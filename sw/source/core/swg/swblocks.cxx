@@ -368,7 +368,7 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
     }
 }
 
-ErrCode SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
+ErrCode SwTextBlocks::CopyBlock( SwTextBlocks const & rSource, OUString& rSrcShort,
                                 const OUString& rLong )
 {
     bool bIsOld = false;

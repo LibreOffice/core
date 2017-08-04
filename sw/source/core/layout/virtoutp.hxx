@@ -49,7 +49,7 @@ public:
     void Enter( SwViewShell *pShell, SwRect &rRect, bool bOn );
     void Leave() { --nCount; Flush(); }
 
-    void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
+    void SetOrgRect( SwRect const &rRect ) { aOrgRect = rRect; }
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
     bool IsFlushable() const { return bool(pOut); }

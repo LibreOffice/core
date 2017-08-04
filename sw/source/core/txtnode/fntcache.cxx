@@ -2285,7 +2285,7 @@ SwCacheObj *SwFntAccess::NewObj( )
     return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++pMagicNo, pShell );
 }
 
-sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
+sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth )
 {
     ChgFnt( rInf.GetShell(), rInf.GetOut() );
 

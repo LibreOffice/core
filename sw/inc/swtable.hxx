@@ -392,7 +392,7 @@ public:
 class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
 {
     friend class SwNodes;           // Transpose index.
-    friend void DelBoxNode(SwTableSortBoxes&);  // Delete StartNode* !
+    friend void DelBoxNode(SwTableSortBoxes const &);  // Delete StartNode* !
     friend class SwXMLTableContext;
 
     SwTableBox( const SwTableBox & ) = delete;

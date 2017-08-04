@@ -949,7 +949,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         rNode.DestroyAttr( &rNewHint );
 }
 
-SwTextAttr* MakeRedlineTextAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
+SwTextAttr* MakeRedlineTextAttr( SwDoc & rDoc, SfxPoolItem const & rAttr )
 {
     // this is intended _only_ for special-purpose redline attributes!
     switch (rAttr.Which())
@@ -3297,7 +3297,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
 
 /// delete the hint
 /// precondition: pTextHt must be in this array
-void SwpHints::Delete( SwTextAttr* pTextHt )
+void SwpHints::Delete( SwTextAttr const * pTextHt )
 {
     const size_t nPos = GetIndexOf( pTextHt );
     assert(SAL_MAX_SIZE != nPos);

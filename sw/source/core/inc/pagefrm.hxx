@@ -89,7 +89,7 @@ class SwPageFrame: public SwFootnoteBossFrame
 
     static void GetHorizontalShadowRect( const SwRect& _rPageRect,
                                      const SwViewShell*    _pViewShell,
-                                     OutputDevice* pRenderContext,
+                                     OutputDevice const * pRenderContext,
                                      SwRect&       _orBottomShadowRect,
                                      bool bPaintLeftShadow,
                                      bool bPaintRightShadow,
@@ -136,7 +136,7 @@ public:
     inline const SwContentFrame  *FindFirstBodyContent() const;
     inline const SwContentFrame  *FindLastBodyContent() const;
 
-    SwRect GetBoundRect(OutputDevice* pOutputDevice) const;
+    SwRect GetBoundRect(OutputDevice const * pOutputDevice) const;
 
     // Specialized GetContentPos() for Field in Frames
     void GetContentPosition( const Point &rPt, SwPosition &rPos ) const;
@@ -169,7 +169,7 @@ public:
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;
     void CheckGrid( bool bInvalidate );
-    void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
+    void PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) const;
     bool HasGrid() const { return m_bHasGrid; }
 
     void PaintDecorators( ) const;
@@ -248,7 +248,7 @@ public:
         has to be generated.
     */
     void PaintMarginArea( const SwRect& _rOutputRect,
-                          SwViewShell* _pViewShell ) const;
+                          SwViewShell const * _pViewShell ) const;
 
     /** paint page border and shadow
 
@@ -295,7 +295,7 @@ public:
     */
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                              const SwViewShell*    _pViewShell,
-                                             OutputDevice* pRenderContext,
+                                             OutputDevice const * pRenderContext,
                                              SwRect& _orBorderAndShadowBoundRect,
                                              const bool bLeftShadow,
                                              const bool bRightShadow,
@@ -303,7 +303,7 @@ public:
                                             );
 
     static void PaintNotesSidebar(const SwRect& _rPageRect, SwViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
-    static void PaintNotesSidebarArrows(const Point &rMiddleFirst, const Point &rMiddleSecond, SwViewShell* _pViewShell, const Color& rColorUp, const Color& rColorDown);
+    static void PaintNotesSidebarArrows(const Point &rMiddleFirst, const Point &rMiddleSecond, SwViewShell const * _pViewShell, const Color& rColorUp, const Color& rColorDown);
     /**
         asks the page on which side a margin should be shown, e.g for notes
         returns true for left side, false for right side

@@ -53,7 +53,7 @@ protected:
     // Reset in the first line
     void Init();
     void CtorInitTextIter( SwTextFrame *pFrame, SwTextInfo *pInf );
-    explicit SwTextIter(SwTextNode* pTextNode)
+    explicit SwTextIter(SwTextNode const * pTextNode)
         : SwAttrIter(pTextNode)
         , m_pFrame(nullptr)
         , m_pInf(nullptr)
@@ -158,7 +158,7 @@ protected:
     void Right( const SwTwips nNew ) { nRight = nNew; }
 
     void CtorInitTextMargin( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
-    explicit SwTextMargin(SwTextNode* pTextNode)
+    explicit SwTextMargin(SwTextNode const * pTextNode)
         : SwTextIter(pTextNode)
         , nLeft(0)
         , nRight(0)
@@ -237,7 +237,7 @@ class SwTextAdjuster : public SwTextMargin
                                   const SwRect &rCurrRect );
 
 protected:
-    explicit SwTextAdjuster(SwTextNode* pTextNode) : SwTextMargin(pTextNode) { }
+    explicit SwTextAdjuster(SwTextNode const * pTextNode) : SwTextMargin(pTextNode) { }
     // Creates the Glues for adjusted paragraphs
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0, bool bSkipKashida = false );
@@ -270,7 +270,7 @@ class SwTextCursor : public SwTextAdjuster
     void GetCharRect_(SwRect *, const sal_Int32, SwCursorMoveState* );
 protected:
     void CtorInitTextCursor( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
-    explicit SwTextCursor(SwTextNode* pTextNode) : SwTextAdjuster(pTextNode) { }
+    explicit SwTextCursor(SwTextNode const * pTextNode) : SwTextAdjuster(pTextNode) { }
 public:
     SwTextCursor( SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf )
         : SwTextAdjuster(pTextFrame->GetTextNode())

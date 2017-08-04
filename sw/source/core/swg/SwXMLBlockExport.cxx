@@ -30,7 +30,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
     const uno::Reference< uno::XComponentContext >& rContext,
     SwXMLTextBlocks & rBlocks,
     const OUString &rFileName,
-    uno::Reference< xml::sax::XDocumentHandler> &rHandler)
+    uno::Reference< xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
@@ -80,7 +80,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
     const uno::Reference< uno::XComponentContext >& rContext,
     SwXMLTextBlocks & rBlocks,
     const OUString &rFileName,
-    uno::Reference< xml::sax::XDocumentHandler> &rHandler)
+    uno::Reference< xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {

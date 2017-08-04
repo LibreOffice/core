@@ -58,7 +58,7 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
-void SwAttrIter::Chg( SwTextAttr *pHt )
+void SwAttrIter::Chg( SwTextAttr const *pHt )
 {
     assert(pHt && m_pFont && "No attribute of font available for change");
     if( m_pRedline && m_pRedline->IsOn() )
@@ -68,7 +68,7 @@ void SwAttrIter::Chg( SwTextAttr *pHt )
     m_nChgCnt++;
 }
 
-void SwAttrIter::Rst( SwTextAttr *pHt )
+void SwAttrIter::Rst( SwTextAttr const *pHt )
 {
     assert(pHt && m_pFont && "No attribute of font available for reset");
     // get top from stack after removing pHt
@@ -397,8 +397,7 @@ bool SwTextNode::IsSymbol( const sal_Int32 nBegin ) const
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *const_cast<SwTextNode*>(this), aScriptInfo );
     aIter.Seek( nBegin );
-    return aIter.GetFnt()->IsSymbol(
-        const_cast<SwViewShell *>(getIDocumentLayoutAccess().GetCurrentViewShell()) );
+    return aIter.GetFnt()->IsSymbol( getIDocumentLayoutAccess().GetCurrentViewShell() );
 }
 
 class SwMinMaxNodeArgs

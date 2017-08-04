@@ -247,7 +247,7 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     return false;
 }
 
-bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess )
+bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGuess )
 {
     Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
 

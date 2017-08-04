@@ -1568,7 +1568,7 @@ SwRect SwTextFrame::SmartTagScan()
     return aRet;
 }
 
-void SwTextFrame::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos )
+void SwTextFrame::CollectAutoCmplWrds( SwContentNode const * pActNode, sal_Int32 nActPos )
 {
     SwTextNode *pNode = GetTextNode();
     if( pNode != pActNode || !nActPos )

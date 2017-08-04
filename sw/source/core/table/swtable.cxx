@@ -229,7 +229,7 @@ SwTable::SwTable( const SwTable& rTable )
 {
 }
 
-void DelBoxNode( SwTableSortBoxes& rSortCntBoxes )
+void DelBoxNode( SwTableSortBoxes const & rSortCntBoxes )
 {
     for (size_t n = 0; n < rSortCntBoxes.size(); ++n)
     {

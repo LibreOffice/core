@@ -165,7 +165,7 @@ class SwTaggedPDFHelper
     // pPorInfo != 0 => BeginInlineStructureElement
     // pFrameInfo, pPorInfo = 0 => BeginNonStructureElement
     SwTaggedPDFHelper( const Num_Info* pNumInfo, const Frame_Info* pFrameInfo, const Por_Info* pPorInfo,
-                       OutputDevice& rOut );
+                       OutputDevice const & rOut );
     ~SwTaggedPDFHelper();
 
     static bool IsExportTaggedPDF( const OutputDevice& rOut );

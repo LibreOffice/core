@@ -790,7 +790,7 @@ static bool lcl_HasRotation( const SwTextAttr& rAttr,
 // E.g. a ruby portion interrupts a 2-line-attribute, a 2-line-attribute
 // with different brackets interrupts another 2-line-attribute.
 SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
-                                                SwMultiPortion* pMulti ) const
+                                                SwMultiPortion const * pMulti ) const
 {
     SwScriptInfo& rSI = const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
@@ -800,7 +800,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     {
         OSL_ENSURE( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" );
         // level associated with bidi-portion;
-        nCurrLevel = static_cast<SwBidiPortion*>(pMulti)->GetLevel();
+        nCurrLevel = static_cast<SwBidiPortion const *>(pMulti)->GetLevel();
     }
     else
         // no nested bidi portion required

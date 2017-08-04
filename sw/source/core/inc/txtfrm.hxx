@@ -219,7 +219,7 @@ public:
     SwRect SmartTagScan();
 
     /// Is called by CollectAutoCmplWords()
-    void CollectAutoCmplWrds( SwContentNode* , sal_Int32 );
+    void CollectAutoCmplWrds( SwContentNode const * , sal_Int32 );
 
     /**
      * Returns the screen position of rPos. The values are relative to the upper
@@ -514,7 +514,7 @@ public:
     void MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 nEnd );
 
     /// Calculates the position of FlyInContentFrames
-    sal_Int32 CalcFlyPos( SwFrameFormat* pSearch );
+    sal_Int32 CalcFlyPos( SwFrameFormat const * pSearch );
 
     /// Determines the start position and step size of the register
     bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );

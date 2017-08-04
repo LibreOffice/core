@@ -22,7 +22,7 @@
 
 extern Color aGlobalRetoucheColor;
 
-void SwCalcPixStatics( OutputDevice *pOut );
+void SwCalcPixStatics( OutputDevice const *pOut );
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
 

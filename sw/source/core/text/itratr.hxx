@@ -62,10 +62,10 @@ private:
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
 
 protected:
-    void Chg( SwTextAttr *pHt );
-    void Rst( SwTextAttr *pHt );
-    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame* pFrame = nullptr );
-    explicit SwAttrIter(SwTextNode* pTextNode)
+    void Chg( SwTextAttr const *pHt );
+    void Rst( SwTextAttr const *pHt );
+    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const * pFrame = nullptr );
+    explicit SwAttrIter(SwTextNode const * pTextNode)
         : m_pViewShell(nullptr)
         , m_pFont(nullptr)
         , m_pHints(nullptr)

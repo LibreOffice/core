@@ -51,7 +51,7 @@
 
 namespace {
     bool lcl_GetCursorOfst_Objects( const SwPageFrame* pPageFrame, bool bSearchBackground,
-           SwPosition *pPos, Point& rPoint, SwCursorMoveState* pCMS  )
+           SwPosition *pPos, Point const & rPoint, SwCursorMoveState* pCMS  )
     {
         bool bRet = false;
         Point aPoint( rPoint );

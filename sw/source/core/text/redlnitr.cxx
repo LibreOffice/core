@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame* pFrame )
+void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrame const * pFrame )
 {
     // during HTML-Import it can happen, that no layout exists
     SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
@@ -291,7 +291,7 @@ void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType_t eType )
     }
 }
 
-void SwRedlineItr::ChangeTextAttr( SwFont* pFnt, SwTextAttr &rHt, bool bChg )
+void SwRedlineItr::ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bChg )
 {
     OSL_ENSURE( IsOn(), "SwRedlineItr::ChangeTextAttr: Off?" );
 

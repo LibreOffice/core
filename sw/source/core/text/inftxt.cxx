@@ -1573,7 +1573,7 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     SetFirstMulti( rInf.IsFirstMulti() );
 }
 
-bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout* pCurr )
+bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout const * pCurr )
 {
     const sal_uInt16 nHeight = pCurr->GetRealHeight();
     for( SwLinePortion *pPor = pCurr->GetPortion(); pPor; pPor = pPor->GetPortion() )

@@ -208,7 +208,7 @@ void SwEmbedObjectLink::Closed()
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const svt::EmbeddedObjectRef& xObj,
                     SwGrfFormatColl *pGrfColl,
-                    SwAttrSet* pAutoAttr ) :
+                    SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Ole, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
     bOLESizeInvalid( false ),
@@ -221,7 +221,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const OUString &rString,
                     sal_Int64 nAspect,
                     SwGrfFormatColl *pGrfColl,
-                    SwAttrSet* pAutoAttr ) :
+                    SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Ole, pGrfColl, pAutoAttr ),
     aOLEObj( rString, nAspect ),
     bOLESizeInvalid( false ),
@@ -388,7 +388,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 }
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
-    const OUString &rName, sal_Int64 nAspect, SwGrfFormatColl* pGrfColl, SwAttrSet* pAutoAttr )
+    const OUString &rName, sal_Int64 nAspect, SwGrfFormatColl* pGrfColl, SwAttrSet const * pAutoAttr )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
 
@@ -441,7 +441,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
                                     pDoc->GetDfltGrfFormatColl(),
-                                    const_cast<SwAttrSet*>(GetpSwAttrSet()) );
+                                    GetpSwAttrSet() );
 
     pOLENd->SetChartTableName( GetChartTableName() );
     pOLENd->SetTitle( GetTitle() );

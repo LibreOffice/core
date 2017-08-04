@@ -34,7 +34,7 @@ class SwTextLine : public SwCacheObj
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
 
-    SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew = nullptr );
+    SwTextLine( SwTextFrame const *pFrame, SwParaPortion *pNew = nullptr );
     virtual ~SwTextLine() override;
 
     SwParaPortion *GetPara()       { return pLine.get(); }

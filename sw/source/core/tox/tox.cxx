@@ -446,7 +446,7 @@ sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
     return 0;
 }
 
-void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
+void SwForm::AdjustTabStops( SwDoc const & rDoc ) // #i21237#
 {
     const sal_uInt16 nFormMax = GetFormMax();
     for ( sal_uInt16 nLevel = 1; nLevel < nFormMax; ++nLevel )

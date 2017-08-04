@@ -69,10 +69,10 @@ void SwTextCharFormat::ModifyNotification( const SfxPoolItem* pOld, const SfxPoo
     }
 }
 
-bool SwTextCharFormat::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTextCharFormat::GetInfo( SfxPoolItem const & rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode const &>(rInfo).pNodes )
     {
         return true;
     }

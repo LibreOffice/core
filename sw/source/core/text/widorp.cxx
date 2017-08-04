@@ -101,7 +101,7 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
  * be done until the Follow is formatted. Unfortunately this is crucial
  * to decide if the whole paragraph goes to the next page or not.
  */
-bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
+bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
 {
     bool bFit = false;
 

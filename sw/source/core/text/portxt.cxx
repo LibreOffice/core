@@ -271,7 +271,7 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     rInf.SetUnderflow( this );
 }
 
-static bool lcl_HasContent( const SwFieldPortion& rField, SwTextFormatInfo &rInf )
+static bool lcl_HasContent( const SwFieldPortion& rField, SwTextFormatInfo const &rInf )
 {
     OUString aText;
     return rField.GetExpText( rInf, aText ) && !aText.isEmpty();

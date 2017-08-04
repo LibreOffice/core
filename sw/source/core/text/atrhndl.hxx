@@ -132,7 +132,7 @@ public:
     inline const SwFont* GetFont() const;
 
     void GetDefaultAscentAndHeight(SwViewShell* pShell,
-                                   OutputDevice& rOut,
+                                   OutputDevice const & rOut,
                                    sal_uInt16& nAscent,
                                    sal_uInt16& nHeight) const;
 };

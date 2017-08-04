@@ -69,7 +69,7 @@ using namespace ::com::sun::star;
 namespace {
     //! Calculates and sets optimal repaint offset for the current line
     long lcl_CalcOptRepaint( SwTextFormatter &rThis,
-                                    SwLineLayout &rCurr,
+                                    SwLineLayout const &rCurr,
                                     const sal_Int32 nOldLineEnd,
                                     const std::vector<long> &rFlyStarts );
     //! Determine if we need to build hidden portions
@@ -2566,7 +2566,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
 
 /* Drop portion is a special case, because it has parts which aren't portions
    but we have handle them just like portions */
-void SwTextFormatter::MergeCharacterBorder( SwDropPortion& rPortion )
+void SwTextFormatter::MergeCharacterBorder( SwDropPortion const & rPortion )
 {
     if( rPortion.GetLines() > 1 )
     {
@@ -2584,7 +2584,7 @@ void SwTextFormatter::MergeCharacterBorder( SwDropPortion& rPortion )
     }
 }
 
-void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion *pPrev, SwTextFormatInfo& rInf )
+void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion const *pPrev, SwTextFormatInfo& rInf )
 {
     const SwFont aCurFont = *rInf.GetFont();
     if( aCurFont.HasBorder() )
@@ -2676,7 +2676,7 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
 namespace {
     // calculates and sets optimal repaint offset for the current line
     long lcl_CalcOptRepaint( SwTextFormatter &rThis,
-                         SwLineLayout &rCurr,
+                         SwLineLayout const &rCurr,
                          const sal_Int32 nOldLineEnd,
                          const std::vector<long> &rFlyStarts )
     {
