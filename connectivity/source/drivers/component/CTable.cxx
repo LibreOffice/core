@@ -181,36 +181,30 @@ bool OComponentTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         m_nFilePos = (sal_Int32)nNumberOfRecords + 1;
 
     if (m_nFilePos == 0 || m_nFilePos == (sal_Int32)nNumberOfRecords + 1)
-        goto Error;
-    else
     {
-        //! read buffer / setup row object etc?
-    }
-    goto End;
-
-Error:
-    switch(eCursorPosition)
-    {
-        case IResultSetHelper::PRIOR:
-        case IResultSetHelper::FIRST:
-            m_nFilePos = 0;
-            break;
-        case IResultSetHelper::LAST:
-        case IResultSetHelper::NEXT:
-        case IResultSetHelper::ABSOLUTE1:
-        case IResultSetHelper::RELATIVE1:
-            if (nOffset > 0)
-                m_nFilePos = nNumberOfRecords + 1;
-            else if (nOffset < 0)
+        switch(eCursorPosition)
+        {
+            case IResultSetHelper::PRIOR:
+            case IResultSetHelper::FIRST:
                 m_nFilePos = 0;
-            break;
-        case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;   // previous position
+                break;
+            case IResultSetHelper::LAST:
+            case IResultSetHelper::NEXT:
+            case IResultSetHelper::ABSOLUTE1:
+            case IResultSetHelper::RELATIVE1:
+                if (nOffset > 0)
+                    m_nFilePos = nNumberOfRecords + 1;
+                else if (nOffset < 0)
+                    m_nFilePos = 0;
+                break;
+            case IResultSetHelper::BOOKMARK:
+                m_nFilePos = nTempPos;   // previous position
+                break;
+        }
+        return false;
     }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
-    return false;
 
-End:
+    //! read buffer / setup row object etc?
     nCurPos = m_nFilePos;
     return true;
 }
