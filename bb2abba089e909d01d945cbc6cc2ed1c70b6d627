@@ -22,6 +22,30 @@
       "revId": "bb2abba089e909d01d945cbc6cc2ed1c70b6d627",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_74e41e3b",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2017-08-04T10:29:00Z",
+      "side": 1,
+      "message": "Hi Armin!\nIf there are international glyphs, it will be caught by the (optionFlags \u0026 1) query and lead to a SAL_WARN. Thus, for the primitive there are pure unicode characters. \nBut I will replace the copy of OUString.",
+      "parentUuid": "1a430d35_3410d64e",
+      "range": {
+        "startLine": 1300,
+        "startChar": 28,
+        "endLine": 1300,
+        "endChar": 50
+      },
+      "revId": "bb2abba089e909d01d945cbc6cc2ed1c70b6d627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
