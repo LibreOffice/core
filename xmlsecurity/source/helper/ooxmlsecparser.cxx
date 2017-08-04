@@ -120,6 +120,10 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
         m_aCertDigest.clear();
         m_bInCertDigest = true;
     }
+    else
+    {
+        SAL_INFO("xmlsecurity.ooxml", "Unknown xml element: " << rName);
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
