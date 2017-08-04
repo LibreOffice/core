@@ -441,6 +441,39 @@
       </node>
     </node>
     <node oor:name="ToolBar">
+      <node oor:name="ScrollToPrevious" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ScrollToPrevious</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>PreviousScrollToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="ScrollToNext" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ScrollToNext</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>NextScrollToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="NavElement" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:NavElement</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>NavElementToolBoxController</value>
+        </prop>
+      </node>
       <node oor:name="ZoomToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ZoomToolBox</value>

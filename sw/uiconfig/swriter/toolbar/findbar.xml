@@ -27,7 +27,7 @@
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
   <toolbar:toolbarseparator/>
-  <toolbar:toolbaritem xlink:href=".uno:NavigationPopup"/>
+  <toolbar:toolbaritem xlink:href=".uno:NavElement"/>
   <toolbar:toolbaritem xlink:href=".uno:ScrollToPrevious"/>
   <toolbar:toolbaritem xlink:href=".uno:ScrollToNext"/>
   <toolbar:toolbarseparator/>

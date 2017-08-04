@@ -1011,6 +1011,11 @@ void SwView::Execute(SfxRequest &rReq)
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
         }
         break;
+        case FN_NAV_ELEMENT:
+        {
+            // nothing here on purpose - if removed only the listbox that changed is changed
+        }
+        break;
         case FN_SCROLL_PREV:
         case FN_SCROLL_NEXT:
         {

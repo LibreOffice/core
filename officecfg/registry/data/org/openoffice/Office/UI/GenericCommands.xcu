@@ -1651,6 +1651,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:NavElement" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Navigate By</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ExtendedHelp" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~What's This?</value>
