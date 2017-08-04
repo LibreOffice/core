@@ -439,6 +439,9 @@ public:
     void postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
                               int nCount, int nButtons, int nModifier) override;
 
+    void postDialogChildMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+                                   int nCount, int nButtons, int nModifier) override;
+
     void notifyDialogInvalidation(const vcl::DialogID& rDialogID) override;
 
     void notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
