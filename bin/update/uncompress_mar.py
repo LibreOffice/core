@@ -13,17 +13,18 @@
 import os
 import sys
 import subprocess
+from path import convert_to_native
 
 def uncompress_content(file_path):
     bzip2 = os.environ.get('BZIP2', 'bzip2')
     file_path_compressed = file_path + ".bz2"
     os.rename(file_path, file_path_compressed)
-    subprocess.check_call(["bzip2", "-d", file_path_compressed])
+    subprocess.check_call(["bzip2", "-d", convert_to_native(file_path_compressed)])
 
 def extract_mar(mar_file, target_dir):
     mar = os.environ.get('MAR', 'mar')
-    subprocess.check_call([mar, "-C", target_dir, "-x", mar_file])
-    file_info = subprocess.check_output([mar, "-t", mar_file])
+    subprocess.check_call([mar, "-C", convert_to_native(target_dir), "-x", convert_to_native(mar_file)])
+    file_info = subprocess.check_output([mar, "-t", convert_to_native(mar_file)])
     lines = file_info.splitlines()
     for line in lines:
         info = line.split()
