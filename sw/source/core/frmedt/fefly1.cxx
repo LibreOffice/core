@@ -1151,7 +1151,7 @@ SwFrameFormat* SwFEShell::GetSelectedFrameFormat() const
     return pRet;
 }
 
-void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Point* pDocPos )
+void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Point const * pDocPos )
 {
     SwFlyFrame *pFly = nullptr;
     if(pDocPos)

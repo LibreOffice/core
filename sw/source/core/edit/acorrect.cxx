@@ -44,7 +44,7 @@ class PaMIntoCursorShellRing
     SwPaM* pPrevDelPam;
     SwPaM* pPrevCursor;
 
-    static void RemoveFromRing( SwPaM& rPam, SwPaM* pPrev );
+    static void RemoveFromRing( SwPaM& rPam, SwPaM const * pPrev );
 public:
     PaMIntoCursorShellRing( SwCursorShell& rSh, SwPaM& rCursor, SwPaM& rPam );
     ~PaMIntoCursorShellRing();
@@ -70,7 +70,7 @@ PaMIntoCursorShellRing::~PaMIntoCursorShellRing()
     RemoveFromRing( rCursor, pPrevCursor );
 }
 
-void PaMIntoCursorShellRing::RemoveFromRing( SwPaM& rPam, SwPaM* pPrev )
+void PaMIntoCursorShellRing::RemoveFromRing( SwPaM& rPam, SwPaM const * pPrev )
 {
     SwPaM* p;
     SwPaM* pNext = &rPam;

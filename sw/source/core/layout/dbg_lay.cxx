@@ -132,7 +132,7 @@ class SwImplProtocol
     void Record_( const SwFrame* pFrame, PROT nFunction, DbgAction nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
-    static void SectFunc( OStringBuffer& rOut, DbgAction nAct, void* pParam );
+    static void SectFunc( OStringBuffer& rOut, DbgAction nAct, void const * pParam );
 public:
     SwImplProtocol();
     ~SwImplProtocol();
@@ -663,13 +663,13 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
 }
 
 /// Handle the output of the SectionFrames.
-void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void* pParam)
+void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void const * pParam)
 {
     bool bTmp = false;
     switch( nAct )
     {
-        case DbgAction::Merge:         rOut.append("Merge Section ");
-                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
+        case DbgAction::Merge:  rOut.append("Merge Section ");
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame const *>(pParam))));
                                 break;
         case DbgAction::CreateMaster: bTmp = true;
                                 SAL_FALLTHROUGH;
@@ -678,7 +678,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void* pParam)
                                     rOut.append("Master to ");
                                 else
                                     rOut.append("Follow from ");
-                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame const *>(pParam))));
                                 break;
         case DbgAction::DelMaster:    bTmp = true;
                                 SAL_FALLTHROUGH;
@@ -687,7 +687,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void* pParam)
                                     rOut.append("Master to ");
                                 else
                                     rOut.append("Follow from ");
-                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame const *>(pParam))));
                                 break;
         default: break;
     }

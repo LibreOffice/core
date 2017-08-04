@@ -3219,7 +3219,7 @@ bool SwFlyFrameFormat::IsBackgroundBrushInherited() const
 
 SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat,
                                               const SwFormatAnchor& _rNewAnchorFormat,
-                                              SwFlyFrame* _pKeepThisFlyFrame )
+                                              SwFlyFrame const * _pKeepThisFlyFrame )
     : mrFlyFrameFormat( _rFlyFrameFormat ),
       mbAnchorNodeChanged( false )
 {

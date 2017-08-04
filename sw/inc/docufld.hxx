@@ -596,7 +596,7 @@ class SwRefPageGetFieldType : public SwFieldType
     SwDoc*          pDoc;
     sal_Int16       nNumberingType;
 
-    void UpdateField( SwTextField* pTextField, SetGetExpFields& rSetList );
+    void UpdateField( SwTextField const * pTextField, SetGetExpFields const & rSetList );
 protected:
     /// overwritten to update all RefPageGet fields
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;

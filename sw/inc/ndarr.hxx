@@ -220,7 +220,7 @@ public:
                             const OUString& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFormatColl *pColl,
-                            SwAttrSet* pAutoAttr = nullptr,
+                            SwAttrSet const * pAutoAttr = nullptr,
                             bool bDelayed = false );    ///< in ndgrf.cxx
 
     static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,

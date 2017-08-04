@@ -63,7 +63,7 @@ SwGrfNode::SwGrfNode(
         const OUString& rGrfName, const OUString& rFltName,
         const Graphic* pGraphic,
         SwGrfFormatColl *pGrfColl,
-        SwAttrSet* pAutoAttr ) :
+        SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(nullptr),
@@ -81,7 +81,7 @@ SwGrfNode::SwGrfNode(
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
-                      SwGrfFormatColl *pGrfColl, SwAttrSet* pAutoAttr ) :
+                      SwGrfFormatColl *pGrfColl, SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
     mpReplacementGraphic(nullptr),
@@ -104,7 +104,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const OUString& rGrfName, const OUString& rFltName,
                       SwGrfFormatColl *pGrfColl,
-                      SwAttrSet* pAutoAttr ) :
+                      SwAttrSet const * pAutoAttr ) :
     SwNoTextNode( rWhere, SwNodeType::Grf, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(nullptr),
@@ -425,7 +425,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const OUString& rFltName,
                                 const Graphic* pGraphic,
                                 SwGrfFormatColl* pGrfColl,
-                                SwAttrSet* pAutoAttr,
+                                SwAttrSet const * pAutoAttr,
                                 bool bDelayed )
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer is 0." );
@@ -952,8 +952,8 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     SwGrfNode* pGrfNd = SwNodes::MakeGrfNode( rIdx, sFile, sFilter,
-                                                    &aTmpGrf, pColl,
-                                            const_cast<SwAttrSet*>(GetpSwAttrSet()) );
+                                              &aTmpGrf, pColl,
+                                              GetpSwAttrSet() );
     pGrfNd->SetTitle( GetTitle() );
     pGrfNd->SetDescription( GetDescription() );
     pGrfNd->SetContour( HasContour(), HasAutomaticContour() );

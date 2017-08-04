@@ -232,8 +232,8 @@ class SwAutoFormat
     }
 
 public:
-    SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
-                SwNodeIndex* pSttNd = nullptr, SwNodeIndex* pEndNd = nullptr );
+    SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & rFlags,
+                SwNodeIndex const * pSttNd = nullptr, SwNodeIndex const * pEndNd = nullptr );
 };
 
 const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
@@ -2087,8 +2087,8 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
     ClearRedlineText();
 }
 
-SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
-                            SwNodeIndex* pSttNd, SwNodeIndex* pEndNd )
+SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & rFlags,
+                            SwNodeIndex const * pSttNd, SwNodeIndex const * pEndNd )
     : m_aFlags( rFlags ),
     m_aDelPam( pEdShell->GetDoc()->GetNodes().GetEndOfExtras() ),
     m_aNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfExtras(), +1 ),

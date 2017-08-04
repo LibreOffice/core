@@ -252,8 +252,8 @@ static const Point &lcl_FindBasePos( const SwFrame *pFrame, const Point &rPt )
         return pFrame->Frame().Pos();
 }
 
-static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame* pFly,
-                const Point& rInsPt, SwFEShell& rDestShell, SwFormatAnchor& rAnchor,
+static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame const * pFly,
+                const Point& rInsPt, SwFEShell const & rDestShell, SwFormatAnchor& rAnchor,
                 Point& rNewPos, bool bCheckFlyRecur )
 {
     bool bRet = true;

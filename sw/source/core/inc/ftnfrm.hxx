@@ -98,7 +98,7 @@ public:
     void SetMaster( SwFootnoteFrame *pNew ) { pMaster = pNew; }
     void SetRef   ( SwContentFrame *pNew ) { pRef = pNew; }
 
-    void InvalidateNxtFootnoteCnts( SwPageFrame* pPage );
+    void InvalidateNxtFootnoteCnts( SwPageFrame const * pPage );
 
     void LockBackMove()     { bBackMoveLocked = true; }
     void UnlockBackMove()   { bBackMoveLocked = false;}

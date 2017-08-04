@@ -79,7 +79,7 @@ public:
     static       SwFootnoteFrame     *FindFootnote( const SwContentFrame *, const SwTextFootnote * );
                  SwFootnoteContFrame *FindFootnoteCont();
     inline const SwFootnoteContFrame *FindFootnoteCont() const;
-           const SwFootnoteFrame     *FindFirstFootnote( SwContentFrame* ) const;
+           const SwFootnoteFrame     *FindFirstFootnote( SwContentFrame const * ) const;
                  SwFootnoteContFrame *FindNearestFootnoteCont( bool bDontLeave = false );
 
     static void ChangeFootnoteRef( const SwContentFrame *pOld, const SwTextFootnote *,
@@ -115,7 +115,7 @@ public:
                          const bool    _bCollectOnlyPreviousFootnotes = false );
     void    MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool bCalc = false );
     void    MoveFootnotes( const SwContentFrame *pSrc, SwContentFrame *pDest,
-                      SwTextFootnote *pAttr );
+                      SwTextFootnote const *pAttr );
 
     // should AdjustNeighbourhood be called (or Grow/Shrink)?
     SwNeighbourAdjust NeighbourhoodAdjustment() const

@@ -429,7 +429,7 @@ SwFootnoteFrame::SwFootnoteFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwConte
     mnFrameType = SwFrameType::Ftn;
 }
 
-void SwFootnoteFrame::InvalidateNxtFootnoteCnts( SwPageFrame *pPage )
+void SwFootnoteFrame::InvalidateNxtFootnoteCnts( SwPageFrame const *pPage )
 {
     if ( GetNext() )
     {
@@ -1039,7 +1039,7 @@ SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote()
 }
 
 /// Get the first footnote of a given content
-const SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote( SwContentFrame *pCnt ) const
+const SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote( SwContentFrame const *pCnt ) const
 {
     const SwFootnoteFrame *pRet = const_cast<SwFootnoteBossFrame*>(this)->FindFirstFootnote();
     if ( pRet )
@@ -2048,7 +2048,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
 }
 
 void SwFootnoteBossFrame::MoveFootnotes( const SwContentFrame *pSrc, SwContentFrame *pDest,
-                             SwTextFootnote *pAttr )
+                             SwTextFootnote const *pAttr )
 {
     if( ( GetFormat()->GetDoc()->GetFootnoteInfo().ePos == FTNPOS_CHAPTER &&
         (!GetUpper()->IsSctFrame() || !static_cast<SwSectionFrame*>(GetUpper())->IsFootnoteAtEnd()))

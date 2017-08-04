@@ -164,6 +164,15 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "GoNext"
             || name == "GoPrevious"
             || name == "lcl_SetOtherLineHeight"
+            || name == "BoxNmsToPtr"
+            || name == "PtrToBoxNms"
+            || name == "RelNmsToBoxNms"
+            || name == "RelBoxNmsToPtr"
+            || name == "BoxNmsToRelNm"
+            || name == "MakeFormula_"
+            || name == "GetFormulaBoxes"
+            || name == "HasValidBoxes_"
+            || name == "SplitMergeBoxNm_"
              // #ifdef win32
             || name == "convert_slashes"
                 // UNO component entry points

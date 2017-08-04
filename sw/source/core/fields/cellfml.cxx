@@ -601,7 +601,7 @@ void SwTableFormula::ToRelBoxNm( const SwTable* pTable )
 }
 
 OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTable,
-                                    void* pPara ) const
+                                     void* pPara ) const
 {
     OUString aStr;
     sal_Int32 nFormula = 0;

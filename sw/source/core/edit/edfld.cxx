@@ -122,7 +122,7 @@ void SwEditShell::RemoveFieldType(SwFieldIds nResId, const OUString& rStr)
     }
 }
 
-void SwEditShell::FieldToText( SwFieldType* pType )
+void SwEditShell::FieldToText( SwFieldType const * pType )
 {
     if( !pType->HasWriterListeners() )
         return;
@@ -147,7 +147,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 }
 
 /// add a field at the cursor position
-void SwEditShell::Insert2(SwField& rField, const bool bForceExpandHints)
+void SwEditShell::Insert2(SwField const & rField, const bool bForceExpandHints)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -311,7 +311,7 @@ void SwEditShell::ChgDBData(const SwDBData& rNewData)
 }
 
 void SwEditShell::GetAllUsedDB( std::vector<OUString>& rDBNameList,
-                                std::vector<OUString>* pAllDBNames )
+                                std::vector<OUString> const * pAllDBNames )
 {
     GetDoc()->GetAllUsedDB( rDBNameList, pAllDBNames );
 }
