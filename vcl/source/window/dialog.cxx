@@ -906,6 +906,42 @@ Size Dialog::PaintActiveFloatingWindow(VirtualDevice& rDevice)
     return aRet;
 }
 
+void Dialog::LogicMouseButtonDownChild(const MouseEvent& rMouseEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
+    {
+        ImplWindowFrameProc(pFirstFloat, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
+    }
+}
+
+void Dialog::LogicMouseButtonUpChild(const MouseEvent& rMouseEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
+    {
+        ImplWindowFrameProc(pFirstFloat, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
+    }
+}
+
+void Dialog::LogicMouseMoveChild(const MouseEvent& rMouseEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && pFirstFloat->GetParentDialog() == this)
+    {
+        ImplWindowFrameProc(pFirstFloat, SalEvent::ExternalMouseMove, &rMouseEvent);
+    }
+}
+
 void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
     SAL_DEBUG("Dialog:: Invalidate Floating window");

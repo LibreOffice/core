@@ -288,6 +288,16 @@ struct _LibreOfficeKitDocumentClass
                                   int nButtons,
                                   int nModifier);
 
+        /// WIP
+    void (*postDialogChildMouseEvent) (LibreOfficeKitDocument* pThis,
+                                       const char* pDialogId,
+                                       int nType,
+                                       int nX,
+                                       int nY,
+                                       int nCount,
+                                       int nButtons,
+                                       int nModifier);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
