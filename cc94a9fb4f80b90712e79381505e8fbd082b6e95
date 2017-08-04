@@ -80,6 +80,30 @@
       "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_54900296",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-04T09:18:23Z",
+      "side": 1,
+      "message": "Well, /me thinks that \"czwarta wartosc\" (having also strings) doesn\u0027t belong to this condition (where it contains number *and nothing else non-blank*).\n\nOf course, it\u0027s necessary to make sure.\n\n([irony]But how one may be sure if the \"documentation\" doesn\u0027t mention topics that make software crash or loose data!... [/irony])",
+      "parentUuid": "1a430d35_14967a94",
+      "range": {
+        "startLine": 305,
+        "startChar": 12,
+        "endLine": 305,
+        "endChar": 31
+      },
+      "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
