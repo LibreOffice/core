@@ -1134,6 +1134,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     , m_pSelectorDlg(nullptr)
 {
     get(m_pTopLevelListBox, "toplevellist");
+    get(m_pCommandCategoryListBox, "commandcategorylist");
     get(m_pContents, "contents");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
@@ -1160,6 +1161,7 @@ SvxConfigPage::~SvxConfigPage()
 void SvxConfigPage::dispose()
 {
     m_pTopLevelListBox.clear();
+    m_pCommandCategoryListBox.clear();
     m_pContents.clear();
     m_pEntries.clear();
     m_pFunctions.clear();

@@ -86,6 +86,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/customize/acccfg \
     cui/source/customize/cfg \
     cui/source/customize/cfgutil \
+    cui/source/customize/CommandCategoryListBox \
     cui/source/customize/eventdlg \
     cui/source/customize/macropg \
     cui/source/customize/SvxConfigPageHelper \
