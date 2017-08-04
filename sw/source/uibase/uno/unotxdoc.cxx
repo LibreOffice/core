@@ -3743,6 +3743,46 @@ void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int n
     }
 }
 
+
+void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+                                                int nCount, int nButtons, int nModifier)
+{
+    SolarMutexGuard aGuard;
+
+    // check if dialog is already open
+    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
+    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
+    if (!pSlot)
+    {
+        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
+        return;
+    }
+    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
+    if (pChild)
+    {
+        Dialog* pDialog = static_cast<Dialog*>(pChild->GetWindow());
+        Point aPos(nX , nY);
+        MouseEvent aEvent(aPos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
+
+        switch (nType)
+        {
+        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+            pDialog->LogicMouseButtonDownChild(aEvent);
+            break;
+        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+            pDialog->LogicMouseButtonUpChild(aEvent);
+            break;
+        case LOK_MOUSEEVENT_MOUSEMOVE:
+            pDialog->LogicMouseMoveChild(aEvent);
+            break;
+        default:
+            assert(false);
+            break;
+        }
+    }
+}
+
 void SwXTextDocument::notifyDialogInvalidation(const vcl::DialogID& rDialogID)
 {
     SfxLokHelper::notifyDialogInvalidation(rDialogID);
