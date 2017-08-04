@@ -33,6 +33,29 @@
       "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_317468ce",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-04T05:16:25Z",
+      "side": 1,
+      "message": "So, the failed tests for change sets 7 \u0026 8 seem to be caused by this. I suppose that we should also check for isContainsBlank to decide if we need to list items here.",
+      "range": {
+        "startLine": 305,
+        "startChar": 12,
+        "endLine": 305,
+        "endChar": 31
+      },
+      "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
