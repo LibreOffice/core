@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d48152fd",
+        "filename": "compilerplugins/clang/checkunusedparams.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-08-04T17:42:22Z",
+      "side": 1,
+      "message": "\"s\" seemed ok since it\u0027s the code which appears.",
+      "range": {
+        "startLine": 66,
+        "startChar": 57,
+        "endLine": 66,
+        "endChar": 59
+      },
+      "revId": "a9d88d224858cbf04a36a5120e4c02304ef264ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
