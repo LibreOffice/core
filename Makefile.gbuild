@@ -34,7 +34,9 @@ create-update-info:
 	rm -rf $(UPDATE_DIR) || true
 	mkdir -p $(MAR_DIR)/language
 	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)"
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)"
+	$(if $(filter WNT,$(OS)),, \
+		MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(MAR_NAME_PREFIX)" "$(UPDATE_CONFIG)" \
+	)
 
 upload-update-info:
 	$(eval BUILDID := $(shell git -C $(SRCDIR) log -1 --format=%H))
