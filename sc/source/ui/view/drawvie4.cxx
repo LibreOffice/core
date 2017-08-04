@@ -245,7 +245,7 @@ void getOleSourceRanges(const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneO
         }
     }
 
-    if( bCalcSourceRanges )
+    if (!bCalcSourceRanges)
         return;
 
     // Compile all range representation strings into ranges.
