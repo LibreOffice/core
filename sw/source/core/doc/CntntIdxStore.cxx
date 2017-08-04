@@ -269,7 +269,7 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater)
     if (!m_aBkmkEntries.empty())
     {   // tdf#105705 sort bookmarks because SaveBkmks special handling of
         // "bMarkPosEqual" may destroy sort order
-        dynamic_cast<sw::mark::MarkManager*>(pMarkAccess)->sortMarks();
+        dynamic_cast<sw::mark::MarkManager&>(*pMarkAccess).sortMarks();
     }
 }
 
