@@ -594,6 +594,15 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
     return bRet;
 }
 
+void FloatingWindow::LogicInvalidate(const Rectangle* /*pRectangle*/)
+{
+    Dialog* pParentDlg = GetParentDialog();
+    if (pParentDlg)
+    {
+        pParentDlg->InvalidateFloatingWindow(mpImplData->maPos);
+    }
+}
+
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
     if (nType == StateChangedType::InitShow)
