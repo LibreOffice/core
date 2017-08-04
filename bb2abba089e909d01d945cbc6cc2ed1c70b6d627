@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3410d64e",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-08-04T07:27:46Z",
+      "side": 1,
+      "message": "Hi Patrick,\ncan this be aggregated to longer strings probably?\nAlso with i18n it will probably not work in international languages to loop glyph per glyph (see TextBreakupHelper and css::i18n::XBreakIterator).\nBetter always use the whole string and set nTextPosition/nTextLength in TextSimplePortionPrimitive2D accordingly. The String will be ref-counted, so uses less space then copying parts out of it. It is also needed for e.g. arabic fonts that up to seven chars back/forward need to be known for correct layouting of a text portion, another reason not to split the Strings more as necessary.",
+      "range": {
+        "startLine": 1300,
+        "startChar": 28,
+        "endLine": 1300,
+        "endChar": 50
+      },
+      "revId": "bb2abba089e909d01d945cbc6cc2ed1c70b6d627",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
