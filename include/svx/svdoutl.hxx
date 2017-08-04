@@ -45,6 +45,8 @@ public:
     const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor) override;
+
+    bool hasEditViewCallbacks() const;
 };
 
 #endif // INCLUDED_SVX_SVDOUTL_HXX

@@ -288,7 +288,9 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         {
             // convert to window coordinates ....
             aClipRect = pView->pImpEditView->GetWindowPos( aClipRect );
-            pView->GetWindow()->Invalidate( aClipRect );
+
+            // moved to one executing method to allow finer control
+            pView->InvalidateWindow(aClipRect);
         }
     }
 
