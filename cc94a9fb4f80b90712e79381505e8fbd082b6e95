@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_11f84c7c",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-08-04T01:33:24Z",
+      "side": 1,
+      "message": "Some nitpicking here. cend should not be necessary and might introduce an unnecessary temporary object. I think C++14 fixes that problem but up to C++11 I think this results in a temporary std::set::const_iterator object.",
+      "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_31f54883",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-08-04T01:33:24Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
