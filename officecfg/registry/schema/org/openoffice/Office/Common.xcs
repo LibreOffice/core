@@ -6729,5 +6729,16 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="Classification">
+      <info>
+        <desc>TSCP Classification</desc>
+      </info>
+      <prop oor:name="Policy" oor:type="xs:short" oor:nillable="false">
+        <info>
+           <desc>The policy type used at classification</desc>
+        </info>
+        <value>3</value>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>
