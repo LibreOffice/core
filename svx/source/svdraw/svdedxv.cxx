@@ -65,6 +65,9 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdviter.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpagewindow.hxx>
 
 #include <memory>
 
@@ -102,7 +105,6 @@ SdrObjEditView::~SdrObjEditView()
     delete pTextEditOutliner;
     assert(nullptr == mpOldTextEditUndoManager); // should have been reset
 }
-
 
 bool SdrObjEditView::IsAction() const
 {
@@ -353,39 +355,298 @@ void SdrObjEditView::ModelHasChanged()
     }
 }
 
+namespace
+{
+    /**
+        Helper class to visualize the content of an active EditView as an
+        OverlayObject. These objects work with Primitives and are handled
+        from the OverlayManager(s) in place as needed.
+
+        It allows complete visualization of the content of the active
+        EditView without the need of Invalidates triggered by the EditView
+        and thus avoiding potentially expensive repaints by using the
+        automatically buffered Overlay mechanism.
+
+        It buffers as amuch as possible locally and *only* triggers a real
+        change (see call to objectChange()) when really needed.
+     */
+    class TextEditOverlayObject : public sdr::overlay::OverlayObject
+    {
+    protected:
+        /// local access to associated sdr::overlay::OverlaySelection
+        sdr::overlay::OverlaySelection*     mpOverlaySelection;
+
+        /// local definition depends on active OutlinerView
+        OutlinerView&                       mrOutlinerView;
+
+        /// geometry definitions with buffering
+        basegfx::B2DRange                   maLastRange;
+        basegfx::B2DRange                   maRange;
+
+        /// text content definitions with buffering
+        drawinglayer::primitive2d::Primitive2DContainer     maTextPrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer     maLastTextPrimitives;
+
+        /// bitfield
+        bool                    mbVisualizeSurroundingFrame : 1;
+
+        // geometry creation for OverlayObject, can use local *Last* values
+        virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
+
+    public:
+        TextEditOverlayObject(
+            sdr::overlay::OverlaySelection* pOverlaySelection,
+            const Color& rColor,
+            OutlinerView& rOutlinerView,
+            bool bVisualizeSurroundingFrame);
+        virtual ~TextEditOverlayObject() override;
+
+        // data read access
+        const sdr::overlay::OverlaySelection* getOverlaySelection() const { return mpOverlaySelection; }
+        const OutlinerView& getOutlinerView() const { return mrOutlinerView; }
+        bool getVisualizeSurroundingFrame() const { return mbVisualizeSurroundingFrame; }
+
+        /// override to check conditions for last createOverlayObjectPrimitive2DSequence
+        virtual drawinglayer::primitive2d::Primitive2DContainer getOverlayObjectPrimitive2DSequence() const override;
+
+        // data write access. In this OverlayObject we only have the
+        // callback that triggers detecting if something *has* changed
+        void checkDataChange(const basegfx::B2DRange& rMinTextEditArea);
+        void checkSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges);
+    };
+
+    drawinglayer::primitive2d::Primitive2DContainer TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aRetval;
+
+        /// outer frame visualization
+        if (getVisualizeSurroundingFrame())
+        {
+            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+            const sal_uInt16 nPixSiz(getOutlinerView().GetInvalidateMore() - 1);
+
+            aRetval.push_back(
+                new drawinglayer::primitive2d::OverlayRectanglePrimitive(
+                    maRange,
+                    getBaseColor().getBColor(),
+                    fTransparence,
+                    std::max(6, nPixSiz - 2), // grow
+                    0.0, // shrink
+                    0.0));
+        }
+
+        // add buffered TextPrimitives
+        aRetval.append(maTextPrimitives);
+
+        return aRetval;
+    }
+
+    TextEditOverlayObject::TextEditOverlayObject(
+        sdr::overlay::OverlaySelection* pOverlaySelection,
+        const Color& rColor,
+        OutlinerView& rOutlinerView,
+        bool bVisualizeSurroundingFrame)
+    :   OverlayObject(rColor),
+        mpOverlaySelection(pOverlaySelection),
+        mrOutlinerView(rOutlinerView),
+        maLastRange(),
+        maRange(),
+        maTextPrimitives(),
+        maLastTextPrimitives(),
+        mbVisualizeSurroundingFrame(bVisualizeSurroundingFrame)
+    {
+        // no AA for TextEdit overlay
+        allowAntiAliase(false);
+    }
+
+    TextEditOverlayObject::~TextEditOverlayObject()
+    {
+        if (getOverlaySelection())
+        {
+            delete mpOverlaySelection;
+            mpOverlaySelection = nullptr;
+        }
+
+        if (getOverlayManager())
+        {
+            getOverlayManager()->remove(*this);
+        }
+    }
+
+    drawinglayer::primitive2d::Primitive2DContainer TextEditOverlayObject::getOverlayObjectPrimitive2DSequence() const
+    {
+        if (!getPrimitive2DSequence().empty())
+        {
+            if (!maRange.equal(maLastRange) || maLastTextPrimitives != maTextPrimitives)
+            {
+                // conditions of last local decomposition have changed, delete to force new evaluation
+                const_cast<TextEditOverlayObject*>(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
+            }
+        }
+
+        if (getPrimitive2DSequence().empty())
+        {
+            // remember new buffered values
+            const_cast<TextEditOverlayObject*>(this)->maLastRange = maRange;
+            const_cast<TextEditOverlayObject*>(this)->maLastTextPrimitives = maTextPrimitives;
+        }
+
+        // call base implementation
+        return OverlayObject::getOverlayObjectPrimitive2DSequence();
+    }
+
+    void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEditArea)
+    {
+        bool bObjectChange(false);
+
+        // check current range
+        const tools::Rectangle aOutArea(mrOutlinerView.GetOutputArea());
+        basegfx::B2DRange aNewRange(aOutArea.Left(), aOutArea.Top(), aOutArea.Right(), aOutArea.Bottom());
+        aNewRange.expand(rMinTextEditArea);
+
+        if (aNewRange != maRange)
+        {
+            maRange = aNewRange;
+            bObjectChange = true;
+        }
+
+        // check if text primitives did change
+        SdrOutliner* pSdrOutliner = dynamic_cast<SdrOutliner*>(getOutlinerView().GetOutliner());
+
+        if (pSdrOutliner)
+        {
+            // get TextPrimitives directly from active Outliner
+            basegfx::B2DHomMatrix aNewTransformA;
+            basegfx::B2DHomMatrix aNewTransformB;
+            basegfx::B2DRange aClipRange;
+            drawinglayer::primitive2d::Primitive2DContainer aNewTextPrimitives;
+
+            // active Outliner is always in unified oriented coordinate system (currently)
+            // so just translate to TopLeft of visible Range
+            tools::Rectangle aVisArea(mrOutlinerView.GetVisArea());
+
+            aNewTransformB.translate(
+                aOutArea.Left() - aVisArea.Left(),
+                aOutArea.Top() - aVisArea.Top());
+
+            // get the current TextPrimitives. This is the most expensive part
+            // of this mechanism, it *may* be possible to buffer layouted
+            // primitives per ParaPortion with/in/dependent on the EditEngine
+            // content if needed. For now, get and compare
+            SdrTextObj::impDecomposeBlockTextPrimitiveDirect(
+                aNewTextPrimitives,
+                *pSdrOutliner,
+                aNewTransformA,
+                aNewTransformB,
+                aClipRange);
+
+            if (aNewTextPrimitives != maTextPrimitives)
+            {
+                maTextPrimitives = aNewTextPrimitives;
+                bObjectChange = true;
+            }
+        }
+
+        if (bObjectChange)
+        {
+            // if there really *was* a change signal the OverlayManager to
+            // refresh this object's visualization
+            objectChange();
+        }
+    }
+
+    void TextEditOverlayObject::checkSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges)
+    {
+        if (getOverlaySelection())
+        {
+            mpOverlaySelection->setRanges(rLogicRanges);
+        }
+    }
+} // end of anonymous namespace
 
 // TextEdit
 
+// file-local static bool to control old/new behaviour of active TextEdit visualization
+static bool bAllowTextEditVisualizatkionOnOverlay(true);
+
+// callback from the active EditView, forward to evtl. existing instances of the
+// TextEditOverlayObject(s)
+void SdrObjEditView::EditViewInvalidate() const
+{
+    if (IsTextEdit())
+    {
+        // MinTextRange may have changed. Forward it, too
+        const basegfx::B2DRange aMinTextRange(
+            aMinTextEditArea.Left(), aMinTextEditArea.Top(),
+            aMinTextEditArea.Right(), aMinTextEditArea.Bottom());
+
+        for (sal_uInt32 a(0); a < maTEOverlayGroup.count(); a++)
+        {
+            TextEditOverlayObject* pCandidate = dynamic_cast< TextEditOverlayObject* >(&maTEOverlayGroup.getOverlayObject(a));
+
+            if (pCandidate)
+            {
+                pCandidate->checkDataChange(aMinTextRange);
+            }
+        }
+    }
+}
+
+void SdrObjEditView::EditViewSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges) const
+{
+    if (IsTextEdit())
+    {
+        for (sal_uInt32 a(0); a < maTEOverlayGroup.count(); a++)
+        {
+            TextEditOverlayObject* pCandidate = dynamic_cast< TextEditOverlayObject* >(&maTEOverlayGroup.getOverlayObject(a));
+
+            if (pCandidate)
+            {
+                pCandidate->checkSelectionChange(rLogicRanges);
+            }
+        }
+    }
+}
 
 void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
-    // draw old text edit stuff
-    if(IsTextEdit())
+    if (bAllowTextEditVisualizatkionOnOverlay)
     {
-        const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
-
-        if(pActiveOutliner)
+        // adapt TextEditOverlayObject(s). Need also to do this here to
+        // update the current values accordingly
+        EditViewInvalidate();
+    }
+    else
+    {
+        // draw old text edit stuff
+        if (IsTextEdit())
         {
-            const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
+            const SdrOutliner* pActiveOutliner = GetTextEditOutliner();
 
-            if(nViewCount)
+            if (pActiveOutliner)
             {
-                const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
-                const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
+                const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
 
-                for(sal_uInt32 i(0); i < nViewCount; i++)
+                if (nViewCount)
                 {
-                    OutlinerView* pOLV = pActiveOutliner->GetView(i);
+                    const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
+                    const tools::Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
-                    // If rPaintWindow knows that the output device is a render
-                    // context and is aware of the underlying vcl::Window,
-                    // compare against that; that's how double-buffering can
-                    // still find the matching OutlinerView.
-                    OutputDevice* pOutputDevice = rPaintWindow.GetWindow() ? rPaintWindow.GetWindow() : &rPaintWindow.GetOutputDevice();
-                    if(pOLV->GetWindow() == pOutputDevice || comphelper::LibreOfficeKit::isActive())
+                    for (sal_uInt32 i(0); i < nViewCount; i++)
                     {
-                        ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
-                        return;
+                        OutlinerView* pOLV = pActiveOutliner->GetView(i);
+
+                        // If rPaintWindow knows that the output device is a render
+                        // context and is aware of the underlying vcl::Window,
+                        // compare against that; that's how double-buffering can
+                        // still find the matching OutlinerView.
+                        OutputDevice* pOutputDevice = rPaintWindow.GetWindow() ? rPaintWindow.GetWindow() : &rPaintWindow.GetOutputDevice();
+                        if (pOLV->GetWindow() == pOutputDevice || comphelper::LibreOfficeKit::isActive())
+                        {
+                            ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
+                            return;
+                        }
                     }
                 }
             }
@@ -513,8 +774,16 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerVie
     // create OutlinerView
     OutlinerView* pOutlView=pGivenView;
     pTextEditOutliner->SetUpdateMode(false);
-    if (pOutlView==nullptr) pOutlView = new OutlinerView(pTextEditOutliner,pWin);
-    else pOutlView->SetWindow(pWin);
+
+    if (pOutlView == nullptr)
+    {
+        pOutlView = new OutlinerView(pTextEditOutliner, pWin);
+    }
+    else
+    {
+        pOutlView->SetWindow(pWin);
+    }
+
     // disallow scrolling
     EVControlBits nStat=pOutlView->GetControlWord();
     nStat&=~EVControlBits::AUTOSCROLL;
@@ -859,6 +1128,57 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,pGivenOutlinerView);
 
+            if (bAllowTextEditVisualizatkionOnOverlay && pTextEditOutlinerView)
+            {
+                // activate visualization of EditView on Overlay
+                pTextEditOutlinerView->GetEditView().setEditViewCallbacks(this);
+
+                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+                const SdrTextObj* pText = dynamic_cast<SdrTextObj*>(GetTextEditObject());
+                const bool bTextFrame(pText && pText->IsTextFrame());
+                const bool bFitToSize(pTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
+                const bool bVisualizeSurroundingFrame(bTextFrame && !bFitToSize);
+                SdrPageView* pPageView = GetSdrPageView();
+
+                if (pPageView)
+                {
+                    for (sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
+                    {
+                        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
+
+                        if (rPageWindow.GetPaintWindow().OutputToWindow())
+                        {
+                            rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                            if (xManager.is())
+                            {
+                                const basegfx::B2DRange aMinTEArea(
+                                    aMinTextEditArea.Left(), aMinTextEditArea.Top(),
+                                    aMinTextEditArea.Right(), aMinTextEditArea.Bottom());
+                                const std::vector< basegfx::B2DRange > aEmptySelection;
+
+                                sdr::overlay::OverlaySelection* pNewOverlaySelection = new sdr::overlay::OverlaySelection(
+                                    sdr::overlay::OverlayType::Transparent,
+                                    aHilightColor,
+                                    aEmptySelection,
+                                    true);
+
+                                sdr::overlay::OverlayObject* pNewTextEditOverlayObject = new TextEditOverlayObject(
+                                    pNewOverlaySelection,
+                                    aHilightColor,
+                                    *pTextEditOutlinerView,
+                                    bVisualizeSurroundingFrame);
+
+                                xManager->add(*pNewTextEditOverlayObject);
+                                xManager->add(*pNewOverlaySelection);
+
+                                maTEOverlayGroup.append(pNewTextEditOverlayObject);
+                            }
+                        }
+                    }
+                }
+            }
+
             // check if this view is already inserted
             sal_uIntPtr i2,nCount = pTextEditOutliner->GetViewCount();
             for( i2 = 0; i2 < nCount; i2++ )
@@ -1065,6 +1385,13 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     {
         SdrHint aHint(SdrHintKind::EndEdit, *mxTextEditObj.get());
         GetModel()->Broadcast(aHint);
+    }
+
+    // if new mechanism was used, clean it up
+    if (bAllowTextEditVisualizatkionOnOverlay && pTextEditOutlinerView)
+    {
+        pTextEditOutlinerView->GetEditView().setEditViewCallbacks(nullptr);
+        maTEOverlayGroup.clear();
     }
 
     mxTextEditObj.reset(nullptr);
