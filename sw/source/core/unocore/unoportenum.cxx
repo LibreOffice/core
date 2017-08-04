@@ -700,7 +700,7 @@ lcl_ExportHints(
     PortionStack_t & rPortionStack,
     const Reference<XText> & xParent,
     SwUnoCursor * const pUnoCursor,
-    SwpHints * const pHints,
+    SwpHints const * const pHints,
     const sal_Int32 i_nStartPos,
     const sal_Int32 i_nEndPos,
     const sal_Int32 nCurrentIndex,
@@ -1165,7 +1165,7 @@ static void lcl_ExportAnnotationStarts(
 static sal_Int32 lcl_ExportFrames(
     TextRangeList_t & rPortions,
     Reference<XText> const & i_xParent,
-    SwUnoCursor * const i_pUnoCursor,
+    SwUnoCursor const * const i_pUnoCursor,
     FrameClientSortList_t & i_rFrames,
     sal_Int32 const i_nCurrentIndex)
 {

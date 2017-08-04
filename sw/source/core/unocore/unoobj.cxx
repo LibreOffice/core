@@ -398,7 +398,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
 }
 
 static void
-lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
+lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
         uno::Any const& rValue)
 {
     OUString uStyle;
@@ -2032,7 +2032,7 @@ void SwUnoCursorHelper::SetPropertyToDefault(
 }
 
 uno::Any SwUnoCursorHelper::GetPropertyDefault(
-    SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
+    SwPaM const & rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
 {
     SfxItemPropertySimpleEntry const*const pEntry =

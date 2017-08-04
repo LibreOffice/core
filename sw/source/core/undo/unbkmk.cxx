@@ -128,7 +128,7 @@ SwRewriter SwUndoRenameBookmark::GetRewriter() const
     return aRewriter;
 }
 
-void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext & rContext, const OUString& sFrom, const OUString& sTo)
+void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext const & rContext, const OUString& sFrom, const OUString& sTo)
 {
     IDocumentMarkAccess* const pMarkAccess = rContext.GetDoc().getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(sFrom);

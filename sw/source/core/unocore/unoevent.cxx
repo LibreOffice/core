@@ -137,7 +137,7 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFormat(
 
 void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
     uno::Reference<
-        container::XNameReplace> & xReplace)
+        container::XNameReplace> const & xReplace)
 {
     // iterate over all names (all names that *we* support)
     Sequence<OUString> aNames = getElementNames();

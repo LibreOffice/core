@@ -72,7 +72,7 @@ class SwUndoTransliterate : public SwUndo, public SwUndRng
     std::vector< UndoTransliterate_Data * >    aChanges;
     TransliterationFlags nType;
 
-    void DoTransliterate(SwDoc & rDoc, SwPaM & rPam);
+    void DoTransliterate(SwDoc & rDoc, SwPaM const & rPam);
 
 public:
     SwUndoTransliterate( const SwPaM& rPam,
@@ -85,7 +85,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void AddChanges( SwTextNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
-                     css::uno::Sequence <sal_Int32>& rOffsets );
+                     css::uno::Sequence <sal_Int32> const & rOffsets );
     bool HasData() const { return aChanges.size() > 0; }
 };
 

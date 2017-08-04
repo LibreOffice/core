@@ -496,7 +496,7 @@ class SW_DLLPUBLIC SwWriter
     bool bWriteAll;
 
 public:
-    ErrCode Write( WriterRef& rxWriter, const OUString* = nullptr);
+    ErrCode Write( WriterRef const & rxWriter, const OUString* = nullptr);
 
     SwWriter( SvStream&, SwCursorShell &, bool bWriteAll = false );
     SwWriter( SvStream&, SwDoc & );

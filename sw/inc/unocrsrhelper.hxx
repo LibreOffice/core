@@ -78,7 +78,7 @@ namespace SwUnoCursorHelper
     };
 
     css::uno::Reference< css::text::XTextContent >
-        GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
+        GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
     bool                    getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
@@ -87,7 +87,7 @@ namespace SwUnoCursorHelper
                                         , css::beans::PropertyState& eState
                                         , const SwTextNode* pNode = nullptr );
 
-    void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
+    void                    GetCurPageStyle(SwPaM const & rPaM, OUString &rString);
 
     inline bool             IsStartOfPara(SwPaM& rUnoCursor)
                                         { return rUnoCursor.GetPoint()->nContent == 0;}
@@ -113,7 +113,7 @@ namespace SwUnoCursorHelper
                                     SwPaM& rPam);
 
     sal_Int16                   IsNodeNumStart(
-                                    SwPaM& rPam,
+                                    SwPaM const & rPam,
                                     css::beans::PropertyState& eState);
 
     bool    DocInsertStringSplitCR(  SwDoc &rDoc,
@@ -121,7 +121,7 @@ namespace SwUnoCursorHelper
                     const bool bForceExpandHints );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void    makeRedline( SwPaM& rPaM, const OUString& RedlineType,
+    void    makeRedline( SwPaM const & rPaM, const OUString& RedlineType,
             const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
@@ -210,7 +210,7 @@ namespace SwUnoCursorHelper
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
     css::uno::Any  GetPropertyDefault(
-            SwPaM & rPaM,
+            SwPaM const & rPaM,
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName);
 

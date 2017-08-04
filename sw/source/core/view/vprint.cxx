@@ -151,7 +151,7 @@ void SwPaintQueue::Repaint()
     }
 }
 
-void SwPaintQueue::Remove( SwViewShell *pSh )
+void SwPaintQueue::Remove( SwViewShell const *pSh )
 {
     SwQueuedPaint *pPt;
     if (nullptr != (pPt = s_pPaintQueue))
@@ -255,7 +255,7 @@ void SwViewShell::ChgAllPageOrientation( Orientation eOri )
     }
 }
 
-void SwViewShell::ChgAllPageSize( Size &rSz )
+void SwViewShell::ChgAllPageSize( Size const &rSz )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );

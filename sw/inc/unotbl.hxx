@@ -186,7 +186,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static SwTableLine* FindLine(SwTable* pTable, SwTableLine* pLine);
+    static SwTableLine* FindLine(SwTable* pTable, SwTableLine const * pLine);
 };
 
 typedef cppu::WeakImplHelper<
@@ -201,7 +201,7 @@ class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     const SfxItemPropertySet*   m_pPropSet;
 
 public:
-    SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox* pBox);
+    SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const * pBox);
     SwXTextTableCursor(SwFrameFormat& rTableFormat,
                         const SwTableCursor* pTableSelection);
     DECLARE_XINTERFACE()
@@ -375,13 +375,13 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwXCellRange(const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
+    SwXCellRange(const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor const & rDesc);
     virtual ~SwXCellRange() override;
 
 public:
     static ::rtl::Reference<SwXCellRange> CreateXCellRange(
             const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat,
-            SwRangeDescriptor& rDesc);
+            SwRangeDescriptor const & rDesc);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

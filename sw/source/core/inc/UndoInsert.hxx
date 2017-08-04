@@ -216,7 +216,7 @@ public:
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
 
     void SetUndoKeep()  { bUndoKeep = true; }
-    void SetFlys( SwFrameFormat& rOldFly, SfxItemSet& rChgSet, SwFrameFormat& rNewFly );
+    void SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChgSet, SwFrameFormat& rNewFly );
     void SetDrawObj( SdrLayerID nLayerId );
 };
 

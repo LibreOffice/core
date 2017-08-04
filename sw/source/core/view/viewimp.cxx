@@ -166,7 +166,7 @@ bool SwViewShellImp::IsUpdateExpFields()
     return false;
 }
 
-void SwViewShellImp::SetFirstVisPage(OutputDevice* pRenderContext)
+void SwViewShellImp::SetFirstVisPage(OutputDevice const * pRenderContext)
 {
     if ( m_pShell->mbDocSizeChgd && m_pShell->VisArea().Top() > m_pShell->GetLayout()->Frame().Height() )
     {
@@ -266,14 +266,14 @@ Color SwViewShellImp::GetRetoucheColor() const
     return aRet;
 }
 
-SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext)
+SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice const * pRenderContext)
 {
     if ( m_bFirstPageInvalid )
         SetFirstVisPage(pRenderContext);
     return m_pFirstVisiblePage;
 }
 
-const SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext) const
+const SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice const * pRenderContext) const
 {
     if ( m_bFirstPageInvalid )
         const_cast<SwViewShellImp*>(this)->SetFirstVisPage(pRenderContext);

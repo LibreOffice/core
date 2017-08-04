@@ -108,7 +108,7 @@ private:
 
 public:
 
-    SwXTextRange(SwPaM& rPam,
+    SwXTextRange(SwPaM const & rPam,
             const css::uno::Reference< css::text::XText > & xParent,
             const enum RangePosition eRange = RANGE_IN_TEXT);
     // only for RANGE_IS_TABLE

@@ -271,7 +271,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
 }
 
 uno::Reference<text::XTextContent>
-GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
+GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
         bool const bParent)
 {
     // these should be unambiguous because of the dummy character
@@ -743,7 +743,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
     return bDone;
 };
 
-sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
+sal_Int16 IsNodeNumStart(SwPaM const & rPam, PropertyState& eState)
 {
     const SwTextNode* pTextNd = rPam.GetNode().GetTextNode();
     // correction: check, if restart value is set at the text node and use
@@ -906,7 +906,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
         eState = PropertyState_DEFAULT_VALUE;
 }
 
-void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
+void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
 {
     if (!rPaM.GetContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
@@ -1158,7 +1158,7 @@ bool DocInsertStringSplitCR(
     return bOK;
 }
 
-void makeRedline( SwPaM& rPaM,
+void makeRedline( SwPaM const & rPaM,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {

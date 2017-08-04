@@ -374,7 +374,7 @@ void SwUndoTransliterate::RepeatImpl(::sw::RepeatContext & rContext)
     DoTransliterate(rContext.GetDoc(), rContext.GetRepeatPaM());
 }
 
-void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
+void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM const & rPam)
 {
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
     rDoc.getIDocumentContentOperations().TransliterateText( rPam, aTrans );
@@ -382,7 +382,7 @@ void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
 
 void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
                     sal_Int32 nStart, sal_Int32 nLen,
-                    uno::Sequence <sal_Int32>& rOffsets )
+                    uno::Sequence <sal_Int32> const & rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
     UndoTransliterate_Data* pNew = new UndoTransliterate_Data(

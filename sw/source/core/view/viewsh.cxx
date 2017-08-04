@@ -133,7 +133,7 @@ void SwViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 static void
-lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
+lcl_PaintTransparentFormControls(SwViewShell const & rShell, SwRect const& rRect)
 {
     // Direct paint has been performed: the background of transparent child
     // windows has been painted, so need to paint the child windows now.
@@ -593,7 +593,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
     }
 }
 
-vcl::Window* SwViewShell::CareChildWin(SwViewShell& rVSh)
+vcl::Window* SwViewShell::CareChildWin(SwViewShell const & rVSh)
 {
     if(rVSh.mpSfxViewShell)
     {
@@ -2435,7 +2435,7 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
     return nullptr;
 }
 
-void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
+void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
     if(mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
     {

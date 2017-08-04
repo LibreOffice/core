@@ -750,7 +750,7 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
     }
 }
 
-SwXTextRange::SwXTextRange(SwPaM& rPam,
+SwXTextRange::SwXTextRange(SwPaM const & rPam,
         const uno::Reference< text::XText > & xParent,
         const enum RangePosition eRange)
     : m_pImpl( new SwXTextRange::Impl(*rPam.GetDoc(), eRange, nullptr, xParent) )
@@ -1073,7 +1073,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
 }
 
 static bool
-lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
+lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
     SwFrameFormat const*const pFrameFormat, SwFrameFormat*& rpFormat)
 {
     bool bRet = false;

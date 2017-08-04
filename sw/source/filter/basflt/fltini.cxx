@@ -281,7 +281,7 @@ void StgReader::SetFltName( const OUString& rFltNm )
         aFltName = rFltNm;
 }
 
-SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, bool bNDoc )
+SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc const & rDoc, bool bNDoc )
 {
     pNumRuleTable = new SwNumRuleTable;
     pNumRuleTable->reserve(8);

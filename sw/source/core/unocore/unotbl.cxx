@@ -181,7 +181,7 @@ static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
 }
 
 static void lcl_SendChartEvent(uno::Reference<uno::XInterface> const& xSource,
-                               ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
+                               ::cppu::OMultiTypeInterfaceContainerHelper const & rListeners)
 {
     ::cppu::OInterfaceContainerHelper *const pContainer(rListeners.getContainer(
             cppu::UnoType<chart::XChartDataChangeEventListener>::get()));
@@ -192,7 +192,7 @@ static void lcl_SendChartEvent(uno::Reference<uno::XInterface> const& xSource,
 }
 
 static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
-                               ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
+                               ::cppu::OMultiTypeInterfaceContainerHelper const & rListeners)
 {
     return lcl_SendChartEvent(&rSource, rListeners);
 }
@@ -606,7 +606,7 @@ static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString>& rAllNa
     }
 }
 
-static bool lcl_FormatTable(SwFrameFormat* pTableFormat)
+static bool lcl_FormatTable(SwFrameFormat const * pTableFormat)
 {
     bool bHasFrames = false;
     SwIterator<SwFrame,SwFormat> aIter( *pTableFormat );
@@ -638,7 +638,7 @@ static void lcl_CursorSelect(SwPaM& rCursor, bool bExpand)
         rCursor.DeleteMark();
 }
 
-static void lcl_GetTableSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, bool bRow)
+static void lcl_GetTableSeparators(uno::Any& rRet, SwTable const * pTable, SwTableBox const * pBox, bool bRow)
 {
     SwTabCols aCols;
     aCols.SetLeftMin ( 0 );
@@ -667,7 +667,7 @@ static void lcl_GetTableSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* 
 
 }
 
-static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBox, bool bRow, SwDoc* pDoc)
+static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox const * pBox, bool bRow, SwDoc* pDoc)
 {
     SwTabCols aOldCols;
 
@@ -1442,7 +1442,7 @@ void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHi
         SwClient::SwClientNotify(rModify, rHint);
 }
 
-SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
+SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine const * pLine)
 {
     for(auto& pCurrentLine : pTable->GetTabLines())
         if(pCurrentLine == pLine)
@@ -1488,7 +1488,7 @@ SwUnoCursor&          SwXTextTableCursor::GetCursor()       { return *m_pUnoCurs
 uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames()
     { return {"com.sun.star.text.TextTableCursor"}; }
 
-SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox* pBox) :
+SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox const * pBox) :
     SwClient(pFormat),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
@@ -2237,9 +2237,9 @@ uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn,
 namespace {
 
 uno::Reference<table::XCellRange> GetRangeByName(
-        SwFrameFormat* pFormat, SwTable* pTable,
+        SwFrameFormat* pFormat, SwTable const * pTable,
         const OUString& rTLName, const OUString& rBRName,
-        SwRangeDescriptor& rDesc)
+        SwRangeDescriptor const & rDesc)
 {
     const SwTableBox* pTLBox = pTable->GetTableBox(rTLName);
     if(!pTLBox)
@@ -3164,7 +3164,7 @@ public:
     bool m_bFirstColumnAsLabel;
 
     Impl(sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
-            SwRangeDescriptor& rDesc)
+            SwRangeDescriptor const & rDesc)
         : SwClient(&rFrameFormat)
         , m_ChartListeners(m_Mutex)
         , m_pTableCursor(pCursor)
@@ -3237,7 +3237,7 @@ uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames()
 }
 
 SwXCellRange::SwXCellRange(sw::UnoCursorPointer const& pCursor,
-        SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc)
+        SwFrameFormat& rFrameFormat, SwRangeDescriptor const & rDesc)
     : m_pImpl(new Impl(pCursor, rFrameFormat, rDesc))
 {
 }
@@ -3248,7 +3248,7 @@ SwXCellRange::~SwXCellRange()
 
 rtl::Reference<SwXCellRange> SwXCellRange::CreateXCellRange(
         sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
-        SwRangeDescriptor& rDesc)
+        SwRangeDescriptor const & rDesc)
 {
     SwXCellRange *const pCellRange(new SwXCellRange(pCursor, rFrameFormat, rDesc));
     uno::Reference<table::XCellRange> xCellRange(pCellRange);

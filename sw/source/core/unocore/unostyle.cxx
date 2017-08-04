@@ -1223,7 +1223,7 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames()
     return aRet;
 }
 
-static uno::Reference<beans::XPropertySet> lcl_InitStandardStyle(const SfxStyleFamily eFamily,  uno::Reference<container::XNameAccess>& rxStyleFamily)
+static uno::Reference<beans::XPropertySet> lcl_InitStandardStyle(const SfxStyleFamily eFamily,  uno::Reference<container::XNameAccess> const & rxStyleFamily)
 {
     using return_t = decltype(lcl_InitStandardStyle(eFamily, rxStyleFamily));
     if(eFamily != SfxStyleFamily::Para && eFamily != SfxStyleFamily::Page)
@@ -2562,7 +2562,7 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
     setPropertiesToDefault(aSequence);
 }
 
-SwFormat* lcl_GetFormatForStyle(SwDoc* pDoc, const rtl::Reference<SwDocStyleSheet>& xStyle, const SfxStyleFamily eFamily)
+SwFormat* lcl_GetFormatForStyle(SwDoc const * pDoc, const rtl::Reference<SwDocStyleSheet>& xStyle, const SfxStyleFamily eFamily)
 {
     if(!xStyle.is())
         return nullptr;
