@@ -42,6 +42,9 @@ public:
     virtual void postDialogMouseEvent(const DialogID& rDialogID, int nType, int nX, int nY,
                                       int nCount, int nButtons, int nModifier) = 0;
 
+    virtual void postDialogChildMouseEvent(const DialogID& rDialogID, int nType, int nX, int nY,
+                                           int nCount, int nButtons, int nModifier) = 0;
+
     // Callbacks
     virtual void notifyDialogInvalidation(const DialogID& rDialogID) = 0;
 
