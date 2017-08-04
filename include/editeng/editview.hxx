@@ -79,6 +79,21 @@ enum class ScrollRangeCheck
     PaperWidthTextSize = 2,   // VisArea must be within paper width, Text Size
 };
 
+// Helper class that allows to set a callback at the EditView. When
+// set, Invalidates and repains are suppressed at the EditView, but
+// EditViewInvalidate() will be triggered to allow the consumer to
+// react itself as needed.
+// Also Selection visualization is suppressed and EditViewSelectionChange
+// is triggered when Selection changes and needs reaction.
+class EDITENG_DLLPUBLIC EditViewCallbacks
+{
+public:
+    EditViewCallbacks() {}
+    virtual ~EditViewCallbacks();
+
+    virtual void EditViewInvalidate() const = 0;
+    virtual void EditViewSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges) const = 0;
+};
 
 class EDITENG_DLLPUBLIC EditView final
 {
@@ -105,6 +120,10 @@ public:
                     EditView( EditEngine* pEng, vcl::Window* pWindow );
                     ~EditView();
 
+    // set EditViewCallbacks for external handling of Repaints/Visualization
+    void setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks);
+    bool hasEditViewCallbacks() const;
+
     void            SetEditEngine( EditEngine* pEditEngine );
     EditEngine*     GetEditEngine() const;
 
@@ -117,6 +136,7 @@ public:
 
     void            Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     tools::Rectangle       GetInvalidateRect() const;
+    void            InvalidateWindow(const tools::Rectangle& rClipRect);
     void            InvalidateOtherViewWindows( const tools::Rectangle& rInvRect );
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );

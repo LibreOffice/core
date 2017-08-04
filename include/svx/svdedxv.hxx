@@ -25,6 +25,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/svdglev.hxx>
 #include <svx/selectioncontroller.hxx>
+#include <editeng/editview.hxx>
 #include <memory>
 
 class SdrOutliner;
@@ -57,10 +58,19 @@ enum class SdrEndTextEditKind
 // - macromod
 
 
-class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView
+class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView, public EditViewCallbacks
 {
     friend class                SdrPageView;
     friend class                ImpSdrEditPara;
+
+    // Now derived from EditViewCallbacks and overriding these callbacks to
+    // allow own EditText visualization
+    virtual void EditViewInvalidate() const override;
+    virtual void EditViewSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges) const override;
+
+    // The OverlayObjects used for visualizing active TextEdit (currently
+    // using TextEditOverlayObject, but not limitied to it
+    sdr::overlay::OverlayObjectList           maTEOverlayGroup;
 
 protected:
     // TextEdit

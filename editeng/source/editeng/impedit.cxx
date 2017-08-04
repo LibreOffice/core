@@ -83,6 +83,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     bClickedInSelection = false;
     eSelectionMode      = EESelectionMode::TxtOnly;
     eAnchorMode         = EEAnchorMode::TopLeft;
+    mpEditViewCallbacks = nullptr;
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nControl            = EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE;
@@ -185,6 +186,35 @@ void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
 
 void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
+    if (hasEditViewCallbacks() && !pRegion)
+    {
+        // when we have an own mechanism for painting EditViews, collect the Selection
+        // in a basegfx::B2DRange vector and hand over. To do so, call GetSelectionRectangles
+        // which recursively calls ImpEditView::DrawSelection, but with nullptr != pRegion
+        std::vector<tools::Rectangle> aLogicRects;
+        std::vector<basegfx::B2DRange> aLogicRanges;
+        OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
+        const Point aPixel(pTarget ? pTarget->LogicToPixel(Point(1, 1)) : Point(1, 1));
+
+        GetSelectionRectangles(aLogicRects);
+
+        for (const auto& aRect : aLogicRects)
+        {
+            // convert from logic Rectangles to logic Ranges, do not forget to add
+            // one Unit (in this case logical unit, thus calculate first)
+            aLogicRanges.push_back(
+                basegfx::B2DRange(
+                    aRect.Left(), aRect.Top(),
+                    aRect.Right() + aPixel.X(), aRect.Bottom() + aPixel.Y()));
+        }
+
+        // use callback to tell about change in selection visualisation
+        mpEditViewCallbacks->EditViewSelectionChange(aLogicRanges);
+
+        // we are done, do *not* visualize self
+        return;
+    }
+
     if ( eSelectionMode == EESelectionMode::Hidden )
         return;
 
@@ -449,16 +479,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
 void ImpEditView::GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects)
 {
-    bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
     vcl::Region aRegion;
     DrawSelection(aEditSelection, &aRegion);
     aRegion.GetRegionRectangles(rLogicRects);
-
-    for (tools::Rectangle& rRectangle : rLogicRects)
-    {
-        if (bMm100ToTwip)
-            rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
-    }
 }
 
 void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly )
@@ -627,6 +650,23 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
         SetScrollDiffX( (sal_uInt16)aOutArea.GetWidth() * 2 / 10 );
 }
 
+void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
+{
+    if (hasEditViewCallbacks())
+    {
+        // do not invalidate and trigger a global repaint, but forward
+        // the need for change to the applied EditViewCallback, can e.g.
+        // be used to visualize the active edit text in an OverlayObject
+        mpEditViewCallbacks->EditViewInvalidate();
+    }
+    else
+    {
+        // classic mode: invalidate and trigger full repaint
+        // of the changed area
+        GetWindow()->Invalidate(rRect);
+    }
+}
+
 void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
 {
     // remember old out area
@@ -643,38 +683,46 @@ void ImpEditView::ResetOutputArea( const tools::Rectangle& rRect )
 
         if(aOldArea.Left() > aOutArea.Left())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOutArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Left(), aOldArea.Bottom() + nMore));
+            const tools::Rectangle aRect(aOutArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Left(), aOldArea.Bottom() + nMore);
+            InvalidateAtWindow(aRect);
         }
         else if(aOldArea.Left() < aOutArea.Left())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOutArea.Left(), aOldArea.Bottom() + nMore));
+            const tools::Rectangle aRect(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOutArea.Left(), aOldArea.Bottom() + nMore);
+            InvalidateAtWindow(aRect);
         }
 
         if(aOldArea.Right() > aOutArea.Right())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOutArea.Right(), aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
+            const tools::Rectangle aRect(aOutArea.Right(), aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Bottom() + nMore);
+            InvalidateAtWindow(aRect);
         }
         else if(aOldArea.Right() < aOutArea.Right())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Right(), aOldArea.Top() - nMore, aOutArea.Right() + nMore, aOldArea.Bottom() + nMore));
+            const tools::Rectangle aRect(aOldArea.Right(), aOldArea.Top() - nMore, aOutArea.Right() + nMore, aOldArea.Bottom() + nMore);
+            InvalidateAtWindow(aRect);
         }
 
         if(aOldArea.Top() > aOutArea.Top())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOutArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Top()));
+            const tools::Rectangle aRect(aOldArea.Left() - nMore, aOutArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Top());
+            InvalidateAtWindow(aRect);
         }
         else if(aOldArea.Top() < aOutArea.Top())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOutArea.Top()));
+            const tools::Rectangle aRect(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOutArea.Top());
+            InvalidateAtWindow(aRect);
         }
 
         if(aOldArea.Bottom() > aOutArea.Bottom())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOutArea.Bottom(), aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
+            const tools::Rectangle aRect(aOldArea.Left() - nMore, aOutArea.Bottom(), aOldArea.Right() + nMore, aOldArea.Bottom() + nMore);
+            InvalidateAtWindow(aRect);
         }
         else if(aOldArea.Bottom() < aOutArea.Bottom())
         {
-            GetWindow()->Invalidate(tools::Rectangle(aOldArea.Left() - nMore, aOldArea.Bottom(), aOldArea.Right() + nMore, aOutArea.Bottom() + nMore));
+            const tools::Rectangle aRect(aOldArea.Left() - nMore, aOldArea.Bottom(), aOldArea.Right() + nMore, aOutArea.Bottom() + nMore);
+            InvalidateAtWindow(aRect);
         }
     }
 }
@@ -1629,6 +1677,10 @@ void ImpEditView::DeselectAll()
     pEditEngine->SetInSelectionMode(false);
     DrawSelection();
     GetEditSelection().Min() = GetEditSelection().Max();
+
+    // Selection is empty, still need to draw it due to new forward selection
+    // functionality. When without that, nothing will be drawn (since it's empty)
+    DrawSelection();
 }
 
 bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )

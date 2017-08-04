@@ -94,4 +94,19 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
         return nullptr;
 }
 
+bool SdrOutliner::hasEditViewCallbacks() const
+{
+    for (size_t a(0); a < GetViewCount(); a++)
+    {
+        OutlinerView* pOutlinerView = GetView(a);
+
+        if (pOutlinerView && pOutlinerView->GetEditView().hasEditViewCallbacks())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1639,5 +1639,18 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rTarget = aConverter.getPrimitive2DSequence();
 }
 
+// Direct decomposer for text visualization when you already have a prepared
+// Outliner containing all the needed information
+void SdrTextObj::impDecomposeBlockTextPrimitiveDirect(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    SdrOutliner& rOutliner,
+    const basegfx::B2DHomMatrix& rNewTransformA,
+    const basegfx::B2DHomMatrix& rNewTransformB,
+    const basegfx::B2DRange& rClipRange)
+{
+    impTextBreakupHandler aConverter(rOutliner);
+    aConverter.decomposeBlockTextPrimitive(rNewTransformA, rNewTransformB, rClipRange);
+    rTarget.append(aConverter.getPrimitive2DSequence());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
