@@ -99,7 +99,8 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
 }
 
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
-        const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup, bool bDataSeriesLabel, bool bMSO2007Doc )
+                                const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
+                                bool bDataSeriesLabel, bool bMSO2007Doc, const PropertySet* pSeriesPropSet )
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
@@ -170,6 +171,12 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
                 case XML_r:         nPlacement = csscd::RIGHT;          break;
                 case XML_bestFit:   nPlacement = csscd::AVOID_OVERLAP;  break;
             }
+
+            sal_Int32 nGlobalPlacement = 0;
+            if ( !bDataSeriesLabel && nPlacement == rTypeInfo.mnDefLabelPos && pSeriesPropSet &&
+                 pSeriesPropSet->getProperty( nGlobalPlacement, PROP_LabelPlacement ) )
+                nPlacement = nGlobalPlacement;
+
             rPropSet.setProperty( PROP_LabelPlacement, nPlacement );
         }
     }
@@ -204,7 +211,8 @@ DataLabelConverter::~DataLabelConverter()
 {
 }
 
-void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
+void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup,
+                                           const PropertySet& rSeriesPropSet )
 {
     if (!rxDataSeries.is())
         return;
@@ -213,7 +221,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false, bMSO2007Doc, &rSeriesPropSet );
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
         if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
@@ -256,11 +264,11 @@ DataLabelsConverter::~DataLabelsConverter()
 
 void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
 {
+    PropertySet aPropSet( rxDataSeries );
     if( !mrModel.mbDeleted )
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
-        PropertySet aPropSet( rxDataSeries );
-        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc, nullptr );
 
         if (mrModel.mxShapeProp)
             // Import baseline border properties for these data labels.
@@ -274,7 +282,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
             (*aIt)->maNumberFormat = mrModel.maNumberFormat;
 
         DataLabelConverter aLabelConv( *this, **aIt );
-        aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
+        aLabelConv.convertFromModel( rxDataSeries, rTypeGroup, aPropSet );
     }
 }
 
