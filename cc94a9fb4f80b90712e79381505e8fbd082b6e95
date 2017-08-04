@@ -56,6 +56,30 @@
       "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_14967a94",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-04T09:08:23Z",
+      "side": 1,
+      "message": "Listing items has very complicated alghoritm in Excel. In this case it is listing items with blanks:\n\n        \u003ccacheField name\u003d\"wartosc\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsString\u003d\"0\" containsBlank\u003d\"1\" containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"111\" maxValue\u003d\"222\" count\u003d\"3\"\u003e\n                \u003cm /\u003e\n                \u003cn v\u003d\"111\" /\u003e\n                \u003cn v\u003d\"222\" /\u003e\n            \u003c/sharedItems\u003e\n        \u003c/cacheField\u003e\n\nbut at few lines later, it is not listing even if it contains blank:\n\n        \u003ccacheField name\u003d\"czwarta wartosc\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsBlank\u003d\"1\" containsMixedTypes\u003d\"1\" containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"11\" maxValue\u003d\"22\" /\u003e\n        \u003c/cacheField\u003e\n\nI will investigate it further.",
+      "parentUuid": "1a430d35_317468ce",
+      "range": {
+        "startLine": 305,
+        "startChar": 12,
+        "endLine": 305,
+        "endChar": 31
+      },
+      "revId": "cc94a9fb4f80b90712e79381505e8fbd082b6e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
