@@ -234,7 +234,7 @@ public:
                             const OUString &rName,
                             sal_Int64 nAspect,
                             SwGrfFormatColl *pColl,
-                            SwAttrSet* pAutoAttr ); ///< in ndole.cxx
+                            SwAttrSet const * pAutoAttr ); ///< in ndole.cxx
 
     /// Array of all OutlineNodes.
     const SwOutlineNodes& GetOutLineNds() const { return *m_pOutlineNodes;}

@@ -43,7 +43,7 @@ namespace {
     /// @param[out] rUsedRef The set of used reference numbers.
     /// @param[out] rInvalid  A returned list of all items that had an invalid reference number.
     void lcl_FillUsedFootnoteRefNumbers(SwDoc &rDoc,
-                                         SwTextFootnote *pExclude,
+                                         SwTextFootnote const *pExclude,
                                          std::set<sal_uInt16> &rUsedRef,
                                          std::vector<SwTextFootnote*> &rInvalid)
     {
@@ -72,7 +72,7 @@ namespace {
     /// @param[in] rUsedNums Set of used reference numbers.
     /// @param[in] requested The requested reference number.
     /// @returns true if the number is available, false if not.
-    bool lcl_IsRefNumAvailable(std::set<sal_uInt16> &rUsedNums,
+    bool lcl_IsRefNumAvailable(std::set<sal_uInt16> const &rUsedNums,
                                          sal_uInt16 requested)
     {
         if ( USHRT_MAX == requested )

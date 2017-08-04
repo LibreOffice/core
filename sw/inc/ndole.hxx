@@ -93,13 +93,13 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
     SwOLENode(  const SwNodeIndex &rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFormatColl *pGrfColl,
-                SwAttrSet* pAutoAttr );
+                SwAttrSet const * pAutoAttr );
 
     SwOLENode(  const SwNodeIndex &rWhere,
                 const OUString &rName,
                 sal_Int64 nAspect,
                 SwGrfFormatColl *pGrfColl,
-                SwAttrSet* pAutoAttr );
+                SwAttrSet const * pAutoAttr );
 
     SwOLENode( const SwOLENode & ) = delete;
 

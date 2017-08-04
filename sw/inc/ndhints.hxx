@@ -53,13 +53,13 @@ SwTextAttr * MakeTextAttr(
 /// create redline dummy text hint that must not be inserted into hints array
 SwTextAttr* MakeRedlineTextAttr(
     SwDoc & rDoc,
-    SfxPoolItem& rAttr );
+    SfxPoolItem const & rAttr );
 
 
 /// SwTextAttr's, sorted by start
 struct CompareSwpHtStart
 {
-    bool operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const;
+    bool operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const;
 };
 class SwpHtStart : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtStart,
     o3tl::find_partialorder_ptrequals> {};
@@ -67,7 +67,7 @@ class SwpHtStart : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtStart,
 /// SwTextAttr's, sorted by end
 struct CompareSwpHtEnd
 {
-    bool operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const;
+    bool operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const;
 };
 class SwpHtEnd : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtEnd,
     o3tl::find_partialorder_ptrequals> {};
@@ -105,7 +105,7 @@ private:
     friend class SwTextNode;
     void DeleteAtPos( size_t nPos );
     /// Delete the given Hint. The Hint must actually be in the array!
-    void Delete( SwTextAttr* pTextHt );
+    void Delete( SwTextAttr const * pTextHt );
 
     void SetInSplitNode(bool bInSplit) { m_bInSplitNode = bInSplit; }
     void SetCalcHiddenParaField() { m_bCalcHiddenParaField = true; }

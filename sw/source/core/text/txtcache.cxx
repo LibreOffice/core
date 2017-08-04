@@ -21,8 +21,8 @@
 #include "txtfrm.hxx"
 #include "porlay.hxx"
 
-SwTextLine::SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew ) :
-    SwCacheObj( static_cast<void*>(pFrame) ),
+SwTextLine::SwTextLine( SwTextFrame const *pFrame, SwParaPortion *pNew ) :
+    SwCacheObj( static_cast<void const *>(pFrame) ),
     pLine( pNew )
 {
 }
@@ -33,7 +33,7 @@ SwTextLine::~SwTextLine()
 
 SwCacheObj *SwTextLineAccess::NewObj()
 {
-    return new SwTextLine( const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner)) );
+    return new SwTextLine( static_cast<SwTextFrame const *>(m_pOwner) );
 }
 
 SwParaPortion *SwTextLineAccess::GetPara()

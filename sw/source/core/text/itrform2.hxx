@@ -52,8 +52,8 @@ class SwTextFormatter : public SwTextPainter
     SwTabPortion *NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const;
     SwNumberPortion *NewNumberPortion( SwTextFormatInfo &rInf ) const;
     SwDropPortion *NewDropPortion( SwTextFormatInfo &rInf );
-    SwNumberPortion *NewFootnoteNumPortion( SwTextFormatInfo &rInf ) const;
-    SwErgoSumPortion *NewErgoSumPortion( SwTextFormatInfo &rInf ) const;
+    SwNumberPortion *NewFootnoteNumPortion( SwTextFormatInfo const &rInf ) const;
+    SwErgoSumPortion *NewErgoSumPortion( SwTextFormatInfo const &rInf ) const;
     SwExpandPortion *NewFieldPortion( SwTextFormatInfo &rInf,
                                     const SwTextAttr *pHt ) const;
     SwFootnotePortion *NewFootnotePortion( SwTextFormatInfo &rInf, SwTextAttr *pHt );
@@ -65,7 +65,7 @@ class SwTextFormatter : public SwTextPainter
                                        SwTextAttr *pHt ) const;
     SwLinePortion *WhichFirstPortion( SwTextFormatInfo &rInf );
     SwTextPortion *WhichTextPor( SwTextFormatInfo &rInf ) const;
-    SwExpandPortion * TryNewNoLengthPortion( SwTextFormatInfo & rInfo );
+    SwExpandPortion * TryNewNoLengthPortion( SwTextFormatInfo const & rInfo );
 
     // The center piece of formatting
     void BuildPortions( SwTextFormatInfo &rInf );
@@ -227,7 +227,7 @@ public:
      * the portions' part. Removing left or right border.
      * @param   rPortion    drop portion for merge
     **/
-    static void MergeCharacterBorder( SwDropPortion& rPortion );
+    static void MergeCharacterBorder( SwDropPortion const & rPortion );
 
     /**
      * Merge border of the line portion with setting the portion's
@@ -238,7 +238,7 @@ public:
      * @param   pPrev       portion immediately before rPortion
      * @param   rInf        contain information
     **/
-    void MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion *pPrev, SwTextFormatInfo& rInf );
+    void MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion const *pPrev, SwTextFormatInfo& rInf );
 };
 
 #endif

@@ -44,7 +44,7 @@ class SwLayouter
     SwEndnoter* mpEndnoter;
     SwLooping* mpLooping;
     void CollectEndnotes_( SwSectionFrame* pSect );
-    bool StartLooping( SwPageFrame* pPage );
+    bool StartLooping( SwPageFrame const * pPage );
 
     // --> #i28701#
     SwMovedFwdFramesByObjPos* mpMovedFwdFrames;
@@ -95,7 +95,7 @@ private:
 public:
     SwLayouter();
     ~SwLayouter();
-    void InsertEndnotes( SwSectionFrame* pSect );
+    void InsertEndnotes( SwSectionFrame const * pSect );
     void CollectEndnote( SwFootnoteFrame* pFootnote );
     bool HasEndnotes() const;
 
@@ -104,8 +104,8 @@ public:
     void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame );
 
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect );
-    static bool Collecting( SwDoc* pDoc, SwSectionFrame* pSect, SwFootnoteFrame* pFootnote );
-    static bool StartLoopControl( SwDoc* pDoc, SwPageFrame *pPage );
+    static bool Collecting( SwDoc* pDoc, SwSectionFrame const * pSect, SwFootnoteFrame* pFootnote );
+    static bool StartLoopControl( SwDoc* pDoc, SwPageFrame const *pPage );
 
     // --> #i28701#
     static void ClearMovedFwdFrames( const SwDoc& _rDoc );

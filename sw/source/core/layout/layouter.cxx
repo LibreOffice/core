@@ -38,7 +38,7 @@ class SwLooping
     sal_uInt16 nCount;
     sal_uInt16 mnLoopControlStage;
 public:
-    explicit SwLooping( SwPageFrame* pPage );
+    explicit SwLooping( SwPageFrame const * pPage );
     void Control( SwPageFrame* pPage );
     void Drastic( SwFrame* pFrame );
     bool IsLoopingLouieLight() const { return nCount > LOOP_DETECT - 30; };
@@ -137,7 +137,7 @@ void SwEndnoter::InsertEndnotes()
     pSect = nullptr;
 }
 
-SwLooping::SwLooping( SwPageFrame* pPage )
+SwLooping::SwLooping( SwPageFrame const * pPage )
 {
     OSL_ENSURE( pPage, "Where's my page?" );
     nMinPage = pPage->GetPhyPageNum();
@@ -239,7 +239,7 @@ void SwLayouter::CollectEndnote( SwFootnoteFrame* pFootnote )
     mpEndnoter->CollectEndnote( pFootnote );
 }
 
-void SwLayouter::InsertEndnotes( SwSectionFrame* pSect )
+void SwLayouter::InsertEndnotes( SwSectionFrame const * pSect )
 {
     if( !mpEndnoter || mpEndnoter->GetSect() != pSect )
         return;
@@ -263,7 +263,7 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame
     }
 }
 
-bool SwLayouter::StartLooping( SwPageFrame* pPage )
+bool SwLayouter::StartLooping( SwPageFrame const * pPage )
 {
     if( mpLooping )
         return false;
@@ -285,7 +285,7 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrame* pSect )
     pDoc->getIDocumentLayoutAccess().GetLayouter()->CollectEndnotes_( pSect );
 }
 
-bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame* pSect, SwFootnoteFrame* pFootnote )
+bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame const * pSect, SwFootnoteFrame* pFootnote )
 {
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         return false;
@@ -301,7 +301,7 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrame* pSect, SwFootnoteFrame
     return false;
 }
 
-bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrame *pPage )
+bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrame const *pPage )
 {
     OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )

@@ -82,8 +82,8 @@ namespace sw
             SwDrawContact* m_pContact;
             virtual SdrObject* GetSdrObj(const SwTextFrame&) override;
         public:
-            DrawFlyCntPortion(SwFrameFormat& rFormat);
-            static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwFrameFormat& rFormat, const Point& rBase, long nAsc, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
+            DrawFlyCntPortion(SwFrameFormat const & rFormat);
+            static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, long nAsc, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~DrawFlyCntPortion() override;
     };

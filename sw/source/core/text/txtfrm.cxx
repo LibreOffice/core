@@ -1789,7 +1789,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             if( pVoid )
             {
-                sal_Int32 nWhere = CalcFlyPos( const_cast<SwFrameFormat *>(static_cast<SwFrameFormat const *>(pVoid)) );
+                sal_Int32 nWhere = CalcFlyPos( static_cast<SwFrameFormat const *>(pVoid) );
                 OSL_ENSURE( COMPLETE_STRING != nWhere, "Prepare: Why me?" );
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
                 return bParaPossiblyInvalid;
@@ -2602,7 +2602,7 @@ const SwScriptInfo* SwTextFrame::GetScriptInfo() const
  * Helper function for SwTextFrame::CalcBasePosForFly()
  */
 static SwTwips lcl_CalcFlyBasePos( const SwTextFrame& rFrame, SwRect aFlyRect,
-                            SwTextFly& rTextFly )
+                            SwTextFly const & rTextFly )
 {
     SwRectFnSet aRectFnSet(&rFrame);
     SwTwips nRet = rFrame.IsRightToLeft() ?

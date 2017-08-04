@@ -200,7 +200,7 @@ public:
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
     // rPos will set to the end of the multi-line part.
-    SwMultiCreator* GetMultiCreator( sal_Int32 &rPos, SwMultiPortion* pM ) const;
+    SwMultiCreator* GetMultiCreator( sal_Int32 &rPos, SwMultiPortion const * pM ) const;
 
     bool OnWin() const { return m_bOnWin; }
     void SetOnWin( const bool bNew ) { m_bOnWin = bNew; }
@@ -527,7 +527,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
 
     // Hyphenating ...
     bool InitHyph( const bool bAuto = false );
-    bool CheckFootnotePortion_( SwLineLayout* pCurr );
+    bool CheckFootnotePortion_( SwLineLayout const * pCurr );
 
 public:
     void CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const bool bInterHyph = false,
@@ -652,7 +652,7 @@ public:
                 HyphWord( const OUString &rText, const sal_Int32 nMinTrail );
     const css::beans::PropertyValues & GetHyphValues() const;
 
-    bool CheckFootnotePortion( SwLineLayout* pCurr )
+    bool CheckFootnotePortion( SwLineLayout const * pCurr )
         { return IsFootnoteInside() && CheckFootnotePortion_( pCurr ); }
 
     // Dropcaps called by SwTextFormatter::CTOR

@@ -92,7 +92,7 @@ public:
     ~SwRedlineItr();
     bool IsOn() const { return bOn || ( pExt && pExt->IsOn() ); }
     void Clear( SwFont* pFnt ) { if( bOn ) Clear_( pFnt ); }
-    void ChangeTextAttr( SwFont* pFnt, SwTextAttr &rHt, bool bChg );
+    void ChangeTextAttr( SwFont* pFnt, SwTextAttr const &rHt, bool bChg );
     short Seek( SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld ) {
         if( bShow || pExt ) return Seek_( rFnt, nNew, nOld );
         return 0;

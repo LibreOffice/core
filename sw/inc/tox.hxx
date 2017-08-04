@@ -301,7 +301,7 @@ public:
     const SwFormTokens& GetPattern(sal_uInt16 nLevel) const;
 
     // fill tab stop positions from template to pattern- #i21237#
-    void AdjustTabStops( SwDoc& rDoc );
+    void AdjustTabStops( SwDoc const & rDoc );
 
     inline TOXTypes GetTOXType() const;
     inline sal_uInt16   GetFormMax() const;
@@ -521,7 +521,7 @@ public:
     const OUString&         GetSortAlgorithm()const {return m_sSortAlgorithm;}
     void            SetSortAlgorithm(const OUString& rSet) {m_sSortAlgorithm = rSet;}
     // #i21237#
-    void AdjustTabStops( SwDoc & rDoc )
+    void AdjustTabStops( SwDoc const & rDoc )
     {
         m_aForm.AdjustTabStops( rDoc );
     }

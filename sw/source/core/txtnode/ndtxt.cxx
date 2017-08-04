@@ -1322,7 +1322,7 @@ static void
 lcl_GetTextAttrs(
     std::vector<SwTextAttr *> *const pVector,
     SwTextAttr **const ppTextAttr,
-    SwpHints *const pSwpHints,
+    SwpHints const *const pSwpHints,
     sal_Int32 const nIndex, RES_TXTATR const nWhich,
     enum SwTextNode::GetTextAttrMode const eMode)
 {

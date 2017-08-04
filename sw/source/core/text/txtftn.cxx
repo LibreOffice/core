@@ -926,7 +926,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
 /**
  * The portion for the Footnote Numbering in the Footnote Area
  */
-SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo &rInf ) const
+SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const &rInf ) const
 {
     OSL_ENSURE( m_pFrame->IsInFootnote() && !m_pFrame->GetIndPrev() && !rInf.IsFootnoteDone(),
             "This is the wrong place for a ftnnumber" );
@@ -985,7 +985,7 @@ OUString lcl_GetPageNumber( const SwPageFrame* pPage )
     return rNum.GetNumStr( nVirtNum );
 }
 
-SwErgoSumPortion *SwTextFormatter::NewErgoSumPortion( SwTextFormatInfo &rInf ) const
+SwErgoSumPortion *SwTextFormatter::NewErgoSumPortion( SwTextFormatInfo const &rInf ) const
 {
     // We cannot assume we're a Follow
     if( !m_pFrame->IsInFootnote()  || m_pFrame->GetPrev() ||

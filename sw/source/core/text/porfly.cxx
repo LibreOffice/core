@@ -180,7 +180,7 @@ void SwTextFrame::MoveFlyInCnt( SwTextFrame *pNew, sal_Int32 nStart, sal_Int32 n
     }
 }
 
-sal_Int32 SwTextFrame::CalcFlyPos( SwFrameFormat* pSearch )
+sal_Int32 SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
 {
     SwpHints* pHints = GetTextNode()->GetpSwpHints();
     OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
@@ -267,7 +267,7 @@ sw::FlyContentPortion::FlyContentPortion(SwFlyInContentFrame* pFly)
     SAL_WARN_IF(!pFly, "sw.core", "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInContentFrame!");
 }
 
-sw::DrawFlyCntPortion::DrawFlyCntPortion(SwFrameFormat& rFormat)
+sw::DrawFlyCntPortion::DrawFlyCntPortion(SwFrameFormat const & rFormat)
     : m_pContact(nullptr)
 {
     rFormat.CallSwClientNotify(sw::CreatePortionHint(&m_pContact));
@@ -281,7 +281,7 @@ sw::FlyContentPortion* sw::FlyContentPortion::Create(const SwTextFrame& rFrame, 
     return pNew;
 }
 
-sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwFrameFormat& rFormat, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
 {
     auto pNew(new DrawFlyCntPortion(rFormat));
     pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);

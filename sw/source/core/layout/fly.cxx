@@ -990,7 +990,7 @@ bool SwFlyFrame::GetInfo( SfxPoolItem & rInfo ) const
     return true;        // Continue searching
 }
 
-void SwFlyFrame::Invalidate_( SwPageFrame *pPage )
+void SwFlyFrame::Invalidate_( SwPageFrame const *pPage )
 {
     InvalidatePage( pPage );
     m_bNotifyBack = m_bInvalid = true;

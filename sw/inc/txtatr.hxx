@@ -40,7 +40,7 @@ public:
 
     // Passed from SwFormatCharFormat (no derivation from SwClient!).
     void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
-    bool GetInfo( SfxPoolItem& rInfo ) const;
+    bool GetInfo( SfxPoolItem const & rInfo ) const;
 
     // get and set TextNode pointer
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }

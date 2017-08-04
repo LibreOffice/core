@@ -263,7 +263,7 @@ bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
 SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
                                       const Frame_Info* pFrameInfo,
                                       const Por_Info* pPorInfo,
-                                      OutputDevice& rOut )
+                                      OutputDevice const & rOut )
   : nEndStructureElement( 0 ),
     nRestoreCurrentTag( -1 ),
     mpNumInfo( pNumInfo ),

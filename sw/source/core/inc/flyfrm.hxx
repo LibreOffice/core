@@ -163,7 +163,7 @@ public:
 
     SwTwips Shrink_( SwTwips, bool bTst );
     SwTwips Grow_  ( SwTwips, bool bTst );
-    void    Invalidate_( SwPageFrame *pPage = nullptr );
+    void    Invalidate_( SwPageFrame const *pPage = nullptr );
 
     bool FrameSizeChg( const SwFormatFrameSize & );
 

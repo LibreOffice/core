@@ -39,7 +39,7 @@ public:
 
     void SetKeep( const bool bNew ) { m_bKeep = bNew; }
 
-    bool IsInside( SwTextMargin &rLine ) const;
+    bool IsInside( SwTextMargin const &rLine ) const;
 
     // In order to be able to handle special cases with Footnote.
     // SetRstHeight sets the rest height for SwTextFrameBreak. This is needed

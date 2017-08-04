@@ -96,12 +96,12 @@ static bool lcl_IsLessEnd( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
     return ( nHt1 < nHt2 );
 }
 
-bool CompareSwpHtStart::operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const
+bool CompareSwpHtStart::operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const
 {
   return lcl_IsLessStart( *lhs, *rhs );
 }
 
-bool CompareSwpHtEnd::operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const
+bool CompareSwpHtEnd::operator()(SwTextAttr const * const lhs, SwTextAttr const * const rhs) const
 {
   return lcl_IsLessEnd( *lhs, *rhs );
 }

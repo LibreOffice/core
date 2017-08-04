@@ -314,7 +314,7 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
  * due to Underflow. In that case, m_nHintEndIndex must be decremented,
  * so the portion will be created again on the next line.
  */
-SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo & rInfo)
+SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo const & rInfo)
 {
     if (m_pHints)
     {
