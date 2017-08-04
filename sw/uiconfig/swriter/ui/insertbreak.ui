@@ -8,17 +8,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="insertbreak|liststore1">[None]</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkDialog" id="BreakDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -171,10 +160,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="stylelb">
+                      <object class="GtkComboBoxText" id="stylelb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">liststore1</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes" context="insertbreak|liststore1">[None]</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -244,9 +236,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
-      <action-widget response="0">help</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
 </interface>
