@@ -9,6 +9,8 @@
 
 import os
 import errno
+import subprocess
+from sys import platform
 
 def mkdir_p(path):
     try:
@@ -19,10 +21,22 @@ def mkdir_p(path):
         else:
             raise
 
+def convert_to_unix(path):
+    if platform == "cygwin":
+        return subprocess.check_output(["cygpath", "-u", path]).decode("utf-8", "strict").rstrip()
+    else:
+        return path
+
+def convert_to_native(path):
+    if platform == "cygwin":
+        return subprocess.check_output(["cygpath", "-m", path]).decode("utf-8", "strict").rstrip()
+    else:
+        return path
+
 class UpdaterPath(object):
 
     def __init__(self, workdir):
-        self._workdir = workdir
+        self._workdir = convert_to_unix(workdir)
 
     def get_workdir(self):
         return self._workdir
@@ -41,6 +55,9 @@ class UpdaterPath(object):
 
     def get_language_dir(self):
         return os.path.join(self.get_mar_dir(), "language")
+
+    def get_workdir(self):
+        return self._workdir
     
     def ensure_dir_exist(self):
         mkdir_p(self.get_update_dir())
