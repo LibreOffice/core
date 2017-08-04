@@ -216,7 +216,6 @@ sal_Int16 SvFilterOptionsDialog::execute()
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
-    OUString aFilterNameStr( "FilterName" );
     OUString aInternalFilterName;
     uno::Reference<graphic::XGraphic> xGraphic;
     sal_Int32 j, nCount = maMediaDescriptor.getLength();
