@@ -377,7 +377,7 @@ public:
     /// Verify the paragraph at the cursor.
     void VerifyParagraph(SwPaM* pPaM);
 
-    void Insert2(SwField&, const bool bForceExpandHints);
+    void Insert2(SwField const &, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
 
@@ -388,7 +388,7 @@ public:
     void RemoveFieldType(size_t nField);
     void RemoveFieldType(SwFieldIds nResId, const OUString& rName);
 
-    void FieldToText( SwFieldType* pType );
+    void FieldToText( SwFieldType const * pType );
 
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
@@ -399,7 +399,7 @@ public:
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                          const OUString& rNewName );
     void GetAllUsedDB( std::vector<OUString>& rDBNameList,
-                       std::vector<OUString>* pAllDBNames );
+                       std::vector<OUString> const * pAllDBNames );
 
     bool IsAnyDatabaseFieldInDoc()const;
 
@@ -430,7 +430,7 @@ public:
 
     void    Insert(const SwTOXMark& rMark);
 
-    void    DeleteTOXMark(SwTOXMark* pMark);
+    void    DeleteTOXMark(SwTOXMark const * pMark);
 
     /// Get all marks at current SPoint.
     void    GetCurTOXMarks(SwTOXMarks& rMarks) const ;
@@ -743,10 +743,10 @@ public:
                      SwDocPositions eCurr, SwConversionArgs *pConvArgs = nullptr );
 
     /// Restore selections.
-    void SpellEnd( SwConversionArgs *pConvArgs = nullptr, bool bRestoreSelection = true );
+    void SpellEnd( SwConversionArgs const *pConvArgs = nullptr, bool bRestoreSelection = true );
     css::uno::Any SpellContinue(
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-                    SwConversionArgs *pConvArgs );
+                    SwConversionArgs const *pConvArgs );
 
     /** Spells on a sentence basis - the SpellPortions are needed
      @return false if no error could be found. */
@@ -792,7 +792,7 @@ public:
     /// Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode,
                         sal_Unicode cChar );
-    bool GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord );
+    bool GetPrevAutoCorrWord( SvxAutoCorrect const & rACorr, OUString& rWord );
 
     /// Set our styles according to the respective rules.
     void AutoFormat( const SvxSwAutoFormatFlags* pAFlags );

@@ -487,7 +487,7 @@ const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(sal_uInt16 nIdx) const
     return nullptr;
 }
 
-void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[])
+void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey  const aKeys[])
 {
     m_SortKeyArr.clear();
     for(sal_uInt16 i = 0; i < nKeyCount; i++)

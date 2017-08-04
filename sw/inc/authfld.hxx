@@ -129,7 +129,7 @@ public:
 
     sal_uInt16          GetSortKeyCount() const ;
     const SwTOXSortKey* GetSortKey(sal_uInt16 nIdx) const ;
-    void                SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey nKeys[]);
+    void                SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey const nKeys[]);
 
     //initui.cxx
     static OUString     GetAuthFieldName(ToxAuthorityField eType);

@@ -71,7 +71,7 @@ namespace
 {
 
 /// Find all page styles which are currently used in the document.
-std::set<OUString> lcl_getUsedPageStyles(SwViewShell* pShell)
+std::set<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
 {
     std::set<OUString> aRet;
 

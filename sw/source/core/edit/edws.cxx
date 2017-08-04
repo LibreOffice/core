@@ -268,7 +268,7 @@ void SwEditShell::SetNewDoc()
     GetDoc()->getIDocumentState().SetNewDoc(true);
 }
 
-bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
+bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect const & rACorr, OUString& rWord )
 {
     SET_CURR_SHELL( this );
 

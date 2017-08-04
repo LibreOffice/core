@@ -110,7 +110,7 @@ using namespace com::sun::star;
 
 namespace {
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel* pDoc)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const * pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList = pDoc->GetLineEndList();
@@ -889,7 +889,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
     }
 }
 
-void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt16 nSlotId)
+void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt16 nSlotId)
 {
     SdrModel *pDoc = pObj->GetModel();
 

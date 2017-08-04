@@ -106,7 +106,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
-    static bool FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFormat,
+    static bool FormatValue( SvNumberFormatter* pDocFormatter, OUString const &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField = nullptr );
 };
 
@@ -167,7 +167,7 @@ public:
     virtual OUString        Expand() const override;
     virtual SwField*        Copy() const override;
 
-    void                    Evaluate(SwDoc*);
+    void                    Evaluate(SwDoc const *);
     inline void             SetCondValid(bool bCond);
     inline bool             IsCondValid() const;
 
@@ -209,7 +209,7 @@ public:
 
     inline bool             IsCondValid() const;
     inline void             SetCondValid(bool bCond);
-    void                    Evaluate(SwDoc*);
+    void                    Evaluate(SwDoc const *);
 
     // Condition
     virtual OUString        GetPar1() const override;
@@ -271,7 +271,7 @@ public:
 
     virtual OUString Expand() const override;
     virtual         SwField* Copy() const override;
-    void            Evaluate(SwDoc*);
+    void            Evaluate(SwDoc const *);
 
     inline long     GetSetNumber() const;
     inline void     SetSetNumber(long nNum);

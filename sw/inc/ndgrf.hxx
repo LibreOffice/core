@@ -56,16 +56,16 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
                const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr );
+               SwAttrSet const * pAutoAttr );
     ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr );
+               SwAttrSet const * pAutoAttr );
     SwGrfNode( const SwNodeIndex& rWhere,
                const GraphicObject& rGrfObj,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr );
+               SwAttrSet const * pAutoAttr );
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
     bool ImportGraphic( SvStream& rStrm );

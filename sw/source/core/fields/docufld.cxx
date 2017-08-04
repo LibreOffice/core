@@ -2129,8 +2129,8 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
     return !rTmpLst.empty();
 }
 
-void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
-                                        SetGetExpFields& rSetList )
+void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
+                                        SetGetExpFields const & rSetList )
 {
     SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pTextField->GetFormatField().GetField()));
     pGetField->SetText( OUString() );

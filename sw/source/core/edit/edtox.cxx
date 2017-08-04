@@ -80,7 +80,7 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
     EndAllAction();
 }
 
-void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
+void SwEditShell::DeleteTOXMark( SwTOXMark const * pMark )
 {
     SET_CURR_SHELL( this );
     StartAllAction();

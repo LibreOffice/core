@@ -391,7 +391,7 @@ public:
     bool IsFrameVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
     SwFrameFormat* GetSelectedFrameFormat() const; ///< If frame then frame style, else 0.
-    void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = nullptr ); ///< If frame then set frame style.
+    void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point const * pDocPos = nullptr ); ///< If frame then set frame style.
 
     // Get selected fly
     SwFlyFrame* GetSelectedFlyFrame() const;
@@ -805,7 +805,7 @@ public:
                                    const Point& _rDocPos );
 
     void ToggleHeaderFooterEdit( );
-    static void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt16 nSlotId);
+    static void SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt16 nSlotId);
 };
 
 void ClearFEShellTabCols();

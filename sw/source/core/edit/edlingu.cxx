@@ -655,7 +655,7 @@ void SwEditShell::SpellStart(
         g_pConvIter->Start( this, eStart, eEnd );
 }
 
-void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection )
+void SwEditShell::SpellEnd( SwConversionArgs const *pConvArgs, bool bRestoreSelection )
 {
     if (!pConvArgs && g_pSpellIter && g_pSpellIter->GetSh() == this)
     {
@@ -674,7 +674,7 @@ void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection 
 /// @returns SPL_ return values as in splchk.hxx
 uno::Any SwEditShell::SpellContinue(
         sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-        SwConversionArgs *pConvArgs )
+        SwConversionArgs const *pConvArgs )
 {
     uno::Any aRes;
 
@@ -1262,7 +1262,7 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
 /** Collect all deleted redlines of the current text node
  *  beginning at the start of the cursor position
  */
-static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
+static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell const * pSh)
 {
     SpellContentPositions aRedlines;
     SwDoc* pDoc = pSh->GetDoc();
@@ -1302,7 +1302,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 }
 
 /// remove the redline positions after the current selection
-static void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh )
+static void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell const * pSh )
 {
     if(!aDeletedRedlines.empty())
     {

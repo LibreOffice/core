@@ -135,7 +135,7 @@ SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
     return pImpl->mpTextForwarder;
 }
 
-void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
+void SwTextAPIEditSource::SetText( OutlinerParaObject const & rText )
 {
     if ( pImpl->mpPool )
     {

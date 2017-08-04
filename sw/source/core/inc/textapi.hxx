@@ -45,7 +45,7 @@ public:
     virtual             ~SwTextAPIEditSource() override;
 
     void                Dispose();
-    void                SetText( OutlinerParaObject& rText );
+    void                SetText( OutlinerParaObject const & rText );
     void                SetString( const OUString& rText );
     OutlinerParaObject* CreateText();
     OUString            GetText();
@@ -60,7 +60,7 @@ public:
     void                DisposeEditSource() { pSource->Dispose(); }
     OutlinerParaObject* CreateText() { return pSource->CreateText(); }
     void                SetString( const OUString& rText ) { pSource->SetString( rText ); }
-    void                SetText( OutlinerParaObject& rText ) { pSource->SetText( rText ); }
+    void                SetText( OutlinerParaObject const & rText ) { pSource->SetText( rText ); }
     OUString            GetText() { return pSource->GetText(); }
 };
 

@@ -264,7 +264,7 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
-bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFormat,
+bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString const &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField )
 {
     bool bValidValue = false;
@@ -582,7 +582,7 @@ SwField* SwDBNextSetField::Copy() const
     return pTmp;
 }
 
-void SwDBNextSetField::Evaluate(SwDoc* pDoc)
+void SwDBNextSetField::Evaluate(SwDoc const * pDoc)
 {
     SwDBManager* pMgr = pDoc->GetDBManager();
     const SwDBData& rData = GetDBData();
@@ -669,7 +669,7 @@ SwField* SwDBNumSetField::Copy() const
     return pTmp;
 }
 
-void SwDBNumSetField::Evaluate(SwDoc* pDoc)
+void SwDBNumSetField::Evaluate(SwDoc const * pDoc)
 {
     SwDBManager* pMgr = pDoc->GetDBManager();
     const SwDBData& aTmpData = GetDBData();
@@ -819,7 +819,7 @@ OUString SwDBSetNumberField::Expand() const
     return FormatNumber(nNumber, (SvxNumType)GetFormat());
 }
 
-void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
+void SwDBSetNumberField::Evaluate(SwDoc const * pDoc)
 {
     SwDBManager* pMgr = pDoc->GetDBManager();
 

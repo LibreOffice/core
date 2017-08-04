@@ -2012,7 +2012,7 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
 // into a new structure, retaining the table structure
 // new: SS for targeted erasing/restoring of the layout
 
-static void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrame *pUpper, SwFrame *pSibling )
+static void lcl_InsertRow( SwTableLine const &rLine, SwLayoutFrame *pUpper, SwFrame *pSibling )
 {
     SwRowFrame *pRow = new SwRowFrame( rLine, pUpper );
     if ( pUpper->IsTabFrame() && static_cast<SwTabFrame*>(pUpper)->IsFollow() )

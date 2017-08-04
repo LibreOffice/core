@@ -173,7 +173,7 @@ public:
     static void ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow );
     static void UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow );
 
-    SwFlyFrame *FindChainNeighbour( SwFrameFormat &rFormat, SwFrame *pAnch = nullptr );
+    SwFlyFrame *FindChainNeighbour( SwFrameFormat const &rFormat, SwFrame *pAnch = nullptr );
 
     // #i26791#
     const SwVirtFlyDrawObj* GetVirtDrawObj() const;

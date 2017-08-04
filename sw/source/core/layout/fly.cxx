@@ -463,7 +463,7 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     }
 }
 
-SwFlyFrame *SwFlyFrame::FindChainNeighbour( SwFrameFormat &rChain, SwFrame *pAnch )
+SwFlyFrame *SwFlyFrame::FindChainNeighbour( SwFrameFormat const &rChain, SwFrame *pAnch )
 {
     // We look for the Fly that's in the same Area.
     // Areas can for now only be Head/Footer or Flys.
