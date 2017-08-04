@@ -52,7 +52,7 @@ public:
 
     ~SwRedlineSaveData();
 
-    void RedlineToDoc( SwPaM& rPam );
+    void RedlineToDoc( SwPaM const & rPam );
 
     SwNodeIndex* GetMvSttIdx() const
     {
@@ -154,7 +154,7 @@ class SwUndoFormatColl : public SwUndo, private SwUndRng
     // the nodes before the format has been applied.
     const bool mbResetListAttrs;
 
-    void DoSetFormatColl(SwDoc & rDoc, SwPaM & rPaM);
+    void DoSetFormatColl(SwDoc & rDoc, SwPaM const & rPaM);
 
 public:
     SwUndoFormatColl( const SwPaM&, SwFormatColl*,

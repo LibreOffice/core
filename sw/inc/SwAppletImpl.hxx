@@ -48,7 +48,7 @@ class SwApplet_Impl
 public:
     static SwHtmlOptType GetOptionType( const OUString& rName, bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool );
-    SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
+    SwApplet_Impl( SfxItemSet const & rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();
     void CreateApplet( const OUString& rCode, const OUString& rName,
                        bool bMayScript, const OUString& rCodeBase,

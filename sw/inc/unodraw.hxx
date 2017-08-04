@@ -264,7 +264,7 @@ public:
     const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() {return xShapeAgg;}
 
     // helper
-    static void AddExistingShapeToFormat( SdrObject& _rObj );
+    static void AddExistingShapeToFormat( SdrObject const & _rObj );
 };
 
 class SwXGroupShape :

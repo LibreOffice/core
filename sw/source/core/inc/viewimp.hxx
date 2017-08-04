@@ -88,7 +88,7 @@ class SwViewShellImp
 
     SwPagePreviewLayout* m_pPagePreviewLayout;
 
-    void SetFirstVisPage(OutputDevice* pRenderContext); // Recalculate the first visible Page
+    void SetFirstVisPage(OutputDevice const * pRenderContext); // Recalculate the first visible Page
 
     void StartAction();         // Show handle and hide
     void EndAction();           // Called by SwViewShell::ImplXXXAction
@@ -145,8 +145,8 @@ public:
     Color GetRetoucheColor() const;
 
     /// Management of the first visible Page
-    const SwPageFrame *GetFirstVisPage(OutputDevice* pRenderContext) const;
-          SwPageFrame *GetFirstVisPage(OutputDevice* pRenderContext);
+    const SwPageFrame *GetFirstVisPage(OutputDevice const * pRenderContext) const;
+          SwPageFrame *GetFirstVisPage(OutputDevice const * pRenderContext);
     void SetFirstVisPageInvalid() { m_bFirstPageInvalid = true; }
 
     bool AddPaintRect( const SwRect &rRect );

@@ -351,7 +351,7 @@ public:
 
     // Change of all page descriptors.
     void   ChgAllPageOrientation( Orientation eOri );
-    void   ChgAllPageSize( Size &rSz );
+    void   ChgAllPageSize( Size const &rSz );
 
     // Printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
@@ -439,9 +439,9 @@ public:
     static ShellResource* GetShellRes();
 
     static void           SetCareWin( vcl::Window* pNew );
-    static vcl::Window*   GetCareWin(SwViewShell& rVSh)
+    static vcl::Window*   GetCareWin(SwViewShell const & rVSh)
                           { return (*mpCareWindow.get()) ? mpCareWindow.get()->get() : CareChildWin(rVSh); }
-    static vcl::Window*   CareChildWin(SwViewShell& rVSh);
+    static vcl::Window*   CareChildWin(SwViewShell const & rVSh);
 
     SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
     void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
@@ -508,7 +508,7 @@ public:
     void InvalidateAccessibleFocus();
 
     // Apply Accessiblity options.
-    void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
+    void ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 

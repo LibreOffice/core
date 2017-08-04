@@ -1141,7 +1141,7 @@ void SwHistory::CopyFormatAttr(
 }
 
 void SwHistory::CopyAttr(
-    SwpHints* pHts,
+    SwpHints const * pHts,
     const sal_uLong nNodeIdx,
     const sal_Int32 nStart,
     const sal_Int32 nEnd,

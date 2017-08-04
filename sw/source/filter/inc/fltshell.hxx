@@ -69,7 +69,7 @@ public:
         return (m_nContent == rOther.m_nContent &&
                 m_nNode == rOther.m_nNode);
     }
-    void SetPos(SwNodeIndex &rNode, sal_uInt16 nIdx)
+    void SetPos(SwNodeIndex const &rNode, sal_uInt16 nIdx)
     {
         m_nNode = rNode;
         m_nContent = nIdx;

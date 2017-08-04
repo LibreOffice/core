@@ -356,7 +356,7 @@ public:
     // helper methods for recording attribute in History
     // used by Undo classes (Delete/Overwrite/Inserts)
     void CopyAttr(
-        SwpHints* pHts,
+        SwpHints const * pHts,
         const sal_uLong nNodeIdx,
         const sal_Int32 nStart,
         const sal_Int32 nEnd,

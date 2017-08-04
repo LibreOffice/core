@@ -726,7 +726,7 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 {
 }
 
-ErrCode SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
+ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileName )
 {
     // #i73788#
     SwPauseThreadStarting aPauseThreadStarting;

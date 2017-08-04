@@ -372,7 +372,7 @@ OUString SwUndoInsLayFormat::GetComment() const
 }
 
 static SwUndoId
-lcl_GetSwUndoId(SwFrameFormat *const pFrameFormat)
+lcl_GetSwUndoId(SwFrameFormat const *const pFrameFormat)
 {
     if (RES_DRAWFRMFMT != pFrameFormat->Which())
     {

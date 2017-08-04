@@ -464,7 +464,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
 }
 
 void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
-                                SvxCSS1PropertyInfo &rPropInfo,
+                                SvxCSS1PropertyInfo const &rPropInfo,
                                 HTMLAttrContext *pContext,
                                 bool bCharLvl )
 {

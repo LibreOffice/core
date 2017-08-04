@@ -30,7 +30,7 @@
 #include <strings.hrc>
 
 SwUndoFormatCreate::SwUndoFormatCreate
-(SwUndoId nUndoId, SwFormat * _pNew, SwFormat * _pDerivedFrom, SwDoc * _pDoc)
+(SwUndoId nUndoId, SwFormat * _pNew, SwFormat const * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndo(nUndoId, _pDoc), pNew(_pNew),
       pDoc(_pDoc), pNewSet(nullptr), nId(0), bAuto(false)
 {
@@ -95,7 +95,7 @@ SwRewriter SwUndoFormatCreate::GetRewriter() const
 }
 
 SwUndoFormatDelete::SwUndoFormatDelete
-(SwUndoId nUndoId, SwFormat * _pOld, SwDoc * _pDoc)
+(SwUndoId nUndoId, SwFormat const * _pOld, SwDoc * _pDoc)
     : SwUndo(nUndoId, _pDoc),
       pDoc(_pDoc), sOldName(_pOld->GetName()),
       aOldSet(_pOld->GetAttrSet())
@@ -189,7 +189,7 @@ SwRewriter SwUndoRenameFormat::GetRewriter() const
 }
 
 SwUndoTextFormatCollCreate::SwUndoTextFormatCollCreate
-(SwTextFormatColl * _pNew, SwTextFormatColl * _pDerivedFrom, SwDoc * _pDoc)
+(SwTextFormatColl * _pNew, SwTextFormatColl const * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndoFormatCreate(SwUndoId::TXTFMTCOL_CREATE, _pNew, _pDerivedFrom, _pDoc)
 {
 }
@@ -209,7 +209,7 @@ SwFormat * SwUndoTextFormatCollCreate::Find(const OUString & rName) const
     return pDoc->FindTextFormatCollByName(rName);
 }
 
-SwUndoTextFormatCollDelete::SwUndoTextFormatCollDelete(SwTextFormatColl * _pOld,
+SwUndoTextFormatCollDelete::SwUndoTextFormatCollDelete(SwTextFormatColl const * _pOld,
                                                SwDoc * _pDoc)
     : SwUndoFormatDelete(SwUndoId::TXTFMTCOL_DELETE, _pOld, _pDoc)
 {
@@ -231,7 +231,7 @@ SwFormat * SwUndoTextFormatCollDelete::Find(const OUString & rName) const
 }
 
 SwUndoCondTextFormatCollCreate::SwUndoCondTextFormatCollCreate(SwConditionTextFormatColl *_pNew,
-    SwTextFormatColl *_pDerivedFrom, SwDoc *_pDoc)
+    SwTextFormatColl const *_pDerivedFrom, SwDoc *_pDoc)
     : SwUndoTextFormatCollCreate(_pNew, _pDerivedFrom, _pDoc)
 {
 }
@@ -241,7 +241,7 @@ SwFormat * SwUndoCondTextFormatCollCreate::Create(SwFormat * pDerivedFrom)
     return pDoc->MakeCondTextFormatColl(sNewName, static_cast<SwTextFormatColl *>(pDerivedFrom), true);
 }
 
-SwUndoCondTextFormatCollDelete::SwUndoCondTextFormatCollDelete(SwTextFormatColl * _pOld,
+SwUndoCondTextFormatCollDelete::SwUndoCondTextFormatCollDelete(SwTextFormatColl const * _pOld,
                                                        SwDoc * _pDoc)
     : SwUndoTextFormatCollDelete(_pOld, _pDoc)
 {
@@ -265,7 +265,7 @@ SwFormat * SwUndoRenameFormatColl::Find(const OUString & rName) const
 }
 
 SwUndoCharFormatCreate::SwUndoCharFormatCreate(SwCharFormat * pNewFormat,
-                                         SwCharFormat * pDerivedFrom,
+                                         SwCharFormat const * pDerivedFrom,
                                          SwDoc * pDocument)
     : SwUndoFormatCreate(SwUndoId::CHARFMT_CREATE, pNewFormat, pDerivedFrom, pDocument)
 {
@@ -286,7 +286,7 @@ SwFormat * SwUndoCharFormatCreate::Find(const OUString & rName) const
     return pDoc->FindCharFormatByName(rName);
 }
 
-SwUndoCharFormatDelete::SwUndoCharFormatDelete(SwCharFormat * pOld, SwDoc * pDocument)
+SwUndoCharFormatDelete::SwUndoCharFormatDelete(SwCharFormat const * pOld, SwDoc * pDocument)
     : SwUndoFormatDelete(SwUndoId::CHARFMT_DELETE, pOld, pDocument)
 {
 }
@@ -319,7 +319,7 @@ SwFormat * SwUndoRenameCharFormat::Find(const OUString & rName) const
 }
 
 SwUndoFrameFormatCreate::SwUndoFrameFormatCreate(SwFrameFormat * pNewFormat,
-                                       SwFrameFormat * pDerivedFrom,
+                                       SwFrameFormat const * pDerivedFrom,
                                        SwDoc * pDocument)
     : SwUndoFormatCreate(SwUndoId::FRMFMT_CREATE, pNewFormat, pDerivedFrom, pDocument)
 {
@@ -340,7 +340,7 @@ SwFormat * SwUndoFrameFormatCreate::Find(const OUString & rName) const
     return pDoc->FindFrameFormatByName(rName);
 }
 
-SwUndoFrameFormatDelete::SwUndoFrameFormatDelete(SwFrameFormat * pOld, SwDoc * pDocument)
+SwUndoFrameFormatDelete::SwUndoFrameFormatDelete(SwFrameFormat const * pOld, SwDoc * pDocument)
     : SwUndoFormatDelete(SwUndoId::FRMFMT_DELETE, pOld, pDocument)
 {
 }

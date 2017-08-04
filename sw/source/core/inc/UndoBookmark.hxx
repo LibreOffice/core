@@ -90,7 +90,7 @@ public:
 
 private:
     virtual SwRewriter GetRewriter() const override;
-    static void Rename( ::sw::UndoRedoContext &, const OUString& sFrom, const OUString& sTo );
+    static void Rename( ::sw::UndoRedoContext const &, const OUString& sFrom, const OUString& sTo );
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };

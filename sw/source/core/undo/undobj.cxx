@@ -190,7 +190,7 @@ SwUndo::~SwUndo()
 class UndoRedoRedlineGuard
 {
 public:
-    UndoRedoRedlineGuard(::sw::UndoRedoContext & rContext, SwUndo & rUndo)
+    UndoRedoRedlineGuard(::sw::UndoRedoContext const & rContext, SwUndo const & rUndo)
         : m_rRedlineAccess(rContext.GetDoc().getIDocumentRedlineAccess())
         , m_eMode(m_rRedlineAccess.GetRedlineFlags())
     {
@@ -1367,7 +1367,7 @@ SwRedlineSaveData::~SwRedlineSaveData()
 {
 }
 
-void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
+void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
 {
     SwDoc& rDoc = *rPam.GetDoc();
     SwRangeRedline* pRedl = new SwRangeRedline( *this, rPam );

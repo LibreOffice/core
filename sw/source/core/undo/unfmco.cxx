@@ -67,7 +67,7 @@ void SwUndoFormatColl::RepeatImpl(::sw::RepeatContext & rContext)
     DoSetFormatColl(rContext.GetDoc(), rContext.GetRepeatPaM());
 }
 
-void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM & rPaM)
+void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM const & rPaM)
 {
     // Only one TextFrameColl can be applied to a section, thus request only in
     // this array.

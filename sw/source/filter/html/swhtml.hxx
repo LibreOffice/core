@@ -526,7 +526,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                           HTMLAttrContext *pContext );
     bool EndSection( bool bLFStripped=false );
 
-    void InsertAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+    void InsertAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo const &rPropInfo,
                       HTMLAttrContext *pContext, bool bCharLvl=false );
     void InsertAttr( HTMLAttr **ppAttr, const SfxPoolItem & rItem,
                      HTMLAttrContext *pCntxt );

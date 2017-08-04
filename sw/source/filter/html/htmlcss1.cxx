@@ -272,7 +272,7 @@ void SwCSS1Parser::SetLinkCharFormats()
 }
 
 static void SetTextCollAttrs( SwTextFormatColl *pColl, SfxItemSet& rItemSet,
-                             SvxCSS1PropertyInfo& rPropInfo,
+                             SvxCSS1PropertyInfo const & rPropInfo,
                              SwCSS1Parser *pCSS1Parser )
 {
     const SfxItemSet& rCollItemSet = pColl->GetAttrSet();

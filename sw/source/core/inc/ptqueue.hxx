@@ -48,7 +48,7 @@ public:
     static SwQueuedPaint *s_pPaintQueue;
 
     static void Add( SwViewShell *pSh, const SwRect &rNew );
-    static void Remove( SwViewShell *pSh );
+    static void Remove( SwViewShell const *pSh );
     static void Repaint();
 };
 

@@ -179,8 +179,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    void        AddDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > &rxDataSequence );
-    void        RemoveDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > &rxDataSequence );
+    void        AddDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > const &rxDataSequence );
+    void        RemoveDataSequence( const SwTable &rTable, css::uno::Reference< css::chart2::data::XDataSequence > const &rxDataSequence );
 
     // will send modified events for all data-sequences of the table
     void        InvalidateTable( const SwTable *pTable );

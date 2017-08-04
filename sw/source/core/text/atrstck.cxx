@@ -895,7 +895,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 }
 
 /// Takes the default font and calculated the ascent and height
-void SwAttrHandler::GetDefaultAscentAndHeight( SwViewShell* pShell, OutputDevice const & rOut,
+void SwAttrHandler::GetDefaultAscentAndHeight( SwViewShell const * pShell, OutputDevice const & rOut,
                                                sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {
     OSL_ENSURE( pFnt, "No font available for GetDefaultAscentAndHeight" );

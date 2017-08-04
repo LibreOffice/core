@@ -1035,7 +1035,7 @@ SwRewriter SwUndoInsertLabel::CreateRewriter(const OUString &rStr)
     return aRewriter;
 }
 
-void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet& rChgSet,
+void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChgSet,
                                 SwFrameFormat& rNewFly )
 {
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
