@@ -537,7 +537,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="toplevellist1">
+                      <object class="cuilo-CommandCategoryListBox" id="commandcategorylist">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_bottom">5</property>

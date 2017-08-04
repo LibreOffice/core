@@ -146,6 +146,12 @@ void SvxMenuConfigPage::Init()
 
     m_pTopLevelListBox->SelectEntryPos(0);
     m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+
+    m_pCommandCategoryListBox->Clear();
+    m_pCommandCategoryListBox->Init(
+        comphelper::getProcessComponentContext(),
+        m_xFrame,
+        vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
 }
 
 void SvxMenuConfigPage::dispose()
