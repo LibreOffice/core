@@ -38,9 +38,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< css::beans::PropertyValue >&, tools::SvRef<SotStorage>&,
-                                             Reference< XModel > &,
-                                             Reference< XStatusIndicator > &,
+typedef sal_Bool ( SAL_CALL *ExportPPTPointer )( const std::vector< css::beans::PropertyValue >&, tools::SvRef<SotStorage> const&,
+                                             Reference< XModel > const &,
+                                             Reference< XStatusIndicator > const &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
 typedef sal_Bool ( SAL_CALL *ImportPPTPointer )( SdDrawDocument*, SvStream&, SotStorage&, SfxMedium& );
@@ -49,9 +49,9 @@ typedef sal_Bool ( SAL_CALL *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*&
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_Bool ExportPPT( const std::vector< css::beans::PropertyValue >&, tools::SvRef<SotStorage>&,
-                               Reference< XModel > &,
-                               Reference< XStatusIndicator > &,
+extern "C" sal_Bool ExportPPT( const std::vector< css::beans::PropertyValue >&, tools::SvRef<SotStorage> const&,
+                               Reference< XModel > const &,
+                               Reference< XStatusIndicator > const &,
                                SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
 extern "C" sal_Bool ImportPPT( SdDrawDocument*, SvStream&, SotStorage&, SfxMedium& );
