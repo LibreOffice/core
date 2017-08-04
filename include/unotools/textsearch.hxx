@@ -27,6 +27,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XTextSearch2.hpp>
 
+#include <ostream>
+
 class CharClass;
 
 namespace com {
@@ -132,6 +134,32 @@ public:
 
     TransliterationFlags GetTransliterationFlags() const        { return nTransliterationFlags; }
 };
+
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const SearchParam::SearchType& eType)
+{
+    switch (eType)
+    {
+    case SearchParam::SearchType::Normal:
+        stream << "N";
+        break;
+    case SearchParam::SearchType::Regexp:
+        stream << "RE";
+        break;
+    case SearchParam::SearchType::Wildcard:
+        stream << "WC";
+        break;
+    case SearchParam::SearchType::Unknown:
+        stream << "UNK";
+        break;
+    default:
+        stream << static_cast<int>(eType) << '?';
+        break;
+    }
+
+    return stream;
+}
 
 //  Utility class for searching a substring in a string.
 //  The following metrics are supported
