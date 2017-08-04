@@ -63,7 +63,7 @@ void CheckUnusedParams::run()
     // leave this alone for now
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit/"))
          return;
-    // this has a certan pattern to it's code which appears to include lots of unused params
+    // this has a certain pattern to its code which appears to include lots of unused params
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/"))
          return;
     // I believe someone is busy working on this chunk of code

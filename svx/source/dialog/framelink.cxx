@@ -585,7 +585,7 @@ void CreateBorderPrimitives(
         else if (2 == myOffsets.size())
         {
             // we are a double edge, calculate cuts with edges coming from above/below
-            // for both edges to detect the line start/end extensions. In the furure this
+            // for both edges to detect the line start/end extensions. In the future this
             // needs to be extended to use two values per extension, getComplexExtendedLineValues
             // internally prepares these already. drawinglayer::primitive2d::BorderLine will
             // then need to take these double entries (maybe a pair) and use them internally.

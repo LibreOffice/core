@@ -967,7 +967,7 @@ void CreateCoordinateSystemForCell(
             rOrigin.setX(rOrigin.getX() + fSkew);
             rY.setX(-fSkew);
             break;
-        default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, altready excluded above
+        default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
             break;
         }
     }
@@ -1280,7 +1280,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                         // The *coordinate system* of the edge has to be given, which for vertical
                         // lines uses the Y-Vector as X-Axis and the X-Vector as Y-Axis, so swap both
                         // and mirror aX to keep the same orientation (should be (-1.0, 0.0) for
-                        // horizontal lines anyways, this could be used as thest here, checked in debug mode)
+                        // horizontal lines anyways, this could be used as test here, checked in debug mode)
                         std::swap(aX, aY);
                         aY.normalize();
                         aY = -aY;
