@@ -533,7 +533,7 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
             rEditView.ShowCursor();
             rEditView.RegisterOtherShell(nullptr);
             // Text selection, if any.
-            rEditView.DrawSelection(pOtherShell);
+            rEditView.DrawSelectionXOR(pOtherShell);
         }
         else
         {

@@ -162,7 +162,7 @@ private:
                        EditEngine&     operator=( const EditEngine& ) = delete;
     EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window const * pFrameWin );
 
-    EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
+    EDITENG_DLLPRIVATE void CursorMoved(const ContentNode* pPrevNode);
     EDITENG_DLLPRIVATE void CheckIdleFormatter();
     EDITENG_DLLPRIVATE bool IsIdleFormatterActive() const;
     EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode const * pNode);

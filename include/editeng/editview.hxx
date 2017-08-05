@@ -293,7 +293,7 @@ public:
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Trigger selection drawing callback in pOtherShell based on our shell's selection state.
-    void DrawSelection(OutlinerViewShell* pOtherShell);
+    void DrawSelectionXOR(OutlinerViewShell* pOtherShell);
 };
 
 #endif // INCLUDED_EDITENG_EDITVIEW_HXX

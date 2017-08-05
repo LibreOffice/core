@@ -329,9 +329,9 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
             aSelEngine.CursorPosChanging( true, false );
 
             EditSelection aNewSelection( SelectWord( aCurSel ) );
-            pView->pImpEditView->DrawSelection();
+            pView->pImpEditView->DrawSelectionXOR();
             pView->pImpEditView->SetEditSelection( aNewSelection );
-            pView->pImpEditView->DrawSelection();
+            pView->pImpEditView->DrawSelectionXOR();
             pView->ShowCursor();
         }
         else if ( rMEvt.GetClicks() == 3 )
@@ -342,9 +342,9 @@ bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
             EditSelection aNewSelection( aCurSel );
             aNewSelection.Min().SetIndex( 0 );
             aNewSelection.Max().SetIndex( aCurSel.Min().GetNode()->Len() );
-            pView->pImpEditView->DrawSelection();
+            pView->pImpEditView->DrawSelectionXOR();
             pView->pImpEditView->SetEditSelection( aNewSelection );
-            pView->pImpEditView->DrawSelection();
+            pView->pImpEditView->DrawSelectionXOR();
             pView->ShowCursor();
         }
     }
@@ -709,11 +709,13 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
 
 //  MISC
 
-void ImpEditEngine::CursorMoved( ContentNode* pPrevNode )
+void ImpEditEngine::CursorMoved( const ContentNode* pPrevNode )
 {
     // Delete empty attributes, but only if paragraph is not empty!
-    if ( pPrevNode->GetCharAttribs().HasEmptyAttribs() && pPrevNode->Len() )
-        pPrevNode->GetCharAttribs().DeleteEmptyAttribs( aEditDoc.GetItemPool() );
+    if (pPrevNode->GetCharAttribs().HasEmptyAttribs() && pPrevNode->Len())
+    {
+        const_cast<ContentNode*>(pPrevNode)->GetCharAttribs().DeleteEmptyAttribs(aEditDoc.GetItemPool());
+    }
 }
 
 void ImpEditEngine::TextModified()
@@ -913,15 +915,27 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     aSelEngine.SetCurView( pEditView );
     aSelEngine.CursorPosChanging( bKeyModifySelection, aTranslatedKeyEvent.GetKeyCode().IsMod1() );
     EditPaM aOldEnd( pEditView->pImpEditView->GetEditSelection().Max() );
-    pEditView->pImpEditView->GetEditSelection().Max() = aPaM;
+
+    {
+        EditSelection aNewSelection(pEditView->pImpEditView->GetEditSelection());
+        aNewSelection.Max() = aPaM;
+        pEditView->pImpEditView->SetEditSelection(aNewSelection);
+        // const_cast<EditPaM&>(pEditView->pImpEditView->GetEditSelection().Max()) = aPaM;
+    }
+
     if ( bKeyModifySelection )
     {
         // Then the selection is expanded ... or the whole selection is painted in case of tiled rendering.
         EditSelection aTmpNewSel( comphelper::LibreOfficeKit::isActive() ? pEditView->pImpEditView->GetEditSelection().Min() : aOldEnd, aPaM );
-        pEditView->pImpEditView->DrawSelection( aTmpNewSel );
+        pEditView->pImpEditView->DrawSelectionXOR( aTmpNewSel );
     }
     else
-        pEditView->pImpEditView->GetEditSelection().Min() = aPaM;
+    {
+        EditSelection aNewSelection(pEditView->pImpEditView->GetEditSelection());
+        aNewSelection.Min() = aPaM;
+        pEditView->pImpEditView->SetEditSelection(aNewSelection);
+        // const_cast<EditPaM&>(pEditView->pImpEditView->GetEditSelection().Min()) = aPaM;
+    }
 
     return pEditView->pImpEditView->GetEditSelection();
 }
@@ -3428,12 +3442,12 @@ void ImpEditEngine::SetActiveView( EditView* pView )
         return;
 
     if ( pActiveView && pActiveView->HasSelection() )
-        pActiveView->pImpEditView->DrawSelection();
+        pActiveView->pImpEditView->DrawSelectionXOR();
 
     pActiveView = pView;
 
     if ( pActiveView && pActiveView->HasSelection() )
-        pActiveView->pImpEditView->DrawSelection();
+        pActiveView->pImpEditView->DrawSelectionXOR();
 
     //  NN: Quick fix for #78668#:
     //  When editing of a cell in Calc is ended, the edit engine is not deleted,
@@ -4325,7 +4339,7 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, bool bRight )
             aNewSel.nEndPos = 0;
         }
 
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->pImpEditView->SetEditSelection(
                         pEditView->pImpEditView->GetEditSelection().Max() );
         UndoActionStart( bRight ? EDITUNDO_INDENTBLOCK : EDITUNDO_UNINDENTBLOCK );
@@ -4361,7 +4375,7 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, bool bRight )
         if ( pLastNode->Len() < aNewSel.nEndPos )
             aNewSel.nEndPos = pLastNode->Len();
         pEditView->pImpEditView->SetEditSelection( CreateSel( aNewSel ) );
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->pImpEditView->ShowCursor( false, true );
     }
 }
