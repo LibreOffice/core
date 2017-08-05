@@ -298,7 +298,7 @@ SVX_DLLPUBLIC long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle
     frame borders). Of course this function can be used for vertical frame
     borders as well.
 
-    The follong picture shows the meaning of all passed parameters:
+    The following picture shows the meaning of all passed parameters:
 
                       \      rTFromT      /
                         \       |       /
@@ -354,7 +354,7 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
     border coming from top-right, connected to the left end of rBorder (and
     therefore a diagonal frame border).
 
-    The follong picture shows the meaning of all passed parameters:
+    The following picture shows the meaning of all passed parameters:
 
                  rLFromT      /                   \      rRFromT
                     |       /                       \       |
