@@ -111,25 +111,22 @@ ScXMLSortContext::~ScXMLSortContext()
 {
 }
 
-SvXMLImportContext *ScXMLSortContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    const SvXMLTokenMap& rTokenMap(GetScImport().GetSortElemTokenMap());
-    switch( rTokenMap.Get( nPrefix, rLName ) )
+    switch (nElement)
     {
-        case XML_TOK_SORT_SORT_BY :
+        case XML_ELEMENT( TABLE, XML_SORT_BY ):
         {
-            pContext = new ScXMLSortByContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+            pContext = new ScXMLSortByContext( GetScImport(), nElement, xAttrList, this );
         }
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -205,42 +202,39 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
 }
 
 ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLSortContext* pTempSortContext) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pSortContext(pTempSortContext),
     sDataType(GetXMLToken(XML_AUTOMATIC)),
     sOrder(GetXMLToken(XML_ASCENDING))
 {
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetSortSortByAttrTokenMap());
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_SORT_BY_ATTR_FIELD_NUMBER :
+            switch (aIter.getToken())
             {
-                sFieldNumber = sValue;
+                case XML_ELEMENT( TABLE, XML_FIELD_NUMBER ):
+                {
+                    sFieldNumber = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
+                {
+                    sDataType = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_ORDER ):
+                {
+                    sOrder = aIter.toString();
+                }
+                break;
             }
-            break;
-            case XML_TOK_SORT_BY_ATTR_DATA_TYPE :
-            {
-                sDataType = sValue;
-            }
-            break;
-            case XML_TOK_SORT_BY_ATTR_ORDER :
-            {
-                sOrder = sValue;
-            }
-            break;
         }
     }
 }
@@ -249,14 +243,7 @@ ScXMLSortByContext::~ScXMLSortByContext()
 {
 }
 
-SvXMLImportContext *ScXMLSortByContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
-}
-
-void ScXMLSortByContext::EndElement()
+void SAL_CALL ScXMLSortByContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pSortContext->AddSortField(sFieldNumber, sDataType, sOrder);
 }
