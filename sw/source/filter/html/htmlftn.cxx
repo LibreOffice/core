@@ -512,7 +512,7 @@ static int lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     return nParts;
 }
 
-static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString *pParts,
+static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
                                   int nParts, const sal_Char *pName )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);

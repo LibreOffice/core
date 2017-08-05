@@ -43,8 +43,8 @@ class FeInheritanceHeader final
 {
 public:
     FeInheritanceHeader(
-        NodeType nodeType, OString* pName, OString* pInherits,
-        std::vector< OString > * typeParameters);
+        NodeType nodeType, OString* pName, OString const * pInherits,
+        std::vector< OString > const * typeParameters);
 
     ~FeInheritanceHeader()
     {

@@ -84,7 +84,7 @@ class SwAnnotationWin : public vcl::Window
 
         /// Calculate parent postit id of current annotation window
         sal_uInt32 CalcParent();
-        void       InitAnswer(OutlinerParaObject* pText);
+        void       InitAnswer(OutlinerParaObject const * pText);
 
         bool IsProtected();
 
@@ -178,7 +178,7 @@ class SwAnnotationWin : public vcl::Window
 
         void SetLanguage(const SvxLanguageItem& rNewItem);
 
-        void ChangeSidebarItem( SwSidebarItem& rSidebarItem );
+        void ChangeSidebarItem( SwSidebarItem const & rSidebarItem );
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
         virtual void    Draw(OutputDevice* pDev, const Point&, const Size&, DrawFlags) override;

@@ -226,7 +226,7 @@ public:
 
     /// For inserting document.
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
-                            SwCursorShell* pCursorSh = nullptr, SwPaM* pPaM = nullptr);
+                            SwCursorShell const * pCursorSh = nullptr, SwPaM* pPaM = nullptr);
 
 #if defined(_WIN32)
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
@@ -277,7 +277,7 @@ public:
 
     void ToggleLayoutMode(SwView* pView);
 
-    ErrCode LoadStylesFromFile( const OUString& rURL, SwgReaderOption& rOpt,
+    ErrCode LoadStylesFromFile( const OUString& rURL, SwgReaderOption const & rOpt,
                                 bool bUnoCall );
     void InvalidateModel();
     void ReactivateModel();

@@ -133,9 +133,9 @@ SwView* SwModule::GetFirstView()
     return pView;
 }
 
-SwView* SwModule::GetNextView(SwView* pView)
+SwView* SwModule::GetNextView(SwView const * pView)
 {
-    OSL_ENSURE(dynamic_cast<SwView*>( pView),"return no SwView" );
+    OSL_ENSURE(dynamic_cast<SwView const *>( pView),"return no SwView" );
     SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
     return pNView;
 }
@@ -370,7 +370,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     return m_pChapterNumRules;
 }
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData)
+void SwModule::ShowDBObj(SwView const & rView, const SwDBData& rData)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
 

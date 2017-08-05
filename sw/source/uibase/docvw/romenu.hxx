@@ -70,7 +70,7 @@ class SwReadOnlyPopup
     ImageMap*   pImageMap;
     INetImage*  pTargetURL;
 
-    void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis );
+    void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher const &rDis );
     OUString SaveGraphic( sal_uInt16 nId );
 
 public:

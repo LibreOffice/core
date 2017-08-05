@@ -156,7 +156,7 @@ bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
 
 ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
-/* static */ ShadowOverlayObject* ShadowOverlayObject::CreateShadowOverlayObject( SwView& rDocView )
+/* static */ ShadowOverlayObject* ShadowOverlayObject::CreateShadowOverlayObject( SwView const & rDocView )
 {
     ShadowOverlayObject* pShadowOverlayObject( nullptr );
 

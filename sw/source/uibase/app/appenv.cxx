@@ -131,7 +131,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUStrin
     return sRet;
 }
 
-static void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
+static void lcl_CopyCollAttr(SwWrtShell const * pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
 {
     sal_uInt16 nCollCnt = pOldSh->GetTextFormatCollCount();
     for( sal_uInt16 nCnt = 0; nCnt < nCollCnt; ++nCnt )

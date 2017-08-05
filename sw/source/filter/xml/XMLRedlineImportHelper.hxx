@@ -89,7 +89,7 @@ public:
     void SetCursor(
         const OUString& rId,     // ID used in RedlineAdd() call
         bool bStart,                // start or end Range
-        css::uno::Reference<css::text::XTextRange> & rRange, // the actual XTextRange
+        css::uno::Reference<css::text::XTextRange> const & rRange, // the actual XTextRange
         // text range is (from an XML view) outside of a paragraph
         // (i.e. before a table)
         bool bIsOusideOfParagraph);

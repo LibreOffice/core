@@ -232,7 +232,7 @@ struct BoxHolder
     BoxHolder(BoxHolder const&) = delete;
     BoxHolder& operator=(BoxHolder const&) = delete;
 
-    explicit BoxHolder(SvxBoxItem& rBox)
+    explicit BoxHolder(SvxBoxItem const & rBox)
     {
         pTop    = rBox.GetTop() == nullptr ?
             nullptr : new SvxBorderLine( *rBox.GetTop() );

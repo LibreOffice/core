@@ -644,7 +644,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
 
 Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
                        const OUString& rGraphicURL,
-                       Graphic& rGraphic, const OUString& rAlternateText,
+                       Graphic const & rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, HtmlFrmOpts nFrameOpts,
                        const sal_Char *pMarkType,
                        const ImageMap *pGenImgMap = nullptr );

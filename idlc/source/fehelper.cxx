@@ -58,8 +58,8 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 }
 
 FeInheritanceHeader::FeInheritanceHeader(
-    NodeType nodeType, OString* pName, OString* pInherits,
-    std::vector< OString > * typeParameters)
+    NodeType nodeType, OString* pName, OString const * pInherits,
+    std::vector< OString > const * typeParameters)
     : m_nodeType(nodeType)
     , m_pName(pName)
     , m_pInherits(nullptr)

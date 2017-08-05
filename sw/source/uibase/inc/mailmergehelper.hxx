@@ -45,7 +45,7 @@ namespace SwMailMergeHelper
     SW_DLLPUBLIC OUString CallSaveAsDialog(OUString& rFilter);
     SW_DLLPUBLIC bool CheckMailAddress(const OUString& rMailAddress);
     SW_DLLPUBLIC css::uno::Reference<css::mail::XSmtpService> ConnectToSmtpServer(
-                            SwMailMergeConfigItem& rConfigItem,
+                            SwMailMergeConfigItem const & rConfigItem,
                             css::uno::Reference<css::mail::XMailService>& xInMailService,
                             const OUString& rInMailServerPassword,
                             const OUString& rOutMailServerPassword,
@@ -105,7 +105,7 @@ public:
     void EnableScrollBar();
 
     // fill the actual data into a string (address block or greeting)
-    static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem& rConfigItem,
+    static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem const & rConfigItem,
                              const css::uno::Sequence<OUString>* pAssignments = nullptr);
 
     void SetSelectHdl (const Link<LinkParamNone*,void>& rLink) { m_aSelectHdl = rLink; }

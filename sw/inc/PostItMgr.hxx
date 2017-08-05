@@ -275,7 +275,7 @@ class SwPostItMgr: public SfxListener
         const OUString&     GetAnswerText() { return maAnswerText; }
         void CheckMetaText();
 
-        sal_uInt16 Replace(SvxSearchItem* pItem);
+        sal_uInt16 Replace(SvxSearchItem const * pItem);
         sal_uInt16 SearchReplace(const SwFormatField &pField, const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);
         sal_uInt16 FinishSearchReplace(const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);
 

@@ -178,12 +178,12 @@ public:
 
     // Iterate over views.
     static SwView*      GetFirstView();
-    static SwView*      GetNextView(SwView*);
+    static SwView*      GetNextView(SwView const *);
 
     bool IsEmbeddedLoadSave() const         { return m_bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( bool bFlag )  { m_bEmbeddedLoadSave = bFlag; }
 
-    static void ShowDBObj( SwView& rView, const SwDBData& rData);
+    static void ShowDBObj( SwView const & rView, const SwDBData& rData);
 
     // Table modi.
     bool            IsInsTableFormatNum(bool bHTML) const;

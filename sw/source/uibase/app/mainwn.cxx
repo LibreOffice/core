@@ -35,7 +35,7 @@ struct SwProgress
 
 static std::vector<SwProgress*> *pProgressContainer = nullptr;
 
-static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
+static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
 {
     for (SwProgress* pTmp : *pProgressContainer)
     {
@@ -73,7 +73,7 @@ void StartProgress( const char* pMessResId, long nStartValue, long nEndValue,
     }
 }
 
-void SetProgressState( long nPosition, SwDocShell *pDocShell )
+void SetProgressState( long nPosition, SwDocShell const *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
@@ -83,7 +83,7 @@ void SetProgressState( long nPosition, SwDocShell *pDocShell )
     }
 }
 
-void EndProgress( SwDocShell *pDocShell )
+void EndProgress( SwDocShell const *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
@@ -116,7 +116,7 @@ void EndProgress( SwDocShell *pDocShell )
     }
 }
 
-void SetProgressText(const char* pId, SwDocShell *pDocShell)
+void SetProgressText(const char* pId, SwDocShell const *pDocShell)
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
@@ -126,7 +126,7 @@ void SetProgressText(const char* pId, SwDocShell *pDocShell)
     }
 }
 
-void RescheduleProgress( SwDocShell *pDocShell )
+void RescheduleProgress( SwDocShell const *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {

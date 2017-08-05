@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 
 // interactive separation
 SwHyphWrapper::SwHyphWrapper( SwView* pVw,
-            uno::Reference< linguistic2::XHyphenator >  &rxHyph,
+            uno::Reference< linguistic2::XHyphenator > const &rxHyph,
             bool bStart, bool bOther, bool bSelect ) :
     SvxSpellWrapper( &pVw->GetEditWin(), rxHyph, bStart, bOther ),
     pView( pVw ),

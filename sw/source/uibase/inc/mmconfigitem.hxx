@@ -96,7 +96,7 @@ public:
     void DisposeResultSet();
 
     OUString& GetFilter() const;
-    void SetFilter(OUString&);
+    void SetFilter(OUString const &);
 
     void SetCurrentDBData( const SwDBData& rDBData);
     const SwDBData& GetCurrentDBData() const;
@@ -228,7 +228,7 @@ public:
     bool IsMailAvailable() const;
 
     // notify a completed merge, provid the appropriate e-Mail address if available
-    void AddMergedDocument(SwDocMergeInfo& rInfo);
+    void AddMergedDocument(SwDocMergeInfo const & rInfo);
     //returns the page and database cursor information of each merged document
     SwDocMergeInfo& GetDocumentMergeInfo(sal_uInt32 nDocument);
     sal_uInt32 GetMergedDocumentCount();

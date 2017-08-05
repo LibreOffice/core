@@ -88,9 +88,9 @@ class XTextRangeOrNodeIndexPosition
 public:
     XTextRangeOrNodeIndexPosition();
 
-    void Set( Reference<XTextRange> & rRange );
-    void Set( SwNodeIndex& rIndex );
-    void SetAsNodeIndex( Reference<XTextRange> & rRange );
+    void Set( Reference<XTextRange> const & rRange );
+    void Set( SwNodeIndex const & rIndex );
+    void SetAsNodeIndex( Reference<XTextRange> const & rRange );
 
     void CopyPositionInto(SwPosition& rPos, SwDoc & rDoc);
     SwDoc* GetDoc();
@@ -104,13 +104,13 @@ XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() :
 {
 }
 
-void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> & rRange )
+void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> const & rRange )
 {
     xRange = rRange->getStart();    // set bookmark
     pIndex.reset();
 }
 
-void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
+void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex const & rIndex )
 {
     pIndex.reset( new SwNodeIndex(rIndex) );
     (*pIndex)-- ;   // previous node!!!
@@ -118,7 +118,7 @@ void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
 }
 
 void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
-    Reference<XTextRange> & rRange )
+    Reference<XTextRange> const & rRange )
 {
     // XTextRange -> XTunnel -> SwXTextRange
     SwDoc* pDoc = lcl_GetDocViaTunnel(rRange);
@@ -480,7 +480,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 void XMLRedlineImportHelper::SetCursor(
     const OUString& rId,
     bool bStart,
-    Reference<XTextRange> & rRange,
+    Reference<XTextRange> const & rRange,
     bool bIsOutsideOfParagraph)
 {
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
