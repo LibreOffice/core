@@ -241,6 +241,7 @@ public:
     void testTdf100709XLSX();
     void testTdf97598XLSX();
     void testTdf110440XLSX();
+    void testTdf83672XLSX();
 
     void testPageScalingXLSX();
     void testActiveXCheckboxXLSX();
@@ -369,6 +370,7 @@ public:
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf110440XLSX);
+    CPPUNIT_TEST(testTdf83672XLSX);
 
     CPPUNIT_TEST(testPageScalingXLSX);
     CPPUNIT_TEST(testActiveXCheckboxXLSX);
@@ -3926,6 +3928,25 @@ void ScFiltersTest::testTdf97598XLSX()
     OUString aStr = rDoc.GetString(0, 0, 0); // A1
     CPPUNIT_ASSERT_EQUAL(OUString("Cell A1"), aStr);
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf83672XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf83672.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf83672.xlsx", xDocSh.is());
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocSh->GetModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(
+        xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+    uno::Reference< beans::XPropertySet > xShapeProperties(
+        xShape, uno::UNO_QUERY );
+    sal_Int32 nRotate = 0;
+    xShapeProperties->getPropertyValue("RotateAngle") >>= nRotate;
+    CPPUNIT_ASSERT(nRotate != 0);
     xDocSh->DoClose();
 }
 
