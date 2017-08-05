@@ -257,9 +257,9 @@ void DrawingFragment::onEndElement()
             if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
             {
                 // Rotation is decided by orientation of shape determined
-                // by the anchor position given by 'twoCellAnchor'
-                if ( getCurrentElement() == XDR_TOKEN( twoCellAnchor ) )
-                    mxShape->setRotation(0);
+                // by the anchor position given by 'editAs="oneCell"'
+                if ( mxAnchor->getEditAs() != ShapeAnchor::ANCHOR_ONECELL )
+                        mxShape->setRotation(0);
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
                 const bool bIsShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
