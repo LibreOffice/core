@@ -236,7 +236,7 @@ void EditView::SetSelection( const ESelection& rESel )
     // manipulates the selection:
     if ( !pImpEditView->GetEditSelection().HasRange() )
     {
-        ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
+        const ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
         pImpEditView->pEditEngine->CursorMoved( pNode );
     }
     EditSelection aNewSelection( pImpEditView->pEditEngine->pImpEditEngine->ConvertSelection(
@@ -261,9 +261,9 @@ void EditView::SetSelection( const ESelection& rESel )
         aNewSelection.Max() = EditPaM( pNode, pNode->Len() );
     }
 
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     pImpEditView->SetEditSelection( aNewSelection );
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     bool bGotoCursor = pImpEditView->DoAutoScroll();
     ShowCursor( bGotoCursor );
 }
@@ -298,7 +298,7 @@ SvtScriptType EditView::GetSelectedScriptType() const
 
 void EditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects) const
 {
-    return pImpEditView->GetSelectionRectangles(rLogicRects);
+    return pImpEditView->GetSelectionRectangles(pImpEditView->GetEditSelection(), rLogicRects);
 }
 
 void EditView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
@@ -368,7 +368,7 @@ void EditView::InsertText( const OUString& rStr, bool bSelect )
 {
 
     EditEngine* pEE = pImpEditView->pEditEngine;
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
 
     EditPaM aPaM1;
     if ( bSelect )
@@ -458,15 +458,15 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
 {
     DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
 
-    pImpEditView->DrawSelection();
-    pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, ATTRSPECIAL_WHOLEWORD );
+    pImpEditView->DrawSelectionXOR();
+    pImpEditView->pEditEngine->SetAttribs( pImpEditView->GetEditSelection(), rSet, ATTRSPECIAL_WHOLEWORD);
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
 void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
 {
 
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     EditSelection aSelection( pImpEditView->GetEditSelection() );
 
@@ -486,7 +486,7 @@ void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
 void EditView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
 
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( pImpEditView->GetEditSelection(), bRemoveParaAttribs, nWhich  );
     pImpEditView->pEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
@@ -520,7 +520,7 @@ void EditView::Redo()
 sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_READ );
     EditPaM aEndPaM = pImpEditView->pEditEngine->pImpEditEngine->Read( rInput, rBaseURL, eFormat, aOldSel, pHTTPHeaderAttrs );
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_READ );
@@ -631,7 +631,7 @@ EditTextObject* EditView::CreateTextObject()
 
 void EditView::InsertText( const EditTextObject& rTextObject )
 {
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
 
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_INSERT );
     EditSelection aTextSel( pImpEditView->pEditEngine->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
@@ -714,9 +714,9 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
     EditSelection aNewSel = pImpEditView->pEditEngine->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
     if ( aNewSel != aOldSel )
     {
-        pImpEditView->DrawSelection();
+        pImpEditView->DrawSelectionXOR();
         pImpEditView->SetEditSelection( aNewSel );
-        pImpEditView->DrawSelection();
+        pImpEditView->DrawSelectionXOR();
     }
 }
 
@@ -724,7 +724,7 @@ void EditView::CompleteAutoCorrect( vcl::Window* pFrameWin )
 {
     if ( !pImpEditView->HasSelection() && pImpEditView->pEditEngine->pImpEditEngine->GetStatus().DoAutoCorrect() )
     {
-        pImpEditView->DrawSelection();
+        pImpEditView->DrawSelectionXOR();
         EditSelection aSel = pImpEditView->GetEditSelection();
         aSel = pImpEditView->pEditEngine->EndOfWord( aSel.Max() );
         aSel = pImpEditView->pEditEngine->pImpEditEngine->AutoCorrect( aSel, 0, !IsInsertMode(), pFrameWin );
@@ -1009,9 +1009,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             {
                 // Set Cursor before word...
                 EditPaM aCursor = pImpEditView->GetEditSelection().Min();
-                pImpEditView->DrawSelection();
+                pImpEditView->DrawSelectionXOR();
                 pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
-                pImpEditView->DrawSelection();
+                pImpEditView->DrawSelectionXOR();
                 // Crashes when no SfxApp
                 pImpEditView->pEditEngine->pImpEditEngine->Spell( this, false );
             }
@@ -1080,17 +1080,17 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 void EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     aCurSel = pImpEditView->pEditEngine->SelectWord(aCurSel.Max(), nWordType);
     pImpEditView->SetEditSelection( aCurSel );
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     ShowCursor( true, false );
 }
 
 void EditView::InsertField( const SvxFieldItem& rFld )
 {
     EditEngine* pEE = pImpEditView->pEditEngine;
-    pImpEditView->DrawSelection();
+    pImpEditView->DrawSelectionXOR();
     pEE->UndoActionStart( EDITUNDO_INSERT );
     EditPaM aPaM( pEE->InsertField( pImpEditView->GetEditSelection(), rFld ) );
     pEE->UndoActionEnd( EDITUNDO_INSERT );
@@ -1377,7 +1377,7 @@ void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool 
 
     if (pImpEditView->GetEditSelection().Min() != aSelection.Min())
         pImpEditView->pEditEngine->CursorMoved(pImpEditView->GetEditSelection().Min().GetNode());
-    pImpEditView->DrawSelection(aSelection);
+    pImpEditView->DrawSelectionXOR(aSelection);
     if (pImpEditView->GetEditSelection() != aSelection)
         pImpEditView->SetEditSelection(aSelection);
     ShowCursor(/*bGotoCursor=*/false);

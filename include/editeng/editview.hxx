@@ -54,6 +54,7 @@ class SfxStyleSheet;
 namespace vcl { class Font; }
 class FontList;
 class OutputDevice;
+class OutlinerViewShell;
 
 #include <editeng/editdata.hxx>
 #include <com/sun/star/uno/Reference.h>

@@ -65,7 +65,7 @@ bool EditUndoManager::Undo()
         }
     }
 
-    mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
+    mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelectionXOR(); // Remove the old selection
 
     mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Undo();
@@ -100,7 +100,7 @@ bool EditUndoManager::Redo()
         }
     }
 
-    mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelection(); // Remove the old selection
+    mpEditEngine->GetActiveView()->GetImpEditView()->DrawSelectionXOR(); // Remove the old selection
 
     mpEditEngine->SetUndoMode( true );
     bool bDone = SfxUndoManager::Redo();

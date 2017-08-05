@@ -72,6 +72,7 @@
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#include <comphelper/lok.hxx>
 
 #include <svl/srchdefs.hxx>
 
@@ -630,7 +631,7 @@ ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordTy
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
-void EditEngine::CursorMoved(ContentNode* pPrevNode)
+void EditEngine::CursorMoved(const ContentNode* pPrevNode)
 {
     pImpEditEngine->CursorMoved(pPrevNode);
 }
@@ -645,12 +646,12 @@ bool EditEngine::IsIdleFormatterActive() const
     return pImpEditEngine->aIdleFormatter.IsActive();
 }
 
-ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode)
+ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode)
 {
     return pImpEditEngine->FindParaPortion(pNode);
 }
 
-const ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode) const
+const ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode) const
 {
     return pImpEditEngine->FindParaPortion(pNode);
 }
@@ -1161,7 +1162,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         break;
                     }
 
-                    pEditView->pImpEditView->DrawSelection();
+                    pEditView->pImpEditView->DrawSelectionXOR();
                     pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = pImpEditEngine->DeleteLeftOrRight( aCurSel, nDel, nMode );
                     pImpEditEngine->UndoActionEnd( EDITUNDO_DELETE );
@@ -1201,7 +1202,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             {
                 if ( !bReadOnly )
                 {
-                    pEditView->pImpEditView->DrawSelection();
+                    pEditView->pImpEditView->DrawSelectionXOR();
                     if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
@@ -1256,7 +1257,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
-                    pEditView->pImpEditView->DrawSelection();
+                    pEditView->pImpEditView->DrawSelectionXOR();
                     // Autocorrection?
                     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
@@ -1349,6 +1350,10 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     }
 
     pEditView->pImpEditView->SetEditSelection( aCurSel );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        pEditView->pImpEditView->DrawSelectionXOR();
+    }
     pImpEditEngine->UpdateSelections();
 
     if ( ( !IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||

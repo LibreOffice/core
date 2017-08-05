@@ -1505,12 +1505,12 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
 
     if ( !bMultipleDoc )
     {
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
             aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
         aCurSel.Min() = aCurSel.Max();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
     EESpellState eState = pSpellInfo->eState;
@@ -1630,12 +1630,12 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
     if ( !bMultipleDoc )
     {
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         if ( aCurSel.Max().GetIndex() > aCurSel.Max().GetNode()->Len() )
             aCurSel.Max().SetIndex( aCurSel.Max().GetNode()->Len() );
         aCurSel.Min() = aCurSel.Max();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->ShowCursor( true, false );
     }
     delete pConvInfo;
@@ -1833,9 +1833,9 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         pConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
     }
 
-    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->DrawSelectionXOR();
     pEditView->pImpEditView->SetEditSelection( aCurSel );
-    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->DrawSelectionXOR();
     pEditView->ShowCursor( true, false );
 
     rConvTxt = aRes;
@@ -1903,9 +1903,9 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
             pSpellInfo->eState = EE_SPELL_ERRORFOUND;
     }
 
-    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->DrawSelectionXOR();
     pEditView->pImpEditView->SetEditSelection( aCurSel );
-    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->DrawSelectionXOR();
     pEditView->ShowCursor( true, false );
     return xSpellAlt;
 }
@@ -2496,9 +2496,9 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
     if (xDlg->Execute() == RET_OK)
     {
         // Replace Word...
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
         pEditView->InsertText(xDlg->GetWord());
         pEditView->ShowCursor(true, false);
     }
@@ -2538,7 +2538,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
         SvxSearchItem aTmpItem( rSearchItem );
         aTmpItem.SetBackward( false );
 
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
 
         aCurSel.Adjust( aEditDoc );
         EditPaM aStartPaM = aTmpItem.GetSelection() ? aCurSel.Min() : aEditDoc.GetStartPaM();
@@ -2563,7 +2563,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
         }
         else
         {
-            pEditView->pImpEditView->DrawSelection();
+            pEditView->pImpEditView->DrawSelectionXOR();
             pEditView->ShowCursor( true, false );
         }
     }
@@ -2586,7 +2586,7 @@ bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
         bFound = ImpSearch( rSearchItem, aSel, aStartPaM, aFoundSel );
     }
 
-    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->DrawSelectionXOR();
     if ( bFound )
     {
         // First, set the minimum, so the whole word is in the visible range.
@@ -2597,7 +2597,7 @@ bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
     else
         pEditView->pImpEditView->SetEditSelection( aSel.Max() );
 
-    pEditView->pImpEditView->DrawSelection();
+    pEditView->pImpEditView->DrawSelectionXOR();
     pEditView->ShowCursor( true, false );
     return bFound;
 }

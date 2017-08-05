@@ -97,6 +97,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
 
     aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->GetEditDoc().GetEndPaM();
+
+    SelectionChanged();
 }
 
 ImpEditView::~ImpEditView()
@@ -134,6 +136,8 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     // set state before notification
     aEditSelection = rEditSelection;
 
+    SelectionChanged();
+
     if (comphelper::LibreOfficeKit::isActive())
         // Tiled rendering: selections are only painted when we are in selection mode.
         pEditEngine->SetInSelectionMode(aEditSelection.HasRange());
@@ -162,19 +166,20 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 }
 
 
-void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
+// EditView never had a central/secure place to react on SelectionChange since
+// Selection was changed in many places, often by not using SetEditSelection()
+// but (mis)using GetEditSelection() and manipulating this non-const return
+// value. Sorted this out now to have such a place, this is needed for safely
+// change/update the Selection visualization for enhanced mechanisms
+void ImpEditView::SelectionChanged()
 {
-    if (hasEditViewCallbacks() && !pRegion)
+    if (hasEditViewCallbacks())
     {
-        // when we have an own mechanism for painting EditViews, collect the Selection
-        // in a basegfx::B2DRange vector and hand over. To do so, call GetSelectionRectangles
-        // which recursively calls ImpEditView::DrawSelection, but with nullptr != pRegion
         std::vector<Rectangle> aLogicRects;
         std::vector<basegfx::B2DRange> aLogicRanges;
-        OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pOutWin;
-        const Point aPixel(pTarget ? pTarget->LogicToPixel(Point(1, 1)) : Point(1, 1));
+        const Size aLogicPixel(pOutWin ? pOutWin->PixelToLogic(Size(1, 1)) : Size(1, 1));
 
-        GetSelectionRectangles(aLogicRects);
+        GetSelectionRectangles(GetEditSelection(), aLogicRects);
 
         for (const auto& aRect : aLogicRects)
         {
@@ -183,12 +188,27 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
             aLogicRanges.push_back(
                 basegfx::B2DRange(
                     aRect.Left(), aRect.Top(),
-                    aRect.Right() + aPixel.X(), aRect.Bottom() + aPixel.Y()));
+                    aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height()));
         }
 
         // use callback to tell about change in selection visualisation
         mpEditViewCallbacks->EditViewSelectionChange(aLogicRanges);
+    }
+}
 
+// renamed from DrawSelection to DrawSelectionXOR to better reflect what this
+// method was used for: Paint Selection in XOR, change it and again paint it in XOR.
+// This can be safely assumed due to the EditView only being capable of painting the
+// selection in XOR until today.
+// This also means that all places calling DrawSelectionXOR are thoroughly weighted
+// and choosen to make this fragile XOR-paint water-proof and thus contain some
+// information in this sense.
+// Someone thankfully expanded it to collect the SelectionRectangles when called with
+// the Region*, see GetSelectionRectangles below.
+void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
+{
+    if (hasEditViewCallbacks() && !pRegion)
+    {
         // we are done, do *not* visualize self
         return;
     }
@@ -240,7 +260,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
         pPolyPoly = new tools::PolyPolygon;
     }
 
-    DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelection: Not formatted!" );
+    DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!" );
     aTmpSel.Adjust( pEditEngine->GetEditDoc() );
 
     ContentNode* pStartNode = aTmpSel.Min().GetNode();
@@ -324,7 +344,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     if ( nTmpEndIndex > nEndIndex )
                         nTmpEndIndex = nEndIndex;
 
-                    DBG_ASSERT( nTmpEndIndex > nTmpStartIndex, "DrawSelection, Start >= End?" );
+                    DBG_ASSERT( nTmpEndIndex > nTmpStartIndex, "DrawSelectionXOR, Start >= End?" );
 
                     long nX1 = pEditEngine->GetXPos(pTmpPortion, &rLine, nTmpStartIndex, true);
                     long nX2 = pEditEngine->GetXPos(pTmpPortion, &rLine, nTmpEndIndex);
@@ -405,10 +425,10 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     }
 }
 
-void ImpEditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects)
+void ImpEditView::GetSelectionRectangles(EditSelection aTmpSel, std::vector<Rectangle>& rLogicRects)
 {
     vcl::Region aRegion;
-    DrawSelection(aEditSelection, &aRegion);
+    DrawSelectionXOR(aTmpSel, &aRegion);
     aRegion.GetRegionRectangles(rLogicRects);
 }
 
@@ -534,9 +554,9 @@ void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
 {
     if ( eSelectionMode != eNewMode )
     {
-        DrawSelection();
+        DrawSelectionXOR();
         eSelectionMode = eNewMode;
-        DrawSelection();    // redraw
+        DrawSelectionXOR();    // redraw
     }
 }
 
@@ -1271,9 +1291,9 @@ bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong )
         bIsWrong = rPaM.GetNode()->GetWrongList()->HasWrong( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
         if ( bIsWrong && bMarkIfWrong )
         {
-            DrawSelection();
+            DrawSelectionXOR();
             SetEditSelection( aSel );
-            DrawSelection();
+            DrawSelectionXOR();
         }
     }
     return bIsWrong;
@@ -1294,9 +1314,9 @@ OUString ImpEditView::SpellIgnoreWord()
         {
             aWord = pEditEngine->pImpEditEngine->GetSelected( GetEditSelection() );
             // And deselect
-            DrawSelection();
+            DrawSelectionXOR();
             SetEditSelection( EditSelection( aPaM, aPaM ) );
-            DrawSelection();
+            DrawSelectionXOR();
         }
 
         if ( !aWord.isEmpty() )
@@ -1320,7 +1340,7 @@ OUString ImpEditView::SpellIgnoreWord()
 
 void ImpEditView::DeleteSelected()
 {
-    DrawSelection();
+    DrawSelectionXOR();
 
     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
 
@@ -1457,7 +1477,7 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
             EditSelection aSel( GetEditSelection() );
             if ( aSel.HasRange() )
             {
-                DrawSelection();
+                DrawSelectionXOR();
                 aSel = pEditEngine->DeleteSelection(aSel);
             }
 
@@ -1543,18 +1563,20 @@ bool ImpEditView::IsInSelection( const EditPaM& rPaM )
 void ImpEditView::CreateAnchor()
 {
     pEditEngine->SetInSelectionMode(true);
-    GetEditSelection().Min() = GetEditSelection().Max();
+    EditSelection aNewSelection(GetEditSelection());
+    aNewSelection.Min() = aNewSelection.Max();
+    SetEditSelection(aNewSelection);
+    // const_cast<EditPaM&>(GetEditSelection().Min()) = GetEditSelection().Max();
 }
 
 void ImpEditView::DeselectAll()
 {
     pEditEngine->SetInSelectionMode(false);
-    DrawSelection();
-    GetEditSelection().Min() = GetEditSelection().Max();
-
-    // Selection is empty, still need to draw it due to new forward selection
-    // functionality. When without that, nothing will be drawn (since it's empty)
-    DrawSelection();
+    DrawSelectionXOR();
+    EditSelection aNewSelection(GetEditSelection());
+    aNewSelection.Min() = aNewSelection.Max();
+    SetEditSelection(aNewSelection);
+    // const_cast<EditPaM&>(GetEditSelection().Min()) = GetEditSelection().Max();
 }
 
 bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
@@ -1615,7 +1637,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     }
     else
     {
-        DrawSelection( aTmpNewSel );
+        DrawSelectionXOR( aTmpNewSel );
     }
 
     // set changed text selection
@@ -1725,8 +1747,8 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
             pDragAndDropInfo->pField = pField;
             ContentNode* pNode = pEditEngine->GetEditDoc().GetObject( nPara );
             aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
-            GetEditSelection() = aCopySel;
-            DrawSelection();
+            SetEditSelection(aCopySel);
+            DrawSelectionXOR();
             bool bGotoCursor = DoAutoScroll();
             ShowCursor( bGotoCursor, /*bForceCursor=*/false );
         }
@@ -1841,7 +1863,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
                     }
                 }
 
-                DrawSelection();
+                DrawSelectionXOR();
                 EditSelection aDelSel( pEditEngine->pImpEditEngine->CreateSel( aToBeDelSel ) );
                 DBG_ASSERT( !aDelSel.DbgIsBuggy( pEditEngine->GetEditDoc() ), "ToBeDel is buggy!" );
                 pEditEngine->DeleteSelection(aDelSel);
@@ -1851,7 +1873,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
                     SetEditSelection( pEditEngine->pImpEditEngine->CreateSel( aNewSel ) );
                 }
                 pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
-                DrawSelection();
+                DrawSelectionXOR();
             }
             else
             {
@@ -1905,7 +1927,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
             {
                 bChanges = true;
                 // remove Selection ...
-                DrawSelection();
+                DrawSelectionXOR();
                 EditPaM aPaM( pDragAndDropInfo->aDropDest );
 
                 PasteOrDropInfos aPasteOrDropInfos;
