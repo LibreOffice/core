@@ -5,6 +5,7 @@ import os
 import subprocess
 
 from config import parse_config
+from path import convert_to_unix
 
 from tools import replace_variables_in_string
 
@@ -25,7 +26,7 @@ def main():
     subprocess.call(command, shell=True)
     for file in os.listdir(update_dir):
         if file.endswith('.mar'):
-            subprocess.call(['scp', os.path.join(update_dir, file), upload_url])
+            subprocess.call(['scp', convert_to_unix(os.path.join(update_dir, file)), upload_url])
 
 if __name__ == '__main__':
     main()
