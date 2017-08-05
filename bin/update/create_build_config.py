@@ -19,7 +19,7 @@ def update_all_url_entries(data, **kwargs):
         for partial in data['partials']:
             partial['file']['url'] = replace_variables_in_string(partial['file']['url'], **kwargs)
 
-            if sys.plaform == "cygwin":
+            if sys.platform == "cygwin":
                 continue
 
             for lang, lang_file in partial['languages'].items():
