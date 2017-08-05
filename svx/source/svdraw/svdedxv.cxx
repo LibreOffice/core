@@ -66,6 +66,8 @@
 #include <sfx2/viewsh.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpagewindow.hxx>
 
 #include <memory>
 
@@ -445,8 +447,8 @@ namespace
         const Color& rColor,
         OutlinerView& rOutlinerView,
         bool bVisualizeSurroundingFrame)
-    :   mpOverlaySelection(pOverlaySelection),
-        OverlayObject(rColor),
+    :   OverlayObject(rColor),
+        mpOverlaySelection(pOverlaySelection),
         mrOutlinerView(rOutlinerView),
         maLastRange(),
         maRange(),

@@ -72,6 +72,7 @@ namespace linguistic2 {
     class XLanguageGuessing;
 }
 }}}
+namespace basegfx { class B2DRange; }
 
 enum class ScrollRangeCheck
 {

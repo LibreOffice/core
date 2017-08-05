@@ -24,6 +24,7 @@
 #include <svx/svdmodel.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
+#include <editeng/editview.hxx>
 
 
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, OutlinerMode nMode )
