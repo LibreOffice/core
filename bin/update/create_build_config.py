@@ -23,6 +23,7 @@ def update_all_url_entries(data, **kwargs):
 def main(argv):
     if len(argv) < 7:
         print("Usage: create_build_config.py $PRODUCTNAME $VERSION $BUILDID $PLATFORM $TARGETDIR $UPDATE_CONFIG")
+        sys.exit(1)
 
     config = parse_config(argv[6])
 
