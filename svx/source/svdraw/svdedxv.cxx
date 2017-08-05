@@ -1152,9 +1152,6 @@ bool SdrObjEditView::SdrBeginTextEdit(
                             rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                             if (xManager.is())
                             {
-                                const basegfx::B2DRange aMinTEArea(
-                                    aMinTextEditArea.Left(), aMinTextEditArea.Top(),
-                                    aMinTextEditArea.Right(), aMinTextEditArea.Bottom());
                                 const std::vector< basegfx::B2DRange > aEmptySelection;
 
                                 sdr::overlay::OverlaySelection* pNewOverlaySelection = new sdr::overlay::OverlaySelection(

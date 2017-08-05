@@ -637,7 +637,7 @@ ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordTy
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
-void EditEngine::CursorMoved(ContentNode* pPrevNode)
+void EditEngine::CursorMoved(const ContentNode* pPrevNode)
 {
     pImpEditEngine->CursorMoved(pPrevNode);
 }
@@ -1173,7 +1173,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                         break;
                     }
 
-                    pEditView->pImpEditView->DrawSelection();
+                    pEditView->pImpEditView->DrawSelectionXOR();
                     pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = pImpEditEngine->DeleteLeftOrRight( aCurSel, nDel, nMode );
                     pImpEditEngine->UndoActionEnd();
@@ -1213,7 +1213,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             {
                 if ( !bReadOnly )
                 {
-                    pEditView->pImpEditView->DrawSelection();
+                    pEditView->pImpEditView->DrawSelectionXOR();
                     if ( !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
@@ -1268,7 +1268,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
-                    pEditView->pImpEditView->DrawSelection();
+                    pEditView->pImpEditView->DrawSelectionXOR();
                     // Autocorrection?
                     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
@@ -1363,7 +1363,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     pEditView->pImpEditView->SetEditSelection( aCurSel );
     if (comphelper::LibreOfficeKit::isActive())
     {
-        pEditView->pImpEditView->DrawSelection();
+        pEditView->pImpEditView->DrawSelectionXOR();
     }
     pImpEditEngine->UpdateSelections();
 

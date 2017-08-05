@@ -335,13 +335,14 @@ public:
     long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
     tools::Rectangle       GetVisDocArea() const;
 
-    EditSelection&  GetEditSelection()          { return aEditSelection; }
+    const EditSelection&  GetEditSelection()          { return aEditSelection; }
     void            SetEditSelection( const EditSelection& rEditSelection );
     bool            HasSelection() const { return aEditSelection.HasRange(); }
 
-    void            DrawSelection() { DrawSelection( aEditSelection ); }
-    void            DrawSelection( EditSelection, vcl::Region* pRegion = nullptr, OutputDevice* pTargetDevice = nullptr );
-    void GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects);
+    void SelectionChanged();
+    void            DrawSelectionXOR() { DrawSelectionXOR( aEditSelection ); }
+    void            DrawSelectionXOR( EditSelection, vcl::Region* pRegion = nullptr, OutputDevice* pTargetDevice = nullptr );
+    void GetSelectionRectangles(EditSelection aTmpSel, std::vector<tools::Rectangle>& rLogicRects);
 
     vcl::Window*    GetWindow() const           { return pOutWin; }
 
@@ -541,7 +542,7 @@ private:
     // Methods...
 
 
-    void                CursorMoved( ContentNode* pPrevNode );
+    void                CursorMoved( const ContentNode* pPrevNode );
     void                ParaAttribsChanged( ContentNode const * pNode );
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
