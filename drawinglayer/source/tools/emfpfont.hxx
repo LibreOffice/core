@@ -36,7 +36,7 @@ namespace emfplushelper
         bool Bold()     { return fontFlags & 0x1; }
         bool Italic()   { return fontFlags & 0x2; }
         bool Underline(){ return fontFlags & 0x4; }
-        bool Strikaout(){ return fontFlags & 0x8; }
+        bool Strikeout(){ return fontFlags & 0x8; }
     };
 }
 
