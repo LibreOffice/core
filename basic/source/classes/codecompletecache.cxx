@@ -35,6 +35,17 @@ CodeCompleteOptions::CodeCompleteOptions()
     bIsProcedureAutoCompleteOn = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();
     bIsCodeCompleteOn = officecfg::Office::BasicIDE::Autocomplete::CodeComplete::get();
     bExtendedTypeDeclarationOn = officecfg::Office::BasicIDE::Autocomplete::UseExtended::get();
+    bIsWarningOn = officecfg::Office::BasicIDE::Autocomplete::WarningOn::get();
+}
+
+bool CodeCompleteOptions::IsWarningOn()
+{
+    return theCodeCompleteOptions::get().aMiscOptions.IsExperimentalMode() && theCodeCompleteOptions::get().bIsWarningOn;
+}
+
+void CodeCompleteOptions::SetWarningOn( bool b )
+{
+    theCodeCompleteOptions::get().bIsWarningOn = b;
 }
 
 bool CodeCompleteOptions::IsCodeCompleteOn()
