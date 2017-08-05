@@ -11,6 +11,7 @@
 # Extract a mar file and uncompress the content
 
 import os
+import re
 import sys
 import subprocess
 from path import convert_to_native
@@ -26,13 +27,17 @@ def extract_mar(mar_file, target_dir):
     subprocess.check_call([mar, "-C", convert_to_native(target_dir), "-x", convert_to_native(mar_file)])
     file_info = subprocess.check_output([mar, "-t", convert_to_native(mar_file)])
     lines = file_info.splitlines()
+    prog = re.compile("\d+\s+\d+\s+(.+)")
     for line in lines:
-        info = line.split()
+        match = prog.match(line.decode("utf-8", "strict"))
+        if match is None:
+            continue
+        info = match.groups()[0]
         # ignore header line
-        if info[2] == b'NAME':
+        if info == b'NAME':
             continue
 
-        uncompress_content(os.path.join(target_dir, info[2].decode("utf-8")))
+        uncompress_content(os.path.join(target_dir, info))
 
 def main():
     if len(sys.argv) != 3:
