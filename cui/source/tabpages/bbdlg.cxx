@@ -75,7 +75,7 @@ void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPa
     {
         SfxItemSet aNew(
             *GetInputSetImpl()->GetPool(),
-            SID_COLOR_TABLE, SID_BITMAP_LIST,
+            SID_COLOR_TABLE, SID_PATTERN_LIST,
             SID_OFFER_IMPORT, SID_OFFER_IMPORT,
             0, 0);
 
