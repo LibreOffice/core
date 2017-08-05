@@ -615,7 +615,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XEnhancedMouseClickBroadcaster \
     qadevOOo/tests/java/ifc/sheet/_XFormulaQuery \
     qadevOOo/tests/java/ifc/sheet/_XFunctionDescriptions \
-    qadevOOo/tests/java/ifc/sheet/_XGoalSeek \
     qadevOOo/tests/java/ifc/sheet/_XHeaderFooterContent \
     qadevOOo/tests/java/ifc/sheet/_XLabelRange \
     qadevOOo/tests/java/ifc/sheet/_XLabelRanges \
