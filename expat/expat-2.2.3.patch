@@ -1,6 +1,6 @@
 --- misc/expat-2.2.3/lib/makefile.mk	Wed Aug 20 14:33:55 2008
 +++ misc/build/expat-2.2.3/lib/makefile.mk	Wed Aug 20 14:26:42 2008
-@@ -1 +1,83 @@
+@@ -1 +1,85 @@
 -dummy
 +#**************************************************************
 +#  
@@ -45,21 +45,23 @@
 +CDEFS+=-DHAVE_MEMMOVE -DHAVE_BCOPY
 +.ENDIF # "$(OS)"=="MACOSX"
 +
-+SLOFILES=$(SLO)$/xmlparse.obj \
-+         $(SLO)$/xmlrole.obj \
-+         $(SLO)$/xmltok.obj
-+
 +SECOND_BUILD=UNICODE
 +UNICODE_SLOFILES=$(SLO)$/xmlparse.obj
 +UNICODECDEFS+=-DXML_UNICODE
 +
++.IF "$(OS)"=="WNT"
++ LOADLIBOBJFILE=$(SLO)/loadlibrary.obj
++.ELSE
++ LOADLIBOBJFILE=
++.ENDIF
++
 +LIB1ARCHIV=$(LB)$/libascii_$(TARGET)_xmlparse.a
 +LIB1TARGET=$(SLB)$/ascii_$(TARGET)_xmlparse.lib
-+LIB1OBJFILES=$(SLO)$/xmlparse.obj
++LIB1OBJFILES=$(SLO)$/xmlparse.obj $(LOADLIBOBJFILE)
 +
 +LIB2ARCHIV=$(LB)$/lib$(TARGET)_xmlparse.a
 +LIB2TARGET=$(SLB)$/$(TARGET)_xmlparse.lib
-+LIB2OBJFILES =$(REAL_UNICODE_SLOFILES)
++LIB2OBJFILES =$(REAL_UNICODE_SLOFILES) $(LOADLIBOBJFILE)
 +
 +LIB3ARCHIV=$(LB)$/lib$(TARGET)_xmltok.a
 +LIB3TARGET=$(SLB)$/$(TARGET)_xmltok.lib
