@@ -33,6 +33,7 @@ private:
     VclPtr<CheckBox> pAutocloseQuotesChk;
     VclPtr<CheckBox> pAutoCorrectChk;
     VclPtr<CheckBox> pUseExtendedTypesChk;
+    VclPtr<CheckBox> pWarningOnChk;         // Set Warning On Compilation.
 
     void LoadConfig();
 

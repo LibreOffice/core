@@ -1,0 +1,26 @@
+cd /home/maison/Documents/Programmation/LO/external/tarballs/tmp && bash -c 'wget --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N --no-use-server-timestamps https://dev-www.libreoffice.org/src/libabw-0.1.1.tar.bz2 2>&1 | tee -a /home/maison/Documents/Programmation/LO/external/tarballs/fetch.log && [ $PIPESTATUS -eq 0 ]' && SUM=`shasum -a 256 libabw-0.1.1.tar.bz2 | sed "s/ .*//"` && if test "$SUM" != "7a3d3415cf82ab9894f601d1b3057c4615060304d5279efdec6275e01b96a199"; then echo ERROR: expected checksum for libabw-0.1.1.tar.bz2 is 7a3d3415cf82ab9894f601d1b3057c4615060304d5279efdec6275e01b96a199 2>&1 | tee -a /home/maison/Documents/Programmation/LO/external/tarballs/fetch.log; false; fi && mv libabw-0.1.1.tar.bz2 ../ 
+--2017-06-25 09:06:25--  https://dev-www.libreoffice.org/src/libabw-0.1.1.tar.bz2
+Résolution de dev-www.libreoffice.org (dev-www.libreoffice.org)… 195.135.221.70
+Connexion à dev-www.libreoffice.org (dev-www.libreoffice.org)|195.135.221.70|:443… connecté.
+requête HTTP transmise, en attente de la réponse… 200 OK
+Taille : 369311 (361K) [application/x-bzip]
+Enregistre : «./libabw-0.1.1.tar.bz2»
+
+     0K .....                                                100%  455K=0,8s
+
+2017-06-25 09:06:27 (455 KB/s) - «./libabw-0.1.1.tar.bz2» enregistré [369311/369311]
+
+cd /home/maison/Documents/Programmation/LO/external/tarballs/tmp && bash -c 'wget --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N --no-use-server-timestamps https://dev-www.libreoffice.org/src/boost_1_63_0.tar.bz2 2>&1 | tee -a /home/maison/Documents/Programmation/LO/external/tarballs/fetch.log && [ $PIPESTATUS -eq 0 ]' && SUM=`shasum -a 256 boost_1_63_0.tar.bz2 | sed "s/ .*//"` && if test "$SUM" != "beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0"; then echo ERROR: expected checksum for boost_1_63_0.tar.bz2 is beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0 2>&1 | tee -a /home/maison/Documents/Programmation/LO/external/tarballs/fetch.log; false; fi && mv boost_1_63_0.tar.bz2 ../ 
+--2017-06-25 09:06:27--  https://dev-www.libreoffice.org/src/boost_1_63_0.tar.bz2
+Résolution de dev-www.libreoffice.org (dev-www.libreoffice.org)… 195.135.221.70
+Connexion à dev-www.libreoffice.org (dev-www.libreoffice.org)|195.135.221.70|:443… connecté.
+requête HTTP transmise, en attente de la réponse… 200 OK
+Taille : 81984414 (78M) [application/x-bzip]
+Enregistre : «./boost_1_63_0.tar.bz2»
+
+     0K ........ ........ ........ ........ ........ ........  3%  873K 88s
+  3072K ........ ........ ........ ........ ........ ........  7% 1,80M 62s
+  6144K ........ ........ ........ ........ ........ ........ 11% 1,81M 53s
+  9216K ........ ........ ........ ........ ........ ........ 15% 1,79M 47s
+ 12288K ........ ........ ........ ........ ........ ........ 19% 1,80M 43s
+ 15360K ........ ........ ........ ........ ......

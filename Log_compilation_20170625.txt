@@ -1,0 +1,10 @@
+cd /home/maison/Documents/Programmation/LO/external/tarballs/tmp && bash -c 'wget --progress=dot:mega -Q 0 -P "." -l 0 -nd -nH -N --no-use-server-timestamps https://dev-www.libreoffice.org/src/boost_1_63_0.tar.bz2 2>&1 | tee -a /home/maison/Documents/Programmation/LO/external/tarballs/fetch.log && [ $PIPESTATUS -eq 0 ]' && SUM=`shasum -a 256 boost_1_63_0.tar.bz2 | sed "s/ .*//"` && if test "$SUM" != "beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0"; then echo ERROR: expected checksum for boost_1_63_0.tar.bz2 is beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0 2>&1 | tee -a /home/maison/Documents/Programmation/LO/external/tarballs/fetch.log; false; fi && mv boost_1_63_0.tar.bz2 ../ 
+--2017-06-25 09:06:54--  https://dev-www.libreoffice.org/src/boost_1_63_0.tar.bz2
+Résolution de dev-www.libreoffice.org (dev-www.libreoffice.org)… 195.135.221.70
+Connexion à dev-www.libreoffice.org (dev-www.libreoffice.org)|195.135.221.70|:443… connecté.
+requête HTTP transmise, en attente de la réponse… 304 Not Modified
+File «./boost_1_63_0.tar.bz2» not modified on server. Omitting download.
+
+ERROR: expected checksum for boost_1_63_0.tar.bz2 is beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0
+/home/maison/Documents/Programmation/LO/Makefile.fetch:100 : la recette pour la cible « /home/maison/Documents/Programmation/LO/workdir/download » a échouée
+make: *** [/home/maison/Documents/Programmation/LO/workdir/download] Erreur 1

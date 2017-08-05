@@ -32,6 +32,7 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxI
     get(pAutocloseQuotesChk, "autoclose_quotes");
     get(pAutoCorrectChk, "autocorrect");
     get(pUseExtendedTypesChk, "extendedtypes_enable");
+    get(pWarningOnChk, "compile_warning_on");
 
     LoadConfig();
 }
@@ -49,6 +50,7 @@ void SvxBasicIDEOptionsPage::dispose()
     pAutocloseQuotesChk.clear();
     pAutoCorrectChk.clear();
     pUseExtendedTypesChk.clear();
+    pWarningOnChk.clear();
     SfxTabPage::dispose();
 }
 
@@ -66,6 +68,8 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     pAutoCorrectChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::isReadOnly() );
     pUseExtendedTypesChk->Check( officecfg::Office::BasicIDE::Autocomplete::UseExtended::get() );
     pUseExtendedTypesChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::UseExtended::isReadOnly() );
+    pWarningOnChk->Check( officecfg::Office::BasicIDE::Autocomplete::WarningOn::get() );
+    pWarningOnChk->Enable( !officecfg::Office::BasicIDE::Autocomplete::WarningOn::isReadOnly() );
 }
 
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
@@ -116,6 +120,13 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         bModified = true;
     }
 
+    if( pWarningOnChk->IsValueChangedFromSaved() )
+    {
+        officecfg::Office::BasicIDE::Autocomplete::WarningOn::set( pWarningOnChk->IsChecked(), batch );
+        CodeCompleteOptions::SetWarningOn( pWarningOnChk->IsChecked() );
+        bModified = true;
+    }
+
     if( bModified )
         batch->commit();
 
@@ -136,6 +147,8 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     pAutoCorrectChk->SaveValue();
 
     pUseExtendedTypesChk->SaveValue();
+
+    pWarningOnChk->SaveValue();
 }
 
 VclPtr<SfxTabPage> SvxBasicIDEOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

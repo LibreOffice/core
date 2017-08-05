@@ -36,7 +36,7 @@ typedef std::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeC
 class BASIC_DLLPUBLIC CodeCompleteOptions
 {
 /*
- * class to store basic code completion
+ * class to store basic code completion and compilation
  * options
  * */
 private:
@@ -46,6 +46,7 @@ private:
     bool bIsAutoCloseParenthesisOn;
     bool bIsAutoCorrectOn;
     bool bExtendedTypeDeclarationOn;
+    bool bIsWarningOn;
     SvtMiscOptions aMiscOptions;
 
 public:
@@ -68,6 +69,9 @@ public:
 
     static bool IsAutoCorrectOn();
     static void SetAutoCorrectOn( bool b );
+
+    static bool IsWarningOn();
+    static void SetWarningOn( bool b );
 };
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache final

@@ -226,6 +226,7 @@ bool SbiScanner::NextSym()
         nOldCol1 = nOldCol2 = 0;
     }
 
+    // Skip whitespace
     if(nCol < aLine.getLength() && BasicCharClass::isWhitespace(aLine[nCol]))
     {
         bSpaces = true;
