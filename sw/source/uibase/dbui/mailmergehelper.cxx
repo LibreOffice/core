@@ -84,7 +84,7 @@ bool CheckMailAddress( const OUString& rMailAddress )
 }
 
 uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
-        SwMailMergeConfigItem& rConfigItem,
+        SwMailMergeConfigItem const & rConfigItem,
         uno::Reference< mail::XMailService >&  rxInMailService,
         const OUString& rInMailServerPassword,
         const OUString& rOutMailServerPassword,
@@ -451,7 +451,7 @@ void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const O
 
 OUString SwAddressPreview::FillData(
         const OUString& rAddress,
-        SwMailMergeConfigItem& rConfigItem,
+        SwMailMergeConfigItem const & rConfigItem,
         const Sequence< OUString>* pAssignments)
 {
     //find the column names in the address string (with name assignment!) and

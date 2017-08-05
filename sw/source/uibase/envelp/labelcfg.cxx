@@ -214,7 +214,7 @@ static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const
 }
 
 static Sequence<PropertyValue> lcl_CreateProperties(
-    Sequence<OUString>& rPropNames, OUString& rMeasure, const SwLabRec& rRec)
+    Sequence<OUString> const & rPropNames, OUString& rMeasure, const SwLabRec& rRec)
 {
     const OUString* pNames = rPropNames.getConstArray();
     Sequence<PropertyValue> aRet(rPropNames.getLength());

@@ -55,7 +55,7 @@ public:
         void SetPosition( const basegfx::B2DPoint& rPoint1,
                           const basegfx::B2DPoint& rPoint2 );
 
-        static ShadowOverlayObject* CreateShadowOverlayObject( SwView& rDocView );
+        static ShadowOverlayObject* CreateShadowOverlayObject( SwView const & rDocView );
         static void DestroyShadowOverlayObject( ShadowOverlayObject* pShadow );
 };
 

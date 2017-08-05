@@ -2682,7 +2682,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
 }
 
 /// Returns the URL of this SwDoc.
-OUString lcl_getOwnURL(SwDocShell* pDocShell)
+OUString lcl_getOwnURL(SwDocShell const * pDocShell)
 {
     OUString aRet;
 
@@ -3156,7 +3156,7 @@ void SwDBManager::ConnectionDisposedListener_Impl::disposing( const lang::EventO
     }
 }
 
-std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView* pView)
+std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView const * pView)
 {
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     if (!xConfigItem)

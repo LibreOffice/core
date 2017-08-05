@@ -879,7 +879,7 @@ bool SwFieldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
 }
 
 // insert field types
-void SwFieldMgr::InsertFieldType(SwFieldType& rType)
+void SwFieldMgr::InsertFieldType(SwFieldType const & rType)
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");

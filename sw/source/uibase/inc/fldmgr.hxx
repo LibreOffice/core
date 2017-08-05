@@ -134,7 +134,7 @@ public:
     // determine a field
     SwField*        GetCurField();
 
-    void            InsertFieldType(SwFieldType& rType);
+    void            InsertFieldType(SwFieldType const & rType);
 
     bool            ChooseMacro();
     void            SetMacroPath(const OUString& rPath);

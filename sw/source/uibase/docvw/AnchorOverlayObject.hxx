@@ -40,7 +40,7 @@ enum class AnchorState
 class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
 {
     public:
-        static AnchorOverlayObject* CreateAnchorOverlayObject( SwView& rDocView,
+        static AnchorOverlayObject* CreateAnchorOverlayObject( SwView const & rDocView,
                                                                const SwRect& aAnchorRect,
                                                                long aPageBorder,
                                                                const Point& aLineStart,

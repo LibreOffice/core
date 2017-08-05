@@ -104,7 +104,7 @@ public:
 
     static void StateDisableItems(SfxItemSet &);
 
-    void        EditRegionDialog(SfxRequest& rReq);
+    void        EditRegionDialog(SfxRequest const & rReq);
     void        InsertRegionDialog(SfxRequest& rReq);
 
     void        ExecField(SfxRequest& rReq);

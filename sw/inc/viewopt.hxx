@@ -195,7 +195,7 @@ public:
             SwViewOption(const SwViewOption&);
             ~SwViewOption();
 
-    static void Init( vcl::Window *pWin );        // Initializing of static data.
+    static void Init( vcl::Window const *pWin );        // Initializing of static data.
 
     ViewOptFlags1   GetCoreOptions() const {return m_nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );

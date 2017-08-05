@@ -119,7 +119,7 @@ void SwModelessRedlineAcceptDlg::Activate()
     pImplDlg->Activate();
 }
 
-void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo *pInfo)
+void SwModelessRedlineAcceptDlg::Initialize(SfxChildWinInfo const *pInfo)
 {
     if (pInfo != nullptr)
         pImplDlg->Initialize(pInfo->aExtraString);

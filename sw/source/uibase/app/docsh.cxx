@@ -161,7 +161,7 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
 
 // Prepare loading
 Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
-                                    SwCursorShell *pCursorShell,
+                                    SwCursorShell const *pCursorShell,
                                     SwPaM* pPaM )
 {
     bool bAPICall = false;
@@ -518,7 +518,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 }
 
 // Save all Formats
-static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
+static SwSrcView* lcl_GetSourceView( SwDocShell const * pSh )
 {
     // are we in SourceView?
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( pSh );

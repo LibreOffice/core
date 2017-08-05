@@ -2973,7 +2973,7 @@ class CellSaveStruct : public SectionSaveStruct
 
 public:
 
-    CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable, bool bHd,
+    CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTable, bool bHd,
                      bool bReadOpt );
 
     void AddContents( HTMLTableCnts *pNewCnts );
@@ -2991,7 +2991,7 @@ public:
     void CheckNoBreak( const SwPosition& rPos );
 };
 
-CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
+CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTable,
                                   bool bHd, bool bReadOpt ) :
     SectionSaveStruct( rParser ),
     m_pCnts( nullptr ),

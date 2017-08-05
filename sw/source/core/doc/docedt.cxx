@@ -544,7 +544,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 nStat = nPageNr - *pPageSt + 1;
                             else
                                 nStat = nPageNr + *pPageCnt - *pPageSt + 1;
-                            ::SetProgressState( nStat, const_cast<SwDocShell*>(GetDocShell()) );
+                            ::SetProgressState( nStat, GetDocShell() );
                         }
                         //Spell() changes the pSpellArgs in case an error is found
                         sal_Int32 nBeginGrammarCheck = 0;

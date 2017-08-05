@@ -1259,7 +1259,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
 }
 
 static
-std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat *const pFormat)
+std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat const *const pFormat)
 {
     // note: we don't add the odd items that GetItemSet() would add
     // because they don't seem relevant for preview
@@ -1778,7 +1778,7 @@ static bool lcl_Contains(const std::vector<void*>& rArr, const void* p)
     return std::find( rArr.begin(), rArr.end(), p ) != rArr.end();
 }
 
-static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
+static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> const & rArr, SwDoc& rDoc )
 {
     size_t n, nCnt;
     switch( nFamily )

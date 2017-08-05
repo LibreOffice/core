@@ -185,7 +185,7 @@ QuickHelpData* SwEditWin::m_pQuickHlpData = nullptr;
 long    SwEditWin::m_nDDStartPosY = 0;
 long    SwEditWin::m_nDDStartPosX = 0;
 
-static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView );
+static SfxShell* lcl_GetTextShellFromDispatcher( SwView const & rView );
 
 /// Check if the selected shape has a TextBox: if so, go into that instead.
 static bool lcl_goIntoTextBox(SwEditWin& rEditWin, SwWrtShell& rSh)
@@ -296,7 +296,7 @@ struct QuickHelpData
     }
 
     // Fills internal structures with hopefully helpful information.
-    void FillStrArr( SwWrtShell& rSh, const OUString& rWord );
+    void FillStrArr( SwWrtShell const & rSh, const OUString& rWord );
     void SortAndFilter(const OUString &rOrigWord);
 };
 
@@ -760,7 +760,7 @@ bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const Sw
 
 //return INVALID_HINT if language should not be explicitly overridden, the correct
 //HintId to use for the eBufferLanguage otherwise
-static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView& rView,
+static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView const & rView,
     const OUString &rInBuffer)
 {
     sal_uInt16 nWhich = INVALID_HINT;
@@ -5830,7 +5830,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     }
 }
 
-static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView )
+static SfxShell* lcl_GetTextShellFromDispatcher( SwView const & rView )
 {
     // determine Shell
     SfxShell* pShell;
@@ -5989,7 +5989,7 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearContent();
 }
 
-void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
+void QuickHelpData::FillStrArr( SwWrtShell const & rSh, const OUString& rWord )
 {
     enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
@@ -6167,7 +6167,7 @@ void QuickHelpData::SortAndFilter(const OUString &rOrigWord)
 }
 
 void SwEditWin::ShowAutoTextCorrectQuickHelp(
-        const OUString& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
+        const OUString& rWord, SvxAutoCorrCfg const * pACfg, SvxAutoCorrect* pACorr,
         bool bFromIME )
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();

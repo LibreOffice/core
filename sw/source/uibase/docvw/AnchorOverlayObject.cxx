@@ -173,7 +173,7 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
 ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
 
 /*static*/ AnchorOverlayObject* AnchorOverlayObject::CreateAnchorOverlayObject(
-                                                       SwView& rDocView,
+                                                       SwView const & rDocView,
                                                        const SwRect& aAnchorRect,
                                                        long aPageBorder,
                                                        const Point& aLineStart,

@@ -202,7 +202,7 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
     }
 }
 
-void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
+void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();

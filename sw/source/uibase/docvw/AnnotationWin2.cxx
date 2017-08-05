@@ -90,7 +90,7 @@ namespace
 {
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
-void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
+void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild, MouseEvent* pMouseEvent)
 {
     // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
     Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
@@ -1454,7 +1454,7 @@ bool SwAnnotationWin::IsScrollbarVisible() const
     return HasScrollbar() && mpVScrollbar->IsVisible();
 }
 
-void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
+void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 {
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
     if ( bAnchorChanged )

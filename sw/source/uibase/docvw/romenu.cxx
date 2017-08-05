@@ -59,7 +59,7 @@ SwReadOnlyPopup::~SwReadOnlyPopup()
     xMenu.disposeAndClear();
 }
 
-void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis )
+void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher const &rDis )
 {
     std::unique_ptr<SfxPoolItem> _pItem;
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );

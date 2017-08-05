@@ -50,7 +50,7 @@ enum class SfxStyleFamily;
 #define PROGRESS_BAR_STEP 20
 
 namespace SwImport {
-    SwDoc* GetDocFromXMLImport( SvXMLImport& );
+    SwDoc* GetDocFromXMLImport( SvXMLImport const & );
 }
 
 // we only need this scoped enum to be flags here, in sw

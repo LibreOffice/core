@@ -920,7 +920,7 @@ OUString&    SwMailMergeConfigItem::GetFilter() const
     return m_pImpl->m_sFilter;
 }
 
-void  SwMailMergeConfigItem::SetFilter(OUString& rFilter)
+void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
 {
     if(m_pImpl->m_sFilter != rFilter)
     {
@@ -1545,7 +1545,7 @@ bool SwMailMergeConfigItem::IsMailAvailable() const
     return m_pImpl->m_bIsEMailSupported;
 }
 
-void SwMailMergeConfigItem::AddMergedDocument(SwDocMergeInfo& rInfo)
+void SwMailMergeConfigItem::AddMergedDocument(SwDocMergeInfo const & rInfo)
 {
     m_pImpl->m_aMergeInfos.push_back(rInfo);
 }

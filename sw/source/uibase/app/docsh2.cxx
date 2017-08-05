@@ -1435,7 +1435,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
 }
 
 ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
-                    SwgReaderOption& rOpt, bool bUnoCall )
+                    SwgReaderOption const & rOpt, bool bUnoCall )
 {
     ErrCode nErr = ERRCODE_NONE;
 

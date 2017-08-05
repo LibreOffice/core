@@ -356,7 +356,7 @@ VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
     return pMenuButton;
 }
 
-void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
+void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
 {
     // If tiled annotations is off in lok case, skip adding additional reply text.
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())

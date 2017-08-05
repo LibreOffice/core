@@ -309,7 +309,7 @@ public:
     bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };
     bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
 
-    static std::shared_ptr<SwMailMergeConfigItem> PerformMailMerge(SwView* pView);
+    static std::shared_ptr<SwMailMergeConfigItem> PerformMailMerge(SwView const * pView);
 
     /// Initialize data fields that lack name of database.
     bool     IsInitDBFields() const  { return bInitDBFields; }

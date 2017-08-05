@@ -302,7 +302,7 @@ SwViewOption::~SwViewOption()
 {
 }
 
-void SwViewOption::Init( vcl::Window *pWin )
+void SwViewOption::Init( vcl::Window const *pWin )
 {
     if( !m_nPixelTwips && pWin )
     {

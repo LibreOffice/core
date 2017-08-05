@@ -1442,7 +1442,7 @@ void SwXMLImport::initialize(
     }
 }
 
-SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
+SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport const & rImport )
 {
     uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
     SwXTextDocument *pTextDoc = reinterpret_cast< SwXTextDocument *>(

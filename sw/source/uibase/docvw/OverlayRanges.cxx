@@ -104,7 +104,7 @@ namespace sw
         }
 
         /*static*/ OverlayRanges* OverlayRanges::CreateOverlayRange(
-            SwView& rDocView,
+            SwView const & rDocView,
             const Color& rColor,
             const std::vector< basegfx::B2DRange >& rRanges,
             const bool bShowSolidBorder )

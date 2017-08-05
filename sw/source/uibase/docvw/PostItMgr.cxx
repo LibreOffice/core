@@ -2187,7 +2187,7 @@ void SwPostItMgr::CheckMetaText()
 
 }
 
-sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
+sal_uInt16 SwPostItMgr::Replace(SvxSearchItem const * pItem)
 {
     SwAnnotationWin* pWin = GetActiveSidebarWin();
     sal_uInt16 aResult = pWin->GetOutlinerView()->StartSearchAndReplace( *pItem );

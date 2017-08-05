@@ -147,7 +147,7 @@ public:
 
     virtual void    Activate() override;
     virtual void    FillInfo(SfxChildWinInfo&) const override;
-    void            Initialize (SfxChildWinInfo* pInfo);
+    void            Initialize (SfxChildWinInfo const * pInfo);
 };
 
 class SwRedlineAcceptChild : public SwChildWinWrapper

@@ -206,7 +206,7 @@ protected:
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
 
-    void    ShowAutoTextCorrectQuickHelp( const OUString& rWord, SvxAutoCorrCfg* pACfg,
+    void    ShowAutoTextCorrectQuickHelp( const OUString& rWord, SvxAutoCorrCfg const * pACfg,
                                 SvxAutoCorrect* pACorr, bool bFromIME = false );
 
     /// Returns true if in header/footer area, or in the header/footer control.
