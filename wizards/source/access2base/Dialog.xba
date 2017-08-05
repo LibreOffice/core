@@ -18,6 +18,8 @@ Private	_Type					As String				&apos;	Must be DIALOG
 Private	_Name					As String
 Private _Shortcut				As String
 Private _Dialog					As Object				&apos;	com.sun.star.io.XInputStreamProvider
+Private _Storage				As String				&apos;	GLOBAL or DOCUMENT
+Private _Library				As String
 Private UnoDialog				As Object				&apos;	com.sun.star.awt.XControl
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -27,6 +29,8 @@ Private Sub Class_Initialize()
 	_Type = OBJDIALOG
 	_Name = &quot;&quot;
 	Set _Dialog = Nothing
+	_Storage = &quot;&quot;
+	_Library = &quot;&quot;
 	Set UnoDialog = Nothing
 End Sub		&apos;	Constructor
 
@@ -757,19 +761,11 @@ Dim iArgNr As Integer
 				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
 				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			Set oDialogEvents = unoDialog.Model.getEvents()
-			sListener = _GetListener(psProperty)
-			sEvent = Utils._GetEventName(psProperty)
-			sEventName = &quot;com.sun.star.awt.&quot; &amp; sListener &amp; &quot;::&quot; &amp; sEvent
-			If oDialogEvents.hasByName(sEventName) Then oDialogEvents.removeByName(sEventName)
-			Set oEvent = CreateUnoStruct(&quot;com.sun.star.script.ScriptEventDescriptor&quot;)
-			With oEvent
-				.ListenerType = sListener
-				.EventMethod = sEvent
-				.ScriptType = &quot;Script&quot;			&apos;	Better than &quot;Basic&quot;
-				.ScriptCode = pvValue
-			End With
-			oDialogEvents.insertByName(sEventName, oEvent)
+			If Not Utils._RegisterDialogEventScript(UnoDialog.Model _
+						, psProperty _
+						, _GetListener(psProperty) _
+						, pvValue _
+						) Then GoTo Trace_Error_Dialog
 		Case UCase(&quot;Page&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 			If pvValue &lt; 0 Then Goto Trace_Error_Value

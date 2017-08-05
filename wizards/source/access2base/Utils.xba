@@ -964,6 +964,37 @@ Dim lEnd As Long, vResult As Object
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _RegisterDialogEventScript(poObject As Object _
+								, ByVal psEvent As String _
+								, ByVal psListener As String _
+								, ByVal psScriptCode As String _
+								) As Boolean
+&apos;	Register a script event (psEvent) to poObject (Dialog or dialog Control)
+
+Dim oEvents As Object, sEvent As String, sEventName As String, oEvent As Object
+
+	_RegisterDialogEventScript = False
+	If Not _hasUNOMethod(poObject, &quot;getEvents&quot;) Then Exit Function
+
+&apos;	Remove existing event, if any, than store new script code
+	Set oEvents = poObject.getEvents()
+	sEvent = Utils._GetEventName(psEvent)
+	sEventName = &quot;com.sun.star.awt.&quot; &amp; psListener &amp; &quot;::&quot; &amp; sEvent
+	If oEvents.hasByName(sEventName) Then oEvents.removeByName(sEventName)
+	Set oEvent = CreateUnoStruct(&quot;com.sun.star.script.ScriptEventDescriptor&quot;)
+	With oEvent
+		.ListenerType = psListener
+		.EventMethod = sEvent
+		.ScriptType = &quot;Script&quot;			&apos;	Better than &quot;Basic&quot;
+		.ScriptCode = psScriptCode
+	End With
+	oEvents.insertByName(sEventName, oEvent)
+
+	_RegisterDialogEventScript = True
+
+End Function	&apos;	_RegisterDialogEventScript	V1.8.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _RegisterEventScript(poObject As Object _
 								, ByVal psEvent As String _
 								, ByVal psListener As String _

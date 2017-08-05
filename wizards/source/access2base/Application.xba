@@ -193,7 +193,7 @@ Const cstThisSub = &quot;AllDialogs&quot;
 
 Dim iMode As Integer, vDialogs() As Variant, i As Integer, j As Integer, iCount As Integer
 Dim oMacLibraries As Object, vAllDialogs As Variant, oLibrary As Object, vNames() As Variant, bFound As Boolean
-Dim oLibDialog As Object, sLibrary As String, oDocLibraries As Object
+Dim oLibDialog As Object, sLibrary As String, oDocLibraries As Object, bLocalStorage As Boolean
 Dim vLibraries() As Variant, vMacLibraries() As Variant, vDocLibraries() As Variant, oDocMacLib As Object
 Const cstCount = 0
 Const cstByIndex = 1
@@ -209,7 +209,7 @@ Const cstSepar = &quot;!&quot;
 
 	Set vAllDialogs = Nothing
 
-	Set oDocLibraries = ThisComponent.DialogLibraries
+	Set oDocLibraries = _A2B_.CurrentDocument.Document.DialogLibraries	&apos;	ThisComponent.DialogLibraries
 	vDocLibraries = oDocLibraries.getElementNames()
 	Set oMacLibraries = DialogLibraries
 	vMacLibraries = oMacLibraries.getElementNames()
@@ -236,11 +236,13 @@ Const cstSepar = &quot;!&quot;
 		bFound = False
 		If i &lt;= UBound(vDocLibraries) Then
 			sLibrary = vDocLibraries(i)
+			bLocalStorage = True
 			Set oDocMacLib = oDocLibraries
 			&apos;	Sometimes library not loaded as should ??
 			If Not oDocMacLib.IsLibraryLoaded(sLibrary) Then oDocMacLib.loadLibrary(sLibrary)
 		Else
 			sLibrary = vMacLibraries(i - UBound(vDocLibraries) - 1)
+			bLocalStorage = False
 			Set oDocMacLib = oMacLibraries
 		End If
 		If oDocMacLib.IsLibraryLoaded(sLibrary) Then
@@ -280,9 +282,13 @@ Const cstSepar = &quot;!&quot;
 			If iMode = cstByIndex Then Goto Trace_Error_Index Else Goto Trace_Not_Found
 		End If
 		Set vAllDialogs = New Dialog
-		vAllDialogs._Name = vDialogs(j)
-		vAllDialogs._Shortcut = &quot;Dialogs!&quot; &amp; vDialogs(j)
-		Set vAllDialogs._Dialog = oLibDialog
+		With vAllDialogs
+			._Name = vDialogs(j)
+			._Shortcut = &quot;Dialogs!&quot; &amp; vDialogs(j)
+			Set ._Dialog = oLibDialog
+			._Library = sLibrary
+			._Storage = Iif(bLocalStorage, &quot;DOCUMENT&quot;, &quot;GLOBAL&quot;)
+		End With
 	End If
 
 Exit_Function:
@@ -447,7 +453,7 @@ Const cstDot = &quot;.&quot;
 
 	Set vAllModules = Nothing
 
-	Set oDocLibraries = ThisComponent.BasicLibraries
+	Set oDocLibraries = _A2B_.CurrentDocument.Document.BasicLibraries	&apos;	ThisComponent.BasicLibraries
 	vDocLibraries = oDocLibraries.getElementNames()
 	If pbAllModules Then
 		Set oMacLibraries = GlobalScope.BasicLibraries

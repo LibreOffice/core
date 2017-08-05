@@ -24,6 +24,7 @@ Private _FormComponent			As Object				&apos;	com.sun.star.text.TextDocument
 Private _DocEntry				As Integer				&apos;	Doc- and DbContainer entries in Root structure
 Private _DbEntry				As Integer
 Private	_ControlType			As Integer
+Private _ThisProperties			As Variant				&apos;	Buffer for properties list
 Private	_SubType				As String
 Private	ControlModel			As Object				&apos;	com.sun.star.comp.forms.XXXModel
 Private	ControlView				As Object				&apos;	com.sun.star.comp.forms.XXXControl	(NULL if form open in edit mode)
@@ -42,6 +43,7 @@ Private Sub Class_Initialize()
 	Set _FormComponent	= Nothing
 	_DocEntry			= -1
 	_DbEntry			= -1
+	_ThisProperties		= Array()
 	_SubType			= &quot;&quot;
 	Set ControlModel	= Nothing
 	Set ControlView		= Nothing
@@ -1226,6 +1228,13 @@ Private Function _PropertiesList() As Variant
 &apos;	Based on ControlProperties.ods analysis
 
 Dim vFullPropertiesList() As Variant
+
+	&apos;List established only once
+	If UBound(_ThisProperties) &gt; -1 Then
+		_PropertiesList = _ThisProperties
+		Exit Function
+	End If
+
 	vFullPropertiesList = Array( _
 		&quot;BackColor&quot; _
 		, &quot;BorderColor&quot; _
@@ -1362,18 +1371,18 @@ Dim vPropertiesMatrix(25) As Variant
 			vPropertiesMatrix(acTimeField) = Array(0,1,2,6,7,10,11,12,13,14,15,16,17,19,25,27,28,36,37,39,40,41,42,43,44,45,46,48,51,52,62,63,64,65,66,67,69,70)
 	End Select
 	
-Dim vProperties() As Variant, i As Integer, iIndex As Integer
+Dim i As Integer, iIndex As Integer
 	If _ControlType = acSubForm Then iIndex = 0 Else iIndex = _ControlType
 	If IsEmpty(vPropertiesMatrix(iIndex)) Then
-		vProperties = Array()
+		_ThisProperties = Array()
 	Else
-		ReDim vProperties(0 To UBound(vPropertiesMatrix(iIndex)))
-		For i = 0 To UBound(vProperties)
-			vProperties(i) = vFullPropertiesList(vPropertiesMatrix(iIndex)(i))
+		ReDim _ThisProperties(0 To UBound(vPropertiesMatrix(iIndex)))
+		For i = 0 To UBound(_ThisProperties)
+			_ThisProperties(i) = vFullPropertiesList(vPropertiesMatrix(iIndex)(i))
 		Next i
 	End If
 
-	_PropertiesList = vProperties()
+	_PropertiesList = _ThisProperties()
 
 End Function	&apos;	_PropertiesList
 
@@ -1404,6 +1413,7 @@ Dim vGet As Variant, vDate As Variant
 Dim ofSubForm As Object
 Dim vFormats() As Variant
 Dim vSelection As Variant, sSelectedText As String
+Dim oControlEvents As Object, sEventName As String
 	
 	If Not hasProperty(psProperty) Then Goto Trace_Error
 
@@ -1590,7 +1600,18 @@ Dim vSelection As Variant, sSelectedText As String
 				, UCase(&quot;OnMouseDragged&quot;), UCase(&quot;OnMouseEntered&quot;), UCase(&quot;OnMouseExited&quot;), UCase(&quot;OnMouseMoved&quot;) _
 				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnTextChanged&quot;) _
 				, UCase(&quot;OnUpdated&quot;)
-			_PropertyGet = Utils._GetEventScriptCode(ControlModel, psProperty, _Name)
+			Select Case _ParentType
+				Case CTLPARENTISDIALOG
+					Set oControlEvents = ControlModel.getEvents()
+					sEventName = &quot;com.sun.star.awt.&quot; &amp; _GetListener(psProperty) &amp; &quot;::&quot; &amp; Utils._GetEventName(psProperty)
+					If oControlEvents.hasByName(sEventName) Then
+						_PropertyGet = oControlEvents.getByName(sEventName).ScriptCode
+					Else
+						_PropertyGet = &quot;&quot;
+					End If
+				Case Else
+					_PropertyGet = Utils._GetEventScriptCode(ControlModel, psProperty, _Name)
+			End Select
 		Case UCase(&quot;OptionValue&quot;)
 			If Utils._hasUNOProperty(ControlModel, &quot;RefValue&quot;) Then
 				If ControlModel.RefValue &lt;&gt; &quot;&quot; Then
@@ -1869,6 +1890,7 @@ Dim bMultiSelect As Boolean, iCount As Integer, iSelectedItems() As Integer, lLi
 Dim vItemList() As Variant, vFormats() As Variant
 Dim oStruct As Object, sValue As String
 Dim vSelection As Variant, sText As String, lStart As long
+Dim oControlEvents As Object, sListener As String, sEvent As String, sEventName As String, oEvent As Object
 
 	_PropertySet = True
 	Select Case UCase(_A2B_.CalledSub)
@@ -2081,11 +2103,21 @@ Dim vSelection As Variant, sText As String, lStart As long
 				, UCase(&quot;OnMousePressed&quot;), UCase(&quot;OnMouseReleased&quot;), UCase(&quot;OnResetted&quot;), UCase(&quot;OnTextChanged&quot;) _
 				, UCase(&quot;OnUpdated&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-			If Not Utils._RegisterEventScript(ControlModel _
-						, psProperty _
-						, _GetListener(psProperty) _
-						, pvValue, _Name _
-						) Then GoTo Trace_Error
+			Select Case _ParentType
+				Case CTLPARENTISDIALOG
+					If Not Utils._RegisterDialogEventScript(ControlModel _
+								, psProperty _
+								, _GetListener(psProperty) _
+								, pvValue _
+								) Then GoTo Trace_Error
+				Case Else
+					If Not Utils._RegisterEventScript(ControlModel _
+								, psProperty _
+								, _GetListener(psProperty) _
+								, pvValue _
+								, _Name _
+								) Then GoTo Trace_Error
+			End Select
 		Case UCase(&quot;OptionValue&quot;)
 			If Not Utils._hasUNOProperty(ControlModel, &quot;RefValue&quot;) Then Goto Trace_Error
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
