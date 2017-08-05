@@ -2565,17 +2565,20 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                             OUString& rStr = sStrArray[i];
                             i++;
-                            nPos = nPos + sStrArray[i].getLength();
-                            nCounter++;
-                            while (i < nStringsCnt &&
-                                   sStrArray[i][0] == '0')
+                            if (i < nStringsCnt)
                             {
-                                rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
-                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nResultStringsCnt--;
                                 nCounter++;
-                                i++;
+                                while (i < nStringsCnt &&
+                                       sStrArray[i][0] == '0')
+                                {
+                                    rStr += sStrArray[i];
+                                    nPos = nPos + sStrArray[i].getLength();
+                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                    nResultStringsCnt--;
+                                    nCounter++;
+                                    i++;
+                                }
                             }
                         }
                         else
