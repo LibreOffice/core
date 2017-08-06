@@ -75,7 +75,7 @@ struct DBTextStruct_Impl
     Reference<XConnection>  xConnection;
 };
 
-void SwTextShell::ExecDB(SfxRequest &rReq)
+void SwTextShell::ExecDB(SfxRequest const &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwDBManager* pDBManager = GetShell().GetDBManager();

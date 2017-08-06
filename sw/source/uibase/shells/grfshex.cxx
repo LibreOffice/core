@@ -56,7 +56,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
-bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
+bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 {
     OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();

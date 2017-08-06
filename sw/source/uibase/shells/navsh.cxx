@@ -40,7 +40,7 @@ SwNavigationShell::SwNavigationShell(SwView &_rView)
     SetName("Navigation");
 }
 
-void SwNavigationShell::Execute(SfxRequest &rReq)
+void SwNavigationShell::Execute(SfxRequest const &rReq)
 {
     SwWrtShell *pSh = &GetShell();
     SdrView* pSdrView = pSh->GetDrawView();

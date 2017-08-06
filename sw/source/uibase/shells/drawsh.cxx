@@ -540,7 +540,7 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 
 // Edit SfxRequests for FontWork
 
-void SwDrawShell::ExecFormText(SfxRequest& rReq)
+void SwDrawShell::ExecFormText(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView*    pDrView = rSh.GetDrawView();

@@ -45,7 +45,7 @@ public:
     void    GetLineStyleState(SfxItemSet &rSet);
     void    ExecTableStyle(SfxRequest& rReq);
 
-    void    ExecNumberFormat(SfxRequest& rReq);
+    void    ExecNumberFormat(SfxRequest const & rReq);
 
             SwTableShell(SwView &rView);
 };

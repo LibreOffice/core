@@ -36,7 +36,7 @@ public:
                 SwDrawFormShell(SwView &rView);
     virtual     ~SwDrawFormShell() override;
 
-    void        Execute(SfxRequest &);
+    void        Execute(SfxRequest const &);
     void        GetState(SfxItemSet &);
 };
 

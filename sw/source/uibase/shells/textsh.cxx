@@ -770,7 +770,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
     rReq.Done();
 }
 
-void SwTextShell::ExecTransliteration( SfxRequest & rReq )
+void SwTextShell::ExecTransliteration( SfxRequest const & rReq )
 {
     using namespace ::com::sun::star::i18n;
     TransliterationFlags nMode = TransliterationFlags::NONE;
@@ -815,7 +815,7 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
         GetShell().TransliterateText( nMode );
 }
 
-void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+void SwTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
         GetShell().TransliterateText( m_aRotateCase.getNextMode() );

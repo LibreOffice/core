@@ -47,17 +47,17 @@ public:
     void        GetState(SfxItemSet &);
     void        StateInsert(SfxItemSet &rSet);
 
-    void        NoteExec(SfxRequest &);
+    void        NoteExec(SfxRequest const &);
     void        GetNoteState(SfxItemSet &);
 
     void        ExecLingu(SfxRequest &rReq);
     void        GetLinguState(SfxItemSet &);
 
-    void        ExecClpbrd(SfxRequest &rReq);
+    void        ExecClpbrd(SfxRequest const &rReq);
     void        StateClpbrd(SfxItemSet &rSet);
 
-    void        ExecTransliteration(SfxRequest &);
-    void        ExecRotateTransliteration(SfxRequest &);
+    void        ExecTransliteration(SfxRequest const &);
+    void        ExecRotateTransliteration(SfxRequest const &);
 
     void        ExecUndo(SfxRequest &rReq);
     void        StateUndo(SfxItemSet &rSet);
@@ -72,7 +72,7 @@ public:
     virtual ::svl::IUndoManager*
                 GetUndoManager() override;
 
-    static SfxItemPool* GetAnnotationPool(SwView& rV);
+    static SfxItemPool* GetAnnotationPool(SwView const & rV);
 };
 
 #endif

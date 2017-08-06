@@ -64,7 +64,7 @@ SwBezierShell::SwBezierShell(SwView &_rView):
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Draw));
 }
 
-void SwBezierShell::Execute(SfxRequest &rReq)
+void SwBezierShell::Execute(SfxRequest const &rReq)
 {
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();

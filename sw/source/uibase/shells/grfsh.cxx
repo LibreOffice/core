@@ -526,7 +526,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
     }
 }
 
-void SwGrfShell::ExecAttr( SfxRequest &rReq )
+void SwGrfShell::ExecAttr( SfxRequest const &rReq )
 {
     GraphicType nGrfType = GraphicType::NONE;
     if (CNT_GRF == GetShell().GetCntType())
@@ -866,7 +866,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     SetGetStateSet( nullptr );
 }
 
-void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
+void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
 {
     sal_uInt16 aRotation;
 

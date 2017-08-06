@@ -77,7 +77,7 @@ void SwMediaShell::InitInterface_Impl()
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Media_Toolbox);
 }
 
-void SwMediaShell::ExecMedia(SfxRequest &rReq)
+void SwMediaShell::ExecMedia(SfxRequest const &rReq)
 {
     SwWrtShell* pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();

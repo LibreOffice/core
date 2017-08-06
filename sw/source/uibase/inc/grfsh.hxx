@@ -36,10 +36,10 @@ private:
 
 public:
     void Execute(SfxRequest& rRequest);
-    void ExecAttr(SfxRequest& rRequest);
+    void ExecAttr(SfxRequest const & rRequest);
     void GetAttrState(SfxItemSet& rRequest);
 
-    void ExecuteRotation(SfxRequest &rRequest);
+    void ExecuteRotation(SfxRequest const &rRequest);
     void GetAttrStateForRotation(SfxItemSet& rRequest);
 
     SwGrfShell(SwView &rView);

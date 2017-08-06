@@ -239,7 +239,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 }
 
 
-void SwTextShell::ExecSetNumber(SfxRequest &rReq)
+void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
 {
     const sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )

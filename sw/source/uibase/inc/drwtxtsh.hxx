@@ -63,18 +63,18 @@ public:
     void        GetState(SfxItemSet &);
     void        GetDrawTextCtrlState(SfxItemSet&);
 
-    void        ExecFontWork(SfxRequest& rReq);
+    void        ExecFontWork(SfxRequest const & rReq);
     void        StateFontWork(SfxItemSet& rSet);
-    void        ExecFormText(SfxRequest& rReq);
+    void        ExecFormText(SfxRequest const & rReq);
     void        GetFormTextState(SfxItemSet& rSet);
-    void        ExecDrawLingu(SfxRequest &rReq);
+    void        ExecDrawLingu(SfxRequest const &rReq);
     void        ExecUndo(SfxRequest &rReq);
     void        StateUndo(SfxItemSet &rSet);
-    void        ExecClpbrd(SfxRequest &rReq);
+    void        ExecClpbrd(SfxRequest const &rReq);
     void        StateClpbrd(SfxItemSet &rSet);
     void        StateInsert(SfxItemSet &rSet);
-    void        ExecTransliteration(SfxRequest &);
-    void        ExecRotateTransliteration(SfxRequest &);
+    void        ExecTransliteration(SfxRequest const &);
+    void        ExecRotateTransliteration(SfxRequest const &);
 
     void        Init();
 };

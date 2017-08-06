@@ -144,7 +144,7 @@ void SwAnnotationShell::InitInterface_Impl()
 }
 
 
-SfxItemPool* SwAnnotationShell::GetAnnotationPool(SwView& rV)
+SfxItemPool* SwAnnotationShell::GetAnnotationPool(SwView const & rV)
 {
     SwWrtShell &rSh = rV.GetWrtShell();
     return rSh.GetAttrPool().GetSecondaryPool();
@@ -893,7 +893,7 @@ void SwAnnotationShell::StateSearch(SfxItemSet &rSet)
     rView.StateSearch(rSet);
 }
 
-void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
+void SwAnnotationShell::ExecClpbrd(SfxRequest const &rReq)
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
@@ -1102,7 +1102,7 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
     }
 }
 
-void SwAnnotationShell::NoteExec(SfxRequest &rReq)
+void SwAnnotationShell::NoteExec(SfxRequest const &rReq)
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr )
@@ -1417,7 +1417,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
     }
 }
 
-void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
+void SwAnnotationShell::ExecTransliteration(SfxRequest const &rReq)
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
@@ -1468,7 +1468,7 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
         pOLV->TransliterateText( nMode );
 }
 
-void SwAnnotationShell::ExecRotateTransliteration( SfxRequest & rReq )
+void SwAnnotationShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
     {

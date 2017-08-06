@@ -34,7 +34,7 @@ public:
             SwBezierShell(SwView &rView);
 
     void    GetState(SfxItemSet &);
-    void    Execute(SfxRequest &);
+    void    Execute(SfxRequest const &);
 };
 
 #endif

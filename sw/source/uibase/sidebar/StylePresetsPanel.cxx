@@ -43,7 +43,7 @@ namespace sw { namespace sidebar {
 namespace {
 
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
-                   OUString const & sName, sal_Int32 nHeight, tools::Rectangle& aRect)
+                   OUString const & sName, sal_Int32 nHeight, tools::Rectangle const & aRect)
 {
     SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(sName, SfxStyleFamily::Para);
 
@@ -56,7 +56,7 @@ void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevic
     }
 }
 
-BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
+BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
 {
     sfx2::StyleManager* pStyleManager = rSource.GetStyleManager();
 
@@ -125,7 +125,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
     return pVirtualDev->GetBitmapEx(Point(), aSize);
 }
 
-BitmapEx CreatePreview(OUString& aUrl, OUString& aName)
+BitmapEx CreatePreview(OUString const & aUrl, OUString& aName)
 {
     SfxMedium aMedium(aUrl, StreamMode::STD_READWRITE);
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();

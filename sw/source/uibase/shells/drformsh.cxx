@@ -66,7 +66,7 @@ void SwDrawFormShell::InitInterface_Impl()
 }
 
 
-void SwDrawFormShell::Execute(SfxRequest &rReq)
+void SwDrawFormShell::Execute(SfxRequest const &rReq)
 {
     SwWrtShell &rSh = GetShell();
     const SfxPoolItem* pItem = nullptr;

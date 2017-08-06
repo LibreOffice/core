@@ -100,7 +100,7 @@ namespace SwLangHelper
         return 0;
     }
 
-    bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView &rView, SwWrtShell &rSh )
+    bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh )
     {
         bool bRestoreSelection = false;
         SfxItemSet aEditAttr(pOLV->GetAttribs());
@@ -229,7 +229,7 @@ namespace SwLangHelper
         SetLanguage( rWrtSh, nullptr , ESelection(), rLangText, bIsForSelection, rCoreSet );
     }
 
-    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         const LanguageType nLang = SvtLanguageTable::GetLanguageType( rLangText );
         if (nLang != LANGUAGE_DONTKNOW)
@@ -311,7 +311,7 @@ namespace SwLangHelper
         SetLanguage_None( rWrtSh,nullptr,ESelection(),bIsForSelection,rCoreSet );
     }
 
-    void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         // EditEngine IDs
         const sal_uInt16 aLangWhichId_EE[3] =
@@ -366,7 +366,7 @@ namespace SwLangHelper
         }
     }
 
-    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV )
+    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView const * pOLV )
     {
         // reset language for current selection.
         // The selection should already have been expanded to the whole paragraph or
@@ -526,7 +526,7 @@ namespace SwLangHelper
         return nCurrentLang;
     }
 
-    OUString GetTextForLanguageGuessing( SwWrtShell &rSh )
+    OUString GetTextForLanguageGuessing( SwWrtShell const &rSh )
     {
         // string for guessing language
         OUString aText;
@@ -548,7 +548,7 @@ namespace SwLangHelper
         return aText;
     }
 
-    OUString GetTextForLanguageGuessing(EditEngine* rEditEngine, const ESelection& rDocSelection)
+    OUString GetTextForLanguageGuessing(EditEngine const * rEditEngine, const ESelection& rDocSelection)
     {
         // string for guessing language
         OUString aText;

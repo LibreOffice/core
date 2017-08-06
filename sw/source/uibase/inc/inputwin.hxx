@@ -77,7 +77,7 @@ protected:
     void            CancelFormula();
 
 public:
-    SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher);
+    SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispatcher);
     virtual         ~SwInputWindow() override;
     virtual void    dispose() override;
 
@@ -95,7 +95,7 @@ class SwInputChild : public SfxChildWindow
 public:
     SwInputChild( vcl::Window* ,
                         sal_uInt16 nId,
-                        SfxBindings*,
+                        SfxBindings const *,
                         SfxChildWinInfo*  );
     virtual ~SwInputChild() override;
     SFX_DECL_CHILDWINDOW_WITHID( SwInputChild );

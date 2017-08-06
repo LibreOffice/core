@@ -156,7 +156,7 @@ public:
     SwRedlineAcceptChild(   vcl::Window* ,
                             sal_uInt16 nId,
                             SfxBindings*,
-                            SfxChildWinInfo*  );
+                            SfxChildWinInfo const *  );
 
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 

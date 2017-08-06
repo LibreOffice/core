@@ -92,7 +92,7 @@ using namespace ::com::sun::star::uno;
 
 // Prototypes
 static void lcl_FrameGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
-static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell& rSh, const OUString& rName)
+static const SwFrameFormat* lcl_GetFrameFormatByName(SwWrtShell const & rSh, const OUString& rName)
 {
     const size_t nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
     for( size_t i = 0; i < nCount; ++i )
@@ -973,7 +973,7 @@ SwFrameShell::~SwFrameShell()
     SwTransferable::ClearSelection( GetShell(), this );
 }
 
-void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
+void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
     bool bDefault = false;
@@ -1220,7 +1220,7 @@ void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
     }
 }
 
-void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
+void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell& rSh = GetShell();
@@ -1262,7 +1262,7 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
     }
 }
 
-void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
+void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
 {
     switch(rReq.GetSlot())
     {

@@ -980,7 +980,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
     }
 }
 
-void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
+void SwDrawTextShell::ExecClpbrd(SfxRequest const &rReq)
 {
     if (!IsTextEdit())  // Otherwise crash!
         return;

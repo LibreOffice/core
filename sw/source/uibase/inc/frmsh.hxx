@@ -36,14 +36,14 @@ public:
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);
-    void    ExecFrameStyle(SfxRequest& rReq);
+    void    ExecFrameStyle(SfxRequest const & rReq);
     void    GetLineStyleState(SfxItemSet &rSet);
     void    StateInsert(SfxItemSet &rSet);
 
     void GetDrawAttrStateTextFrame(SfxItemSet &rSet);
-    void ExecDrawAttrArgsTextFrame(SfxRequest& rReq);
+    void ExecDrawAttrArgsTextFrame(SfxRequest const & rReq);
 
-    void ExecDrawDlgTextFrame(SfxRequest& rReq);
+    void ExecDrawDlgTextFrame(SfxRequest const & rReq);
     void DisableStateTextFrame(SfxItemSet &rSet);
 };
 

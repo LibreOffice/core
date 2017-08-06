@@ -31,7 +31,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    void    ExecMedia(SfxRequest &);
+    void    ExecMedia(SfxRequest const &);
     void    GetMediaState(SfxItemSet &);
 
             SwMediaShell(SwView &rView);
