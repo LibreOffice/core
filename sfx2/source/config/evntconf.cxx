@@ -108,18 +108,6 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
     return new SfxEventNamesItem(*this);
 }
 
-SfxPoolItem* SfxEventNamesItem::Create(SvStream &, sal_uInt16) const
-{
-    OSL_FAIL("not streamable!");
-    return new SfxEventNamesItem(Which());
-}
-
-SvStream& SfxEventNamesItem::Store(SvStream &rStream, sal_uInt16 ) const
-{
-    OSL_FAIL("not streamable!");
-    return rStream;
-}
-
 sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 {
     OSL_FAIL("not streamable!");

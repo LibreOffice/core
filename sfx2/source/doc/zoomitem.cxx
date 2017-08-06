@@ -66,27 +66,6 @@ SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 }
 
 
-SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
-{
-    sal_uInt16 nValue;
-    sal_uInt16 nValSet;
-    sal_Int8 nType;
-    rStrm.ReadUInt16( nValue ).ReadUInt16( nValSet ).ReadSChar( nType );
-    SvxZoomItem* pNew = new SvxZoomItem( (SvxZoomType)nType, nValue, Which() );
-    pNew->SetValueSet( static_cast<SvxZoomEnableFlags>(nValSet) );
-    return pNew;
-}
-
-
-SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteUInt16( GetValue() )
-         .WriteUInt16( static_cast<sal_uInt16>(nValueSet) )
-         .WriteSChar( static_cast<int>(eType) );
-    return rStrm;
-}
-
-
 bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
