@@ -653,7 +653,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XUniqueCellFormatRangesSupplier \
     qadevOOo/tests/java/ifc/sheet/_XUsedAreaCursor \
     qadevOOo/tests/java/ifc/sheet/_XViewFreezable \
-    qadevOOo/tests/java/ifc/sheet/_XViewSplitable \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesComplex \
