@@ -150,6 +150,11 @@ public:
             assert(mnIdx < mrList.maAttributeTokens.size());
             return rtl_str_toInt32(mrList.getFastAttributeValue(mnIdx), 10);
         }
+        double toDouble() const
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return rtl_str_toDouble(mrList.getFastAttributeValue(mnIdx));
+        }
         OUString toString() const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());

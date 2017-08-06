@@ -200,9 +200,7 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
                 pCalcSet->SetIterationCount(aIter.toInt32());
                 break;
             case XML_ELEMENT( TABLE, XML_MAXIMUM_DIFFERENCE ):
-                double fDif;
-                ::sax::Converter::convertDouble(fDif, aIter.toString());
-                pCalcSet->SetIterationEpsilon(fDif);
+                pCalcSet->SetIterationEpsilon( aIter.toDouble() );
                 break;
             }
         }
