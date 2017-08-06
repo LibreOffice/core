@@ -421,7 +421,7 @@ public:
     /// If a fly is selected, it draws cursor into the first ContentFrame.
     const SwFrameFormat* SelFlyGrabCursor();
 
-    /// Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
+    /// Get FlyFrameFormat; for UI macro linkage at Flys
     const SwFrameFormat* GetFlyFrameFormat() const;
           SwFrameFormat* GetFlyFrameFormat();
 

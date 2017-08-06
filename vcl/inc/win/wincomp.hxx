@@ -23,7 +23,7 @@
 #include <string.h>
 
 
-// Anpassungen fuer TypeChecking
+// Adjustments for TypeChecking
 
 inline HPEN SelectPen( HDC hDC, HPEN hPen )
 {

@@ -906,7 +906,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
 MOVEPAGE:
             {
                 bool bRet = ChgPage( eMvMode );
-                // return value fuer Basic
+                // return value for Basic
                 if(bRetVal)
                     rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !bRet));
 

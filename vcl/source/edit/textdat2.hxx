@@ -119,7 +119,7 @@ private:
 
     short               mnStartX;
 
-    bool                mbInvalid;  // fuer geschickte Formatierung/Ausgabe
+    bool                mbInvalid;  // for clever formatting/output
 
 public:
                     TextLine()

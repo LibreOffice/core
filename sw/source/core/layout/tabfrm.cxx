@@ -2913,7 +2913,7 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 }
                 break;
             default:
-                OSL_FAIL( "Ungueltige orientation fuer Table." );
+                OSL_FAIL( "Invalid orientation for table." );
         }
 
         // #i26250# - extend bottom printing area, if table

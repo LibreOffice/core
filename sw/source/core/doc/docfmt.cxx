@@ -964,7 +964,7 @@ SwGrfFormatColl* SwDoc::MakeGrfFormatColl( const OUString &rFormatName,
 
 void SwDoc::DelTextFormatColl(size_t nFormatColl, bool bBroadcast)
 {
-    OSL_ENSURE( nFormatColl, "Remove fuer Coll 0." );
+    OSL_ENSURE( nFormatColl, "Remove of Coll 0." );
 
     // Who has the to-be-deleted as their Next?
     SwTextFormatColl *pDel = (*mpTextFormatCollTable)[nFormatColl];

@@ -189,7 +189,7 @@ static bool lcl_FindAnchorPos(
         break;
 
     default:
-        OSL_ENSURE( false, "Falsche ID fuer neuen Anker." );
+        OSL_ENSURE( false, "Wrong Id for new anchor." );
     }
 
     rSet.Put( aNewAnch );

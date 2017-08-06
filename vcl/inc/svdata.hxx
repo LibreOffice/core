@@ -227,12 +227,12 @@ struct ImplSVCtrlData
     ImplTBDragMgr*          mpTBDragMgr = nullptr;          // DragMgr for ToolBox
     sal_uInt16              mnCheckStyle = 0;               // CheckBox-Style for ImageList-Update
     sal_uInt16              mnRadioStyle = 0;               // Radio-Style for ImageList-Update
-    sal_uLong               mnLastCheckFColor = 0;          // Letzte FaceColor fuer CheckImage
-    sal_uLong               mnLastCheckWColor = 0;          // Letzte WindowColor fuer CheckImage
-    sal_uLong               mnLastCheckLColor = 0;          // Letzte LightColor fuer CheckImage
-    sal_uLong               mnLastRadioFColor = 0;          // Letzte FaceColor fuer RadioImage
-    sal_uLong               mnLastRadioWColor = 0;          // Letzte WindowColor fuer RadioImage
-    sal_uLong               mnLastRadioLColor = 0;          // Letzte LightColor fuer RadioImage
+    sal_uLong               mnLastCheckFColor = 0;          // Last FaceColor for CheckImage
+    sal_uLong               mnLastCheckWColor = 0;          // Last WindowColor for CheckImage
+    sal_uLong               mnLastCheckLColor = 0;          // Last LightColor for CheckImage
+    sal_uLong               mnLastRadioFColor = 0;          // Last FaceColor for RadioImage
+    sal_uLong               mnLastRadioWColor = 0;          // Last WindowColor for RadioImage
+    sal_uLong               mnLastRadioLColor = 0;          // Last LightColor for RadioImage
     FieldUnitStringList*    mpFieldUnitStrings = nullptr;   // list with field units
     FieldUnitStringList*    mpCleanUnitStrings = nullptr;   // same list but with some "fluff" like spaces removed
 };

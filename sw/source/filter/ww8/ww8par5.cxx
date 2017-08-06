@@ -1477,7 +1477,7 @@ eF_ResT SwWW8ImplReader::Read_F_Styleref(WW8FieldDesc*, OUString& rString)
 eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
 {
     sal_uInt16 nSub=0;
-    // RegInfoFormat, DefaultFormat fuer DocInfoFelder
+    // RegInfoFormat, DefaultFormat for DocInfoFelder
     sal_uInt16 nReg = DI_SUB_AUTHOR;
     bool bDateTime = false;
 

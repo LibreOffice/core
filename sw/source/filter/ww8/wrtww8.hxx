@@ -186,7 +186,7 @@ struct WW8_SepInfo
 };
 
 /// Class to collect and output the sections/headers/footers.
-// Plc fuer PageDescs -> Sepx ( Section Extensions )
+// Plc for PageDescs -> Sepx ( Section Extensions )
 class MSWordSections
 {
 protected:

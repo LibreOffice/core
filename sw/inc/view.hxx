@@ -612,7 +612,7 @@ public:
     void ExecFormatPaintbrush(SfxRequest const &);
     void StateFormatPaintbrush(SfxItemSet &);
 
-    //public fuer D&D
+    // public for D&D
     ErrCode     InsertGraphic( const OUString &rPath, const OUString &rFilter,
                             bool bLink, GraphicFilter *pFlt );
 

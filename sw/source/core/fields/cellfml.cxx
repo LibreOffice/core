@@ -978,7 +978,7 @@ void SwTableFormula::HasValidBoxes_( const SwTable& rTable, OUString& ,
     if( *pBValid )      // wrong is wrong
     {
         SwTableBox* pSttBox = nullptr, *pEndBox = nullptr;
-        rFirstBox = rFirstBox.copy(1);       // Kennung fuer Box loeschen
+        rFirstBox = rFirstBox.copy(1);       // delete identifier of box
 
         // area in this parenthesis?
         if( pLastBox )

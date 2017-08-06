@@ -59,7 +59,7 @@ public:
     void        DeselectAll() override;
 };
 
-// Flags fuer nFlag
+// Flags for nFlag
 enum class LBoxFlags {
     NONE                        = 0x0000,
     InScrolling                 = 0x0001,

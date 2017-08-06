@@ -103,7 +103,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 default:
                     ;
             }
-            OSL_ENSURE( pSubStr, "ubekannter Subtyp fuer SwExtUserField" );
+            OSL_ENSURE( pSubStr, "unknown sub type for SwExtUserField" );
             bFixed = static_cast<const SwExtUserField*>(pField)->IsFixed();
             break;
 
@@ -114,7 +114,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 case AF_NAME:     pFormatStr = OOO_STRING_SW_HTML_FF_name;     break;
                 case AF_SHORTCUT:  pFormatStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
             }
-            OSL_ENSURE( pFormatStr, "ubekanntes Format fuer SwAuthorField" );
+            OSL_ENSURE( pFormatStr, "unknown format for SwAuthorField" );
             bFixed = static_cast<const SwAuthorField*>(pField)->IsFixed();
             break;
 
@@ -138,7 +138,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                     case PG_NEXT:       pSubStr = OOO_STRING_SW_HTML_FS_next;       break;
                     case PG_PREV:       pSubStr = OOO_STRING_SW_HTML_FS_prev;       break;
                 }
-                OSL_ENSURE( pSubStr, "ubekannter Subtyp fuer SwPageNumberField" );
+                OSL_ENSURE( pSubStr, "unknown sub type for SwPageNumberField" );
                 pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFormat) );
 
                 if( (SvxNumType)nFormat==SVX_NUM_CHAR_SPECIAL )
@@ -250,7 +250,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                     ;
             }
             bFixed = static_cast<const SwFileNameField*>(pField)->IsFixed();
-            OSL_ENSURE( pFormatStr, "unbekanntes Format fuer SwFileNameField" );
+            OSL_ENSURE( pFormatStr, "unknown format for SwFileNameField" );
             break;
         default: break;
     }

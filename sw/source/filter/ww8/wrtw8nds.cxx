@@ -2892,7 +2892,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
             // new Section with no own PageDesc/-Break
             //  -> write follow section break;
             const SwSectionFormat& rFormat = *rSection.GetFormat();
-            ReplaceCr( msword::PageBreak ); // Indikator fuer Page/Section-Break
+            ReplaceCr( msword::PageBreak ); // Indicator for Page/Section-Break
 
             // Get the page in use at the top of this section
             SwNodeIndex aIdxTmp(rSectionNode, 1);

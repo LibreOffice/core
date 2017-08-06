@@ -639,7 +639,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mnPrevStyle                         = 0;                         // prevstyle (set in SetStyle)
     mnExtendedStyle                     = 0;                         // extended style (init in ImplInitWindow)
     mnType                              = nType;                     // type
-    mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags fuer GetFocus()-Aufruf
+    mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags for GetFocus()-Call
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
     mnPaintFlags                        = ImplPaintFlags::NONE;      // Flags for ImplCallPaint
     mnParentClipMode                    = ParentClipMode::NONE;      // Flags for Parent-ClipChildren-Mode
