@@ -621,7 +621,7 @@ sal_Bool VCLXAccessibleToolBoxItem::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex != 0 )
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
     if ( m_pToolBox )
@@ -634,7 +634,7 @@ OUString VCLXAccessibleToolBoxItem::getAccessibleActionDescription ( sal_Int32 n
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex != 0 )
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
     return OUString(RID_STR_ACC_ACTION_CLICK);
@@ -644,7 +644,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleToolBoxItem::getAccessibleActio
 {
     OContextEntryGuard aGuard( this );
 
-    if ( nIndex != 0 )
+    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
     return Reference< XAccessibleKeyBinding >();
