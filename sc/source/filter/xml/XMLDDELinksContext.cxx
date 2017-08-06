@@ -370,7 +370,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                     bString2 = true;
                 break;
                 case XML_ELEMENT( OFFICE, XML_VALUE ):
-                    ::sax::Converter::convertDouble(fValue, aIter.toString());
+                    fValue = aIter.toDouble();
                     bEmpty = false;
                     bString2 = false;
                 break;

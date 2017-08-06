@@ -211,7 +211,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     if (!it.isEmpty())
                     {
-                        ::sax::Converter::convertDouble(fValue, it.toString());
+                        fValue = it.toDouble();
                         bIsEmpty = false;
 
                         //if office:value="0", let's get the text:p in case this is
@@ -259,7 +259,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                         else if ( IsXMLToken( it, XML_FALSE ) )
                             fValue = 0.0;
                         else
-                            ::sax::Converter::convertDouble(fValue, it.toString() );
+                            fValue = it.toDouble();
                         bIsEmpty = false;
                     }
                 }

@@ -1504,7 +1504,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                         bAutoStart = true;
                     else
                     {
-                        ::sax::Converter::convertDouble(fStart, aIter.toString());
+                        fStart = aIter.toDouble();
                         bAutoStart = false;
                     }
                 }
@@ -1515,14 +1515,14 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                         bAutoEnd = true;
                     else
                     {
-                        ::sax::Converter::convertDouble(fEnd, aIter.toString());
+                        fEnd = aIter.toDouble();
                         bAutoEnd = false;
                     }
                 }
                 break;
                 case XML_STEP :
                 {
-                    ::sax::Converter::convertDouble(fStep, aIter.toString());
+                    fStep = aIter.toDouble();
                 }
                 break;
                 case XML_GROUPED_BY :

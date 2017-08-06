@@ -887,7 +887,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
                 }
                 break;
             case XML_ELEMENT( OFFICE, XML_VALUE ):
-                ::sax::Converter::convertDouble(fValue, aIter.toString());
+                fValue = aIter.toDouble();
                 bEmpty = false;
                 break;
             case XML_ELEMENT( OFFICE, XML_DATE_VALUE ):

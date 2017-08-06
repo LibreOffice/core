@@ -278,7 +278,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 {
                     if ( !it.isEmpty() )
                     {
-                        ::sax::Converter::convertDouble( mfCellValue, it.toString() );
+                        mfCellValue = it.toDouble();
                         mbIsNumeric = true;
                         mbIsEmpty = false;
                     }
