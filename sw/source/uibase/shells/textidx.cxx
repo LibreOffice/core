@@ -40,7 +40,7 @@
 #include <globals.hrc>
 #include <memory>
 
-void SwTextShell::ExecIdx(SfxRequest &rReq)
+void SwTextShell::ExecIdx(SfxRequest const &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;

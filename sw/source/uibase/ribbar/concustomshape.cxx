@@ -47,7 +47,7 @@
 
 using namespace com::sun::star;
 
-ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest& rReq )
+ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest const & rReq )
     : SwDrawBase( pWrtShell, pEditWin, pSwView )
 {
     aCustomShape = ConstCustomShape::GetShapeTypeFromRequest( rReq );
@@ -58,7 +58,7 @@ const OUString& ConstCustomShape::GetShapeType() const
     return aCustomShape;
 }
 
-OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
+OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest const & rReq )
 {
     OUString aRet;
     const SfxItemSet* pArgs = rReq.GetArgs();

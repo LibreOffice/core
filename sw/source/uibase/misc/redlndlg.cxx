@@ -62,7 +62,7 @@ static bool       bSortDir = true;
 SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
                                             sal_uInt16 nId,
                                             SfxBindings* pBindings,
-                                            SfxChildWinInfo* pInfo ) :
+                                            SfxChildWinInfo const * pInfo ) :
     SwChildWinWrapper( _pParent, nId )
 {
     SetWindow( VclPtr<SwModelessRedlineAcceptDlg>::Create( pBindings, this, _pParent) );

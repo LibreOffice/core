@@ -1458,7 +1458,7 @@ void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
     rSet.Put( aLine );
 }
 
-void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
+void SwTableShell::ExecNumberFormat(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();

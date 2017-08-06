@@ -129,7 +129,7 @@ static sal_uInt8 nFooterPos;
 
 namespace
 {
-    SvxContourDlg* GetContourDlg(SwView &rView)
+    SvxContourDlg* GetContourDlg(SwView const &rView)
     {
         SfxChildWindow *pChildWindow = rView.GetViewFrame()->GetChildWindow(
             SvxContourDlgChildWindow::GetChildWindowId());
@@ -137,7 +137,7 @@ namespace
         return pChildWindow ? static_cast<SvxContourDlg*>(pChildWindow->GetWindow()) : nullptr;
     }
 
-    SvxIMapDlg* GetIMapDlg(SwView &rView)
+    SvxIMapDlg* GetIMapDlg(SwView const &rView)
     {
         SfxChildWindow* pWnd = rView.GetViewFrame()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
         return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : nullptr;
@@ -2858,7 +2858,7 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
     rReq.Done();
 }
 
-void SwBaseShell::ExecField( SfxRequest& rReq )
+void SwBaseShell::ExecField( SfxRequest const & rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )

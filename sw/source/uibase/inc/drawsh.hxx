@@ -38,10 +38,10 @@ public:
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);
     void        ExecDrawDlg(SfxRequest& rReq);
-    void        ExecDrawAttrArgs(SfxRequest& rReq);
+    void        ExecDrawAttrArgs(SfxRequest const & rReq);
     void        GetDrawAttrState(SfxItemSet &rSet);
 
-    void        ExecFormText(SfxRequest& rReq);
+    void        ExecFormText(SfxRequest const & rReq);
     void        GetFormTextState(SfxItemSet& rSet);
 
     // #i123922# added helper methods to handle applying graphic data to draw objects

@@ -107,7 +107,7 @@ public:
     void        EditRegionDialog(SfxRequest const & rReq);
     void        InsertRegionDialog(SfxRequest& rReq);
 
-    void        ExecField(SfxRequest& rReq);
+    void        ExecField(SfxRequest const & rReq);
 
     static void    SetFrameMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   SetFrameMode_( FlyMode eMode )   { eFrameMode = eMode; }

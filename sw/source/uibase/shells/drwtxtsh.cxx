@@ -176,7 +176,7 @@ bool SwDrawTextShell::IsTextEdit()
     return pSdrView->IsTextEdit();
 }
 
-void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
+void SwDrawTextShell::ExecFontWork(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
@@ -202,7 +202,7 @@ void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 
 // Edit SfxRequests for FontWork
 
-void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
+void SwDrawTextShell::ExecFormText(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
     SdrView* pDrView = rSh.GetDrawView();
@@ -267,7 +267,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     }
 }
 
-void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
+void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
 {
     SwWrtShell &rSh = GetShell();
     OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
@@ -601,7 +601,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
     }
 }
 
-void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
+void SwDrawTextShell::ExecTransliteration( SfxRequest const & rReq )
 {
     if (!pSdrView)
         return;
@@ -657,7 +657,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
     }
 }
 
-void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+void SwDrawTextShell::ExecRotateTransliteration( SfxRequest const & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
     {

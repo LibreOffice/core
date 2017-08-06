@@ -94,7 +94,7 @@ SwDrawBaseShell::~SwDrawBaseShell()
     SwTransferable::ClearSelection( GetShell() );
 }
 
-void SwDrawBaseShell::Execute(SfxRequest &rReq)
+void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 {
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();

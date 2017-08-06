@@ -31,21 +31,21 @@ enum class SvtScriptType;
 namespace SwLangHelper
 {
     extern sal_uInt16 GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
-    extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView &rView, SwWrtShell &rSh );
+    extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView const &rView, SwWrtShell &rSh );
 
     extern void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
-    extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV = nullptr );
+    extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView const * pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
+    extern void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView const * pOLV = nullptr );
 
     // document
     extern void SelectCurrentPara( SwWrtShell &rWrtSh );
     // EditView
     extern void SelectPara( EditView &rEditView, const ESelection &rCurSel );
 
-    extern OUString GetTextForLanguageGuessing(EditEngine* rEditEngine, const ESelection& rDocSelection);
-    extern OUString GetTextForLanguageGuessing(SwWrtShell &rSh);
+    extern OUString GetTextForLanguageGuessing(EditEngine const * rEditEngine, const ESelection& rDocSelection);
+    extern OUString GetTextForLanguageGuessing(SwWrtShell const &rSh);
 
     extern LanguageType GetLanguage( SfxItemSet const & aSet, sal_uInt16 nLangWhichId );
     extern LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId );

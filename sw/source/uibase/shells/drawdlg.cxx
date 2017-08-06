@@ -164,7 +164,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             pDoc->SetChanged();
 }
 
-void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
+void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
 {
     SwWrtShell* pSh   = &GetShell();
     SdrView*    pView = pSh->GetDrawView();
