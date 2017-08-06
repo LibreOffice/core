@@ -255,6 +255,7 @@
 #define STR_SIGNATURE_OK                        NC_("STR_SIGNATURE_OK", "This document is digitally signed and the signature is valid.")
 #define STR_SIGNATURE_SHOW                      NC_("STR_SIGNATURE_SHOW", "Show Signatures")
 
+#define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 #define STR_SFX_DOCK                            NC_("STR_SFX_DOCK", "Dock")
 #define STR_SFX_UNDOCK                          NC_("STR_SFX_UNDOCK", "Undock")
 
