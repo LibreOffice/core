@@ -291,10 +291,6 @@ void HelpLinker::link()
     // do the work here
     // continue with introduction of the overall process thing into the
     // here all hzip files will be worked on
-    std::string appl = mod;
-    if (appl[0] == 's')
-        appl = appl.substr(1);
-
     bool bUse_ = true;
     if( !bExtensionMode )
         bUse_ = false;
