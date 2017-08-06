@@ -782,7 +782,7 @@ bool FormattedField::EventNotify(NotifyEvent& rNEvt)
 
     if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
     {
-        // Sonderbehandlung fuer leere Texte
+        // special treatment for empty texts
         if (GetText().isEmpty())
         {
             if (!IsEmptyFieldEnabled())
