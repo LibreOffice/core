@@ -610,24 +610,6 @@ public:
     bool set_property(const OString &rKey, const OUString &rValue);
 };
 
-enum class VclButtonsType
-{
-    NONE,
-    Ok,
-    Close,
-    Cancel,
-    YesNo,
-    OkCancel
-};
-
-enum class VclMessageType
-{
-    Info,
-    Warning,
-    Question,
-    Error
-};
-
 class VCL_DLLPUBLIC MessageDialog : public Dialog
 {
 private:
