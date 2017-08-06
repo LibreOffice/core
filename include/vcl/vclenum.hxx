@@ -237,6 +237,25 @@ enum VclResponseType
     RET_HELP    = 10
 };
 
+enum class VclButtonsType
+{
+    NONE,
+    Ok,
+    Close,
+    Cancel,
+    YesNo,
+    OkCancel
+};
+
+enum class VclMessageType
+{
+    Info,
+    Warning,
+    Question,
+    Error
+};
+
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
