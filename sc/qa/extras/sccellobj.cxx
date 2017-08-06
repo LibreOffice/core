@@ -48,7 +48,7 @@ sal_Int32 ScCellObj::nTest = 0;
 uno::Reference< lang::XComponent > ScCellObj::mxComponent;
 
 ScCellObj::ScCellObj()
-        : CalcUnoApiTest("/sc/qa/extrax/testdocuments")
+        : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
