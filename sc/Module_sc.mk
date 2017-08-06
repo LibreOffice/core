@@ -122,6 +122,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_viewpaneobj \
 	CppunitTest_sc_cellobj \
 	CppunitTest_sc_cellcursorobj \
+	CppunitTest_sc_tabviewobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
