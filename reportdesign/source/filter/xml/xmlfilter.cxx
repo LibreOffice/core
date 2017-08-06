@@ -192,7 +192,6 @@ ErrCode ReadThroughComponent(
     if ( xStorage.is() )
     {
         uno::Reference< io::XStream > xDocStream;
-        bool bEncrypted = false;
 
         try
         {
@@ -215,9 +214,6 @@ ErrCode ReadThroughComponent(
 
             // get input stream
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
-
-            uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue("Encrypted") >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)
         {
