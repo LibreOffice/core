@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ff72a7ac",
+        "filename": "compilerplugins/clang/checkunusedparams.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-08-06T00:16:53Z",
+      "side": 1,
+      "message": "I don’t think this was an error.",
+      "revId": "d76783a0f6022a0308d5d49d559e1a7d3fb6dd5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1f6853ba",
+        "filename": "offapi/com/sun/star/text/TimeDisplayFormat.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-08-06T00:16:53Z",
+      "side": 1,
+      "message": "Please also change \"This\" to \"These\".",
+      "revId": "d76783a0f6022a0308d5d49d559e1a7d3fb6dd5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
