@@ -41,7 +41,7 @@ def main(argv):
 
     extra_data_files = ['complete_info.json', 'partial_update_info.json']
     if sys.platform != "cygwin":
-        extra_data_files += 'complete_lang_info.json'
+        extra_data_files.append('complete_lang_info.json')
 
     for extra_file in extra_data_files:
         extra_file_path = os.path.join(argv[5], extra_file)
