@@ -58,7 +58,7 @@ bool AxFontData::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.skipIntProperty< sal_Int32 >(); // font offset
     aReader.readIntProperty< sal_uInt8 >( mnFontCharSet );
     aReader.skipIntProperty< sal_uInt8 >(); // font pitch/family
-    sal_uInt8 nTmp = 0;
+    sal_uInt8 nTmp = static_cast<sal_uInt8>(AxHorizontalAlign::Left);
     aReader.readIntProperty< sal_uInt8 >( nTmp );
     mnHorAlign = static_cast<AxHorizontalAlign>(nTmp);
     aReader.skipIntProperty< sal_uInt16 >(); // font weight
