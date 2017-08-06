@@ -12,6 +12,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
@@ -84,6 +85,7 @@
 #include "com/sun/star/text/TextMarkupType.hpp"
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <paratr.hxx>
@@ -124,6 +126,7 @@ public:
     void testDOTMAutoText();
     void testDOCXAutoTextGallery();
     void testWatermarkDOCX();
+    void testWatermarkPosition();
     void testTdf67238();
     void testFdo75110();
     void testFdo75898();
@@ -248,6 +251,7 @@ public:
     CPPUNIT_TEST(testDOTMAutoText);
     CPPUNIT_TEST(testDOCXAutoTextGallery);
     CPPUNIT_TEST(testWatermarkDOCX);
+    CPPUNIT_TEST(testWatermarkPosition);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
@@ -842,6 +846,56 @@ void SwUiWriterTest::testWatermarkDOCX()
     CPPUNIT_ASSERT_EQUAL((sal_Int16)45, pWatermark->GetAngle());
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)0x548dd4, pWatermark->GetColor());
     CPPUNIT_ASSERT_EQUAL((sal_Int16)50, pWatermark->GetTransparency());
+}
+
+void SwUiWriterTest::testWatermarkPosition()
+{
+    // tdf#108494 Watermark inserted in the document with page break was outside the first page
+    const int aPagesInDocument = 2;
+    const int aAdditionalPagesCount[] = { 0, 1, 5, 20 };
+
+    for (unsigned long i = 0; i < sizeof(aAdditionalPagesCount) / sizeof(int); ++i)
+    {
+        int aPages = aPagesInDocument + aAdditionalPagesCount[i];
+
+        // Empty document with one Page Break
+        SwDoc* pDoc = createDoc("watermark-position.odt");
+        SwEditShell* pEditShell = pDoc->GetEditShell();
+        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+        for (int j = 0; j < aAdditionalPagesCount[i]; ++j)
+            pWrtShell->InsertPageBreak();
+
+        SfxWatermarkItem aWatermark;
+        aWatermark.SetText("Watermark");
+        aWatermark.SetFont("DejaVu Sans");
+
+        const OUString rPageStyleName = "Default Style";
+        uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+
+        pEditShell->SetWatermark(aWatermark);
+
+        uno::Reference<css::drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShape.is());
+
+        SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+
+        // Get Watermark object
+        SdrObject* pObject = pPage->GetObj(0);
+        pObject->RecalcBoundRect();
+        const Rectangle& rRect = pObject->GetSnapRect();
+        Size rSize = pPage->GetSize();
+
+        // Page break, calculate height of a page
+        const int nPageHeight = rSize.getHeight() / aPages;
+
+        // Check if Watermark is inside a page
+        CPPUNIT_ASSERT(nPageHeight >= rRect.Bottom());
+    }
 }
 
 void SwUiWriterTest::testFdo74981()
