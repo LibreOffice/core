@@ -128,12 +128,7 @@ ScXMLMappingContext::~ScXMLMappingContext()
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingContext::createFastChildContext(
     sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = nullptr;
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
-    return pContext;
+    return new SvXMLImportContext( GetImport() );
 }
 
 void SAL_CALL ScXMLMappingContext::endFastElement( sal_Int32 /*nElement*/ )
