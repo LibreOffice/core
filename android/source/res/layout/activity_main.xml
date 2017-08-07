@@ -41,11 +41,10 @@
 
                 <EditText
                     android:id="@+id/calc_address"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/calc_address_bar_width"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="0"
                     android:inputType="textNoSuggestions"
-                    android:text="@string/calc_address_bar"
                     android:imeOptions="actionDone|actionGo"
                     android:visibility="gone"/>
 
@@ -53,9 +52,8 @@
                     android:id="@+id/calc_formula"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="5"
+                    android:layout_weight="1"
                     android:inputType="text"
-                    android:text="@string/calc_formula_bar"
                     android:imeOptions="actionDone|actionGo"
                     android:visibility="gone"/>
 

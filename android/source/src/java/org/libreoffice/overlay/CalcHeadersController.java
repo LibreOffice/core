@@ -14,7 +14,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -95,6 +94,14 @@ public class CalcHeadersController {
                 return true;
             }
         });
+        // manually select A1 for address bar and formula bar to update when calc first opens
+        JSONObject rootJson = new JSONObject();
+        try {
+            CalcHeadersView.addProperty(rootJson, "ToPoint", "string", "A1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:GoToCell", rootJson.toString()));
     }
 
     public void setupHeaderPopupView() {

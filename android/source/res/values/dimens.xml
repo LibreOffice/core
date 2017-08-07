@@ -12,4 +12,5 @@
     <dimen name="calc_header_width">48dp</dimen>
     <dimen name="calc_header_height">24dp</dimen>
     <dimen name="calc_toolbar_height">40dp</dimen>
+    <dimen name="calc_address_bar_width">96dp</dimen>
 </resources>

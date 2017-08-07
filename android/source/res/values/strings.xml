@@ -151,7 +151,5 @@
     <string name="calc_optimal_length_confirm">OK</string>
     <string name="calc_optimal_length_default_text">Enter Extra Length in 100th/mm</string>
     <string name="calc_alert_double_click_optimal_length">Hint: Double tap on a header sets optimal width/height.</string>
-    <string name="calc_address_bar">Address Bar</string>
-    <string name="calc_formula_bar">Formula Bar</string>
 
 </resources>
