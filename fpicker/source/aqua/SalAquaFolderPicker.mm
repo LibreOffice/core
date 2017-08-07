@@ -162,9 +162,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescrip
 
 rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
-    rtl::OUString retVal( FOLDER_PICKER_IMPL_NAME );
-
-    return retVal;
+    return FOLDER_PICKER_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const rtl::OUString& sServiceName )

@@ -482,9 +482,7 @@ void SAL_CALL SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 
 rtl::OUString SAL_CALL SalAquaFilePicker::getImplementationName()
 {
-    rtl::OUString retVal( FILE_PICKER_IMPL_NAME );
-
-    return retVal;
+    return FILE_PICKER_IMPL_NAME;
 }
 
 sal_Bool SAL_CALL SalAquaFilePicker::supportsService( const rtl::OUString& sServiceName )
