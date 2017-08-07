@@ -37,7 +37,6 @@ officecfg_XCSFILES := \
     Office/Linguistic \
     Office/Logging \
     Office/Math \
-    Office/OOoImprovement/Settings \
     Office/OptionsDialog \
     Office/Paths \
     Office/PresentationMinimizer \

@@ -81,32 +81,6 @@
     </group>
   </templates>
   <component>
-    <group oor:name="OOoImprovement">
-      <info>
-        <desc>specifies settings for the logging of userinterface events.</desc>
-      </info>
-      <prop oor:name="EnablingAllowed" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>only if this is true, usage tracking is allowed and its options will be shown
-          </desc>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="LogPath" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>directory where the logs will get saved
-          </desc>
-        </info>
-        <value>$(user)/temp/Feedback</value>
-      </prop>
-      <prop oor:name="IdleTimeout" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>idle time in minutes. If two log event are separated by a longer
-          time, the log will be rotated.</desc>
-        </info>
-        <value>180</value>
-      </prop>
-    </group>
     <set oor:name="Settings" oor:node-type="LoggerSettings">
       <info>
         <desc>contains the settings for all known loggers in OpenOffice.org.</desc>
