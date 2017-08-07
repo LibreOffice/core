@@ -322,7 +322,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 +(void)addMarkup:(XAccessibleTextMarkup*)markup toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
-    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(css::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
+    [AquaA11yTextAttributesWrapper addMarkup:markup withType:css::text::TextMarkupType::SPELLCHECK toString:string inRange:range];
 }
 
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange {

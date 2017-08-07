@@ -495,7 +495,7 @@ public:
     virtual void SkipPixel( sal_uInt32 nPixel ) override
         {
             mnX += nPixel;
-            if( (nPixel & 1) )
+            if( nPixel & 1 )
             {
                 mnShift ^= 4;
             }

@@ -196,7 +196,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
     // enable OSX>=10.7 fullscreen options if available and useful
     bool bAllowFullScreen = (SalFrameStyleFlags::NONE == (mpFrame->mnStyle & (SalFrameStyleFlags::DIALOG | SalFrameStyleFlags::TOOLTIP | SalFrameStyleFlags::SYSTEMCHILD | SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLWINDOW | SalFrameStyleFlags::INTRO)));
-    bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & (SalFrameStyleFlags::SIZEABLE)));
+    bAllowFullScreen &= (SalFrameStyleFlags::NONE == (~mpFrame->mnStyle & SalFrameStyleFlags::SIZEABLE));
     bAllowFullScreen &= (mpFrame->mpParent == nullptr);
     const SEL setCollectionBehavior = @selector(setCollectionBehavior:);
     if( bAllowFullScreen && [pNSWindow respondsToSelector: setCollectionBehavior])

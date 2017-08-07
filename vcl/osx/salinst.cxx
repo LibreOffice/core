@@ -781,7 +781,7 @@ SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* p
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
-    delete ( pObject );
+    delete pObject;
 }
 
 SalPrinter* AquaSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
