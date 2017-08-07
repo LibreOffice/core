@@ -152,6 +152,15 @@ public:
         return ret;
     }
 
+    bool TraverseObjCMethodDecl(ObjCMethodDecl * decl) {
+        returnTypes_.push(decl->getReturnType());
+        auto const ret = RecursiveASTVisitor::TraverseObjCMethodDecl(decl);
+        assert(!returnTypes_.empty());
+        assert(returnTypes_.top() == decl->getReturnType());
+        returnTypes_.pop();
+        return ret;
+    }
+
     bool TraverseConstructorInitializer(CXXCtorInitializer * init) {
         if (auto const field = init->getAnyMember()) {
             if (loplugin::TypeCheck(field->getType()).LvalueReference()) {
@@ -340,8 +349,11 @@ private:
                     {
                         continue;
                     }
-                    auto const fun = dyn_cast_or_null<FunctionDecl>(
-                        i.first->getDeclContext());
+                    auto const ctxt = i.first->getDeclContext();
+                    if (dyn_cast_or_null<ObjCMethodDecl>(ctxt) != nullptr) {
+                        continue;
+                    }
+                    auto const fun = dyn_cast_or_null<FunctionDecl>(ctxt);
                     assert(fun != nullptr);
                     if (containsPreprocessingConditionalInclusion(
                             fun->getSourceRange()))
