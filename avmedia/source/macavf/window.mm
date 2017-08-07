@@ -44,8 +44,6 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
     AVPlayer* pAVPlayer = mrPlayer.getAVPlayer();
     AVAsset* pMovie = [[pAVPlayer currentItem] asset];
     const int nVideoCount = [pMovie tracksWithMediaType:AVMediaTypeVideo].count;
-    const int nAudioCount = [pMovie tracksWithMediaType:AVMediaTypeAudio].count;
-    (void)nAudioCount;
     if( nVideoCount <= 0 )
         return;
 
