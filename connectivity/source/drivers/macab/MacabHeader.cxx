@@ -25,6 +25,7 @@
 #include <math.h>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <connectivity/dbconversion.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace connectivity::macab;
 using namespace com::sun::star::sdbc;
@@ -36,7 +37,7 @@ MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
 {
     sal_Int32 i;
     size = _size;
-    fields = new macabfield *[size];
+    fields = o3tl::make_unique<macabfield *[]>(size);
     for(i = 0; i < size; i++)
     {
         if(_fields[i] == nullptr)
@@ -86,7 +87,7 @@ void MacabHeader::operator+= (const MacabHeader *r)
         {
             sal_Int32 i;
             size = rSize;
-            fields = new macabfield *[size];
+            fields = o3tl::make_unique<macabfield *[]>(size);
             for(i = 0; i < size; i++)
             {
                 fields[i] = r->copy(i);
@@ -132,9 +133,8 @@ void MacabHeader::operator+= (const MacabHeader *r)
             }
 
             releaseFields();
-            delete [] fields;
             size += numAdded;
-            fields = newFields;
+            fields.reset(newFields);
         }
     }
 }
@@ -230,7 +230,7 @@ macabfield **MacabHeader::sortRecord(const sal_Int32 _start, const sal_Int32 _le
         }
         if(_length == size)
         {
-            fields = sorted;
+            fields.reset(sorted);
         }
         delete firstHalf;
         delete lastHalf;

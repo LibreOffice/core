@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORD_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORD_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -46,7 +50,7 @@ namespace connectivity
         class MacabRecord{
             protected:
                 sal_Int32 size;
-                macabfield **fields;
+                std::unique_ptr<macabfield *[]> fields;
             protected:
                 void releaseFields();
             public:

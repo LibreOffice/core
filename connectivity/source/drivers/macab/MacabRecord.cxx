@@ -21,6 +21,7 @@
 #include "MacabRecord.hxx"
 #include "macabutilities.hxx"
 #include <com/sun/star/util/DateTime.hpp>
+#include <o3tl/make_unique.hxx>
 
 #include <premac.h>
 #include <Carbon/Carbon.h>
@@ -43,7 +44,7 @@ MacabRecord::MacabRecord()
 MacabRecord::MacabRecord(const sal_Int32 _size)
 {
     size = _size;
-    fields = new macabfield *[size];
+    fields = o3tl::make_unique<macabfield *[]>(size);
     sal_Int32 i;
     for(i = 0; i < size; i++)
         fields[i] = nullptr;
@@ -61,8 +62,6 @@ MacabRecord::~MacabRecord()
             fields[i] = nullptr;
         }
     }
-    delete [] fields;
-    fields = nullptr;
 }
 
 
