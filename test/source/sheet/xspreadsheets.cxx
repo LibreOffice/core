@@ -37,7 +37,7 @@ void XSpreadsheets::testInsertNewByNameBadName()
 {
     uno::Reference< sheet::XSpreadsheets > xSpreadsheets(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_THROW_MESSAGE("No excpetion thrown",
+    CPPUNIT_ASSERT_THROW_MESSAGE("No exception thrown",
                                  xSpreadsheets->insertNewByName("$%#/?\\", 0),
                                  uno::RuntimeException);
 }
