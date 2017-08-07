@@ -62,6 +62,7 @@
 #include "asciiopt.hxx"
 #include "datastream.hxx"
 #include "datastreamdlg.hxx"
+#include "dataproviderdlg.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
 #include <documentlinkmgr.hxx>
@@ -778,6 +779,20 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 pStrm->StopImport();
         }
         break;
+        case SID_DATA_PROVIDER:
+        {
+            ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            //ScDocument *pDoc = GetViewData()->GetDocument();
+            //sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            //sc::DataStream* pStrm = rMgr.getDataStream();
+            //if (pStrm)
+            aDialog->Init(/**pStrm*/);
+            aDialog->Execute();
+
+            //if (aDialog->Execute() == RET_OK)
+            //aDialog->StartStream();
+        }
+        break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();
         break;
@@ -1184,6 +1199,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                 }
                 break;
+            case SID_DATA_PROVIDER:
+            break;
             case SID_DATA_STREAMS:
             case SID_DATA_STREAMS_PLAY:
             case SID_DATA_STREAMS_STOP:
