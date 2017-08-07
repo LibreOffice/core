@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7f46b7c0",
+        "filename": "sw/util/sw.component",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-08-07T07:22:54Z",
+      "side": 1,
+      "message": "Maybe align with the existing examples and use some prefix like lo.writer.*",
+      "revId": "c4fb249e4e1a6bc2e1a462cf5beddb0a1c0aa841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

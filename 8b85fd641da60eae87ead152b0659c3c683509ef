@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5f49fbcf",
+        "filename": "sw/uiconfig/swriter/toolbar/findbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-08-07T07:22:54Z",
+      "side": 0,
+      "message": "You can delete the old code from NavigationPopup.",
+      "revId": "8b85fd641da60eae87ead152b0659c3c683509ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
