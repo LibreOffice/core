@@ -83,7 +83,6 @@ public:
 private:
     bool checkIfCanBeConst(const Stmt*, const ParmVarDecl*);
     bool isPointerOrReferenceToConst(const QualType& qt);
-    StringRef getFilename(const SourceLocation& loc);
 
     std::unordered_set<const ParmVarDecl*> interestingSet;
     std::unordered_map<const ParmVarDecl*, const FunctionDecl*> parmToFunction;
@@ -486,13 +485,6 @@ bool ConstParams::isPointerOrReferenceToConst(const QualType& qt) {
         return bool(type.LvalueReference().Const());
     }
     return false;
-}
-
-StringRef ConstParams::getFilename(const SourceLocation& loc)
-{
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
-    StringRef name { compiler.getSourceManager().getFilename(spellingLocation) };
-    return name;
 }
 
 loplugin::Plugin::Registration< ConstParams > X("constparams", false);
