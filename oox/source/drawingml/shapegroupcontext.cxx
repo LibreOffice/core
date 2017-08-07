@@ -79,7 +79,7 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
     case XML_grpSpPr:
         return new ShapePropertiesContext( *this, *mpGroupShapePtr );
     case XML_nvGrpSpPr:
-        return nullptr;
+        return this;
     case XML_spPr:
         return new ShapePropertiesContext( *this, *mpGroupShapePtr );
 /*
