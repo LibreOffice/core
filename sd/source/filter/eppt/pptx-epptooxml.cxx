@@ -64,6 +64,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <oox/export/utils.hxx>
@@ -903,25 +904,45 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
 
 void PowerPointExport::WriteAnimationTarget( const FSHelperPtr& pFS, const Any& rTarget )
 {
-    sal_Int32 nBegin = -1, nEnd = -1;
-    bool bParagraphTarget;
-    Reference< XShape > rXShape = AnimationExporter::getTargetElementShape( rTarget, nBegin, nEnd, bParagraphTarget );
+    sal_Int32 nParagraph = -1;
+    bool bParagraphTarget = false;
 
-    if( rXShape.is() ) {
-    pFS->startElementNS( XML_p, XML_tgtEl, FSEND );
-    pFS->startElementNS( XML_p, XML_spTgt,
+    Reference< XShape > rXShape;
+    rTarget >>= rXShape;
+
+    if( !rXShape.is() )
+    {
+        ParagraphTarget aParagraphTarget;
+        if( rTarget >>= aParagraphTarget )
+            rXShape = aParagraphTarget.Shape;
+        if ( rXShape.is() )
+        {
+            nParagraph = static_cast<sal_Int32>(aParagraphTarget.Paragraph);
+            Reference< XSimpleText > xText( rXShape, UNO_QUERY );
+            if ( xText.is() )
+            {
+                bParagraphTarget = true;
+            }
+        }
+    }
+
+    if( rXShape.is() )
+    {
+        pFS->startElementNS( XML_p, XML_tgtEl, FSEND );
+        pFS->startElementNS( XML_p, XML_spTgt,
                  XML_spid, I32S( ShapeExport::GetShapeID( rXShape, &maShapeMap ) ),
                  FSEND );
-    if( bParagraphTarget ) {
-        pFS->startElementNS( XML_p, XML_txEl, FSEND );
-        pFS->singleElementNS( XML_p, XML_pRg,
-                  XML_st, I32S( nBegin ),
-                  XML_end, I32S( nEnd ),
-                  FSEND );
-        pFS->endElementNS( XML_p, XML_txEl );
-    }
-    pFS->endElementNS( XML_p, XML_spTgt );
-    pFS->endElementNS( XML_p, XML_tgtEl );
+        if( bParagraphTarget )
+        {
+                pFS->startElementNS( XML_p, XML_txEl, FSEND );
+                pFS->singleElementNS( XML_p, XML_pRg,
+                        XML_st, I32S( nParagraph ),
+                        XML_end, I32S( nParagraph ),
+                        FSEND );
+                pFS->endElementNS( XML_p, XML_txEl );
+        }
+        pFS->endElementNS( XML_p, XML_spTgt );
+        pFS->endElementNS( XML_p, XML_tgtEl );
     }
 }
 
