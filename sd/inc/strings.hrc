@@ -96,6 +96,7 @@
 #define STR_SD_PAGE                                     NC_("STR_SD_PAGE", "Slide")
 #define STR_SD_PAGE_COUNT                               NC_("STR_SD_PAGE_COUNT", "Slide %1 of %2")
 #define STR_SD_PAGE_COUNT_CUSTOM                        NC_("STR_SD_PAGE_COUNT_CUSTOM", "Slide %1 of %2 (%3)")
+#define STR_ALL_SUPPORTED_FORMATS                       NC_("STR_ALL_SUPPORTED_FORMATS", "All supported formats")
 #define STR_ALL_FILES                                   NC_("STR_ALL_FILES", "All files")
 #define STR_UNDO_INSERT_TEXTFRAME                       NC_("STR_UNDO_INSERT_TEXTFRAME", "Insert text frame")
 #define STR_ACTION_NOTPOSSIBLE                          NC_("STR_ACTION_NOTPOSSIBLE", "This function cannot be run \nwith the selected objects.")
