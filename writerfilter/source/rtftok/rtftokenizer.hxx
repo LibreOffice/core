@@ -39,7 +39,7 @@ public:
     }
     /// To be invoked by the pushState() callback to signal when the importer enters a group.
     void pushGroup();
-    /// To be invoked by the popState() callback to single when the importer leaves a group.
+    /// To be invoked by the popState() callback to signal when the importer leaves a group.
     void popGroup();
     OUString getPosition();
     std::size_t getGroupStart()
