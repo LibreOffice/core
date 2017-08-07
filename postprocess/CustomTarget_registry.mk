@@ -152,7 +152,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/Linguistic.xcs \
 	$(postprocess_XCS)/Office/Logging.xcs \
 	$(postprocess_XCS)/Office/Math.xcs \
-	$(postprocess_XCS)/Office/OOoImprovement/Settings.xcs \
 	$(postprocess_XCS)/Office/OptionsDialog.xcs \
 	$(postprocess_XCS)/Office/Paths.xcs \
 	$(postprocess_XCS)/Office/ProtocolHandler.xcs \
