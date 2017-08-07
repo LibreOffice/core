@@ -36,7 +36,6 @@
 
 -(void)menuNeedsUpdate: (NSMenu*)pMenu
 {
-    (void)pMenu;
     SolarMutexGuard aGuard;
 
     if( mpMenu )

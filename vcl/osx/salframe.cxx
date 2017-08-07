@@ -283,7 +283,6 @@ SalGraphics* AquaSalFrame::AcquireGraphics()
 
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
-    (void)pGraphics;
     SAL_WARN_IF( pGraphics != mpGraphics, "vcl", "graphics released on wrong frame" );
     mbGraphics = FALSE;
 }

@@ -108,13 +108,11 @@ using namespace ::com::sun::star::uno;
 
 +(id)sharedTextUIElementsAttributeForElement:(AquaA11yWrapper *)wrapper
 {
-    (void)wrapper;
     return [NSArray arrayWithObject:wrapper];
 }
 
 +(id)sharedCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper
 {
-    (void)wrapper;
     return [ NSValue valueWithRange: NSMakeRange ( 0, [wrapper accessibleText]->getCharacterCount() ) ];
 }
 

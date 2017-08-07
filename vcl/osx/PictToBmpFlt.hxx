@@ -27,8 +27,7 @@
 #include <postmac.h>
 
 bool ImageToPNG( css::uno::Sequence<sal_Int8>& rImgData,
-                 css::uno::Sequence<sal_Int8>& rPngData,
-                 NSBitmapImageFileType eInFormat);
+                 css::uno::Sequence<sal_Int8>& rPngData);
 
 bool PNGToImage( css::uno::Sequence<sal_Int8>& rPngData,
                  css::uno::Sequence<sal_Int8>& rImgData,

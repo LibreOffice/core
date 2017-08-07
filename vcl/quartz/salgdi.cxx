@@ -829,7 +829,6 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
 {
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
-    (void)pData;
     SAL_WARN_IF( (pData==nullptr), "vcl", "AquaSalGraphics::FreeEmbedFontData() is not implemented");
 }
 

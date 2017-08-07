@@ -846,8 +846,6 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 -(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute
 {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetOverrideValue:" << ((NSObject*)value) << " forAttribute:" << attribute << "]");
-    (void)value;
-    (void)attribute;
     return NO; // TODO
 }
 

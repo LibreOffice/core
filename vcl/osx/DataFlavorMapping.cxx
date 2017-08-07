@@ -387,7 +387,7 @@ Any PNGDataProvider::getOOoData()
         memcpy( imgData.getArray(), [mSystemData bytes], flavorDataLength);
 
         Sequence<sal_Int8> pngData;
-        if( ImageToPNG( imgData, pngData, meImageType))
+        if( ImageToPNG( imgData, pngData))
             oOOData <<= pngData;
     }
     else

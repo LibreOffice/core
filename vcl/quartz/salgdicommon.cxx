@@ -86,7 +86,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
     {
         return;
     }
-    (void)bPixelSnap; // TODO
 
     const bool bHasCurves = rPolygon.areControlPointsUsed();
     for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
