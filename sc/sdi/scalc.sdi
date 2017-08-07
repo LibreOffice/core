@@ -4467,6 +4467,56 @@ SfxVoidItem DataStreamsStop SID_DATA_STREAMS_STOP
     GroupId = SfxGroupId::Data;
 ]
 
+SfxVoidItem DataProvider SID_DATA_PROVIDER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Data;
+]
+
+SfxVoidItem DataProviderPlay SID_DATA_PROVIDER_PLAY
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+SfxVoidItem DataProviderStop SID_DATA_PROVIDER_STOP
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+
 SfxVoidItem ManageXMLSource SID_MANAGE_XML_SOURCE
 (SfxStringItem DbName SID_MANAGE_XML_SOURCE)
 [

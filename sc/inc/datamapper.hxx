@@ -11,6 +11,9 @@
 #define INCLUDED_SC_INC_EXTERNALDATAMAPPER_HXX
 
 #include <memory>
+#include <vector>
+
+#include "scdllapi.h"
 
 #include <rtl/ustring.hxx>
 
@@ -23,7 +26,7 @@ class ScDBDataManager;
 class DataProvider;
 class ScDBDataManager;
 
-class ExternalDataSource
+class SC_DLLPUBLIC ExternalDataSource
 {
 private:
 
@@ -68,6 +71,8 @@ public:
 
     ExternalDataSource(const OUString& rURL,
             const OUString& rProvider);
+
+    ~ExternalDataSource();
 
     void setUpdateFrequency(double nUpdateFrequency);
 
