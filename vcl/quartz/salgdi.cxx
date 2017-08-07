@@ -301,6 +301,8 @@ static bool AddTempDevFont(const OUString& rFontFileURL)
     {
         CFRelease(error);
     }
+    CFRelease(rFontPath);
+    CFRelease(rFontURL);
 
     return success;
 }
