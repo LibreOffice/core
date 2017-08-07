@@ -20,7 +20,7 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
         css::uno::Reference<css::lang::XComponent> const& xModel,
         bool bRepairStorage,
         SourceDocumentType eDocumentType,
-        utl::MediaDescriptor const & rMediaDesc)
+        utl::MediaDescriptor const& rMediaDesc)
 {
 #ifdef DEBUG_WRITERFILTER
     OUString sURL = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());

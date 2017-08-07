@@ -146,7 +146,7 @@ void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPrope
     }
 }
 
-void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Reference<beans::XPropertySet>& xPropertySet, uno::Any const & rLineColor, uno::Any const & rLineWidth)
+void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Reference<beans::XPropertySet>& xPropertySet, uno::Any const& rLineColor, uno::Any const& rLineWidth)
 {
     if (!bTextFrame)
     {

@@ -111,7 +111,7 @@ public:
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
     /// Create date control from w:sdt's w:date.
-    void createDateControl(OUString const & rContentText, const css::beans::PropertyValue& rCharFormat);
+    void createDateControl(OUString const& rContentText, const css::beans::PropertyValue& rCharFormat);
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();

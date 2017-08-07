@@ -25,7 +25,7 @@ namespace dmapper
 using namespace ::com::sun::star;
 
 /// w:sdt's w:dropDownList doesn't have width, so guess the size based on the longest string.
-awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet, OUString const & rDefault, std::vector<OUString>& rItems)
+awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet, OUString const& rDefault, std::vector<OUString>& rItems)
 {
     OUString aLongest = rDefault;
     sal_Int32 nHeight = 0;
@@ -85,7 +85,7 @@ void SdtHelper::createDropDownControl()
     m_aDropDownItems.clear();
 }
 
-void SdtHelper::createDateControl(OUString const & rContentText, const beans::PropertyValue& rCharFormat)
+void SdtHelper::createDateControl(OUString const& rContentText, const beans::PropertyValue& rCharFormat)
 {
     uno::Reference<awt::XControlModel> xControlModel;
     try

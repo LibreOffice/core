@@ -154,7 +154,7 @@ bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
     return isTextBox(pVirtFlyDrawObj->GetFormat(), RES_FLYFRMFMT);
 }
 
-sal_Int32 SwTextBoxHelper::getCount(SdrPage const * pPage)
+sal_Int32 SwTextBoxHelper::getCount(SdrPage const* pPage)
 {
     sal_Int32 nRet = 0;
     for (std::size_t i = 0; i < pPage->GetObjCount(); ++i)
@@ -178,7 +178,7 @@ sal_Int32 SwTextBoxHelper::getCount(const SwDoc* pDoc)
     return nRet;
 }
 
-uno::Any SwTextBoxHelper::getByIndex(SdrPage const * pPage, sal_Int32 nIndex)
+uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
 {
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
@@ -362,7 +362,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         syncProperty(pShape, RES_BOX, BOTTOM_BORDER_DISTANCE, rValue);
 }
 
-void SwTextBoxHelper::getProperty(SwFrameFormat const * pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue)
+void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue)
 {
     if (!pShape)
         return;
@@ -594,7 +594,7 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
     }
 }
 
-void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const & rSet)
+void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet)
 {
     if (SwFrameFormat* pFormat = getOtherTextBoxFormat(&rShape, RES_DRAWFRMFMT))
     {

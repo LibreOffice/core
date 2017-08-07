@@ -60,10 +60,10 @@ public:
     /// Does the same, but works on properties which lack an sw-specific WID / MemberID.
     static void syncProperty(SwFrameFormat* pShape, const OUString& rPropertyName, const css::uno::Any& rValue);
     /// Get a property of the underlying TextFrame.
-    static void getProperty(SwFrameFormat const * pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue);
+    static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue);
 
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
-    static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const & rSet);
+    static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
 
     /**
      * If we have an associated TextFrame, then return that.
@@ -95,11 +95,11 @@ public:
     /// Count number of shapes in the document, excluding TextBoxes.
     static sal_Int32 getCount(const SwDoc* pDoc);
     /// Count number of shapes on the page, excluding TextBoxes.
-    static sal_Int32 getCount(SdrPage const * pPage);
+    static sal_Int32 getCount(SdrPage const* pPage);
     /// Get a shape by index, excluding TextBoxes.
     ///
     /// @throws css::lang::IndexOutOfBoundsException
-    static css::uno::Any getByIndex(SdrPage const * pPage, sal_Int32 nIndex);
+    static css::uno::Any getByIndex(SdrPage const* pPage, sal_Int32 nIndex);
     /// Get the order of the shape, excluding TextBoxes.
     static sal_Int32 getOrdNum(const SdrObject* pObject);
     /// If pTextBox is a textbox, then set rWrapThrough to the surround of its shape.

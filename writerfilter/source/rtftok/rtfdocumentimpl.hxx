@@ -426,7 +426,7 @@ public:
         return m_xModelFactory;
     }
     bool isInBackground();
-    void setDestinationText(OUString const & rString);
+    void setDestinationText(OUString const& rString);
     /// Resolve a picture: If not inline, then anchored.
     void resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& xShape);
 
@@ -466,7 +466,7 @@ private:
     void resetSprms();
     void resetAttributes();
     void resolveSubstream(std::size_t nPos, Id nId);
-    void resolveSubstream(std::size_t nPos, Id nId, OUString const & rIgnoreFirst);
+    void resolveSubstream(std::size_t nPos, Id nId, OUString const& rIgnoreFirst);
 
     void text(OUString& rString);
     // Sends a single character to dmapper, taking care of buffering.
