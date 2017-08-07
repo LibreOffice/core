@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
     bool        FindConvText_impl();    ///< former FindSpellError
 
     void        ConvStart_impl( SwConversionArgs *pConvArgs, SvxSpellArea eSpell );   ///< former SpellStart
-    void        ConvEnd_impl( SwConversionArgs *pConvArgs );                          ///< former SpellEnd
+    void        ConvEnd_impl( SwConversionArgs const *pConvArgs );                          ///< former SpellEnd
     bool        ConvContinue_impl( SwConversionArgs *pConvArgs );                     ///< former SpellContinue
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,

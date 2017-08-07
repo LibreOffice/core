@@ -42,7 +42,7 @@ namespace ww8
         OSL_ENSURE(mn_size == nSize, "short read in WW8Struct::WW8Struct");
     }
 
-    WW8Struct::WW8Struct(WW8Struct * pStruct, sal_uInt32 nPos, sal_uInt32 nSize)
+    WW8Struct::WW8Struct(WW8Struct const * pStruct, sal_uInt32 nPos, sal_uInt32 nSize)
         : m_pData(pStruct->m_pData), mn_offset(pStruct->mn_offset + nPos)
         , mn_size(nSize)
     {

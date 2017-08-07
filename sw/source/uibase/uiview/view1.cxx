@@ -131,7 +131,7 @@ void SwView::MarginChanged()
     GetWrtShell().SetBrowseBorder( GetMargin() );
 }
 
-void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
+void SwView::ExecFormatPaintbrush(SfxRequest const & rReq)
 {
     if(!m_pFormatClipboard)
         return;

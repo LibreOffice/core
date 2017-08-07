@@ -355,7 +355,7 @@ void DocxExport::DoFormText(const SwInputField* /*pField*/)
     SAL_INFO("sw.ww8", "TODO DocxExport::ForFormText()" );
 }
 
-OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer )
+OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer )
 {
     OUString aFileName = "charts/chart" + OUString::number(nCount) + ".xml";
     OUString sId = m_pFilter->addRelation( m_pSerializer->getOutputStream(),
@@ -419,7 +419,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
-void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
+void DocxExport::OutputDML(uno::Reference<drawing::XShape> const & xShape)
 {
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
     sal_Int32 nNamespace = XML_wps;

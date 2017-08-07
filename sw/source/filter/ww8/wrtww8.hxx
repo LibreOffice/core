@@ -370,7 +370,7 @@ protected:
 public:
     PlcDrawObj() {}
     void WritePlc( WW8Export& rWrt ) const;
-    bool Append( WW8Export&, WW8_CP nCp, const ww8::Frame& rFormat,
+    bool Append( WW8Export const &, WW8_CP nCp, const ww8::Frame& rFormat,
         const Point& rNdTopLeft );
     int size() { return maDrawObjs.size(); };
     DrawObjVector &GetObjArr() { return maDrawObjs; }
@@ -788,7 +788,7 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    sal_Int32 GetNextPos( SwWW8AttrIter* pAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos );
+    sal_Int32 GetNextPos( SwWW8AttrIter const * pAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos );
 
     /// Update the information for GetNextPos().
     void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos );

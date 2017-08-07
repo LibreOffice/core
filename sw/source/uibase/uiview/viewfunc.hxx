@@ -32,7 +32,7 @@ class SwViewShell;
 namespace vcl { class Window; }
 
 // The following functions are available in viewprt.cxx
-void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, bool bWeb );
+void SetPrinter( IDocumentDeviceAccess*, SfxPrinter const *, bool bWeb );
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb );
 
 // The following functions are available in viewport.cxx

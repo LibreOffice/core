@@ -685,7 +685,7 @@ void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs
     m_pView->SpellStart( eArea, m_bStartDone, m_bEndDone, /* [out] */ pConversionArgs );
 }
 
-void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
+void SwHHCWrapper::ConvEnd_impl( SwConversionArgs const *pConversionArgs )
 {
     m_pView->SpellEnd( pConversionArgs );
 }

@@ -245,7 +245,7 @@ static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc
     return pColl;
 }
 
-static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
+static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell const * pDocShell )
 {
     // check if the view frame still exists
     SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell, false );

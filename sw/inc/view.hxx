@@ -305,7 +305,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // used for spell checking and text conversion
     SAL_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, bool bStartDone,
                                         bool bEndDone, SwConversionArgs *pConvArgs );
-    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs );
+    SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs const *pConvArgs );
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SAL_DLLPRIVATE void          SpellContext(bool bOn = true)
@@ -490,12 +490,12 @@ public:
     // Handler
     void            Execute(SfxRequest&);
     void            ExecLingu(SfxRequest&);
-    void            ExecDlg(SfxRequest&);
-    void            ExecDlgExt(SfxRequest&);
-    void            ExecColl(SfxRequest&);
+    void            ExecDlg(SfxRequest const &);
+    void            ExecDlgExt(SfxRequest const &);
+    void            ExecColl(SfxRequest const &);
     void            ExecutePrint(SfxRequest&);
     void            ExecDraw(SfxRequest&);
-    void            ExecTabWin(SfxRequest&);
+    void            ExecTabWin(SfxRequest const &);
     void            ExecuteStatusLine(SfxRequest&);
     DECL_LINK( ExecRulerClick, Ruler *, void );
     void            ExecSearch(SfxRequest&);
@@ -528,8 +528,8 @@ public:
     bool            IsFormMode() const;
     bool            IsBezierEditMode();
     bool            AreOnlyFormsSelected() const;
-    bool            HasDrwObj(SdrObject *pSdrObj) const;
-    bool            HasOnlyObj(SdrObject *pSdrObj, SdrInventor eObjInventor) const;
+    bool            HasDrwObj(SdrObject const *pSdrObj) const;
+    bool            HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const;
     bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=nullptr,
                                     vcl::Window* pWin=nullptr, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
@@ -592,7 +592,7 @@ public:
     // Enable mail merge - mail merge field dialog enabled
     void EnableMailMerge();
     //apply Accessiblity options
-    void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
+    void ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions);
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     virtual ~SwView() override;
@@ -605,11 +605,11 @@ public:
 
     // store MailMerge data while "Back to Mail Merge Wizard" FloatingWindow is active
     // or to support printing
-    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rConfigItem);
+    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
     std::shared_ptr<SwMailMergeConfigItem> GetMailMergeConfigItem() const;
     std::shared_ptr<SwMailMergeConfigItem> EnsureMailMergeConfigItem(const SfxItemSet* pArgs = nullptr);
 
-    void ExecFormatPaintbrush(SfxRequest &);
+    void ExecFormatPaintbrush(SfxRequest const &);
     void StateFormatPaintbrush(SfxItemSet &);
 
     //public fuer D&D

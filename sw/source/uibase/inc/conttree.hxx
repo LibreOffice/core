@@ -161,7 +161,7 @@ protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    void            EditEntry( SvTreeListEntry* pEntry, EditEntryMode nMode );
+    void            EditEntry( SvTreeListEntry const * pEntry, EditEntryMode nMode );
 
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}

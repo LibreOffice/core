@@ -754,7 +754,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
     }
 };
 
-SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPercent,
+SwTwips GetTableWidth( SwFrameFormat const * pFormat, SwTabCols const & rCols, sal_uInt16 *pPercent,
             SwWrtShell* pSh )
 {
     // To get the width is slightly more complicated.
@@ -815,7 +815,7 @@ void SetApplyCharUnit(bool bApplyChar, bool bWeb)
     SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
 }
 
-bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId )
+bool ExecuteMenuCommand( PopupMenu const & rMenu, SfxViewFrame const & rViewFrame, sal_uInt16 nId )
 {
     bool bRet = false;
     const sal_uInt16 nItemCount = rMenu.GetItemCount();

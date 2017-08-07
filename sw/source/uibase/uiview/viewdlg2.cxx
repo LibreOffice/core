@@ -41,7 +41,7 @@
 
 #include <memory>
 
-void SwView::ExecDlgExt(SfxRequest &rReq)
+void SwView::ExecDlgExt(SfxRequest const &rReq)
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
 

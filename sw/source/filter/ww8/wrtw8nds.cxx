@@ -1776,7 +1776,7 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
     m_rWW8Export.pO->clear();
 }
 
-sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos )
+sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter const * aAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos )
 {
     // Get the bookmarks for the normal run
     const sal_Int32 nNextPos = aAttrIter->WhereNext();

@@ -223,7 +223,7 @@ void ResizeFrameCols(SwFormatCol& rCol,
 }
 
 // Here all changes to the tab bar will be shot again into the model.
-void SwView::ExecTabWin( SfxRequest& rReq )
+void SwView::ExecTabWin( SfxRequest const & rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
     const FrameTypeFlags nFrameType   = rSh.IsObjSelected() ?

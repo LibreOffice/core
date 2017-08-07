@@ -96,14 +96,14 @@ SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, boo
 SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
 
 // Get table width and alignment
-SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPercent,
+SwTwips GetTableWidth( SwFrameFormat const * pFormat, SwTabCols const & rCols, sal_uInt16 *pPercent,
         SwWrtShell* pSh );
 
 OUString GetAppLangDateTimeString( const DateTime& );
 
 // search for a command string within the menu structure and execute it
 // at the dispatcher if there is one, if executed return true
-bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId );
+bool ExecuteMenuCommand( PopupMenu const & rMenu, SfxViewFrame const & rViewFrame, sal_uInt16 nId );
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_UITOOL_HXX
 

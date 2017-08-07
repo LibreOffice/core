@@ -30,7 +30,7 @@
 #include "wrtsh.hxx"
 #include "basesh.hxx"
 
-void SwView::ExecColl(SfxRequest &rReq)
+void SwView::ExecColl(SfxRequest const &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;

@@ -67,7 +67,7 @@ public:
 
     /// @return the XModel of the newly inserted chart if successful
     css::uno::Reference< css::frame::XModel >
-        InsertChart( css::uno::Reference< css::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrameFormat** ppFlyFrameFormat = nullptr );
+        InsertChart( css::uno::Reference< css::chart2::data::XDataProvider > const &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrameFormat** ppFlyFrameFormat = nullptr );
 };
 
 #endif

@@ -1502,7 +1502,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
 }
 
-void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
+void DocxAttributeOutput::StartField_Impl( FieldInfos const & rInfos, bool bWriteRun )
 {
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
@@ -1587,7 +1587,7 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
 
 }
 
-void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
+void DocxAttributeOutput::CmdField_Impl( FieldInfos const & rInfos )
 {
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
     sal_Int32 nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
@@ -2774,7 +2774,7 @@ static bool boxHasLineLargerThan31(const SvxBoxItem& rBox)
             );
 }
 
-static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins* pageMargins,
+static void impl_borders( FSHelperPtr const & pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions, PageMargins const * pageMargins,
                           std::map<SvxBoxItemLine, css::table::BorderLine2> &rTableStyleConf )
 {
     static const SvxBoxItemLine aBorders[] =

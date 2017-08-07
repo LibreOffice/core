@@ -33,7 +33,7 @@
 
 #include "pagedesc.hxx"
 
-void SwView::ExecDlg(SfxRequest &rReq)
+void SwView::ExecDlg(SfxRequest const &rReq)
 {
     // Thus, from the basic no dialogues for background views are called:
     const SfxPoolItem* pItem = nullptr;

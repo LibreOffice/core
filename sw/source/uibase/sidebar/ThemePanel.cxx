@@ -82,7 +82,7 @@ public:
         maVariable = aVariable;
     }
 
-    Color getColor(svx::ColorSet& rColorSet)
+    Color getColor(svx::ColorSet const & rColorSet)
     {
         Color aColor;
         if (maVariable.mnIndex > -1)
@@ -192,7 +192,7 @@ StyleSet setupThemes()
     return aSet;
 }
 
-void changeFont(SwFormat* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
+void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const & rFontSet)
 {
     bool bChanged = false;
 
@@ -244,7 +244,7 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
     }
 }*/
 
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet& rColorSet, StyleRedefinition* pRedefinition)
+void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const & rColorSet, StyleRedefinition* pRedefinition)
 {
     Color aColor = pRedefinition->getColor(rColorSet);
 

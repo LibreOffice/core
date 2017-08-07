@@ -80,7 +80,7 @@ struct SwSearchOptions
     SwDocPositions eStart, eEnd;
     bool bDontWrap;
 
-    SwSearchOptions( SwWrtShell* pSh, bool bBackward );
+    SwSearchOptions( SwWrtShell const * pSh, bool bBackward );
 };
 
 /// Adds rMatches using rKey as a key to the rTree tree.
@@ -100,7 +100,7 @@ static void lcl_addContainerToJson(boost::property_tree::ptree& rTree, const OSt
 }
 
 /// Emits LOK callbacks (count, selection) for search results.
-static void lcl_emitSearchResultCallbacks(SvxSearchItem* pSearchItem, SwWrtShell* pWrtShell, bool bHighlightAll)
+static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwWrtShell const * pWrtShell, bool bHighlightAll)
 {
     // Emit a callback also about the selection rectangles, grouped by matches.
     if (SwPaM* pPaM = pWrtShell->GetCursor())
@@ -761,7 +761,7 @@ void SwView::Replace()
     m_pWrtShell->EndAllAction();
 }
 
-SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, bool bBackward )
+SwSearchOptions::SwSearchOptions( SwWrtShell const * pSh, bool bBackward )
 {
     eStart = SwDocPositions::Curr;
     if( bBackward )
