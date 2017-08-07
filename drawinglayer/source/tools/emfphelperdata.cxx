@@ -28,6 +28,8 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -348,7 +350,15 @@ namespace emfplushelper
             SAL_WARN_IF(pen->startCap != pen->endCap, "cppcanvas.emf", "emf+ pen uses different start and end cap");
           }
           // transform the pen width
-          const double transformedPenWidth = MapSize(pen->penWidth, 0).getX();
+          double adjustedPenWidth = pen->penWidth;
+          if (!pen->penWidth) // no width specified, then use default value
+          {
+                adjustedPenWidth = pen->penUnit == 0 ? 0.18f   // 0.18f is determined by comparison with MSO  (case of Unit == World)
+                                                     : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
+          }
+
+          // transform and compare to 5 (the value 5 is determined by comparison to MSO)
+          const double transformedPenWidth = std::max( MapSize(adjustedPenWidth,0).getX() , 5.);
           drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
                                                                transformedPenWidth,
                                                                lineJoin,
@@ -362,14 +372,193 @@ namespace emfplushelper
 
     void EmfPlusHelperData::EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor)
     {
-        if (polygon.count())
+        if (!polygon.count())
+          return;
+
+        SAL_INFO("cppcanvas.emf", "EMF+\tfill polygon");
+        if (isColor) // use Color
         {
-            if (isColor)
+            mrTargetHolders.Current().append(
+                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                    polygon,
+                    ::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor()));
+        }
+        else // use Brush
+        {
+            EMFPBrush* brush = static_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
+            SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << (brush ? brush->GetType() : -1) << ")");
+
+            // give up in case something wrong happened
+            if( !brush )
+                return;
+            if (brush->type == BrushTypeHatchFill)
             {
-                mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                        polygon,
-                        ::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor()));
+                // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
+                // for the others the hatch "background" color (secondColor in brush) is used.
+
+                bool isHatchBlend = true;
+                double blendFactor = 0.0;
+
+                switch (brush->hatchStyle)
+                {
+                    case HatchStyle05Percent: blendFactor = 0.05; break;
+                    case HatchStyle10Percent: blendFactor = 0.10; break;
+                    case HatchStyle20Percent: blendFactor = 0.20; break;
+                    case HatchStyle25Percent: blendFactor = 0.25; break;
+                    case HatchStyle30Percent: blendFactor = 0.30; break;
+                    case HatchStyle40Percent: blendFactor = 0.40; break;
+                    case HatchStyle50Percent: blendFactor = 0.50; break;
+                    case HatchStyle60Percent: blendFactor = 0.60; break;
+                    case HatchStyle70Percent: blendFactor = 0.70; break;
+                    case HatchStyle75Percent: blendFactor = 0.75; break;
+                    case HatchStyle80Percent: blendFactor = 0.80; break;
+                    case HatchStyle90Percent: blendFactor = 0.90; break;
+                    default:
+                        isHatchBlend = false;
+                        break;
+                }
+                ::Color fillColor;
+                if (isHatchBlend)
+                {
+                    fillColor = brush->solidColor;
+                    fillColor.Merge(brush->secondColor, static_cast<sal_uInt8>(255 * blendFactor));
+                }
+                else
+                {
+                    fillColor = brush->secondColor;
+                }
+                EMFPPlusFillPolygon(polygon,true,fillColor.GetRGBColor());
+            }
+            else if (brush->type == BrushTypeTextureFill)
+            {
+                SAL_WARN("cppcanvas.emf", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+            }
+            else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
+
+            {
+                if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
+                {
+                    SAL_WARN("cppcanvas.emf", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
+                }
+                ::basegfx::B2DHomMatrix aTextureTransformation;
+
+                if (brush->hasTransformation) {
+                   aTextureTransformation *= brush->brush_transformation;
+                }
+
+                // adjust aTextureTransformation for our world space:
+                // -> revert the mapping -> apply the transformation -> map back
+                basegfx::B2DHomMatrix aInvertedMapTrasform(maMapTransform);
+                aInvertedMapTrasform.invert();
+                aTextureTransformation =  maMapTransform * aTextureTransformation * aInvertedMapTrasform;
+
+                // select the stored colors
+                basegfx::BColor aStartColor =  brush->solidColor.getBColor();
+                basegfx::BColor aEndColor =  brush->secondColor.getBColor();
+                drawinglayer::primitive2d::SvgGradientEntryVector aVector;
+
+                if (brush->blendPositions)
+                {
+                     SAL_INFO("cppcanvas.emf", "EMF+\t\tuse blend");
+
+                    // store the blendpoints in the vector
+                    for (int i = 0; i < brush->blendPoints; i++)
+                    {
+                        double aBlendPoint;
+                        basegfx::BColor aColor;
+                        if (brush->type == BrushTypeLinearGradient)
+                        {
+                            aBlendPoint = brush->blendPositions [i];
+                        }
+                        else
+                        {
+                            // seems like SvgRadialGradientPrimitive2D needs doubled, inverted radius
+                            aBlendPoint = 2. * ( 1. - brush->blendPositions [i] );
+                        }
+                        aColor.setGreen( aStartColor.getGreen() * (1. - brush->blendFactors[i]) + aEndColor.getGreen() * brush->blendFactors[i] );
+                        aColor.setBlue ( aStartColor.getBlue()  * (1. - brush->blendFactors[i]) + aEndColor.getBlue()  * brush->blendFactors[i] );
+                        aColor.setRed  ( aStartColor.getRed()   * (1. - brush->blendFactors[i]) + aEndColor.getRed()   * brush->blendFactors[i] );
+                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(aBlendPoint, aColor, 1.) );
+                    }
+                }
+                else if (brush->colorblendPositions)
+                {
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tuse color blend");
+
+                    // store the colorBlends in the vector
+                    for (int i = 0; i < brush->colorblendPoints; i++) {
+                        double aBlendPoint;
+                        basegfx::BColor aColor;
+                        if (brush->type == BrushTypeLinearGradient)
+                        {
+                            aBlendPoint = brush->colorblendPositions [i];
+                        }
+                        else
+                        {
+                            // seems like SvgRadialGradientPrimitive2D needs doubled, inverted radius
+                            aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
+                        }
+                        aColor = brush->colorblendColors[i].getBColor();
+                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(aBlendPoint, aColor, 1.) );
+                    }
+                }
+                else // ok, no extra points: just start and end
+                {
+                    if (brush->type == BrushTypeLinearGradient)
+                    {
+                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(0.0, aStartColor, 1.) );
+                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(1.0, aEndColor, 1.) );
+                    }
+                    else // again, here reverse
+                    {
+                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(0.0, aEndColor, 1.) );
+                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(1.0, aStartColor, 1.) );
+                    }
+                }
+
+                // get the polygon range to be able to map the start/end/center point correctly
+                // threrefore, create a mapping and invert it
+                basegfx::B2DRange aPolygonRange= polygon.getB2DRange();
+                basegfx::B2DHomMatrix aPolygonTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aPolygonRange.getWidth(),aPolygonRange.getHeight(),
+                    aPolygonRange.getMinX(), aPolygonRange.getMinY());
+                aPolygonTransformation.invert();
+
+                if (brush->type == BrushTypeLinearGradient)
+                {
+                    basegfx::B2DPoint aStartPoint = Map(brush->areaX,brush->areaY);
+                    aStartPoint = aPolygonTransformation * aStartPoint;
+                    basegfx::B2DPoint aEndPoint = Map(brush->areaX + brush->areaWidth ,brush->areaY + brush->areaHeight);
+                    aEndPoint = aPolygonTransformation * aEndPoint;
+
+                    // create the same one used for SVG
+                    mrTargetHolders.Current().append(
+                         new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
+                             aTextureTransformation,
+                             polygon,
+                             aVector,
+                             aStartPoint,
+                             aEndPoint,
+                             false,                  // do not use UnitCoordinates
+                             drawinglayer::primitive2d::SpreadMethod::Pad));
+                }
+                else // BrushTypePathGradient
+                {
+                    basegfx::B2DPoint aCenterPoint = Map(brush->areaX,brush->areaY);
+                    aCenterPoint = aPolygonTransformation * aCenterPoint;
+
+                    // create the same one used for SVG
+                    mrTargetHolders.Current().append(
+                         new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
+                             aTextureTransformation,
+                             polygon,
+                             aVector,
+                             aCenterPoint,
+                             0.5,                   // relative radius
+                             true,                  // use UnitCoordinates to strectch the gradient
+                             drawinglayer::primitive2d::SpreadMethod::Repeat,
+                             nullptr));
+                }
             }
         }
     }
