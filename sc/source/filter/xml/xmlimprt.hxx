@@ -833,14 +833,8 @@ class ScXMLImport: public SvXMLImport
     rtl::Reference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
 
     SvXMLTokenMap           *pDocElemTokenMap;
-    SvXMLTokenMap           *pBodyElemTokenMap;
-    SvXMLTokenMap           *pContentValidationsElemTokenMap;
     SvXMLTokenMap           *pContentValidationElemTokenMap;
-    SvXMLTokenMap           *pContentValidationAttrTokenMap;
     SvXMLTokenMap           *pContentValidationMessageElemTokenMap;
-    SvXMLTokenMap           *pContentValidationHelpMessageAttrTokenMap;
-    SvXMLTokenMap           *pContentValidationErrorMessageAttrTokenMap;
-    SvXMLTokenMap           *pContentValidationErrorMacroAttrTokenMap;
     SvXMLTokenMap           *pCondFormatsTokenMap;
     SvXMLTokenMap           *pCondFormatTokenMap;
     SvXMLTokenMap           *pCondFormatAttrMap;
@@ -852,15 +846,9 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataBarAttrMap;
     SvXMLTokenMap           *pFormattingEntryAttrMap;
     SvXMLTokenMap           *pIconSetAttrMap;
-    SvXMLTokenMap           *pLabelRangesElemTokenMap;
-    SvXMLTokenMap           *pLabelRangeAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
-    SvXMLTokenMap           *pTableProtectionElemTokenMap;
     SvXMLTokenMap           *pTableRowsElemTokenMap;
-    SvXMLTokenMap           *pTableColsElemTokenMap;
-    SvXMLTokenMap           *pTableScenarioAttrTokenMap;
     SvXMLTokenMap           *pTableAttrTokenMap;
-    SvXMLTokenMap           *pTableColAttrTokenMap;
     SvXMLTokenMap           *pTableRowElemTokenMap;
     SvXMLTokenMap           *pTableRowAttrTokenMap;
     SvXMLTokenMap           *pTableRowCellElemTokenMap;
@@ -870,12 +858,6 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDetectiveHighlightedAttrTokenMap;
     SvXMLTokenMap           *pDetectiveOperationAttrTokenMap;
     SvXMLTokenMap           *pTableCellRangeSourceAttrTokenMap;
-    SvXMLTokenMap           *pNamedExpressionsElemTokenMap;
-    SvXMLTokenMap           *pNamedRangeAttrTokenMap;
-    SvXMLTokenMap           *pNamedExpressionAttrTokenMap;
-    SvXMLTokenMap           *pDatabaseRangesElemTokenMap;
-    SvXMLTokenMap           *pDatabaseRangeElemTokenMap;
-    SvXMLTokenMap           *pDatabaseRangeAttrTokenMap;
     SvXMLTokenMap           *pDatabaseRangeSourceSQLAttrTokenMap;
     SvXMLTokenMap           *pDatabaseRangeSourceTableAttrTokenMap;
     SvXMLTokenMap           *pDatabaseRangeSourceQueryAttrTokenMap;
@@ -885,14 +867,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pFilterConditionAttrTokenMap;
     SvXMLTokenMap           *pFilterSetItemAttrTokenMap;
     SvXMLTokenMap           *pSortElemTokenMap;
-    SvXMLTokenMap           *pSortAttrTokenMap;
     SvXMLTokenMap           *pSortSortByAttrTokenMap;
-    SvXMLTokenMap           *pDatabaseRangeSubTotalRulesElemTokenMap;
-    SvXMLTokenMap           *pDatabaseRangeSubTotalRulesAttrTokenMap;
-    SvXMLTokenMap           *pSubTotalRulesSortGroupsAttrTokenMap;
-    SvXMLTokenMap           *pSubTotalRulesSubTotalRuleElemTokenMap;
-    SvXMLTokenMap           *pSubTotalRulesSubTotalRuleAttrTokenMap;
-    SvXMLTokenMap           *pSubTotalRuleSubTotalFieldAttrTokenMap;
     SvXMLTokenMap           *pDataPilotTablesElemTokenMap;
     SvXMLTokenMap           *pDataPilotTableAttrTokenMap;
     SvXMLTokenMap           *pDataPilotTableElemTokenMap;
@@ -908,13 +883,11 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataPilotSubTotalAttrTokenMap;
     SvXMLTokenMap           *pDataPilotMembersElemTokenMap;
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
-    SvXMLTokenMap           *pConsolidationAttrTokenMap;
     SvXMLTokenMap           *pCellTextParaElemTokenMap;
     SvXMLTokenMap           *pCellTextSpanElemTokenMap;
     SvXMLTokenMap           *pCellTextSpanAttrTokenMap;
     SvXMLTokenMap           *pCellTextURLAttrTokenMap;
     SvXMLTokenMap           *pCellTextSAttrTokenMap;
-    SvXMLTokenMap           *pDataStreamAttrTokenMap;
 
     sc::ImportPostProcessData* mpPostProcessData; /// Lift cycle managed elsewhere, no need to delete.
 

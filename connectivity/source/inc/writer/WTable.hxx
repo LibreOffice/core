@@ -68,7 +68,6 @@ private:
     css::uno::Reference< css::text::XTextTable > m_xTable;
     OWriterConnection* m_pWriterConnection;
     sal_Int32 m_nStartCol;
-    sal_Int32 m_nStartRow;
     sal_Int32 m_nDataCols;
     bool      m_bHasHeaders;
     css::uno::Reference< css::util::XNumberFormats > m_xFormats;

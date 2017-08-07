@@ -116,7 +116,7 @@ void OWriterTable::fillColumns()
         sal_Int32 eType = sdbc::DataType::OTHER;
         bool bCurrency = false;
 
-        lcl_GetColumnInfo(m_xTable, m_nStartCol + i, m_nStartRow, m_bHasHeaders,
+        lcl_GetColumnInfo(m_xTable, m_nStartCol + i, 0, m_bHasHeaders,
                           aColumnName, eType, bCurrency);
 
         sal_Int32 nPrecision = 0;   //! ...
@@ -184,7 +184,6 @@ OWriterTable::OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pCo
                                       CatalogName)
     ,m_pWriterConnection(_pConnection)
     ,m_nStartCol(0)
-    ,m_nStartRow(0)
     ,m_nDataCols(0)
     ,m_bHasHeaders(false)
 {
@@ -263,7 +262,7 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols,
     {
         if ((_rRow->get())[i]->isBound())
         {
-            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, m_nStartRow, m_bHasHeaders,
+            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, 0, m_bHasHeaders,
                          m_nFilePos, i);
         }
     }
