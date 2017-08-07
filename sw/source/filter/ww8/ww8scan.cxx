@@ -3502,7 +3502,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
     p4 = nullptr;
 
     sal_uInt8* pSp = pSprms;
-    sal_uInt16 i=0;
+    size_t i = 0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm found?
