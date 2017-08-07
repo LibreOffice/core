@@ -551,11 +551,9 @@ void OSXBluetoothWrapper::channelClosed()
 }
 
 void incomingCallback( void *userRefCon,
-                       IOBluetoothUserNotificationRef inRef,
+                       IOBluetoothUserNotificationRef,
                        IOBluetoothObjectRef objectRef )
 {
-    (void) inRef;
-
     SAL_INFO( "sdremote.bluetooth", "incomingCallback()" );
 
     BluetoothServer* pServer = static_cast<BluetoothServer*>(userRefCon);
@@ -1500,14 +1498,11 @@ void SAL_CALL BluetoothServer::run()
         [serviceRecord getServiceRecordHandle: &serviceRecordHandle];
 
         // Register callback for incoming connections
-        IOBluetoothUserNotificationRef callbackRef =
-            IOBluetoothRegisterForFilteredRFCOMMChannelOpenNotifications(
-                incomingCallback,
-                this,
-                channelID,
-                kIOBluetoothUserNotificationChannelDirectionIncoming);
-
-        (void) callbackRef;
+        IOBluetoothRegisterForFilteredRFCOMMChannelOpenNotifications(
+            incomingCallback,
+            this,
+            channelID,
+            kIOBluetoothUserNotificationChannelDirectionIncoming);
 
         [serviceRecord release];
     }
