@@ -67,7 +67,7 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         break;
     case DGM_TOKEN( layoutNode ):
     {
-        LayoutNodePtr pNode( new LayoutNode() );
+        LayoutNodePtr pNode( new LayoutNode(mpLayout->getDiagram()) );
         mpLayout->getNode() = pNode;
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );

@@ -105,7 +105,7 @@ public:
             case DGM_TOKEN( if ):
             {
                 // CT_When
-                mpConditionNode.reset( new ConditionAtom(rAttribs.getFastAttributeList()) );
+                mpConditionNode.reset( new ConditionAtom(mpNode->getLayoutNode(), rAttribs.getFastAttributeList()) );
                 mpNode->addChild( mpConditionNode );
                 return new IfContext( *this, rAttribs, mpConditionNode );
             }
@@ -237,7 +237,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     {
     case DGM_TOKEN( layoutNode ):
     {
-        LayoutNodePtr pNode( new LayoutNode() );
+        LayoutNodePtr pNode( new LayoutNode(mpNode->getLayoutNode().getDiagram()) );
         mpNode->addChild( pNode );
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
@@ -263,7 +263,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
             pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
         }
 
-        ShapeAtomPtr pAtom( new ShapeAtom(pShape) );
+        ShapeAtomPtr pAtom( new ShapeAtom(mpNode->getLayoutNode(), pShape) );
         mpNode->addChild( pAtom );
         return new ShapeContext( *this, ShapePtr(), pShape );
     }
@@ -272,21 +272,21 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     case DGM_TOKEN( alg ):
     {
         // CT_Algorithm
-        AlgAtomPtr pAtom( new AlgAtom );
+        AlgAtomPtr pAtom( new AlgAtom(mpNode->getLayoutNode()) );
         mpNode->addChild( pAtom );
         return new AlgorithmContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( choose ):
     {
         // CT_Choose
-        LayoutAtomPtr pAtom( new ChooseAtom );
+        LayoutAtomPtr pAtom( new ChooseAtom(mpNode->getLayoutNode()) );
         mpNode->addChild( pAtom );
         return new ChooseContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( forEach ):
     {
         // CT_ForEach
-        ForEachAtomPtr pAtom( new ForEachAtom(rAttribs.getFastAttributeList()) );
+        ForEachAtomPtr pAtom( new ForEachAtom(mpNode->getLayoutNode(), rAttribs.getFastAttributeList()) );
         mpNode->addChild( pAtom );
         return new ForEachContext( *this, rAttribs, pAtom );
     }

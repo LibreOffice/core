@@ -147,6 +147,7 @@ typedef std::vector< Point >        Points;
 
 }
 
+class Diagram;
 class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 
@@ -197,6 +198,7 @@ typedef std::shared_ptr< DiagramData > DiagramDataPtr;
 class DiagramLayout
 {
 public:
+    DiagramLayout(const Diagram& rDgm) : mrDgm(rDgm) {}
     void setDefStyle( const OUString & sDefStyle )
         { msDefStyle = sDefStyle; }
     void setMinVer( const OUString & sMinVer )
@@ -207,6 +209,8 @@ public:
         { msTitle = sTitle; }
     void setDesc( const OUString & sDesc )
         { msDesc = sDesc; }
+    const Diagram& getDiagram() const
+        { return mrDgm; }
     LayoutNodePtr & getNode()
         { return mpNode; }
     const LayoutNodePtr & getNode() const
@@ -221,6 +225,7 @@ public:
         { return mpStyleData; }
 
 private:
+    const Diagram& mrDgm;
     OUString msDefStyle;
     OUString msMinVer;
     OUString msUniqueId;

@@ -116,8 +116,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     if (rAtom.getExistingShape())
     {
         // reuse existing shape
-        if (rAtom.setupShape(rAtom.getExistingShape(), mrDgm, pNewNode))
-            rAtom.getNodeShapes().push_back(rAtom.getExistingShape());
+        if (rAtom.setupShape(rAtom.getExistingShape(), pNewNode))
+            rAtom.addNodeShape(rAtom.getExistingShape());
     }
     else
     {
@@ -133,11 +133,11 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                     << (pShape->getCustomShapeProperties()
                         ->getShapePresetType()));
 
-            if (rAtom.setupShape(pShape, mrDgm, pNewNode))
+            if (rAtom.setupShape(pShape, pNewNode))
             {
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
-                rAtom.getNodeShapes().push_back(pShape);
+                rAtom.addNodeShape(pShape);
             }
         }
         else
@@ -238,10 +238,10 @@ void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
 
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
-    if (mbLookForAlg && mpCurrentLayoutNode)
+    if (mbLookForAlg)
     {
-        for (const auto& pShape : mpCurrentLayoutNode->getNodeShapes())
-            rAtom.layoutShape(pShape, mpCurrentLayoutNode->getName());
+        for (const auto& pShape : rAtom.getLayoutNode().getNodeShapes())
+            rAtom.layoutShape(pShape);
     }
 }
 
@@ -265,16 +265,11 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
     if (mbLookForAlg)
         return;
 
-    LayoutNode* pPreviousLayoutNode = mpCurrentLayoutNode;
-    mpCurrentLayoutNode = &rAtom;
-
     // process alg atoms first, nested layout nodes afterwards
     mbLookForAlg = true;
     defaultVisit(rAtom);
     mbLookForAlg = false;
     defaultVisit(rAtom);
-
-    mpCurrentLayoutNode = pPreviousLayoutNode;
 }
 
 void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
