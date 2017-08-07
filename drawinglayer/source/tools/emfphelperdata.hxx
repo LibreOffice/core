@@ -25,6 +25,7 @@
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 // predefines
 class SvStream;
@@ -231,6 +232,9 @@ namespace emfplushelper
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
         void EMFPPlusFillPolygon(const ::basegfx::B2DPolyPolygon& polygon, bool isColor, sal_uInt32 brushIndexOrColor);
+
+        // helper functions
+        ::basegfx::BColor EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor);
 
     public:
         EmfPlusHelperData(
