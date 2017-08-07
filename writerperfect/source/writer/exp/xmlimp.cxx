@@ -16,28 +16,46 @@ namespace writerperfect
 namespace exp
 {
 
-XMLImport::XMLImport()
+XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator)
+    : mrGenerator(rGenerator)
 {
 }
 
 void XMLImport::startDocument()
 {
+    mrGenerator.startDocument(librevenge::RVNGPropertyList());
 }
 
 void XMLImport::endDocument()
 {
+    mrGenerator.endDocument();
 }
 
-void XMLImport::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLImport::startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
+    if (rName == "text:p")
+    {
+        mrGenerator.openParagraph(librevenge::RVNGPropertyList());
+        mbParagraphOpened = true;
+    }
 }
 
-void XMLImport::endElement(const OUString &/*rName*/)
+void XMLImport::endElement(const OUString &rName)
 {
+    if (rName == "text:p")
+    {
+        mrGenerator.closeParagraph();
+        mbParagraphOpened = false;
+    }
 }
 
-void XMLImport::characters(const OUString &/*rChars*/)
+void XMLImport::characters(const OUString &rChars)
 {
+    if (mbParagraphOpened)
+    {
+        OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+        mrGenerator.insertText(librevenge::RVNGString(sCharU8.getStr()));
+    }
 }
 
 void XMLImport::ignorableWhitespace(const OUString &/*rWhitespaces*/)

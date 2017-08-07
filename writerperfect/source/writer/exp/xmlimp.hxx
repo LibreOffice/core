@@ -12,6 +12,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <librevenge/librevenge.h>
+
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 namespace writerperfect
@@ -25,8 +27,11 @@ class XMLImport : public cppu::WeakImplHelper
     css::xml::sax::XDocumentHandler
     >
 {
+    librevenge::RVNGTextInterface &mrGenerator;
+    bool mbParagraphOpened = false;
+
 public:
-    XMLImport();
+    XMLImport(librevenge::RVNGTextInterface &rGenerator);
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

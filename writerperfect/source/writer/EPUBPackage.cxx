@@ -38,9 +38,9 @@ void EPUBPackage::closeElement(const char *pName)
     SAL_WARN("writerperfect", "EPUBPackage::closeElement, " << pName << ": implement me");
 }
 
-void EPUBPackage::insertCharacters(const librevenge::RVNGString &/*rCharacters*/)
+void EPUBPackage::insertCharacters(const librevenge::RVNGString &rCharacters)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::insertCharacters: implement me");
+    SAL_WARN("writerperfect", "EPUBPackage::insertCharacters, " << rCharacters.cstr() << ": implement me");
 }
 
 void EPUBPackage::closeXMLFile()
