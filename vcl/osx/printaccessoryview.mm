@@ -166,14 +166,14 @@ public:
         assert( SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 5 && "resources not found" );
     }
 
-    rtl::OUString getMoreString()
+    static rtl::OUString getMoreString()
     {
         return SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 4
                ? VclResId(SV_PRINT_NATIVE_STRINGS[3])
                : OUString("More");
     }
 
-    rtl::OUString getPrintSelectionString()
+    static rtl::OUString getPrintSelectionString()
     {
         return SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 5
                ? VclResId(SV_PRINT_NATIVE_STRINGS[4])
@@ -1127,7 +1127,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
             {
                 rtl::OUString aGroupTitle( aText );
                 if( aCtrlType == "Subgroup" )
-                    aGroupTitle = pControllerProperties->getMoreString();
+                    aGroupTitle = ControllerProperties::getMoreString();
 
                 // set size of current parent
                 if( pCurParent )
@@ -1153,7 +1153,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 if( bAddSelectionCheckBox )
                 {
                     addBool( pCurParent, nCurX, nCurY, 0,
-                             pControllerProperties->getPrintSelectionString(), bSelectionBoxEnabled,
+                             ControllerProperties::getPrintSelectionString(), bSelectionBoxEnabled,
                              "PrintContent", bSelectionBoxChecked,
                              aRightColumn, pControllerProperties, pCtrlTarget );
                     bAddSelectionCheckBox = false;
