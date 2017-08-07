@@ -3638,26 +3638,6 @@
         </prop>
       </group>
     </group>
-    <group oor:name="Java">
-      <info>
-        <desc>Contains Java related settings.</desc>
-      </info>
-      <group oor:name="Applet">
-        <info>
-          <desc>Contains Applet related settings.</desc>
-        </info>
-        <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
-          <!-- OldPath: Java -->
-          <!-- OldLocation: java.ini -->
-          <!-- UIHints: Tools  Options  Security Enable Applets -->
-          <info>
-            <desc>Enables/disables Java applets in Office documents.</desc>
-            <label>Enable Applets</label>
-          </info>
-          <value>false</value>
-        </prop>
-      </group>
-    </group>
     <group oor:name="Vectorize">
       <info>
         <desc>Specifies the options related to the vectorization of
