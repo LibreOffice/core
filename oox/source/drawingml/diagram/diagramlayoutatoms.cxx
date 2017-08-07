@@ -85,7 +85,8 @@ void LayoutAtom::dump(int level)
         pAtom->dump(level + 1);
 }
 
-ForEachAtom::ForEachAtom(const Reference< XFastAttributeList >& xAttributes)
+ForEachAtom::ForEachAtom(const LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
+    LayoutAtom(rLayoutNode)
 {
     maIter.loadFromXAttr(xAttributes);
 }
@@ -100,11 +101,53 @@ void ChooseAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-ConditionAtom::ConditionAtom(const Reference< XFastAttributeList >& xAttributes) :
+ConditionAtom::ConditionAtom(const LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
+    LayoutAtom(rLayoutNode),
     mbElse( false )
 {
     maIter.loadFromXAttr( xAttributes );
     maCond.loadFromXAttr( xAttributes );
+}
+
+bool ConditionAtom::compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond) const
+{
+    switch (nOperator)
+    {
+    case XML_equ: return nFirst == nSecond;
+    case XML_gt:  return nFirst >  nSecond;
+    case XML_gte: return nFirst >= nSecond;
+    case XML_lt:  return nFirst <  nSecond;
+    case XML_lte: return nFirst <= nSecond;
+    case XML_neq: return nFirst != nSecond;
+    default:
+        SAL_WARN("oox.drawingml", "unsupported operator: " << nOperator);
+        return false;
+    }
+}
+
+sal_Int32 ConditionAtom::getNodeCount() const
+{
+    sal_Int32 nCount = 0;
+    const DiagramData::PointsNameMap& rPoints = mrLayoutNode.getDiagram().getData()->getPointsPresNameMap();
+    DiagramData::PointsNameMap::const_iterator aDataNode = rPoints.find(mrLayoutNode.getName());
+    if (aDataNode != rPoints.end())
+    {
+        SAL_WARN_IF(aDataNode->second.size() > 1, "oox.drawingml", "multiple nodes found; calculating cnt for first one");
+        const dgm::Point* pPoint = aDataNode->second.front();
+        OUString sNodeId = "";
+
+        for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+            if (aCxn.mnType == XML_presOf && aCxn.msDestId == pPoint->msModelId)
+                sNodeId = aCxn.msSourceId;
+
+        if (!sNodeId.isEmpty())
+        {
+            for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+                if (aCxn.mnType == XML_parOf && aCxn.msSourceId == sNodeId)
+                    nCount++;
+        }
+    }
+    return nCount;
 }
 
 const std::vector<LayoutAtomPtr>& ConditionAtom::getChildren() const
@@ -113,6 +156,9 @@ const std::vector<LayoutAtomPtr>& ConditionAtom::getChildren() const
     // HACK
     if( maCond.mnFunc == XML_var && maCond.mnArg == XML_dir && maCond.mnOp == XML_equ && maCond.msVal != "norm" )
         bDecisionVar=false;
+
+    if (maCond.mnFunc == XML_cnt)
+        bDecisionVar = compareResult(maCond.mnOp, getNodeCount(), maCond.msVal.toInt32());
 
     if( bDecisionVar )
         return mpChildNodes;
@@ -143,8 +189,7 @@ void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-void AlgAtom::layoutShape( const ShapePtr& rShape,
-                           const OUString& rName ) const
+void AlgAtom::layoutShape( const ShapePtr& rShape ) const
 {
     switch(mnType)
     {
@@ -347,7 +392,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
     SAL_INFO(
         "oox.drawingml",
-        "Layouting shape " << rName << ", alg type: " << mnType << ", ("
+        "Layouting shape " << mrLayoutNode.getName() << ", alg type: " << mnType << ", ("
         << rShape->getPosition().X << "," << rShape->getPosition().Y << ","
         << rShape->getSize().Width << "," << rShape->getSize().Height << ")");
 }
@@ -357,7 +402,7 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, const dgm::Point* pPresNode ) const
+bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode ) const
 {
     SAL_INFO(
         "oox.drawingml",
@@ -365,15 +410,15 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, const 
             << "\", modelId \"" << pPresNode->msModelId << "\"");
 
     // have the presentation node - now, need the actual data node:
-    const DiagramData::StringMap::const_iterator aNodeName = rDgm.getData()->getPresOfNameMap().find(
+    const DiagramData::StringMap::const_iterator aNodeName = mrDgm.getData()->getPresOfNameMap().find(
         pPresNode->msModelId);
-    if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
+    if( aNodeName != mrDgm.getData()->getPresOfNameMap().end() )
     {
         DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
         const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
         while( aVecIter != aVecEnd )
         {
-            DiagramData::PointNameMap& rMap = rDgm.getData()->getPointNameMap();
+            DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
             DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
             if (aDataNode2 == rMap.end())
             {
@@ -451,8 +496,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, const 
         aStyleLabel = msStyleLabel;
     if( !aStyleLabel.isEmpty() )
     {
-        const DiagramQStyleMap::const_iterator aStyle = rDgm.getStyles().find(aStyleLabel);
-        if( aStyle != rDgm.getStyles().end() )
+        const DiagramQStyleMap::const_iterator aStyle = mrDgm.getStyles().find(aStyleLabel);
+        if( aStyle != mrDgm.getStyles().end() )
         {
             const DiagramStyle& rStyle = aStyle->second;
             rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
@@ -465,8 +510,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, const 
             SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
         }
 
-        const DiagramColorMap::const_iterator aColor = rDgm.getColors().find(aStyleLabel);
-        if( aColor != rDgm.getColors().end() )
+        const DiagramColorMap::const_iterator aColor = mrDgm.getColors().find(aStyleLabel);
+        if( aColor != mrDgm.getColors().end() )
         {
             const DiagramColor& rColor=aColor->second;
             if( rColor.maFillColor.isUsed() )

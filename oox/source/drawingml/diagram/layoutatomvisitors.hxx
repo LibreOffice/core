@@ -74,7 +74,6 @@ public:
 
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {
-    LayoutNode* mpCurrentLayoutNode;
     bool mbLookForAlg;
 
     void defaultVisit(LayoutAtom const & rAtom);
@@ -88,7 +87,6 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 
 public:
     ShapeLayoutingVisitor() :
-        mpCurrentLayoutNode(nullptr),
         mbLookForAlg(false)
     {}
 };

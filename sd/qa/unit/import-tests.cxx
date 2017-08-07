@@ -166,6 +166,7 @@ public:
     void testSmartArt1();
     void testSmartArtChildren();
     void testSmartArtText();
+    void testSmartArtCnt();
     void testTdf109223();
     void testTdf109187();
 
@@ -241,6 +242,7 @@ public:
     CPPUNIT_TEST(testSmartArt1);
     CPPUNIT_TEST(testSmartArtChildren);
     CPPUNIT_TEST(testSmartArtText);
+    CPPUNIT_TEST(testSmartArtCnt);
     CPPUNIT_TEST(testTdf109223);
     CPPUNIT_TEST(testTdf109187);
 
@@ -2312,6 +2314,23 @@ void SdImportTest::testSmartArtText()
 
     uno::Reference<text::XText> xText1(xShapeGroup2->getByIndex(1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xText1->getString());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testSmartArtCnt()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-cnt.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    sal_Int32 nCount = xShapeGroup->getCount();
+    sal_Int32 nCorrect = 0;
+    for (sal_Int32 i=0; i<nCount; i++)
+    {
+        uno::Reference<text::XText> xText(xShapeGroup->getByIndex(i), uno::UNO_QUERY);
+        if (xText.is() && !xText->getString().isEmpty())
+            nCorrect++;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nCorrect);
 
     xDocShRef->DoClose();
 }
