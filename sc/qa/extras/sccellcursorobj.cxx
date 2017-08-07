@@ -9,8 +9,8 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xusedareacursor.hxx>
 
-#include <com/sun/star/table/XCellCursor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
@@ -19,9 +19,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 4
 
-class ScCellCursorObj : public CalcUnoApiTest, private apitest::XCellSeries
+class ScCellCursorObj : public CalcUnoApiTest, private apitest::XCellSeries, public apitest::XUsedAreaCursor
 {
 public:
     ScCellCursorObj();
@@ -31,8 +31,15 @@ public:
     virtual uno::Reference< uno::XInterface > init() override;
 
     CPPUNIT_TEST_SUITE(ScCellCursorObj);
+
+    // XUsedAreaCursor
+    CPPUNIT_TEST(testGotoStartOfUsedArea);
+    CPPUNIT_TEST(testGotoEndOfUsedArea);
+
+    // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -60,9 +67,8 @@ uno::Reference< uno::XInterface > ScCellCursorObj::init()
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
-    uno::Reference< table::XCellCursor > xCellCursor( xSheet->createCursor(), UNO_QUERY_THROW);
 
-    return xCellCursor;
+    return xSheet;
 }
 
 void ScCellCursorObj::setUp()

@@ -10,6 +10,7 @@
 #include <test/sheet/xcellseries.hxx>
 
 #include <com/sun/star/sheet/XCellSeries.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include "cppunit/extensions/HelperMacros.h"
@@ -21,7 +22,8 @@ namespace apitest {
 
 void XCellSeries::testFillAuto()
 {
-    uno::Reference<table::XCellRange> xCellRange(init(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet(init(), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xCellRange(xSheet->createCursor(), UNO_QUERY_THROW);
     sal_Int32 maValue = xCellRange->getCellByPosition(maStartX, maStartY)->getValue();
 
     uno::Reference<table::XCellRange> xCellRangeH(xCellRange->getCellRangeByPosition(maStartX, maStartY, maStartX + 2, maStartY), UNO_QUERY_THROW);
@@ -54,7 +56,8 @@ void XCellSeries::testFillAuto()
 
 void XCellSeries::testFillSeries()
 {
-    uno::Reference<table::XCellRange> xCellRange(init(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet(init(), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xCellRange(xSheet->createCursor(), UNO_QUERY_THROW);
     sal_Int32 maValue = xCellRange->getCellByPosition(maStartX, maStartY)->getValue();
 
     uno::Reference<table::XCellRange> xCellRangeH(xCellRange->getCellRangeByPosition(maStartX, maStartY, maStartX + 2, maStartY), UNO_QUERY_THROW);

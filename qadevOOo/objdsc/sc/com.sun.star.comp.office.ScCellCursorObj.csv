@@ -55,8 +55,6 @@
 "ScCellCursorObj";"com::sun::star::chart::XChartData";"removeChartDataChangeEventListener()"
 "ScCellCursorObj";"com::sun::star::chart::XChartData";"getNotANumber()"
 "ScCellCursorObj";"com::sun::star::chart::XChartData";"isNotANumber()"
-"ScCellCursorObj";"com::sun::star::sheet::XUsedAreaCursor";"gotoStartOfUsedArea()"
-"ScCellCursorObj";"com::sun::star::sheet::XUsedAreaCursor";"gotoEndOfUsedArea()"
 "ScCellCursorObj";"com::sun::star::style::ParagraphProperties";"ParaAdjust"
 "ScCellCursorObj";"com::sun::star::style::ParagraphProperties";"ParaLineSpacing#optional"
 "ScCellCursorObj";"com::sun::star::style::ParagraphProperties";"ParaBackColor#optional"
