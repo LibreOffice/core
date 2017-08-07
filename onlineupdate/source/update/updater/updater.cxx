@@ -63,7 +63,7 @@
 #include <onlineupdate/mozilla/Types.h>
 
 #ifdef _WIN32
-#include <winhelper/windowsStart.hxx>
+#include <comphelper/windowsStart.hxx>
 #include "uachelper.h"
 #include "pathhash.h"
 

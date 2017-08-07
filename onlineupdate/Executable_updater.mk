@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_static_libraries,updater,\
     libmarverify \
     updatehelper \
 	$(if $(filter WNT,$(OS)), \
-		winhelper )\
+		windows_process )\
 ))
 
 $(eval $(call gb_Executable_use_externals,updater,\

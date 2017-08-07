@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef INCLUDED_ONLINEUPDATE_INC_WINSTART_HXX
-#define INCLUDED_ONLINEUPDATE_INC_WINSTART_HXX
+#ifndef INCLUDED_COMPHELPER_WINSTART_HXX
+#define INCLUDED_COMPHELPER_WINSTART_HXX
 
 #ifdef _WIN32
 #include <windows.h>
