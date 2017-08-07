@@ -97,7 +97,7 @@ static OUString lcl_GetExtensionForDocType(sal_uLong nDocType)
     return sExtension;
 }
 
-static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
+static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < container::XNameAccess> const & rxColAccess )
 {
     OUString sRet;
     try

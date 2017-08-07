@@ -91,7 +91,7 @@ struct AddressUserData_Impl
         {}
 };
 
-static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
+static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSourceProperties )
 {
     if(xSourceProperties.is())
     {

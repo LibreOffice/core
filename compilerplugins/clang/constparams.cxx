@@ -313,6 +313,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                 return isPointerOrReferenceToConst(constructorDecl->getParamDecl(i)->getType());
             }
         }
+        return false; // TODO ??
     } else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent)) {
         const CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
         if (calleeMethodDecl) {
@@ -343,6 +344,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                 }
             }
         }
+        return false; // TODO ???
     } else if (auto callExpr = dyn_cast<CallExpr>(parent)) {
         QualType functionType = callExpr->getCallee()->getType();
         if (functionType->isFunctionPointerType()) {
@@ -382,12 +384,13 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
             }
             for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
                 if (i >= calleeFunctionDecl->getNumParams()) // can happen in template code
-                    break;
+                    return false;
                 if (callExpr->getArg(i) == stmt) {
                     return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
                 }
             }
         }
+        return false; // TODO ????
     } else if (isa<CXXReinterpretCastExpr>(parent)) {
         return false;
     } else if (isa<CXXConstCastExpr>(parent)) {
@@ -459,15 +462,16 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return true;
     } else if (isa<CXXPseudoDestructorExpr>(parent)) {
         return false;
-    } else {
-        parent->dump();
-        parmVarDecl->dump();
-        report(
-             DiagnosticsEngine::Warning,
-             "oh dear, what can the matter be?",
-              parent->getLocStart())
-              << parent->getSourceRange();
+    } else if (isa<CXXDependentScopeMemberExpr>(parent)) {
+        return false;
     }
+    parent->dump();
+    parmVarDecl->dump();
+    report(
+         DiagnosticsEngine::Warning,
+         "oh dear, what can the matter be?",
+          parent->getLocStart())
+          << parent->getSourceRange();
     return true;
 }
 

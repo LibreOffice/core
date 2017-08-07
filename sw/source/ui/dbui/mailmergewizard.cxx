@@ -39,7 +39,7 @@
 using namespace svt;
 using namespace ::com::sun::star;
 
-SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rItem) :
+SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> const & rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow()),
         m_pSwView(&rView),
         m_bDocumentLoad( false ),

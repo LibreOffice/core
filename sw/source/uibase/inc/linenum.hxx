@@ -53,7 +53,7 @@ private:
     DECL_LINK(ModifyHdl, Edit&, void);
 
 public:
-    SwLineNumberingDlg(SwView *pVw);
+    SwLineNumberingDlg(SwView const *pVw);
     virtual ~SwLineNumberingDlg() override;
     virtual void dispose() override;
 };

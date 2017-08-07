@@ -146,7 +146,7 @@ public:
     virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher,
                 uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) override;
 
-    static void DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage );
+    static void DeleteAttachments( uno::Reference< mail::XMailMessage > const & xMessage );
 };
 
 SwMailDispatcherListener_Impl::SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg) :
@@ -191,7 +191,7 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
     DeleteAttachments( xMailMessage );
 }
 
-void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage )
+void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage > const & xMessage )
 {
     uno::Sequence< mail::MailAttachment > aAttachments = xMessage->getAttachments();
 
@@ -334,7 +334,7 @@ void SwSendMailDialog::dispose()
     ModelessDialog::dispose();
 }
 
-void SwSendMailDialog::AddDocument( SwMailDescriptor& rDesc )
+void SwSendMailDialog::AddDocument( SwMailDescriptor const & rDesc )
 {
     ::osl::MutexGuard aGuard(m_pImpl->aDescriptorMutex);
     m_pImpl->aDescriptors.push_back(rDesc);

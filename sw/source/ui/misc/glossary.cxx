@@ -187,7 +187,7 @@ void SwGlossaryDlg::SetActGroup(const OUString &rGrp)
     ::SetCurrGlosGroup(rGrp);
 }
 
-SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
+SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
                             SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
     : SvxStandardDialog(&pViewFrame->GetWindow(), "AutoTextDialog",
         "modules/swriter/ui/autotext.ui")

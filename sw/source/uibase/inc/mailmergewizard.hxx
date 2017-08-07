@@ -60,7 +60,7 @@ protected:
     virtual OUString                getStateDisplayName( WizardState _nState ) const override;
 
 public:
-    SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem);
+    SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
     virtual ~SwMailMergeWizard() override;
 
     SwView*                     GetSwView() {return m_pSwView;}

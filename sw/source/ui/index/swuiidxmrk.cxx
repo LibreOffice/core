@@ -651,7 +651,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyEditHdl, Edit&, rEdit, void )
     ModifyHdl(&rEdit);
 }
 
-void SwIndexMarkPane::ModifyHdl(Control* pBox)
+void SwIndexMarkPane::ModifyHdl(Control const * pBox)
 {
     if (m_pTypeDCB == pBox)
     {
@@ -946,7 +946,7 @@ SwIndexMarkPane::~SwIndexMarkPane()
 {
 }
 
-void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
+void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOXMark)
 {
     pSh = &rWrtShell;
     pTOXMgr.reset( new SwTOXMgr(pSh) );
@@ -964,7 +964,7 @@ void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark
 
 SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
     SfxChildWindow* pChild, vcl::Window *pParent,
-    SfxChildWinInfo* pInfo, bool bNew)
+    SfxChildWinInfo const * pInfo, bool bNew)
     : SfxModelessDialog(_pBindings, pChild, pParent, "IndexEntryDialog", "modules/swriter/ui/indexentry.ui")
     , m_aContent(*this, bNew, *::GetActiveWrtShell())
 {
@@ -983,7 +983,7 @@ void SwIndexMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
     m_aContent.ReInitDlg( rWrtShell );
 }
 
-SwIndexMarkModalDlg::SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark)
+SwIndexMarkModalDlg::SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark const * pCurTOXMark)
     : SvxStandardDialog(pParent, "IndexEntryDialog", "modules/swriter/ui/indexentry.ui")
     , m_aContent(*this, false, rSh)
 {
@@ -1658,7 +1658,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox&, rBox, void)
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    vcl::Window *pParent,
-                                   SfxChildWinInfo* pInfo,
+                                   SfxChildWinInfo const * pInfo,
                                    bool bNew)
     : SfxModelessDialog(_pBindings, pChild, pParent,
         "BibliographyEntryDialog", "modules/swriter/ui/bibliographyentry.ui")

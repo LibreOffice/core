@@ -81,7 +81,7 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 }
 
 // determine lines and columns for table selection
-static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
+static bool lcl_GetSelTable( SwWrtShell const &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
     const SwTableNode* pTableNd = rSh.IsCursorInTable();
     if( !pTableNd )
@@ -428,7 +428,7 @@ IMPL_LINK( SwSortDlg, LanguageListBoxHdl, ListBox&, rLBox, void )
     LanguageHdl(&rLBox);
 }
 
-void SwSortDlg::LanguageHdl(ListBox* pLBox)
+void SwSortDlg::LanguageHdl(ListBox const * pLBox)
 {
     Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms(
                 LanguageTag( m_pLangLB->GetSelectLanguage()).getLocale() ));

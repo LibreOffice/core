@@ -160,7 +160,7 @@ void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart )
     pTable->GetTabCols( rCols, pStart );
 }
 
-sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols )
+sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols const & rCols )
 {
     sal_Int32 nCount = 0;
     for( size_t i = 0; i < rCols.Count(); ++i )
@@ -169,7 +169,7 @@ sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols )
     return rCols.Count() - nCount;
 }
 
-sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum)
+sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols const & rCols, sal_Int32 nNum)
 {
     OSL_ENSURE( nNum < GetColCount( rCols ) ,"Index out of range");
     sal_Int32 i = 0;

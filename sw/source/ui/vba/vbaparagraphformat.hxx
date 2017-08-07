@@ -36,7 +36,7 @@ private:
     static css::style::LineSpacing getOOoLineSpacing( float _lineSpace, sal_Int16 mode );
     css::style::LineSpacing getOOoLineSpacingFromRule( sal_Int32 _linespacingrule );
     static float getMSWordLineSpacing( css::style::LineSpacing& rLineSpacing );
-    static sal_Int32 getMSWordLineSpacingRule( css::style::LineSpacing& rLineSpacing );
+    static sal_Int32 getMSWordLineSpacingRule( css::style::LineSpacing const & rLineSpacing );
     /// @throws css::uno::RuntimeException
     sal_Int16 getCharHeight();
     static css::style::ParagraphAdjust getOOoAlignment( sal_Int32 _alignment );

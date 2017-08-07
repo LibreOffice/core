@@ -116,7 +116,7 @@ namespace
         pSh->LockView( false );
     }
 
-    sal_uInt16 lcl_GetCurrentPage(SwWrtShell *pSh)
+    sal_uInt16 lcl_GetCurrentPage(SwWrtShell const *pSh)
     {
         OUString sDummy;
         sal_uInt16 nPhyNum=1, nVirtNum=1;

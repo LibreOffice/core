@@ -247,7 +247,7 @@ bool SwMailMergeLayoutPage::commitPage(::svt::WizardTypes::CommitPageReason eRea
     return true;
 }
 
-SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
+SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView const * pView,
         SwMailMergeConfigItem& rConfigItem,
         const Point& rAddressPosition,
         bool bAlignToBody)
@@ -277,7 +277,7 @@ SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
 
 SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         SwWrtShell& rShell,
-        SwMailMergeConfigItem& rConfigItem,
+        SwMailMergeConfigItem const & rConfigItem,
         const Point& rDestination,
         bool bAlignLeft,
         bool bExample)
@@ -415,7 +415,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
     return pRet;
 }
 
-void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample)
+void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem, bool bExample)
 {
     //set the cursor to the desired position - if no text content is here then
     //new paragraphs are inserted

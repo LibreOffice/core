@@ -360,7 +360,7 @@ public:
     OUString msOOOPropName;
     std::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 
-    static DocPropInfo createDocPropInfo( const OUString& sDesc, const OUString& sPropName, std::shared_ptr< PropertGetSetHelper >& rHelper )
+    static DocPropInfo createDocPropInfo( const OUString& sDesc, const OUString& sPropName, std::shared_ptr< PropertGetSetHelper > const & rHelper )
     {
         DocPropInfo aItem;
         aItem.msMSODesc = sDesc;
@@ -369,7 +369,7 @@ public:
         return aItem;
     }
 
-    static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, std::shared_ptr< PropertGetSetHelper >& rHelper )
+    static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, std::shared_ptr< PropertGetSetHelper > const & rHelper )
     {
         return createDocPropInfo( OUString::createFromAscii( sDesc ), OUString::createFromAscii( sPropName ), rHelper );
     }

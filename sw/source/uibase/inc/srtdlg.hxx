@@ -80,7 +80,7 @@ class SwSortDlg : public SvxStandardDialog
     DECL_LINK( CheckHdl, Button*, void );
     DECL_LINK( DelimHdl, Button*, void );
     DECL_LINK( LanguageListBoxHdl, ListBox&, void );
-    void LanguageHdl(ListBox*);
+    void LanguageHdl(ListBox const *);
     DECL_LINK(DelimCharHdl, Button*,void);
 
 public:

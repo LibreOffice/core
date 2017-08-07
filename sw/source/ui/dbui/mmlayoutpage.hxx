@@ -73,11 +73,11 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 
     static SwFrameFormat*        InsertAddressFrame(
                             SwWrtShell& rShell,
-                            SwMailMergeConfigItem& rConfigItem,
+                            SwMailMergeConfigItem const & rConfigItem,
                             const Point& rDestination,
                             bool bAlignToBody,
                             bool bExample);
-    static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample);
+    static void             InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem const & rConfigItem, bool bExample);
 
     virtual void        ActivatePage() override;
     virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) override;
@@ -86,7 +86,7 @@ public:
         virtual ~SwMailMergeLayoutPage() override;
     virtual void            dispose() override;
 
-    static SwFrameFormat*        InsertAddressAndGreeting(SwView* pView,
+    static SwFrameFormat*        InsertAddressAndGreeting(SwView const * pView,
                                             SwMailMergeConfigItem& rConfigItem,
                                             const Point& rAddressPos,
                                             bool bAlignToBody);

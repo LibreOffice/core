@@ -56,7 +56,7 @@ public:
 
     void NotifyChange( const SwTableAutoFormat& rNewData );
 
-    void DetectRTL(SwWrtShell* pWrtShell);
+    void DetectRTL(SwWrtShell const * pWrtShell);
 
     virtual void Resize() override;
 protected:
@@ -538,7 +538,7 @@ void AutoFormatPreview::Resize()
     NotifyChange(aCurData);
 }
 
-void AutoFormatPreview::DetectRTL(SwWrtShell* pWrtShell)
+void AutoFormatPreview::DetectRTL(SwWrtShell const * pWrtShell)
 {
     if (!pWrtShell->IsCursorInTable()) // We haven't created the table yet
         mbRTL = AllSettings::GetLayoutRTL();
