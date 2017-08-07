@@ -27,7 +27,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
 
     /**
      * calls the method and stores the result in the <br>
-     * variable count. Is OK if no excpetion occurs
+     * variable count. It is OK if no exception occurs
      */
 
     public void _getAccessibleActionCount() {
