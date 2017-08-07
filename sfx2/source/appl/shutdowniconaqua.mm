@@ -179,7 +179,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
     int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
     m_pRecentFilesItems->clear();
-    if( ( nPickListMenuItems > 0 ) )
+    if( nPickListMenuItems > 0 )
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
