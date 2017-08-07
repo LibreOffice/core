@@ -346,7 +346,7 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 
 	HIDRemoteControlDevice* remote = (HIDRemoteControlDevice*)target;
 	IOHIDEventStruct event;
-	AbsoluteTime 	 zeroTime = {0,0};
+	AbsoluteTime const zeroTime = {0,0};
 	NSMutableString* cookieString = [NSMutableString string];
 	SInt32			 sumOfValues = 0;
 	while (result == kIOReturnSuccess)

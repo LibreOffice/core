@@ -145,7 +145,7 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 
 	if (eventHandlerRef) return;
 
-	EventTypeSpec eventSpec[2] = {
+	EventTypeSpec const eventSpec[2] = {
 		{ kEventClassKeyboard, kEventHotKeyPressed },
 		{ kEventClassKeyboard, kEventHotKeyReleased }
 	};
