@@ -1585,6 +1585,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:DataProvider" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Data Provider...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ManageXMLSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~XML Source...</value>
