@@ -9,23 +9,39 @@
 
 #include "EPUBPackage.hxx"
 
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+
+#include <comphelper/storagehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
+
 using namespace com::sun::star;
 
 namespace writerperfect
 {
 
-EPUBPackage::EPUBPackage(const uno::Reference<uno::XComponentContext> &xContext, const uno::Sequence<beans::PropertyValue> &/*rDescriptor*/)
+EPUBPackage::EPUBPackage(const uno::Reference<uno::XComponentContext> &xContext, const uno::Sequence<beans::PropertyValue> &rDescriptor)
     : mxContext(xContext)
 {
+    // Extract the output stream from the descriptor.
+    utl::MediaDescriptor aMediaDesc(rDescriptor);
+    auto xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
+    const sal_Int32 nOpenMode = embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
+    mxStorage.set(comphelper::OStorageHelper::GetStorageOfFormatFromStream(ZIP_STORAGE_FORMAT_STRING, xStream, nOpenMode, mxContext), uno::UNO_QUERY);
 }
 
 EPUBPackage::~EPUBPackage()
 {
+    uno::Reference<embed::XTransactedObject> xTransactedObject(mxStorage, uno::UNO_QUERY);
+    xTransactedObject->commit();
 }
 
 void EPUBPackage::openXMLFile(const char *pName)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::openXMLFile, " << pName << ": implement me");
+    assert(pName);
+    assert(!mxOutputStream.is());
+
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
 }
 
 void EPUBPackage::openElement(const char *pName, const librevenge::RVNGPropertyList &/*rAttributes*/)
@@ -45,12 +61,19 @@ void EPUBPackage::insertCharacters(const librevenge::RVNGString &rCharacters)
 
 void EPUBPackage::closeXMLFile()
 {
-    SAL_WARN("writerperfect", "EPUBPackage::closeXMLFile: implement me");
+    assert(mxOutputStream.is());
+
+    uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
+    xTransactedObject->commit();
+    mxOutputStream.clear();
 }
 
 void EPUBPackage::openCSSFile(const char *pName)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::openCSSFile, " << pName << ": implement me");
+    assert(pName);
+    assert(!mxOutputStream.is());
+
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
 }
 
 void EPUBPackage::insertRule(const librevenge::RVNGString &/*rSelector*/, const librevenge::RVNGPropertyList &/*rProperties*/)
@@ -60,7 +83,11 @@ void EPUBPackage::insertRule(const librevenge::RVNGString &/*rSelector*/, const 
 
 void EPUBPackage::closeCSSFile()
 {
-    SAL_WARN("writerperfect", "EPUBPackage::closeCSSFile: implement me");
+    assert(mxOutputStream.is());
+
+    uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
+    xTransactedObject->commit();
+    mxOutputStream.clear();
 }
 
 void EPUBPackage::openBinaryFile(const char *pName)
