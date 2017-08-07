@@ -32,6 +32,8 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace emfplushelper
 {
@@ -324,6 +326,24 @@ namespace emfplushelper
     {
         // map in one step using complete MapTransform (see mappingChanged)
         return maMapTransform * ::basegfx::B2DSize(iwidth, iheight);
+    }
+
+    ::basegfx::BColor EmfPlusHelperData::EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor){
+        basegfx::BColor color;
+        if (flags & 0x8000) // we use a color
+        {
+            color = Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff,
+                                 (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor();
+        }
+        else // we use a pen
+        {
+            const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
+            if (pen)
+            {
+            color = pen->GetColor().getBColor();
+            }
+        }
+        return color;
     }
 
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
@@ -946,54 +966,6 @@ namespace emfplushelper
                                   fontAttribute,
                                   locale,
                                   color));
-
-    //                      OUString text = read_uInt16s_ToOUString(rMS, stringLength);
-    //                      EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
-    //                        css::rendering::FontRequest aFontRequest;
-    //
-    //                        if (stringFormat)
-    //                        {
-    //                            LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
-    //                            aFontRequest.Locale = aLanguageTag.getLocale(false);
-    //                            SAL_INFO("cppcanvas.emf", "EMF+\t\t Font locale, Country:" << aLanguageTag.getCountry() << " Language:" << aLanguageTag.getLanguage());
-    //                        }
-    //
-    //                        SAL_INFO("cppcanvas.emf", "EMF+\t\t TODO Use all string formatting attributes during drawing");
-    //
-    //                        double cellSize = setFont(aFontRequest, flags & 0xff, rFactoryParms, rState);
-    //                        rState.textColor = COLOR(brushId);
-    //
-    //                        ::basegfx::B2DPoint point(Map(lx + 0.15*cellSize, ly + cellSize));
-    //
-    //                        ActionSharedPtr pTextAction(
-    //                            TextActionFactory::createTextAction(
-    //                                // position is just rough guess for now
-    //                                // we should calculate it exactly from layoutRect or font
-    //                                vcl::unotools::pointFromB2DPoint(point),
-    //                                ::Size(),
-    //                                ::Color(),
-    //                                ::Size(),
-    //                                ::Color(),
-    //                                text,
-    //                                0,
-    //                                stringLength,
-    //                                nullptr,
-    //                                rFactoryParms.mrVDev,
-    //                                rFactoryParms.mrCanvas,
-    //                                rState,
-    //                                rFactoryParms.mrParms,
-    //                                false));
-    //                        if (pTextAction)
-    //                        {
-    //                            SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
-    //
-    //                            maActions.push_back(
-    //                                MtfAction(
-    //                                    pTextAction,
-    //                                    rFactoryParms.mrCurrActionIndex));
-    //
-    //                            rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount() - 1;
-    //                        }
                         }
                         else
                         {
@@ -1315,6 +1287,7 @@ namespace emfplushelper
                             std::unique_ptr<float[]> charsPosX(new float[glyphsCount]);
                             std::unique_ptr<float[]> charsPosY(new float[glyphsCount]);
                             OUString text = read_uInt16s_ToOUString(rMS, glyphsCount);
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawDriverString string: " << text);
 
                             for (sal_uInt32 i = 0; i<glyphsCount; i++)
                             {
@@ -1332,45 +1305,71 @@ namespace emfplushelper
                                     ", " << transform.get(0,2) << ", " << transform.get(1,2));
                             }
 
-                            (void)text; // avoid warning
+                            // get the font from the flags
+                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            if (!font)
+                            {
+                              break;
+                            }
+                            // done reading
 
-    //                        rendering::FontRequest aFontRequest;
-    //                        // add the text action
-    //                        setFont(aFontRequest, flags & 0xff, rFactoryParms, rState);
-    //
-    //                        if (flags & 0x8000)
-    //                            rState.textColor = COLOR(brushIndexOrColor);
-    //
-    //                        ::basegfx::B2DPoint point(Map(charsPosX[0], charsPosY[0]));
-    //
-    //                        ActionSharedPtr pTextAction(
-    //                            TextActionFactory::createTextAction(
-    //                                vcl::unotools::pointFromB2DPoint(point),
-    //                                ::Size(),
-    //                                ::Color(),
-    //                                ::Size(),
-    //                                ::Color(),
-    //                                text,
-    //                                0,
-    //                                glyphsCount,
-    //                                nullptr,
-    //                                rFactoryParms.mrVDev,
-    //                                rFactoryParms.mrCanvas,
-    //                                rState,
-    //                                rFactoryParms.mrParms,
-    //                                false));
-    //
-    //                        if (pTextAction)
-    //                        {
-    //                            SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
-    //
-    //                            maActions.push_back(
-    //                                MtfAction(
-    //                                    pTextAction,
-    //                                    rFactoryParms.mrCurrActionIndex));
-    //
-    //                            rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount() - 1;
-    //                        }
+                            const OUString emptyString;
+                            drawinglayer::attribute::FontAttribute fontAttribute(
+                                font->family,                                    // font family
+                                emptyString,                                     // (no) font style
+                                font->Bold() ? 8u : 1u,                          // weight: 8 = bold
+                                font->family.compareTo("SYMBOL") == 0,           // symbol
+                                optionFlags & 0x2,                               // vertical
+                                font->Italic(),                                  // italic
+                                false,                                           // monospaced
+                                false,                                           // outline = false, no such thing in MS-EMFPLUS
+                                false,                                           // right-to-left
+                                false);                                          // BiDiStrong
+
+                            basegfx::BColor color = EMFPGetBrushColorOrARGBColor(flags,brushIndexOrColor);
+                            std::vector<double> aDXArray; // dummy for DX array (not used)
+
+                            // generate TextSimplePortionPrimitive2Ds for all portions of text with
+                            // the same charsPosY values
+                            sal_uInt32 pos = 0;
+                            while (pos < glyphsCount)
+                            {
+                                //determine the current length
+                                sal_uInt32 aLength = 1;
+                                while (pos + aLength < glyphsCount && std::abs( charsPosY[pos + aLength] - charsPosY[pos] ) < std::numeric_limits< float >::epsilon())
+                                    aLength++;
+
+                                // generate the DX-Array
+                                aDXArray.clear();
+                                double mappedPosX = Map(charsPosX[pos],charsPosY[pos]).getX();
+                                for (size_t i=0; i<aLength-1; i++)
+                                {
+                                    aDXArray.push_back(Map(charsPosX[pos+i+1],charsPosY[pos+i+1]).getX() - mappedPosX);
+                                }
+                                // last entry
+                                aDXArray.push_back(0);
+
+                                // prepare transform matrix
+                                basegfx::B2DHomMatrix transformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    MapSize(font->emSize,font->emSize),Map(charsPosX[pos],charsPosY[pos]));
+                                if (hasMatrix)
+                                    transformMatrix *= transform;
+
+                                //generate TextSimplePortionPrimitive2D
+                                mrTargetHolders.Current().append(
+                                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    transformMatrix,
+                                    text,
+                                    pos,            // take character at current pos
+                                    aLength,        // use determined length
+                                    aDXArray,       // generated DXArray
+                                    fontAttribute,
+                                    Application::GetSettings().GetLanguageTag().getLocale(),
+                                    color));
+
+                                // update pos
+                                pos += aLength;
+                            }
                         }
                         else
                         {
