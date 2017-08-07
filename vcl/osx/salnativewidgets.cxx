@@ -50,18 +50,18 @@ class AquaBlinker : public Timer
     tools::Rectangle           maInvalidateRect;
 
     AquaBlinker( AquaSalFrame* pFrame, const tools::Rectangle& rRect )
-    : mpFrame( pFrame ), maInvalidateRect( rRect )
+        : Timer( "AquaBlinker" )
+        , mpFrame( pFrame )
+        , maInvalidateRect( rRect )
     {
         mpFrame->maBlinkers.push_back( this );
     }
 
-    public:
-
+public:
     static void Blink( AquaSalFrame*, const tools::Rectangle&, int nTimeout = 80 );
 
     virtual void Invoke() override
     {
-        Stop();
         if( AquaSalFrame::isAlive( mpFrame ) && mpFrame->mbShown )
         {
             mpFrame->maBlinkers.remove( this );

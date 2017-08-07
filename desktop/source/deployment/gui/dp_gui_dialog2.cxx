@@ -519,6 +519,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
+    m_aIdle.SetDebugName( "ExtMgrDialog m_aIdle TimeOutHdl" );
     m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
@@ -855,14 +856,18 @@ void ExtMgrDialog::showProgress( bool _bStart )
     }
 
     DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), reinterpret_cast<void*>(bStart) );
+    m_aIdle.Start();
 }
 
 
 void ExtMgrDialog::updateProgress( const long nProgress )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    m_nProgress = nProgress;
+    if ( m_nProgress != nProgress )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_nProgress = nProgress;
+        m_aIdle.Start();
+    }
 }
 
 
@@ -874,6 +879,7 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
     m_xAbortChannel = xAbortChannel;
     m_sProgressText = rText;
     m_bProgressChanged = true;
+    m_aIdle.Start();
 }
 
 
@@ -991,8 +997,6 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
 
         if ( m_pProgressBar->IsVisible() )
             m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
-
-        m_aIdle.Start();
     }
 }
 
@@ -1079,6 +1083,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pCloseBtn->GrabFocus();
 
     m_aIdle.SetPriority( TaskPriority::LOWEST );
+    m_aIdle.SetDebugName( "UpdateRequiredDialog m_aIdle TimeOutHdl" );
     m_aIdle.SetInvokeHandler( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 
@@ -1195,14 +1200,18 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
     }
 
     DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), reinterpret_cast<void*>(bStart) );
+    m_aIdle.Start();
 }
 
 
 void UpdateRequiredDialog::updateProgress( const long nProgress )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    m_nProgress = nProgress;
+    if ( m_nProgress != nProgress )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_nProgress = nProgress;
+        m_aIdle.Start();
+    }
 }
 
 
@@ -1214,6 +1223,7 @@ void UpdateRequiredDialog::updateProgress( const OUString &rText,
     m_xAbortChannel = xAbortChannel;
     m_sProgressText = rText;
     m_bProgressChanged = true;
+    m_aIdle.Start();
 }
 
 
@@ -1301,8 +1311,6 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Timer *, void)
 
         if ( m_pProgressBar->IsVisible() )
             m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
-
-        m_aIdle.Start();
     }
 }
 
