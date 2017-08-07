@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5f4e5bc2",
+        "filename": "accessibility/source/standard/vclxaccessiblemenu.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-07T08:24:26Z",
+      "side": 1,
+      "message": "this was the bug - AccessibleAction\u0027s are not the same as AccessibleChild and have separate count methods (getAccessibleChildCount() vs. getAccessibleActionCount())",
+      "revId": "e2c14a6caabbb6413ae7b1e631a0a89f7b2ba4c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
