@@ -123,7 +123,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                                const OUString& rTableName,
                                sal_Int32 nCommandType,
                                const uno::Reference< XConnection>& _xConnection,
-                               Sequence< Any >* pSelection) :
+                               Sequence< Any > const * pSelection) :
 
     SvxStandardDialog(pParent, "MailmergeDialog", "modules/swriter/ui/mailmerge.ui"),
 

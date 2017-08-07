@@ -165,7 +165,7 @@ void wwFrameNamer::SetUniqueGraphName(SwFrameFormat *pFrameFormat, const OUStrin
 
 // ReadGrafStart reads object data and if necessary creates an anchor
 bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
-    WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+    WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     if (SVBT16ToShort(pHd->cb) < sizeof(WW8_DPHEAD) + nDataSiz)
     {
@@ -191,7 +191,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
 
 // SetStdAttr() sets standard attributes
 static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
-                        WW8_DP_SHADOW& rSh )
+                        WW8_DP_SHADOW const & rSh )
 {
     if( SVBT16ToShort( rL.lnps ) == 5 ){            // invisible
         rSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
@@ -265,8 +265,8 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
     }
 }
 
-static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
-                            WW8_DP_LINETYPE& rLt )
+static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND const & rLe,
+                            WW8_DP_LINETYPE const & rLt )
 {
     sal_uInt16 aSB = SVBT16ToShort( rLe.aStartBits );
     if( aSB & 0x3 )
@@ -301,7 +301,7 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
 }
 
 // start of routines for the different objects
-SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_LINE aLine;
 
@@ -333,7 +333,7 @@ SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_RECT aRect;
 
@@ -354,7 +354,7 @@ SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_ELIPSE aElipse;
 
@@ -375,7 +375,7 @@ SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_ARC aArc;
 
@@ -408,7 +408,7 @@ SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_POLYLINE aPoly;
 
@@ -442,7 +442,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-ESelection GetESelection(EditEngine &rDrawEditEngine, long nCpStart, long nCpEnd)
+ESelection GetESelection(EditEngine const &rDrawEditEngine, long nCpStart, long nCpEnd)
 {
     sal_Int32 nPCnt = rDrawEditEngine.GetParagraphCount();
     sal_Int32 nSP = 0;
@@ -979,8 +979,8 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
 
 // InsertTxbxText() adds the Text and the Attributes for TextBoxes and CaptionBoxes
 void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
-    Size* pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
-    SwFrameFormat* pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
+    Size const * pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
+    SwFrameFormat const * pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
     bool* pbTestTxbxContainsText, long* pnStartCp, long* pnEndCp,
     bool* pbContainsGraphics, SvxMSDffImportRec* pRecord)
 {
@@ -1196,7 +1196,7 @@ bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartC
 }
 
 // TextBoxes only for Ver67 !!
-SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     bool bDummy;
     WW8_DP_TXTBOX aTextB;
@@ -1235,7 +1235,7 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     static const SdrCaptionType aCaptA[] = { SdrCaptionType::Type1, SdrCaptionType::Type2,
                                        SdrCaptionType::Type3, SdrCaptionType::Type4 };
@@ -1299,7 +1299,7 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     return pObj;
 }
 
-SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
+SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet)
 {
     sal_Int16 nGrouped;
 
@@ -1614,7 +1614,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
 #define WW8ITEMVALUE(ItemSet,Id,Cast)  ItemSet.GetItem<Cast>(Id)->GetValue()
 
-void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
+void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType,
     tools::Rectangle& rInnerDist )
 {
@@ -2037,7 +2037,7 @@ static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
 
 void
 SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
-    SwFrameFormat *pFlyFormat, WW8_FSPA *pF )
+    SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF )
 {
     const SwNodeIndex* pIdx = pFlyFormat->GetContent(false).GetContentIdx();
     SwGrfNode *const pGrfNd(

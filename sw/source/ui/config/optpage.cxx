@@ -639,7 +639,7 @@ VclPtr<SfxTabPage> SwStdFontTabPage::Create( vcl::Window* pParent,
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
-                    SfxPrinter* pPrt, const OUString& rStyle,
+                    SfxPrinter const * pPrt, const OUString& rStyle,
                     sal_uInt16 nFontWhich)
 {
     vcl::Font aFont( rStyle, Size( 0, 10 ) );

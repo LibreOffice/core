@@ -409,7 +409,7 @@ SwFrameFormat* SwWW8ImplReader::MakeGrafInContent(const WW8_PIC& rPic,
     return pFlyFormat;
 }
 
-SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
+SwFrameFormat* SwWW8ImplReader::ImportGraf1(WW8_PIC const & rPic, SvStream* pSt,
     sal_uLong nFilePos )
 {
     SwFrameFormat* pRet = nullptr;
@@ -461,7 +461,7 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
 
 namespace
 {
-    SwNodeType GetNodeType(SwFrameFormat &rSource)
+    SwNodeType GetNodeType(SwFrameFormat const &rSource)
     {
         const SwNodeIndex* pNodeIndex = rSource.GetContent().GetContentIdx();
         if (!pNodeIndex)
@@ -472,8 +472,8 @@ namespace
     }
 }
 
-SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
-    SwFrameFormat* pOldFlyFormat)
+SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
+    SwFrameFormat const * pOldFlyFormat)
 {
     SwFrameFormat* pRet = nullptr;
     if (
@@ -762,7 +762,7 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
     pPic->bpp = pPicS->aBits2;
 }
 
-void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
+void WW8FSPAShadowToReal( WW8_FSPA_SHADOW const * pFSPAS, WW8_FSPA * pFSPA )
 {
     pFSPA->nSpId        = SVBT32ToUInt32( pFSPAS->nSpId );
     pFSPA->nXaLeft      = SVBT32ToUInt32( pFSPAS->nXaLeft );

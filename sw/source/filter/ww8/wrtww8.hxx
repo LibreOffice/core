@@ -1034,7 +1034,7 @@ public:
     void EndCommentOutput(   const OUString& rName );
     void OutGrf(const ww8::Frame &rFrame);
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStorage> const & xOleStg,
-        tools::SvRef<SotStorage> xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
+        tools::SvRef<SotStorage> xObjStg, OUString const &rStorageName, SwOLENode *pOLENd);
 
     virtual void AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
     virtual void AppendBookmark( const OUString& rName ) override;

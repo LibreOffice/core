@@ -123,7 +123,7 @@ public:
         const OUString& rTableName,
         sal_Int32 nCommandType,
         const css::uno::Reference< css::sdbc::XConnection>& xConnection,
-        css::uno::Sequence< css::uno::Any >* pSelection);
+        css::uno::Sequence< css::uno::Any > const * pSelection);
     virtual ~SwMailMergeDlg() override;
     virtual void dispose() override;
 

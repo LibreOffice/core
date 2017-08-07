@@ -63,7 +63,7 @@ class SwColumnDlg : public SfxModalDialog
 
     DECL_LINK(ObjectListBoxHdl, ListBox&, void);
     DECL_LINK(OkHdl, Button*, void);
-    void ObjectHdl(ListBox*);
+    void ObjectHdl(ListBox const *);
     SfxItemSet* EvalCurrentSelection(void);
 
 public:
@@ -138,7 +138,7 @@ class SwColumnPage : public SfxTabPage
 
     // Handler
     DECL_LINK( ColModify, Edit&, void );
-    void ColModify(NumericField*);
+    void ColModify(NumericField const *);
     DECL_LINK( GapModify, Edit&, void );
     DECL_LINK( EdModify, Edit&, void );
     DECL_LINK( AutoWidthHdl, Button *, void );
@@ -151,7 +151,7 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK( UpdateColMgrColorBox, SvxColorListBox&, void );
     void Timeout();
 
-    void            Update(MetricField *pInteractiveField);
+    void            Update(MetricField const *pInteractiveField);
     void            UpdateCols();
     void            Init();
     void            ResetColWidth();

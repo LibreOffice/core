@@ -2188,7 +2188,7 @@ VclPtr<SfxTabPage> SwSectionIndentTabPage::Create( vcl::Window* pParent, const S
     return VclPtr<SwSectionIndentTabPage>::Create(pParent, *rAttrSet);
 }
 
-void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
+void SwSectionIndentTabPage::SetWrtShell(SwWrtShell const & rSh)
 {
     //set sensible values at the preview
     m_pPreviewWin->SetAdjust(SvxAdjust::Block);

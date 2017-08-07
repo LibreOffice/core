@@ -172,7 +172,7 @@ SwMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate )             // static
     return nullptr;
 };
 
-void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell* pDocShell)
+void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocShell)
 {
     OUString aTmpStr;
     while( nLevel )
@@ -205,7 +205,7 @@ namespace
     }
 }
 
-void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr)
+void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocShell, struct HyperLinksTable& hlStr)
 {
     // (0x01B8) HLINK
     // const sal_uInt16 WW8_ID_HLINK               = 0x01B8;
@@ -2149,7 +2149,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 }
 
 void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
-    SwFrameFormat &rHdFtFormat, sal_uInt16 nPageWidth)
+    SwFrameFormat const &rHdFtFormat, sal_uInt16 nPageWidth)
 {
     const SwNodeIndex* pSttIdx = rHdFtFormat.GetContent().GetContentIdx();
     OSL_ENSURE(pSttIdx, "impossible");
@@ -2192,7 +2192,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     MoveOutsideFly(pFrame, aTmpPos);
 }
 
-void SwWW8ImplReader::Read_HdFtText(WW8_CP nStart, WW8_CP nLen, SwFrameFormat* pHdFtFormat)
+void SwWW8ImplReader::Read_HdFtText(WW8_CP nStart, WW8_CP nLen, SwFrameFormat const * pHdFtFormat)
 {
     const SwNodeIndex* pSttIdx = pHdFtFormat->GetContent().GetContentIdx();
     if (!pSttIdx)
@@ -2810,7 +2810,7 @@ void SwWW8ImplReader::PostProcessAttrs()
  convert from 1252 on the undefined character
 */
 std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
-    sal_Char *pIn, std::size_t nInLen, sal_Unicode *pOut, std::size_t nOutLen)
+    sal_Char const *pIn, std::size_t nInLen, sal_Unicode *pOut, std::size_t nOutLen)
 {
     const sal_uInt32 nFlags =
         RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
@@ -4110,7 +4110,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 }
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition &rPos)
+    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos)
     : m_pDocShell(rD.GetDocShell())
     , m_pStg(pStorage)
     , m_pStrm(pSt)
@@ -4310,7 +4310,7 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
  * Set the page descriptor on this node, handle the different cases for a text
  * node or a table
  */
-void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFormatPageDesc &rPgDesc,
+void GiveNodePageDesc(SwNodeIndex const &rIdx, const SwFormatPageDesc &rPgDesc,
     SwDoc &rDoc)
 {
     /*
@@ -4341,8 +4341,8 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFormatPageDesc &rPgDesc,
 /**
  * Map a word section to a writer page descriptor
  */
-SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter &rIter,
-    mySegIter &rStart, bool bIgnoreCols)
+SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter const &rIter,
+    mySegIter const &rStart, bool bIgnoreCols)
 {
     if (mrReader.m_bNewDoc && rIter == rStart)
     {
@@ -4756,11 +4756,11 @@ class WW8Customizations
     SvStream* mpTableStream;
     WW8Fib mWw8Fib;
 public:
-    WW8Customizations( SvStream*, WW8Fib& );
+    WW8Customizations( SvStream*, WW8Fib const & );
     void  Import( SwDocShell* pShell );
 };
 
-WW8Customizations::WW8Customizations( SvStream* pTableStream, WW8Fib& rFib ) : mpTableStream(pTableStream), mWw8Fib( rFib )
+WW8Customizations::WW8Customizations( SvStream* pTableStream, WW8Fib const & rFib ) : mpTableStream(pTableStream), mWw8Fib( rFib )
 {
 }
 
@@ -4858,7 +4858,7 @@ ImportProgress::~ImportProgress()
     ::EndProgress(m_pDocShell);
 }
 
-ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
+ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 {
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (m_bNewDoc && m_pStg && !pGloss)
@@ -5558,7 +5558,7 @@ namespace
         return aEncryptionData;
     }
 
-    uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium)
+    uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 const pDocId[16], SfxMedium& rMedium)
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
         const SfxUnoAnyItem* pEncryptionData = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);

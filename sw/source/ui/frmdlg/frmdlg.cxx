@@ -44,7 +44,7 @@
 #include <svx/xflgrit.hxx>
 
 // the dialog's carrier
-SwFrameDlg::SwFrameDlg( SfxViewFrame*       pViewFrame,
+SwFrameDlg::SwFrameDlg( SfxViewFrame const * pViewFrame,
                     vcl::Window*        pParent,
                     const SfxItemSet&   rCoreSet,
                     bool                bNewFrame,

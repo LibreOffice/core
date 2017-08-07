@@ -74,7 +74,7 @@ class SwFieldFuncPage : public SwFieldPage
     DECL_LINK( ListModifyButtonHdl, Button*, void );
     DECL_LINK( ListEnableHdl, Edit&, void );
     DECL_LINK( ListEnableListBoxHdl, ListBox&, void );
-    void ListModifyHdl(Control*);
+    void ListModifyHdl(Control const *);
 
     // select Macro
     DECL_LINK( MacroHdl, Button *, void );

@@ -91,7 +91,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel>& xModel,   const SwLabItem& rItem);
+typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
 
 typedef OUString    (*GlossaryGetCurrGroup)();
 typedef void        (*GlossarySetActGroup)(const OUString& rNewGroup);

@@ -1849,7 +1849,7 @@ private:
     short nIdxOffset;
 
 public:
-    WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop );
+    WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop const & rDop );
     bool GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, WW8_CP& rLen);
     void GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen);
     void UpdateIndex( sal_uInt8 grpfIhdt );

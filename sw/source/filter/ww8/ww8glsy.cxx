@@ -56,7 +56,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
     }
 }
 
-bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
+bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex const &rIdx)
 {
     bool bRet=false;
     for( sal_uInt16 nCnt = pDoc->GetSpzFrameFormats()->size(); nCnt; )

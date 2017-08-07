@@ -199,7 +199,7 @@ class WW8TabDesc
 
     // single box - maybe used in a merge group
     // (the merge groups are processed later at once)
-    void UpdateTableMergeGroup(WW8_TCell& rCell,
+    void UpdateTableMergeGroup(WW8_TCell const & rCell,
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
     void StartMiserableHackForUnsupportedDirection(short nWwCol);
     void EndMiserableHackForUnsupportedDirection(short nWwCol);
@@ -1199,7 +1199,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     m_bAnl = false;
 }
 
-WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
+WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc const & rBand )
 {
     *this = rBand;
     if( rBand.pTCs )
@@ -3399,7 +3399,7 @@ void WW8TabDesc::TableCellEnd()
 }
 
 // if necessary register the box for the merge group for this column
-void WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
+void WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell const &     rCell,
                                                 WW8SelBoxInfo* pActGroup,
                                                 SwTableBox*    pActBox,
                                                 sal_uInt16         nCol )
@@ -3678,7 +3678,7 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
     return nRes;
 }
 
-const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
+const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString const & rName ) const
 {
     SwFormat* pRet = nullptr;
     if( !m_vColl.empty() )

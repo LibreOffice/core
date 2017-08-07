@@ -646,7 +646,7 @@ public:
     void OutputFlyFrame( const ww8::Frame& rFormat );
 
     void GetTablePageSize
-    ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,
+    ( ww8::WW8TableNodeInfoInner const * pTableTextNodeInfoInner,
       long& rPageSize, bool& rRelBoxSize );
 
     /// Exports the definition (image, size) of a single numbering picture bullet.

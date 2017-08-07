@@ -170,7 +170,7 @@ void SwVisitingCardPage::UpdateFields()
     }
 }
 
-void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, const SwLabItem& rItem)
+void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > const & xModel, const SwLabItem& rItem)
 {
     uno::Reference< text::XTextFieldsSupplier >  xFields(xModel, uno::UNO_QUERY);
     uno::Reference< container::XNameAccess >  xFieldMasters = xFields->getTextFieldMasters();

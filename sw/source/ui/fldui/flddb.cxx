@@ -279,7 +279,7 @@ IMPL_LINK( SwFieldDBPage, TypeListBoxHdl, ListBox&, rBox, void )
     TypeHdl(&rBox);
 }
 
-void SwFieldDBPage::TypeHdl( ListBox* pBox )
+void SwFieldDBPage::TypeHdl( ListBox const * pBox )
 {
     // save old ListBoxPos
     const sal_Int32 nOld = GetTypeSel();

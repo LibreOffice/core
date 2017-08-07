@@ -59,7 +59,7 @@ class SwFieldDBPage : public SwFieldPage
     DECL_LINK( TreeSelectHdl, SvTreeListBox*, void );
     DECL_LINK( ModifyHdl, Edit&, void );
     DECL_LINK( AddDBHdl, Button*, void );
-    void TypeHdl(ListBox*);
+    void TypeHdl(ListBox const *);
 
     void                CheckInsert();
 

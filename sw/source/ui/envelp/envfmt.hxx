@@ -49,7 +49,7 @@ class SwEnvFormatPage : public SfxTabPage
 
     void SetMinMax();
 
-    SfxItemSet  *GetCollItemSet(SwTextFormatColl* pColl, bool bSender);
+    SfxItemSet  *GetCollItemSet(SwTextFormatColl const * pColl, bool bSender);
 
     SwEnvDlg    *GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetParentDialog());}
 

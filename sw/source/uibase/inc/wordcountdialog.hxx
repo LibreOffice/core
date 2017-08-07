@@ -53,7 +53,7 @@ public:
     SwWordCountFloatDlg(     SfxBindings* pBindings,
                              SfxChildWindow* pChild,
                              vcl::Window *pParent,
-                             SfxChildWinInfo* pInfo);
+                             SfxChildWinInfo const * pInfo);
     virtual ~SwWordCountFloatDlg() override;
     virtual void dispose() override;
     void    UpdateCounts();
