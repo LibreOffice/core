@@ -25,7 +25,7 @@ namespace wrapper
 {
     bool Instance::LoadSymbols()
     {
-        ApiMap VLC_INSTANCE_API[] =
+        ApiMap const VLC_INSTANCE_API[] =
         {
             SYM_MAP( libvlc_new ),
             SYM_MAP( libvlc_release ),

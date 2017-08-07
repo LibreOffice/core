@@ -25,7 +25,7 @@ namespace wrapper
 {
 bool Common::LoadSymbols()
 {
-    ApiMap VLC_COMMON_API[] =
+    ApiMap const VLC_COMMON_API[] =
     {
         SYM_MAP( libvlc_get_version ),
         SYM_MAP( libvlc_errmsg )
