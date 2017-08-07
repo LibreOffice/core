@@ -125,7 +125,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
     return pVirtualDev->GetBitmapEx(Point(), aSize);
 }
 
-BitmapEx CreatePreview(OUString const & aUrl, OUString& aName)
+BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
 {
     SfxMedium aMedium(aUrl, StreamMode::STD_READWRITE);
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();

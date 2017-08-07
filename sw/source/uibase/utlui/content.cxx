@@ -128,7 +128,7 @@ namespace
         return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
 
-    bool lcl_FindShell(SwWrtShell* pShell)
+    bool lcl_FindShell(SwWrtShell const * pShell)
     {
         bool bFound = false;
         SwView *pView = SwModule::GetFirstView();
@@ -1109,7 +1109,7 @@ sal_Int8 SwContentTree::AcceptDrop( const AcceptDropEvent& rEvt )
 
 // Drop will be executed in the navigator
 
-static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent)
+static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent const * pContent)
 {
     void* key = nullptr;
     if( pTree && pContent )
@@ -3189,7 +3189,7 @@ OUString SwContentType::RemoveNewline(const OUString& rEntry)
     return aEntry.makeStringAndClear();
 }
 
-void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
+void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMode)
 {
     SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
     GotoContent(pCnt);

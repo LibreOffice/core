@@ -282,9 +282,9 @@ public:
     std::string toString();
 #endif
 
-    TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);
-    WidthsPtr getWidthsOfRow(WW8TableNodeInfoInner * pNodeInfo);
-    RowSpansPtr getRowSpansOfRow(WW8TableNodeInfoInner * pNodeInfo);
+    TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner const * pNodeInfo);
+    WidthsPtr getWidthsOfRow(WW8TableNodeInfoInner const * pNodeInfo);
+    RowSpansPtr getRowSpansOfRow(WW8TableNodeInfoInner const * pNodeInfo);
 };
 
 class WW8TableInfo final
@@ -328,7 +328,7 @@ class WW8TableInfo final
                         sal_uInt32 nRow,
                         sal_uInt32 nCell,
                         sal_uInt32 nDepth,
-                        SwRect * pRect = nullptr);
+                        SwRect const * pRect = nullptr);
 
     WW8TableCellGrid::Pointer_t getCellGridForTable(const SwTable * pTable,
                                                     bool bCreate = true);

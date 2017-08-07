@@ -713,9 +713,9 @@ private:
     /// Closes a currently open SDT block.
     void EndSdtBlock();
 
-    void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = false );
+    void StartField_Impl( FieldInfos const & rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
-    void CmdField_Impl( FieldInfos& rInfos );
+    void CmdField_Impl( FieldInfos const & rInfos );
     void EndField_Impl( FieldInfos& rInfos );
 
     static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );

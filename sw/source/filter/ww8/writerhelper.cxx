@@ -508,7 +508,7 @@ namespace sw
            Utility to extract FlyFormats from a document, potentially from a
            selection.
            */
-        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
+        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM const *pPaM /*, bool bAll*/)
         {
             SwPosFlyFrames aFlys(rDoc.GetAllFlyFormats(pPaM, true));
             ww8::Frames aRet(SwPosFlyFramesToFrames(aFlys));

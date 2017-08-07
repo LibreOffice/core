@@ -134,7 +134,7 @@ public:
 
     void                            AddTransferable(SwTransferable& rTransferable);
 
-    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rItem)
+    void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rItem)
     {
         xConfigItem = rItem;
     }

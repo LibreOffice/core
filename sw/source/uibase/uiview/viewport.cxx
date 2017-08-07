@@ -71,7 +71,7 @@ bool SwView::IsDocumentBorder()
            SvxZoomType::PAGEWIDTH_NOBORDER == m_pWrtShell->GetViewOptions()->GetZoomType();
 }
 
-inline long GetLeftMargin( SwView &rView )
+inline long GetLeftMargin( SwView const &rView )
 {
     SvxZoomType eType = rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(CurRectType::PagePrt).Left();
@@ -80,9 +80,9 @@ inline long GetLeftMargin( SwView &rView )
                                          lRet + DOCUMENTBORDER + nLeftOfst;
 }
 
-static void lcl_GetPos(SwView* pView,
+static void lcl_GetPos(SwView const * pView,
                 Point& rPos,
-                SwScrollbar* pScrollbar,
+                SwScrollbar const * pScrollbar,
                 bool bBorder)
 {
     SwWrtShell &rSh = pView->GetWrtShell();

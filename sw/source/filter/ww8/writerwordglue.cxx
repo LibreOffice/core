@@ -1047,15 +1047,15 @@ namespace sw
             return nKey;
         }
 
-        bool IsPreviousAM(OUString& rParams, sal_Int32 nPos)
+        bool IsPreviousAM(OUString const & rParams, sal_Int32 nPos)
         {
             return nPos>=2 && rParams.matchIgnoreAsciiCase("am", nPos-2);
         }
-        bool IsNextPM(OUString& rParams, sal_Int32 nPos)
+        bool IsNextPM(OUString const & rParams, sal_Int32 nPos)
         {
             return nPos+2<rParams.getLength() && rParams.matchIgnoreAsciiCase("pm", nPos+1);
         }
-        bool IsNotAM(OUString& rParams, sal_Int32 nPos)
+        bool IsNotAM(OUString const & rParams, sal_Int32 nPos)
         {
             ++nPos;
             return nPos>=rParams.getLength() || (rParams[nPos]!='M' && rParams[nPos]!='m');

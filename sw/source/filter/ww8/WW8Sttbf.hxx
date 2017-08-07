@@ -40,7 +40,7 @@ namespace ww8
 
     public:
         WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize);
-        WW8Struct(WW8Struct * pStruct, sal_uInt32 nPos, sal_uInt32 nSize);
+        WW8Struct(WW8Struct const * pStruct, sal_uInt32 nPos, sal_uInt32 nSize);
         virtual ~WW8Struct() override;
 
         sal_uInt8 getU8(sal_uInt32 nOffset);

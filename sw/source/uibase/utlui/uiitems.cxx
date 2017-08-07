@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo& rInfo) :
+SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo) :
     SfxPoolItem( FN_PARAM_FTN_INFO ),
     aFootnoteInfo(rInfo)
 {

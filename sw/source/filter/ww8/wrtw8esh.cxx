@@ -318,7 +318,7 @@ namespace
     /// @param rWrt The containing WW8Export.
     /// @param pObj pointer to the drawing object.
     /// @returns The ordering number.
-    sal_uLong lcl_getSdrOrderNumber(const WW8Export& rWrt, DrawObj *pObj)
+    sal_uLong lcl_getSdrOrderNumber(const WW8Export& rWrt, DrawObj const *pObj)
     {
         return rWrt.GetSdrOrdNum(pObj->maContent.GetFrameFormat());
     };
@@ -936,7 +936,7 @@ DrawObj& DrawObj::operator=(const DrawObj& rOther)
     return *this;
 }
 
-bool PlcDrawObj::Append( WW8Export& rWrt, WW8_CP nCp, const ww8::Frame& rFormat,
+bool PlcDrawObj::Append( WW8Export const & rWrt, WW8_CP nCp, const ww8::Frame& rFormat,
     const Point& rNdTopLeft )
 {
     bool bRet = false;
@@ -3109,7 +3109,7 @@ sal_uInt32 SwEscherEx::QueryTextID(
     return nId;
 }
 
-SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
+SwMSConvertControls::SwMSConvertControls( SfxObjectShell const *pDSh, SwPaM *pP ) : oox
 ::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : nullptr ), pPaM( pP ), mnObjectId(0)
 {
 }
@@ -3117,7 +3117,7 @@ SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so.. we need an implementation here
-bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
+bool  SwMSConvertControls::ReadOCXStream( tools::SvRef<SotStorage> const & rSrc1,
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
 {

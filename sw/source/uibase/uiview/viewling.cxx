@@ -382,7 +382,7 @@ void SwView::SpellError(LanguageType eLang)
 
 // Finish spelling and restore cursor
 
-void SwView::SpellEnd( SwConversionArgs *pConvArgs )
+void SwView::SpellEnd( SwConversionArgs const *pConvArgs )
 {
     m_pWrtShell->SpellEnd( pConvArgs );
     if( m_pWrtShell->IsExtMode() )

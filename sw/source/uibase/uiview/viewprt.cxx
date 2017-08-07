@@ -85,7 +85,7 @@ SfxPrinter* SwView::GetPrinter( bool bCreate )
 
 // Propagate printer change
 
-void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, bool bWeb )
+void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter const * pNew, bool bWeb )
 {
     SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
     if( !pOpt)

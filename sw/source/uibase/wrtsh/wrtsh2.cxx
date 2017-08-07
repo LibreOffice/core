@@ -65,7 +65,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
-void SwWrtShell::Insert(SwField &rField)
+void SwWrtShell::Insert(SwField const &rField)
 {
     ResetCursorStack();
     if(!CanInsert())

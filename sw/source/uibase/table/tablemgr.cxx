@@ -189,7 +189,7 @@ void SwTableFUNC::UpdateChart()
 }
 
 uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
-        uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
+        uno::Reference< chart2::data::XDataProvider > const &rxDataProvider,
         bool bFillWithData,
         const OUString &rCellRange,
         SwFlyFrameFormat** ppFlyFrameFormat )

@@ -445,7 +445,7 @@ void SwView::NoRotate()
 
 // Enable DrawTextEditMode
 
-static bool lcl_isTextBox(SdrObject* pObject)
+static bool lcl_isTextBox(SdrObject const * pObject)
 {
     if (SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pObject->GetUserCall()))
     {
@@ -677,7 +677,7 @@ bool SwView::AreOnlyFormsSelected() const
     return bForm;
 }
 
-bool SwView::HasDrwObj(SdrObject *pSdrObj) const
+bool SwView::HasDrwObj(SdrObject const *pSdrObj) const
 {
     bool bRet = false;
 
@@ -699,7 +699,7 @@ bool SwView::HasDrwObj(SdrObject *pSdrObj) const
     return bRet;
 }
 
-bool SwView::HasOnlyObj(SdrObject *pSdrObj, SdrInventor eObjInventor) const
+bool SwView::HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) const
 {
     bool bRet = false;
 

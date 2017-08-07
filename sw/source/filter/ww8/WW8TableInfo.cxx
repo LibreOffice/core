@@ -734,7 +734,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
     return pNodeInfo;
 }
 
-void updateFinalEndOfLine(RowEndInners_t &rLastRowEnds, WW8TableNodeInfo* pEndOfCellInfo)
+void updateFinalEndOfLine(RowEndInners_t &rLastRowEnds, WW8TableNodeInfo const * pEndOfCellInfo)
 {
     sal_Int32 nDepth = pEndOfCellInfo->getDepth();
     WW8TableNodeInfoInner::Pointer_t pInner = pEndOfCellInfo->getInnerForDepth(nDepth);
@@ -849,7 +849,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
  sal_uInt32 nRow,
  sal_uInt32 nCell,
  sal_uInt32 nDepth,
- SwRect * pRect)
+ SwRect const * pRect)
 {
     WW8TableNodeInfo::Pointer_t pNodeInfo = getTableNodeInfo(pNode);
 
@@ -1365,7 +1365,7 @@ std::string WW8TableCellGrid::toString()
 #endif
 
 TableBoxVectorPtr WW8TableCellGrid::getTableBoxesOfRow
-(WW8TableNodeInfoInner * pNodeInfoInner)
+(WW8TableNodeInfoInner const * pNodeInfoInner)
 {
     TableBoxVectorPtr pResult;
     WW8TableCellGridRow::Pointer_t pRow =
@@ -1380,7 +1380,7 @@ TableBoxVectorPtr WW8TableCellGrid::getTableBoxesOfRow
 }
 
 WidthsPtr WW8TableCellGrid::getWidthsOfRow
-(WW8TableNodeInfoInner * pNodeInfoInner)
+(WW8TableNodeInfoInner const * pNodeInfoInner)
 {
     GridColsPtr pResult;
 
@@ -1396,7 +1396,7 @@ WidthsPtr WW8TableCellGrid::getWidthsOfRow
 }
 
 RowSpansPtr WW8TableCellGrid::getRowSpansOfRow
-(WW8TableNodeInfoInner * pNodeInfoInner)
+(WW8TableNodeInfoInner const * pNodeInfoInner)
 {
     RowSpansPtr pResult;
 

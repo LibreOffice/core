@@ -517,7 +517,7 @@ namespace sw
 
             @return A Frames containing the selections Floating elements
         */
-        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM);
+        ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM const *pPaM);
 
         /** fix up frame positions, must be called after SetRedlineFlags */
         void UpdateFramePositions(ww8::Frames & rFrames);

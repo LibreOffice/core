@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwPageFootnoteInfoItem : public SfxPoolItem
 
 public:
 
-    SwPageFootnoteInfoItem(SwPageFootnoteInfo& rInfo);
+    SwPageFootnoteInfoItem(SwPageFootnoteInfo const & rInfo);
     SwPageFootnoteInfoItem(const SwPageFootnoteInfoItem& rItem );
     virtual ~SwPageFootnoteInfoItem() override;
 

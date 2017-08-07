@@ -93,7 +93,7 @@ enum CloseResult
     eFailed         // failed for some unknown reason
 };
 static CloseResult CloseModelAndDocSh(
-       Reference< frame::XModel > &rxModel,
+       Reference< frame::XModel > const &rxModel,
        SfxObjectShellRef &rxDocSh )
 {
     CloseResult eResult = eSuccess;

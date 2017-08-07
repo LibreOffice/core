@@ -719,13 +719,13 @@ public:
 class SwMSConvertControls: public oox::ole::MSConvertOCXControls
 {
 public:
-    SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
+    SwMSConvertControls( SfxObjectShell const *pDSh, SwPaM *pP );
     void InsertFormula( WW8FormulaControl &rFormula);
     virtual bool InsertControl(const css::uno::Reference< css::form::XFormComponent >& rFComp,
         const css::awt::Size& rSize,
         css::uno::Reference<  css::drawing::XShape > *pShape, bool bFloatingCtrl) override;
     void ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
-    bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
+    bool ReadOCXStream( tools::SvRef<SotStorage> const & rSrc1,
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl=false );
 private:
