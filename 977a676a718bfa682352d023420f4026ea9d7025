@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3ac19d81",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-07T14:51:52Z",
+      "side": 0,
+      "message": "StoreUnicodeStrings sounds like it could be obsolete too, please check if there are any other callers and maybe remove it.",
+      "revId": "977a676a718bfa682352d023420f4026ea9d7025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

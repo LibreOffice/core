@@ -16,6 +16,24 @@
       "revId": "7b5586730c2e7f831b2c445d17d159e83cdc6825",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3ada7d79",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-07T14:51:52Z",
+      "side": 1,
+      "message": "investigated, it looks like that  ScPageHFItem::Create is unused and can also be removed.",
+      "parentUuid": "3a461143_eb72bfe4",
+      "revId": "7b5586730c2e7f831b2c445d17d159e83cdc6825",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
