@@ -665,13 +665,12 @@ void SfxMailModel::AddToAddress( const OUString& rAddress )
 }
 
 SfxMailModel::SendMailResult SfxMailModel::AttachDocument(
-    const OUString& sDocumentType,
     const css::uno::Reference< css::uno::XInterface >& xFrameOrModel,
     const OUString& sAttachmentTitle )
 {
     OUString sFileName;
 
-    SaveResult eSaveResult = SaveDocumentAsFormat( sAttachmentTitle, xFrameOrModel, sDocumentType, sFileName );
+    SaveResult eSaveResult = SaveDocumentAsFormat( sAttachmentTitle, xFrameOrModel, OUString()/*sDocumentType*/, sFileName );
     if ( eSaveResult == SAVE_SUCCESSFULL &&  !sFileName.isEmpty() )
         maAttachedDocuments.push_back(sFileName);
     return eSaveResult == SAVE_SUCCESSFULL ? SEND_MAIL_OK : SEND_MAIL_ERROR;

@@ -78,32 +78,14 @@ ResData::ResData( const OString &rGId, const OString &rFilename)
 
 
 bool MergeEntrys::GetText( OString &rReturn,
-    StringType nTyp, const OString &nLangIndex, bool bDel )
+    const OString &nLangIndex, bool bDel )
 {
     bool bReturn = true;
-    switch ( nTyp ) {
-        case StringType::Text :
-            rReturn = sText[ nLangIndex ];
-            if ( bDel )
-                sText[ nLangIndex ] = "";
-            bReturn = bTextFirst[ nLangIndex ];
-            bTextFirst[ nLangIndex ] = false;
-            break;
-        case StringType::QuickHelpText :
-            rReturn = sQuickHelpText[ nLangIndex ];
-            if ( bDel )
-                sQuickHelpText[ nLangIndex ] = "";
-            bReturn = bQuickHelpTextFirst[ nLangIndex ];
-            bQuickHelpTextFirst[ nLangIndex ] = false;
-            break;
-        case StringType::Title :
-            rReturn = sTitle[ nLangIndex ];
-            if ( bDel )
-                sTitle[ nLangIndex ] = "";
-            bReturn = bTitleFirst[ nLangIndex ];
-            bTitleFirst[ nLangIndex ] = false;
-            break;
-    }
+    rReturn = sText[ nLangIndex ];
+    if ( bDel )
+        sText[ nLangIndex ] = "";
+    bReturn = bTextFirst[ nLangIndex ];
+    bTextFirst[ nLangIndex ] = false;
     return bReturn;
 }
 

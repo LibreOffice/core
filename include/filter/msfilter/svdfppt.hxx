@@ -581,8 +581,7 @@ protected:
                                 const Graphic& rGraf,
                                 const tools::Rectangle& rBoundRect,
                                 const tools::Rectangle& rVisArea,
-                                const int _nCalledByGroup,
-                                sal_Int64 nAspect
+                                const int _nCalledByGroup
                             ) const override;
     SvMemoryStream*         ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const;
     SdrPage*                MakeBlancPage(bool bMaster) const;

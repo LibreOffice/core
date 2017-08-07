@@ -37,8 +37,7 @@ public:
     virtual tools::Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons,
-                                  int nDefButton ) override;
+                                  const std::list< OUString >& rButtons ) override;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX

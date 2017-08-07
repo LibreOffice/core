@@ -13,10 +13,13 @@ dbaccess/source/filter/xml/xmlExport.hxx:172
 include/framework/framelistanalyzer.hxx:181
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/svl/itemset.hxx:134
+include/sfx2/objsh.hxx:458
+    void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
+    enum SfxLoadedFlags nWhich setBits=0x1
+include/svl/itemset.hxx:188
     void SfxItemSet::PutExtended(const class SfxItemSet &,enum SfxItemState,enum SfxItemState)
     enum SfxItemState eDefaultAs setBits=0x20 clearBits=0xf
-include/svtools/brwbox.hxx:441
+include/svtools/brwbox.hxx:439
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
     enum HeaderBarItemBits nBits setBits=0x410 clearBits=0x3ac
 include/svtools/wizardmachine.hxx:173
@@ -32,7 +35,7 @@ sc/inc/rangelst.hxx:45
     void ScRangeList::Format(class rtl::OUString &,enum ScRefFlags,class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t) const
     enum ScRefFlags nFlags setBits=0x8000 clearBits=0x7f80
 sc/inc/xmlwrap.hxx:92
-    _Bool ScXMLImportWrapper::Import(enum ImportFlags,unsigned int &)
+    _Bool ScXMLImportWrapper::Import(enum ImportFlags,class ErrCode &)
     enum ImportFlags nMode setBits=0x1
 xmloff/inc/MetaExportComponent.hxx:32
     void XMLMetaExportComponent::XMLMetaExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)

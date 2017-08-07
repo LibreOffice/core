@@ -1205,7 +1205,7 @@ namespace svt { namespace table
                     continue;
 
                 bool isActiveColumn = (aCell.getColumn() == getCurrentColumn());
-                pRenderer->PaintColumnHeader(aCell.getColumn(), isActiveColumn, false/*isSelectedColumn*/, rRenderContext, aCell.getRect(), rStyle);
+                pRenderer->PaintColumnHeader(aCell.getColumn(), isActiveColumn, rRenderContext, aCell.getRect(), rStyle);
             }
         }
         // the area occupied by the row header, if any

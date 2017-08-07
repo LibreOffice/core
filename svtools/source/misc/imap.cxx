@@ -66,7 +66,7 @@ IMapObject::IMapObject( const OUString& rURL, const OUString& rAltText, const OU
 }
 
 
-void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
+void IMapObject::Write( SvStream& rOStm ) const
 {
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
 
@@ -75,7 +75,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     rOStm.WriteUInt16( eEncoding  );
 
     const OString aRelURL = OUStringToOString(
-        URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
+        URIHelper::simpleNormalizedMakeRelative("", aURL), eEncoding);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, aRelURL);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aAltText, eEncoding);
     rOStm.WriteBool( bActive );
@@ -95,7 +95,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 |*
 \******************************************************************************/
 
-void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
+void IMapObject::Read( SvStream& rIStm )
 {
     rtl_TextEncoding    nTextEncoding;
 
@@ -109,7 +109,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     aTarget = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
 
     // make URL absolute
-    aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::Unambiguous );
+    aURL = URIHelper::SmartRel2Abs( INetURLObject(""), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::Unambiguous );
     std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, StreamMode::READ ));
 
     ReadIMapObject( rIStm );
@@ -840,7 +840,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm ) const
     for ( size_t i = 0; i < nCount; i++ )
     {
         IMapObject* pObj = maList[ i ];
-        pObj->Write( rOStm, "" );
+        pObj->Write( rOStm );
     }
 }
 
@@ -876,7 +876,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
             case IMAP_OBJ_RECTANGLE:
             {
                 IMapRectangleObject* pObj = new IMapRectangleObject;
-                pObj->Read( rIStm, "" );
+                pObj->Read( rIStm );
                 maList.push_back( pObj );
             }
             break;
@@ -884,7 +884,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
             case IMAP_OBJ_CIRCLE:
             {
                 IMapCircleObject* pObj = new IMapCircleObject;
-                pObj->Read( rIStm, "" );
+                pObj->Read( rIStm );
                 maList.push_back( pObj );
             }
             break;
@@ -892,7 +892,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
             case IMAP_OBJ_POLYGON:
             {
                 IMapPolygonObject* pObj = new IMapPolygonObject;
-                pObj->Read( rIStm, "" );
+                pObj->Read( rIStm );
                 maList.push_back( pObj );
             }
             break;

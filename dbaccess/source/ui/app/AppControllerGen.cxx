@@ -715,7 +715,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
                 Reference< XModel > xModel(componentIter->second,UNO_QUERY);
 
                 // Send document as e-Mail using stored/default type
-                eResult = aSendMail.AttachDocument(OUString(),xModel,componentIter->first);
+                eResult = aSendMail.AttachDocument(xModel,componentIter->first);
                 ::comphelper::disposeComponent(xModel);
             }
             catch(const Exception&)

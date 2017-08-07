@@ -32,8 +32,7 @@ public:
     virtual tools::Rectangle     GetDisplayScreenPosSizePixel   (unsigned int nScreen) override;
     virtual int           ShowNativeDialog (const OUString&              rTitle,
                                             const OUString&              rMessage,
-                                            const std::list< OUString >& rButtons,
-                                            int                        nDefButton) override;
+                                            const std::list< OUString >& rButtons) override;
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
     int               GetDisplayXScreenCount();

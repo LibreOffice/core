@@ -37,7 +37,7 @@ class BaseCommandEnv
 protected:
     css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
 
-    void handle_(bool approve, bool abort,
+    void handle_(bool approve,
                  css::uno::Reference< css::task::XInteractionRequest> const & xRequest );
 public:
     virtual ~BaseCommandEnv() override;

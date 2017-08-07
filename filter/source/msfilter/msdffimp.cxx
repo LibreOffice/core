@@ -3940,8 +3940,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         {
             // TODO/LATER: in future probably the correct aspect should be provided here
             // #i32596# - pass <nCalledByGroup> to method
-            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId, 0 ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup,
-                              embed::Aspects::MSOLE_CONTENT );
+            pRet = ImportOLE( GetPropertyValue( DFF_Prop_pictureId, 0 ), aGraf, rObjData.aBoundRect, aVisArea, rObjData.nCalledByGroup );
         }
         if( !pRet )
         {
@@ -6558,8 +6557,7 @@ SdrObject* SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                        const Graphic& rGrf,
                                        const tools::Rectangle& rBoundRect,
                                        const tools::Rectangle& rVisArea,
-                                       const int /* _nCalledByGroup */,
-                                       sal_Int64 nAspect ) const
+                                       const int /* _nCalledByGroup */ ) const
 {
     SdrObject* pRet = nullptr;
     OUString sStorageName;
@@ -6569,7 +6567,7 @@ SdrObject* SvxMSDffManager::ImportOLE( sal_uInt32 nOLEId,
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
         pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
                                         rGrf, rBoundRect, rVisArea, pStData, nError,
-                                        nSvxMSDffOLEConvFlags, nAspect, maBaseURL);
+                                        nSvxMSDffOLEConvFlags, embed::Aspects::MSOLE_CONTENT, maBaseURL);
     return pRet;
 }
 

@@ -82,8 +82,7 @@ public:
     virtual ~AndroidSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons,
-                                  int nDefButton );
+                                  const std::list< OUString >& rButtons );
 };
 
 SalSystem *AndroidSalInstance::CreateSalSystem()
@@ -204,10 +203,9 @@ void DestroySalInstance( SalInstance *pInst )
 
 int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
                                         const OUString& rMessage,
-                                        const std::list< OUString >& rButtons,
-                                        int nDefButton )
+                                        const std::list< OUString >& rButtons )
 {
-    (void)rButtons; (void)nDefButton;
+    (void)rButtons;
     LOGI("LibreOffice native dialog '%s': '%s'",
          OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
          OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());

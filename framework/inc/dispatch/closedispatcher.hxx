@@ -168,9 +168,6 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                     ignores it and open/close other documents, we can't know
                     which state the office has after closing of this frame.
 
-            @param  bAllowSuspend
-                    force calling of XController->suspend().
-
             @param  bCloseAllOtherViewsToo
                     if there are other top level frames, which
                     contains views to the same document then our m_xCloseFrame,
@@ -180,10 +177,9 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
             @return [boolean]
                     sal_True if closing was successfully.
          */
-        bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
-                                                     bool                                   bAllowSuspend         ,
-                                                     bool                                   bCloseAllOtherViewsToo,
-                                                     bool&                                  bControllerSuspended  );
+        bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame,
+                                           bool                                   bCloseAllOtherViewsToo,
+                                           bool&                                  bControllerSuspended  );
 
         /** @short  close the member m_xCloseFrame.
 

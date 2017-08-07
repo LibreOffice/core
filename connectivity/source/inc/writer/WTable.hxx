@@ -77,10 +77,7 @@ private:
 public:
     OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pConnection,
                  const OUString& Name,
-                 const OUString& Type,
-                 const OUString& Description = OUString(),
-                 const OUString& SchemaName = OUString(),
-                 const OUString& CatalogName = OUString()
+                 const OUString& Type
                 );
 
     virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;

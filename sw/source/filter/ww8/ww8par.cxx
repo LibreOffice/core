@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
@@ -493,8 +494,7 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                       const Graphic& rGrf,
                                       const tools::Rectangle& rBoundRect,
                                       const tools::Rectangle& rVisArea,
-                                      const int _nCalledByGroup,
-                                      sal_Int64 nAspect ) const
+                                      const int _nCalledByGroup ) const
 {
     // #i32596# - no import of OLE object, if it's inside a group.
     // NOTE: This can be undone, if grouping of Writer fly frames is possible or
@@ -523,7 +523,7 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
             ErrCode nError = ERRCODE_NONE;
             pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
                 rGrf, rBoundRect, rVisArea, pStData, nError,
-                nSvxMSDffOLEConvFlags, nAspect, rReader.GetBaseURL());
+                nSvxMSDffOLEConvFlags, css::embed::Aspects::MSOLE_CONTENT, rReader.GetBaseURL());
         }
     }
     return pRet;

@@ -168,7 +168,7 @@ namespace
                             pMergeDataFile->GetMergeEntrys( &aResData );
                         if( pEntrys )
                         {
-                            pEntrys->GetText( sNewText, StringType::Text, rLang );
+                            pEntrys->GetText( sNewText, rLang );
                         }
                     }
                     else if( rLang == "qtz" )

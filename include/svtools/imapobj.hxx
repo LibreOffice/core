@@ -70,9 +70,9 @@ protected:
 
     // helper methods
     static void AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100);
-    void AppendCERNURL(OStringBuffer& rBuf, const OUString& rBaseURL) const;
+    void AppendCERNURL(OStringBuffer& rBuf) const;
     static void AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100);
-    void AppendNCSAURL(OStringBuffer&rBuf, const OUString& rBaseURL) const;
+    void AppendNCSAURL(OStringBuffer&rBuf) const;
 
 public:
 
@@ -90,8 +90,8 @@ public:
     virtual sal_uInt16  GetType() const = 0;
     virtual bool        IsHit( const Point& rPoint ) const = 0;
 
-    void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
-    void                Read( SvStream& rIStm, const OUString& rBaseURL );
+    void                Write ( SvStream& rOStm ) const;
+    void                Read( SvStream& rIStm );
 
     const OUString&     GetURL() const { return aURL; }
     void                SetURL( const OUString& rURL ) { aURL = rURL; }

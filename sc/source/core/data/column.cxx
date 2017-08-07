@@ -874,7 +874,6 @@ class CopyToClipHandler
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
-    bool mbCopyNotes;
 
     void setDefaultAttrsToDest(size_t nRow, size_t nSize)
     {
@@ -884,8 +883,8 @@ class CopyToClipHandler
     }
 
 public:
-    CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, bool bCopyNotes) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mbCopyNotes(bCopyNotes)
+    CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -989,8 +988,7 @@ public:
         if (bSet)
             setDefaultAttrsToDest(nTopRow, nDataSize);
 
-        if (mbCopyNotes)
-            mrSrcCol.DuplicateNotes(nTopRow, nDataSize, mrDestCol, maDestPos, false);
+        mrSrcCol.DuplicateNotes(nTopRow, nDataSize, mrDestCol, maDestPos, false);
     }
 };
 
@@ -1028,7 +1026,7 @@ void ScColumn::CopyToClip(
                           rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
 
     {
-        CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), true/*CloneNotes*/);
+        CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
         sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
     }
 
@@ -1750,7 +1748,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     sc::SingleColumnSpanSet::SpansType aRanges;
     aRangeSet.getSpans(aRanges);
 
-    CopyToClipHandler aFunc(*this, rDestCol, nullptr, true/*bCopyNotes*/);
+    CopyToClipHandler aFunc(*this, rDestCol, nullptr);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
     for (; it != itEnd; ++it)

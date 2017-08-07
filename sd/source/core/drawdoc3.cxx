@@ -281,7 +281,6 @@ void SdDrawDocument::InsertBookmark(
     const std::vector<OUString> &rBookmarkList,     // List of names of the bookmarks to be inserted
     std::vector<OUString> &rExchangeList,           // List of the names to be used
     bool bLink,                                     // Insert bookmarks as links?
-    bool bReplace,                                  // Replace current default and notes pages?
     sal_uInt16 nInsertPos,                          // Insertion position of pages
     ::sd::DrawDocShell* pBookmarkDocSh,             // If set, this is the source document
     Point const * pObjPos)                                 // Insertion position of objects
@@ -327,7 +326,7 @@ void SdDrawDocument::InsertBookmark(
     if ( bOK && bInsertPages )
     {
         // Insert all page bookmarks
-        bOK = InsertBookmarkAsPage(rBookmarkList, &rExchangeList, bLink, bReplace,
+        bOK = InsertBookmarkAsPage(rBookmarkList, &rExchangeList, bLink, false/*bReplace*/,
                                    nInsertPos, false/*bNoDialogs*/, pBookmarkDocSh, true/*bCopy*/, true, false);
     }
 

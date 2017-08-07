@@ -58,14 +58,14 @@ void IMapObject::AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100)
     rBuf.append(' ');
 }
 
-void IMapObject::AppendCERNURL(OStringBuffer& rBuf, const OUString& rBaseURL) const
+void IMapObject::AppendCERNURL(OStringBuffer& rBuf) const
 {
-    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), osl_getThreadTextEncoding()));
+    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative("", aURL), osl_getThreadTextEncoding()));
 }
 
-void IMapObject::AppendNCSAURL(OStringBuffer& rBuf, const OUString& rBaseURL) const
+void IMapObject::AppendNCSAURL(OStringBuffer& rBuf) const
 {
-    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), osl_getThreadTextEncoding()));
+    rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative("", aURL), osl_getThreadTextEncoding()));
     rBuf.append(' ');
 }
 
@@ -75,7 +75,7 @@ void IMapRectangleObject::WriteCERN( SvStream& rOStm ) const
 
     AppendCERNCoords(aStrBuf, aRect.TopLeft());
     AppendCERNCoords(aStrBuf, aRect.BottomRight());
-    AppendCERNURL(aStrBuf, "");
+    AppendCERNURL(aStrBuf);
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
@@ -84,7 +84,7 @@ void IMapRectangleObject::WriteNCSA( SvStream& rOStm ) const
 {
     OStringBuffer aStrBuf("rect ");
 
-    AppendNCSAURL(aStrBuf, "");
+    AppendNCSAURL(aStrBuf);
     AppendNCSACoords(aStrBuf, aRect.TopLeft());
     AppendNCSACoords(aStrBuf, aRect.BottomRight());
 
@@ -98,7 +98,7 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
     AppendCERNCoords(aStrBuf, aCenter);
     aStrBuf.append(nRadius);
     aStrBuf.append(' ');
-    AppendCERNURL(aStrBuf, "");
+    AppendCERNURL(aStrBuf);
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
@@ -107,7 +107,7 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm ) const
 {
     OStringBuffer aStrBuf("circle ");
 
-    AppendNCSAURL(aStrBuf, "");
+    AppendNCSAURL(aStrBuf);
     AppendNCSACoords(aStrBuf, aCenter);
     AppendNCSACoords(aStrBuf, aCenter + Point(nRadius, 0));
 
@@ -122,7 +122,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm  ) const
     for (sal_uInt16 i = 0; i < nCount; ++i)
         AppendCERNCoords(aStrBuf, aPoly[i]);
 
-    AppendCERNURL(aStrBuf, "");
+    AppendCERNURL(aStrBuf);
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
@@ -132,7 +132,7 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm  ) const
     OStringBuffer aStrBuf("poly ");
     const sal_uInt16 nCount = std::min( aPoly.GetSize(), (sal_uInt16) 100 );
 
-    AppendNCSAURL(aStrBuf, "");
+    AppendNCSAURL(aStrBuf);
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
         AppendNCSACoords(aStrBuf, aPoly[i]);

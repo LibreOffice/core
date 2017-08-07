@@ -475,8 +475,7 @@ protected:
                                   const Graphic& rGraf,
                                   const tools::Rectangle& rBoundRect,
                                   const tools::Rectangle& rVisArea,
-                                  const int _nCalledByGroup,
-                                  sal_Int64 nAspect ) const;
+                                  const int _nCalledByGroup ) const;
     static css::uno::Reference < css::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const css::uno::Reference < css::embed::XStorage >& xDestStg,

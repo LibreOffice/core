@@ -430,7 +430,6 @@ public:
                    SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                    const ScMarkData& rMark,
                    ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                   InsertDeleteFlags nNewFlags,
                    ScRefUndoData* pRefData);
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -443,7 +442,6 @@ private:
     std::unique_ptr<ScMarkData> mxMarkData;
     std::unique_ptr<ScDocument> xUndoDoc;
     std::unique_ptr<ScDocument> xRedoDoc;
-    InsertDeleteFlags nFlags;
     std::unique_ptr<ScRefUndoData> xRefUndoData;
     std::unique_ptr<ScRefUndoData> xRefRedoData;
     sal_uLong       nStartChangeAction;

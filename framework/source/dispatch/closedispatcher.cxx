@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     //    document inside our own frame and decide then again, what has to be done!
     else
     {
-        if (implts_prepareFrameForClosing(m_xCloseFrame, true/*bAllowSuspend*/, bCloseAllViewsToo, bControllerSuspended))
+        if (implts_prepareFrameForClosing(m_xCloseFrame, bCloseAllViewsToo, bControllerSuspended))
         {
             // OK; this frame is empty now.
             // Check the environment again to decide, what is the next step.
@@ -429,10 +429,9 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     }
 }
 
-bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
-                                                          bool                                   bAllowSuspend         ,
-                                                          bool                                   bCloseAllOtherViewsToo,
-                                                          bool&                                  bControllerSuspended  )
+bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame,
+                                                    bool                                   bCloseAllOtherViewsToo,
+                                                    bool&                                  bControllerSuspended  )
 {
     // Frame already dead ... so this view is closed ... is closed ... is ... .-)
     if (! xFrame.is())
@@ -462,9 +461,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         }
     }
 
-    // If allowed - inform user about modified documents or
-    // still running jobs (e.g. printing).
-    if (bAllowSuspend)
+    // Inform user about modified documents or still running jobs (e.g. printing).
     {
         css::uno::Reference< css::frame::XController > xController = xFrame->getController();
         if (xController.is()) // some views don't uses a controller .-( (e.g. the help window)
