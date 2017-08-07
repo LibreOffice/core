@@ -522,13 +522,12 @@ void ControlHelper::createUserPane()
 
 void ControlHelper::createControls()
 {
-    CResourceProvider aResProvider;
     for (int i = 0; i < LIST_LAST; i++) {
         if (m_bListVisibility[i]) {
             m_bUserPaneNeeded = true;
 
             int elementName = getControlElementName([NSPopUpButton class], i);
-            NSString* sLabel = aResProvider.getResString(elementName);
+            NSString* sLabel = CResourceProvider::getResString(elementName);
 
             m_pListControls[i] = [NSPopUpButton new];
 
@@ -554,7 +553,7 @@ void ControlHelper::createControls()
             m_bUserPaneNeeded = true;
 
             int elementName = getControlElementName([NSButton class], i);
-            NSString* sLabel = aResProvider.getResString(elementName);
+            NSString* sLabel = CResourceProvider::getResString(elementName);
 
             NSButton *button = [NSButton new];
             [button setTitle:sLabel];
@@ -867,8 +866,7 @@ void ControlHelper::layoutControls()
 
 void ControlHelper::createFilterControl()
 {
-    CResourceProvider aResProvider;
-    NSString* sLabel = aResProvider.getResString(CommonFilePickerElementIds::LISTBOX_FILTER_LABEL);
+    NSString* sLabel = CResourceProvider::getResString(CommonFilePickerElementIds::LISTBOX_FILTER_LABEL);
 
     m_pFilterControl = [NSPopUpButton new];
 

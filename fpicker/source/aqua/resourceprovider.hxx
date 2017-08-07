@@ -38,10 +38,10 @@
 #define FILE_PICKER_FILE_TYPE         504
 #define FILE_PICKER_OVERWRITE         505
 
-class CResourceProvider
-{
-public:
-    NSString* getResString( sal_Int32 aId );
+namespace CResourceProvider {
+
+NSString* getResString( sal_Int32 aId );
+
 };
 
 #endif
