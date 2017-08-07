@@ -318,7 +318,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
         else
         {
             ScopedVclPtr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(
-                                                                            bAscii, &aOptions, &aTitle, true/*bMultiByte*/,
+                                                                            bAscii, &aOptions, &aTitle,
                                                                             bDBEnc, !bExport));
             OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )

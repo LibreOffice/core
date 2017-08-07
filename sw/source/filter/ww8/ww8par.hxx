@@ -749,8 +749,7 @@ private:
                                   const Graphic& rGrf,
                                   const tools::Rectangle& rBoundRect,
                                   const tools::Rectangle& rVisArea,
-                                  const int _nCalledByGroup,
-                                  sal_Int64 nAspect ) const override;
+                                  const int _nCalledByGroup ) const override;
 
     SwMSDffManager(const SwMSDffManager&) = delete;
     SwMSDffManager& operator=(const SwMSDffManager&) = delete;

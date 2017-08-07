@@ -1777,8 +1777,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                            const Graphic& rGraf,
                                            const tools::Rectangle& rBoundRect,
                                            const tools::Rectangle& rVisArea,
-                                           const int /*_nCalledByGroup*/,
-                                           sal_Int64 /*nAspect*/ ) const
+                                           const int /*_nCalledByGroup*/ ) const
 {
     SdrObject* pRet = nullptr;
 

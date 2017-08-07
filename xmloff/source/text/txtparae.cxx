@@ -1677,7 +1677,7 @@ void XMLTextParagraphExport::exportText(
     if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bIsProgress, bExportParagraph, nullptr, true/*bExportLevels*/, eExtensionNS );
+                                  bIsProgress, bExportParagraph, nullptr, eExtensionNS );
     if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
@@ -1720,7 +1720,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         bool bIsProgress,
         bool bExportParagraph,
         const Reference < XPropertySet > *pRangePropSet,
-        bool bExportLevels, TextPNS eExtensionNS )
+        TextPNS eExtensionNS )
 {
     SAL_WARN_IF( !rContEnum.is(), "xmloff", "No enumeration to export!" );
     bool bHasMoreElements = rContEnum->hasMoreElements();
@@ -1756,30 +1756,27 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
         if( xServiceInfo->supportsService( sParagraphService ) )
         {
-            if( bExportLevels )
+            if( bAutoStyles )
             {
-                if( bAutoStyles )
-                {
-                    exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
-                                                aPrevNumInfo, aNextNumInfo,
-                                                bAutoStyles );
-                }
-                else
-                {
-                    /* Pass list auto style pool to <XMLTextNumRuleInfo> instance
-                       Pass info about request to export <text:number> element
-                       to <XMLTextNumRuleInfo> instance (#i69627#)
-                    */
-                    aNextNumInfo.Set( xTxtCntnt,
-                                      GetExport().writeOutlineStyleAsNormalListStyle(),
-                                      GetListAutoStylePool(),
-                                      GetExport().exportTextNumberElement() );
+                exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
+                                            aPrevNumInfo, aNextNumInfo,
+                                            bAutoStyles );
+            }
+            else
+            {
+                /* Pass list auto style pool to <XMLTextNumRuleInfo> instance
+                   Pass info about request to export <text:number> element
+                   to <XMLTextNumRuleInfo> instance (#i69627#)
+                */
+                aNextNumInfo.Set( xTxtCntnt,
+                                  GetExport().writeOutlineStyleAsNormalListStyle(),
+                                  GetListAutoStylePool(),
+                                  GetExport().exportTextNumberElement() );
 
-                    exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
-                                                TEXT_SECTION, xTxtCntnt,
-                                                aPrevNumInfo, aNextNumInfo,
-                                                bAutoStyles );
-                }
+                exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
+                                            TEXT_SECTION, xTxtCntnt,
+                                            aPrevNumInfo, aNextNumInfo,
+                                            bAutoStyles );
             }
 
             // if we found a mute section: skip all section content
@@ -1866,7 +1863,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         bHasMoreElements = rContEnum->hasMoreElements();
     }
 
-    if( bExportLevels && bHasContent && !bAutoStyles )
+    if( bHasContent && !bAutoStyles )
     {
         aNextNumInfo.Reset();
 

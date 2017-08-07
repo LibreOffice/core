@@ -282,7 +282,6 @@ protected:
         bool bProgress,
         bool bExportParagraph = true,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
-        bool bExportLevels = true,
         TextPNS eExtensionNS = TextPNS::ODF);
     void exportParagraph(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,

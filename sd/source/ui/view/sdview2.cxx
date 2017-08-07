@@ -840,7 +840,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
         if( bNameOK )
         {
             mrDoc.InsertBookmark( aBookmarkList, aExchangeList,
-                                  bLink, false/*bReplace*/, nPgPos,
+                                  bLink, nPgPos,
                                   &pPageObjsTransferable->GetDocShell(),
                                   &aPos );
         }

@@ -73,8 +73,7 @@ public:
     virtual ~IosSalSystem() {}
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
-                                  const std::list< OUString >& rButtons,
-                                  int nDefButton );
+                                  const std::list< OUString >& rButtons );
 };
 
 SalSystem *IosSalInstance::CreateSalSystem()
@@ -185,11 +184,9 @@ void DestroySalInstance( SalInstance *pInst )
 
 int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
                                     const OUString& rMessage,
-                                    const std::list< OUString >& rButtons,
-                                    int nDefButton )
+                                    const std::list< OUString >& rButtons )
 {
     (void)rButtons;
-    (void)nDefButton;
 
     NSLog(@"%@: %@", CreateNSString(rTitle), CreateNSString(rMessage));
 

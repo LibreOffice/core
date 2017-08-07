@@ -95,9 +95,6 @@ namespace svt { namespace table
             @param _bActive
                 <TRUE/> if and only if the column whose column is to be painted
                 contains the active cell.
-            @param _bSelected
-                <TRUE/> if and only if the column whose column is to be painted
-                is selected currently.
             @param _rDevice
                 denotes the device to paint onto
             @param _rArea
@@ -105,7 +102,7 @@ namespace svt { namespace table
             @param _rStyle
                 the style to be used for drawing
         */
-        virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
+        virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive,
                             OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) = 0;
 

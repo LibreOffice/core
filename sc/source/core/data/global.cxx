@@ -786,7 +786,7 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
         return true;
 
     if ( pObj1 && pObj2 )
-        return pObj1->Equals( *pObj2, false);
+        return pObj1->Equals( *pObj2);
 
     return false;
 }

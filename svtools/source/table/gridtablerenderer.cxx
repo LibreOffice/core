@@ -239,7 +239,6 @@ namespace svt { namespace table
     void GridTableRenderer::PaintColumnHeader(
         ColPos _nCol,
         bool, // _bActive: no special painting for the active column at the moment
-        bool, // _bSelected: selection for column header not yet implemented
         vcl::RenderContext& rRenderContext,
         const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {

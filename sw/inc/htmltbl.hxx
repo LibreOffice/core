@@ -253,8 +253,7 @@ public:
                        sal_uInt16 nWidth, bool bPrcWidth, sal_uInt16 nBorderOpt,
                        sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,
                        sal_uInt16 nLMargin, sal_uInt16 nRMargin, sal_uInt16 nBWidth,
-                       sal_uInt16 nLeftBWidth, sal_uInt16 nRightBWidth,
-                       sal_uInt16 nInhLeftBWidth, sal_uInt16 nInhRightBWidth );
+                       sal_uInt16 nLeftBWidth, sal_uInt16 nRightBWidth );
 
     ~SwHTMLTableLayout();
 

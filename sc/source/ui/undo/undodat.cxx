@@ -1719,13 +1719,11 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                 const ScMarkData& rMark,
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                                InsertDeleteFlags nNewFlags,
                                 ScRefUndoData* pRefData )
     : ScBlockUndo(pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE)
     , mxMarkData(new ScMarkData(rMark))
     , xUndoDoc(pNewUndoDoc)
     , xRedoDoc(pNewRedoDoc)
-    , nFlags(nNewFlags)
     , xRefUndoData(pRefData)
     , bRedoFilled(false)
 {
@@ -1749,12 +1747,7 @@ OUString ScUndoDataForm::GetComment() const
 
 void ScUndoDataForm::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
-    if ( pChangeTrack && (nFlags & InsertDeleteFlags::CONTENTS) )
-        pChangeTrack->AppendContentRange(aBlockRange, xUndoDoc.get(),
-                nStartChangeAction, nEndChangeAction, SC_CACM_PASTE);
-    else
-        nStartChangeAction = nEndChangeAction = 0;
+    nStartChangeAction = nEndChangeAction = 0;
 }
 
 void ScUndoDataForm::Undo()
@@ -1797,13 +1790,6 @@ void ScUndoDataForm::DoChange( const bool bUndo )
         xRefRedoData.reset(new ScRefUndoData(&rDoc));
 
     ScRefUndoData* pWorkRefData = bUndo ? xRefUndoData.get() : xRefRedoData.get();
-
-    // Always back-up either all or none of the content for Undo
-    InsertDeleteFlags nUndoFlags = InsertDeleteFlags::NONE;
-    if (nFlags & InsertDeleteFlags::CONTENTS)
-            nUndoFlags |= InsertDeleteFlags::CONTENTS;
-    if (nFlags & InsertDeleteFlags::ATTRIB)
-            nUndoFlags |= InsertDeleteFlags::ATTRIB;
 
     bool bPaintAll = false;
 

@@ -173,15 +173,12 @@ void OWriterTable::fillColumns()
 
 OWriterTable::OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pConnection,
                            const OUString& Name,
-                           const OUString& Type,
-                           const OUString& Description,
-                           const OUString& SchemaName,
-                           const OUString& CatalogName
+                           const OUString& Type
                           ) : OWriterTable_BASE(_pTables,_pConnection,Name,
                                       Type,
-                                      Description,
-                                      SchemaName,
-                                      CatalogName)
+                                      OUString()/*Description*/,
+                                      OUString()/*SchemaName*/,
+                                      OUString()/*CatalogName*/)
     ,m_pWriterConnection(_pConnection)
     ,m_nStartCol(0)
     ,m_nDataCols(0)

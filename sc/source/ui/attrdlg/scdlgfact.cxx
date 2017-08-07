@@ -863,11 +863,10 @@ VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportO
                                                                     bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
                                                                     const OUString*         pStrTitle,
-                                                                    bool                    bMultiByte,
                                                                     bool                    bOnlyDbtoolsEncodings,
                                                                     bool                    bImport )
 {
-    VclPtr<ScImportOptionsDlg> pDlg = VclPtr<ScImportOptionsDlg>::Create( nullptr, bAscii, pOptions,pStrTitle, bMultiByte,bOnlyDbtoolsEncodings, bImport );
+    VclPtr<ScImportOptionsDlg> pDlg = VclPtr<ScImportOptionsDlg>::Create( nullptr, bAscii, pOptions,pStrTitle, true/*bMultiByte*/,bOnlyDbtoolsEncodings, bImport );
     return VclPtr<AbstractScImportOptionsDlg_Impl>::Create( pDlg );
 }
 

@@ -71,10 +71,10 @@ void BaseCommandEnv::handle(
 {
 }
 
-void BaseCommandEnv::handle_(bool approve, bool abort,
+void BaseCommandEnv::handle_(bool approve,
                              Reference< task::XInteractionRequest> const & xRequest )
 {
-    if (!approve && !abort)
+    if (!approve)
     {
         //not handled so far -> forwarding
         if (m_forwardHandler.is())
@@ -99,15 +99,6 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
                     xInteractionApprove->select();
                     // don't query again for ongoing continuations:
                     approve = false;
-                }
-            }
-            else if (abort) {
-                Reference< task::XInteractionAbort > xInteractionAbort(
-                    pConts[ pos ], uno::UNO_QUERY );
-                if (xInteractionAbort.is()) {
-                    xInteractionAbort->select();
-                    // don't query again for ongoing continuations:
-                    abort = false;
                 }
             }
         }
@@ -158,7 +149,7 @@ void TmpRepositoryCommandEnv::handle(
         approve = true;
     }
 
-    handle_(approve, false/*abort*/, xRequest);
+    handle_(approve, xRequest);
 }
 
 
@@ -195,7 +186,7 @@ void LicenseCommandEnv::handle(
         }
     }
 
-    handle_(approve, false/*abort*/, xRequest);
+    handle_(approve, xRequest);
 }
 
 
@@ -219,7 +210,7 @@ void NoLicenseCommandEnv::handle(
     {
         approve = true;
     }
-    handle_(approve, false/*abort*/, xRequest);
+    handle_(approve, xRequest);
 }
 
 SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
@@ -238,7 +229,7 @@ void SilentCheckPrerequisitesCommandEnv::handle(
 
     if (request >>= licExc)
     {
-        handle_(true, false, xRequest); // approve = true, abort = false
+        handle_(true, xRequest); // approve = true
     }
     else if ((request >>= platformExc)
              || (request >>= depExc))

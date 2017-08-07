@@ -1994,10 +1994,10 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         }
         pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nCurrentRow, nStartTab, nEndCol, nCurrentRow, nEndTab );  // content after the change
         SfxUndoAction* pUndo = new ScUndoDataForm( pDocSh,
-                                                                nStartCol, nCurrentRow, nStartTab,
-                                                                nUndoEndCol, nUndoEndRow, nEndTab, rMark,
-                                                                pUndoDoc, pRedoDoc, InsertDeleteFlags::NONE,
-                                                                pUndoData );
+                                                   nStartCol, nCurrentRow, nStartTab,
+                                                   nUndoEndCol, nUndoEndRow, nEndTab, rMark,
+                                                   pUndoDoc, pRedoDoc,
+                                                   pUndoData );
         pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
 
         PaintPartFlags nPaint = PaintPartFlags::Grid;

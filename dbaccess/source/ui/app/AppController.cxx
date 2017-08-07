@@ -1368,7 +1368,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_MAIL_SENDDOC:
                 {
                     SfxMailModel aSendMail;
-                    if ( aSendMail.AttachDocument(OUString(),getModel(), OUString()) == SfxMailModel::SEND_MAIL_OK )
+                    if ( aSendMail.AttachDocument(getModel(), OUString()) == SfxMailModel::SEND_MAIL_OK )
                         aSendMail.Send( getFrame() );
                 }
                 break;

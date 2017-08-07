@@ -73,8 +73,9 @@ private:
 
     /// Check that m_xStream implements io::XSeekable and return it
     css::uno::Reference< css::io::XInputStream > const & GetOwnSeekStream();
+    /// get raw data using unbuffered stream
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData( const bool bUseBufferedStream = true );
+    css::uno::Reference< css::io::XInputStream > SAL_CALL getRawData();
 
 public:
     bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}

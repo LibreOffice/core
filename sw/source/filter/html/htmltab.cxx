@@ -1100,8 +1100,7 @@ SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
                         nW, m_bPrcWidth, m_nBorder, m_nCellPadding,
                         m_nCellSpacing, m_eTableAdjust,
                         m_nLeftMargin, m_nRightMargin,
-                        nBorderWidth, nLeftBorderWidth, nRightBorderWidth,
-                        0/*nInhLeftBorderWidth*/, 0/*nInhRightBorderWidth*/ );
+                        nBorderWidth, nLeftBorderWidth, nRightBorderWidth );
 
     bool bExportable = true;
     sal_uInt16 i;

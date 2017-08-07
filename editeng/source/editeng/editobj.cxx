@@ -433,9 +433,9 @@ bool EditTextObject::operator==( const EditTextObject& rCompare ) const
     return mpImpl->operator==(*rCompare.mpImpl);
 }
 
-bool EditTextObject::Equals( const EditTextObject& rCompare, bool bComparePool ) const
+bool EditTextObject::Equals( const EditTextObject& rCompare ) const
 {
-    return mpImpl->Equals(*rCompare.mpImpl, bComparePool);
+    return mpImpl->Equals(*rCompare.mpImpl, false/*bComparePool*/);
 }
 
 // #i102062#

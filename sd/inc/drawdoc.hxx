@@ -256,7 +256,7 @@ public:
 
     SAL_DLLPRIVATE void InsertBookmark(const std::vector<OUString> &rBookmarkList,
                             std::vector<OUString> &rExchangeList, bool bLink,
-                            bool bReplace, sal_uInt16 nPgPos,
+                            sal_uInt16 nPgPos,
                             ::sd::DrawDocShell* pBookmarkDocSh,
                             Point const * pObjPos);
 

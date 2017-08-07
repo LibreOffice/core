@@ -123,7 +123,7 @@ public:
         sTitle[ rId ] = rTitle;
         bTitleFirst[ rId ] = true;
     }
-    bool GetText( OString &rReturn, StringType nTyp, const OString &nLangIndex, bool bDel = false );
+    bool GetText( OString &rReturn, const OString &nLangIndex, bool bDel = false );
 
     /**
       Generate QTZ string with ResData

@@ -166,9 +166,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
                                       sal_uInt16 nCellSp, SvxAdjust eAdjust,
                                       sal_uInt16 nLMargin, sal_uInt16 nRMargin,
                                       sal_uInt16 nBWidth, sal_uInt16 nLeftBWidth,
-                                      sal_uInt16 nRightBWidth,
-                                      sal_uInt16 nInhLeftBWidth,
-                                      sal_uInt16 nInhRightBWidth )
+                                      sal_uInt16 nRightBWidth )
     : m_aColumns( nCls )
     , m_aCells( static_cast<size_t>(nRws)*nCls )
     , m_pSwTable( pTable )
@@ -191,8 +189,8 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
     , m_nBorder( nBorderOpt )
     , m_nLeftBorderWidth( nLeftBWidth )
     , m_nRightBorderWidth( nRightBWidth )
-    , m_nInhLeftBorderWidth( nInhLeftBWidth )
-    , m_nInhRightBorderWidth( nInhRightBWidth )
+    , m_nInhLeftBorderWidth( 0 )
+    , m_nInhRightBorderWidth( 0 )
     , m_nBorderWidth( nBWidth )
     , m_nDelayedResizeAbsAvail( 0 )
     , m_nLastResizeAbsAvail( 0 )

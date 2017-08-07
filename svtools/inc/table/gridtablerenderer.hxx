@@ -69,7 +69,7 @@ namespace svt { namespace table
                             OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
                             const StyleSettings& _rStyle ) override;
-        virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
+        virtual void    PaintColumnHeader( ColPos _nCol, bool _bActive,
                             OutputDevice& _rDevice, const tools::Rectangle& _rArea,
                             const StyleSettings& _rStyle ) override;
         virtual void    PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,

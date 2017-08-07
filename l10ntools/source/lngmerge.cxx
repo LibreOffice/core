@@ -230,7 +230,7 @@ bool LngParser::Merge(
                         if( !sLang.isEmpty() )
                         {
                             OString sNewText;
-                            pEntrys->GetText( sNewText, StringType::Text, sLang, true );
+                            pEntrys->GetText( sNewText, sLang, true );
                             if( sLang == "qtz" )
                                 continue;
 
@@ -268,7 +268,7 @@ bool LngParser::Merge(
                 {
 
                     OString sNewText;
-                    pEntrys->GetText( sNewText, StringType::Text, sCur, true );
+                    pEntrys->GetText( sNewText, sCur, true );
                     if( sCur == "qtz" )
                         continue;
                     if ( !sNewText.isEmpty() && sCur != "x-comment")

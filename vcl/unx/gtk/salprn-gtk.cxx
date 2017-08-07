@@ -172,7 +172,6 @@ GtkSalPrinter::impl_doJob(
         const OUString& i_rJobName,
         const OUString& i_rAppName,
         ImplJobSetup* const io_pSetupData,
-        const int i_nCopies,
         const bool i_bCollate,
         vcl::PrinterController& io_rController)
 {
@@ -180,7 +179,7 @@ GtkSalPrinter::impl_doJob(
     io_rController.jobStarted();
     const bool bJobStarted(
             PspSalPrinter::StartJob(i_pFileName, i_rJobName, i_rAppName,
-                i_nCopies, i_bCollate, true, io_pSetupData))
+                1/*i_nCopies*/, i_bCollate, true, io_pSetupData))
         ;
 
     if (bJobStarted)
@@ -253,7 +252,7 @@ GtkSalPrinter::StartJob(
 
     //To-Do, swap ps/pdf for gtk_printer_accepts_ps()/gtk_printer_accepts_pdf() ?
 
-    return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, 1/*nCopies*/, bCollate, io_rController);
+    return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, bCollate, io_rController);
 }
 
 bool
