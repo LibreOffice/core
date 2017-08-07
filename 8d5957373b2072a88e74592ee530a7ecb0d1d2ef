@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_df9ecb06",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-07T09:06:49Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "8d5957373b2072a88e74592ee530a7ecb0d1d2ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
