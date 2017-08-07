@@ -566,7 +566,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_CellAreaLink \
     qadevOOo/tests/java/ifc/sheet/_DatabaseImportDescriptor \
     qadevOOo/tests/java/ifc/sheet/_DatabaseRange \
-    qadevOOo/tests/java/ifc/sheet/_DataPilotField \
     qadevOOo/tests/java/ifc/sheet/_DataPilotItem \
     qadevOOo/tests/java/ifc/sheet/_DocumentSettings \
     qadevOOo/tests/java/ifc/sheet/_FunctionDescription \
