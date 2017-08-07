@@ -214,15 +214,15 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     ++aOtherIter;
                 }
 
-                // set default-filter (<All>)
-                OUString aAllSpec( SdResId( STR_ALL_FILES ) );
+                // set "All supported formats" as the default filter
+                OUString aAllSpec( SdResId( STR_ALL_SUPPORTED_FORMATS ) );
                 OUString aExtensions = lcl_GetExtensionsList( aFilterVector );
                 OUString aGUIName = aAllSpec + " (" + aExtensions + ")";
 
                 xFilterManager->appendFilter( aGUIName, aExtensions );
                 xFilterManager->setCurrentFilter( aAllSpec );
 
-                // add filters to filter manager finally
+                // append individual filters
                 ::std::vector< ::std::pair < OUString, OUString > >::const_iterator aIter( aFilterVector.begin() );
 
                 while( aIter != aFilterVector.end() )
@@ -231,6 +231,8 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     ++aIter;
                 }
 
+                // end with "All files" as fallback
+                xFilterManager->appendFilter( SdResId( STR_ALL_FILES ), "*.*" );
             }
             catch (const IllegalArgumentException&)
             {
