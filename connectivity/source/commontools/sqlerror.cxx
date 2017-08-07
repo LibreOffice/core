@@ -79,7 +79,6 @@ namespace connectivity
                 impl_buildSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
                     const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
     private:
-        ::osl::Mutex                                            m_aMutex;
         std::locale                                             m_aResources;
     };
 
