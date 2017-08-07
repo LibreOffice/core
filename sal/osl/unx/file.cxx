@@ -798,9 +798,10 @@ static int osl_file_adjustLockFlags(const char *path, int flags)
             flags &= ~(O_EXLOCK | O_SHLOCK | O_NONBLOCK);
         }
     }
-#endif /* MACOSX */
-
+#else
     (void) path;
+#endif
+
     return flags;
 }
 
