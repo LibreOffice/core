@@ -17,8 +17,7 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 	StaticLibrary_updatehelper \
 	$(if $(filter WNT,$(OS)),\
 		Executable_update_service \
-		WinResTarget_updater \
-		StaticLibrary_winhelper )\
+		WinResTarget_updater )\
 	Executable_mar \
 	Executable_updater \
 	Executable_mbsdiff \

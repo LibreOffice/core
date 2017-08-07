@@ -7,16 +7,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,winhelper))
+$(eval $(call gb_StaticLibrary_StaticLibrary,windows_process))
 
-$(eval $(call gb_StaticLibrary_set_include,winhelper,\
-	-I$(SRCDIR)/onlineupdate/inc/ \
-	-I$(SRCDIR)/onlineupdate/source/winhelper/ \
+$(eval $(call gb_StaticLibrary_set_include,windows_process,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,winhelper,\
-	onlineupdate/source/winhelper/windowsStart \
+$(eval $(call gb_StaticLibrary_add_defs,windows_process,\
+	-DUNICODE \
+))
+
+$(eval $(call gb_StaticLibrary_add_exception_objects,windows_process,\
+	comphelper/source/windows/windows_process \
 ))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
