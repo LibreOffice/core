@@ -62,7 +62,7 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
             /* Convert from utf8 to unicode. */
             rtl_uString * pAbsPath = nullptr;
             rtl_string2UString (
-                &(pAbsPath),
+                &pAbsPath,
                 abspath, rtl_str_getLength (abspath),
                 RTL_TEXTENCODING_UTF8,
                 OSTRING_TO_OUSTRING_CVTFLAGS);
