@@ -419,7 +419,7 @@ void loadDiagram( ShapePtr const & pShape,
     DiagramDataPtr pData( new DiagramData() );
     pDiagram->setData( pData );
 
-    DiagramLayoutPtr pLayout( new DiagramLayout );
+    DiagramLayoutPtr pLayout( new DiagramLayout(*pDiagram) );
     pDiagram->setLayout( pLayout );
 
     // data
@@ -516,7 +516,7 @@ void loadDiagram( const ShapePtr& pShape,
     DiagramDataPtr pData( new DiagramData() );
     pDiagram->setData( pData );
 
-    DiagramLayoutPtr pLayout( new DiagramLayout );
+    DiagramLayoutPtr pLayout( new DiagramLayout(*pDiagram) );
     pDiagram->setLayout( pLayout );
 
     // data

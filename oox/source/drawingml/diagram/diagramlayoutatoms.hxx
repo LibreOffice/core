@@ -66,6 +66,7 @@ struct ConditionAttr
 
 struct LayoutAtomVisitor;
 class LayoutAtom;
+class LayoutNode;
 
 typedef std::shared_ptr< LayoutAtom > LayoutAtomPtr;
 
@@ -73,7 +74,11 @@ typedef std::shared_ptr< LayoutAtom > LayoutAtomPtr;
 class LayoutAtom
 {
 public:
+    LayoutAtom(const LayoutNode& rLayoutNode) : mrLayoutNode(rLayoutNode) {}
     virtual ~LayoutAtom() { }
+
+    const LayoutNode& getLayoutNode() const
+        { return mrLayoutNode; }
 
     /** visitor acceptance
      */
@@ -91,7 +96,9 @@ public:
 
     // dump for debug
     void dump(int level = 0);
+
 protected:
+    const LayoutNode&            mrLayoutNode;
     std::vector< LayoutAtomPtr > mpChildNodes;
     OUString                     msName;
 };
@@ -100,7 +107,7 @@ class ConstraintAtom
     : public LayoutAtom
 {
 public:
-    ConstraintAtom() :
+    ConstraintAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode),
         mnFor(-1), msForName(), mnPointType(-1), mnType(-1), mnRefFor(-1), msRefForName(),
         mnRefType(-1), mnRefPointType(-1), mfFactor(1.0), mfValue(0.0), mnOperator(0)
     {}
@@ -147,7 +154,7 @@ class AlgAtom
     : public LayoutAtom
 {
 public:
-    AlgAtom() : mnType(0), maMap() {}
+    AlgAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode), mnType(0), maMap() {}
 
     typedef std::map<sal_Int32,sal_Int32> ParamMap;
 
@@ -157,8 +164,7 @@ public:
         { mnType = nToken; }
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
-    void layoutShape( const ShapePtr& rShape,
-                      const OUString& rName ) const;
+    void layoutShape( const ShapePtr& rShape ) const;
 private:
     sal_Int32 mnType;
     ParamMap  maMap;
@@ -170,7 +176,7 @@ class ForEachAtom
     : public LayoutAtom
 {
 public:
-    explicit ForEachAtom(const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ForEachAtom(const LayoutNode& rLayoutNode, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
 
     IteratorAttr & iterator()
         { return maIter; }
@@ -186,12 +192,14 @@ class ConditionAtom
     : public LayoutAtom
 {
 public:
-    explicit ConditionAtom(const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ConditionAtom(const LayoutNode& rLayoutNode, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
     void readElseBranch()
         { mbElse=true; }
     virtual void addChild( const LayoutAtomPtr & pNode ) override;
     virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
+    static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
+    sal_Int32 getNodeCount() const;
 private:
     bool          mbElse;
     IteratorAttr  maIter;
@@ -206,6 +214,7 @@ class ChooseAtom
     : public LayoutAtom
 {
 public:
+    ChooseAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode) {}
     virtual void accept( LayoutAtomVisitor& ) override;
 };
 
@@ -228,7 +237,9 @@ public:
     // the use of Any allow having empty values
     typedef std::array<css::uno::Any, 9> VarMap;
 
-    LayoutNode() : mnChildOrder(0) {}
+    LayoutNode(const Diagram& rDgm) : LayoutAtom(*this), mrDgm(rDgm), mnChildOrder(0) {}
+    const Diagram& getDiagram() const
+        { return mrDgm; }
     virtual void accept( LayoutAtomVisitor& ) override;
     VarMap & variables()
         { return mVariables; }
@@ -242,14 +253,16 @@ public:
         { mpExistingShape = pShape; }
     const ShapePtr& getExistingShape() const
         { return mpExistingShape; }
-    std::vector<ShapePtr> & getNodeShapes()
+    const std::vector<ShapePtr> & getNodeShapes() const
         { return mpNodeShapes; }
+    void addNodeShape(const ShapePtr& pShape)
+        { mpNodeShapes.push_back(pShape); }
 
     bool setupShape( const ShapePtr& rShape,
-                     const Diagram& rDgm,
                      const dgm::Point* pPresNode ) const;
 
 private:
+    const Diagram&               mrDgm;
     VarMap                       mVariables;
     OUString                     msMoveWith;
     OUString                     msStyleLabel;
@@ -264,7 +277,7 @@ class ShapeAtom
     : public LayoutAtom
 {
 public:
-    ShapeAtom(const ShapePtr& pShape) : mpShapeTemplate(pShape) {}
+    ShapeAtom(const LayoutNode& rLayoutNode, const ShapePtr& pShape) : LayoutAtom(rLayoutNode), mpShapeTemplate(pShape) {}
     virtual void accept( LayoutAtomVisitor& ) override;
     const ShapePtr& getShapeTemplate() const
         { return mpShapeTemplate; }
