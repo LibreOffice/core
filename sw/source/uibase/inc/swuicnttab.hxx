@@ -204,7 +204,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     DECL_LINK(MenuEnableHdl, Menu*, bool);
     DECL_LINK(MenuExecuteHdl, Menu*, bool);
     DECL_LINK(LanguageListBoxHdl, ListBox&, void);
-    void LanguageHdl(ListBox*);
+    void LanguageHdl(ListBox const *);
     DECL_LINK(CheckBoxHdl, Button*, void );
     DECL_LINK(RadioButtonHdl, Button*, void);
     DECL_LINK(ModifyHdl, Edit&, void);
@@ -231,7 +231,7 @@ public:
                                 const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
-    void                SetWrtShell(SwWrtShell& rSh);
+    void                SetWrtShell(SwWrtShell const & rSh);
 };
 
 class SwTokenWindow : public VclHBox, public VclBuilderContainer
@@ -304,7 +304,7 @@ public:
     bool        Contains(FormTokenType) const;
 
     //helper for pattern buttons and edits
-    bool        CreateQuickHelp(Control* pCtrl,
+    bool        CreateQuickHelp(Control const * pCtrl,
                     const SwFormToken& rToken, const HelpEvent& );
 
     virtual void    GetFocus() override;
@@ -420,7 +420,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     void            WriteBackLevel();
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
-    void OnModify(void*);
+    void OnModify(void const *);
     DECL_LINK(ModifyClickHdl, Button*, void);
 
     using SfxTabPage::ActivatePage;

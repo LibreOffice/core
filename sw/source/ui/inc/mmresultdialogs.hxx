@@ -211,7 +211,7 @@ public:
     virtual ~SwSendMailDialog() override;
     virtual void        dispose() override;
 
-    void                AddDocument( SwMailDescriptor& rDesc );
+    void                AddDocument( SwMailDescriptor const & rDesc );
     void                EnableDestruction() {m_bDesctructionEnabled = true;}
     void                ShowDialog();
 

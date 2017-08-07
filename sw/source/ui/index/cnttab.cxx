@@ -633,13 +633,13 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
     DECL_LINK(HeaderDragHdl, HeaderBar*, void);
 
 public:
-    SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
+    SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
     virtual ~SwAddStylesDlg_Impl() override;
     virtual void dispose() override;
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
-            SwWrtShell& rWrtSh, OUString rStringArr[])
+            SwWrtShell const & rWrtSh, OUString rStringArr[])
     : SfxModalDialog(pParent, "AssignStylesDialog",
         "modules/swriter/ui/assignstylesdialog.ui")
     , pStyleArr(rStringArr)
@@ -940,7 +940,7 @@ void SwTOXSelectTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
+void SwTOXSelectTabPage::SetWrtShell(SwWrtShell const & rSh)
 {
     const sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
     if(nUserTypeCount > 1)
@@ -1427,7 +1427,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageListBoxHdl, ListBox&, rBox, void)
 {
     LanguageHdl(&rBox);
 }
-void SwTOXSelectTabPage::LanguageHdl( ListBox* pBox )
+void SwTOXSelectTabPage::LanguageHdl( ListBox const * pBox )
 {
     lang::Locale aLcl( LanguageTag( m_pLanguageLB->GetSelectLanguage() ).getLocale() );
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
@@ -2045,7 +2045,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyHdl, LinkParamNone*, void)
 {
     OnModify(nullptr);
 }
-void SwTOXEntryTabPage::OnModify(void* pVoid)
+void SwTOXEntryTabPage::OnModify(void const * pVoid)
 {
     UpdateDescriptor();
 
@@ -3459,7 +3459,7 @@ bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
     return bRet;
 }
 
-bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
+bool SwTokenWindow::CreateQuickHelp(Control const * pCtrl,
             const SwFormToken& rToken,
             const HelpEvent& rHEvt)
 {

@@ -60,8 +60,8 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 
-static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
-                           uno::Reference< XPropertySet > & xProps,
+static void lcl_SetProp( uno::Reference< XPropertySetInfo > const & xInfo,
+                           uno::Reference< XPropertySet > const & xProps,
                          OUString const & aPropName, const OUString& rValue)
 {
     if(xInfo->hasPropertyByName(aPropName))
@@ -72,8 +72,8 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
     }
 }
 
-static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
-                           uno::Reference< XPropertySet > & xProps,
+static void lcl_SetProp( uno::Reference< XPropertySetInfo > const & xInfo,
+                           uno::Reference< XPropertySet > const & xProps,
                            OUString const & aPropName, sal_Int16 nValue )
 {
     if(xInfo->hasPropertyByName(aPropName))
@@ -85,8 +85,8 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 }
 
 static void lcl_SetBOOLProp(
-                uno::Reference< beans::XPropertySetInfo > & xInfo,
-                uno::Reference< beans::XPropertySet > & xProps,
+                uno::Reference< beans::XPropertySetInfo > const & xInfo,
+                uno::Reference< beans::XPropertySet > const & xProps,
                 OUString const & aPropName, bool bValue )
 {
     if(xInfo->hasPropertyByName(aPropName))

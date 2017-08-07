@@ -31,7 +31,7 @@ public:
     /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::text::XTextRange > getRangeByPosition( const css::uno::Reference< css::text::XText >& rText, sal_Int32 _position );
     /// @throws css::uno::RuntimeException
-    static void insertString( css::uno::Reference< css::text::XTextRange >& rTextRange, css::uno::Reference< css::text::XText >& rText, const OUString& rStr, bool _bAbsorb );
+    static void insertString( css::uno::Reference< css::text::XTextRange > const & rTextRange, css::uno::Reference< css::text::XText > const & rText, const OUString& rStr, bool _bAbsorb );
     /// @throws css::uno::RuntimeException
     /// @throws css::script::BasicErrorException
     static css::uno::Reference< css::text::XTextCursor > initCursor( const css::uno::Reference< css::text::XTextRange >& rTextRange, const css::uno::Reference< css::text::XText >& rText );

@@ -59,7 +59,7 @@ static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bL
     xStyleSheet->SetItemSet(rSet);
 }
 
-SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
+SwLineNumberingDlg::SwLineNumberingDlg(SwView const *pVw)
     : SfxModalDialog( &pVw->GetViewFrame()->GetWindow(), "LineNumberingDialog",
         "modules/swriter/ui/linenumbering.ui" )
     , pSh(pVw->GetWrtShellPtr())

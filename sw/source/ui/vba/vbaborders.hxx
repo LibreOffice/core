@@ -33,7 +33,7 @@ class SwVbaBorders : public SwVbaBorders_BASE
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
-    SwVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, VbaPalette& rPalette );
+    SwVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, VbaPalette const & rPalette );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

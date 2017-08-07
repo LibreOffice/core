@@ -118,7 +118,7 @@ class SwTableColumnPage : public SfxTabPage
 
     void        Init(bool bWeb);
     DECL_LINK( AutoClickHdl, Button *, void );
-    void        ModifyHdl( MetricField* pEdit );
+    void        ModifyHdl( MetricField const * pEdit );
     DECL_LINK( UpHdl, SpinField&, void );
     DECL_LINK( DownHdl, SpinField&, void );
     DECL_LINK( LoseFocusHdl, Control&, void );

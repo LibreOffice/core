@@ -119,7 +119,7 @@ class SwIndexMarkPane
     DECL_LINK( PrevSameHdl, Button*, void );
     DECL_LINK( ModifyListBoxHdl, ListBox&, void );
     DECL_LINK( ModifyEditHdl, Edit&, void );
-    void ModifyHdl(Control*);
+    void ModifyHdl(Control const *);
     DECL_LINK( KeyDCBModifyHdl, Edit&, void );
     DECL_LINK( NewUserIdxHdl, Button*, void );
     DECL_LINK( SearchTypeHdl, Button*, void );
@@ -148,7 +148,7 @@ public:
 
     ~SwIndexMarkPane();
 
-    void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = nullptr);
+    void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOXMark = nullptr);
     bool    IsTOXType(const OUString& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos(rName);}
 };
@@ -161,7 +161,7 @@ public:
     SwIndexMarkFloatDlg( SfxBindings* pBindings,
                          SfxChildWindow* pChild,
                          vcl::Window *pParent,
-                         SfxChildWinInfo* pInfo,
+                         SfxChildWinInfo const * pInfo,
                          bool bNew);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
@@ -170,7 +170,7 @@ class SwIndexMarkModalDlg : public SvxStandardDialog
 {
     SwIndexMarkPane m_aContent;
 public:
-    SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
+    SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark const * pCurTOXMark);
 
     virtual void        Apply() override;
     virtual void        dispose() override;
@@ -236,7 +236,7 @@ public:
     SwAuthMarkFloatDlg( SfxBindings* pBindings,
                         SfxChildWindow* pChild,
                         vcl::Window *pParent,
-                        SfxChildWinInfo* pInfo,
+                        SfxChildWinInfo const * pInfo,
                         bool bNew);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };

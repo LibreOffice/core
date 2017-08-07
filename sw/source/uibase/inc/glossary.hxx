@@ -150,7 +150,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     void            DeleteEntry();
 public:
-    SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
+    SwGlossaryDlg(SfxViewFrame const * pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual ~SwGlossaryDlg() override;
     virtual void dispose() override;
     OUString GetCurrGrpName() const;

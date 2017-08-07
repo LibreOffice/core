@@ -1628,7 +1628,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
     RelHdl(_rLB);
 }
 
-sal_Int16 SwFramePage::GetRelation(ListBox &rRelationLB)
+sal_Int16 SwFramePage::GetRelation(ListBox const &rRelationLB)
 {
     const sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
 
@@ -1642,7 +1642,7 @@ sal_Int16 SwFramePage::GetRelation(ListBox &rRelationLB)
 }
 
 sal_Int16 SwFramePage::GetAlignment(FrameMap *pMap, sal_Int32 nMapPos,
-        ListBox &rRelationLB)
+        ListBox const &rRelationLB)
 {
     if (!pMap || nMapPos < 0)
         return 0;
@@ -1674,7 +1674,7 @@ sal_Int16 SwFramePage::GetAlignment(FrameMap *pMap, sal_Int32 nMapPos,
     return 0;
 }
 
-sal_Int32 SwFramePage::GetMapPos( const FrameMap *pMap, ListBox &rAlignLB )
+sal_Int32 SwFramePage::GetMapPos( const FrameMap *pMap, ListBox const &rAlignLB )
 {
     sal_Int32 nMapPos = 0;
     sal_Int32 nLBSelPos = rAlignLB.GetSelectEntryPos();

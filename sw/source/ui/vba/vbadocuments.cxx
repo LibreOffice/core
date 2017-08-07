@@ -42,7 +42,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 static uno::Any
-getDocument( uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< text::XTextDocument > &xDoc, const uno::Any& aApplication )
+getDocument( uno::Reference< uno::XComponentContext > const & xContext, const uno::Reference< text::XTextDocument > &xDoc, const uno::Any& aApplication )
 {
     // FIXME: fine as long as SwVbaDocument is stateless ...
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );

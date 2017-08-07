@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 static void lcl_FillGreetingsBox(ListBox& rBox,
-                        SwMailMergeConfigItem& rConfig,
+                        SwMailMergeConfigItem const & rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
     const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
@@ -47,7 +47,7 @@ static void lcl_FillGreetingsBox(ListBox& rBox,
 }
 
 static void lcl_FillGreetingsBox(ComboBox& rBox,
-                        SwMailMergeConfigItem& rConfig,
+                        SwMailMergeConfigItem const & rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
     const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
@@ -56,7 +56,7 @@ static void lcl_FillGreetingsBox(ComboBox& rBox,
     rBox.SelectEntryPos(rConfig.GetCurrentGreeting(eType));
 }
 
-static void lcl_StoreGreetingsBox(ListBox& rBox,
+static void lcl_StoreGreetingsBox(ListBox const & rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
@@ -68,7 +68,7 @@ static void lcl_StoreGreetingsBox(ListBox& rBox,
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
 }
 
-static void lcl_StoreGreetingsBox(ComboBox& rBox,
+static void lcl_StoreGreetingsBox(ComboBox const & rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {

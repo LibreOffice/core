@@ -37,7 +37,7 @@ public:
     virtual ~SwVbaListTemplate() override;
 
     /// @throws css::uno::RuntimeException
-    void applyListTemplate( css::uno::Reference< css::beans::XPropertySet >& xProps );
+    void applyListTemplate( css::uno::Reference< css::beans::XPropertySet > const & xProps );
 
     // Methods
     virtual css::uno::Any SAL_CALL ListLevels( const css::uno::Any& index ) override;

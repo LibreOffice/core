@@ -46,7 +46,7 @@ class SwVbaBorder : public SwVbaBorder_Base
 private:
     uno::Reference< beans::XPropertySet > m_xProps;
     sal_Int32 m_LineType;
-    void setBorderLine( table::BorderLine& rBorderLine )
+    void setBorderLine( table::BorderLine const & rBorderLine )
     {
         table::TableBorder aTableBorder;
         m_xProps->getPropertyValue( "TableBorder" ) >>= aTableBorder;
@@ -247,7 +247,7 @@ private:
         return getCount(); // error condition
     }
 public:
-    RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette& rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
+    RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette const & rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
     {
     }
     // XIndexAccess
@@ -277,7 +277,7 @@ public:
 };
 
 uno::Reference< container::XIndexAccess >
-rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette& rPalette )
+rangeToBorderIndexAccess( const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette const & rPalette )
 {
     return new RangeBorders( xRange, xContext, rPalette );
 }
@@ -302,7 +302,7 @@ public:
 };
 
 // for Table borders
-SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, VbaPalette& rPalette  ):  SwVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) )
+SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< table::XCellRange >& xRange, VbaPalette const & rPalette  ):  SwVbaBorders_BASE( xParent, xContext, rangeToBorderIndexAccess( xRange ,xContext, rPalette ) )
 {
     m_xProps.set( xRange, uno::UNO_QUERY_THROW );
 }

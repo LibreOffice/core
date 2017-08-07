@@ -424,7 +424,7 @@ float SwVbaParagraphFormat::getMSWordLineSpacing( style::LineSpacing& rLineSpaci
     return wdLineSpacing;
 }
 
-sal_Int32 SwVbaParagraphFormat::getMSWordLineSpacingRule( style::LineSpacing& rLineSpacing )
+sal_Int32 SwVbaParagraphFormat::getMSWordLineSpacingRule( style::LineSpacing const & rLineSpacing )
 {
     sal_Int32 wdLineSpacing = word::WdLineSpacing::wdLineSpaceSingle;
     switch( rLineSpacing.Mode )

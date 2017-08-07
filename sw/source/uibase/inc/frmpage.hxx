@@ -163,9 +163,9 @@ class SwFramePage: public SfxTabPage
                                const sal_Int16 _nRel,
                                ListBox& _rLB,
                                FixedText& _rFT );
-    static sal_Int32 GetMapPos(const FrameMap *pMap, ListBox &rAlignLB);
-    static sal_Int16 GetAlignment(FrameMap *pMap, sal_Int32 nMapPos, ListBox &rRelationLB);
-    static sal_Int16 GetRelation(ListBox &rRelationLB);
+    static sal_Int32 GetMapPos(const FrameMap *pMap, ListBox const &rAlignLB);
+    static sal_Int16 GetAlignment(FrameMap *pMap, sal_Int32 nMapPos, ListBox const &rRelationLB);
+    static sal_Int16 GetRelation(ListBox const &rRelationLB);
     RndStdIds       GetAnchor();
 
     void setOptimalFrameWidth();

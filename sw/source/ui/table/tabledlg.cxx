@@ -949,7 +949,7 @@ bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
     return bModified;
 }
 
-void   SwTableColumnPage::ModifyHdl( MetricField* pField )
+void   SwTableColumnPage::ModifyHdl( MetricField const * pField )
 {
         PercentField *pEdit = nullptr;
         sal_uInt16 i;
