@@ -124,9 +124,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     if ( ! xWindow.is() )
         return;
 
-    OUString sApplicationID;
-
 #if !defined(MACOSX)
+    OUString sApplicationID;
     try
     {
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
@@ -158,6 +157,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     catch(const css::uno::Exception&)
     {
     }
+#else
+    OUString const sApplicationID;
 #endif
 
     // VCL SYNCHRONIZED ->
