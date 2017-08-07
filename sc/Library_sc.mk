@@ -464,6 +464,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/miscdlgs/conflictsdlg \
     sc/source/ui/miscdlgs/crnrdlg \
     sc/source/ui/miscdlgs/datastreamdlg \
+    sc/source/ui/miscdlgs/dataproviderdlg \
     sc/source/ui/miscdlgs/highred \
     sc/source/ui/miscdlgs/mergecellsdialog \
     sc/source/ui/miscdlgs/optsolver \

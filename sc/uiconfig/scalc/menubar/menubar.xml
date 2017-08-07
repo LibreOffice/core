@@ -630,6 +630,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DataStreams"/>
             <menu:menuitem menu:id=".uno:ManageXMLSource"/>
+            <menu:menuitem menu:id=".uno:DataProvider"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:TableOperationDialog"/>
             <menu:menuitem menu:id=".uno:TextToColumns"/>
