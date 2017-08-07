@@ -50,7 +50,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 
 // edit insert-field
-SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
+SwChangeDBDlg::SwChangeDBDlg(SwView const & rVw)
     : SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), "ExchangeDatabasesDialog",
         "modules/swriter/ui/exchangedatabases.ui")
     , pSh(rVw.GetWrtShellPtr())

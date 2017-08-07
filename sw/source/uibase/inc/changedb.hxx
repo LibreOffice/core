@@ -53,7 +53,7 @@ class SwChangeDBDlg: public SvxStandardDialog
     void            ShowDBName(const SwDBData& rDBData);
 
 public:
-    SwChangeDBDlg(SwView& rVw);
+    SwChangeDBDlg(SwView const & rVw);
     virtual ~SwChangeDBDlg() override;
     virtual void dispose() override;
 };

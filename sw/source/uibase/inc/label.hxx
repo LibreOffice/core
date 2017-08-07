@@ -70,8 +70,8 @@ public:
     Printer *GetPrt();
     inline void ReplaceGroup( const OUString &rMake );
     void UpdateGroup( const OUString &rMake ) {ReplaceGroup_( rMake );}
-    static void UpdateFieldInformation(css::uno::Reference< css::frame::XModel>& xModel,
-                                                                                const SwLabItem& rItem);
+    static void UpdateFieldInformation(css::uno::Reference< css::frame::XModel> const & xModel,
+                                       const SwLabItem& rItem);
     const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
 
     SwLabelConfig& GetLabelsConfig() {return aLabelsCfg;}

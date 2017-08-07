@@ -347,7 +347,7 @@ IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
 }
 
 // A temporary Itemset that gets discarded at abort
-SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl* pColl, bool bSender)
+SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool bSender)
 {
     SfxItemSet *&pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
     if (!pAddrSet)

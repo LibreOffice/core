@@ -68,7 +68,7 @@ struct OLE_MFP
 
 using namespace ::com::sun::star;
 
-static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1)
+static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage> const & rSrc1)
 {
     // Getting the scaling factor:
     //      Information in the PIC-stream (by trying out)
@@ -126,7 +126,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1
 }
 
 static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
-    tools::SvRef<SotStorage>& rSrc1)
+    tools::SvRef<SotStorage> const & rSrc1)
 {
     tools::SvRef<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
         StreamMode::STD_READ );
@@ -179,7 +179,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     return true;
 }
 
-static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rSrc1)
+static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage> const & rSrc1)
 {
     // 03-META-stream does not exist. Maybe a 03-PICT?
     tools::SvRef<SotStorageStream> xSrc4 = rSrc1->OpenSotStream("\3PICT");

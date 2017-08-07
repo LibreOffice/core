@@ -461,7 +461,7 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     return *aResult;
 }
 
-static void lcl_CopyGreaterEight(OUString &rDest, OUString &rSrc,
+static void lcl_CopyGreaterEight(OUString &rDest, OUString const &rSrc,
     sal_Int32 nStart, sal_Int32 nLen = SAL_MAX_INT32)
 {
     const sal_Int32 nMaxLen = std::min(rSrc.getLength(), nLen);
@@ -984,7 +984,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
 }
 
 void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
-    WW8aISet& rListItemSet, WW8aCFormat& rCharFormat, bool& bNewCharFormatCreated,
+    WW8aISet const & rListItemSet, WW8aCFormat& rCharFormat, bool& bNewCharFormatCreated,
     const OUString& sPrefix )
 {
     bNewCharFormatCreated = false;
@@ -2250,7 +2250,7 @@ WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
 //Miserable hack to get a hardcoded guesstimate of the size of a list dropdown
 //box's first entry to set as the lists default size
 awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
-    uno::Reference<beans::XPropertySet>& rPropSet)
+    uno::Reference<beans::XPropertySet> const & rPropSet)
 {
     awt::Size aRet;
     struct CtrlFontMapEntry

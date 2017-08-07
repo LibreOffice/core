@@ -180,7 +180,7 @@ private:
 
     void DelUserData();
     void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = nullptr);
-    void SaveEntry(SvTreeListEntry* pEntry);
+    void SaveEntry(SvTreeListEntry const * pEntry);
     void InvalidatePreview();
 
 public:

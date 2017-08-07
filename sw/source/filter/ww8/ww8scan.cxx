@@ -7123,7 +7123,7 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
 //    out of WW8_{FOOTER,HEADER}_{ODD,EVEN,FIRST} (Do not change!)
 //  -> maybe we can get a right result then
 
-WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
+WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop const & rDop )
     : aPLCF(*pSt, rFib.m_fcPlcfhdd , rFib.m_lcbPlcfhdd , 0)
 {
     nIdxOffset = 0;

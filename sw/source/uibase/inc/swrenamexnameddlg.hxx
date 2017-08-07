@@ -54,8 +54,8 @@ public:
     }
 
     void SetAlternativeAccess(
-            css::uno::Reference< css::container::XNameAccess > & xSecond,
-            css::uno::Reference< css::container::XNameAccess > & xThird )
+            css::uno::Reference< css::container::XNameAccess > const & xSecond,
+            css::uno::Reference< css::container::XNameAccess > const & xThird )
     {
         xSecondAccess = xSecond;
         xThirdAccess = xThird;

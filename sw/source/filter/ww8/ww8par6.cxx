@@ -640,7 +640,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
 }
 
 SwSectionFormat *wwSectionManager::InsertSection(
-    SwPaM& rMyPaM, wwSection &rSection)
+    SwPaM const & rMyPaM, wwSection &rSection)
 {
     SwSectionData aSection( CONTENT_SECTION,
             mrReader.m_rDoc.GetUniqueSectionName() );
@@ -1708,7 +1708,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 }
 
 // read for Apo definitions in Styledefs
-void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
+void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle const * pStyle)
 {
     if (bVer67)
     {
@@ -2443,7 +2443,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 }
 
 //In auto-width word frames negative after-indent values are ignored
-void SwWW8ImplReader::StripNegativeAfterIndent(SwFrameFormat *pFlyFormat)
+void SwWW8ImplReader::StripNegativeAfterIndent(SwFrameFormat const *pFlyFormat)
 {
     const SwNodeIndex* pSttNd = pFlyFormat->GetContent().GetContentIdx();
     if (!pSttNd)

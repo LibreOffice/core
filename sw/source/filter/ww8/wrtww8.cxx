@@ -2392,7 +2392,7 @@ ww8::WidthsPtr AttributeOutputBase::GetColumnWidths( ww8::WW8TableNodeInfoInner:
     return pTableTextNodeInfoInner->getGridColsOfRow(*this, true);
 }
 
-void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner, long& rPageSize, bool& rRelBoxSize )
+void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * pTableTextNodeInfoInner, long& rPageSize, bool& rRelBoxSize )
 {
     long nPageSize = 0;
 

@@ -805,7 +805,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
         SaveEntry(pEntry);
 }
 
-void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
+void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
 {
     if (pEntry)
     {

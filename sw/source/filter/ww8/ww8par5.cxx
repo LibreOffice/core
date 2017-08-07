@@ -429,7 +429,7 @@ OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, LanguageTyp
     return sParams;
 }
 
-short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
+short SwWW8ImplReader::GetTimeDatePara(OUString const & rStr, sal_uInt32& rFormat,
     LanguageType &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
@@ -686,7 +686,7 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
     }
 }
 
-WW8FieldEntry::WW8FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw()
+WW8FieldEntry::WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) throw()
     : maStartPos(rPos), mnFieldId(nFieldId), mnObjLocFc(0)
 {
 }
@@ -2753,7 +2753,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
 
 //        "table of ..." fields
 
-static void lcl_toxMatchACSwitch(SwDoc& rDoc,
+static void lcl_toxMatchACSwitch(SwDoc const & rDoc,
                             SwTOXBase& rBase,
                             WW8ReadFieldParams& rParam,
                             SwCaptionDisplay eCaptionType)
@@ -2791,7 +2791,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
     }
 }
 
-static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
+static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBase,
     WW8ReadFieldParams& rParam)
 {
     if ( rParam.GoToTokenParam() )
@@ -3518,7 +3518,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     return eF_ResT::TEXT;
 }
 
-static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const OUString &rStr, bool bIdx)
+static void lcl_ImportTox(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rStr, bool bIdx)
 {
     TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
 
@@ -3594,7 +3594,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const OUString &rStr, bool b
     }
 }
 
-void sw::ms::ImportXE(SwDoc &rDoc, SwPaM &rPaM, const OUString &rStr)
+void sw::ms::ImportXE(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rStr)
 {
     lcl_ImportTox(rDoc, rPaM, rStr, true);
 }

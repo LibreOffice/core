@@ -177,7 +177,7 @@ private:
     // character style pointer
     typedef SwCharFormat* WW8aCFormat[nMaxLevel];
 
-    void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
+    void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet const & rListItemSet,
         WW8aCFormat& aCharFormat, bool& bNewCharFormatCreated,
         const OUString& aPrefix = OUString());
 
@@ -206,7 +206,7 @@ struct WW8FlyPara
     bool operator==(const WW8FlyPara& rSrc) const;
     void Read(sal_uInt8 nSprm29, WW8PLCFx_Cp_FKP* pPap);
     void ReadFull(sal_uInt8 nSprm29, SwWW8ImplReader* pIo);
-    void Read(sal_uInt8 nSprm29, WW8RStyle* pStyle);
+    void Read(sal_uInt8 nSprm29, WW8RStyle const * pStyle);
     void ApplyTabPos(const WW8_TablePos *pTabPos);
     bool IsEmpty() const;
 };
@@ -555,7 +555,7 @@ class WW8FieldEntry
         sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
         sal_uLong mnObjLocFc;
-        WW8FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
+        WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) throw();
         WW8FieldEntry(const WW8FieldEntry &rOther) throw();
         WW8FieldEntry &operator=(const WW8FieldEntry &rOther) throw();
         void Swap(WW8FieldEntry &rOther) throw();
@@ -847,7 +847,7 @@ private:
     void SetUseOn(wwSection &rSection);
     void SetHdFt(wwSection &rSection, int nSect, const wwSection *pPrevious);
 
-    SwSectionFormat *InsertSection(SwPaM& rMyPaM, wwSection &rSection);
+    SwSectionFormat *InsertSection(SwPaM const & rMyPaM, wwSection &rSection);
     static bool SetCols(SwFrameFormat &rFormat, const wwSection &rSection,
         sal_uInt32 nNetWidth);
     bool SectionIsProtected(const wwSection &rSection) const;
@@ -857,7 +857,7 @@ private:
      nodeindex of where we want the page break to (normally the segments start
      position
     */
-    SwFormatPageDesc SetSwFormatPageDesc(mySegIter &rIter, mySegIter &rStart,
+    SwFormatPageDesc SetSwFormatPageDesc(mySegIter const &rIter, mySegIter const &rStart,
         bool bIgnoreCols);
 
     wwSectionManager(const wwSectionManager&) = delete;
@@ -1030,7 +1030,7 @@ struct WW8TabBandDesc
     }
 
     WW8TabBandDesc();
-    WW8TabBandDesc(WW8TabBandDesc& rBand);    // deep copy
+    WW8TabBandDesc(WW8TabBandDesc const & rBand);    // deep copy
     ~WW8TabBandDesc();
     static void setcelldefaults(WW8_TCell *pCells, short nCells);
     void ReadDef(bool bVer67, const sal_uInt8* pS);
@@ -1377,9 +1377,9 @@ private:
 
     void Read_HdFt(int nSect, const SwPageDesc *pPrev,
         const wwSection &rSection);
-    void Read_HdFtText(WW8_CP nStartCp, WW8_CP nLen, SwFrameFormat* pHdFtFormat);
+    void Read_HdFtText(WW8_CP nStartCp, WW8_CP nLen, SwFrameFormat const * pHdFtFormat);
     void Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
-        SwFrameFormat &rHdFtFormat, sal_uInt16 nPageWidth);
+        SwFrameFormat const &rHdFtFormat, sal_uInt16 nPageWidth);
 
     bool isValid_HdFt_CP(WW8_CP nHeaderCP) const;
 
@@ -1470,7 +1470,7 @@ private:
     static sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
         MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, sal_Int32 &rLineWidth,
         SvxBoxItem& rBox );
-    void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
+    void MatchSdrItemsIntoFlySet( SdrObject const *    pSdrObj, SfxItemSet &aFlySet,
         MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, tools::Rectangle &rInnerDist );
     static void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxLRSpaceItem &rLR);
@@ -1479,7 +1479,7 @@ private:
     static void MapWrapIntoFlyFormat(SvxMSDffImportRec* pRecord, SwFrameFormat* pFlyFormat);
 
     void SetAttributesAtGrfNode(SvxMSDffImportRec const* pRecord,
-            SwFrameFormat *pFlyFormat, WW8_FSPA *pF);
+            SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF);
 
     bool IsDropCap();
     bool IsListOrDropcap() { return (!m_pAktItemSet  || m_bDropCap); };
@@ -1492,7 +1492,7 @@ private:
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
         const WW8_TablePos *pTabPos);
-    static void StripNegativeAfterIndent(SwFrameFormat *pFlyFormat);
+    static void StripNegativeAfterIndent(SwFrameFormat const *pFlyFormat);
 
     void EndSpecial();
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
@@ -1513,8 +1513,8 @@ private:
         const SfxItemSet& rGrfSet);
 
     SwFrameFormat *AddAutoAnchor(SwFrameFormat *pFormat);
-    SwFrameFormat* ImportGraf1(WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos);
-    SwFrameFormat* ImportGraf(SdrTextObj* pTextObj = nullptr, SwFrameFormat* pFlyFormat = nullptr);
+    SwFrameFormat* ImportGraf1(WW8_PIC const & rPic, SvStream* pSt, sal_uLong nFilePos);
+    SwFrameFormat* ImportGraf(SdrTextObj const * pTextObj = nullptr, SwFrameFormat const * pFlyFormat = nullptr);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=nullptr,
         const SfxItemSet* pFlySet=nullptr, const tools::Rectangle& aVisArea = tools::Rectangle() );
@@ -1534,7 +1534,7 @@ private:
 
     ErrCode LoadThroughDecryption(WW8Glossary *pGloss);
     ErrCode SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream, tools::SvRef<SotStorageStream> &rDataStream);
-    ErrCode CoreLoad(WW8Glossary *pGloss);
+    ErrCode CoreLoad(WW8Glossary const *pGloss);
 
     void ReadDocVars();
 
@@ -1568,13 +1568,13 @@ private:
 
 // graphics layer
 
-    bool ReadGrafStart(void* pData, short nDataSiz, WW8_DPHEAD* pHd,
+    bool ReadGrafStart(void* pData, short nDataSiz, WW8_DPHEAD const * pHd,
         SfxAllItemSet &rSet);
-    SdrObject *ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadRect(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadElipse(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadArc(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
     void InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
@@ -1582,8 +1582,8 @@ private:
         sal_uInt16 nSequence);
     sal_Int32 GetRangeAsDrawingString(OUString& rString, long StartCp, long nEndCp, ManTypes eType);
     OutlinerParaObject* ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
-    void InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
-        sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrameFormat* pFlyFormat,
+    void InsertTxbxText(SdrTextObj* pTextObj, Size const * pObjSiz,
+        sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrameFormat const * pFlyFormat,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
         bool* pbTestTxbxContainsText = nullptr, long* pnStartCp = nullptr,
         long* pnEndCp = nullptr, bool* pbContainsGraphics = nullptr,
@@ -1591,9 +1591,9 @@ private:
     bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
                                     long&  rStartCp,
                                     long&  rEndCp );
-    SdrObject *ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
-    SdrObject *ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet);
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject(SwFrameFormat* pFlyFormat);
@@ -1824,7 +1824,7 @@ public:     // really private, but can only be done public
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, OUString& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, OUString& );
-    short GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat, LanguageType &rLang,
+    short GetTimeDatePara(OUString const & rStr, sal_uInt32& rFormat, LanguageType &rLang,
         int nWhichDefault, bool bHijri = false);
     bool ForceFieldLanguage(SwField &rField, LanguageType nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, OUString& rStr );
@@ -1844,7 +1844,7 @@ public:     // really private, but can only be done public
     eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr );
     eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr);
     css::awt::Size MiserableDropDownFormHack(const OUString &rString,
-        css::uno::Reference<css::beans::XPropertySet>& rPropSet);
+        css::uno::Reference<css::beans::XPropertySet> const & rPropSet);
 
     eF_ResT Read_F_Macro( WW8FieldDesc*, OUString& rStr);
     eF_ResT Read_F_DBField( WW8FieldDesc*, OUString& rStr );
@@ -1877,7 +1877,7 @@ public:     // really private, but can only be done public
     void SetNAktColl( sal_uInt16 nColl ) { m_nAktColl = nColl;    }
     void SetAktItemSet( SfxItemSet* pItemSet ) { m_pAktItemSet = pItemSet; }
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
-    const SwFormat* GetStyleWithOrgWWName( OUString& rName ) const ;
+    const SwFormat* GetStyleWithOrgWWName( OUString const & rName ) const ;
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
@@ -1886,7 +1886,7 @@ public:     // really private, but can only be done public
     static ColorData GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition &rPos );
+        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos );
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }
     // load a complete doc file
@@ -1897,7 +1897,7 @@ public:     // really private, but can only be done public
     rtl_TextEncoding GetCJKCharSetFromLanguage();
 
     void PostProcessAttrs();
-    void ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr);
+    void ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocShell, struct HyperLinksTable& hlStr);
 };
 
 bool CanUseRemoteLink(const OUString &rGrfName);

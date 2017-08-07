@@ -89,7 +89,7 @@ namespace sw
             @param rXE
                 the arguments of the original word XE field
         */
-        void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const OUString &rXE);
+        void ImportXE(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rXE);
 
         /** Convert from DTTM to Writer's DateTime
 

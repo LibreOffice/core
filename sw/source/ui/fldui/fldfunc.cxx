@@ -434,7 +434,7 @@ IMPL_LINK( SwFieldFuncPage, ListModifyReturnActionHdl, ReturnActionEdit&, rContr
 {
     ListModifyHdl(&rControl);
 }
-void SwFieldFuncPage::ListModifyHdl(Control* pControl)
+void SwFieldFuncPage::ListModifyHdl(Control const * pControl)
 {
     m_pListItemsLB->SetUpdateMode(false);
     if(pControl == m_pListAddPB ||

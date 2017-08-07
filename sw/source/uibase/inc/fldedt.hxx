@@ -41,7 +41,7 @@ class SwFieldEditDlg : public SfxSingleTabDialog
     void EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr);
 public:
 
-    SwFieldEditDlg(SwView& rVw);
+    SwFieldEditDlg(SwView const & rVw);
     virtual ~SwFieldEditDlg() override;
     virtual void dispose() override;
 

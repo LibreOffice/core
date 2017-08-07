@@ -187,7 +187,7 @@ OUString GetDefaultString(sal_Int32 nChars)
     return aStr;
 }
 
-static void calcFontHeightAnyAscent( vcl::RenderContext* _pWin, vcl::Font& _rFont, long& _nHeight, long& _nAscent )
+static void calcFontHeightAnyAscent( vcl::RenderContext* _pWin, vcl::Font const & _rFont, long& _nHeight, long& _nAscent )
 {
     if ( !_nHeight )
     {

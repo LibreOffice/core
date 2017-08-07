@@ -235,7 +235,7 @@ IMPL_LINK(SwColumnDlg, ObjectListBoxHdl, ListBox&, rBox, void)
     ObjectHdl(&rBox);
 }
 
-void SwColumnDlg::ObjectHdl(ListBox* pBox)
+void SwColumnDlg::ObjectHdl(ListBox const * pBox)
 {
     SfxItemSet* pSet = EvalCurrentSelection();
 
@@ -367,7 +367,7 @@ SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
 #if OSL_DEBUG_LEVEL < 2
 inline
 #endif
-sal_uInt16 GetMaxWidth( SwColMgr* pColMgr, sal_uInt16 nCols )
+sal_uInt16 GetMaxWidth( SwColMgr const * pColMgr, sal_uInt16 nCols )
 {
     sal_uInt16 nMax = pColMgr->GetActualSize();
     if( --nCols )
@@ -947,7 +947,7 @@ IMPL_LINK( SwColumnPage, ColModify, Edit&, rEdit, void )
     ColModify(static_cast<NumericField*>(&rEdit));
 }
 
-void SwColumnPage::ColModify(NumericField* pNF)
+void SwColumnPage::ColModify(NumericField const * pNF)
 {
     m_nCols = (sal_uInt16)m_pCLNrEdt->GetValue();
     //#107890# the handler is also called from LoseFocus()
@@ -1140,7 +1140,7 @@ void SwColumnPage::Timeout()
 }
 
 // Update the view
-void SwColumnPage::Update(MetricField *pInteractiveField)
+void SwColumnPage::Update(MetricField const *pInteractiveField)
 {
     m_pBalanceColsCB->Enable(m_nCols > 1);
     if(m_nCols >= 2)

@@ -173,6 +173,8 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "GetFormulaBoxes"
             || name == "HasValidBoxes_"
             || name == "SplitMergeBoxNm_"
+            || name.startswith("Read_F_")
+            || name == "UpdateFieldInformation"
              // #ifdef win32
             || name == "convert_slashes"
                 // UNO component entry points

@@ -85,7 +85,7 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
     assert(pCurField == rMgr.GetCurField());
 }
 
-SwFieldEditDlg::SwFieldEditDlg(SwView& rVw)
+SwFieldEditDlg::SwFieldEditDlg(SwView const & rVw)
     : SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), nullptr,
         "EditFieldDialog", "modules/swriter/ui/editfielddialog.ui")
     , pSh(rVw.GetWrtShellPtr())

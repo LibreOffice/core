@@ -250,7 +250,7 @@ public:
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
-    void    SetWrtShell(SwWrtShell& rSh);
+    void    SetWrtShell(SwWrtShell const & rSh);
 };
 
 class SwInsertSectionTabDialog : public SfxTabDialog

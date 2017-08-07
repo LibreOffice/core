@@ -242,7 +242,7 @@ IMPL_LINK( SwFieldVarPage, SubTypeListBoxHdl, ListBox&, rBox, void )
     SubTypeHdl(&rBox);
 }
 
-void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
+void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 {
     sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
     sal_Int32 nSelPos = m_pSelectionLB->GetSelectEntryPos();

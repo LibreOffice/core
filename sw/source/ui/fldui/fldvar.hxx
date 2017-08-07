@@ -82,7 +82,7 @@ class SwFieldVarPage : public SwFieldPage
     DECL_LINK( TBClickHdl, ToolBox *, void );
     DECL_LINK( ChapterHdl, ListBox&, void );
     DECL_LINK( SeparatorHdl, Edit&, void );
-    void SubTypeHdl(ListBox*);
+    void SubTypeHdl(ListBox const *);
 
     void                UpdateSubType();
     void                FillFormatLB(sal_uInt16 nTypeId);
