@@ -9,6 +9,8 @@
 
 #include "EPUBExportFilter.hxx"
 
+#include <libepubgen/EPUBTextGenerator.h>
+
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -30,16 +32,14 @@ EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> 
 
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
-    // The package writes to the output file.
+    // Build the export filter chain: the package has direct access to the ZIP
+    // file, the flat ODF filter has access to the doc model, everything else
+    // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage);
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
 
-    // Create ODT exporter, this will feed our document handler.
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
-
-    // The document handler will make the calls on the text interface provided by the EPUB export.
-    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport);
-
-    // Let the ODT exporter read the doc model and invoke the doc handler.
     xInitialization->initialize({uno::makeAny(xExportHandler)});
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
