@@ -710,18 +710,8 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
             OUString sPrivilege, sGrantee;
             while ( xPrivileges->next() )
             {
-#ifdef DBG_UTIL
-                OUString sCat, sSchema, sName, sGrantor, sGrantable;
-                sCat        = xCurrentRow->getString(1);
-                sSchema     = xCurrentRow->getString(2);
-                sName       = xCurrentRow->getString(3);
-                sGrantor    = xCurrentRow->getString(4);
-#endif
                 sGrantee    = xCurrentRow->getString(5);
                 sPrivilege  = xCurrentRow->getString(6);
-#ifdef DBG_UTIL
-                sGrantable  = xCurrentRow->getString(7);
-#endif
 
                 if (!sUserWorkingFor.equalsIgnoreAsciiCase(sGrantee))
                     continue;
@@ -759,19 +749,8 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
             OUString sPrivilege, sGrantee;
             while ( xColumnPrivileges->next() )
             {
-#ifdef DBG_UTIL
-                OUString sCat, sSchema, sTableName, sColumnName, sGrantor, sGrantable;
-                sCat        = xColumnCurrentRow->getString(1);
-                sSchema     = xColumnCurrentRow->getString(2);
-                sTableName  = xColumnCurrentRow->getString(3);
-                sColumnName = xColumnCurrentRow->getString(4);
-                sGrantor    = xColumnCurrentRow->getString(5);
-#endif
                 sGrantee    = xColumnCurrentRow->getString(6);
                 sPrivilege  = xColumnCurrentRow->getString(7);
-#ifdef DBG_UTIL
-                sGrantable  = xColumnCurrentRow->getString(8);
-#endif
 
                 if (!sUserWorkingFor.equalsIgnoreAsciiCase(sGrantee))
                     continue;
