@@ -3170,7 +3170,7 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
 {
     // Here we set the zoom value as it has been set by the user in the client.
     // This value is used in postMouseEvent and setGraphicSelection methods
-    // for in place chart editing. We assume that x and y scale is rougly
+    // for in place chart editing. We assume that x and y scale is roughly
     // the same.
     // Indeed we could set mnTilePixelWidth, mnTilePixelHeight, mnTileTwipWidth,
     // mnTileTwipHeight data members of this class but they are not very useful
