@@ -59,7 +59,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
 
         if (pWindowData->bLegacy)
         {
-            NSOpenGLPixelFormatAttribute aAttributes[] =
+            NSOpenGLPixelFormatAttribute const aAttributes[] =
             {
                 NSOpenGLPFADoubleBuffer,
                 NSOpenGLPFAAlphaSize, 8,
@@ -74,7 +74,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
         }
         else
         {
-            NSOpenGLPixelFormatAttribute aAttributes[] =
+            NSOpenGLPixelFormatAttribute const aAttributes[] =
             {
                 NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
                 NSOpenGLPFADoubleBuffer,

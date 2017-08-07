@@ -157,7 +157,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( ! asGetter ) {
             [ methodName appendString: @"set" ];
         }
-        NSRange aRange = { 2, 1 };
+        NSRange const aRange = { 2, 1 };
         NSString * firstChar = [ attribute substringWithRange: aRange ]; // drop leading "AX" and get first char
         if ( asGetter ) {
             [ methodName appendString: [ firstChar lowercaseString ] ];

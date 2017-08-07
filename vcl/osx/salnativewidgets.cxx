@@ -590,7 +590,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 // Perhaps some other HIThemeButtonDrawInfo setting would do the trick ?
 
                 CGContextSetShouldAntialias( mrContext, true );
-                CGFloat aGrey[] = { 0.45, 0.45, 0.45, 1.0 };
+                CGFloat const aGrey[] = { 0.45, 0.45, 0.45, 1.0 };
                 CGContextSetFillColor( mrContext, aGrey );
                 CGContextBeginPath( mrContext );
                 float x = rc.origin.x + rc.size.width;
