@@ -24,8 +24,8 @@
  module com {  module sun {  module star {  module text {
 
 
-/** This constants define how a time field is formatted before it is displayed.
-    The formate may also depend on the system or document locale.
+/** These constants define how a time field is formatted before it is displayed.
+    The format may also depend on the system or document locale.
 
     @deprecated
  */

@@ -48,7 +48,7 @@ namespace emfplushelper
         s.ReadUInt32(stringAlignment).ReadUInt32(lineAlign).ReadUInt32(digitSubstitution).ReadUInt32(digitLanguage);
         s.ReadFloat(firstTabOffset).ReadInt32(hotkeyPrefix).ReadFloat(leadingMargin).ReadFloat(trailingMargin).ReadFloat(tracking);
         s.ReadInt32(trimming).ReadInt32(tabStopCount).ReadInt32(rangeCount);
-        // keep olny the last 16 Bits of language
+        // keep only the last 16 bits of language
         language >>= 16;
         digitLanguage >>= 16;
         SAL_WARN_IF((header >> 12) != 0xdbc01, "cppcanvas.emf", "Invalid header - not 0xdbc01");
