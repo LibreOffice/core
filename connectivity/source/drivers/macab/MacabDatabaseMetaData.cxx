@@ -56,12 +56,11 @@ MacabDatabaseMetaData::~MacabDatabaseMetaData()
 
 OUString SAL_CALL MacabDatabaseMetaData::getCatalogSeparator(  )
 {
-    OUString aVal;
     if (m_bUseCatalog)
     { // do some special here for you database
     }
 
-    return aVal;
+    return OUString();
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getMaxBinaryLiteralLength(  )
@@ -183,11 +182,10 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  )
 
 OUString SAL_CALL MacabDatabaseMetaData::getCatalogTerm(  )
 {
-    OUString aVal;
     if (m_bUseCatalog)
     {
     }
-    return aVal;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getIdentifierQuoteString(  )
@@ -198,8 +196,7 @@ OUString SAL_CALL MacabDatabaseMetaData::getIdentifierQuoteString(  )
 
 OUString SAL_CALL MacabDatabaseMetaData::getExtraNameCharacters(  )
 {
-    OUString aVal;
-    return aVal;
+    return OUString();
 }
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
@@ -540,8 +537,7 @@ OUString SAL_CALL MacabDatabaseMetaData::getURL(  )
 
 OUString SAL_CALL MacabDatabaseMetaData::getUserName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getDriverName(  )
@@ -556,26 +552,22 @@ OUString SAL_CALL MacabDatabaseMetaData::getDriverVersion()
 
 OUString SAL_CALL MacabDatabaseMetaData::getDatabaseProductVersion(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getDatabaseProductName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getProcedureTerm(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getSchemaTerm(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 sal_Int32 SAL_CALL MacabDatabaseMetaData::getDriverMajorVersion(  )
@@ -595,14 +587,12 @@ sal_Int32 SAL_CALL MacabDatabaseMetaData::getDriverMinorVersion(  )
 
 OUString SAL_CALL MacabDatabaseMetaData::getSQLKeywords(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getSearchStringEscape(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL MacabDatabaseMetaData::getStringFunctions(  )
