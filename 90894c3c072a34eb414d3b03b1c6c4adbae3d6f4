@@ -22,6 +22,30 @@
       "revId": "90894c3c072a34eb414d3b03b1c6c4adbae3d6f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7f031710",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2017-08-07T12:24:03Z",
+      "side": 1,
+      "message": "OK, no problem. I will update the patch in a few minutes.",
+      "parentUuid": "1a430d35_14e75a13",
+      "range": {
+        "startLine": 1255,
+        "startChar": 28,
+        "endLine": 1256,
+        "endChar": 87
+      },
+      "revId": "90894c3c072a34eb414d3b03b1c6c4adbae3d6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
