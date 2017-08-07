@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_dfe7abaa",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-07T08:49:04Z",
+      "side": 1,
+      "message": "Can you please drop this, now that nsinstall is ideally not built at all? (FWIW my \u0027make nss\u0027 still fails the same way, not finding gnu/stubs-32.h; but hopefully not defining a native compiler will trigger the error for you as well.)",
+      "revId": "a56aeef6581c6acbde0532299eb216e93e2b79e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ffec6791",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-07T08:49:04Z",
+      "side": 1,
+      "message": "Could this be:\n\n#ifndef __ANDROID__\n\ninstead? I guess we want to upstream these changes instead of maintaining this patch forever. Upstreaming the .c changes first sounds like a good idea.",
+      "revId": "a56aeef6581c6acbde0532299eb216e93e2b79e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
