@@ -778,6 +778,33 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 pStrm->StopImport();
         }
         break;
+        case SID_DATA_PROVIDER:
+        {
+            ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            //ScDocument *pDoc = GetViewData()->GetDocument();
+            //sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
+            //sc::DataStream* pStrm = rMgr.getDataStream();
+            //if (pStrm)
+            aDialog->Init(/**pStrm*/);
+
+            //if (aDialog->Execute() == RET_OK)
+            //aDialog->StartStream();
+        }
+        break;
+        case SID_DATA_PROVIDER_PLAY:
+        {
+            ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            //ScDocument *pDoc = GetViewData()->GetDocument();
+            aDialog->StartImport();
+        }
+        break;
+        case SID_DATA_PROVIDER_STOP:
+        {
+            ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            //ScDocument *pDoc = GetViewData()->GetDocument();
+            aDialog->StopImport();
+        }
+        break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();
         break;
