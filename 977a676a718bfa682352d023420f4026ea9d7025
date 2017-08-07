@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7a69658b",
+        "filename": "editeng/source/items/bulitem.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-07T15:08:19Z",
+      "side": 0,
+      "message": "the ctor that is called here can be removed too?",
+      "revId": "977a676a718bfa682352d023420f4026ea9d7025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
