@@ -23,11 +23,11 @@
 #include <sal/types.h>
 #include <sal/config.h>
 #include <memory>
+#include <wmfemfhelper.hxx>
 
  /// predefines
 namespace emfplushelper { struct EmfPlusHelperData; }
 namespace wmfemfhelper { class TargetHolders; }
-namespace wmfemfhelper { class PropertyHolders; }
 namespace drawinglayer { namespace geometry { class ViewInformation2D; }}
 class SvMemoryStream;
 
