@@ -55,7 +55,7 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColor,
                 double fExtendStart = 0.0,
                 double fExtendEnd = 0.0);
-            virtual ~BorderLine();
+            ~BorderLine();
 
             double getWidth() const { return mfWidth; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
@@ -63,7 +63,7 @@ namespace drawinglayer
             double getExtendEnd() const { return mfExtendEnd; }
 
             /// compare operator
-            virtual bool operator==(const BorderLine& rBorderLine) const;
+            bool operator==(const BorderLine& rBorderLine) const;
         };
 
         /** BorderLinePrimitive2D class
