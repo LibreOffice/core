@@ -218,7 +218,7 @@ private:
     long nEndX;     /* End in x direction */
     long nStartY;   /* Start in y direction */
     long nEndY;     /* Ende in y direction */
-    bool bLimits; /* boundary limit control by the application */
+    bool bLimits;   /* boundary limit control by the application */
 
 protected:
     virtual bool             operator==( const SfxPoolItem& ) const override;
@@ -240,8 +240,6 @@ public:
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY);
     SvxObjectItem(const SvxObjectItem& rCopy);
-
-    bool HasLimits() const { return bLimits;}
 
     long GetStartX() const { return nStartX;}
     long GetEndX() const { return nEndX;}

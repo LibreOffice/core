@@ -78,7 +78,6 @@ class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
 
         SvxBackgroundColorItem(const sal_uInt16 nId);
         SvxBackgroundColorItem(const Color& rCol, const sal_uInt16 nId);
-        SvxBackgroundColorItem(SvStream& rStrm, const sal_uInt16 nId);
         SvxBackgroundColorItem(const SvxBackgroundColorItem& rCopy);
 
         virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;

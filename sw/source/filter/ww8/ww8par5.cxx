@@ -3594,11 +3594,6 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rStr, 
     }
 }
 
-void sw::ms::ImportXE(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rStr)
-{
-    lcl_ImportTox(rDoc, rPaM, rStr, true);
-}
-
 void SwWW8ImplReader::ImportTox( int nFieldId, const OUString& aStr )
 {
     bool bIdx = (nFieldId != 9);

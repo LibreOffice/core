@@ -190,7 +190,6 @@ class PresetHandler
             @return css::embed::XStorage
                     which the current working storage.
          */
-        css::uno::Reference< css::embed::XStorage > getWorkingStorageShare();
         css::uno::Reference< css::embed::XStorage > getWorkingStorageUser();
 
         /** @short  check if there is a parent storage well known for

@@ -93,18 +93,4 @@ cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedSe
     return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();
 }
 
-
-void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
-/****** XMLElementWrapper_XmlSecImpl/setNativeElement *************************
- *
- *   NAME
- *  setNativeElement -- Configures the libxml2 node wrapped by this object
- *
- *   INPUTS
- *  pNode - the new libxml2 node to be wrapped by this object
- ******************************************************************************/
-{
-    m_pElement = pNode;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

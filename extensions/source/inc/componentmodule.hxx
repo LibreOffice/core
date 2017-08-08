@@ -64,9 +64,6 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
             s_pFactoryFunctionPointers;
 
     public:
-        /// get the resource locale of the module
-        static const std::locale& getResLocale();
-
         /** register a component implementing a service with the given data.
             @param  _rImplementationName
                         the implementation name of the component

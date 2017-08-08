@@ -78,19 +78,6 @@ namespace sw
         sal_uInt8 rtl_TextEncodingToWinCharsetRTF(OUString const& rFontName,
                 OUString const& rAltName, rtl_TextEncoding eTextEncoding);
 
-        /** Import a MSWord XE field. Suitable for .doc and .rtf
-
-            @param rDoc
-                the document to insert into
-
-            @param rPaM
-                the position in the document to insert into
-
-            @param rXE
-                the arguments of the original word XE field
-        */
-        void ImportXE(SwDoc &rDoc, SwPaM const &rPaM, const OUString &rXE);
-
         /** Convert from DTTM to Writer's DateTime
 
         */

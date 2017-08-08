@@ -58,17 +58,6 @@ void SfxPoolItemArray_Impl::ReHash()
     }
 }
 
-/**
- * Returns the <SfxItemPool> that is being saved.
- * This should only be used in very exceptional cases e.g.
- * when guaranteeing file format compatibility:
- * When overriding a <SfxPoolItem::Store()> getting additional data from the Pool
- */
-const SfxItemPool* SfxItemPool::GetStoringPool()
-{
-    return pStoringPool_;
-}
-
 static sal_uInt16 convertSfxItemKindToUInt16(SfxItemKind eKind)
 {
     switch (eKind)
@@ -179,7 +168,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
     // Every Pool as a whole is a record
     SfxMiniRecordWriter aPoolRec( &rStream, SFX_ITEMPOOL_REC );
-    pStoringPool_ = this;
 
     // Single header (content version and name)
     {
@@ -306,7 +294,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     }
 
     // Write out additional Pools
-    pStoringPool_ = nullptr;
     aPoolRec.Close();
     if ( !rStream.GetError() && pImpl->mpSecondary )
         pImpl->mpSecondary->Store( rStream );
@@ -926,32 +913,6 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 }
 
 
-bool SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
-{
-    return nWhich >= pImpl->nStoringStart &&
-           nWhich <= pImpl->nStoringEnd;
-}
-
-/**
- * This method allows for restricting the WhichRange, which is saved
- * by ItemSets of this Pool (and the Pool itself).
- * The method must be called before SfxItemPool::Store() and the values
- * must also be still set when the actual document (the ItemSets) is
- * being saved.
- *
- * Resetting it is not necessary, if this range is set correctly before
- * _every_ save, because its only accounted for when saving.
- *
- * We need to do this for the 3.1 format, because there's a bug in the
- * Pool loading method.
-*/
-void SfxItemPool::SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo )
-{
-    pImpl->nStoringStart = nFrom;
-    pImpl->nStoringEnd = nTo;
-}
-
-
 /**
  * This method allows for the creation of new and incompatible WhichId
  * Ranges or distributions. Pools that were saved with old versions
@@ -1168,7 +1129,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
         return false;
 
     const SfxItemPool *pPool = this;
-    while ( !pPool->IsInStoringRange(rItem.Which()) )
+    while ( !pPool->IsInRange(rItem.Which()) )
         if ( nullptr == ( pPool = pPool->pImpl->mpSecondary ) )
             return false;
 

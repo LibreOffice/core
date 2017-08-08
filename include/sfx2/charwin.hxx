@@ -31,7 +31,6 @@ public:
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) override;
     void            InsertCharToDoc();
-    Point           GetClickPosition() const;
 
     void            createContextMenu();
 

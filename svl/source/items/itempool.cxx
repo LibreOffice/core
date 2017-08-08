@@ -184,8 +184,6 @@ SfxItemPool::SfxItemPool
     pImpl->nVerStart = pImpl->mnStart;
     pImpl->nVerEnd = pImpl->mnEnd;
     pImpl->bInSetItem = false;
-    pImpl->nStoringStart = nStartWhich;
-    pImpl->nStoringEnd = nEndWhich;
     pImpl->mbPersistentRefCounts = bLoadRefCounts;
 
     if ( pDefaults )
@@ -218,8 +216,6 @@ SfxItemPool::SfxItemPool
     pImpl->nVerStart = rPool.pImpl->nVerStart;
     pImpl->nVerEnd = rPool.pImpl->nVerEnd;
     pImpl->bInSetItem = false;
-    pImpl->nStoringStart = pImpl->mnStart;
-    pImpl->nStoringEnd = pImpl->mnEnd;
     pImpl->mbPersistentRefCounts = rPool.pImpl->mbPersistentRefCounts;
 
     // Take over static Defaults
@@ -995,8 +991,6 @@ void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
     for ( SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
         pPool->pImpl->mnFileFormatVersion = nFileFormatVersion;
 }
-
-const SfxItemPool* SfxItemPool::pStoringPool_ = nullptr;
 
 void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
 {

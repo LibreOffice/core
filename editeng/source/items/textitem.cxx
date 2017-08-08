@@ -67,7 +67,6 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/fwdtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
@@ -418,11 +417,6 @@ bool SvxFontItem::GetPresentation
     return true;
 }
 
-
-void SvxFontItem::EnableStoreUnicodeNames( bool bEnable )
-{
-    bEnableStoreUnicodeNames = bEnable;
-}
 
 void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
@@ -1093,97 +1087,6 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-// class SvxFontWidthItem -----------------------------------------------
-
-SvxFontWidthItem::SvxFontWidthItem( const sal_uInt16 nSz, const sal_uInt16 nPrp, const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
-{
-    nWidth = nSz;
-    nProp = nPrp;
-}
-
-
-SfxPoolItem* SvxFontWidthItem::Clone( SfxItemPool * ) const
-{
-    return new SvxFontWidthItem( *this );
-}
-
-
-void SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
-{
-    nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
-}
-
-
-bool SvxFontWidthItem::HasMetrics() const
-{
-    return true;
-}
-
-
-bool SvxFontWidthItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-    return GetWidth() == static_cast<const SvxFontWidthItem&>(rItem).GetWidth() &&
-            GetProp() == static_cast<const SvxFontWidthItem&>(rItem).GetProp();
-}
-
-bool SvxFontWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
-{
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    nMemberId &= ~CONVERT_TWIPS;
-    switch(nMemberId)
-    {
-        case MID_FONTWIDTH:
-            rVal <<= (sal_Int16)(nWidth);
-        break;
-        case MID_FONTWIDTH_PROP:
-            rVal <<= (sal_Int16)(nProp);
-        break;
-    }
-    return true;
-}
-
-bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
-{
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    nMemberId &= ~CONVERT_TWIPS;
-    sal_Int16 nVal = sal_Int16();
-    if(!(rVal >>= nVal))
-        return false;
-
-    switch(nMemberId)
-    {
-        case MID_FONTWIDTH:
-            nProp = nVal;
-        break;
-        case MID_FONTWIDTH_PROP:
-            nWidth = nVal;
-        break;
-    }
-    return true;
-}
-
-
-bool SvxFontWidthItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    MapUnit             eCoreUnit,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper& rIntl
-)   const
-{
-    if ( 100 == nProp )
-    {
-        rText = GetMetricText( (long)nWidth,
-                                eCoreUnit, MapUnit::MapPoint, &rIntl ) +
-                " " + EditResId(GetMetricId(MapUnit::MapPoint));
-    }
-    else
-        rText = OUString::number( nProp ) + "%";
-    return true;
-}
-
 // class SvxTextLineItem ------------------------------------------------
 
 SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
@@ -1740,14 +1643,6 @@ SvxBackgroundColorItem::SvxBackgroundColorItem( const Color& rCol,
                                                 const sal_uInt16 nId ) :
     SvxColorItem( rCol, nId )
 {
-}
-
-SvxBackgroundColorItem::SvxBackgroundColorItem(SvStream& rStrm, const sal_uInt16 nId)
-    : SvxColorItem(nId)
-{
-    Color aColor;
-    aColor.Read(rStrm);
-    SetValue(aColor);
 }
 
 SvxBackgroundColorItem::SvxBackgroundColorItem( const SvxBackgroundColorItem& rCopy ) :

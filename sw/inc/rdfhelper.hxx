@@ -28,9 +28,6 @@ public:
     /// Add an (rTextNode, key, value) statement in the graph of type rType -- or if it does not exist, create a graph at rPath first.
     static void addTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue);
 
-    /// Remove an (rTextNode, key, value) statement in the graph of type rType.
-    static void removeTextNodeStatement(const OUString& rType, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue);
-
     /// Update an (rTextNode, key, value) statement in the graph of type rType from old value to new. Creates the graph at rPath if doesn't exist.
     static void updateTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rOldValue, const OUString& rNewValue);
 };

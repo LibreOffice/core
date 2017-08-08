@@ -89,9 +89,6 @@ public:
                                     MapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper& ) const override;
 
-    static void         StoreFont( SvStream&, const vcl::Font& );
-    static vcl::Font    CreateFont( SvStream&, sal_uInt16 nVer );
-
     void                CopyValidProperties( const SvxBulletItem& rCopyFrom );
 };
 

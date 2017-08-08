@@ -76,8 +76,6 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getMinorVersion(  ) override;
 
         public:
-            const css::uno::Reference< css::lang::XMultiServiceFactory >
-                        & getMSFactory() const { return  m_xFactory; }
             css::uno::Reference< css::uno::XComponentContext >
                         getComponentContext( ) const { return comphelper::getComponentContext( m_xFactory ); }
 

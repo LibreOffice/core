@@ -80,10 +80,6 @@
 #define MID_ESC_HEIGHT   1
 #define MID_AUTO_ESC     2
 
-//SvxFontWidthItem
-#define MID_FONTWIDTH       0
-#define MID_FONTWIDTH_PROP  1
-
 //SvxFontHeightItem
 #define MID_FONTHEIGHT      1
 #define MID_FONTHEIGHT_PROP 2

@@ -61,8 +61,6 @@ public:
     IntlWrapper(const LanguageTag& rLanguageTag);
     ~IntlWrapper();
 
-    const LanguageTag&          getLanguageTag() const { return maLanguageTag; }
-
     const LocaleDataWrapper*    getLocaleData() const
                                     {
                                         if ( !pLocaleData )
