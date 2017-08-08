@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c5a51eb6",
+        "filename": "include/svl/itempool.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-08T12:41:53Z",
+      "side": 1,
+      "message": "this is write only now\nhttps://opengrok.libreoffice.org/search?project\u003dcore\u0026q\u003dpStoringPool_",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 50
+      },
+      "revId": "a929f189c1ec0d2fa5403c1f9995c897ba77b120",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e5985a6d",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-08T12:41:53Z",
+      "side": 1,
+      "message": "looks like nStoringStart and nStoringEnd are always set to mnStart and mnEnd now and those are never changed after initialization. (try changing them to \u0027sal_uInt16 const\u0027)\n\nSo IsInStoringRange can be replaced with IsInRange.",
+      "range": {
+        "startLine": 918,
+        "startChar": 0,
+        "endLine": 922,
+        "endChar": 1
+      },
+      "revId": "a929f189c1ec0d2fa5403c1f9995c897ba77b120",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
