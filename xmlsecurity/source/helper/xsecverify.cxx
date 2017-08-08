@@ -26,6 +26,7 @@
 #include "gpg/xmlsignature_gpgimpl.hxx"
 #include "gpg/SEInitializer.hxx"
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -36,6 +37,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;
@@ -326,6 +328,15 @@ void XSecController::setDescription(const OUString& rDescription)
     rInformation.signatureInfor.ouDescription = rDescription;
 }
 
+void XSecController::setSignatureText(const OUString& rSignatureText)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.ouSignatureText = rSignatureText;
+}
+
 void XSecController::setSignatureBytes(const uno::Sequence<sal_Int8>& rBytes)
 {
     if (m_vInternalSignatureInformations.empty())
@@ -342,6 +353,37 @@ void XSecController::setCertDigest(const OUString& rCertDigest)
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
     rInformation.signatureInfor.ouCertDigest = rCertDigest;
+}
+
+void XSecController::setValidSignatureImage(const OUString& rValidSigImg)
+{
+    SAL_DEBUG("XSecController::setValidSignatureImage");
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    std::vector<sal_Int8> v;
+    v.reserve(rValidSigImg.getLength());
+    for (int i=0;i <rValidSigImg.getLength(); i++) {
+        v.emplace_back(rValidSigImg[i]);
+    }
+    // TODO: Create graphic using  GraphicHelper::importGraphic( const StreamDataSequence& rGraphicData )
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.maValidSignatureImage = comphelper::containerToSequence(v);
+}
+
+void XSecController::setInvalidSignatureImage(const OUString& rInvalidSigImg)
+{
+    SAL_DEBUG("XSecController::setInvalidSignatureImage");
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    std::vector<sal_Int8> v;
+    v.reserve(rInvalidSigImg.getLength());
+    for (int i=0;i <rInvalidSigImg.getLength(); i++) {
+        v.emplace_back(rInvalidSigImg[i]);
+    }
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.maInvalidSignatureImage = comphelper::containerToSequence(v);
 }
 
 void XSecController::addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate)

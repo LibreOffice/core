@@ -329,9 +329,11 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    SAL_DEBUG("ShapeTypeContext::onCreateContext");
     if( isRootElement() ) switch( nElement )
     {
         case VML_TOKEN( stroke ):
+            SAL_DEBUG("found stroke");
             mrTypeModel.maStrokeModel.moStroked.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
             mrTypeModel.maStrokeModel.maStartArrow.moArrowType = rAttribs.getToken( XML_startarrow );
             mrTypeModel.maStrokeModel.maStartArrow.moArrowWidth = rAttribs.getToken( XML_startarrowwidth );
@@ -348,6 +350,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maStrokeModel.moJoinStyle = rAttribs.getToken( XML_joinstyle );
         break;
         case VML_TOKEN( fill ):
+            SAL_DEBUG("found fill");
             mrTypeModel.maFillModel.moFilled.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
             mrTypeModel.maFillModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
             mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
@@ -363,6 +366,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         break;
         case VML_TOKEN( imagedata ):
         {
+            SAL_DEBUG("found imagedata");
             // shapes in docx use r:id for the relationship id
             // in xlsx it they use o:relid
             bool bHasORelId = rAttribs.hasAttribute( O_TOKEN( relid ) );
@@ -377,6 +381,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         }
         break;
         case NMSP_vmlWord | XML_wrap:
+            SAL_DEBUG("NMSP_vmlWord | XML_wrap");
             mrTypeModel.moWrapAnchorX = rAttribs.getString(XML_anchorx);
             mrTypeModel.moWrapAnchorY = rAttribs.getString(XML_anchory);
             mrTypeModel.moWrapType = rAttribs.getString(XML_type);
@@ -384,6 +389,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         break;
         case VML_TOKEN( shadow ):
         {
+            SAL_DEBUG("found shadow");
             mrTypeModel.maShadowModel.mbHasShadow = true;
             mrTypeModel.maShadowModel.moShadowOn.assignIfUsed(lclDecodeBool(rAttribs, XML_on));
             mrTypeModel.maShadowModel.moColor.assignIfUsed(rAttribs.getString(XML_color));
@@ -392,8 +398,18 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         }
         break;
         case VML_TOKEN( textpath ):
+            SAL_DEBUG("found textpath");
             mrTypeModel.maTextpathModel.moString.assignIfUsed(rAttribs.getString(XML_string));
             mrTypeModel.maTextpathModel.moStyle.assignIfUsed(rAttribs.getString(XML_style));
+        break;
+        case O_TOKEN( signatureline ):
+            SAL_DEBUG("O_TOKEN( signatureline )");
+        break;
+        case O_TOKEN( lock ):
+            SAL_DEBUG("O_TOKEN( lock )");
+        break;
+        default:
+            SAL_DEBUG("ShapeTypeContext unhandled element: " << nElement);
         break;
     }
     return nullptr;
@@ -467,6 +483,8 @@ ShapeContext::ShapeContext(ContextHandler2Helper const & rParent,
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    SAL_DEBUG("ShapeContext::onCreateContext");
+    SAL_DEBUG("current elem: " << (getCurrentElement() == VML_TOKEN(shape)));
     // Excel specific shape client data
     if( isRootElement() ) switch( nElement )
     {
@@ -491,6 +509,15 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                     "com.sun.star.drawing.RectangleShape");
             mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
             break;
+        case O_TOKEN( signatureline ):
+            SAL_DEBUG("O_TOKEN( signatureline )");
+        break;
+        case O_TOKEN( lock ):
+            SAL_DEBUG("O_TOKEN( lock )");
+        break;
+        default:
+            SAL_DEBUG("ShapeContext Unhandled element: " << nElement);
+        break;
     }
     // handle remaining stuff in base class
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );

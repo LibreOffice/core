@@ -44,7 +44,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
- #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <rtl/math.hxx>
@@ -535,6 +535,7 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
     ShapeBase( rDrawing ),
     maService( rService )
 {
+    SAL_DEBUG("SimpleShape::SimpleShape");
 }
 
 void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)

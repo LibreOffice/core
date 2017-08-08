@@ -65,6 +65,7 @@ DocumentDigitalSignatures::~DocumentDigitalSignatures()
 
 void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
 {
+    SAL_DEBUG("DocumentDigitalSignatures::initialize");
     if (aArguments.getLength() > 2)
         throw css::lang::IllegalArgumentException(
           "DocumentDigitalSignatures::initialize requires zero, one, or two arguments",

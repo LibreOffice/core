@@ -20,9 +20,12 @@ OOXMLSecParser::OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecCont
     ,m_bInX509Certificate(false)
     ,m_bInMdssiValue(false)
     ,m_bInSignatureComments(false)
+    ,m_bInSignatureText(false)
     ,m_bInX509IssuerName(false)
     ,m_bInX509SerialNumber(false)
     ,m_bInCertDigest(false)
+    ,m_bInValidSignatureImage(false)
+    ,m_bInInvalidSignatureImage(false)
     ,m_bReferenceUnresolved(false)
     ,m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
@@ -105,6 +108,11 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
         m_aSignatureComments.clear();
         m_bInSignatureComments = true;
     }
+    else if (rName == "SignatureText")
+    {
+        m_aSignatureText.clear();
+        m_bInSignatureText = true;
+    }
     else if (rName == "X509IssuerName")
     {
         m_aX509IssuerName.clear();
@@ -119,6 +127,22 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
     {
         m_aCertDigest.clear();
         m_bInCertDigest = true;
+    }
+    else if (rName == "Object")
+    {
+        OUString sId = xAttribs->getValueByName("Id");
+        if (sId == "idValidSigLnImg")
+        {
+            m_aValidSignatureImage.clear();
+            m_bInValidSignatureImage = true;
+            SAL_DEBUG("valid img");
+        }
+        else if (sId == "idInvalidSigLnImg")
+        {
+            m_aInvalidSignatureImage.clear();
+            m_bInInvalidSignatureImage = true;
+            SAL_DEBUG("invalid img");
+        }
     }
     else
     {
@@ -165,6 +189,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
         m_pXSecController->setDescription(m_aSignatureComments);
         m_bInSignatureComments = false;
     }
+    else if (rName == "SignatureText")
+    {
+        m_pXSecController->setSignatureText(m_aSignatureText);
+        m_bInSignatureText = false;
+    }
     else if (rName == "X509IssuerName")
     {
         m_pXSecController->setX509IssuerName(m_aX509IssuerName);
@@ -179,6 +208,19 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
     {
         m_pXSecController->setCertDigest(m_aCertDigest);
         m_bInCertDigest = false;
+    }
+    else if (rName == "Object")
+    {
+        if (m_bInValidSignatureImage)
+        {
+            m_pXSecController->setValidSignatureImage(m_aValidSignatureImage);
+            m_bInValidSignatureImage = false;
+        }
+        else if (m_bInInvalidSignatureImage)
+        {
+            m_pXSecController->setInvalidSignatureImage(m_aInvalidSignatureImage);
+            m_bInInvalidSignatureImage = false;
+        }
     }
 
     if (m_xNextHandler.is())
@@ -197,12 +239,18 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars)
         m_aMdssiValue += rChars;
     else if (m_bInSignatureComments)
         m_aSignatureComments += rChars;
+    else if (m_bInSignatureText)
+        m_aSignatureText += rChars;
     else if (m_bInX509IssuerName)
         m_aX509IssuerName += rChars;
     else if (m_bInX509SerialNumber)
         m_aX509SerialNumber += rChars;
     else if (m_bInCertDigest)
         m_aCertDigest += rChars;
+    else if (m_bInValidSignatureImage)
+        m_aValidSignatureImage += rChars;
+    else if (m_bInInvalidSignatureImage)
+        m_aInvalidSignatureImage += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);

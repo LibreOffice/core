@@ -103,6 +103,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     m_pImpl(new DomainMapper_Impl(*this, xContext, xModel, eDocumentType, rMediaDesc)),
     mbIsSplitPara(false)
 {
+    SAL_DEBUG("somewhere in docx import");
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
         getPropertyName( PROP_TABS_RELATIVE_TO_INDENT ),
