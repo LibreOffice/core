@@ -247,7 +247,7 @@ public:
 
     bool setupShape( const ShapePtr& rShape,
                      const Diagram& rDgm,
-                     sal_uInt32 nIdx ) const;
+                     const dgm::Point* pPresNode ) const;
 
 private:
     VarMap                       mVariables;
