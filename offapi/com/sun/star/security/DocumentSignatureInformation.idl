@@ -20,6 +20,7 @@
 #ifndef __com_sun_star_security_DocumentSignatureInformation_idl__
 #define __com_sun_star_security_DocumentSignatureInformation_idl__
 
+#include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/security/XCertificate.idl>
 #include <com/sun/star/security/CertificateValidity.idl>
 
@@ -66,6 +67,12 @@ struct DocumentSignatureInformation
     */
     boolean PartialDocumentSignature;
 
+    /* The Id of the Signature Line. */
+    string SignatureLineId;
+    /* The Signature Line Image which is shown when the signature is valid */
+    com::sun::star::graphic::XGraphic ValidSignatureLineImage;
+    /* The Signature Line Image which is shown when the signature is invalid */
+    com::sun::star::graphic::XGraphic InvalidSignatureLineImage;
 };
 
 

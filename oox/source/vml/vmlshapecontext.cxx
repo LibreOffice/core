@@ -491,6 +491,13 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                     "com.sun.star.drawing.RectangleShape");
             mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
             break;
+        case O_TOKEN( signatureline ):
+            mrShapeModel.mbIsSignatureLine = true;
+            mrShapeModel.maSignatureId = rAttribs.getString(XML_id, OUString());
+            break;
+        case O_TOKEN( lock ):
+            // TODO
+            break;
     }
     // handle remaining stuff in base class
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
