@@ -26,6 +26,7 @@
 #include "osx/salframe.h"
 #include "osx/salinst.h"
 #include "osx/salobj.h"
+#include "osx/runinmain.hxx"
 
 #include <AppKit/NSOpenGLView.h>
 
@@ -105,6 +106,8 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWi
 
 AquaSalObject::~AquaSalObject()
 {
+    assert( GetSalData()->mpFirstInstance->IsMainThread() );
+
     if( maSysData.mpNSView )
     {
         NSView *pView = maSysData.mpNSView;
@@ -194,6 +197,8 @@ void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 void AquaSalObject::setClippedPosSize()
 {
+    OSX_SALDATA_RUNINMAIN( setClippedPosSize() )
+
     NSRect aViewRect = { NSZeroPoint, NSMakeSize( mnWidth, mnHeight) };
     if( maSysData.mpNSView )
     {
@@ -222,8 +227,12 @@ void AquaSalObject::setClippedPosSize()
 
 void AquaSalObject::Show( bool bVisible )
 {
-    if( mpClipView )
-        [mpClipView setHidden: (bVisible ? NO : YES)];
+    if( !mpClipView )
+        return;
+
+    OSX_SALDATA_RUNINMAIN( Show( bVisible ) )
+
+    [mpClipView setHidden: (bVisible ? NO : YES)];
 }
 
 const SystemEnvData* AquaSalObject::GetSystemData() const
@@ -235,8 +244,10 @@ class AquaOpenGLContext : public OpenGLContext
 {
 public:
     virtual bool initWindow() override;
+
 private:
     GLWindow m_aGLWin;
+
     virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
     virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
     NSOpenGLView* getOpenGLView();
@@ -250,6 +261,8 @@ private:
 
 void AquaOpenGLContext::resetCurrent()
 {
+    OSX_SALDATA_RUNINMAIN( resetCurrent() )
+
     clearCurrent();
 
     OpenGLZone aZone;
@@ -260,6 +273,8 @@ void AquaOpenGLContext::resetCurrent()
 
 void AquaOpenGLContext::makeCurrent()
 {
+    OSX_SALDATA_RUNINMAIN( makeCurrent() )
+
     if (isCurrent())
         return;
 
@@ -275,6 +290,8 @@ void AquaOpenGLContext::makeCurrent()
 
 void AquaOpenGLContext::swapBuffers()
 {
+    OSX_SALDATA_RUNINMAIN( swapBuffers() )
+
     OpenGLZone aZone;
 
     NSOpenGLView* pView = getOpenGLView();
@@ -293,11 +310,14 @@ SystemWindowData AquaOpenGLContext::generateWinData(vcl::Window* /*pParent*/, bo
 
 void AquaOpenGLContext::destroyCurrentContext()
 {
+    OSX_SALDATA_RUNINMAIN( destroyCurrentContext() )
     [NSOpenGLContext clearCurrentContext];
 }
 
 bool AquaOpenGLContext::initWindow()
 {
+    OSX_SALDATA_RUNINMAIN_UNION( initWindow(), boolean )
+
     if( !m_pChildWindow )
     {
         SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
@@ -314,6 +334,8 @@ bool AquaOpenGLContext::initWindow()
 
 bool AquaOpenGLContext::ImplInit()
 {
+    OSX_SALDATA_RUNINMAIN_UNION( ImplInit(), boolean )
+
     OpenGLZone aZone;
 
     VCL_GL_INFO("OpenGLContext::ImplInit----start");
@@ -332,6 +354,7 @@ NSOpenGLView* AquaOpenGLContext::getOpenGLView()
 
 OpenGLContext* AquaSalInstance::CreateOpenGLContext()
 {
+    OSX_SALDATA_RUNINMAIN_POINTER( CreateOpenGLContext(), OpenGLContext* )
     return new AquaOpenGLContext;
 }
 

@@ -203,8 +203,8 @@ using namespace ::com::sun::star::uno;
 
 +(id)rangeForPositionAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)point {
     NSValue * value = nil;
-    Point aPoint( [ AquaA11yUtil nsPointToVclPoint: point ]);
-    const Point screenPos = [ wrapper accessibleComponent ] -> getLocationOnScreen();
+    css::awt::Point aPoint( [ AquaA11yUtil nsPointToVclPoint: point ]);
+    const css::awt::Point screenPos = [ wrapper accessibleComponent ] -> getLocationOnScreen();
     aPoint.X -= screenPos.X;
     aPoint.Y -= screenPos.Y;
     sal_Int32 index = [ wrapper accessibleText ] -> getIndexAtPoint( aPoint );
@@ -239,9 +239,9 @@ using namespace ::com::sun::star::uno;
         }
         if ( [ wrapper accessibleComponent ] ) {
             // get location on screen (must be added since get CharacterBounds returns values relative to parent)
-            Point screenPos = [ wrapper accessibleComponent ] -> getLocationOnScreen();
-            Point pos ( minx + screenPos.X, miny + screenPos.Y );
-            Point size ( maxx - minx, maxy - miny );
+            css::awt::Point screenPos = [ wrapper accessibleComponent ] -> getLocationOnScreen();
+            css::awt::Point pos ( minx + screenPos.X, miny + screenPos.Y );
+            css::awt::Point size ( maxx - minx, maxy - miny );
             NSValue * nsPos = [ AquaA11yUtil vclPointToNSPoint: pos ];
             rect = [ NSValue valueWithRect: NSMakeRect ( [ nsPos pointValue ].x, [ nsPos pointValue ].y - size.Y, size.X, size.Y ) ];
             //printf("Range: %s --- Rect: %s\n", [ NSStringFromRange ( [ range rangeValue ] ) UTF8String ], [ NSStringFromRect ( [ rect rectValue ] ) UTF8String ]);

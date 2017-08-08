@@ -45,6 +45,8 @@
 
 #include "apple_remote/RemoteMainController.h"
 
+#include "osx/runinmain.hxx"
+
 class AquaSalInstance;
 class SalObject;
 class SalFrame;

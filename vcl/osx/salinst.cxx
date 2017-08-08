@@ -46,6 +46,7 @@
 #include "osx/salprn.h"
 #include "osx/saltimer.h"
 #include "osx/vclnsapp.h"
+#include "osx/runinmain.hxx"
 
 #include "print.h"
 #include "impbmp.hxx"
@@ -259,6 +260,7 @@ void InitSalMain()
 }
 
 SalYieldMutex::SalYieldMutex()
+    : m_aCodeBlock( nullptr )
 {
 }
 
@@ -268,12 +270,59 @@ SalYieldMutex::~SalYieldMutex()
 
 void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
+    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    if ( pInst && pInst->IsMainThread() )
+    {
+        if ( pInst->mbNoYieldLock )
+            return;
+        do {
+            m_aInMainCondition.reset();
+            if ( m_aCodeBlock )
+            {
+                assert( !pInst->mbNoYieldLock );
+                pInst->mbNoYieldLock = true;
+                m_aCodeBlock();
+                pInst->mbNoYieldLock = false;
+                Block_release( m_aCodeBlock );
+                m_aCodeBlock = nullptr;
+                m_aResultCondition.set();
+            }
+            // reset condition *before* acquiring!
+            if (m_aMutex.tryToAcquire())
+                break;
+            // wait for doRelease() or RUNINMAIN_* to set the condition
+            osl::Condition::Result res =  m_aInMainCondition.wait();
+            assert(osl::Condition::Result::result_ok == res);
+        }
+        while ( true );
+    }
+    else
+        m_aMutex.acquire();
+    ++m_nCount;
+    --nLockCount;
+
     comphelper::GenericSolarMutex::doAcquire( nLockCount );
 }
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 {
-    return comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
+        return 1;
+    sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+
+    if ( 0 == m_nCount && !pInst->IsMainThread() )
+        m_aInMainCondition.set();
+
+    return nCount;
+}
+
+bool SalYieldMutex::IsCurrentThread() const
+{
+    if ( !GetSalData()->mpFirstInstance->mbNoYieldLock )
+        return comphelper::GenericSolarMutex::IsCurrentThread();
+    else
+        return GetSalData()->mpFirstInstance->IsMainThread();
 }
 
 // some convenience functions regarding the yield mutex, aka solar mutex
@@ -325,15 +374,13 @@ void DestroySalInstance( SalInstance* pInst )
 }
 
 AquaSalInstance::AquaSalInstance()
- : maUserEventListMutex()
- , maWaitingYieldCond()
- , mbIsLiveResize( false )
+    : mnActivePrintJobs( 0 )
+    , mbIsLiveResize( false )
+    , mbNoYieldLock( false )
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
     maMainThread = osl::Thread::getCurrentIdentifier();
-    mbWaitingYield = false;
-    mnActivePrintJobs = 0;
 }
 
 AquaSalInstance::~AquaSalInstance()
@@ -342,21 +389,15 @@ AquaSalInstance::~AquaSalInstance()
     delete mpSalYieldMutex;
 }
 
-void AquaSalInstance::wakeupYield()
-{
-    // wakeup :Yield
-    if( mbWaitingYield )
-        ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, YES );
-}
-
 void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData )
 {
     {
         osl::MutexGuard g( maUserEventListMutex );
         maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
     }
-    // notify main loop that an event has arrived
-    wakeupYield();
+    dispatch_async(dispatch_get_main_queue(),^{
+        ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, NO );
+    });
 }
 
 comphelper::SolarMutex* AquaSalInstance::GetYieldMutex()
@@ -474,8 +515,8 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 #endif
 
     case YieldWakeupEvent:
-        // do nothing, fall out of Yield
-    break;
+        assert( !"YieldWakeupEvent must be filtered in dispatch!" );
+        break;
 
     default:
         OSL_FAIL( "unhandled NSApplicationDefined event" );
@@ -532,11 +573,6 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
     // cocoa events may be only handled in the thread the NSApp was created
     if( IsMainThread() && mnActivePrintJobs == 0 )
     {
-        // we need to be woken up by a cocoa-event
-        // if a user event should be posted by the event handling below
-        bool bOldWaitingYield = mbWaitingYield;
-        mbWaitingYield = bWait;
-
         // handle available events
         NSEvent* pEvent = nil;
         do
@@ -552,13 +588,18 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                             dequeue: YES];
             if( pEvent )
             {
+                if ( isWakeupEvent( pEvent ) )
+                    continue;
                 [NSApp sendEvent: pEvent];
                 bHadEvent = true;
             }
 
             [NSApp updateWindows];
+
+            if ( !bHandleAllCurrentEvents || !pEvent )
+                break;
         }
-        while( bHandleAllCurrentEvents && pEvent );
+        while( true );
 
         // if we had no event yet, wait for one if requested
         if( bWait && ! bHadEvent )
@@ -574,11 +615,15 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )
-                [NSApp sendEvent: pEvent];
+            {
+                if ( !isWakeupEvent( pEvent ) )
+                {
+                    [NSApp sendEvent: pEvent];
+                    bHadEvent = true;
+                }
+            }
             [NSApp updateWindows];
         }
-
-        mbWaitingYield = bOldWaitingYield;
 
         // collect update rectangles
         const std::list< AquaSalFrame* > rFrames( GetSalData()->maFrames );
@@ -590,17 +635,17 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 (*it)->maInvalidRect.SetEmpty();
             }
         }
-        maWaitingYieldCond.set();
+
+        if ( bHadEvent )
+            maWaitingYieldCond.set();
     }
     else if( bWait )
     {
         // #i103162#
-        // wait until any thread (most likely the main thread)
-        // has dispatched an event, cop out at 200 ms
+        // wait until the main thread has dispatched an event
         maWaitingYieldCond.reset();
-        TimeValue aVal = { 0, 200000000 };
         SolarMutexReleaser aReleaser;
-        maWaitingYieldCond.wait( &aVal );
+        maWaitingYieldCond.wait();
     }
 
     // we get some apple events way too early
@@ -639,6 +684,8 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             return false;
     }
 
+    OSX_INST_RUNINMAIN_UNION( AnyInput( nType ), boolean )
+
     if( nType & VclInputFlags::TIMER )
     {
         if( AquaSalTimer::pRunningTimer )
@@ -650,9 +697,6 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             }
         }
     }
-
-    if (!IsMainThread())
-        return false;
 
     unsigned/*NSUInteger*/ nEventMask = 0;
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -701,29 +745,28 @@ SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, SalFrameStyleFla
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
 {
-    SalData::ensureThreadAutoreleasePool();
-
-    SalFrame* pFrame = new AquaSalFrame( pParent, nSalFrameStyle );
-    return pFrame;
+    OSX_INST_RUNINMAIN_POINTER( CreateFrame( pParent, nSalFrameStyle ), SalFrame* )
+    return new AquaSalFrame( pParent, nSalFrameStyle );
 }
 
 void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 {
+    OSX_INST_RUNINMAIN( DestroyFrame( pFrame ) )
     delete pFrame;
 }
 
 SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool /* bShow */ )
 {
-    AquaSalObject *pObject = nullptr;
+    if ( !pParent )
+        return nullptr;
 
-    if ( pParent )
-        pObject = new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
-
-    return pObject;
+    OSX_INST_RUNINMAIN_POINTER( CreateObject( pParent, pWindowData, false ), SalObject* )
+    return new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
 }
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
+    OSX_INST_RUNINMAIN( DestroyObject( pObject ) )
     delete pObject;
 }
 
