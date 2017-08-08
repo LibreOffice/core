@@ -368,6 +368,29 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
+            // OOXML Signature line info (ID + Images)
+            if (!rInfo.ouSignatureLineId.isEmpty())
+                rSigInfo.SignatureLineId = rInfo.ouSignatureLineId;
+
+            if (rInfo.aValidSignatureImage.is())
+            {
+                SAL_DEBUG("aValidSignatureImage.is()");
+                rSigInfo.ValidSignatureLineImage = rInfo.aValidSignatureImage;
+            }
+            else
+            {
+                SAL_DEBUG("aValidSignatureImage.isnot()");
+            }
+
+            if (rInfo.aInvalidSignatureImage.is())
+            {
+                SAL_DEBUG("aInvalidSignatureImage.is()");
+                rSigInfo.InvalidSignatureLineImage = rInfo.aInvalidSignatureImage;
+            }
+            else
+            {
+                SAL_DEBUG("aInvalidSignatureImage.isnot()");
+            }
 
             // OOXML intentionally doesn't sign metadata.
             if ( rSigInfo.SignatureIsValid && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)

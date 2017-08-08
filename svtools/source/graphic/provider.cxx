@@ -47,6 +47,7 @@
 #include <vcl/dibtools.hxx>
 #include <comphelper/sequence.hxx>
 #include <memory>
+#include <svtools/ehdl.hxx>
 
 using namespace com::sun::star;
 
@@ -418,14 +419,20 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             if ( nExtMapMode > 0 )
                 pExtHeader = &aExtHeader;
 
-            if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
-                                         GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader ) == ERRCODE_NONE ) &&
+            ErrCode error = rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
+                GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader );
+            if( (error == ERRCODE_NONE ) &&
                 ( aVCLGraphic.GetType() != GraphicType::NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
 
                 pUnoGraphic->init( aVCLGraphic );
                 xRet = pUnoGraphic;
+            }
+            else{
+                //OUString aErrorString;
+                //GetErrorString(error, aErrorString);
+                SAL_DEBUG("Could not create graphic: " << error);
             }
         }
     }

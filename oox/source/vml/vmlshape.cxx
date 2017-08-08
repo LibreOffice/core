@@ -44,9 +44,11 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
- #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svdtrans.hxx>
@@ -67,7 +69,9 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -249,7 +253,8 @@ ClientData::ClientData() :
 {
 }
 
-ShapeModel::ShapeModel()
+ShapeModel::ShapeModel() :
+    mbIsSignatureLine(false)
 {
 }
 
@@ -1226,15 +1231,74 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             return xShape;
     }
 
+
+    if( getShapeModel().mbIsSignatureLine )
+    {
+
+        SAL_DEBUG("ComplexShape here, we have a signatureline!, id: " << getShapeModel().maSignatureId);
+        Reference< security::XDocumentDigitalSignatures > xSignatures(
+            security::DocumentDigitalSignatures::createWithVersion(
+                comphelper::getProcessComponentContext(), "1.2" ) );
+
+        uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, mrDrawing.getFilter().getFileUrl(), embed::ElementModes::READWRITE);
+        SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
+
+        uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =
+            xSignatures->verifyScriptingContentSignatures(xStorage, uno::Reference< io::XInputStream >());
+
+        for (int i=0; i<xSignatureInfo.getLength(); i++)
+        {
+            SAL_DEBUG("Signature found, SignatureLineId: " << xSignatureInfo[i].SignatureLineId);
+            if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
+            {
+                SAL_DEBUG("found matching signature line");
+                //PropertySet aPropSet( xShape );
+                if (xSignatureInfo[i].SignatureIsValid)
+                {
+                    SAL_DEBUG("Signature is valid, render the 'valid' image");
+                    SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml", "No ValidSignatureLineImage!");
+                    OUString aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject( xSignatureInfo[i].ValidSignatureLineImage );
+                    //Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
+                    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
+                    PropertySet aPropSet( xShape );
+                    SAL_DEBUG("graphic url: " << aGraphicUrl);
+                    aPropSet.setProperty(PROP_GraphicURL, aGraphicUrl);
+                    //aPropSet.setProperty(PROP_Graphic, xSignatureInfo[i].ValidSignatureLineImage);
+
+                    uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
+                    // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
+                    if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
+                        aPropSet.setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
+
+                    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+                    lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
+
+                    return xShape;
+                }
+                else
+                {
+                    SAL_DEBUG("Signature is invalid, render the 'invalid' image");
+                    SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml", "No InvalidSignatureLineImage!");
+                    //aPropSet.setProperty(PROP_Graphic, xSignatureInfo[i].InvalidSignatureLineImage);
+                }
+
+            }
+        }
+        // In case no matching signature line is found, render the fallback image (next if branch)
+    }
+
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
     {
+        SAL_DEBUG("creating shape from graphicpath: " << aGraphicPath);
         Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
         // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
         if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
         return xShape;
     }
+
     // default: try to create a custom shape
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
