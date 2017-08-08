@@ -94,7 +94,19 @@ can be added to the scheduler reasonably.
 Generally the Scheduler is handled as expected, except on resize, which is
 handled with different runloop-modes in MacOS. In case of a resize, the normal
 runloop is suspended in sendEvent, so we can't call the scheduler via posted
-main loop-events. Instead the schedule the timer again.
+main loop-events. Instead the scheduler uses the timer again.
+
+Like the Windows backend, all Cocoa / GUI handling also has to be run in
+the main thread. We're emulating Windows out-of-order PeekMessage processing,
+via a YieldWakeupEvent and two conditionals. When in a RUNINMAIN call, all
+the DBG_TESTSOLARMUTEX calls are disabled, as we can't release the SolarMutex,
+but we can prevent running any other SolarMutex based code. Same for all the
+SolarMutex acquire and release calls, so the calling and the main thread
+don't deadlock. Those wakeup events must be ignored to prevent busy-locks.
+
+We can neigher rely on MacOS dispatch_sync code block execution nor the
+message handling, as both can't be priorized or filtered and the first
+does also not allow nested execution and is just processed in sequence.
 
 There is also a workaround for a problem for pushing tasks to an empty queue,
 as [NSApp postEvent: ... atStart: NO] doesn't append the event, if the
@@ -159,3 +171,8 @@ easy way to process just a single event).
 Since the Scheduler is always handled by the system message queue, there is
 really no more reasoning to stop after 100 events to prevent LO Scheduler
 starvation.
+
+== Run the LO application in its own thread ==
+
+This would probably get rid of most of the MacOS and Windows implementation
+details / workarounds, but is quite probably a large amount of work.
