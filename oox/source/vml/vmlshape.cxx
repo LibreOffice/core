@@ -44,9 +44,11 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
- #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svdtrans.hxx>
@@ -67,7 +69,9 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -249,7 +253,8 @@ ClientData::ClientData() :
 {
 }
 
-ShapeModel::ShapeModel()
+ShapeModel::ShapeModel() :
+    mbIsSignatureLine(false)
 {
 }
 
@@ -852,17 +857,23 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const
+Reference< XShape > SimpleShape::createEmbeddedPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const
+{
+    XmlFilterBase& rFilter = mrDrawing.getFilter();
+    OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( rGraphicPath );
+    return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
+}
+
+Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString const & rGraphicUrl ) const
 {
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
     if( xShape.is() )
     {
-        XmlFilterBase& rFilter = mrDrawing.getFilter();
-        OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( rGraphicPath );
+
         PropertySet aPropSet( xShape );
-        if( !aGraphicUrl.isEmpty() )
+        if( !rGraphicUrl.isEmpty() )
         {
-            aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
+            aPropSet.setProperty( PROP_GraphicURL, rGraphicUrl );
         }
         uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
         // If the shape has an absolute position, set the properties accordingly, unless we're inside a group shape.
@@ -912,7 +923,7 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
 
     // try to create a picture object
     if(!aGraphicPath.isEmpty())
-        return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        return SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
     // default: try to create a rectangle shape
     Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
@@ -1231,15 +1242,60 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             return xShape;
     }
 
+
+    if( getShapeModel().mbIsSignatureLine )
+    {
+        // Get the document signatures
+        Reference< security::XDocumentDigitalSignatures > xSignatures(
+            security::DocumentDigitalSignatures::createWithVersion(
+                comphelper::getProcessComponentContext(), "1.2" ) );
+
+        uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, mrDrawing.getFilter().getFileUrl(), embed::ElementModes::READ);
+        SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
+
+        uno::Sequence< security::DocumentSignatureInformation > xSignatureInfo =
+            xSignatures->verifyScriptingContentSignatures(xStorage, uno::Reference< io::XInputStream >());
+
+        for (int i=0; i<xSignatureInfo.getLength(); i++)
+        {
+            // Try to find matching signature line image - if none exists that is fine,
+            // then the signature line is not digitally signed.
+            if (xSignatureInfo[i].SignatureLineId == getShapeModel().maSignatureId)
+            {
+                OUString aGraphicUrl;
+                if (xSignatureInfo[i].SignatureIsValid)
+                {
+                    // Signature is valid, use the 'valid' image
+                    SAL_WARN_IF(!xSignatureInfo[i].ValidSignatureLineImage.is(), "oox.vml", "No ValidSignatureLineImage!");
+                    aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(xSignatureInfo[i].ValidSignatureLineImage);
+                }
+                else
+                {
+                    // Signature is invalid, use the 'invalid' image
+                    SAL_WARN_IF(!xSignatureInfo[i].InvalidSignatureLineImage.is(), "oox.vml", "No InvalidSignatureLineImage!");
+                    aGraphicUrl = rFilter.getGraphicHelper().createGraphicObject(xSignatureInfo[i].InvalidSignatureLineImage);
+                }
+                Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicUrl);
+                PropertySet aPropSet(xShape);
+                aPropSet.setProperty(PROP_GraphicURL, aGraphicUrl);
+
+                return xShape;
+            }
+        }
+        // In case no matching signature line is found, render the unsigned signature line image (next if branch)
+    }
+
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
     {
-        Reference< XShape > xShape = SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
+        Reference< XShape > xShape = SimpleShape::createEmbeddedPictureObject(rxShapes, rShapeRect, aGraphicPath);
         // AS_CHARACTER shape: vertical orientation default is bottom, MSO default is top.
         if ( maTypeModel.maPosition != "absolute" && maTypeModel.maPosition != "relative" )
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
         return xShape;
     }
+
     // default: try to create a custom shape
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
