@@ -59,11 +59,16 @@ void EPUBPackage::openXMLFile(const char *pName)
     mxOutputWriter->startDocument();
 }
 
-void EPUBPackage::openElement(const char *pName, const librevenge::RVNGPropertyList &/*rAttributes*/)
+void EPUBPackage::openElement(const char *pName, const librevenge::RVNGPropertyList &rAttributes)
 {
     assert(mxOutputWriter.is());
 
     rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+
+    librevenge::RVNGPropertyList::Iter it(rAttributes);
+    for (it.rewind(); it.next();)
+        pAttributeList->AddAttribute(OUString::fromUtf8(it.key()), OUString::fromUtf8(it()->getStr().cstr()));
+
     mxOutputWriter->startElement(OUString::fromUtf8(pName), uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
 }
 
