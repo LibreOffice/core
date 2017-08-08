@@ -276,7 +276,7 @@
 #define STR_TEMPLATE_NAME9                      NC_("STR_TEMPLATE_NAME9", "Sunset")
 #define STR_TEMPLATE_NAME10                     NC_("STR_TEMPLATE_NAME10", "Vintage")
 
-#define STR_CLEAR_CHAR                          NC_("STR_CLEAR_CHAR", "Clear")
+#define STR_CLEAR_CHAR                          NC_("STR_CLEAR_CHAR", "Remove")
 #define STR_CLEAR_ALL_CHAR                      NC_("STR_CLEAR_ALL_CHAR", "Clear All")
 
 #endif
