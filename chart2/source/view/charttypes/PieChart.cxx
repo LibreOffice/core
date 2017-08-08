@@ -355,8 +355,13 @@ void PieChart::createTextLabelShape(
     ///a new `PieLabelInfo` instance is initialized with all the info related to
     ///the current label in order to simplify later label position rearrangement;
     uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
-    if( xChild.is() )
-        aPieLabelInfo.xLabelGroupShape.set( xChild->getParent(), uno::UNO_QUERY );
+
+    ///text shape could be empty; in that case there is no need to add label info
+    if( !xChild.is() )
+        return;
+
+    aPieLabelInfo.xLabelGroupShape.set( xChild->getParent(), uno::UNO_QUERY );
+
     aPieLabelInfo.fValue = nVal;
     aPieLabelInfo.bMovementAllowed = bMovementAllowed;
     aPieLabelInfo.bMoved= false;
@@ -367,9 +372,7 @@ void PieChart::createTextLabelShape(
         performLabelBestFit(rParam, aPieLabelInfo);
     }
 
-
     m_aLabelInfoList.push_back(aPieLabelInfo);
-
 }
 
 void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
