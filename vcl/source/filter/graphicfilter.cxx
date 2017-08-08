@@ -378,8 +378,8 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             rFormatExtension = "WMF";
             return true;
         }
-        else if( nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
-            sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 )
+        else if( true /* nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
+            sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 */ )
         {
             rFormatExtension = "EMF";
             return true;
