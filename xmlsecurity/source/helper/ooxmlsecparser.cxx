@@ -22,6 +22,8 @@ OOXMLSecParser::OOXMLSecParser(XSecController* pXSecController)
     ,m_bInX509IssuerName(false)
     ,m_bInX509SerialNumber(false)
     ,m_bInCertDigest(false)
+    ,m_bInValidSignatureImage(false)
+    ,m_bInInvalidSignatureImage(false)
     ,m_bReferenceUnresolved(false)
 {
 }
@@ -118,6 +120,33 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
         m_aCertDigest.clear();
         m_bInCertDigest = true;
     }
+    else if (rName == "Object")
+    {
+        OUString sId = xAttribs->getValueByName("Id");
+        if (sId == "idValidSigLnImg")
+        {
+            m_aValidSignatureImage.clear();
+            m_bInValidSignatureImage = true;
+        }
+        else if (sId == "idInvalidSigLnImg")
+        {
+            m_aInvalidSignatureImage.clear();
+            m_bInInvalidSignatureImage = true;
+        }
+        else
+        {
+            SAL_INFO("xmlsecurity.ooxml", "Unknown 'Object' child element: " << rName);
+        }
+    }
+    else if (rName == "SetupID")
+    {
+        m_aSignatureLineId.clear();
+        m_bInSignatureLineId = true;
+    }
+    else
+    {
+        SAL_INFO("xmlsecurity.ooxml", "Unknown xml element: " << rName);
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->startElement(rName, xAttribs);
@@ -174,6 +203,24 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName) throw (xml::sax:
         m_pXSecController->setCertDigest(m_aCertDigest);
         m_bInCertDigest = false;
     }
+    else if (rName == "Object")
+    {
+        if (m_bInValidSignatureImage)
+        {
+            m_pXSecController->setValidSignatureImage(m_aValidSignatureImage);
+            m_bInValidSignatureImage = false;
+        }
+        else if (m_bInInvalidSignatureImage)
+        {
+            m_pXSecController->setInvalidSignatureImage(m_aInvalidSignatureImage);
+            m_bInInvalidSignatureImage = false;
+        }
+    }
+    else if (rName == "SetupID")
+    {
+        m_pXSecController->setSignatureLineId(m_aSignatureLineId);
+        m_bInSignatureLineId = false;
+    }
 
     if (m_xNextHandler.is())
         m_xNextHandler->endElement(rName);
@@ -197,6 +244,12 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars) throw (xml::sax
         m_aX509SerialNumber += rChars;
     else if (m_bInCertDigest)
         m_aCertDigest += rChars;
+    else if (m_bInValidSignatureImage)
+        m_aValidSignatureImage += rChars;
+    else if (m_bInInvalidSignatureImage)
+        m_aInvalidSignatureImage += rChars;
+    else if (m_bInSignatureLineId)
+        m_aSignatureLineId += rChars;
 
     if (m_xNextHandler.is())
         m_xNextHandler->characters(rChars);
