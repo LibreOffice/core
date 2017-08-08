@@ -326,6 +326,15 @@ void XSecController::setDescription(const OUString& rDescription)
     rInformation.signatureInfor.ouDescription = rDescription;
 }
 
+void XSecController::setSignatureText(const OUString& rSignatureText)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.ouSignatureText = rSignatureText;
+}
+
 void XSecController::setSignatureBytes(const uno::Sequence<sal_Int8>& rBytes)
 {
     if (m_vInternalSignatureInformations.empty())

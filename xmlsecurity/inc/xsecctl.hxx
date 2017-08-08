@@ -314,6 +314,7 @@ private:
 
     void setDate( OUString const & ouDate );
     void setDescription(const OUString& rDescription);
+    void setSignatureText(const OUString& rSignatureText);
     void setCertDigest(const OUString& rCertDigest);
 
 public:

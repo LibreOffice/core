@@ -20,6 +20,7 @@ OOXMLSecParser::OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecCont
     ,m_bInX509Certificate(false)
     ,m_bInMdssiValue(false)
     ,m_bInSignatureComments(false)
+    ,m_bInSignatureText(false)
     ,m_bInX509IssuerName(false)
     ,m_bInX509SerialNumber(false)
     ,m_bInCertDigest(false)
@@ -105,6 +106,11 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
         m_aSignatureComments.clear();
         m_bInSignatureComments = true;
     }
+    else if (rName == "SignatureText")
+    {
+        m_aSignatureText.clear();
+        m_bInSignatureText = true;
+    }
     else if (rName == "X509IssuerName")
     {
         m_aX509IssuerName.clear();
@@ -165,6 +171,11 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
         m_pXSecController->setDescription(m_aSignatureComments);
         m_bInSignatureComments = false;
     }
+    else if (rName == "SignatureText")
+    {
+        m_pXSecController->setSignatureText(m_aSignatureText);
+        m_bInSignatureText = false;
+    }
     else if (rName == "X509IssuerName")
     {
         m_pXSecController->setX509IssuerName(m_aX509IssuerName);
@@ -197,6 +208,8 @@ void SAL_CALL OOXMLSecParser::characters(const OUString& rChars)
         m_aMdssiValue += rChars;
     else if (m_bInSignatureComments)
         m_aSignatureComments += rChars;
+    else if (m_bInSignatureText)
+        m_aSignatureText += rChars;
     else if (m_bInX509IssuerName)
         m_aX509IssuerName += rChars;
     else if (m_bInX509SerialNumber)

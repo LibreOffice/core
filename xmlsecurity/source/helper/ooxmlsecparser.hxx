@@ -39,6 +39,8 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     OUString m_aMdssiValue;
     bool m_bInSignatureComments;
     OUString m_aSignatureComments;
+    bool m_bInSignatureText;
+    OUString m_aSignatureText;
     bool m_bInX509IssuerName;
     OUString m_aX509IssuerName;
     bool m_bInX509SerialNumber;

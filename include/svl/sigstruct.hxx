@@ -101,6 +101,8 @@ struct SignatureInformation
     OUString ouPropertyId;
     /// Characters of the <dc:description> element inside the signature.
     OUString ouDescription;
+    /// Holds the OOXML SignatureText property
+    OUString ouSignatureText;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
     OUString ouDescriptionPropertyId;
     /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
