@@ -11,9 +11,11 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <xmloff/attrlist.hxx>
 
 using namespace com::sun::star;
 
@@ -49,28 +51,41 @@ void EPUBPackage::openXMLFile(const char *pName)
 {
     assert(pName);
     assert(!mxOutputStream.is());
+    assert(!mxOutputWriter.is());
 
     mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    mxOutputWriter = xml::sax::Writer::create(mxContext);
+    mxOutputWriter->setOutputStream(mxOutputStream);
+    mxOutputWriter->startDocument();
 }
 
 void EPUBPackage::openElement(const char *pName, const librevenge::RVNGPropertyList &/*rAttributes*/)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::openElement, " << pName << ": implement me");
+    assert(mxOutputWriter.is());
+
+    rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
+    mxOutputWriter->startElement(OUString::fromUtf8(pName), uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
 }
 
 void EPUBPackage::closeElement(const char *pName)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::closeElement, " << pName << ": implement me");
+    assert(mxOutputWriter.is());
+
+    mxOutputWriter->endElement(OUString::fromUtf8(pName));
 }
 
 void EPUBPackage::insertCharacters(const librevenge::RVNGString &rCharacters)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::insertCharacters, " << rCharacters.cstr() << ": implement me");
+    mxOutputWriter->characters(OUString::fromUtf8(rCharacters.cstr()));
 }
 
 void EPUBPackage::closeXMLFile()
 {
+    assert(mxOutputWriter.is());
     assert(mxOutputStream.is());
+
+    mxOutputWriter->endDocument();
+    mxOutputWriter.clear();
 
     uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
     xTransactedObject->commit();
