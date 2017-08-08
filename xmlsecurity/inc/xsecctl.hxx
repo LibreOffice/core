@@ -316,7 +316,10 @@ private:
 
     void setDate( OUString const & ouDate );
     void setDescription(const OUString& rDescription);
+    void setSignatureText(const OUString& rSignatureText);
     void setCertDigest(const OUString& rCertDigest);
+    void setValidSignatureImage(const OUString& rValidSigImg);
+    void setInvalidSignatureImage(const OUString& rInvalidSigImg);
 
 public:
     void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);

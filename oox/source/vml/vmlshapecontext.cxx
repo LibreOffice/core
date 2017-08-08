@@ -329,6 +329,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    SAL_DEBUG("ShapeTypeContext::onCreateContext");
     if( isRootElement() ) switch( nElement )
     {
         case VML_TOKEN( stroke ):
@@ -394,6 +395,9 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         case VML_TOKEN( textpath ):
             mrTypeModel.maTextpathModel.moString.assignIfUsed(rAttribs.getString(XML_string));
             mrTypeModel.maTextpathModel.moStyle.assignIfUsed(rAttribs.getString(XML_style));
+        break;
+        default:
+            SAL_DEBUG("unhandled element: " << nElement);
         break;
     }
     return nullptr;
@@ -467,6 +471,8 @@ ShapeContext::ShapeContext(ContextHandler2Helper const & rParent,
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
+    SAL_DEBUG("ShapeContext::onCreateContext");
+    SAL_DEBUG("current elem: " << (getCurrentElement() == VML_TOKEN(shape)));
     // Excel specific shape client data
     if( isRootElement() ) switch( nElement )
     {
@@ -491,6 +497,12 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                     "com.sun.star.drawing.RectangleShape");
             mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
             break;
+        case O_TOKEN( signatureline ):
+            SAL_DEBUG("O_TOKEN( signatureline )");
+        break;
+        case O_TOKEN( lock ):
+            SAL_DEBUG("O_TOKEN( lock )");
+        break;
     }
     // handle remaining stuff in base class
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
