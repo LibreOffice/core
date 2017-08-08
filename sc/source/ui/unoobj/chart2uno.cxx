@@ -1891,9 +1891,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         if (!bRowSourceAmbiguous)
         {
             bRowSourceDetected = true;
-            eRowSource = ( nDataInRows > 0
-                           ? chart::ChartDataRowSource_ROWS
-                           : chart::ChartDataRowSource_COLUMNS );
+            eRowSource = ( nDataInCols > 0
+                           ? chart::ChartDataRowSource_COLUMNS
+                           : chart::ChartDataRowSource_ROWS );
         }
         else
         {
