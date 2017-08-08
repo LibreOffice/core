@@ -208,6 +208,8 @@ struct ShapeModel
     OUString     maControl1;         ///< Bezier control point 1
     OUString     maControl2;         ///< Bezier control point 2
     OUString     maVmlPath;          ///< VML path for this shape
+    bool         mbIsSignatureLine;  ///< Shape is a signature line
+    OUString     maSignatureId;      ///< ID of the signature
 
     explicit            ShapeModel();
                         ~ShapeModel();
@@ -293,9 +295,12 @@ protected:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const override;
     /** Used by both RectangleShape and ComplexShape. */
+    css::uno::Reference<css::drawing::XShape>createEmbeddedPictureObject(
+        const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+        const css::awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const;
     css::uno::Reference<css::drawing::XShape>createPictureObject(
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-            const css::awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const;
+            const css::awt::Rectangle& rShapeRect, OUString const & rGraphicUrl ) const;
 
 private:
     OUString     maService;          ///< Name of the UNO shape service.

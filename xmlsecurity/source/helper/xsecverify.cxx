@@ -26,18 +26,27 @@
 #include <gpg/xmlsignature_gpgimpl.hxx>
 #include <gpg/SEInitializer.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
+#include <comphelper/base64.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/seqstream.hxx>
 
-using namespace com::sun::star;
+using namespace css;
+using namespace css::uno;
+using namespace css::beans;
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
@@ -342,6 +351,56 @@ void XSecController::setCertDigest(const OUString& rCertDigest)
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
     rInformation.signatureInfor.ouCertDigest = rCertDigest;
+}
+
+namespace {
+Reference<css::graphic::XGraphic> lcl_getGraphicFromString(const OUString& rImage)
+{
+    Sequence<sal_Int8> seq;
+    comphelper::Base64::decode(seq, rImage);
+
+    Reference< graphic::XGraphic > xGraphic;
+    if( !seq.hasElements() )
+        return Reference<css::graphic::XGraphic>();
+
+    Reference< graphic::XGraphicProvider > xGraphicProvider(
+        graphic::GraphicProvider::create(comphelper::getProcessComponentContext()) );
+    Reference< io::XInputStream > xInputStream( new ::comphelper::SequenceInputStream( seq ) );
+
+    Sequence< PropertyValue > aArgs( 1 );
+    aArgs[ 0 ].Name = "InputStream";
+    aArgs[ 0 ].Value <<= xInputStream;
+    xGraphic = xGraphicProvider->queryGraphic(aArgs);
+
+    return xGraphic;
+}
+}
+
+void XSecController::setValidSignatureImage(const OUString& rValidSigImg)
+{
+    if (m_vInternalSignatureInformations.empty() || rValidSigImg.isEmpty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.aValidSignatureImage = lcl_getGraphicFromString(rValidSigImg);
+}
+
+void XSecController::setInvalidSignatureImage(const OUString& rInvalidSigImg)
+{
+    if (m_vInternalSignatureInformations.empty() || rInvalidSigImg.isEmpty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.aInvalidSignatureImage = lcl_getGraphicFromString(rInvalidSigImg);
+}
+
+void XSecController::setSignatureLineId(const OUString& rSignatureLineId)
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    rInformation.signatureInfor.ouSignatureLineId = rSignatureLineId;
 }
 
 void XSecController::addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate)

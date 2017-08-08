@@ -241,6 +241,7 @@ certain functionality.
 @li @c oox.ppt - pptx filter
 @li @c oox.shape
 @li @c oox.storage - ZipStorage class
+@li @c oox.vml - VML
 @li @c oox.xmlstream - XmlStream class
 
 @section forms
