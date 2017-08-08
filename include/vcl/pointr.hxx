@@ -23,8 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/ptrstyle.hxx>
 
-class Point;
-
 class VCL_DLLPUBLIC Pointer
 {
     PointerStyle    meStyle;

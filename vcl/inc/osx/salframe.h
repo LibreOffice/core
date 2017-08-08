@@ -183,22 +183,22 @@ public:
     void VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen = true );
     void CocoaToVCL( NSPoint& io_Point, bool bRelativeToScreen = true );
 
-    NSCursor* getCurrentCursor() const;
+    NSCursor* getCurrentCursor();
 
     CGMutablePathRef getClipPath() const { return mrClippingPath; }
 
     // called by VCL_NSApplication to indicate screen settings have changed
     void screenParametersChanged();
 
- private: // methods
+private: // methods
     /** do things on initial show (like centering on parent or on screen)
     */
     void initShow();
 
     void initWindowAndView();
 
- private: // data
-    static AquaSalFrame*                   s_pCaptureFrame;
+private: // data
+    static AquaSalFrame*       s_pCaptureFrame;
 
     AquaSalFrame( const AquaSalFrame& ) = delete;
     AquaSalFrame& operator=(const AquaSalFrame&) = delete;
