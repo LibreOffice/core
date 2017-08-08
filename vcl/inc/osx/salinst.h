@@ -32,16 +32,31 @@
 #endif
 #include "salinst.hxx"
 
+#include "osx/runinmain.hxx"
+
 class AquaSalFrame;
+class SalFrame;
+class SalObject;
 class ApplicationEvent;
 class Image;
 enum class SalEvent;
 
+typedef void(^RuninmainBlock)(void);
+
 class SalYieldMutex : public comphelper::GenericSolarMutex
 {
 public:
+    OSX_RUNINMAIN_MEMBERS
+
+protected:
+    virtual void            doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32      doRelease( bool bUnlockAll ) override;
+
+public:
     SalYieldMutex();
     virtual ~SalYieldMutex() override;
+
+    virtual bool IsCurrentThread() const override;
 };
 
 class AquaSalInstance : public SalInstance
@@ -61,12 +76,12 @@ public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
-    bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
     osl::Mutex                              maUserEventListMutex;
     osl::Condition                          maWaitingYieldCond;
     bool                                    mbIsLiveResize;
+    bool                                    mbNoYieldLock;
 
     static std::list<const ApplicationEvent*> aAppEventList;
 
@@ -126,9 +141,7 @@ public:
     // this is needed to avoid duplicate open events through a) command line and b) NSApp's openFile
     static bool isOnCommandLine( const OUString& );
 
-    void wakeupYield();
-
- public:
+public:
     friend class AquaSalFrame;
 
     void PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData );
