@@ -35,8 +35,6 @@
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"HideSpellMarks"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ZoomType"
 "ScTabViewObj";"com::sun::star::sheet::SpreadsheetViewSettings";"ZoomValue"
-"ScTabViewObj";"com::sun::star::sheet::XViewFreezable";"hasFrozenPanes()"
-"ScTabViewObj";"com::sun::star::sheet::XViewFreezable";"freezeAtPosition()"
 "ScTabViewObj";"com::sun::star::sheet::XActivationBroadcaster#optional";"addActivationEventListener()"
 "ScTabViewObj";"com::sun::star::sheet::XActivationBroadcaster#optional";"removeActivationEventListener()"
 "ScTabViewObj";"com::sun::star::sheet::XRangeSelection";"startRangeSelection()"
