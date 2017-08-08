@@ -29,7 +29,7 @@
 
 module com { module sun { module star { module security {
 
-/** interface for signing and verifying digital signatures in office documents
+/** Interface for signing and verifying digital signatures in office documents
 
     <p>
     This interface can be used to digitally sign different content in a office document.

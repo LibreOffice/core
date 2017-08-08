@@ -368,6 +368,12 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
+            // OOXML Signature line infos
+            if (!rInfo.ouSignatureLineId.isEmpty())
+                rSigInfo.SignatureLineId = rInfo.ouSignatureLineId;
+            //rSigInfo.ValidSignatureLineImage = 
+            //rSigInfo.InvalidSignatureLineImage = 
+
 
             // OOXML intentionally doesn't sign metadata.
             if ( rSigInfo.SignatureIsValid && aStreamHelper.nStorageFormat != embed::StorageFormats::OFOPXML)
