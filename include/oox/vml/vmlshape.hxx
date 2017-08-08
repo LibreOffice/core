@@ -208,6 +208,8 @@ struct ShapeModel
     OUString     maControl1;         ///< Bezier control point 1
     OUString     maControl2;         ///< Bezier control point 2
     OUString     maVmlPath;          ///< VML path for this shape
+    bool         mbIsSignatureLine;  ///< Shape is a signature line
+    OUString maSignatureId;          ///< ID of the signature
 
     explicit            ShapeModel();
                         ~ShapeModel();
