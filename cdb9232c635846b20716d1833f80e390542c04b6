@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_e5813afd",
+        "filename": "include/svx/ruler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2017-08-08T12:49:20Z",
+      "side": 1,
+      "message": "This was removed in another commit, 612b489d3e05b24c1b6690082e8518bac033e9d2. but must have stayed here while rebasing, i\u0027ll remove it in the next update.",
+      "parentUuid": "1a430d35_2520a249",
+      "range": {
+        "startLine": 249,
+        "startChar": 43,
+        "endLine": 249,
+        "endChar": 44
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_65be2a01",
         "filename": "include/svx/ruler.hxx",
         "patchSetId": 1
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_c5935e4e",
+        "filename": "sw/sdi/_viewsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2017-08-08T12:49:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_05464623",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 60
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_a52bb232",
         "filename": "sw/source/uibase/uiview/viewtab.cxx",
         "patchSetId": 1
@@ -76,6 +124,24 @@
       "writtenOn": "2017-08-08T11:06:51Z",
       "side": 1,
       "message": "nitpick: If you could respect the naming convention of variables, that would be great. Eg:. SfxPoolItem* pMargin1, where \u0027p\u0027 means pointer.",
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_45792e2f",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2017-08-08T12:49:20Z",
+      "side": 1,
+      "message": "Sure.",
+      "parentUuid": "1a430d35_a52bb232",
       "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -105,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_65762a40",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2017-08-08T12:49:20Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1a430d35_850076ac",
+      "range": {
+        "startLine": 812,
+        "startChar": 21,
+        "endLine": 812,
+        "endChar": 32
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_c530bea1",
         "filename": "sw/source/uibase/uiview/viewtab.cxx",
         "patchSetId": 1
@@ -116,6 +206,30 @@
       "writtenOn": "2017-08-08T11:06:51Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 819,
+        "startChar": 21,
+        "endLine": 819,
+        "endChar": 32
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8573164d",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2017-08-08T12:49:20Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1a430d35_c530bea1",
       "range": {
         "startLine": 819,
         "startChar": 21,
