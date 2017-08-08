@@ -130,6 +130,13 @@ void VBATest::testMiscVBAFunctions()
         "string.vb",
         "strreverse.vb",
         "switch.vb",
+        "syd.vb",
+        "timeserial.vb",
+        "timevalue.vb",
+        "trim.vb",
+        "typename.vb",
+        "ubound.vb",
+        "ucase.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
