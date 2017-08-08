@@ -1395,6 +1395,14 @@ void SAL_CALL ZipPackage::commitChanges()
             try
             {
                 xOutputStream = m_xStream->getOutputStream();
+
+                // Make sure we avoid a situation where the current position is
+                // not zero, but the underlying file is truncated in the
+                // meantime.
+                uno::Reference<io::XSeekable> xSeekable(xOutputStream, uno::UNO_QUERY);
+                if (xSeekable.is())
+                    xSeekable->seek(0);
+
                 uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY_THROW );
 
                 // after successful truncation the original file contents are already lost
