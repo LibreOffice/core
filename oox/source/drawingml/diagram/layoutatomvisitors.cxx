@@ -93,12 +93,30 @@ void ShapeCreationVisitor::visit(ChooseAtom& rAtom)
 
 void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 {
+    // stop processing if it's not a child of previous LayoutNode
+
+    const DiagramData::PointsNameMap::const_iterator aDataNode = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
+    if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end() || mnCurrIdx >= (sal_Int32)aDataNode->second.size())
+        return;
+
+    const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
+    if (!mpCurrentNode || !pNewNode)
+        return;
+
+    bool bIsChild = false;
+    for (const auto & aConnection : mrDgm.getData()->getConnections())
+        if (aConnection.msSourceId == mpCurrentNode->msModelId && aConnection.msDestId == pNewNode->msModelId)
+            bIsChild = true;
+
+    if (!bIsChild)
+        return;
+
     ShapePtr pCurrParent(mpParentShape);
 
     if (rAtom.getExistingShape())
     {
         // reuse existing shape
-        if (rAtom.setupShape(rAtom.getExistingShape(), mrDgm, mnCurrIdx))
+        if (rAtom.setupShape(rAtom.getExistingShape(), mrDgm, pNewNode))
             rAtom.getNodeShapes().push_back(rAtom.getExistingShape());
     }
     else
@@ -115,7 +133,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                     << (pShape->getCustomShapeProperties()
                         ->getShapePresetType()));
 
-            if (rAtom.setupShape(pShape, mrDgm, mnCurrIdx))
+            if (rAtom.setupShape(pShape, mrDgm, pNewNode))
             {
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
@@ -128,6 +146,9 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         }
     }
 
+    const dgm::Point* pPreviousNode = mpCurrentNode;
+    mpCurrentNode = pNewNode;
+
     // set new parent for children
     ShapePtr pPreviousParent(mpParentShape);
     mpParentShape=pCurrParent;
@@ -137,6 +158,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     // restore parent
     mpParentShape=pPreviousParent;
+    mpCurrentNode = pPreviousNode;
 
     // remove unneeded empty group shapes
     pCurrParent->getChildren().erase(

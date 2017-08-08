@@ -353,150 +353,132 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uInt32 nIdx ) const
+bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, const dgm::Point* pPresNode ) const
 {
-    // find the data node to grab text from
-    DiagramData::PointsNameMap::const_iterator aDataNode=rDgm.getData()->getPointsPresNameMap().find(msName);
-    if( aDataNode != rDgm.getData()->getPointsPresNameMap().end() &&
-        aDataNode->second.size() > nIdx )
+    SAL_INFO(
+        "oox.drawingml",
+        "Filling content from layout node named \"" << msName
+            << "\", modelId \"" << pPresNode->msModelId << "\"");
+
+    // have the presentation node - now, need the actual data node:
+    const DiagramData::StringMap::const_iterator aNodeName = rDgm.getData()->getPresOfNameMap().find(
+        pPresNode->msModelId);
+    if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
     {
-        const dgm::Point* aPresNode = aDataNode->second.at(nIdx);
-        SAL_INFO(
-            "oox.drawingml",
-            "Filling content from " << nIdx << "th layout node named \""
-                << msName << "\", modelId \""
-                << aPresNode->msModelId << "\"");
-
-        // got the presentation node - now, need the actual data node:
-        const DiagramData::StringMap::const_iterator aNodeName=rDgm.getData()->getPresOfNameMap().find(
-            aPresNode->msModelId);
-        if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
+        DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
+        const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
+        while( aVecIter != aVecEnd )
         {
-            DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
-            const DiagramData::StringMap::value_type::second_type::const_iterator aVecEnd=aNodeName->second.end();
-            while( aVecIter != aVecEnd )
+            DiagramData::PointNameMap& rMap = rDgm.getData()->getPointNameMap();
+            DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
+            if (aDataNode2 == rMap.end())
             {
-                DiagramData::PointNameMap& rMap = rDgm.getData()->getPointNameMap();
-                DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
-                if (aDataNode2 == rMap.end())
-                {
-                    //busted, skip it
-                    ++aVecIter;
-                    continue;
-                }
-
-                if( aVecIter->second == 0 )
-                {
-                    // grab shape attr from topmost element(s)
-                    rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
-                    rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
-                    rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
-                    rShape->getCustomShapeProperties() = aDataNode2->second->mpShape->getCustomShapeProperties();
-                    rShape->setMasterTextListStyle( aDataNode2->second->mpShape->getMasterTextListStyle() );
-
-                    SAL_INFO(
-                        "oox.drawingml",
-                        "Custom shape with preset type "
-                            << (rShape->getCustomShapeProperties()
-                                ->getShapePresetType())
-                            << " added for layout node named \"" << msName
-                            << "\"");
-                }
-
-                // append text with right outline level
-                if( aDataNode2->second->mpShape->getTextBody() &&
-                    !aDataNode2->second->mpShape->getTextBody()->getParagraphs().empty() &&
-                    !aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
-                {
-                    TextBodyPtr pTextBody=rShape->getTextBody();
-                    if( !pTextBody )
-                    {
-                        pTextBody.reset( new TextBody() );
-
-                        // also copy text attrs
-                        pTextBody->getTextListStyle() =
-                            aDataNode2->second->mpShape->getTextBody()->getTextListStyle();
-                        pTextBody->getTextProperties() =
-                            aDataNode2->second->mpShape->getTextBody()->getTextProperties();
-
-                        rShape->setTextBody(pTextBody);
-                    }
-
-                    TextParagraph& rPara=pTextBody->addParagraph();
-                    if( aVecIter->second != -1 )
-                        rPara.getProperties().setLevel(aVecIter->second);
-
-                    rPara.addRun(
-                        aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().front());
-                    rPara.getProperties().apply(
-                        aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getProperties());
-                }
-
+                //busted, skip it
                 ++aVecIter;
-            }
-        }
-        else
-        {
-            SAL_INFO(
-                "oox.drawingml",
-                "ShapeCreationVisitor::visit: no data node name found while"
-                    " processing shape type "
-                    << rShape->getCustomShapeProperties()->getShapePresetType()
-                    << " for layout node named \"" << msName << "\"");
-        }
-
-        // TODO(Q1): apply styling & coloring - take presentation
-        // point's presStyleLbl for both style & color
-        // if not found use layout node's styleLbl
-        // however, docs are a bit unclear on this
-        OUString aStyleLabel = aPresNode->msPresentationLayoutStyleLabel;
-        if (aStyleLabel.isEmpty())
-            aStyleLabel = msStyleLabel;
-        if( !aStyleLabel.isEmpty() )
-        {
-            const DiagramQStyleMap::const_iterator aStyle = rDgm.getStyles().find(aStyleLabel);
-            if( aStyle != rDgm.getStyles().end() )
-            {
-                const DiagramStyle& rStyle = aStyle->second;
-                rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
-                rShape->getShapeStyleRefs()[XML_lnRef] = rStyle.maLineStyle;
-                rShape->getShapeStyleRefs()[XML_effectRef] = rStyle.maEffectStyle;
-                rShape->getShapeStyleRefs()[XML_fontRef] = rStyle.maTextStyle;
-            }
-            else
-            {
-                SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
+                continue;
             }
 
-            const DiagramColorMap::const_iterator aColor = rDgm.getColors().find(aStyleLabel);
-            if( aColor != rDgm.getColors().end() )
+            if( aVecIter->second == 0 )
             {
-                const DiagramColor& rColor=aColor->second;
-                if( rColor.maFillColor.isUsed() )
-                    rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = rColor.maFillColor;
-                if( rColor.maLineColor.isUsed() )
-                    rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = rColor.maLineColor;
-                if( rColor.maEffectColor.isUsed() )
-                    rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = rColor.maEffectColor;
-                if( rColor.maTextFillColor.isUsed() )
-                    rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rColor.maTextFillColor;
-            }
-        }
+                // grab shape attr from topmost element(s)
+                rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
+                rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
+                rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
+                rShape->getCustomShapeProperties() = aDataNode2->second->mpShape->getCustomShapeProperties();
+                rShape->setMasterTextListStyle( aDataNode2->second->mpShape->getMasterTextListStyle() );
 
-        // even if no data node found, successful anyway. it's
-        // contained at the layoutnode
-        return true;
+                SAL_INFO(
+                    "oox.drawingml",
+                    "Custom shape with preset type "
+                        << (rShape->getCustomShapeProperties()
+                            ->getShapePresetType())
+                        << " added for layout node named \"" << msName
+                        << "\"");
+            }
+
+            // append text with right outline level
+            if( aDataNode2->second->mpShape->getTextBody() &&
+                !aDataNode2->second->mpShape->getTextBody()->getParagraphs().empty() &&
+                !aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
+            {
+                TextBodyPtr pTextBody=rShape->getTextBody();
+                if( !pTextBody )
+                {
+                    pTextBody.reset( new TextBody() );
+
+                    // also copy text attrs
+                    pTextBody->getTextListStyle() =
+                        aDataNode2->second->mpShape->getTextBody()->getTextListStyle();
+                    pTextBody->getTextProperties() =
+                        aDataNode2->second->mpShape->getTextBody()->getTextProperties();
+
+                    rShape->setTextBody(pTextBody);
+                }
+
+                TextParagraph& rPara=pTextBody->addParagraph();
+                if( aVecIter->second != -1 )
+                    rPara.getProperties().setLevel(aVecIter->second);
+
+                rPara.addRun(
+                    aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().front());
+                rPara.getProperties().apply(
+                    aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getProperties());
+            }
+
+            ++aVecIter;
+        }
     }
     else
     {
         SAL_INFO(
             "oox.drawingml",
-            "no text found while processing shape type "
+            "ShapeCreationVisitor::visit: no data node name found while"
+                " processing shape type "
                 << rShape->getCustomShapeProperties()->getShapePresetType()
                 << " for layout node named \"" << msName << "\"");
     }
 
-    return false;
+    // TODO(Q1): apply styling & coloring - take presentation
+    // point's presStyleLbl for both style & color
+    // if not found use layout node's styleLbl
+    // however, docs are a bit unclear on this
+    OUString aStyleLabel = pPresNode->msPresentationLayoutStyleLabel;
+    if (aStyleLabel.isEmpty())
+        aStyleLabel = msStyleLabel;
+    if( !aStyleLabel.isEmpty() )
+    {
+        const DiagramQStyleMap::const_iterator aStyle = rDgm.getStyles().find(aStyleLabel);
+        if( aStyle != rDgm.getStyles().end() )
+        {
+            const DiagramStyle& rStyle = aStyle->second;
+            rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
+            rShape->getShapeStyleRefs()[XML_lnRef] = rStyle.maLineStyle;
+            rShape->getShapeStyleRefs()[XML_effectRef] = rStyle.maEffectStyle;
+            rShape->getShapeStyleRefs()[XML_fontRef] = rStyle.maTextStyle;
+        }
+        else
+        {
+            SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
+        }
+
+        const DiagramColorMap::const_iterator aColor = rDgm.getColors().find(aStyleLabel);
+        if( aColor != rDgm.getColors().end() )
+        {
+            const DiagramColor& rColor=aColor->second;
+            if( rColor.maFillColor.isUsed() )
+                rShape->getShapeStyleRefs()[XML_fillRef].maPhClr = rColor.maFillColor;
+            if( rColor.maLineColor.isUsed() )
+                rShape->getShapeStyleRefs()[XML_lnRef].maPhClr = rColor.maLineColor;
+            if( rColor.maEffectColor.isUsed() )
+                rShape->getShapeStyleRefs()[XML_effectRef].maPhClr = rColor.maEffectColor;
+            if( rColor.maTextFillColor.isUsed() )
+                rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rColor.maTextFillColor;
+        }
+    }
+
+    // even if no data node found, successful anyway. it's
+    // contained at the layoutnode
+    return true;
 }
 
 void ShapeAtom::accept( LayoutAtomVisitor& rVisitor )

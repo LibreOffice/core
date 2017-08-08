@@ -180,6 +180,7 @@ public:
         { return maPointsPresNameMap; }
     ::std::vector<OUString> &getExtDrawings()
         { return maExtDrawings; }
+    const dgm::Point* getRootPoint() const;
     void dump();
 private:
     FillPropertiesPtr mpFillProperties;
