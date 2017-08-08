@@ -170,8 +170,6 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce, sal_uInt64 nTime)
     if ( !rSchedCtx.mbActive )
         return;
 
-    DBG_TESTSOLARMUTEX();
-
     if (!rSchedCtx.mpSalTimer)
     {
         rSchedCtx.mnTimerStart = 0;
