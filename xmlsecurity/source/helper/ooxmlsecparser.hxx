@@ -45,6 +45,12 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     OUString m_aX509SerialNumber;
     bool m_bInCertDigest;
     OUString m_aCertDigest;
+    bool m_bInValidSignatureImage;
+    OUString m_aValidSignatureImage;
+    bool m_bInInvalidSignatureImage;
+    OUString m_aInvalidSignatureImage;
+    bool m_bInSignatureLineId;
+    OUString m_aSignatureLineId;
 
     /// Last seen <Reference URI="...">.
     OUString m_aReferenceURI;
