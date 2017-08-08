@@ -26,7 +26,7 @@ namespace apitest {
 
 void XUsedAreaCursor::testGotoStartOfUsedArea()
 {
-    uno::Reference< sheet::XSpreadsheet > xSheet(init(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet(getXSpreadsheet(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor(xSheet->createCursor(), UNO_QUERY_THROW);
     uno::Reference< sheet::XCellRangeAddressable> xCellRangeAddressable(xSheetCellCursor, UNO_QUERY_THROW);
 
@@ -60,7 +60,7 @@ void XUsedAreaCursor::testGotoStartOfUsedArea()
 
 void XUsedAreaCursor::testGotoEndOfUsedArea()
 {
-    uno::Reference< sheet::XSpreadsheet > xSheet(init(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet(getXSpreadsheet(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor(xSheet->createCursor(), UNO_QUERY_THROW);
     uno::Reference< sheet::XCellRangeAddressable> xCellRangeAddressable(xSheetCellCursor, UNO_QUERY_THROW);
 
