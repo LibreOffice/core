@@ -1891,13 +1891,15 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 
     // We have methods to _add_ individual tokens or whole namespaces to be
     // processed by writerfilter (instead of oox), but we have no method to
-    // filter out a single token. Just hardwire the wrap token here until we
-    // need a more generic solution.
+    // filter out a single token. Just hardwire the 'wrap' and 'signatureline' tokens
+    // here until we need a more generic solution.
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
+    bool bIsSignatureLine = Element == static_cast<sal_Int32>(NMSP_vmlOffice | XML_signatureline);
+    bool bIsShapeSent = static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent();
     bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&
         !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
 
-    if ( bInNamespaces && (!bIsWrap || static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) )
+    if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine) || bIsShapeSent) )
         xResult.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
     else if (mxContext.is()  && !bSkipImages)
     {
