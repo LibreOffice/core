@@ -168,7 +168,7 @@ public:
                                             const SfxPoolItem *pItem ) const;
 
     SvStream &                      Load(SvStream &);
-    virtual SvStream &              Store(SvStream &) const;
+    SvStream &                      Store(SvStream &) const;
     void                            LoadCompleted();
 
     sal_uInt16                      GetFirstWhich() const;

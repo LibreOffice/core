@@ -396,8 +396,7 @@ protected:
        @param bRecursive   descend to children
        @param rParents     vector for recording path
      */
-    virtual void IsSane
-    (bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
+    void IsSane(bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
 #endif // DBG_UTIL
 
     /**
