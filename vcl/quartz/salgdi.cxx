@@ -93,6 +93,7 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(FontSelectPattern& 
                 rPattern.mpFontData = pSalData->mpFontList->GetFontDataFromId(reinterpret_cast<sal_IntPtr>(pDesc));
 
             CFRelease(pFallback);
+            CFRelease(pDesc);
         }
         CFRelease(pStr);
     }
