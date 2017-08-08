@@ -37,11 +37,6 @@ SfxPoolItem* ScCondFormatDlgItem::Clone(SfxItemPool* /*pPool*/) const
     return new ScCondFormatDlgItem(*this);
 }
 
-SfxPoolItem* ScCondFormatDlgItem::Create(SvStream& /*rStrm*/, sal_uInt16 /*nVer*/) const
-{
-    return nullptr;
-}
-
 bool ScCondFormatDlgItem::IsManaged() const
 {
     return mbManaged;
