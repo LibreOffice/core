@@ -5,6 +5,7 @@
 #
 
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 
 from libreoffice.linguistic.linguservice import get_spellchecker
 
@@ -66,8 +67,13 @@ frog, dog, tact"""
         cursor.goUp(2, False)
         cursor.goLeft(1, False)
 
-        # Step 3: Initiate spellchecking
+        # Step 3: Initiate spellchecking, and make sure "Check grammar" is
+        # unchecked
         spell_dialog = self.launch_dialog()
+        checkgrammar = spell_dialog.getChild('checkgrammar')
+        if get_state_as_dict(checkgrammar)['Selected'] == 'true':
+            checkgrammar.executeAction('CLICK', ())
+        self.assertTrue(get_state_as_dict(checkgrammar)['Selected'] == 'false')
 
         # Step 4: Repetitively click on "Correct all" for each misspelling
         #         prompt until end of document is reached.
