@@ -11,6 +11,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/storagehelper.hxx>
@@ -105,9 +106,27 @@ void EPUBPackage::openCSSFile(const char *pName)
     mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
 }
 
-void EPUBPackage::insertRule(const librevenge::RVNGString &/*rSelector*/, const librevenge::RVNGPropertyList &/*rProperties*/)
+void EPUBPackage::insertRule(const librevenge::RVNGString &rSelector, const librevenge::RVNGPropertyList &rProperties)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::insertRule: implement me");
+    assert(mxOutputStream.is());
+
+    uno::Reference<io::XSeekable> xSeekable(mxOutputStream, uno::UNO_QUERY);
+    std::stringstream aStream;
+    if (xSeekable->getPosition() != 0)
+        aStream << '\n';
+    aStream << rSelector.cstr() << " {\n";
+
+    librevenge::RVNGPropertyList::Iter it(rProperties);
+    for (it.rewind(); it.next();)
+    {
+        if (it())
+            aStream << "  " << it.key() << ": " << it()->getStr().cstr() << ";\n";
+    }
+
+    aStream << "}\n";
+    std::string aString = aStream.str();
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aString.c_str()), aString.size());
+    mxOutputStream->writeBytes(aData);
 }
 
 void EPUBPackage::closeCSSFile()
