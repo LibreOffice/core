@@ -12,10 +12,11 @@
 
 #include <libepubgen/EPUBPackage.h>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 
 namespace writerperfect
 {
@@ -26,6 +27,7 @@ class EPUBPackage : public libepubgen::EPUBPackage
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::embed::XHierarchicalStorageAccess> mxStorage;
     css::uno::Reference<css::io::XOutputStream> mxOutputStream;
+    css::uno::Reference<css::xml::sax::XWriter> mxOutputWriter;
 
 public:
     explicit EPUBPackage(const css::uno::Reference<css::uno::XComponentContext> &xContext, const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor);
