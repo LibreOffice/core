@@ -40,7 +40,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svx/fmobjfac.hxx>
-#include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
 #include <editeng/acorrcfg.hxx>
 
@@ -109,9 +108,6 @@ SwDLL::SwDLL()
         pGlobDocFact->SetDocumentServiceName("com.sun.star.text.GlobalDocument");
         pDocFact->SetDocumentServiceName("com.sun.star.text.TextDocument");
     }
-
-    // register SvDraw-Fields
-    SdrRegisterFieldClasses();
 
     // register 3D-object-Factory
     E3dObjFactory();

@@ -76,7 +76,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     const SvxFieldData*     GetField() const    { return mxField.get(); }
-    static SvClassManager&  GetClassManager();
 };
 
 

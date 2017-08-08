@@ -82,7 +82,7 @@ public:
     }
 };
 
-class SvMetaObject : public SvRttiBase
+class SvMetaObject : public SvRefBase
 {
 protected:
     OString      aName;

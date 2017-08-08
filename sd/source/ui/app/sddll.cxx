@@ -25,7 +25,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/fmobjfac.hxx>
-#include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
 #include <vcl/svapp.hxx>
 
@@ -276,9 +275,6 @@ void SdDLL::Init()
 
     // register your controllers here
     RegisterControllers(pModule);
-
-    // register SvDraw-Fields
-    SdrRegisterFieldClasses();
 
     // register 3D-object-factory
     E3dObjFactory();

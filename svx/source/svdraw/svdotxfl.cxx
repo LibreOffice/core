@@ -18,27 +18,8 @@
  */
 
 #include <editeng/eeitem.hxx>
-
 #include <editeng/measfld.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdfield.hxx>
-
-static bool bInit = false;
-
-// Do not remove this, it is still used in src536a!
-void SdrRegisterFieldClasses()
-{
-    if ( !bInit )
-    {
-        SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SdrMeasureField);
-        SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxHeaderField);
-        SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxFooterField);
-        SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SvxDateTimeField);
-        bInit = true;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////// */
 
 bool SdrTextObj::CalcFieldValue(const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_uInt16 /*nPos*/,
     bool /*bEdit*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/, OUString& /*rRet*/) const

@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/misc/cpuid \
     tools/source/misc/extendapplicationenvironment \
     tools/source/ref/globname \
-    tools/source/ref/pstm \
     tools/source/ref/ref \
     tools/source/stream/stream \
     tools/source/stream/vcompat \

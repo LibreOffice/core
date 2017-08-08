@@ -20,7 +20,7 @@
 
 #include <editeng/measfld.hxx>
 
-SV_IMPL_PERSIST1(SdrMeasureField,SvxFieldData);
+SV_IMPL_PERSIST1(SdrMeasureField);
 
 SdrMeasureField::~SdrMeasureField()
 {
@@ -34,18 +34,6 @@ SvxFieldData* SdrMeasureField::Clone() const
 bool SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 {
     return eMeasureFieldKind == static_cast<const SdrMeasureField&>(rSrc).GetMeasureFieldKind();
-}
-
-void SdrMeasureField::Load(SvPersistStream& rIn)
-{
-    sal_uInt16 nFieldKind;
-    rIn.ReadUInt16( nFieldKind );
-    eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
-}
-
-void SdrMeasureField::Save(SvPersistStream& rOut)
-{
-    rOut.WriteUInt16( eMeasureFieldKind );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

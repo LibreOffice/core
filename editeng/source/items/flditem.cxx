@@ -224,7 +224,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 }
 
 
-SV_IMPL_PERSIST1( SvxFieldData, SvPersistBase );
+SV_IMPL_PERSIST1( SvxFieldData );
 
 
 SvxFieldData::SvxFieldData()
@@ -248,16 +248,6 @@ bool SvxFieldData::operator==( const SvxFieldData& rFld ) const
     DBG_ASSERT( typeid(*this) == typeid(rFld), "==: Different Types" );
     (void)rFld;
     return true;    // Basic class is always the same.
-}
-
-
-void SvxFieldData::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-
-void SvxFieldData::Save( SvPersistStream & /*rStm*/ )
-{
 }
 
 
@@ -314,7 +304,7 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 // The following are the derivatives of SvxFieldData ...
 
 
-SV_IMPL_PERSIST1( SvxDateField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxDateField );
 
 
 SvxDateField::SvxDateField()
@@ -350,26 +340,6 @@ bool SvxDateField::operator==( const SvxFieldData& rOther ) const
                 ( eFormat == rOtherFld.eFormat ) );
 }
 
-
-void SvxDateField::Load( SvPersistStream & rStm )
-{
-    sal_uInt16 nType, nFormat;
-
-    rStm.ReadInt32( nFixDate );
-    rStm.ReadUInt16( nType );
-    rStm.ReadUInt16( nFormat );
-
-    eType = (SvxDateType)nType;
-    eFormat= (SvxDateFormat)nFormat;
-}
-
-
-void SvxDateField::Save( SvPersistStream & rStm )
-{
-    rStm.WriteInt32( nFixDate );
-    rStm.WriteUInt16( (sal_uInt16)eType );
-    rStm.WriteUInt16( eFormat );
-}
 
 
 OUString SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
@@ -448,7 +418,7 @@ MetaAction* SvxDateField::createBeginComment() const
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-SV_IMPL_PERSIST1( SvxURLField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxURLField );
 
 
 SvxURLField::SvxURLField()
@@ -483,58 +453,6 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
 }
 
 
-static void write_unicode( SvPersistStream & rStm, const OUString& rString )
-{
-    sal_uInt16 nL =  sal::static_int_cast<sal_uInt16>(rString.getLength());
-    rStm.WriteUInt16( nL );
-    //endian specific?, yipes!
-    rStm.WriteBytes( rString.getStr(), nL*sizeof(sal_Unicode) );
-}
-
-static OUString read_unicode( SvPersistStream & rStm )
-{
-    rtl_uString *pStr = nullptr;
-    sal_uInt16 nL = 0;
-    rStm.ReadUInt16( nL );
-    const size_t nMaxRecords = rStm.remainingSize() / sizeof(sal_Unicode);
-    if (nL > nMaxRecords)
-    {
-        SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
-                 " max possible entries, but " << nL << " claimed, truncating");
-        nL = nMaxRecords;
-    }
-    if (nL)
-    {
-        pStr = rtl_uString_alloc(nL);
-        //endian specific?, yipes!
-        rStm.ReadBytes(pStr->buffer, nL*sizeof(sal_Unicode));
-    }
-    //take ownership of buffer and return, otherwise return empty string
-    return pStr ? OUString(pStr, SAL_NO_ACQUIRE) : OUString();
-}
-
-void SvxURLField::Load( SvPersistStream & rStm )
-{
-    sal_uInt16 nFormat = 0;
-
-    rStm.ReadUInt16( nFormat );
-    eFormat= (SvxURLFormat)nFormat;
-
-    aURL = read_unicode( rStm );
-    aRepresentation = read_unicode( rStm );
-    aTargetFrame = read_unicode( rStm );
-}
-
-
-void SvxURLField::Save( SvPersistStream & rStm )
-{
-    rStm.WriteUInt16( eFormat );
-
-    write_unicode( rStm, aURL );
-    write_unicode( rStm, aRepresentation );
-    write_unicode( rStm, aTargetFrame );
-}
-
 MetaAction* SvxURLField::createBeginComment() const
 {
     // #i46618# Adding target URL to metafile comment
@@ -548,7 +466,7 @@ MetaAction* SvxURLField::createBeginComment() const
 // SvxPageTitleField methods
 //
 
-SV_IMPL_PERSIST1( SvxPageTitleField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxPageTitleField );
 
 SvxPageTitleField::SvxPageTitleField() {}
 
@@ -562,14 +480,6 @@ bool SvxPageTitleField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxPageTitleField *>(&rCmp) != nullptr );
 }
 
-void SvxPageTitleField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxPageTitleField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
 MetaAction* SvxPageTitleField::createBeginComment() const
 {
     return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageTitleField" );
@@ -581,7 +491,7 @@ MetaAction* SvxPageTitleField::createBeginComment() const
 // The fields that were removed from Calc:
 
 
-SV_IMPL_PERSIST1( SvxPageField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxPageField );
 
 SvxPageField::SvxPageField() {}
 
@@ -595,21 +505,13 @@ bool SvxPageField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxPageField *>(&rCmp) != nullptr );
 }
 
-void SvxPageField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxPageField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
 MetaAction* SvxPageField::createBeginComment() const
 {
     return new MetaCommentAction( "FIELD_SEQ_BEGIN;PageField" );
 }
 
 
-SV_IMPL_PERSIST1( SvxPagesField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxPagesField );
 
 SvxPagesField::SvxPagesField() {}
 
@@ -623,15 +525,7 @@ bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxPagesField *>(&rCmp) != nullptr);
 }
 
-void SvxPagesField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxPagesField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
-SV_IMPL_PERSIST1( SvxTimeField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxTimeField );
 
 SvxTimeField::SvxTimeField() {}
 
@@ -645,20 +539,12 @@ bool SvxTimeField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxTimeField *>(&rCmp) != nullptr);
 }
 
-void SvxTimeField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxTimeField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
 MetaAction* SvxTimeField::createBeginComment() const
 {
     return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
 }
 
-SV_IMPL_PERSIST1( SvxFileField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxFileField );
 
 SvxFileField::SvxFileField() {}
 
@@ -672,15 +558,7 @@ bool SvxFileField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxFileField *>(&rCmp) != nullptr );
 }
 
-void SvxFileField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxFileField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
-SV_IMPL_PERSIST1( SvxTableField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxTableField );
 
 SvxTableField::SvxTableField() : mnTab(0) {}
 
@@ -705,19 +583,10 @@ bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
     return mnTab == static_cast<const SvxTableField&>(rCmp).mnTab;
 }
 
-void SvxTableField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxTableField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
-
 //      SvxExtTimeField
 
 
-SV_IMPL_PERSIST1( SvxExtTimeField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxExtTimeField );
 
 
 SvxExtTimeField::SvxExtTimeField()
@@ -751,27 +620,6 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
     return ((m_nFixTime == rOtherFld.m_nFixTime) &&
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
-}
-
-
-void SvxExtTimeField::Load( SvPersistStream & rStm )
-{
-    sal_uInt16 nType, nFormat;
-
-    rStm.ReadInt64(m_nFixTime);
-    rStm.ReadUInt16( nType );
-    rStm.ReadUInt16( nFormat );
-
-    eType = (SvxTimeType) nType;
-    eFormat= (SvxTimeFormat) nFormat;
-}
-
-
-void SvxExtTimeField::Save( SvPersistStream & rStm )
-{
-    rStm.WriteInt64(m_nFixTime);
-    rStm.WriteUInt16( eType );
-    rStm.WriteUInt16( eFormat );
 }
 
 
@@ -855,7 +703,7 @@ MetaAction* SvxExtTimeField::createBeginComment() const
 //      SvxExtFileField
 
 
-SV_IMPL_PERSIST1( SvxExtFileField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxExtFileField );
 
 
 SvxExtFileField::SvxExtFileField()
@@ -888,31 +736,6 @@ bool SvxExtFileField::operator==( const SvxFieldData& rOther ) const
     return ( ( aFile == rOtherFld.aFile ) &&
                 ( eType == rOtherFld.eType ) &&
                 ( eFormat == rOtherFld.eFormat ) );
-}
-
-
-void SvxExtFileField::Load( SvPersistStream & rStm )
-{
-    sal_uInt16 nType, nFormat;
-
-    // UNICODE: rStm >> aFile;
-    aFile = rStm.ReadUniOrByteString(rStm.GetStreamCharSet());
-
-    rStm.ReadUInt16( nType );
-    rStm.ReadUInt16( nFormat );
-
-    eType = (SvxFileType) nType;
-    eFormat= (SvxFileFormat) nFormat;
-}
-
-
-void SvxExtFileField::Save( SvPersistStream & rStm )
-{
-    // UNICODE: rStm << aFile;
-    rStm.WriteUniOrByteString(aFile, rStm.GetStreamCharSet());
-
-    rStm.WriteUInt16( eType );
-    rStm.WriteUInt16( eFormat );
 }
 
 
@@ -995,7 +818,7 @@ OUString SvxExtFileField::GetFormatted() const
 //      SvxAuthorField
 
 
-SV_IMPL_PERSIST1( SvxAuthorField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxAuthorField );
 
 
 SvxAuthorField::SvxAuthorField()
@@ -1038,33 +861,6 @@ bool SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 }
 
 
-void SvxAuthorField::Load( SvPersistStream & rStm )
-{
-    sal_uInt16 nType = 0, nFormat = 0;
-
-    aName = read_unicode( rStm );
-    aFirstName = read_unicode( rStm );
-    aShortName = read_unicode( rStm );
-
-    rStm.ReadUInt16( nType );
-    rStm.ReadUInt16( nFormat );
-
-    eType = (SvxAuthorType) nType;
-    eFormat= (SvxAuthorFormat) nFormat;
-}
-
-
-void SvxAuthorField::Save( SvPersistStream & rStm )
-{
-    write_unicode( rStm, aName );
-    write_unicode( rStm, aFirstName );
-    write_unicode( rStm, aShortName );
-
-    rStm.WriteUInt16( eType );
-    rStm.WriteUInt16( eFormat );
-}
-
-
 OUString SvxAuthorField::GetFormatted() const
 {
     OUString aString;
@@ -1090,29 +886,7 @@ OUString SvxAuthorField::GetFormatted() const
     return aString;
 }
 
-static SvClassManager* pClassMgr=nullptr;
-
-SvClassManager& SvxFieldItem::GetClassManager()
-{
-    if ( !pClassMgr )
-    {
-        pClassMgr = new SvClassManager;
-        pClassMgr->Register(SvxFieldData::StaticClassId(),    SvxFieldData::CreateInstance);
-        pClassMgr->Register(SvxURLField::StaticClassId(),     SvxURLField::CreateInstance);
-        pClassMgr->Register(SvxDateField::StaticClassId(),    SvxDateField::CreateInstance);
-        pClassMgr->Register(SvxPageField::StaticClassId(),    SvxPageField::CreateInstance);
-        pClassMgr->Register(SvxPageTitleField::StaticClassId(), SvxPageTitleField::CreateInstance);
-        pClassMgr->Register(SvxTimeField::StaticClassId(),    SvxTimeField::CreateInstance);
-        pClassMgr->Register(SvxExtTimeField::StaticClassId(), SvxExtTimeField::CreateInstance);
-        pClassMgr->Register(SvxExtFileField::StaticClassId(), SvxExtFileField::CreateInstance);
-        pClassMgr->Register(SvxAuthorField::StaticClassId(),  SvxAuthorField::CreateInstance);
-    }
-
-    return *pClassMgr;
-}
-
-
-SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxHeaderField );
 
 SvxHeaderField::SvxHeaderField() {}
 
@@ -1126,16 +900,8 @@ bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxHeaderField *>(&rCmp) != nullptr );
 }
 
-void SvxHeaderField::Load( SvPersistStream & /*rStm*/ )
-{
-}
+SV_IMPL_PERSIST1( SvxFooterField );
 
-void SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
-
-SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
 SvxFooterField::SvxFooterField() {}
 
 SvxFieldData* SvxFooterField::Clone() const
@@ -1148,16 +914,7 @@ bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
     return ( dynamic_cast< const SvxFooterField *>(&rCmp) != nullptr );
 }
 
-void SvxFooterField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxFooterField::Save( SvPersistStream & /*rStm*/ )
-{
-}
-
-
-SV_IMPL_PERSIST1( SvxDateTimeField, SvxFieldData );
+SV_IMPL_PERSIST1( SvxDateTimeField );
 
 SvxFieldData* SvxDateTimeField::Clone() const
 {
@@ -1167,14 +924,6 @@ SvxFieldData* SvxDateTimeField::Clone() const
 bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( dynamic_cast< const SvxDateTimeField *>(&rCmp) != nullptr );
-}
-
-void SvxDateTimeField::Load( SvPersistStream & /*rStm*/ )
-{
-}
-
-void SvxDateTimeField::Save( SvPersistStream & /*rStm*/ )
-{
 }
 
 SvxDateTimeField::SvxDateTimeField() {}
