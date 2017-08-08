@@ -72,6 +72,16 @@ DiagramData::DiagramData()
 {
 }
 
+const dgm::Point* DiagramData::getRootPoint() const
+{
+    for (const auto & aCurrPoint : maPoints)
+        if (aCurrPoint.mnType == XML_doc)
+            return &aCurrPoint;
+
+    SAL_WARN("oox.drawingml", "No root point");
+    return nullptr;
+}
+
 void DiagramData::dump()
 {
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of cnx: " << maConnections.size() );

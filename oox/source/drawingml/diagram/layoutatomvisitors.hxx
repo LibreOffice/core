@@ -33,6 +33,7 @@ class ShapeCreationVisitor : public LayoutAtomVisitor
     ShapePtr mpParentShape;
     const Diagram& mrDgm;
     sal_Int32 mnCurrIdx;
+    const dgm::Point* mpCurrentNode;
 
     void defaultVisit(LayoutAtom& rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
@@ -48,7 +49,8 @@ public:
                          const Diagram& rDgm) :
         mpParentShape(rParentShape),
         mrDgm(rDgm),
-        mnCurrIdx(0)
+        mnCurrIdx(0),
+        mpCurrentNode(rDgm.getData()->getRootPoint())
     {}
 };
 
