@@ -66,11 +66,7 @@ public:
  */
 class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
 {
-private:
     tools::SvRef<SvxFieldData>      mxField;
-
-    EDITENG_DLLPRIVATE SvxFieldItem( SvxFieldData* pField, const sal_uInt16 nId );
-
 public:
             SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );

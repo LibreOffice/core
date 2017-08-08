@@ -285,12 +285,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShare()
-{
-    SolarMutexGuard g;
-    return m_xWorkingStorageShare;
-}
-
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser()
 {
     SolarMutexGuard g;

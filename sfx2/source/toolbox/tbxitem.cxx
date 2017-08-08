@@ -738,22 +738,6 @@ SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUStrin
 
 SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
-    const Reference< XFrame >& rFrame,
-    vcl::Window* pParentWindow,
-    WinBits nBits ) :
-    FloatingWindow( pParentWindow, nBits )
-    , m_bFloating( false )
-    , m_bCascading( false )
-    , m_nId( nId )
-    , m_xFrame( rFrame )
-{
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
-}
-
-SfxPopupWindow::SfxPopupWindow(
-    sal_uInt16 nId,
     vcl::Window* pParentWindow,
     const OString& rID, const OUString& rUIXMLDescription,
     const Reference< XFrame >& rFrame ) :

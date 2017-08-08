@@ -176,7 +176,6 @@ public:
     bool                            IsInRange( sal_uInt16 nWhich ) const;
     bool                            IsInVersionsRange( sal_uInt16 nWhich ) const;
     bool                            IsInStoringRange( sal_uInt16 nWhich ) const;
-    void                            SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     void                            SetSecondaryPool( SfxItemPool *pPool );
     SfxItemPool*                    GetSecondaryPool() const;
     SfxItemPool*                    GetMasterPool() const;
@@ -204,8 +203,6 @@ public:
                                         return nId && nId <= SFX_WHICH_MAX; }
     static bool                     IsSlot(sal_uInt16 nId) {
                                         return nId && nId > SFX_WHICH_MAX; }
-
-    static const SfxItemPool*       GetStoringPool();
 
     void                            dumpAsXml(struct _xmlTextWriter* pWriter) const;
 

@@ -120,8 +120,6 @@ namespace connectivity
             OEvoabResultSet( OCommonStatement *pStmt, OEvoabConnection *pConnection );
             void construct( const QueryData& _rData );
 
-            OEvoabConnection * getConnection() { return m_pConnection; }
-
             css::uno::Reference< css::uno::XInterface > operator *()
             {
                 return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));

@@ -270,7 +270,6 @@ public:
     void            UnlockInput();
     bool            IsInputLocked() const { return mnLockCount > 0UL; }
 
-    sal_uInt16      GetCurPageId() { return maTabControl->GetCurPageId(); }
     sal_uInt16      GetCurPagePos() { return maTabControl->GetCurPagePos(); }
 
     /** Show controls of the UI or hide them, depending on the given flag.
