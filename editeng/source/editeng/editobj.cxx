@@ -1185,7 +1185,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
         // And the individual attributes
         // Items as Surrogate => always 8 bytes per Attributes
-        // Which = 2; Surregat = 2; Start = 2; End = 2;
+        // Which = 2; Surrogate = 2; Start = 2; End = 2;
         for (size_t nAttr = 0; nAttr < nAttribs; ++nAttr)
         {
             sal_uInt16 _nWhich(0), nStart(0), nEnd(0);

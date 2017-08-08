@@ -517,7 +517,7 @@ namespace emfplushelper
                 }
 
                 // get the polygon range to be able to map the start/end/center point correctly
-                // threrefore, create a mapping and invert it
+                // therefore, create a mapping and invert it
                 basegfx::B2DRange aPolygonRange= polygon.getB2DRange();
                 basegfx::B2DHomMatrix aPolygonTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(
                     aPolygonRange.getWidth(),aPolygonRange.getHeight(),
@@ -555,7 +555,7 @@ namespace emfplushelper
                              aVector,
                              aCenterPoint,
                              0.5,                   // relative radius
-                             true,                  // use UnitCoordinates to strectch the gradient
+                             true,                  // use UnitCoordinates to stretch the gradient
                              drawinglayer::primitive2d::SpreadMethod::Repeat,
                              nullptr));
                 }
