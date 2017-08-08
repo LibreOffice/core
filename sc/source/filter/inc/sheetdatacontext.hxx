@@ -26,8 +26,6 @@
 #include "sheetdatabuffer.hxx"
 #include <vcl/svapp.hxx>
 
-#define MULTI_THREAD_SHEET_PARSING 1
-
 namespace oox {
 namespace xls {
 
@@ -54,12 +52,9 @@ struct SheetDataContextBase
  */
 class SheetDataContext : public WorksheetContextBase, private SheetDataContextBase
 {
-    // If we are doing threaded parsing, this SheetDataContext
-    // forms the inner loop for bulk data parsing, and for the
-    // duration of this we can drop the solar mutex.
-#if MULTI_THREAD_SHEET_PARSING
+    // This SheetDataContext forms the inner loop for bulk data parsing,
+    // and for the duration of this we can drop the solar mutex.
     SolarMutexReleaser aReleaser;
-#endif
 
 public:
     explicit            SheetDataContext( WorksheetFragmentBase& rFragment );
