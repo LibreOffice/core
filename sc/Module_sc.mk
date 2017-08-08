@@ -48,7 +48,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,sc,\
-    CppunitTest_sc_tiledrendering \
+	CppunitTest_sc_tiledrendering \
 ))
 endif
 endif
