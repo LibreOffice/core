@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -101,10 +102,17 @@ struct SignatureInformation
     OUString ouPropertyId;
     /// Characters of the <dc:description> element inside the signature.
     OUString ouDescription;
+    /// Holds the OOXML SignatureText property
+    OUString ouSignatureText;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
     OUString ouDescriptionPropertyId;
     /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
     OUString ouCertDigest;
+    /// OOXML Valid and invalid signature images
+    css::uno::Reference<css::graphic::XGraphic> maValidSignatureImage;
+    css::uno::Reference<css::graphic::XGraphic> maInvalidSignatureImage;
+    /// OOXML Signature Line Id, used to map signatures to their respective signature line images.
+    OUString ouSignatureLineId;
     /// A full OOXML signature for unchanged roundtrip, empty for ODF.
     css::uno::Sequence<sal_Int8> aSignatureBytes;
     /// For PDF: digest format, from css::xml::crypto::DigestID

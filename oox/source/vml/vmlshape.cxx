@@ -44,9 +44,11 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
- #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svdtrans.hxx>
@@ -67,6 +69,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
@@ -249,7 +252,8 @@ ClientData::ClientData() :
 {
 }
 
-ShapeModel::ShapeModel()
+ShapeModel::ShapeModel() :
+    mbIsSignatureLine(false)
 {
 }
 
@@ -1226,6 +1230,15 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             return xShape;
     }
 
+    if( getShapeModel().mbIsSignatureLine)
+    {
+        SAL_DEBUG("ComplexShape here, we have a signatureline!, id: " << getShapeModel().maSignatureId);
+        Reference< css::security::XDocumentDigitalSignatures > xSignatures(
+            css::security::DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
+
+        return nullptr;
+    }
+
     // try to create a picture object
     if( !aGraphicPath.isEmpty() )
     {
@@ -1235,6 +1248,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             PropertySet( xShape ).setAnyProperty( PROP_VertOrient, makeAny(text::VertOrientation::TOP));
         return xShape;
     }
+
     // default: try to create a custom shape
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
