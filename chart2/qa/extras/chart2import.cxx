@@ -94,6 +94,8 @@ public:
     void testSecondaryAxisTitleDefaultRotationXLSX();
     void testAxisTitleRotationXLSX();
 
+    void testTdf111173();
+
     void testInternalDataProvider();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
@@ -148,6 +150,7 @@ public:
     CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
+    CPPUNIT_TEST(testTdf111173);
 
     CPPUNIT_TEST(testInternalDataProvider);
 
@@ -1245,6 +1248,13 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("hello")), xSequence[1]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("0")),     xSequence[2]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("world")), xSequence[3]);
+}
+
+void Chart2ImportTest::testTdf111173()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf111173.xlsx");
+    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart1Doc.is() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
