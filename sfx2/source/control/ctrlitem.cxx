@@ -203,7 +203,7 @@ SfxControllerItem::~SfxControllerItem()
 void SfxControllerItem::dispose()
 {
     if ( IsBound() )
-        pBindings->Release(*this);
+        UnBind();
 }
 
 void SfxControllerItem::StateChanged
