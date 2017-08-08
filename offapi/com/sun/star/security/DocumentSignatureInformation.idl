@@ -20,6 +20,7 @@
 #ifndef __com_sun_star_security_DocumentSignatureInformation_idl__
 #define __com_sun_star_security_DocumentSignatureInformation_idl__
 
+#include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/security/XCertificate.idl>
 #include <com/sun/star/security/CertificateValidity.idl>
 
@@ -65,6 +66,10 @@ struct DocumentSignatureInformation
         the fact, that not everything in this document is signed.
     */
     boolean PartialDocumentSignature;
+
+    string SignatureLineId;
+    com::sun::star::graphic::XGraphic ValidSignatureLineImage;
+    com::sun::star::graphic::XGraphic InvalidSignatureLineImage;
 
 };
 
