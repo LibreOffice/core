@@ -349,6 +349,40 @@ namespace emfplushelper
         return color;
     }
 
+    void EmfPlusHelperData::GraphicStatePush(GraphicStateMap& map, sal_Int32 index)
+    {
+        GraphicStateMap::iterator iter = map.find( index );
+
+        if ( iter != map.end() )
+        {
+            wmfemfhelper::PropertyHolder state = iter->second;
+            map.erase( iter );
+
+            SAL_INFO("cppcanvas.emf", "stack index: " << index << " found and erased");
+        }
+
+        wmfemfhelper::PropertyHolder state;
+
+        state = mrPropertyHolders.Current();
+
+        map[ index ] = state;
+    }
+
+    void EmfPlusHelperData::GraphicStatePop(GraphicStateMap& map, sal_Int32 index, wmfemfhelper::PropertyHolder& rState)
+    {
+        GraphicStateMap::iterator iter = map.find( index );
+
+        if ( iter != map.end() )
+        {
+            SAL_INFO("cppcanvas.emf", "stack index: " << index << " found");
+
+            wmfemfhelper::PropertyHolder state = iter->second;
+
+            maWorldTransform = state.getTransformation();
+            rState.setClipPolyPolygon( state.getClipPolyPolygon() );
+        }
+    }
+
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
     {
         const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
@@ -356,38 +390,42 @@ namespace emfplushelper
 
         if (pen && polygon.count())
         {
-          // we need a line join attribute
-          basegfx::B2DLineJoin lineJoin = basegfx::B2DLineJoin::Round;
-          if (pen->penDataFlags & 0x00000008) // additional line join information
-          {
+            // we need a line join attribute
+            basegfx::B2DLineJoin lineJoin = basegfx::B2DLineJoin::Round;
+            if (pen->penDataFlags & 0x00000008) // additional line join information
+            {
             lineJoin = static_cast<basegfx::B2DLineJoin>(EMFPPen::lcl_convertLineJoinType(pen->lineJoin));
-          }
+            }
 
-          // we need a line cap attribute
-          css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
-          if (pen->penDataFlags & 0x00000002) // additional line cap information
-          {
+            // we need a line cap attribute
+            css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
+            if (pen->penDataFlags & 0x00000002) // additional line cap information
+            {
             lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
             SAL_WARN_IF(pen->startCap != pen->endCap, "cppcanvas.emf", "emf+ pen uses different start and end cap");
-          }
-          // transform the pen width
-          double adjustedPenWidth = pen->penWidth;
-          if (!pen->penWidth) // no width specified, then use default value
-          {
+            }
+            // transform the pen width
+            double adjustedPenWidth = pen->penWidth;
+            if (!pen->penWidth) // no width specified, then use default value
+            {
                 adjustedPenWidth = pen->penUnit == 0 ? 0.18f   // 0.18f is determined by comparison with MSO  (case of Unit == World)
-                                                     : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
-          }
+                                                        : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
+            }
 
-          // transform and compare to 5 (the value 5 is determined by comparison to MSO)
-          const double transformedPenWidth = std::max( MapSize(adjustedPenWidth,0).getX() , 5.);
-          drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
-                                                               transformedPenWidth,
-                                                               lineJoin,
-                                                               lineCap);
-          mrTargetHolders.Current().append(
-              new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                  polygon,
-                  lineAttribute));
+            // transform and compare to 5 (the value 5 is determined by comparison to MSO)
+            const double transformedPenWidth = std::max( MapSize(adjustedPenWidth,0).getX() , 5.);
+            drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
+                                                                transformedPenWidth,
+                                                                lineJoin,
+                                                                lineCap);
+            mrTargetHolders.Current().append(
+                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                    polygon,
+                    lineAttribute));
+
+            mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
+            mrPropertyHolders.Current().setLineColorActive(true);
+            mrPropertyHolders.Current().setFillColorActive(false);
         }
     }
 
@@ -403,6 +441,11 @@ namespace emfplushelper
                 new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     polygon,
                     ::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor()));
+
+            mrPropertyHolders.Current().setFillColor(::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor());
+            mrPropertyHolders.Current().setFillColorActive(true);
+            mrPropertyHolders.Current().setLineColorActive(false);
+
         }
         else // use Brush
         {
@@ -412,6 +455,10 @@ namespace emfplushelper
             // give up in case something wrong happened
             if( !brush )
                 return;
+
+            mrPropertyHolders.Current().setFillColorActive(false);
+            mrPropertyHolders.Current().setLineColorActive(false);
+
             if (brush->type == BrushTypeHatchFill)
             {
                 // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
@@ -448,7 +495,12 @@ namespace emfplushelper
                 {
                     fillColor = brush->secondColor;
                 }
-                EMFPPlusFillPolygon(polygon,true,fillColor.GetRGBColor());
+                // temporal solution: create a solid colored polygon
+                // TODO create a 'real' hatching primitive
+                mrTargetHolders.Current().append(
+                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                    polygon,
+                    fillColor.getBColor()));
             }
             else if (brush->type == BrushTypeTextureFill)
             {
@@ -1104,9 +1156,12 @@ namespace emfplushelper
                             {
                               break;
                             }
+                            mrPropertyHolders.Current().setFont(vcl::Font(font->family , Size(font->emSize,font->emSize)));
                             // done reading
 
                             // transform to TextSimplePortionPrimitive2D
+                            // TODO add more decorations: underline, strikeout, etc
+                            //      and create a TextDecoratedPortionPrimitive2D
 
                             const OUString emptyString;
                             drawinglayer::attribute::FontAttribute fontAttribute(
@@ -1139,6 +1194,8 @@ namespace emfplushelper
                                 color = pen->GetColor().getBColor();
                               }
                             }
+                            mrPropertyHolders.Current().setTextColor(color);
+                            mrPropertyHolders.Current().setTextColorActive(true);
 
                             std::vector<double> emptyVector;
                             mrTargetHolders.Current().append(
@@ -1219,7 +1276,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("cppcanvas.emf", "EMF+ Save stack index: " << stackIndex);
 
-    //                    GraphicStatePush(mGSStack, stackIndex, rState);
+                        GraphicStatePush(mGSStack, stackIndex);
 
                         break;
                     }
@@ -1229,8 +1286,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("cppcanvas.emf", "EMF+ Restore stack index: " << stackIndex);
 
-    //                    GraphicStatePop(mGSStack, stackIndex, rState);
-
+                        GraphicStatePop(mGSStack, stackIndex, mrPropertyHolders.Current());
                         break;
                     }
                     case EmfPlusRecordTypeBeginContainerNoParams:
@@ -1239,7 +1295,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("cppcanvas.emf", "EMF+ Begin Container No Params stack index: " << stackIndex);
 
-    //                    GraphicStatePush(mGSContainerStack, stackIndex, rState);
+                        GraphicStatePush(mGSContainerStack, stackIndex);
                         break;
                     }
                     case EmfPlusRecordTypeEndContainer:
@@ -1248,7 +1304,7 @@ namespace emfplushelper
                         rMS.ReadUInt32(stackIndex);
                         SAL_INFO("cppcanvas.emf", "EMF+ End Container stack index: " << stackIndex);
 
-    //                    GraphicStatePop(mGSContainerStack, stackIndex, rState);
+                        GraphicStatePop(mGSContainerStack, stackIndex, mrPropertyHolders.Current());
                         break;
                     }
                     case EmfPlusRecordTypeSetWorldTransform:
