@@ -80,7 +80,6 @@ public:
     *  pNode - the libxml2 node wrapped by this object
     */
     xmlNodePtr getNativeElement( ) const { return m_pElement;}
-    void setNativeElement(const xmlNodePtr pNode);
 };
 
 /// @throws css::uno::RuntimeException

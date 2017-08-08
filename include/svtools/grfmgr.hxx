@@ -584,8 +584,6 @@ public:
     void                SetMaxCacheSize( sal_uLong nNewCacheSize );
     sal_uLong           GetMaxCacheSize() const;
 
-    void                SetMaxObjCacheSize( sal_uLong nNewMaxObjSize );
-
     void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
 
     bool                IsInCache(

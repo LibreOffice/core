@@ -108,8 +108,6 @@ public:
 
     SvxFontItem& operator=(const SvxFontItem& rFont);
 
-    static void EnableStoreUnicodeNames(bool bEnable);
-
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 

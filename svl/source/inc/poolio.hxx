@@ -111,7 +111,6 @@ struct SfxItemPool_Impl
     sal_uInt16                      nLoadingVersion;
     sal_uInt16                      nInitRefCount; // 1, during load, may be 2
     sal_uInt16                      nVerStart, nVerEnd; // WhichRange in versions
-    sal_uInt16                      nStoringStart, nStoringEnd; // Range to be saved
     sal_uInt8                       nMajorVer, nMinorVer; // The Pool itself
     MapUnit                         eDefMetric;
     bool                            bInSetItem;
@@ -134,8 +133,6 @@ struct SfxItemPool_Impl
         , nInitRefCount(0)
         , nVerStart(0)
         , nVerEnd(0)
-        , nStoringStart(0)
-        , nStoringEnd(0)
         , nMajorVer(0)
         , nMinorVer(0)
         , eDefMetric(MapUnit::MapCM)

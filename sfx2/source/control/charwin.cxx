@@ -63,11 +63,6 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-Point SvxCharView::GetClickPosition() const
-{
-    return maPosition;
-}
-
 void SvxCharView::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();

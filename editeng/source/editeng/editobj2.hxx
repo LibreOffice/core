@@ -268,7 +268,6 @@ public:
     void                    SetMetric( sal_uInt16 n )       { nMetric = n; }
 
     bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
-    void StoreUnicodeStrings( bool b ) { bStoreUnicodeStrings = b; }
 
     bool operator==( const EditTextObjectImpl& rCompare ) const;
     bool Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const;

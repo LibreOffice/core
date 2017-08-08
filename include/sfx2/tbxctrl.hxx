@@ -103,10 +103,6 @@ public:
                                            const OString& rID, const OUString& rUIXMLDescription,
                                            const css::uno::Reference<css::frame::XFrame> &rFrame =
                                                css::uno::Reference<css::frame::XFrame>());
-                            SfxPopupWindow( sal_uInt16 nId,
-                                            const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                            vcl::Window* pParentWindow,
-                                            WinBits nBits );
                             virtual ~SfxPopupWindow() override;
     virtual void            dispose() override;
 

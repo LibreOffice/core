@@ -272,13 +272,6 @@ MetaAction* SvxFieldData::createEndComment()
 }
 
 
-SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
-    , mxField( pFld )  // belongs directly to the item
-{
-}
-
-
 SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
     , mxField( rField.Clone() )

@@ -58,17 +58,6 @@ enum class SdrHitKind;
 class SwEditWin: public vcl::Window,
                 public DropTargetHelper, public DragSourceHelper
 {
-friend void     ScrollMDI(SwViewShell* pVwSh, const SwRect&,
-                          sal_uInt16 nRangeX, sal_uInt16 nRangeY);
-friend bool     IsScrollMDI(SwViewShell* pVwSh, const SwRect&);
-
-friend void     SizeNotify(SwViewShell* pVwSh, const Size &);
-
-friend void     PageNumNotify(  SwViewShell* pVwSh,
-                                sal_uInt16 nPhyNum,
-                                sal_uInt16 nVirtNum,
-                                const OUString& rPg );
-
     static  QuickHelpData* m_pQuickHlpData;
 
     static  long    m_nDDStartPosX, m_nDDStartPosY;
