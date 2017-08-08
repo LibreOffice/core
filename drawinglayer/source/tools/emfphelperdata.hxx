@@ -25,6 +25,7 @@
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <map>
 
 // predefines
 class SvStream;
@@ -183,6 +184,8 @@ namespace emfplushelper
 //
 //    typedef std::map<int, EmfPlusGraphicState> GraphicStateMap;
 
+    typedef std::map<int, wmfemfhelper::PropertyHolder> GraphicStateMap;
+
     struct EmfPlusHelperData
     {
     private:
@@ -214,8 +217,8 @@ namespace emfplushelper
         SvMemoryStream              mMStream;
 
         /* emf+ graphic state stack */
-//        GraphicStateMap         mGSStack;
-//        GraphicStateMap         mGSContainerStack;
+        GraphicStateMap         mGSStack;
+        GraphicStateMap         mGSContainerStack;
 
         /// data holders
         wmfemfhelper::TargetHolders&    mrTargetHolders;
@@ -227,6 +230,10 @@ namespace emfplushelper
 
         // internal mapper
         void mappingChanged();
+
+        // stack actions
+        void GraphicStatePush(GraphicStateMap& map, sal_Int32 index);
+        void GraphicStatePop (GraphicStateMap& map, sal_Int32 index, wmfemfhelper::PropertyHolder& rState);
 
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
