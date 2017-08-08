@@ -31,6 +31,7 @@
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -1031,20 +1032,15 @@ namespace emfplushelper
                                 SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
-    //                                ActionSharedPtr pBmpAction(
-    //                                    internal::BitmapActionFactory::createBitmapAction(
-    //                                        aBmp,
-    //                                        rState.mapModeTransform * aDstPoint,
-    //                                        rState.mapModeTransform * aDstSize,
-    //                                        rCanvas,
-    //                                        rState));
-    //
-    //                                if (pBmpAction) {
-    //                                    maActions.push_back(MtfAction(pBmpAction,
-    //                                        rFactoryParms.mrCurrActionIndex));
-    //
-    //                                    rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount() - 1;
-    //                                }
+                                    // create correct transform matrix
+                                    basegfx::B2DHomMatrix aTransformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                        aDstSize.getX(),
+                                        aDstSize.getY(),
+                                        aDstPoint.getX(),
+                                        aDstPoint.getY());
+
+                                    mrTargetHolders.Current().append(
+                                        new drawinglayer::primitive2d::BitmapPrimitive2D(aBmp,aTransformMatrix));
                                 }
                                 else
                                 {
