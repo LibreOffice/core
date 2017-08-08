@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9a17f153",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-08T05:44:23Z",
+      "side": 1,
+      "message": "I still don\u0027t understand why can\u0027t we check if the list contains only one numeric type and blank to also allow listing the items, because it\u0027s what Excel apparently does. If there are other cases, at least that would not be worse.\n\nBut if we export here something different than Excel, then we should put a comment like\n\n// We don\u0027t list items on round-trip, but Excel accepts that; so no check for \"count\" attribute",
+      "range": {
+        "startLine": 575,
+        "startChar": 114,
+        "endLine": 575,
+        "endChar": 114
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_da11795f",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-08T05:44:23Z",
+      "side": 1,
+      "message": "And here we apparently omit testing for absence of listed items (count attribute). But why? Excel doesn\u0027t put items here. We explicitly check in code that if there\u0027s only numeric types in list, then we don\u0027t list items (xepivotxml.cxx:305).",
+      "range": {
+        "startLine": 598,
+        "startChar": 114,
+        "endLine": 598,
+        "endChar": 115
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ba1cad78",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-08T05:44:23Z",
+      "side": 1,
+      "message": "I\u0027d add here \" \u0026\u0026 !isContainsBlank\" to allow \"wartosc\" test to generate same output as Excel",
+      "range": {
+        "startLine": 305,
+        "startChar": 49,
+        "endLine": 305,
+        "endChar": 50
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
