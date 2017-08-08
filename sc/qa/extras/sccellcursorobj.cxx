@@ -13,6 +13,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/XCellCursor.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -29,6 +30,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScCellCursorObj);
 
@@ -57,6 +59,22 @@ ScCellCursorObj::ScCellCursorObj():
 }
 
 uno::Reference< uno::XInterface > ScCellCursorObj::init()
+{
+    OUString aFileURL;
+    createFileURL("ScCellCursorObj.ods", aFileURL);
+    if(!mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< table::XCellCursor > xCellCursor( xSheet->createCursor(), UNO_QUERY_THROW);
+
+    return xCellCursor;
+}
+
+uno::Reference< uno::XInterface > ScCellCursorObj::getXSpreadsheet()
 {
     OUString aFileURL;
     createFileURL("ScCellCursorObj.ods", aFileURL);
