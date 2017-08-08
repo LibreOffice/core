@@ -68,6 +68,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xstyleloader \
 	test/source/sheet/xusedareacursor \
 	test/source/sheet/xviewpane \
+	test/source/sheet/xviewfreezable \
 	test/source/sheet/xviewsplitable \
 	test/source/text/xtext \
 	test/source/text/xtextfield \

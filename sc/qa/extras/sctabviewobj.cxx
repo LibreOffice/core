@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/xviewfreezable.hxx>
 #include <test/sheet/xviewsplitable.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -21,9 +22,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 1
+#define NUMBER_OF_TESTS 2
 
-class ScTabViewObj : public CalcUnoApiTest, public apitest::XViewSplitable
+class ScTabViewObj : public CalcUnoApiTest, public apitest::XViewFreezable, public apitest::XViewSplitable
 {
 public:
     ScTabViewObj();
@@ -33,6 +34,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTabViewObj);
+
+    // XViewFreezable
+    CPPUNIT_TEST(testFreeze);
+
     // XViewSplitable
     CPPUNIT_TEST(testSplit);
 
@@ -61,9 +66,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::init()
     CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
 
     uno::Reference< frame::XModel > xModel(xSheetDoc, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XViewSplitable > xViewSplitable(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
-
-    return xViewSplitable;
+    return xModel->getCurrentController();
 }
 
 void ScTabViewObj::setUp()
