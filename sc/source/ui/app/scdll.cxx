@@ -100,7 +100,6 @@
 #include <svx/imapdlg.hxx>
 
 #include "editutil.hxx"
-#include <svx/svdfield.hxx>
 
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
@@ -261,14 +260,6 @@ void ScDLL::Init()
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
     ScCondFormatDlgWrapper::RegisterChildWindow(false, pMod);
-
-    // EditEngine Field; insofar not already defined in OfficeApplication::Init
-    SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-    rClassManager.Register(SvxPagesField::StaticClassId(), SvxPagesField::CreateInstance);
-    rClassManager.Register(SvxFileField::StaticClassId(),  SvxFileField::CreateInstance);
-    rClassManager.Register(SvxTableField::StaticClassId(), SvxTableField::CreateInstance);
-
-    SdrRegisterFieldClasses(); // Register SvDraw fields
 
     // Add 3DObject Factory
     E3dObjFactory();
