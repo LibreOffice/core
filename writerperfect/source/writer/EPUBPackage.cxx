@@ -28,6 +28,15 @@ EPUBPackage::EPUBPackage(const uno::Reference<uno::XComponentContext> &xContext,
     auto xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference<io::XStream>());
     const sal_Int32 nOpenMode = embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
     mxStorage.set(comphelper::OStorageHelper::GetStorageOfFormatFromStream(ZIP_STORAGE_FORMAT_STRING, xStream, nOpenMode, mxContext), uno::UNO_QUERY);
+
+    // The zipped content represents an EPUB Publication.
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName("mimetype", embed::ElementModes::READWRITE), uno::UNO_QUERY);
+    const OString aMimeType("application/epub+zip");
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(aMimeType.getStr()), aMimeType.getLength());
+    mxOutputStream->writeBytes(aData);
+    uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
+    xTransactedObject->commit();
+    mxOutputStream.clear();
 }
 
 EPUBPackage::~EPUBPackage()
