@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2520a249",
+        "filename": "include/svx/ruler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-08T11:06:51Z",
+      "side": 1,
+      "message": "Where is this function used ? I can\u0027t see any usage anywhere",
+      "range": {
+        "startLine": 249,
+        "startChar": 43,
+        "endLine": 249,
+        "endChar": 44
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_65be2a01",
+        "filename": "include/svx/ruler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-08T11:06:51Z",
+      "side": 1,
+      "message": "Hm, what is this ending \u0027P\u0027 in GetPageWidthP() ?",
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_05464623",
+        "filename": "sw/sdi/_viewsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-08T11:06:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure we really need this ? Do we ?",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 60
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a52bb232",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-08T11:06:51Z",
+      "side": 1,
+      "message": "nitpick: If you could respect the naming convention of variables, that would be great. Eg:. SfxPoolItem* pMargin1, where \u0027p\u0027 means pointer.",
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_850076ac",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-08T11:06:51Z",
+      "side": 1,
+      "message": "nitpick: this can be const",
+      "range": {
+        "startLine": 812,
+        "startChar": 21,
+        "endLine": 812,
+        "endChar": 32
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c530bea1",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-08T11:06:51Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 819,
+        "startChar": 21,
+        "endLine": 819,
+        "endChar": 32
+      },
+      "revId": "cdb9232c635846b20716d1833f80e390542c04b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
