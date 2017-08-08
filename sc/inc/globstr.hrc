@@ -149,7 +149,7 @@
 #define STR_PIVOT_MOVENOTALLOWED                NC_("STR_PIVOT_MOVENOTALLOWED", "The data range can not be deleted.")
 #define STR_PIVOT_ERROR                         NC_("STR_PIVOT_ERROR", "Error creating the pivot table.")
 #define STR_PIVOT_NOTEMPTY                      NC_("STR_PIVOT_NOTEMPTY", "The destination range is not empty. Overwrite existing contents?")
-#define STR_PIVOT_REMOVE_PIVOTCHART             NC_("STR_PIVOT_REMOVE_PIVOTCHART", "There is at least one pivot chart associated with this pivot table. Should remove all or abort?")
+#define STR_PIVOT_REMOVE_PIVOTCHART             NC_("STR_PIVOT_REMOVE_PIVOTCHART", "Deleting any cells of a pivot table will also remove it and all associated pivot charts.\nDo you want to proceed?")
 #define STR_DATAPILOT_SUBTOTAL                  NC_("STR_DATAPILOT_SUBTOTAL", "The source range contains subtotals which may distort the results. Use it anyway?")
 #define STR_PIVOT_TOTAL                         NC_("STR_PIVOT_TOTAL", "Total")
 #define STR_PIVOT_DATA                          NC_("STR_PIVOT_DATA", "Data")
