@@ -64,6 +64,24 @@ struct ConditionAttr
     OUString msVal;
 };
 
+struct Constraint
+{
+    sal_Int32 mnFor;
+    OUString msForName;
+    sal_Int32 mnPointType;
+    sal_Int32 mnType;
+    sal_Int32 mnRefFor;
+    OUString msRefForName;
+    sal_Int32 mnRefType;
+    sal_Int32 mnRefPointType;
+    double mfFactor;
+    double mfValue;
+    sal_Int32 mnOperator;
+};
+
+typedef std::map<sal_Int32, sal_Int32> LayoutProperty;
+typedef std::map<OUString, LayoutProperty> LayoutPropertyMap;
+
 struct LayoutAtomVisitor;
 class LayoutAtom;
 class LayoutNode;
@@ -107,47 +125,13 @@ class ConstraintAtom
     : public LayoutAtom
 {
 public:
-    ConstraintAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode),
-        mnFor(-1), msForName(), mnPointType(-1), mnType(-1), mnRefFor(-1), msRefForName(),
-        mnRefType(-1), mnRefPointType(-1), mfFactor(1.0), mfValue(0.0), mnOperator(0)
-    {}
-
+    ConstraintAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode) {}
     virtual void accept( LayoutAtomVisitor& ) override;
-
-    void setFor( sal_Int32 nToken )
-        { mnFor = nToken; }
-    void setForName( const OUString & sName )
-        { msForName = sName; }
-    void setPointType( sal_Int32 nToken )
-        { mnPointType = nToken; }
-    void setType( sal_Int32 nToken )
-        { mnType = nToken; }
-    void setRefFor( sal_Int32 nToken )
-        { mnRefFor = nToken; }
-    void setRefForName( const OUString & sName )
-        { msRefForName = sName; }
-    void setRefType( sal_Int32 nToken )
-        { mnRefType = nToken; }
-    void setRefPointType( sal_Int32 nToken )
-        { mnRefPointType = nToken; }
-    void setFactor( const double& fVal )
-        { mfFactor = fVal; }
-    void setValue( const double& fVal )
-        { mfValue = fVal; }
-    void setOperator( sal_Int32 nToken )
-        { mnOperator = nToken; }
+    Constraint& getConstraint()
+        { return maConstraint; }
+    void parseConstraint(std::vector<Constraint>& rConstraints) const;
 private:
-    sal_Int32 mnFor;
-    OUString msForName;
-    sal_Int32 mnPointType;
-    sal_Int32 mnType;
-    sal_Int32 mnRefFor;
-    OUString msRefForName;
-    sal_Int32 mnRefType;
-    sal_Int32 mnRefPointType;
-    double mfFactor;
-    double mfValue;
-    sal_Int32 mnOperator;
+    Constraint maConstraint;
 };
 
 class AlgAtom
@@ -164,7 +148,8 @@ public:
         { mnType = nToken; }
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
-    void layoutShape( const ShapePtr& rShape ) const;
+    void layoutShape( const ShapePtr& rShape,
+                      const std::vector<Constraint>& rConstraints ) const;
 private:
     sal_Int32 mnType;
     ParamMap  maMap;

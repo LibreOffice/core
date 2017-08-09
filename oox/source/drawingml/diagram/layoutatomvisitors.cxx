@@ -36,7 +36,7 @@ void ShapeCreationVisitor::defaultVisit(LayoutAtom const & rAtom)
 
 void ShapeCreationVisitor::visit(ConstraintAtom& /*rAtom*/)
 {
-    // TODO: eval the constraints
+    // stop processing
 }
 
 void ShapeCreationVisitor::visit(AlgAtom& rAtom)
@@ -112,8 +112,12 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     if (rAtom.getExistingShape())
     {
         // reuse existing shape
-        if (rAtom.setupShape(rAtom.getExistingShape(), pNewNode))
-            rAtom.addNodeShape(rAtom.getExistingShape());
+        ShapePtr pShape = rAtom.getExistingShape();
+        if (rAtom.setupShape(pShape, pNewNode))
+        {
+            pShape->setInternalName(rAtom.getName());
+            rAtom.addNodeShape(pShape);
+        }
     }
     else
     {
@@ -131,6 +135,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
             if (rAtom.setupShape(pShape, pNewNode))
             {
+                pShape->setInternalName(rAtom.getName());
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
                 rAtom.addNodeShape(pShape);
@@ -227,17 +232,18 @@ void ShapeLayoutingVisitor::defaultVisit(LayoutAtom const & rAtom)
         pAtom->accept(*this);
 }
 
-void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
+void ShapeLayoutingVisitor::visit(ConstraintAtom& rAtom)
 {
-    // stop processing
+    if (meLookFor == CONSTRAINT)
+        rAtom.parseConstraint(maConstraints);
 }
 
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
-    if (mbLookForAlg)
+    if (meLookFor == ALGORITHM)
     {
         for (const auto& pShape : rAtom.getLayoutNode().getNodeShapes())
-            rAtom.layoutShape(pShape);
+            rAtom.layoutShape(pShape, maConstraints);
     }
 }
 
@@ -258,13 +264,16 @@ void ShapeLayoutingVisitor::visit(ChooseAtom& rAtom)
 
 void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
 {
-    if (mbLookForAlg)
+    if (meLookFor != LAYOUT_NODE)
         return;
 
     // process alg atoms first, nested layout nodes afterwards
-    mbLookForAlg = true;
+    meLookFor = CONSTRAINT;
     defaultVisit(rAtom);
-    mbLookForAlg = false;
+    meLookFor = ALGORITHM;
+    defaultVisit(rAtom);
+    maConstraints.clear();
+    meLookFor = LAYOUT_NODE;
     defaultVisit(rAtom);
 }
 
