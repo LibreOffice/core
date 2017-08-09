@@ -282,10 +282,12 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, Shape
     {
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
         // get ShapeType and ShapeId from name for compatibility
-        mrTypeModel.maShapeId = mrTypeModel.maShapeName;
         static const OUString sShapeTypePrefix = "shapetype_";
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
+        {
+            mrTypeModel.maShapeId = mrTypeModel.maShapeName;
             mrTypeModel.moShapeType = mrTypeModel.maShapeName.copy(sShapeTypePrefix.getLength()).toInt32();
+        }
     }
 
     // coordinate system position/size, CSS style
