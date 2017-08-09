@@ -433,7 +433,7 @@ sal_uInt64 tools::Time::GetSystemTicks()
         SAL_WARN("tools.datetime", "gettimeofday failed: " << e);
     }
     return static_cast<sal_uInt64>(tv.tv_sec) * 1000
-        + (static_cast<sal_uInt64>(tv.tv_usec) + 500) / 1000;
+        + static_cast<sal_uInt64>(tv.tv_usec) / 1000;
 #endif
 }
 
