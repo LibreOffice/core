@@ -55,9 +55,6 @@ public:
     void            SetScaleY( const Fraction& rScaleY );
     const Fraction& GetScaleY() const;
 
-    /// Gets the multiplier, which is relative to 1/100 mm units
-    double          GetUnitMultiplier() const;
-
     MapMode&        operator=( const MapMode& rMapMode );
     MapMode&        operator=( MapMode&& rMapMode );
     bool            operator==( const MapMode& rMapMode ) const;
