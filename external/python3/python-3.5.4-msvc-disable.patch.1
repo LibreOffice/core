@@ -1,8 +1,8 @@
 Disable some stuff LO does not need, especially stuff with external dependencies
 
 diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
---- python3.orig/PCbuild/pcbuild.sln	2015-07-26 17:43:52.262528695 +0200
-+++ python3/PCbuild/pcbuild.sln	2015-07-26 18:00:18.438594901 +0200
+--- python3.orig/PCbuild/pcbuild.sln	2017-08-10 00:04:44.359879894 +0200
++++ python3/PCbuild/pcbuild.sln	2017-08-10 00:13:51.179873748 +0200
 @@ -12,8 +12,6 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore", "pythoncore.vcxproj", "{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}"
@@ -45,7 +45,7 @@ diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_multiprocessing", "_multiprocessing.vcxproj", "{9E48B300-37D1-11DD-8C41-005056C00008}"
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "python3dll", "python3dll.vcxproj", "{885D4898-D08D-4091-9C40-C700CFE3FC5A}"
-@@ -58,12 +58,6 @@
+@@ -80,12 +64,6 @@
  EndProject
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_testmultiphase", "_testmultiphase.vcxproj", "{16BFE6F0-22EF-40B5-B831-7E937119EF10}"
  EndProject
@@ -58,3 +58,4 @@ diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyshellext", "pyshellext.vcxproj", "{0F6EE4A4-C75F-4578-B4B3-2D64F4B9B782}"
  EndProject
  Global
+Only in python3/PCbuild: pcbuild.sln~
