@@ -12,7 +12,7 @@
 
 #include <rtl/ustring.hxx>
 
-void update();
+bool update();
 
 void update_checker();
 

@@ -1442,7 +1442,9 @@ int Desktop::Main()
                 xFlushable->flush();
                 // avoid the old oosplash staying around
                 CloseSplashScreen();
-                update();
+                bool bSuccess = update();
+                if (bSuccess)
+                    return EXIT_SUCCESS;
             }
             else if (isTimeForUpdateCheck())
             {
