@@ -809,24 +809,6 @@ ScXMLImport::ScXMLImport(
         GetXMLToken( XML_NP_PRESENTATION ),
         GetXMLToken( XML_N_PRESENTATION ),
         XML_NAMESPACE_PRESENTATION );
-
-    // initialize cell type map.
-    const struct { XMLTokenEnum  _token; sal_Int16 _type; } aCellTypePairs[] =
-    {
-        { XML_FLOAT,        util::NumberFormat::NUMBER },
-        { XML_STRING,       util::NumberFormat::TEXT },
-        { XML_TIME,         util::NumberFormat::TIME },
-        { XML_DATE,         util::NumberFormat::DATETIME },
-        { XML_PERCENTAGE,   util::NumberFormat::PERCENT },
-        { XML_CURRENCY,     util::NumberFormat::CURRENCY },
-        { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
-    };
-    for (const auto & aCellTypePair : aCellTypePairs)
-    {
-        aCellTypeMap.insert(
-            CellTypeMap::value_type(
-                GetXMLToken(aCellTypePair._token), aCellTypePair._type));
-    }
 }
 
 ScXMLImport::~ScXMLImport() throw()
@@ -1022,11 +1004,35 @@ ScDocumentImport& ScXMLImport::GetDoc()
     return *mpDocImport;
 }
 
-sal_Int16 ScXMLImport::GetCellType(const OUString& rStrValue) const
+sal_Int16 ScXMLImport::GetCellType(const char* rStrValue, const sal_Int32 nStrLength) const
 {
-    CellTypeMap::const_iterator itr = aCellTypeMap.find(rStrValue);
-    if (itr != aCellTypeMap.end())
-        return itr->second;
+    if (rStrValue != nullptr)
+    {
+        switch (rStrValue[0])
+        {
+            case 'b':
+                if (nStrLength == 7 && !strcmp(rStrValue, "boolean"))
+                    return util::NumberFormat::LOGICAL;
+            case 'c':
+                if (nStrLength == 8 && !strcmp(rStrValue, "currency"))
+                    return util::NumberFormat::CURRENCY;
+            case 'd':
+                if (nStrLength == 4 && !strcmp(rStrValue, "date"))
+                    return util::NumberFormat::DATETIME;
+            case 'f':
+                if (nStrLength == 5 && !strcmp(rStrValue, "float"))
+                    return util::NumberFormat::NUMBER;
+            case 'p':
+                if (nStrLength == 10 && !strcmp(rStrValue, "percentage"))
+                    return util::NumberFormat::PERCENT;
+            case 's':
+                if (nStrLength == 6 && !strcmp(rStrValue, "string"))
+                    return util::NumberFormat::TEXT;
+            case 't':
+                if (nStrLength == 4 && !strcmp(rStrValue, "time"))
+                    return util::NumberFormat::TIME;
+        }
+    }
 
     return util::NumberFormat::UNDEFINED;
 }

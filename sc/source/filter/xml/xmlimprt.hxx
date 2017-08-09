@@ -808,10 +808,7 @@ class ScXMLImport: public SvXMLImport
     ScXMLImport(const ScXMLImport&) = delete;
     const ScXMLImport& operator=(const ScXMLImport&) = delete;
 
-    typedef std::unordered_map< OUString, sal_Int16, OUStringHash >   CellTypeMap;
     typedef ::std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;
-
-    CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
     std::unique_ptr<ScDocumentImport> mpDocImport;
@@ -969,7 +966,7 @@ public:
 
     bool IsStylesOnlyMode() const { return !bLoadDoc; }
 
-    sal_Int16 GetCellType(const OUString& rStrValue) const;
+    sal_Int16 GetCellType(const char* rStrValue, const sal_Int32 nStrLength) const;
 
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }

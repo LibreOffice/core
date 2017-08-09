@@ -196,14 +196,14 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                 std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
                 break;
                 case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
-                    nCellType = GetScImport().GetCellType(it.toString());
+                    nCellType = GetScImport().GetCellType(it.toCString(), it.getLength());
                     bIsEmpty = false;
                 break;
                 case XML_ELEMENT( CALC_EXT, XML_VALUE_TYPE ):
                     if(it.isString( "error" ) )
                         mbErrorValue = true;
                     else
-                        nCellType = GetScImport().GetCellType(it.toString());
+                        nCellType = GetScImport().GetCellType(it.toCString(), it.getLength());
                     bIsEmpty = false;
                     mbNewValueType = true;
                 break;
