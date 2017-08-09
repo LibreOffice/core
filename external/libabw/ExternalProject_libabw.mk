@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,libabw,build) :
 			--disable-shared \
 			--without-docs \
 			--disable-tools \
-			--disable-debug \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS) \
