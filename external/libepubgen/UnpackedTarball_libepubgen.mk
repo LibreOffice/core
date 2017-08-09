@@ -8,6 +8,12 @@
 #
 
 epubgen_patches :=
+# Backport of <https://sourceforge.net/p/libepubgen/code/ci/96e9786f5aba1078251f36e58feefc8d953cdea0/>.
+epubgen_patches += libepubgen-validation1.patch.1
+# Backport of <https://sourceforge.net/p/libepubgen/code/ci/2e51fb9163bbc6b9a27fa524382c5aad9700dd0d/>.
+epubgen_patches += libepubgen-validation2.patch.1
+# Backport of <https://sourceforge.net/p/libepubgen/code/ci/9041ef42f9e0a5c4bc3b0a912d36683c4e10ca84/>.
+epubgen_patches += libepubgen-validation3.patch.1
 # Backport of <https://sourceforge.net/p/libepubgen/code/ci/49f6461d4751d3b16e32ab8f9c93a3856b33be49/>.
 epubgen_patches += libepubgen-vc.patch.1
 

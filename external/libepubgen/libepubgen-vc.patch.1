@@ -41,6 +41,19 @@ diff -Naur a/configure b/configure
  
  #error "This is not a C++11 compiler"
  
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 9dbccac..3357cf2 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -7,6 +7,8 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <sstream>
++
+ #include <boost/uuid/uuid.hpp>
+ #include <boost/uuid/uuid_generators.hpp>
+ #include <boost/uuid/uuid_io.hpp>
 -- 
 2.12.3
 
