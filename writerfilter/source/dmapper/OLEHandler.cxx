@@ -100,6 +100,12 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
         {
             uno::Reference< drawing::XShape > xTempShape;
             rVal.getAny() >>= xTempShape;
+
+            // Control shape is handled on a different code path
+            uno::Reference< lang::XServiceInfo > xSInfo( xTempShape, uno::UNO_QUERY_THROW );
+            if(xSInfo->supportsService("com.sun.star.drawing.ControlShape"))
+                break;
+
             if( xTempShape.is() )
             {
                 m_xShape.set( xTempShape );
