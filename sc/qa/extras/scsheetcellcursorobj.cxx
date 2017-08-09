@@ -8,11 +8,11 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xusedareacursor.hxx>
 
+#include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/table/XCellCursor.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -21,20 +21,20 @@ namespace sc_apitest {
 
 #define NUMBER_OF_TESTS 2
 
-class ScCellCursorObj : public CalcUnoApiTest, private apitest::XCellSeries
+class ScSheetCellCursorObj : public CalcUnoApiTest, public apitest::XUsedAreaCursor
 {
 public:
-    ScCellCursorObj();
+    ScSheetCellCursorObj();
 
     virtual void setUp() override;
     virtual void tearDown() override;
     virtual uno::Reference< uno::XInterface > init() override;
 
-    CPPUNIT_TEST_SUITE(ScCellCursorObj);
+    CPPUNIT_TEST_SUITE(ScSheetCellCursorObj);
 
-    // XCellSeries
-    CPPUNIT_TEST(testFillAuto);
-    CPPUNIT_TEST(testFillSeries);
+    // XUsedAreaCursor
+    CPPUNIT_TEST(testGotoStartOfUsedArea);
+    CPPUNIT_TEST(testGotoEndOfUsedArea);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -43,39 +43,38 @@ private:
     static uno::Reference< lang::XComponent > mxComponent;
 };
 
-sal_Int32 ScCellCursorObj::nTest = 0;
-uno::Reference< lang::XComponent > ScCellCursorObj::mxComponent;
+sal_Int32 ScSheetCellCursorObj::nTest = 0;
+uno::Reference< lang::XComponent > ScSheetCellCursorObj::mxComponent;
 
-ScCellCursorObj::ScCellCursorObj():
-    CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XCellSeries(0, 0)
+ScSheetCellCursorObj::ScSheetCellCursorObj():
+    CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference< uno::XInterface > ScCellCursorObj::init()
+uno::Reference< uno::XInterface > ScSheetCellCursorObj::init()
 {
     OUString aFileURL;
-    createFileURL("ScCellCursorObj.ods", aFileURL);
+    createFileURL("ScSheetCellCursorObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("co calc document", mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
-    uno::Reference< table::XCellCursor > xCellCursor( xSheet->createCursor(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor(xSheet->createCursor(), UNO_QUERY_THROW);
 
-    return xCellCursor;
+    return xSheetCellCursor;
 }
 
-void ScCellCursorObj::setUp()
+void ScSheetCellCursorObj::setUp()
 {
     nTest++;
     CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 
-void ScCellCursorObj::tearDown()
+void ScSheetCellCursorObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
     {
@@ -86,10 +85,11 @@ void ScCellCursorObj::tearDown()
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScCellCursorObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScSheetCellCursorObj);
 
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

@@ -23,7 +23,6 @@ class OOO_DLLPUBLIC_TEST XUsedAreaCursor
 {
 public:
     virtual uno::Reference< uno::XInterface > init() = 0;
-    virtual uno::Reference< uno::XInterface > getXSpreadsheet() = 0;
     virtual ~XUsedAreaCursor(){}
 
     void testGotoStartOfUsedArea();
