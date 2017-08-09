@@ -162,7 +162,16 @@ public:
                             mrList.AttributeValueLength(mnIdx),
                             RTL_TEXTENCODING_UTF8);
         }
-
+        const char* toCString() const
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return mrList.getFastAttributeValue(mnIdx);
+        }
+        sal_Int32 getLength() const
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return mrList.AttributeValueLength(mnIdx);
+        }
         bool isString(const char *str) const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
