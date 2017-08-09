@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
@@ -402,24 +403,25 @@ void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
 
 basegfx::B2DSize Graphic::GetPPI() const
 {
-    MapMode aMapMode = GetPrefMapMode();
+    double nGrfDPIx;
+    double nGrfDPIy;
 
-    double fWidthInches = ( GetPrefSize().Width() * aMapMode.GetUnitMultiplier() ) / 2540;
-    double fHeightInches = ( GetPrefSize().Height() * aMapMode.GetUnitMultiplier() ) / 2540;
-    double fPpiX = 0;
-    double fPpiY = 0;
-
-    if ( fWidthInches > 0 || fHeightInches > 0 ) // we don't want a divide by 0 situation
+    const MapMode aGrfMap(GetPrefMapMode());
+    const Size aGrfPixelSize(GetSizePixel());
+    const Size aGrfPrefMapModeSize(GetPrefSize());
+    if (aGrfMap.GetMapUnit() == MapUnit::MapInch)
     {
-        fPpiX = GetSizePixel().Width() / fWidthInches;
-        fPpiY = GetSizePixel().Height() / fHeightInches;
+        nGrfDPIx = aGrfPixelSize.Width() / ( (double)aGrfMap.GetScaleX() * aGrfPrefMapModeSize.Width() );
+        nGrfDPIy = aGrfPixelSize.Height() / ( (double)aGrfMap.GetScaleY() * aGrfPrefMapModeSize.Height() );
     }
     else
     {
-        SAL_WARN("vcl", "PPI X is " << fPpiX << " and PPI Y is " << fPpiY << ": thus we are making this 0 DPI. This is unlikely.");
+        const Size aGrf1000thInchSize = OutputDevice::LogicToLogic(aGrfPrefMapModeSize, aGrfMap, MapUnit::Map1000thInch);
+        nGrfDPIx = 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
+        nGrfDPIy = 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
     }
 
-    return basegfx::B2DSize( fPpiX, fPpiY );
+    return basegfx::B2DSize(nGrfDPIx, nGrfDPIy);
 }
 
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
