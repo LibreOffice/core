@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a02ac0e5",
+        "filename": "drawinglayer/source/tools/emfphelperdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-08-09T08:19:03Z",
+      "side": 1,
+      "message": "Is that needed? There *is* altready maTransformation in PropertyHolder. I\u0027m not currently in the details, but it should be the WorldTransform...",
+      "range": {
+        "startLine": 187,
+        "startChar": 3,
+        "endLine": 193,
+        "endChar": 63
+      },
+      "revId": "e50424570489a56981d3a4093d9ac8a4391a59ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
