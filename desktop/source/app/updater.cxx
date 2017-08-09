@@ -274,8 +274,7 @@ bool update()
     OUString aTempDirURL = aTempDir.GetURL();
     CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL);
 
-    OUString aTempDirPath = getPathFromURL(aTempDirURL);
-    OUString aUpdaterPath = aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName);
+    OUString aUpdaterPath = getPathFromURL(aTempDirURL + "/" + OUString::fromUtf8(pUpdaterName));
 
     Updater::log("Calling the updater with parameters: ");
     CharT** pArgs = createCommandLine();
@@ -297,6 +296,7 @@ bool update()
     }
     else
     {
+        SAL_WARN("desktop.updater", "Updater executable path: " << aUpdaterPath);
         for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
         {
             SAL_WARN("desktop.updater", pArgs[i]);
