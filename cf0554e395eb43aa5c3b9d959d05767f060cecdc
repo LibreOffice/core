@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_e0592890",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T10:38:20Z",
+      "side": 1,
+      "message": "likely #include \"dialmgr.hxx\" if you need \u0027CuiResId\u0027",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_00d634c5",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T10:38:20Z",
+      "side": 1,
+      "message": "Why ImplEntryType?",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_60fc583f",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T10:38:20Z",
+      "side": 1,
+      "message": "SetUserData is a SvTreeListbox function ...",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_80f94450",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T10:38:20Z",
+      "side": 1,
+      "message": "... so what you need for ListBox derivative is SetEntryData",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_a05f2074",
         "filename": "cui/source/customize/SvxMenuConfigPage.cxx",
         "patchSetId": 1
@@ -47,6 +115,24 @@
       "writtenOn": "2017-08-09T09:38:27Z",
       "side": 1,
       "message": "Some private member variables:\n\ncss::uno::XComponentContext m_xContext\ncss:frame::Frame m_xFrame",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e0d048cc",
+        "filename": "cui/source/inc/CommandCategoryListBox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T10:38:20Z",
+      "side": 1,
+      "message": "SfxGroupInfoArr_Impl m_aGroupInfo // or sth like that",
+      "parentUuid": "1a430d35_0088f4e6",
       "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
