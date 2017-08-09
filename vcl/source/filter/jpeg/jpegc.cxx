@@ -251,7 +251,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                long nWidth, long nHeight, basegfx::B2DSize const & aPPI, bool bGreys,
+                long nWidth, long nHeight, basegfx::B2DSize const & rPPI, bool bGreys,
                 long nQualityPercent, long aChromaSubsampling,
                 css::uno::Reference<css::task::XStatusIndicator> const & status )
 {
@@ -290,8 +290,8 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
 
     cinfo.density_unit = 1;
-    cinfo.X_density = aPPI.getX();
-    cinfo.Y_density = aPPI.getY();
+    cinfo.X_density = rPPI.getX();
+    cinfo.Y_density = rPPI.getY();
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
