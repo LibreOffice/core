@@ -1403,7 +1403,7 @@ int Desktop::Main()
                 {
                     if (!aSeeAlso.isEmpty())
                     {
-                        SAL_INFO("updater", "See also: " << aSeeAlso);
+                        SAL_INFO("desktop.updater", "See also: " << aSeeAlso);
                                 Reference< css::system::XSystemShellExecute > xSystemShell(
                         SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
 
