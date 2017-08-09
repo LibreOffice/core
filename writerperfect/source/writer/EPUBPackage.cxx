@@ -125,7 +125,7 @@ void EPUBPackage::insertRule(const librevenge::RVNGString &rSelector, const libr
 
     aStream << "}\n";
     std::string aString = aStream.str();
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aString.c_str()), aString.size());
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(aString.c_str()), aString.size());
     mxOutputStream->writeBytes(aData);
 }
 
