@@ -457,12 +457,23 @@ namespace
             drawinglayer::primitive2d::Primitive2DContainer aNewTextPrimitives;
 
             // active Outliner is always in unified oriented coordinate system (currently)
-            // so just translate to TopLeft of visible Range
-            Rectangle aVisArea(mrOutlinerView.GetVisArea());
+            // so just translate to TopLeft of visible Range. Keep in mind that top-left
+            // depends on vertical text and top-to-bottom text attribures
+            const Rectangle aVisArea(mrOutlinerView.GetVisArea());
+            const bool bVerticalWriting(pSdrOutliner->IsVertical());
+            const bool bTopToBottom(true); // pSdrOutliner->IsTopToBottom() not yet invented
+            const double fStartInX(
+                bVerticalWriting && bTopToBottom
+                ? aOutArea.Right() - aVisArea.Left()
+                : aOutArea.Left() - aVisArea.Left());
+            const double fStartInY(
+                bVerticalWriting && !bTopToBottom
+                ? aOutArea.Bottom() - aVisArea.Top()
+                : aOutArea.Top() - aVisArea.Top());
 
             aNewTransformB.translate(
-                aOutArea.Left() - aVisArea.Left(),
-                aOutArea.Top() - aVisArea.Top());
+                fStartInX,
+                fStartInY);
 
             // get the current TextPrimitives. This is the most expensive part
             // of this mechanism, it *may* be possible to buffer layouted
@@ -500,9 +511,6 @@ namespace
 } // end of anonymous namespace
 
 // TextEdit
-
-// file-local static bool to control old/new behaviour of active TextEdit visualization
-static bool bAllowTextEditVisualizatkionOnOverlay(true);
 
 // callback from the active EditView, forward to evtl. existing instances of the
 // TextEditOverlayObject(s)
@@ -545,10 +553,11 @@ void SdrObjEditView::EditViewSelectionChange(const std::vector<basegfx::B2DRange
 
 void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
-    if (bAllowTextEditVisualizatkionOnOverlay)
+    if (!comphelper::LibreOfficeKit::isActive())
     {
         // adapt TextEditOverlayObject(s). Need also to do this here to
-        // update the current values accordingly
+        // update the current values accordingly. Suppress new stuff when
+        // LibreOficeKit is active
         EditViewInvalidate();
     }
     else
@@ -1055,9 +1064,10 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
 
-            if (bAllowTextEditVisualizatkionOnOverlay && pTextEditOutlinerView)
+            if (!comphelper::LibreOfficeKit::isActive() && pTextEditOutlinerView)
             {
-                // activate visualization of EditView on Overlay
+                // activate visualization of EditView on Overlay, suppress when
+                // LibreOfficeKit is active
                 pTextEditOutlinerView->GetEditView().setEditViewCallbacks(this);
 
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
@@ -1291,8 +1301,9 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         GetModel()->Broadcast(aHint);
     }
 
-    // if new mechanism was used, clean it up
-    if (bAllowTextEditVisualizatkionOnOverlay && pTextEditOutlinerView)
+    // if new mechanism was used, clean it up. At cleanup no need to check
+    // for LibreOfficeKit
+    if (pTextEditOutlinerView)
     {
         pTextEditOutlinerView->GetEditView().setEditViewCallbacks(nullptr);
         maTEOverlayGroup.clear();
