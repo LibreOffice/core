@@ -291,34 +291,6 @@ void CSVFetchThread::execute()
     mpIdle->Start();
 }
 
-osl::Mutex& CSVFetchThread::GetLinesMutex()
-{
-    return maMtxLines;
-}
-
-bool CSVFetchThread::HasNewLines()
-{
-    return !maPendingLines.empty();
-}
-
-void CSVFetchThread::WaitForNewLines()
-{
-    maCondConsume.wait();
-    maCondConsume.reset();
-}
-
-LinesType* CSVFetchThread::GetNewLines()
-{
-    LinesType* pLines = maPendingLines.front();
-    maPendingLines.pop();
-    return pLines;
-}
-
-void CSVFetchThread::ResumeFetchStream()
-{
-    maCondReadStream.set();
-}
-
 CSVDataProvider::CSVDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pBDDataManager):
     maURL(rURL),
     mpDocument(pDoc),
@@ -362,28 +334,6 @@ void CSVDataProvider::Refresh()
 {
     ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
     pDocShell->SetDocumentModified();
-}
-
-Line CSVDataProvider::GetLine()
-{
-    if (!mpLines || mnLineCount >= mpLines->size())
-    {
-        if (mxCSVFetchThread->IsRequestedTerminate())
-            return Line();
-
-        osl::ResettableMutexGuard aGuard(mxCSVFetchThread->GetLinesMutex());
-        while (!mxCSVFetchThread->HasNewLines() && !mxCSVFetchThread->IsRequestedTerminate())
-        {
-            aGuard.clear();
-            mxCSVFetchThread->WaitForNewLines();
-            aGuard.reset();
-        }
-
-        mpLines = mxCSVFetchThread->GetNewLines();
-        mxCSVFetchThread->ResumeFetchStream();
-    }
-
-    return mpLines->at(mnLineCount++);
 }
 
 // TODO: why don't we use existing copy functionality
