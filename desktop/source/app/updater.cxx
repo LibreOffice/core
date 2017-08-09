@@ -34,6 +34,8 @@
 #include <orcus/pstring.hpp>
 #include <comphelper/hash.hxx>
 
+#include <comphelper/windowsStart.hxx>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <officecfg/Setup.hxx>
@@ -116,33 +118,52 @@ void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempD
     CopyFileToDir(rTempDirURL, aUpdaterName, rInstallDirURL);
 }
 
-void createStr(const char* pSrc, char** pArgs, size_t i)
+#ifdef UNX
+typedef char CharT;
+#define tstrncpy std::strncpy
+#define tstrlen std::strlen
+#elif _WIN32
+typedef wchar_t CharT;
+#define tstrlen std::wcslen
+#define tstrncpy std::wcsncpy
+#else
+#error "Need an implementation"
+#endif
+
+void createStr(const CharT* pSrc, CharT** pArgs, size_t i)
 {
-    size_t nLength = std::strlen(pSrc);
-    char* pFinalStr = new char[nLength + 1];
-    std::strncpy(pFinalStr, pSrc, nLength);
+    size_t nLength = tstrlen(pSrc);
+    CharT* pFinalStr = new CharT[nLength + 1];
+    tstrncpy(pFinalStr, pSrc, nLength);
     pFinalStr[nLength] = '\0';
     pArgs[i] = pFinalStr;
 }
 
-void createStr(const OUString& rStr, char** pArgs, size_t i)
+void createStr(const OUString& rStr, CharT** pArgs, size_t i)
 {
+#ifdef UNX
     OString aStr = OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
-    char* pStr = new char[aStr.getLength() + 1];
-    std::strncpy(pStr, aStr.getStr(), aStr.getLength());
+#elif _WIN32
+    OUString aStr = rStr;
+#else
+#error "Need an implementation"
+#endif
+    CharT* pStr = new CharT[aStr.getLength() + 1];
+    tstrncpy(pStr, (wchar_t*)aStr.getStr(), aStr.getLength());
     pStr[aStr.getLength()] = '\0';
     pArgs[i] = pStr;
 }
 
-char** createCommandLine()
+CharT** createCommandLine()
 {
     OUString aInstallDir = Updater::getInstallationPath();
 
     size_t nCommandLineArgs = rtl_getAppCommandArgCount();
     size_t nArgs = 8 + nCommandLineArgs;
-    char** pArgs = new char*[nArgs];
+    CharT** pArgs = new CharT*[nArgs];
     {
-        createStr(pUpdaterName, pArgs, 0);
+        OUString aUpdaterName = OUString::fromUtf8(pUpdaterName);
+        createStr(aUpdaterName, pArgs, 0);
     }
     {
         // directory with the patch log
@@ -163,8 +184,17 @@ char** createCommandLine()
         createStr(aInstallDir, pArgs, 3);
     }
     {
-        const char* pPID = "0";
-        createStr(pPID, pArgs, 4);
+#ifdef UNX
+        OUString aPID("0");
+#elif _WIN32
+        oslProcessInfo aInfo;
+        aInfo.Size = sizeof(oslProcessInfo);
+        osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aInfo);
+        OUString aPID = OUString::number(aInfo.Ident);
+#else
+#error "Need an implementation"
+#endif
+        createStr(aPID, pArgs, 4);
     }
     {
         OUString aExeDir = Updater::getExecutableDirURL();
@@ -247,7 +277,7 @@ bool isUserWritable(const OUString& rFileURL)
 
 }
 
-void update()
+bool update()
 {
     utl::TempFile aTempDir(nullptr, true);
     OUString aTempDirURL = aTempDir.GetURL();
@@ -257,9 +287,9 @@ void update()
     OString aPath = OUStringToOString(aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName), RTL_TEXTENCODING_UTF8);
 
     Updater::log("Calling the updater with parameters: ");
-    char** pArgs = createCommandLine();
+    CharT** pArgs = createCommandLine();
 
-
+    bool bSuccess = true;
 #if UNX
     const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
     if (!pUpdaterTestReplace)
@@ -267,6 +297,7 @@ void update()
         if (execv(aPath.getStr(), pArgs))
         {
             printf("execv failed with error %d %s\n",errno,strerror(errno));
+            bSuccess = false;
         }
     }
     else
@@ -275,7 +306,10 @@ void update()
         {
             SAL_WARN("desktop.updater", pArgs[i]);
         }
+        bSuccess = false;
     }
+#elif _WIN32
+    bSuccess = WinLaunchChild(nullptr, 8, pArgs);
 #endif
 
     for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
@@ -283,6 +317,8 @@ void update()
         delete[] pArgs[i];
     }
     delete[] pArgs;
+
+    return bSuccess;
 }
 
 namespace {
