@@ -20,6 +20,7 @@
 #include <osl/conditn.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
+#include <vcl/idle.hxx>
 
 #include "docsh.hxx"
 #include "scdllapi.h"
@@ -84,9 +85,11 @@ class CSVFetchThread : public salhelper::Thread
 
     orcus::csv::parser_config maConfig;
 
+    Idle* mpIdle;
+
 
 public:
-    CSVFetchThread(ScDocument& rDoc, const OUString&);
+    CSVFetchThread(ScDocument& rDoc, const OUString&, Idle* pIdle);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -126,6 +129,8 @@ class CSVDataProvider : public DataProvider
     ScDBDataManager* mpDBDataManager;
     LinesType* mpLines;
     size_t mnLineCount;
+    std::unique_ptr<ScDocument> mpDoc;
+    Idle maIdle;
 
     void Refresh();
     Line GetLine();
@@ -139,6 +144,8 @@ public:
     // TODO: this method should be moved to the ScDBDataManager
     virtual void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData) override;
     const OUString& GetURL() const override { return maURL; }
+
+    DECL_LINK( ImportFinishedHdl, Timer*, void );
 };
 
 
