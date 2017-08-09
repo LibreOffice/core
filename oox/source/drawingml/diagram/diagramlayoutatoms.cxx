@@ -280,8 +280,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         }
 
         case XML_sp:
-            // HACK. Handled one level higher. Or rather, planned to
+        {
+            // HACK: Handled one level higher. Or rather, planned to
+            // HACK: text should appear only in tx node; we're assigning it earlier, so let's remove it here
+            rShape->setTextBody(TextBodyPtr());
             break;
+        }
 
         case XML_tx:
         {
