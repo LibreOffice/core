@@ -752,6 +752,7 @@ void WorksheetFragment::importOleObject( const AttributeList& rAttribs )
 void WorksheetFragment::importControl( const AttributeList& rAttribs )
 {
     ::oox::vml::ControlInfo aInfo;
+    aInfo.setShapeId( rAttribs.getInteger( XML_shapeId, 0 ) );
     aInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     aInfo.maName = rAttribs.getString( XML_name, OUString() );
     getVmlDrawing().registerControl( aInfo );
@@ -888,6 +889,7 @@ void WorksheetFragment::importOleObject( SequenceInputStream& rStrm )
 void WorksheetFragment::importControl( SequenceInputStream& rStrm )
 {
     ::oox::vml::ControlInfo aInfo;
+    aInfo.setShapeId( rStrm.readInt32() );
     aInfo.maFragmentPath = getFragmentPathFromRelId( BiffHelper::readString( rStrm ) );
     rStrm >> aInfo.maName;
     getVmlDrawing().registerControl( aInfo );

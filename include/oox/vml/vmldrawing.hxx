@@ -78,10 +78,14 @@ struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
 /** Contains information about a form control embedded in a draw page. */
 struct OOX_DLLPUBLIC ControlInfo
 {
+    OUString     maShapeId;          ///< Shape identifier for shape lookup.
     OUString     maFragmentPath;     ///< Path to the fragment describing the form control properties.
     OUString     maName;             ///< Programmatical name of the form control.
 
     explicit            ControlInfo();
+
+    /** Sets the string representation of the passed numeric shape identifier. */
+    void                setShapeId( sal_Int32 nShapeId );
 };
 
 

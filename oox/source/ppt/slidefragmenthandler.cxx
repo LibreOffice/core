@@ -139,6 +139,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
     case PPT_TOKEN( control ):
         {
             ::oox::vml::ControlInfo aInfo;
+            aInfo.setShapeId( rAttribs.getInteger( XML_spid, 0 ) );
             aInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
             aInfo.maName = rAttribs.getXString( XML_name, OUString() );
             mpSlidePersistPtr->getDrawing()->registerControl( aInfo );
