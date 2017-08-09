@@ -941,7 +941,10 @@ IMPL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, pItem, void)
 IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, Button*, void)
 {
     if(m_pFavouritesBtn->GetText().match(CuiResId(RID_SVXSTR_ADD_FAVORITES)))
+    {
         updateFavCharacterList(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
+        setFavButtonState(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
+    }
     else
     {
         deleteFavCharacterFromList(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
