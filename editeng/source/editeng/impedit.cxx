@@ -232,6 +232,10 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     if (hasEditViewCallbacks() && !pRegion)
     {
         // we are done, do *not* visualize self
+        // CAUTION: do not use when comphelper::LibreOfficeKit::isActive()
+        // due to event stuff triggered below. That *should* probably be moved
+        // to SelectionChanged() which exists now, but I do not know enough about
+        // that stuff to do it
         return;
     }
 
