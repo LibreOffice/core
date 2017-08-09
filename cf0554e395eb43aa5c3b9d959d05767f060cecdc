@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a05f2074",
+        "filename": "cui/source/customize/SvxMenuConfigPage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T09:38:27Z",
+      "side": 1,
+      "message": "You\u0027ll need to do sth like (with correct data types of course):\n\nxComponentContext \u003d comphelper::getProcessComponentContext();\nand \nxFrame \u003d GetFrame() // GetFrame comes from SfxTabPage\n\nand then \nm_pCommandCategoryListBox -\u003e Init (xFrame) // or whatever else you need to pass down",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6077f802",
+        "filename": "cui/source/inc/CommandCategoryListBox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T09:38:27Z",
+      "side": 1,
+      "message": "Add some public Init function, in which you\u0027ll initialize the private members mentioned below",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0088f4e6",
+        "filename": "cui/source/inc/CommandCategoryListBox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-09T09:38:27Z",
+      "side": 1,
+      "message": "Some private member variables:\n\ncss::uno::XComponentContext m_xContext\ncss:frame::Frame m_xFrame",
+      "revId": "cf0554e395eb43aa5c3b9d959d05767f060cecdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
