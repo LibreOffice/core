@@ -67,10 +67,12 @@ private:
     std::shared_ptr<DataProvider> mpDataProvider;
     std::shared_ptr<ScDBDataManager> mpDBDataManager;
 
+    ScDocument* mpDoc;
+
 public:
 
     ExternalDataSource(const OUString& rURL,
-            const OUString& rProvider);
+            const OUString& rProvider, ScDocument* pDoc);
 
     ~ExternalDataSource();
 
