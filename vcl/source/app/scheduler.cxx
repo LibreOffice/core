@@ -134,19 +134,9 @@ sal_uInt32 SchedulerMutex::release( bool bUnlockAll )
     sal_uInt32 nLockCount = 0;
     if ( mnLockDepth )
     {
-        if ( bUnlockAll )
-        {
-            nLockCount = mnLockDepth;
-            do {
-                --mnLockDepth;
-                maMutex.release();
-            }
-            while ( mnLockDepth );
-        }
-        else
-        {
-            nLockCount = 1;
-            --mnLockDepth;
+        nLockCount = bUnlockAll ? mnLockDepth : 1;
+        mnLockDepth -= nLockCount;
+        for (sal_uInt32 i = 0; i != nLockCount; ++i) {
             maMutex.release();
         }
     }
