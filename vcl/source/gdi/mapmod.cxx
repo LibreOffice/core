@@ -129,52 +129,6 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
     mpImplMapMode->mbSimple = false;
 }
 
-double MapMode::GetUnitMultiplier() const
-{
-    double nMul;
-    switch ( GetMapUnit() )
-    {
-        case MapUnit::MapPixel :
-        case MapUnit::MapSysFont :
-        case MapUnit::MapAppFont :
-
-        case MapUnit::Map100thMM :
-            nMul = 1;
-            break;
-        case MapUnit::Map10thMM :
-            nMul = 10;
-            break;
-        case MapUnit::MapMM :
-            nMul = 100;
-            break;
-        case MapUnit::MapCM :
-            nMul = 1000;
-            break;
-        case MapUnit::Map1000thInch :
-            nMul = 2.54;
-            break;
-        case MapUnit::Map100thInch :
-            nMul = 25.4;
-            break;
-        case MapUnit::Map10thInch :
-            nMul = 254;
-            break;
-        case MapUnit::MapInch :
-            nMul = 2540;
-            break;
-        case MapUnit::MapTwip :
-            nMul = 1.76388889;
-            break;
-        case MapUnit::MapPoint :
-            nMul = 35.27777778;
-            break;
-        default:
-            nMul = 1.0;
-            break;
-    }
-    return nMul;
-}
-
 MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
     mpImplMapMode = rMapMode.mpImplMapMode;

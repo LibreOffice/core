@@ -213,6 +213,7 @@ private:
     inline void         ImplWriteTextColor( sal_uLong nMode );
     void                ImplWriteColor( sal_uLong nMode );
 
+    static double       ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
     static bool         ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
     static sal_uInt8*   ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
@@ -2173,7 +2174,7 @@ void PSWriter::ImplWriteColor( sal_uLong nMode )
 void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
-    double fMul = rMapMode.GetUnitMultiplier();
+    double fMul = ImplGetScaling(rMapMode);
     double fScaleX = (double)rMapMode.GetScaleX() * fMul;
     double fScaleY = (double)rMapMode.GetScaleY() * fMul;
     ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
@@ -2212,6 +2213,52 @@ inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
     }
     mnCursorPos += i;
     ImplExecMode( nMode );
+}
+
+double PSWriter::ImplGetScaling( const MapMode& rMapMode )
+{
+    double nMul;
+    switch (rMapMode.GetMapUnit())
+    {
+        case MapUnit::MapPixel :
+        case MapUnit::MapSysFont :
+        case MapUnit::MapAppFont :
+
+        case MapUnit::Map100thMM :
+            nMul = 1;
+            break;
+        case MapUnit::Map10thMM :
+            nMul = 10;
+            break;
+        case MapUnit::MapMM :
+            nMul = 100;
+            break;
+        case MapUnit::MapCM :
+            nMul = 1000;
+            break;
+        case MapUnit::Map1000thInch :
+            nMul = 2.54;
+            break;
+        case MapUnit::Map100thInch :
+            nMul = 25.4;
+            break;
+        case MapUnit::Map10thInch :
+            nMul = 254;
+            break;
+        case MapUnit::MapInch :
+            nMul = 2540;
+            break;
+        case MapUnit::MapTwip :
+            nMul = 1.76388889;
+            break;
+        case MapUnit::MapPoint :
+            nMul = 35.27777778;
+            break;
+        default:
+            nMul = 1.0;
+            break;
+    }
+    return nMul;
 }
 
 
