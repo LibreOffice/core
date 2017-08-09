@@ -165,6 +165,7 @@ public:
     void testTdf109067();
     void testSmartArt1();
     void testSmartArtChildren();
+    void testSmartArtText();
     void testTdf109223();
     void testActiveXCheckbox();
 
@@ -239,6 +240,7 @@ public:
     CPPUNIT_TEST(testTdf109067);
     CPPUNIT_TEST(testSmartArt1);
     CPPUNIT_TEST(testSmartArtChildren);
+    CPPUNIT_TEST(testSmartArtText);
     CPPUNIT_TEST(testTdf109223);
     CPPUNIT_TEST(testActiveXCheckbox);
 
@@ -2294,6 +2296,21 @@ void SdImportTest::testSmartArtChildren()
     uno::Reference<drawing::XShapes> xChildZ(xChildren1->getByIndex(1), uno::UNO_QUERY_THROW);
     uno::Reference<text::XText> xTextZ(xChildZ->getByIndex(0), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("z"), xTextZ->getString());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testSmartArtText()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-text.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xShapeGroup2(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    uno::Reference<text::XText> xText0(xShapeGroup2->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xText0->getString().isEmpty());
+
+    uno::Reference<text::XText> xText1(xShapeGroup2->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xText1->getString());
 
     xDocShRef->DoClose();
 }
