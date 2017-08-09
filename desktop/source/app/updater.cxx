@@ -275,33 +275,35 @@ bool update()
     CopyUpdaterToTempDir(Updater::getExecutableDirURL(), aTempDirURL);
 
     OUString aTempDirPath = getPathFromURL(aTempDirURL);
-    OString aPath = OUStringToOString(aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName), RTL_TEXTENCODING_UTF8);
+    OUString aUpdaterPath = aTempDirPath + "/" + OUString::fromUtf8(pUpdaterName);
 
     Updater::log("Calling the updater with parameters: ");
     CharT** pArgs = createCommandLine();
 
     bool bSuccess = true;
-#if UNX
     const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
     if (!pUpdaterTestReplace)
     {
+#if UNX
+        OString aPath = OUStringToOString(aUpdaterPath, RTL_TEXTENCODING_UTF8);
         if (execv(aPath.getStr(), pArgs))
         {
             printf("execv failed with error %d %s\n",errno,strerror(errno));
             bSuccess = false;
         }
+#elif _WIN32
+        bSuccess = WinLaunchChild((wchar_t*)aUpdaterPath.getStr(), 8, pArgs);
+#endif
     }
     else
     {
+        SAL_WARN("updater", "Executable Path:" << aUpdaterPath);
         for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
         {
             SAL_WARN("desktop.updater", pArgs[i]);
         }
         bSuccess = false;
     }
-#elif _WIN32
-    bSuccess = WinLaunchChild(nullptr, 8, pArgs);
-#endif
 
     for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
     {
