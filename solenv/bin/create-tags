@@ -17,6 +17,15 @@ omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 
 $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $saloptions $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
+      --langdef=UNOIDL \
+      --langmap=UNOIDL:.idl \
+      --regex-UNOIDL="/^[ \t]*published[ \t]*interface[ \t]*([a-zA-Z0-9]*)/\1/i,interface/" \
+      --regex-UNOIDL="/^[ \t]*([a-zA-Z0-9:]+)[ \t]+([a-zA-Z0-9]+)\(.*\)/\2/f,function/" \
+      --regex-UNOIDL="/^[ \t]*\[.*property.*\][ \t]+([a-zA-Z0-9]+)[ \t]+([a-zA-Z0-9]+);/\2/p,property/" \
+      --regex-UNOIDL="/^[ \t]*.*[ \t]+service[ \t]+([a-zA-Z0-9]+)$/\1/g,service/" \
+      --regex-UNOIDL="/^[ \t]*.*[ \t]+struct[ \t]+([a-zA-Z0-9]+)$/\1/s,struct/" \
+      --regex-UNOIDL="/^[ \t]*.*[ \t]+enum[ \t]+([a-zA-Z0-9]+)$/\1/e,enum/" \
+      --regex-UNOIDL="/^[ \t]*([a-zA-Z0-9]+)[ \t]+([a-zA-Z0-9]+);/\2/m,member/" \
       -R --exclude=instdir --exclude=instdir_for_build --exclude=workdir --exclude=workdir_for_build \
       --exclude=external --totals=yes ${SRCDIR:-*}
 
