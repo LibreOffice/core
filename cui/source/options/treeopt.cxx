@@ -1589,7 +1589,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SD_EDITOPTIONS_RES[0].second;
+                    nPageId = (sal_uInt16)SID_SD_EDITOPTIONS_RES[i].second;
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -1611,7 +1611,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_GRAPHIC_OPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SD_GRAPHIC_OPTIONS_RES[0].second;
+                    nPageId = (sal_uInt16)SID_SD_GRAPHIC_OPTIONS_RES[i].second;
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -1633,7 +1633,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 nGroup = AddGroup(CuiResId(SID_SM_EDITOPTIONS_RES[0].first), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( sal_uInt32 i = 1; i < SAL_N_ELEMENTS(SID_SM_EDITOPTIONS_RES); ++i )
                 {
-                    nPageId = (sal_uInt16)SID_SM_EDITOPTIONS_RES[0].second;
+                    nPageId = (sal_uInt16)SID_SM_EDITOPTIONS_RES[i].second;
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         AddTabPage( nPageId, CuiResId(SID_SM_EDITOPTIONS_RES[i].first), nGroup );
                 }
