@@ -182,23 +182,94 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
+void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints) const
+{
+    // accepting only basic equality constraints
+    if (!maConstraint.msForName.isEmpty() &&
+        (maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ) &&
+        maConstraint.mnType != XML_none &&
+        maConstraint.mfValue == 0)
+    {
+        rConstraints.push_back(maConstraint);
+    }
+}
+
 void AlgAtom::accept( LayoutAtomVisitor& rVisitor )
 {
     rVisitor.visit(*this);
 }
 
-void AlgAtom::layoutShape( const ShapePtr& rShape ) const
+void AlgAtom::layoutShape( const ShapePtr& rShape,
+                           const std::vector<Constraint>& rConstraints ) const
 {
     switch(mnType)
     {
         case XML_composite:
         {
-            // all shapes fill parent
+            // layout shapes using basic constraints
+
+            LayoutPropertyMap aProperties;
+            LayoutProperty& rParent = aProperties[""];
+            rParent[XML_w] = rShape->getSize().Width;
+            rParent[XML_h] = rShape->getSize().Height;
+            rParent[XML_l] = 0;
+            rParent[XML_t] = 0;
+            rParent[XML_r] = rShape->getSize().Width;
+            rParent[XML_b] = rShape->getSize().Height;
+
+            for (const auto & rConstr : rConstraints)
+            {
+                const LayoutPropertyMap::const_iterator aRef = aProperties.find(rConstr.msRefForName);
+                if (aRef != aProperties.end())
+                {
+                    const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstr.mnRefType);
+                    if (aRefType != aRef->second.end())
+                        aProperties[rConstr.msForName][rConstr.mnType] = aRefType->second * rConstr.mfFactor;
+                    else
+                        aProperties[rConstr.msForName][rConstr.mnType] = 0; // TODO: val
+                }
+            }
 
             for (auto & aCurrShape : rShape->getChildren())
             {
-                aCurrShape->setSize(rShape->getSize());
-                aCurrShape->setChildSize(rShape->getSize());
+                awt::Size aSize = rShape->getSize();
+                awt::Point aPos(0, 0);
+
+                const LayoutPropertyMap::const_iterator aPropIt = aProperties.find(aCurrShape->getInternalName());
+                if (aPropIt != aProperties.end())
+                {
+                    const LayoutProperty& rProp = aPropIt->second;
+                    LayoutProperty::const_iterator it, it2;
+
+                    if ( (it = rProp.find(XML_w)) != rProp.end() )
+                        aSize.Width = it->second;
+                    if ( (it = rProp.find(XML_h)) != rProp.end() )
+                        aSize.Height = it->second;
+
+                    if ( (it = rProp.find(XML_l)) != rProp.end() )
+                        aPos.X = it->second;
+                    else if ( (it = rProp.find(XML_ctrX)) != rProp.end() )
+                        aPos.X = it->second - aSize.Width/2;
+
+                    if ( (it = rProp.find(XML_t)) != rProp.end())
+                        aPos.Y = it->second;
+                    else if ( (it = rProp.find(XML_ctrY)) != rProp.end() )
+                        aPos.Y = it->second - aSize.Height/2;
+
+                    if ( (it = rProp.find(XML_l)) != rProp.end() && (it2 = rProp.find(XML_r)) != rProp.end() )
+                        aSize.Width = it2->second - it->second;
+                    if ( (it = rProp.find(XML_t)) != rProp.end() && (it2 = rProp.find(XML_b)) != rProp.end() )
+                        aSize.Height = it2->second - it->second;
+
+                    aSize.Width = std::min(aSize.Width, rShape->getSize().Width - aPos.X);
+                    aSize.Height = std::min(aSize.Height, rShape->getSize().Height - aPos.Y);
+                }
+                else
+                    SAL_WARN("oox.drawingml", "composite layout properties not found for shape " << aCurrShape->getInternalName());
+
+                aCurrShape->setSize(aSize);
+                aCurrShape->setChildSize(aSize);
+                aCurrShape->setPosition(aPos);
             }
             break;
         }
@@ -390,7 +461,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape ) const
 
     SAL_INFO(
         "oox.drawingml",
-        "Layouting shape " << mrLayoutNode.getName() << ", alg type: " << mnType << ", ("
+        "Layouting shape " << rShape->getInternalName() << ", alg type: " << mnType << ", ("
         << rShape->getPosition().X << "," << rShape->getPosition().Y << ","
         << rShape->getSize().Width << "," << rShape->getSize().Height << ")");
 }
