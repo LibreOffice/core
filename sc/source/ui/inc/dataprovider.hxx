@@ -78,10 +78,6 @@ class CSVFetchThread : public salhelper::Thread
     osl::Mutex maMtxTerminate;
 
     std::queue<LinesType*> maPendingLines;
-    osl::Mutex maMtxLines;
-
-    osl::Condition maCondReadStream;
-    osl::Condition maCondConsume;
 
     orcus::csv::parser_config maConfig;
 
@@ -96,12 +92,6 @@ public:
     bool IsRequestedTerminate();
     void Terminate();
     void EndThread();
-    void EmptyLineQueue(std::queue<LinesType*>& );
-    osl::Mutex& GetLinesMutex();
-    bool HasNewLines();
-    void WaitForNewLines();
-    LinesType* GetNewLines();
-    void ResumeFetchStream();
 
     virtual void execute() override;
 };
