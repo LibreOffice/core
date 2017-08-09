@@ -209,11 +209,12 @@ public:
     }
 };
 
-CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL):
+CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL, Idle* pIdle):
         Thread("CSV Fetch Thread"),
         mrDocument(rDoc),
         maURL (mrURL),
-        mbTerminate(false)
+        mbTerminate(false),
+        mpIdle(pIdle)
 {
     maConfig.delimiters.push_back(',');
     maConfig.text_qualifier = '"';
@@ -252,7 +253,7 @@ void CSVFetchThread::execute()
         for (Line & rLine : aLines)
         {
             if (mbTerminate)
-                return;
+                break;
 
             rLine.maCells.clear();
             pStream->ReadLine(rLine.maLine);
@@ -262,7 +263,7 @@ void CSVFetchThread::execute()
 
             if (rLine.maCells.empty())
             {
-                return;
+                break;
             }
 
             nCol = 0;
@@ -282,6 +283,8 @@ void CSVFetchThread::execute()
             nCurRow++;
         }
     }
+    SolarMutexGuard aGuard;
+    mpIdle->Start();
 }
 
 osl::Mutex& CSVFetchThread::GetLinesMutex()
@@ -317,34 +320,43 @@ CSVDataProvider::CSVDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDat
     mpDocument(pDoc),
     mpDBDataManager(pBDDataManager),
     mpLines(nullptr),
-    mnLineCount(0)
+    mnLineCount(0),
+    maIdle("CSVDataProvider CopyHandler")
 {
+    maIdle.SetInvokeHandler(LINK(this, CSVDataProvider, ImportFinishedHdl));
 }
 
 CSVDataProvider::~CSVDataProvider()
 {
-}
-
-void CSVDataProvider::Import()
-{
-    ScDocument aDoc(SCDOCMODE_CLIP);
-    aDoc.ResetClip(mpDocument, (SCTAB)0);
-    mxCSVFetchThread = new CSVFetchThread(aDoc, maURL);
-    mxCSVFetchThread->launch();
     if (mxCSVFetchThread.is())
     {
         mxCSVFetchThread->join();
     }
+}
 
-    WriteToDoc(aDoc, mpDBDataManager->getDBData());
+void CSVDataProvider::Import()
+{
+    // already importing data
+    if (mpDoc)
+        return;
 
+    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc->ResetClip(mpDocument, (SCTAB)0);
+    mxCSVFetchThread = new CSVFetchThread(*mpDoc, maURL, &maIdle);
+    mxCSVFetchThread->launch();
+}
+
+IMPL_LINK_NOARG(CSVDataProvider, ImportFinishedHdl, Timer*, void)
+{
+    WriteToDoc(*mpDoc, mpDBDataManager->getDBData());
+    mxCSVFetchThread.clear();
+    mpDoc.reset();
     Refresh();
 }
 
 void CSVDataProvider::Refresh()
 {
     ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
-    pDocShell->DoHardRecalc();
     pDocShell->SetDocumentModified();
 }
 
@@ -401,6 +413,8 @@ void CSVDataProvider::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
             }
         }
     }
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
+    pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
 ScDBDataManager::ScDBDataManager(ScDBData* pDBData,  bool /*bAllowResize*/):
