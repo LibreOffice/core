@@ -113,7 +113,7 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
         if (pDBData)
         {
             auto& rDataMapper = pDoc->GetExternalDataMapper();
-            sc::ExternalDataSource aSource(aURL, aProvider);
+            sc::ExternalDataSource aSource(aURL, aProvider, pDoc);
             aSource.setID(aID);
             aSource.setDBData(pDBData);
             rDataMapper.insertDataSource(aSource);

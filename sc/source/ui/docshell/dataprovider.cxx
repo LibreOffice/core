@@ -58,10 +58,10 @@ std::unique_ptr<SvStream> FetchStreamFromURL(const OUString& rURL, OStringBuffer
 }
 
 ExternalDataSource::ExternalDataSource(const OUString& rURL,
-        const OUString& rProvider):
+        const OUString& rProvider, ScDocument* pDoc):
     maURL(rURL),
     maProvider(rProvider),
-    mnUpdateFrequency(0)
+    mpDoc(pDoc)
 {
 }
 
@@ -104,7 +104,7 @@ void ExternalDataSource::setDBData(ScDBData* pDBData)
 {
     if (!mpDBDataManager)
     {
-        mpDBDataManager.reset(new ScDBDataManager(pDBData, false));
+        mpDBDataManager.reset(new ScDBDataManager(pDBData, false, mpDoc));
     }
     else
     {
@@ -352,7 +352,7 @@ void CSVDataProvider::Import()
 
 IMPL_LINK_NOARG(CSVDataProvider, ImportFinishedHdl, Timer*, void)
 {
-    WriteToDoc(*mpDoc, mpDBDataManager->getDBData());
+    mpDBDataManager->WriteToDoc(*mpDoc, mpDBDataManager->getDBData());
     mxCSVFetchThread.clear();
     mpDoc.reset();
     Refresh();
@@ -387,7 +387,7 @@ Line CSVDataProvider::GetLine()
 }
 
 // TODO: why don't we use existing copy functionality
-void CSVDataProvider::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
+void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
 {
     bool bShrunk = false;
     SCCOL nStartCol = 0;
@@ -409,21 +409,22 @@ void CSVDataProvider::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
             if (pfValue == nullptr)
             {
                 OUString aString = rDoc.GetString(nCol, nRow, 0);
-                mpDocument->SetString(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), aString);
+                mpDoc->SetString(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), aString);
             }
             else
             {
-                mpDocument->SetValue(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), *pfValue);
+                mpDoc->SetValue(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), *pfValue);
             }
         }
     }
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
     pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
-ScDBDataManager::ScDBDataManager(ScDBData* pDBData,  bool /*bAllowResize*/):
-    mpDBData(pDBData)
-    //mbAllowResize(bAllowResize)
+ScDBDataManager::ScDBDataManager(ScDBData* pDBData,  bool /*bAllowResize*/, ScDocument* pDoc):
+    mpDBData(pDBData),
+    //mbAllowResize(bAllowResize),
+    mpDoc(pDoc)
 {
 }
 
