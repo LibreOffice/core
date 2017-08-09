@@ -45,27 +45,21 @@ class SchedulerMutex final
 public:
     SchedulerMutex() : mnLockDepth( 0 ) {}
 
-    bool acquire( sal_uInt32 nLockCount = 1 );
+    void acquire( sal_uInt32 nLockCount = 1 );
     sal_uInt32 release( bool bUnlockAll = false );
     sal_uInt32 lockDepth() const { return mnLockDepth; }
 };
 
 class SchedulerGuard final
 {
-    bool mbLocked;
-
 public:
     SchedulerGuard()
-        : mbLocked( false )
     {
-        mbLocked = Scheduler::Lock();
-        assert( mbLocked );
+        Scheduler::Lock();
     }
 
     ~SchedulerGuard()
     {
-        if ( !mbLocked )
-            return;
         Scheduler::Unlock();
     }
 };

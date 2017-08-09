@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <svdata.hxx>
 #include <tools/time.hxx>
 #include <vcl/scheduler.hxx>
@@ -118,14 +122,13 @@ void Scheduler::ImplDeInitScheduler()
     rSchedCtx.mnTimerPeriod        = InfiniteTimeoutMs;
 }
 
-bool SchedulerMutex::acquire( sal_uInt32 nLockCount )
+void SchedulerMutex::acquire( sal_uInt32 nLockCount )
 {
     for (sal_uInt32 i = 0; i != nLockCount; ++i) {
-        if ( !maMutex.acquire() )
-            return false;
+        bool ok = maMutex.acquire();
+        assert(ok); (void) ok;
         ++mnLockDepth;
     }
-    return true;
 }
 
 sal_uInt32 SchedulerMutex::release( bool bUnlockAll )
@@ -139,11 +142,11 @@ sal_uInt32 SchedulerMutex::release( bool bUnlockAll )
     return nLockCount;
 }
 
-bool Scheduler::Lock( sal_uInt32 nLockCount )
+void Scheduler::Lock( sal_uInt32 nLockCount )
 {
     ImplSVData* pSVData = ImplGetSVData();
     assert( pSVData != nullptr );
-    return pSVData->maSchedCtx.maMutex.acquire( nLockCount );
+    pSVData->maSchedCtx.maMutex.acquire( nLockCount );
 }
 
 sal_uInt32 Scheduler::Unlock( bool bUnlockAll )

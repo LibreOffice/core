@@ -499,9 +499,8 @@ void Scheduler::ProcessEventsToIdle()
 #if OSL_DEBUG_LEVEL > 0
     const ImplSVData* pSVData = ImplGetSVData();
     bool bIsMainThread = pSVData->mpDefInst->IsMainThread();
-    bool mbLocked = false;
     if ( bIsMainThread )
-        mbLocked = Scheduler::Lock();
+        Scheduler::Lock();
 #endif
     while( Application::Reschedule( true ) )
     {
@@ -532,8 +531,7 @@ void Scheduler::ProcessEventsToIdle()
         pSchedulerData = pSchedulerData->mpNext;
     }
     assert( !bAnyIdle );
-    if ( mbLocked )
-        Scheduler::Unlock();
+    Scheduler::Unlock();
 #endif
 }
 
