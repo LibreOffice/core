@@ -178,6 +178,15 @@ public:
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
+class ControlShapeContext : public ShapeContextBase
+{
+public:
+    explicit            ControlShapeContext(
+                            ::oox::core::ContextHandler2Helper const & rParent,
+                            ShapeContainer& rShapes,
+                            const AttributeList& rAttribs );
+};
+
 
 } // namespace vml
 } // namespace oox

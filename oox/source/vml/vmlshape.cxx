@@ -1171,18 +1171,21 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     const ControlInfo* pControlInfo = mrDrawing.getControlInfo( maTypeModel.maShapeId );
     if( pControlInfo && !pControlInfo->maFragmentPath.isEmpty() )
     {
-        OSL_ENSURE( nShapeType == VML_SHAPETYPE_HOSTCONTROL, "ComplexShape::implConvertAndInsert - unexpected shape type" );
-        OUString aShapeName = getShapeName();
-        if( !aShapeName.isEmpty() )
+        if( !pControlInfo->maName.isEmpty() )
         {
-            OSL_ENSURE( aShapeName == pControlInfo->maName, "ComplexShape::implConvertAndInsert - control name mismatch" );
             // load the control properties from fragment
-            ::oox::ole::EmbeddedControl aControl( aShapeName );
+            ::oox::ole::EmbeddedControl aControl(pControlInfo->maName);
             if( rFilter.importFragment( new ::oox::ole::AxControlFragment( rFilter, pControlInfo->maFragmentPath, aControl ) ) )
             {
                 // create and return the control shape (including control model)
                 sal_Int32 nCtrlIndex = -1;
                 Reference< XShape > xShape = mrDrawing.createAndInsertXControlShape( aControl, rxShapes, rShapeRect, nCtrlIndex );
+
+                if (pControlInfo->mbTextContentShape)
+                {
+                    PropertySet aPropertySet(xShape);
+                    lcl_SetAnchorType(aPropertySet, maTypeModel, mrDrawing.getFilter().getGraphicHelper());
+                }
                 // on error, proceed and try to create picture from replacement image
                 if( xShape.is() )
                     return xShape;

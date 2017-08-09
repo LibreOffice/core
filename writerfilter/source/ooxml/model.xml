@@ -12455,17 +12455,6 @@
           <ref name="CT_PPrChange"/>
         </element>
       </define>
-      <define name="CT_Control">
-        <attribute name="name">
-          <data type="string"/>
-        </attribute>
-        <attribute name="shapeid">
-          <data type="string"/>
-        </attribute>
-        <attribute name="r:id">
-          <ref name="ST_String"/>
-        </attribute>
-      </define>
       <define name="CT_Background">
         <ref name="CT_PictureBase"/>
         <attribute name="color">
@@ -12496,9 +12485,6 @@
       </define>
       <define name="CT_Object">
         <ref name="CT_PictureBase"/>
-        <element name="control">
-          <ref name="CT_Control"/>
-        </element>
         <attribute name="dxaOrig">
           <data type="string"/>
         </attribute>
@@ -12510,9 +12496,6 @@
         <ref name="CT_PictureBase"/>
         <element name="movie">
           <ref name="CT_Rel"/>
-        </element>
-        <element name="control">
-          <ref name="CT_Control"/>
         </element>
       </define>
       <define name="CT_Drawing">
@@ -17473,11 +17456,6 @@
       <element name="sectPr" tokenid="ooxml:CT_PPr_sectPr"/>
       <element name="pPrChange" tokenid="ooxml:CT_PPr_pPrChange"/>
     </resource>
-    <resource name="CT_Control" resource="Properties">
-      <attribute name="name" tokenid="ooxml:CT_Control_name"/>
-      <attribute name="shapeid" tokenid="ooxml:CT_Control_shapeid"/>
-      <attribute name="r:id" tokenid="ooxml:CT_Control_r_id"/>
-    </resource>
     <resource name="CT_Background" resource="Properties">
       <attribute name="color" tokenid="ooxml:CT_Background_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Background_themeColor"/>
@@ -17490,7 +17468,6 @@
     </resource>
     <resource name="CT_PictureBase" resource="Properties"/>
     <resource name="CT_Object" resource="Shape">
-      <element name="control" tokenid="ooxml:CT_Object_control"/>
       <attribute name="dxaOrig" tokenid="ooxml:CT_Object_dxaOrig"/>
       <attribute name="dyaOrig" tokenid="ooxml:CT_Object_dyaOrig"/>
       <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
@@ -17498,7 +17475,6 @@
     </resource>
     <resource name="CT_Picture" resource="Shape">
       <element name="movie" tokenid="ooxml:CT_Picture_movie"/>
-      <element name="control" tokenid="ooxml:CT_Picture_control"/>
       <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
       <action name="end" action="clearProps"/>
     </resource>

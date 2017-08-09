@@ -262,6 +262,9 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& r
         case VML_TOKEN( diagram ):
         case VML_TOKEN( image ):
             return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
+
+        case W_TOKEN(control):
+            return new ControlShapeContext( rParent, rShapes, rAttribs );
     }
     return nullptr;
 }
@@ -552,6 +555,17 @@ ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, co
 {
     // The parent class's context is fine
     return ShapeContext::onCreateContext( nElement, rAttribs );
+}
+
+ControlShapeContext::ControlShapeContext( ::oox::core::ContextHandler2Helper const & rParent, ShapeContainer& rShapes, const AttributeList& rAttribs )
+    : ShapeContextBase (rParent)
+{
+    ::oox::vml::ControlInfo aInfo;
+    aInfo.maShapeId = rAttribs.getXString( W_TOKEN( shapeid ), OUString() );
+    aInfo.maFragmentPath = getFragmentPathFromRelId(rAttribs.getString( R_TOKEN(id), OUString() ));
+    aInfo.maName = rAttribs.getString( W_TOKEN( name ), OUString() );
+    aInfo.mbTextContentShape = true;
+    rShapes.getDrawing().registerControl(aInfo);
 }
 
 } // namespace vml
