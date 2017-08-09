@@ -104,6 +104,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testTdf111518();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testTdf111518);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -790,6 +792,20 @@ void SdOOXMLExportTest2::testTdf105739()
     xShell->DoClose();
 }
 
+void SdOOXMLExportTest2::testTdf111518()
+{
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf111518.pptx"), PPTX);
+    utl::TempFile tempFile;
+    tempFile.EnableKillingFile(false);
+    xShell = saveAndReload(xShell.get(), PPTX, &tempFile);
+    xShell->DoClose();
+
+    xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocRels,
+            "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animMotion",
+            "path",
+            "M -3.54167E-6 -4.81481E-6 L 0.39037 -0.00069");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
