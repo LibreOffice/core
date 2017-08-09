@@ -306,7 +306,6 @@ bool update()
     }
     else
     {
-        SAL_WARN("updater", "Executable Path:" << aUpdaterPath);
         for (size_t i = 0; i < 8 + rtl_getAppCommandArgCount(); ++i)
         {
             SAL_WARN("desktop.updater", pArgs[i]);
@@ -387,13 +386,13 @@ update_file parse_update_file(const orcus::json::detail::node& rNode)
 {
     if (rNode.type() != orcus::json::detail::node_t::object)
     {
-        SAL_WARN("desktop.update", "invalid update or language file entry");
+        SAL_WARN("desktop.updater", "invalid update or language file entry");
         throw invalid_update_info();
     }
 
     if (rNode.child_count() < 4)
     {
-        SAL_WARN("desktop.update", "invalid update or language file entry");
+        SAL_WARN("desktop.updater", "invalid update or language file entry");
         throw invalid_update_info();
     }
 
@@ -404,7 +403,7 @@ update_file parse_update_file(const orcus::json::detail::node& rNode)
 
     if (aHashTypeNode.string_value() != "sha512")
     {
-        SAL_WARN("desktop.update", "invalid hash type");
+        SAL_WARN("desktop.updater", "invalid hash type");
         throw invalid_update_info();
     }
 
@@ -428,7 +427,7 @@ update_info parse_response(const std::string& rResponse)
     auto aDocumentRoot = aJsonDoc.get_document_root();
     if (aDocumentRoot.type() != orcus::json_node_t::object)
     {
-        SAL_WARN("desktop.Update", "invalid root entries: " << rResponse);
+        SAL_WARN("desktop.updater", "invalid root entries: " << rResponse);
         throw invalid_update_info();
     }
 
