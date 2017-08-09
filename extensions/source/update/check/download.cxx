@@ -238,6 +238,8 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
 
         // enable redirection
         curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
+        // only allow redirect to http:// and https://
+        curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 
         // write function
         curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
