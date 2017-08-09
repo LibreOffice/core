@@ -808,7 +808,7 @@ class ScXMLImport: public SvXMLImport
     ScXMLImport(const ScXMLImport&) = delete;
     const ScXMLImport& operator=(const ScXMLImport&) = delete;
 
-    typedef std::unordered_map< OUString, sal_Int16, OUStringHash >   CellTypeMap;
+    typedef std::unordered_map< sal_Int32, sal_Int16 >   CellTypeMap;
     typedef ::std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;
 
     CellTypeMap             aCellTypeMap;
@@ -969,7 +969,7 @@ public:
 
     bool IsStylesOnlyMode() const { return !bLoadDoc; }
 
-    sal_Int16 GetCellType(const OUString& rStrValue) const;
+    sal_Int16 GetCellType(const sal_Int32& nStrValueHash) const;
 
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }

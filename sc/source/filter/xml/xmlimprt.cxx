@@ -811,21 +811,21 @@ ScXMLImport::ScXMLImport(
         XML_NAMESPACE_PRESENTATION );
 
     // initialize cell type map.
-    const struct { XMLTokenEnum  _token; sal_Int16 _type; } aCellTypePairs[] =
+    const struct { const char*  _token; sal_Int16 _type; } aCellTypePairs[] =
     {
-        { XML_FLOAT,        util::NumberFormat::NUMBER },
-        { XML_STRING,       util::NumberFormat::TEXT },
-        { XML_TIME,         util::NumberFormat::TIME },
-        { XML_DATE,         util::NumberFormat::DATETIME },
-        { XML_PERCENTAGE,   util::NumberFormat::PERCENT },
-        { XML_CURRENCY,     util::NumberFormat::CURRENCY },
-        { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
+        { "float",        util::NumberFormat::NUMBER },
+        { "string",       util::NumberFormat::TEXT },
+        { "time",         util::NumberFormat::TIME },
+        { "date",         util::NumberFormat::DATETIME },
+        { "percentage",   util::NumberFormat::PERCENT },
+        { "currency",     util::NumberFormat::CURRENCY },
+        { "boolean",      util::NumberFormat::LOGICAL }
     };
     for (const auto & aCellTypePair : aCellTypePairs)
     {
         aCellTypeMap.insert(
             CellTypeMap::value_type(
-                GetXMLToken(aCellTypePair._token), aCellTypePair._type));
+                rtl_str_hashCode(aCellTypePair._token), aCellTypePair._type));
     }
 }
 
@@ -1022,9 +1022,9 @@ ScDocumentImport& ScXMLImport::GetDoc()
     return *mpDocImport;
 }
 
-sal_Int16 ScXMLImport::GetCellType(const OUString& rStrValue) const
+sal_Int16 ScXMLImport::GetCellType(const sal_Int32& nStrValueHash) const
 {
-    CellTypeMap::const_iterator itr = aCellTypeMap.find(rStrValue);
+    CellTypeMap::const_iterator itr = aCellTypeMap.find(nStrValueHash);
     if (itr != aCellTypeMap.end())
         return itr->second;
 
