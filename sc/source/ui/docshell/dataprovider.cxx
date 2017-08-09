@@ -336,7 +336,6 @@ void CSVDataProvider::Refresh()
     pDocShell->SetDocumentModified();
 }
 
-// TODO: why don't we use existing copy functionality
 void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
 {
     bool bShrunk = false;
@@ -345,28 +344,13 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
     SCCOL nEndCol = MAXCOL;
     SCROW nEndRow = MAXROW;
     rDoc.ShrinkToUsedDataArea(bShrunk, 0, nStartCol, nStartRow, nEndCol, nEndRow, false, true, true);
+    rDoc.SetClipArea(ScRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0));
 
     ScRange aDestRange;
     pDBData->GetArea(aDestRange);
-    double* pfValue;
-    for (int nRow = nStartRow; nRow < nEndRow; ++nRow)
-    {
-        for (int nCol = nStartCol; nCol < nEndCol; ++nCol)
-        {
-            ScAddress aAddr = ScAddress(nCol, nRow, 0);
-            pfValue = rDoc.GetValueCell(aAddr);
-
-            if (pfValue == nullptr)
-            {
-                OUString aString = rDoc.GetString(nCol, nRow, 0);
-                mpDoc->SetString(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), aString);
-            }
-            else
-            {
-                mpDoc->SetValue(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), *pfValue);
-            }
-        }
-    }
+    ScMarkData aMark;
+    aMark.SelectTable(0, true);
+    mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
     ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
     pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
