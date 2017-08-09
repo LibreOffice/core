@@ -1,0 +1,83 @@
+-*- Mode: diff -*-
+
+Tweak SSL build to find OpenSSL in workdir & not build it itself in "ssl.vcproj" etc.
+
+diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
+--- python3.orig/PCbuild/pcbuild.sln	2017-08-09 23:39:15.511897077 +0200
++++ python3/PCbuild/pcbuild.sln	2017-08-09 23:48:41.375890717 +0200
+@@ -86,10 +86,6 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tk", "tk.vcxproj", "{7E85ECCF-A72C-4DA4-9E52-884508E80BA1}"
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libeay", "libeay.vcxproj", "{E5B04CC0-EB4C-42AB-B4DC-18EF95F864B0}"
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ssleay", "ssleay.vcxproj", "{10615B24-73BF-4EFA-93AA-236916321317}"
+-EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyshellext", "pyshellext.vcxproj", "{0F6EE4A4-C75F-4578-B4B3-2D64F4B9B782}"
+ EndProject
+ Global
+diff -ru python3.orig/PCbuild/_ssl.vcxproj python3/PCbuild/_ssl.vcxproj
+--- python3.orig/PCbuild/_ssl.vcxproj	2017-08-07 09:59:11.000000000 +0200
++++ python3/PCbuild/_ssl.vcxproj	2017-08-09 23:50:36.871889419 +0200
+@@ -1,4 +1,4 @@
+-﻿<?xml version="1.0" encoding="utf-8"?>
++<?xml version="1.0" encoding="utf-8"?>
+ <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <ItemGroup Label="ProjectConfigurations">
+     <ProjectConfiguration Include="Debug|Win32">
+@@ -61,10 +61,10 @@
+   </PropertyGroup>
+   <ItemDefinitionGroup>
+     <ClCompile>
+-      <AdditionalIncludeDirectories>$(opensslIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>$(WORKDIR)/UnpackedTarball/openssl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+-      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(OutDir)libeay$(PyDebugExt).lib;$(OutDir)ssleay$(PyDebugExt).lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>ws2_32.lib;crypt32.lib;$(WORKDIR)\UnpackedTarball\openssl\out32dll\libeay32.lib;$(WORKDIR)\UnpackedTarball\openssl\out32dll\ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+@@ -78,14 +78,6 @@
+       <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
+       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+     </ProjectReference>
+-    <ProjectReference Include="libeay.vcxproj">
+-      <Project>{e5b04cc0-eb4c-42ab-b4dc-18ef95f864b0}</Project>
+-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+-    </ProjectReference>
+-    <ProjectReference Include="ssleay.vcxproj">
+-      <Project>{10615b24-73bf-4efa-93aa-236916321317}</Project>
+-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+-    </ProjectReference>
+     <ProjectReference Include="_socket.vcxproj">
+       <Project>{86937f53-c189-40ef-8ce8-8759d8e7d480}</Project>
+       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+diff -ru python3.orig/setup.py python3/setup.py
+--- python3.orig/setup.py	2017-08-09 23:39:15.495897077 +0200
++++ python3/setup.py	2017-08-09 23:53:06.891887733 +0200
+@@ -807,7 +807,10 @@
+         exts.append( Extension('_socket', ['socketmodule.c'],
+                                depends = ['socketmodule.h']) )
+         # Detect SSL support for the socket module (via _ssl)
++        ooosslinc = os.environ.get('WORKDIR') + \
++            '/UnpackedTarball/openssl/include/'
+         search_for_ssl_incs_in = [
++                              ooosslinc,
+                               '/usr/local/ssl/include',
+                               '/usr/contrib/ssl/include/'
+                              ]
+@@ -819,8 +822,12 @@
+                                ['/usr/kerberos/include'])
+             if krb5_h:
+                 ssl_incs += krb5_h
++        ooossllib = os.environ.get('WORKDIR') + \
++            '/UnpackedTarball/openssl'
++        ooosslinc = ooosslinc + '/'
+         ssl_libs = find_library_file(self.compiler, 'ssl',lib_dirs,
+-                                     ['/usr/local/ssl/lib',
++                                     [ooossllib,
++                                      '/usr/local/ssl/lib',
+                                       '/usr/contrib/ssl/lib/'
+                                      ] )
+ 
