@@ -119,21 +119,9 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
             {
                 if ( !bPixelGrf && m_bPixelContour )
                 {
-                    const Size aGrfPixelSize( GetGraphic().GetSizePixel() );
-                    const Size aGrfPrefMapModeSize( GetGraphic().GetPrefSize() );
-                    if ( aGrfMap.GetMapUnit() == MapUnit::MapInch )
-                    {
-                        nGrfDPIx = aGrfPixelSize.Width() / ( (double)aGrfMap.GetScaleX() * aGrfPrefMapModeSize.Width() );
-                        nGrfDPIy = aGrfPixelSize.Height() / ( (double)aGrfMap.GetScaleY() * aGrfPrefMapModeSize.Height() );
-                    }
-                    else
-                    {
-                        const Size aGrf1000thInchSize =
-                            OutputDevice::LogicToLogic( aGrfPrefMapModeSize,
-                                                        aGrfMap, MapUnit::Map1000thInch );
-                        nGrfDPIx = 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
-                        nGrfDPIy = 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
-                    }
+                    basegfx::B2DSize aDPI = GetGraphic().GetPPI();
+                    nGrfDPIx = aDPI.getX();
+                    nGrfDPIy = aDPI.getY();
                 }
             }
             OSL_ENSURE( !bPixelGrf || aGrfMap == aContourMap,
