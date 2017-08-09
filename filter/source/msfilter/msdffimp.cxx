@@ -4421,7 +4421,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         aFont.SetFamilyName( aFontName );
                         auto nTextWidth = pOut->GetTextWidth( aObjectText );
 
-                        if ( nTextWidth )
+                        if ( nTextWidth && aObjData.eShapeType == mso_sptTextPlainText )
                         {
                             fRatio = aFont.GetFontSize().Height();
                             fRatio /= nTextWidth;
