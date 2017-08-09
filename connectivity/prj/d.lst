@@ -20,6 +20,7 @@
 ..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mysql\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\class\sdbc_hsqldb\*.jar %_DEST%\bin%_EXT%\*.jar
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx

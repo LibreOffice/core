@@ -1536,6 +1536,9 @@ if(defined($outfile_bat))
    die "Cannot open $outfile_bat: $!\n";
 }
 
+open( OUT_PROPS, ">ant.properties" ) ||
+  die "Cannot open ant.properties: $!\n";
+
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
@@ -2099,6 +2102,7 @@ if(defined($outfile_bat))
 #---------------------------
 #
 close( OUT_SH ) || print "Can't close $outfile_sh: $!";
+close( OUT_PROPS ) || print "Can't close ant.properties: $!";
 
 if( defined($outfile_bat))
 {  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
@@ -2303,6 +2307,9 @@ sub ToFile {
          $envvar =~ s/\\/\\\\/g;
          $envvarbash = $envvar;
 
+         my $antvar = $envvarbash;
+         $antvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
+
          if ($platform =~ m/os2/) {
              # expand the variables
              $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
@@ -2316,6 +2323,7 @@ sub ToFile {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
+         print OUT_PROPS "$_[ 0 ]=$antvar$newline";    # to Ant properties file
 
          if(defined($outfile_bat)) {
              print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";

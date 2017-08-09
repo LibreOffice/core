@@ -154,7 +154,7 @@ public class StorageNativeOutputStream {
      * be flushed (for example, by invoking
      * OutputStream.flush) before that data will be affected by sync.
      *
-     * @exception IOException
+     * @exception java.io.IOException
      *        Thrown when the buffers cannot be flushed,
      *        or because the system cannot guarantee that all the
      *        buffers have been synchronized with physical media.
