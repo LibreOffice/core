@@ -168,6 +168,13 @@ public:
             assert(mnIdx < mrList.maAttributeTokens.size());
             return mrList.getFastAttributeValue(mnIdx);
         }
+        sal_Int32 toHashCode() const
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return rtl_str_hashCode_WithLength(
+                mrList.getFastAttributeValue(mnIdx),
+                mrList.AttributeValueLength(mnIdx));
+        }
         bool isString(const char *str) const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
