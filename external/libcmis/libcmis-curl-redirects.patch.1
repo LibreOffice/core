@@ -1,0 +1,24 @@
+configure curl to only allow redirects to HTTP/HTTPS
+
+--- cmis/src/libcmis/http-session.cxx.orig	2017-08-09 17:39:11.686928636 +0200
++++ cmis/src/libcmis/http-session.cxx	2017-08-09 17:40:10.398933383 +0200
+@@ -525,6 +525,8 @@
+ {
+     // Redirect
+     curl_easy_setopt( m_curlHandle, CURLOPT_FOLLOWLOCATION, redirect);
++    // only allow redirect to http:// and https://
++    curl_easy_setopt(m_curlHandle, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+ 
+     // Activate the cookie engine
+     curl_easy_setopt( m_curlHandle, CURLOPT_COOKIEFILE, "" );
+--- cmis/src/libcmis/sharepoint-session.cxx.orig	2017-08-09 17:39:19.974929306 +0200
++++ cmis/src/libcmis/sharepoint-session.cxx	2017-08-09 17:39:42.500931127 +0200
+@@ -204,6 +204,8 @@
+ {
+     // Redirect
+     curl_easy_setopt( m_curlHandle, CURLOPT_FOLLOWLOCATION, redirect);
++    // only allow redirect to http:// and https://
++    curl_easy_setopt(m_curlHandle, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+ 
+     // Activate the cookie engine
+     curl_easy_setopt( m_curlHandle, CURLOPT_COOKIEFILE, "" );
