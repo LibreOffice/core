@@ -74,7 +74,8 @@ public:
 
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {
-    bool mbLookForAlg;
+    std::vector<Constraint> maConstraints;
+    enum {layoutNode, constraint, algorithm} meLookFor;
 
     void defaultVisit(LayoutAtom const & rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
@@ -87,7 +88,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
 
 public:
     ShapeLayoutingVisitor() :
-        mbLookForAlg(false)
+        meLookFor(layoutNode)
     {}
 };
 
