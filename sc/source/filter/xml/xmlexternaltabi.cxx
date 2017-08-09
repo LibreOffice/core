@@ -271,7 +271,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
                 {
-                    mnCellType = mrScImport.GetCellType( it.toString() );
+                    mnCellType = ScXMLImport::GetCellType( it.toCString(), it.getLength() );
                 }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
