@@ -116,7 +116,6 @@ public:
     virtual ~DataProvider() = 0;
 
     virtual void Import() = 0;
-    virtual void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData) = 0;
 
     virtual const OUString& GetURL() const = 0;
 };
@@ -141,13 +140,9 @@ public:
 
     virtual void Import() override;
 
-    // TODO: this method should be moved to the ScDBDataManager
-    virtual void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData) override;
     const OUString& GetURL() const override { return maURL; }
-
     DECL_LINK( ImportFinishedHdl, Timer*, void );
 };
-
 
 /**
  * This class handles the copying of the data from the imported
@@ -162,14 +157,17 @@ public:
 class ScDBDataManager
 {
     ScDBData* mpDBData;
+    ScDocument* mpDoc;
 
 public:
-    ScDBDataManager(ScDBData* pDBData, bool bAllowResize);
+    ScDBDataManager(ScDBData* pDBData, bool bAllowResize, ScDocument* pDoc);
     ~ScDBDataManager();
 
     void SetDatabase(ScDBData* pDBData);
 
     ScDBData* getDBData();
+
+    void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData);
 };
 
 class DataProviderFactory

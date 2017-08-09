@@ -161,7 +161,7 @@ void DataProviderDlg::StartImport()
 
     OUString aURL;
     // TODO : replace those strings with something that is obtained from user
-    ExternalDataSource aDataSource(aURL, "org.libreoffice.calc.csv");
+    ExternalDataSource aDataSource(aURL, "org.libreoffice.calc.csv", &mpDocShell->GetDocument());
     //aDataSource.setDBData(pDBData);
     mpDocShell->GetDocument().GetExternalDataMapper().insertDataSource(aDataSource);
 }
