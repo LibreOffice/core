@@ -17,9 +17,17 @@ epubgen_patches += libepubgen-validation3.patch.1
 # Backport of <https://sourceforge.net/p/libepubgen/code/ci/49f6461d4751d3b16e32ab8f9c93a3856b33be49/>.
 epubgen_patches += libepubgen-vc.patch.1
 
+ifeq ($(COM_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+epubgen_patches += ubsan-visibility.patch
+endif
+endif
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libepubgen))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libepubgen,$(EPUBGEN_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libepubgen,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libepubgen,\
 	$(foreach patch,$(epubgen_patches),external/libepubgen/$(patch)) \
