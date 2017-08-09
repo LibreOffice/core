@@ -46,7 +46,7 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
-#include <com/sun/star/animations/XAnimateSet.hpp>
+#include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -883,18 +883,34 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
 
     SAL_INFO("sd.eppt", "write attribute name: " << USS(rAttributeName));
 
-    const char* sAttributeName = nullptr;
-    if ( rAttributeName == "Visibility" ) {
-        sAttributeName = "style.visibility";
-    } else if ( rAttributeName == "X" ) {
-        sAttributeName = "ppt_x";
-    } else if ( rAttributeName == "Y" ) {
-        sAttributeName = "ppt_y";
+    if (rAttributeName == "Visibility")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("style.visibility");
+        pFS->endElementNS(XML_p, XML_attrName);
     }
+    else if (rAttributeName == "X")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_x");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "Y")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_y");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "X;Y")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_x");
+        pFS->endElementNS(XML_p, XML_attrName);
 
-    pFS->startElementNS( XML_p, XML_attrName, FSEND );
-    pFS->writeEscaped( sAttributeName );
-    pFS->endElementNS( XML_p, XML_attrName );
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_y");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
 
     pFS->endElementNS( XML_p, XML_attrNameLst );
 }
@@ -956,12 +972,29 @@ void PowerPointExport::WriteAnimationNodeAnimate( const FSHelperPtr& pFS, const 
     }
     }
 
-    pFS->startElementNS( XML_p, nXmlNodeType,
-             XML_calcmode, pCalcMode,
-             XML_valueType, pValueType,
-             FSEND );
-    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, bSimple );
-    pFS->endElementNS( XML_p, nXmlNodeType );
+    OUString aPath;
+    if (nXmlNodeType == XML_animMotion)
+    {
+        Reference<XAnimateMotion> rMotion(rXNode, UNO_QUERY);
+        if (rMotion.is())
+            rMotion->getPath() >>= aPath;
+    }
+
+    if (aPath.isEmpty())
+    {
+        pFS->startElementNS(XML_p, nXmlNodeType,
+                            XML_calcmode, pCalcMode,
+                            XML_valueType, pValueType,
+                            FSEND);
+    }
+    else
+    {
+        pFS->startElementNS(XML_p, nXmlNodeType,
+                            XML_path, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8),
+                            FSEND);
+    }
+    WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, bSimple);
+    pFS->endElementNS(XML_p, nXmlNodeType);
 }
 
 void PowerPointExport::WriteAnimationNodeAnimateInside( const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple )
@@ -1344,6 +1377,10 @@ void PowerPointExport::WriteAnimationNode( const FSHelperPtr& pFS, const Referen
         break;
     case AnimationNodeType::ANIMATE:
         xmlNodeType = XML_anim;
+        pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
+        break;
+    case AnimationNodeType::ANIMATEMOTION:
+        xmlNodeType = XML_animMotion;
         pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
         break;
     case AnimationNodeType::SET:
