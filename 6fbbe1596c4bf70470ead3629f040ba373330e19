@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_14b595cc",
+        "filename": "sc/source/filter/xml/xmlimprt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-09T20:09:57Z",
+      "side": 1,
+      "message": "just pass by value?",
+      "revId": "6fbbe1596c4bf70470ead3629f040ba373330e19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
