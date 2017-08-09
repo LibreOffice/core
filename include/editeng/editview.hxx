@@ -93,7 +93,7 @@ public:
     virtual ~EditViewCallbacks();
 
     virtual void EditViewInvalidate() const = 0;
-    virtual void EditViewSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges) const = 0;
+    virtual void EditViewSelectionChange() const = 0;
 };
 
 class EDITENG_DLLPUBLIC EditView final

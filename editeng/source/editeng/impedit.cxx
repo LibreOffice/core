@@ -197,24 +197,8 @@ void ImpEditView::SelectionChanged()
 {
     if (hasEditViewCallbacks())
     {
-        std::vector<tools::Rectangle> aLogicRects;
-        std::vector<basegfx::B2DRange> aLogicRanges;
-        const Size aLogicPixel(pOutWin ? pOutWin->PixelToLogic(Size(1, 1)) : Size(1, 1));
-
-        GetSelectionRectangles(GetEditSelection(), aLogicRects);
-
-        for (const auto& aRect : aLogicRects)
-        {
-            // convert from logic Rectangles to logic Ranges, do not forget to add
-            // one Unit (in this case logical unit, thus calculate first)
-            aLogicRanges.push_back(
-                basegfx::B2DRange(
-                    aRect.Left(), aRect.Top(),
-                    aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height()));
-        }
-
         // use callback to tell about change in selection visualisation
-        mpEditViewCallbacks->EditViewSelectionChange(aLogicRanges);
+        mpEditViewCallbacks->EditViewSelectionChange();
     }
 }
 
@@ -229,7 +213,7 @@ void ImpEditView::SelectionChanged()
 // the Region*, see GetSelectionRectangles below.
 void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
-    if (hasEditViewCallbacks() && !pRegion)
+    if (hasEditViewCallbacks() && !pRegion && !comphelper::LibreOfficeKit::isActive())
     {
         // we are done, do *not* visualize self
         // CAUTION: do not use when comphelper::LibreOfficeKit::isActive()
