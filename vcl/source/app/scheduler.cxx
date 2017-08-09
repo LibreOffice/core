@@ -131,14 +131,11 @@ bool SchedulerMutex::acquire( sal_uInt32 nLockCount )
 
 sal_uInt32 SchedulerMutex::release( bool bUnlockAll )
 {
-    sal_uInt32 nLockCount = 0;
-    if ( mnLockDepth )
-    {
-        nLockCount = bUnlockAll ? mnLockDepth : 1;
-        mnLockDepth -= nLockCount;
-        for (sal_uInt32 i = 0; i != nLockCount; ++i) {
-            maMutex.release();
-        }
+    assert(mnLockDepth != 0);
+    sal_uInt32 nLockCount = bUnlockAll ? mnLockDepth : 1;
+    mnLockDepth -= nLockCount;
+    for (sal_uInt32 i = 0; i != nLockCount; ++i) {
+        maMutex.release();
     }
     return nLockCount;
 }
