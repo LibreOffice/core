@@ -74,12 +74,7 @@ public class InvalidationHandler implements Document.MessageCallback {
                 graphicSelection(payload);
                 break;
             case Document.CALLBACK_HYPERLINK_CLICKED:
-                if (!payload.startsWith("http://") && !payload.startsWith("https://")) {
-                    payload = "http://" + payload;
-                }
-                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
-                urlIntent.setData(Uri.parse(payload));
-                mContext.startActivity(urlIntent);
+                hyperlinkClicked(payload);
                 break;
             case Document.CALLBACK_STATE_CHANGED:
                 stateChanged(payload);
@@ -99,6 +94,17 @@ public class InvalidationHandler implements Document.MessageCallback {
                 break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
+        }
+    }
+
+    private void hyperlinkClicked(String payload) {
+        if (payload.startsWith("#")) {
+            //TODO Implement Internal URL click
+            Log.d(LOGTAG, "internal link is " + payload);
+        } else {
+            Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+            urlIntent.setData(Uri.parse(payload));
+            mContext.startActivity(urlIntent);
         }
     }
 
