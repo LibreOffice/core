@@ -80,6 +80,13 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     vcl \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_static_libraries,sofficeapp,\
+    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
+        windows_process )\
+))
+endif
+
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,sofficeapp,\
