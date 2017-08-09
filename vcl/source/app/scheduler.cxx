@@ -120,12 +120,11 @@ void Scheduler::ImplDeInitScheduler()
 
 bool SchedulerMutex::acquire( sal_uInt32 nLockCount )
 {
-    do {
+    for (sal_uInt32 i = 0; i != nLockCount; ++i) {
         if ( !maMutex.acquire() )
             return false;
         ++mnLockDepth;
     }
-    while ( --nLockCount );
     return true;
 }
 
