@@ -346,7 +346,7 @@ namespace
         // data write access. In this OverlayObject we only have the
         // callback that triggers detecting if something *has* changed
         void checkDataChange(const basegfx::B2DRange& rMinTextEditArea);
-        void checkSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges);
+        void checkSelectionChange();
     };
 
     drawinglayer::primitive2d::Primitive2DContainer TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
@@ -501,11 +501,28 @@ namespace
         }
     }
 
-    void TextEditOverlayObject::checkSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges)
+    void TextEditOverlayObject::checkSelectionChange()
     {
-        if (getOverlaySelection())
+        if (getOverlaySelection() && getOverlayManager())
         {
-            mpOverlaySelection->setRanges(rLogicRanges);
+            std::vector<Rectangle> aLogicRects;
+            std::vector<basegfx::B2DRange> aLogicRanges;
+            const Size aLogicPixel(getOverlayManager()->getOutputDevice().PixelToLogic(Size(1, 1)));
+
+            // get logic selection
+            getOutlinerView().GetSelectionRectangles(aLogicRects);
+
+            for (const auto& aRect : aLogicRects)
+            {
+                // convert from logic Rectangles to logic Ranges, do not forget to add
+                // one Unit (in this case logical units for one pixel, pre-calculated)
+                aLogicRanges.push_back(
+                    basegfx::B2DRange(
+                        aRect.Left() - aLogicPixel.Width(), aRect.Top() - aLogicPixel.Height(),
+                        aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height()));
+            }
+
+            mpOverlaySelection->setRanges(aLogicRanges);
         }
     }
 } // end of anonymous namespace
@@ -535,7 +552,7 @@ void SdrObjEditView::EditViewInvalidate() const
     }
 }
 
-void SdrObjEditView::EditViewSelectionChange(const std::vector<basegfx::B2DRange>& rLogicRanges) const
+void SdrObjEditView::EditViewSelectionChange() const
 {
     if (IsTextEdit())
     {
@@ -545,7 +562,7 @@ void SdrObjEditView::EditViewSelectionChange(const std::vector<basegfx::B2DRange
 
             if (pCandidate)
             {
-                pCandidate->checkSelectionChange(rLogicRanges);
+                pCandidate->checkSelectionChange();
             }
         }
     }
@@ -555,10 +572,11 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 {
     if (!comphelper::LibreOfficeKit::isActive())
     {
-        // adapt TextEditOverlayObject(s). Need also to do this here to
-        // update the current values accordingly. Suppress new stuff when
-        // LibreOficeKit is active
+        // adapt all TextEditOverlayObject(s), so call EditViewInvalidate()
+        // and EditViewSelectionChange() to update accordingly. Suppress new
+        // stuff when LibreOficeKit is active
         EditViewInvalidate();
+        EditViewSelectionChange();
     }
     else
     {
