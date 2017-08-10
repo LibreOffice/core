@@ -313,13 +313,13 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
     : XMLParentNode( nullptr )
     , m_sFileName( rFileName )
 {
-    m_aNodes_localize.insert( TagMap::value_type(OString("bookmark") , true) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("variable") , true) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("paragraph") , true) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("alt") , true) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("caption") , true) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("title") , true) );
-    m_aNodes_localize.insert( TagMap::value_type(OString("link") , true) );
+    m_aNodes_localize.emplace( OString("bookmark") , true );
+    m_aNodes_localize.emplace( OString("variable") , true );
+    m_aNodes_localize.emplace( OString("paragraph") , true );
+    m_aNodes_localize.emplace( OString("alt") , true );
+    m_aNodes_localize.emplace( OString("caption") , true );
+    m_aNodes_localize.emplace( OString("title") , true );
+    m_aNodes_localize.emplace( OString("link") , true );
 }
 
 void XMLFile::Extract()
@@ -364,7 +364,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
     {
         pElem = new LangHashMap;
         (*pElem)[ sLanguage ]=pElement;
-        m_pXMLStrings->insert( XMLHashMap::value_type( sId , pElem ) );
+        m_pXMLStrings->emplace( sId , pElem );
         m_vOrder.push_back( sId );
     }
     else        // Already there

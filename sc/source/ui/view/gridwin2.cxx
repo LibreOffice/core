@@ -565,7 +565,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     MemNameMapType aMemNameMap;
     for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
            itr != itrEnd; ++itr)
-        aMemNameMap.insert(MemNameMapType::value_type(itr->maLayoutName, itr->maName));
+        aMemNameMap.emplace(itr->maLayoutName, itr->maName);
 
     // The raw result may contain a mixture of layout names and original names.
     ScCheckListMenuWindow::ResultType aRawResult;

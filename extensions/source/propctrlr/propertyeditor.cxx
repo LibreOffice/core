@@ -401,7 +401,7 @@ namespace pcr
 
         OSL_ENSURE( m_aPropertyPageIds.find( rData.sName ) == m_aPropertyPageIds.end(),
             "OPropertyEditor::InsertEntry: property already present in the map!" );
-        m_aPropertyPageIds.insert( MapStringToPageId::value_type( rData.sName, _nPageId ) );
+        m_aPropertyPageIds.emplace( rData.sName, _nPageId );
     }
 
 

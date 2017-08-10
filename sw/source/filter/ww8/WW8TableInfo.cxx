@@ -857,7 +857,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
     {
         pNodeInfo =
             std::make_shared<ww8::WW8TableNodeInfo>(this, pNode);
-        mMap.insert(Map_t::value_type(pNode, pNodeInfo));
+        mMap.emplace(pNode, pNodeInfo);
     }
 
     pNodeInfo->setDepth(nDepth + pNodeInfo->getDepth());

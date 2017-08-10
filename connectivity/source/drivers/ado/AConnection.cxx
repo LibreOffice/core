@@ -461,7 +461,7 @@ void OConnection::buildTypeInfo()
                 // in the Hashtable if we don't already have an
                 // entry for this SQL type.
 
-                m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo->eType,aInfo));
+                m_aTypeInfo.emplace( aInfo->eType,aInfo));
             }
             while ( SUCCEEDED(pRecordset->MoveNext()) );
         }

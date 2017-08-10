@@ -408,7 +408,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
 
     // Just ensure that the handle is unique in the process (via heap)
     uno_ThreadPool h = new struct _uno_ThreadPool;
-    g_pThreadpoolHashSet->insert( ThreadpoolHashSet::value_type(h, p) );
+    g_pThreadpoolHashSet->emplace( h, p );
     return h;
 }
 

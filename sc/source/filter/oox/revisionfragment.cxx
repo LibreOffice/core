@@ -298,7 +298,7 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
 
     aMetadata.maUserName = rAttribs.getString(XML_userName, OUString());
 
-    mpImpl->maRevData.insert(RevDataType::value_type(aRId, aMetadata));
+    mpImpl->maRevData.emplace(aRId, aMetadata);
 }
 
 struct RevisionLogFragment::Impl

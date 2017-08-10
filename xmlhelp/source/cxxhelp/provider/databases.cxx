@@ -342,7 +342,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
     OUString key = processLang(Language) + "/" + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
-        m_aModInfo.insert( ModInfoTable::value_type( key,nullptr ) );
+        m_aModInfo.emplace(key,nullptr);
 
     ModInfoTable::iterator it = aPair.first;
 
@@ -471,7 +471,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
-        m_aDatabases.insert( DatabasesTable::value_type( key, reinterpret_cast<helpdatafileproxy::Hdf *>(0) ) );
+        m_aDatabases.emplace( key, reinterpret_cast<helpdatafileproxy::Hdf *>(0) );
 
     DatabasesTable::iterator it = aPair.first;
 
@@ -510,7 +510,7 @@ Databases::getCollator( const OUString& Language )
     osl::MutexGuard aGuard( m_aMutex );
 
     CollatorTable::iterator it =
-        m_aCollatorTable.insert( CollatorTable::value_type( key, Reference< XCollator >() ) ).first;
+        m_aCollatorTable.emplace( key, Reference< XCollator >() ).first;
 
     if( ! it->second.is() )
     {
@@ -725,7 +725,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
     OUString key = processLang(Language) + "/" + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
-        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,nullptr ) );
+        m_aKeywordInfo.emplace( key,nullptr );
 
     KeywordInfoTable::iterator it = aPair.first;
 
@@ -805,7 +805,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
     osl::MutexGuard aGuard( m_aMutex );
 
     ZipFileTable::iterator it =
-        m_aZipFileTable.insert( ZipFileTable::value_type( key,Reference< XHierarchicalNameAccess >(nullptr) ) ).first;
+        m_aZipFileTable.emplace( key,Reference< XHierarchicalNameAccess >(nullptr) ).first;
 
     if( ! it->second.is() )
     {

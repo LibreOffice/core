@@ -2331,14 +2331,13 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
         if (nWhich == RES_TXTATR_CHARFMT || nWhich == RES_TXTATR_AUTOFMT)
         {
             const AttrSpan_t aSpan(pHint->GetStart(), *pHint->End());
-            o_rSpanMap.insert(AttrSpanMap_t::value_type(aSpan, pHint));
+            o_rSpanMap.emplace(aSpan, pHint);
 
             // < not != because there may be multiple CHARFMT at same range
             if (nLastEnd < aSpan.first)
             {
                 // insert dummy span covering the gap
-                o_rSpanMap.insert(AttrSpanMap_t::value_type(
-                    AttrSpan_t(nLastEnd, aSpan.first), nullptr));
+                o_rSpanMap.emplace( AttrSpan_t(nLastEnd, aSpan.first), nullptr );
             }
 
             nLastEnd = aSpan.second;

@@ -2103,7 +2103,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
 
         pHelper->setOwner          (xThis);
 
-        m_aNumberedControllers.insert(TNumberedController::value_type(sModuleId,xNumberedControllers));
+        m_aNumberedControllers.emplace( sModuleId,xNumberedControllers );
     }
     else
         xNumberedControllers = aFind->second;

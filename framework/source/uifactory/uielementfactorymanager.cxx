@@ -129,7 +129,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
     if ( pIter != m_aFactoryManagerMap.end() )
         throw ElementExistException();
     else
-        m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, rServiceSpecifier ));
+        m_aFactoryManagerMap.emplace( aHashKey, rServiceSpecifier );
 }
 
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
@@ -205,7 +205,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
         // Create hash key from type, name and module as they are together a primary key to
         // the UNO service that implements a user interface factory.
         OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
-        m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
+        m_aFactoryManagerMap.emplace( aHashKey, aService );
     }
 }
 
@@ -244,7 +244,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
         // the UNO service that implements the popup menu controller.
         OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.erase( aHashKey );
-        m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
+        m_aFactoryManagerMap.emplace( aHashKey, aService );
     }
 }
 
@@ -297,7 +297,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
                 // Create hash key from type, name and module as they are together a primary key to
                 // the UNO service that implements the user interface element factory.
                 aHashKey = getHashKeyFromStrings( aType, aName, aModule );
-                m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
+                m_aFactoryManagerMap.emplace( aHashKey, aService );
             }
         }
 

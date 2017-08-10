@@ -123,7 +123,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
 
         temp.append( XMLNS_FILTER_SEPARATOR );
         temp.appendAscii( ImagesEntries[i].aEntryName );
-        m_aImageMap.insert( ImageHashMap::value_type( temp.makeStringAndClear(), (Image_XML_Entry)i ) );
+        m_aImageMap.emplace( temp.makeStringAndClear(), (Image_XML_Entry)i );
     }
 
     // reset states

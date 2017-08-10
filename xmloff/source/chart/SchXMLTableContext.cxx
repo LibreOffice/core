@@ -125,18 +125,15 @@ void lcl_fillRangeMapping(
                     if( nCol == 0 && rTable.bHasHeaderColumn )
                     {
                         SAL_WARN_IF( static_cast< sal_Int32 >( nRow ) != nRowOffset, "xmloff.chart", "nRow != nRowOffset" );
-                        rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
-                                                 aRangeId, lcl_aCategoriesRange ));
+                        rOutRangeMap.emplace(aRangeId, lcl_aCategoriesRange);
                     }
                     else
                     {
                         OUString aColNumStr = OUString::number( nCol - nColOffset);
                         if( nRow == 0 && rTable.bHasHeaderRow )
-                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
-                                                     aRangeId, lcl_aLabelPrefix + aColNumStr ));
+                            rOutRangeMap.emplace( aRangeId, lcl_aLabelPrefix + aColNumStr );
                         else
-                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
-                                                     aRangeId, aColNumStr ));
+                            rOutRangeMap.emplace( aRangeId, aColNumStr );
                     }
                 }
                 else // eDataRowSource == chart::ChartDataRowSource_ROWS
@@ -144,18 +141,15 @@ void lcl_fillRangeMapping(
                     if( nRow == 0 && rTable.bHasHeaderRow )
                     {
                         SAL_WARN_IF( static_cast< sal_Int32 >( nCol ) != nColOffset, "xmloff.chart", "nCol != nColOffset" );
-                        rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
-                                                 aRangeId, lcl_aCategoriesRange ));
+                        rOutRangeMap.emplace( aRangeId, lcl_aCategoriesRange );
                     }
                     else
                     {
                         OUString aRowNumStr = OUString::number( nRow - nRowOffset);
                         if( nCol == 0 && rTable.bHasHeaderColumn )
-                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
-                                                     aRangeId, lcl_aLabelPrefix + aRowNumStr ));
+                            rOutRangeMap.emplace( aRangeId, lcl_aLabelPrefix + aRowNumStr );
                         else
-                            rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
-                                                     aRangeId, aRowNumStr ));
+                            rOutRangeMap.emplace( aRangeId, aRowNumStr );
                     }
                 }
             }

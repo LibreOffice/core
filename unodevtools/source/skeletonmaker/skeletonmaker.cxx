@@ -243,7 +243,7 @@ SAL_IMPLEMENT_MAIN()
                 vCmds.push_back(sCmd);
             } while ( nIndex >= 0 );
 
-            options.protocolCmdMap.insert(ProtocolCmdMap::value_type(sPrt, vCmds));
+            options.protocolCmdMap.emplace(sPrt, vCmds);
             continue;
         }
 

@@ -188,7 +188,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     guard.reset();
 
     std::pair< t_string2ref::iterator, bool > insertion(
-        m_bound.insert( t_string2ref::value_type( url, xNewPackage ) ) );
+        m_bound.emplace(  url, xNewPackage ) );
     if (insertion.second)
     { // first insertion
         SAL_WARN_IF(

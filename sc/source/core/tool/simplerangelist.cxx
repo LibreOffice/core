@@ -182,7 +182,7 @@ ScSimpleRangeList::RangeListRef ScSimpleRangeList::findTab(SCTAB nTab)
     if (itr == maTabs.end())
     {
         RangeListRef p(new list<Range>);
-        pair<TabType::iterator, bool> r = maTabs.insert(TabType::value_type(nTab, p));
+        pair<TabType::iterator, bool> r = maTabs.emplace(nTab, p);
         if (!r.second)
             return RangeListRef();
         itr = r.first;

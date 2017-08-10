@@ -78,7 +78,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rEl
 {
     if( m_aMap.find( rName ) != m_aMap.end() )
         throw container::ElementExistException();
-    m_aMap.insert( tContentMap::value_type( rName, rElement ));
+    m_aMap.emplace( rName, rElement );
 }
 
 void SAL_CALL NameContainer::removeByName( const OUString& Name )

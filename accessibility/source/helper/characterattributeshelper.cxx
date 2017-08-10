@@ -27,19 +27,19 @@ using namespace ::com::sun::star::beans;
 
 CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor )
 {
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharBackColor" ),     Any( nBackColor ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharColor" ),         Any( nColor ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontCharSet" ),   Any( (sal_Int16) rFont.GetCharSet() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontFamily" ),    Any( (sal_Int16) rFont.GetFamilyType() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontName" ),      Any( rFont.GetFamilyName() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontPitch" ),     Any( (sal_Int16) rFont.GetPitch() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharFontStyleName" ), Any( rFont.GetStyleName() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharHeight" ),        Any( (sal_Int16) rFont.GetFontSize().Height() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharScaleWidth" ),    Any( (sal_Int16) rFont.GetFontSize().Width() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharStrikeout" ),     Any( (sal_Int16) rFont.GetStrikeout() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharUnderline" ),     Any( (sal_Int16) rFont.GetUnderline() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharWeight" ),        Any( (float) rFont.GetWeight() ) ) );
-    m_aAttributeMap.insert( AttributeMap::value_type( OUString( "CharPosture" ),       Any( (sal_Int16)rFont.GetItalic() ) ) );
+    m_aAttributeMap.emplace( OUString( "CharBackColor" ),     Any( nBackColor ) );
+    m_aAttributeMap.emplace( OUString( "CharColor" ),         Any( nColor ) );
+    m_aAttributeMap.emplace( OUString( "CharFontCharSet" ),   Any( (sal_Int16) rFont.GetCharSet() ) );
+    m_aAttributeMap.emplace( OUString( "CharFontFamily" ),    Any( (sal_Int16) rFont.GetFamilyType() ) );
+    m_aAttributeMap.emplace( OUString( "CharFontName" ),      Any( rFont.GetFamilyName() ) );
+    m_aAttributeMap.emplace( OUString( "CharFontPitch" ),     Any( (sal_Int16) rFont.GetPitch() ) );
+    m_aAttributeMap.emplace( OUString( "CharFontStyleName" ), Any( rFont.GetStyleName() ) );
+    m_aAttributeMap.emplace( OUString( "CharHeight" ),        Any( (sal_Int16) rFont.GetFontSize().Height() ) );
+    m_aAttributeMap.emplace( OUString( "CharScaleWidth" ),    Any( (sal_Int16) rFont.GetFontSize().Width() ) );
+    m_aAttributeMap.emplace( OUString( "CharStrikeout" ),     Any( (sal_Int16) rFont.GetStrikeout() ) );
+    m_aAttributeMap.emplace( OUString( "CharUnderline" ),     Any( (sal_Int16) rFont.GetUnderline() ) );
+    m_aAttributeMap.emplace( OUString( "CharWeight" ),        Any( (float) rFont.GetWeight() ) );
+    m_aAttributeMap.emplace( OUString( "CharPosture" ),       Any( (sal_Int16)rFont.GetItalic() ) );
 }
 
 

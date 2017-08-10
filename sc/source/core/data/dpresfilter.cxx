@@ -114,7 +114,7 @@ void ScDPResultTree::add(
         {
             // New dimension.  Insert it.
             std::pair<DimensionsType::iterator, bool> r =
-                rDims.insert(DimensionsType::value_type(aUpperName, new DimensionNode));
+                rDims.emplace(aUpperName, new DimensionNode);
 
             if (!r.second)
                 // Insertion failed!
@@ -135,7 +135,7 @@ void ScDPResultTree::add(
             // New member.  Insert it.
             std::shared_ptr<MemberNode> pNode( new MemberNode);
             std::pair<MembersType::iterator, bool> r =
-                rMembersValueNames.insert( MembersType::value_type(aUpperName, pNode));
+                rMembersValueNames.emplace(aUpperName, pNode);
 
             if (!r.second)
                 // Insertion failed!
@@ -154,7 +154,7 @@ void ScDPResultTree::add(
                 {
                     // New member.  Insert it.
                     std::pair<MembersType::iterator, bool> it =
-                        rMembersValues.insert( MembersType::value_type(aUpperName, pNode));
+                        rMembersValues.emplace(aUpperName, pNode);
                     // If insertion failed do not bail out anymore.
                     SAL_WARN_IF( !it.second, "sc.core", "ScDPResultTree::add - rMembersValues.insert failed");
                 }
@@ -175,7 +175,7 @@ void ScDPResultTree::add(
         if (it == maLeafValues.end())
         {
             // This name pair doesn't exist.  Associate a new value for it.
-            maLeafValues.insert(LeafValuesType::value_type(aNames, fVal));
+            maLeafValues.emplace(aNames, fVal);
         }
         else
         {

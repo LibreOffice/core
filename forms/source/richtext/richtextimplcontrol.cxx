@@ -191,12 +191,12 @@ namespace frm
                 return;
             SAL_WARN_IF( _nAttributeId != aHandler->getAttributeId(), "forms.richtext", "RichTextControlImpl::enableAttributeNotification: suspicious handler!" );
 
-            aHandlerPos = m_aAttributeHandlers.insert( AttributeHandlerPool::value_type( _nAttributeId , aHandler ) ).first;
+            aHandlerPos = m_aAttributeHandlers.emplace( _nAttributeId , aHandler ).first;
         }
 
         // remember the listener
         if ( _pListener )
-            m_aAttributeListeners.insert( AttributeListenerPool::value_type( _nAttributeId, _pListener ) );
+            m_aAttributeListeners.emplace( _nAttributeId, _pListener );
 
         // update (and broadcast) the state of this attribute
         updateAttribute( _nAttributeId );
@@ -240,7 +240,7 @@ namespace frm
         StateCache::iterator aCachePos = m_aLastKnownStates.find( _nAttribute );
         if ( aCachePos == m_aLastKnownStates.end() )
         {   // nothing known about this attribute, yet
-            m_aLastKnownStates.insert( StateCache::value_type( _nAttribute, _rState ) );
+            m_aLastKnownStates.emplace( _nAttribute, _rState );
         }
         else
         {

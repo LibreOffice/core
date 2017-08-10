@@ -73,7 +73,7 @@ namespace dbaccess
         void insert( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
         {
             OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element with this name!" );
-            m_aColumns.insert( Columns::value_type( _rName, _rxColumn ) );
+            m_aColumns.emplace(  _rName, _rxColumn );
         }
     };
 

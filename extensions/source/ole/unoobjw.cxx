@@ -252,11 +252,11 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
                 if (d.flags != 0)
                 {
                     m_MemberInfos.push_back(d);
-                    iter = m_nameToDispIdMap.insert(NameToIdMap::value_type(exactName, (DISPID)m_MemberInfos.size())).first;
+                    iter = m_nameToDispIdMap.emplace( exactName, (DISPID)m_MemberInfos.size())).first;
 
                     if (exactName != name)
                     {
-                        iter = m_nameToDispIdMap.insert(NameToIdMap::value_type(name, (DISPID)m_MemberInfos.size())).first;
+                        iter = m_nameToDispIdMap.emplace( name, (DISPID)m_MemberInfos.size())).first;
                     }
                 }
             }
@@ -1263,12 +1263,12 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHA
         {
             // name has not been bad before( member exists
             typedef NameToIdMap::iterator ITnames;
-            pair< ITnames, bool > pair_id= m_nameToDispIdMap.insert( NameToIdMap::value_type(name, m_currentId++));
+            pair< ITnames, bool > pair_id= m_nameToDispIdMap.emplace( name, m_currentId++));
             // new ID inserted ?
             if( pair_id.second )
             {// yes, now create MemberInfo and ad to IdToMemberInfoMap
                 MemberInfo d(0, name);
-                m_idToMemberInfoMap.insert( IdToMemberInfoMap::value_type( m_currentId - 1, d));
+                m_idToMemberInfoMap.emplace(  m_currentId - 1, d));
             }
 
             *rgdispid = pair_id.first->second;

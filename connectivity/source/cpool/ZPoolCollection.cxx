@@ -305,7 +305,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
         if(xProp.is())
             xProp->addPropertyChangeListener(getEnableNodeName(),this);
         OConnectionPool* pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
-        aFind = m_aPools.insert(OConnectionPools::value_type(_sImplName,pConnectionPool)).first;
+        aFind = m_aPools.emplace(_sImplName,pConnectionPool).first;
         pRet = aFind->second.get();
     }
 

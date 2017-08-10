@@ -238,7 +238,7 @@ namespace connectivity
             OUString sDriverClass(getJavaDriverClass(info));
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
             if ( aFind == m_aJdbcDrivers.end() )
-                aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xContext,sCuttedUrl))).first;
+                aFind = m_aJdbcDrivers.emplace(sDriverClass,lcl_loadDriver(m_xContext,sCuttedUrl)).first;
             xDriver = aFind->second;
         }
 

@@ -216,7 +216,7 @@ void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pNa
         // New keyword.
         list<ScCellKeyword> aList;
         aList.push_back(aKeyItem);
-        maStringNameMap.insert( ScCellKeywordHashMap::value_type(rKey, aList) );
+        maStringNameMap.emplace(rKey, aList);
     }
     else
         itr->second.push_back(aKeyItem);

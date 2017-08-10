@@ -2394,7 +2394,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             if( SUCCEEDED(pType->GetNames( funcDesc->memid, & memberName, 1, &pcNames)))
                             {
                                 OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName)));
-                                m_mapComFunc.insert( TLBFuncIndexMap::value_type( usName, i));
+                                m_mapComFunc.emplace(  usName, i));
                             }
                             else
                             {
@@ -2421,8 +2421,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                                 if (varDesc->varkind == VAR_DISPATCH)
                                 {
                                     OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName)));
-                                    m_mapComFunc.insert(TLBFuncIndexMap::value_type(
-                                                        usName, i));
+                                    m_mapComFunc.emplace(usName, i);
                                 }
                             }
                             else

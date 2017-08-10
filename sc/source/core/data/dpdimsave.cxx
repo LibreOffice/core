@@ -635,7 +635,7 @@ void ScDPDimensionSaveData::ReplaceNumGroupDimension( const ScDPSaveNumGroupDime
 {
     ScDPSaveNumGroupDimMap::iterator aIt = maNumGroupDims.find( rGroupDim.GetDimensionName() );
     if( aIt == maNumGroupDims.end() )
-        maNumGroupDims.insert( ScDPSaveNumGroupDimMap::value_type( rGroupDim.GetDimensionName(), rGroupDim ) );
+        maNumGroupDims.emplace( rGroupDim.GetDimensionName(), rGroupDim );
     else
         aIt->second = rGroupDim;
 }

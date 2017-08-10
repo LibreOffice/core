@@ -126,7 +126,7 @@ void CodeCompleteDataCache::Clear()
 
 void CodeCompleteDataCache::InsertGlobalVar( const OUString& sVarName, const OUString& sVarType )
 {
-    aGlobalVars.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
+    aGlobalVars.emplace( sVarName, sVarType );
 }
 
 void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType )
@@ -135,13 +135,13 @@ void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUS
     if( aIt == aVarScopes.end() ) //new procedure
     {
         CodeCompleteVarTypes aTypes;
-        aTypes.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
-        aVarScopes.insert( CodeCompleteVarScopes::value_type(sProcName, aTypes) );
+        aTypes.emplace( sVarName, sVarType );
+        aVarScopes.emplace( sProcName, aTypes );
     }
     else
     {
         CodeCompleteVarTypes aTypes = aVarScopes[ sProcName ];
-        aTypes.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
+        aTypes.emplace( sVarName, sVarType );
         aVarScopes[ sProcName ] = aTypes;
     }
 }

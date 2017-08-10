@@ -2281,7 +2281,7 @@ uno::Reference< drawing::XShape >
 
             //set name/classified ObjectID (CID)
             if( !aName.isEmpty() )
-                aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::Any( aName ) ) ); //CID OUString
+                aValueMap.emplace( "Name", uno::Any( aName ) ); //CID OUString
         }
 
         //set global title properties

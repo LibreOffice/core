@@ -312,7 +312,7 @@ namespace
             while (pToolBarResToName[nIndex].eId != ToolbarId::None)
             {
                 OUString aResourceURL( OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
-                m_aResIdToResourceURLMap.insert(ToolBarResIdToResourceURLMap::value_type(pToolBarResToName[nIndex].eId, aResourceURL));
+                m_aResIdToResourceURLMap.emplace(pToolBarResToName[nIndex].eId, aResourceURL);
                 ++nIndex;
             }
         }

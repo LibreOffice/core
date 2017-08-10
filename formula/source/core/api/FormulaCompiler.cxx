@@ -372,11 +372,11 @@ void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OU
     // map to different symbols, the first pair wins. Same symbol of course may
     // not map to different AddIns, again the first pair wins and also the
     // AddIn->symbol mapping is not inserted in other cases.
-    bool bOk = maExternalHashMap.insert( ExternalHashMap::value_type( rSymbol, rAddIn)).second;
+    bool bOk = maExternalHashMap.emplace(rSymbol, rAddIn).second;
     SAL_WARN_IF( !bOk, "formula.core", "OpCodeMap::putExternal: symbol not inserted, " << rSymbol << " -> " << rAddIn);
     if (bOk)
     {
-        bOk = maReverseExternalHashMap.insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
+        bOk = maReverseExternalHashMap.emplace(rAddIn, rSymbol).second;
         // Failed insertion of the AddIn is ok for different symbols mapping to
         // the same AddIn. Make this INFO only.
         SAL_INFO_IF( !bOk, "formula.core", "OpCodeMap::putExternal: AddIn not inserted, " << rAddIn << " -> " << rSymbol);
@@ -385,9 +385,9 @@ void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OU
 
 void FormulaCompiler::OpCodeMap::putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn )
 {
-    bool bOk = maReverseExternalHashMap.insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
+    bool bOk = maReverseExternalHashMap.emplace(rAddIn, rSymbol).second;
     if (bOk)
-        maExternalHashMap.insert( ExternalHashMap::value_type( rSymbol, rAddIn));
+        maExternalHashMap.emplace(rSymbol, rAddIn);
 }
 
 uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(
@@ -697,7 +697,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
         if (bPutOp)
             mpTable[eOp] = rStr;
         OUString aUpper( pCharClass ? pCharClass->uppercase( rStr) : rStr.toAsciiUpperCase());
-        maHashMap.insert( OpCodeHashMap::value_type( aUpper, eOp));
+        maHashMap.emplace(aUpper, eOp);
     }
     else
     {
@@ -1076,11 +1076,11 @@ void FormulaCompiler::OpCodeMap::putCopyOpCode( const OUString& rSymbol, OpCode 
             "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << static_cast<sal_uInt16>(eOp)
             << " '" << mpTable[eOp] << "' with empty name!");
     if (!mpTable[eOp].isEmpty() && rSymbol.isEmpty())
-        maHashMap.insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
+        maHashMap.emplace(mpTable[eOp], eOp);
     else
     {
         mpTable[eOp] = rSymbol;
-        maHashMap.insert( OpCodeHashMap::value_type( rSymbol, eOp));
+        maHashMap.emplace(rSymbol, eOp);
     }
 }
 

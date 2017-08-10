@@ -76,7 +76,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
     if( !(aElement >>= aProps ) )
         throw lang::IllegalArgumentException();
 
-    maProperties.insert(  NamedPropertyValues::value_type(aName ,aProps) );
+    maProperties.emplace( aName, aProps );
 }
 
 void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )

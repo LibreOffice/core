@@ -72,7 +72,7 @@ void PropertySetBase::registerProperty( const Property& rProperty,
     const ::rtl::Reference< PropertyAccessorBase >& rAccessor )
 {
     OSL_ENSURE( rAccessor.get(), "PropertySetBase::registerProperty: invalid property accessor, this will crash!" );
-    m_aAccessors.insert( PropertyAccessors::value_type( rProperty.Handle, rAccessor ) );
+    m_aAccessors.emplace( rProperty.Handle, rAccessor );
 
     OSL_ENSURE( rAccessor->isWriteable()
                 == ( ( rProperty.Attributes & css::beans::PropertyAttribute::READONLY ) == 0 ),
@@ -98,7 +98,7 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
             // default construct a value of this type
             Any aEmptyValue( nullptr, aProperty.Type );
             // insert into the cache
-            aPos = m_aCache.insert( PropertyValueCache::value_type( nHandle, aEmptyValue ) ).first;
+            aPos = m_aCache.emplace( nHandle, aEmptyValue ).first;
         }
         catch( const Exception& )
         {
@@ -123,7 +123,7 @@ void PropertySetBase::initializePropertyValueCache( sal_Int32 nHandle )
     getFastPropertyValue( aCurrentValue, nHandle );
 
     ::std::pair< PropertyValueCache::iterator, bool > aInsertResult =
-          m_aCache.insert( PropertyValueCache::value_type( nHandle, aCurrentValue ) );
+          m_aCache.emplace( nHandle, aCurrentValue );
     OSL_ENSURE( aInsertResult.second, "PropertySetBase::initializePropertyValueCache: already cached a value for this property!" );
 }
 

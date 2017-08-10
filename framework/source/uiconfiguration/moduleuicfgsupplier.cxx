@@ -107,7 +107,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
         const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
         const OUString*                pNameSeq   = aNameSeq.getConstArray();
         for ( sal_Int32 n = 0; n < aNameSeq.getLength(); n++ )
-            m_aModuleToModuleUICfgMgrMap.insert( ModuleToModuleCfgMgr::value_type(  pNameSeq[n], Reference< XModuleUIConfigurationManager2 >() ));
+            m_aModuleToModuleUICfgMgrMap.emplace( pNameSeq[n], Reference< XModuleUIConfigurationManager2 >() );
     }
     catch(...)
     {

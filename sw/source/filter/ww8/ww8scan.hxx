@@ -74,8 +74,7 @@ public:
     //see Read_AmbiguousSPRM for the bPatchCJK oddity
     wwSprmSearcher(SprmInfoRow const * rows, std::size_t size, bool bPatchCJK = false) {
         for (std::size_t i = 0; i != size; ++i) {
-            bool ins = map_.insert(Map::value_type(rows[i].nId, rows[i].info))
-                .second;
+            bool ins = map_.emplace(rows[i].nId, rows[i].info).second;
             assert(ins); (void) ins;
         }
         if (bPatchCJK)
