@@ -155,7 +155,7 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
     else
         SelectIndex( nMapIndex );
     aHighHdl.Call(this);
-    // move selected item to top row if not in focusf
+    // move selected item to top row if not in focus
     aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
     Invalidate();
 }
