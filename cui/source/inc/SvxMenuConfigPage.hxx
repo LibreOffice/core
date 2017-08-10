@@ -54,6 +54,8 @@ private:
     DECL_LINK( SelectMenu, ListBox&, void );
     DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
 
+    DECL_LINK( SelectCategory, ListBox&, void );
+
     void            Init() override;
     void            UpdateButtonStates() override;
     short           QueryReset() override;

@@ -114,13 +114,6 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pContentsListBox->set_vexpand(true);
     m_pContentsListBox->Show();
 
-    m_pFunctionsListBox = VclPtr<SvxToolbarEntriesListBox>::Create(m_pFunctions, this);
-    m_pFunctionsListBox->set_grid_left_attach(0);
-    m_pFunctionsListBox->set_grid_top_attach(0);
-    m_pFunctionsListBox->set_hexpand(true);
-    m_pFunctionsListBox->set_vexpand(true);
-    m_pFunctionsListBox->Show();
-
     m_pTopLevelListBox->SetHelpId ( HID_SVX_TOPLEVELLISTBOX );
     m_pContentsListBox->SetHelpId( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
     m_pSaveInListBox->SetHelpId( HID_SVX_SAVE_IN );

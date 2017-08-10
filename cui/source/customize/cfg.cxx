@@ -1131,11 +1131,12 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)
     , m_pContentsListBox(nullptr)
-    , m_pFunctionsListBox(nullptr)
     , m_pSelectorDlg(nullptr)
 {
-    get(m_pTopLevelListBox, "toplevellist");
     get(m_pCommandCategoryListBox, "commandcategorylist");
+    get(m_pFunctions, "functions");
+
+    get(m_pTopLevelListBox, "toplevellist");
     get(m_pContents, "contents");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
@@ -1143,7 +1144,6 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
     get(m_pEntries, "entries");
-    get(m_pFunctions, "functions");
     Size aSize(LogicToPixel(Size(108, 115), MapUnit::MapAppFont));
     m_pEntries->set_height_request(aSize.Height());
     m_pEntries->set_width_request(aSize.Width());
@@ -1173,7 +1173,6 @@ void SvxConfigPage::dispose()
 
     m_pSelectorDlg.disposeAndClear();
     m_pContentsListBox.disposeAndClear();
-    m_pFunctionsListBox.disposeAndClear();
     SfxTabPage::dispose();
 }
 

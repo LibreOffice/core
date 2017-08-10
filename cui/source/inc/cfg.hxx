@@ -382,28 +382,24 @@ private:
 
 protected:
 
-    // the top section of the tab page where top level menus and toolbars
-    //  are displayed in a listbox
-    VclPtr<ListBox>                            m_pTopLevelListBox;
+    // Left side of the dialog where command categories and the available
+    // commands in them are displayed as a searchable list
     VclPtr<CommandCategoryListBox>             m_pCommandCategoryListBox;
+    VclPtr<SfxConfigFunctionListBox>           m_pFunctions;
 
-    // the contents section where the contents of the selected
+    VclPtr<VclMultiLineEdit>                   m_pDescriptionField;
+
+    // Right side of the dialog where the contents of the selected
     // menu or toolbar are displayed
+    VclPtr<ListBox>                            m_pTopLevelListBox;
     VclPtr<VclFrame>                           m_pContents;
     VclPtr<VclContainer>                       m_pEntries;
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
-
-    // the functions section where functions in the
-    // selected category will be displayed
-    VclPtr<VclContainer>                       m_pFunctions;
-    VclPtr<SvTreeListBox>                      m_pFunctionsListBox;
 
     VclPtr<PushButton>                         m_pMoveUpButton;
     VclPtr<PushButton>                         m_pMoveDownButton;
 
     VclPtr<ListBox>                            m_pSaveInListBox;
-
-    VclPtr<VclMultiLineEdit>                   m_pDescriptionField;
 
     VclPtr<SvxScriptSelectorDialog>            m_pSelectorDlg;
 
