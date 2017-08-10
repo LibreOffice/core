@@ -16,6 +16,8 @@ epubgen_patches += libepubgen-validation2.patch.1
 epubgen_patches += libepubgen-validation3.patch.1
 # Backport of <https://sourceforge.net/p/libepubgen/code/ci/49f6461d4751d3b16e32ab8f9c93a3856b33be49/>.
 epubgen_patches += libepubgen-vc.patch.1
+# Backport of <https://sourceforge.net/p/libepubgen/code/ci/2e9e9af9f49a78cca75d3c862c8dd4b5f7cc7eb2/> (and its deps).
+epubgen_patches += libepubgen-epub3.patch.1
 
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
