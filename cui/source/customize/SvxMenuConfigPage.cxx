@@ -113,18 +113,14 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pContentsListBox->set_vexpand(true);
     m_pContentsListBox->Show();
 
-    m_pFunctionsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pFunctions, this);
-    m_pFunctionsListBox->set_grid_left_attach(0);
-    m_pFunctionsListBox->set_grid_top_attach(0);
-    m_pFunctionsListBox->set_hexpand(true);
-    m_pFunctionsListBox->set_vexpand(true);
-    m_pFunctionsListBox->Show();
-
     m_pTopLevelListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectMenu ) );
 
     m_pContentsListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
+
+    m_pCommandCategoryListBox->SetSelectHdl(
+        LINK( this, SvxMenuConfigPage, SelectCategory ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
@@ -147,11 +143,11 @@ void SvxMenuConfigPage::Init()
     m_pTopLevelListBox->SelectEntryPos(0);
     m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
 
-    m_pCommandCategoryListBox->Clear();
     m_pCommandCategoryListBox->Init(
         comphelper::getProcessComponentContext(),
         m_xFrame,
         vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
+    m_pCommandCategoryListBox->categorySelected();
 }
 
 void SvxMenuConfigPage::dispose()
@@ -286,6 +282,11 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     }
 
     UpdateButtonStates();
+}
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )
+{
+    m_pCommandCategoryListBox->categorySelected();
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
