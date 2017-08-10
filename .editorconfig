@@ -23,3 +23,7 @@ trim_trailing_whitespace = false
 # Patch files
 [*.patch.*]
 trim_trailing_whitespace = false
+
+# XSL files
+[*.xsl]
+indent_style = tab
