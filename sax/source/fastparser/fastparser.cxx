@@ -238,13 +238,6 @@ public:
     void callbackEndElement();
     void callbackCharacters( const xmlChar* s, int nLen );
     void callbackProcessingInstruction( const xmlChar *target, const xmlChar *data );
-#if 0
-    bool callbackExternalEntityRef( XML_Parser parser, const xmlChar *openEntityNames, const xmlChar *base, const xmlChar *systemId, const xmlChar *publicId);
-    void callbackEntityDecl(const xmlChar *entityName, int is_parameter_entity,
-            const xmlChar *value, int value_length, const xmlChar *base,
-            const xmlChar *systemId, const xmlChar *publicId,
-            const xmlChar *notationName);
-#endif
 
     void pushEntity( const Entity& rEntity );
     void popEntity();
@@ -268,9 +261,6 @@ private:
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
 
 private:
-#if 0
-    FastSaxParser* mpFront;
-#endif
     osl::Mutex maMutex; ///< Protecting whole parseStream() execution
     ::rtl::Reference< FastLocatorImpl >     mxDocumentLocator;
     NamespaceMap                            maNamespaceMap;
@@ -334,24 +324,6 @@ static void call_callbackProcessingInstruction( void *userData, const xmlChar *t
     pFastParser->callbackProcessingInstruction( target, data );
 }
 
-#if 0
-static void call_callbackEntityDecl(void *userData, const xmlChar *entityName,
-        int is_parameter_entity, const xmlChar *value, int value_length,
-        const xmlChar *base, const xmlChar *systemId,
-        const xmlChar *publicId, const xmlChar *notationName)
-{
-    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>(userData);
-    pFastParser->callbackEntityDecl(entityName, is_parameter_entity, value,
-            value_length, base, systemId, publicId, notationName);
-}
-
-static int call_callbackExternalEntityRef( XML_Parser parser,
-        const xmlChar *openEntityNames, const xmlChar *base, const xmlChar *systemId, const xmlChar *publicId )
-{
-    FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( XML_GetUserData( parser ) );
-    return pFastParser->callbackExternalEntityRef( parser, openEntityNames, base, systemId, publicId );
-}
-#endif
 }
 
 class FastLocatorImpl : public WeakImplHelper< XLocator >
@@ -651,9 +623,6 @@ void Entity::saveException( const Any & e )
 namespace sax_fastparser {
 
 FastSaxParserImpl::FastSaxParserImpl() :
-#if 0
-    mpFront(pFront),
-#endif
     m_bIgnoreMissingNSDecl(false),
     mpTop(nullptr)
 {
@@ -1040,10 +1009,6 @@ void FastSaxParserImpl::parse()
     callbacks.characters = call_callbackCharacters;
     callbacks.processingInstruction = call_callbackProcessingInstruction;
     callbacks.initialized = XML_SAX2_MAGIC;
-#if 0
-    XML_SetEntityDeclHandler(entity.mpParser, call_callbackEntityDecl);
-    XML_SetExternalEntityRefHandler( entity.mpParser, call_callbackExternalEntityRef );
-#endif
     int nRead = 0;
     do
     {
@@ -1304,106 +1269,6 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
     else
         rEntity.processingInstruction( rEvent.msNamespace, rEvent.msElementName );
 }
-
-#if 0
-void FastSaxParserImpl::callbackEntityDecl(
-    SAL_UNUSED_PARAMETER const xmlChar * /*entityName*/,
-    SAL_UNUSED_PARAMETER int /*is_parameter_entity*/,
-    const xmlChar *value, SAL_UNUSED_PARAMETER int /*value_length*/,
-    SAL_UNUSED_PARAMETER const xmlChar * /*base*/,
-    SAL_UNUSED_PARAMETER const xmlChar * /*systemId*/,
-    SAL_UNUSED_PARAMETER const xmlChar * /*publicId*/,
-    SAL_UNUSED_PARAMETER const xmlChar * /*notationName*/)
-{
-    if (value) { // value != 0 means internal entity
-        SAL_INFO("sax", "FastSaxParser: internal entity declaration, stopping");
-        XML_StopParser(getEntity().mpParser, XML_FALSE);
-        getEntity().saveException( SAXParseException(
-            "FastSaxParser: internal entity declaration, stopping",
-            static_cast<OWeakObject*>(mpFront), Any(),
-            mxDocumentLocator->getPublicId(),
-            mxDocumentLocator->getSystemId(),
-            mxDocumentLocator->getLineNumber(),
-            mxDocumentLocator->getColumnNumber() ) );
-    } else {
-        SAL_INFO("sax", "FastSaxParser: ignoring external entity declaration");
-    }
-}
-
-bool FastSaxParserImpl::callbackExternalEntityRef(
-    XML_Parser parser, const xmlChar *context,
-    SAL_UNUSED_PARAMETER const xmlChar * /*base*/, const xmlChar *systemId,
-    const xmlChar *publicId )
-{
-    bool bOK = true;
-    InputSource source;
-
-    Entity& rCurrEntity = getEntity();
-    Entity aNewEntity( rCurrEntity );
-
-    if( rCurrEntity.mxEntityResolver.is() ) try
-    {
-        aNewEntity.maStructSource = rCurrEntity.mxEntityResolver->resolveEntity(
-            OUString( publicId, strlen( publicId ), RTL_TEXTENCODING_UTF8 ) ,
-            OUString( systemId, strlen( systemId ), RTL_TEXTENCODING_UTF8 ) );
-    }
-    catch (const SAXParseException & e)
-    {
-        rCurrEntity.saveException( e );
-        bOK = false;
-    }
-    catch (const SAXException& e)
-    {
-        rCurrEntity.saveException( SAXParseException(
-            e.Message, e.Context, e.WrappedException,
-            mxDocumentLocator->getPublicId(),
-            mxDocumentLocator->getSystemId(),
-            mxDocumentLocator->getLineNumber(),
-            mxDocumentLocator->getColumnNumber() ) );
-        bOK = false;
-    }
-
-    if( aNewEntity.maStructSource.aInputStream.is() )
-    {
-        aNewEntity.mpParser = XML_ExternalEntityParserCreate( parser, context, 0 );
-        if( !aNewEntity.mpParser )
-        {
-            return false;
-        }
-
-        aNewEntity.maConverter.setInputStream( aNewEntity.maStructSource.aInputStream );
-        pushEntity( aNewEntity );
-        try
-        {
-            parse();
-        }
-        catch (const SAXParseException& e)
-        {
-            rCurrEntity.saveException( e );
-            bOK = false;
-        }
-        catch (const IOException& e)
-        {
-            SAXException aEx;
-            aEx.WrappedException <<= e;
-            rCurrEntity.saveException( aEx );
-            bOK = false;
-        }
-        catch (const RuntimeException& e)
-        {
-            SAXException aEx;
-            aEx.WrappedException <<= e;
-            rCurrEntity.saveException( aEx );
-            bOK = false;
-        }
-
-        popEntity();
-        XML_ParserFree( aNewEntity.mpParser );
-    }
-
-    return bOK;
-}
-#endif
 
 FastSaxParser::FastSaxParser() : mpImpl(new FastSaxParserImpl) {}
 
