@@ -962,7 +962,7 @@ void Dialog::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
 {
     if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
     {
-        mpDialogRenderable->notifyDialogInvalidation(maID);
+        mpDialogRenderable->notifyDialog(maID, "invalidate");
     }
 }
 
