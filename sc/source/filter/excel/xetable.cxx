@@ -2413,7 +2413,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
                     mnHighestOutlineLevel = maOutlineBfr.GetLevel();
                 }
                 RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight));
-                maRowMap.insert(RowMap::value_type(nFrom, p));
+                maRowMap.emplace(nFrom, p);
                 pPrevEntry = p;
             }
             ++nFrom;

@@ -92,12 +92,12 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 {
     sal_uLong nNd = rBkmk.GetMarkPos().nNode.GetIndex();
 
-    aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ) );
+    aBkmkNodePos.emplace( nNd, &rBkmk );
 
     if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().nNode != nNd)
     {
         nNd = rBkmk.GetOtherMarkPos().nNode.GetIndex();
-        aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ));
+        aBkmkNodePos.emplace( nNd, &rBkmk );
     }
 }
 

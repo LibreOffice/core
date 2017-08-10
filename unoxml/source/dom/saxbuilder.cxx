@@ -210,16 +210,16 @@ namespace DOM
             if (attr_qname.startsWith("xmlns:"))
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
-                aNSMap.insert(NSMap::value_type(newprefix, attr_value));
+                aNSMap.emplace(newprefix, attr_value);
             }
             else if ( attr_qname == "xmlns" )
             {
                 // new default prefix
-                aNSMap.insert(NSMap::value_type(OUString(), attr_value));
+                aNSMap.emplace(OUString(), attr_value);
             }
             else
             {
-                aAttrMap.insert(AttrMap::value_type(attr_qname, attr_value));
+                aAttrMap.emplace(attr_qname, attr_value);
             }
         }
 

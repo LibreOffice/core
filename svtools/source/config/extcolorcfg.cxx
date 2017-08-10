@@ -242,7 +242,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
         if ( aComponentDisplayNamesValue.getLength() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
         {
             sal_Int32 nIndex = 0;
-            m_aComponentDisplayNames.insert(TDisplayNames::value_type(componentName.getToken(1,'/',nIndex),sComponentDisplayName));
+            m_aComponentDisplayNames.emplace(componentName.getToken(1,'/',nIndex),sComponentDisplayName);
         }
 
         componentName += "/Entries";
@@ -261,7 +261,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
             sName = sName.copy(0,sName.lastIndexOf(sDisplayName));
             OUString sCurrentDisplayName;
             aDisplayNamesValue[j] >>= sCurrentDisplayName;
-            aDisplayNameMap.insert(TDisplayNames::value_type(sName,sCurrentDisplayName));
+            aDisplayNameMap.emplace(sName,sCurrentDisplayName);
         }
     }
 
@@ -332,7 +332,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _
             OUString* pColorIter = aColorNames.getArray();
             OUString* pColorEnd  = pColorIter + aColorNames.getLength();
 
-            m_aConfigValuesPos.push_back(m_aConfigValues.insert(TComponents::value_type(sComponentName,TComponentMapping(TConfigValues(),TMapPos()))).first);
+            m_aConfigValuesPos.push_back(m_aConfigValues.emplace(sComponentName,TComponentMapping(TConfigValues(),TMapPos())).first);
             TConfigValues& aConfigValues = (*m_aConfigValuesPos.rbegin())->second.first;
             TMapPos& aConfigValuesPos = (*m_aConfigValuesPos.rbegin())->second.second;
             for(int i = 0; pColorIter != pColorEnd; ++pColorIter ,++i)
@@ -360,7 +360,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _
                     else
                         nDefaultColor = nColor;
                     ExtendedColorConfigValue aValue(sName,sDisplayName,nColor,nDefaultColor);
-                    aConfigValuesPos.push_back(aConfigValues.insert(TConfigValues::value_type(sName,aValue)).first);
+                    aConfigValuesPos.push_back(aConfigValues.emplace(sName,aValue).first);
                 }
             } // for(int i = 0; pColorIter != pColorEnd; ++pColorIter ,++i)
         }

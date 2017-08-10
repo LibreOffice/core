@@ -294,9 +294,9 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
         Load();
 
     DBG_ASSERT(!HasEntry( rLeftText, rRightText), "entry already exists" );
-    aFromLeft .insert( ConvMap::value_type( rLeftText, rRightText ) );
+    aFromLeft .emplace( rLeftText, rRightText );
     if (pFromRight.get())
-        pFromRight->insert( ConvMap::value_type( rRightText, rLeftText ) );
+        pFromRight->emplace( rRightText, rLeftText );
 
     if (bMaxCharCountIsValid)
     {
@@ -553,7 +553,7 @@ void SAL_CALL ConvDic::setPropertyType(
     // currently we assume that entries with the same left text have the
     // same PropertyType even if the right text is different...
     if (pConvPropType.get())
-        pConvPropType->insert( PropTypeMap::value_type( rLeftText, nPropertyType ) );
+        pConvPropType->emplace( rLeftText, nPropertyType );
     bIsModified = true;
 }
 

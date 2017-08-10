@@ -302,14 +302,14 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                 }
 
                 UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
-                aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pUserIter->second.aResourceURL, aInfo ));
+                aUIElementInfoCollection.emplace( pUserIter->second.aResourceURL, aInfo );
             }
         }
         else
         {
             // The user interface name for standard user interface elements is stored in the WindowState.xcu file
             UIElementInfo aInfo( pUserIter->second.aResourceURL, OUString() );
-            aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pUserIter->second.aResourceURL, aInfo ));
+            aUIElementInfoCollection.emplace( pUserIter->second.aResourceURL, aInfo );
         }
         ++pUserIter;
     }
@@ -340,14 +340,14 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                     }
 
                     UIElementInfo aInfo( pDefIter->second.aResourceURL, aUIName );
-                    aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pDefIter->second.aResourceURL, aInfo ));
+                    aUIElementInfoCollection.emplace( pDefIter->second.aResourceURL, aInfo );
                 }
             }
             else
             {
                 // The user interface name for standard user interface elements is stored in the WindowState.xcu file
                 UIElementInfo aInfo( pDefIter->second.aResourceURL, OUString() );
-                aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pDefIter->second.aResourceURL, aInfo ));
+                aUIElementInfoCollection.emplace( pDefIter->second.aResourceURL, aInfo );
             }
         }
 
@@ -398,7 +398,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
 
                         // Create std::unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
-                        rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
+                        rHashMap.emplace( aUIElementData.aResourceURL, aUIElementData );
                     }
                 }
                 rElementTypeData.bLoaded = true;
@@ -1265,7 +1265,7 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
                 if ( pIter != rElements.end() )
                     pIter->second = aUIElementData;
                 else
-                    rElements.insert( UIElementDataHashMap::value_type( ResourceURL, aUIElementData ));
+                    rElements.emplace( ResourceURL, aUIElementData );
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 Reference< XInterface > xIfac( xThis, UNO_QUERY );
@@ -1406,7 +1406,7 @@ void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewR
             rElementType.bModified = true;
 
             UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
-            rElements.insert( UIElementDataHashMap::value_type( NewResourceURL, aUIElementData ));
+            rElements.emplace( NewResourceURL, aUIElementData );
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );

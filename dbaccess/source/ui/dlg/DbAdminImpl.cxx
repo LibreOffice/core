@@ -144,59 +144,59 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
 {
     /// initialize the property translation map
     // direct properties of a data source
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_CONNECTURL, PROPERTY_URL));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_NAME, PROPERTY_NAME));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_USER, PROPERTY_USER));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_PASSWORD, PROPERTY_PASSWORD));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_PASSWORDREQUIRED, PROPERTY_ISPASSWORDREQUIRED));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_TABLEFILTER, PROPERTY_TABLEFILTER));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_READONLY, PROPERTY_ISREADONLY));
-    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_SUPPRESSVERSIONCL, PROPERTY_SUPPRESSVERSIONCL));
+    m_aDirectPropTranslator.emplace( DSID_CONNECTURL, PROPERTY_URL );
+    m_aDirectPropTranslator.emplace( DSID_NAME, PROPERTY_NAME );
+    m_aDirectPropTranslator.emplace( DSID_USER, PROPERTY_USER );
+    m_aDirectPropTranslator.emplace( DSID_PASSWORD, PROPERTY_PASSWORD );
+    m_aDirectPropTranslator.emplace( DSID_PASSWORDREQUIRED, PROPERTY_ISPASSWORDREQUIRED );
+    m_aDirectPropTranslator.emplace( DSID_TABLEFILTER, PROPERTY_TABLEFILTER );
+    m_aDirectPropTranslator.emplace( DSID_READONLY, PROPERTY_ISREADONLY );
+    m_aDirectPropTranslator.emplace( DSID_SUPPRESSVERSIONCL, PROPERTY_SUPPRESSVERSIONCL );
 
     // implicit properties, to be found in the direct property "Info"
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_JDBCDRIVERCLASS, INFO_JDBCDRIVERCLASS));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTFILEEXTENSION, INFO_TEXTFILEEXTENSION));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHARSET, INFO_CHARSET));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTFILEHEADER, INFO_TEXTFILEHEADER));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_FIELDDELIMITER, INFO_FIELDDELIMITER));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTDELIMITER, INFO_TEXTDELIMITER));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DECIMALDELIMITER, INFO_DECIMALDELIMITER));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_THOUSANDSDELIMITER, INFO_THOUSANDSDELIMITER));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SHOWDELETEDROWS, INFO_SHOWDELETEDROWS));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, INFO_ALLOWLONGTABLENAMES));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ADDITIONALOPTIONS, INFO_ADDITIONALOPTIONS));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SQL92CHECK, PROPERTY_ENABLESQL92CHECK));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTOINCREMENTVALUE, PROPERTY_AUTOINCREMENTCREATION));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEVALUE, INFO_AUTORETRIEVEVALUE));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEENABLED, INFO_AUTORETRIEVEENABLED));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_APPEND_TABLE_ALIAS, INFO_APPEND_TABLE_ALIAS));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ESCAPE_DATETIME, INFO_ESCAPE_DATETIME ) );
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PRIMARY_KEY_SUPPORT, OUString("PrimaryKeySupport")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ENABLEOUTERJOIN, PROPERTY_ENABLEOUTERJOIN));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CATALOG, PROPERTY_USECATALOGINSELECT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SCHEMA, PROPERTY_USESCHEMAINSELECT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_INDEXAPPENDIX, OUString("AddIndexAppendix")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOSLINEENDS, OUString("PreferDosLikeLineEnds")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SOCKET, OUString("LocalSocket")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, OUString("NamedPipe")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_RESPECTRESULTSETTYPE, OUString("RespectDriverResultSetType")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_MAX_ROW_SCAN, OUString("MaxRowScan")));
+    m_aIndirectPropTranslator.emplace( DSID_JDBCDRIVERCLASS, INFO_JDBCDRIVERCLASS );
+    m_aIndirectPropTranslator.emplace( DSID_TEXTFILEEXTENSION, INFO_TEXTFILEEXTENSION );
+    m_aIndirectPropTranslator.emplace( DSID_CHARSET, INFO_CHARSET );
+    m_aIndirectPropTranslator.emplace( DSID_TEXTFILEHEADER, INFO_TEXTFILEHEADER );
+    m_aIndirectPropTranslator.emplace( DSID_FIELDDELIMITER, INFO_FIELDDELIMITER );
+    m_aIndirectPropTranslator.emplace( DSID_TEXTDELIMITER, INFO_TEXTDELIMITER );
+    m_aIndirectPropTranslator.emplace( DSID_DECIMALDELIMITER, INFO_DECIMALDELIMITER );
+    m_aIndirectPropTranslator.emplace( DSID_THOUSANDSDELIMITER, INFO_THOUSANDSDELIMITER );
+    m_aIndirectPropTranslator.emplace( DSID_SHOWDELETEDROWS, INFO_SHOWDELETEDROWS );
+    m_aIndirectPropTranslator.emplace( DSID_ALLOWLONGTABLENAMES, INFO_ALLOWLONGTABLENAMES );
+    m_aIndirectPropTranslator.emplace( DSID_ADDITIONALOPTIONS, INFO_ADDITIONALOPTIONS );
+    m_aIndirectPropTranslator.emplace( DSID_SQL92CHECK, PROPERTY_ENABLESQL92CHECK );
+    m_aIndirectPropTranslator.emplace( DSID_AUTOINCREMENTVALUE, PROPERTY_AUTOINCREMENTCREATION );
+    m_aIndirectPropTranslator.emplace( DSID_AUTORETRIEVEVALUE, INFO_AUTORETRIEVEVALUE );
+    m_aIndirectPropTranslator.emplace( DSID_AUTORETRIEVEENABLED, INFO_AUTORETRIEVEENABLED );
+    m_aIndirectPropTranslator.emplace( DSID_APPEND_TABLE_ALIAS, INFO_APPEND_TABLE_ALIAS );
+    m_aIndirectPropTranslator.emplace( DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME );
+    m_aIndirectPropTranslator.emplace( DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS );
+    m_aIndirectPropTranslator.emplace( DSID_ESCAPE_DATETIME, INFO_ESCAPE_DATETIME );
+    m_aIndirectPropTranslator.emplace( DSID_PRIMARY_KEY_SUPPORT, OUString("PrimaryKeySupport") );
+    m_aIndirectPropTranslator.emplace( DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST );
+    m_aIndirectPropTranslator.emplace( DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV );
+    m_aIndirectPropTranslator.emplace( DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE );
+    m_aIndirectPropTranslator.emplace( DSID_ENABLEOUTERJOIN, PROPERTY_ENABLEOUTERJOIN );
+    m_aIndirectPropTranslator.emplace( DSID_CATALOG, PROPERTY_USECATALOGINSELECT );
+    m_aIndirectPropTranslator.emplace( DSID_SCHEMA, PROPERTY_USESCHEMAINSELECT );
+    m_aIndirectPropTranslator.emplace( DSID_INDEXAPPENDIX, OUString("AddIndexAppendix") );
+    m_aIndirectPropTranslator.emplace( DSID_DOSLINEENDS, OUString("PreferDosLikeLineEnds") );
+    m_aIndirectPropTranslator.emplace( DSID_CONN_SOCKET, OUString("LocalSocket") );
+    m_aIndirectPropTranslator.emplace( DSID_NAMED_PIPE, OUString("NamedPipe") );
+    m_aIndirectPropTranslator.emplace( DSID_RESPECTRESULTSETTYPE, OUString("RespectDriverResultSetType") );
+    m_aIndirectPropTranslator.emplace( DSID_MAX_ROW_SCAN, OUString("MaxRowScan") );
 
     // extra settings for odbc
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, INFO_USECATALOG));
+    m_aIndirectPropTranslator.emplace( DSID_USECATALOG, INFO_USECATALOG );
     // extra settings for a ldap address book
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, OUString("UseSSL")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOCUMENT_URL, PROPERTY_URL));
+    m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN );
+    m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT );
+    m_aIndirectPropTranslator.emplace( DSID_CONN_LDAP_USESSL, OUString("UseSSL") );
+    m_aIndirectPropTranslator.emplace( DSID_DOCUMENT_URL, PROPERTY_URL );
 
     // oracle
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNORECURRENCY, OUString("IgnoreCurrency")));
+    m_aIndirectPropTranslator.emplace( DSID_IGNORECURRENCY, OUString("IgnoreCurrency") );
 
     try
     {

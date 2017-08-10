@@ -148,8 +148,8 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
         {
             std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
             TPropertyNamePair aPropertyMediation;
-            aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_MASTERFIELDS, TPropertyConverter(PROPERTY_MASTERFIELDS,aNoConverter) ) );
-            aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_DETAILFIELDS, TPropertyConverter(PROPERTY_DETAILFIELDS,aNoConverter) ) );
+            aPropertyMediation.emplace( PROPERTY_MASTERFIELDS, TPropertyConverter(PROPERTY_MASTERFIELDS,aNoConverter) );
+            aPropertyMediation.emplace( PROPERTY_DETAILFIELDS, TPropertyConverter(PROPERTY_DETAILFIELDS,aNoConverter) );
 
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,true );
         }

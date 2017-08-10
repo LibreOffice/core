@@ -508,7 +508,7 @@ namespace pcr
                         continue;
                     }
 
-                    m_aProperties.insert( PropertyMap::value_type( property.Name, property ) );
+                    m_aProperties.emplace( property.Name, property );
                 }
             }
             catch( const Exception& )

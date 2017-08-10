@@ -143,7 +143,7 @@ namespace xmloff { namespace metadata
                 while ( !desc->propertyName.isEmpty() )
                 {
                     if ( desc->propertyGroup != NO_GROUP )
-                        s_attributeGroups.insert( AttributeGroups::value_type( desc->attribute, desc->propertyGroup ) );
+                        s_attributeGroups.emplace( desc->attribute, desc->propertyGroup );
                     ++desc;
                 }
             }

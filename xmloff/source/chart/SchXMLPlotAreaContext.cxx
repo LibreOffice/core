@@ -901,8 +901,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
         Reference< chart2::data::XLabeledDataSequence > xLabelSeq( chart2::data::LabeledDataSequence::create(xContext),
             uno::UNO_QUERY_THROW );
 
-        rSequences.insert( tSchXMLLSequencesPerIndex::value_type(
-                    tSchXMLIndexWithPart( -2, SCH_XML_PART_ERROR_BARS ), xLabelSeq ) );
+        rSequences.emplace( tSchXMLIndexWithPart( -2, SCH_XML_PART_ERROR_BARS ), xLabelSeq );
 
         xLabelSeq->setValues( xNewSequence );
 

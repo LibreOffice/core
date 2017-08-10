@@ -71,7 +71,7 @@ public:
 
     void insert( const OUString& _rName, TContentPtr _pDefinition )
     {
-        m_aDefinitions.insert( NamedDefinitions::value_type( _rName, _pDefinition ) );
+        m_aDefinitions.emplace(  _rName, _pDefinition );
     }
 
 private:

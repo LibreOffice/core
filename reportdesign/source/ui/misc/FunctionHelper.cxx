@@ -64,7 +64,7 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     {
         uno::Reference< report::meta::XFunctionCategory> xCategory = m_xMgr->getCategory(_nPos);
         std::shared_ptr< FunctionCategory > pCategory(new FunctionCategory(this,_nPos + 1,xCategory));
-        m_aCategoryIndex.push_back( m_aCategories.insert(TCategoriesMap::value_type(xCategory->getName(),pCategory)).first );
+        m_aCategoryIndex.push_back( m_aCategories.emplace(xCategory->getName(),pCategory).first );
     }
     return m_aCategoryIndex[_nPos]->second.get();
 }
@@ -87,10 +87,10 @@ std::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference
             TCategoriesMap::iterator aCategoryFind = m_aCategories.find(sCategoryName);
             if ( aCategoryFind == m_aCategories.end() )
             {
-                aCategoryFind = m_aCategories.insert(TCategoriesMap::value_type(sCategoryName,std::make_shared< FunctionCategory > (this,xCategory->getNumber() + 1,xCategory))).first;
+                aCategoryFind = m_aCategories.emplace(sCategoryName,std::make_shared< FunctionCategory > (this,xCategory->getNumber() + 1,xCategory)).first;
                 m_aCategoryIndex.push_back( aCategoryFind );
             }
-            aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,std::make_shared<FunctionDescription>(aCategoryFind->second.get(),_xFunctionDescription))).first;
+            aFunctionFind = m_aFunctions.emplace(sFunctionName,std::make_shared<FunctionDescription>(aCategoryFind->second.get(),_xFunctionDescription)).first;
         }
         pDesc = aFunctionFind->second;
     }

@@ -605,7 +605,7 @@ namespace xmloff
                     OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
                         "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: already have a style for this column!" );
 
-                    m_aGridColumnStyles.insert( MapPropertySet2String::value_type( xColumnProperties, sColumnStyleName ) );
+                    m_aGridColumnStyles.emplace( xColumnProperties, sColumnStyleName );
                 }
             }
         }

@@ -129,7 +129,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     xRet.set( PackageManagerImpl::create( m_xComponentContext, context ) );
     guard.reset();
     std::pair< t_string2weakref::iterator, bool > insertion(
-        m_managers.insert( t_string2weakref::value_type( context, xRet ) ) );
+        m_managers.emplace( context, xRet ) );
     if (insertion.second)
     {
         OSL_ASSERT( insertion.first->second.get() == xRet );

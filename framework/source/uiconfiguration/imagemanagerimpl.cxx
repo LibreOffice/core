@@ -670,12 +670,12 @@ Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType 
         const std::vector< OUString >& rGlobalImageNameVector = rGlobalImageList->getImageCommandNames();
         const sal_uInt32 nGlobalCount = rGlobalImageNameVector.size();
         for ( i = 0; i < nGlobalCount; i++ )
-            aImageCmdNameMap.insert( ImageNameMap::value_type( rGlobalImageNameVector[i], true ));
+            aImageCmdNameMap.emplace( rGlobalImageNameVector[i], true );
 
         const std::vector< OUString >& rModuleImageNameVector = implts_getDefaultImageList()->getImageCommandNames();
         const sal_uInt32 nModuleCount = rModuleImageNameVector.size();
         for ( i = 0; i < nModuleCount; i++ )
-            aImageCmdNameMap.insert( ImageNameMap::value_type( rModuleImageNameVector[i], true ));
+            aImageCmdNameMap.emplace( rModuleImageNameVector[i], true );
     }
 
     ImageList* pImageList = implts_getUserImageList(nIndex);
@@ -683,7 +683,7 @@ Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType 
     pImageList->GetImageNames( rUserImageNames );
     const sal_uInt32 nUserCount = rUserImageNames.size();
     for ( i = 0; i < nUserCount; i++ )
-        aImageCmdNameMap.insert( ImageNameMap::value_type( rUserImageNames[i], true ));
+        aImageCmdNameMap.emplace( rUserImageNames[i], true );
 
     return comphelper::mapKeysToSequence( aImageCmdNameMap );
 }
@@ -986,7 +986,7 @@ void ImageManagerImpl::reload()
                 sal_uInt32 j( 0 );
                 const sal_uInt32 nOldCount = aOldUserCmdImageVector.size();
                 for ( j = 0; j < nOldCount; j++ )
-                    aOldUserCmdImageSet.insert( CommandMap::value_type( aOldUserCmdImageVector[j], false ));
+                    aOldUserCmdImageSet.emplace( aOldUserCmdImageVector[j], false );
 
                 // Attention: This can make the old image list pointer invalid!
                 implts_loadUserImages( i, m_xUserImageStorage, m_xUserBitmapsStorage );

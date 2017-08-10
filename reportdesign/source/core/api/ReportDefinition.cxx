@@ -2364,7 +2364,7 @@ void SAL_CALL OStylesHelper::insertByName( const OUString& aName, const uno::Any
     if ( !aElement.isExtractableTo(m_aType) )
         throw lang::IllegalArgumentException();
 
-    m_aElementsPos.push_back(m_aElements.insert(TStyleElements::value_type(aName,aElement)).first);
+    m_aElementsPos.push_back(m_aElements.emplace(aName,aElement).first);
 }
 
 void SAL_CALL OStylesHelper::removeByName( const OUString& aName )

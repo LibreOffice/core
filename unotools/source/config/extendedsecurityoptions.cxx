@@ -211,7 +211,7 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
             // Don't use value if sequence has not the correct length
             if ( aValues[0] >>= aValue )
                 // Add extension into secure extensions hash map
-                aHashMap.insert( ExtensionHashMap::value_type( aValue.toAsciiLowerCase(), 1 ) );
+                aHashMap.emplace( aValue.toAsciiLowerCase(), 1 );
             else
             {
                 SAL_WARN( "unotools.config", "SvtExtendedSecurityOptions_Impl::FillExtensionHashMap(): not string value?" );

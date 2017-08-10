@@ -196,8 +196,7 @@ void PackageRegistryImpl::insertBackend(
         const OUString mediaType( normalizeMediaType(
                                       xPackageType->getMediaType() ) );
         std::pair<t_string2registry::iterator, bool> a_insertion(
-            m_mediaType2backend.insert( t_string2registry::value_type(
-                                            mediaType, xBackend ) ) );
+            m_mediaType2backend.emplace( mediaType, xBackend ) );
         if (a_insertion.second)
         {
             // add parameterless media-type, too:

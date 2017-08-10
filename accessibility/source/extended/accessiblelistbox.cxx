@@ -147,7 +147,7 @@ namespace accessibility
                             {
                                 AccessibleListBoxEntry *pEntNew = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
                                 m_xFocusedChild = pEntNew;
-                                m_mapEntry.insert(MAP_ENTRY::value_type(pEntry,pEntNew));
+                                m_mapEntry.emplace(pEntry,pEntNew);
                             }
 
                             aNewValue <<= m_xFocusedChild;
@@ -232,7 +232,7 @@ namespace accessibility
             else
             {
                 pAccCurOptionEntry =new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
-                std::pair<MAP_ENTRY::iterator, bool> pairMi =  m_mapEntry.insert(MAP_ENTRY::value_type(pAccCurOptionEntry->GetSvLBoxEntry(),pAccCurOptionEntry));
+                std::pair<MAP_ENTRY::iterator, bool> pairMi = m_mapEntry.emplace(pAccCurOptionEntry->GetSvLBoxEntry(), pAccCurOptionEntry);
                 mi = pairMi.first;
             }
 

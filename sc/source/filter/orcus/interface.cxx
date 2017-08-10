@@ -187,7 +187,7 @@ size_t ScOrcusFactory::appendString(const OUString& rStr)
 {
     size_t nPos = maStrings.size();
     maStrings.push_back(rStr);
-    maStringHash.insert(StringHashType::value_type(rStr, nPos));
+    maStringHash.emplace(rStr, nPos);
 
     return nPos;
 }
