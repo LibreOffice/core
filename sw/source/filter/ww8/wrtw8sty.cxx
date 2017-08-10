@@ -1001,7 +1001,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
             pFormat = pSectNd->GetSection().GetFormat();
     }
 
-    // Hole evtl. Pagedesc des 1. Nodes
+    // Try to get page descriptor of the first node
     if ( pSet &&
          SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
          static_cast<const SwFormatPageDesc*>(pI)->GetPageDesc() )
@@ -1901,7 +1901,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
     {
         // there is no Header/Footer, but a CR is still necessary
         OSL_ENSURE( pSttIdx, "Header/Footer text is not really present" );
-        AttrOutput().EmptyParagraph(); // CR ans Ende ( sonst mault WW )
+        AttrOutput().EmptyParagraph();
     }
 }
 

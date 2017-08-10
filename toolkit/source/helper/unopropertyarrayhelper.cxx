@@ -66,7 +66,7 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropNa
 
 css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties()
 {
-    // Sortiert nach Namen...
+    // Sort by names ...
 
     std::map<sal_Int32, sal_uInt16> aSortedPropsIds;
     for( std::set<sal_Int32>::const_iterator it =  maIDs.begin(); it != maIDs.end(); ++it)
@@ -76,13 +76,13 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
-            // Einzelproperties...
+            // single properties ...
             for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
                 aSortedPropsIds[ 1+GetPropertyOrderNr( i ) ]  = i;
         }
     }
 
-    sal_uInt32 nProps = aSortedPropsIds.size();   // koennen jetzt mehr sein
+    sal_uInt32 nProps = aSortedPropsIds.size();   // could be more now
     css::uno::Sequence< css::beans::Property> aProps( nProps );
     css::beans::Property* pProps = aProps.getArray();
 
