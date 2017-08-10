@@ -160,10 +160,11 @@ std::vector<ScQueryEntry*> ScQueryParamBase::FindAllEntriesByField(SCCOLROW nFie
     return aEntries;
 }
 
-void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
+bool ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
 {
     EntriesType::iterator itr = std::find_if(
         m_Entries.begin(), m_Entries.end(), FindByField(nField));
+    bool bRet = false;
 
     if (itr != m_Entries.end())
     {
@@ -172,7 +173,15 @@ void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
             // Make sure that we have at least MAXQUERY number of entries at
             // all times.
             m_Entries.push_back(o3tl::make_unique<ScQueryEntry>());
+        bRet = true;
     }
+
+    return bRet;
+}
+
+void ScQueryParamBase::RemoveAllEntriesByField(SCCOLROW nField)
+{
+    while( RemoveEntryByField( nField ) ) {}
 }
 
 void ScQueryParamBase::Resize(size_t nNew)
