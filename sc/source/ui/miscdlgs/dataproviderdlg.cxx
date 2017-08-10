@@ -29,7 +29,10 @@ DataProviderDlg::DataProviderDlg(ScDocShell *pDocShell, vcl::Window* pParent)
     get(m_pCBData, "combobox_db");
 
     m_pCbUrl->SetSelectHdl( LINK( this, DataProviderDlg, UpdateComboBoxHdl ) );
+    m_pCbUrl->SetModifyHdl(LINK(this, DataProviderDlg, EditHdl));
     m_pBtnBrowse->SetClickHdl( LINK( this, DataProviderDlg, BrowseHdl ) );
+    Init();
+    m_pCBData->Resize();
     UpdateEnable();
 }
 
@@ -63,6 +66,11 @@ IMPL_LINK_NOARG(DataProviderDlg, UpdateClickHdl, Button*, void)
 }
 
 IMPL_LINK_NOARG(DataProviderDlg, UpdateComboBoxHdl, ComboBox&, void)
+{
+    UpdateEnable();
+}
+
+IMPL_LINK_NOARG(DataProviderDlg, EditHdl, Edit&, void)
 {
     UpdateEnable();
 }
