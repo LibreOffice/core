@@ -51,7 +51,6 @@ public:
     MediatorMapping(uno_Environment * pFrom,
                     uno_Environment * pInterm,
                     uno_Environment * pTo);
-    ~MediatorMapping();
 };
 
 extern "C" {
@@ -88,8 +87,6 @@ MediatorMapping::MediatorMapping(uno_Environment * pFrom,
       m_interm  (pInterm),
       m_to      (pTo)
 {
-    SAL_INFO("cppu.mapping", __FUNCTION__);
-
     if (!m_from2uno.get() || !m_uno2to.get())
         abort();
 
@@ -98,22 +95,13 @@ MediatorMapping::MediatorMapping(uno_Environment * pFrom,
     uno_Mapping::mapInterface = s_mapInterface;
 }
 
-MediatorMapping::~MediatorMapping()
-{
-    SAL_INFO("cppu.mapping", __FUNCTION__);
-}
-
 void MediatorMapping::acquire()
 {
-    SAL_INFO("cppu.mapping", __FUNCTION__);
-
     osl_atomic_increment(&m_refCount);
 }
 
 void MediatorMapping::release()
 {
-    SAL_INFO("cppu.mapping", __FUNCTION__);
-
     if (osl_atomic_decrement(&m_refCount) == 0)
     {
         ::uno_revokeMapping(this);
