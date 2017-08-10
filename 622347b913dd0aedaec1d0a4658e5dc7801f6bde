@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_2a414a3a",
+        "filename": "external/python3/python-3.5.4-msvc-disable.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-08-10T19:01:22Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1a430d35_774b3b5a",
+      "revId": "622347b913dd0aedaec1d0a4658e5dc7801f6bde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_573e3fb9",
         "filename": "external/python3/python-3.5.4-ssl.patch.1",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-10T10:23:11Z",
       "side": 0,
       "message": "this comment gives an idea what the patch does and why it\u0027s needed, why remove it?\n\nokay, \"solver\" can be replaced with \"workdir\"...",
+      "revId": "622347b913dd0aedaec1d0a4658e5dc7801f6bde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4a3e96b9",
+        "filename": "external/python3/python-3.5.4-ssl.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-08-10T19:01:22Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1a430d35_573e3fb9",
       "revId": "622347b913dd0aedaec1d0a4658e5dc7801f6bde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
