@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6ab9922e",
+        "filename": "tools/source/stream/stream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-10T19:37:38Z",
+      "side": 0,
+      "message": "i think this is supposed to be a question",
+      "revId": "772686adb99137733db79b7d1ab6ebb21bf93b4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
