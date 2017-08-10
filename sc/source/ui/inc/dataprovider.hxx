@@ -146,18 +146,18 @@ public:
  */
 class ScDBDataManager
 {
-    ScDBData* mpDBData;
+    OUString maDBName;
     ScDocument* mpDoc;
 
 public:
-    ScDBDataManager(ScDBData* pDBData, bool bAllowResize, ScDocument* pDoc);
+    ScDBDataManager(const OUString& rDBName, bool bAllowResize, ScDocument* pDoc);
     ~ScDBDataManager();
 
-    void SetDatabase(ScDBData* pDBData);
+    void SetDatabase(const OUString& rDBName);
 
     ScDBData* getDBData();
 
-    void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData);
+    void WriteToDoc(ScDocument& rDoc);
 };
 
 class DataProviderFactory
