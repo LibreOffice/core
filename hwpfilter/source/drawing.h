@@ -318,8 +318,6 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
 
 static HWPDrawingObject *LoadDrawingObject(void)
 {
-    fprintf(stderr, "LoadDrawingObject\n");
-
     HWPDrawingObject *hdo, *head, *prev;
 
     unsigned short link_info;
