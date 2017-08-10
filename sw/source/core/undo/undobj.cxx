@@ -390,11 +390,6 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::TYPING:
             pId = STR_TYPING_UNDO;
             break;
-        case SwUndoId::REPEAT_DUMMY_6:
-        case SwUndoId::REPEAT_DUMMY_7:
-        case SwUndoId::REPEAT_DUMMY_8:
-        case SwUndoId::REPEAT_DUMMY_9:
-            break;
         case SwUndoId::MOVE:
             pId = STR_MOVE_UNDO;
             break;
@@ -425,9 +420,6 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::CHGSECTION:
             pId = STR_CHANGESECTION;
             break;
-        case SwUndoId::CHGSECTIONPASSWD:
-            pId = STR_CHANGESECTPASSWD;
-            break;
         case SwUndoId::SETDEFTATTR:
             pId = STR_CHANGEDEFATTR;
             break;
@@ -451,9 +443,6 @@ OUString GetUndoComment(SwUndoId eId)
             break;
         case SwUndoId::DELGRF:
             pId = STR_DELGRF;
-            break;
-        case SwUndoId::DELOLE:
-            pId = STR_DELOLE;
             break;
         case SwUndoId::TABLE_ATTR:
             pId = STR_TABLE_ATTR;
@@ -503,9 +492,6 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::FTNINFO:
             pId = STR_UNDO_FTNINFO;
             break;
-        case SwUndoId::ENDNOTEINFO:
-            pId = STR_UNDO_ENDNOTEINFO;
-            break;
         case SwUndoId::COMPAREDOC:
             pId = STR_UNDO_COMPAREDOC;
             break;
@@ -514,9 +500,6 @@ OUString GetUndoComment(SwUndoId eId)
             break;
         case SwUndoId::SETRUBYATTR:
             pId = STR_UNDO_SETRUBYATTR;
-            break;
-        case SwUndoId::TMPAUTOCORR:
-            pId = STR_UNDO_TMPAUTOCORR;
             break;
         case SwUndoId::TOXCHANGE:
             pId = STR_TOXCHANGE;
@@ -616,9 +599,6 @@ OUString GetUndoComment(SwUndoId eId)
             break;
         case SwUndoId::UI_INSERT_COLUMN_BREAK:
             pId = STR_INSERT_COLUMN_BREAK_UNDO;
-            break;
-        case SwUndoId::UI_PLAY_MACRO:
-            pId = STR_PLAY_MACRO_UNDO;
             break;
         case SwUndoId::UI_INSERT_ENVELOPE:
             pId = STR_INSERT_ENV_UNDO;

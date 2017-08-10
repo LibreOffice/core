@@ -39,7 +39,6 @@ enum class MenuItemBits : sal_Int16
     CHECKABLE           = 0x0001,
     RADIOCHECK          = 0x0002,
     AUTOCHECK           = 0x0004,
-    ABOUT               = 0x0008,
     HELP                = 0x0010,
     POPUPSELECT         = 0x0020,
     // These have been said to be a preliminary (sic) solution since 2007
@@ -49,7 +48,7 @@ enum class MenuItemBits : sal_Int16
 };
 namespace o3tl
 {
-    template<> struct typed_flags<MenuItemBits> : is_typed_flags<MenuItemBits, 0x1ff> {};
+    template<> struct typed_flags<MenuItemBits> : is_typed_flags<MenuItemBits, 0x1f7> {};
 }
 
 enum class ToolBoxItemBits

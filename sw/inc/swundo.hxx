@@ -74,12 +74,7 @@ enum class SwUndoId
     TRANSLITERATE,                     // 39
     PASTE_CLIPBOARD,                   // 40
     TYPING,                            // 41
-    REPEAT_DUMMY_6,                    // 42
-    REPEAT_DUMMY_7,                    // 43
-    REPEAT_DUMMY_8,                    // 44
-    REPEAT_DUMMY_9,                    // 45
-
-        REPEAT_END,
+        REPEAT_END = 46,
 
     MOVE = REPEAT_END,                 // 46
     INSGLOSSARY,                       // 47
@@ -91,8 +86,7 @@ enum class SwUndoId
     REPLACE,                           // 53
     DELSECTION,                        // 54
     CHGSECTION,                        // 55
-    CHGSECTIONPASSWD,                  // 56
-    SETDEFTATTR,                       // 57
+    SETDEFTATTR = 57,                  // 57
     DELNUM,                            // 58
     DRAWUNDO,                          // 59
     DRAWGROUP,                         // 60
@@ -100,8 +94,7 @@ enum class SwUndoId
     DRAWDELETE,                        // 62
     REREAD,                            // 63
     DELGRF,                            // 64
-    DELOLE,                            // 65
-    TABLE_ATTR,                        // 66
+    TABLE_ATTR = 66,                   // 66
     TABLE_AUTOFMT,                     // 67
     TABLE_INSCOL,                      // 68
     TABLE_INSROW,                      // 69
@@ -117,12 +110,10 @@ enum class SwUndoId
     CHAINE,                            // 79
     UNCHAIN,                           // 80
     FTNINFO,                           // 81
-    ENDNOTEINFO,                       // 82
-    COMPAREDOC,                        // 83
+    COMPAREDOC = 83,                   // 83
     SETFLYFRMFMT,                      // 84
     SETRUBYATTR,                       // 85
-    TMPAUTOCORR,                       // 86
-    TOXCHANGE,                         // 87
+    TOXCHANGE = 87,                    // 87
     CREATE_PAGEDESC,                   // 88
     CHANGE_PAGEDESC,                   // 89
     DELETE_PAGEDESC,                   // 90
@@ -154,26 +145,24 @@ enum class SwUndoId
     TBLSTYLE_DELETE,                   // 115
     TBLSTYLE_UPDATE,                   // 116
     PARA_SIGN_ADD,                     // 117
-    STD_END = PARA_SIGN_ADD,
 
     // UI undo ID's...
-    UI_REPLACE = STD_END + 1,
-    UI_INSERT_PAGE_BREAK,
-    UI_INSERT_COLUMN_BREAK,
-    UI_PLAY_MACRO,
-    UI_INSERT_ENVELOPE,
-    UI_DRAG_AND_COPY,
-    UI_DRAG_AND_MOVE,
-    UI_INSERT_CHART,
-    UI_INSERT_FOOTNOTE,
-    UI_INSERT_URLBTN,
-    UI_INSERT_URLTXT,
-    UI_DELETE_INVISIBLECNTNT,
-    UI_REPLACE_STYLE,
-    UI_DELETE_PAGE_BREAK,
-    UI_TEXT_CORRECTION,
-    UI_TABLE_DELETE,
-    CONFLICT
+    UI_REPLACE,                        // 118
+    UI_INSERT_PAGE_BREAK,              // 119
+    UI_INSERT_COLUMN_BREAK,            // 120
+    UI_INSERT_ENVELOPE = 122,          // 122
+    UI_DRAG_AND_COPY,                  // 123
+    UI_DRAG_AND_MOVE,                  // 124
+    UI_INSERT_CHART,                   // 125
+    UI_INSERT_FOOTNOTE,                // 126
+    UI_INSERT_URLBTN,                  // 127
+    UI_INSERT_URLTXT,                  // 128
+    UI_DELETE_INVISIBLECNTNT,          // 129
+    UI_REPLACE_STYLE,                  // 130
+    UI_DELETE_PAGE_BREAK,              // 131
+    UI_TEXT_CORRECTION,                // 132
+    UI_TABLE_DELETE,                   // 133
+    CONFLICT                           // 134
 };
 
 OUString GetUndoComment(SwUndoId eId);

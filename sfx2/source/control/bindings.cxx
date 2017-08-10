@@ -108,14 +108,6 @@ public:
     }
 };
 
-enum class SfxPopupAction
-{
-    DELETE,
-    HIDE,
-    SHOW
-};
-
-
 class SfxBindings_Impl
 {
 public:

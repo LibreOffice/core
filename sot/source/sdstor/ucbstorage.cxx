@@ -394,11 +394,6 @@ SvGlobalName GetClassId_Impl( SotClipboardFormatId nFormat )
 // All storage and streams are refcounted internally; outside of this classes they are only accessible through a handle
 // class, that uses the refcounted object as impl-class.
 
-enum class RepresentMode {
-    NONE,
-    svstream
-};
-
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
 {
                                 virtual ~UCBStorageStream_Impl() override;

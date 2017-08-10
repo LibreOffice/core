@@ -63,7 +63,6 @@ enum class SvImageId {
     GlobalDoc              = START + 150,
     Draw                   = START + 151,
     DrawTemplate           = START + 152,
-    Template               = START + 166,
     OO_DatabaseDoc         = START + 169,
     OO_DrawDoc             = START + 170,
     OO_MathDoc             = START + 171,

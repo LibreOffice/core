@@ -559,8 +559,6 @@ static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
                 return Image(BitmapEx(BMP_DRAW_LC));
             case SvImageId::DrawTemplate:
                 return Image(BitmapEx(BMP_DRAWTEMPLATE_LC));
-            case SvImageId::Template:
-                return Image(BitmapEx(BMP_TEMPLATE_LC));
             case SvImageId::OO_DatabaseDoc:
                 return Image(BitmapEx(BMP_OO_DATABASE_DOC_LC));
             case SvImageId::OO_DrawDoc:
@@ -665,8 +663,6 @@ static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
                 return Image(BitmapEx(BMP_DRAW_SC));
             case SvImageId::DrawTemplate:
                 return Image(BitmapEx(BMP_DRAWTEMPLATE_SC));
-            case SvImageId::Template:
-                return Image(BitmapEx(BMP_TEMPLATE_SC));
             case SvImageId::OO_DatabaseDoc:
                 return Image(BitmapEx(BMP_OO_DATABASE_DOC_SC));
             case SvImageId::OO_DrawDoc:

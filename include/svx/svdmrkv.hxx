@@ -42,7 +42,6 @@ enum class SdrSearchOptions
     WITHTEXT     = 0x0040, /* Just objects with text */
     TESTTEXTAREA = 0x0080, /* The textarea of objects with text  (TextEditHit) */
     BACKWARD     = 0x0100, /* Backwards search */
-    NEXT         = 0x0200, /* Search starts behind the transferred object/point/... */
     MARKED       = 0x0400, /* Just marked objects/points/... */
     PASS2BOUND   = 0x0800, /* In case of empty search results, then 2nd. try with BoundRectHit */
     PASS3NEAREST = 0x1000, /* In case of empty search results, then new 3rd. Try with NearestBoundRectHit */
@@ -55,7 +54,7 @@ enum class SdrSearchOptions
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0xbfff> {};
+    template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0xbdff> {};
 }
 
 enum class SdrHitKind
