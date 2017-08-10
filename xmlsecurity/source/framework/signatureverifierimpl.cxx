@@ -75,16 +75,11 @@ void SignatureVerifierImpl::notifyResultListener() const
     xSignatureVerifyResultListener->signatureVerified( m_nSecurityId, m_nStatus );
 }
 
-void SignatureVerifierImpl::startEngine( const cssu::Reference<
-    cssxc::XXMLSignatureTemplate >&
-    xSignatureTemplate)
+void SignatureVerifierImpl::startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate)
 /****** SignatureVerifierImpl/startEngine ************************************
  *
  *   NAME
  *  startEngine -- verifies the signature.
- *
- *   SYNOPSIS
- *  startEngine( xSignatureTemplate );
  *
  *   INPUTS
  *  xSignatureTemplate - the signature template (along with all referenced
@@ -94,7 +89,7 @@ void SignatureVerifierImpl::startEngine( const cssu::Reference<
     cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;
     try
     {
-        xResultTemplate = m_xXMLSignature->validate(xSignatureTemplate, m_xXMLSecurityContext);
+        xResultTemplate = m_xXMLSignature->validate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate.get()), m_xXMLSecurityContext);
         m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )

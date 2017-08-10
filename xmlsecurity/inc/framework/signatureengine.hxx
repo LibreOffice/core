@@ -33,9 +33,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include "xsecfwdllapi.h"
 #include "securityengine.hxx"
+#include "xmlsignaturetemplateimpl.hxx"
 
 #include <vector>
 
@@ -97,8 +99,7 @@ protected:
      */
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    virtual void startEngine( const css::uno::Reference<
-                              css::xml::crypto::XXMLSignatureTemplate >&)
+    virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>&)
         {};
 
 public:

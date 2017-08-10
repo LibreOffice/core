@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
-#include "xmlsignaturetemplateimpl.hxx"
+#include "framework/xmlsignaturetemplateimpl.hxx"
 
 using namespace ::com::sun::star::uno ;
 using ::com::sun::star::lang::XMultiServiceFactory ;

@@ -19,7 +19,7 @@
 
 
 #include "framework/signatureengine.hxx"
-#include "xmlsignaturetemplateimpl.hxx"
+#include "framework/xmlsignaturetemplateimpl.hxx"
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ref.hxx>
@@ -111,7 +111,7 @@ void SignatureEngine::tryToPerform( )
          */
         xSignatureTemplate->setBinding( this );
 
-        startEngine(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate.get()));
+        startEngine(xSignatureTemplate);
 
         /*
          * done

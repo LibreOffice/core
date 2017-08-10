@@ -56,7 +56,7 @@ private:
 
     virtual void notifyResultListener() const override;
     virtual bool checkReady() const override;
-    virtual void startEngine( const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& xSignatureTemplate) override;
+    virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate) override;
 
 public:
     explicit SignatureVerifierImpl();
