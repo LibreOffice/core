@@ -2050,7 +2050,7 @@ namespace
                 // If set already, skip expensive test
                 if ( !bConvert )
                 {
-                    // Muessen wir Konvertieren
+                    // Has to be converted
                     if ( ((eLineEnd != LINEEND_LF) && (rIn[i] == '\n')) ||
                          ((eLineEnd == LINEEND_CRLF) && (i+1) < nStrLen && (rIn[i+1] != '\n')) ||
                          ((eLineEnd == LINEEND_LF) &&

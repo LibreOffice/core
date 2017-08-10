@@ -587,8 +587,9 @@ void
                                 ntp->len + ntp->wslen);
                         len += ntp->len + ntp->wslen;
                     }
-                    else    // Leerzeichen um ## herum entfernen:
+                    else
                     {
+                        // remove spaces around ##
                         strncpy((char *) tt + len, (char *) ntp->t, ntp->len);
                         len += ntp->len;
                     }
