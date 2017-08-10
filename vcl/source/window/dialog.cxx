@@ -588,6 +588,11 @@ void Dialog::dispose()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogClosed");
 
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable)
+    {
+        mpDialogRenderable->notifyDialog(maID, "close");
+    }
+
     SystemWindow::dispose();
 }
 
