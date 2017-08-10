@@ -25,7 +25,7 @@ namespace LOKDocViewSigHandlers {
     void formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer);
     void passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer);
     void comment(LOKDocView* pDocView, gchar* pComment, gpointer);
-    void dialogInvalidate(LOKDocView* pDocView, gchar* pDialogId, gpointer);
+    void dialog(LOKDocView* pDocView, gchar* pDialogId, gpointer);
     void dialogChild(LOKDocView* pDocView, gchar* pPayload, gpointer);
 
     gboolean configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);

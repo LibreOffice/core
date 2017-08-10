@@ -281,10 +281,19 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
     }
 }
 
-void LOKDocViewSigHandlers::dialogInvalidate(LOKDocView* pDocView, gchar* pPayload, gpointer)
+void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-//    GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, pDialogId);
+
+    std::stringstream aStream(pPayload);
+    boost::property_tree::ptree aRoot;
+    boost::property_tree::read_json(aStream, aRoot);
+    //std::string aDialogId = aRoot.get<std::string>("dialogId");
+    std::string aAction = aRoot.get<std::string>("action");
+
+    // we only understand 'invalidate' as of now
+    if (aAction != "invalidate")
+        return;
 
     // temporary hack to invalidate all open dialogs
     GList* pChildWins = gtv_application_window_get_all_child_windows(window);
@@ -293,11 +302,6 @@ void LOKDocViewSigHandlers::dialogInvalidate(LOKDocView* pDocView, gchar* pPaylo
     {
         gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
     }
-/*  if (pDialog)
-    {
-        gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog));
-    }
-*/
 }
 
 void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, gpointer)

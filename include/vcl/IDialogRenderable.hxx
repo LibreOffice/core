@@ -46,7 +46,7 @@ public:
                                            int nCount, int nButtons, int nModifier) = 0;
 
     // Callbacks
-    virtual void notifyDialogInvalidation(const DialogID& rDialogID) = 0;
+    virtual void notifyDialog(const DialogID& rDialogID, const OUString& rAction) = 0;
 
     virtual void notifyDialogChild(const DialogID& rDialogID, const OUString& rAction, const Point& rPos) = 0;
 };

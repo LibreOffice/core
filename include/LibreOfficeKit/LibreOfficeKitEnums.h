@@ -525,7 +525,7 @@ typedef enum
     /**
      * Dialog invalidation
      */
-    LOK_CALLBACK_DIALOG_INVALIDATE = 36,
+    LOK_CALLBACK_DIALOG = 36,
 
     /**
      * Invalidation corresponding to dialog's children.
