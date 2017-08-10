@@ -291,8 +291,8 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     //std::string aDialogId = aRoot.get<std::string>("dialogId");
     std::string aAction = aRoot.get<std::string>("action");
 
-    // we only understand 'invalidate' as of now
-    if (aAction != "invalidate")
+    // we only understand 'invalidate' and 'close' as of now
+    if (aAction != "invalidate" && aAction != "close")
         return;
 
     // temporary hack to invalidate all open dialogs
@@ -300,43 +300,48 @@ void LOKDocViewSigHandlers::dialog(LOKDocView* pDocView, gchar* pPayload, gpoint
     GList* pIt = nullptr;
     for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
     {
-        gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
+        if (aAction == "close")
+        {
+            gtk_widget_destroy(GTK_WIDGET(pIt->data));
+        }
+        else if (aAction == "invalidate")
+            gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
     }
 }
 
 void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, gpointer)
 {
-  GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
 
-  std::stringstream aStream(pPayload);
-  boost::property_tree::ptree aRoot;
-  boost::property_tree::read_json(aStream, aRoot);
-  //std::string aDialogId = aRoot.get<std::string>("dialogId");
-  std::string aAction = aRoot.get<std::string>("action");
-  std::string aPos = aRoot.get<std::string>("position");
-  gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
-  gchar** ppCoordinate = ppCoordinates;
-  int nX = 0;
-  int nY = 0;
+    std::stringstream aStream(pPayload);
+    boost::property_tree::ptree aRoot;
+    boost::property_tree::read_json(aStream, aRoot);
+    //std::string aDialogId = aRoot.get<std::string>("dialogId");
+    std::string aAction = aRoot.get<std::string>("action");
+    std::string aPos = aRoot.get<std::string>("position");
+    gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
+    gchar** ppCoordinate = ppCoordinates;
+    int nX = 0;
+    int nY = 0;
 
-  if (*ppCoordinate)
-      nX = atoi(*ppCoordinate);
-  ++ppCoordinate;
-  if (*ppCoordinate)
-      nY = atoi(*ppCoordinate);
+    if (*ppCoordinate)
+        nX = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (*ppCoordinate)
+        nY = atoi(*ppCoordinate);
 
-  g_strfreev(ppCoordinates);
+    g_strfreev(ppCoordinates);
 
-  // temporary hack to invalidate/close floating window of all opened dialogs
-  GList* pChildWins = gtv_application_window_get_all_child_windows(window);
-  GList* pIt = nullptr;
-  for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
-  {
-      if (aAction == "invalidate")
-          gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
-      else if (aAction == "close")
-          gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
-  }
+    // temporary hack to invalidate/close floating window of all opened dialogs
+    GList* pChildWins = gtv_application_window_get_all_child_windows(window);
+    GList* pIt = nullptr;
+    for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
+    {
+        if (aAction == "invalidate")
+            gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
+        else if (aAction == "close")
+            gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
+    }
 }
 
 gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
