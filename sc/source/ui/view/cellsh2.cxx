@@ -782,15 +782,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_PROVIDER:
         {
             ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
-            //ScDocument *pDoc = GetViewData()->GetDocument();
-            //sc::DocumentLinkManager& rMgr = pDoc->GetDocLinkManager();
-            //sc::DataStream* pStrm = rMgr.getDataStream();
-            //if (pStrm)
             aDialog->Init(/**pStrm*/);
-            aDialog->Execute();
-
-            //if (aDialog->Execute() == RET_OK)
-            //aDialog->StartStream();
+            if (aDialog->Execute() == RET_OK)
+            {
+                aDialog->StartImport();
+            }
         }
         break;
         case SID_MANAGE_XML_SOURCE:
