@@ -39,6 +39,7 @@ class DataProviderDlg : public ModalDialog
     DECL_LINK(UpdateClickHdl, Button*, void);
     DECL_LINK(UpdateComboBoxHdl, ComboBox&, void);
     DECL_LINK(BrowseHdl, Button*, void);
+    DECL_LINK(EditHdl, Edit&, void);
 
     void UpdateEnable();
 

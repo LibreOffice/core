@@ -782,7 +782,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_DATA_PROVIDER:
         {
             ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
-            aDialog->Init(/**pStrm*/);
             if (aDialog->Execute() == RET_OK)
             {
                 aDialog->StartImport();
