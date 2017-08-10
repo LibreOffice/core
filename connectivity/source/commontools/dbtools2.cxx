@@ -819,8 +819,8 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
         OSL_ENSURE( nCount != 0, "::dbtools::collectColumnInformation: result set has empty (column-less) meta data!" );
         for (sal_Int32 i=1; i <= nCount ; ++i)
         {
-            _rInfo.insert(ColumnInformationMap::value_type(xMeta->getColumnName(i),
-                ColumnInformation(TBoolPair(xMeta->isAutoIncrement(i),xMeta->isCurrency(i)),xMeta->getColumnType(i))));
+            _rInfo.emplace( xMeta->getColumnName(i),
+                ColumnInformation(TBoolPair(xMeta->isAutoIncrement(i),xMeta->isCurrency(i)),xMeta->getColumnType(i)));
         }
     }
     catch( const Exception& )

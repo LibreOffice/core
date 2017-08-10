@@ -231,7 +231,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         aRefRange.aEnd.SetRow(rTopPos.Row() + nRowEnd);
                         aRef.InitRange(aRefRange);
                         formula::FormulaTokenRef xTok(new ScMatrixRangeToken(pMat, aRef));
-                        aCachedTokens.insert(CachedTokensType::value_type(p, xTok));
+                        aCachedTokens.emplace(p, xTok);
                         aCode2.AddToken(*xTok);
                     }
                     else

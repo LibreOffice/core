@@ -157,7 +157,7 @@ AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient()
         // completely nonsense, and potentially slowing down the Office me thinks...
 
     // add the client
-    Clients::get().insert( ClientMap::value_type( nNewClientId, pNewListeners ) );
+    Clients::get().emplace( nNewClientId, pNewListeners );
 
     // outta here
     return nNewClientId;

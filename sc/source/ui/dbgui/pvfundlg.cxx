@@ -403,7 +403,7 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
             NameMapType aMap;
             vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
             for (; itr != itrEnd; ++itr)
-                aMap.insert(NameMapType::value_type(itr->getDisplayName(), itr->maName));
+                aMap.emplace(itr->getDisplayName(), itr->maName);
             maBaseItemNameMap.swap(aMap);
         }
 
@@ -661,7 +661,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
     {
         // Cache names for later lookup.
-        maDataFieldNameMap.insert(NameMapType::value_type(aIt->maLayoutName, *aIt));
+        maDataFieldNameMap.emplace(aIt->maLayoutName, *aIt);
 
         m_pLbSortBy->InsertEntry( aIt->maLayoutName );
         m_pLbShowUsing->InsertEntry( aIt->maLayoutName );  // for AutoShow
@@ -840,7 +840,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, 
                         aName = *pLayoutName;
                 }
                 mpLbDims->InsertEntry( aName );
-                maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+                maNameIndexMap.emplace(aName, nDim);
             }
         }
     }

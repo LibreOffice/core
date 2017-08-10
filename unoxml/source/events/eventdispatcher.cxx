@@ -44,13 +44,13 @@ namespace DOM { namespace events {
         auto tIter = pTMap->find(aType);
         if (tIter == pTMap->end()) {
             // the map has to be created
-            auto const pair = pTMap->insert(TypeListenerMap::value_type(aType, ListenerMap()));
+            auto const pair = pTMap->emplace(aType, ListenerMap());
             pMap = & pair.first->second;
         } else {
             pMap = & tIter->second;
         }
         assert(pMap != nullptr);
-        pMap->insert(ListenerMap::value_type(pNode, aListener));
+        pMap->emplace(pNode, aListener);
     }
 
     void CEventDispatcher::removeListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)

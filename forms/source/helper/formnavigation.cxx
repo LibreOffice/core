@@ -270,7 +270,7 @@ namespace frm
 
                 if ( bKnownId )
                     // add to our map
-                    m_aSupportedFeatures.insert( FeatureMap::value_type( *aLoop, aFeatureInfo ) );
+                    m_aSupportedFeatures.emplace( *aLoop, aFeatureInfo );
             }
         }
     }

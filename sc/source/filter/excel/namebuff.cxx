@@ -67,7 +67,7 @@ void SharedFormulaBuffer::Store( const ScAddress& rPos, const ScTokenArray& rArr
 {
     ScTokenArray* pCode = rArray.Clone();
     pCode->GenHash();
-    maTokenArrays.insert(TokenArraysType::value_type(rPos, pCode));
+    maTokenArrays.emplace(rPos, pCode);
 }
 
 const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const

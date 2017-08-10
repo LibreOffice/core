@@ -120,7 +120,7 @@ const CmdToInfoCache& GetCommandToInfoCache()
                 CacheDispatchInfo aDispatchInfo;
                 aDispatchInfo.nGroupId          = SupportedCommandsArray[i].nGroupId;
                 aDispatchInfo.bActiveConnection = SupportedCommandsArray[i].bActiveConnection;
-                aCmdToInfoCache.insert( CmdToInfoCache::value_type( aCommand, aDispatchInfo ));
+                aCmdToInfoCache.emplace(aCommand, aDispatchInfo);
                 ++i;
             }
             bCacheInitialized = true;

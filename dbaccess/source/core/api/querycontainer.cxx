@@ -89,7 +89,7 @@ void OQueryContainer::init()
     for ( ; pDefinitionName != pEnd; ++pDefinitionName )
     {
         rDefinitions.insert( *pDefinitionName, TContentPtr() );
-        m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(*pDefinitionName,Documents::mapped_type())).first);
+        m_aDocuments.push_back(m_aDocumentMap.emplace( *pDefinitionName,Documents::mapped_type()).first);
     }
 
     setElementApproval( PContainerApprove( new ObjectNameApproval( m_xConnection, ObjectNameApproval::TypeQuery ) ) );

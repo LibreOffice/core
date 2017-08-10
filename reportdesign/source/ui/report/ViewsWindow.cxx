@@ -666,7 +666,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
                 const SdrMark* pM = rView.GetSdrMarkByIndex(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 tools::Rectangle aObjRect(pObj->GetSnapRect());
-                _rSortRectangles.insert(TRectangleMap::value_type(aObjRect,TRectangleMap::mapped_type(pObj,&rView)));
+                _rSortRectangles.emplace(aObjRect,TRectangleMap::mapped_type(pObj,&rView));
             }
         }
     }

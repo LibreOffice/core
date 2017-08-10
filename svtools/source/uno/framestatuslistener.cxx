@@ -187,7 +187,7 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
                 }
             }
             else
-                m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, xDispatch ));
+                m_aListenerMap.emplace( aCommandURL, xDispatch );
         }
     }
 

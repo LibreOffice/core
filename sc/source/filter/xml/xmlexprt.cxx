@@ -929,7 +929,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         }
 
         // store the number format to index mapping for later use.
-        aNumFmtIndexMap.insert(NumberFormatIndexMap::value_type(nNumFmt, nIndex));
+        aNumFmtIndexMap.emplace(nNumFmt, nIndex);
     }
 }
 

@@ -81,11 +81,11 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
             {
                 // replace current namespace definition
                 m_aNamespaceMap.erase( p );
-                m_aNamespaceMap.insert( NamespaceMap::value_type( aNamespaceName, aValue ));
+                m_aNamespaceMap.emplace( aNamespaceName, aValue );
             }
             else
             {
-                m_aNamespaceMap.insert( NamespaceMap::value_type( aNamespaceName, aValue ));
+                m_aNamespaceMap.emplace( aNamespaceName, aValue );
             }
         }
     }

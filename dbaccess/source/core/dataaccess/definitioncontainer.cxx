@@ -554,7 +554,7 @@ void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< X
             }
         }
 
-        m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(_rName,_rxNewObject)).first);
+        m_aDocuments.push_back(m_aDocumentMap.emplace(_rName,_rxNewObject).first);
         notifyDataSourceModified();
         // now update our structures
         if ( _rxNewObject.is() )

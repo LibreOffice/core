@@ -156,9 +156,9 @@ namespace pcr
     namespace
     {
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
-            s_aKnownEvents.insert( EventMap::value_type( \
+            s_aKnownEvents.emplace(  \
                 asciimethod, \
-                EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) ) )
+                EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) )
 
         bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )
         {
@@ -358,7 +358,7 @@ namespace pcr
     void EventHolder::addEvent( EventId _nId, const OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
     {
         std::pair< EventMap::iterator, bool > insertionResult =
-            m_aEventNameAccess.insert( EventMap::value_type( _rEventName, _rScriptEvent ) );
+            m_aEventNameAccess.emplace( _rEventName, _rScriptEvent );
         OSL_ENSURE( insertionResult.second, "EventHolder::addEvent: there already was a MacroURL for this event!" );
         m_aEventIndexAccess[ _nId ] = insertionResult.first;
     }
@@ -730,8 +730,8 @@ namespace pcr
                         if ( !impl_filterMethod_nothrow( aEvent ) )
                             continue;
 
-                        m_aEvents.insert( EventMap::value_type(
-                            lcl_getEventPropertyName( sListenerClassName, *pMethods ), aEvent ) );
+                        m_aEvents.emplace(
+                            lcl_getEventPropertyName( sListenerClassName, *pMethods ), aEvent );
                     }
                 }
 

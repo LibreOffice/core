@@ -801,7 +801,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
             if ( xPopupMenu.is() )
             {
                 // insert into std::unordered_map to filter duplicates from the parent
-                aMenuInfo.insert( MenuInfo::value_type( aUrl, true ) );
+                aMenuInfo.emplace(  aUrl, true );
 
                 OUString aUIMenuName = GetUIName( aUrl );
                 if ( aUIMenuName.isEmpty() )
@@ -2364,7 +2364,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
 
                 // insert into std::unordered_map to filter duplicates from the parent
-                aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
+                aToolbarInfo.emplace( systemname, true );
 
                 OUString custom(CUSTOM_TOOLBAR_STR);
                 if ( systemname.startsWith( custom ) )
@@ -2426,7 +2426,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 ToolbarInfo::const_iterator pIter = aToolbarInfo.find( systemname );
                 if ( pIter == aToolbarInfo.end() )
                 {
-                    aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
+                    aToolbarInfo.emplace( systemname, true );
 
                     try
                     {
@@ -2983,7 +2983,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     {
         names = m_xImportedImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
         for ( sal_Int32 n = 0; n < names.getLength(); ++n )
-            aImageInfo1.insert( ImageInfo::value_type( names[n], false ));
+            aImageInfo1.emplace( names[n], false );
     }
     sal_uInt16 nId = 1;
     ImageInfo::const_iterator pConstIter = aImageInfo1.begin();
@@ -3013,7 +3013,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     {
         names = m_xParentImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
         for ( sal_Int32 n = 0; n < names.getLength(); ++n )
-            aImageInfo.insert( ImageInfo::value_type( names[n], false ));
+            aImageInfo.emplace( names[n], false );
     }
 
     names = m_xImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
@@ -3023,7 +3023,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
         if ( pIter != aImageInfo.end() )
             pIter->second = true;
         else
-            aImageInfo.insert( ImageInfo::value_type( names[n], true ));
+            aImageInfo.emplace( names[n], true );
     }
 
     // large growth factor, expecting many entries

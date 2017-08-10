@@ -369,7 +369,7 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
         TConnectionHolder aHolder;
         aHolder.nALiveCount = 0; // will be incremented by addListener
         aHolder.xMasterConnection = _pDataSource->buildIsolatedConnection(user,password);
-        aIter = m_aConnections.insert(TConnectionMap::value_type(nId,aHolder)).first;
+        aIter = m_aConnections.emplace(nId,aHolder).first;
     }
 
     Reference<XConnection> xRet;
@@ -377,7 +377,7 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     {
         Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(aIter->second.xMasterConnection.get());
         xRet = new OSharedConnection(xConProxy);
-        m_aSharedConnection.insert(TSharedConnectionMap::value_type(xRet,aIter));
+        m_aSharedConnection.emplace(xRet,aIter);
         addEventListener(xRet,aIter);
     }
 

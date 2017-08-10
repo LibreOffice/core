@@ -298,7 +298,7 @@ void OBookmarkContainer::implAppend(const OUString& _rName, const OUString& _rDo
     MutexGuard aGuard(m_rMutex);
 
     OSL_ENSURE(m_aBookmarks.find(_rName) == m_aBookmarks.end(),"Bookmark already known!");
-    m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
+    m_aBookmarksIndexed.push_back(m_aBookmarks.emplace( _rName,_rDocumentLocation).first);
 }
 
 void OBookmarkContainer::implReplace(const OUString& _rName, const OUString& _rNewLink)

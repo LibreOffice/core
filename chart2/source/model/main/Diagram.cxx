@@ -293,7 +293,7 @@ lcl_tCooSysMapping lcl_CloneCoordinateSystems(
         if( xClone.is())
         {
             rDestination.push_back( xClone );
-            aResult.insert( lcl_tCooSysMapping::value_type( *aIt, xClone ));
+            aResult.emplace( *aIt, xClone );
         }
         else
             rDestination.push_back( *aIt );

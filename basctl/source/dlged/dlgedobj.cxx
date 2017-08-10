@@ -562,7 +562,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
                     xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
                 // insert into map
-                aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
+                aIndexToNameMap.emplace( nTabIndex, aName );
             }
 
             // create a helper list of control names, sorted by tab index
@@ -1424,7 +1424,7 @@ void DlgEdForm::UpdateTabIndices()
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
             // insert into map
-            aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
+            aIndexToNameMap.emplace( nTabIndex, aName );
         }
 
         // set new tab indices

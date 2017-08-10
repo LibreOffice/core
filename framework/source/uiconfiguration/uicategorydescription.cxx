@@ -188,7 +188,7 @@ void ConfigurationAccess_UICategory::fillCache()
             {
                 xNameAccess->getByName( m_aPropUIName ) >>= aUIName;
 
-                m_aIdCache.insert( IdToInfoCache::value_type( aNameSeq[i], aUIName ));
+                m_aIdCache.emplace( aNameSeq[i], aUIName );
             }
         }
         catch ( const css::lang::WrappedTargetException& )
@@ -379,8 +379,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
     m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
 
     // insert generic categories mappings
-    m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
-        OUString("generic"), aGenericCategories ));
+    m_aModuleToCommandFileMap.emplace( OUString("generic"), aGenericCategories );
 
     UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
     if ( pCatIter != m_aUICommandsHashMap.end() )

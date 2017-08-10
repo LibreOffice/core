@@ -121,7 +121,7 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     osl::MutexGuard g(m_mutex);
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
-    m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) ));
+    m_aMenuControllerMap.emplace( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) );
 }
 
 void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
@@ -248,7 +248,7 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
                     // Create hash key from command and module as they are together a primary key to
                     // the UNO service that implements the popup menu controller.
                     aHashKey = getHashKeyFromStrings( aCommand, aModule );
-                    m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey, ControllerInfo(aService,aValue) ));
+                    m_aMenuControllerMap.emplace( aHashKey, ControllerInfo(aService,aValue) );
                 }
             }
             catch ( const NoSuchElementException& )

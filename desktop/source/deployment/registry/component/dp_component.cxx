@@ -1042,8 +1042,7 @@ Reference<XInterface> BackendImpl::insertObject(
 {
     const ::osl::MutexGuard guard( getMutex() );
     const std::pair<t_string2object::iterator, bool> insertion(
-        m_backendObjects.insert( t_string2object::value_type(
-                                     id, xObject ) ) );
+        m_backendObjects.emplace( id, xObject ) );
     return insertion.first->second;
 }
 

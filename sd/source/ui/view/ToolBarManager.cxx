@@ -1220,7 +1220,7 @@ void ToolBarList::AddToolBar (
 {
     Groups::iterator iGroup (maGroups.find(eGroup));
     if (iGroup == maGroups.end())
-        iGroup = maGroups.insert(Groups::value_type(eGroup,NameList())).first;
+        iGroup = maGroups.emplace(eGroup,NameList()).first;
 
     if (iGroup != maGroups.end())
     {

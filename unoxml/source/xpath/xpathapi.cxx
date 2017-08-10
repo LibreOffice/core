@@ -99,7 +99,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        m_nsmap.insert(nsmap_t::value_type(aPrefix, aURI));
+        m_nsmap.emplace(aPrefix, aURI);
     }
 
     void SAL_CALL CXPathAPI::unregisterNS(

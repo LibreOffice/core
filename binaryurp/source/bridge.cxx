@@ -428,9 +428,9 @@ OUString Bridge::registerOutgoingInterface(
         //TODO: Release sub-stub if it is not successfully sent to remote side
         // (otherwise, stub will leak until terminate()):
         if (j == stub->end()) {
-            j = stub->insert(Stub::value_type(type, SubStub())).first;
+            j = stub->emplace(type, SubStub()).first;
             if (stub == &newStub) {
-                i = stubs_.insert(Stubs::value_type(oid, Stub())).first;
+                i = stubs_.emplace(oid, Stub()).first;
                 std::swap(i->second, newStub);
                 j = i->second.find(type);
                 assert(j !=  i->second.end());

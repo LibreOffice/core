@@ -82,7 +82,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aEl
     if( aElement.getValueType() != maType )
         throw IllegalArgumentException();
 
-    maProperties.insert( SvGenericNameContainerMapImpl::value_type(aName,aElement));
+    maProperties.emplace(aName,aElement);
 }
 
 void SAL_CALL NameContainer::removeByName( const OUString& Name )

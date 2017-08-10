@@ -727,7 +727,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
             sal_Int32 nTabIndex = -1;
             xControlProps->getPropertyValue( getTabIndexPropertyName() ) >>= nTabIndex;
 
-            aSortedModels.insert( MapIndexToModel::value_type( nTabIndex, xModel ) );
+            aSortedModels.emplace( nTabIndex, xModel );
         }
         else if ( xModel.is() )
             // no, it hasn't, but we have to include it, anyway

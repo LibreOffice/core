@@ -972,7 +972,7 @@ void ORptFilter::removeFunction(const OUString& _sFunctionName)
 
 void ORptFilter::insertFunction(const css::uno::Reference< css::report::XFunction > & _xFunction)
 {
-    m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
+    m_aFunctions.emplace(_xFunction->getName(),_xFunction);
 }
 
 SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName)

@@ -86,7 +86,7 @@ public:
         {
             // Create an entry for this column.
             std::pair<ColCacheType::iterator,bool> r =
-                maCache.insert(ColCacheType::value_type(rPos.Col(), new Item));
+                maCache.emplace(rPos.Col(), new Item);
             if (!r.second)
                 // Insertion failed.
                 return;
