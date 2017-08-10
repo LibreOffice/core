@@ -144,15 +144,19 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyDialogInvalidation(const OUString& rDialogID)
+void SfxLokHelper::notifyDialog(const OUString& rDialogID, const OUString& rAction)
 {
     if (SfxLokHelper::getViewsCount() <= 0)
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    const OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() +
+        OString("\", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() +
+        + "\" }";
+
     while (pViewShell)
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG_INVALIDATE, OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG, aPayload.getStr());
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
