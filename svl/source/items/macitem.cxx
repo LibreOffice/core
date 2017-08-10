@@ -131,7 +131,7 @@ void SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStrm.ReadUInt16( eType );
 
-        aSvxMacroTable.insert( SvxMacroTable::value_type(SvMacroItemId(nCurKey), SvxMacro( aMacName, aLibName, (ScriptType)eType ) ));
+        aSvxMacroTable.emplace( SvMacroItemId(nCurKey), SvxMacro( aMacName, aLibName, (ScriptType)eType ) );
     }
 }
 
@@ -186,7 +186,7 @@ bool SvxMacroTableDtor::IsKeyValid(SvMacroItemId nEvent) const
 // This stores a copy of the rMacro parameter
 SvxMacro& SvxMacroTableDtor::Insert(SvMacroItemId nEvent, const SvxMacro& rMacro)
 {
-    return aSvxMacroTable.insert( SvxMacroTable::value_type( nEvent, rMacro ) ).first->second;
+    return aSvxMacroTable.emplace( nEvent, rMacro ).first->second;
 }
 
 // If the entry exists, remove it from the map and release it's storage

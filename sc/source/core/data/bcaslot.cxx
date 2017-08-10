@@ -743,8 +743,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.insert( TableSlotsMap::value_type(
-                            nTab, new TableSlots)).first;
+                iTab = aTableSlotsMap.emplace(nTab, new TableSlots).first;
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
@@ -1057,8 +1056,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         {
             TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
             if (iTab == aTableSlotsMap.end())
-                iTab = aTableSlotsMap.insert( TableSlotsMap::value_type(
-                            nTab, new TableSlots)).first;
+                iTab = aTableSlotsMap.emplace(nTab, new TableSlots).first;
             ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
             SCSIZE nStart, nEnd, nRowBreak;
             ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );

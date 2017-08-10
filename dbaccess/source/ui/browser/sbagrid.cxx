@@ -452,7 +452,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     if ( dtUnknown != eURLType )
     {
         // notify any status listeners that the dialog is now active (well, about to be active)
-        MapDispatchToBool::const_iterator aThisURLState = m_aDispatchStates.insert( MapDispatchToBool::value_type( eURLType, true ) ).first;
+        MapDispatchToBool::const_iterator aThisURLState = m_aDispatchStates.emplace( eURLType, true ).first;
         NotifyStatusChanged( aURL, nullptr );
 
         // execute the dialog

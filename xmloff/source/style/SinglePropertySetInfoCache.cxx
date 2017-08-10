@@ -45,7 +45,7 @@ bool SinglePropertySetInfoCache::hasProperty(
     rPropSetInfo = xWeakInfo;
     if( rPropSetInfo.is() )
     {
-        map_.insert(Map::value_type(rPropSetInfo, bRet));
+        map_.emplace(rPropSetInfo, bRet);
     }
     return bRet;
 }

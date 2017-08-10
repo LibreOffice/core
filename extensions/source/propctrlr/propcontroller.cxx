@@ -1046,8 +1046,7 @@ namespace pcr
                 StlSyntaxSequence< OUString > aInterestingActuations( (*aHandler)->getActuatingProperties() );
                 for (const auto & aInterestingActuation : aInterestingActuations)
                 {
-                    m_aDependencyHandlers.insert( PropertyHandlerMultiRepository::value_type(
-                        aInterestingActuation, *aHandler ) );
+                    m_aDependencyHandlers.emplace( aInterestingActuation, *aHandler );
                 }
 
                 ++aHandler;
@@ -1065,7 +1064,7 @@ namespace pcr
                 sal_Int32 nRelativePropertyOrder = sourceProps - aProperties.begin();
                 if ( m_xModel.is() )
                     nRelativePropertyOrder = m_xModel->getPropertyOrderIndex( sourceProps->Name );
-                m_aProperties.insert(OrderedPropertyMap::value_type(nRelativePropertyOrder, *sourceProps));
+                m_aProperties.emplace(nRelativePropertyOrder, *sourceProps);
             }
 
             // be notified when one of our inspectees dies

@@ -2968,10 +2968,10 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
 
         std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
         TPropertyNamePair aPropertyMediation;
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMAND, TPropertyConverter(PROPERTY_COMMAND,aNoConverter) ) );
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMANDTYPE, TPropertyConverter(PROPERTY_COMMANDTYPE,aNoConverter) ) );
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_ESCAPEPROCESSING, TPropertyConverter(PROPERTY_ESCAPEPROCESSING,aNoConverter) ) );
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_FILTER, TPropertyConverter(PROPERTY_FILTER,aNoConverter) ) );
+        aPropertyMediation.emplace( PROPERTY_COMMAND, TPropertyConverter(PROPERTY_COMMAND,aNoConverter) );
+        aPropertyMediation.emplace( PROPERTY_COMMANDTYPE, TPropertyConverter(PROPERTY_COMMANDTYPE,aNoConverter) );
+        aPropertyMediation.emplace( PROPERTY_ESCAPEPROCESSING, TPropertyConverter(PROPERTY_ESCAPEPROCESSING,aNoConverter) );
+        aPropertyMediation.emplace( PROPERTY_FILTER, TPropertyConverter(PROPERTY_FILTER,aNoConverter) );
 
         m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition.get(), xRowSetProp, aPropertyMediation );
         m_xRowSet = xRowSet;

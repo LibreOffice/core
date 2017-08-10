@@ -597,7 +597,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     DBG_UNHANDLED_EXCEPTION();
                 }
             }
-            aSetPos = pCache->insert(PropertySetInfoCache::value_type(xSet,aNewEntry)).first;
+            aSetPos = pCache->emplace(xSet,aNewEntry).first;
             DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
         else

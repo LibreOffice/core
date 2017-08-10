@@ -863,7 +863,7 @@ namespace editeng
                 implChange( sChangeInto );
 
                 // put into the "change all" list
-                m_aChangeList.insert( StringMap::value_type( sCurrentUnit, sChangeInto ) );
+                m_aChangeList.emplace( sCurrentUnit, sChangeInto );
             }
 
             // and proceed

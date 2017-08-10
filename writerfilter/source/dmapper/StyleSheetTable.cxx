@@ -1460,7 +1460,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
             OUString aTo = OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]);
             if (!aTo.isEmpty())
             {
-                m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(aFrom, aTo));
+                m_pImpl->m_aStyleNameMap.emplace(aFrom, aTo);
                 m_pImpl->m_aReservedStyleNames.insert(aTo);
             }
         }

@@ -699,7 +699,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         {
             const OUString title( xPackageType->getShortDescription() );
             const std::pair< t_string2string::iterator, bool > insertion(
-                title2filter.insert( t_string2string::value_type( title, filter ) ) );
+                title2filter.emplace( title, filter ) );
             if ( ! insertion.second )
             { // already existing, append extensions:
                 OUStringBuffer buf;

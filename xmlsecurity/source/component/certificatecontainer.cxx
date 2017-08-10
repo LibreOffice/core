@@ -59,11 +59,11 @@ CertificateContainer::isCertificateTrust ( const OUString & url, const OUString 
 sal_Bool
 CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust )
 {
-    certMap.insert( Map::value_type( url, certificate_name ) );
+    certMap.emplace( url, certificate_name );
 
         //remember that the cert is trusted
         if (trust)
-            certTrustMap.insert( Map::value_type( url, certificate_name ) );
+            certTrustMap.emplace( url, certificate_name );
 
         return true;
 }

@@ -1428,7 +1428,7 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
     if (itr == maProtectedSheets.end())
     {
         // new sheet
-        if ( !maProtectedSheets.insert( ProtectedSheetMap::value_type(nTab, Sheet()) ).second )
+        if ( !maProtectedSheets.emplace( nTab, Sheet() ).second )
             return nullptr;
 
         itr = maProtectedSheets.find(nTab);

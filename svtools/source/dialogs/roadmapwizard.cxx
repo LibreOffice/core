@@ -169,7 +169,7 @@ namespace svt
     void RoadmapWizard::declarePath( PathId _nPathId, const WizardPath& _lWizardStates)
     {
 
-        m_pImpl->aPaths.insert( Paths::value_type( _nPathId, _lWizardStates ) );
+        m_pImpl->aPaths.emplace( _nPathId, _lWizardStates );
 
         if ( m_pImpl->aPaths.size() == 1 )
             // the very first path -> activate it

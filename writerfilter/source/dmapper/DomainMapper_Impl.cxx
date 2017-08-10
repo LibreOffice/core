@@ -3518,7 +3518,7 @@ void DomainMapper_Impl::handleToc
                 if( !nLevel )
                     nLevel = 1;
                 if( !sStyleName.isEmpty() )
-                    aMap.insert( TOCStyleMap::value_type(nLevel, sStyleName) );
+                    aMap.emplace(nLevel, sStyleName);
             }
             uno::Reference< container::XIndexReplace> xParaStyles;
             xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_PARAGRAPH_STYLES)) >>= xParaStyles;
@@ -4851,7 +4851,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                 xCurrent = xCursor->getStart();
             }
             m_sCurrentBkmkId = rId;
-            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, m_sCurrentBkmkName, xCurrent ) ));
+            m_aBookmarkMap.emplace( rId, BookmarkInsertPosition( bIsStart, m_sCurrentBkmkName, xCurrent ) );
             m_sCurrentBkmkName.clear();
         }
     }

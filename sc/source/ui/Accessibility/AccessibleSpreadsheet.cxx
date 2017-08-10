@@ -600,7 +600,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     aEvent.NewValue <<= xChild;
                     CommitChange(aEvent);
                     OSL_ASSERT(m_mapSelectionSend.count(aNewCell) == 0 );
-                    m_mapSelectionSend.insert(MAP_ADDR_XACC::value_type(aNewCell,xChild));
+                    m_mapSelectionSend.emplace(aNewCell,xChild);
 
                 }
                 else
@@ -639,7 +639,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
                                 aEvent.NewValue <<= xChild;
                                 CommitChange(aEvent);
-                                m_mapSelectionSend.insert(MAP_ADDR_XACC::value_type(*viAddr,xChild));
+                                m_mapSelectionSend.emplace(*viAddr,xChild);
                             }
                         }
                     }
@@ -1542,7 +1542,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
             aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
             aEvent.NewValue <<= xNew;
             CommitChange(aEvent);
-            m_mapFormulaSelectionSend.insert(MAP_ADDR_XACC::value_type(aFormulaAddr,xNew));
+            m_mapFormulaSelectionSend.emplace(aFormulaAddr,xNew);
             m_vecFormulaLastMyAddr.clear();
             m_vecFormulaLastMyAddr.push_back(aFormulaAddr);
         }
@@ -1591,7 +1591,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
                     aEvent.NewValue <<= xChild;
                     CommitChange(aEvent);
-                    m_mapFormulaSelectionSend.insert(MAP_ADDR_XACC::value_type(*viAddr,xChild));
+                    m_mapFormulaSelectionSend.emplace(*viAddr,xChild);
                 }
             }
             m_vecFormulaLastMyAddr.swap(vecCurSel);

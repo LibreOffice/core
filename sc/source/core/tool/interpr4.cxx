@@ -1592,7 +1592,7 @@ bool ScInterpreter::ConvertMatrixParameters()
             }
             pJumpMat->SetJumpParameters( pParams);
             xNew = new ScJumpMatrixToken( pJumpMat );
-            GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew));
+            GetTokenMatrixMap().emplace(pCur, xNew);
         }
         PushTempTokenWithoutError( xNew.get());
         // set continuation point of path for main code line
@@ -4446,8 +4446,7 @@ StackVar ScInterpreter::Interpret()
 
             // Remember result matrix in case it could be reused.
             if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
-                pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur,
-                            pStack[sp-1]));
+                pTokenMatrixMap->emplace(pCur, pStack[sp-1]);
 
             // outer function determines format of an expression
             if ( nFuncFmtType != css::util::NumberFormat::UNDEFINED )

@@ -126,7 +126,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra variable to be set
     OKeySetValue keySetValue(nullptr,std::pair<sal_Int32,Reference<XRow> >(0,Reference<XRow>()));
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
+    m_aKeyMap.emplace(0,keySetValue);
     m_aKeyIter = m_aKeyMap.begin();
 
     Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);

@@ -512,7 +512,7 @@ void LwpStyleManager::AddStyle(LwpObjectID styleObjID, IXFStyle* pStyle)
     //pStyle may change if same style is found in XFStyleManager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pStyle = pXFStyleManager->AddStyle(pStyle).m_pStyle;
-    m_StyleList.insert(LwpStyleMap::value_type(styleObjID, pStyle));
+    m_StyleList.emplace(styleObjID, pStyle);
 }
 
 /*

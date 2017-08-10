@@ -1247,7 +1247,7 @@ namespace svx
             {
                 FmTextControlFeature* pDispatcher = implGetFeatureDispatcher( xProvider, pApplication, *pSlots );
                 if ( pDispatcher )
-                    _rDispatchers.insert( ControlFeatures::value_type( *pSlots, ControlFeature( pDispatcher ) ) );
+                    _rDispatchers.emplace( *pSlots, ControlFeature( pDispatcher ) );
 
                 ++pSlots;
             }

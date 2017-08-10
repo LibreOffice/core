@@ -125,7 +125,7 @@ void Drawing::registerOleObject( const OleObjectInfo& rOleObject )
 {
     OSL_ENSURE( !rOleObject.maShapeId.isEmpty(), "Drawing::registerOleObject - missing OLE object shape id" );
     OSL_ENSURE( maOleObjects.count( rOleObject.maShapeId ) == 0, "Drawing::registerOleObject - OLE object already registered" );
-    maOleObjects.insert( OleObjectInfoMap::value_type( rOleObject.maShapeId, rOleObject ) );
+    maOleObjects.emplace( rOleObject.maShapeId, rOleObject );
 }
 
 void Drawing::registerControl( const ControlInfo& rControl )
@@ -133,7 +133,7 @@ void Drawing::registerControl( const ControlInfo& rControl )
     OSL_ENSURE( !rControl.maShapeId.isEmpty(), "Drawing::registerControl - missing form control shape id" );
     OSL_ENSURE( !rControl.maName.isEmpty(), "Drawing::registerControl - missing form control name" );
     OSL_ENSURE( maControls.count( rControl.maShapeId ) == 0, "Drawing::registerControl - form control already registered" );
-    maControls.insert( ControlInfoMap::value_type( rControl.maShapeId, rControl ) );
+    maControls.emplace( rControl.maShapeId, rControl );
 }
 
 void Drawing::finalizeFragmentImport()

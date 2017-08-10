@@ -293,7 +293,7 @@ void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef const &
     ScExternalRefCache::Cell aCell;
     aCell.mxToken = pToken;
     aCell.mnFmtIndex = nFmtIndex;
-    rRow.insert(RowDataType::value_type(nCol, aCell));
+    rRow.emplace(nCol, aCell);
     if (bSetCacheRange)
         setCachedCell(nCol, nRow);
 }
@@ -717,9 +717,9 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         }
     }
 
-    rDoc.maRangeArrays.insert( RangeArrayMap::value_type(aCacheRange, pArray));
+    rDoc.maRangeArrays.emplace(aCacheRange, pArray);
     if (pNewRange && *pNewRange != aCacheRange)
-        rDoc.maRangeArrays.insert( RangeArrayMap::value_type(*pNewRange, pArray));
+        rDoc.maRangeArrays.emplace(*pNewRange, pArray);
 
     return pArray;
 }
@@ -751,8 +751,8 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& 
 
     OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
     RangeNameMap& rMap = pDoc->maRangeNames;
-    rMap.insert(RangeNameMap::value_type(aUpperName, pArray));
-    pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
+    rMap.emplace(aUpperName, pArray);
+    pDoc->maRealRangeNameMap.emplace(aUpperName, rName);
 }
 
 bool ScExternalRefCache::isValidRangeName(sal_uInt16 nFileId, const OUString& rName) const
@@ -776,7 +776,7 @@ void ScExternalRefCache::setRangeName(sal_uInt16 nFileId, const OUString& rName)
         return;
 
     OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
-    pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
+    pDoc->maRealRangeNameMap.emplace(aUpperName, rName);
 }
 
 void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow,
@@ -887,7 +887,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     size_t nTabLastId = nTabFirstId + rRange.aEnd.Tab() - rRange.aStart.Tab();
     ScRange aCacheRange( nCol1, nRow1, static_cast<SCTAB>(nTabFirstId), nCol2, nRow2, static_cast<SCTAB>(nTabLastId));
 
-    rDoc.maRangeArrays.insert( RangeArrayMap::value_type( aCacheRange, pArray));
+    rDoc.maRangeArrays.emplace(aCacheRange, pArray);
 }
 
 bool ScExternalRefCache::isDocInitialized(sal_uInt16 nFileId)
@@ -968,7 +968,7 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
     // name index map
     TableNameIndexMap aNewNameIndex;
     for (size_t i = 0; i < n; ++i)
-        aNewNameIndex.insert(TableNameIndexMap::value_type(pDoc->maTableNames[i].maUpperName, i));
+        aNewNameIndex.emplace(pDoc->maTableNames[i].maUpperName, i);
     pDoc->maTableNameIndex.swap(aNewNameIndex);
 
     // Setup name for Sheet1 vs base name to be able to load documents
@@ -2393,7 +2393,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
                 // Found !
                 SrcShell aSrcDoc;
                 aSrcDoc.maShell = pShell;
-                maUnsavedDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
+                maUnsavedDocShells.emplace(nFileId, aSrcDoc);
                 StartListening(*pShell);
                 pSrcDoc = &pShell->GetDocument();
                 break;
@@ -2565,7 +2565,7 @@ ScDocument& ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell
         // If this is the first source document insertion, start up the timer.
         maSrcDocTimer.Start();
 
-    maDocShells.insert(DocShellMap::value_type(nFileId, rSrcShell));
+    maDocShells.emplace(nFileId, rSrcShell);
     SfxObjectShell& rShell = *rSrcShell.maShell;
     ScDocument& rSrcDoc = static_cast<ScDocShell&>(rShell).GetDocument();
     initDocInCache(maRefCache, &rSrcDoc, nFileId);
@@ -2633,7 +2633,7 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
     pLink->Update();
     pLink->SetDoReferesh(true);
 
-    maLinkedDocs.insert(LinkedDocMap::value_type(nFileId, true));
+    maLinkedDocs.emplace(nFileId, true);
 }
 
 void ScExternalRefManager::addFilesToLinkManager()

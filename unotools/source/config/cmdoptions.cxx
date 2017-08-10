@@ -74,7 +74,7 @@ class SvtCmdOptions
 
         void AddCommand( const OUString& aCmd )
         {
-            m_aCommandHashMap.insert( CommandHashMap::value_type( aCmd, 0 ) );
+            m_aCommandHashMap.emplace( aCmd, 0 );
         }
 
     private:

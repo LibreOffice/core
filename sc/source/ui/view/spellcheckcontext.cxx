@@ -72,7 +72,7 @@ void SpellCheckContext::setMisspellRanges(
     if (pRanges)
     {
         if (it == maMisspellCells.end())
-            maMisspellCells.insert(CellMapType::value_type(aPos, *pRanges));
+            maMisspellCells.emplace(aPos, *pRanges);
         else
             it->second = *pRanges;
     }

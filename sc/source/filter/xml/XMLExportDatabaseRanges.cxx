@@ -694,7 +694,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
     {
         const ScDBData* p = pDoc->GetAnonymousDBData(i);
         if (p)
-            aSheetDBs.insert(SheetLocalDBs::value_type(i, p));
+            aSheetDBs.emplace(i, p);
     }
 
     bool bHasRanges = !aSheetDBs.empty();

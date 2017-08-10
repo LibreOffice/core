@@ -134,13 +134,13 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         }
         if ( m_aCommandURL == ".uno:FontColor" || m_aCommandURL == ".uno:Color" )
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),true));
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),true));
+            m_aStates.emplace(OUString(".uno:FontColor"),true);
+            m_aStates.emplace(OUString(".uno:Color"),true);
             m_pToolbarController = new SvxColorToolBoxControl(SID_ATTR_CHAR_COLOR2,nToolBoxId,*pToolBox);
         }
         else
         {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),true));
+            m_aStates.emplace(OUString(".uno:BackgroundColor"),true);
             m_pToolbarController = new SvxColorToolBoxControl(SID_BACKGROUND_COLOR,nToolBoxId,*pToolBox);
         }
 

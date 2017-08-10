@@ -412,7 +412,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     for ( sal_Int32 n = 0; n < aPathPropSeq.getLength(); n++ )
     {
         const css::beans::Property& aProperty = aPathPropSeq[n];
-        aTempHashMap.insert( NameToHandleMap::value_type( aProperty.Name, aProperty.Handle ));
+        aTempHashMap.emplace(aProperty.Name, aProperty.Handle);
     }
 
     // Create mapping between internal enum (SvtPathOptions::Paths) and property handle
@@ -425,7 +425,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         {
             sal_Int32 nHandle   = pIter->second;
             sal_Int32 nEnum     = p.ePath;
-            m_aMapEnumToPropHandle.insert( EnumToHandleMap::value_type( nEnum, nHandle ));
+            m_aMapEnumToPropHandle.emplace( nEnum, nHandle );
         }
     }
 

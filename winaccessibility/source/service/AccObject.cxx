@@ -1051,7 +1051,7 @@ bool AccObject:: UpdateAccessibleInfoFromUnoToMSAA ( )
    */
 void AccObject::AddSelect( long index, AccObject* accObj)
 {
-    m_selectionList.insert(IAccSelectionList::value_type(index,accObj));
+    m_selectionList.emplace(index,accObj);
 }
 
 IAccSelectionList& AccObject::GetSelection()

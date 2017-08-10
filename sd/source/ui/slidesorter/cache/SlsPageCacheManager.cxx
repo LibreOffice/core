@@ -215,7 +215,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
 
     // Put the new (or old) cache into the container.
     if (pResult.get() != nullptr)
-        mpPageCaches->insert(PageCacheContainer::value_type(aKey, pResult));
+        mpPageCaches->emplace(aKey, pResult);
 
     return pResult;
 }
@@ -296,9 +296,9 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
             const ::sd::slidesorter::cache::PageCacheManager::DocumentKey aKey (
                 iCacheToChange->first.mpDocument);
             mpPageCaches->erase(iCacheToChange);
-            mpPageCaches->insert(PageCacheContainer::value_type(
+            mpPageCaches->emplace(
                 CacheDescriptor(aKey,rNewPreviewSize),
-                rpCache));
+                rpCache);
 
             pResult = rpCache;
         }

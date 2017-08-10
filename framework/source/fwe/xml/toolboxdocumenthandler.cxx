@@ -135,14 +135,14 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
             OUString temp( XMLNS_TOOLBAR );
             temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
-            m_aToolBoxMap.insert( ToolBoxHashMap::value_type( temp, (ToolBox_XML_Entry)i ) );
+            m_aToolBoxMap.emplace( temp, (ToolBox_XML_Entry)i );
         }
         else
         {
             OUString temp( XMLNS_XLINK );
             temp += XMLNS_FILTER_SEPARATOR;
             temp += OUString::createFromAscii( ToolBoxEntries[i].aEntryName );
-            m_aToolBoxMap.insert( ToolBoxHashMap::value_type( temp, (ToolBox_XML_Entry)i ) );
+            m_aToolBoxMap.emplace( temp, (ToolBox_XML_Entry)i );
         }
     }
 

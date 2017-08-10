@@ -60,7 +60,7 @@ GenericToolboxController::GenericToolboxController( const Reference< XComponentC
 
     // insert main command to our listener map
     if ( !m_aCommandURL.isEmpty() )
-        m_aListenerMap.insert( URLToDispatchMap::value_type( aCommand, Reference< XDispatch >() ));
+        m_aListenerMap.emplace( aCommand, Reference< XDispatch >() );
 }
 
 GenericToolboxController::~GenericToolboxController()

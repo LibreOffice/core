@@ -101,7 +101,7 @@ SharedString SharedStringPool::intern( const OUString& rStr )
         // Failed to insert or fetch upper-case variant. Should never happen.
         return SharedString();
 
-    mpImpl->maStrStore.insert(StrStoreType::value_type(pOrig, *aRes.first));
+    mpImpl->maStrStore.emplace(pOrig, *aRes.first);
 
     return SharedString(pOrig, aRes.first->pData);
 }
