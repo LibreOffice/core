@@ -9321,7 +9321,7 @@ void ScUniqueFormatsEntry::Join( const ScRange& rNewRange )
         }
 
         SCROW nSingleRow = aSingleRange.aStart.Row();
-        aJoinedRanges.insert( ScRowRangeHashMap::value_type( nSingleRow, aSingleRange ) );
+        aJoinedRanges.emplace( nSingleRow, aSingleRange );
         eState = STATE_COMPLEX;
         // continue normally
     }
@@ -9353,7 +9353,7 @@ void ScUniqueFormatsEntry::Join( const ScRange& rNewRange )
     else
     {
         // keep rNewRange for joining
-        aJoinedRanges.insert( ScRowRangeHashMap::value_type( nStartRow, rNewRange ) );
+        aJoinedRanges.emplace( nStartRow, rNewRange );
     }
 }
 

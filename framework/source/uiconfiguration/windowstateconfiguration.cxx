@@ -381,7 +381,7 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
                 {
                     WindowStateInfo aWinStateInfo;
                     impl_fillStructFromSequence( aWinStateInfo, aPropSet );
-                    m_aResourceURLToInfoCache.insert( ResourceURLToInfoCache::value_type( rResourceURL, aWinStateInfo ));
+                    m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
 
                     // insert must be write-through => insert element into configuration
                     Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
@@ -765,7 +765,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
     }
 
     aWindowStateInfo.nMask = nMask;
-    m_aResourceURLToInfoCache.insert( ResourceURLToInfoCache::value_type( rResourceURL, aWindowStateInfo ));
+    m_aResourceURLToInfoCache.emplace( rResourceURL, aWindowStateInfo );
     return makeAny( comphelper::containerToSequence(aPropVec) );
 }
 
@@ -940,7 +940,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
     }
 
     aWindowStateInfo.nMask = nMask;
-    ResourceURLToInfoCache::iterator pIter = (m_aResourceURLToInfoCache.insert( ResourceURLToInfoCache::value_type( rResourceURL, aWindowStateInfo ))).first;
+    ResourceURLToInfoCache::iterator pIter = (m_aResourceURLToInfoCache.emplace( rResourceURL, aWindowStateInfo )).first;
     return pIter->second;
 }
 
@@ -1324,12 +1324,12 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentC
             if ( !aWindowStateFileStr.isEmpty() )
             {
                 // Create first mapping ModuleIdentifier ==> Window state configuration file
-                m_aModuleToFileHashMap.insert( ModuleToWindowStateFileMap::value_type( aModuleIdentifier, aWindowStateFileStr ));
+                m_aModuleToFileHashMap.emplace( aModuleIdentifier, aWindowStateFileStr );
 
                 // Create second mapping Command File ==> Window state configuration instance
                 ModuleToWindowStateConfigHashMap::iterator pIter = m_aModuleToWindowStateHashMap.find( aWindowStateFileStr );
                 if ( pIter == m_aModuleToWindowStateHashMap.end() )
-                    m_aModuleToWindowStateHashMap.insert( ModuleToWindowStateConfigHashMap::value_type( aWindowStateFileStr, xEmptyNameAccess ));
+                    m_aModuleToWindowStateHashMap.emplace( aWindowStateFileStr, xEmptyNameAccess );
             }
         }
     }

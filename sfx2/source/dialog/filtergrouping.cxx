@@ -181,7 +181,7 @@ namespace sfx2
             FilterClassList::iterator aInsertPos = m_rClassList.end();
             --aInsertPos;
             // remember this position
-            m_rClassesReferrer.insert( FilterClassReferrer::value_type( _rLogicalFilterName, aInsertPos ) );
+            m_rClassesReferrer.emplace( _rLogicalFilterName, aInsertPos );
         }
     };
 
@@ -349,7 +349,7 @@ namespace sfx2
         void operator() ( const FilterName& _rName )
         {
             ::std::pair< FilterGroupEntryReferrer::iterator, bool > aInsertRes =
-            m_rEntryReferrer.insert( FilterGroupEntryReferrer::value_type( _rName, m_aClassPos ) );
+            m_rEntryReferrer.emplace( _rName, m_aClassPos );
             SAL_WARN_IF(
                 !aInsertRes.second, "sfx.dialog",
                 "already have an element for " << _rName);

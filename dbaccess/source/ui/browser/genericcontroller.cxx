@@ -1244,7 +1244,7 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
             ++aIter
         )
         if ( aIter->second.GroupId != CommandGroup::INTERNAL )
-            aCmdHashMap.insert( CommandHashMap::value_type( aIter->second.GroupId, 0 ));
+            aCmdHashMap.emplace( aIter->second.GroupId, 0 );
 
     return comphelper::mapKeysToSequence( aCmdHashMap );
 }

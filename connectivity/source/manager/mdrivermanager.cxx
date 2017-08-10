@@ -570,7 +570,7 @@ void SAL_CALL OSDBCDriverManager::registerObject( const OUString& _rName, const 
     {
         Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
         if (xNewDriver.is())
-            m_aDriversRT.insert(DriverCollection::value_type(_rName, xNewDriver));
+            m_aDriversRT.emplace(_rName, xNewDriver);
         else
             throw IllegalArgumentException();
     }

@@ -193,8 +193,8 @@ namespace dbtools
 
                 if ( aExistentPos == m_aParameterInformation.end() )
                 {
-                    aExistentPos = m_aParameterInformation.insert( ParameterInformation::value_type(
-                        sName, xParam ) ).first;
+                    aExistentPos = m_aParameterInformation.emplace(
+                        sName, xParam ).first;
                 }
                 else
                     aExistentPos->second.xComposerColumn = xParam;

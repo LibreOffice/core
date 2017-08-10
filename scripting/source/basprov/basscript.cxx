@@ -257,7 +257,7 @@ namespace basprov
                             if ( pVar )
                             {
                                 SbxVariableRef xVar = pVar;
-                                aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar.get() ) ) );
+                                aOutParamMap.emplace( n - 1, sbxToUnoValue( xVar.get() ) );
                             }
                         }
                     }

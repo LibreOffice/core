@@ -2616,7 +2616,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
                 assert(hr == S_OK);
                 if(hr == S_OK)
                 {
-                    m_containedObjects.insert(XGUIDToComObjHash::value_type(*pMap->piid,static_cast<IUnknown*>(*ppvObject)));
+                    m_containedObjects.emplace(*pMap->piid, static_cast<IUnknown*>(*ppvObject));
                     IUNOXWrapper* wrapper = nullptr;
                     static_cast<IUnknown*>(*ppvObject)->QueryInterface(IID_IUNOXWrapper, reinterpret_cast<void**>(&wrapper));
                     if(wrapper)

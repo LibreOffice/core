@@ -1090,8 +1090,8 @@ void OServiceManager::insert( const Any & Element )
         const OUString * pArray = aServiceNames.getConstArray();
         for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
         {
-            m_ServiceMap.insert( HashMultimap_OWString_Interface::value_type(
-                pArray[i], *o3tl::doAccess<Reference<XInterface>>(Element) ) );
+            m_ServiceMap.emplace(
+                pArray[i], *o3tl::doAccess<Reference<XInterface>>(Element) );
         }
     }
     }

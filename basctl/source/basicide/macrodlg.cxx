@@ -515,7 +515,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
             DBG_ASSERT( pMethod, "Method not found! (NULL)" );
             sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
-            aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
+            aMacros.emplace( nStart, pMethod );
         }
 
         m_pMacroBox->SetUpdateMode(false);

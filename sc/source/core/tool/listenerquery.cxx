@@ -38,7 +38,7 @@ void RefQueryFormulaGroup::add( const ScAddress& rPos )
     if (itTab == maTabs.end())
     {
         std::pair<TabsType::iterator,bool> r =
-            maTabs.insert(TabsType::value_type(rPos.Tab(), ColsType()));
+            maTabs.emplace(rPos.Tab(), ColsType());
         if (!r.second)
             // Insertion failed.
             return;
@@ -51,7 +51,7 @@ void RefQueryFormulaGroup::add( const ScAddress& rPos )
     if (itCol == rCols.end())
     {
         std::pair<ColsType::iterator,bool> r =
-            rCols.insert(ColsType::value_type(rPos.Col(), ColType()));
+            rCols.emplace(rPos.Col(), ColType());
         if (!r.second)
             // Insertion failed.
             return;

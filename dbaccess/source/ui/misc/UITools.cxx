@@ -623,7 +623,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
             if ( !aName.isEmpty() )
                 pInfo->aUIName += " ]";
             // Now that we have the type info, save it in the multimap
-            _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
+            _rTypeInfoMap.emplace(pInfo->nType,pInfo);
         }
         // for a faster index access
         _rTypeInfoIters.reserve(_rTypeInfoMap.size());

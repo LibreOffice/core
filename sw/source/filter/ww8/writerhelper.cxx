@@ -914,7 +914,7 @@ namespace sw
 
             InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
 
-            maTables.insert(TableMap::value_type(pClient, &(rPaM.GetPoint()->nNode)));
+            maTables.emplace(pClient, &(rPaM.GetPoint()->nNode));
         }
     }
 

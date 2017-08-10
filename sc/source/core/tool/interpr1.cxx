@@ -170,7 +170,7 @@ void ScInterpreter::ScIfJump()
                         }
                     }
                     xNew = new ScJumpMatrixToken( pJumpMat );
-                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(pCur, xNew));
+                    GetTokenMatrixMap().emplace(pCur, xNew);
                 }
                 if (!xNew.get())
                 {
@@ -376,7 +376,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                         nR = 0;
                     }
                     xNew = new ScJumpMatrixToken( pJumpMat );
-                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur, xNew ));
+                    GetTokenMatrixMap().emplace( pCur, xNew );
                 }
                 nGlobalError = nOldGlobalError;
                 PushTokenRef( xNew );
@@ -473,8 +473,7 @@ void ScInterpreter::ScChooseJump()
                         }
                     }
                     xNew = new ScJumpMatrixToken( pJumpMat );
-                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(
-                                pCur, xNew));
+                    GetTokenMatrixMap().emplace(pCur, xNew);
                 }
                 if (xNew.get())
                 {
@@ -827,7 +826,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             if (pTokenMatrixMap)
             {
                 pTokenMatrixMap->erase( pCur);
-                pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur, pStack[sp-1]));
+                pTokenMatrixMap->emplace(pCur, pStack[sp-1]);
             }
         }
         return true;

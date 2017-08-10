@@ -574,9 +574,9 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
         ).first;
     lcl_calculate(aColumnPos,aRowPos,aInsert->second);
 
-    TGridStyleMap::iterator aPos = m_aColumnStyleNames.insert(TGridStyleMap::value_type(_xProp.get(),TStringVec())).first;
+    TGridStyleMap::iterator aPos = m_aColumnStyleNames.emplace(_xProp.get(),TStringVec()).first;
     collectStyleNames(XML_STYLE_FAMILY_TABLE_COLUMN,aColumnPos,aPos->second);
-    aPos = m_aRowStyleNames.insert(TGridStyleMap::value_type(_xProp.get(),TStringVec())).first;
+    aPos = m_aRowStyleNames.emplace(_xProp.get(),TStringVec()).first;
     collectStyleNames(XML_STYLE_FAMILY_TABLE_ROW,aRowPos,aPos->second);
 
     sal_Int32 x1 = 0;
@@ -1131,7 +1131,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     {
         ::std::vector< XMLPropertyState > aPropertyStates( m_xParaPropMapper->Filter(_xProp) );
         if ( !aPropertyStates.empty() )
-            m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aPropertyStates )));
+            m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aPropertyStates ));
     }
     ::std::vector< XMLPropertyState > aPropertyStates( m_xCellStylesExportPropertySetMapper->Filter(_xProp) );
     Reference<XFixedLine> xFixedLine(_xProp,uno::UNO_QUERY);
@@ -1231,14 +1231,14 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     }
 
     if ( !aPropertyStates.empty() )
-        m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_CELL, aPropertyStates )));
+        m_aAutoStyleNames.emplace( _xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_CELL, aPropertyStates ));
 }
 
 void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 {
     ::std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp.get()) );
     if ( !aPropertyStates.empty() )
-        m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp.get(),GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_TABLE, aPropertyStates )));
+        m_aAutoStyleNames.emplace( _xProp.get(),GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_TABLE, aPropertyStates ));
 }
 
 void ORptExport::SetBodyAttributes()
@@ -1546,7 +1546,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sFunction += sPostfix;
                     xFunction->setFormula(sFunction);
                     exportFunction(xFunction);
-                    m_aGroupFunctionMap.insert(TGroupFunctionMap::value_type(xGroup,xFunction));
+                    m_aGroupFunctionMap.emplace(xGroup,xFunction);
                 }
             }
         }

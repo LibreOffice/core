@@ -140,7 +140,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         }
         sLabel = sAlias;
     }
-    _rColumns.insert(StringMap::value_type(sLabel,0));
+    _rColumns.emplace(sLabel,0);
     OParseColumn* pColumn = new OParseColumn(
         sLabel,
         _rxResMetaData->getColumnTypeName( _nColumnPos ),

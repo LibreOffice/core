@@ -405,7 +405,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             OUString aInsStr = aString;
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
-            aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
+            aRangeMap.emplace( aInsStr, aRange );
             pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataCol) );
         }
     }
@@ -446,7 +446,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             OUString aInsStr = aString;
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
-            aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
+            aRangeMap.emplace( aInsStr, aRange );
             pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataRow) );
         }
     }

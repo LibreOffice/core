@@ -151,7 +151,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             try
             {
                 rAcceptor->initialize( aSeq );
-                rMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
+                rMap.emplace(aAcceptString, rAcceptor);
             }
             catch (const css::uno::Exception& e)
             {

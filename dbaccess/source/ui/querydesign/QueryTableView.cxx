@@ -836,7 +836,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             // Show the window and add to the list
             OUString sName = static_cast< OQueryTableWindowData*>(pData.get())->GetAliasName();
             OSL_ENSURE(GetTabWinMap().find(sName) == GetTabWinMap().end(),"Alias name already in list!");
-            GetTabWinMap().insert(OTableWindowMap::value_type(sName,pTabWin));
+            GetTabWinMap().emplace(sName,pTabWin);
 
             pTabWin->Show();
 

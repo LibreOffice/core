@@ -137,7 +137,7 @@ void lcl_collectFunctionNames(const uno::Reference< report::XFunctions>& _xFunct
     for (sal_Int32 i = 0; i < nCount ; ++i)
     {
         uno::Reference< report::XFunction > xFunction(_xFunctions->getByIndex(i),uno::UNO_QUERY_THROW);
-        _rFunctionNames.insert(TFunctions::value_type(lcl_getQuotedFunctionName(xFunction),TFunctionPair(xFunction,xParent)));
+        _rFunctionNames.emplace( lcl_getQuotedFunctionName(xFunction),TFunctionPair(xFunction,xParent) );
     }
 }
 
@@ -2154,7 +2154,7 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
     const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
     const uno::Reference< container::XIndexContainer> xFunctions(xFunctionsSupplier->getFunctions(),uno::UNO_QUERY_THROW);
     xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(m_xFunction));
-    m_aFunctionNames.insert(TFunctions::value_type(sQuotedFunctionName,TFunctionPair(m_xFunction,xFunctionsSupplier)));
+    m_aFunctionNames.emplace(sQuotedFunctionName,TFunctionPair(m_xFunction,xFunctionsSupplier));
     m_bNewFunction = true;
 }
 

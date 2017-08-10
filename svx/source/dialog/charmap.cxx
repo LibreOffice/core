@@ -730,7 +730,7 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
         OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
         std::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
             m_xAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
-        aFind = m_aItems.insert(ItemsMap::value_type(_nPos, xItem)).first;
+        aFind = m_aItems.emplace(_nPos, xItem).first;
         OUStringBuffer buf;
         buf.appendUtf32( mxFontCharMap->GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();

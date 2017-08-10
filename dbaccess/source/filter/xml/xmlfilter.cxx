@@ -458,7 +458,7 @@ void ODBFilter::fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap)
     {
         Sequence<PropertyValue> aValue;
         pIter->Value >>= aValue;
-        _rMap.insert(TPropertyNameMap::value_type(pIter->Name,aValue));
+        _rMap.emplace( pIter->Name,aValue );
     }
 
 }

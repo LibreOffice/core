@@ -657,7 +657,7 @@ void LibInfo::InsertInfo (
 {
     Key aKey(rDocument, rLibName);
     m_aMap.erase(aKey);
-    m_aMap.insert(Map::value_type(aKey, Item(rCurrentName, eCurrentType)));
+    m_aMap.emplace(aKey, Item(rCurrentName, eCurrentType));
 }
 
 void LibInfo::RemoveInfoFor (ScriptDocument const& rDocument)

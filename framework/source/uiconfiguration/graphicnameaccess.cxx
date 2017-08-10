@@ -36,7 +36,7 @@ GraphicNameAccess::~GraphicNameAccess()
 
 void GraphicNameAccess::addElement( const OUString& rName, const uno::Reference< graphic::XGraphic >& rElement )
 {
-    m_aNameToElementMap.insert( NameGraphicHashMap::value_type( rName, rElement ));
+    m_aNameToElementMap.emplace( rName, rElement );
 }
 
 // XNameAccess

@@ -214,7 +214,7 @@ static void fillHashMap( const Sequence< Sequence< css::beans::PropertyValue > >
 
         if ( !aResourceURL.isEmpty() &&
              rHashMap.find( aResourceURL ) == rHashMap.end() )
-            rHashMap.insert( ToolbarHashMap::value_type( aResourceURL, aUIName ));
+            rHashMap.emplace( aResourceURL, aUIName );
     }
 }
 

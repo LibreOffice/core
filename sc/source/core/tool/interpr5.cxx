@@ -341,7 +341,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
 
     if (pToken && pTokenMatrixMap)
-        pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pToken, new ScMatrixToken( pMat)));
+        pTokenMatrixMap->emplace(pToken, new ScMatrixToken( pMat));
 
     return pMat;
 }
