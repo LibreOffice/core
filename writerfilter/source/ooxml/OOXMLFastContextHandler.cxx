@@ -1614,14 +1614,6 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
     mpParserState->endTable();
 }
 
-void OOXMLFastContextHandlerTextTable::start_P_Tbl()
-{
-}
-
-void OOXMLFastContextHandlerTextTable::end_P_Tbl()
-{
-}
-
 /*
   class OOXMLFastContextHandlerShape
  */
