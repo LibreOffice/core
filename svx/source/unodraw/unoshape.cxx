@@ -353,15 +353,20 @@ void SvxShape::impl_initFromSdrObject()
     }
     osl_atomic_decrement( &m_refCount );
 
-    mpModel = mpObj->GetModel();
+    auto pNewModel = mpObj->GetModel();
+
+    if (pNewModel != mpModel)
+    {
+        if (mpModel)
+            EndListening( *mpModel );
+        if (pNewModel)
+            StartListening( *pNewModel );
+        mpModel = pNewModel;
+    }
 
     // #i40944#
     // Do not simply return when no model but do the type corrections
     // following below.
-    if(mpModel)
-    {
-        StartListening( *mpModel );
-    }
 
     const SdrInventor nInventor = mpObj->GetObjInventor();
 
