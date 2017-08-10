@@ -1273,32 +1273,16 @@
 			</xsl:attribute>
 
 			<xsl:element name="span">
-				<!-- outline style 'text:min-label-distance' is interpreted as a CSS 'margin-right' attribute
+				<!-- Convert the "label-followed-by" to margins. According to ODF, possible values are: 'listtab', 'space', and 'nothing'.
+				'space' seems not to be written out by LO, and for 'nothing' we obviously need do nothing.
 				NOTE: Should be handled as CSS style in style header -->
-				<xsl:variable name="minLabelDistance" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = current()/@text:outline-level]/*/@text:min-label-distance"/>
-				<xsl:variable name="minLabelWidth" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = current()/@text:outline-level]/*/@text:min-label-width"/>
+				<xsl:variable name="currentOutlineLevel" select="@text:outline-level"/>
+				<xsl:variable name="labelFollowedBy" select="$globalData//office:document/office:styles/text:outline-style/text:outline-level-style[@text:level = $currentOutlineLevel]/style:list-level-properties[@text:list-level-position-and-space-mode='label-alignment']/style:list-level-label-alignment/@text:label-followed-by"/>
 
-				<xsl:if test="$minLabelDistance | $minLabelWidth">
+				<!-- Add some margin (a tab is around 0.64cm in LO), but only if there is a number preceding the heading. -->
+				<xsl:if test="$labelFollowedBy='listtab' and $headingNumber != ''">
 					<xsl:attribute name="style">
-						<xsl:if test="$minLabelDistance">
-							<xsl:text>margin-right:</xsl:text>
-							<xsl:call-template name="convert2cm">
-								<xsl:with-param name="value" select="$minLabelDistance"/>
-							</xsl:call-template>
-							<xsl:text>cm;</xsl:text>
-						</xsl:if>
-						<xsl:if test="$minLabelWidth">
-							<xsl:text>display:block;float:</xsl:text>
-							<xsl:call-template name="getOppositeWritingDirection">
-								<xsl:with-param name="globalData" select="$globalData"/>
-								<xsl:with-param name="paraStyleName" select="descendant-or-self::*/@text:style-name"/>
-							</xsl:call-template>;
-							<xsl:text>min-width:</xsl:text>
-							<xsl:call-template name="convert2cm">
-								<xsl:with-param name="value" select="$minLabelWidth"/>
-							</xsl:call-template>
-							<xsl:text>cm;</xsl:text>
-						</xsl:if>
+						<xsl:text>margin-right:0.64cm;</xsl:text>
 					</xsl:attribute>
 				</xsl:if>
 				<xsl:copy-of select="$headingNumber"/>
