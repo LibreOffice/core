@@ -344,10 +344,17 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
     SCCOL nEndCol = MAXCOL;
     SCROW nEndRow = MAXROW;
     rDoc.ShrinkToUsedDataArea(bShrunk, 0, nStartCol, nStartRow, nEndCol, nEndRow, false, true, true);
-    rDoc.SetClipArea(ScRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0));
+    ScRange aClipRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0);
+    rDoc.SetClipArea(aClipRange);
 
     ScRange aDestRange;
     pDBData->GetArea(aDestRange);
+    SCCOL nColSize = std::min<SCCOL>(aDestRange.aEnd.Col() - aDestRange.aStart.Col(), nEndCol);
+    aDestRange.aEnd.SetCol(aDestRange.aStart.Col() + nColSize);
+
+    SCROW nRowSize = std::min<SCCOL>(aDestRange.aEnd.Row() - aDestRange.aStart.Row(), nEndRow);
+    aDestRange.aEnd.SetRow(aDestRange.aStart.Row() + nRowSize);
+
     ScMarkData aMark;
     aMark.SelectTable(0, true);
     mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
