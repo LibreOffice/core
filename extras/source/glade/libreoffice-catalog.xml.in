@@ -851,5 +851,8 @@
     <glade-widget-class title="Category ListBox" name="sdlo-CategoryListBox"
                         generic-name="Category ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Command Category ListBox" name="cuilo-CommandCategoryListBox"
+                        generic-name="Command Category ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
   </glade-widget-classes>
 </glade-catalog>

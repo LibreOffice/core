@@ -18,6 +18,7 @@
  */
 
 #include "CommandCategoryListBox.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
@@ -26,6 +27,7 @@
 
 #include "dialmgr.hxx"
 #include "strings.hrc"
+#include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
 
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent, WinBits nStyle)
@@ -35,6 +37,24 @@ CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent, WinBits nSt
 }
 
 VCL_BUILDER_FACTORY(CommandCategoryListBox);
+
+CommandCategoryListBox::~CommandCategoryListBox()
+{
+    disposeOnce();
+}
+
+void CommandCategoryListBox::dispose()
+{
+    ClearAll();
+    ListBox::dispose();
+}
+
+void CommandCategoryListBox::ClearAll()
+{
+    //TODO: Handle SfxCfgKind::GROUP_SCRIPTCONTAINER when it gets added to Init
+    m_aGroupInfo.clear();
+    Clear();
+}
 
 void CommandCategoryListBox::Init(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -50,6 +70,7 @@ void CommandCategoryListBox::Init(
     m_sModuleLongName = sModuleLongName;
     m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
     m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
+    m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
 /**** InitModule Start ****/
     try
@@ -103,11 +124,118 @@ void CommandCategoryListBox::Init(
     SelectEntryPos(0);
 }
 
-void CommandCategoryListBox::ClearAll()
+void CommandCategoryListBox::FillFunctionsList(
+    const css::uno::Sequence<css::frame::DispatchInformation>& xCommands,
+    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox)
 {
-    //TODO: Handle SfxCfgKind::GROUP_SCRIPTCONTAINER when it gets added to Init
-    m_aGroupInfo.clear();
-    Clear();
+    for (const auto & rInfo : xCommands)
+    {
+        OUString sUIName = MapCommand2UIName(rInfo.Command);
+
+        SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName );
+
+        m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
+        SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
+        pGrpInfo->sCommand = rInfo.Command;
+        pGrpInfo->sLabel   = sUIName;
+        pFuncEntry->SetUserData(pGrpInfo);
+    }
+}
+
+OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
+{
+    OUString sUIName;
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xModuleConf;
+        m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
+        if (xModuleConf.is())
+        {
+            ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
+            sUIName = lProps.getUnpackedValueOrDefault("Name", OUString());
+        }
+    }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
+    catch(css::uno::Exception&)
+        { sUIName.clear(); }
+
+    // fallback for missing UINames !?
+    if (sUIName.isEmpty())
+    {
+        sUIName = sCommand;
+    }
+
+    return sUIName;
+}
+
+void CommandCategoryListBox::categorySelected( const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox )
+{
+    SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(GetSelectEntryData());
+    pFunctionListBox->SetUpdateMode(false);
+    pFunctionListBox->ClearAll();
+
+    switch ( pInfo->nKind )
+    {
+        case SfxCfgKind::GROUP_ALLFUNCTIONS:
+        {
+            css::uno::Reference< css::frame::XDispatchInformationProvider >
+                xProvider( m_xFrame, css::uno::UNO_QUERY );
+            sal_Int32 nEntryCount = GetEntryCount();
+
+            for (sal_Int32 nCurPos = 0; nCurPos < nEntryCount; ++nCurPos)
+            {
+                SfxGroupInfo_Impl *pCurrentInfo =
+                    static_cast<SfxGroupInfo_Impl*>(GetEntryData(nCurPos));
+
+                if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
+                {
+                    css::uno::Sequence< css::frame::DispatchInformation > lCommands;
+                    try
+                    {
+                        lCommands = xProvider->getConfigurableDispatchInformation(
+                                        pCurrentInfo->nUniqueID );
+                        FillFunctionsList( lCommands, pFunctionListBox );
+                    }
+                    catch( css::container::NoSuchElementException& )
+                    {
+                    }
+                }
+            }
+
+
+            break;
+        }
+        case SfxCfgKind::GROUP_FUNCTION:
+        {
+            sal_uInt16 nGroup = pInfo->nUniqueID;
+            css::uno::Reference< css::frame::XDispatchInformationProvider >
+                xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
+            css::uno::Sequence< css::frame::DispatchInformation > lCommands =
+                xProvider->getConfigurableDispatchInformation(nGroup);
+            FillFunctionsList( lCommands, pFunctionListBox );
+            break;
+        }
+        case SfxCfgKind::GROUP_SCRIPTCONTAINER:
+        {
+            //TODO:Implement
+            break;
+        }
+        case SfxCfgKind::GROUP_STYLES:
+        {
+            //TODO:Implement
+            break;
+        }
+        default:
+            // Do nothing, the list box will stay empty
+            SAL_INFO( "cui.customize", "Ignoring unexpected SfxCfgKind: " <<  static_cast<int>(pInfo->nKind) );
+            break;
+    }
+
+    if ( pFunctionListBox->GetEntryCount() )
+        pFunctionListBox->Select( pFunctionListBox->GetEntry( nullptr, 0 ) );
+
+    pFunctionListBox->SetUpdateMode(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
