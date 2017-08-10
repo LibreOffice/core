@@ -3783,9 +3783,9 @@ void SwXTextDocument::postDialogChildMouseEvent(const vcl::DialogID& rDialogID, 
     }
 }
 
-void SwXTextDocument::notifyDialogInvalidation(const vcl::DialogID& rDialogID)
+void SwXTextDocument::notifyDialog(const vcl::DialogID& rDialogID, const OUString& rAction)
 {
-    SfxLokHelper::notifyDialogInvalidation(rDialogID);
+    SfxLokHelper::notifyDialog(rDialogID, rAction);
 }
 
 void SwXTextDocument::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)

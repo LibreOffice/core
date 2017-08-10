@@ -279,7 +279,7 @@ enum
     PASSWORD_REQUIRED,
     COMMENT,
     RULER,
-    DIALOG_INVALIDATE,
+    DIALOG,
     DIALOG_CHILD,
 
     LAST_SIGNAL
@@ -438,8 +438,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_COMMENT";
     case LOK_CALLBACK_RULER_UPDATE:
         return "LOK_CALLBACK_RULER_UPDATE";
-    case LOK_CALLBACK_DIALOG_INVALIDATE:
-        return "LOK_CALLBACK_DIALOG_INVALIDATE";
+    case LOK_CALLBACK_DIALOG:
+        return "LOK_CALLBACK_DIALOG";
     case LOK_CALLBACK_DIALOG_CHILD:
         return "LOK_CALLBACK_DIALOG_CHILD";
     }
@@ -1414,8 +1414,9 @@ callback (gpointer pData)
         break;
     case LOK_CALLBACK_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
-    case LOK_CALLBACK_DIALOG_INVALIDATE:
-        g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG_INVALIDATE], 0, pCallback->m_aPayload.c_str());
+        break;
+    case LOK_CALLBACK_DIALOG:
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG], 0, pCallback->m_aPayload.c_str());
         break;
     case LOK_CALLBACK_DIALOG_CHILD:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG_CHILD], 0, pCallback->m_aPayload.c_str());
@@ -3222,8 +3223,8 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * @pDocView: the #LOKDocView on which the signal is emitted
      * @pDialogId: The uno command for the dialog (dialog ID)
      */
-    doc_view_signals[DIALOG_INVALIDATE] =
-        g_signal_new("dialog-invalidate",
+    doc_view_signals[DIALOG] =
+        g_signal_new("dialog",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
