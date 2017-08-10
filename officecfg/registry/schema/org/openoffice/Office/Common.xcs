@@ -6709,11 +6709,11 @@
     </group>
     <group oor:name="StylesAndFormatting">
       <info>
-        <desc>Contains settings for Styles.</desc>
+        <desc>Contains settings for Styles and Formatting.</desc>
       </info>
       <prop oor:name="Preview" oor:type="xs:boolean" oor:nillable="false">
         <info>
-           <desc>Specifies if the styles preview is enabled.</desc>
+           <desc>Specifies if the styles and formatting preview is enabled.</desc>
         </info>
         <value>true</value>
       </prop>
