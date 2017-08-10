@@ -33,22 +33,14 @@ class DataProviderDlg : public ModalDialog
 
     VclPtr<SvtURLBox>      m_pCbUrl;
     VclPtr<PushButton>     m_pBtnBrowse;
-    VclPtr<RadioButton>    m_pRBAddressValue;
-    VclPtr<CheckBox>       m_pCBRefreshOnEmpty;
-    VclPtr<RadioButton>    m_pRBMaxLimit;
-    VclPtr<RadioButton>    m_pRBUnlimited;
-    VclPtr<Edit>           m_pEdRange;
-    VclPtr<Edit>           m_pEdLimit;
     VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<VclFrame>       m_pVclFrameLimit;
+    VclPtr<ComboBox>       m_pCBData;
 
     DECL_LINK(UpdateClickHdl, Button*, void);
-    DECL_LINK(UpdateHdl, Edit&, void);
     DECL_LINK(UpdateComboBoxHdl, ComboBox&, void);
     DECL_LINK(BrowseHdl, Button*, void);
 
     void UpdateEnable();
-    ScRange GetStartRange();
 
     std::shared_ptr<ExternalDataSource> mpDataSource;
 
