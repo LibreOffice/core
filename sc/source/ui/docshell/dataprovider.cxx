@@ -249,43 +249,40 @@ void CSVFetchThread::execute()
 {
     OStringBuffer aBuffer(64000);
     std::unique_ptr<SvStream> pStream = FetchStreamFromURL(maURL, aBuffer);
-    if (pStream->good())
+    SCROW nCurRow = 0;
+    SCCOL nCol = 0;
+    while (pStream->good())
     {
-        LinesType aLines(10);
-        SCROW nCurRow = 0;
-        SCCOL nCol = 0;
-        for (Line & rLine : aLines)
+        if (mbTerminate)
+            break;
+
+        Line aLine;
+        aLine.maCells.clear();
+        pStream->ReadLine(aLine.maLine);
+        CSVHandler aHdl(aLine, MAXCOL);
+        orcus::csv_parser<CSVHandler> parser(aLine.maLine.getStr(), aLine.maLine.getLength(), aHdl, maConfig);
+        parser.parse();
+
+        if (aLine.maCells.empty())
         {
-            if (mbTerminate)
-                break;
-
-            rLine.maCells.clear();
-            pStream->ReadLine(rLine.maLine);
-            CSVHandler aHdl(rLine, MAXCOL);
-            orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
-            parser.parse();
-
-            if (rLine.maCells.empty())
-            {
-                break;
-            }
-
-            nCol = 0;
-            const char* pLineHead = rLine.maLine.getStr();
-            for (auto& rCell : rLine.maCells)
-            {
-                if (rCell.mbValue)
-                {
-                    mrDocument.SetValue(ScAddress(nCol, nCurRow, 0 /* Tab */), rCell.mfValue);
-                }
-                else
-                {
-                    mrDocument.SetString(nCol, nCurRow, 0 /* Tab */, OUString(pLineHead+rCell.maStr.Pos, rCell.maStr.Size, RTL_TEXTENCODING_UTF8));
-                }
-                ++nCol;
-            }
-            nCurRow++;
+            break;
         }
+
+        nCol = 0;
+        const char* pLineHead = aLine.maLine.getStr();
+        for (auto& rCell : aLine.maCells)
+        {
+            if (rCell.mbValue)
+            {
+                mrDocument.SetValue(ScAddress(nCol, nCurRow, 0 /* Tab */), rCell.mfValue);
+            }
+            else
+            {
+                mrDocument.SetString(nCol, nCurRow, 0 /* Tab */, OUString(pLineHead+rCell.maStr.Pos, rCell.maStr.Size, RTL_TEXTENCODING_UTF8));
+            }
+            ++nCol;
+        }
+        nCurRow++;
     }
     SolarMutexGuard aGuard;
     mpIdle->Start();
