@@ -1013,8 +1013,6 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
     else
     {
         pFS->startElementNS(XML_p, nXmlNodeType,
-                            XML_calcmode, pCalcMode,
-                            XML_valueType, pValueType,
                             XML_path, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8),
                             FSEND);
     }
