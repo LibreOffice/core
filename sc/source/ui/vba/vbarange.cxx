@@ -4436,13 +4436,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         xDBRangeProps->setPropertyValue( "AutoFilter", uno::Any(true) );
         // set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
-        bool bHasColHeader = false;
-        ScDocument* pDoc = pShell ? &pShell->GetDocument() : nullptr;
-        if (pDoc)
-        {
-            bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) );
-        }
-        xFiltProps->setPropertyValue( "ContainsHeader", uno::Any( bHasColHeader ) );
+        xFiltProps->setPropertyValue( "ContainsHeader", uno::Any( true ) );
     }
 
     sal_Int32 nField = 0; // *IS* 1 based
