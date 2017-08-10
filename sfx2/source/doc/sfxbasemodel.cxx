@@ -258,7 +258,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
             const Reference<XComponentContext> xContext(
                 ::comphelper::getProcessComponentContext());
-            OUString uri;
             const Reference<frame::XModel> xModel(
                 m_pObjectShell->GetModel());
             const Reference<lang::XMultiComponentFactory> xMsf(
@@ -276,7 +275,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             {
                 return nullptr;
             }
-            uri = xContent->getIdentifier()->getContentIdentifier();
+            OUString uri = xContent->getIdentifier()->getContentIdentifier();
             OSL_ENSURE(!uri.isEmpty(), "GetDMA: empty uri?");
             if (!uri.isEmpty() && !uri.endsWith("/"))
             {
@@ -1478,8 +1477,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
               && aSeqArgs[nInd].Name != "FailOnWarning"
               && aSeqArgs[nInd].Name != "CheckIn" )
             {
-                OUString aMessage( "Unexpected MediaDescriptor parameter: "  );
-                aMessage += aSeqArgs[nInd].Name;
+                const OUString aMessage( "Unexpected MediaDescriptor parameter: " + aSeqArgs[nInd].Name );
                 throw lang::IllegalArgumentException( aMessage, Reference< XInterface >(), 1 );
             }
             else if ( aSeqArgs[nInd].Name == "CheckIn" )
@@ -1761,8 +1759,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     SfxMedium* pMedium = new SfxMedium( seqArguments );
 
     ErrCode nError = ERRCODE_NONE;
-    OUString aFilterProvider = getFilterProvider(*pMedium);
-    if (!aFilterProvider.isEmpty())
+    if (!getFilterProvider(*pMedium).isEmpty())
     {
         if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
             nError = ERRCODE_IO_GENERAL;
@@ -1797,7 +1794,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         nError = m_pData->m_pObjectShell->GetErrorCode();
         if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
         {
-            OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
+            const OUString aDocName( pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) );
             const SfxBoolItem* pRepairItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_REPAIRPACKAGE, false);
             if ( !pRepairItem || !pRepairItem->GetValue() )
             {
@@ -2458,12 +2455,12 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
             aProps[2].Name = "CheckIn";
             aProps[2].Value <<= true;
 
-            OUString sName( pMedium->GetName( ) );
+            const OUString sName( pMedium->GetName( ) );
             storeSelf( aProps );
 
             // Refresh pMedium as it has probably changed during the storeSelf call
             pMedium = m_pData->m_pObjectShell->GetMedium( );
-            OUString sNewName( pMedium->GetName( ) );
+            const OUString sNewName( pMedium->GetName( ) );
 
             // URL has changed, update the document
             if ( sName != sNewName )
@@ -2567,7 +2564,7 @@ void SfxBaseModel::loadCmisProperties( )
                 utl::UCBContentHelper::getDefaultCommandEnvironment(),
                 comphelper::getProcessComponentContext() );
             Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-            OUString aCmisProps( "CmisProperties" );
+            const OUString aCmisProps( "CmisProperties" );
             if ( xProps->hasPropertyByName( aCmisProps ) )
             {
                 Sequence< document::CmisProperty> aCmisProperties;
@@ -2677,7 +2674,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                   && m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
                 {
                     Reference< embed::XStorage > xConfigStorage;
-                    OUString aUIConfigFolderName( "Configurations2" );
+                    const OUString aUIConfigFolderName( "Configurations2" );
 
                     xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
                     if ( !xConfigStorage.is() )
@@ -2712,9 +2709,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
                 SfxItemSet *pSet = m_pData->m_pObjectShell->GetMedium()->GetItemSet();
                 Sequence< beans::PropertyValue > aArgs;
-                OUString aTitle = m_pData->m_pObjectShell->GetTitle();
                 TransformItems( SID_SAVEASDOC, *pSet, aArgs );
-                addTitle_Impl( aArgs, aTitle );
+                addTitle_Impl( aArgs, m_pData->m_pObjectShell->GetTitle() );
                 attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
             }
             break;
@@ -2740,8 +2736,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
         if ( rHint.GetId() == SfxHintId::TitleChanged )
         {
-            OUString aTitle = m_pData->m_pObjectShell->GetTitle();
-            addTitle_Impl( m_pData->m_seqArguments, aTitle );
+            addTitle_Impl( m_pData->m_seqArguments, m_pData->m_pObjectShell->GetTitle() );
             postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
         }
         else if ( rHint.GetId() == SfxHintId::ModeChanged )
@@ -2849,8 +2844,8 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         // this is the same file URL as the current document location, try to use storeOwn if possible
 
         ::comphelper::SequenceAsHashMap aArgHash( seqArguments );
-        OUString aFilterString( "FilterName"  );
-        OUString aFilterName = aArgHash.getUnpackedValueOrDefault( aFilterString, OUString() );
+        const OUString aFilterString( "FilterName"  );
+        const OUString aFilterName( aArgHash.getUnpackedValueOrDefault( aFilterString, OUString() ) );
         if ( !aFilterName.isEmpty() )
         {
             SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
@@ -2871,7 +2866,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                     if ( !bFormerPassword )
                     {
                         aArgHash.erase( aFilterString );
-                        aArgHash.erase( OUString( "URL" ) );
+                        aArgHash.erase( "URL" );
 
                         try
                         {
@@ -2890,8 +2885,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault("EncryptionData", uno::Sequence< beans::NamedValue >() );
                                 if ( !aNewEncryptionData.getLength() )
                                 {
-                                    OUString aNewPassword = aArgHash.getUnpackedValueOrDefault("Password", OUString() );
-                                    aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
+                                    aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aArgHash.getUnpackedValueOrDefault("Password", OUString()) );
                                 }
 
                                 uno::Sequence< beans::NamedValue > aOldEncryptionData;
@@ -3389,10 +3383,10 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
                 GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
                 if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
                 {
-                    OUString aSlot( aCommand.copy( 5 ));
+                    const sal_uInt16 nSlot = aCommand.copy( 5 ).toInt32();
 
                     // We have to replace the old "slot-Command" with our new ".uno:-Command"
-                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( sal_uInt16( aSlot.toInt32() ));
+                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );
                     if ( pSlot )
                     {
                         OUStringBuffer aStrBuf( ".uno:"  );
@@ -3429,7 +3423,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
-            OUString aMediaTypeProp( "MediaType" );
+            const OUString aMediaTypeProp( "MediaType" );
             OUString aMediaType;
             Reference< beans::XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
             Any a = xPropSet->getPropertyValue( aMediaTypeProp );
@@ -3466,8 +3460,8 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
 
                     for ( size_t i = 0; i < rToolbars.size(); i++ )
                     {
-                        OUString aCustomTbxName = "private:resource/toolbar/custom_OOo1x_" + OUString::number( i + 1 );
-                        OUString aCustomTbxTitle = "Toolbar " + OUString::number( i + 1 );
+                        const OUString sId(OUString::number( i + 1 ));
+                        const OUString aCustomTbxName = "private:resource/toolbar/custom_OOo1x_" + sId;
 
                         Reference< container::XIndexContainer > xToolbar = rToolbars[i];
                         ConvertSlotsToCommands( pObjShell, xToolbar );
@@ -3479,7 +3473,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                             {
                                 try
                                 {
-                                    xPropSet->setPropertyValue( "UIName", Any( aCustomTbxTitle ) );
+                                    xPropSet->setPropertyValue( "UIName", Any( "Toolbar " + sId ) );
                                 }
                                 catch ( beans::UnknownPropertyException& )
                                 {
@@ -3627,8 +3621,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     sal_Int32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
     if( pItem )
     {
-        OUString aFilterName = pItem->GetValue();
-        std::shared_ptr<const SfxFilter> pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        std::shared_ptr<const SfxFilter> pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( pItem->GetValue() );
         if ( pFilter && pFilter->UsesStorage() )
             nVersion = pFilter->GetVersion();
     }
@@ -3818,7 +3811,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
                      = aContent.getProperties();
                 if ( xProps.is() )
                 {
-                    OUString aServerTitle( "TitleOnServer" );
+                    const OUString aServerTitle( "TitleOnServer" );
                     if ( xProps->hasPropertyByName( aServerTitle ) )
                     {
                         Any aAny = aContent.getPropertyValue( aServerTitle );
