@@ -179,17 +179,6 @@ struct OStorePageKey
           m_nHigh (store::htonl(nHigh))
     {}
 
-    OStorePageKey (const OStorePageKey & rhs)
-        : m_nLow (rhs.m_nLow), m_nHigh (rhs.m_nHigh)
-    {}
-
-    OStorePageKey & operator= (const OStorePageKey & rhs)
-    {
-        m_nLow  = rhs.m_nLow;
-        m_nHigh = rhs.m_nHigh;
-        return *this;
-    }
-
     /** Comparison.
      */
     bool operator== (const OStorePageKey & rhs) const
@@ -222,16 +211,6 @@ struct OStorePageLink
     void swap (OStorePageLink & rhs)
     {
         std::swap(m_nAddr, rhs.m_nAddr);
-    }
-
-    OStorePageLink (const OStorePageLink & rhs)
-        : m_nAddr (rhs.m_nAddr)
-    {}
-
-    OStorePageLink & operator= (const OStorePageLink & rhs)
-    {
-        m_nAddr = rhs.m_nAddr;
-        return *this;
     }
 
     OStorePageLink & operator= (sal_uInt32 nAddr)
