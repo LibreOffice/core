@@ -29,12 +29,32 @@
 #include <o3tl/make_unique.hxx>
 
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox( pParent, nStyle)
+    : ListBox( pParent, nStyle),
+    pFunctionListBox( nullptr )
 {
     SetDropDownLineCount(25);
 }
 
 VCL_BUILDER_FACTORY(CommandCategoryListBox);
+
+CommandCategoryListBox::~CommandCategoryListBox()
+{
+    disposeOnce();
+}
+
+void CommandCategoryListBox::dispose()
+{
+    ClearAll();
+    pFunctionListBox.clear();
+    ListBox::dispose();
+}
+
+void CommandCategoryListBox::ClearAll()
+{
+    //TODO: Handle SfxCfgKind::GROUP_SCRIPTCONTAINER when it gets added to Init
+    m_aGroupInfo.clear();
+    Clear();
+}
 
 void CommandCategoryListBox::Init(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -101,13 +121,6 @@ void CommandCategoryListBox::Init(
 
     SetUpdateMode(true);
     SelectEntryPos(0);
-}
-
-void CommandCategoryListBox::ClearAll()
-{
-    //TODO: Handle SfxCfgKind::GROUP_SCRIPTCONTAINER when it gets added to Init
-    m_aGroupInfo.clear();
-    Clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

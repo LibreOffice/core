@@ -24,6 +24,7 @@
 
 class CommandCategoryListBox : public ListBox
 {
+    VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
     SfxGroupInfoArr_Impl m_aGroupInfo;
     OUString m_sModuleLongName;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -33,13 +34,16 @@ class CommandCategoryListBox : public ListBox
 
 public:
     CommandCategoryListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
-
-    void Init(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XFrame >& xFrame,
-        const OUString& sModuleLongName);
-
+    virtual ~CommandCategoryListBox() override;
+    virtual void dispose() override;
     void ClearAll();
+
+    void    Init(
+                const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                const css::uno::Reference< css::frame::XFrame >& xFrame,
+                const OUString& sModuleLongName);
+    void    SetFunctionListBox( SfxConfigFunctionListBox *pBox )
+            { pFunctionListBox = pBox; }
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
