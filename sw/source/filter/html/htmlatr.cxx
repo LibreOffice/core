@@ -2820,7 +2820,7 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.m_bCfgOutStyles && rHTMLWrt.m_bTextAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        // maybe as CSS1 attribute?
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 

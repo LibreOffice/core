@@ -1001,7 +1001,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     }
 
     do{                                 // middle checked loop!!
-    if( bAsTable )          // Daten als Tabelle einfuegen
+    if( bAsTable )                      // fill in data as table
     {
         rSh.DoUndo( false );
 
