@@ -30,16 +30,29 @@ class CommandCategoryListBox : public ListBox
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
+    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
 
 public:
     CommandCategoryListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
-
-    void Init(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XFrame >& xFrame,
-        const OUString& sModuleLongName);
-
+    virtual ~CommandCategoryListBox() override;
+    virtual void dispose() override;
     void ClearAll();
+
+    void        Init(
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< css::frame::XFrame >& xFrame,
+                    const OUString& sModuleLongName);
+    void        FillFunctionsList(
+                    const css::uno::Sequence< css::frame::DispatchInformation >& xCommands,
+                    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox);
+    OUString    MapCommand2UIName(const OUString& sCommand);
+
+    /**
+        Signals that a command category has been selected.
+        And updates the functions list box to include
+        the commands in the selected category.
+    */
+    void categorySelected( const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
