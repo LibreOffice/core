@@ -860,7 +860,7 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
     {
         Any a( _xProps->getPropertyValue( rPropName ) );
-        if (auto n = o3tl::tryAccess<sal_Int16>(a))
+        if (auto n = o3tl::tryAccess<sal_Int32>(a))
         {
             switch (*n)
             {
