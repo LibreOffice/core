@@ -320,9 +320,10 @@ bool HMemIODev::setCompressed(bool )
 
 bool HMemIODev::read1b(unsigned char &out)
 {
+    ++pos;
     if (pos <= length)
     {
-        out = ptr[pos++];
+        out = ptr[pos - 1];
         return true;
     }
     return false;
