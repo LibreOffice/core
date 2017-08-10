@@ -81,16 +81,11 @@ void SignatureCreatorImpl::notifyResultListener() const
     xSignatureCreationResultListener->signatureCreated( m_nSecurityId, m_nStatus );
 }
 
-void SignatureCreatorImpl::startEngine( const cssu::Reference<
-    cssxc::XXMLSignatureTemplate >&
-    xSignatureTemplate)
+void SignatureCreatorImpl::startEngine(const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate)
 /****** SignatureCreatorImpl/startEngine *************************************
  *
  *   NAME
  *  startEngine -- generates the signature.
- *
- *   SYNOPSIS
- *  startEngine( xSignatureTemplate );
  *
  *   FUNCTION
  *  generates the signature element, then if succeeds, updates the link
@@ -105,7 +100,7 @@ void SignatureCreatorImpl::startEngine( const cssu::Reference<
     cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;
     try
     {
-        xResultTemplate = m_xXMLSignature->generate(xSignatureTemplate, m_xSecurityEnvironment);
+        xResultTemplate = m_xXMLSignature->generate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate.get()), m_xSecurityEnvironment);
         m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
