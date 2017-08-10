@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_d7e14fd2",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-10T14:31:04Z",
+      "side": 1,
+      "message": "It is strange Excel behaviour:\n1. If it contains two integers and blank, then it listing items:\n        \u003ccacheField name\u003d\"wartosc\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsString\u003d\"0\" containsBlank\u003d\"1\" containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"111\" maxValue\u003d\"222\" count\u003d\"3\"\u003e\n                \u003cm /\u003e\n                \u003cn v\u003d\"111\" /\u003e\n                \u003cn v\u003d\"222\" /\u003e\n            \u003c/sharedItems\u003e\n        \u003c/cacheField\u003e\n\n2. If it contains only one integer and one blank, then Excel is not listing it:\n\n        \u003ccacheField name\u003d\"wartosc\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsString\u003d\"0\" containsBlank\u003d\"1\" containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"111\" maxValue\u003d\"111\" /\u003e\n        \u003c/cacheField\u003e\n3. If it contains one integer, one blank and one string ( \u003cm /\u003e,  \u003cn v\u003d\"111\" /\u003e, \u003cs v\u003d\"string\" /\u003e), then Excel is also not listing:\n\n        \u003ccacheField name\u003d\"wartosc\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsBlank\u003d\"1\" containsMixedTypes\u003d\"1\" containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"111\" maxValue\u003d\"111\" /\u003e\n        \u003c/cacheField\u003e\n\nIt seems that the behaviour if the items will be listed or not, is dependent on how many there is specific types. If there is only one entry of many fields then it is not listed.",
+      "parentUuid": "1a430d35_9a17f153",
+      "range": {
+        "startLine": 575,
+        "startChar": 114,
+        "endLine": 575,
+        "endChar": 114
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_da11795f",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 11
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_179e7756",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-10T14:31:04Z",
+      "side": 1,
+      "message": "Generally I don\u0027t understand when Excel is listing the items, and when it is not. \nI noticed that Excel import errors whas caused by wrong values of \"containsMixedTypes\", \"containsSemiMixedTypes\", \"containsInteger\" and \"containsBlank\". \n\nMaybe it is not worth checking \"count\" field, as I\u0027m not sure when it should be checking for listed items? \n\nI was only unsuccessfuly tried to reproduce how MS Excel is exporting listed items (without any documentation).\nWhat do you think about removing checking \"count\" completely?",
+      "parentUuid": "1a430d35_da11795f",
+      "range": {
+        "startLine": 598,
+        "startChar": 114,
+        "endLine": 598,
+        "endChar": 115
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_ba1cad78",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 11
@@ -59,6 +107,30 @@
       "writtenOn": "2017-08-08T05:44:23Z",
       "side": 1,
       "message": "I\u0027d add here \" \u0026\u0026 !isContainsBlank\" to allow \"wartosc\" test to generate same output as Excel",
+      "range": {
+        "startLine": 305,
+        "startChar": 49,
+        "endLine": 305,
+        "endChar": 50
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_77db3b1c",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-10T14:31:04Z",
+      "side": 1,
+      "message": "Generally I should check something like that:\n  if (  (aDPTypesWithoutBlank.size() \u003d\u003d 1) || ((numberOfStrings \u003c\u003d 1) \u0026\u0026 (numberOfNumbers \u003c\u003d 1) \u0026\u0026 (numberOfBlanks \u003c\u003d 1) )\n\nSee my explanation nearby the test case",
+      "parentUuid": "1a430d35_ba1cad78",
       "range": {
         "startLine": 305,
         "startChar": 49,
