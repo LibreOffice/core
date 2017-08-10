@@ -2744,7 +2744,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             addTitle_Impl( m_pData->m_seqArguments, aTitle );
             postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
         }
-        if ( rHint.GetId() == SfxHintId::ModeChanged )
+        else if ( rHint.GetId() == SfxHintId::ModeChanged )
         {
             postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::MODECHANGED ) );
         }
