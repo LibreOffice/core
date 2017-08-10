@@ -104,11 +104,11 @@ void ExternalDataSource::setDBData(ScDBData* pDBData)
 {
     if (!mpDBDataManager)
     {
-        mpDBDataManager.reset(new ScDBDataManager(pDBData, false, mpDoc));
+        mpDBDataManager.reset(new ScDBDataManager(pDBData->GetName(), false, mpDoc));
     }
     else
     {
-        mpDBDataManager->SetDatabase(pDBData);
+        mpDBDataManager->SetDatabase(pDBData->GetName());
     }
 }
 
@@ -321,7 +321,7 @@ void CSVDataProvider::Import()
 
 IMPL_LINK_NOARG(CSVDataProvider, ImportFinishedHdl, Timer*, void)
 {
-    mpDBDataManager->WriteToDoc(*mpDoc, mpDBDataManager->getDBData());
+    mpDBDataManager->WriteToDoc(*mpDoc);
     mxCSVFetchThread.clear();
     mpDoc.reset();
     Refresh();
@@ -333,7 +333,7 @@ void CSVDataProvider::Refresh()
     pDocShell->SetDocumentModified();
 }
 
-void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
+void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
 {
     bool bShrunk = false;
     SCCOL nStartCol = 0;
@@ -345,7 +345,7 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
     rDoc.SetClipArea(aClipRange);
 
     ScRange aDestRange;
-    pDBData->GetArea(aDestRange);
+    getDBData()->GetArea(aDestRange);
     SCCOL nColSize = std::min<SCCOL>(aDestRange.aEnd.Col() - aDestRange.aStart.Col(), nEndCol);
     aDestRange.aEnd.SetCol(aDestRange.aStart.Col() + nColSize);
 
@@ -359,8 +359,8 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
     pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
-ScDBDataManager::ScDBDataManager(ScDBData* pDBData,  bool /*bAllowResize*/, ScDocument* pDoc):
-    mpDBData(pDBData),
+ScDBDataManager::ScDBDataManager(const OUString& rDBName,  bool /*bAllowResize*/, ScDocument* pDoc):
+    maDBName(rDBName),
     //mbAllowResize(bAllowResize),
     mpDoc(pDoc)
 {
@@ -370,14 +370,15 @@ ScDBDataManager::~ScDBDataManager()
 {
 }
 
-void ScDBDataManager::SetDatabase(ScDBData* pDbData)
+void ScDBDataManager::SetDatabase(const OUString& rDBName)
 {
-    mpDBData = pDbData;
+    maDBName = rDBName;
 }
 
 ScDBData* ScDBDataManager::getDBData()
 {
-    return mpDBData;
+    ScDBData* pDBData = mpDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(maDBName));
+    return pDBData;
 }
 
 bool DataProviderFactory::isInternalDataProvider(const OUString& rProvider)
