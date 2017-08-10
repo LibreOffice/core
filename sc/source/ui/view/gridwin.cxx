@@ -778,12 +778,10 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
 
-    if (eMode == Normal && mpAutoFilterPopup->isAllSelected())
-    {
-        // Remove this entry.
-        aParam.RemoveEntryByField(rPos.Col());
-    }
-    else
+    // Remove old entries.
+    aParam.RemoveAllEntriesByField(rPos.Col());
+
+    if( !(eMode == Normal && mpAutoFilterPopup->isAllSelected() ) )
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
