@@ -1547,7 +1547,7 @@ public:
             assert(nEndRow >= nFirstRow);
             mnHighIndex = nEndRow - nFirstRow;
 
-            maBlockMap.insert(BlockMapType::value_type(aLoPos.first->size, aLoPos.first));
+            maBlockMap.emplace(aLoPos.first->size, aLoPos.first);
             return;
         }
 
@@ -1582,7 +1582,7 @@ public:
             }
 
             nPos += itBlk->size;
-            maBlockMap.insert(BlockMapType::value_type(nPos, itBlk));
+            maBlockMap.emplace(nPos, itBlk);
             ++itBlk;
 
             if (itBlk->type == sc::element_type_empty)
@@ -1593,7 +1593,7 @@ public:
 
         assert(itBlk == aHiPos.first);
         nPos += itBlk->size;
-        maBlockMap.insert(BlockMapType::value_type(nPos, itBlk));
+        maBlockMap.emplace(nPos, itBlk);
 
         // Calculate the high index.
         BlockMapType::const_reverse_iterator ri = maBlockMap.rbegin();

@@ -533,7 +533,7 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
     osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it =
-        m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
+        m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
     if( ! it->second.notifier )
         it->second.notifier = new NotifierList;
@@ -598,7 +598,7 @@ TaskManager::associate( const OUString& aUnqPath,
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        ContentMap::iterator it = m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
+        ContentMap::iterator it = m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
         // Load the XPersistentPropertySetInfo and create it, if it does not exist
         load( it,true );
@@ -628,7 +628,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    ContentMap::iterator it = m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
+    ContentMap::iterator it = m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
     load( it,false );
 
@@ -1982,7 +1982,7 @@ void SAL_CALL TaskManager::insertDefaultProperties( const OUString& aUnqPath )
     osl::MutexGuard aGuard( m_aMutex );
 
     ContentMap::iterator it =
-        m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
+        m_aContent.emplace( aUnqPath,UnqPathData() ).first;
 
     load( it,false );
 

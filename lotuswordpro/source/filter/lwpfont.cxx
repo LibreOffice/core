@@ -474,7 +474,7 @@ Prerequisite: pStyle has been created and the paragraph properties has been set 
     pStyle->SetFont(pFont);
     pStyle->SetStyleName(styleName);
     XFStyleManager::AddStyle(pStyle);
-    m_StyleList.insert(LwpParaStyleMap::value_type(styleObjID, styleName));
+    m_StyleList.emplace( styleObjID, styleName));
 }*/
 
 /*

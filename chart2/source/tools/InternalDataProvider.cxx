@@ -454,7 +454,7 @@ void InternalDataProvider::adaptMapReferences(
             if( xNamed.is())
                 xNamed->setName( rNewRangeRepresentation );
         }
-        aNewElements.insert( tSequenceMap::value_type( rNewRangeRepresentation, aIt->second ));
+        aNewElements.emplace( rNewRangeRepresentation, aIt->second );
     }
     // erase map values for old index
     m_aSequenceMap.erase( aRange.first, aRange.second );

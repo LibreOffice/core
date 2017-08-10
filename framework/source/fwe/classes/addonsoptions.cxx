@@ -644,7 +644,7 @@ void AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue
                     sal_uInt32 nMenuItemCount = rAddonOfficeMenuBarSeq.getLength() + 1;
                     rAddonOfficeMenuBarSeq.realloc( nMenuItemCount );
                     rAddonOfficeMenuBarSeq[nIndex] = aPopupMenu;
-                    aTitleToIndexMap.insert( StringToIndexMap::value_type( aPopupTitle, nIndex ));
+                    aTitleToIndexMap.emplace( aPopupTitle, nIndex );
                     ++nIndex;
                 }
             }
@@ -746,7 +746,7 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
             if ( pImageEntry )
             {
                 // Successfully read a user-defined images item, put it into our image manager
-                aImageManager.insert( ImageManager::value_type( aURL, *pImageEntry ));
+                aImageManager.emplace( aURL, *pImageEntry );
                 delete pImageEntry; // We have the ownership of the pointer
             }
         }
@@ -1321,7 +1321,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
                               Image(), aFileURL.makeStringAndClear() );
     }
 
-    m_aImageManager.insert( ImageManager::value_type( aURL, aImageEntry ));
+    m_aImageManager.emplace( aURL, aImageEntry );
 }
 
 AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )

@@ -349,7 +349,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
         {
             SAL_WARN_IF(aPkName.isEmpty(),"connectivity.commontools", "empty Primary Key name");
             SAL_WARN_IF(pKeyProps->m_aKeyColumnNames.size() == 0,"connectivity.commontools", "Primary Key has no columns");
-            m_pImpl->m_aKeys.insert(TKeyMap::value_type(aPkName,pKeyProps));
+            m_pImpl->m_aKeys.emplace(aPkName,pKeyProps);
             _rNames.push_back(aPkName);
         }
     } // if ( xResult.is() && xResult->next() )
@@ -392,7 +392,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
                 if ( sOldFKName != sFkName )
                 {
                     if ( pKeyProps.get() )
-                        m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
+                        m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
 
                     const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::EComposeRule::InDataManipulation);
                     pKeyProps.reset(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule));
@@ -414,7 +414,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
             }
         } // while( xResult->next() )
         if ( pKeyProps.get() )
-            m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
+            m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
         ::comphelper::disposeComponent(xResult);
     }
 }
@@ -586,7 +586,7 @@ std::shared_ptr<sdbcx::KeyProperties> OTableHelper::getKeyProperties(const OUStr
 
 void OTableHelper::addKey(const OUString& _sName,const std::shared_ptr<sdbcx::KeyProperties>& _aKeyProperties)
 {
-    m_pImpl->m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
+    m_pImpl->m_aKeys.emplace(_sName,_aKeyProperties);
 }
 
 OUString OTableHelper::getTypeCreatePattern() const

@@ -356,7 +356,7 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
 
     if ( aFind == m_aGroupArr.end() )
     {
-        aFind = m_aGroupArr.insert(OGroupArr::value_type(sGroupName,OGroup(sGroupName))).first;
+        aFind = m_aGroupArr.emplace(sGroupName,OGroup(sGroupName)).first;
     }
 
     aFind->second.InsertComponent( xSet );

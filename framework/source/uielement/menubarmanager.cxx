@@ -1722,8 +1722,7 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
                 else if ( nQueryPart == -1 )
                     aMainURL += aMenuURL.copy( nSchemePart+1 );
 
-                rPopupController.insert( PopupControllerCache::value_type(
-                                           aMainURL, aPopupControllerEntry ));
+                rPopupController.emplace( aMainURL, aPopupControllerEntry );
             }
         }
         if ( pItemHandler->xSubMenuManager.is() )

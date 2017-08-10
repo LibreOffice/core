@@ -177,7 +177,7 @@ void ScHTMLStyles::insertProp(
     }
 
     PropsType *const pProps = itr->second.get();
-    pProps->insert(PropsType::value_type(aProp, aValue));
+    pProps->emplace(aProp, aValue);
 }
 
 // BASE class for HTML parser classes

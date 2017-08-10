@@ -376,7 +376,7 @@ void ScChartPositioner::CreatePositionMap()
                 if ( it == pCols->end() )
                 {
                     pCol = new RowMap;
-                    pCols->insert( ColumnMap::value_type( nInsCol, pCol ) );
+                    pCols->emplace(nInsCol, pCol);
                 }
                 else
                     pCol = it->second;
@@ -388,7 +388,7 @@ void ScChartPositioner::CreatePositionMap()
                 {
                     if ( pCol->find( nInsRow ) == pCol->end() )
                     {
-                        pCol->insert( RowMap::value_type( nInsRow, new ScAddress( nCol, nRow, nTab ) ) );
+                        pCol->emplace( nInsRow, new ScAddress( nCol, nRow, nTab ) );
                     }
                 }
             }
@@ -451,7 +451,7 @@ void ScChartPositioner::CreatePositionMap()
             {
                 sal_uLong nKey = it1->first;
                 for (ColumnMap::const_iterator it2 = ++pCols->begin(); it2 != pCols->end(); ++it2 )
-                    it2->second->insert( RowMap::value_type( nKey, nullptr )); // no data
+                    it2->second->emplace( nKey, nullptr ); // no data
             }
         }
     }

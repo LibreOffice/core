@@ -1677,7 +1677,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
                     // This string doesn't exist in the member name set.  Don't add this.
                     continue;
 
-                aSubStrs.insert(UserSortMap::value_type(aSub, nSubCount++));
+                aSubStrs.emplace(aSub, nSubCount++);
             }
         }
 

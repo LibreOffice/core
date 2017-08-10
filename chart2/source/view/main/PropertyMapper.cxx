@@ -97,7 +97,7 @@ void PropertyMapper::getValueMap(
         for(sal_Int32 i = 0, n = rNameMap.size(); i < n; ++i)
         {
             if( xValues[i].hasValue() )
-                rValueMap.insert( tPropertyNameValueMap::value_type( aPropTargetNames[i], xValues[i] ) );
+                rValueMap.emplace(  aPropTargetNames[i], xValues[i] );
         }
     }
     else
@@ -110,7 +110,7 @@ void PropertyMapper::getValueMap(
             {
                 uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
                 if( aAny.hasValue() )
-                    rValueMap.insert( tPropertyNameValueMap::value_type( aTarget, aAny ) );
+                    rValueMap.emplace(  aTarget, aAny );
             }
             catch( const uno::Exception& e )
             {
@@ -452,20 +452,20 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 
     //some more shape properties apart from character properties, position-matrix and label string
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::Any(true) ) ); // sal_Bool
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::Any(true) ) ); // sal_Bool
+    aValueMap.emplace( "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) ); // drawing::TextHorizontalAdjust - needs to be overwritten
+    aValueMap.emplace( "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) ); //drawing::TextVerticalAdjust - needs to be overwritten
+    aValueMap.emplace( "TextAutoGrowHeight", uno::Any(true) ); // sal_Bool
+    aValueMap.emplace( "TextAutoGrowWidth", uno::Any(true) ); // sal_Bool
     if( bName )
-        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::Any( OUString() ) ) ); //CID OUString - needs to be overwritten for each point
+        aValueMap.emplace( "Name", uno::Any( OUString() ) ); //CID OUString - needs to be overwritten for each point
 
     if( nLimitedSpace > 0 )
     {
         if(bLimitedHeight)
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameHeight", uno::Any(nLimitedSpace) ) ); //sal_Int32
+            aValueMap.emplace( "TextMaximumFrameHeight", uno::Any(nLimitedSpace) ); //sal_Int32
         else
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameWidth", uno::Any(nLimitedSpace) ) ); //sal_Int32
-        aValueMap.insert( tPropertyNameValueMap::value_type( "ParaIsHyphenation", uno::Any(true) ) );
+            aValueMap.emplace( "TextMaximumFrameWidth", uno::Any(nLimitedSpace) ); //sal_Int32
+        aValueMap.emplace( "ParaIsHyphenation", uno::Any(true) );
     }
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
@@ -482,18 +482,18 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
             , xSourceProp );
 
     // auto-grow makes sure the shape has the correct size after setting text
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::Any( true )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::Any( true )));
+    aValueMap.emplace( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ));
+    aValueMap.emplace( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ));
+    aValueMap.emplace( "TextAutoGrowHeight", uno::Any( true ));
+    aValueMap.emplace( "TextAutoGrowWidth", uno::Any( true ));
 
     // set some distance to the border, in case it is shown
     const sal_Int32 nWidthDist  = 250;
     const sal_Int32 nHeightDist = 125;
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextLeftDistance",  uno::Any( nWidthDist )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextRightDistance", uno::Any( nWidthDist )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextUpperDistance", uno::Any( nHeightDist )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextLowerDistance", uno::Any( nHeightDist )));
+    aValueMap.emplace( "TextLeftDistance",  uno::Any( nWidthDist ));
+    aValueMap.emplace( "TextRightDistance", uno::Any( nWidthDist ));
+    aValueMap.emplace( "TextUpperDistance", uno::Any( nHeightDist ));
+    aValueMap.emplace( "TextLowerDistance", uno::Any( nHeightDist ));
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.

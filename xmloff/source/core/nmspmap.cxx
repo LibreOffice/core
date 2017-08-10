@@ -347,7 +347,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
 
         if (bCache)
         {
-            aNameCache.insert(NameSpaceHash::value_type(rAttrName, xEntry));
+            aNameCache.emplace(rAttrName, xEntry);
         }
     }
 

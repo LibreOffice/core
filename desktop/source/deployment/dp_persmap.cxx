@@ -277,7 +277,7 @@ bool PersistentMap::get( OString * value, OString const & key ) const
 void PersistentMap::add( OString const & key, OString const & value )
 {
     typedef std::pair<t_string2string_map::iterator,bool> InsertRC;
-    InsertRC r = m_entries.insert( t_string2string_map::value_type(key,value));
+    InsertRC r = m_entries.emplace(key,value);
     m_bIsDirty = r.second;
 }
 

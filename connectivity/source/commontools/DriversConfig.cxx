@@ -115,7 +115,7 @@ const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Refer
                 if ( !aInstalledDriver.sDriverFactory.isEmpty() &&
                      ( aMiscOptions.IsExperimentalMode() ||
                        aInstalledDriver.sDriverFactory != "com.sun.star.comp.sdbc.firebird.Driver" ))
-                    m_aDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
+                    m_aDrivers.emplace(*pPatternIter,aInstalledDriver);
             }
         } // if ( m_aInstalled.isValid() )
     }

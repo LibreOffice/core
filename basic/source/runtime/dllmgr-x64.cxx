@@ -702,7 +702,7 @@ ErrCode Dll::getProc(OUString const & name, ProcData * proc) {
     }
     ErrCode e = getProcData(handle, name, proc);
     if (e == ERRCODE_NONE) {
-        procs.insert(Procs::value_type(name, *proc));
+        procs.emplace(name, *proc);
     }
     return e;
 }
@@ -734,7 +734,7 @@ public:
 Dll * SbiDllMgr::Impl::getDll(OUString const & name) {
     Dlls::iterator i(dlls.find(name));
     if (i == dlls.end()) {
-        i = dlls.insert(Dlls::value_type(name, new Dll)).first;
+        i = dlls.emplace(name, new Dll).first;
         HMODULE h = LoadLibraryW(reinterpret_cast<LPCWSTR>(name.getStr()));
         if (h == nullptr) {
             dlls.erase(i);

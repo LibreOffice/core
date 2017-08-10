@@ -696,7 +696,7 @@ void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
         if (rMembers.count(pMem->GetName()))
         {
             // This member still exists.
-            maMemberHash.insert(MemberHash::value_type(pMem->GetName(), pMem));
+            maMemberHash.emplace(pMem->GetName(), pMem);
             aNew.push_back(pMem);
         }
         else
@@ -1297,7 +1297,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
     NameIndexMap aMap;
     long nColCount = pData->GetColumnCount();
     for (long i = 0; i < nColCount; ++i)
-        aMap.insert( NameIndexMap::value_type(pData->getDimensionName(i), i));
+        aMap.emplace(pData->getDimensionName(i), i);
 
     NameIndexMap::const_iterator itrEnd = aMap.end();
 
@@ -1341,7 +1341,7 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
     NameIndexMap aMap;
     long nColCount = pData->GetColumnCount();
     for (long i = 0; i < nColCount; ++i)
-        aMap.insert(NameIndexMap::value_type(pData->getDimensionName(i), i));
+        aMap.emplace(pData->getDimensionName(i), i);
 
     NameIndexMap::const_iterator itMapEnd = aMap.end();
 
@@ -1405,7 +1405,7 @@ void ScDPSaveData::CheckDuplicateName(ScDPSaveDimension& rDim)
     }
     else
         // New name.
-        maDupNameCounts.insert(DupNameCountType::value_type(aName, 0));
+        maDupNameCounts.emplace(aName, 0);
 }
 
 void ScDPSaveData::RemoveDuplicateNameCount(const OUString& rName)
@@ -1436,7 +1436,7 @@ ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const OUString& rName, bool 
     ScDPSaveDimension* pNew = new ScDPSaveDimension(rName, bDataLayout);
     m_DimList.push_back(std::unique_ptr<ScDPSaveDimension>(pNew));
     if (!maDupNameCounts.count(rName))
-        maDupNameCounts.insert(DupNameCountType::value_type(rName, 0));
+        maDupNameCounts.emplace(rName, 0);
 
     DimensionsChanged();
     return pNew;

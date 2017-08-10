@@ -170,8 +170,7 @@ inline void ObjectEntry::append(
     aNewEntry.pTypeDescr = pTypeDescr;
 
     std::pair< Ptr2ObjectMap::iterator, bool > i(
-        pEnv->aPtr2ObjectMap.insert( Ptr2ObjectMap::value_type(
-                                         pInterface, this ) ) );
+        pEnv->aPtr2ObjectMap.emplace( pInterface, this ) );
     SAL_WARN_IF(
         !i.second && (find(pInterface, 0) == -1 || i.first->second != this),
         "cppu",
@@ -241,7 +240,7 @@ static void SAL_CALL defenv_registerInterface(
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
-        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, nullptr ) ) );
+        that->aOId2ObjectMap.emplace(  rOId, nullptr ) );
     if (insertion.second)
     {
         ObjectEntry * pOEntry = new ObjectEntry( rOId );
@@ -289,7 +288,7 @@ static void SAL_CALL defenv_registerProxyInterface(
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
-        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, nullptr ) ) );
+        that->aOId2ObjectMap.emplace(  rOId, nullptr ) );
     if (insertion.second)
     {
         ObjectEntry * pOEntry = new ObjectEntry( rOId );

@@ -465,7 +465,7 @@ void ODBExport::exportDataSource()
                 }
             }
 
-            aSettingsMap.insert(TSettingsMap::value_type(eToken,sValue));
+            aSettingsMap.emplace(eToken,sValue);
         }
         if ( bAutoIncrementEnabled && !(aAutoIncrement.first.isEmpty() && aAutoIncrement.second.isEmpty()) )
             m_aAutoIncrement.reset( new TStringPair(aAutoIncrement));
@@ -1130,7 +1130,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         {
             aPropertyStates = i.first->Filter(_xProp);
             if ( !aPropertyStates.empty() )
-                i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropertyStates )));
+                i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropertyStates ) );
         }
 
         Reference< XNameAccess > xCollection;
@@ -1149,7 +1149,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                 if ( xFac.is() )
                 {
                     Reference< XPropertySet> xColumn = xFac->createDataDescriptor();
-                    m_aTableDummyColumns.insert(TTableColumnMap::value_type(Reference< XPropertySet>(_xProp),xColumn));
+                    m_aTableDummyColumns.emplace( Reference< XPropertySet>(_xProp),xColumn );
                     exportAutoStyle(xColumn.get());
                 }
             }
@@ -1205,7 +1205,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             if ( XML_STYLE_FAMILY_TABLE_CELL == i.second.second )
                 std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
-                i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropStates )));
+                i.second.first->emplace( _xProp,GetAutoStylePool()->Add( i.second.second, aPropStates ) );
         }
     }
 }

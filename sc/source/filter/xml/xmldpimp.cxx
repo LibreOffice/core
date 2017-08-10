@@ -397,7 +397,7 @@ void ScXMLDataPilotTableContext::SetButtons()
 
 void ScXMLDataPilotTableContext::SetSelectedPage( const OUString& rDimName, const OUString& rSelected )
 {
-    maSelectedPages.insert(SelectedPagesType::value_type(rDimName, rSelected));
+    maSelectedPages.emplace(rDimName, rSelected);
 }
 
 void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)

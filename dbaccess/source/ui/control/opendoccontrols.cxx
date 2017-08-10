@@ -179,7 +179,7 @@ namespace dbaui
                     OUString sDecodedURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                     sal_Int32 nPos = InsertEntry( sTitle );
-                    m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );
+                    m_aURLs.emplace( nPos, StringPair( sDecodedURL, sFilter ) );
                 }
             }
             catch( Exception& ) {}

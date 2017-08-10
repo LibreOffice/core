@@ -349,7 +349,7 @@ void XclExpXmlPivotTableManager::Initialize()
         const ScDPCache::ScDPObjectSet& rRefs = pCache->GetAllReferences();
         ScDPCache::ScDPObjectSet::const_iterator it = rRefs.begin(), itEnd = rRefs.end();
         for (; it != itEnd; ++it)
-            maCacheIdMap.insert(CacheIdMapType::value_type(*it, aCaches.size()+1));
+            maCacheIdMap.emplace(*it, aCaches.size()+1);
 
         XclExpXmlPivotCaches::Entry aEntry;
         aEntry.meType = XclExpXmlPivotCaches::Worksheet;
@@ -505,7 +505,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     for (size_t i = 0; i < nFieldCount; ++i)
     {
         OUString aName = rCache.GetDimensionName(i);
-        aNameToIdMap.insert(NameToIdMapType::value_type(aName, aCachedDims.size()));
+        aNameToIdMap.emplace(aName, aCachedDims.size());
         const ScDPSaveDimension* pDim = rSaveData.GetExistingDimensionByName(aName);
         aCachedDims.push_back(pDim);
     }

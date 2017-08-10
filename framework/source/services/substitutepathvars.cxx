@@ -201,8 +201,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
         m_aPreDefVars.m_FixedVarNames[i] = OUString::createFromAscii( aFixedVarTable[i].pVarName );
 
         // Create hash map entry
-        m_aPreDefVarMap.insert( VarNameToIndexMap::value_type(
-            m_aPreDefVars.m_FixedVarNames[i], PreDefVariable(i) ) );
+        m_aPreDefVarMap.emplace( m_aPreDefVars.m_FixedVarNames[i], PreDefVariable(i) );
     }
 
     // Sort predefined/fixed variable to path length

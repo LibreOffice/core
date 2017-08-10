@@ -718,7 +718,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
         {
             XHWNDDocList.erase( aIter );
         }
-        XHWNDDocList.insert( XHWNDToDocumentHash::value_type(pWnd, pXAcc) );
+        XHWNDDocList.emplace( pWnd, pXAcc );
     }
     //end of file name
 
@@ -736,9 +736,9 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     else
         return false;
 
-    XIdAccList.insert( XIdToAccObjHash::value_type( pXAcc, pObj ));
+    XIdAccList.emplace(pXAcc, pObj);
     XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
-    XResIdAccList.insert(XResIdToAccObjHash::value_type(pObj.GetResID(),&(pIndTemp->second)));
+    XResIdAccList.emplace(pObj.GetResID(),&(pIndTemp->second));
 
     AccObject* pCurObj = GetAccObjByXAcc(pXAcc);
     if( pCurObj )
@@ -762,7 +762,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
    */
 void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc)
 {
-    HwndXAcc.insert( XHWNDToXAccHash::value_type( hWnd,pXAcc ) );
+    HwndXAcc.emplace(hWnd,pXAcc);
 }
 
 

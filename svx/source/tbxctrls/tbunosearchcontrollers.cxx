@@ -360,7 +360,7 @@ void SearchToolbarControllersManager::registryController( const css::uno::Refere
         SearchToolbarControllersVec lControllers(1);
         lControllers[0].Name = sCommandURL;
         lControllers[0].Value <<= xStatusListener;
-        aSearchToolbarControllersMap.insert(SearchToolbarControllersMap::value_type(xFrame, lControllers));
+        aSearchToolbarControllersMap.emplace(xFrame, lControllers);
     }
     else
     {
