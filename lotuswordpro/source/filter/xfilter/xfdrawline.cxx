@@ -105,7 +105,7 @@ void XFDrawLine::ToXml(IXFStream *pStrm)
     OUString   strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
         strTransform = "rotate (" + OUString::number(m_fRotate) + ") ";
-    if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )
+    if( m_nFlag&XFDRAWOBJECT_FLAG_TRANSLATE )
         strTransform += "translate (" + OUString::number(m_aRotatePoint.GetX()) + "cm " + OUString::number(m_aRotatePoint.GetY()) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWX )
         strTransform += "skewX (" + OUString::number(0) + " ";

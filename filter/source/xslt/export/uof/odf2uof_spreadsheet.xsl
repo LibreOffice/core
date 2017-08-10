@@ -3178,12 +3178,12 @@
 					</xsl:call-template>
 				</xsl:variable>
 				<!-- <xsl:value-of select="concat('qqqqqqqq  ',$left-top)"/> -->
-				<xsl:variable name="after-tanslated-left-top">
+				<xsl:variable name="after-translated-left-top">
 					<xsl:call-template name="translate-left-top-condition">
 						<xsl:with-param name="left-top" select="$left-top"/>
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:value-of select="concat($after-tanslated-left-top,':',style:map/@style:base-cell-address)"/>
+				<xsl:value-of select="concat($after-translated-left-top,':',style:map/@style:base-cell-address)"/>
 			</xsl:element>
 			<xsl:for-each select="style:map">
 				<xsl:element name="表:条件">
