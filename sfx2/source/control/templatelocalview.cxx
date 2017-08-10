@@ -772,8 +772,6 @@ bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNe
 
 void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected, bool bShowCategoryInTooltip)
 {
-    mItemList.clear();
-
     std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
