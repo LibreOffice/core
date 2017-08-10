@@ -169,6 +169,8 @@ private:
 public:
 
     static std::shared_ptr<DataProvider> getDataProvider(ScDocument* pDoc, const OUString& rProvider, const OUString& rURL, const OUString& rID, ScDBDataManager* pManager);
+
+    static std::vector<OUString> getDataProviders();
 };
 
 }

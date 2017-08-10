@@ -403,6 +403,14 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
     return std::shared_ptr<DataProvider>();
 }
 
+std::vector<OUString> DataProviderFactory::getDataProviders()
+{
+    std::vector<OUString> aDataProviders;
+    aDataProviders.push_back("org.libreoffice.calc.csv");
+
+    return aDataProviders;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
