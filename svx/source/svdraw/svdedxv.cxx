@@ -395,7 +395,6 @@ namespace
 
     public:
         TextEditOverlayObject(
-            sdr::overlay::OverlaySelection* pOverlaySelection,
             const Color& rColor,
             OutlinerView& rOutlinerView,
             bool bVisualizeSurroundingFrame);
@@ -443,12 +442,11 @@ namespace
     }
 
     TextEditOverlayObject::TextEditOverlayObject(
-        sdr::overlay::OverlaySelection* pOverlaySelection,
         const Color& rColor,
         OutlinerView& rOutlinerView,
         bool bVisualizeSurroundingFrame)
     :   OverlayObject(rColor),
-        mpOverlaySelection(pOverlaySelection),
+        mpOverlaySelection(nullptr),
         mrOutlinerView(rOutlinerView),
         maLastRange(),
         maRange(),
@@ -458,6 +456,15 @@ namespace
     {
         // no AA for TextEdit overlay
         allowAntiAliase(false);
+
+        // create local OverlaySelection - this is an integral part of EditText
+        // visualization
+        const std::vector< basegfx::B2DRange > aEmptySelection;
+        mpOverlaySelection = new sdr::overlay::OverlaySelection(
+            sdr::overlay::OverlayType::Transparent,
+            rColor,
+            aEmptySelection,
+            true);
     }
 
     TextEditOverlayObject::~TextEditOverlayObject()
@@ -564,6 +571,10 @@ namespace
             // if there really *was* a change signal the OverlayManager to
             // refresh this object's visualization
             objectChange();
+
+            // on data change, always do a SelectionChange, too
+            // since the selection is an integral part of text visualization
+            checkSelectionChange();
         }
     }
 
@@ -596,7 +607,8 @@ namespace
 // TextEdit
 
 // callback from the active EditView, forward to evtl. existing instances of the
-// TextEditOverlayObject(s)
+// TextEditOverlayObject(s). This will additionally update the selection which
+// is an integral part of the text visualization
 void SdrObjEditView::EditViewInvalidate() const
 {
     if (IsTextEdit())
@@ -618,6 +630,9 @@ void SdrObjEditView::EditViewInvalidate() const
     }
 }
 
+// callback from the active EditView, forward to evtl. existing instances of the
+// TextEditOverlayObject(s). This cvall *only* updates the selection visualization
+// which is e.g. used when only the selection is changed, but not the text
 void SdrObjEditView::EditViewSelectionChange() const
 {
     if (IsTextEdit())
@@ -639,10 +654,9 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
     if (!comphelper::LibreOfficeKit::isActive())
     {
         // adapt all TextEditOverlayObject(s), so call EditViewInvalidate()
-        // and EditViewSelectionChange() to update accordingly. Suppress new
+        // to update accordingly (will update selection, too). Suppress new
         // stuff when LibreOficeKit is active
         EditViewInvalidate();
-        EditViewSelectionChange();
     }
     else
     {
@@ -1180,22 +1194,13 @@ bool SdrObjEditView::SdrBeginTextEdit(
                             rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
                             if (xManager.is())
                             {
-                                const std::vector< basegfx::B2DRange > aEmptySelection;
-
-                                sdr::overlay::OverlaySelection* pNewOverlaySelection = new sdr::overlay::OverlaySelection(
-                                    sdr::overlay::OverlayType::Transparent,
-                                    aHilightColor,
-                                    aEmptySelection,
-                                    true);
-
-                                sdr::overlay::OverlayObject* pNewTextEditOverlayObject = new TextEditOverlayObject(
-                                    pNewOverlaySelection,
+                                TextEditOverlayObject* pNewTextEditOverlayObject = new TextEditOverlayObject(
                                     aHilightColor,
                                     *pTextEditOutlinerView,
                                     bVisualizeSurroundingFrame);
 
                                 xManager->add(*pNewTextEditOverlayObject);
-                                xManager->add(*pNewOverlaySelection);
+                                xManager->add(const_cast<sdr::overlay::OverlaySelection&>(*pNewTextEditOverlayObject->getOverlaySelection()));
 
                                 maTEOverlayGroup.append(pNewTextEditOverlayObject);
                             }
