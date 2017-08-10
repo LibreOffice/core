@@ -56,20 +56,6 @@ struct OStoreBTreeEntry
           m_nAttrib (store::htonl(0))
     {}
 
-    OStoreBTreeEntry (const OStoreBTreeEntry & rhs)
-        : m_aKey    (rhs.m_aKey),
-          m_aLink   (rhs.m_aLink),
-          m_nAttrib (rhs.m_nAttrib)
-    {}
-
-    OStoreBTreeEntry& operator= (const OStoreBTreeEntry & rhs)
-    {
-        m_aKey    = rhs.m_aKey;
-        m_aLink   = rhs.m_aLink;
-        m_nAttrib = rhs.m_nAttrib;
-        return *this;
-    }
-
     /** Comparison.
     */
     enum CompareResult
