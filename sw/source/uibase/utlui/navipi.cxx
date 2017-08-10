@@ -718,8 +718,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aGlobalTree->SetFont(aFont);
 
     StartListening(*SfxGetpApp());
-    if ( m_pCreateView )
-        StartListening(*m_pCreateView);
 
     sal_uInt16 nNavId = m_aContentToolBox->GetItemId("navigation");
     m_aContentToolBox->SetItemBits(nNavId, m_aContentToolBox->GetItemBits(nNavId) | ToolBoxItemBits::DROPDOWNONLY );
@@ -886,6 +884,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     {
         if (rHint.GetId() == SfxHintId::Dying)
         {
+            EndListening(*m_pCreateView);
             m_pCreateView = nullptr;
         }
     }
