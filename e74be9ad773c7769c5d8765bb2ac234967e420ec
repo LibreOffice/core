@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_14403556",
+        "filename": "extras/source/glade/libreoffice-catalog.xml.in",
+        "patchSetId": 14
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-08-10T08:48:55Z",
+      "side": 1,
+      "message": "The title and generic name should be adjusted.",
+      "revId": "e74be9ad773c7769c5d8765bb2ac234967e420ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_342531c2",
+        "filename": "include/svx/ucsubset.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-08-10T08:48:55Z",
+      "side": 1,
+      "message": "Why this include here?",
+      "revId": "e74be9ad773c7769c5d8765bb2ac234967e420ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5422bdba",
+        "filename": "svx/source/dialog/charmap.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-08-10T08:48:55Z",
+      "side": 1,
+      "message": "dito.",
+      "revId": "e74be9ad773c7769c5d8765bb2ac234967e420ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
