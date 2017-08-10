@@ -113,7 +113,7 @@ void lcl_CloneAttributedDataPoints(
                 if( xPoint.is())
                 {
                     lcl_SetParent( xPoint, xSeries );
-                    rDestination.insert( lcl_tDataPointMap::value_type( (*aIt).first, xPoint ));
+                    rDestination.emplace( (*aIt).first, xPoint );
                 }
             }
         }

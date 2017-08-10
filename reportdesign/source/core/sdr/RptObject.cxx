@@ -241,9 +241,9 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 if ( s_aNameMap.empty() )
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
                 }
                 return s_aNameMap;
             }
@@ -254,18 +254,18 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 if ( s_aNameMap.empty() )
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+                    s_aNameMap.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
 
                     std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust);
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
+                    s_aNameMap.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
                 }
                 return s_aNameMap;
             }
@@ -275,17 +275,17 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 if ( s_aNameMap.empty() )
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+                    s_aNameMap.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
                     std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust);
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
+                    s_aNameMap.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
                 }
                 return s_aNameMap;
             }
@@ -296,8 +296,8 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 if ( s_aNameMap.empty() )
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.insert(TPropertyNamePair::value_type(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter)));
-                    s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
+                    s_aNameMap.emplace(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter));
+                    s_aNameMap.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter));
                 }
                 return s_aNameMap;
             }

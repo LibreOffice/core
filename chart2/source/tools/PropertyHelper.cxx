@@ -266,7 +266,7 @@ void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
 {
     tPropertyValueMap::iterator aIt( rOutMap.find( key ));
     if( aIt == rOutMap.end())
-        rOutMap.insert( tPropertyValueMap::value_type( key, rAny ));
+        rOutMap.emplace( key, rAny );
     else
         (*aIt).second = rAny;
 }

@@ -1465,7 +1465,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
 
                 if ( aCase(sTableColumnName, sSelectColumnRealName) && !(*aRowIter)->isBound() && aSelectIters.end() == aSelectIters.find(aIter) )
                 {
-                    aSelectIters.insert(IterMap::value_type(aIter,true));
+                    aSelectIters.emplace(aIter,true);
                     if(_bSetColumnMapping)
                     {
                         sal_Int32 nSelectColumnPos = aIter - _rxColumns->get().begin() + 1;
@@ -1511,7 +1511,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
 
                 if ( xNameAccess->hasByName( sSelectColumnRealName ) )
                 {
-                    aSelectIters.insert(IterMap::value_type(aIter,true));
+                    aSelectIters.emplace(aIter,true);
                     sal_Int32 nSelectColumnPos = aIter - _rxColumns->get().begin() + 1;
                     const OUString* pBegin = aSelectColumns.getConstArray();
                     const OUString* pEnd   = pBegin + aSelectColumns.getLength();

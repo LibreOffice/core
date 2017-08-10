@@ -211,7 +211,7 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
         }
 
         if ( !m_aCommandURL.isEmpty() )
-            m_aListenerMap.insert( URLToDispatchMap::value_type( m_aCommandURL, Reference< XDispatch >() ));
+            m_aListenerMap.emplace( m_aCommandURL, Reference< XDispatch >() );
     }
 }
 
@@ -391,7 +391,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
         if ( !m_bInitialized )
         {
             // Put into the unordered_map of status listener. Will be activated when initialized is called
-            m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
+            m_aListenerMap.emplace( aCommandURL, Reference< XDispatch >() );
             return;
         }
         else
@@ -422,7 +422,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
                     }
                 }
                 else
-                    m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, xDispatch ));
+                    m_aListenerMap.emplace( aCommandURL, xDispatch );
             }
         }
     }

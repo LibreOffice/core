@@ -382,7 +382,7 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
             // insert into map
-            aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
+            aIndexToNameMap.emplace( nTabIndex, aName );
         }
 
         // create controls and insert them into drawing page

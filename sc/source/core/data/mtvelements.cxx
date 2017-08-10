@@ -64,7 +64,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
     if (itTab == maTables.end())
     {
         std::pair<TablesType::iterator,bool> r =
-            maTables.insert(TablesType::value_type(nTab, ColumnsType()));
+            maTables.emplace(nTab, ColumnsType());
         if (!r.second)
             // insertion failed.
             return nullptr;

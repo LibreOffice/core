@@ -156,9 +156,9 @@ sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID )
         sal_Int32 i = 0;
         while ( GroupIDCommandGroupMap[i].nGroupID != SfxGroupId::NONE )
         {
-            s_aHashMap.insert( GroupHashMap::value_type(
+            s_aHashMap.emplace(
                 GroupIDCommandGroupMap[i].nGroupID,
-                GroupIDCommandGroupMap[i].nCommandGroup ));
+                GroupIDCommandGroupMap[i].nCommandGroup );
             ++i;
         }
         bGroupIDMapInitialized = true;

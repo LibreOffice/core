@@ -123,7 +123,7 @@ namespace comphelper
         registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, css::uno::Any() );
 
         // remember the default
-        m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, Any() ) );
+        m_pImpl->aDefaults.emplace( _nHandle, Any() );
     }
 
 
@@ -146,7 +146,7 @@ namespace comphelper
             _rInitialValue );
 
         // remember the default
-        m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, _rInitialValue ) );
+        m_pImpl->aDefaults.emplace( _nHandle, _rInitialValue );
     }
 
 

@@ -271,7 +271,7 @@ void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfo
             }
 
             UIElementInfo aInfo( pUserIter->second.aResourceURL, aUIName );
-            aUIElementInfoCollection.insert( UIElementInfoHashMap::value_type( pUserIter->second.aResourceURL, aInfo ));
+            aUIElementInfoCollection.emplace( pUserIter->second.aResourceURL, aInfo );
         }
         ++pUserIter;
     }
@@ -315,7 +315,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
 
                         // Create unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
-                        rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
+                        rHashMap.emplace( aUIElementData.aResourceURL, aUIElementData );
                     }
                 }
             }
@@ -1107,7 +1107,7 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
                 pDataSettings->aResourceURL = NewResourceURL;
 
                 UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
-                rElements.insert( UIElementDataHashMap::value_type( NewResourceURL, *pDataSettings ));
+                rElements.emplace( NewResourceURL, *pDataSettings );
             }
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );

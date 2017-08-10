@@ -690,7 +690,7 @@ namespace pcr
                     OUString sUIName = composeModelElementUIName( *pModelName, sElementName );
 
                     OSL_ENSURE( rMapUINameToElement.find( sUIName ) == rMapUINameToElement.end(), "EFormsHelper::getAllElementUINames: duplicate name!" );
-                    rMapUINameToElement.insert( MapStringToPropertySet::value_type( sUIName, xElement ) );
+                    rMapUINameToElement.emplace( sUIName, xElement );
                 }
             }
         }

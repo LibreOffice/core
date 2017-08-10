@@ -76,7 +76,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
             SCTAB nTab = it->first;
             IndexNameMapType aNames;
             insertAllNames(aNames, *pSheetNames);
-            maSheetRangeNames.insert(TabIndexMapType::value_type(nTab, aNames));
+            maSheetRangeNames.emplace(nTab, aNames);
         }
     }
 
@@ -89,7 +89,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
         for (; it != itEnd; ++it)
         {
             const ScDBData& rData = **it;
-            maNamedDBs.insert(IndexNameMapType::value_type(rData.GetIndex(), rData.GetName()));
+            maNamedDBs.emplace(rData.GetIndex(), rData.GetName());
         }
     }
 

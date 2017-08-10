@@ -437,7 +437,7 @@ void UnoControl::ImplLockPropertyChangeNotification( const OUString& rPropertyNa
     if ( bLock )
     {
         if ( pos == mpData->aSuspendedPropertyNotifications.end() )
-            pos = mpData->aSuspendedPropertyNotifications.insert( MapString2Int::value_type( rPropertyName, 0 ) ).first;
+            pos = mpData->aSuspendedPropertyNotifications.emplace( rPropertyName, 0 ).first;
         ++pos->second;
     }
     else

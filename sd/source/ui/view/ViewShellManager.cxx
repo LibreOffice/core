@@ -386,7 +386,7 @@ void ViewShellManager::Implementation::AddShellFactory (
 
     // Add the factory if it is not already present.
     if ( ! bAlreadyAdded)
-        maShellFactories.insert(FactoryList::value_type(pViewShell, rpFactory));
+        maShellFactories.emplace(pViewShell, rpFactory);
 }
 
 void ViewShellManager::Implementation::RemoveShellFactory (

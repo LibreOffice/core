@@ -215,9 +215,9 @@ Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rU
         // insert the new connection and struct into the active connection map
         aPack.nALiveCount               = m_nALiveCount;
         TActiveConnectionInfo aActiveInfo;
-        aActiveInfo.aPos                = m_aPool.insert(TConnectionMap::value_type(nId,aPack)).first;
+        aActiveInfo.aPos                = m_aPool.emplace(nId,aPack).first;
         aActiveInfo.xPooledConnection   = xPooledConnection;
-        m_aActiveConnections.insert(TActiveConnectionMap::value_type(xConnection,aActiveInfo));
+        m_aActiveConnections.emplace(xConnection,aActiveInfo);
 
         if(m_xInvalidator->isExpired())
             m_xInvalidator->start();

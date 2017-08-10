@@ -615,7 +615,7 @@ namespace frm
                     SingleAttributeDispatcher pDispatcher = implCreateDispatcher( nSlotId, _rURL );
                     if ( pDispatcher.is() )
                     {
-                        aDispatcherPos = m_aDispatchers.insert( AttributeDispatchers::value_type( nSlotId, pDispatcher ) ).first;
+                        aDispatcherPos = m_aDispatchers.emplace( nSlotId, pDispatcher ).first;
                     }
                 }
 

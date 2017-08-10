@@ -25,7 +25,7 @@ void UpdatedRangeNames::setUpdatedName(SCTAB nTab, sal_uInt16 nIndex)
         // Insert a new container for this sheet index.
         NameIndicesType aIndices;
         std::pair<UpdatedNamesType::iterator,bool> r =
-            maUpdatedNames.insert(UpdatedNamesType::value_type(nTab, aIndices));
+            maUpdatedNames.emplace( nTab, aIndices);
 
         if (!r.second)
             // Insertion failed for whatever reason.

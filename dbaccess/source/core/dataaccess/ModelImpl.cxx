@@ -308,7 +308,7 @@ Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( con
     if ( pos == m_aExposedStorages.end() )
     {
         Reference< XStorage > xResult = impl_openSubStorage_nothrow( aStorageName, _nDesiredMode );
-        pos = m_aExposedStorages.insert( NamedStorages::value_type( aStorageName, xResult ) ).first;
+        pos = m_aExposedStorages.emplace( aStorageName, xResult ).first;
     }
 
     return pos->second;

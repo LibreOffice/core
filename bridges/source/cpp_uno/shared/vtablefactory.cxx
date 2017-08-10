@@ -216,7 +216,7 @@ VtableFactory::Vtables VtableFactory::getVtables(
         for (sal_Int32 j = 0; j < vtables.count; ++j) {
             vtables.blocks[j] = blocks[j];
         }
-        i = m_map.insert(Map::value_type(name, vtables)).first;
+        i = m_map.emplace(name, vtables).first;
         guardedBlocks.release();
         blocks.unguard();
     }

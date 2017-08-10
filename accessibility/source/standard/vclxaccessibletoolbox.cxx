@@ -738,7 +738,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
                 pChild->SetChecked( true );
             if ( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET )
                 pChild->SetIndeterminate( true );
-            m_aAccessibleChildren.insert( ToolBoxItemsMap::value_type( i, xChild ) );
+            m_aAccessibleChildren.emplace( i, xChild );
         }
         else
         {

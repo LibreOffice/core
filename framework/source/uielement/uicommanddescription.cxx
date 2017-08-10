@@ -342,7 +342,7 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
                     xNameAccess->getByName( m_aPropUIIsExperimental ) >>= aCmdToInfo.bIsExperimental;
                     xNameAccess->getByName( m_aPropProperties )     >>= aCmdToInfo.nProperties;
 
-                    m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
+                    m_aCmdInfoCache.emplace( aNameSeq[i], aCmdToInfo );
 
                     if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
                         aImageCommandVector.push_back( aNameSeq[i] );
@@ -639,12 +639,12 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
             }
 
             // Create first mapping ModuleIdentifier ==> Command File
-            m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type( aModuleIdentifier, aCommandStr ));
+            m_aModuleToCommandFileMap.emplace( aModuleIdentifier, aCommandStr );
 
             // Create second mapping Command File ==> commands instance
             UICommandsHashMap::iterator pIter = m_aUICommandsHashMap.find( aCommandStr );
             if ( pIter == m_aUICommandsHashMap.end() )
-                m_aUICommandsHashMap.insert( UICommandsHashMap::value_type( aCommandStr, Reference< XNameAccess >() ));
+                m_aUICommandsHashMap.emplace( aCommandStr, Reference< XNameAccess >() );
         }
     } // for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
 }

@@ -344,7 +344,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu()
             {
                 xDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
                 xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
-                m_aURLToDispatchMap.insert( UrlToDispatchMap::value_type( aTargetURL.Complete, xDispatch ));
+                m_aURLToDispatchMap.emplace( aTargetURL.Complete, xDispatch );
             }
         }
     }

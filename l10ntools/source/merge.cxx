@@ -113,7 +113,7 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
 
 std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, MergeData* pMergeData)
 {
-    std::pair<iterator,bool> aTemp = m_aHashMap.insert(HashMap_t::value_type( rKey, pMergeData ));
+    std::pair<iterator,bool> aTemp = m_aHashMap.emplace( rKey, pMergeData );
     if( m_aHashMap.size() == 1 )
     {
         // When first insert, set an iterator to the first element

@@ -884,7 +884,6 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     static map<OUString, rtl::Reference<VendorBase> > mapJREs;
     typedef map<OUString, rtl::Reference<VendorBase> >::const_iterator MapIt;
-    typedef map<OUString, rtl::Reference<VendorBase> > MAPJRE;
     OUString sFilePath;
     typedef vector<OUString>::const_iterator cit_path;
     vector<pair<OUString, OUString> > props;
@@ -1055,8 +1054,8 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     {
         JFW_TRACE2("Found JRE: " << sResolvedDir << " at: " << path);
 
-        mapJREs.insert(MAPJRE::value_type(sResolvedDir, ret));
-        mapJREs.insert(MAPJRE::value_type(sFilePath, ret));
+        mapJREs.emplace(sResolvedDir, ret);
+        mapJREs.emplace(sFilePath, ret);
     }
 
     return ret;

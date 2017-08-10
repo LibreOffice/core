@@ -18,7 +18,7 @@ void ColumnSet::set(SCTAB nTab, SCCOL nCol)
     if (itTab == maTabs.end())
     {
         std::pair<TabsType::iterator,bool> r =
-            maTabs.insert(TabsType::value_type(nTab, ColsType()));
+            maTabs.emplace(nTab, ColsType());
 
         if (!r.second)
             // insertion failed.
