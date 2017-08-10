@@ -162,9 +162,11 @@ void MasterPageObserver::Implementation::RegisterDocument (
             aMasterPageSet.insert (pMasterPage->GetName());
     }
 
+    bool bAlreadyExists = maUsedMasterPages.find(&rDocument) != maUsedMasterPages.end();
     maUsedMasterPages[&rDocument] = aMasterPageSet;
 
-    StartListening (rDocument);
+    if (!bAlreadyExists)
+        StartListening (rDocument);
 }
 
 void MasterPageObserver::Implementation::UnregisterDocument (
