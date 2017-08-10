@@ -3250,7 +3250,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     nTextLen = aText.getLength();
                                     ExtraPortionInfo *pExtraInfo = rTextPortion.GetExtraInfos();
                                     // Do not split the Fields into different lines while editing
-                                    if( bStripOnly && !bParsingFields && pExtraInfo && pExtraInfo->lineBreaksList.size() )
+                                    // With EditView on Overlay bStripOnly is now set for stripping to
+                                    // primitives. To stay compatible in EditMode use pActiveView to detect
+                                    // when we are in EditMode. For whatever reason URLs are drawn as single
+                                    // line in edit mode, originally clipped against edit area (which is no
+                                    // longer done in Overlay mode and allows to *read* the URL).
+                                    // It would be difficult to change this due to needed adaptions in
+                                    // EditEngine (look for lineBreaksList creation)
+                                    if( nullptr == pActiveView && bStripOnly && !bParsingFields && pExtraInfo && pExtraInfo->lineBreaksList.size() )
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
