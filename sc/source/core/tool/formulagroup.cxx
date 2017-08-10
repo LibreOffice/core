@@ -369,6 +369,13 @@ void FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
+void FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly()
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::UseOpenCL::set(false, batch);
+    batch->commit();
+}
+
 #endif
 
 } // namespace sc

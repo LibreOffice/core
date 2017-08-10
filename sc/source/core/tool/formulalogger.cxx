@@ -340,7 +340,9 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
     // Get the file name if available.
     const SfxObjectShell* pShell = rDoc.GetDocumentShell();
     const SfxMedium* pMedium = pShell->GetMedium();
-    OUString aName = pMedium->GetURLObject().GetLastName();
+    OUString aName;
+    if (pMedium)
+        aName = pMedium->GetURLObject().GetLastName();
     if (aName.isEmpty())
         aName = "-"; // unsaved document.
 

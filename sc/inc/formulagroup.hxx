@@ -138,6 +138,7 @@ public:
     static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
     // This is intended to be called from opencl-test.cxx only
     static void enableOpenCL_UnitTestsOnly();
+    static void disableOpenCL_UnitTestsOnly();
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 #endif
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
