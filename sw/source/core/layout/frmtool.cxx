@@ -3181,8 +3181,13 @@ public:
 void SwFrameHolder::SetFrame( SwFrame* pHold )
 {
     bSet = true;
-    pFrame = pHold;
-    StartListening(*pHold);
+    if (pFrame != pHold)
+    {
+        if (pFrame)
+            EndListening(*pFrame);
+        StartListening(*pHold);
+        pFrame = pHold;
+    }
 }
 
 void SwFrameHolder::Reset()

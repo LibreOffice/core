@@ -733,6 +733,12 @@ PRIVATE_1.3 { # LibreOffice 5.4
         sal_detail_log_report;
 } PRIVATE_1.2;
 
+PRIVATE_1.4 { # LibreOffice 6.0
+    global:
+        _Z17sal_backtrace_getj;
+        _Z23sal_backtrace_to_stringP14BacktraceState;
+} PRIVATE_1.3;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;

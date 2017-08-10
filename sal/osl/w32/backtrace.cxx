@@ -19,6 +19,7 @@
 #include <DbgHelp.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/backtrace.hxx>
 
 #include "backtraceasstring.hxx"
 
@@ -63,5 +64,55 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
 
     return aBuf.makeStringAndClear();
 }
+
+std::unique_ptr<BacktraceState> sal_backtrace_get(sal_uInt32 maxDepth)
+{
+    assert(maxDepth != 0);
+    auto const maxUlong = std::numeric_limits<ULONG>::max();
+    if (maxDepth > maxUlong) {
+        maxDepth = static_cast<sal_uInt32>(maxUlong);
+    }
+
+    HANDLE hProcess = GetCurrentProcess();
+    SymInitialize( hProcess, nullptr, true );
+
+    auto pStack = new void *[maxDepth];
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633.aspx
+    // "CaptureStackBackTrace function" claims that you "can capture up to
+    // MAXUSHORT frames", and on Windows Server 2003 and Windows XP it even
+    // "must be less than 63", but assume that a too large input value is
+    // clamped internally, instead of resulting in an error:
+    int nFrames = CaptureStackBackTrace( 0, static_cast<ULONG>(maxDepth), pStack, nullptr );
+
+    return std::unique_ptr<BacktraceState>(new BacktraceState{ pStack, nFrames });
+}
+
+OUString sal_backtrace_to_string(BacktraceState* backtraceState)
+{
+    OUStringBuffer aBuf;
+
+    SYMBOL_INFO  * pSymbol;
+    pSymbol = static_cast<SYMBOL_INFO *>(calloc( sizeof( SYMBOL_INFO ) + 1024 * sizeof( char ), 1 ));
+    pSymbol->MaxNameLen = 1024 - 1;
+    pSymbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+    HANDLE hProcess = GetCurrentProcess();
+
+    auto nFrames = backtraceState->nDepth;
+    for( int i = 0; i < nFrames; i++ )
+    {
+        SymFromAddr( hProcess, reinterpret_cast<DWORD64>(backtraceState->buffer[ i ]), nullptr, pSymbol );
+        aBuf.append( (sal_Int32)(nFrames - i - 1) );
+        aBuf.append( ": " );
+        aBuf.appendAscii( pSymbol->Name );
+        aBuf.append( " - 0x" );
+        aBuf.append( (sal_Int64)pSymbol->Address, 16 );
+        aBuf.append( "\n" );
+    }
+
+    free( pSymbol );
+
+    return aBuf.makeStringAndClear();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
