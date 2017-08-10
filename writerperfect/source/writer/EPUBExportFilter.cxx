@@ -36,7 +36,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
-    libepubgen::EPUBTextGenerator aGenerator(&aPackage);
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage, libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK, /*version=*/30);
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);

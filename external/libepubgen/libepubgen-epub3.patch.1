@@ -1,0 +1,866 @@
+From 17b4d0a2b595d1504f3d957268e2085ae0f80db7 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 15:53:02 +0200
+Subject: [PATCH 1/9] EPUBGenerator: avoid container version roundtrip to
+ double
+
+This will be an error for EPUB3:
+
+ERROR(RSC-005): test.epub/META-INF/container.xml(2,85): Error while parsing file: value of attribute "version" is invalid; must be equal to "1.0"
+
+But it does not hurt for EPUB2, either.
+---
+ src/lib/EPUBGenerator.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 3357cf2..1033c0f 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -117,7 +117,7 @@ void EPUBGenerator::writeContainer()
+   EPUBXMLSink sink;
+ 
+   RVNGPropertyList containerAttrs;
+-  containerAttrs.insert("version", "1.0");
++  containerAttrs.insert("version", RVNGPropertyFactory::newStringProp("1.0"));
+   containerAttrs.insert("xmlns", "urn:oasis:names:tc:opendocument:xmlns:container");
+ 
+   sink.openElement("container", containerAttrs);
+-- 
+2.12.3
+
+From 8ca1fe2b9db9bacd6e868e69a0909a441fb6a7f8 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 16:00:05 +0200
+Subject: [PATCH 2/9] EPUBGenerator: avoid opf:scheme attribute when writing
+ the UUID
+
+This will be an error for EPUB3:
+
+ERROR(RSC-005): test.epub/OEBPS/content.opf(2,292): Error while parsing file: found attribute "opf:scheme", but no attributes allowed here
+
+But it's optional for EPUB2 already.
+---
+ src/lib/EPUBGenerator.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 1033c0f..14e3c58 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -199,7 +199,6 @@ void EPUBGenerator::writeRoot()
+ 
+   RVNGPropertyList identifierAttrs;
+   identifierAttrs.insert("id", uniqueId);
+-  identifierAttrs.insert("opf:scheme", "UUID");
+   sink.openElement("dc:identifier", identifierAttrs);
+   // The identifier element is required to have a unique character content.
+   std::stringstream identifierStream("urn:uuid:");
+-- 
+2.12.3
+
+From aa71784fcee0404c2f136f035887ca4c52d0e756 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 16:11:13 +0200
+Subject: [PATCH 3/9] EPUBGenerator: avoid empty dc:title element
+
+This is a warning for EPUB2, but it'll be an error for EPUB3:
+
+ERROR(RSC-005): test.epub/OEBPS/content.opf(2,337): Error while parsing file: character content of element "dc:title" invalid; must be a string with length at least 1 (actual length was 0)
+
+The problem is that for ODF/librevenge this element is optional, so work
+it around by adding a zero-width space.
+
+A later commit should read the optional title of declared with a
+librevenge API call, though.
+---
+ src/lib/EPUBGenerator.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 14e3c58..75ccb5a 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -208,8 +208,12 @@ void EPUBGenerator::writeRoot()
+   sink.insertCharacters(identifierCharactrs.c_str());
+   sink.closeElement("dc:identifier");
+ 
++  // Zero-width space as it must be at least one character in length after
++  // white space has been trimmed.
+   sink.openElement("dc:title");
++  sink.insertCharacters("\u200b");
+   sink.closeElement("dc:title");
++
+   sink.openElement("dc:language");
+   sink.closeElement("dc:language");
+ 
+-- 
+2.12.3
+
+From a4585b8f35c76472eb91688c9177b9f532c290d8 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 16:15:12 +0200
+Subject: [PATCH 4/9] EPUBGenerator: avoid empty dc:language element
+
+Same story as with dc:title:
+
+ERROR(RSC-005): test.epub/OEBPS/content.opf(2,362): Error while parsing file: character content of element "dc:language" invalid; must be an RFC 3066 language identifier
+
+(This is a warning for EPUB2, but it'll be an error for EPUB3; this is optional
+for ODF; later commit should read the this info, though.)
+---
+ src/lib/EPUBGenerator.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 75ccb5a..40ae0cc 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -215,6 +215,7 @@ void EPUBGenerator::writeRoot()
+   sink.closeElement("dc:title");
+ 
+   sink.openElement("dc:language");
++  sink.insertCharacters("en");
+   sink.closeElement("dc:language");
+ 
+   sink.closeElement("metadata");
+-- 
+2.12.3
+
+From 862ec6735c25760edadf05d83717daaf65f39f99 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 16:47:12 +0200
+Subject: [PATCH 5/9] [ABI CHANGE] optionally support generating EPUB3 output
+
+Versions are 20 and 30 to be consistent with
+<https://github.com/idpf/epubcheck/tree/master/src/main/resources/com/adobe/epubcheck/schema/>.
+---
+ inc/libepubgen/EPUBDrawingGenerator.h      |  6 +++++-
+ inc/libepubgen/EPUBPresentationGenerator.h |  6 +++++-
+ inc/libepubgen/EPUBTextGenerator.h         |  6 +++++-
+ src/lib/EPUBDrawingGenerator.cpp           | 10 +++++-----
+ src/lib/EPUBGenerator.cpp                  |  8 ++++++--
+ src/lib/EPUBGenerator.h                    |  4 +++-
+ src/lib/EPUBPagedGenerator.cpp             | 10 +++++-----
+ src/lib/EPUBPagedGenerator.h               |  2 +-
+ src/lib/EPUBPresentationGenerator.cpp      | 10 +++++-----
+ src/lib/EPUBTextGenerator.cpp              | 10 +++++-----
+ 10 files changed, 45 insertions(+), 27 deletions(-)
+
+diff --git a/inc/libepubgen/EPUBDrawingGenerator.h b/inc/libepubgen/EPUBDrawingGenerator.h
+index 48bfc99..963e3b8 100644
+--- a/inc/libepubgen/EPUBDrawingGenerator.h
++++ b/inc/libepubgen/EPUBDrawingGenerator.h
+@@ -32,7 +32,11 @@ class EPUBGENAPI EPUBDrawingGenerator : public librevenge::RVNGDrawingInterface
+   class Impl;
+ 
+ public:
+-  explicit EPUBDrawingGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK);
++  /** Constructor.
++    *
++    * @param[in] version possible values: 20, 30.
++    */
++  explicit EPUBDrawingGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK, int version = 20);
+   EPUBDrawingGenerator(EPUBEmbeddingContact &contact, EPUBPackage *package);
+   ~EPUBDrawingGenerator() override;
+ 
+diff --git a/inc/libepubgen/EPUBPresentationGenerator.h b/inc/libepubgen/EPUBPresentationGenerator.h
+index 0a8152a..512c52d 100644
+--- a/inc/libepubgen/EPUBPresentationGenerator.h
++++ b/inc/libepubgen/EPUBPresentationGenerator.h
+@@ -32,7 +32,11 @@ class EPUBGENAPI EPUBPresentationGenerator: public librevenge::RVNGPresentationI
+   class Impl;
+ 
+ public:
+-  explicit EPUBPresentationGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK);
++  /** Constructor.
++    *
++    * @param[in] version possible values: 20, 30.
++    */
++  explicit EPUBPresentationGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK, int version = 20);
+   EPUBPresentationGenerator(EPUBEmbeddingContact &contact, EPUBPackage *package);
+   ~EPUBPresentationGenerator() override;
+ 
+diff --git a/inc/libepubgen/EPUBTextGenerator.h b/inc/libepubgen/EPUBTextGenerator.h
+index abf9e7f..664f673 100644
+--- a/inc/libepubgen/EPUBTextGenerator.h
++++ b/inc/libepubgen/EPUBTextGenerator.h
+@@ -32,7 +32,11 @@ class EPUBGENAPI EPUBTextGenerator : public librevenge::RVNGTextInterface
+   struct Impl;
+ 
+ public:
+-  explicit EPUBTextGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK);
++  /** Constructor.
++    *
++    * @param[in] version possible values: 20, 30.
++    */
++  explicit EPUBTextGenerator(EPUBPackage *package, EPUBSplitMethod split = EPUB_SPLIT_METHOD_PAGE_BREAK, int version = 20);
+   EPUBTextGenerator(EPUBEmbeddingContact &contact, EPUBPackage *package);
+   ~EPUBTextGenerator() override;
+ 
+diff --git a/src/lib/EPUBDrawingGenerator.cpp b/src/lib/EPUBDrawingGenerator.cpp
+index e25a377..bcb4994 100644
+--- a/src/lib/EPUBDrawingGenerator.cpp
++++ b/src/lib/EPUBDrawingGenerator.cpp
+@@ -20,16 +20,16 @@ using librevenge::RVNGString;
+ class EPUBDrawingGenerator::Impl : public EPUBPagedGenerator
+ {
+ public:
+-  Impl(EPUBPackage *const package, const EPUBSplitMethod method);
++  Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version);
+ };
+ 
+-EPUBDrawingGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method)
+-  : EPUBPagedGenerator(package, method)
++EPUBDrawingGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
++  : EPUBPagedGenerator(package, method, version)
+ {
+ }
+ 
+-EPUBDrawingGenerator::EPUBDrawingGenerator(EPUBPackage *const package, EPUBSplitMethod split)
+-  : m_impl(new Impl(package, split))
++EPUBDrawingGenerator::EPUBDrawingGenerator(EPUBPackage *const package, EPUBSplitMethod split, int version)
++  : m_impl(new Impl(package, split, version))
+ {
+ }
+ 
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 40ae0cc..4888677 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -25,7 +25,7 @@ using librevenge::RVNGPropertyFactory;
+ using librevenge::RVNGPropertyList;
+ using librevenge::RVNGString;
+ 
+-EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod split)
++EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod split, int version)
+   : m_package(package)
+   , m_manifest()
+   , m_htmlManager(m_manifest)
+@@ -39,6 +39,7 @@ EPUBGenerator::EPUBGenerator(EPUBPackage *const package, const EPUBSplitMethod s
+   , m_metadata()
+   , m_currentHtml()
+   , m_splitGuard(split)
++  , m_version(version)
+ {
+ }
+ 
+@@ -190,7 +191,10 @@ void EPUBGenerator::writeRoot()
+   packageAttrs.insert("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+   packageAttrs.insert("xmlns:dcterms", "http://purl.org/dc/terms/");
+   packageAttrs.insert("xmlns:opf", "http://www.idpf.org/2007/opf");
+-  packageAttrs.insert("version", RVNGPropertyFactory::newStringProp("2.0"));
++  if (m_version == 30)
++    packageAttrs.insert("version", RVNGPropertyFactory::newStringProp("3.0"));
++  else
++    packageAttrs.insert("version", RVNGPropertyFactory::newStringProp("2.0"));
+   packageAttrs.insert("unique-identifier", uniqueId);
+ 
+   sink.openElement("package", packageAttrs);
+diff --git a/src/lib/EPUBGenerator.h b/src/lib/EPUBGenerator.h
+index 51dd911..a0ef8ac 100644
+--- a/src/lib/EPUBGenerator.h
++++ b/src/lib/EPUBGenerator.h
+@@ -33,7 +33,7 @@ class EPUBGenerator
+   EPUBGenerator &operator=(const EPUBGenerator &);
+ 
+ public:
+-  EPUBGenerator(EPUBPackage *package, EPUBSplitMethod method);
++  EPUBGenerator(EPUBPackage *package, EPUBSplitMethod method, int version);
+   virtual ~EPUBGenerator();
+ 
+   void startDocument(const librevenge::RVNGPropertyList &props);
+@@ -75,6 +75,8 @@ private:
+   EPUBHTMLGeneratorPtr_t m_currentHtml;
+ 
+   EPUBSplitGuard m_splitGuard;
++
++  int m_version;
+ };
+ 
+ }
+diff --git a/src/lib/EPUBPagedGenerator.cpp b/src/lib/EPUBPagedGenerator.cpp
+index 913a592..6a3bff0 100644
+--- a/src/lib/EPUBPagedGenerator.cpp
++++ b/src/lib/EPUBPagedGenerator.cpp
+@@ -25,7 +25,7 @@ class EPUBPagedGenerator::Impl : public EPUBGenerator
+   Impl &operator=(const Impl &);
+ 
+ public:
+-  Impl(EPUBPackage *const package, EPUBSplitMethod method);
++  Impl(EPUBPackage *const package, EPUBSplitMethod method, int version);
+ 
+ private:
+   void startHtmlFile() override;
+@@ -35,8 +35,8 @@ public:
+   bool m_firstPage;
+ };
+ 
+-EPUBPagedGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method)
+-  : EPUBGenerator(package, method)
++EPUBPagedGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
++  : EPUBGenerator(package, method, version)
+   , m_firstPage(true)
+ {
+ }
+@@ -59,8 +59,8 @@ void EPUBPagedGenerator::Impl::endHtmlFile()
+ {
+ }
+ 
+-EPUBPagedGenerator::EPUBPagedGenerator(EPUBPackage *const package, const EPUBSplitMethod method)
+-  : m_impl(new Impl(package, method))
++EPUBPagedGenerator::EPUBPagedGenerator(EPUBPackage *const package, const EPUBSplitMethod method, int version)
++  : m_impl(new Impl(package, method, version))
+ {
+ }
+ 
+diff --git a/src/lib/EPUBPagedGenerator.h b/src/lib/EPUBPagedGenerator.h
+index f1d124f..74d70da 100644
+--- a/src/lib/EPUBPagedGenerator.h
++++ b/src/lib/EPUBPagedGenerator.h
+@@ -26,7 +26,7 @@ class EPUBPagedGenerator: public librevenge::RVNGPresentationInterface
+   class Impl;
+ 
+ public:
+-  EPUBPagedGenerator(EPUBPackage *package, EPUBSplitMethod method);
++  EPUBPagedGenerator(EPUBPackage *package, EPUBSplitMethod method, int version);
+ 
+   void setSplitHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+diff --git a/src/lib/EPUBPresentationGenerator.cpp b/src/lib/EPUBPresentationGenerator.cpp
+index 5b2a2e9..80b5ac2 100644
+--- a/src/lib/EPUBPresentationGenerator.cpp
++++ b/src/lib/EPUBPresentationGenerator.cpp
+@@ -20,16 +20,16 @@ using librevenge::RVNGString;
+ class EPUBPresentationGenerator::Impl : public EPUBPagedGenerator
+ {
+ public:
+-  Impl(EPUBPackage *const package, EPUBSplitMethod method);
++  Impl(EPUBPackage *const package, EPUBSplitMethod method, int version);
+ };
+ 
+-EPUBPresentationGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method)
+-  : EPUBPagedGenerator(package, method)
++EPUBPresentationGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
++  : EPUBPagedGenerator(package, method, version)
+ {
+ }
+ 
+-EPUBPresentationGenerator::EPUBPresentationGenerator(EPUBPackage *const package, EPUBSplitMethod method)
+-  : m_impl(new Impl(package, method))
++EPUBPresentationGenerator::EPUBPresentationGenerator(EPUBPackage *const package, EPUBSplitMethod method, int version)
++  : m_impl(new Impl(package, method, version))
+ {
+   (void) method;
+ }
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index b3ca626..e8f785e 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -57,7 +57,7 @@ bool operator!=(const char *const left, const RVNGString &right)
+ 
+ struct EPUBTextGenerator::Impl : public EPUBGenerator
+ {
+-  Impl(EPUBPackage *package, EPUBSplitMethod method);
++  Impl(EPUBPackage *package, EPUBSplitMethod method, int version);
+ 
+ private:
+   void startHtmlFile() override;
+@@ -83,8 +83,8 @@ private:
+   Impl &operator=(const Impl &);
+ };
+ 
+-EPUBTextGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method)
+-  : EPUBGenerator(package, method)
++EPUBTextGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod method, int version)
++  : EPUBGenerator(package, method, version)
+   , m_inPageSpan(false)
+   , m_inHeader(false)
+   , m_inFooter(false)
+@@ -113,8 +113,8 @@ void EPUBTextGenerator::Impl::endHtmlFile()
+     m_currentFooter->write(getHtml().get());
+ }
+ 
+-EPUBTextGenerator::EPUBTextGenerator(EPUBPackage *const package, const EPUBSplitMethod method)
+-  : m_impl(new Impl(package, method))
++EPUBTextGenerator::EPUBTextGenerator(EPUBPackage *const package, const EPUBSplitMethod method, int version)
++  : m_impl(new Impl(package, method, version))
+ {
+   (void) method;
+ }
+-- 
+2.12.3
+
+From cfd57f50c9d33781f90018d40902ccce68a13a5c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 17:19:06 +0200
+Subject: [PATCH 6/9] EPUB3: write missing modification date
+
+ERROR(RSC-005): test.epub/OEBPS/content.opf(2,236): Error while parsing file: package dcterms:modified meta element must occur exactly once
+
+But not for EPUB2, which doesn't allow so.
+
+(Similar story as with dc:title: later commit should read the this
+optional info from librevenge.)
+---
+ src/lib/EPUBGenerator.cpp | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 4888677..1628a2b 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -7,6 +7,7 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <ctime>
+ #include <sstream>
+ 
+ #include <boost/uuid/uuid.hpp>
+@@ -222,6 +223,23 @@ void EPUBGenerator::writeRoot()
+   sink.insertCharacters("en");
+   sink.closeElement("dc:language");
+ 
++  time_t now = 0;
++  time(&now);
++  const struct tm *local = localtime(&now);
++  if (m_version == 30 && local)
++  {
++    RVNGPropertyList metaAttrs;
++    metaAttrs.insert("property", "dcterms:modified");
++    sink.openElement("meta", metaAttrs);
++    const int MAX_BUFFER = 1024;
++    char buffer[MAX_BUFFER];
++    strftime(&buffer[0], MAX_BUFFER-1, "%Y-%m-%dT%H:%M:%SZ", local);
++    RVNGString result;
++    result.append(buffer);
++    sink.insertCharacters(result);
++    sink.closeElement("meta");
++  }
++
+   sink.closeElement("metadata");
+ 
+   sink.openElement("manifest");
+-- 
+2.12.3
+
+From 575a09f637b5afe4d61387c7be3c8b2b67039ccb Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 9 Aug 2017 17:39:51 +0200
+Subject: [PATCH 7/9] EPUB3: add missing nav property on first HTML stream
+
+ERROR(RSC-005): test30.epub/OEBPS/content.opf(2,459): Error while parsing file: Exactly one manifest item must declare the 'nav' property (number of 'nav' items: 0).
+
+This is the last error in OEBPS/content.opf in case of EPUB3.
+---
+ src/lib/EPUBGenerator.cpp    | 11 ++++++++---
+ src/lib/EPUBGenerator.h      |  1 +
+ src/lib/EPUBHTMLManager.cpp  |  9 +++++++--
+ src/lib/EPUBHTMLManager.h    |  3 ++-
+ src/lib/EPUBImageManager.cpp |  2 +-
+ src/lib/EPUBManifest.cpp     | 11 +++++++----
+ src/lib/EPUBManifest.h       |  5 +++--
+ 7 files changed, 29 insertions(+), 13 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 1628a2b..f77aa6c 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -54,8 +54,8 @@ void EPUBGenerator::startDocument(const RVNGPropertyList &props)
+ 
+   startNewHtmlFile();
+ 
+-  m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx");
+-  m_manifest.insert(m_stylesheetPath, "text/css", "stylesheet.css");
++  m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
++  m_manifest.insert(m_stylesheetPath, "text/css", "stylesheet.css", "");
+ }
+ 
+ void EPUBGenerator::endDocument()
+@@ -90,7 +90,7 @@ void EPUBGenerator::startNewHtmlFile()
+ 
+   m_splitGuard.onSplit();
+ 
+-  m_currentHtml = m_htmlManager.create(m_imageManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath);
++  m_currentHtml = m_htmlManager.create(m_imageManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, *this);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+@@ -114,6 +114,11 @@ EPUBSplitGuard &EPUBGenerator::getSplitGuard()
+   return m_splitGuard;
+ }
+ 
++int EPUBGenerator::getVersion() const
++{
++  return m_version;
++}
++
+ void EPUBGenerator::writeContainer()
+ {
+   EPUBXMLSink sink;
+diff --git a/src/lib/EPUBGenerator.h b/src/lib/EPUBGenerator.h
+index a0ef8ac..1a67a88 100644
+--- a/src/lib/EPUBGenerator.h
++++ b/src/lib/EPUBGenerator.h
+@@ -47,6 +47,7 @@ public:
+ 
+   const EPUBSplitGuard &getSplitGuard() const;
+   EPUBSplitGuard &getSplitGuard();
++  int getVersion() const;
+ 
+ private:
+   virtual void startHtmlFile() = 0;
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 03dbf21..57636b9 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -13,6 +13,7 @@
+ 
+ #include "EPUBHTMLManager.h"
+ #include "EPUBManifest.h"
++#include "EPUBGenerator.h"
+ 
+ namespace libepubgen
+ {
+@@ -26,7 +27,7 @@ EPUBHTMLManager::EPUBHTMLManager(EPUBManifest &manifest)
+ {
+ }
+ 
+-const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath)
++const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, const EPUBGenerator &generator)
+ {
+   std::ostringstream nameBuf;
+   nameBuf << "section" << std::setw(4) << std::setfill('0') << m_number.next();
+@@ -35,7 +36,11 @@ const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageMana
+   nameBuf << ".html";
+   m_paths.push_back(EPUBPath("OEBPS/sections") / nameBuf.str());
+ 
+-  m_manifest.insert(m_paths.back(), "application/xhtml+xml", m_ids.back());
++  std::string properties;
++  if (m_number.current() == 1 && generator.getVersion() == 30)
++    // Only for the first HTML file.
++    properties = "nav";
++  m_manifest.insert(m_paths.back(), "application/xhtml+xml", m_ids.back(), properties);
+ 
+   m_contents.push_back(EPUBXMLSink());
+ 
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index 84ecd2d..7dab33b 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -30,6 +30,7 @@ class EPUBSpanStyleManager;
+ class EPUBTableStyleManager;
+ class EPUBManifest;
+ class EPUBPackage;
++class EPUBGenerator;
+ 
+ class EPUBHTMLManager
+ {
+@@ -40,7 +41,7 @@ class EPUBHTMLManager
+ public:
+   explicit EPUBHTMLManager(EPUBManifest &manifest);
+ 
+-  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath);
++  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, const EPUBGenerator &generator);
+ 
+   void writeTo(EPUBPackage &package);
+ 
+diff --git a/src/lib/EPUBImageManager.cpp b/src/lib/EPUBImageManager.cpp
+index 1b043d7..0179cad 100644
+--- a/src/lib/EPUBImageManager.cpp
++++ b/src/lib/EPUBImageManager.cpp
+@@ -86,7 +86,7 @@ const EPUBPath &EPUBImageManager::insert(const librevenge::RVNGBinaryData &data,
+ 
+     const EPUBPath path(EPUBPath("OEBPS/images") / nameBuf.str());
+ 
+-    m_manifest.insert(path, mime, id);
++    m_manifest.insert(path, mime, id, "");
+     it = m_map.insert(MapType_t::value_type(data, path)).first;
+   }
+ 
+diff --git a/src/lib/EPUBManifest.cpp b/src/lib/EPUBManifest.cpp
+index dcffdcc..813a097 100644
+--- a/src/lib/EPUBManifest.cpp
++++ b/src/lib/EPUBManifest.cpp
+@@ -21,9 +21,9 @@ EPUBManifest::EPUBManifest()
+ {
+ }
+ 
+-void EPUBManifest::insert(const EPUBPath &path, const std::string &mimetype, const std::string &id)
++void EPUBManifest::insert(const EPUBPath &path, const std::string &mimetype, const std::string &id, const std::string &properties)
+ {
+-  if (!m_map.insert(MapType_t::value_type(path.relativeTo(EPUBPath("OEBPS/content.opf")).str(), ValueType_t(mimetype, id))).second)
++  if (!m_map.insert(MapType_t::value_type(path.relativeTo(EPUBPath("OEBPS/content.opf")).str(), ValueType_t(mimetype, id, properties))).second)
+   {
+     assert(!"duplicate entry!");
+   }
+@@ -35,8 +35,11 @@ void EPUBManifest::writeTo(EPUBXMLSink &sink)
+   {
+     librevenge::RVNGPropertyList attrs;
+     attrs.insert("href", it->first.c_str());
+-    attrs.insert("media-type", it->second.first.c_str());
+-    attrs.insert("id", it->second.second.c_str());
++    attrs.insert("media-type", std::get<0>(it->second).c_str());
++    attrs.insert("id", std::get<1>(it->second).c_str());
++    const std::string &properties = std::get<2>(it->second);
++    if (!properties.empty())
++      attrs.insert("properties", properties.c_str());
+     sink.insertEmptyElement("item", attrs);
+   }
+ }
+diff --git a/src/lib/EPUBManifest.h b/src/lib/EPUBManifest.h
+index f2379cf..c4c9031 100644
+--- a/src/lib/EPUBManifest.h
++++ b/src/lib/EPUBManifest.h
+@@ -26,13 +26,14 @@ class EPUBManifest
+   EPUBManifest(const EPUBManifest &);
+   EPUBManifest &operator=(const EPUBManifest &);
+ 
+-  typedef std::pair<std::string, std::string> ValueType_t;
++  // media-type, id, properties
++  typedef std::tuple<std::string, std::string, std::string> ValueType_t;
+   typedef std::unordered_map<std::string, ValueType_t> MapType_t;
+ 
+ public:
+   EPUBManifest();
+ 
+-  void insert(const EPUBPath &path, const std::string &mimetype, const std::string &id);
++  void insert(const EPUBPath &path, const std::string &mimetype, const std::string &id, const std::string &properties);
+ 
+   void writeTo(EPUBXMLSink &sink);
+ 
+-- 
+2.12.3
+
+From 28090aa5d57162302122686cb020d4bf2231cab4 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 10 Aug 2017 15:05:46 +0200
+Subject: [PATCH 8/9] EPUB3: implement navigation document
+
+As
+<http://www.idpf.org/epub/30/spec/epub30-changes.html#sec-new-changed-nav>
+says, EPUB 3 defines a new grammar for navigation based on XHTML, which
+replaces the old NCX grammar -- so use that in EPUB3 mode.
+
+With this, a hello world input in EPUB3 mode results in 0 errors in the
+validator.
+---
+ src/lib/EPUBGenerator.cpp   | 43 ++++++++++++++++++++++++++++++++++++++-----
+ src/lib/EPUBHTMLManager.cpp | 28 +++++++++++++++++++++-------
+ src/lib/EPUBHTMLManager.h   |  4 ++--
+ 3 files changed, 61 insertions(+), 14 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index f77aa6c..7ec2a2b 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -54,7 +54,10 @@ void EPUBGenerator::startDocument(const RVNGPropertyList &props)
+ 
+   startNewHtmlFile();
+ 
+-  m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
++  if (m_version == 30)
++    m_manifest.insert(EPUBPath("OEBPS/toc.html"), "application/xhtml+xml", "toc.html", "nav");
++  else
++    m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
+   m_manifest.insert(m_stylesheetPath, "text/css", "stylesheet.css", "");
+ }
+ 
+@@ -90,7 +93,7 @@ void EPUBGenerator::startNewHtmlFile()
+ 
+   m_splitGuard.onSplit();
+ 
+-  m_currentHtml = m_htmlManager.create(m_imageManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath, *this);
++  m_currentHtml = m_htmlManager.create(m_imageManager, m_listStyleManager, m_paragraphStyleManager, m_spanStyleManager, m_tableStyleManager, m_stylesheetPath);
+ 
+   // restore state in the new file
+   m_currentHtml->startDocument(m_documentProps);
+@@ -144,9 +147,38 @@ void EPUBGenerator::writeContainer()
+ 
+ void EPUBGenerator::writeNavigation()
+ {
+-  const EPUBPath path("OEBPS/toc.ncx");
+   EPUBXMLSink sink;
+ 
++  if (m_version == 30)
++  {
++    const EPUBPath path("OEBPS/toc.html");
++    RVNGPropertyList htmlAttrs;
++    htmlAttrs.insert("xmlns", "http://www.w3.org/1999/xhtml");
++    htmlAttrs.insert("xmlns:epub", "http://www.idpf.org/2007/ops");
++    sink.openElement("html", htmlAttrs);
++
++    sink.openElement("head");
++    sink.closeElement("head");
++    sink.openElement("body");
++
++    RVNGPropertyList navAttrs;
++    navAttrs.insert("epub:type", "toc");
++    sink.openElement("nav", navAttrs);
++
++    sink.openElement("ol");
++    m_htmlManager.writeTocTo(sink, path, m_version);
++    sink.closeElement("ol");
++
++    sink.closeElement("nav");
++    sink.closeElement("body");
++    sink.closeElement("html");
++
++    sink.writeTo(*m_package, path.str().c_str());
++
++    return;
++  }
++
++  const EPUBPath path("OEBPS/toc.ncx");
+   RVNGPropertyList ncxAttrs;
+   ncxAttrs.insert("xmlns", "http://www.daisy.org/z3986/2005/ncx/");
+   ncxAttrs.insert("version", "2005-1");
+@@ -166,7 +198,7 @@ void EPUBGenerator::writeNavigation()
+   sink.closeElement("docTitle");
+ 
+   sink.openElement("navMap");
+-  m_htmlManager.writeTocTo(sink, path);
++  m_htmlManager.writeTocTo(sink, path, m_version);
+   sink.closeElement("navMap");
+ 
+   sink.closeElement("ncx");
+@@ -252,7 +284,8 @@ void EPUBGenerator::writeRoot()
+   sink.closeElement("manifest");
+ 
+   RVNGPropertyList spineAttrs;
+-  spineAttrs.insert("toc", "toc.ncx");
++  if (m_version == 20)
++    spineAttrs.insert("toc", "toc.ncx");
+ 
+   sink.openElement("spine", spineAttrs);
+   m_htmlManager.writeSpineTo(sink);
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 57636b9..7b17304 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -27,7 +27,7 @@ EPUBHTMLManager::EPUBHTMLManager(EPUBManifest &manifest)
+ {
+ }
+ 
+-const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, const EPUBGenerator &generator)
++const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath)
+ {
+   std::ostringstream nameBuf;
+   nameBuf << "section" << std::setw(4) << std::setfill('0') << m_number.next();
+@@ -36,11 +36,7 @@ const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageMana
+   nameBuf << ".html";
+   m_paths.push_back(EPUBPath("OEBPS/sections") / nameBuf.str());
+ 
+-  std::string properties;
+-  if (m_number.current() == 1 && generator.getVersion() == 30)
+-    // Only for the first HTML file.
+-    properties = "nav";
+-  m_manifest.insert(m_paths.back(), "application/xhtml+xml", m_ids.back(), properties);
++  m_manifest.insert(m_paths.back(), "application/xhtml+xml", m_ids.back(), "");
+ 
+   m_contents.push_back(EPUBXMLSink());
+ 
+@@ -71,8 +67,26 @@ void EPUBHTMLManager::writeSpineTo(EPUBXMLSink &sink)
+   }
+ }
+ 
+-void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath)
++void EPUBHTMLManager::writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int version)
+ {
++  if (version == 30)
++  {
++    for (std::vector<EPUBPath>::size_type i = 0; m_paths.size() != i; ++i)
++    {
++      sink.openElement("li");
++      librevenge::RVNGPropertyList anchorAttrs;
++      anchorAttrs.insert("href", m_paths[i].relativeTo(tocPath).str().c_str());
++      sink.openElement("a", anchorAttrs);
++      std::ostringstream label;
++      label << "Section " << (i + 1);
++      sink.insertCharacters(label.str().c_str());
++      sink.closeElement("a");
++      sink.closeElement("li");
++    }
++
++    return;
++  }
++
+   librevenge::RVNGPropertyList navPointAttrs;
+   for (std::vector<EPUBPath>::size_type i = 0; m_paths.size() != i; ++i)
+   {
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index 7dab33b..2ec7bb7 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -41,12 +41,12 @@ class EPUBHTMLManager
+ public:
+   explicit EPUBHTMLManager(EPUBManifest &manifest);
+ 
+-  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath, const EPUBGenerator &generator);
++  const EPUBHTMLGeneratorPtr_t create(EPUBImageManager &imageManager, EPUBListStyleManager &listStyleManager, EPUBParagraphStyleManager &paragraphStyleManager, EPUBSpanStyleManager &spanStyleManager, EPUBTableStyleManager &tableStyleManager, const EPUBPath &stylesheetPath);
+ 
+   void writeTo(EPUBPackage &package);
+ 
+   void writeSpineTo(EPUBXMLSink &sink);
+-  void writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath);
++  void writeTocTo(EPUBXMLSink &sink, const EPUBPath &tocPath, int version);
+ 
+ private:
+   EPUBManifest &m_manifest;
+-- 
+2.12.3
+
+From 2e9e9af9f49a78cca75d3c862c8dd4b5f7cc7eb2 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 10 Aug 2017 15:11:49 +0200
+Subject: [PATCH 9/9] Use .xhtml for XHTML content
+
+The EPUB3 validator warns:
+
+WARNING(HTM-014a): test30.epub/OEBPS/content.opf(2,718): XHTML Content Document file name 'OEBPS/sections/section0001.html' should have the extension '.xhtml'.
+
+And it does not hurt for EPUB2, either.
+---
+ src/lib/EPUBGenerator.cpp   | 4 ++--
+ src/lib/EPUBHTMLManager.cpp | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 7ec2a2b..ca05ea7 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -55,7 +55,7 @@ void EPUBGenerator::startDocument(const RVNGPropertyList &props)
+   startNewHtmlFile();
+ 
+   if (m_version == 30)
+-    m_manifest.insert(EPUBPath("OEBPS/toc.html"), "application/xhtml+xml", "toc.html", "nav");
++    m_manifest.insert(EPUBPath("OEBPS/toc.xhtml"), "application/xhtml+xml", "toc.xhtml", "nav");
+   else
+     m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
+   m_manifest.insert(m_stylesheetPath, "text/css", "stylesheet.css", "");
+@@ -151,7 +151,7 @@ void EPUBGenerator::writeNavigation()
+ 
+   if (m_version == 30)
+   {
+-    const EPUBPath path("OEBPS/toc.html");
++    const EPUBPath path("OEBPS/toc.xhtml");
+     RVNGPropertyList htmlAttrs;
+     htmlAttrs.insert("xmlns", "http://www.w3.org/1999/xhtml");
+     htmlAttrs.insert("xmlns:epub", "http://www.idpf.org/2007/ops");
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 7b17304..be56cc7 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -33,7 +33,7 @@ const EPUBHTMLGeneratorPtr_t EPUBHTMLManager::create(EPUBImageManager &imageMana
+   nameBuf << "section" << std::setw(4) << std::setfill('0') << m_number.next();
+   m_ids.push_back(nameBuf.str());
+ 
+-  nameBuf << ".html";
++  nameBuf << ".xhtml";
+   m_paths.push_back(EPUBPath("OEBPS/sections") / nameBuf.str());
+ 
+   m_manifest.insert(m_paths.back(), "application/xhtml+xml", m_ids.back(), "");
+-- 
+2.12.3
+
