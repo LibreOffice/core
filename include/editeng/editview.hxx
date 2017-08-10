@@ -92,7 +92,14 @@ public:
     EditViewCallbacks() {}
     virtual ~EditViewCallbacks();
 
+    // call this when text visualization changed in any way. It
+    // will also update selection, so no need to call this self
+    // additionally (but will also do no harm)
     virtual void EditViewInvalidate() const = 0;
+
+    // call this when only selection is changed. Text change will
+    // then *not* be checked and not be reacted on. Still, when
+    // only the selection is changed, this is useful and faster
     virtual void EditViewSelectionChange() const = 0;
 };
 
