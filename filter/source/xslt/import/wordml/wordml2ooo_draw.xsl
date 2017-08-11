@@ -1739,8 +1739,8 @@
     <xsl:template match="v:shapetype" mode="output">
         <xsl:param name="instance" select="''"/>
         <!--#Dummy after version 1.63 The following test is for the adj attribute of the file. It is Dummy now. 
-		<xsl:if test="not($instance/@adj)">
-			<xsl:if test="contains(@adj,',')">-->
+        <xsl:if test="not($instance/@adj)">
+            <xsl:if test="contains(@adj,',')">-->
         <!--Please Note that the modifier can be more than 2 , so use a translate can be more efficient.
                         -####Note that comma cann't be recognized by OOo's modifiers
                 <xsl:variable name="adjust-x" select="substring-before(@adj,',')"/>
@@ -1751,17 +1751,17 @@
                         <xsl:value-of select="concat( $adjust-x , '  ' ,$adjust-y )"/>
                     </xsl:if>
                 </xsl:variable>-->
-        <!--Dummy after version 1.63	<xsl:attribute name="draw:modifiers">
-					<xsl:value-of select="translate(@adj, ',' , '  ' )"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="@adj and not(contains(@adj,','))">-->
+        <!--Dummy after version 1.63    <xsl:attribute name="draw:modifiers">
+                    <xsl:value-of select="translate(@adj, ',' , '  ' )"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@adj and not(contains(@adj,','))">-->
         <!--####Note that comma cann't be recognized by OOo's modifiers.-->
-        <!--Dummy after version 1.63	<xsl:attribute name="draw:modifiers">
-					<xsl:value-of select="@adj"/>
-				</xsl:attribute>
-			</xsl:if>
-		</xsl:if>-->
+        <!--Dummy after version 1.63    <xsl:attribute name="draw:modifiers">
+                    <xsl:value-of select="@adj"/>
+                </xsl:attribute>
+            </xsl:if>
+        </xsl:if>-->
         <xsl:variable name="viewbox">
             <xsl:value-of select="'0 0'"/>
             <xsl:value-of select="' '"/>
@@ -1864,19 +1864,19 @@
                 </xsl:when>
                 <!-- -->
                 <!--><xsl:when test="$command = 'atan2' ">
-					<xsl:variable name="value1" select="substring-before($tmp,' ')"/>
-					<xsl:variable name="value2" select="substring-after($tmp,' ')"/>
-					<xsl:value-of select="concat(  'atan' , '( ' ,  $value2, '/' , $value1 , ')' )"/>
-				</xsl:when><- -->
+                    <xsl:variable name="value1" select="substring-before($tmp,' ')"/>
+                    <xsl:variable name="value2" select="substring-after($tmp,' ')"/>
+                    <xsl:value-of select="concat(  'atan' , '( ' ,  $value2, '/' , $value1 , ')' )"/>
+                </xsl:when><- -->
                 <!-- ellipse and sumangle are always used by arc commans like this
-						eqn="ellipse @24 @4 height" ; and eqn="sumangle @2 360 0"
-					mod is always used too.-->
+                        eqn="ellipse @24 @4 height" ; and eqn="sumangle @2 360 0"
+                    mod is always used too.-->
                 <!--mod  =sqrt( v*v + P1×P1 + P2×P2). ( 3 parameters )-->
                 <xsl:when test="$command='mod' ">
                     <xsl:variable name="value1" select="substring-before($tmp,' ')"/>
                     <xsl:variable name="value2" select="substring-before(substring-after($tmp,' '), ' ')"/>
                     <xsl:variable name="value3" select="substring-after(substring-after($tmp,' '), ' ')"/>
-                    <xsl:value-of select="concat( 'sqrt( ' , $value3, ' * ',$value3,	' + '	,$value2, ' * ' ,$value2, 	' + '	,$value1, ' * ', $value1, ' )'  )"/>
+                    <xsl:value-of select="concat( 'sqrt( ' , $value3, ' * ',$value3,    ' + '   ,$value2, ' * ' ,$value2,   ' + '   ,$value1, ' * ', $value1, ' )'  )"/>
                 </xsl:when>
                 <!--ellipse= P2* sqrt(1 - v*v /P1*P1) ( 3 parameters )-->
                 <xsl:when test="$command='ellipse' ">
@@ -1887,11 +1887,11 @@
                 </xsl:when>
                 <!--sumangle  =v + P1×2^16 - P2×2^16. ( 3 parameters )-->
                 <!--<xsl:when test="$command='sumangle' ">
-					<xsl:variable name="value1" select="substring-before($tmp,' ')"/>
-					<xsl:variable name="value2" select="substring-before(substring-after($tmp,' '), ' ')"/>
-					<xsl:variable name="value3" select="substring-after(substring-after($tmp,' '), ' ')"/>
-					<xsl:value-of select="concat( $value1 , '+' , $value2 , ' * ' ,  '65535',' + ', $value2,' - ' ,$value3 , ' * ',  '65535', ' - ', $value3)"/>
-				</xsl:when>-->
+                    <xsl:variable name="value1" select="substring-before($tmp,' ')"/>
+                    <xsl:variable name="value2" select="substring-before(substring-after($tmp,' '), ' ')"/>
+                    <xsl:variable name="value3" select="substring-after(substring-after($tmp,' '), ' ')"/>
+                    <xsl:value-of select="concat( $value1 , '+' , $value2 , ' * ' ,  '65535',' + ', $value2,' - ' ,$value3 , ' * ',  '65535', ' - ', $value3)"/>
+                </xsl:when>-->
                 <!--sumangle  =v + P1×2^16 - P2×2^16. ( 3 parameters )-->
                 <xsl:when test="$command='sumangle' ">
                     <xsl:variable name="value1" select="substring-before($tmp,' ')"/>

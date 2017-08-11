@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-				xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0"
-				xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0"
-				xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0"
-				xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0"
-				xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0"
-				xmlns:fo="http://www.w3.org/1999/XSL/Format"
-				xmlns:xlink="http://www.w3.org/1999/xlink"
-				xmlns:dc="http://purl.org/dc/elements/1.1/"
-				xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0"
-				xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0"
-				xmlns:pres="urn:oasis:names:tc:openoffice:xmlns:presentation:1.0"
-				xmlns:svg="http://www.w3.org/2000/svg"
-				xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0"
-				xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0"
-				xmlns:math="http://www.w3.org/1998/Math/MathML"
-				xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0"
-				xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0"
-				xmlns:ooo="http://openoffice.org/2004/office"
-				xmlns:ooow="http://openoffice.org/2004/writer"
-				xmlns:oooc="http://openoffice.org/2004/calc"
-				xmlns:dom="http://www.w3.org/2001/xml-events"
-				xmlns:smil="http://www.w3.org/2001/SMIL20"
-				xmlns:anim="urn:oasis:names:tc:openoffice:xmlns:animation:1.0"   
+                xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0"
+                xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0"
+                xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0"
+                xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0"
+                xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0"
+                xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0"
+                xmlns:pres="urn:oasis:names:tc:openoffice:xmlns:presentation:1.0"
+                xmlns:svg="http://www.w3.org/2000/svg"
+                xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0"
+                xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
+                xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0"
+                xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0"
+                xmlns:ooo="http://openoffice.org/2004/office"
+                xmlns:ooow="http://openoffice.org/2004/writer"
+                xmlns:oooc="http://openoffice.org/2004/calc"
+                xmlns:dom="http://www.w3.org/2001/xml-events"
+                xmlns:smil="http://www.w3.org/2001/SMIL20"
+                xmlns:anim="urn:oasis:names:tc:openoffice:xmlns:animation:1.0"   
 
                 version="1.0">
 
@@ -506,7 +506,7 @@
   <xsl:template match="anim:iterate[@pres:preset-id = 'ooo-exit-colored-lettering']">
     <anim:iterate pres:preset-property="Color1;Color2" pres:text-only="true">
       <xsl:apply-templates select="*|@*|text()"/>
-    </anim:iterate>	
+    </anim:iterate> 
   </xsl:template>   
    
   <!-- zoom -->
