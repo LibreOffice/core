@@ -2154,7 +2154,7 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<RES_PARATR_OUTLINELEVEL>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    SAL_WARN_IF(SfxStyleFamily::Para == GetFamily(), "sw.uno", "only paras");
+    SAL_WARN_IF(SfxStyleFamily::Para != GetFamily(), "sw.uno", "only paras");
     return uno::makeAny<sal_Int16>(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel());
 }
 template<>
