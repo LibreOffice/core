@@ -1372,11 +1372,11 @@ public:
     ErrCode WriteStream() override;
 };
 
-SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
+SwRTFWriter::SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL)
 {
     SetBaseURL(rBaseURL);
     // export outline nodes, only (send outline to clipboard/presentation)
-    m_bOutOutlineOnly = rFltName.startsWith("O");
+    m_bOutOutlineOnly = rFilterName.startsWith("O");
 }
 
 ErrCode SwRTFWriter::WriteStream()

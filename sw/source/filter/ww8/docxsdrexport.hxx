@@ -90,7 +90,7 @@ public:
     /// Writes a drawing as VML data.
     void writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft);
     /// Writes a drawing as DML.
-    void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat, int nAnchorId);
+    void writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat, int nAnchorId);
     /// Writes shape in both DML and VML format.
     void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft, int nAnchorId);
     /// Write <a:effectLst>, the effect list.
@@ -109,7 +109,7 @@ public:
     /// Writes text from Textbox for <w:framePr>
     void writeOnlyTextOfFrame(ww8::Frame* pParentFrame);
     /// Writes the drawingML <a:ln> markup of a box item.
-    void writeBoxItemLine(const SvxBoxItem& rBoxItem);
+    void writeBoxItemLine(const SvxBoxItem& rBox);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
