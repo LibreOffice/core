@@ -27,7 +27,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/mapmod.hxx>
 #include <vector>
-#include <deque>
 
 class Graphic;
 
