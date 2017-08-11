@@ -201,8 +201,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
                 "<" << uri << "> does not define entity " << name);
         }
     }
-    cache_.insert(
-        std::map< OUString, rtl::Reference<Entity> >::value_type(name, ent));
+    cache_.emplace(name, ent);
     return ent;
 }
 

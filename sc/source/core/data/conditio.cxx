@@ -866,8 +866,7 @@ void ScConditionEntry::FillCache() const
                     if (!lcl_GetCellContent(aCell, false, nVal, aStr, mpDoc))
                     {
                         std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult =
-                            mpCache->maStrings.insert(
-                                ScConditionEntryCache::StringCacheType::value_type(aStr, 1));
+                            mpCache->maStrings.emplace(aStr, 1);
 
                         if(!aResult.second)
                             aResult.first->second++;
@@ -875,8 +874,7 @@ void ScConditionEntry::FillCache() const
                     else
                     {
                         std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult =
-                            mpCache->maValues.insert(
-                                ScConditionEntryCache::ValueCacheType::value_type(nVal, 1));
+                            mpCache->maValues.emplace(nVal, 1);
 
                         if(!aResult.second)
                             aResult.first->second++;

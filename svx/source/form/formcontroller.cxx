@@ -4065,8 +4065,8 @@ FormController::interceptedQueryDispatch( const URL& aURL,
             DispatcherContainer::const_iterator aDispatcherPos = m_aFeatureDispatchers.find( nFormFeature );
             if ( aDispatcherPos == m_aFeatureDispatchers.end() )
             {
-                aDispatcherPos = m_aFeatureDispatchers.insert(
-                    DispatcherContainer::value_type( nFormFeature, new svx::OSingleFeatureDispatcher( aURL, nFormFeature, m_xFormOperations, m_aMutex ) )
+                aDispatcherPos = m_aFeatureDispatchers.emplace(
+                    nFormFeature, new svx::OSingleFeatureDispatcher( aURL, nFormFeature, m_xFormOperations, m_aMutex )
                 ).first;
             }
 

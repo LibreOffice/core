@@ -203,8 +203,7 @@ void LdapConnection::initConnection()
         if (values) {
             const OUString aAttr( reinterpret_cast<sal_Unicode*>( attr ) );
             const OUString aValues( reinterpret_cast<sal_Unicode*>( *values ) );
-            data->insert(
-                LdapData::value_type( aAttr, aValues ));
+            data->emplace( aAttr, aValues );
             ldap_value_freeW(values);
         }
         attr = ldap_next_attributeW(mConnection, result.msg, ptr);
@@ -213,10 +212,9 @@ void LdapConnection::initConnection()
     while (attr) {
         char ** values = ldap_get_values(mConnection, result.msg, attr);
         if (values) {
-            data->insert(
-                LdapData::value_type(
+            data->emplace(
                     OStringToOUString(attr, RTL_TEXTENCODING_ASCII_US),
-                    OStringToOUString(*values, RTL_TEXTENCODING_UTF8)));
+                    OStringToOUString(*values, RTL_TEXTENCODING_UTF8));
             ldap_value_free(values);
         }
         attr = ldap_next_attribute(mConnection, result.msg, ptr);

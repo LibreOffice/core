@@ -359,9 +359,8 @@ UpdateInfoMap getOnlineUpdateInfos(
             Reference<deployment::XPackage> extension = getExtensionWithHighestVersion(seqExt);
             OSL_ASSERT(extension.is());
 
-            std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
-                UpdateInfoMap::value_type(
-                    dp_misc::getIdentifier(extension), UpdateInfo(extension)));
+            std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.emplace(
+                    dp_misc::getIdentifier(extension), UpdateInfo(extension));
             OSL_ASSERT(insertRet.second);
         }
     }
@@ -371,9 +370,8 @@ UpdateInfoMap getOnlineUpdateInfos(
         for (CIT i = extensionList->begin(); i != extensionList->end(); ++i)
         {
             OSL_ASSERT(i->is());
-            std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
-                UpdateInfoMap::value_type(
-                    dp_misc::getIdentifier(*i), UpdateInfo(*i)));
+            std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.emplace(
+                    dp_misc::getIdentifier(*i), UpdateInfo(*i));
             OSL_ASSERT(insertRet.second);
         }
     }

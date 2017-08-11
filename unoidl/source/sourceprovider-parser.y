@@ -273,12 +273,11 @@ unoidl::detail::SourceProviderEntity * findEntity_(
             rtl::Reference<unoidl::Entity> ent(data->manager->findEntity(n));
             if (ent.is()) {
                 std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator
-                    k(data->entities.insert(
-                          std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+                    k(data->entities.emplace(
                               n,
                               unoidl::detail::SourceProviderEntity(
                                   unoidl::detail::SourceProviderEntity::KIND_EXTERNAL,
-                                  ent))).
+                                  ent)).
                       first);
                 *name = n;
                 return &k->second;
@@ -295,12 +294,11 @@ unoidl::detail::SourceProviderEntity * findEntity_(
     rtl::Reference<unoidl::Entity> ent(data->manager->findEntity(n));
     if (ent.is()) {
         std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator
-            j(data->entities.insert(
-                  std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+            j(data->entities.emplace(
                       n,
                       unoidl::detail::SourceProviderEntity(
                           unoidl::detail::SourceProviderEntity::KIND_EXTERNAL,
-                          ent))).
+                          ent)).
               first);
         *name = n;
         return &j->second;
@@ -959,11 +957,10 @@ moduleDecl:
       OUString name(convertToFullName(data, $2));
       data->modules.push_back(name);
       std::pair<std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator, bool> p(
-          data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+          data->entities.emplace(
                   name,
                   unoidl::detail::SourceProviderEntity(
-                      unoidl::detail::SourceProviderEntity::KIND_MODULE))));
+                      unoidl::detail::SourceProviderEntity::KIND_MODULE)));
       if (!p.second
           && (p.first->second.kind
               != unoidl::detail::SourceProviderEntity::KIND_MODULE))
@@ -981,12 +978,11 @@ enumDefn:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       data->publishedContext = $2;
       convertToCurrentName(data, $4);
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderEnumTypeEntityPad(
-                          $2)))).
+                          $2))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -1113,12 +1109,11 @@ plainStructDefn:
               YYERROR;
           }
       }
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderPlainStructTypeEntityPad(
-                          $2, baseName, baseEnt)))).
+                          $2, baseName, baseEnt))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -1147,12 +1142,11 @@ polymorphicStructTemplateDefn:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       data->publishedContext = $2;
       convertToCurrentName(data, $4);
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderPolymorphicStructTypeTemplateEntityPad(
-                          $2)))).
+                          $2))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -1244,12 +1238,11 @@ exceptionDefn:
               YYERROR;
           }
       }
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderExceptionTypeEntityPad(
-                          $2, baseName, baseEnt)))).
+                          $2, baseName, baseEnt))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -1940,13 +1933,12 @@ typedefDefn:
       default:
           break;
       }
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   name,
                   unoidl::detail::SourceProviderEntity(
                       unoidl::detail::SourceProviderEntity::KIND_LOCAL,
                       new unoidl::TypedefEntity(
-                          $2, t.getName(), annotations($1))))).
+                          $2, t.getName(), annotations($1)))).
           second)
       {
           error(@5, yyscanner, "multiple entities named " + name);
@@ -1962,12 +1954,11 @@ constantGroupDefn:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       data->publishedContext = $2;
       convertToCurrentName(data, $4);
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderConstantGroupEntityPad(
-                          $2)))).
+                          $2))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -2326,12 +2317,11 @@ singleInterfaceBasedServiceDefn:
                + " base " + base + " is unpublished"));
           YYERROR;
       }
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad(
-                          $2, base)))).
+                          $2, base))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -2540,12 +2530,11 @@ accumulationBasedServiceDefn:
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       data->publishedContext = $2;
       convertToCurrentName(data, $4);
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   data->currentName,
                   unoidl::detail::SourceProviderEntity(
                       new unoidl::detail::SourceProviderAccumulationBasedServiceEntityPad(
-                          $2)))).
+                          $2))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + data->currentName);
@@ -2857,13 +2846,12 @@ interfaceBasedSingletonDefn:
                + " is unpublished"));
           YYERROR;
       }
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   name,
                   unoidl::detail::SourceProviderEntity(
                       unoidl::detail::SourceProviderEntity::KIND_LOCAL,
                       new unoidl::InterfaceBasedSingletonEntity(
-                          $2, base, annotations($1))))).
+                          $2, base, annotations($1)))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + name);
@@ -2908,13 +2896,12 @@ serviceBasedSingletonDefn:
                + " is unpublished"));
           YYERROR;
       }
-      if (!data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+      if (!data->entities.emplace(
                   name,
                   unoidl::detail::SourceProviderEntity(
                       unoidl::detail::SourceProviderEntity::KIND_LOCAL,
                       new unoidl::ServiceBasedSingletonEntity(
-                          $2, base, annotations($1))))).
+                          $2, base, annotations($1)))).
           second)
       {
           error(@4, yyscanner, "multiple entities named " + name);
@@ -3020,13 +3007,12 @@ interfaceDecl:
       data->publishedContext = $2;
       OUString name(convertToFullName(data, $4));
       std::pair<std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator, bool> p(
-          data->entities.insert(
-              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+          data->entities.emplace(
                   name,
                   unoidl::detail::SourceProviderEntity(
                       $2
                       ? unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL
-                      : unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))));
+                      : unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL)));
       if (!p.second) {
           switch (p.first->second.kind) {
           case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
@@ -4087,9 +4073,7 @@ bool SourceProviderInterfaceTypeEntityPad::addDirectMember(
     if (!checkMemberClashes(location, yyscanner, data, "", name, true)) {
         return false;
     }
-    allMembers.insert(
-        std::map<OUString, Member>::value_type(
-            name, Member(data->currentName)));
+    allMembers.emplace(name, Member(data->currentName));
     return true;
 }
 
@@ -4270,8 +4254,7 @@ bool SourceProviderInterfaceTypeEntityPad::addBase(
         ? direct ? BASE_DIRECT_OPTIONAL : BASE_INDIRECT_OPTIONAL
         : direct ? BASE_DIRECT_MANDATORY : BASE_INDIRECT_MANDATORY;
     std::pair<std::map<OUString, BaseKind>::iterator, bool> p(
-        allBases.insert(
-            std::map<OUString, BaseKind>::value_type(name, kind)));
+        allBases.emplace(name, kind));
     bool seen = !p.second && p.first->second >= BASE_INDIRECT_MANDATORY;
     if (!p.second && kind > p.first->second) {
         p.first->second = kind;
@@ -4333,12 +4316,10 @@ bool SourceProviderInterfaceTypeEntityPad::addBase(
             }
         }
         for (auto & i: entity->getDirectAttributes()) {
-            allMembers.insert(
-                std::map<OUString, Member>::value_type(i.name, Member(name)));
+            allMembers.emplace(i.name, Member(name));
         }
         for (auto & i: entity->getDirectMethods()) {
-            allMembers.insert(
-                std::map<OUString, Member>::value_type(i.name, Member(name)));
+            allMembers.emplace(i.name, Member(name));
         }
     }
     return true;
@@ -4378,8 +4359,7 @@ bool SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(
     }
     for (auto & i: entity->getDirectAttributes()) {
         Member & m(
-            allMembers.insert(
-                std::map<OUString, Member>::value_type(i.name, Member("")))
+            allMembers.emplace(i.name, Member(""))
             .first->second);
         if (m.mandatory.isEmpty()) {
             m.optional.insert(name);
@@ -4387,8 +4367,7 @@ bool SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(
     }
     for (auto & i: entity->getDirectMethods()) {
         Member & m(
-            allMembers.insert(
-                std::map<OUString, Member>::value_type(i.name, Member("")))
+            allMembers.emplace(i.name, Member(""))
             .first->second);
         if (m.mandatory.isEmpty()) {
             m.optional.insert(name);

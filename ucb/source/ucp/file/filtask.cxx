@@ -2814,8 +2814,8 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
             TaskManager::ContentMap::iterator itold = m_aContent.find( aOldName );
             if( itold != m_aContent.end() )
             {
-                TaskManager::ContentMap::iterator itnew = m_aContent.insert(
-                    ContentMap::value_type( aNewName,UnqPathData() ) ).first;
+                TaskManager::ContentMap::iterator itnew = m_aContent.emplace(
+                    aNewName,UnqPathData() ).first;
 
                 // copy Ownership also
                 delete itnew->second.properties;

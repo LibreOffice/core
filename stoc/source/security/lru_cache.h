@@ -193,7 +193,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
             m_key2element.erase( entry->m_key );
             entry->m_key = key;
             ::std::pair< typename t_key2element::iterator, bool > insertion(
-                m_key2element.insert( typename t_key2element::value_type( key, entry ) ) );
+                m_key2element.emplace( key, entry ) );
             OSL_ENSURE( insertion.second, "### inserting new cache entry failed?!" );
         }
         else

@@ -450,7 +450,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                     {
                         if ( sPrivs[j] == sColumnName )
                         {
-                            aColumnMatching.insert( std::map<sal_Int32,sal_Int32>::value_type(i,j+1) );
+                            aColumnMatching.emplace(i,j+1);
                             break;
                         }
                     }

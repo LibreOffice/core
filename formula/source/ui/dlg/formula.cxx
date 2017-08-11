@@ -826,7 +826,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     {
         for (sal_Int32 nPos = 0; nPos < nLen; nPos++)
         {
-            m_aTokenMap.insert( ::std::map<FormulaToken*, sheet::FormulaToken>::value_type( pTokens[nPos], m_aTokenList[nPos]));
+            m_aTokenMap.emplace( pTokens[nPos], m_aTokenList[nPos] );
         }
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 

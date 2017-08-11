@@ -1022,7 +1022,7 @@ namespace
             std::map<OTableWindow*,sal_Int32>::const_iterator aCountEnd = aConnectionCount.end();
             for(;aCountIter != aCountEnd;++aCountIter)
             {
-                aMulti.insert(std::multimap<sal_Int32 , OTableWindow*>::value_type(aCountIter->second,aCountIter->first));
+                aMulti.emplace(aCountIter->second,aCountIter->first);
             }
 
             const bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
@@ -1161,7 +1161,7 @@ namespace
                     }
                     if ( aGroupByNames.find(sGroupByPart) == aGroupByNames.end() )
                     {
-                        aGroupByNames.insert(std::map< OUString,bool>::value_type(sGroupByPart,true));
+                        aGroupByNames.emplace(sGroupByPart,true);
                         aGroupByStr += sGroupByPart + ",";
                     }
                 }

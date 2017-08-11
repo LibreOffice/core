@@ -189,8 +189,7 @@ void Test::testFormulaCreateStringFromTokens()
     aCxt.maExternalFileNames.push_back("file:///path/to/fake.file");
     std::vector<OUString> aExtTabNames;
     aExtTabNames.push_back("Sheet");
-    aCxt.maExternalCachedTabNames.insert(
-        sc::TokenStringContext::IndexNamesMapType::value_type(0, aExtTabNames));
+    aCxt.maExternalCachedTabNames.emplace(0, aExtTabNames);
 
     ScAddress aPos(0,0,0);
 

@@ -24,12 +24,12 @@ public:
     typedef DataType::const_iterator const_iterator;
     typedef DataType::iterator iterator;
 
-    const_iterator end() const;
+    const_iterator end() const { return maData.end(); }
 
-    std::pair<iterator, bool>
-        insert( DataType::value_type const& val );
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maData.emplace(std::forward<Args>(args)...); }
 
-    const_iterator find( DataType::key_type key ) const;
+    const_iterator find( DataType::key_type key ) const { return maData.find(key); }
 };
 
 }

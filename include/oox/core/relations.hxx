@@ -78,9 +78,10 @@ public:
     {
         return maMap.end();
     }
-    void insert( const ::std::map< OUString, Relation >::value_type& rVal )
+    template<class... Args>
+    void emplace(Args&&... args)
     {
-        maMap.insert( rVal );
+        maMap.emplace(std::forward<Args>(args)...);
     }
 
     /** Returns the path of the fragment this relations collection is related to. */

@@ -109,10 +109,9 @@ void SchXMLPropertyMappingContext::StartElement(const uno::Reference< xml::sax::
         Reference< chart2::XChartDocument > xChartDoc( GetImport().GetModel(), uno::UNO_QUERY );
         Reference< chart2::data::XLabeledDataSequence2 > xSeq =
             createAndAddSequenceToSeries(aRole, aRange, xChartDoc, mxDataSeries);
-        mrLSequencesPerIndex.insert(
-                tSchXMLLSequencesPerIndex::value_type(
+        mrLSequencesPerIndex.emplace(
                     tSchXMLIndexWithPart( 0, SCH_XML_PART_VALUES),
-                    Reference< chart2::data::XLabeledDataSequence >( xSeq, UNO_QUERY )));
+                    Reference< chart2::data::XLabeledDataSequence >( xSeq, UNO_QUERY ));
     }
 }
 

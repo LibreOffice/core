@@ -47,8 +47,8 @@ public:
         ModuleCellMap::iterator itr = maCells.find(rModuleName);
         if (itr == maCells.end())
         {
-            pair<ModuleCellMap::iterator, bool> r = maCells.insert(
-                ModuleCellMap::value_type(rModuleName, list<ScFormulaCell*>()));
+            pair<ModuleCellMap::iterator, bool> r = maCells.emplace(
+                rModuleName, list<ScFormulaCell*>());
 
             if (!r.second)
                 // insertion failed.

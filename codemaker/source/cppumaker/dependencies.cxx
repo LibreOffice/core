@@ -282,8 +282,7 @@ void Dependencies::insert(OUString const & name, Kind kind) {
     case UnoType::Sort::Typedef:
         {
             std::pair< Map::iterator, bool > i(
-                m_map.insert(
-                    Map::value_type(n, kind)));
+                m_map.emplace(n, kind));
             if (!i.second && kind == KIND_BASE) {
                 assert(i.first->second != KIND_EXCEPTION);
                 i.first->second = KIND_BASE;

@@ -40,8 +40,7 @@ void Modifications::add(std::vector<OUString> const & path) {
             if (wasPresent && p->children.empty()) {
                 return;
             }
-            j = p->children.insert(Node::Children::value_type(*i, Node())).
-                first;
+            j = p->children.emplace(*i, Node()).first;
             wasPresent = false;
         } else {
             wasPresent = true;

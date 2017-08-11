@@ -58,7 +58,7 @@ namespace svt
                 nullptr,
                 _eType
             );
-            aFind = _raHeaderCells.insert( BrowseBoxImpl::THeaderCellMap::value_type( _nPos, xAccessible ) ).first;
+            aFind = _raHeaderCells.emplace( _nPos, xAccessible ).first;
         }
         if ( aFind != _raHeaderCells.end() )
             xRet = aFind->second;

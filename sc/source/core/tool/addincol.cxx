@@ -553,18 +553,15 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 ppFuncData[nFuncPos+nOld] = pData;
 
-                pExactHashMap->insert(
-                        ScAddInHashMap::value_type(
+                pExactHashMap->emplace(
                             pData->GetOriginalName(),
-                            pData ) );
-                pNameHashMap->insert(
-                        ScAddInHashMap::value_type(
+                            pData );
+                pNameHashMap->emplace(
                             pData->GetUpperName(),
-                            pData ) );
-                pLocalHashMap->insert(
-                        ScAddInHashMap::value_type(
+                            pData );
+                pLocalHashMap->emplace(
                             pData->GetUpperLocal(),
-                            pData ) );
+                            pData );
             }
         }
     }
@@ -942,18 +939,15 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
                                 const ScUnoAddInFuncData* pData =
                                     ppFuncData[nFuncPos+nOld];
-                                pExactHashMap->insert(
-                                        ScAddInHashMap::value_type(
+                                pExactHashMap->emplace(
                                             pData->GetOriginalName(),
-                                            pData ) );
-                                pNameHashMap->insert(
-                                        ScAddInHashMap::value_type(
+                                            pData );
+                                pNameHashMap->emplace(
                                             pData->GetUpperName(),
-                                            pData ) );
-                                pLocalHashMap->insert(
-                                        ScAddInHashMap::value_type(
+                                            pData );
+                                pLocalHashMap->emplace(
                                             pData->GetUpperLocal(),
-                                            pData ) );
+                                            pData );
                             }
                         }
                     }

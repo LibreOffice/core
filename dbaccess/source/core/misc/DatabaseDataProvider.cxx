@@ -740,7 +740,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
 
         const sal_Int32 columnIndex = col - aColumns.begin();
         const OUString sRangeName = OUString::number( columnIndex );
-        m_aNumberFormats.insert( std::map< OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
+        m_aNumberFormats.emplace( sRangeName, aNumberFormat );
     }
 
     std::vector< OUString > aRowLabels;

@@ -798,9 +798,8 @@ void ToolBarManager::CreateControllers()
                 {
                     SubToolBarControllerVector aSubToolBarVector;
                     aSubToolBarVector.push_back( xSubToolBar );
-                    m_aSubToolBarControllerMap.insert(
-                        SubToolBarToSubToolBarControllerMap::value_type(
-                            aSubToolBarName, aSubToolBarVector ));
+                    m_aSubToolBarControllerMap.emplace(
+                            aSubToolBarName, aSubToolBarVector );
                 }
                 else
                     pIter->second.push_back( xSubToolBar );

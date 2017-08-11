@@ -97,11 +97,11 @@ namespace DOM
     {
         ::rtl::Reference<CDocument> const xDoc(new CDocument(pDoc));
         // add the doc itself to its nodemap!
-        xDoc->m_NodeMap.insert(
-            nodemap_t::value_type(reinterpret_cast<xmlNodePtr>(pDoc),
+        xDoc->m_NodeMap.emplace(
+                reinterpret_cast<xmlNodePtr>(pDoc),
                 ::std::make_pair(
                     WeakReference<XNode>(static_cast<XDocument*>(xDoc.get())),
-                    xDoc.get())));
+                    xDoc.get()));
         return xDoc;
     }
 
@@ -260,10 +260,9 @@ namespace DOM
         }
 
         if (pCNode != nullptr) {
-            bool const bInserted = m_NodeMap.insert(
-                    nodemap_t::value_type(pNode,
-                        ::std::make_pair(WeakReference<XNode>(pCNode.get()),
-                        pCNode.get()))
+            bool const bInserted = m_NodeMap.emplace(
+                        pNode,
+                        ::std::make_pair(WeakReference<XNode>(pCNode.get()), pCNode.get())
                 ).second;
             OSL_ASSERT(bInserted);
             if (!bInserted) {

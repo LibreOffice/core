@@ -2025,9 +2025,8 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out)
     std::map< OUString, sal_uInt32 > types;
     std::vector< unoidl::PlainStructTypeEntity::Member >::size_type n = 0;
     for (const unoidl::PlainStructTypeEntity::Member& member : entity_->getDirectMembers()) {
-        if (types.insert(
-                std::map< OUString, sal_uInt32 >::value_type(
-                    member.type, static_cast< sal_uInt32 >(types.size()))).
+        if (types.emplace(
+                    member.type, static_cast< sal_uInt32 >(types.size())).
             second) {
             dumpCppuGetType(out, member.type, &name_);
             // For typedefs, use the resolved type name, as there will be no
@@ -2530,9 +2529,8 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
     size_type n = 0;
     for (const unoidl::PolymorphicStructTypeTemplateEntity::Member& member : entity_->getMembers()) {
         if (member.parameterized) {
-            if (parameters.insert(
-                    std::map< OUString, sal_uInt32 >::value_type(
-                        member.type, static_cast< sal_uInt32 >(parameters.size()))).
+            if (parameters.emplace(
+                        member.type, static_cast< sal_uInt32 >(parameters.size())).
                 second) {
                 sal_uInt32 k = static_cast< sal_uInt32 >(parameters.size() - 1);
                 out << indent()
@@ -2546,9 +2544,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out)
                     << "::rtl::OUString the_pname" << k << "(the_ptype" << k
                     << ".getTypeName());\n";
             }
-        } else if (types.insert(
-                       std::map< OUString, sal_uInt32 >::value_type(
-                           member.type, static_cast< sal_uInt32 >(types.size()))).
+        } else if (types.emplace(member.type, static_cast< sal_uInt32 >(types.size())).
                    second) {
             dumpCppuGetType(out, member.type, &name_);
             // For typedefs, use the resolved type name, as there will be no

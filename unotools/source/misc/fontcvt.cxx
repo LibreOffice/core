@@ -1168,9 +1168,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
         for (aEntry.cIndex = 0xFF; aEntry.cIndex >= 0x20; --aEntry.cIndex)
         {
             if (sal_Unicode cChar = r.pTab[aEntry.cIndex-0x20])
-                maMagicMap.insert(
-                    ::std::multimap<sal_Unicode, SymbolEntry>::value_type(
-                    cChar, aEntry));
+                maMagicMap.emplace(cChar, aEntry);
         }
     }
 
@@ -1198,9 +1196,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
         for (int j = r.mnSize / sizeof(r.mpTable[0]) - 1; j >=0; --j)
         {
             aEntry.cIndex = r.mpTable[j].cMS;
-            maMagicMap.insert(
-                ::std::multimap<sal_Unicode, SymbolEntry>::value_type(
-                r.mpTable[j].cStar, aEntry));
+            maMagicMap.emplace(r.mpTable[j].cStar, aEntry);
         }
     }
 }

@@ -111,8 +111,7 @@ void Includes::add(OString const & entityName) {
     case codemaker::UnoType::Sort::Exception:
     case codemaker::UnoType::Sort::Interface:
     case codemaker::UnoType::Sort::Typedef:
-        m_map.insert(
-            Dependencies::Map::value_type(n, Dependencies::KIND_NORMAL));
+        m_map.emplace(n, Dependencies::KIND_NORMAL);
         break;
     default:
         throw CannotDumpException(

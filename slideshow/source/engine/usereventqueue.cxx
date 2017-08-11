@@ -158,9 +158,7 @@ public:
             maAnimationEventMap.end() )
         {
             // no entry for this animation -> create one
-            aIter = maAnimationEventMap.insert(
-                ImpAnimationEventMap::value_type( xNode,
-                                                  ImpEventVector() ) ).first;
+            aIter = maAnimationEventMap.emplace( xNode, ImpEventVector() ).first;
         }
 
         // add new event to queue
@@ -300,9 +298,7 @@ public:
         if( (aIter=maShapeEventMap.find( rShape )) == maShapeEventMap.end() )
         {
             // no entry for this shape -> create one
-            aIter = maShapeEventMap.insert(
-                ImpShapeEventMap::value_type( rShape,
-                                              ImpEventQueue() ) ).first;
+            aIter = maShapeEventMap.emplace(rShape, ImpEventQueue()).first;
         }
 
         // add new event to queue

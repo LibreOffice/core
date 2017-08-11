@@ -172,10 +172,9 @@ StorageElementFactory::createStorage( const OUString & rUri,
         rtl::Reference< Storage > xElement(
             new Storage( m_xContext, this, aUriKey, xParentStorage, xStorage ) );
 
-        aIt = m_aMap.insert(
-            StorageMap::value_type(
+        aIt = m_aMap.emplace(
                 std::pair< OUString, bool >( aUriKey, bWritable ),
-                xElement.get() ) ).first;
+                xElement.get() ).first;
 
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;

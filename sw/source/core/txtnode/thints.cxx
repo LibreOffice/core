@@ -2348,8 +2348,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
     // no hints at the end (special case: no hints at all in i_rHints)
     if (nLastEnd != nLength && nLength != 0)
     {
-        o_rSpanMap.insert(
-            AttrSpanMap_t::value_type(AttrSpan_t(nLastEnd, nLength), nullptr));
+        o_rSpanMap.emplace(AttrSpan_t(nLastEnd, nLength), nullptr);
     }
 }
 

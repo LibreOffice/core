@@ -529,8 +529,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     // Create the sub shell list if it does not yet exist.
     SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
     if (iList == maActiveSubShells.end())
-        iList = maActiveSubShells.insert(
-            SubShellList::value_type(&rParentShell,SubShellSubList())).first;
+        iList = maActiveSubShells.emplace(&rParentShell,SubShellSubList()).first;
 
     // Do not activate an object bar that is already active.  Requesting
     // this is not exactly an error but may be an indication of one.

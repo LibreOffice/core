@@ -1519,8 +1519,7 @@ public:
             }
             map_.erase(del);
         }
-        bool ins = map_.insert(typename Map::value_type(key, Data(access)))
-            .second;
+        bool ins = map_.emplace(key, Data(access)).second;
         assert(ins); (void)ins;
     }
 

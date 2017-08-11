@@ -118,13 +118,12 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
         case STATE_VALUE:
             if (bEnd || c == 0x2C) // ','
             {
-                if (!m_aParameters.insert(
-                        Parameters::value_type(
+                if (!m_aParameters.emplace(
                             aKey,
                             rtl::Uri::decode(rDescriptor.copy(nStart,
                                                               i - nStart),
                                              rtl_UriDecodeWithCharset,
-                                             RTL_TEXTENCODING_UTF8))).second)
+                                             RTL_TEXTENCODING_UTF8)).second)
                     throw rtl::MalformedUriException(
                         "UNO URL contains duplicated parameter");
                 eState = STATE_KEY0;

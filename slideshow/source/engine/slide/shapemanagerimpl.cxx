@@ -296,10 +296,7 @@ bool ShapeManagerImpl::listenerAdded(
     ShapeSharedPtr pShape( lookupShape(xShape) );
     if( pShape )
     {
-        maShapeListenerMap.insert(
-            ShapeToListenersMap::value_type(
-                pShape,
-                aIter->second));
+        maShapeListenerMap.emplace(pShape, aIter->second);
     }
 
     return true;
@@ -343,10 +340,7 @@ void ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
         if( (aIter = maShapeCursorMap.find(pShape))
             == maShapeCursorMap.end() )
         {
-            maShapeCursorMap.insert(
-                ShapeToCursorMap::value_type(
-                    pShape,
-                    nCursor ));
+            maShapeCursorMap.emplace(pShape, nCursor);
         }
         else
         {

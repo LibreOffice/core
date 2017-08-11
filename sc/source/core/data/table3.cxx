@@ -974,7 +974,7 @@ void ScTable::SortReorderByColumn(
         {
             SCCOL nNew = i + nStart;
             SCCOL nOld = rOldIndices[i];
-            aColMap.insert(sc::ColRowReorderMapType::value_type(nOld, nNew));
+            aColMap.emplace(nOld, nNew);
         }
 
         // Collect all listeners within sorted range ahead of time.
@@ -1375,7 +1375,7 @@ void ScTable::SortReorderByRowRefUpdate(
     {
         SCROW nNew = i + nRow1;
         SCROW nOld = rOldIndices[i];
-        aRowMap.insert(sc::ColRowReorderMapType::value_type(nOld, nNew));
+        aRowMap.emplace(nOld, nNew);
     }
 
     // Collect all listeners within sorted range ahead of time.

@@ -1008,7 +1008,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
         }
 
         m_aDestVec.insert(m_aDestVec.begin() + _nPos,
-            m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
+            m_vDestColumns.emplace(_pField->GetName(),_pField).first);
         m_mNameMapping[_pField->GetName()] = _pField->GetName();
     }
 }
@@ -1021,8 +1021,7 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
         m_vDestColumns.erase(_sOldName);
         OSL_ENSURE( m_vDestColumns.find(_pField->GetName()) == m_vDestColumns.end(),"Column with that name already exist!");
 
-        m_aDestVec[_nPos] =
-            m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first;
+        m_aDestVec[_nPos] = m_vDestColumns.emplace(_pField->GetName(),_pField).first;
     }
 }
 
@@ -1066,7 +1065,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
             pTypeInfo = m_pTypeInfo;
 
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
-        _rColVector.push_back(_rColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
+        _rColVector.push_back(_rColumns.emplace(pActFieldDescr->GetName(),pActFieldDescr).first);
     }
 
     // determine which columns belong to the primary key

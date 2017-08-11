@@ -3897,8 +3897,8 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
     DimMemberType::iterator itr = maDimensions.find(rDimName);
     if (itr == maDimensions.end())
     {
-        pair<DimMemberType::iterator, bool> r = maDimensions.insert(
-            DimMemberType::value_type(rDimName, VisibleMemberType()));
+        pair<DimMemberType::iterator, bool> r = maDimensions.emplace(
+            rDimName, VisibleMemberType());
 
         if (!r.second)
             // insertion failed.
@@ -3920,8 +3920,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
     long nColumnCount = pData->GetColumnCount();
     for (long i = 0; i < nColumnCount; ++i)
     {
-        aFieldNames.insert(
-            FieldNameMapType::value_type(pData->getDimensionName(i), i));
+        aFieldNames.emplace(pData->getDimensionName(i), i);
     }
 
     const ScDPDimensions* pDims = mpSource->GetDimensionsObject();

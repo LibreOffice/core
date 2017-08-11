@@ -89,7 +89,7 @@ public:
     {
     }
     void clear() { m_pComponent = nullptr; }
-    void add(const OUString& _sRefName) { m_aRefNames.insert(std::map< OUString,bool>::value_type(_sRefName,true)); }
+    void add(const OUString& _sRefName) { m_aRefNames.emplace(_sRefName,true); }
 };
 }
 namespace connectivity

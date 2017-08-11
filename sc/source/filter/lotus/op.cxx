@@ -552,7 +552,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
         r.ReadUChar( Ver_Align );
         OP_VerAlign123(rContext, Ver_Align, rItemSet );
 
-        rContext.aLotusPatternPool.insert( std::map<sal_uInt16, ScPatternAttr>::value_type( nPatternId, aPattern ) );
+        rContext.aLotusPatternPool.emplace( nPatternId, aPattern );
         n -= (n > 20) ? 20 : n;
     }
     r.SeekRel(n);

@@ -216,18 +216,15 @@ struct lcl_RolesWithRangeAppend : public
                     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
                     if( xProp->getPropertyValue( "Role" ) >>= aRole )
                     {
-                        m_rDestCnt->insert(
-                            tContainerType::value_type(
-                                aRole, xSeq->getSourceRangeRepresentation()));
+                        m_rDestCnt->emplace(aRole, xSeq->getSourceRangeRepresentation());
                         // label
                         if( aRole == m_aRoleForLabelSeq )
                         {
                             Reference< data::XDataSequence > xLabelSeq( xVal->getLabel());
                             if( xLabelSeq.is())
                             {
-                                m_rDestCnt->insert(
-                                    tContainerType::value_type(
-                                        lcl_aLabelRole, xLabelSeq->getSourceRangeRepresentation()));
+                                m_rDestCnt->emplace(
+                                        lcl_aLabelRole, xLabelSeq->getSourceRangeRepresentation());
                             }
                         }
                     }
@@ -471,7 +468,7 @@ void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence
     for(sal_Int32 i = 0, n = rRoles.getLength(); i < n; ++i)
     {
         if(rResult.find(rRoles[i]) == rResult.end())
-            rResult.insert(DialogModel::tRolesWithRanges::value_type(rRoles[i], OUString()));
+            rResult.emplace(rRoles[i], OUString());
     }
 }
 

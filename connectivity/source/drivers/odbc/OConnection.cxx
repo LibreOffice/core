@@ -515,7 +515,7 @@ SQLHANDLE OConnection::createStatementHandle()
     N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
     ++m_nStatementCount;
     if(bNew)
-        m_aConnections.insert(std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));
+        m_aConnections.emplace(aStatementHandle,pConnectionTemp);
 
     return aStatementHandle;
 

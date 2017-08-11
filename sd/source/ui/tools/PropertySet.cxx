@@ -86,10 +86,7 @@ void SAL_CALL PropertySet::addPropertyChangeListener (
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
 
-    mpChangeListeners->insert(
-        ChangeListenerContainer::value_type(
-            rsPropertyName,
-            rxListener));
+    mpChangeListeners->emplace(rsPropertyName, rxListener);
 }
 
 void SAL_CALL PropertySet::removePropertyChangeListener (

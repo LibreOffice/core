@@ -1785,8 +1785,7 @@ private:
                 TotalStoreType::iterator itr = aStore.find(fX);
                 if (itr == aStore.end())
                     // New min-max pair for give X value.
-                    aStore.insert(
-                        TotalStoreType::value_type(fX, std::pair<double,double>(fYMin,fYMax)));
+                    aStore.emplace(fX, std::pair<double,double>(fYMin,fYMax));
                 else
                 {
                     MinMaxType& r = itr->second;

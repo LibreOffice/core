@@ -278,8 +278,8 @@ void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef const &
     if (itrRow == maRows.end())
     {
         // This row does not exist yet.
-        pair<RowsDataType::iterator, bool> res = maRows.insert(
-            RowsDataType::value_type(nRow, RowDataType()));
+        pair<RowsDataType::iterator, bool> res = maRows.emplace(
+            nRow, RowDataType());
 
         if (!res.second)
             return;
@@ -1391,8 +1391,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     TableTypeRef pTab(new Table);
     rDoc.maTables.push_back(pTab);
     rDoc.maTableNames.push_back(TableName(aTabNameUpper, rTabName));
-    rDoc.maTableNameIndex.insert(
-        TableNameIndexMap::value_type(aTabNameUpper, nIndex));
+    rDoc.maTableNameIndex.emplace(aTabNameUpper, nIndex);
     return pTab;
 }
 
@@ -1435,8 +1434,8 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
     if (itrDoc == maDocs.end())
     {
         // specified document is not cached.
-        pair<DocDataType::iterator, bool> res = maDocs.insert(
-                DocDataType::value_type(nFileId, DocItem()));
+        pair<DocDataType::iterator, bool> res = maDocs.emplace(
+                nFileId, DocItem());
 
         if (!res.second)
             // insertion failed.
@@ -2167,8 +2166,8 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
     if (itr == maRefCells.end())
     {
         RefCellSet aRefCells;
-        pair<RefCellMap::iterator, bool> r = maRefCells.insert(
-            RefCellMap::value_type(nFileId, aRefCells));
+        pair<RefCellMap::iterator, bool> r = maRefCells.emplace(
+            nFileId, aRefCells);
         if (!r.second)
             // insertion failed.
             return;
@@ -3065,8 +3064,8 @@ void ScExternalRefManager::addLinkListener(sal_uInt16 nFileId, LinkListener* pLi
     LinkListenerMap::iterator itr = maLinkListeners.find(nFileId);
     if (itr == maLinkListeners.end())
     {
-        pair<LinkListenerMap::iterator, bool> r = maLinkListeners.insert(
-            LinkListenerMap::value_type(nFileId, LinkListeners()));
+        pair<LinkListenerMap::iterator, bool> r = maLinkListeners.emplace(
+            nFileId, LinkListeners());
         if (!r.second)
         {
             OSL_FAIL("insertion of new link listener list failed");
@@ -3140,8 +3139,8 @@ sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_u
     if (itr == maNumFormatMap.end())
     {
         // Number formatter map is not initialized for this external document.
-        pair<NumFmtMap::iterator, bool> r = maNumFormatMap.insert(
-            NumFmtMap::value_type(nFileId, SvNumberFormatterMergeMap()));
+        pair<NumFmtMap::iterator, bool> r = maNumFormatMap.emplace(
+            nFileId, SvNumberFormatterMergeMap());
 
         if (!r.second)
             // insertion failed.
