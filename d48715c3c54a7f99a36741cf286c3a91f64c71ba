@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_aa5ffa73",
+        "filename": "connectivity/source/drivers/macab/MacabRecords.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-11T07:13:11Z",
+      "side": 1,
+      "message": "this is a fairly confusing flow here, but I think we should move the CFRelease down, outside the if statements, so the code reads:\n    if(multiValue)\n        CFRelease(multiValue);\n    if(multiLabel)\n        CFRelease(multiLabel);",
+      "revId": "d48715c3c54a7f99a36741cf286c3a91f64c71ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
