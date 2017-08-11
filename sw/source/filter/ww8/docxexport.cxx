@@ -1294,7 +1294,7 @@ void DocxExport::WriteVBA()
         pOut->WriteStream(*pIn);
 
         // Write the relationship.
-        m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+        m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), "vbaProject.bin");
     }
 
     OUString aDataName("_MS_VBA_Macros_XML");
@@ -1320,7 +1320,7 @@ void DocxExport::WriteVBA()
         if (!xProjectStream.is())
             return;
 
-        m_pFilter->addRelation(xProjectStream, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData", "vbaData.xml");
+        m_pFilter->addRelation(xProjectStream, oox::getRelationship(Relationship::WORDVBADATA), "vbaData.xml");
     }
 }
 
