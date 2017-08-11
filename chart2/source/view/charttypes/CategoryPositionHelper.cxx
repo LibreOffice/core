@@ -30,14 +30,6 @@ CategoryPositionHelper::CategoryPositionHelper( double fSeriesCount, double fCat
 {
 }
 
-CategoryPositionHelper::CategoryPositionHelper( const CategoryPositionHelper& rSource )
-    : m_fSeriesCount( rSource.m_fSeriesCount )
-    , m_fCategoryWidth( rSource.m_fCategoryWidth )
-    , m_fInnerDistance( rSource.m_fInnerDistance )
-    , m_fOuterDistance( rSource.m_fOuterDistance )
-{
-}
-
 CategoryPositionHelper::~CategoryPositionHelper()
 {
 }

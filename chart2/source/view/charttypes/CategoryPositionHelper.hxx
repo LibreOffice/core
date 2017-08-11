@@ -27,7 +27,6 @@ class CategoryPositionHelper
 {
 public:
     CategoryPositionHelper( double fSeriesCount, double CategoryWidth = 1.0);
-    CategoryPositionHelper( const CategoryPositionHelper& rSource );
     virtual ~CategoryPositionHelper();
 
     double getScaledSlotWidth() const;

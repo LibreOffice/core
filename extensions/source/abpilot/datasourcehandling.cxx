@@ -304,19 +304,8 @@ namespace abp
             : xORB(_rxORB)
         {
         }
-
-        ODataSourceImpl( const ODataSourceImpl& _rSource );
     };
 
-
-    ODataSourceImpl::ODataSourceImpl( const ODataSourceImpl& _rSource )
-        :xORB( _rSource.xORB )
-        ,xDataSource( _rSource.xDataSource )
-        ,xConnection( _rSource.xConnection )
-        ,aTables( _rSource.aTables )
-        ,sName( _rSource.sName )
-    {
-    }
 
     ODataSource::ODataSource( const ODataSource& _rSource )
         :m_pImpl( nullptr )

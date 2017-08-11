@@ -29,12 +29,6 @@ namespace dbaui
     {
     }
 
-    OptionalBoolItem::OptionalBoolItem( const OptionalBoolItem& _rSource )
-        :SfxPoolItem( _rSource )
-        ,m_aValue( _rSource.m_aValue )
-    {
-    }
-
     bool OptionalBoolItem::operator==( const SfxPoolItem& _rItem ) const
     {
         const OptionalBoolItem* pCompare = dynamic_cast<const OptionalBoolItem*>( &_rItem  );

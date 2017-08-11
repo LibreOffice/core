@@ -55,7 +55,7 @@ public:
     bool isExtension() const { return extension_;}
 
 private:
-    PropertyNode(PropertyNode const & other);
+    PropertyNode(PropertyNode const&) = default;
 
     virtual ~PropertyNode() override;
 
