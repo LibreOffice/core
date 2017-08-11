@@ -942,3 +942,32 @@ index ca05ea7..8017ffe 100644
 -- 
 2.12.3
 
+From d855721de6b4e55fb0b2a02a6a1132802dba5f63 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 11 Aug 2017 15:40:49 +0200
+Subject: [PATCH] EPUBGenerator: write title into content.opf
+
+---
+ src/lib/EPUBGenerator.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 8017ffe..056c48c 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -253,8 +253,11 @@ void EPUBGenerator::writeRoot()
+ 
+   // Zero-width space as it must be at least one character in length after
+   // white space has been trimmed.
++  RVNGString title("\u200b");
++  if (m_metadata["dc:title"] && !m_metadata["dc:title"]->getStr().empty())
++    title = m_metadata["dc:title"]->getStr();
+   sink.openElement("dc:title");
+-  sink.insertCharacters("\u200b");
++  sink.insertCharacters(title);
+   sink.closeElement("dc:title");
+ 
+   sink.openElement("dc:language");
+-- 
+2.12.3
+
