@@ -865,14 +865,6 @@ void SfxConfigGroupListBox::GroupSelected()
     SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
     pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
-    if ( pInfo->nKind != SfxCfgKind::GROUP_FUNCTION &&
-         pInfo->nKind != SfxCfgKind::GROUP_ALLFUNCTIONS &&
-             pInfo->nKind != SfxCfgKind::GROUP_SCRIPTCONTAINER &&
-             pInfo->nKind != SfxCfgKind::GROUP_STYLES )
-    {
-        pFunctionListBox->SetUpdateMode(true);
-        return;
-    }
 
     switch ( pInfo->nKind )
     {
@@ -994,7 +986,9 @@ void SfxConfigGroupListBox::GroupSelected()
         }
 
         default:
-            return;
+            // Do nothing, the list box will stay empty
+            SAL_INFO( "cui.customize", "Ignoring unexpected SfxCfgKind: " <<  static_cast<int>(pInfo->nKind) );
+            break;
     }
 
     if ( pFunctionListBox->GetEntryCount() )
