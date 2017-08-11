@@ -16,6 +16,24 @@
       "revId": "d48715c3c54a7f99a36741cf286c3a91f64c71ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8a4b1eb0",
+        "filename": "connectivity/source/drivers/macab/MacabRecords.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-08-11T07:28:37Z",
+      "side": 1,
+      "message": "I agree with you.\nMoreover, reading https://developer.apple.com/documentation/corefoundation/1521153-cfrelease, I\u0027ll take into account the null test before calling CFRelease.",
+      "parentUuid": "1a430d35_aa5ffa73",
+      "revId": "d48715c3c54a7f99a36741cf286c3a91f64c71ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
