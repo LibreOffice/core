@@ -40,6 +40,50 @@ void XMLDcTitleContext::characters(const OUString &rChars)
     mrMeta.m_aPropertyList.insert("dc:title", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+/// Handler for <dc:language>.
+class XMLDcLanguageContext : public XMLImportContext
+{
+public:
+    XMLDcLanguageContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+
+    void SAL_CALL characters(const OUString &rChars) override;
+
+    XMLMetaDocumentContext &mrMeta;
+};
+
+XMLDcLanguageContext::XMLDcLanguageContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
+    : XMLImportContext(rImport), mrMeta(rMeta)
+{
+}
+
+void XMLDcLanguageContext::characters(const OUString &rChars)
+{
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrMeta.m_aPropertyList.insert("dc:language", librevenge::RVNGString(sCharU8.getStr()));
+}
+
+/// Handler for <dc:date>.
+class XMLDcDateContext : public XMLImportContext
+{
+public:
+    XMLDcDateContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+
+    void SAL_CALL characters(const OUString &rChars) override;
+
+    XMLMetaDocumentContext &mrMeta;
+};
+
+XMLDcDateContext::XMLDcDateContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
+    : XMLImportContext(rImport), mrMeta(rMeta)
+{
+}
+
+void XMLDcDateContext::characters(const OUString &rChars)
+{
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrMeta.m_aPropertyList.insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
+}
+
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
@@ -49,6 +93,10 @@ XMLImportContext *XMLMetaDocumentContext::CreateChildContext(const OUString &rNa
 {
     if (rName == "dc:title")
         return new XMLDcTitleContext(mrImport, *this);
+    if (rName == "dc:language")
+        return new XMLDcLanguageContext(mrImport, *this);
+    if (rName == "dc:date")
+        return new XMLDcDateContext(mrImport, *this);
     return nullptr;
 }
 
