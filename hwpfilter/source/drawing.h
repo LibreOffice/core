@@ -690,6 +690,9 @@ HWPDrawingObject::~HWPDrawingObject()
     if (next)
         delete next;
 
+    if (property.pPara)
+        FreeParaList(property.pPara);
+
     HWPDOFunc(this, OBJFUNC_FREE, nullptr, 0);
 }
 #endif
