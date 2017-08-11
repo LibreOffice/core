@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_aabb7a74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-11T08:09:51Z",
+      "side": 1,
+      "message": "Is this a good idea? :-)\n\nIn C++ code a git hook enforces that no tabs are used, instead all C++ code uses 4 spaces for indentation. Wouldn\u0027t it be better to go with 4 spaces where as well?",
+      "revId": "1e91a7ad75687b3a4cb261737072f35f8db9f407",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
