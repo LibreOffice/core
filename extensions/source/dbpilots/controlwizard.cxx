@@ -590,7 +590,7 @@ namespace dbp
                     {
                         OSL_FAIL("OControlWizard::initContext: unexpected exception while gathering column information!");
                     }
-                    m_aContext.aTypes.insert(OControlWizardContext::TNameTypeMap::value_type(*pBegin,nFieldType));
+                    m_aContext.aTypes.emplace(*pBegin,nFieldType);
                 }
             }
         }

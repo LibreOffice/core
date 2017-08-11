@@ -284,10 +284,9 @@ ContextChangeEventMultiplexer::FocusDescriptor* ContextChangeEventMultiplexer::G
             xComponent->addEventListener(this);
 
         // Create a new listener container for the event focus.
-        iDescriptor = maListeners.insert(
-            ListenerMap::value_type(
+        iDescriptor = maListeners.emplace(
                 rxEventFocus,
-                FocusDescriptor())).first;
+                FocusDescriptor()).first;
     }
     if (iDescriptor != maListeners.end())
         return &iDescriptor->second;

@@ -150,7 +150,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column )
         }
         else
             nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
-        aFind = m_aColumnTypes.insert(std::map<sal_Int32,sal_Int32>::value_type(column,nType)).first;
+        aFind = m_aColumnTypes.emplace(column,nType).first;
     }
 
 

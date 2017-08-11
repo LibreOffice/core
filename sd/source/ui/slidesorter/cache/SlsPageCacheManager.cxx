@@ -147,7 +147,8 @@ public:
     iterator end() { return maMap.end(); }
     void clear() { maMap.clear(); }
     iterator find(const key_type& key) { return maMap.find(key); }
-    std::pair<iterator,bool> insert(const value_type& value) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
 };
 
 class PageCacheManager::Deleter
@@ -414,8 +415,8 @@ void PageCacheManager::PutRecentlyUsedCache(
     // Look up the list of recently used caches for the given document.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue == mpRecentlyUsedPageCaches->end())
-        iQueue = mpRecentlyUsedPageCaches->insert(
-            RecentlyUsedPageCaches::value_type(pDocument, RecentlyUsedQueue())
+        iQueue = mpRecentlyUsedPageCaches->emplace(
+            pDocument, RecentlyUsedQueue()
             ).first;
 
     if (iQueue != mpRecentlyUsedPageCaches->end())

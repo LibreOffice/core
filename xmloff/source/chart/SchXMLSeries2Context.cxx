@@ -185,9 +185,8 @@ void lcl_insertErrorBarLSequencesToMap(
         for( sal_Int32 nIndex = 0; nIndex < aLSequences.getLength(); ++nIndex )
         {
             // use "0" as data index. This is ok, as it is not used for error bars
-            rInOutMap.insert(
-                tSchXMLLSequencesPerIndex::value_type(
-                    tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), aLSequences[ nIndex ] ));
+            rInOutMap.emplace(
+                    tSchXMLIndexWithPart( 0, SCH_XML_PART_ERROR_BARS ), aLSequences[ nIndex ] );
         }
     }
 }
@@ -434,9 +433,8 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         xLabeledSeq->setValues(xSequenceValues);
 
         // register for setting local data if external data provider is not present
-        maPostponedSequences.insert(
-            tSchXMLLSequencesPerIndex::value_type(
-                tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
+        maPostponedSequences.emplace(
+                tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq );
 
         // label
         Reference<chart2::data::XDataSequence> xSequenceLabel;
@@ -462,9 +460,8 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         // for creation, because internal data always has labels. If
         // they don't exist in the original, auto-generated labels are
         // used for the internal data.
-        maPostponedSequences.insert(
-            tSchXMLLSequencesPerIndex::value_type(
-                tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
+        maPostponedSequences.emplace(
+                tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq );
 
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( &xLabeledSeq, 1 );
         Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );
@@ -619,10 +616,9 @@ void SchXMLSeries2Context::EndElement()
         if( xLabeledSeq.is() )
         {
             // register for setting local data if external data provider is not present
-            mrLSequencesPerIndex.insert(
-                tSchXMLLSequencesPerIndex::value_type(
+            mrLSequencesPerIndex.emplace(
                     tSchXMLIndexWithPart( aDomainInfo.nIndexForLocalData, SCH_XML_PART_VALUES ),
-                    Reference< chart2::data::XLabeledDataSequence >(xLabeledSeq, uno::UNO_QUERY_THROW) ));
+                    Reference< chart2::data::XLabeledDataSequence >(xLabeledSeq, uno::UNO_QUERY_THROW) );
         }
     }
 
@@ -632,9 +628,7 @@ void SchXMLSeries2Context::EndElement()
             aIt != maPostponedSequences.end(); ++aIt )
         {
             sal_Int32 nNewIndex = aIt->first.first + nDomainCount;
-            mrLSequencesPerIndex.insert(
-                tSchXMLLSequencesPerIndex::value_type(
-                    tSchXMLIndexWithPart( nNewIndex, aIt->first.second ), aIt->second ));
+            mrLSequencesPerIndex.emplace( tSchXMLIndexWithPart( nNewIndex, aIt->first.second ), aIt->second );
         }
         m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
     }

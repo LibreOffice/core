@@ -190,9 +190,7 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
                                              && rDeckDescriptor.mbIsEnabled;
 
 
-        aOrderedIds.insert(::std::multimap<sal_Int32,DeckContextDescriptor>::value_type(
-                rDeckDescriptor.mnOrderIndex,
-                aDeckContextDescriptor));
+        aOrderedIds.emplace(rDeckDescriptor.mnOrderIndex, aDeckContextDescriptor);
     }
 
     std::multimap<sal_Int32,DeckContextDescriptor>::const_iterator iId;
@@ -233,9 +231,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
         aPanelContextDescriptor.msMenuCommand = pEntry->msMenuCommand;
         aPanelContextDescriptor.mbIsInitiallyVisible = pEntry->mbIsInitiallyVisible;
         aPanelContextDescriptor.mbShowForReadOnlyDocuments = rPanelDescriptor.mbShowForReadOnlyDocuments;
-        aOrderedIds.insert(std::multimap<sal_Int32, PanelContextDescriptor>::value_type(
-                                                    rPanelDescriptor.mnOrderIndex,
-                                                    aPanelContextDescriptor));
+        aOrderedIds.emplace(rPanelDescriptor.mnOrderIndex, aPanelContextDescriptor);
     }
 
     std::multimap<sal_Int32,PanelContextDescriptor>::const_iterator iId;

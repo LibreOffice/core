@@ -636,7 +636,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         if ( aIndex != aTempString )
                         {
                             aIndex = aTempString;
-                            it = aInfo.insert(sfx2::KeywordInfo::value_type(aTempString, 0)).first;
+                            it = aInfo.emplace(aTempString, 0).first;
                             if ( (tmp = it->second++) != 0)
                                 m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
                             else
@@ -646,7 +646,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         aIndex.clear();
 
                     // Assume the token is trimmed
-                    it = aInfo.insert(sfx2::KeywordInfo::value_type(aKeywordPair, 0)).first;
+                    it = aInfo.emplace(aKeywordPair, 0).first;
                     if ((tmp = it->second++) != 0)
                         nPos = m_pIndexCB->InsertEntry(aKeywordPair + OUString(append, tmp));
                     else
@@ -678,7 +678,7 @@ void IndexTabPage_Impl::InitializeIndex()
                             .append( aTitleList[j] );
 
                         aTempString = aData.makeStringAndClear();
-                        it = aInfo.insert(sfx2::KeywordInfo::value_type(aTempString, 0)).first;
+                        it = aInfo.emplace(aTempString, 0).first;
                         if ( (tmp = it->second++) != 0 )
                             nPos = m_pIndexCB->InsertEntry(aTempString + OUString(append, tmp));
                         else

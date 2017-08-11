@@ -273,9 +273,9 @@ void BitmapCache::SetBitmap (
     }
     else
     {
-        iEntry = mpBitmapContainer->insert(CacheBitmapContainer::value_type (
+        iEntry = mpBitmapContainer->emplace(
             rKey,
-            CacheEntry(rPreview, mnCurrentAccessTime++, bIsPrecious))
+            CacheEntry(rPreview, mnCurrentAccessTime++, bIsPrecious)
             ).first;
     }
 
@@ -315,9 +315,9 @@ void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
     }
     else if (bIsPrecious)
     {
-        iEntry = mpBitmapContainer->insert(CacheBitmapContainer::value_type (
+        iEntry = mpBitmapContainer->emplace(
             rKey,
-            CacheEntry(Bitmap(), mnCurrentAccessTime++, bIsPrecious))
+            CacheEntry(Bitmap(), mnCurrentAccessTime++, bIsPrecious)
             ).first;
         UpdateCacheSize(iEntry->second, ADD);
     }
@@ -354,9 +354,9 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
         CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(iOtherEntry->first));
         if (iEntry == mpBitmapContainer->end())
         {
-            iEntry = mpBitmapContainer->insert(CacheBitmapContainer::value_type (
+            iEntry = mpBitmapContainer->emplace(
                 iOtherEntry->first,
-                CacheEntry(mnCurrentAccessTime++, true))
+                CacheEntry(mnCurrentAccessTime++, true)
                 ).first;
             UpdateCacheSize(iEntry->second, ADD);
         }

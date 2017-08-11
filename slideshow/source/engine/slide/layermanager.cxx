@@ -214,9 +214,8 @@ namespace slideshow
             ENSURE_OR_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
 
             // add shape to XShape hash map
-            if( !maXShapeHash.insert(
-                    XShapeHash::value_type( rShape->getXShape(),
-                                            rShape) ).second )
+            if( !maXShapeHash.emplace(rShape->getXShape(),
+                                      rShape).second )
             {
                 // entry already present, nothing to do
                 return;

@@ -566,11 +566,9 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     ::std::sort(aRowPos.begin(),aRowPos.end(),::std::less<sal_Int32>());
     aRowPos.erase(::std::unique(aRowPos.begin(),aRowPos.end()),aRowPos.end());
 
-    TSectionsGrid::iterator aInsert = m_aSectionsGrid.insert(
-        TSectionsGrid::value_type(
+    TSectionsGrid::iterator aInsert = m_aSectionsGrid.emplace(
                                     _xProp.get(),
                                     TGrid(aRowPos.size() - 1,TGrid::value_type(false,TRow(aColumnPos.size() - 1)))
-                                  )
         ).first;
     lcl_calculate(aColumnPos,aRowPos,aInsert->second);
 

@@ -1287,7 +1287,10 @@ SWORD ODatabaseMetaDataResultSet::impl_getColumnType_nothrow(sal_Int32 columnInd
 {
     std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(columnIndex);
     if ( aFind == m_aODBCColumnTypes.end() )
-        aFind = m_aODBCColumnTypes.insert(std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pConnection.get(),m_aStatementHandle,*this,columnIndex))).first;
+        aFind = m_aODBCColumnTypes.emplace(
+                        columnIndex,
+                        OResultSetMetaData::getColumnODBCType(m_pConnection.get(),m_aStatementHandle,*this,columnIndex)
+                    ).first;
     return aFind->second;
 }
 

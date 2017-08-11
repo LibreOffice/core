@@ -278,8 +278,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     for( ScDPLabelDataVector::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
     {
         mpLbBaseField->InsertEntry((*aIt)->getDisplayName());
-        maBaseFieldNameMap.insert(
-            NameMapType::value_type((*aIt)->getDisplayName(), (*aIt)->maName));
+        maBaseFieldNameMap.emplace((*aIt)->getDisplayName(), (*aIt)->maName);
         if ((*aIt)->maName == rFuncData.maFieldRef.ReferenceField)
             aSelectedEntry = (*aIt)->getDisplayName();
     }

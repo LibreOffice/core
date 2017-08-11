@@ -104,8 +104,7 @@ ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext
             ++aDefinition
         )
         m_aDocuments.push_back(
-            m_aDocumentMap.insert(
-                Documents::value_type( aDefinition->first, Documents::mapped_type() ) ).first );
+            m_aDocumentMap.emplace(aDefinition->first, Documents::mapped_type() ).first );
 
 }
 

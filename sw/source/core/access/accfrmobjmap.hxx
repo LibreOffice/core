@@ -117,7 +117,8 @@ public:
     const_reverse_iterator crbegin() const { return maMap.crbegin(); }
     const_reverse_iterator crend() const { return maMap.crend(); }
 
-    std::pair<iterator,bool> insert(const value_type& value) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
 };
 
 #endif

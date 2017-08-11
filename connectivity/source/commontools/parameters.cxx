@@ -304,8 +304,8 @@ namespace dbtools
 
                     // remember meta information about this new parameter
                     std::pair< ParameterInformation::iterator, bool > aInsertionPos =
-                        m_aParameterInformation.insert(
-                            ParameterInformation::value_type( sNewParamName, ParameterMetaData( nullptr ) )
+                        m_aParameterInformation.emplace(
+                            sNewParamName, ParameterMetaData( nullptr )
                         );
                     OSL_ENSURE( aInsertionPos.second, "ParameterManager::classifyLinks: there already was a parameter with this name!" );
                     aInsertionPos.first->second.eType = ParameterClassification::LinkedByColumnName;

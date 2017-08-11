@@ -80,9 +80,7 @@ AstInterface::DoubleMemberDeclarations AstInterface::checkMemberClashes(
 
 void AstInterface::addMember(AstDeclaration /*TODO: const*/ * member) {
     addDeclaration(member);
-    m_visibleMembers.insert(
-        VisibleMembers::value_type(
-            member->getLocalName(), VisibleMember(member)));
+    m_visibleMembers.emplace(member->getLocalName(), VisibleMember(member));
 }
 
 void AstInterface::forwardDefined(AstInterface const & def)
@@ -347,8 +345,7 @@ void AstInterface::addVisibleInterface(
         ? direct ? INTERFACE_DIRECT_OPTIONAL : INTERFACE_INDIRECT_OPTIONAL
         : direct ? INTERFACE_DIRECT_MANDATORY : INTERFACE_INDIRECT_MANDATORY;
     std::pair< VisibleInterfaces::iterator, bool > result(
-        m_visibleInterfaces.insert(
-            VisibleInterfaces::value_type(ifc->getScopedName(), kind)));
+        m_visibleInterfaces.emplace(ifc->getScopedName(), kind));
     bool seen = !result.second
         && result.first->second >= INTERFACE_INDIRECT_MANDATORY;
     if (!result.second && kind > result.first->second) {
@@ -358,9 +355,8 @@ void AstInterface::addVisibleInterface(
         for (DeclList::const_iterator i(ifc->getIteratorBegin());
               i != ifc->getIteratorEnd(); ++i)
         {
-            m_visibleMembers.insert(
-                VisibleMembers::value_type(
-                    (*i)->getLocalName(), VisibleMember(*i)));
+            m_visibleMembers.emplace(
+                    (*i)->getLocalName(), VisibleMember(*i));
         }
         for (InheritedInterfaces::const_iterator i(
                   ifc->m_inheritedInterfaces.begin());
@@ -378,13 +374,11 @@ void AstInterface::addOptionalVisibleMembers(AstInterface const * ifc) {
         VisibleMembers::iterator visible(
             m_visibleMembers.find((*i)->getLocalName()));
         if (visible == m_visibleMembers.end()) {
-            visible = m_visibleMembers.insert(
-                VisibleMembers::value_type(
-                    (*i)->getLocalName(), VisibleMember())).first;
+            visible = m_visibleMembers.emplace(
+                    (*i)->getLocalName(), VisibleMember()).first;
         }
         if (visible->second.mandatory == nullptr) {
-            visible->second.optionals.insert(
-                VisibleMember::Optionals::value_type(ifc->getScopedName(), *i));
+            visible->second.optionals.emplace(ifc->getScopedName(), *i);
         }
     }
     for (InheritedInterfaces::const_iterator i(

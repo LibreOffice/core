@@ -951,8 +951,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     {
         (*pEnv->acquireWeak)( pEnv );
         std::pair< OUString2EnvironmentMap::iterator, bool > insertion (
-            aName2EnvMap.insert(
-                OUString2EnvironmentMap::value_type( aKey, pEnv ) ) );
+            aName2EnvMap.emplace( aKey, pEnv ) );
         SAL_WARN_IF( !insertion.second, "cppu", "key " << aKey << " already in env map" );
     }
     else

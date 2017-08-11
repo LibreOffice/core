@@ -80,8 +80,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
         return &it->second;
 
     std::pair<ColumnsType::iterator,bool> r =
-        rCols.insert(
-            ColumnsType::value_type(nCol, ColumnBlockPosition()));
+        rCols.emplace(nCol, ColumnBlockPosition());
 
     if (!r.second)
         // insertion failed.
@@ -140,8 +139,7 @@ ColumnBlockPosition* TableColumnBlockPositionSet::getBlockPosition( SCCOL nCol )
         return &it->second;
 
     std::pair<ColumnsType::iterator,bool> r =
-        mpImpl->maColumns.insert(
-            ColumnsType::value_type(nCol, ColumnBlockPosition()));
+        mpImpl->maColumns.emplace(nCol, ColumnBlockPosition());
 
     if (!r.second)
         // insertion failed.

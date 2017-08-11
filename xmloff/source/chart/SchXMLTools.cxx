@@ -513,9 +513,8 @@ void CreateCategories(
                                 if( pLSequencesPerIndex )
                                 {
                                     // register for setting local data if external data provider is not present
-                                    pLSequencesPerIndex->insert(
-                                        tSchXMLLSequencesPerIndex::value_type(
-                                            tSchXMLIndexWithPart( SCH_XML_CATEGORIES_INDEX, SCH_XML_PART_VALUES ), xLabeledSeq ));
+                                    pLSequencesPerIndex->emplace(
+                                            tSchXMLIndexWithPart( SCH_XML_CATEGORIES_INDEX, SCH_XML_PART_VALUES ), xLabeledSeq );
                                 }
                                 xAxis->setScaleData( aData );
                             }

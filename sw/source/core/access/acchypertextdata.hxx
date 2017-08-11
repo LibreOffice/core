@@ -45,7 +45,8 @@ public:
     iterator begin() { return maMap.begin(); }
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
-    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
 };
 
 #endif

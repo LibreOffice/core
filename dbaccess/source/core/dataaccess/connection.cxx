@@ -646,11 +646,10 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
                 Sequence<Any> aArgs(1);
                 Reference<XConnection> xMy(this);
                 aArgs[0] <<= NamedValue("ActiveConnection",makeAny(xMy));
-                aFind = m_aSupportServices.insert(
-                           TSupportServices::value_type(
+                aFind = m_aSupportServices.emplace(
                                _sServiceSpecifier,
                                m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceSpecifier, aArgs, m_aContext)
-                           )).first;
+                           ).first;
             }
             return aFind->second;
         }

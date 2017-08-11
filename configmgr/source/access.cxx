@@ -154,10 +154,9 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
             break;
         }
         assert(dynamic_cast< ChildAccess * >(p.get()) != nullptr);
-        parent->modifiedChildren_.insert(
-            ModifiedChildren::value_type(
+        parent->modifiedChildren_.emplace(
                 p->getNameInternal(),
-                ModifiedChild(static_cast< ChildAccess * >(p.get()), false)));
+                ModifiedChild(static_cast< ChildAccess * >(p.get()), false));
         p = parent;
     }
 }

@@ -1828,11 +1828,10 @@ void SlideShowImpl::addShapeEventListener(
         maShapeEventListeners.end() )
     {
         // no entry for this shape -> create one
-        aIter = maShapeEventListeners.insert(
-            ShapeEventListenerMap::value_type(
+        aIter = maShapeEventListeners.emplace(
                 xShape,
                 std::make_shared<comphelper::OInterfaceContainerHelper2>(
-                    m_aMutex))).first;
+                    m_aMutex)).first;
     }
 
     // add new listener to broadcaster
@@ -1890,9 +1889,7 @@ void SlideShowImpl::setShapeCursor(
             // add new entry, unless shape shall display
             // normal pointer arrow -> no need to handle that
             // case
-            maShapeCursors.insert(
-                ShapeCursorMap::value_type(xShape,
-                                           nPointerShape) );
+            maShapeCursors.emplace(xShape, nPointerShape);
         }
     }
     else if( nPointerShape == awt::SystemPointer::ARROW )

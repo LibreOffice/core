@@ -5429,8 +5429,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
                 if (!aRanges.empty())
                 {
                     sc::SpellCheckContext::CellPos aPos(nCol, nRow);
-                    mpSpellCheckCxt->maMisspellCells.insert(
-                        sc::SpellCheckContext::CellMapType::value_type(aPos, aRanges));
+                    mpSpellCheckCxt->maMisspellCells.emplace(aPos, aRanges);
                 }
 
                 // Broadcast for re-paint.

@@ -185,8 +185,8 @@ void ComponentContext::insertByName(
             name.startsWith( "/singletons/" ) &&
             !element.hasValue() ) );
     MutexGuard guard( m_mutex );
-    std::pair<t_map::iterator, bool> insertion( m_map.insert(
-        t_map::value_type( name, entry ) ) );
+    std::pair<t_map::iterator, bool> insertion( m_map.emplace(
+        name, entry ) );
     if (! insertion.second)
         throw container::ElementExistException(
             "element already exists: " + name,

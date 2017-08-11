@@ -415,10 +415,9 @@ void InternalDataProvider::addDataSequenceToMap(
     const OUString & rRangeRepresentation,
     const Reference< chart2::data::XDataSequence > & xSequence )
 {
-    m_aSequenceMap.insert(
-        tSequenceMap::value_type(
+    m_aSequenceMap.emplace(
             rRangeRepresentation,
-            uno::WeakReference< chart2::data::XDataSequence >( xSequence )));
+            uno::WeakReference< chart2::data::XDataSequence >( xSequence ));
 }
 
 void InternalDataProvider::deleteMapReferences( const OUString & rRangeRepresentation )

@@ -113,7 +113,8 @@ public:
     bool empty() const { return maMap.empty(); }
     void clear() { maMap.clear(); }
     iterator find(const key_type& key) { return maMap.find(key); }
-    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
     iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
@@ -257,7 +258,8 @@ public:
     const_iterator cend() const { return maMap.cend(); }
     bool empty() const { return maMap.empty(); }
     iterator find(const key_type& key) { return maMap.find(key); }
-    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
     iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
@@ -588,7 +590,8 @@ private:
 public:
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
-    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
     iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
@@ -628,7 +631,8 @@ public:
     iterator begin() { return maMap.begin(); }
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
-    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    template<class... Args>
+    std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
     iterator erase(const_iterator const & pos) { return maMap.erase(pos); }
 };
 
@@ -1042,9 +1046,8 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
         }
         else if( SwAccessibleEvent_Impl::DISPOSE != rEvent.GetType() )
         {
-            SwAccessibleEventMap_Impl::value_type aEntry( rEvent.GetFrameOrObj(),
+            mpEventMap->emplace( rEvent.GetFrameOrObj(),
                     mpEvents->insert( mpEvents->end(), rEvent ) );
-            mpEventMap->insert( aEntry );
         }
     }
 }
@@ -1349,7 +1352,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 vecAdd.push_back(static_cast< SwAccessibleContext * >(xAcc.get()));
                             }
 
-                            mapTemp.insert( SwAccessibleContextMap_Impl::value_type( pFrame, xAcc ) );
+                            mapTemp.emplace( pFrame, xAcc );
                         }
                     }
                     ++nStartIndex;
@@ -1379,7 +1382,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         SwAccessibleContextMap_Impl::iterator aIter = mapTemp.begin();
         while( aIter != mapTemp.end() )
         {
-            mpSeletedFrameMap->insert( SwAccessibleContextMap_Impl::value_type( (*aIter).first, (*aIter).second ) );
+            mpSeletedFrameMap->emplace( (*aIter).first, (*aIter).second );
             ++aIter;
         }
         mapTemp.clear();
@@ -1760,8 +1763,7 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView_(
             }
             else
             {
-                SwAccessibleContextMap_Impl::value_type aEntry( pRootFrame, xAcc );
-                mpFrameMap->insert( aEntry );
+                mpFrameMap->emplace( pRootFrame, xAcc );
             }
         }
 
@@ -1889,8 +1891,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
                 }
                 else
                 {
-                    SwAccessibleContextMap_Impl::value_type aEntry( pFrame, xAcc );
-                    mpFrameMap->insert( aEntry );
+                    mpFrameMap->emplace( pFrame, xAcc );
                 }
 
                 if( pAcc->HasCursor() &&
@@ -1986,9 +1987,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                 }
                 else
                 {
-                    SwAccessibleShapeMap_Impl::value_type aEntry( pObj,
-                                                                  xAcc );
-                    mpShapeMap->insert( aEntry );
+                    mpShapeMap->emplace( pObj, xAcc );
                 }
                 // TODO: focus!!!
                 AddGroupContext(pObj, xAcc);
@@ -2016,8 +2015,7 @@ void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XA
 
     if( mpShapeMap )
     {
-        SwAccessibleShapeMap_Impl::value_type aEntry( pObj, xAccShape );
-        mpShapeMap->insert( aEntry );
+        mpShapeMap->emplace( pObj, xAccShape );
     }
 
 }
@@ -3147,8 +3145,7 @@ bool SwAccessibleMap::ReplaceChild (
             }
             else
             {
-                SwAccessibleShapeMap_Impl::value_type aEntry( pObj, xAcc );
-                mpShapeMap->insert( aEntry );
+                mpShapeMap->emplace( pObj, xAcc );
             }
         }
     }
@@ -3349,14 +3346,12 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
                                     pTextNode == &(pEndPos->nNode.GetNode())
                                                 ? pEndPos->nContent.GetIndex()
                                                 : -1 );
-                                SwAccessibleSelectedParas_Impl::value_type
-                                                aEntry( xWeakAcc, aDataEntry );
                                 if ( !pRetSelectedParas )
                                 {
                                     pRetSelectedParas =
                                             new SwAccessibleSelectedParas_Impl;
                                 }
-                                pRetSelectedParas->insert( aEntry );
+                                pRetSelectedParas->emplace( xWeakAcc, aDataEntry );
                             }
                         }
                     }

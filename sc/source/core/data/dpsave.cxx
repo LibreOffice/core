@@ -856,8 +856,7 @@ public:
     void operator() (const ScDPSaveDimension* pDim)
     {
         size_t nRank = mrNames.size();
-        mrNames.insert(
-            ScDPSaveData::DimOrderType::value_type(pDim->GetName(), nRank));
+        mrNames.emplace(pDim->GetName(), nRank);
     }
 };
 

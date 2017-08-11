@@ -584,16 +584,12 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
                 // Translate the special empty name into an empty string.
                 aName.clear();
 
-            aResult.insert(
-                std::unordered_map<OUString, bool, OUStringHash>::value_type(
-                    aName, itr->bValid));
+            aResult.emplace(aName, itr->bValid);
         }
         else
         {
             // This is a layout name.  Get the original member name and use it.
-            aResult.insert(
-                std::unordered_map<OUString, bool, OUStringHash>::value_type(
-                    itrNameMap->second, itr->bValid));
+            aResult.emplace(itrNameMap->second, itr->bValid);
         }
     }
     pDim->UpdateMemberVisibility(aResult);

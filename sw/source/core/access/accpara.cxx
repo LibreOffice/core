@@ -3088,8 +3088,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                         }
                         else
                         {
-                            SwAccessibleHyperTextData::value_type aEntry( pHt, xRet );
-                            m_pHyperTextData->insert( aEntry );
+                            m_pHyperTextData->emplace( pHt, xRet );
                         }
                     }
                 }

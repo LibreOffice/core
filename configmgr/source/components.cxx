@@ -440,8 +440,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
         if (service.is()) {
             propset.set( service, css::uno::UNO_QUERY_THROW);
         }
-        j = externalServices_.insert(
-            ExternalServices::value_type(name, propset)).first;
+        j = externalServices_.emplace(name, propset).first;
     }
     css::beans::Optional< css::uno::Any > value;
     if (j->second.is()) {

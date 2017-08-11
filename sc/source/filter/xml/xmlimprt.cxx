@@ -823,9 +823,8 @@ ScXMLImport::ScXMLImport(
     };
     for (const auto & aCellTypePair : aCellTypePairs)
     {
-        aCellTypeMap.insert(
-            CellTypeMap::value_type(
-                GetXMLToken(aCellTypePair._token), aCellTypePair._type));
+        aCellTypeMap.emplace(
+                GetXMLToken(aCellTypePair._token), aCellTypePair._type);
     }
 }
 

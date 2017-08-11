@@ -25,8 +25,7 @@ void insertAllNames( TokenStringContext::IndexNameMapType& rMap, const ScRangeNa
     for (auto const& it : rNames)
     {
         const ScRangeData *const pData = it.second.get();
-        rMap.insert(
-            TokenStringContext::IndexNameMapType::value_type(pData->GetIndex(), pData->GetName()));
+        rMap.emplace(pData->GetIndex(), pData->GetName());
     }
 }
 
@@ -104,8 +103,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
             std::vector<OUString> aTabNames;
             pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
             if (!aTabNames.empty())
-                maExternalCachedTabNames.insert(
-                    IndexNamesMapType::value_type(nFileId, aTabNames));
+                maExternalCachedTabNames.emplace(nFileId, aTabNames);
         }
     }
 }

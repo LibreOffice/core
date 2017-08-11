@@ -242,8 +242,7 @@ void Data::initProperties(
                         "interface type has too many attributes");
                 }
                 rtl::OUString name(members[i]->getMemberName());
-                if (!properties.insert(
-                        PropertyMap::value_type(
+                if (!properties.emplace(
                             name,
                             PropertyData(
                                 css::beans::Property(
@@ -252,7 +251,7 @@ void Data::initProperties(
                                         t->getTypeClass(), t->getName()),
                                     attrAttribs),
                                 (std::find(absentBegin, absentEnd, name)
-                                 == absentEnd)))).
+                                 == absentEnd))).
                     second)
                 {
                     throw css::uno::RuntimeException(

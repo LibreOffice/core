@@ -118,7 +118,7 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
             // ignore empty ones.
             continue;
 
-        aNames.insert(ScRangeName::TabNameCopyMap::value_type(i, p));
+        aNames.emplace(i, p);
     }
     rNames.swap(aNames);
 }

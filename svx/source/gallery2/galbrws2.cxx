@@ -155,20 +155,17 @@ GalleryThemePopup::GalleryThemePopup(
     mpPopupMenu->SetPopupMenu(mpPopupMenu->GetItemId("background"), mpBackgroundPopup);
 
     // SID_GALLERY_ENABLE_ADDCOPY
-    m_aCommandInfo.insert(
-        CommandInfoMap::value_type(
+    m_aCommandInfo.emplace(
             SID_GALLERY_ENABLE_ADDCOPY,
-            CommandInfo( CMD_SID_GALLERY_ENABLE_ADDCOPY )));
+            CommandInfo( CMD_SID_GALLERY_ENABLE_ADDCOPY ));
     // SID_GALLERY_BG_BRUSH
-    m_aCommandInfo.insert(
-        CommandInfoMap::value_type(
+    m_aCommandInfo.emplace(
             SID_GALLERY_BG_BRUSH,
-            CommandInfo( CMD_SID_GALLERY_BG_BRUSH )));
+            CommandInfo( CMD_SID_GALLERY_BG_BRUSH ));
     // SID_GALLERY_FORMATS
-    m_aCommandInfo.insert(
-        CommandInfoMap::value_type(
+    m_aCommandInfo.emplace(
             SID_GALLERY_FORMATS,
-            CommandInfo( CMD_SID_GALLERY_FORMATS )));
+            CommandInfo( CMD_SID_GALLERY_FORMATS ));
 
 }
 

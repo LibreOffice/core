@@ -384,9 +384,7 @@ void Parser::handleImplementation() {
         new cppuhelper::ServiceManager::Data::Implementation(
             attrName, attrLoader_, attrUri_, attrEnvironment_, attrConstructor,
             attrPrefix_, alienContext_, reader_.getUrl()));
-    if (!data_->namedImplementations.insert(
-            cppuhelper::ServiceManager::Data::NamedImplementations::value_type(
-                attrName, implementation_)).
+    if (!data_->namedImplementations.emplace(attrName, implementation_).
         second)
     {
         throw css::registry::InvalidRegistryException(
@@ -1445,9 +1443,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
                 name, readLegacyRdbString(uri, implKey, "UNO/ACTIVATOR"),
                 readLegacyRdbString(uri, implKey, "UNO/LOCATION"), "", "", "",
                 css::uno::Reference< css::uno::XComponentContext >(), uri));
-        if (!data_.namedImplementations.insert(
-                Data::NamedImplementations::value_type(name, impl)).
-            second)
+        if (!data_.namedImplementations.emplace(name, impl).second)
         {
             throw css::registry::InvalidRegistryException(
                 uri + ": duplicate <implementation name=\"" + name + "\">");
@@ -1580,11 +1576,9 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
         new Data::Implementation(name, f1, f2, comp));
     Data extra;
     if (!name.isEmpty()) {
-        extra.namedImplementations.insert(
-            Data::NamedImplementations::value_type(name, impl));
+        extra.namedImplementations.emplace(name, impl);
     }
-    extra.dynamicImplementations.insert(
-        Data::DynamicImplementations::value_type(factoryInfo, impl));
+    extra.dynamicImplementations.emplace(factoryInfo, impl);
     css::uno::Sequence< rtl::OUString > services(
         factoryInfo->getSupportedServiceNames());
     for (sal_Int32 i = 0; i != services.getLength(); ++i) {

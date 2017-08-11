@@ -302,9 +302,8 @@ Additions * Data::addExtensionXcuAdditions(
 {
     rtl::Reference< ExtensionXcu > item(new ExtensionXcu);
     ExtensionXcuAdditions::iterator i(
-        extensionXcuAdditions_.insert(
-            ExtensionXcuAdditions::value_type(
-                url, rtl::Reference< ExtensionXcu >())).first);
+        extensionXcuAdditions_.emplace(
+                url, rtl::Reference< ExtensionXcu >()).first);
     if (i->second.is()) {
         throw css::uno::RuntimeException(
             "already added extension xcu " + url);

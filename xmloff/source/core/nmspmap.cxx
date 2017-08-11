@@ -252,9 +252,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                     if (bCache)
                     {
                         OUString sString(sQName.makeStringAndClear());
-                        aQNameCache.insert(
-                            QNameCache::value_type(
-                                QNamePair(nKey, rLocalName), sString));
+                        aQNameCache.emplace(QNamePair(nKey, rLocalName), sString);
                         return sString;
                     }
                     else

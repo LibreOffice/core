@@ -623,7 +623,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
         xInfo = xWeakInfo;
         if( xInfo.is() )
         {
-            mpImpl->maCache.insert(Impl::CacheType::value_type(xInfo, pFilterInfo));
+            mpImpl->maCache.emplace(xInfo, pFilterInfo);
         }
         else
             bDelInfo = true;

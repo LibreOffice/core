@@ -86,8 +86,7 @@ FormulaGroupContext::ColArray* FormulaGroupContext::setCachedColArray(
     if (it == maColArrays.end())
     {
         std::pair<ColArraysType::iterator,bool> r =
-            maColArrays.insert(
-                ColArraysType::value_type(ColKey(nTab, nCol), ColArray(pNumArray, pStrArray)));
+            maColArrays.emplace(ColKey(nTab, nCol), ColArray(pNumArray, pStrArray));
 
         if (!r.second)
             // Somehow the insertion failed.

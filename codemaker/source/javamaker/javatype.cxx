@@ -742,9 +742,7 @@ void handleEnumType(
     {
         min = std::min(min, member.value);
         max = std::max(max, member.value);
-        map.insert(
-            std::map< sal_Int32, OString >::value_type(
-                member.value, codemaker::convertString(member.name)));
+        map.emplace(member.value, codemaker::convertString(member.name));
     }
     sal_uInt64 size = static_cast< sal_uInt64 >(map.size());
     if ((static_cast< sal_uInt64 >(max) - static_cast< sal_uInt64 >(min)
@@ -1458,8 +1456,7 @@ void handlePolyStructType(
     for (const OUString& param : entity->getTypeParameters())
     {
         sig.append(codemaker::convertString(param) + ":Ljava/lang/Object;");
-        if (!typeParameters.insert(
-                std::map< OUString, sal_Int32 >::value_type(param, index++)).second)
+        if (!typeParameters.emplace(param, index++).second)
         {
             throw CannotDumpException("Bad type information"); //TODO
         }

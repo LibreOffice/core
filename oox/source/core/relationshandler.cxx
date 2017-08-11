@@ -78,7 +78,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
 
                 SAL_WARN_IF( mxRelations->count( aRelation.maId ) != 0, "oox",
                     "RelationsFragment::createFastChildContext - relation identifier exists already" );
-                mxRelations->insert( ::std::map< OUString, Relation >::value_type( aRelation.maId, aRelation ) );
+                mxRelations->emplace( aRelation.maId, aRelation );
             }
         }
         break;

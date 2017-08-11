@@ -639,7 +639,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             }
 
             // insert the new entry
-            aPropertyPos = rPropInfos.insert(PropertySetInfo::AllProperties::value_type(evt.PropertyName,aNewEntry)).first;
+            aPropertyPos = rPropInfos.emplace(evt.PropertyName,aNewEntry).first;
             DBG_ASSERT(aPropertyPos != rPropInfos.end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
         }
 

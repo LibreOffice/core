@@ -307,7 +307,7 @@ namespace connectivity
                                 }
                                 pHelper.reset( new StreamHelper(storage->openStreamElement( sStrippedName, _nMode ) ) );
                             }
-                            aFind->second.streams.insert(TStreamMap::value_type(sName,pHelper));
+                            aFind->second.streams.emplace(sName,pHelper);
                         }
                         catch(const Exception& e)
                         {

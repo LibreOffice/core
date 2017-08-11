@@ -166,8 +166,7 @@ void ImportExcel::SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt1
     if (it == maLastFormulaCells.end())
     {
         std::pair<LastFormulaMapType::iterator, bool> r =
-            maLastFormulaCells.insert(
-                LastFormulaMapType::value_type(nCol, LastFormula()));
+            maLastFormulaCells.emplace(nCol, LastFormula());
         it = r.first;
     }
 

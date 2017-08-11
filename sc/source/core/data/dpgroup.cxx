@@ -657,8 +657,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
         ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(), itrEnd = aGroups.end();
         for (; itr != itrEnd; ++itr)
         {
-            aGroupFieldIds.insert(
-                GroupFieldMapType::value_type(itr->GetGroupDim(), &(*itr)));
+            aGroupFieldIds.emplace(itr->GetGroupDim(), &(*itr));
         }
     }
 

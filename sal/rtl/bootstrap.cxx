@@ -677,8 +677,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
         {
             ++that->_nRefCount;
             ::std::pair< bootstrap_map::t::iterator, bool > insertion(
-                p_bootstrap_map->insert(
-                    bootstrap_map::t::value_type(iniName, that)));
+                p_bootstrap_map->emplace(iniName, that));
             OSL_ASSERT(insertion.second);
         }
         else

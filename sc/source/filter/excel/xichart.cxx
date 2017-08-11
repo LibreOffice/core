@@ -3529,8 +3529,7 @@ void XclImpChAxesSet::Finalize()
             XclImpChTypeGroupRef xTypeGroup = aIt->second;
             xTypeGroup->Finalize();
             if( xTypeGroup->IsValidGroup() )
-                aValidGroups.insert(
-                    XclImpChTypeGroupMap::value_type(aIt->first, xTypeGroup));
+                aValidGroups.emplace(aIt->first, xTypeGroup);
         }
         maTypeGroups.swap( aValidGroups );
     }

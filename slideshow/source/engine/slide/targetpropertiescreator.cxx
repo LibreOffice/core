@@ -304,15 +304,14 @@ namespace internal
 
                         // target is set the 'visible' value,
                         // so we should record the opposite value
-                        mrShapeHash.insert(
-                                    XShapeHash::value_type(
+                        mrShapeHash.emplace(
                                         aTarget,
                                         VectorOfNamedValues(
                                             1,
                                             beans::NamedValue(
                                                 //xAnimateNode->getAttributeName(),
                                                 "visibility",
-                                                uno::makeAny( bVisible ) ) ) ) );
+                                                uno::makeAny( bVisible ) ) ) );
                     break;
                     }
                 }

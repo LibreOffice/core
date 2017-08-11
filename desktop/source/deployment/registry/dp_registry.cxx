@@ -202,9 +202,7 @@ void PackageRegistryImpl::insertBackend(
             // add parameterless media-type, too:
             sal_Int32 semi = mediaType.indexOf( ';' );
             if (semi >= 0) {
-                m_mediaType2backend.insert(
-                    t_string2registry::value_type(
-                        mediaType.copy( 0, semi ), xBackend ) );
+                m_mediaType2backend.emplace( mediaType.copy( 0, semi ), xBackend );
             }
             const OUString fileFilter( xPackageType->getFileFilter() );
             //The package backend shall also be called to determine the mediatype
@@ -228,9 +226,8 @@ void PackageRegistryImpl::insertBackend(
                                   token.indexOf('?') >= 0);
                     if (! ambig) {
                         std::pair<t_string2string::iterator, bool> ins(
-                            m_filter2mediaType.insert(
-                                t_string2string::value_type(
-                                    token, mediaType ) ) );
+                            m_filter2mediaType.emplace(
+                                    token, mediaType ) );
                         ambig = !ins.second;
                         if (ambig) {
                             // filter has already been in: add previously

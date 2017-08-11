@@ -126,8 +126,7 @@ std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
                                                 const SwAccessibleChild& rLower )
 {
     SwAccessibleChildMapKey aKey( eLayerId, nPos );
-    value_type aEntry( aKey, rLower );
-    return insert( aEntry );
+    return emplace( aKey, rLower );
 }
 
 std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
@@ -142,8 +141,7 @@ std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
                         ? SwAccessibleChildMapKey::CONTROLS
                         : SwAccessibleChildMapKey::HEAVEN );
     SwAccessibleChildMapKey aKey( eLayerId, pObj->GetOrdNum() );
-    value_type aEntry( aKey, rLower );
-    return insert( aEntry );
+    return emplace( aKey, rLower );
 }
 
 bool SwAccessibleChildMap::IsSortingRequired( const SwFrame& rFrame )

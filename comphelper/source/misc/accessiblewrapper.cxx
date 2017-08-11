@@ -112,8 +112,7 @@ namespace comphelper
             // see if we do cache children
             if ( !m_bTransientChildren )
             {
-                if (!m_aChildrenMap.insert(
-                        AccessibleMap::value_type( _rxKey, xValue ) ).second)
+                if (!m_aChildrenMap.emplace( _rxKey, xValue ).second)
                 {
                     OSL_FAIL(
                         "OWrappedAccessibleChildrenManager::"
