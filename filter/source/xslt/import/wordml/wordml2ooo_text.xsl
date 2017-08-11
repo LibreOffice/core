@@ -511,7 +511,7 @@
             <xsl:element name="style:text-properties">
 
                 <xsl:apply-templates select="current()"/>
-<!--		<xsl:call-template name="text-properties"/> -->
+                <!-- <xsl:call-template name="text-properties"/> -->
             </xsl:element>
         </xsl:element>
     </xsl:template>
@@ -788,7 +788,7 @@
     <xsl:template match="w:p">
         <xsl:choose>
             <!-- because word treats page breaks as separate tags, we must split some paragraphs up so that we can
-			give the sub para a fo:break-before ="page" or column attribute. -->
+            give the sub para a fo:break-before ="page" or column attribute. -->
             <xsl:when test="w:r[w:br/@w:type='page' or w:br/@w:type='column']">
                 <xsl:call-template name="process-breaks-in-paragraph"/>
             </xsl:when>

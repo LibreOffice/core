@@ -170,9 +170,9 @@
                 <xsl:attribute name="fo:margin-right">
                     <xsl:value-of select="concat($tbl_margin_right, 'in')"/>
                 </xsl:attribute>
-                <!-- If previous w:p has a page break, the table must have the page break attribute applied to it	 May need this for tables starting on new pages -->
-                <!--	<xsl:if test="parent::w:tbl/preceding-sibling::w:p[1][descendant::w:br/@w:type='page']">
-							<xsl:attribute name="fo:break-before">page</xsl:attribute></xsl:if>	-->
+                <!-- If previous w:p has a page break, the table must have the page break attribute applied to it    May need this for tables starting on new pages -->
+                <!--    <xsl:if test="parent::w:tbl/preceding-sibling::w:p[1][descendant::w:br/@w:type='page']">
+                            <xsl:attribute name="fo:break-before">page</xsl:attribute></xsl:if> -->
                 <!-- initial values for tables-->
             </xsl:element>
         </xsl:element>

@@ -39,24 +39,24 @@
                     </xsl:choose>
                 </xsl:variable>
                 <!-- MS word and SO wirter borders Mapping
-				MS word Borders                         SO borders
-				w:val="single" w:sz="0"             		0.05pt(0.002cm);solid
-				w:val="single" w:sz="12"             		1.00pt(0.035cm);solid
-				w:val="single" w:sz="18"  					2.50pt(0.088cm);solid
-				w:val="single" w:sz="36" 						4.00pt(0.141cm);solid
-				w:val="single" w:sz="48"  						5.00pt(0.176cm);solid
-				w:val="double" w:sz="2"  						1.10pt(0.039cm);double
-				w:val="double" w:sz="6"  						2.60pt(0.092cm);double
-				w:val="thin-thick-small-gap" w:sz="12"        		  3.00pt(0.105cm);double
-				w:val="thin-thick-large-gap" w:sz="18"   			 3.55pt(0.125cm);double
-				w:val="thick-thin-medium-gap" w:sz="24" 		4.50pt(0.158cm);double
-				w:val="thin-thick-medium-gap" w:sz="24"		 5.05pt(0.178cm);double
-				w:val="thin-thick-small-gap" w:sz="24"			6.00pt(0.211cm);double
-				w:val="thin-thick-medium-gap" w:sz="36			" 6.55pt(0.231cm);double
-				w:val="double" w:sz="18" 						7.50pt(0.264cm);double
-				w:val="thin-thick-medium-gap" w:sz="48" 		9.00pt(0.317cm);double;style:border-line-width="0.088cm 0.088cm 0.141cm"
-				w:val="double" w:sz="24"						9.00pt(0.317cm);double;style:border-line-width="0.141cm 0.088cm 0.088cm"
-				we adjust the criteria by adding about 1/2 range of this current criteria and next criteria.  Gary. Yang -->
+                MS word Borders                         SO borders
+                w:val="single" w:sz="0"                         0.05pt(0.002cm);solid
+                w:val="single" w:sz="12"                        1.00pt(0.035cm);solid
+                w:val="single" w:sz="18"                        2.50pt(0.088cm);solid
+                w:val="single" w:sz="36"                        4.00pt(0.141cm);solid
+                w:val="single" w:sz="48"                        5.00pt(0.176cm);solid
+                w:val="double" w:sz="2"                         1.10pt(0.039cm);double
+                w:val="double" w:sz="6"                         2.60pt(0.092cm);double
+                w:val="thin-thick-small-gap" w:sz="12"          3.00pt(0.105cm);double
+                w:val="thin-thick-large-gap" w:sz="18"          3.55pt(0.125cm);double
+                w:val="thick-thin-medium-gap" w:sz="24"         4.50pt(0.158cm);double
+                w:val="thin-thick-medium-gap" w:sz="24"         5.05pt(0.178cm);double
+                w:val="thin-thick-small-gap" w:sz="24"          6.00pt(0.211cm);double
+                w:val="thin-thick-medium-gap" w:sz="36"         6.55pt(0.231cm);double
+                w:val="double" w:sz="18"                        7.50pt(0.264cm);double
+                w:val="thin-thick-medium-gap" w:sz="48"         9.00pt(0.317cm);double;style:border-line-width="0.088cm 0.088cm 0.141cm"
+                w:val="double" w:sz="24"                        9.00pt(0.317cm);double;style:border-line-width="0.141cm 0.088cm 0.088cm"
+                we adjust the criteria by adding about 1/2 range of this current criteria and next criteria.  Gary. Yang -->
                 <xsl:variable name="microsoft-border-style-size">
                     <xsl:choose>
                         <xsl:when test=" $border-style = 'solid'">
