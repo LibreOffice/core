@@ -11,7 +11,7 @@ charset = utf-8
 trim_trailing_whitespace = true
 
 # Source code files
-[*.{c,cxx,cpp,h,hxx,hpp,java,py}]
+[*.{c,cxx,cpp,h,hxx,hpp,java,py,xsl}]
 indent_style = space
 indent_size = 4
 
@@ -23,7 +23,3 @@ trim_trailing_whitespace = false
 # Patch files
 [*.patch.*]
 trim_trailing_whitespace = false
-
-# XSL files
-[*.xsl]
-indent_style = tab
