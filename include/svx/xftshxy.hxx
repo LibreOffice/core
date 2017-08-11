@@ -37,7 +37,6 @@ public:
                             XFormTextShadowXValItem(long nVal = 0);
                             XFormTextShadowXValItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 };
 
 /*************************************************************************
@@ -53,7 +52,6 @@ public:
                             XFormTextShadowYValItem(long nVal = 0);
                             XFormTextShadowYValItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 };
 
 #endif
