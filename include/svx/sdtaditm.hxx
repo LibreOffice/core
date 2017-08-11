@@ -35,9 +35,7 @@ enum class SdrTextAniDirection
 class SVX_DLLPUBLIC SdrTextAniDirectionItem: public SfxEnumItem<SdrTextAniDirection> {
 public:
     SdrTextAniDirectionItem(SdrTextAniDirection eDir=SdrTextAniDirection::Left): SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION, eDir) {}
-    SdrTextAniDirectionItem(SvStream& rIn)                           : SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,rIn)  {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16     GetValueCount() const override;
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

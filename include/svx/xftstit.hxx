@@ -35,9 +35,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             XFormTextStartItem(long nStart = 0);
-                            XFormTextStartItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 };
 
 #endif

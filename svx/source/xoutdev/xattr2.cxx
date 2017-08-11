@@ -40,19 +40,9 @@ XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
 {
 }
 
-XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn) :
-    SfxUInt16Item(XATTR_LINETRANSPARENCE, rIn)
-{
-}
-
 SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineTransparenceItem(*this);
-}
-
-SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineTransparenceItem(rIn);
 }
 
 bool XLineTransparenceItem::GetPresentation
@@ -87,24 +77,9 @@ XLineJointItem::XLineJointItem( css::drawing::LineJoint eLineJoint ) :
 {
 }
 
-XLineJointItem::XLineJointItem( SvStream& rIn ) :
-    SfxEnumItem( XATTR_LINEJOINT, rIn )
-{
-}
-
 sal_uInt16 XLineJointItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
-}
-
-SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
-{
-    XLineJointItem* pRet = new XLineJointItem( rIn );
-
-    if(nVer < 1)
-        pRet->SetValue(css::drawing::LineJoint_ROUND);
-
-    return pRet;
 }
 
 SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
@@ -264,24 +239,9 @@ XLineCapItem::XLineCapItem(css::drawing::LineCap eLineCap)
 {
 }
 
-XLineCapItem::XLineCapItem( SvStream& rIn )
-:   SfxEnumItem(XATTR_LINECAP, rIn)
-{
-}
-
 sal_uInt16 XLineCapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
-}
-
-SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
-{
-    XLineCapItem* pRet = new XLineCapItem( rIn );
-
-    if(nVer < 1)
-        pRet->SetValue(css::drawing::LineCap_BUTT);
-
-    return pRet;
 }
 
 SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
@@ -371,19 +331,9 @@ XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
 {
 }
 
-XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn) :
-    SfxUInt16Item(XATTR_FILLTRANSPARENCE, rIn)
-{
-}
-
 SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillTransparenceItem(*this);
-}
-
-SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillTransparenceItem(rIn);
 }
 
 bool XFillTransparenceItem::GetPresentation
@@ -424,19 +374,9 @@ XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparenc
 {
 }
 
-XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn) :
-    SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, rIn)
-{
-}
-
 SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowTranspItem(*this);
-}
-
-SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextShadowTranspItem(rIn);
 }
 
 // class XFillGradientStepCountItem
@@ -446,19 +386,9 @@ XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
 {
 }
 
-XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn ) :
-    SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, rIn )
-{
-}
-
 SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XGradientStepCountItem( *this );
-}
-
-SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XGradientStepCountItem( rIn );
 }
 
 bool XGradientStepCountItem::GetPresentation
@@ -481,19 +411,9 @@ XFillBmpTileItem::XFillBmpTileItem( bool bTile ) :
 {
 }
 
-XFillBmpTileItem::XFillBmpTileItem( SvStream& rIn ) :
-            SfxBoolItem( XATTR_FILLBMP_TILE, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpTileItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpTileItem( *this );
-}
-
-SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpTileItem( rIn );
 }
 
 bool XFillBmpTileItem::GetPresentation
@@ -524,19 +444,9 @@ XFillBmpPosItem::XFillBmpPosItem( RectPoint eRP ) :
 {
 }
 
-XFillBmpPosItem::XFillBmpPosItem( SvStream& rIn ) :
-            SfxEnumItem( XATTR_FILLBMP_POS, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpPosItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpPosItem( *this );
-}
-
-SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpPosItem( rIn );
 }
 
 bool XFillBmpPosItem::GetPresentation
@@ -571,19 +481,9 @@ XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
 {
 }
 
-XFillBmpSizeXItem::XFillBmpSizeXItem( SvStream& rIn ) :
-            SfxMetricItem( XATTR_FILLBMP_SIZEX, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpSizeXItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpSizeXItem( *this );
-}
-
-SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpSizeXItem( rIn );
 }
 
 bool XFillBmpSizeXItem::GetPresentation
@@ -611,19 +511,9 @@ XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
 {
 }
 
-XFillBmpSizeYItem::XFillBmpSizeYItem( SvStream& rIn ) :
-            SfxMetricItem( XATTR_FILLBMP_SIZEY, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpSizeYItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpSizeYItem( *this );
-}
-
-SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpSizeYItem( rIn );
 }
 
 bool XFillBmpSizeYItem::GetPresentation
@@ -650,19 +540,9 @@ XFillBmpSizeLogItem::XFillBmpSizeLogItem( bool bLog ) :
 {
 }
 
-XFillBmpSizeLogItem::XFillBmpSizeLogItem( SvStream& rIn ) :
-            SfxBoolItem( XATTR_FILLBMP_SIZELOG, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpSizeLogItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpSizeLogItem( *this );
-}
-
-SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpSizeLogItem( rIn );
 }
 
 bool XFillBmpSizeLogItem::GetPresentation
@@ -685,19 +565,9 @@ XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
 {
 }
 
-XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( SvStream& rIn ) :
-            SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETX, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpTileOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpTileOffsetXItem( *this );
-}
-
-SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpTileOffsetXItem( rIn );
 }
 
 bool XFillBmpTileOffsetXItem::GetPresentation
@@ -719,19 +589,9 @@ XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
 {
 }
 
-XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( SvStream& rIn ) :
-            SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpTileOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpTileOffsetYItem( *this );
-}
-
-SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpTileOffsetYItem( rIn );
 }
 
 bool XFillBmpTileOffsetYItem::GetPresentation
@@ -751,19 +611,9 @@ XFillBmpStretchItem::XFillBmpStretchItem( bool bStretch ) :
 {
 }
 
-XFillBmpStretchItem::XFillBmpStretchItem( SvStream& rIn ) :
-            SfxBoolItem( XATTR_FILLBMP_STRETCH, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpStretchItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpStretchItem( *this );
-}
-
-SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpStretchItem( rIn );
 }
 
 bool XFillBmpStretchItem::GetPresentation
@@ -793,19 +643,9 @@ XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
 {
 }
 
-XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( SvStream& rIn ) :
-            SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpPosOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpPosOffsetXItem( *this );
-}
-
-SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpPosOffsetXItem( rIn );
 }
 
 bool XFillBmpPosOffsetXItem::GetPresentation
@@ -827,19 +667,9 @@ XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
 {
 }
 
-XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( SvStream& rIn ) :
-            SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, rIn )
-{
-}
-
 SfxPoolItem* XFillBmpPosOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBmpPosOffsetYItem( *this );
-}
-
-SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBmpPosOffsetYItem( rIn );
 }
 
 bool XFillBmpPosOffsetYItem::GetPresentation
@@ -859,19 +689,9 @@ XFillBackgroundItem::XFillBackgroundItem( bool bFill ) :
 {
 }
 
-XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn ) :
-    SfxBoolItem( XATTR_FILLBACKGROUND, rIn )
-{
-}
-
 SfxPoolItem* XFillBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBackgroundItem( *this );
-}
-
-SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillBackgroundItem( rIn );
 }
 
 bool XFillBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/,

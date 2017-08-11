@@ -30,9 +30,7 @@
 class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
     SdrOnOffItem(sal_uInt16 nId, bool bOn): SfxBoolItem(nId,bOn) {}
-    SdrOnOffItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual OUString GetValueTextByVal(bool bVal) const override;
 
