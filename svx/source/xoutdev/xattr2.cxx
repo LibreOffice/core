@@ -40,19 +40,9 @@ XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
 {
 }
 
-XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn) :
-    SfxUInt16Item(XATTR_LINETRANSPARENCE, rIn)
-{
-}
-
 SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineTransparenceItem(*this);
-}
-
-SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineTransparenceItem(rIn);
 }
 
 bool XLineTransparenceItem::GetPresentation
@@ -87,24 +77,9 @@ XLineJointItem::XLineJointItem( css::drawing::LineJoint eLineJoint ) :
 {
 }
 
-XLineJointItem::XLineJointItem( SvStream& rIn ) :
-    SfxEnumItem( XATTR_LINEJOINT, rIn )
-{
-}
-
 sal_uInt16 XLineJointItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
-}
-
-SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
-{
-    XLineJointItem* pRet = new XLineJointItem( rIn );
-
-    if(nVer < 1)
-        pRet->SetValue(css::drawing::LineJoint_ROUND);
-
-    return pRet;
 }
 
 SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
@@ -264,24 +239,9 @@ XLineCapItem::XLineCapItem(css::drawing::LineCap eLineCap)
 {
 }
 
-XLineCapItem::XLineCapItem( SvStream& rIn )
-:   SfxEnumItem(XATTR_LINECAP, rIn)
-{
-}
-
 sal_uInt16 XLineCapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
-}
-
-SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
-{
-    XLineCapItem* pRet = new XLineCapItem( rIn );
-
-    if(nVer < 1)
-        pRet->SetValue(css::drawing::LineCap_BUTT);
-
-    return pRet;
 }
 
 SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
@@ -371,19 +331,9 @@ XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
 {
 }
 
-XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn) :
-    SfxUInt16Item(XATTR_FILLTRANSPARENCE, rIn)
-{
-}
-
 SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillTransparenceItem(*this);
-}
-
-SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillTransparenceItem(rIn);
 }
 
 bool XFillTransparenceItem::GetPresentation
@@ -446,19 +396,9 @@ XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
 {
 }
 
-XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn ) :
-    SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, rIn )
-{
-}
-
 SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XGradientStepCountItem( *this );
-}
-
-SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XGradientStepCountItem( rIn );
 }
 
 bool XGradientStepCountItem::GetPresentation
