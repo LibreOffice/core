@@ -1591,7 +1591,7 @@ DECLARE_RTFEXPORT_TEST(testBinSkipping, "bin-skipping.rtf")
 DECLARE_RTFEXPORT_TEST(testTdf92061, "tdf92061.rtf")
 {
     // This was "C", i.e. part of the footnote ended up in the body text.
-    CPPUNIT_ASSERT_EQUAL(OUString("body-after"), getRun(getParagraph(1), 3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("body-after"), getRun(getParagraph(1), 2)->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf92481, "tdf92481.rtf")

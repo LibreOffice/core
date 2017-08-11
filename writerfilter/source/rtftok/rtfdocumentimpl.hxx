@@ -583,8 +583,6 @@ private:
     /// Buffered table cells, till cell definitions are not reached.
     /// for nested table, one buffer per table level
     std::deque< RTFBuffer_t > m_aTableBufferStack;
-    /// Buffered superscript, till footnote is reached (or not).
-    RTFBuffer_t m_aSuperBuffer;
 
     /// Superstream of this substream.
     RTFDocumentImpl* m_pSuperstream;
@@ -594,6 +592,7 @@ private:
     std::size_t m_nGroupStartPos;
     /// Ignore the first occurrence of this text.
     OUString m_aIgnoreFirst;
+    OUString m_sCustomFootnote;
     /// Bookmark name <-> index map.
     std::map<OUString, int> m_aBookmarks;
     /// Revision index <-> author map.

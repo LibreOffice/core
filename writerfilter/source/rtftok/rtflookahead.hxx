@@ -13,6 +13,7 @@
 #include <memory>
 #include <rtflistener.hxx>
 #include <rtftokenizer.hxx>
+#include <comphelper/string.hxx>
 
 class SvStream;
 
@@ -45,6 +46,18 @@ public:
     void setSkipUnknown(bool bSkipUnknown) override;
     void finishSubstream() override;
     bool isSubstream() const override;
+    sal_Int32 hasChftn()
+    {
+        return m_nHasChftn;
+    }
+    sal_Int32 hasFootnote()
+    {
+        return m_nHasFootnote;
+    }
+    OUString getString(sal_uInt32 nGroup)
+    {
+        return m_aText.size() > nGroup ? m_aText[nGroup].toString() : OUString();
+    }
     bool hasTable()
     {
         return m_bHasTable;
@@ -52,6 +65,14 @@ public:
 private:
     std::shared_ptr<RTFTokenizer> m_pTokenizer;
     SvStream& m_rStream;
+    // Level of the first subgroup that contains a chftn
+    sal_Int32 m_nHasChftn;
+    // Level of the first subgroup that contains a footnote
+    sal_Int32 m_nHasFootnote;
+    // The text at each level.
+    // - currently missing unicode and hex encoded characters
+    // - level 0 text may be incomplete since isSubstream() always returns false.
+    std::vector< OUStringBuffer > m_aText;
     bool m_bHasTable;
 };
 } // namespace rtftok

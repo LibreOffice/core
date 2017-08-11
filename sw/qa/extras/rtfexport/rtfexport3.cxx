@@ -49,6 +49,34 @@ DECLARE_RTFIMPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote Character color", sal_Int32(0xFF0000), getProperty< sal_Int32 >(xFootnote->getAnchor(), "CharColor") );
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf109382_customFootnotes, "tdf109382_customFootnotes.rtf")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XFootnote> xFootnote;
+
+    xFootnotes->getByIndex(0) >>= xFootnote;
+    CPPUNIT_ASSERT_EQUAL( OUString("CUSTOM"), xFootnote->getAnchor()->getString() );
+    xFootnotes->getByIndex(1) >>= xFootnote;
+    CPPUNIT_ASSERT_EQUAL( OUString("X"), xFootnote->getAnchor()->getString() );
+
+    uno::Reference<text::XText> xFootnoteText;
+    xFootnotes->getByIndex(1) >>= xFootnoteText;
+    CPPUNIT_ASSERT_EQUAL( OUString("X - single character anchor"), xFootnoteText->getString() );
+
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes(xEndnotesSupplier->getEndnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XFootnote> xEndnote;
+
+    xEndnotes->getByIndex(0) >>= xEndnote;
+    CPPUNIT_ASSERT_EQUAL( OUString("FANCY"), xEndnote->getAnchor()->getString() );
+    xEndnotes->getByIndex(1) >>= xEndnote;
+    CPPUNIT_ASSERT_EQUAL( OUString("Y"), xEndnote->getAnchor()->getString() );
+
+    uno::Reference<text::XText> xEndnoteText;
+    xEndnotes->getByIndex(1) >>= xEndnoteText;
+    CPPUNIT_ASSERT_EQUAL( OUString("Y - simple custom endnote"), xEndnoteText->getString() );
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
