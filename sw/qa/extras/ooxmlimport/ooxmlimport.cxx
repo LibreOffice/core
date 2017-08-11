@@ -62,7 +62,6 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <test/mtfxmldump.hxx>
 
 class Test : public SwModelTestBase
