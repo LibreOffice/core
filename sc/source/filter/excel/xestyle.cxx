@@ -54,6 +54,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
@@ -3138,7 +3139,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
             "styles.xml",
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" );
+            rtl::OUStringToOString(oox::getRelationship(Relationship::STYLES), RTL_TEXTENCODING_UTF8).getStr());
     rStrm.PushStream( aStyleSheet );
 
     aStyleSheet->startElement( XML_styleSheet,
