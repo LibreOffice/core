@@ -49,12 +49,6 @@ class SbxVariableImpl
     SbxVariableImpl()
         : m_pComListenerParentBasic( nullptr )
     {}
-    SbxVariableImpl( const SbxVariableImpl& r )
-        : m_aDeclareClassName( r.m_aDeclareClassName )
-        , m_xComListener( r.m_xComListener )
-        , m_pComListenerParentBasic( r.m_pComListenerParentBasic )
-    {
-    }
 };
 
 

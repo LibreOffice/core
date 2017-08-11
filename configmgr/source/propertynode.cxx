@@ -81,13 +81,6 @@ void PropertyNode::setExternal(int layer, OUString const & descriptor) {
     externalDescriptor_ = descriptor;
 }
 
-
-PropertyNode::PropertyNode(PropertyNode const & other):
-    Node(other), staticType_(other.staticType_), nillable_(other.nillable_),
-    extension_(other.extension_), externalDescriptor_(other.externalDescriptor_),
-    value_(other.value_)
-{}
-
 PropertyNode::~PropertyNode() {}
 
 Node::Kind PropertyNode::kind() const {

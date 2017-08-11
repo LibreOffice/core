@@ -49,7 +49,7 @@ public:
     void setValue(int layer, css::uno::Any const & value);
 
 private:
-    LocalizedValueNode(LocalizedValueNode const & other);
+    LocalizedValueNode(LocalizedValueNode const&) = default;
 
     virtual ~LocalizedValueNode() override;
 

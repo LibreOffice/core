@@ -141,7 +141,6 @@ struct AxisProperties final
 
     AxisProperties( const css::uno::Reference< css::chart2::XAxis >& xAxisModel
                   , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
-    AxisProperties( const AxisProperties& rAxisProperties );
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 

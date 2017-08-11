@@ -53,10 +53,6 @@ void LocalizedValueNode::setValue(int layer, css::uno::Any const & value)
         value_ = value;
 }
 
-LocalizedValueNode::LocalizedValueNode(LocalizedValueNode const & other):
-    Node(other), value_(other.value_)
-{}
-
 LocalizedValueNode::~LocalizedValueNode() {}
 
 Node::Kind LocalizedValueNode::kind() const {

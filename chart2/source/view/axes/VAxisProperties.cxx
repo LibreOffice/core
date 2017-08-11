@@ -177,36 +177,6 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
 {
 }
 
-AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
-    : m_xAxisModel( rAxisProperties.m_xAxisModel )
-    , m_nDimensionIndex( rAxisProperties.m_nDimensionIndex )
-    , m_bIsMainAxis( rAxisProperties.m_bIsMainAxis )
-    , m_bSwapXAndY( rAxisProperties.m_bSwapXAndY )
-    , m_eCrossoverType( rAxisProperties.m_eCrossoverType )
-    , m_eLabelPos( rAxisProperties.m_eLabelPos )
-    , m_eTickmarkPos( rAxisProperties.m_eTickmarkPos )
-    , m_bCrossingAxisHasReverseDirection( rAxisProperties.m_bCrossingAxisHasReverseDirection )
-    , m_bCrossingAxisIsCategoryAxes( rAxisProperties.m_bCrossingAxisIsCategoryAxes )
-    , maLabelAlignment( rAxisProperties.maLabelAlignment )
-    , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
-    , m_bTryStaggeringFirst( rAxisProperties.m_bTryStaggeringFirst )
-    , m_nNumberFormatKey( rAxisProperties.m_nNumberFormatKey )
-    , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
-    , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
-    , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
-    , m_aLineProperties( rAxisProperties.m_aLineProperties )
-    //for category axes
-    , m_nAxisType( rAxisProperties.m_nAxisType )
-    , m_bComplexCategories( rAxisProperties.m_bComplexCategories )
-    , m_pExplicitCategoriesProvider( rAxisProperties.m_pExplicitCategoriesProvider )
-    , m_xAxisTextProvider( rAxisProperties.m_xAxisTextProvider )
-{
-    if( rAxisProperties.m_pfMainLinePositionAtOtherAxis )
-        m_pfMainLinePositionAtOtherAxis.reset(*rAxisProperties.m_pfMainLinePositionAtOtherAxis);
-    if( rAxisProperties.m_pfExrtaLinePositionAtOtherAxis )
-        m_pfExrtaLinePositionAtOtherAxis.reset(*rAxisProperties.m_pfExrtaLinePositionAtOtherAxis);
-}
-
 LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_RIGHT );
