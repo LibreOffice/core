@@ -1056,7 +1056,6 @@ void Document::retrieveRunAttributesImpl(
     ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
     ::TextPaM aPaM( nNumber, Index );
         // XXX  numeric overflow
-    // FIXME  TEXTATTR_HYPERLINK ignored:
     ::TextAttribFontColor const * pColor
           = static_cast< ::TextAttribFontColor const * >(
               m_rEngine.FindAttrib( aPaM, TEXTATTR_FONTCOLOR ) );

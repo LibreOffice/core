@@ -89,35 +89,6 @@ bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
                 ( meWeight == static_cast<const TextAttribFontWeight&>(rAttr).meWeight ) );
 }
 
-TextAttribHyperLink::TextAttribHyperLink( const TextAttribHyperLink& rAttr )
-    : TextAttrib( rAttr ), maURL( rAttr.maURL ), maDescription( rAttr.maDescription )
-{
-    maColor = rAttr.maColor;
-}
-
-TextAttribHyperLink::~TextAttribHyperLink()
-{
-}
-
-void TextAttribHyperLink::SetFont( vcl::Font& rFont ) const
-{
-    rFont.SetColor( maColor );
-    rFont.SetUnderline( LINESTYLE_SINGLE );
-}
-
-TextAttrib* TextAttribHyperLink::Clone() const
-{
-    return new TextAttribHyperLink( *this );
-}
-
-bool TextAttribHyperLink::operator==( const TextAttrib& rAttr ) const
-{
-    return ( ( TextAttrib::operator==(rAttr ) ) &&
-                ( maURL == static_cast<const TextAttribHyperLink&>(rAttr).maURL ) &&
-                ( maDescription == static_cast<const TextAttribHyperLink&>(rAttr).maDescription ) &&
-                ( maColor == static_cast<const TextAttribHyperLink&>(rAttr).maColor ) );
-}
-
 TextAttribProtect::TextAttribProtect() :
     TextAttrib( TEXTATTR_PROTECTED )
 {
