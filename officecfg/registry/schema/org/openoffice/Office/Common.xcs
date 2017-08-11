@@ -573,52 +573,6 @@
         <value>10000</value>
       </prop>
     </group>
-    <group oor:name="LogicalGraphicSize">
-      <info>
-        <desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-      </info>
-      <prop oor:name="LogicalWidth" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the logical width of a graphic.
-          [UNIT=1/100 mm].</desc>
-        </info>
-        <constraints>
-          <minInclusive oor:value="100">
-            <info>
-              <desc>Represents the lowest value that can be entered in the
-              dialog.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="99999">
-            <info>
-              <desc>Represents the highest value that can be entered in the
-              dialog.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>10000</value>
-      </prop>
-      <prop oor:name="LogicalHeight" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
-        </info>
-        <constraints>
-          <minInclusive oor:value="100">
-            <info>
-              <desc>Represents the lowest value that can be entered in the
-              dialog.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="99999">
-            <info>
-              <desc>Represents the highest value that can be entered in the
-              dialog.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>10000</value>
-      </prop>
-    </group>
     <group oor:name="ObjectNames">
       <info>
         <deprecated>Replaced by
