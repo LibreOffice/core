@@ -653,6 +653,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                         CFRelease(localizedMultiLabel);
                         multiLabel = OUStringToCFString(multiLabelString);
                         hdr.reset(createHeaderForProperty(multiType, multiValue, multiLabel));
+                        CFRelease(multiLabel);
                         if (!hdr)
                             hdr = o3tl::make_unique<MacabHeader>();
                         multiLengthSecondLevel += hdr->getSize();
