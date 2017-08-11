@@ -383,6 +383,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/condformat/condformatdlgitem \
     sc/source/ui/condformat/condformathelper \
     sc/source/ui/condformat/colorformat \
+    sc/source/ui/dataprovider/csvdataprovider \
+    sc/source/ui/dataprovider/dataprovider \
     sc/source/ui/dbgui/asciiopt \
     sc/source/ui/dbgui/consdlg \
     sc/source/ui/dbgui/csvcontrol \
@@ -418,7 +420,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/docshell/docsh8 \
     sc/source/ui/docshell/documentlinkmgr \
     sc/source/ui/docshell/editable \
-    sc/source/ui/docshell/dataprovider \
     sc/source/ui/docshell/externalrefmgr \
     sc/source/ui/docshell/impex \
     sc/source/ui/docshell/macromgr \
