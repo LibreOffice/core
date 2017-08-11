@@ -3012,6 +3012,7 @@ void DomainMapper::lcl_startParagraphGroup()
 
 void DomainMapper::lcl_endParagraphGroup()
 {
+    SAL_DEBUG("ending para group");
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     if (m_pImpl->hasTableManager())
        m_pImpl->getTableManager().endParagraphGroup();
@@ -3121,6 +3122,7 @@ void DomainMapper::lcl_startCharacterGroup()
 
 void DomainMapper::lcl_endCharacterGroup()
 {
+    SAL_DEBUG("ending char group");
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
 }
 

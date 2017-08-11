@@ -1625,7 +1625,9 @@ void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
 
 void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 {
-    if (nToken == Token_t(NMSP_wps | XML_wsp) || nToken == Token_t(NMSP_dmlPicture | XML_pic))
+    if (nToken == Token_t(NMSP_wps | XML_wsp)
+        || nToken == Token_t(NMSP_wpg | XML_wgp)
+        || nToken == Token_t(NMSP_dmlPicture | XML_pic))
     {
         // drawingML shapes are independent, <wps:bodyPr> is not parsed after
         // shape contents without pushing/popping the stack.
@@ -1714,8 +1716,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
     bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
-    // drawingML version also counts as a group shape.
-    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
+    // // drawingML version also counts as a group shape.
+    // bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
 
     switch (oox::getNamespace(Element))
     {
@@ -1728,23 +1730,31 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
         default:
             if (!xContextHandler.is())
             {
-                if (mrShapeContext.is())
+                if (mrShapeContext.is() )
                 {
-                    uno::Reference<XFastContextHandler> pChildContext =
-                        mrShapeContext->createFastChildContext(Element, Attribs);
-
-                    OOXMLFastContextHandlerWrapper * pWrapper =
-                        new OOXMLFastContextHandlerWrapper(this, pChildContext);
-
-                    if (!bGroupShape)
+                    if (Element == Token_t(NMSP_wps | XML_wsp) )
                     {
-                        pWrapper->addNamespace(NMSP_doc);
-                        pWrapper->addNamespace(NMSP_vmlWord);
-                        pWrapper->addNamespace(NMSP_vmlOffice);
-                        pWrapper->addToken( NMSP_vml|XML_textbox );
+                        // wsp inside group -> create nested shape parser
+                        xContextHandler.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
                     }
+                    else
+                    {
+                        uno::Reference<XFastContextHandler> pChildContext =
+                            mrShapeContext->createFastChildContext(Element, Attribs);
 
-                    xContextHandler.set(pWrapper);
+                        OOXMLFastContextHandlerWrapper * pWrapper =
+                            new OOXMLFastContextHandlerWrapper(this, pChildContext);
+
+                        if (!bGroupShape)
+                        {
+                            pWrapper->addNamespace(NMSP_doc);
+                            pWrapper->addNamespace(NMSP_vmlWord);
+                            pWrapper->addNamespace(NMSP_vmlOffice);
+                            pWrapper->addToken( NMSP_vml|XML_textbox );
+                        }
+
+                        xContextHandler.set(pWrapper);
+                    }
                 }
                 else
                     xContextHandler.set(this);
