@@ -37,7 +37,6 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <list>
 #include <memory>
 #include <vector>
 #include <set>
