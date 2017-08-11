@@ -794,18 +794,6 @@
         <value>true</value>
       </prop>
     </group>
-    <group oor:name="ProductVersionID">
-      <info>
-        <desc>Stores registration data which is related to a specific product
-        version.</desc>
-      </info>
-      <prop oor:name="InstanceUUID" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>An instance UUID associated with the product version ID.</desc>
-        </info>
-        <value/>
-      </prop>
-    </group>
     <group oor:name="PersonasEntry">
       <info>
         <desc>Stores the details of the installed personas.</desc>
