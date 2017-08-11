@@ -619,25 +619,6 @@
         <value>10000</value>
       </prop>
     </group>
-    <group oor:name="ObjectNames">
-      <info>
-        <deprecated>Replaced by
-        org.openoffice.Office.Embedding/ObjectName.</deprecated>
-        <desc>Deprecated</desc>
-      </info>
-      <prop oor:name="Name" oor:type="xs:string" oor:localized="true">
-        <info>
-          <deprecated/>
-          <desc>Deprecated</desc>
-        </info>
-      </prop>
-      <prop oor:name="Key" oor:type="xs:string">
-        <info>
-          <deprecated/>
-          <desc>Deprecated</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="RecoveryEntry">
       <info>
         <desc>Specifies an entry of the recovery list which is then used by
