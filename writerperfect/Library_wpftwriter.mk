@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/exp/txtparai \
 	writerperfect/source/writer/exp/xmlictxt \
 	writerperfect/source/writer/exp/xmlimp \
+	writerperfect/source/writer/exp/xmlmetai \
 	writerperfect/source/writer/exp/xmltext \
 ))
 
