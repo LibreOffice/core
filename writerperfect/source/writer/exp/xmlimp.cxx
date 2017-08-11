@@ -9,6 +9,9 @@
 
 #include "xmlimp.hxx"
 
+#include "xmlictxt.hxx"
+#include "xmltext.hxx"
+
 using namespace com::sun::star;
 
 namespace writerperfect
@@ -16,9 +19,63 @@ namespace writerperfect
 namespace exp
 {
 
+/// Handler for <office:body>.
+class XMLBodyContext : public XMLImportContext
+{
+public:
+    XMLBodyContext(XMLImport &rImport);
+
+    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
+};
+
+XMLBodyContext::XMLBodyContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+XMLImportContext *XMLBodyContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    if (rName == "office:text")
+        return new XMLBodyContentContext(mrImport);
+    return nullptr;
+}
+
+/// Handler for <office:document>.
+class XMLOfficeDocContext : public XMLImportContext
+{
+public:
+    XMLOfficeDocContext(XMLImport &rImport);
+
+    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
+};
+
+XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+XMLImportContext *XMLOfficeDocContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    if (rName == "office:body")
+        return new XMLBodyContext(mrImport);
+    return nullptr;
+}
+
 XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator)
     : mrGenerator(rGenerator)
 {
+}
+
+XMLImportContext *XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    if (rName == "office:document")
+        return new XMLOfficeDocContext(*this);
+    return nullptr;
+}
+
+librevenge::RVNGTextInterface &XMLImport::GetGenerator() const
+{
+    return mrGenerator;
 }
 
 void XMLImport::startDocument()
@@ -31,31 +88,38 @@ void XMLImport::endDocument()
     mrGenerator.endDocument();
 }
 
-void XMLImport::startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLImport::startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
 {
-    if (rName == "text:p")
+    rtl::Reference<XMLImportContext> xContext;
+    if (!maContexts.empty())
     {
-        mrGenerator.openParagraph(librevenge::RVNGPropertyList());
-        mbParagraphOpened = true;
+        if (maContexts.top().is())
+            xContext = maContexts.top()->CreateChildContext(rName, xAttribs);
     }
+    else
+        xContext = CreateContext(rName, xAttribs);
+
+    if (xContext.is())
+        xContext->startElement(rName, xAttribs);
+
+    maContexts.push(xContext);
 }
 
 void XMLImport::endElement(const OUString &rName)
 {
-    if (rName == "text:p")
-    {
-        mrGenerator.closeParagraph();
-        mbParagraphOpened = false;
-    }
+    if (maContexts.empty())
+        return;
+
+    if (maContexts.top().is())
+        maContexts.top()->endElement(rName);
+
+    maContexts.pop();
 }
 
 void XMLImport::characters(const OUString &rChars)
 {
-    if (mbParagraphOpened)
-    {
-        OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
-        mrGenerator.insertText(librevenge::RVNGString(sCharU8.getStr()));
-    }
+    if (maContexts.top().is())
+        maContexts.top()->characters(rChars);
 }
 
 void XMLImport::ignorableWhitespace(const OUString &/*rWhitespaces*/)
@@ -64,12 +128,10 @@ void XMLImport::ignorableWhitespace(const OUString &/*rWhitespaces*/)
 
 void XMLImport::processingInstruction(const OUString &/*rTarget*/, const OUString &/*rData*/)
 {
-    SAL_WARN("writerperfect", "XMLImport::processingInstruction: implement me");
 }
 
 void XMLImport::setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &/*xLocator*/)
 {
-    SAL_WARN("writerperfect", "XMLImport::setDocumentLocator: implement me");
 }
 
 } // namespace exp

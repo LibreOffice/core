@@ -7,41 +7,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLIMP_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLIMP_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLICTXT_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLICTXT_HXX
 
-#include <memory>
-#include <stack>
+#include <cppuhelper/implbase.hxx>
 
 #include <librevenge/librevenge.h>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-
-#include <cppuhelper/implbase.hxx>
-#include <rtl/ref.hxx>
 
 namespace writerperfect
 {
 namespace exp
 {
 
-class XMLImportContext;
+class XMLImport;
 
-/// ODT export feeds this class to make librevenge calls.
-class XMLImport : public cppu::WeakImplHelper
+/// Base class for a handler of a single XML element during ODF -> librevenge conversion.
+class XMLImportContext : public cppu::WeakImplHelper
     <
     css::xml::sax::XDocumentHandler
     >
 {
-    librevenge::RVNGTextInterface &mrGenerator;
-    std::stack< rtl::Reference<XMLImportContext> > maContexts;
-
 public:
-    XMLImport(librevenge::RVNGTextInterface &rGenerator);
+    XMLImportContext(XMLImport &rImport);
 
-    XMLImportContext *CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
-
-    librevenge::RVNGTextInterface &GetGenerator() const;
+    virtual XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;
@@ -52,6 +43,9 @@ public:
     void SAL_CALL ignorableWhitespace(const OUString &rWhitespaces) override;
     void SAL_CALL processingInstruction(const OUString &rTarget, const OUString &rData) override;
     void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator> &xLocator) override;
+
+protected:
+    XMLImport &mrImport;
 };
 
 } // namespace exp
