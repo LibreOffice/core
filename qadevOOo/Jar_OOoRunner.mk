@@ -606,7 +606,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XDataPilotField \
     qadevOOo/tests/java/ifc/sheet/_XDataPilotFieldGrouping \
     qadevOOo/tests/java/ifc/sheet/_XDataPilotTable \
-    qadevOOo/tests/java/ifc/sheet/_XDataPilotTable2 \
     qadevOOo/tests/java/ifc/sheet/_XDataPilotTables \
     qadevOOo/tests/java/ifc/sheet/_XDataPilotTablesSupplier \
     qadevOOo/tests/java/ifc/sheet/_XDDELink \
