@@ -63,7 +63,6 @@ inline SfxBoolItem makeSvx3DDoubleSidedItem(bool bVal) {
 class Svx3DReducedLineGeometryItem : public SfxBoolItem {
 public:
     Svx3DReducedLineGeometryItem(bool bVal = false);
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
     SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 };
@@ -284,7 +283,6 @@ public:
 class Svx3DSmoothNormalsItem : public SfxBoolItem {
 public:
     Svx3DSmoothNormalsItem(bool bVal = true);
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
     SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 };
@@ -293,7 +291,6 @@ public:
 class Svx3DSmoothLidsItem : public SfxBoolItem {
 public:
     Svx3DSmoothLidsItem(bool bVal = false);
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
     SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 };
@@ -302,7 +299,6 @@ public:
 class Svx3DCharacterModeItem : public SfxBoolItem {
 public:
     Svx3DCharacterModeItem(bool bVal = false);
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const override;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
     SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 };
@@ -311,7 +307,6 @@ public:
 class SVX_DLLPUBLIC Svx3DCloseFrontItem : public SfxBoolItem {
 public:
     Svx3DCloseFrontItem(bool bVal = true);
-    SVX_DLLPRIVATE virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const override;
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
     SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 };
@@ -320,7 +315,6 @@ public:
 class SVX_DLLPUBLIC Svx3DCloseBackItem : public SfxBoolItem {
 public:
     Svx3DCloseBackItem(bool bVal = true);
-    SVX_DLLPRIVATE virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const override;
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const override;
     SfxPoolItem * Clone(SfxItemPool * = nullptr) const override;
 };

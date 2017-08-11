@@ -39,21 +39,9 @@ SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
 }
 
 
-SvxChartTextOrderItem::SvxChartTextOrderItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxEnumItem(nId, rIn)
-{
-}
-
-
 SfxPoolItem* SvxChartTextOrderItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartTextOrderItem(*this);
-}
-
-
-SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SvxChartTextOrderItem(rIn, Which());
 }
 
 
@@ -165,21 +153,9 @@ SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,
 }
 
 
-SvxChartKindErrorItem::SvxChartKindErrorItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxEnumItem(nId, rIn)
-{
-}
-
-
 SfxPoolItem* SvxChartKindErrorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartKindErrorItem(*this);
-}
-
-
-SfxPoolItem* SvxChartKindErrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SvxChartKindErrorItem(rIn, Which());
 }
 
 
@@ -197,21 +173,9 @@ SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
 }
 
 
-SvxChartIndicateItem::SvxChartIndicateItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxEnumItem(nId, rIn)
-{
-}
-
-
 SfxPoolItem* SvxChartIndicateItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartIndicateItem(*this);
-}
-
-
-SfxPoolItem* SvxChartIndicateItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SvxChartIndicateItem(rIn, Which());
 }
 
 
@@ -229,21 +193,9 @@ SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
 }
 
 
-SvxChartRegressItem::SvxChartRegressItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxEnumItem(nId, rIn)
-{
-}
-
-
 SfxPoolItem* SvxChartRegressItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxChartRegressItem(*this);
-}
-
-
-SfxPoolItem* SvxChartRegressItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SvxChartRegressItem(rIn, Which());
 }
 
 
