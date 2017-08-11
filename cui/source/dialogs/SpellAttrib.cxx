@@ -32,18 +32,6 @@ SpellErrorAttrib::SpellErrorAttrib( const SpellErrorDescription& rDesc ) :
 }
 
 
-SpellErrorAttrib::SpellErrorAttrib( const SpellErrorAttrib& rAttr ) :
-    TextAttrib(TEXTATTR_SPELL_ERROR),
-    m_aSpellErrorDescription( rAttr.m_aSpellErrorDescription )
-{
-}
-
-
-SpellErrorAttrib::~SpellErrorAttrib()
-{
-}
-
-
 void SpellErrorAttrib::SetFont( vcl::Font&  ) const
 {
     //this attribute doesn't have a visual effect
@@ -70,18 +58,6 @@ SpellLanguageAttrib::SpellLanguageAttrib(LanguageType eLang) :
 }
 
 
-SpellLanguageAttrib::SpellLanguageAttrib( const SpellLanguageAttrib& rAttr ) :
-    TextAttrib(TEXTATTR_SPELL_LANGUAGE),
-    m_eLanguage(rAttr.m_eLanguage)
-{
-}
-
-
-SpellLanguageAttrib::~SpellLanguageAttrib()
-{
-}
-
-
 void SpellLanguageAttrib::SetFont( vcl::Font&  ) const
 {
     //no visual effect
@@ -104,18 +80,6 @@ bool SpellLanguageAttrib::operator==( const TextAttrib& rAttr ) const
 SpellBackgroundAttrib::SpellBackgroundAttrib(const Color& rCol) :
     TextAttrib(TEXTATTR_SPELL_BACKGROUND),
     m_aBackgroundColor(rCol)
-{
-}
-
-
-SpellBackgroundAttrib::SpellBackgroundAttrib( const SpellBackgroundAttrib& rAttr ) :
-    TextAttrib(TEXTATTR_SPELL_BACKGROUND),
-    m_aBackgroundColor(rAttr.m_aBackgroundColor)
-{
-}
-
-
-SpellBackgroundAttrib::~SpellBackgroundAttrib()
 {
 }
 

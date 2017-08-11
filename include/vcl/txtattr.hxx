@@ -39,11 +39,11 @@ namespace vcl { class Font; }
 class VCL_DLLPUBLIC TextAttrib
 {
 private:
-    sal_uInt16                  mnWhich;
+    sal_uInt16 const        mnWhich;
 
 protected:
-                            TextAttrib( sal_uInt16 nWhich ) { mnWhich = nWhich; }
-                            TextAttrib( const TextAttrib& rAttr ) { mnWhich = rAttr.mnWhich; }
+                            TextAttrib( sal_uInt16 nWhich ) : mnWhich(nWhich) {}
+                            TextAttrib( const TextAttrib& rAttr ) = default;
 
 public:
 
@@ -66,8 +66,6 @@ private:
 
 public:
                             TextAttribFontColor( const Color& rColor );
-                            TextAttribFontColor( const TextAttribFontColor& rAttr );
-                            virtual ~TextAttribFontColor() override;
 
     const Color&            GetColor() const { return maColor; }
 
@@ -84,8 +82,6 @@ private:
 
 public:
                             TextAttribFontWeight( FontWeight eWeight );
-                            TextAttribFontWeight( const TextAttribFontWeight& rAttr );
-                            virtual ~TextAttribFontWeight() override;
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
     virtual TextAttrib*     Clone() const override;
@@ -98,8 +94,6 @@ class VCL_DLLPUBLIC TextAttribProtect : public TextAttrib
 {
 public:
                             TextAttribProtect();
-                            TextAttribProtect( const TextAttribProtect& rAttr );
-                            virtual ~TextAttribProtect() override;
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
     virtual TextAttrib*     Clone() const override;
@@ -116,13 +110,9 @@ private:
     sal_Int32       mnStart;
     sal_Int32       mnEnd;
 
-protected:
-
 public:
-
                     TextCharAttrib( const TextAttrib& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
                     TextCharAttrib( const TextCharAttrib& rTextCharAttrib );
-                    ~TextCharAttrib();
 
     const TextAttrib&   GetAttr() const         { return *mpAttr; }
 
