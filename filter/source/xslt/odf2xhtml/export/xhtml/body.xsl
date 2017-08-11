@@ -646,7 +646,7 @@
 		<xsl:choose>
 			<!-- OOo writes out empty paragraphs layouted behind the image,
 				those have to be neglected in HTML
-			<xsl:when test="name() = 'text:p' and (normalize-space($childText) = '')">                         -->
+			<xsl:when test="name() = 'text:p' and (normalize-space($childText) = '')"> -->
 				<!-- WorkAround: Test if the empty paragraph was added after an image, which OOO often does -->
 			<xsl:when test="(name($precedingElement) = 'text:p' and not($precedingElement/text()) and not($precedingElement/*))">
 				<xsl:call-template name="follows-empty-paragraphs-and-image">
@@ -1075,47 +1075,47 @@
 			<xsl:value-of select="$elem-name"/>' is a draw:frame.
 		</xsl:comment>
 		<xsl:element name="{$elem-name}">
-		  <xsl:choose>
-		    <xsl:when test="draw:object/math:math">
-		      <!-- draw:frame elements contain many data that are not
-			   relevant for mathematical formulas and that may
-			   cause incorrect rendering. Let's ignore the
-			   replacement image and keep only the id attribute.
-			   See fdo#66645 -->
-		      <xsl:apply-templates select="@draw:name"/>
-		      <xsl:text> </xsl:text>
-		      <xsl:apply-templates select="draw:object[1]"/>
-		      <!-- TODO: do not always add a space after the formula,
-			   for example when it is followed by a comma, period,
-			   dash etc This will probably require using regexp
-			   features like xsl:analyze-string -->
-		      <xsl:text> </xsl:text>
-		    </xsl:when>
-		    <xsl:otherwise>
-			<xsl:attribute name="style">
-				<xsl:call-template name="widthAndHeight"/>
-				<xsl:text> padding:0; </xsl:text>
-				<xsl:if test="@text:anchor-type!='as-char'">
-					<!-- all images float (CSS float reltaive) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->
-					<xsl:text> float:left; position:relative; left:</xsl:text>
-					<xsl:value-of select="$leftPosition"/>
-					<xsl:text>cm; </xsl:text>
-					<!-- if the frame is anchored on a char -->
-					<xsl:if test="@text:anchor-type='char'">
-						<xsl:text>top:</xsl:text>
-						<xsl:value-of select="$svgY"/>
+			<xsl:choose>
+				<xsl:when test="draw:object/math:math">
+					<!-- draw:frame elements contain many data that are not
+					relevant for mathematical formulas and that may
+					cause incorrect rendering. Let's ignore the
+					replacement image and keep only the id attribute.
+					See fdo#66645 -->
+					<xsl:apply-templates select="@draw:name"/>
+						<xsl:text> </xsl:text>
+					<xsl:apply-templates select="draw:object[1]"/>
+					<!-- TODO: do not always add a space after the formula,
+					for example when it is followed by a comma, period,
+					dash etc This will probably require using regexp
+					features like xsl:analyze-string -->
+					<xsl:text> </xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:attribute name="style">
+					<xsl:call-template name="widthAndHeight"/>
+					<xsl:text> padding:0; </xsl:text>
+					<xsl:if test="@text:anchor-type!='as-char'">
+						<!-- all images float (CSS float reltaive) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->
+						<xsl:text> float:left; position:relative; left:</xsl:text>
+						<xsl:value-of select="$leftPosition"/>
 						<xsl:text>cm; </xsl:text>
+						<!-- if the frame is anchored on a char -->
+						<xsl:if test="@text:anchor-type='char'">
+							<xsl:text>top:</xsl:text>
+							<xsl:value-of select="$svgY"/>
+							<xsl:text>cm; </xsl:text>
+						</xsl:if>
 					</xsl:if>
-				</xsl:if>
-			</xsl:attribute>
-			<xsl:apply-templates select="@*">
-				<xsl:with-param name="globalData" select="$globalData"/>
-			</xsl:apply-templates>
-			<xsl:apply-templates select="node()">
-				<xsl:with-param name="globalData" select="$globalData"/>
-			</xsl:apply-templates>
-		    </xsl:otherwise>
-		  </xsl:choose>
+				</xsl:attribute>
+				<xsl:apply-templates select="@*">
+					<xsl:with-param name="globalData" select="$globalData"/>
+				</xsl:apply-templates>
+				<xsl:apply-templates select="node()">
+					<xsl:with-param name="globalData" select="$globalData"/>
+				</xsl:apply-templates>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:element>
 	</xsl:template>
 

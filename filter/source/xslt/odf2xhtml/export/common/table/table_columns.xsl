@@ -216,18 +216,16 @@
 			DebugInformation: For each 'table:table-column' of the 'allTableColumns' variable the style-name is given out.
 							  In case of table:visibility attribute unequal 'visible' the 'column is hidden' no text is given out.
 			</xsl:text>
-				<xsl:for-each select="$allTableColumns/table:table-column">
+			<xsl:for-each select="$allTableColumns/table:table-column">
 				<xsl:choose>
-				<xsl:when test="@table:visibility = 'collapse' or @table:visibility = 'filter' ">
-			<xsl:text>  </xsl:text><xsl:value-of select="@table:style-name" /><xsl:text>column is hidden</xsl:text><xsl:text>
-			</xsl:text>
-				</xsl:when>
-				<xsl:otherwise>
-			<xsl:text>  </xsl:text><xsl:value-of select="@table:style-name" /><xsl:text> </xsl:text><xsl:value-of select="@table:default-cell-style-name" /><xsl:text>
-			</xsl:text>
-				</xsl:otherwise>
+					<xsl:when test="@table:visibility = 'collapse' or @table:visibility = 'filter' ">
+						<xsl:text>  </xsl:text><xsl:value-of select="@table:style-name" /><xsl:text>column is hidden</xsl:text><xsl:text></xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>  </xsl:text><xsl:value-of select="@table:style-name" /><xsl:text> </xsl:text><xsl:value-of select="@table:default-cell-style-name" /><xsl:text></xsl:text>
+					</xsl:otherwise>
 				</xsl:choose>
-						   </xsl:for-each>
+			</xsl:for-each>
 	</xsl:template>
 	<!--debugEnabled-END-->
 

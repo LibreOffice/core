@@ -151,7 +151,7 @@
 			<xsl:apply-templates select="@* | node()">
 				<xsl:with-param name="globalData" select="$globalData"/>
 			</xsl:apply-templates>
-				
+
 		</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -170,13 +170,13 @@
 			</xsl:choose>
         </xsl:attribute>
     </xsl:template>
-    
+
 	<xsl:template match="text:sequence">
 		<xsl:param name="globalData"/>
 
 		<xsl:element namespace="{$namespace}" name="a">
 			<xsl:apply-templates select="@*" />
-			<xsl:attribute name="id">			
+			<xsl:attribute name="id">
 				<xsl:choose>
 					<xsl:when test="number(substring(@text:ref-name,1,1))">
 					<!-- Heuristic: If the first character is a number a 'a_' will be set
@@ -186,7 +186,7 @@
 					<xsl:otherwise>
 						<xsl:value-of select="translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
 					</xsl:otherwise>
-				</xsl:choose>			
+				</xsl:choose>
 			</xsl:attribute>
 		</xsl:element>
 
@@ -210,7 +210,7 @@
 					<xsl:otherwise>
 						<xsl:value-of select="translate(@text:name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
 					</xsl:otherwise>
-				</xsl:choose>					
+				</xsl:choose>
 			</xsl:attribute>
 		</xsl:element>
 
@@ -256,60 +256,59 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 
-   
-    <xsl:template match="office:annotation">
-        <xsl:element name="span">
-            <xsl:attribute name="title">annotation</xsl:attribute>       
-            <xsl:attribute name="class">annotation_style_by_filter</xsl:attribute>                    
-            <xsl:apply-templates select="@*" />
-            <br/>            
-            <xsl:text>[ANNOTATION:</xsl:text>
-            <br/>
-            <xsl:apply-templates select="*" mode="annotation"/>
-            <xsl:text>]</xsl:text>           
-        </xsl:element>
-    </xsl:template>
-    
-    <xsl:template match="text:p" mode="annotation">
-        <br/>    
-        <xsl:element name="span">
-            <xsl:text>NOTE: '</xsl:text>            
-            <xsl:apply-templates />
-            <xsl:text>'</xsl:text>                        
-        </xsl:element>
-    </xsl:template>
-        
-    <xsl:template match="dc:creator" mode="annotation">
-        <br/>     
-        <xsl:element name="span">
-            <xsl:attribute name="title">dc:creator</xsl:attribute>  
-            <xsl:text>BY '</xsl:text>            
-            <xsl:apply-templates />
-            <xsl:text>'</xsl:text>
-        </xsl:element>   
-    </xsl:template>
-    
-    <xsl:template match="dc:date" mode="annotation">  
-        <br/>     
-        <xsl:element name="span">
-            <xsl:attribute name="title">dc:date</xsl:attribute>
-            <xsl:text>ON '</xsl:text>                    
-            <xsl:apply-templates />
-            <xsl:text>'</xsl:text>
-        </xsl:element>       
-    </xsl:template>    
-    
-    <xsl:template match="meta:date-string" mode="annotation">
-        <br/>    
-        <xsl:element name="span">
-            <xsl:attribute name="title">meta-date-string</xsl:attribute>  
-            <xsl:text>META DATE '</xsl:text>                            
-            <xsl:apply-templates />
-            <xsl:text>'</xsl:text>            
-        </xsl:element>           
-    </xsl:template>    
-        
-    
+	<xsl:template match="office:annotation">
+		<xsl:element name="span">
+			<xsl:attribute name="title">annotation</xsl:attribute>
+			<xsl:attribute name="class">annotation_style_by_filter</xsl:attribute>
+			<xsl:apply-templates select="@*" />
+			<br/>
+			<xsl:text>[ANNOTATION:</xsl:text>
+			<br/>
+			<xsl:apply-templates select="*" mode="annotation"/>
+			<xsl:text>]</xsl:text>
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="text:p" mode="annotation">
+		<br/>
+		<xsl:element name="span">
+			<xsl:text>NOTE: '</xsl:text>
+			<xsl:apply-templates />
+			<xsl:text>'</xsl:text>
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="dc:creator" mode="annotation">
+		<br/>
+		<xsl:element name="span">
+			<xsl:attribute name="title">dc:creator</xsl:attribute>
+			<xsl:text>BY '</xsl:text>
+			<xsl:apply-templates />
+			<xsl:text>'</xsl:text>
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="dc:date" mode="annotation">
+		<br/>
+		<xsl:element name="span">
+			<xsl:attribute name="title">dc:date</xsl:attribute>
+			<xsl:text>ON '</xsl:text>
+			<xsl:apply-templates />
+			<xsl:text>'</xsl:text>
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="meta:date-string" mode="annotation">
+		<br/>
+		<xsl:element name="span">
+			<xsl:attribute name="title">meta-date-string</xsl:attribute>
+			<xsl:text>META DATE '</xsl:text>
+			<xsl:apply-templates />
+			<xsl:text>'</xsl:text>
+		</xsl:element>
+	</xsl:template>
+
+
 	<!-- *************** -->
 	<!-- *** HELPER  *** -->
 	<!-- *************** -->
@@ -333,14 +332,14 @@
 				<xsl:value-of select="concat('a_', translate(normalize-space($title), '.,;: %()[]/\+', '_____________'))"/>
 			</xsl:when>
 			<xsl:when test="self::draw:image[office:binary-data]">
-                <xsl:choose>
-                    <xsl:when test="$mimetype">
-                        <xsl:text>data:</xsl:text><xsl:value-of select="$mimetype"/><xsl:text>;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>data:image/*;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+				<xsl:choose>
+					<xsl:when test="$mimetype">
+						<xsl:text>data:</xsl:text><xsl:value-of select="$mimetype"/><xsl:text>;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>data:image/*;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>

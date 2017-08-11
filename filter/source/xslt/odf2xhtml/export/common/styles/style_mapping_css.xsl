@@ -91,7 +91,7 @@
 
 	<!-- Maps fo:margin as well fo:margin-top, fo:margin-bottom, fo:padding-left, fo:margin-right -->
 	<!-- Maps fo:padding as well fo:padding-top, fo:padding-bottom, fo:padding-left, fo:padding-right -->
-	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">		
+	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">
 		<xsl:value-of select="local-name(.)"/>
 		<xsl:text>:</xsl:text>
 		<!-- Map once erroneusly used inch shortage 'inch' to CSS shortage 'in' -->
@@ -111,24 +111,24 @@
 			Otherwise a table cell style-class would always be outnumbered by the run-time alignment value -->
 		<xsl:choose>
 			<xsl:when test="contains(., 'start')">
-                <xsl:choose>
-                    <xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
-                        <xsl:text>text-align:right ! important; </xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>text-align:left ! important; </xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+				<xsl:choose>
+					<xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
+						<xsl:text>text-align:right ! important; </xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>text-align:left ! important; </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="contains(., 'end')">
-                <xsl:choose>
-                    <xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
-                        <xsl:text>text-align:left ! important;</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>text-align:right ! important; </xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+				<xsl:choose>
+					<xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
+						<xsl:text>text-align:left ! important;</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>text-align:right ! important; </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>text-align:</xsl:text>
@@ -289,9 +289,9 @@
 		</xsl:choose>
 	</xsl:template>
 	<xsl:template match="@style:writing-mode">
-        <xsl:text>writing-mode:</xsl:text>
-        <xsl:value-of select="."/>
-        <xsl:text>; </xsl:text>
+		<xsl:text>writing-mode:</xsl:text>
+		<xsl:value-of select="."/>
+		<xsl:text>; </xsl:text>
 	</xsl:template>
     <!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
 	<xsl:template match="@table:align">

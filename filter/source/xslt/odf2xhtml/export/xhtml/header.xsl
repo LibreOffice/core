@@ -137,20 +137,20 @@
 
 		<!-- approximation to find the correct master page style (with page dimensions) -->
 		<xsl:variable name="masterPageNames">
-            <!-- set context to styles.xml -->
-            <xsl:for-each select="$globalData/all-doc-styles/style">
-                <!-- Loop over every style:style containing a @style:master-page-name attribute -->
-                <xsl:for-each select="key('masterPage','count')">
-                        <!-- set context to styles.xml -->
-                        <xsl:for-each select="/*/office:body">
-                            <!-- Check if this style is being used in the body -->
-                            <xsl:if test="key('elementUsingStyle', ../@style:name)">
-                                <!-- Check every master-page-name if it is not empty and return as ';' separated list  -->
-                                <xsl:if test="string-length(../@style:master-page-name) &gt; 0"><xsl:value-of select="../@style:master-page-name"/>;</xsl:if>
-                            </xsl:if>
-                        </xsl:for-each>
-                </xsl:for-each>
-            </xsl:for-each>
+			<!-- set context to styles.xml -->
+			<xsl:for-each select="$globalData/all-doc-styles/style">
+				<!-- Loop over every style:style containing a @style:master-page-name attribute -->
+				<xsl:for-each select="key('masterPage','count')">
+						<!-- set context to styles.xml -->
+						<xsl:for-each select="/*/office:body">
+							<!-- Check if this style is being used in the body -->
+							<xsl:if test="key('elementUsingStyle', ../@style:name)">
+								<!-- Check every master-page-name if it is not empty and return as ';' separated list  -->
+								<xsl:if test="string-length(../@style:master-page-name) &gt; 0"><xsl:value-of select="../@style:master-page-name"/>;</xsl:if>
+							</xsl:if>
+						</xsl:for-each>
+				</xsl:for-each>
+			</xsl:for-each>
 		</xsl:variable>
 		<!-- Take the first of the masterpage list and get the according style:master-page element and find the @style:page-layout-name  -->
 		<xsl:variable name="pageLayoutName" select="key('masterPageElements', substring-before($masterPageNames,';'))/@style:page-layout-name"/>
