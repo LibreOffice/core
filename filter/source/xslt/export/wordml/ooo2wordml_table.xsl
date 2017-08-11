@@ -184,7 +184,7 @@
         </xsl:variable>
         <xsl:choose>
             <!-- if table:table-column has attribute table:number-columns-repeated, then call the recursion
-			temple repeat-gridcol to produce multiple w:gridCol in MS word. Gary.Yang   -->
+            temple repeat-gridcol to produce multiple w:gridCol in MS word. Gary.Yang   -->
             <xsl:when test="@table:number-columns-repeated">
                 <xsl:call-template name="repeat-gridcol">
                     <xsl:with-param name="grid-repeat-count" select="@table:number-columns-repeated"/>

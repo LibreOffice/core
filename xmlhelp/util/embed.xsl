@@ -28,7 +28,7 @@ All others
 ######################################################
 -->
 <xsl:template match="/">
-	<xsl:apply-templates/>
+    <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="*|@*|comment()|processing-instruction()|text()">
@@ -45,7 +45,7 @@ All others
 
 <xsl:template match="bookmark" mode="embedded" />
 <xsl:template match="ahelp" mode="embedded">
-	<xsl:apply-templates mode="embedded"/>
+    <xsl:apply-templates mode="embedded"/>
 </xsl:template>
 
 <xsl:template match="paragraph[@role='heading']">
@@ -65,36 +65,36 @@ All others
 </xsl:template>
 
 
-<!-- 
-###################################################### 
+<!--
+######################################################
 EMBED
-###################################################### 
+######################################################
 -->
 <xsl:template match="embed">
 
-		<xsl:variable name="href"><xsl:value-of select="substring-before(concat($fsroot,@href),'#')"/></xsl:variable>
-		<xsl:variable name="anchor"><xsl:value-of select="substring-after(@href,'#')"/></xsl:variable>
-		<xsl:variable name="doc" select="document($href)"/>
-		<xsl:apply-templates select="$doc//section[@id=$anchor]" mode="embedded"/>
-		<xsl:if test="not($doc//section[@id=$anchor])"> <!-- fallback for embeds that actually should be embedvars -->
-			<paragraph role="paragraph"><xsl:apply-templates select="$doc//variable[@id=$anchor]" mode="embedded"/></paragraph>
-		</xsl:if>
+        <xsl:variable name="href"><xsl:value-of select="substring-before(concat($fsroot,@href),'#')"/></xsl:variable>
+        <xsl:variable name="anchor"><xsl:value-of select="substring-after(@href,'#')"/></xsl:variable>
+        <xsl:variable name="doc" select="document($href)"/>
+        <xsl:apply-templates select="$doc//section[@id=$anchor]" mode="embedded"/>
+        <xsl:if test="not($doc//section[@id=$anchor])"> <!-- fallback for embeds that actually should be embedvars -->
+            <paragraph role="paragraph"><xsl:apply-templates select="$doc//variable[@id=$anchor]" mode="embedded"/></paragraph>
+        </xsl:if>
 </xsl:template>
 
-<!-- 
-###################################################### 
+<!--
+######################################################
 EMBEDVAR
-###################################################### 
+######################################################
 -->
 <xsl:template match="embedvar">
-	<xsl:if test="not(@href='text/shared/00/00000004.xhp#wie')"> <!-- special treatment if howtoget links -->
-		<xsl:variable name="href"><xsl:value-of select="substring-before(concat($fsroot,@href),'#')"/></xsl:variable>
-		<xsl:variable name="anchor"><xsl:value-of select="substring-after(@href,'#')"/></xsl:variable>
-		<xsl:variable name="doc" select="document($href)"/>
-		<xsl:apply-templates select="$doc//variable[@id=$anchor]" mode="embedded"/>
-	</xsl:if>
-	
-	<!-- FPE: embedvars, that point to "text/shared/00/00000004.xml#wie" will only be resolved in the main_transform -->
-	
+    <xsl:if test="not(@href='text/shared/00/00000004.xhp#wie')"> <!-- special treatment if howtoget links -->
+        <xsl:variable name="href"><xsl:value-of select="substring-before(concat($fsroot,@href),'#')"/></xsl:variable>
+        <xsl:variable name="anchor"><xsl:value-of select="substring-after(@href,'#')"/></xsl:variable>
+        <xsl:variable name="doc" select="document($href)"/>
+        <xsl:apply-templates select="$doc//variable[@id=$anchor]" mode="embedded"/>
+    </xsl:if>
+
+    <!-- FPE: embedvars, that point to "text/shared/00/00000004.xml#wie" will only be resolved in the main_transform -->
+
 </xsl:template>
 </xsl:stylesheet>

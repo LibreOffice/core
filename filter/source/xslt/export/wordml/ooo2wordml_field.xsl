@@ -195,7 +195,7 @@
                             <!--wx:font wx:val="MS Mincho"/ -->
                             <w:lang w:fareast="JA"/>
                         </xsl:when>
-                        <xsl:when test=" @style:num-format  ='壹, 	貳, 參, ...' or @style:num-format  ='壹, 貳, 參, ...' or @style:num-format  ='壹, 贰, 	叁, ...'or  @style:num-format  = '一, 二, 三, ...' ">
+                        <xsl:when test=" @style:num-format  ='壹, 貳, 參, ...' or @style:num-format  ='壹, 貳, 參, ...' or @style:num-format  ='壹, 贰, 叁, ...'or  @style:num-format  = '一, 二, 三, ...' ">
                             <w:rFonts w:hint="fareast"/>
                             <!--wx:font wx:val="宋体"/ -->
                         </xsl:when>
@@ -212,7 +212,7 @@
         <!-- this template get the various of number formats for number type field-->
         <xsl:param name="field_number_format_style"/>
         <xsl:choose>
-            <xsl:when test=" $field_number_format_style = '１, ２, ３, ...' or $field_number_format_style = '1'  	">
+            <xsl:when test=" $field_number_format_style = '１, ２, ３, ...' or $field_number_format_style = '1'      ">
                 <xsl:text>  \* Arabic </xsl:text>
             </xsl:when>
             <xsl:when test="$field_number_format_style = '①, ②, ③, ...' ">
@@ -227,8 +227,7 @@
             <xsl:when test="$field_number_format_style = '一, 二, 三, ...'">
                 <xsl:text>  \* CHINESENUM3  </xsl:text>
             </xsl:when>
-            <xsl:when test="  $field_number_format_style ='壹, 	貳, 參, ...' or $field_number_format_style ='壹, 貳, 參, ...' or
-$field_number_format_style ='壹, 贰, 叁, ...' ">
+            <xsl:when test="  $field_number_format_style ='壹, 貳, 參, ...' or $field_number_format_style ='壹, 貳, 參, ...' or $field_number_format_style ='壹, 贰, 叁, ...' ">
                 <xsl:text>  \* CHINESENUM2  </xsl:text>
             </xsl:when>
             <xsl:when test="$field_number_format_style = '壱, 弐, 参, ...' ">
@@ -267,7 +266,7 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
             <xsl:when test="$field_number_format_style = 'א, י, ק, ...' ">
                 <xsl:text>  \* hebrew1  </xsl:text>
             </xsl:when>
-	    <xsl:when test="$field_number_format_style = 'א, ב, ג, ...' ">
+            <xsl:when test="$field_number_format_style = 'א, ב, ג, ...' ">
                 <xsl:text>  \* hebrew2  </xsl:text>
             </xsl:when>
             <xsl:when test="$field_number_format_style = 'أ, ب, ت, ...' ">

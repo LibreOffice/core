@@ -19,7 +19,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ole="http://libreoffice.org/2011/xslt/ole" exclude-result-prefixes="w wx aml o dt v">
     <xsl:include href="wordml2ooo_custom_draw.xsl"/>
     <xsl:include href="wordml2ooo_path.xsl"/>
-    
+
     <xsl:key name="imagedata" match="w:binData" use="@w:name"/>
     <xsl:key name="shapetype" match="v:shapetype" use="concat('#', @id)"/>
     <xsl:template match="v:fill" mode="get-xsl-number">
@@ -205,9 +205,9 @@
                         <xsl:with-param name="namenumber" select="concat('markerend',$stroke-num)"/>
                     </xsl:call-template>
                 </xsl:if>
-                <!--<v:stroke dashstyle="1 1" startarrow="diamond" startarrowwidth="wide" startarrowlength="long" endarrow="block" 
+                <!--<v:stroke dashstyle="1 1" startarrow="diamond" startarrowwidth="wide" startarrowlength="long" endarrow="block"
                                     endarrowwidth="wide" endarrowlength="long" endcap="round"/>
-                    <draw:stroke-dash draw:name="2 2dots 1 dash" draw:style="rect" draw:dots1="2" draw:dots2="1" draw:dots2-length="0.0795in" 
+                    <draw:stroke-dash draw:name="2 2dots 1 dash" draw:style="rect" draw:dots1="2" draw:dots2="1" draw:dots2-length="0.0795in"
                                                     draw:distance="0.102in"/>
                     Hehe,It need to be revised-->
             </xsl:if>
@@ -584,9 +584,9 @@
                                 </xsl:call-template>
                             </xsl:attribute>
                             <xsl:attribute name="draw:ole-draw-aspect">
-                                <!--   DVASPECT_CONTENT    = 1, 
-                                        DVASPECT_THUMBNAIL  = 2, 
-                                        DVASPECT_ICON       = 4, 
+                                <!--   DVASPECT_CONTENT    = 1,
+                                        DVASPECT_THUMBNAIL  = 2,
+                                        DVASPECT_ICON       = 4,
                                         DVASPECT_DOCPRINT   = 8 -->
                                 <xsl:variable name="ms-aspect" select="parent::w:pict/o:OLEObject/@DrawAspect"/>
                                 <xsl:choose>
@@ -1513,7 +1513,7 @@
                         </xsl:if>
                     </xsl:variable>
                     <!--the following choose statement code will process the revised modifier
-                        It happens that if a drawing elements has more than 2 modifier, the modifier (or say adj 
+                        It happens that if a drawing elements has more than 2 modifier, the modifier (or say adj
                         in wordml) can be adjusted and only the modified adj is recorded.
                         what makes it more complicated is that adj support both comma and blanks.
                         so you have to use kickblanks template to kick the blanks and change it to comma version.
@@ -1632,13 +1632,13 @@
         <xsl:apply-templates select="w:binData[@w:name='oledata.mso']" mode="oledata.mso"/>
     </xsl:template>
     <xsl:template match="w:binData" mode="oledata.mso">
-           <xsl:variable name="tmp" select="ole:insertByName('oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>                
+           <xsl:variable name="tmp" select="ole:insertByName('oledata.mso', translate(text(),'&#10;&#13;&#32;','' )  )"/>
     </xsl:template>
     <xsl:template match="o:OLEObject " mode="output">
         <!-- depends on i43230,we can uncomment this code or find another way after i43230 got fixed -->
         <draw:object-ole>
             <xsl:element name="office:binary-data">
-                <xsl:value-of select="translate(ole:getByName(@ObjectID),'&#13;','')"/>            
+                <xsl:value-of select="translate(ole:getByName(@ObjectID),'&#13;','')"/>
             </xsl:element>
         </draw:object-ole>
     </xsl:template>
@@ -1738,9 +1738,9 @@
     </xsl:template>
     <xsl:template match="v:shapetype" mode="output">
         <xsl:param name="instance" select="''"/>
-        <!--#Dummy after version 1.63 The following test is for the adj attribute of the file. It is Dummy now. 
-		<xsl:if test="not($instance/@adj)">
-			<xsl:if test="contains(@adj,',')">-->
+        <!--#Dummy after version 1.63 The following test is for the adj attribute of the file. It is Dummy now.
+        <xsl:if test="not($instance/@adj)">
+            <xsl:if test="contains(@adj,',')">-->
         <!--Please Note that the modifier can be more than 2 , so use a translate can be more efficient.
                         -####Note that comma cann't be recognized by OOo's modifiers
                 <xsl:variable name="adjust-x" select="substring-before(@adj,',')"/>
@@ -1751,17 +1751,17 @@
                         <xsl:value-of select="concat( $adjust-x , '  ' ,$adjust-y )"/>
                     </xsl:if>
                 </xsl:variable>-->
-        <!--Dummy after version 1.63	<xsl:attribute name="draw:modifiers">
-					<xsl:value-of select="translate(@adj, ',' , '  ' )"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="@adj and not(contains(@adj,','))">-->
+        <!--Dummy after version 1.63    <xsl:attribute name="draw:modifiers">
+                    <xsl:value-of select="translate(@adj, ',' , '  ' )"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@adj and not(contains(@adj,','))">-->
         <!--####Note that comma cann't be recognized by OOo's modifiers.-->
-        <!--Dummy after version 1.63	<xsl:attribute name="draw:modifiers">
-					<xsl:value-of select="@adj"/>
-				</xsl:attribute>
-			</xsl:if>
-		</xsl:if>-->
+        <!--Dummy after version 1.63    <xsl:attribute name="draw:modifiers">
+                    <xsl:value-of select="@adj"/>
+                </xsl:attribute>
+            </xsl:if>
+        </xsl:if>-->
         <xsl:variable name="viewbox">
             <xsl:value-of select="'0 0'"/>
             <xsl:value-of select="' '"/>
@@ -1864,19 +1864,19 @@
                 </xsl:when>
                 <!-- -->
                 <!--><xsl:when test="$command = 'atan2' ">
-					<xsl:variable name="value1" select="substring-before($tmp,' ')"/>
-					<xsl:variable name="value2" select="substring-after($tmp,' ')"/>
-					<xsl:value-of select="concat(  'atan' , '( ' ,  $value2, '/' , $value1 , ')' )"/>
-				</xsl:when><- -->
+                    <xsl:variable name="value1" select="substring-before($tmp,' ')"/>
+                    <xsl:variable name="value2" select="substring-after($tmp,' ')"/>
+                    <xsl:value-of select="concat(  'atan' , '( ' ,  $value2, '/' , $value1 , ')' )"/>
+                </xsl:when><- -->
                 <!-- ellipse and sumangle are always used by arc commans like this
-						eqn="ellipse @24 @4 height" ; and eqn="sumangle @2 360 0"
-					mod is always used too.-->
+                        eqn="ellipse @24 @4 height" ; and eqn="sumangle @2 360 0"
+                    mod is always used too.-->
                 <!--mod  =sqrt( v*v + P1×P1 + P2×P2). ( 3 parameters )-->
                 <xsl:when test="$command='mod' ">
                     <xsl:variable name="value1" select="substring-before($tmp,' ')"/>
                     <xsl:variable name="value2" select="substring-before(substring-after($tmp,' '), ' ')"/>
                     <xsl:variable name="value3" select="substring-after(substring-after($tmp,' '), ' ')"/>
-                    <xsl:value-of select="concat( 'sqrt( ' , $value3, ' * ',$value3,	' + '	,$value2, ' * ' ,$value2, 	' + '	,$value1, ' * ', $value1, ' )'  )"/>
+                    <xsl:value-of select="concat( 'sqrt( ' , $value3, ' * ',$value3,    ' + '   ,$value2, ' * ' ,$value2,   ' + '   ,$value1, ' * ', $value1, ' )'  )"/>
                 </xsl:when>
                 <!--ellipse= P2* sqrt(1 - v*v /P1*P1) ( 3 parameters )-->
                 <xsl:when test="$command='ellipse' ">
@@ -1887,11 +1887,11 @@
                 </xsl:when>
                 <!--sumangle  =v + P1×2^16 - P2×2^16. ( 3 parameters )-->
                 <!--<xsl:when test="$command='sumangle' ">
-					<xsl:variable name="value1" select="substring-before($tmp,' ')"/>
-					<xsl:variable name="value2" select="substring-before(substring-after($tmp,' '), ' ')"/>
-					<xsl:variable name="value3" select="substring-after(substring-after($tmp,' '), ' ')"/>
-					<xsl:value-of select="concat( $value1 , '+' , $value2 , ' * ' ,  '65535',' + ', $value2,' - ' ,$value3 , ' * ',  '65535', ' - ', $value3)"/>
-				</xsl:when>-->
+                    <xsl:variable name="value1" select="substring-before($tmp,' ')"/>
+                    <xsl:variable name="value2" select="substring-before(substring-after($tmp,' '), ' ')"/>
+                    <xsl:variable name="value3" select="substring-after(substring-after($tmp,' '), ' ')"/>
+                    <xsl:value-of select="concat( $value1 , '+' , $value2 , ' * ' ,  '65535',' + ', $value2,' - ' ,$value3 , ' * ',  '65535', ' - ', $value3)"/>
+                </xsl:when>-->
                 <!--sumangle  =v + P1×2^16 - P2×2^16. ( 3 parameters )-->
                 <xsl:when test="$command='sumangle' ">
                     <xsl:variable name="value1" select="substring-before($tmp,' ')"/>

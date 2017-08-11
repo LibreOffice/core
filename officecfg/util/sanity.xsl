@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <xsl:transform  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:oor="http://openoffice.org/2001/registry"
-		version="1.0">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:oor="http://openoffice.org/2001/registry"
+        version="1.0">
 
 <xsl:output method="text" indent="no" encoding="ISO-8859-1"/>
 

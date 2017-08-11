@@ -18,10 +18,10 @@
  -->
 
 <xsl:transform  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"		
-		xmlns:oor="http://openoffice.org/2001/registry"		
-		version="1.0">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:oor="http://openoffice.org/2001/registry"
+        version="1.0">
 
     <!-- Set correct output format -->
     <xsl:output method="text" indent="no" encoding="UTF-8"/>

@@ -59,7 +59,7 @@
     </xsl:template>
     <xsl:template match="w:wordDocument">
         <office:document office:mimetype="application/vnd.oasis.opendocument.text" office:version="1.0">
-	    <fla:fla.activate/>
+            <fla:fla.activate/>
             <xsl:apply-templates select="o:DocumentProperties"/>
             <xsl:apply-templates select="w:docOleData" mode="init"/>
             <xsl:apply-templates select="w:docPr"/>
@@ -208,9 +208,9 @@
                         <xsl:apply-templates select="w:pPr/w:rPr"/>
                         <xsl:apply-templates select="w:rPr"/>
 -->
-			<xsl:for-each select="w:rPr">
-			<xsl:call-template name="text-properties"/>
-			</xsl:for-each>
+                    <xsl:for-each select="w:rPr">
+                        <xsl:call-template name="text-properties"/>
+                    </xsl:for-each>
                     </xsl:element>
                 </xsl:when>
                 <xsl:otherwise>
