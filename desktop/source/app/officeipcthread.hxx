@@ -61,6 +61,7 @@ struct ProcessDocumentsRequest
     std::vector< OUString > aConversionList;
     OUString aConversionParams;
     OUString aConversionOut;
+    OUString aImageConversionType;
     std::vector< OUString > aInFilter;
     ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
     bool bTextCat; // boolean flag indicating whether to dump text content to console
