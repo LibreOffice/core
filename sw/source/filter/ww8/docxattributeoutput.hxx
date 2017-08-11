@@ -700,7 +700,6 @@ private:
     void WritePostponedDiagram();
     void WritePostponedChart();
     void WritePostponedOLE();
-    void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
     void WritePostponedCustomShape();
 
@@ -856,7 +855,6 @@ private:
         const SwFrameFormat* frame;
         const Point* point;
     };
-    std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedVMLDrawings;
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedDMLDrawings;
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedCustomShape;
 
