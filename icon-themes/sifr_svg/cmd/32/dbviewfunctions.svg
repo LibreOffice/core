@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="dbviewfunctions.svg"
+   inkscape:version="0.92.1 r15371"
+   inkscape:export-filename="/home/matthias/GIT/icons/sifr_svg/32_insertindexentry.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   width="32"
+   height="32">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="5.6384658"
+     inkscape:cx="-58.42673"
+     inkscape:cy="28.345708"
+     inkscape:window-x="0"
+     inkscape:window-y="44"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4486" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="display:inline;opacity:1;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.36930633"
+     d="m 20,15 3.554692,7.78125 -0.429691,0.984377 c -1.114673,0.310779 -2.316875,1.598767 -2.851554,3.09375 C 19.655998,28.585256 20.132527,30 21.367191,30 c 1.234499,0 2.742115,-1.414744 3.359376,-3.140623 0.118739,-0.331706 0.195539,-0.637552 0.234375,-0.937505 L 26.83594,30 H 30 l -3.554692,-7.828121 0.390632,-0.984374 c 1.124014,-0.2944 2.350346,-1.583651 2.890616,-3.093754 C 30.344073,16.367846 29.867379,15 28.63281,15 c -1.234603,0 -2.741917,1.367846 -3.359377,3.093751 -0.128302,0.358568 -0.199136,0.710483 -0.234374,1.031249 L 23.125001,15 Z"
+     id="rect5925"
+     inkscape:export-filename="/home/matthias/Arbeitsfläche/sifr/von Jay Philipz/Matti/lc_insertformula.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     inkscape:connector-curvature="0" />
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:Sans;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;baseline-shift:baseline;text-anchor:start;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#555753;fill-opacity:1;stroke:none;stroke-width:2.76810074;marker:none;enable-background:accumulate"
+     d="m 20.044954,3 c -3.324225,0 -6.616032,3.048975 -7.303205,6.75 l -0.997713,5.25001 h -0.997703 c -1.1005558,0 -2.159593,1.003499 -2.3545885,2.249998 -0.1958576,1.246486 0.5356847,2.250004 1.6362415,2.250004 h 0.877977 L 10.22753,23.25 c -0.2357616,1.269211 -1.2944143,2.249999 -2.4344088,2.249999 -1.1399586,0 -1.8718953,-0.980788 -1.6362293,-2.249999 L 6.5958742,21.000001 H 4.560555 C 3.5549875,20.998594 2.4051874,21.747323 2.1261572,23.25 1.4389734,26.951025 3.6308568,30 6.9550485,30 10.279276,30 13.57107,26.951025 14.258254,23.25 l 0.718348,-3.749991 h 1.277068 c 1.100522,0 2.159593,-1.003515 2.354589,-2.250001 0.195869,-1.246499 -0.53572,-2.249998 -1.636242,-2.249998 H 15.814674 L 16.772471,9.75 c 0.235667,-1.269211 1.294428,-2.2499999 2.434411,-2.2499999 1.13997,0 1.83198,0.9807889 1.596326,2.2499999 l -0.399079,2.249999 h 2.035319 C 23.445015,12.001405 24.594815,11.25269 24.873846,9.75 25.561018,6.048975 23.369146,3 20.044954,3 Z"
+     id="path5938"
+     inkscape:export-filename="/home/matthias/Arbeitsfläche/sifr/von Jay Philipz/Matti/lc_insertformula.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89"
+     inkscape:connector-curvature="0" />
+</svg>
