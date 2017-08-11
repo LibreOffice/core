@@ -1036,9 +1036,9 @@ void readDir(
             }
         } else if (replace) {
             members.erase(name);
-            members.emplace( name, member));
+            members.insert(NodeMap::value_type(name, member));
         } else if (insert) {
-            members.emplace( name, member));
+            members.insert(NodeMap::value_type(name, member));
         }
     }
 }
