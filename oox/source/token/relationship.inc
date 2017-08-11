@@ -25,4 +25,6 @@
 {Relationship::PACKAGE, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"},
 {Relationship::SETTINGS, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"},
 {Relationship::STYLES, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"},
-{Relationship::THEME, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"}
+{Relationship::THEME, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"},
+{Relationship::VBAPROJECT, "http://schemas.microsoft.com/office/2006/relationships/vbaProject"},
+{Relationship::WORDVBADATA, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData"}

@@ -42,7 +42,9 @@ enum class Relationship
     PACKAGE,
     SETTINGS,
     STYLES,
-    THEME
+    THEME,
+    VBAPROJECT,
+    WORDVBADATA
 };
 
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);
