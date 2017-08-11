@@ -34,15 +34,6 @@ TextAttribFontColor::TextAttribFontColor( const Color& rColor )
 {
 }
 
-TextAttribFontColor::TextAttribFontColor( const TextAttribFontColor& rAttr )
-    : TextAttrib( rAttr ), maColor( rAttr.maColor )
-{
-}
-
-TextAttribFontColor::~TextAttribFontColor()
-{
-}
-
 void TextAttribFontColor::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetColor( maColor );
@@ -64,15 +55,6 @@ TextAttribFontWeight::TextAttribFontWeight( FontWeight eWeight )
 {
 }
 
-TextAttribFontWeight::TextAttribFontWeight( const TextAttribFontWeight& rAttr )
-    : TextAttrib( rAttr ), meWeight( rAttr.meWeight )
-{
-}
-
-TextAttribFontWeight::~TextAttribFontWeight()
-{
-}
-
 void TextAttribFontWeight::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetWeight( meWeight );
@@ -91,15 +73,6 @@ bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
 
 TextAttribProtect::TextAttribProtect() :
     TextAttrib( TEXTATTR_PROTECTED )
-{
-}
-
-TextAttribProtect::TextAttribProtect( const TextAttribProtect&) :
-    TextAttrib( TEXTATTR_PROTECTED )
-{
-}
-
-TextAttribProtect::~TextAttribProtect()
 {
 }
 

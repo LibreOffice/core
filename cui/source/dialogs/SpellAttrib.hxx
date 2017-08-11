@@ -96,11 +96,8 @@ public:
 private:
     SpellErrorDescription        m_aSpellErrorDescription;
 
-                            SpellErrorAttrib() = delete;
 public:
                             SpellErrorAttrib( const SpellErrorDescription& );
-                            SpellErrorAttrib( const SpellErrorAttrib& rAttr );
-                            virtual ~SpellErrorAttrib() override;
 
     const SpellErrorDescription& GetErrorDescription() const { return m_aSpellErrorDescription; }
 
@@ -115,12 +112,8 @@ class SpellLanguageAttrib : public TextAttrib
 {
     LanguageType m_eLanguage;
 
-                            SpellLanguageAttrib() = delete;
-
 public:
                             SpellLanguageAttrib(LanguageType eLanguage);
-                            SpellLanguageAttrib( const SpellLanguageAttrib& rAttr );
-                            virtual ~SpellLanguageAttrib() override;
 
     LanguageType            GetLanguage() const {return m_eLanguage;}
 
@@ -134,12 +127,8 @@ class SpellBackgroundAttrib : public TextAttrib
 {
     Color   m_aBackgroundColor;
 
-                            SpellBackgroundAttrib() = delete;
-
 public:
                             SpellBackgroundAttrib(const Color& rCol);
-                            SpellBackgroundAttrib( const SpellBackgroundAttrib& rAttr );
-                            virtual ~SpellBackgroundAttrib() override;
 
     virtual void            SetFont( vcl::Font& rFont ) const override;
     virtual TextAttrib*     Clone() const override;
