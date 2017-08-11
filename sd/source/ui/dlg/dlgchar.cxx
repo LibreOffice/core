@@ -65,7 +65,7 @@ void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == mnCharBackground)
     {
-        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
     }
 }

@@ -68,32 +68,8 @@ void FuChar::DoExecute( SfxRequest& rReq )
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
-        static const sal_uInt16 aRanges[] =
-        {
-            EE_ITEMS_START, EE_ITEMS_END,
-            SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
-            0
-        };
-
-        SfxItemSet aNewAttr( mpViewShell->GetPool(),
-                                aRanges );
+        SfxItemSet aNewAttr(mpViewShell->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
         aNewAttr.Put( aEditAttr, false );
-
-        // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
-        // can only work with SvxBrushItems (it requires major undertaking to have
-        // it support anything else). Do the following then:
-        const SfxPoolItem* pItem;
-        if ( aNewAttr.GetItemState( EE_CHAR_BKGCOLOR, true, &pItem ) == SfxItemState::SET )
-        {
-            // extract Color outta SvxBackColorItem
-            Color aBackColor = static_cast<const SvxBackgroundColorItem*>(pItem)->GetValue();
-            // make new SvxBrushItem with this Color
-            SvxBrushItem aBrushItem( aBackColor, SID_ATTR_BRUSH_CHAR );
-
-            aNewAttr.ClearItem( EE_CHAR_BKGCOLOR );
-            // and stick it into the set
-            aNewAttr.Put( aBrushItem );
-        }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc->GetDocSh() ) : nullptr);
