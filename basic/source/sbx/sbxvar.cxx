@@ -624,62 +624,6 @@ SbxInfo::SbxInfo( const OUString& r, sal_uInt32 n )
        : aHelpFile( r ), nHelpId( n )
 {}
 
-// SbxAlias
-
-SbxAlias::SbxAlias( const SbxAlias& r )
-        : SvRefBase( r ), SbxVariable( r ),
-          SfxListener( r ), xAlias( r.xAlias )
-{}
-
-SbxAlias& SbxAlias::operator=( const SbxAlias& r )
-{
-    xAlias = r.xAlias;
-    return *this;
-}
-
-SbxAlias::~SbxAlias()
-{
-    if( xAlias.is() )
-    {
-        EndListening( xAlias->GetBroadcaster() );
-    }
-}
-
-void SbxAlias::Broadcast( SfxHintId nHt )
-{
-    if( xAlias.is() )
-    {
-        xAlias->SetParameters( GetParameters() );
-        if( nHt == SfxHintId::BasicDataWanted )
-        {
-            SbxVariable::operator=( *xAlias );
-        }
-        else if( nHt == SfxHintId::BasicDataChanged || nHt == SfxHintId::BasicConverted )
-        {
-            *xAlias = *this;
-        }
-        else if( nHt == SfxHintId::BasicInfoWanted )
-        {
-            xAlias->Broadcast( nHt );
-            pInfo = xAlias->GetInfo();
-        }
-    }
-}
-
-void SbxAlias::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
-    if( p && p->GetId() == SfxHintId::BasicDying )
-    {
-        xAlias.clear();
-        // delete the alias?
-        if( pParent )
-        {
-            pParent->Remove( this );
-        }
-    }
-}
-
 void SbxVariable::Dump( SvStream& rStrm, bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNameType::ShortTypes ), RTL_TEXTENCODING_ASCII_US));

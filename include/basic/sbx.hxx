@@ -97,18 +97,6 @@ public:
     SbxVariable* GetVar() const { return pVar; }
 };
 
-// SbxAlias is an alias for a var or object
-class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
-{
-    SbxVariableRef xAlias;
-    virtual ~SbxAlias() override;
-    virtual void Broadcast( SfxHintId ) override;
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-public:
-    SbxAlias( const SbxAlias& );
-    SbxAlias& operator=( const SbxAlias& );
-};
-
 // SbxArray is an unidimensional, dynamic Array
 // The variables convert from SbxVariablen. Put()/Insert() into the
 // declared datatype, if they are not SbxVARIANT.

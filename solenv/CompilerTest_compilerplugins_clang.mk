@@ -13,6 +13,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/casttovoid \
     compilerplugins/clang/test/constparams \
     compilerplugins/clang/test/cppunitassertequals \
+    compilerplugins/clang/test/deadclass \
     compilerplugins/clang/test/datamembershadow \
     compilerplugins/clang/test/externvar \
     compilerplugins/clang/test/finalprotected \
