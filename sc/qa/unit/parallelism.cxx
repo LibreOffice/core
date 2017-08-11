@@ -144,10 +144,10 @@ void ScParallelismTest::testSUMIFS()
     std::cerr << "A1=" << m_pDoc->GetValue(0, 0, 0) << std::endl;
 
     m_pDoc->GetFormula(5, 0, 0, sFormula);
-    std::cerr << "E1=" << "\"" << sFormula << "\"=" << m_pDoc->GetValue(5, 0, 0) << std::endl;
+    std::cerr << "E1=\"" << sFormula << "\"=" << m_pDoc->GetValue(5, 0, 0) << std::endl;
 
     m_pDoc->GetFormula(6, 0, 0, sFormula);
-    std::cerr << "F1=" << "\"" << sFormula << "\"=" << m_pDoc->GetValue(6, 0, 0) << std::endl;
+    std::cerr << "F1=\"" << sFormula << "\"=" << m_pDoc->GetValue(6, 0, 0) << std::endl;
 
     std::cerr << "      A,B,C  F  L,M" << std::endl;
     for (auto i = 1; i < 30; i++)
