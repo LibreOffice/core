@@ -1666,8 +1666,8 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
 {
     Initialize(pInfo);
     SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-    OSL_ENSURE(pWrtShell, "No shell?");
-    m_aContent.ReInitDlg(*pWrtShell);
+    if (pWrtShell)
+        m_aContent.ReInitDlg(*pWrtShell);
 }
 
 void SwAuthMarkFloatDlg::Activate()
