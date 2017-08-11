@@ -221,7 +221,7 @@ public:
 
 protected:
     /// Output frames - the implementation.
-    void OutputFlyFrame_Impl(const ww8::Frame& rFormat, const Point& rNdTopLeft) override;
+    void OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& rNdTopLeft) override;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     void CharCaseMap(const SvxCaseMapItem& rCaseMap) override;
@@ -296,7 +296,7 @@ protected:
     void CharLanguageCTL(const SvxLanguageItem& rLanguageItem) override;
 
     /// Sfx item RES_CHRATR_CTL_POSTURE
-    void CharPostureCTL(const SvxPostureItem& rWeight) override;
+    void CharPostureCTL(const SvxPostureItem& rPosture) override;
 
     /// Sfx item RES_CHRATR_CTL_WEIGHT
     void CharWeightCTL(const SvxWeightItem& rWeight) override;

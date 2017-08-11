@@ -2210,10 +2210,10 @@ void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
     }
 }
 
-void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEsc)
+void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 {
-    short nEsc = rEsc.GetEsc();
-    if (rEsc.GetProportionalHeight() == DFLT_ESC_PROP)
+    short nEsc = rEscapement.GetEsc();
+    if (rEscapement.GetProportionalHeight() == DFLT_ESC_PROP)
     {
         if (DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUB);
@@ -2226,9 +2226,9 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEsc)
 
     SwTwips nH = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
 
-    if (0 < rEsc.GetEsc())
+    if (0 < rEscapement.GetEsc())
         pUpDn = OOO_STRING_SVTOOLS_RTF_UP;
-    else if (0 > rEsc.GetEsc())
+    else if (0 > rEscapement.GetEsc())
     {
         pUpDn = OOO_STRING_SVTOOLS_RTF_DN;
         nH = -nH;
@@ -2236,15 +2236,15 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEsc)
     else
         return;
 
-    short nProp = rEsc.GetProportionalHeight() * 100;
+    short nProp = rEscapement.GetProportionalHeight() * 100;
     if (DFLT_ESC_AUTO_SUPER == nEsc)
     {
-        nEsc = 100 - rEsc.GetProportionalHeight();
+        nEsc = 100 - rEscapement.GetProportionalHeight();
         ++nProp;
     }
     else if (DFLT_ESC_AUTO_SUB == nEsc)
     {
-        nEsc = - 100 + rEsc.GetProportionalHeight();
+        nEsc = - 100 + rEscapement.GetProportionalHeight();
         ++nProp;
     }
 
