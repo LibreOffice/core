@@ -33,8 +33,44 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** BorderLineExtend class
+         */
+        class DRAWINGLAYER_DLLPUBLIC BorderLineExtend
+        {
+        private:
+            std::vector<double> mfExtends;
+
+        public:
+            BorderLineExtend();
+            BorderLineExtend(
+                double fStart,
+                double fEnd);
+            BorderLineExtend(
+                double fStartLeft,
+                double fStartRight,
+                double fEndLeft,
+                double fEndRight);
+            ~BorderLineExtend();
+
+            bool equalStart() const;
+            bool equalEnd() const;
+
+            double getStartLeft() const;
+            double getStartRight() const;
+            double getEndLeft() const;
+            double getEndRight() const;
+
+            double getStartAverage() const;
+            double getEndAverage() const;
+
+            /// compare operator
+            bool operator==(const BorderLineExtend& rBorderLineExtend) const;
+        };
+
         /** BorderLine class
-        Helper class holding the style definition for a single part of a full BNorderLine definition
+        Helper class holding the style definition for a single part of a full NorderLine definition.
+        Line extends are for start/end and for Left/Right, seen in vector direction. If
+        Left != Right that means the line has a diagonal start/end
         */
         class DRAWINGLAYER_DLLPUBLIC BorderLine
         {
@@ -46,21 +82,21 @@ namespace drawinglayer
             basegfx::BColor     maRGBColor;
 
             // line extends
-            double              mfExtendStart;
-            double              mfExtendEnd;
+            BorderLineExtend    maBorderLineExtend;
 
         public:
             BorderLine(
                 double fWidth,
                 const basegfx::BColor& rRGBColor,
-                double fExtendStart = 0.0,
-                double fExtendEnd = 0.0);
+                const BorderLineExtend& rBorderLineExtend);
+            BorderLine(
+                double fWidth,
+                const basegfx::BColor& rRGBColor);
             ~BorderLine();
 
             double getWidth() const { return mfWidth; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
-            double getExtendStart() const { return mfExtendStart; }
-            double getExtendEnd() const { return mfExtendEnd; }
+            const BorderLineExtend& getBorderLineExtend() const { return maBorderLineExtend; }
 
             /// compare operator
             bool operator==(const BorderLine& rBorderLine) const;
@@ -71,8 +107,8 @@ namespace drawinglayer
         This is the basic primitive to build frames around objects, e.g. tables.
         It defines a single or double line from Start to End using the LeftWidth,
         Distance and RightWidth definitions.
-        The LineStart/End overlap is defined by the Extend(Left|Right)(Start|End)
-        definitions.
+        The LineStart/End overlap is defined in the BorderLines definitions (see
+        class BorderLine above).
         */
         class DRAWINGLAYER_DLLPUBLIC BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
         {

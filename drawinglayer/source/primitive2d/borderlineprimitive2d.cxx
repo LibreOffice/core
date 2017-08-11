@@ -37,15 +37,128 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        BorderLineExtend::BorderLineExtend()
+        :   mfExtends()
+        {
+        }
+
+        BorderLineExtend::BorderLineExtend(
+            double fStart,
+            double fEnd)
+        :   mfExtends(2)
+        {
+            mfExtends[0] = fStart;
+            mfExtends[1] = fEnd;
+        }
+
+        BorderLineExtend::BorderLineExtend(
+            double fStartLeft,
+            double fStartRight,
+            double fEndLeft,
+            double fEndRight)
+        :   mfExtends(4)
+        {
+            mfExtends[0] = fStartLeft;
+            mfExtends[1] = fStartRight;
+            mfExtends[2] = fEndLeft;
+            mfExtends[3] = fEndRight;
+        }
+
+        BorderLineExtend::~BorderLineExtend()
+        {
+        }
+
+        bool BorderLineExtend::equalStart() const
+        {
+            if (mfExtends.empty()|| 2 == mfExtends.size())
+                return true;
+            return mfExtends[0] == mfExtends[1];
+        }
+
+        bool BorderLineExtend::equalEnd() const
+        {
+            if (mfExtends.empty() || 2 == mfExtends.size())
+                return true;
+            return mfExtends[2] == mfExtends[3];
+        }
+
+        double BorderLineExtend::getStartLeft() const
+        {
+            if (mfExtends.empty())
+                return 0.0;
+            return mfExtends[0];
+        }
+
+        double BorderLineExtend::getStartRight() const
+        {
+            if (mfExtends.empty())
+                return 0.0;
+            if (2 == mfExtends.size())
+                return mfExtends[0];
+            return mfExtends[1];
+        }
+
+        double BorderLineExtend::getEndLeft() const
+        {
+            if (mfExtends.empty())
+                return 0.0;
+            if (2 == mfExtends.size())
+                return mfExtends[1];
+            return mfExtends[2];
+        }
+
+        double BorderLineExtend::getEndRight() const {
+            if (mfExtends.empty())
+                return 0.0;
+            if (2 == mfExtends.size())
+                return mfExtends[1];
+            return mfExtends[3];
+        }
+
+        double BorderLineExtend::getStartAverage() const
+        {
+            if (mfExtends.empty())
+                return 0.0;
+            if (2 == mfExtends.size())
+                return mfExtends[0];
+            return (mfExtends[0] + mfExtends[1]) * 0.5;
+        }
+
+        double BorderLineExtend::getEndAverage() const
+        {
+            if (mfExtends.empty())
+                return 0.0;
+            if (2 == mfExtends.size())
+                return mfExtends[1];
+            return (mfExtends[2] + mfExtends[3]) * 0.5;
+        }
+
+        bool BorderLineExtend::operator==(const BorderLineExtend& rBorderLineExtend) const
+        {
+            if (mfExtends.size() == rBorderLineExtend.mfExtends.size())
+            {
+                return mfExtends == rBorderLineExtend.mfExtends;
+            }
+
+            return false;
+        }
+
         BorderLine::BorderLine(
             double fWidth,
             const basegfx::BColor& rRGBColor,
-            double fExtendStart,
-            double fExtendEnd)
-        :   mfWidth(fWidth),
+            const BorderLineExtend& rBorderLineExtend)
+            : mfWidth(fWidth),
             maRGBColor(rRGBColor),
-            mfExtendStart(fExtendStart),
-            mfExtendEnd(fExtendEnd)
+            maBorderLineExtend(rBorderLineExtend)
+        {
+        }
+
+        BorderLine::BorderLine(
+            double fWidth,
+            const basegfx::BColor& rRGBColor)
+            : mfWidth(fWidth),
+            maRGBColor(rRGBColor),
+            maBorderLineExtend()
         {
         }
 
@@ -57,8 +170,7 @@ namespace drawinglayer
         {
             return getWidth() == rBorderLine.getWidth()
                 && getRGBColor() == rBorderLine.getRGBColor()
-                && getExtendStart() == rBorderLine.getExtendStart()
-                && getExtendEnd() == rBorderLine.getExtendEnd();
+                && getBorderLineExtend() == rBorderLine.getBorderLineExtend();
         }
 
         // helper to add a centered, maybe stroked line primitive to rContainer
@@ -117,8 +229,8 @@ namespace drawinglayer
                         // inside line (left of vector). Create stroke primitive centered on left line width
                         const double fDeltaY((rLeft.getWidth() - fFullWidth) * 0.5);
                         const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * rLeft.getExtendStart()) + aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rLeft.getExtendEnd()) + aDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rLeft.getBorderLineExtend().getStartAverage()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rLeft.getBorderLineExtend().getEndAverage()) + aDeltaY);
                         const attribute::LineAttribute aLineAttribute(rLeft.getRGBColor(), rLeft.getWidth());
 
                         addPolygonStrokePrimitive2D(
@@ -135,8 +247,8 @@ namespace drawinglayer
                         // Create stroke primitive on vector with given color centered on gap position
                         const double fDeltaY(((fFullWidth - mfDiscreteGapDistance) * 0.5) - rRight.getWidth());
                         const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * rGap.getExtendStart()) + aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rGap.getExtendEnd()) + aDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rGap.getBorderLineExtend().getStartAverage()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rGap.getBorderLineExtend().getEndAverage()) + aDeltaY);
                         const attribute::LineAttribute aLineAttribute(rGap.getRGBColor(), mfDiscreteGapDistance);
 
                         addPolygonStrokePrimitive2D(
@@ -151,8 +263,8 @@ namespace drawinglayer
                         // outside line (right of vector). Create stroke primitive centered on right line width
                         const double fDeltaY((fFullWidth - rRight.getWidth()) * 0.5);
                         const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * rRight.getExtendStart()) + aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rRight.getExtendEnd()) + aDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rRight.getBorderLineExtend().getStartAverage()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rRight.getBorderLineExtend().getEndAverage()) + aDeltaY);
                         const attribute::LineAttribute aLineAttribute(rRight.getRGBColor(), rRight.getWidth());
 
                         addPolygonStrokePrimitive2D(
@@ -171,8 +283,8 @@ namespace drawinglayer
 
                     addPolygonStrokePrimitive2D(
                         rContainer,
-                        getStart() - (aVector * rBorderLine.getExtendStart()),
-                        getEnd() + (aVector * rBorderLine.getExtendEnd()),
+                        getStart() - (aVector * rBorderLine.getBorderLineExtend().getStartAverage()),
+                        getEnd() + (aVector * rBorderLine.getBorderLineExtend().getEndAverage()),
                         aLineAttribute,
                         aStrokeAttribute);
                 }

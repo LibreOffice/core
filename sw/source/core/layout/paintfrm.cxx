@@ -111,6 +111,7 @@ using namespace ::editeng;
 using namespace ::com::sun::star;
 using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
 using ::drawinglayer::primitive2d::BorderLine;
+using ::drawinglayer::primitive2d::BorderLineExtend;
 using std::pair;
 using std::make_pair;
 
@@ -526,7 +527,14 @@ lcl_MergeBorderLines(
         return new BorderLinePrimitive2D(
             rStart,
             rEnd,
-            BorderLine(rLineLeft.getWidth(), rLineLeft.getRGBColor(), rLineLeft.getExtendStart(), rOtherLeft.getExtendEnd()),
+            BorderLine(
+                rLineLeft.getWidth(),
+                rLineLeft.getRGBColor(),
+                BorderLineExtend(
+                    rLineLeft.getBorderLineExtend().getStartLeft(),
+                    rLineLeft.getBorderLineExtend().getStartRight(),
+                    rOtherLeft.getBorderLineExtend().getEndLeft(),
+                    rOtherLeft.getBorderLineExtend().getEndRight())),
             rLine.getStyle());
     }
     else
@@ -539,9 +547,25 @@ lcl_MergeBorderLines(
         return new BorderLinePrimitive2D(
             rStart,
             rEnd,
-            BorderLine(rLineLeft.getWidth(), rLineLeft.getRGBColor(), rLineLeft.getExtendStart(), rOtherLeft.getExtendEnd()),
-            BorderLine(rLineGap.getWidth(), rLineGap.getRGBColor()),
-            BorderLine(rLineRight.getWidth(), rLineRight.getRGBColor(), rLineRight.getExtendStart(), rOtherRight.getExtendEnd()),
+            BorderLine(
+                rLineLeft.getWidth(),
+                rLineLeft.getRGBColor(),
+                BorderLineExtend(
+                    rLineLeft.getBorderLineExtend().getStartLeft(),
+                    rLineLeft.getBorderLineExtend().getStartRight(),
+                    rOtherLeft.getBorderLineExtend().getEndLeft(),
+                    rOtherLeft.getBorderLineExtend().getEndRight())),
+            BorderLine(
+                rLineGap.getWidth(),
+                rLineGap.getRGBColor()),
+            BorderLine(
+                rLineRight.getWidth(),
+                rLineRight.getRGBColor(),
+                BorderLineExtend(
+                    rLineRight.getBorderLineExtend().getStartLeft(),
+                    rLineRight.getBorderLineExtend().getStartRight(),
+                    rOtherRight.getBorderLineExtend().getEndLeft(),
+                    rOtherRight.getBorderLineExtend().getEndRight())),
             rLine.hasGapColor(),
             rLine.getStyle());
     }
@@ -4862,7 +4886,12 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
         xLine = new BorderLinePrimitive2D(
             aStart,
             aEnd,
-            BorderLine(nLeftWidth, aLeftColor.getBColor(), nExtentLeftStart, nExtentLeftEnd),
+            BorderLine(
+                nLeftWidth,
+                aLeftColor.getBColor(),
+                BorderLineExtend(
+                    nExtentLeftStart,
+                    nExtentLeftEnd)),
             rBorder.GetBorderLineStyle());
     }
     else
@@ -4870,9 +4899,21 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
         xLine = new BorderLinePrimitive2D(
             aStart,
             aEnd,
-            BorderLine(nLeftWidth, aLeftColor.getBColor(), nExtentLeftStart, nExtentLeftEnd),
-            BorderLine(rBorder.GetDistance(), rBorder.GetColorGap().getBColor()),
-            BorderLine(nRightWidth, aRightColor.getBColor(), nExtentRightStart, nExtentRightEnd),
+            BorderLine(
+                nLeftWidth,
+                aLeftColor.getBColor(),
+                BorderLineExtend(
+                    nExtentLeftStart,
+                    nExtentLeftEnd)),
+            BorderLine(
+                rBorder.GetDistance(),
+                rBorder.GetColorGap().getBColor()),
+            BorderLine(
+                nRightWidth,
+                aRightColor.getBColor(),
+                BorderLineExtend(
+                    nExtentRightStart,
+                    nExtentRightEnd)),
             rBorder.HasGapColor(),
             rBorder.GetBorderLineStyle());
     }
