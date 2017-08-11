@@ -837,6 +837,8 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
     {
         manageDuplicateHeaders(headerNames, length);
         MacabHeader *headerResult = new MacabHeader(length, headerNames);
+        for(sal_Int32 i = 0; i < length; ++i)
+            delete headerNames[i];
         delete [] headerNames;
         return headerResult;
     }
