@@ -663,6 +663,8 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     }
                     if(multiValue)
                         CFRelease(multiValue);
+                    if(multiLabel)
+                        CFRelease(multiLabel);
                     multiHeaders.push_back(std::move(hdr));
                 }
 
