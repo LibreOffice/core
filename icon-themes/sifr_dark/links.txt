@@ -150,16 +150,6 @@ cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
 
-# insert rows and columns
-#cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
-#cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
-#cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
-#cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
-#cmd/lc_insertrowsafter.png cmd/lc_insertrows.png
-#cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
-#cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
-#cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
-
 # simple save button
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
@@ -199,8 +189,8 @@ cmd/sc_lastslide.png cmd/sc_lastpage.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
-cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
-cmd/lc_rowoperations.png cmd/lc_entirerow.png 
+cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
+cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/lc_objectforwardone.png cmd/lc_forward.png
