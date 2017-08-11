@@ -2167,6 +2167,7 @@ void Desktop::OpenClients()
     aRequest.aConversionList = rArgs.GetConversionList();
     aRequest.aConversionParams = rArgs.GetConversionParams();
     aRequest.aConversionOut = rArgs.GetConversionOut();
+    aRequest.aImageConversionType = rArgs.GetImageConversionType();
     aRequest.aInFilter = rArgs.GetInFilter();
     aRequest.bTextCat = rArgs.IsTextCat();
     aRequest.bScriptCat = rArgs.IsScriptCat();
