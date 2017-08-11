@@ -50,6 +50,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
             REQUEST_FORCEOPEN,
             REQUEST_FORCENEW,
             REQUEST_CONVERSION,
+            REQUEST_IMAGE_CONVERSION,
             REQUEST_INFILTER,
             REQUEST_BATCHPRINT,
             REQUEST_CAT,
