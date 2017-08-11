@@ -58,30 +58,6 @@ SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 }
 
 
-SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
-{
-    basegfx::B3DVector aStr;
-    double fValue;
-    rStream.ReadDouble( fValue ); aStr.setX(fValue);
-    rStream.ReadDouble( fValue ); aStr.setY(fValue);
-    rStream.ReadDouble( fValue ); aStr.setZ(fValue);
-    return new SvxB3DVectorItem(Which(), aStr);
-}
-
-
-SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
-{
-
-    // ## if (nItemVersion)
-    double fValue;
-    fValue = aVal.getX(); rStream.WriteDouble( fValue );
-    fValue = aVal.getY(); rStream.WriteDouble( fValue );
-    fValue = aVal.getZ(); rStream.WriteDouble( fValue );
-
-    return rStream;
-}
-
-
 bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     assert(!rtl::math::isNan(aVal.getX()) && !rtl::math::isNan(aVal.getY()) && !rtl::math::isNan(aVal.getZ()));

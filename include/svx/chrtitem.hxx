@@ -161,8 +161,6 @@ public:
 
     virtual bool             operator == (const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVersion) const override;
-    virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 
     double GetValue() const { return fVal; }
 };

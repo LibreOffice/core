@@ -138,14 +138,4 @@ SfxPoolItem* SvxGalleryItem::Clone( SfxItemPool * ) const
     return new SvxGalleryItem( *this );
 }
 
-SvStream& SvxGalleryItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return rStream;
-}
-
-SfxPoolItem* SvxGalleryItem::Create(SvStream& , sal_uInt16) const
-{
-    return nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
