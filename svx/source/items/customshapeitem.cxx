@@ -266,16 +266,6 @@ bool SdrCustomShapeGeometryItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& /*rIn*/, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return new SdrCustomShapeGeometryItem;
-}
-
-SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return rOut;
-}
-
 SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SdrCustomShapeGeometryItem( aPropSeq );

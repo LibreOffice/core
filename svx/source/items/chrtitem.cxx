@@ -147,19 +147,6 @@ SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
     return new SvxDoubleItem(*this);
 }
 
-SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
-{
-    double _fVal;
-    rIn.ReadDouble( _fVal );
-    return new SvxDoubleItem(_fVal, Which());
-}
-
-SvStream& SvxDoubleItem::Store(SvStream& rOut, sal_uInt16 /*nItemVersion*/) const
-{
-    rOut.WriteDouble( fVal );
-    return rOut;
-}
-
 bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= fVal;

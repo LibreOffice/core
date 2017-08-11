@@ -92,16 +92,4 @@ SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
     return new SvxSmartTagItem( *this );
 }
 
-
-SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return rStream;
-}
-
-
-SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
-{
-    return nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

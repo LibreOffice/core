@@ -610,15 +610,6 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
 // FractionItem
 
 
-SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
-    SfxPoolItem(nId)
-{
-    sal_Int32 nMul,nDiv;
-    rIn.ReadInt32( nMul );
-    rIn.ReadInt32( nDiv );
-    nValue=Fraction(nMul,nDiv);
-}
-
 bool SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
@@ -658,18 +649,6 @@ bool SdrFractionItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SdrFractionItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SdrFractionItem(Which(),rIn);
-}
-
-SvStream& SdrFractionItem::Store(SvStream& rOut, sal_uInt16 /*nItemVers*/) const
-{
-    rOut.WriteInt32( nValue.GetNumerator() );
-    rOut.WriteInt32( nValue.GetDenominator() );
-    return rOut;
-}
-
 SfxPoolItem* SdrFractionItem::Clone(SfxItemPool * /*pPool*/) const
 {
     return new SdrFractionItem(Which(),GetValue());
@@ -703,11 +682,6 @@ bool SdrScaleItem::GetPresentation(
     }
 
     return true;
-}
-
-SfxPoolItem* SdrScaleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SdrScaleItem(Which(),rIn);
 }
 
 SfxPoolItem* SdrScaleItem::Clone(SfxItemPool * /*pPool*/) const
@@ -1335,16 +1309,6 @@ SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( bool bUseFixedCellHeight
     : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, bUseFixedCellHeight )
 {
 }
-SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion )
-    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, false )
-{
-    if ( nVersion )
-    {
-        bool bValue;
-        rStream.ReadCharAsBool( bValue );
-        SetValue( bValue );
-    }
-}
 bool SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,
                                     MapUnit /*eCoreMetric*/, MapUnit /*ePresentationMetric*/,
                                     OUString &rText, const IntlWrapper& ) const
@@ -1357,19 +1321,6 @@ bool SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,
         rText = aStr + " " + rText;
     }
     return true;
-}
-SfxPoolItem* SdrTextFixedCellHeightItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
-{
-    return new SdrTextFixedCellHeightItem( rIn, nItemVersion );
-}
-SvStream& SdrTextFixedCellHeightItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
-{
-    if ( nItemVersion )
-    {
-        bool bValue = GetValue();
-        rOut.WriteBool( bValue );
-    }
-    return rOut;
 }
 SfxPoolItem* SdrTextFixedCellHeightItem::Clone( SfxItemPool * /*pPool*/) const
 {
@@ -1397,22 +1348,6 @@ bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
 
 SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem() : SfxPoolItem( SDRATTR_CUSTOMSHAPE_ADJUSTMENT )
 {
-}
-
-SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem( SvStream& rIn, sal_uInt16 nVersion ):
-    SfxPoolItem( SDRATTR_CUSTOMSHAPE_ADJUSTMENT )
-{
-    if ( nVersion )
-    {
-        SdrCustomShapeAdjustmentValue aVal;
-        sal_uInt32 i, nCount;
-        rIn.ReadUInt32( nCount );
-        for ( i = 0; i < nCount; i++ )
-        {
-            rIn.ReadUInt32( aVal.nValue );
-            SetValue( i, aVal );
-        }
-    }
 }
 
 SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
@@ -1454,23 +1389,6 @@ bool SdrCustomShapeAdjustmentItem::GetPresentation(
         rText = aStr + " " + rText;
     }
     return true;
-}
-
-SfxPoolItem* SdrCustomShapeAdjustmentItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
-{
-    return new SdrCustomShapeAdjustmentItem( rIn, nItemVersion );
-}
-
-SvStream& SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
-{
-    if ( nItemVersion )
-    {
-        sal_uInt32 i, nCount = GetCount();
-        rOut.WriteUInt32( nCount );
-        for ( i = 0; i < nCount; i++ )
-            rOut.WriteUInt32( GetValue( i ).nValue );
-    }
-    return rOut;
 }
 
 SfxPoolItem* SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
