@@ -95,7 +95,7 @@ void WinSalTimer::Start( sal_uLong nMS )
         SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
-        ImplSalStartTimer( nMS, FALSE );
+        ImplSalStartTimer( nMS );
 }
 
 void WinSalTimer::Stop()
