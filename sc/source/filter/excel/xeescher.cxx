@@ -72,6 +72,7 @@
 #include <svx/xlnstit.hxx>
 
 #include <oox/token/tokens.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
@@ -1425,7 +1426,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( "../", "comments", mnTab + 1 ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" );
+            rtl::OUStringToOString(oox::getRelationship(Relationship::COMMENTS), RTL_TEXTENCODING_UTF8).getStr());
     rStrm.PushStream( rComments );
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
