@@ -1088,6 +1088,10 @@ void SwTextNode::Update(
                 if( this == &pEnd->nNode.GetNode() &&
                     rPos.GetIndex() == rEndIdx.GetIndex() )
                 {
+                    if (&rEndIdx == next) // nasty corner case:
+                    {   // don't switch to iterating aTmpIdxReg!
+                        next = rEndIdx.GetNext();
+                    }
                     rEndIdx.Assign( &aTmpIdxReg, rEndIdx.GetIndex() );
                     bAtLeastOneBookmarkMoved = true;
                 }
