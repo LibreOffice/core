@@ -37,6 +37,7 @@
 #include <editeng/eerdll.hxx>
 
 #include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include "backgrnd.hxx"
 
 #include <svx/xtable.hxx>
@@ -317,6 +318,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
     , bHighlighting(false)
+    , bCharBackColor(false)
     , m_bColorSelected(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
     , pImportDlg(nullptr)
@@ -441,7 +443,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 
 
     // get and evaluate Input-BrushItem
-    const SvxBrushItem* pBgdAttr = nullptr;
+    bool bBrushItemSet = false;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
     const SfxPoolItem* pItem;
     sal_uInt16 nDestValue = USHRT_MAX;
@@ -469,20 +471,39 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     {
         nSlot = SID_ATTR_BRUSH_CHAR;
     }
+    else if( bCharBackColor )
+    {
+        nSlot = SID_ATTR_CHAR_BACK_COLOR;
+    }
+
     //#111173# the destination item is missing when the parent style has been changed
     if(USHRT_MAX == nDestValue && m_pTblLBox->IsVisible())
         nDestValue = 0;
-    sal_uInt16 nWhich = GetWhich( nSlot );
+    sal_uInt16 nWhich = GetWhich(nSlot);
+    SvxBrushItem aBgdAttr(nWhich);
 
-    if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
-        pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
+    if (rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT)
+    {
+        if (!bCharBackColor)
+            aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
+        else
+        {
+            // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
+            // can only work with SvxBrushItems
+            // extract Color out of SvxBackColorItem
+            Color aBackColor = static_cast<const SvxBackgroundColorItem&>(rSet->Get(nWhich)).GetValue();
+            // make new SvxBrushItem with this Color
+            aBgdAttr = SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
+        }
+        bBrushItemSet = true;
+    }
 
     m_pBtnTile->Check();
 
-    if ( pBgdAttr )
+    if (bBrushItemSet)
     {
-        FillControls_Impl(*pBgdAttr, aUserData);
-        aBgdColor = const_cast<SvxBrushItem*>(pBgdAttr)->GetColor();
+        FillControls_Impl(aBgdAttr, aUserData);
+        aBgdColor = const_cast<SvxBrushItem&>(aBgdAttr).GetColor();
     }
     else
     {
@@ -517,22 +538,22 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
-                pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
+                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
+                pTableBck_Impl->pCellBrush = new SvxBrushItem(aBgdAttr);
             }
             pTableBck_Impl->nCellWhich = nWhich;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( SID_ATTR_BRUSH_ROW ) ));
-                pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
+                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(SID_ATTR_BRUSH_ROW));
+                pTableBck_Impl->pRowBrush = new SvxBrushItem(aBgdAttr);
             }
             pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( SID_ATTR_BRUSH_TABLE ) ));
-                pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
+                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(SID_ATTR_BRUSH_TABLE));
+                pTableBck_Impl->pTableBrush = new SvxBrushItem(aBgdAttr);
             }
             pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
 
@@ -544,8 +565,22 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
-                pHighlighting.reset(new SvxBrushItem(*pBgdAttr));
+                aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
+                pHighlighting.reset(new SvxBrushItem(aBgdAttr));
+            }
+        }
+        else if( bCharBackColor )
+        {
+            nWhich = GetWhich(SID_ATTR_CHAR_BACK_COLOR);
+            if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
+            {
+                // EE_CHAR_BKGCOLOR is SvxBackgroundColorItem, but char background tabpage
+                // can only work with SvxBrushItems
+                // extract Color out of SvxBackColorItem
+                Color aBackColor = static_cast<const SvxBackgroundColorItem&>(rSet->Get(nWhich)).GetValue();
+                // make new SvxBrushItem with this Color
+                aBgdAttr = SvxBrushItem(aBackColor, SID_ATTR_BRUSH_CHAR);
+                pHighlighting.reset(new SvxBrushItem(aBgdAttr));
             }
         }
     }
@@ -570,6 +605,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     }
 
     bool bModified = false;
+    bool bCompareOldBrush = true;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
 
     if ( m_pTblLBox->IsVisible() )
@@ -591,15 +627,21 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         nSlot = SID_ATTR_BRUSH_CHAR;
     }
+    else if( bCharBackColor )
+    {
+        nSlot = SID_ATTR_CHAR_BACK_COLOR;
+        bCompareOldBrush = false;
+    }
+
     sal_uInt16 nWhich = GetWhich( nSlot );
 
-    const SfxPoolItem* pOld = GetOldItem( *rCoreSet, nSlot );
-    if (pOld)
+    const SfxPoolItem* pOld = GetOldItem(*rCoreSet, nSlot);
+    if (pOld && bCompareOldBrush)
     {
         SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
         const SfxItemSet& rOldSet = GetItemSet();
-
         const SvxBrushItem& rOldItem    = static_cast<const SvxBrushItem&>(*pOld);
+
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
         const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
 
@@ -699,6 +741,22 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             }
             bModified = ( bIsBrush || m_pBtnLink->IsChecked() || bIsGraphicValid );
         }
+    }
+    else if (pOld && SID_ATTR_CHAR_BACK_COLOR == nSlot)
+    {
+        SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
+        const SfxItemSet& rOldSet = GetItemSet();
+        const SvxBackgroundColorItem& rOldItem = static_cast<const SvxBackgroundColorItem&>(*pOld);
+
+        // Brush-treatment:
+        if ( rOldItem.GetValue() != aBgdColor ||
+             (SfxItemState::DEFAULT >= eOldItemState && m_bColorSelected))
+        {
+            bModified = true;
+            rCoreSet->Put(SvxBackgroundColorItem(aBgdColor, nWhich));
+        }
+        else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
+            rCoreSet->ClearItem( nWhich );
     }
     else if ( SID_ATTR_BRUSH_CHAR == nSlot && aBgdColor != Color( COL_WHITE ) )
     {
@@ -1373,10 +1431,12 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
         {
             ShowSelector();
         }
-        if ( nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING )
+        if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING) ||
+            (nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR))
         {
             m_pBackGroundColorLabelFT->SetText(CuiResId(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
-            bHighlighting = true;
+            bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
+            bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
         }
     }
 }
