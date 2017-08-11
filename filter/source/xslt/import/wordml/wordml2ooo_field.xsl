@@ -225,107 +225,107 @@
                 <xsl:choose>
                     <xsl:when test="contains($instr_command, 'Author' ) ">
                         <text:user-field-get text:name="Author">
-			             </text:user-field-get>
+                         </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Bytes' ) ">
                         <text:user-field-get text:name="Bytes">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'CharactersWithSpaces' ) ">
                         <text:user-field-get text:name="CharactersWithSpaces">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Category' ) ">
                         <text:user-field-get text:name="Category">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Characters' ) ">
                         <text:user-field-get text:name="Characters">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Comments' ) ">
                         <text:user-field-get text:name="Comments">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Company' ) ">
                         <text:user-field-get text:name="Company">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'CreateTime' ) ">
                         <text:user-field-get text:name="CreateTime">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'HyperlinkBase' ) ">
                         <text:user-field-get text:name="HyperlinkBase">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Keywords' ) ">
                         <text:user-field-get text:name="Keywords">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'LastPrinted' ) ">
                         <text:user-field-get text:name="LastPrinted">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'LastSavedBy' ) ">
                         <text:user-field-get text:name="LastSavedBy">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'LastSavedTime' ) ">
                         <text:user-field-get text:name="LastSavedTime">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Lines' ) ">
                         <text:user-field-get text:name="Lines">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Manager' ) ">
                         <text:user-field-get text:name="Manager">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'NameofApplication' ) ">
                         <text:user-field-get text:name="NameofApplication">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'ODMADocId' ) ">
                         <text:user-field-get text:name="ODMADocId">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Pages' ) ">
                         <text:user-field-get text:name="Pages">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Paragraphs' ) ">
                         <text:user-field-get text:name="Paragraphs">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'RevisionNumber' ) ">
                         <text:user-field-get text:name="RevisionNumber">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Security' ) ">
                         <text:user-field-get text:name="Security">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Subject' ) ">
                         <text:user-field-get text:name="Subject">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Template' ) ">
                         <text:user-field-get text:name="Template">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Title' ) ">
                         <text:user-field-get text:name="Title">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'TotalEditingTime' ) ">
                         <text:user-field-get text:name="TotalEditingTime">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Words' ) ">
                         <text:user-field-get text:name="Words">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
@@ -531,107 +531,107 @@
                 <xsl:choose>
                     <xsl:when test="contains($instr_command, 'Author' ) ">
                         <text:user-field-get text:name="Author">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Bytes' ) ">
                         <text:user-field-get text:name="Bytes">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Category' ) ">
                         <text:user-field-get text:name="Category">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'CharactersWithSpaces' ) ">
                         <text:user-field-get text:name="CharactersWithSpaces">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Characters' ) ">
                         <text:user-field-get text:name="Characters">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Comments' ) ">
                         <text:user-field-get text:name="Comments">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Company' ) ">
                         <text:user-field-get text:name="Company">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'CreateTime' ) ">
                         <text:user-field-get text:name="CreateTime">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'HyperlinkBase' ) ">
                         <text:user-field-get text:name="HyperlinkBase">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Keywords' ) ">
                         <text:user-field-get text:name="Keywords">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'LastPrinted' ) ">
                         <text:user-field-get text:name="LastPrinted">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'LastSavedBy' ) ">
                         <text:user-field-get text:name="LastSavedBy">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'LastSavedTime' ) ">
                         <text:user-field-get text:name="LastSavedTime">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Lines' ) ">
                         <text:user-field-get text:name="Lines">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Manager' ) ">
                         <text:user-field-get text:name="Manager">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'NameofApplication' ) ">
                         <text:user-field-get text:name="NameofApplication">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'ODMADocId' ) ">
                         <text:user-field-get text:name="ODMADocId">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Pages' ) ">
                         <text:user-field-get text:name="Pages">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Paragraphs' ) ">
                         <text:user-field-get text:name="Paragraphs">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'RevisionNumber' ) ">
                         <text:user-field-get text:name="RevisionNumber">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Security' ) ">
                         <text:user-field-get text:name="Security">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Subject' ) ">
                         <text:user-field-get text:name="Subject">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Template' ) ">
                         <text:user-field-get text:name="Template">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Title' ) ">
                         <text:user-field-get text:name="Title">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'TotalEditingTime' ) ">
                         <text:user-field-get text:name="TotalEditingTime">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                     <xsl:when test="contains($instr_command, 'Words' ) ">
                         <text:user-field-get text:name="Words">
-			            </text:user-field-get>
+                        </text:user-field-get>
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
@@ -671,15 +671,15 @@
     </xsl:template>
     <xsl:template name="default_sequence_declaration">
         <text:sequence-decl text:display-outline-level="0" text:name="Illustration">
-			</text:sequence-decl>
+            </text:sequence-decl>
         <text:sequence-decl text:display-outline-level="0" text:name="Table">
-			</text:sequence-decl>
+            </text:sequence-decl>
         <text:sequence-decl text:display-outline-level="0" text:name="Text">
-			</text:sequence-decl>
+            </text:sequence-decl>
         <text:sequence-decl text:display-outline-level="0" text:name="Drawing">
-			</text:sequence-decl>
+            </text:sequence-decl>
         <text:sequence-decl text:display-outline-level="0" text:name="AutoNr">
-			</text:sequence-decl>
+            </text:sequence-decl>
     </xsl:template>
     <xsl:template match="w:instrText | w:fldSimple" mode="sequence_declare">
         <text:sequence-decl text:display-outline-level="0">
@@ -1271,7 +1271,7 @@
                 <xsl:text>一, 二, 三, ...</xsl:text>
             </xsl:when>
             <xsl:when test="contains($input_MS_num_format, 'CHINESENUM2' )">
-                <xsl:text>壹, 	貳, 參, ...</xsl:text>
+                <xsl:text>壹,  貳, 參, ...</xsl:text>
             </xsl:when>
             <xsl:when test="contains($input_MS_num_format, 'DBNUM3' ) ">
                 <xsl:text>壱, 弐, 参, ...</xsl:text>
@@ -1297,7 +1297,7 @@
             <xsl:when test="contains($input_MS_num_format, 'hebrew1' ) ">
                 <xsl:text>א, י, ק, ...</xsl:text>
             </xsl:when>
-	    <xsl:when test="contains($input_MS_num_format, 'hebrew2' ) ">
+        <xsl:when test="contains($input_MS_num_format, 'hebrew2' ) ">
                 <xsl:text>א, ב, ג, ...</xsl:text>
             </xsl:when>
             <xsl:when test="contains($input_MS_num_format,  'ArabicAlpha' ) ">
@@ -1333,15 +1333,15 @@
         </number:day>
         <number:text>  </number:text>
         <number:hours>
-		</number:hours>
+        </number:hours>
         <number:text>:</number:text>
         <number:minutes number:style="long">
-			</number:minutes>
+            </number:minutes>
         <number:text>:</number:text>
         <number:seconds number:style="long">
-			</number:seconds>
+            </number:seconds>
         <number:am-pm>
-			</number:am-pm>
+            </number:am-pm>
     </xsl:template>
     <!--the default date style -->
     <xsl:template name="default_date_style">
@@ -1510,55 +1510,55 @@
         <xsl:choose>
             <xsl:when test="$input_date_format_pattern = 'am/pm' ">
                 <number:am-pm>
-			</number:am-pm>
+            </number:am-pm>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'yyyy' ">
                 <number:year number:style="long">
-			</number:year>
+            </number:year>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'yy' ">
                 <number:year>
-			</number:year>
+            </number:year>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'MMMM' ">
                 <number:month number:style="long" number:textual="true">
-			</number:month>
+            </number:month>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'MMM'  ">
                 <number:month number:textual="true">
-			</number:month>
+            </number:month>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'MM' ">
                 <number:month number:style="long">
-			</number:month>
+            </number:month>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'M' ">
                 <number:month>
-			</number:month>
+            </number:month>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'dddd' ">
                 <number:day-of-week number:style="long">
-			</number:day-of-week>
+            </number:day-of-week>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'ddd' ">
                 <number:day-of-week>
-			</number:day-of-week>
+            </number:day-of-week>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'dd' ">
                 <number:day number:style="long">
-			</number:day>
+            </number:day>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'd' ">
                 <number:day>
-			</number:day>
+            </number:day>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'mm' ">
                 <number:minutes number:style="long">
-			</number:minutes>
+            </number:minutes>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'm' ">
                 <number:minutes>
-			</number:minutes>
+            </number:minutes>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'hh' ">
                 <number:hours number:style="long">
@@ -1566,7 +1566,7 @@
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'h' ">
                 <number:hours>
-			</number:hours>
+            </number:hours>
             </xsl:when>
             <xsl:when test="$input_date_format_pattern = 'ss' ">
                 <number:seconds number:style="long">

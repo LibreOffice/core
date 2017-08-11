@@ -787,7 +787,7 @@
                 <xsl:variable name="following-section" select="following::text:section[1]"/>
                 <xsl:variable name="ancestor-section" select="ancestor::text:section"/>
                 <!-- if the following neighbour paragraph/heading are slave of one master style, or new section starts,
-				 then a new page will start -->
+                 then a new page will start -->
                 <xsl:variable name="next-is-new-page" select="boolean(key( 'slave-style', $following-paragraph-heading-table[1]/@*[name()='text:style-name' or name()='table:style-name']))"/>
                 <xsl:variable name="next-is-new-section">
                     <xsl:if test="$following-section and generate-id($following-section/descendant::*[(name()= 'text:p' or name()= 'text:h' or name()= 'table:table') and position() =1]) = generate-id($following-paragraph-heading-table[1])">

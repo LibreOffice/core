@@ -104,7 +104,7 @@
   </xsl:choose>
 </xsl:attribute>
 
-<xsl:if test="not(w:cols/w:col)"> 
+<xsl:if test="not(w:cols/w:col)">
 <!-- bug in the OASIS spec resp. bug in xmloff  -->
 <xsl:attribute name="fo:column-gap">
   <xsl:value-of select="concat(w:cols/@w:space div 567.0, 'cm')"/>
@@ -112,7 +112,7 @@
 </xsl:if>
 
 <xsl:for-each select="w:cols/w:col">
-  <style:column> 
+  <style:column>
      <xsl:attribute name="style:rel-width">
        <xsl:value-of select="concat(@w:w, '*')"/>
      </xsl:attribute>
@@ -127,12 +127,12 @@
           <xsl:otherwise>0cm</xsl:otherwise>
        </xsl:choose>
      </xsl:attribute>
-  </style:column> 
+  </style:column>
 </xsl:for-each>
 </style:columns>
 </xsl:template>
 
-<an:text-properties 
+<an:text-properties
      context-node-input="w:rPr"
      context-node-output="style:text-properties">
 </an:text-properties >

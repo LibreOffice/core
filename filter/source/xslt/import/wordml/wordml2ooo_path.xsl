@@ -580,11 +580,11 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <!-- 
+    <!--
     **Template vmlpath2enhancedpath**
-    The template is responsible for converting the vml-path to enhanced-path, because the svg:path 
+    The template is responsible for converting the vml-path to enhanced-path, because the svg:path
     cann't support command a now.(But heard that will be supported in OOo3.0)
-    And  the 2nd reason of using an enhanced-path is that enhanced-path have a perfect mapping to 
+    And  the 2nd reason of using an enhanced-path is that enhanced-path have a perfect mapping to
     vmlpath.(You will find out that often, we even don't need to change the parameters).
     -->
     <xsl:template name="vmlpath2enhancedpath">
@@ -758,7 +758,7 @@
                         <xsl:with-param name="count" select="2"/>
                     </xsl:call-template>
                 </xsl:variable>
-				<xsl:call-template name="vmlpath2enhancedpath">
+                <xsl:call-template name="vmlpath2enhancedpath">
                     <xsl:with-param name="vml-path" select="$vml-path"/>
                     <xsl:with-param name="enhanced-path" select=" concat($new-enhanced-path , substring-before( $control-and-pos , ':')  , ' ' ,  substring-before( $num-and-pos , ':')  , ' ') "/>
                     <xsl:with-param name="position" select=" substring-after( $num-and-pos , ':')  "/>
@@ -976,10 +976,10 @@
                 </xsl:call-template>
             </xsl:when>
             <!--The following is 6 command which deal with arcs:
-                ae   ->T    	al -> U
-                at   -> A		ar  -> B
-				wa -> W 	wr  ->V 
-			  These pairs of commands have shown the perfect mapping from vml-path to enhanced-path-->
+                ae   -> T       al -> U
+                at   -> A       ar -> B
+                wa   -> W       wr -> V
+              These pairs of commands have shown the perfect mapping from vml-path to enhanced-path-->
             <xsl:when test="$command = 'ae' ">
                 <!-- arc on the screen with the start and end angles -->
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' T ' ) "/>
@@ -1488,15 +1488,15 @@
     </xsl:template>
     <!--
         **get-path- command**
-		This function will collect the next command from a string. If the input string should has a start of number character,
-		we here implicitly think the command is the last-command
+        This function will collect the next command from a string. If the input string should has a start of number character,
+        we here implicitly think the command is the last-command
         All of the command of vml is listed as following:
         __Basic commands:__
-		m		l		c		x		e		t		r		v		nf		ns		ae		al		at		ar		wa		wr		qx		qy		qb	
-		__Edit behavior extensions commands__
-		ha 	hb	hc	hd	he	hf	hg	hh	hi
+        m       l       c       x       e       t       r       v       nf      ns      ae      al      at      ar      wa      wr      qx      qy      qb
+        __Edit behavior extensions commands__
+        ha  hb  hc  hd  he  hf  hg  hh  hi
 
-		So we know the longest command should be four character.The function is implemented on this basis:
+        So we know the longest command should be four character.The function is implemented on this basis:
      -->
     <xsl:template name="get-path-command">
         <xsl:param name="vml-path"/>
