@@ -594,11 +594,11 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     sal_uInt16 nWhich = GetWhich( nSlot );
 
     const SfxPoolItem* pOld = GetOldItem( *rCoreSet, nSlot );
-    SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
-    const SfxItemSet& rOldSet = GetItemSet();
-
-    if ( pOld )
+    if (pOld)
     {
+        SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
+        const SfxItemSet& rOldSet = GetItemSet();
+
         const SvxBrushItem& rOldItem    = static_cast<const SvxBrushItem&>(*pOld);
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
         const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
