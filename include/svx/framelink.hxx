@@ -184,71 +184,7 @@ SVX_DLLPUBLIC bool operator<( const Style& rL, const Style& rR );
 
 inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
 
-
-/** Extends the Style struct with an angle for diagonal frame borders.
-
-    The angle is specified in radian (a full circle is equivalent to 2*PI).
-    It is dependent on the context, how the value is interpreted, i.e. it may
-    specify the angle to a horizontal or vertical frame border.
- */
-class SAL_WARN_UNUSED DiagStyle : public Style
-{
-public:
-    /** Constructs an invisible diagonal frame style. */
-    explicit     DiagStyle() {}
-    /** Constructs a diagonal frame style passed style and angle. */
-    explicit     DiagStyle( const Style& rStyle, double /*fAngle*/ ) :
-                            Style( rStyle ) {}
-};
-
-
 // Various helper functions
-
-
-/** Returns the angle between horizontal border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    horizontal borders, and is therefore in the range [0,PI/2] (inclusive). The
-    passed sizes may be negative, calculation is done with absolute values.
- */
-SVX_DLLPUBLIC double GetHorDiagAngle( long nWidth, long nHeight );
-
-/** Returns an X coordinate for a diagonal frame border in the specified height.
-
-    This function is for usage with the top-left end of a top-left to
-    bottom-right diagonal frame border, connected to the left end of a
-    horizontal frame border.
-
-    The function returns the relative X position (i.e. for a polygon) of the
-    diagonal frame border according to the specified relative Y position. The
-    mentioned positions are relative to the reference point of both frame
-    borders.
-
-                +----------------------------------------------------------
-                |               The horizontal frame border.
-                |    |
-    - - - - - - |  --+--  <---- Reference point for horizontal and diagonal frame borders.
-      ^         | \  |  \
-     nVerOffs   |  \     \ <--- The diagonal frame border.
-      v         +---\     \------------------------------------------------
-    - - - - - - - - -\- - -X <----- The function calculates the X position of i.e.
-                      \     \       this point (relative from X of reference point).
-                       \     \
-             Primary -->\     \<-- Secondary
-
-    @param nVerOffs
-        The vertical position of the point to be calculated, relative to the Y
-        coordinate of the reference point.
-    @param nDiagOffs
-        The width offset across the diagonal frame border (0 = middle),
-        regardless of the gradient of the diagonal frame border (always
-        vertical to the direction of the diagonal frame border). This value is
-        not related in any way to the reference point. For details about
-        relative width offsets, see description of class Style.
-    @param fAngle
-        Inner (right) angle between diagonal and horizontal frame border.
- */
-SVX_DLLPUBLIC long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
 
 /** Checks whether two horizontal frame borders are "connectable".
 
@@ -339,17 +275,17 @@ SVX_DLLPUBLIC void CreateBorderPrimitives(
 
     const Style&        rBorder,        /// Style of the processed frame border.
 
-    const DiagStyle&    rLFromTR,       /// Diagonal frame border from top-right to left end of rBorder.
+    const Style&        rLFromTR,       /// Diagonal frame border from top-right to left end of rBorder.
     const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
     const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
     const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
-    const DiagStyle&    rLFromBR,       /// Diagonal frame border from bottom-right to left end of rBorder.
+    const Style&        rLFromBR,       /// Diagonal frame border from bottom-right to left end of rBorder.
 
-    const DiagStyle&    rRFromTL,       /// Diagonal frame border from top-left to right end of rBorder.
+    const Style&        rRFromTL,       /// Diagonal frame border from top-left to right end of rBorder.
     const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
     const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
     const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
-    const DiagStyle&    rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
+    const Style&        rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
 
     const Color*        pForceColor     /// If specified, overrides frame border color.
 );

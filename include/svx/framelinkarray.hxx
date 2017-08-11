@@ -289,27 +289,9 @@ public:
     /** Returns the output height of the entire array. */
     long                GetHeight() const;
 
-    /** Returns the top-left output position of the cell (nCol,nRow).
-        Returns output position of top-left corner of merged ranges. */
-    Point               GetCellPosition( size_t nCol, size_t nRow ) const;
-
-    /** Returns the output size of the cell (nCol,nRow).
-        Returns total output size of merged ranges. */
-    Size                GetCellSize( size_t nCol, size_t nRow ) const;
-
-    /** Returns the output rectangle of the cell (nCol,nRow).
-        Returns total output rectangle of merged ranges. */
-    tools::Rectangle           GetCellRect( size_t nCol, size_t nRow ) const;
-
-    // diagonal frame borders -------------------------------------------------
-
-    /** Returns the angle between horizontal and diagonal border of the cell (nCol,nRow).
-        Returns the horizontal angle of merged ranges. */
-    double              GetHorDiagAngle( size_t nCol, size_t nRow ) const;
-
-    /** Returns the angle between vertical and diagonal border of the cell (nCol,nRow).
-        Returns the vertical angle of merged ranges. */
-    double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
+    /** Returns the output range of the cell (nCol,nRow).
+        Returns total output range of merged ranges. */
+    basegfx::B2DRange GetCellRange( size_t nCol, size_t nRow ) const;
 
     // mirroring --------------------------------------------------------------
 

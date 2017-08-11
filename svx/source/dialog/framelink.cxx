@@ -44,12 +44,6 @@ namespace frame {
 
 namespace {
 
-/** Rounds and casts a double value to a long value. */
-inline long lclD2L( double fValue )
-{
-    return static_cast< long >( (fValue < 0.0) ? (fValue - 0.5) : (fValue + 0.5) );
-}
-
 /** Converts a width in twips to a width in another map unit (specified by fScale). */
 double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
 {
@@ -235,18 +229,6 @@ bool operator<( const Style& rL, const Style& rR )
 }
 
 #undef SCALEVALUE
-
-
-// Various helper functions
-double GetHorDiagAngle( long nWidth, long nHeight )
-{
-    return atan2( static_cast< double >( std::abs( nHeight ) ), static_cast< double >( std::abs( nWidth ) ) );
-}
-
-long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
-{
-    return lclD2L( nVerOffs / tan( fAngle ) + nDiagOffs / sin( fAngle ) );
-}
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
@@ -506,16 +488,16 @@ void CreateBorderPrimitives(
     const basegfx::B2DVector& rX,
     const basegfx::B2DVector& rY,
     const Style& rBorder,
-    const DiagStyle& /*rLFromTR*/,
+    const Style& /*rLFromTR*/,
     const Style& rLFromT,
     const Style& /*rLFromL*/,
     const Style& rLFromB,
-    const DiagStyle& /*rLFromBR*/,
-    const DiagStyle& /*rRFromTL*/,
+    const Style& /*rLFromBR*/,
+    const Style& /*rRFromTL*/,
     const Style& rRFromT,
     const Style& /*rRFromR*/,
     const Style& rRFromB,
-    const DiagStyle& /*rRFromBL*/,
+    const Style& /*rRFromBL*/,
     const Color* pForceColor)
 {
     if (rBorder.Prim())
@@ -572,8 +554,9 @@ void CreateBorderPrimitives(
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Prim(),
                             (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
-                            mfExtendStart,
-                            mfExtendEnd),
+                            drawinglayer::primitive2d::BorderLineExtend(
+                                mfExtendStart,
+                                mfExtendEnd)),
                         rBorder.Type(),
                         rBorder.PatternScale())));
         }
@@ -605,6 +588,13 @@ void CreateBorderPrimitives(
             // cut exists. Else use upper and take maximum when cut exists
             mfExtendRightEnd = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[1], rRFromB, rRFromT, false, fLength);
 
+            // needs to be determined in detail later, for now use the max prolongation
+            // from left/right, but do not less than half (0.0). This works decently,
+            // but not perfect (see Writer, use three-color-style, look at upper/lower#
+            // connections)
+            const double fGapLeft(std::max(0.0, std::max(mfExtendLeftStart, mfExtendRightStart)));
+            const double fGapRight(std::max(0.0, std::max(mfExtendLeftEnd, mfExtendRightEnd)));
+
             rTarget.append(
                 drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::BorderLinePrimitive2D(
@@ -613,22 +603,21 @@ void CreateBorderPrimitives(
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Prim(),
                             (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
-                            mfExtendLeftStart,
-                            mfExtendLeftEnd),
+                            drawinglayer::primitive2d::BorderLineExtend(
+                                mfExtendLeftStart,
+                                mfExtendLeftEnd)),
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Dist(),
                             (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
-                            // needs to be determined in detail later, for now use the max prolongation
-                            // from left/right, butz do not less than half (0.0). This works decently,
-                            // but not perfect (see Writer, use three-color-style, look at upper/lower#
-                            // connections)
-                            std::max(0.0, std::max(mfExtendLeftStart, mfExtendRightStart)),
-                            std::max(0.0, std::max(mfExtendLeftEnd, mfExtendRightEnd))),
+                            drawinglayer::primitive2d::BorderLineExtend(
+                                fGapLeft,
+                                fGapRight)),
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Secn(),
                             (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
-                            mfExtendRightStart,
-                            mfExtendRightEnd),
+                            drawinglayer::primitive2d::BorderLineExtend(
+                                mfExtendRightStart,
+                                mfExtendRightEnd)),
                         rBorder.UseGapColor(),
                         rBorder.Type(),
                         rBorder.PatternScale())));
@@ -658,16 +647,16 @@ void CreateBorderPrimitives(
             rX,
             rY,
             rBorder,
-            DiagStyle(),
+            Style(),
             rLFromT,
             rLFromL,
             rLFromB,
-            DiagStyle(),
-            DiagStyle(),
+            Style(),
+            Style(),
             rRFromT,
             rRFromR,
             rRFromB,
-            DiagStyle(),
+            Style(),
             pForceColor);
     }
 }
@@ -701,7 +690,9 @@ void CreateDiagFrameBorderPrimitives(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     rOrigin,
                     rOrigin + rXAxis + rYAxis,
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Prim(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
                     rTLBR.Type(),
                     rTLBR.PatternScale()));
         }
@@ -711,9 +702,15 @@ void CreateDiagFrameBorderPrimitives(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     rOrigin,
                     rOrigin + rXAxis + rYAxis,
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Dist(), (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Secn(), (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Prim(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Dist(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Secn(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
                     rTLBR.UseGapColor(),
                     rTLBR.Type(),
                     rTLBR.PatternScale()));
@@ -729,7 +726,9 @@ void CreateDiagFrameBorderPrimitives(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     rOrigin + rYAxis,
                     rOrigin + rXAxis,
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Prim(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
                     rBLTR.Type(),
                     rBLTR.PatternScale()));
         }
@@ -739,9 +738,15 @@ void CreateDiagFrameBorderPrimitives(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     rOrigin + rYAxis,
                     rOrigin + rXAxis,
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Dist(), (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(rTLBR.Secn(), (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Prim(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Dist(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(
+                        rTLBR.Secn(),
+                        (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
                     rBLTR.UseGapColor(),
                     rBLTR.Type(),
                     rBLTR.PatternScale()));
