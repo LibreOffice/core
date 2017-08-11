@@ -187,8 +187,8 @@ inline void applyStartToEndFlags(ScRefFlags &target)
 class SAL_WARN_UNUSED ScAddress
 {
 private:
-    SCROW   nRow;
     SCCOL   nCol;
+    SCROW   nRow;
     SCTAB   nTab;
 
 public:
@@ -228,20 +228,20 @@ public:
     };
 
     ScAddress() :
-        nRow(0), nCol(0), nTab(0)
+        nCol(0), nRow(0), nTab(0)
     {}
     ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
-        nRow(nRowP), nCol(nColP), nTab(nTabP)
+        nCol(nColP), nRow(nRowP), nTab(nTabP)
     {}
     /** Yes, it is what it seems to be: Uninitialized. May be used for
         performance reasons if it is initialized by other means. */
     ScAddress( Uninitialized )
     {}
     ScAddress( InitializeInvalid ) :
-        nRow(-1), nCol(-1), nTab(-1)
+        nCol(-1), nRow(-1), nTab(-1)
     {}
     ScAddress( const ScAddress& rAddress ) :
-        nRow(rAddress.nRow), nCol(rAddress.nCol), nTab(rAddress.nTab)
+        nCol(rAddress.nCol), nRow(rAddress.nRow), nTab(rAddress.nTab)
     {}
     inline ScAddress& operator=( const ScAddress& rAddress );
 
@@ -274,13 +274,13 @@ public:
     }
     void SetInvalid()
     {
-        nRow = -1;
         nCol = -1;
+        nRow = -1;
         nTab = -1;
     }
     bool IsValid() const
     {
-        return (nRow >= 0) && (nCol >= 0) && (nTab >= 0);
+        return (nCol >= 0) && (nRow >= 0) && (nTab >= 0);
     }
 
     inline void PutInOrder( ScAddress& rAddress );
