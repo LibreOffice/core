@@ -10,6 +10,7 @@
 #include "xmlimp.hxx"
 
 #include "xmlictxt.hxx"
+#include "xmlmetai.hxx"
 #include "xmltext.hxx"
 
 using namespace com::sun::star;
@@ -58,6 +59,8 @@ XMLImportContext *XMLOfficeDocContext::CreateChildContext(const OUString &rName,
 {
     if (rName == "office:body")
         return new XMLBodyContext(mrImport);
+    else if (rName == "office:meta")
+        return new XMLMetaDocumentContext(mrImport);
     return nullptr;
 }
 
