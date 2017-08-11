@@ -43,7 +43,7 @@
     </xsl:copy>
     </xsl:if>
 </xsl:template>
- 
+
 <xsl:template match="text()">
     <xsl:if test="../@xml:lang=$lang">
         <xsl:copy>
