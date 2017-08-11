@@ -3034,39 +3034,6 @@ endef
 endif # ENABLE_KDE4
 
 
-ifeq ($(ENABLE_KDE5),TRUE)
-
-define gb_LinkTarget__use_kde5
-$(call gb_LinkTarget_set_include,$(1),\
-	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KF5_CFLAGS)))) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KF5_CFLAGS))) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(KF5_LIBS) \
-)
-
-ifeq ($(COM),GCC)
-$(call gb_LinkTarget_add_cxxflags,$(1),\
-	-Wno-shadow \
-)
-endif
-
-endef
-
-else # !ENABLE_KDE5
-
-define gb_LinkTarget__use_kde5
-
-endef
-
-endif # ENABLE_KDE5
-
-
 # PYTHON
 # extra python_headers external because pyuno wrapper must not link python
 ifneq ($(SYSTEM_PYTHON),)

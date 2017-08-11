@@ -660,7 +660,6 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kde5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
         test_fontconfig=yes
@@ -742,7 +741,6 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -771,7 +769,6 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -797,7 +794,6 @@ dragonfly*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
-    test_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -821,7 +817,6 @@ linux-android*)
     test_freetype=no
     test_gtk=no
     test_kde4=no
-    test_kde5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1260,12 +1255,6 @@ AC_ARG_ENABLE(kde4,
     AS_HELP_STRING([--enable-kde4],
         [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
          KDE4 are available.]),
-,)
-
-AC_ARG_ENABLE(kde5,
-    AS_HELP_STRING([--enable-kde5],
-        [Determines whether to use Qt5/KF5 vclplug on platforms where Qt5 and
-         KF5 are available.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(gui,
@@ -4608,7 +4597,6 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_kde4=no
-    test_kde5=no
     enable_cairo_canvas=no
 fi
 
@@ -9803,13 +9791,6 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
-ENABLE_KDE5=""
-if test "x$enable_kde5" = "xyes"; then
-    ENABLE_KDE5="TRUE"
-    AC_DEFINE(ENABLE_KDE5)
-    R="$R kde5"
-fi
-AC_SUBST(ENABLE_KDE5)
 
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
@@ -10889,142 +10870,6 @@ AC_SUBST(MOC4)
 AC_SUBST(KDE4_GLIB_CFLAGS)
 AC_SUBST(KDE4_GLIB_LIBS)
 AC_SUBST(KDE4_HAVE_GLIB)
-
-dnl ===================================================================
-dnl KDE5 Integration
-dnl ===================================================================
-
-KF5_CFLAGS=""
-KF5_LIBS=""
-QMAKE5="qmake"
-KF5_CONFIG="kf5-config"
-MOC5="moc"
-KF5_GLIB_CFLAGS=""
-KF5_GLIB_LIBS=""
-KF5_HAVE_GLIB=""
-if test "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE"; then
-    qt5_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
-    qt5_libdirs="$QT5LIB /usr/lib/qt5 /usr/lib $x_libraries"
-
-    kf5_incdirs="$KF5INC /usr/include /usr/include/KF5 $x_includes"
-    kf5_libdirs="$KF5LIB /usr/lib /usr/lib/kf5 /usr/lib/kf5/devel $x_libraries"
-
-    if test -n "$supports_multilib"; then
-        qt5_libdirs="$qt5_libdirs /usr/lib64/qt5 /usr/lib64/qt /usr/lib64"
-        kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
-    fi
-
-    qt5_test_include="QtWidgets/qapplication.h"
-    qt5_test_library="libQt5Widgets.so"
-    kf5_test_include="kcoreaddons_version.h"
-    kf5_test_library="libKF5CoreAddons.so"
-
-    dnl Check for qmake
-    AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH] )
-    if test "$QMAKE5" != "no"; then
-        qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
-        qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
-    fi
-
-    AC_MSG_CHECKING([for Qt5 headers])
-    qt5_incdir="no"
-    for inc_dir in $qt5_incdirs; do
-        if test -r "$inc_dir/$qt5_test_include"; then
-            qt5_incdir="$inc_dir"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$qt5_incdir])
-    if test "x$qt5_incdir" = "xno"; then
-        AC_MSG_ERROR([Qt5 headers not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
-    fi
-
-    AC_MSG_CHECKING([for Qt5 libraries])
-    qt5_libdir="no"
-    for lib_dir in $qt5_libdirs; do
-        if test -r "$lib_dir/$qt5_test_library"; then
-            qt5_libdir="$lib_dir"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$qt5_libdir])
-    if test "x$qt5_libdir" = "xno"; then
-        AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
-    fi
-    kf5_libdirs="$qt5_libdir $kf5_libdirs"
-
-    dnl Check for Meta Object Compiler
-
-    AC_PATH_PROGS( MOC5, [moc-qt5 moc], no, [`dirname $qt5_libdir`/bin:$QT5DIR/bin:$PATH] )
-    if test "$MOC5" = "no"; then
-        AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
-the root of your Qt installation by exporting QT5DIR before running "configure".])
-    fi
-
-    dnl kf5 KDE4 support compatibility installed
-    AC_PATH_PROG( KF5_CONFIG, $KF5_CONFIG, no, )
-    if test "$KF5_CONFIG" != "no"; then
-        kf5_incdirs="`$KF5_CONFIG --path include` $kf5_incdirs"
-        kf5_libdirs="`$KF5_CONFIG --path lib` $kf5_libdirs"
-    fi
-
-    dnl Check for KF5 headers
-    AC_MSG_CHECKING([for KF5 headers])
-    kf5_incdir="no"
-    for kf5_check in $kf5_incdirs; do
-        if test -r "$kf5_check/$kf5_test_include"; then
-            kf5_incdir="$kf5_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$kf5_incdir])
-    if test "x$kf5_incdir" = "xno"; then
-        AC_MSG_ERROR([KF5 headers not found.  Please specify the root of your KF5 installation by exporting KF5DIR before running "configure".])
-    fi
-
-    dnl Check for KF5 libraries
-    AC_MSG_CHECKING([for KF5 libraries])
-    kf5_libdir="no"
-    for kf5_check in $kf5_libdirs; do
-        if test -r "$kf5_check/$kf5_test_library"; then
-            kf5_libdir="$kf5_check"
-            break
-        fi
-    done
-
-    AC_MSG_RESULT([$kf5_libdir])
-    if test "x$kf5_libdir" = "xno"; then
-        AC_MSG_ERROR([KF5 libraries not found.  Please specify the root of your KF5 installation by exporting KF5DIR before running "configure".])
-    fi
-
-    PKG_CHECK_MODULES(KF5_XCB,[xcb],,[AC_MSG_ERROR([XCB not installed])])
-
-    KF5_CFLAGS="-I$kf5_incdir -I$kf5_incdir/KCoreAddons -I$kf5_incdir/KI18n -I$kf5_incdir/KConfigCore -I$kf5_incdir/KWindowSystem -I$kf5_incdir/KIOCore -I$qt5_incdir -I$qt5_incdir/QtCore -I$qt5_incdir/QtGui -I$qt5_incdir/QtWidgets -I$qt5_incdir/QtNetwork -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT $KF5_XCB_CFLAGS"
-    KF5_LIBS="-L$kf5_libdir -lKF5CoreAddons -lKF5I18n -lKF5ConfigCore -lKF5WindowSystem -lKF5KIOCore -L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network -lQt5X11Extras $KF5_XCB_LIBS"
-    KF5_CFLAGS=$(printf '%s' "$KF5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $KF5_CFLAGS"
-    AC_MSG_CHECKING([whether KDE is >= 5.0])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <kcoreaddons_version.h>
-
-int main(int argc, char **argv) {
-       if (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 0) return 0;
-       else return 1;
-}
-       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-
-fi
-AC_SUBST(KF5_CFLAGS)
-AC_SUBST(KF5_LIBS)
-AC_SUBST(MOC5)
-AC_SUBST(KF5_GLIB_CFLAGS)
-AC_SUBST(KF5_GLIB_LIBS)
-AC_SUBST(KF5_HAVE_GLIB)
 
 dnl ===================================================================
 dnl Test whether to include Evolution 2 support
@@ -12564,7 +12409,6 @@ AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
-AC_CONFIG_HEADERS([config_host/config_kde5.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
