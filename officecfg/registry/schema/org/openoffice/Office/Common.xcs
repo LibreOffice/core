@@ -3399,48 +3399,6 @@
         </group>
       </group>
     </group>
-    <group oor:name="AddXMLToStorage">
-      <info>
-        <desc>Contains settings specifying if a XML package is added to the
-        applications binary files.</desc>
-      </info>
-      <prop oor:name="Writer" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Writer -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: no -->
-        <info>
-          <desc>Defines if a XML package is added to the Writer binary
-          files.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Calc" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Calc -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: no -->
-        <info>
-          <desc>Defines if a XML package is added to the Calc binary
-          files.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Impress" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Impress -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: no -->
-        <info>
-          <desc>Defines if a XML package is added to the Impress binary
-          files.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Draw" oor:type="xs:boolean">
-        <!-- OldPath: AddXMLToStorage_Draw -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: no -->
-        <info>
-          <desc>Defines if a XML package is added to the Draw binary
-          files.</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="UserColors">
       <info>
         <desc>Contains recent colors and custom colors</desc>
