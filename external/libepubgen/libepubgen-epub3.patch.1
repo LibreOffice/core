@@ -971,3 +971,100 @@ index 8017ffe..056c48c 100644
 -- 
 2.12.3
 
+From 14da42819f1f96b87b2337da395e5ad6639dcebe Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 11 Aug 2017 16:43:10 +0200
+Subject: [PATCH] EPUBGenerator: write language and modification date into
+ content.opf
+
+With this, all metadata which had a hardcoded value is now parsed and
+the old values are just defaults.
+---
+ src/lib/EPUBGenerator.cpp | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 056c48c..fc6c848 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -260,24 +260,34 @@ void EPUBGenerator::writeRoot()
+   sink.insertCharacters(title);
+   sink.closeElement("dc:title");
+ 
++  RVNGString language("en");
++  if (m_metadata["dc:language"] && !m_metadata["dc:language"]->getStr().empty())
++    language = m_metadata["dc:language"]->getStr();
+   sink.openElement("dc:language");
+-  sink.insertCharacters("en");
++  sink.insertCharacters(language);
+   sink.closeElement("dc:language");
+ 
+-  time_t now = 0;
+-  time(&now);
+-  const struct tm *local = localtime(&now);
+-  if (m_version == 30 && local)
++  if (m_version == 30)
+   {
++    RVNGString date;
++    time_t now = 0;
++    time(&now);
++    const struct tm *local = localtime(&now);
++    if (local)
++    {
++      const int MAX_BUFFER = 1024;
++      char buffer[MAX_BUFFER];
++      strftime(&buffer[0], MAX_BUFFER-1, "%Y-%m-%dT%H:%M:%SZ", local);
++      date.append(buffer);
++    }
++
++    if (m_metadata["dc:date"] && !m_metadata["dc:date"]->getStr().empty())
++      date = m_metadata["dc:date"]->getStr();
++
+     RVNGPropertyList metaAttrs;
+     metaAttrs.insert("property", "dcterms:modified");
+     sink.openElement("meta", metaAttrs);
+-    const int MAX_BUFFER = 1024;
+-    char buffer[MAX_BUFFER];
+-    strftime(&buffer[0], MAX_BUFFER-1, "%Y-%m-%dT%H:%M:%SZ", local);
+-    RVNGString result;
+-    result.append(buffer);
+-    sink.insertCharacters(result);
++    sink.insertCharacters(date);
+     sink.closeElement("meta");
+   }
+ 
+-- 
+2.12.3
+From c8cba54a7025ee0f1129233912f6e9ceda254c64 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 11 Aug 2017 17:40:10 +0200
+Subject: [PATCH] EPUB3: fix validation error with doc modified date format
+
+ERROR(RSC-005): test.epub/OEBPS/content.opf(2,420): Error while parsing file: dcterms:modified illegal syntax (expecting: 'CCYY-MM-DDThh:mm:ssZ')
+
+Both of them looked like XML date formats, but actually librevenge is
+more precise, so truncate it.
+---
+ src/lib/EPUBGenerator.cpp | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index fc6c848..4bffb8b 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -282,7 +282,11 @@ void EPUBGenerator::writeRoot()
+     }
+ 
+     if (m_metadata["dc:date"] && !m_metadata["dc:date"]->getStr().empty())
+-      date = m_metadata["dc:date"]->getStr();
++    {
++      // Expecting CCYY-MM-DDThh:mm:ssZ, librevenge provides CCYY-MM-DDThh:mm:ss.sssssssss
++      date = std::string(m_metadata["dc:date"]->getStr().cstr()).substr(0, 19).c_str();
++      date.append("Z");
++    }
+ 
+     RVNGPropertyList metaAttrs;
+     metaAttrs.insert("property", "dcterms:modified");
+-- 
+2.12.3
+
