@@ -54,43 +54,6 @@ private:
     bool                mbValid;        /// True = decoder is correctly initialized.
 };
 
-/** Decodes BIFF stream contents that are encoded using the old XOR algorithm. */
-class BiffDecoder_XOR : public BiffDecoderBase
-{
-private:
-    /** Copy constructor for cloning. */
-                        BiffDecoder_XOR( const BiffDecoder_XOR& rDecoder );
-
-    /** Implements password verification and initialization of the decoder. */
-    virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
-    virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
-
-private:
-    ::oox::core::BinaryCodec_XOR maCodec;   /// Cipher algorithm implementation.
-    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
-    sal_uInt16          mnKey;
-    sal_uInt16          mnHash;
-};
-
-/** Decodes BIFF stream contents that are encoded using the RC4 algorithm. */
-class BiffDecoder_RCF : public BiffDecoderBase
-{
-private:
-    /** Copy constructor for cloning. */
-                        BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder );
-
-    /** Implements password verification and initialization of the decoder. */
-    virtual css::uno::Sequence< css::beans::NamedValue > implVerifyPassword( const OUString& rPassword ) override;
-    virtual bool implVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
-
-private:
-    ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.
-    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
-    ::std::vector< sal_uInt8 > maSalt;
-    ::std::vector< sal_uInt8 > maVerifier;
-    ::std::vector< sal_uInt8 > maVerifierHash;
-};
-
 } // namespace xls
 } // namespace oox
 
