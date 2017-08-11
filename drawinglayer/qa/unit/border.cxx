@@ -63,9 +63,21 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
         new drawinglayer::primitive2d::BorderLinePrimitive2D(
             aStart,
             aEnd,
-            drawinglayer::primitive2d::BorderLine(fLeftWidth, aColorLeft, fExtendLeftStart, fExtendLeftEnd),
-            drawinglayer::primitive2d::BorderLine(fDistance, aColorGap),
-            drawinglayer::primitive2d::BorderLine(fRightWidth, aColorRight, fExtendRightStart, fExtendRightEnd),
+            drawinglayer::primitive2d::BorderLine(
+                fLeftWidth,
+                aColorLeft,
+                drawinglayer::primitive2d::BorderLineExtend(
+                    fExtendLeftStart,
+                    fExtendLeftEnd)),
+            drawinglayer::primitive2d::BorderLine(
+                fDistance,
+                aColorGap),
+            drawinglayer::primitive2d::BorderLine(
+                fRightWidth,
+                aColorRight,
+                drawinglayer::primitive2d::BorderLineExtend(
+                    fExtendRightStart,
+                    fExtendRightEnd)),
             bHasGapColor,
             nStyle));
 
@@ -118,9 +130,21 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
         new drawinglayer::primitive2d::BorderLinePrimitive2D(
             aStart,
             aEnd,
-            drawinglayer::primitive2d::BorderLine(fLeftWidth, aColorLeft, fExtendLeftStart, fExtendLeftEnd),
-            drawinglayer::primitive2d::BorderLine(fDistance, aColorGap),
-            drawinglayer::primitive2d::BorderLine(fRightWidth, aColorRight, fExtendRightStart, fExtendRightEnd),
+            drawinglayer::primitive2d::BorderLine(
+                fLeftWidth,
+                aColorLeft,
+                drawinglayer::primitive2d::BorderLineExtend(
+                    fExtendLeftStart,
+                    fExtendLeftEnd)),
+            drawinglayer::primitive2d::BorderLine(
+                fDistance,
+                aColorGap),
+            drawinglayer::primitive2d::BorderLine(
+                fRightWidth,
+                aColorRight,
+                drawinglayer::primitive2d::BorderLineExtend(
+                    fExtendRightStart,
+                    fExtendRightEnd)),
             bHasGapColor,
             nStyle));
 
