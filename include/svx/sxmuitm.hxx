@@ -29,9 +29,7 @@
 class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem<FieldUnit> {
 public:
     SdrMeasureUnitItem(FieldUnit eUnit=FUNIT_NONE): SfxEnumItem(SDRATTR_MEASUREUNIT, eUnit) {}
-    SdrMeasureUnitItem(SvStream& rIn)             : SfxEnumItem(SDRATTR_MEASUREUNIT,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 14; }
 
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

@@ -33,9 +33,7 @@ class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem<css::drawing::LineStyle>
 public:
                             static SfxPoolItem* CreateDefault();
                             XLineStyleItem(css::drawing::LineStyle = css::drawing::LineStyle_SOLID);
-                            XLineStyleItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

@@ -319,19 +319,9 @@ XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
 {
 }
 
-XLineStyleItem::XLineStyleItem(SvStream& rIn) :
-    SfxEnumItem(XATTR_LINESTYLE, rIn)
-{
-}
-
 SfxPoolItem* XLineStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStyleItem( *this );
-}
-
-SfxPoolItem* XLineStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineStyleItem(rIn);
 }
 
 bool XLineStyleItem::GetPresentation
@@ -934,19 +924,9 @@ XLineWidthItem::XLineWidthItem(long nWidth) :
 {
 }
 
-XLineWidthItem::XLineWidthItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_LINEWIDTH, rIn)
-{
-}
-
 SfxPoolItem* XLineWidthItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineWidthItem(*this);
-}
-
-SfxPoolItem* XLineWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineWidthItem(rIn);
 }
 
 bool XLineWidthItem::GetPresentation
@@ -1665,19 +1645,9 @@ XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
 {
 }
 
-XLineStartWidthItem::XLineStartWidthItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_LINESTARTWIDTH, rIn)
-{
-}
-
 SfxPoolItem* XLineStartWidthItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStartWidthItem(*this);
-}
-
-SfxPoolItem* XLineStartWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineStartWidthItem(rIn);
 }
 
 bool XLineStartWidthItem::GetPresentation
@@ -1713,19 +1683,9 @@ XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
 {
 }
 
-XLineEndWidthItem::XLineEndWidthItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_LINEENDWIDTH, rIn)
-{
-}
-
 SfxPoolItem* XLineEndWidthItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineEndWidthItem(*this);
-}
-
-SfxPoolItem* XLineEndWidthItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineEndWidthItem(rIn);
 }
 
 bool XLineEndWidthItem::GetPresentation
@@ -1761,19 +1721,9 @@ XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
 {
 }
 
-XLineStartCenterItem::XLineStartCenterItem(SvStream& rIn) :
-    SfxBoolItem(XATTR_LINESTARTCENTER, rIn)
-{
-}
-
 SfxPoolItem* XLineStartCenterItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineStartCenterItem(*this);
-}
-
-SfxPoolItem* XLineStartCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineStartCenterItem(rIn);
 }
 
 bool XLineStartCenterItem::GetPresentation
@@ -1810,19 +1760,9 @@ XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
 {
 }
 
-XLineEndCenterItem::XLineEndCenterItem(SvStream& rIn) :
-    SfxBoolItem(XATTR_LINEENDCENTER, rIn)
-{
-}
-
 SfxPoolItem* XLineEndCenterItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineEndCenterItem(*this);
-}
-
-SfxPoolItem* XLineEndCenterItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XLineEndCenterItem(rIn);
 }
 
 bool XLineEndCenterItem::GetPresentation
@@ -1864,19 +1804,9 @@ XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
 {
 }
 
-XFillStyleItem::XFillStyleItem(SvStream& rIn) :
-    SfxEnumItem(XATTR_FILLSTYLE, rIn)
-{
-}
-
 SfxPoolItem* XFillStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillStyleItem( *this );
-}
-
-SfxPoolItem* XFillStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFillStyleItem(rIn);
 }
 
 bool XFillStyleItem::GetPresentation
@@ -2763,19 +2693,9 @@ XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
 {
 }
 
-XFormTextStyleItem::XFormTextStyleItem(SvStream& rIn) :
-    SfxEnumItem(XATTR_FORMTXTSTYLE, rIn)
-{
-}
-
 SfxPoolItem* XFormTextStyleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextStyleItem( *this );
-}
-
-SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextStyleItem(rIn);
 }
 
 sal_uInt16 XFormTextStyleItem::GetValueCount() const
@@ -2806,19 +2726,9 @@ XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
 {
 }
 
-XFormTextAdjustItem::XFormTextAdjustItem(SvStream& rIn) :
-    SfxEnumItem(XATTR_FORMTXTADJUST, rIn)
-{
-}
-
 SfxPoolItem* XFormTextAdjustItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextAdjustItem( *this );
-}
-
-SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextAdjustItem(rIn);
 }
 
 sal_uInt16 XFormTextAdjustItem::GetValueCount() const
@@ -2849,19 +2759,9 @@ XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
 {
 }
 
-XFormTextDistanceItem::XFormTextDistanceItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_FORMTXTDISTANCE, rIn)
-{
-}
-
 SfxPoolItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextDistanceItem(*this);
-}
-
-SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextDistanceItem(rIn);
 }
 
 SfxPoolItem* XFormTextStartItem::CreateDefault() { return new XFormTextStartItem; }
@@ -2871,19 +2771,9 @@ XFormTextStartItem::XFormTextStartItem(long nStart) :
 {
 }
 
-XFormTextStartItem::XFormTextStartItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_FORMTXTSTART, rIn)
-{
-}
-
 SfxPoolItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextStartItem(*this);
-}
-
-SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextStartItem(rIn);
 }
 
 
@@ -2894,19 +2784,9 @@ XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
 {
 }
 
-XFormTextMirrorItem::XFormTextMirrorItem(SvStream& rIn) :
-    SfxBoolItem(XATTR_FORMTXTMIRROR, rIn)
-{
-}
-
 SfxPoolItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextMirrorItem(*this);
-}
-
-SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextMirrorItem(rIn);
 }
 
 
@@ -2917,19 +2797,9 @@ XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
 {
 }
 
-XFormTextOutlineItem::XFormTextOutlineItem(SvStream& rIn) :
-    SfxBoolItem(XATTR_FORMTXTOUTLINE, rIn)
-{
-}
-
 SfxPoolItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextOutlineItem(*this);
-}
-
-SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextOutlineItem(rIn);
 }
 
 
@@ -2940,19 +2810,9 @@ XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
 {
 }
 
-XFormTextShadowItem::XFormTextShadowItem(SvStream& rIn) :
-    SfxEnumItem(XATTR_FORMTXTSHADOW, rIn)
-{
-}
-
 SfxPoolItem* XFormTextShadowItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowItem( *this );
-}
-
-SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextShadowItem(rIn);
 }
 
 sal_uInt16 XFormTextShadowItem::GetValueCount() const
@@ -2996,19 +2856,9 @@ XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
 {
 }
 
-XFormTextShadowXValItem::XFormTextShadowXValItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_FORMTXTSHDWXVAL, rIn)
-{
-}
-
 SfxPoolItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowXValItem(*this);
-}
-
-SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextShadowXValItem(rIn);
 }
 
 
@@ -3019,19 +2869,9 @@ XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
 {
 }
 
-XFormTextShadowYValItem::XFormTextShadowYValItem(SvStream& rIn) :
-    SfxMetricItem(XATTR_FORMTXTSHDWYVAL, rIn)
-{
-}
-
 SfxPoolItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowYValItem(*this);
-}
-
-SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextShadowYValItem(rIn);
 }
 
 
@@ -3042,19 +2882,9 @@ XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
 {
 }
 
-XFormTextHideFormItem::XFormTextHideFormItem(SvStream& rIn) :
-    SfxBoolItem(XATTR_FORMTXTHIDEFORM, rIn)
-{
-}
-
 SfxPoolItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextHideFormItem(*this);
-}
-
-SfxPoolItem* XFormTextHideFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new XFormTextHideFormItem(rIn);
 }
 
 // --- SetItems ---

@@ -30,18 +30,14 @@ class SdrGrafModeItem_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
     SdrGrafModeItem_Base(GraphicDrawMode eMode):
         SfxEnumItem(SDRATTR_GRAFMODE, eMode) {}
-
-    SdrGrafModeItem_Base(SvStream& rIn): SfxEnumItem(SDRATTR_GRAFMODE, rIn) {}
 };
 
 class SVX_DLLPUBLIC SdrGrafModeItem : public SdrGrafModeItem_Base
 {
 public:
                             SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SdrGrafModeItem_Base( eMode ) {}
-                            SdrGrafModeItem( SvStream& rIn ) : SdrGrafModeItem_Base( rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
     virtual sal_uInt16      GetValueCount() const override;
 
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
