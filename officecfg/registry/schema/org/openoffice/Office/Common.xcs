@@ -6489,12 +6489,6 @@
          <value>false</value>
        </prop>
     </group>
-    <group oor:name="ExternalApps" oor:extensible="true">
-      <info>
-        <deprecated>Without replacement.</deprecated>
-        <desc>Specifies external helper applications / protocol handlers.</desc>
-      </info>
-    </group>
     <group oor:name="ExternalMailer">
       <info>
         <desc>Specifies an external mail application to be used for Send as
