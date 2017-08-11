@@ -2760,7 +2760,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
         //get the master
         xMaster.set(xFieldMasterAccess->getByName(sFieldMasterName), uno::UNO_QUERY_THROW);
     }
-    else
+    else if( m_xTextFactory.is() )
     {
         //create the master
         xMaster.set( m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
@@ -4144,7 +4144,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties->setPropertyValue(
                                 getPropertyName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
                         }
-                        else
+                        else if( m_xTextFactory.is() )
                         {
                             xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField.GetExpression");
                             xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
@@ -4305,6 +4305,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_XE:
                     {
+                        if( !m_xTextFactory.is() )
+                            break;
+
                         uno::Reference< beans::XPropertySet > xTC(
                                 m_xTextFactory->createInstance(
                                         OUString::createFromAscii(aIt->second.cFieldServiceName)),
@@ -4331,6 +4334,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         break;
                     case FIELD_CITATION:
                     {
+                        if( !m_xTextFactory.is() )
+                            break;
+
                         xFieldInterface = m_xTextFactory->createInstance(
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                                   uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
@@ -4352,6 +4358,9 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                     case FIELD_TC :
                     {
+                        if( !m_xTextFactory.is() )
+                            break;
+
                         uno::Reference< beans::XPropertySet > xTC(
                             m_xTextFactory->createInstance(
                                 OUString::createFromAscii(aIt->second.cFieldServiceName)),
