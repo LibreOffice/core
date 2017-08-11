@@ -26,14 +26,11 @@ class SVX_DLLPUBLIC SdrTextFixedCellHeightItem : public SfxBoolItem
 public:
 
     SdrTextFixedCellHeightItem( bool bUseFixedCellHeight = false );
-    SVX_DLLPRIVATE SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion );
 
     SVX_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                                 MapUnit eCoreMetric, MapUnit ePresentationMetric,
                                                 OUString &rText, const IntlWrapper&) const override;
 
-    SVX_DLLPRIVATE virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nItem ) const override;
-    SVX_DLLPRIVATE virtual SvStream&            Store( SvStream&, sal_uInt16 nVersion ) const override;
     SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = nullptr ) const override;
     SVX_DLLPRIVATE virtual  sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 

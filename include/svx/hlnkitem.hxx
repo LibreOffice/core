@@ -99,9 +99,6 @@ public:
     void SetMacroEvents (const HyperDialogEvent nEvents) { nMacroEvents = nEvents; }
     HyperDialogEvent GetMacroEvents() const { return nMacroEvents; }
 
-    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const override;
-    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVer ) const override;
-
 };
 
 #endif

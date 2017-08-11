@@ -38,8 +38,6 @@ public:
 
     // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;
-    virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const override;
-    virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

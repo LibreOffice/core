@@ -155,20 +155,6 @@ SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
     return new SvxNumberInfoItem( *this );
 }
 
-// Load/Save is unused!
-
-
-SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) const
-{
-    return new SvxNumberInfoItem( *this );
-}
-
-
-SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    return rStream;
-}
-
 
 void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
                                            const sal_uInt32 nCount )
