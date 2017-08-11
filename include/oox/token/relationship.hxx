@@ -27,7 +27,9 @@ enum class Relationship
     DIAGRAMDRAWING,
     DIAGRAMLAYOUT,
     DIAGRAMQUICKSTYLE,
+    DRAWING,
     ENDNOTES,
+    EXTERNALLINKPATH,
     FONT,
     FONTTABLE,
     FOOTER,
@@ -44,13 +46,16 @@ enum class Relationship
     OLEOBJECT,
     PACKAGE,
     SETTINGS,
+    SHAREDSTRINGS,
     SLIDE,
     SLIDELAYOUT,
     SLIDEMASTER,
     STYLES,
     THEME,
     VBAPROJECT,
-    WORDVBADATA
+    VMLDRAWING,
+    WORDVBADATA,
+    WORKSHEET
 };
 
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);
