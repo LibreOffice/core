@@ -40,19 +40,6 @@ sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 /*nFileFormatVers
     return 1;
 }
 
-SfxPoolItem* Svx3DReducedLineGeometryItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
-{
-    SfxBoolItem* pRetval = new Svx3DReducedLineGeometryItem();
-
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
-
-    return pRetval;
-}
-
 SfxPoolItem * Svx3DReducedLineGeometryItem::Clone(SfxItemPool *) const
 {
     return new Svx3DReducedLineGeometryItem(*this);
@@ -96,19 +83,6 @@ sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/)
     return 1;
 }
 
-SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
-{
-    SfxBoolItem* pRetval = new Svx3DSmoothNormalsItem();
-
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
-
-    return pRetval;
-}
-
 SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
 {
     return new Svx3DSmoothNormalsItem(*this);
@@ -122,19 +96,6 @@ Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
 sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
-}
-
-SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
-{
-    SfxBoolItem* pRetval = new Svx3DSmoothLidsItem();
-
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
-
-    return pRetval;
 }
 
 SfxPoolItem * Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
@@ -152,19 +113,6 @@ sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/)
     return 1;
 }
 
-SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
-{
-    SfxBoolItem* pRetval = new Svx3DCharacterModeItem();
-
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
-
-    return pRetval;
-}
-
 SfxPoolItem * Svx3DCharacterModeItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCharacterModeItem(*this);
@@ -180,19 +128,6 @@ sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) co
     return 1;
 }
 
-SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
-{
-    SfxBoolItem* pRetval = new Svx3DCloseFrontItem();
-
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
-
-    return pRetval;
-}
-
 SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
 {
     return new Svx3DCloseFrontItem(*this);
@@ -206,19 +141,6 @@ Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
 sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
-}
-
-SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
-{
-    SfxBoolItem* pRetval = new Svx3DCloseBackItem();
-
-    if(nItemVersion > 0)
-    {
-        SfxBoolItem aBoolItem(Which(), rIn);
-        pRetval->SetValue(aBoolItem.GetValue());
-    }
-
-    return pRetval;
 }
 
 SfxPoolItem * Svx3DCloseBackItem::Clone(SfxItemPool *) const

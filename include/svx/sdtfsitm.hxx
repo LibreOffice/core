@@ -46,9 +46,7 @@ class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem<SdrFitToSizeTyp
 public:
     static SfxPoolItem* CreateDefault();
     SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SdrFitToSizeType::NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit) {}
-    SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
-    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
