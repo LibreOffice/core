@@ -207,7 +207,7 @@ void ImpEditView::SelectionChanged()
 // This can be safely assumed due to the EditView only being capable of painting the
 // selection in XOR until today.
 // This also means that all places calling DrawSelectionXOR are thoroughly weighted
-// and choosen to make this fragile XOR-paint water-proof and thus contain some
+// and chosen to make this fragile XOR-paint water-proof and thus contain some
 // information in this sense.
 // Someone thankfully expanded it to collect the SelectionRectangles when called with
 // the Region*, see GetSelectionRectangles below.

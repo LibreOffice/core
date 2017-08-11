@@ -81,7 +81,7 @@ enum class ScrollRangeCheck
 };
 
 // Helper class that allows to set a callback at the EditView. When
-// set, Invalidates and repains are suppressed at the EditView, but
+// set, Invalidates and repaints are suppressed at the EditView, but
 // EditViewInvalidate() will be triggered to allow the consumer to
 // react itself as needed.
 // Also Selection visualization is suppressed and EditViewSelectionChange

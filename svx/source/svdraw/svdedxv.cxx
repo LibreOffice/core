@@ -367,7 +367,7 @@ namespace
         and thus avoiding potentially expensive repaints by using the
         automatically buffered Overlay mechanism.
 
-        It buffers as amuch as possible locally and *only* triggers a real
+        It buffers as much as possible locally and *only* triggers a real
         change (see call to objectChange()) when really needed.
      */
     class TextEditOverlayObject : public sdr::overlay::OverlayObject
@@ -531,7 +531,7 @@ namespace
 
             // active Outliner is always in unified oriented coordinate system (currently)
             // so just translate to TopLeft of visible Range. Keep in mind that top-left
-            // depends on vertical text and top-to-bottom text attribures
+            // depends on vertical text and top-to-bottom text attributes
             const tools::Rectangle aVisArea(mrOutlinerView.GetVisArea());
             const bool bVerticalWriting(pSdrOutliner->IsVertical());
             const bool bTopToBottom(pSdrOutliner->IsTopToBottom());
@@ -655,7 +655,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
     {
         // adapt all TextEditOverlayObject(s), so call EditViewInvalidate()
         // to update accordingly (will update selection, too). Suppress new
-        // stuff when LibreOficeKit is active
+        // stuff when LibreOfficeKit is active
         EditViewInvalidate();
     }
     else

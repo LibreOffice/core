@@ -69,7 +69,7 @@ class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView, public EditViewCallb
     virtual void EditViewSelectionChange() const override;
 
     // The OverlayObjects used for visualizing active TextEdit (currently
-    // using TextEditOverlayObject, but not limitied to it
+    // using TextEditOverlayObject, but not limited to it
     sdr::overlay::OverlayObjectList           maTEOverlayGroup;
 
 protected:
