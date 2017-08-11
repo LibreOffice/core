@@ -39,14 +39,15 @@ namespace o3tl
 // flags for SvxBackgroundTabPage
 enum class SvxBackgroundTabFlags
 {
-    NONE                = 0x00,
-    SHOW_SELECTOR       = 0x01,
-    SHOW_TBLCTL         = 0x08,
-    SHOW_HIGHLIGHTING   = 0x10,
+    NONE                 = 0x00,
+    SHOW_SELECTOR        = 0x01,
+    SHOW_TBLCTL          = 0x08,
+    SHOW_HIGHLIGHTING    = 0x10,
+    SHOW_CHAR_BKGCOLOR   = 0x20,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxBackgroundTabFlags> : is_typed_flags<SvxBackgroundTabFlags, 0x19> {};
+    template<> struct typed_flags<SvxBackgroundTabFlags> : is_typed_flags<SvxBackgroundTabFlags, 0x39> {};
 }
 
 // flags for SvxBorderTabPage
