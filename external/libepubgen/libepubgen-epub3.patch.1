@@ -864,3 +864,81 @@ index 7b17304..be56cc7 100644
 -- 
 2.12.3
 
+From c30bc184c18837203e9f249386711e9cd616c9f0 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 11 Aug 2017 10:50:47 +0200
+Subject: [PATCH] EPUB3: write the deprecated NCX navication as well
+
+<http://www.idpf.org/epub/30/spec/epub30-changes.html#sec-new-changed-nav>
+"3.2 Navigation" says:
+
+	EPUB 3 Publications may include the EPUB 2 NCX for EPUB 2 Reading System
+	forward compatibility purposes.
+---
+ src/lib/EPUBGenerator.cpp | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index ca05ea7..8017ffe 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -56,8 +56,7 @@ void EPUBGenerator::startDocument(const RVNGPropertyList &props)
+ 
+   if (m_version == 30)
+     m_manifest.insert(EPUBPath("OEBPS/toc.xhtml"), "application/xhtml+xml", "toc.xhtml", "nav");
+-  else
+-    m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
++  m_manifest.insert(EPUBPath("OEBPS/toc.ncx"), "application/x-dtbncx+xml", "toc.ncx", "");
+   m_manifest.insert(m_stylesheetPath, "text/css", "stylesheet.css", "");
+ }
+ 
+@@ -147,10 +146,10 @@ void EPUBGenerator::writeContainer()
+ 
+ void EPUBGenerator::writeNavigation()
+ {
+-  EPUBXMLSink sink;
+-
+   if (m_version == 30)
+   {
++    EPUBXMLSink sink;
++
+     const EPUBPath path("OEBPS/toc.xhtml");
+     RVNGPropertyList htmlAttrs;
+     htmlAttrs.insert("xmlns", "http://www.w3.org/1999/xhtml");
+@@ -174,10 +173,10 @@ void EPUBGenerator::writeNavigation()
+     sink.closeElement("html");
+ 
+     sink.writeTo(*m_package, path.str().c_str());
+-
+-    return;
+   }
+ 
++  EPUBXMLSink sink;
++
+   const EPUBPath path("OEBPS/toc.ncx");
+   RVNGPropertyList ncxAttrs;
+   ncxAttrs.insert("xmlns", "http://www.daisy.org/z3986/2005/ncx/");
+@@ -198,7 +197,9 @@ void EPUBGenerator::writeNavigation()
+   sink.closeElement("docTitle");
+ 
+   sink.openElement("navMap");
+-  m_htmlManager.writeTocTo(sink, path, m_version);
++  // In case of EPUB3 the (deprecated, but valid) EPUB2 markup is wanted, so
++  // the version is unconditional here.
++  m_htmlManager.writeTocTo(sink, path, /*version=*/20);
+   sink.closeElement("navMap");
+ 
+   sink.closeElement("ncx");
+@@ -284,8 +285,7 @@ void EPUBGenerator::writeRoot()
+   sink.closeElement("manifest");
+ 
+   RVNGPropertyList spineAttrs;
+-  if (m_version == 20)
+-    spineAttrs.insert("toc", "toc.ncx");
++  spineAttrs.insert("toc", "toc.ncx");
+ 
+   sink.openElement("spine", spineAttrs);
+   m_htmlManager.writeSpineTo(sink);
+-- 
+2.12.3
+
