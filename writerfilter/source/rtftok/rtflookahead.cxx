@@ -19,6 +19,8 @@ namespace rtftok
 
 RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
     : m_rStream(rStream),
+      m_nHasChftn(-1),
+      m_nHasFootnote(-1),
       m_bHasTable(false)
 {
     sal_uInt64 const nPos = m_rStream.Tell();
@@ -31,8 +33,17 @@ RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
 
 RTFLookahead::~RTFLookahead() = default;
 
-RTFError RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/)
+RTFError RTFLookahead::dispatchDestination(RTFKeyword nKeyword)
 {
+    switch (nKeyword)
+    {
+        case (RTF_FOOTNOTE):
+            if( hasFootnote() == -1 )
+                m_nHasFootnote = m_pTokenizer->getGroup();
+            break;
+        default :
+            break;
+    }
     return RTFError::OK;
 }
 
@@ -43,8 +54,17 @@ RTFError RTFLookahead::dispatchFlag(RTFKeyword nKeyword)
     return RTFError::OK;
 }
 
-RTFError RTFLookahead::dispatchSymbol(RTFKeyword /*nKeyword*/)
+RTFError RTFLookahead::dispatchSymbol(RTFKeyword nKeyword)
 {
+    switch (nKeyword)
+    {
+        case (RTF_CHFTN):
+            if( hasChftn() == -1 )
+                m_nHasChftn = m_pTokenizer->getGroup();
+            break;
+        default :
+            break;
+    }
     return RTFError::OK;
 }
 
@@ -61,7 +81,14 @@ RTFError RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
 RTFError RTFLookahead::resolveChars(char ch)
 {
     while (!m_rStream.IsEof() && (ch != '{' && ch != '}' && ch != '\\'))
+    {
+        sal_uInt32 nCurrGroup = m_pTokenizer->getGroup();
+        while( nCurrGroup >= m_aText.size() )
+            m_aText.push_back( OUStringBuffer() );
+        if ( ch >= 0 ) //how can we handle unicode marks here???
+            m_aText[nCurrGroup].append(ch);
         m_rStream.ReadChar(ch);
+    }
     if (!m_rStream.IsEof())
         m_rStream.SeekRel(-1);
     return RTFError::OK;

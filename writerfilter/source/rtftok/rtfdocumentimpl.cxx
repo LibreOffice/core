@@ -1133,6 +1133,20 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().nInternalState != RTFInternalState::HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
 
+    // is the text part of a custom footnote mark? Then get the entire mark.
+    if( ch == '{' && !aBuf.isEmpty() )
+    {
+        // Lookahead group 0 never reads the full text, so start at this block's beginning '{' and look for a {\footnote.
+        // Right now, we are in group 1, so \footnote needs to be in group 2. If there is a \chftn in our group, it overrides the custom footnote.
+        RTFLookahead aLookahead(Strm(), m_nGroupStartPos-1);
+        if ( aLookahead.hasFootnote() == 2 && aLookahead.hasChftn() != 1 && !aLookahead.getString(1).isEmpty() )
+        {
+            m_sCustomFootnote = aLookahead.getString(1);
+            m_aIgnoreFirst = m_sCustomFootnote.copy(aBuf.getLength());
+            return RTFError::OK;
+        }
+    }
+
     if (m_aStates.top().nInternalState == RTFInternalState::HEX && m_aStates.top().eDestination != Destination::LEVELNUMBERS)
     {
         if (!bSkipped)
@@ -1366,6 +1380,7 @@ void RTFDocumentImpl::text(OUString& rString)
         m_aIgnoreFirst.clear();
         return;
     }
+    m_aIgnoreFirst.clear();
 
     // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
     if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get() &&
@@ -3084,14 +3099,6 @@ RTFError RTFDocumentImpl::popState()
             m_aStates.top().aPicture = aState.aPicture;
     }
     break;
-    }
-
-    if (aState.pCurrentBuffer == &m_aSuperBuffer)
-    {
-        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == nullptr);
-
-        if (!m_aSuperBuffer.empty())
-            replayBuffer(m_aSuperBuffer, nullptr, nullptr);
     }
 
     if (!m_aStates.empty() && m_aStates.top().nTableRowWidthAfter > 0 && aState.nTableRowWidthAfter == 0)

@@ -750,9 +750,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     break;
     case RTF_SUPER:
     {
-        if (!m_aStates.top().pCurrentBuffer)
-            m_aStates.top().pCurrentBuffer = &m_aSuperBuffer;
-
         auto pValue = std::make_shared<RTFValue>("superscript");
         m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
     }
@@ -765,11 +762,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     break;
     case RTF_NOSUPERSUB:
     {
-        if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
-        {
-            replayBuffer(m_aSuperBuffer, nullptr, nullptr);
-            m_aStates.top().pCurrentBuffer = nullptr;
-        }
         m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
     }
     break;

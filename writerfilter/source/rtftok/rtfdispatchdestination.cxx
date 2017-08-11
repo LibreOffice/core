@@ -288,20 +288,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (aKeyword == "\\ftnalt")
                     nId = NS_ooxml::LN_endnote;
 
-                if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
-                    m_aStates.top().pCurrentBuffer = nullptr;
-                bool bCustomMark = false;
-                OUString aCustomMark;
-                while (m_aSuperBuffer.size())
-                {
-                    Buf_t aTuple = m_aSuperBuffer.front();
-                    m_aSuperBuffer.pop_front();
-                    if (std::get<0>(aTuple) == BUFFER_UTEXT)
-                    {
-                        aCustomMark = std::get<1>(aTuple)->getString();
-                        bCustomMark = true;
-                    }
-                }
+                OUString aCustomMark = m_sCustomFootnote;
+                m_sCustomFootnote.clear();
+
                 m_aStates.top().eDestination = Destination::FOOTNOTE;
                 Mapper().startCharacterGroup();
                 runProps();
@@ -315,13 +304,16 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     aAttributes.set(Id(2), std::make_shared<RTFValue>(aCustomMark));
                     m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_RESOLVESUBSTREAM, std::make_shared<RTFValue>(aAttributes), nullptr));
                 }
-                if (bCustomMark)
+                if ( !aCustomMark.isEmpty() )
                 {
                     m_aStates.top().aCharacterAttributes.clear();
                     m_aStates.top().aCharacterSprms.clear();
                     auto pValue = std::make_shared<RTFValue>(1);
                     m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
+                    OUString sSavedIgnoreFirst = m_aIgnoreFirst;
+                    m_aIgnoreFirst.clear();
                     text(aCustomMark);
+                    m_aIgnoreFirst = sSavedIgnoreFirst;
                 }
                 Mapper().endCharacterGroup();
                 m_aStates.top().eDestination = Destination::SKIP;
