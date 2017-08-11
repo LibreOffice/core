@@ -1731,9 +1731,6 @@ void DocxAttributeOutput::StartRunProperties()
     assert( !m_pPostponedDiagrams );
     m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>);
 
-    assert( !m_pPostponedVMLDrawings );
-    m_pPostponedVMLDrawings.reset(new std::list<PostponedDrawing>);
-
     assert(!m_pPostponedDMLDrawings);
     m_pPostponedDMLDrawings.reset(new std::list<PostponedDrawing>);
 
@@ -2042,7 +2039,6 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WritePostponedChart();
 
     //We need to write w:pict tag after the w:rPr.
-    WritePostponedVMLDrawing();
     WritePostponedDMLDrawing();
 
     WritePostponedOLE();
@@ -4903,23 +4899,6 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
                                     FSEND );
 
     m_pSerializer->endElementNS( XML_w, XML_object );
-}
-
-/*
- * Write w:pict hierarchy  end element of w:rPr tag.
- */
-void DocxAttributeOutput::WritePostponedVMLDrawing()
-{
-    if (!m_pPostponedVMLDrawings)
-        return;
-
-    for( std::list< PostponedDrawing >::iterator it = m_pPostponedVMLDrawings->begin();
-         it != m_pPostponedVMLDrawings->end();
-         ++it )
-    {
-        m_rExport.SdrExporter().writeVMLDrawing(it->object, *(it->frame), *(it->point));
-    }
-    m_pPostponedVMLDrawings.reset(nullptr);
 }
 
 void DocxAttributeOutput::WritePostponedCustomShape()
