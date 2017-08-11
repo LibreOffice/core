@@ -580,6 +580,14 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 else if (m_unknown.isEmpty())
                     m_unknown = "--outdir must be followed by output directory path";
             }
+            else if ( eCurrentEvent == CommandLineEvent::Conversion
+                      && oArg == "convert-images-to" )
+            {
+                if (supplier.next(&aArg))
+                    m_convertimages = aArg;
+                else if (m_unknown.isEmpty())
+                    m_unknown = "--convert-images-to must be followed by an image type";
+            }
             else if ( aArg.startsWith("-") )
             {
                 // because it's impossible to filter these options that

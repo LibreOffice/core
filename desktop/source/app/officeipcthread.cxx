@@ -1049,6 +1049,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
         pRequest->aConversionList = aCmdLineArgs->GetConversionList();
         pRequest->aConversionParams = aCmdLineArgs->GetConversionParams();
         pRequest->aConversionOut = aCmdLineArgs->GetConversionOut();
+        pRequest->aImageConversionType = aCmdLineArgs->GetImageConversionType();
         pRequest->aInFilter = aCmdLineArgs->GetInFilter();
         pRequest->bTextCat = aCmdLineArgs->IsTextCat();
         pRequest->bScriptCat = aCmdLineArgs->IsScriptCat();
