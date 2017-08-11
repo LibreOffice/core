@@ -36,7 +36,6 @@ public:
                             XFormTextMirrorItem(bool bMirror = false);
                             XFormTextMirrorItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 };
 
 #endif
