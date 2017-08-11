@@ -440,7 +440,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         }
         else if ( aName.startsWith( "service:" ) )
         {
-            // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for more details.
+            // TODO: the dispatch has to be done for loadComponentFromURL as well.
             URL             aURL ;
             aURL.Complete = aName;
 
