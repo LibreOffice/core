@@ -3993,8 +3993,49 @@
   <namespace name="dml-graphicalObject">
     <start name="graphic"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+      <include href="dml-documentProperties"/>
+      <include href="dml-shapeProperties"/>
+      <include href="vml-main"/>
       <!-- ISO RELAX NG Schema -->
       <!-- start = graphic -->
+      <define name="CT_WordprocessingShape">
+        <element name="wps:cNvSpPr">
+          <ref name="CT_NonVisualDrawingShapeProps"/>
+        </element>
+        <element name="wps:cNvPr">
+          <ref name="CT_NonVisualDrawingProps"/>
+        </element>
+        <element name="wps:spPr">
+          <ref name="CT_ShapeProperties"/>
+        </element>
+        <element name="wps:txbx">
+          <ref name="CT_Textbox"/>
+        </element>
+        <element name="wps:bodyPr">
+          <ref name="BUILT_IN_ANY_TYPE"/>
+        </element>
+      </define>
+      <define name="CT_WordprocessingGroup">
+        <element name="wpg:cNvGrpSpPr">
+          <ref name="CT_NonVisualGroupDrawingShapeProps"/>
+        </element>
+        <element name="wpg:grpSpPr">
+          <ref name="CT_WordprocessingGroup"/>
+        </element>
+        <element name="wps:wsp">
+          <ref name="CT_WordprocessingShape"/>
+        </element>
+      </define>
+      <define name="wgp">
+        <element name="wpg:wgp">
+          <ref name="CT_WordprocessingGroup"/>
+        </element>
+      </define>
+      <define name="wsp">
+        <element name="wps:wsp">
+          <ref name="CT_WordprocessingShape"/>
+        </element>
+      </define>
       <define name="CT_GraphicalObjectData">
         <ref name="pic"/>
         <ref name="relIds"/>
@@ -4025,8 +4066,8 @@
       <element name="relIds" tokenid="ooxml:CT_GraphicalObjectData_relIds"/>
       <element name="lockedCanvas" tokenid="ooxml:CT_GraphicalObjectData_lockedCanvas"/>
       <element name="chart" tokenid="ooxml:CT_GraphicalObjectData_chart"/>
-      <element name="wsp" tokenid="ooxml:CT_GraphicalObjectData_wsp"/>
-      <element name="wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
+      <element name="wps:wsp" tokenid="ooxml:CT_GraphicalObjectData_wsp"/>
+      <element name="wpg:wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
     <resource name="CT_GraphicalObject" resource="Properties">
@@ -4034,6 +4075,20 @@
     </resource>
     <resource name="graphic" resource="Properties">
       <element name="graphic" tokenid="ooxml:graphic_graphic"/>
+    </resource>
+    <resource name="CT_WordprocessingShape" resource="Shape">
+      <element name="wps:cNvSpPr" tokenid="ooxml:CT_WordprocessingShape_cNvSpPr"/>
+      <element name="wps:spPr" tokenid="ooxml:CT_WordprocessingShape_spPr"/>
+    </resource>
+    <resource name="wsp" resource="Shape">
+      <element name="wps:wsp" tokenid="ooxml:wps_wsp"/>
+    </resource>
+    <resource name="CT_WordprocessingGroup" resource="Shape">
+      <element name="wpg:cNvGrpSpPr" tokenid="ooxml:CT_WordprocessingGroup_cNvGrpSpPr"/>
+      <element name="wpg:grpSpPr" tokenid="ooxml:CT_WordprocessingGroup_grpSpPr"/>
+    </resource>
+    <resource name="wgp" resource="Shape">
+      <element name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
     </resource>
   </namespace>
   <namespace name="wp14">

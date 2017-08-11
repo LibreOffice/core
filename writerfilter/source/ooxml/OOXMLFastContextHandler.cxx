@@ -1688,8 +1688,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
     bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
-    // drawingML version also counts as a group shape.
-    bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
+    // // drawingML version also counts as a group shape.
+    // bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
 
     switch (oox::getNamespace(Element))
     {
