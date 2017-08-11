@@ -75,6 +75,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -253,7 +254,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
             XclXmlUtils::GetStreamName( "../", "drawings/drawing", nDrawing ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.drawing+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing",
+            rtl::OUStringToOString(oox::getRelationship(Relationship::DRAWING), RTL_TEXTENCODING_UTF8).getStr(),
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_drawing,
@@ -287,7 +288,7 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nV
             XclXmlUtils::GetStreamName( "../", "drawings/vmlDrawing", nDrawing ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.vmlDrawing",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
+            rtl::OUStringToOString(oox::getRelationship(Relationship::VMLDRAWING), RTL_TEXTENCODING_UTF8).getStr(),
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_legacyDrawing,
@@ -1267,7 +1268,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( nullptr, "worksheets/sheet", nTab+1),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
+            rtl::OUStringToOString(oox::getRelationship(Relationship::WORKSHEET), RTL_TEXTENCODING_UTF8).getStr(),
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,

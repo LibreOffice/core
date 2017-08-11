@@ -48,6 +48,7 @@
 #include <excdoc.hxx>
 
 #include <oox/token/tokens.hxx>
+#include <oox/token/relationship.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/ole/vbaexport.hxx>
@@ -1079,7 +1080,7 @@ bool XclExpXmlStream::exportDocument()
     PushStream( CreateOutputStream( workbook, workbook,
                                     uno::Reference <XOutputStream>(),
                                     pWorkbookContentType,
-                                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
+                                    rtl::OUStringToOString(oox::getRelationship(Relationship::OFFICEDOCUMENT), RTL_TEXTENCODING_UTF8).getStr() ) );
 
     if (mbExportVBA)
     {
@@ -1096,7 +1097,7 @@ bool XclExpXmlStream::exportDocument()
                 openFragmentStream("xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
             comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 
-            addRelation(GetCurrentStream()->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+            addRelation(GetCurrentStream()->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), "vbaProject.bin");
         }
     }
 
