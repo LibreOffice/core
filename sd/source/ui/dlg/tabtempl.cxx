@@ -70,6 +70,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     , m_nTransparencyId(0)
     , m_nFontId(0)
     , m_nFontEffectId(0)
+    , m_nBackgroundId(0)
     , m_nTextId(0)
     , m_nDimensionId(0)
     , m_nConnectorId(0)
@@ -82,6 +83,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     m_nTransparencyId = AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
     m_nFontId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
     m_nFontEffectId = AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
+    m_nBackgroundId = AddTabPage("background", RID_SVXPAGE_BACKGROUND);
     AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
     m_nTextId = AddTabPage("text", RID_SVXPAGE_TEXTATTR);
     AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);
@@ -142,6 +144,11 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nFontEffectId)
     {
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == m_nBackgroundId)
+    {
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nTextId)

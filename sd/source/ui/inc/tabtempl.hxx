@@ -49,6 +49,7 @@ private:
     sal_uInt16 m_nTransparencyId;
     sal_uInt16 m_nFontId;
     sal_uInt16 m_nFontEffectId;
+    sal_uInt16 m_nBackgroundId;
     sal_uInt16 m_nTextId;
     sal_uInt16 m_nDimensionId;
     sal_uInt16 m_nConnectorId;
