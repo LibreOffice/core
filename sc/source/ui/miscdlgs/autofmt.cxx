@@ -251,8 +251,8 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         Size aStrSize;
         sal_uInt16 nFmtIndex = GetFormatIndex( nCol, nRow );
-        Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
-        Point aPos = cellRect.TopLeft();
+        const basegfx::B2DRange cellRange(maArray.GetCellRange( nCol, nRow ));
+        Point aPos = Point(basegfx::fround(cellRange.getMinX()), basegfx::fround(cellRange.getMinY()));
         sal_uInt16 nRightX = 0;
         bool bJustify = pCurData->GetIncludeJustify();
         SvxHorJustifyItem aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
@@ -273,7 +273,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
             MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
 
-            theMaxStrSize           = cellRect.GetSize();
+            theMaxStrSize = Size(basegfx::fround(cellRange.getWidth()), basegfx::fround(cellRange.getHeight()));
             theMaxStrSize.Width()  -= FRAME_OFFSET;
             theMaxStrSize.Height() -= FRAME_OFFSET;
 
@@ -306,7 +306,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
             aStrSize = aScriptedText.GetTextSize();
         }
 
-        nRightX  = sal_uInt16(cellRect.GetWidth() - aStrSize.Width() - FRAME_OFFSET);
+        nRightX  = sal_uInt16(basegfx::fround(cellRange.getWidth()) - aStrSize.Width() - FRAME_OFFSET);
 
         // vertical (always center):
 
@@ -316,7 +316,8 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
 
         if (eJustification != SVX_HOR_JUSTIFY_STANDARD)
         {
-            sal_uInt16 nHorPos = sal_uInt16((cellRect.GetWidth()-aStrSize.Width()) / 2);
+            sal_uInt16 nHorPos = sal_uInt16((basegfx::fround(cellRange.getWidth())-aStrSize.Width()) / 2);
+            //sal_uInt16 nHorPos = sal_uInt16((basegfx::fround(cellRange.getWidth())-aStrSize.Width()) / 2);
 
             switch (eJustification)
             {
@@ -381,7 +382,13 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
                 rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
                 rRenderContext.SetLineColor();
                 rRenderContext.SetFillColor( pItem->GetColor() );
-                rRenderContext.DrawRect( maArray.GetCellRect( nCol, nRow ) );
+
+                const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+                rRenderContext.DrawRect(
+                    Rectangle(
+                        basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
+                        basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
+
                 rRenderContext.Pop();
             }
         }

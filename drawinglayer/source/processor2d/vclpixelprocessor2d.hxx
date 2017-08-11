@@ -34,7 +34,6 @@ namespace drawinglayer { namespace primitive2d {
     class PolyPolygonColorPrimitive2D;
     class PolygonHairlinePrimitive2D;
     class PolygonStrokePrimitive2D;
-    class BorderLinePrimitive2D;
 }}
 
 
