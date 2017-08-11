@@ -30,7 +30,6 @@
 namespace vcl { class Font; }
 
 #define TEXTATTR_FONTCOLOR  1
-#define TEXTATTR_HYPERLINK  2
 #define TEXTATTR_FONTWEIGHT 3
 
 #define TEXTATTR_USER_START 1000 //start id for user defined text attributes
@@ -93,24 +92,6 @@ public:
     virtual bool            operator==( const TextAttrib& rAttr ) const override;
 
     FontWeight getFontWeight() const { return meWeight; }
-};
-
-
-class TextAttribHyperLink : public TextAttrib
-{
-private:
-    OUString    maURL;
-    OUString    maDescription;
-    Color       maColor;
-
-public:
-                            TextAttribHyperLink( const TextAttribHyperLink& rAttr );
-                            virtual ~TextAttribHyperLink() override;
-
-    const OUString&         GetURL() const                              { return maURL; }
-    virtual void            SetFont( vcl::Font& rFont ) const override;
-    virtual TextAttrib*     Clone() const override;
-    virtual bool            operator==( const TextAttrib& rAttr ) const override;
 };
 
 class VCL_DLLPUBLIC TextAttribProtect : public TextAttrib

@@ -1038,9 +1038,6 @@ void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboa
     {
         TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
 
-        if ( mpImpl->mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // then also as HTML
-            mpImpl->mpTextEngine->Write( pDataObj->GetHTMLStream(), &mpImpl->maSelection, true );
-
         SolarMutexReleaser aReleaser;
 
         try
@@ -1752,11 +1749,10 @@ bool TextView::IsSelectionAtPoint( const Point& rPosPixel )
 {
     Point aDocPos = GetDocPos( rPosPixel );
     TextPaM aPaM = mpImpl->mpTextEngine->GetPaM( aDocPos );
-    // For Hyperlinks D&D also start w/o a selection.
     // BeginDrag is only called, however, if IsSelectionAtPoint()
     // Problem: IsSelectionAtPoint is not called by Command()
     // if before MBDown returned false.
-    return IsInSelection( aPaM ) || mpImpl->mpTextEngine->FindAttrib( aPaM, TEXTATTR_HYPERLINK );
+    return IsInSelection( aPaM );
 }
 
 bool TextView::IsInSelection( const TextPaM& rPaM )
@@ -1881,30 +1877,6 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
         mpImpl->mpDDInfo->mbStarterOfDD = true;
 
         TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
-
-        if ( mpImpl->mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // then also as HTML
-            mpImpl->mpTextEngine->Write( pDataObj->GetHTMLStream(), &mpImpl->maSelection, true );
-
-        /*
-        // D&D of a Hyperlink
-        // TODO: Better would be to store MBDownPaM in MBDown,
-        // but this would be incompatible => change later
-        TextPaM aPaM( mpImpl->mpTextEngine->GetPaM( GetDocPos( GetWindow()->GetPointerPosPixel() ) ) );
-        const TextCharAttrib* pAttr = mpImpl->mpTextEngine->FindCharAttrib( aPaM, TEXTATTR_HYPERLINK );
-        if ( pAttr )
-        {
-            aSel = aPaM;
-            aSel.GetStart().GetIndex() = pAttr->GetStart();
-            aSel.GetEnd().GetIndex() = pAttr->GetEnd();
-
-            const TextAttribHyperLink& rLink = (const TextAttribHyperLink&)pAttr->GetAttr();
-            String aText( rLink.GetDescription() );
-            if ( !aText.Len() )
-                aText = mpImpl->mpTextEngine->GetText( aSel );
-            INetBookmark aBookmark( rLink.GetURL(), aText );
-            aBookmark.CopyDragServer();
-        }
-        */
 
         mpImpl->mpCursor->Hide();
 

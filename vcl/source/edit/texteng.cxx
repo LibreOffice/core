@@ -2495,31 +2495,8 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
             }
             else
             {
-                sal_Int32 nTmpStart = nStartPos;
-                sal_Int32 nTmpEnd;
-                do
-                {
-                    const TextCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( TEXTATTR_HYPERLINK, nTmpStart, nEndPos );
-                    nTmpEnd = pAttr ? pAttr->GetStart() : nEndPos;
-
-                    // Text before Attribute
-                    aText.append( pNode->GetText().copy( nTmpStart, nTmpEnd-nTmpStart ) );
-
-                    if ( pAttr )
-                    {
-                        nTmpEnd = std::min( pAttr->GetEnd(), nEndPos );
-
-                        // e.g. <A HREF="http://www.mopo.de/">Morgenpost</A>
-                        aText.append( "<A HREF=\"" );
-                        aText.append( static_cast<const TextAttribHyperLink&>( pAttr->GetAttr() ).GetURL() );
-                        aText.append( "\">" );
-                        nTmpStart = pAttr->GetStart();
-                        aText.append( pNode->GetText().copy( nTmpStart, nTmpEnd-nTmpStart ) );
-                        aText.append( "</A>" );
-
-                        nTmpStart = pAttr->GetEnd();
-                    }
-                } while ( nTmpEnd < nEndPos );
+                // Text before Attribute
+                aText.append( pNode->GetText().copy( nStartPos, nEndPos-nStartPos ) );
             }
 
             aText.append( "</P>" );
