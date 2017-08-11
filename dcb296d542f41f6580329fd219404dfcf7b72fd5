@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_eafd826f",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-11T05:44:43Z",
+      "side": 1,
+      "message": "I might have been unclear, sorry.\n\nIf Excel accepts our output, then yes, let\u0027s skip those *non-critical* elements. If some sample requires listed items to be read by Excel, then don\u0027t skip it, though.",
+      "parentUuid": "1a430d35_179e7756",
+      "range": {
+        "startLine": 598,
+        "startChar": 114,
+        "endLine": 598,
+        "endChar": 115
+      },
+      "revId": "dcb296d542f41f6580329fd219404dfcf7b72fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_ba1cad78",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 11
