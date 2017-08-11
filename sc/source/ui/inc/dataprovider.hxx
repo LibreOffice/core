@@ -25,6 +25,7 @@
 #include "docsh.hxx"
 #include "scdllapi.h"
 #include "datamapper.hxx"
+#include <rtl/strbuf.hxx>
 
 #include <queue>
 
@@ -33,41 +34,16 @@
 #if defined(_WIN32)
 #define __ORCUS_STATIC_LIB
 #endif
+
 #include <orcus/csv_parser.hpp>
+
+class SvStream;
 
 namespace sc {
 
 class DataProvider;
 class CSVDataProvider;
 class ScDBDataManager;
-
-struct Cell
-{
-    struct Str
-    {
-        size_t Pos;
-        size_t Size;
-    };
-
-    union
-    {
-        Str maStr;
-        double mfValue;
-    };
-
-    bool mbValue;
-
-    Cell();
-    Cell( const Cell& r );
-};
-
-struct Line
-{
-    OString maLine;
-    std::vector<Cell> maCells;
-};
-
-typedef std::vector<Line> LinesType;
 
 class CSVFetchThread : public salhelper::Thread
 {
@@ -76,8 +52,6 @@ class CSVFetchThread : public salhelper::Thread
 
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
-
-    std::queue<LinesType*> maPendingLines;
 
     orcus::csv::parser_config maConfig;
 
@@ -108,6 +82,8 @@ public:
     virtual void Import() = 0;
 
     virtual const OUString& GetURL() const = 0;
+
+    static std::unique_ptr<SvStream> FetchStreamFromURL(const OUString&, OStringBuffer& rBuffer);
 };
 
 class CSVDataProvider : public DataProvider
@@ -116,13 +92,10 @@ class CSVDataProvider : public DataProvider
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocument* mpDocument;
     ScDBDataManager* mpDBDataManager;
-    LinesType* mpLines;
-    size_t mnLineCount;
     std::unique_ptr<ScDocument> mpDoc;
     Idle maIdle;
 
     void Refresh();
-    Line GetLine();
 
 public:
     CSVDataProvider (ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager);
