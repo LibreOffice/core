@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6d58cc57",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-11T18:45:01Z",
+      "side": 1,
+      "message": "xContext is never null given line 834, so pContext is never null, so it can be removed from this check",
+      "revId": "b48db923b9fefb0b1cf6f65cb42359b5a70a1473",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
