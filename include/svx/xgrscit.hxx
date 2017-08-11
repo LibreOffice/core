@@ -33,9 +33,7 @@ class SVX_DLLPUBLIC XGradientStepCountItem: public SfxUInt16Item
 {
 public:
                             XGradientStepCountItem( sal_uInt16 nStepCount = 0 );
-                            XGradientStepCountItem( SvStream& rIn );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
