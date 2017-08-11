@@ -459,7 +459,7 @@ namespace
 
         // create local OverlaySelection - this is an integral part of EditText
         // visualization
-        const std::vector< basegfx::B2DRange > aEmptySelection;
+        const std::vector< basegfx::B2DRange > aEmptySelection{};
         mpOverlaySelection = new sdr::overlay::OverlaySelection(
             sdr::overlay::OverlayType::Transparent,
             rColor,
