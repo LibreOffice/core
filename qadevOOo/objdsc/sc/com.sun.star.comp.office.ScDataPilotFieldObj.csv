@@ -1,5 +1,3 @@
-"ScDataPilotFieldObj";"com::sun::star::sheet::XDataPilotFieldGrouping#optional";"createNameGroup()"
-"ScDataPilotFieldObj";"com::sun::star::sheet::XDataPilotFieldGrouping#optional";"createDateGroup()"
 "ScDataPilotFieldObj";"com::sun::star::container::XNamed";"getName()"
 "ScDataPilotFieldObj";"com::sun::star::container::XNamed";"setName()"
 "ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
