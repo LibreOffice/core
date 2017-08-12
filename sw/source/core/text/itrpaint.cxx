@@ -70,6 +70,12 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            SvxCaseMap::SmallCaps == rFnt.GetCaseMap();
 }
 
+const Color GetUnderColor( const SwFont *pFont )
+{
+    return pFont->GetUnderColor() == Color( COL_AUTO ) ?
+        pFont->GetColor() : pFont->GetUnderColor();
+}
+
 void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo *pNewInf )
 {
     CtorInitTextCursor( pNewFrame, pNewInf );
@@ -486,10 +492,15 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         GetInfo().SetUnderFnt( nullptr );
         return;
     }
-
     // Reuse calculated underline font as much as possible.
-    if ( GetInfo().GetUnderFnt() && GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + 1)
+    if ( GetInfo().GetUnderFnt() && GetInfo().GetIdx() + pPor->GetLen() <= GetInfo().GetUnderFnt()->GetEnd() + 1 )
+    {
+        SwFont &rFont = GetInfo().GetUnderFnt()->GetFont();
+        const Color aColor = GetUnderColor( GetInfo().GetFont() );
+        if ( GetUnderColor( &rFont ) != aColor )
+            rFont.SetColor( aColor );
         return;
+    }
 
     // If current underline matches the common underline font, we continue
     // to use the common underline font.
@@ -578,7 +589,6 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                 break;
 
             aIter.Seek( nTmpIdx );
-
             if ( aIter.GetFnt()->GetEscapement() < 0 || m_pFont->IsWordLineMode() ||
                  SvxCaseMap::SmallCaps == m_pFont->GetCaseMap() )
                 break;
