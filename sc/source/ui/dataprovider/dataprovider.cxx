@@ -22,29 +22,37 @@ namespace sc {
 
 std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL, OStringBuffer& rBuffer)
 {
-    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-
-    uno::Reference< io::XInputStream > xStream;
-    xStream = xFileAccess->openFileRead( rURL );
-
-    const sal_Int32 BUF_LEN = 8000;
-    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
-
-    sal_Int32 nRead = 0;
-    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
+    try
     {
-        rBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
-    }
+        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
 
-    if ( nRead > 0 )
+        uno::Reference< io::XInputStream > xStream;
+        xStream = xFileAccess->openFileRead( rURL );
+
+        const sal_Int32 BUF_LEN = 8000;
+        uno::Sequence< sal_Int8 > buffer( BUF_LEN );
+
+        sal_Int32 nRead = 0;
+        while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
+        {
+            rBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+        }
+
+        if ( nRead > 0 )
+        {
+            rBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+        }
+
+        xStream->closeInput();
+
+        SvStream* pStream = new SvMemoryStream(const_cast<char*>(rBuffer.getStr()), rBuffer.getLength(), StreamMode::READ);
+        return std::unique_ptr<SvStream>(pStream);
+    }
+    catch(...)
     {
-        rBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+        rBuffer.setLength(0);
+        return nullptr;
     }
-
-    xStream->closeInput();
-
-    SvStream* pStream = new SvMemoryStream(const_cast<char*>(rBuffer.getStr()), rBuffer.getLength(), StreamMode::READ);
-    return std::unique_ptr<SvStream>(pStream);
 }
 
 ExternalDataSource::ExternalDataSource(const OUString& rURL,
