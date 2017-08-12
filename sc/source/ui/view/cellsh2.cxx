@@ -1210,7 +1210,11 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 break;
 #if !ENABLE_ORCUS
             case SID_MANAGE_XML_SOURCE:
-                rSet.DisableItem(nWhich);
+                {
+                    SvtMiscOptions aMiscOptions;
+                    if ( !aMiscOptions.IsExperimentalMode() )
+                        rSet.DisableItem( nWhich );
+                }
             break;
 #endif
         }
