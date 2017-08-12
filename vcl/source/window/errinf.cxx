@@ -174,7 +174,7 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
         }
     }
 
-    OSL_FAIL("Error not handled");
+    SAL_WARN( "vcl", "Error not handled " << pInfo->GetErrorCode());
     // Error 1 (ERRCODE_ABORT) is classified as a General Error in sfx
     if (pInfo->GetErrorCode() != ERRCODE_ABORT)
         HandleError(ERRCODE_ABORT);
