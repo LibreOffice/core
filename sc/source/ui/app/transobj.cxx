@@ -47,7 +47,6 @@
 #include <docfunc.hxx>
 #include <scmod.hxx>
 #include <dragdata.hxx>
-#include <clipdata.hxx>
 #include <clipparam.hxx>
 
 #include <editeng/paperinf.hxx>
@@ -184,11 +183,6 @@ ScTransferObj::~ScTransferObj()
     SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetClipData().pCellClipboard == this )
-    {
-        OSL_FAIL("ScTransferObj wasn't released");
-        pScMod->SetClipObject( nullptr, nullptr );
-    }
     if ( pScMod->GetDragData().pCellTransfer == this )
     {
         OSL_FAIL("ScTransferObj wasn't released");
@@ -205,22 +199,16 @@ ScTransferObj::~ScTransferObj()
 
 ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
 {
-    ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
-    if ( pObj && pUIWin )
+    ScTransferObj* pObj = nullptr;
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
+    uno::Reference<XUnoTunnel> xTunnel( aDataHelper.GetTransferable(), uno::UNO_QUERY );
+    if ( xTunnel.is() )
     {
-        //  check formats to see if pObj is really in the system clipboard
-
-        //  pUIWin is NULL when called from core (IsClipboardSource),
-        //  in that case don't access the system clipboard, because the call
-        //  may be from other clipboard operations (like flushing, #86059#)
-
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
-        if ( !aDataHelper.HasFormat( SotClipboardFormatId::DIF ) )
-        {
-//          OSL_FAIL("ScTransferObj wasn't released");
-            pObj = nullptr;
-        }
+        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
+        if ( nHandle )
+            pObj = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( (sal_IntPtr) nHandle ));
     }
+
     return pObj;
 }
 
@@ -522,15 +510,6 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
             OSL_FAIL("unknown object id");
     }
     return bRet;
-}
-
-void ScTransferObj::ObjectReleased()
-{
-    ScModule* pScMod = SC_MOD();
-    if ( pScMod && pScMod->GetClipData().pCellClipboard == this )
-        pScMod->SetClipObject( nullptr, nullptr );
-
-    TransferableHelper::ObjectReleased();
 }
 
 void ScTransferObj::DragFinished( sal_Int8 nDropAction )
