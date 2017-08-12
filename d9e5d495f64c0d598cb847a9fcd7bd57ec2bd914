@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8877a601",
+        "filename": "sw/qa/extras/rtfexport/rtfexport2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1591,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-12T12:55:48Z",
+      "side": 1,
+      "message": "This test almost aught to be removed. It displays MUCH differently in Word than in LO, and this test wouldn\u0027t pass in MSO either.  But for now I just \"made it work\".",
+      "range": {
+        "startLine": 1591,
+        "startChar": 23,
+        "endLine": 1591,
+        "endChar": 35
+      },
+      "revId": "d9e5d495f64c0d598cb847a9fcd7bd57ec2bd914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_085ad683",
+        "filename": "writerfilter/source/rtftok/rtflookahead.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-12T12:55:48Z",
+      "side": 1,
+      "message": "haven\u0027t attempted creating an example document yet. Need to do that.",
+      "range": {
+        "startLine": 88,
+        "startChar": 25,
+        "endLine": 88,
+        "endChar": 64
+      },
+      "revId": "d9e5d495f64c0d598cb847a9fcd7bd57ec2bd914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e864aa4a",
+        "filename": "writerfilter/source/rtftok/rtflookahead.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-12T12:55:48Z",
+      "side": 1,
+      "message": "Oops - wrong position",
+      "range": {
+        "startLine": 68,
+        "startChar": 7,
+        "endLine": 68,
+        "endChar": 53
+      },
+      "revId": "d9e5d495f64c0d598cb847a9fcd7bd57ec2bd914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
