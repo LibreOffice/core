@@ -8,7 +8,6 @@
  */
 
 #include "cliputil.hxx"
-#include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "transobj.hxx"
 #include "document.hxx"

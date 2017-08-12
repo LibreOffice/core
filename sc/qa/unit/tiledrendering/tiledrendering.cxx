@@ -24,6 +24,7 @@
 #include <editeng/outliner.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
 
@@ -85,6 +86,7 @@ public:
     void testInsertGraphicInvalidations();
     void testDocumentSizeWithTwoViews();
     void testDisableUndoRepair();
+    void testMultiViewCopyPaste();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -112,6 +114,7 @@ public:
     CPPUNIT_TEST(testInsertGraphicInvalidations);
     CPPUNIT_TEST(testDocumentSizeWithTwoViews);
     CPPUNIT_TEST(testDisableUndoRepair);
+    CPPUNIT_TEST(testMultiViewCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1416,6 +1419,51 @@ void ScTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet2.GetItem(SID_UNDO)));
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testMultiViewCopyPaste()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(0, 0, 0), "TestCopy1");
+    pDoc->SetString(ScAddress(1, 0, 0), "TestCopy2");
+
+    // view #1
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+
+    // view #2
+    SfxLokHelper::createView();
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    CPPUNIT_ASSERT(pView1 != pView2);
+
+    // copy text view 1
+    pView1->SetCursor(0, 0);
+    pView1->GetViewFrame()->GetBindings().Execute(SID_COPY);
+
+    // copy text view 2
+    pView2->SetCursor(1, 0);
+    pView2->GetViewFrame()->GetBindings().Execute(SID_COPY);
+
+     // paste text view 1
+    pView1->SetCursor(0, 1);
+    pView1->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+
+    // paste text view 2
+    pView2->SetCursor(1, 1);
+    pView2->GetViewFrame()->GetBindings().Execute(SID_PASTE);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("TestCopy1"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("TestCopy2"), pDoc->GetString(ScAddress(1, 1, 0)));
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 }

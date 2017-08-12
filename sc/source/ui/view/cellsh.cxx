@@ -449,7 +449,7 @@ static bool lcl_TestFormat( SvxClipboardFormatItem& rFormats, const Transferable
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats )
 {
     vcl::Window* pWin = GetViewData()->GetActiveWin();
-    bool bDraw = ScDrawTransferObj::GetOwnClipboard() != nullptr;
+    bool bDraw = ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr;
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
@@ -479,10 +479,10 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
 
 //  insert, insert contents
 
-static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
+static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData, vcl::Window* pWin )
 {
     bool bPossible = false;
-    if ( ScTransferObj::GetOwnClipboard( nullptr ) || ScDrawTransferObj::GetOwnClipboard() )
+    if ( ScTransferObj::GetOwnClipboard( pWin ) || ScDrawTransferObj::GetOwnClipboard( pWin ) )
         bPossible = true;
     else
     {
@@ -513,7 +513,7 @@ static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 
 IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
-    bPastePossible = lcl_IsCellPastePossible( *pDataHelper );
+    bPastePossible = lcl_IsCellPastePossible( *pDataHelper, GetViewData()->GetActiveWin() );
 
     SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_PASTE );
@@ -585,7 +585,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-        bPastePossible = lcl_IsCellPastePossible( aDataHelper );
+        bPastePossible = lcl_IsCellPastePossible( aDataHelper, pWin );
     }
 
     bool bDisable = !bPastePossible;
@@ -603,29 +603,6 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
 
         if (!bDisable && !checkDestRanges(*GetViewData()))
             bDisable = true;
-    }
-
-    // This is only a workaround, we don't want that text content copied
-    // in one view is pasted in a different view.
-    // This part of the patch takes care to disable the "Paste" entry
-    // in the context menu.
-    // TODO: implement a solution providing one clipboard per view
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(nullptr);
-        if (pOwnClip)
-        {
-            ScDocument* pClipDoc = pOwnClip->GetDocument();
-            if (pClipDoc)
-            {
-                ScTabViewShell* pThisView = GetViewData()->GetViewShell();
-                ScTabViewShell* pSourceView = dynamic_cast<ScTabViewShell*>(pClipDoc->GetClipParam().getSourceView());
-                if (pThisView && pSourceView && pThisView != pSourceView)
-                {
-                    bDisable = true;
-                }
-            }
-        }
     }
 
     if (bDisable)
