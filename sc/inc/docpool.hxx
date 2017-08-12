@@ -30,19 +30,6 @@ class ScDocument;
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     std::vector<SfxPoolItem*>* mpPoolDefaults;
-    static sal_uInt16*  pVersionMap1;
-    static sal_uInt16*  pVersionMap2;
-    static sal_uInt16*  pVersionMap3;
-    static sal_uInt16*  pVersionMap4;
-    static sal_uInt16*  pVersionMap5;
-    static sal_uInt16*  pVersionMap6;
-    static sal_uInt16*  pVersionMap7;
-    static sal_uInt16*  pVersionMap8;
-    static sal_uInt16*  pVersionMap9;
-    static sal_uInt16*  pVersionMap10;
-    static sal_uInt16*  pVersionMap11;
-    static sal_uInt16*  pVersionMap12;
-
     sal_uInt64 mnCurrentMaxKey;
 
 public:
@@ -62,9 +49,6 @@ public:
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,
                                   const IntlWrapper& rIntl ) const override;
-
-    static void InitVersionMaps();
-    static void DeleteVersionMaps();
 };
 
 #endif

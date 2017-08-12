@@ -116,8 +116,6 @@ void ScDLL::Init()
     if ( SfxApplication::GetModule(SfxToolsModule::Calc) )    // Module already active
         return;
 
-    ScDocumentPool::InitVersionMaps(); // Is needed in the ScModule ctor
-
     auto pUniqueModule = o3tl::make_unique<ScModule>(&ScDocShell::Factory());
     ScModule* pMod = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Calc, std::move(pUniqueModule));
