@@ -170,7 +170,7 @@ implnCopy( const uno::Reference< frame::XModel>& xModel )
         pViewShell->CopyToClip(nullptr,false,false,true);
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( nullptr );
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( pViewShell->GetViewData().GetActiveWin() );
         if (pClipObj)
             pClipObj->SetUseInApi( true );
     }
@@ -185,7 +185,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
         pViewShell->CutToClip();
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
-        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( nullptr );
+        ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( pViewShell->GetViewData().GetActiveWin() );
         if (pClipObj)
             pClipObj->SetUseInApi( true );
     }
