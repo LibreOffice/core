@@ -796,14 +796,15 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
         }
     }
 
-    SalBitmap* pSalBmp, *pSalMask;
+    SalBitmap* pSalBmp = nullptr;
+    SalBitmap* pSalMask = nullptr;
 
     pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-    pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
 
     Size aLocalSize(rSize);
     if( pSalBmp->Create( xBitmapCanvas, aLocalSize ) )
     {
+        pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
         if ( pSalMask->Create( xBitmapCanvas, aLocalSize, true ) )
         {
             *this = BitmapEx(Bitmap(pSalBmp), Bitmap(pSalMask) );
@@ -811,6 +812,7 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
         }
         else
         {
+            delete pSalMask;
             *this = BitmapEx(Bitmap(pSalBmp));
             return true;
         }
