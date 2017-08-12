@@ -107,7 +107,7 @@ double ExternalDataSource::getUpdateFrequency() const
     return mnUpdateFrequency;
 }
 
-void ExternalDataSource::refresh(ScDocument* pDoc)
+void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
 {
     // no DB data available
     if (!mpDBDataManager)
@@ -120,6 +120,9 @@ void ExternalDataSource::refresh(ScDocument* pDoc)
     // if we still have not been able to create one, we can not refresh the data
     if (!mpDataProvider)
         return;
+
+    if (bDeterministic)
+        mpDataProvider->setDeterministic();
 
     mpDataProvider->Import();
 }
@@ -146,6 +149,16 @@ const std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources() 
 std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources()
 {
     return maDataSources;
+}
+
+DataProvider::DataProvider():
+    mbDeterministic(false)
+{
+}
+
+void DataProvider::setDeterministic()
+{
+    mbDeterministic = true;
 }
 
 DataProvider::~DataProvider()

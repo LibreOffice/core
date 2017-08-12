@@ -87,7 +87,7 @@ public:
     OUString getDBName() const;
     void setDBData(ScDBData* pDBData);
 
-    void refresh(ScDocument* pDoc);
+    void refresh(ScDocument* pDoc, bool bDeterministic = false);
 };
 
 class SC_DLLPUBLIC ExternalDataMapper

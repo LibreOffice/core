@@ -202,6 +202,12 @@ void CSVDataProvider::Import()
     mpDoc->ResetClip(mpDocument, (SCTAB)0);
     mxCSVFetchThread = new CSVFetchThread(*mpDoc, maURL, &maIdle);
     mxCSVFetchThread->launch();
+
+    if (mbDeterministic)
+    {
+        SolarMutexReleaser aReleaser;
+        mxCSVFetchThread->join();
+    }
 }
 
 IMPL_LINK_NOARG(CSVDataProvider, ImportFinishedHdl, Timer*, void)

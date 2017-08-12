@@ -76,7 +76,14 @@ public:
  */
 class DataProvider
 {
+protected:
+    /**
+     * If true make the threaded import deterministic for the tests.
+     */
+    bool mbDeterministic;
+
 public:
+    DataProvider();
     virtual ~DataProvider() = 0;
 
     virtual void Import() = 0;
@@ -84,6 +91,8 @@ public:
     virtual const OUString& GetURL() const = 0;
 
     static std::unique_ptr<SvStream> FetchStreamFromURL(const OUString&, OStringBuffer& rBuffer);
+
+    void setDeterministic();
 };
 
 class CSVDataProvider : public DataProvider
