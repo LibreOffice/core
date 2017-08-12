@@ -432,15 +432,6 @@ SfxItemInfo aSlotTab[] =
     { 0, true }                            // RES_UNKNOWNATR_CONTAINER
 };
 
-sal_uInt16* SwAttrPool::pVersionMap1 = nullptr;
-sal_uInt16* SwAttrPool::pVersionMap2 = nullptr;
-sal_uInt16* SwAttrPool::pVersionMap3 = nullptr;
-sal_uInt16* SwAttrPool::pVersionMap4 = nullptr;
-// #i18732#
-sal_uInt16* SwAttrPool::pVersionMap5 = nullptr;
-sal_uInt16* SwAttrPool::pVersionMap6 = nullptr;
-sal_uInt16* SwAttrPool::pVersionMap7 = nullptr;
-
 std::vector<SvGlobalName*> *pGlobalOLEExcludeList = nullptr;
 
 SwAutoCompleteWord* SwDoc::mpACmpltWords = nullptr;
@@ -650,82 +641,6 @@ void InitCore()
                        *static_cast<SvxFontItem*>(aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ]),
                        *static_cast<SvxFontItem*>(aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ]) );
 
-    // 1. version - new attributes:
-    //      - RES_CHRATR_BLINK
-    //      - RES_CHRATR_NOHYPHEN
-    //      - RES_CHRATR_NOLINEBREAK
-    //      - RES_PARATR_REGISTER
-    //      + 2 dummies for the "ranges"
-    SwAttrPool::pVersionMap1 = new sal_uInt16[ 60 ];
-    sal_uInt16 i;
-    for( i = 1; i <= 17; i++ )
-        SwAttrPool::pVersionMap1[ i-1 ] = i;
-    for ( i = 18; i <= 27; ++i )
-        SwAttrPool::pVersionMap1[ i-1 ] = i + 5;
-    for ( i = 28; i <= 35; ++i )
-        SwAttrPool::pVersionMap1[ i-1 ] = i + 7;
-    for ( i = 36; i <= 58; ++i )
-        SwAttrPool::pVersionMap1[ i-1 ] = i + 10;
-    for ( i = 59; i <= 60; ++i )
-        SwAttrPool::pVersionMap1[ i-1 ] = i + 12;
-
-    // 2. version - new attributes:
-    //      10 dummies for the frame "range"
-    SwAttrPool::pVersionMap2 = new sal_uInt16[ 75 ];
-    for( i = 1; i <= 70; i++ )
-        SwAttrPool::pVersionMap2[ i-1 ] = i;
-    for ( i = 71; i <= 75; ++i )
-        SwAttrPool::pVersionMap2[ i-1 ] = i + 10;
-
-    // 3. version:
-    //      new attributes and dummies for the CJK version and
-    //      new graphics attributes
-    SwAttrPool::pVersionMap3 = new sal_uInt16[ 86 ];
-    for( i = 1; i <= 21; i++ )
-        SwAttrPool::pVersionMap3[ i-1 ] = i;
-    for ( i = 22; i <= 27; ++i )
-        SwAttrPool::pVersionMap3[ i-1 ] = i + 15;
-    for ( i = 28; i <= 82; ++i )
-        SwAttrPool::pVersionMap3[ i-1 ] = i + 20;
-    for ( i = 83; i <= 86; ++i )
-        SwAttrPool::pVersionMap3[ i-1 ] = i + 35;
-
-    // 4. version:
-    //      new paragraph attributes for CJK version
-    SwAttrPool::pVersionMap4 = new sal_uInt16[ 121 ];
-    for( i = 1; i <= 65; i++ )
-        SwAttrPool::pVersionMap4[ i-1 ] = i;
-    for ( i = 66; i <= 121; ++i )
-        SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
-
-    // 5. version
-    // #i18732# - setup new version map due to extension of
-    // the frame attributes (RES_FRMATR_*) for binary filters.
-    SwAttrPool::pVersionMap5 = new sal_uInt16[ 130 ];
-    for( i = 1; i <= 109; i++ )
-        SwAttrPool::pVersionMap5[ i-1 ] = i;
-    for ( i = 110; i <= 130; ++i )
-        SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
-
-    // 6. version:
-    //      RES_CHARATR_OVERLINE
-    //      new character attribute for overlining plus 2 dummies
-    //      1. dummy -> RES_CHRATR_RSID
-    //      2. dummy -> RES_CHRATR_BOX
-    SwAttrPool::pVersionMap6 = new sal_uInt16[ 136 ];
-    for( i = 1; i <= 37; i++ )
-        SwAttrPool::pVersionMap6[ i-1 ] = i;
-    for ( i = 38; i <= 136; ++i )
-        SwAttrPool::pVersionMap6[ i-1 ] = i + 3;
-
-    // 7. version:
-    // New character attribute for character box shadow plus 3 dummies
-    SwAttrPool::pVersionMap7 = new sal_uInt16[ 144 ];
-    for( i = 1; i <= 40; ++i )
-        SwAttrPool::pVersionMap7[ i-1 ] = i;
-    for ( i = 41; i <= 144; ++i )
-        SwAttrPool::pVersionMap7[ i-1 ] = i + 4;
-
     SwBreakIt::Create_( ::comphelper::getProcessComponentContext() );
     pCheckIt = nullptr;
 
@@ -821,15 +736,6 @@ void FinitCore()
     }
 
     ::ClearFEShellTabCols();
-
-    delete[] SwAttrPool::pVersionMap1;
-    delete[] SwAttrPool::pVersionMap2;
-    delete[] SwAttrPool::pVersionMap3;
-    delete[] SwAttrPool::pVersionMap4;
-    // #i18732#
-    delete[] SwAttrPool::pVersionMap5;
-    delete[] SwAttrPool::pVersionMap6;
-    delete[] SwAttrPool::pVersionMap7;
 
     for (SvGlobalName* p : *pGlobalOLEExcludeList)
         delete p;
