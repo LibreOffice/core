@@ -290,7 +290,6 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
                 }
                 pTransferObj->CopyToClipboard( GetActiveWin() );
-                SC_MOD()->SetClipObject( pTransferObj, nullptr );
             }
 
             bDone = true;
@@ -399,7 +398,6 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 }
 
                 pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard
-                SC_MOD()->SetClipObject( pTransferObj, nullptr );      // internal clipboard
             }
 
             bSuccess = true;

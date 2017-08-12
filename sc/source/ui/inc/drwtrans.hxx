@@ -79,7 +79,6 @@ public:
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
-    virtual void        ObjectReleased() override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
     SdrModel*           GetModel()  { return pModel; }
@@ -97,6 +96,7 @@ public:
 
     static ScDrawTransferObj* GetOwnClipboard( vcl::Window* pUIWin );
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
+
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }
