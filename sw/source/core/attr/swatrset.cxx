@@ -51,15 +51,6 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
                     aSlotTab, &aAttrTab ),
     m_pDoc( pD )
 {
-    SetVersionMap( 1, 1, 60, pVersionMap1 );
-    SetVersionMap( 2, 1, 75, pVersionMap2 );
-    SetVersionMap( 3, 1, 86, pVersionMap3 );
-    SetVersionMap( 4, 1,121, pVersionMap4 );
-    // #i18732# - apply new version map
-    SetVersionMap( 5, 1,130, pVersionMap5 );
-    SetVersionMap( 6, 1,136, pVersionMap6 );
-    SetVersionMap( 7, 1,144, pVersionMap7 );
-
     // create secondary pools immediately
     createAndAddSecondaryPools();
 }

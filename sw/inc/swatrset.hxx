@@ -145,15 +145,6 @@ private:
 
     friend void InitCore();            // For creating/deleting of version maps.
     friend void FinitCore();
-    static sal_uInt16* pVersionMap1;
-    static sal_uInt16* pVersionMap2;
-    static sal_uInt16* pVersionMap3;
-    static sal_uInt16* pVersionMap4;
-    // due to extension of attribute set a new version
-    // map for binary filter is necessary (version map 5).
-    static sal_uInt16* pVersionMap5;
-    static sal_uInt16* pVersionMap6;
-    static sal_uInt16* pVersionMap7;
 
     SwDoc* m_pDoc;
 
