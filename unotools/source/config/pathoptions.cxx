@@ -113,7 +113,6 @@ class SvtPathOptions_Impl
         const OUString& GetModulePath() { return GetPath( SvtPathOptions::PATH_MODULE ); }
         const OUString& GetPalettePath() { return GetPath( SvtPathOptions::PATH_PALETTE ); }
         const OUString& GetPluginPath() { return GetPath( SvtPathOptions::PATH_PLUGIN ); }
-        const OUString& GetStoragePath() { return GetPath( SvtPathOptions::PATH_STORAGE ); }
         const OUString& GetTempPath() { return GetPath( SvtPathOptions::PATH_TEMP ); }
         const OUString& GetTemplatePath() { return GetPath( SvtPathOptions::PATH_TEMPLATE ); }
         const OUString& GetUserConfigPath() { return GetPath( SvtPathOptions::PATH_USERCONFIG ); }
@@ -141,7 +140,6 @@ class SvtPathOptions_Impl
         void            SetModulePath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_MODULE, rPath ); }
         void            SetPalettePath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_PALETTE, rPath ); }
         void            SetPluginPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_PLUGIN, rPath ); }
-        void            SetStoragePath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_STORAGE, rPath ); }
         void            SetTempPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_TEMP, rPath ); }
         void            SetTemplatePath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
         void            SetUserConfigPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
@@ -187,7 +185,6 @@ static const PropertyStruct aPropNames[] =
     { "Module",         SvtPathOptions::PATH_MODULE         },
     { "Palette",        SvtPathOptions::PATH_PALETTE        },
     { "Plugin",         SvtPathOptions::PATH_PLUGIN         },
-    { "Storage",        SvtPathOptions::PATH_STORAGE        },
     { "Temp",           SvtPathOptions::PATH_TEMP           },
     { "Template",       SvtPathOptions::PATH_TEMPLATE       },
     { "UserConfig",     SvtPathOptions::PATH_USERCONFIG     },
@@ -227,8 +224,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
             ePath == SvtPathOptions::PATH_FILTER    ||
             ePath == SvtPathOptions::PATH_HELP      ||
             ePath == SvtPathOptions::PATH_MODULE    ||
-            ePath == SvtPathOptions::PATH_PLUGIN    ||
-            ePath == SvtPathOptions::PATH_STORAGE
+            ePath == SvtPathOptions::PATH_PLUGIN
           )
         {
             // These office paths have to be converted to system pates
@@ -279,7 +275,6 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
             case SvtPathOptions::PATH_HELP:
             case SvtPathOptions::PATH_MODULE:
             case SvtPathOptions::PATH_PLUGIN:
-            case SvtPathOptions::PATH_STORAGE:
             {
                 // These office paths have to be convert back to UCB-URL's
                 osl::FileBase::getFileURLFromSystemPath( rNewPath, aResult );
@@ -551,11 +546,6 @@ const OUString& SvtPathOptions::GetPluginPath() const
     return pImpl->GetPluginPath();
 }
 
-const OUString& SvtPathOptions::GetStoragePath() const
-{
-    return pImpl->GetStoragePath();
-}
-
 const OUString& SvtPathOptions::GetTempPath() const
 {
     return pImpl->GetTempPath();
@@ -664,11 +654,6 @@ void SvtPathOptions::SetPalettePath( const OUString& rPath )
 void SvtPathOptions::SetPluginPath( const OUString& rPath )
 {
     pImpl->SetPluginPath( rPath );
-}
-
-void SvtPathOptions::SetStoragePath( const OUString& rPath )
-{
-    pImpl->SetStoragePath( rPath );
 }
 
 void SvtPathOptions::SetTempPath( const OUString& rPath )
