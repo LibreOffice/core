@@ -14,6 +14,8 @@
 #include "officecfg/Office/Calc.hxx"
 #include <rtl/strbuf.hxx>
 
+#include "htmldataprovider.hxx"
+
 using namespace com::sun::star;
 
 namespace sc {
@@ -203,13 +205,16 @@ bool DataProviderFactory::isInternalDataProvider(const OUString& rProvider)
     return rProvider.startsWith("org.libreoffice.calc");
 }
 
-std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc, const OUString& rProvider, const OUString& rURL, const OUString& /*rID*/, ScDBDataManager* pManager)
+std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc, const OUString& rProvider,
+        const OUString& rURL, const OUString& rID, ScDBDataManager* pManager)
 {
     bool bInternal = DataProviderFactory::isInternalDataProvider(rProvider);
     if (bInternal)
     {
         if (rProvider == "org.libreoffice.calc.csv")
             return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rURL, pManager));
+        else if (rProvider == "org.libreoffice.calc.html")
+            return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rURL, pManager, rID));
     }
     else
     {
