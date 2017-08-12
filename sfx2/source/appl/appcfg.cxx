@@ -434,7 +434,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_MODULE:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetModulePath(), aValue ); break;
                             case SvtPathOptions::PATH_PALETTE:      aValue = aPathCfg.GetPalettePath(); break;
                             case SvtPathOptions::PATH_PLUGIN:       osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetPluginPath(), aValue ); break;
-                            case SvtPathOptions::PATH_STORAGE:      osl::FileBase::getFileURLFromSystemPath( aPathCfg.GetStoragePath(), aValue ); break;
                             case SvtPathOptions::PATH_TEMP:         aValue = aPathCfg.GetTempPath(); break;
                             case SvtPathOptions::PATH_TEMPLATE:     aValue = aPathCfg.GetTemplatePath(); break;
                             case SvtPathOptions::PATH_USERCONFIG:   aValue = aPathCfg.GetUserConfigPath(); break;
@@ -789,14 +788,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                         OUString aTmp;
                         if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
                             aPathOptions.SetPluginPath( aTmp );
-                        break;
-                    }
-
-                    case SvtPathOptions::PATH_STORAGE:
-                    {
-                        OUString aTmp;
-                        if( osl::FileBase::getSystemPathFromFileURL( sValue, aTmp ) == osl::FileBase::E_None )
-                            aPathOptions.SetStoragePath( aTmp );
                         break;
                     }
 
