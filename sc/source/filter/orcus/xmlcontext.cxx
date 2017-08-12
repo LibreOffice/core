@@ -22,6 +22,7 @@
 #include <orcus/xml_namespace.hpp>
 #include <orcus/orcus_xml.hpp>
 #include <orcus/global.hpp>
+#include <orcus/sax_parser_base.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
@@ -206,9 +207,13 @@ void ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
         orcus::xml_structure_tree::element aElem = aWalker.root();
         populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, nullptr, rParam);
     }
+    catch (const orcus::sax::malformed_xml_error& e)
+    {
+        SAL_WARN("sc.orcus", "Malformed XML error: " << e.what());
+    }
     catch (const std::exception&)
     {
-        // Parsing of this XML file failed.
+        SAL_WARN("sc.orcus", "parsing failed with an unknown error");
     }
 }
 
