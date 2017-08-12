@@ -1,4 +1,2 @@
 "ScDataPilotTableObj";"com::sun::star::container::XNamed";"getName()"
 "ScDataPilotTableObj";"com::sun::star::container::XNamed";"setName()"
-"ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable";"getOutputRange()"
-"ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable";"refresh()"
