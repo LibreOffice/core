@@ -7,19 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_dataproviders_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_dataprovider))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_dataproviders_test, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_dataprovider, \
     sc/qa/unit/dataproviders_test \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sc_dataproviders_test, \
+$(eval $(call gb_CppunitTest_use_externals,sc_dataprovider, \
 	boost_headers \
 	mdds_headers \
 	libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_dataproviders_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_dataprovider, \
     basegfx \
     comphelper \
     cppu \
@@ -56,23 +56,23 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_dataproviders_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_dataproviders_test,\
+$(eval $(call gb_CppunitTest_set_include,sc_dataprovider,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
 	-I$(SRCDIR)/sc/source/filter/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_custom_headers,sc_dataproviders_test,\
+$(eval $(call gb_CppunitTest_use_custom_headers,sc_dataprovider,\
 	officecfg/registry \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sc_dataproviders_test))
+$(eval $(call gb_CppunitTest_use_sdk_api,sc_dataprovider))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_dataproviders_test))
-$(eval $(call gb_CppunitTest_use_vcl,sc_dataproviders_test))
+$(eval $(call gb_CppunitTest_use_ure,sc_dataprovider))
+$(eval $(call gb_CppunitTest_use_vcl,sc_dataprovider))
 
-$(eval $(call gb_CppunitTest_use_components,sc_dataproviders_test,\
+$(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
 	basic/util/sb \
     chart2/source/chartcore \
     chart2/source/controller/chartcontroller \
@@ -112,7 +112,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataproviders_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sc_dataproviders_test,\
+$(eval $(call gb_CppunitTest_use_externals,sc_dataprovider,\
 	orcus \
 	orcus-parser \
 	boost_filesystem \
@@ -121,6 +121,6 @@ $(eval $(call gb_CppunitTest_use_externals,sc_dataproviders_test,\
 	zlib \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_dataproviders_test))
+$(eval $(call gb_CppunitTest_use_configuration,sc_dataprovider))
 
 # vim: set noet sw=4 ts=4:
