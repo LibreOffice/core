@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_882086f9",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-12T12:16:03Z",
+      "side": 1,
+      "message": "There were added as a blind test, and probably can be removed.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 30
+      },
+      "revId": "b304df657e92c0bd611b9e5cfa9dcbb7e48e8e1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
