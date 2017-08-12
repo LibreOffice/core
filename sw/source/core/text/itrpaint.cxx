@@ -70,6 +70,12 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            SvxCaseMap::SmallCaps == rFnt.GetCaseMap();
 }
 
+const Color GetUnderColor( const SwFont *pFont )
+{
+    return pFont->GetUnderColor() == Color(COL_AUTO) ?
+        pFont->GetColor() : pFont->GetUnderColor();
+}
+
 void SwTextPainter::CtorInitTextPainter( SwTextFrame *pNewFrame, SwTextPaintInfo *pNewInf )
 {
     CtorInitTextCursor( pNewFrame, pNewInf );
@@ -569,6 +575,8 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         sal_uInt16 nMaxBaseLineOfst = 0;
         int nNumberOfPortions = 0;
 
+        const Color aUnderColor = GetUnderColor(GetInfo().GetFont());
+
         while( sal::static_int_cast<long>(nTmpIdx) <= nUnderEnd && pPor )
         {
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
@@ -578,9 +586,12 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                 break;
 
             aIter.Seek( nTmpIdx );
-
             if ( aIter.GetFnt()->GetEscapement() < 0 || m_pFont->IsWordLineMode() ||
                  SvxCaseMap::SmallCaps == m_pFont->GetCaseMap() )
+                break;
+
+            const Color aColor = GetUnderColor( aIter.GetFnt() );
+            if ( aColor != aUnderColor )
                 break;
 
             if ( !aIter.GetFnt()->GetEscapement() )
@@ -635,6 +646,9 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
             // common base line
             aCommonBaseLine.Y() = nAdjustBaseLine + nMaxBaseLineOfst;
+
+            if ( nTmpIdx > nIndx && nTmpIdx < nUnderEnd)
+                nUnderEnd = nTmpIdx - 1;
         }
     }
 
