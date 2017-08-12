@@ -580,8 +580,6 @@ void ScGlobal::Clear()
     DELETEZ(pUnitConverter);
     DELETEZ(pFieldEditEngine);
 
-    ScDocumentPool::DeleteVersionMaps();
-
     DELETEZ(pEmptyOUString);
     xDrawClipDocShellRef.clear();
 }
