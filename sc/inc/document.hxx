@@ -710,7 +710,7 @@ public:
     const ScDBData*              GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData*                    GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void                         RefreshDirtyTableColumnNames();
-    sc::ExternalDataMapper&      GetExternalDataMapper();
+    SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const;
 
