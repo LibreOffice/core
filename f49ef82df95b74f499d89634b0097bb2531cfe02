@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_88f166d0",
+        "filename": "include/oox/token/relationship.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-08-12T06:12:43Z",
+      "side": 1,
+      "message": "To be well sorted, NOTESMASTER should be before NOTESSLIDE",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 15
+      },
+      "revId": "f49ef82df95b74f499d89634b0097bb2531cfe02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a8ee22ea",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-08-12T06:12:43Z",
+      "side": 1,
+      "message": "idem previous comment",
+      "range": {
+        "startLine": 24,
+        "startChar": 15,
+        "endLine": 24,
+        "endChar": 26
+      },
+      "revId": "f49ef82df95b74f499d89634b0097bb2531cfe02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c8b9aeee",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-08-12T06:12:43Z",
+      "side": 1,
+      "message": "extra final space to remove",
+      "range": {
+        "startLine": 30,
+        "startChar": 99,
+        "endLine": 30,
+        "endChar": 100
+      },
+      "revId": "f49ef82df95b74f499d89634b0097bb2531cfe02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
