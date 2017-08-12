@@ -17,11 +17,6 @@
 
 #include <memory>
 
-struct TestImpl
-{
-    ScDocShellRef m_xDocShell;
-};
-
 class ScDataProvidersTest : public ScBootstrapFixture
 {
 public:
@@ -40,45 +35,42 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    std::unique_ptr<TestImpl> m_pImpl;
+    ScDocShellRef m_xDocShell;
     ScDocument *m_pDoc;
 };
 
-ScDataProvidersTest::ScDataProvidersTest() :
-    ScBootstrapFixture( "/sc/qa/unit/data" ),
-    m_pImpl(new TestImpl),
-    m_pDoc(nullptr)
-{
-}
-
-ScDocShell& ScDataProvidersTest::getDocShell()
-{
-    return *m_pImpl->m_xDocShell;
-}
-
 void ScDataProvidersTest::testCSVImport()
 {
-    m_pDoc->InsertTab(0, "foo");
-    bool success;
-    OUString aCSVPath;
-    createCSVPath( "dataprovider.", aCSVPath );
-    OUString aDBName = "TEST";
-    sc::ExternalDataMapper aExternalDataMapper (&getDocShell(), aCSVPath, aDBName, 0, 0, 0, 5, 5, false, success);
-    aExternalDataMapper.StartImport();
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    CPPUNIT_ASSERT(bInserted);
+
+    OUString aFileURL;
+    createFileURL("test1.", "csv", aFileURL);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.csv", m_pDoc);
+    aDataSource.setDBData(pDBData);
+
+
+    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    CPPUNIT_ASSERT(!rDataSources.empty());
+
+    rDataSources[0].refresh(m_pDoc, true);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL (-2012.0, m_pDoc->GetValue(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL (-1.0, m_pDoc->GetValue(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL (0.0, m_pDoc->GetValue(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL (1.0, m_pDoc->GetValue(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL (2012.0, m_pDoc->GetValue(4, 0, 0));
-    CPPUNIT_ASSERT_EQUAL (-3.14, m_pDoc->GetValue(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL (-0.99, m_pDoc->GetValue(1, 1, 0));
-    CPPUNIT_ASSERT_EQUAL (0.01, m_pDoc->GetValue(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL (3.14, m_pDoc->GetValue(3, 1, 0));
-    CPPUNIT_ASSERT_EQUAL (OUString("H"), m_pDoc->GetString(0, 2, 0));
-    CPPUNIT_ASSERT_EQUAL (OUString("Hello, Calc!"), m_pDoc->GetString(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL (0.0, m_pDoc->GetValue(2, 2, 0));
-    CPPUNIT_ASSERT_EQUAL (0.0, m_pDoc->GetValue(0, 3, 0));
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), m_pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), m_pDoc->GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test3"), m_pDoc->GetString(2, 1, 0));
+}
+
+ScDataProvidersTest::ScDataProvidersTest() :
+    ScBootstrapFixture( "/sc/qa/unit/data/dataprovider" ),
+    m_pDoc(nullptr)
+{
 }
 
 void ScDataProvidersTest::setUp()
@@ -86,20 +78,21 @@ void ScDataProvidersTest::setUp()
     ScBootstrapFixture::setUp();
 
     ScDLL::Init();
-    m_pImpl->m_xDocShell = new ScDocShell(
+    m_xDocShell = new ScDocShell(
         SfxModelFlags::EMBEDDED_OBJECT |
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
-    m_pImpl->m_xDocShell->SetIsInUcalc();
-    m_pImpl->m_xDocShell->DoInitUnitTest();
-    m_pDoc = &m_pImpl->m_xDocShell->GetDocument();
+    m_xDocShell->SetIsInUcalc();
+    m_xDocShell->DoInitUnitTest();
+    m_pDoc = &m_xDocShell->GetDocument();
+    m_pDoc->InsertTab(0, "Tab");
 }
 
 void ScDataProvidersTest::tearDown()
 {
-    m_pImpl->m_xDocShell->DoClose();
-    m_pImpl->m_xDocShell.clear();
+    m_xDocShell->DoClose();
+    m_xDocShell.clear();
     ScBootstrapFixture::tearDown();
 }
 
