@@ -88,7 +88,7 @@ public:
     }
 
     ErrCode MakeWarning() const {
-        return ErrCode(m_value & ERRCODE_WARNING_MASK);
+        return ErrCode(m_value | ERRCODE_WARNING_MASK);
     }
 
     bool IsError() {
