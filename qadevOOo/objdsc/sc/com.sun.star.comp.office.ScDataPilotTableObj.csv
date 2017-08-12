@@ -11,8 +11,6 @@
 "ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotDescriptor";"getPageFields()"
 "ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotDescriptor";"getDataFields()"
 "ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotDescriptor";"getHiddenFields()"
-"ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable";"getOutputRange()"
-"ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable";"refresh()"
 "ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable2";"getDrillDownData()"
 "ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable2";"getPositionData()"
 "ScDataPilotTableObj";"com::sun::star::sheet::XDataPilotTable2";"insertDrillDownSheet()"
