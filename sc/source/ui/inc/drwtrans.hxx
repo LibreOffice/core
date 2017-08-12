@@ -77,7 +77,6 @@ public:
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual bool        WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor ) override;
-    virtual void        ObjectReleased() override;
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 
     SdrModel*           GetModel()  { return pModel; }
@@ -93,7 +92,8 @@ public:
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
     ScDragSrc           GetDragSourceFlags() const      { return nDragSourceFlags; }
 
-    static ScDrawTransferObj* GetOwnClipboard();
+    static ScDrawTransferObj* GetOwnClipboard( vcl::Window* );
+
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

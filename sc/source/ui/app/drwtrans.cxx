@@ -58,7 +58,6 @@
 #include <rangeutl.hxx>
 #include <formula/grammar.hxx>
 #include <dragdata.hxx>
-#include <clipdata.hxx>
 
 #include <scitems.hxx>
 
@@ -221,11 +220,6 @@ ScDrawTransferObj::~ScDrawTransferObj()
     SolarMutexGuard aSolarGuard;
 
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetClipData().pDrawClipboard == this )
-    {
-        OSL_FAIL("ScDrawTransferObj wasn't released");
-        pScMod->SetClipObject( nullptr, nullptr );
-    }
     if ( pScMod->GetDragData().pDrawTransfer == this )
     {
         OSL_FAIL("ScDrawTransferObj wasn't released");
@@ -242,9 +236,18 @@ ScDrawTransferObj::~ScDrawTransferObj()
     delete pDragSourceView;
 }
 
-ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard()
+ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( vcl::Window* pWin )
 {
-    ScDrawTransferObj* pObj = SC_MOD()->GetClipData().pDrawClipboard;
+    ScDrawTransferObj* pObj = nullptr;
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+    uno::Reference<XUnoTunnel> xTunnel( aDataHelper.GetTransferable(), uno::UNO_QUERY );
+    if ( xTunnel.is() )
+    {
+        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
+        if ( nHandle )
+            pObj = dynamic_cast<ScDrawTransferObj*>(reinterpret_cast<TransferableHelper*>( (sal_IntPtr) nHandle ));
+    }
+
     return pObj;
 }
 
@@ -583,15 +586,6 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
             OSL_FAIL("unknown object id");
     }
     return bRet;
-}
-
-void ScDrawTransferObj::ObjectReleased()
-{
-    ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetClipData().pDrawClipboard == this )
-        pScMod->SetClipObject( nullptr, nullptr );
-
-    TransferableHelper::ObjectReleased();
 }
 
 void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )

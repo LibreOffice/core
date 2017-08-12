@@ -1311,7 +1311,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     vcl::Window* pWin = GetViewData()->GetActiveWin();
                     bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != nullptr );
-                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard() != nullptr );
+                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
                     bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
 
                     if ( bCells && bOle )
@@ -1562,7 +1562,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bRet=true;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
-                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard() != nullptr );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
                         if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
@@ -1589,7 +1589,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else                                    // draw objects or external data
                     {
-                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard() != nullptr );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
 
                         SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         GetPossibleClipboardFormats( aFormats );

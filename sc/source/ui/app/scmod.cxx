@@ -106,7 +106,6 @@
 #include <detfunc.hxx>
 #include <preview.hxx>
 #include <dragdata.hxx>
-#include <clipdata.hxx>
 #include <markdata.hxx>
 
 #include <svx/xmlsecctrl.hxx>
@@ -142,7 +141,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     aIdleTimer("sc ScModule IdleTimer"),
     aSpellIdle("sc ScModule SpellIdle"),
     mpDragData(new ScDragData),
-    mpClipData(new ScClipData),
     pSelTransfer( nullptr ),
     pMessagePool( nullptr ),
     pRefInputHandler( nullptr ),
@@ -172,7 +170,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SetName("StarCalc"); // for Basic
 
     ResetDragObject();
-    SetClipObject( nullptr, nullptr );
 
     // InputHandler does not need to be created
 
@@ -663,18 +660,14 @@ void ScModule::SetDragJump(
     mpDragData->aJumpText = rText;
 }
 
-void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
-{
-    OSL_ENSURE( !pCellObj || !pDrawObj, "SetClipObject: not allowed to set both objects" );
-
-    mpClipData->pCellClipboard = pCellObj;
-    mpClipData->pDrawClipboard = pDrawObj;
-}
-
 ScDocument* ScModule::GetClipDoc()
 {
     // called from document
-    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( nullptr );
+    vcl::Window* pWin = nullptr;
+    if( ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() ))
+        pWin = pViewShell->GetViewData().GetActiveWin();
+
+    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( pWin );
     if (pObj)
     {
         ScDocument* pDoc = pObj->GetDocument();

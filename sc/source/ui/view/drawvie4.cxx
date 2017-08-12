@@ -376,7 +376,6 @@ void ScDrawView::DoCopy()
     }
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
-    SC_MOD()->SetClipObject( nullptr, pTransferObj.get() );                  // internal clipboard
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
