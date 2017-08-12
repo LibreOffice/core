@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_filters_test \
     CppunitTest_sd_misc_tests \
     CppunitTest_sd_html_export_tests \
+    CppunitTest_sd_activex_controls_tests \
 ))
 endif
 

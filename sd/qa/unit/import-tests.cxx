@@ -167,7 +167,6 @@ public:
     void testSmartArtChildren();
     void testSmartArtText();
     void testTdf109223();
-    void testActiveXCheckbox();
     void testTdf109187();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
@@ -243,7 +242,6 @@ public:
     CPPUNIT_TEST(testSmartArtChildren);
     CPPUNIT_TEST(testSmartArtText);
     CPPUNIT_TEST(testTdf109223);
-    CPPUNIT_TEST(testActiveXCheckbox);
     CPPUNIT_TEST(testTdf109187);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2347,40 +2345,6 @@ void SdImportTest::testTdf109223()
     }
 
     CPPUNIT_ASSERT_EQUAL(true, bAttributeFound);
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testActiveXCheckbox()
-{
-    // ActiveX controls were imported as images
-    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/activex_checkbox.pptx"), PPTX);
-    uno::Reference< drawing::XControlShape > xControlShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xControlShape.is());
-
-    // Check control type
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
-
-    // Check custom label
-    OUString sLabel;
-    xPropertySet->getPropertyValue("Label") >>= sLabel;
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
-
-    // Check background color (highlight system color)
-    sal_Int32 nColor;
-    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x316AC5), nColor);
-
-    // Check Text color (active border system color)
-    xPropertySet->getPropertyValue("TextColor") >>= nColor;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), nColor);
-
-    // Check state of the checkbox
-    sal_Int16 nState;
-    xPropertySet->getPropertyValue("State") >>= nState;
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
-
     xDocShRef->DoClose();
 }
 
