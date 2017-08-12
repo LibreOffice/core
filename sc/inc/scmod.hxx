@@ -72,15 +72,12 @@ class ScSelectionTransferObj;
 class ScFormEditData;
 class ScMarkData;
 struct ScDragData;
-struct ScClipData;
 
 class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     Timer               aIdleTimer;
     Idle                aSpellIdle;
     ScDragData*         mpDragData;
-    std::unique_ptr<ScClipData>
-                        mpClipData;
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
     // there is no global InputHandler anymore, each View has it's own
@@ -143,10 +140,6 @@ public:
         const OUString& rDoc, const OUString& rTab, const OUString& rArea );
     void                SetDragJump(
         ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText );
-
-    //  clipboard:
-    const ScClipData&   GetClipData() const { return *mpClipData;}
-    void                SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
 
     static ScDocument*  GetClipDoc();       // called from document - should be removed later
 
