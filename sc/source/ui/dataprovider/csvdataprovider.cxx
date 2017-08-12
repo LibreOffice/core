@@ -188,6 +188,7 @@ CSVDataProvider::~CSVDataProvider()
 {
     if (mxCSVFetchThread.is())
     {
+        SolarMutexReleaser aReleaser;
         mxCSVFetchThread->join();
     }
 }
