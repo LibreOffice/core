@@ -216,49 +216,6 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_CHARSETCOLOR, true },  // EE_FEATURE_NOTCONV
 };
 
-const sal_uInt16 aV1Map[] = {
-    3999, 4001, 4002, 4003, 4004, 4005, 4006,
-    4007, 4008, 4009, 4010, 4011, 4012, 4013, 4017, 4018, 4019 // MI: 4019?
-};
-
-const sal_uInt16 aV2Map[] = {
-    3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009,
-    4010, 4011, 4012, 4013, 4014, 4015, 4016, 4018, 4019, 4020
-};
-
-const sal_uInt16 aV3Map[] = {
-    3997, 3998, 3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007,
-    4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019,
-    4020, 4021
-};
-
-const sal_uInt16 aV4Map[] = {
-    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
-    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
-    4014, 4015, 4016, 4017, 4018,
-    /* CJK Items inserted here: EE_CHAR_LANGUAGE - EE_CHAR_XMLATTRIBS */
-    4034, 4035, 4036, 4037
-};
-
-const sal_uInt16 aV5Map[] = {
-    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
-    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
-    4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023,
-    4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033,
-    /* EE_CHAR_OVERLINE inserted here */
-    4035, 4036, 4037, 4038
-};
-
-const sal_uInt16 aV6Map[] = {
-    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
-    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
-    4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023,
-    4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033,
-    4035, 4036, 4037, 4038,
-    /* EE_CHAR_GRABBAG inserted here */
-    4039
-};
-
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
     // Create a new attribute in the pool
@@ -3068,13 +3025,6 @@ EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, nullptr, bPersistenRefCounts )
 {
-    SetVersionMap( 1, 3999, 4015, aV1Map );
-    SetVersionMap( 2, 3999, 4019, aV2Map );
-    SetVersionMap( 3, 3997, 4020, aV3Map );
-    SetVersionMap( 4, 3994, 4022, aV4Map );
-    SetVersionMap( 5, 3994, 4037, aV5Map );
-    SetVersionMap( 6, 3994, 4038, aV6Map );
-
     m_xDefItems = EditDLL::Get().GetGlobalData()->GetDefItems();
     SetDefaults(m_xDefItems->getDefaults());
 }
