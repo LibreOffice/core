@@ -19,80 +19,44 @@
 
 namespace {
 
-struct Cell
-{
-    struct Str
-    {
-        size_t Pos;
-        size_t Size;
-    };
-
-    union
-    {
-        Str maStr;
-        double mfValue;
-    };
-
-    bool mbValue;
-
-    Cell();
-    Cell( const Cell& r );
-};
-
-struct Line
-{
-    OString maLine;
-    std::vector<Cell> maCells;
-};
-
-Cell::Cell() : mfValue(0.0), mbValue(true) {}
-
-Cell::Cell(const Cell& r) : mbValue(r.mbValue)
-{
-    if (r.mbValue)
-        mfValue = r.mfValue;
-    else
-    {
-        maStr.Pos = r.maStr.Pos;
-        maStr.Size = r.maStr.Size;
-    }
-}
-
 class CSVHandler
 {
-    Line& mrLine;
-    size_t mnColCount;
-    size_t mnCols;
-    const char* mpLineHead;
+    ScDocument* mpDoc;
+    SCCOL mnCol;
+    SCROW mnRow;
 
 public:
-    CSVHandler( Line& rLine, size_t nColCount ) :
-        mrLine(rLine), mnColCount(nColCount), mnCols(0), mpLineHead(rLine.maLine.getStr()) {}
+    CSVHandler(ScDocument* pDoc) :
+        mpDoc(pDoc), mnCol(0), mnRow(0)
+    {
+    }
 
-    static void begin_parse() {}
-    static void end_parse() {}
-    static void begin_row() {}
-    static void end_row() {}
+    void begin_parse() {}
+    void end_parse() {}
+    void begin_row() {}
+    void end_row()
+    {
+        ++mnRow;
+        mnCol = 0;
+    }
 
     void cell(const char* p, size_t n)
     {
-        if (mnCols >= mnColCount)
+        if (mnCol > MAXCOL)
             return;
 
-        Cell aCell;
-        if (ScStringUtil::parseSimpleNumber(p, n, '.', ',', aCell.mfValue))
+        double mfValue = 0.0;
+        if (ScStringUtil::parseSimpleNumber(p, n, '.', ',', mfValue))
         {
-            aCell.mbValue = true;
+            mpDoc->SetValue(mnCol, mnRow, 0, mfValue);
         }
         else
         {
-            aCell.mbValue = false;
-            aCell.maStr.Pos = std::distance(mpLineHead, p);
-            aCell.maStr.Size = n;
+            OString aStr(p, n);
+            mpDoc->SetString(mnCol, mnRow, 0, OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
         }
-        mrLine.maCells.push_back(aCell);
 
-        ++mnCols;
+        ++mnCol;
     }
 };
 
@@ -136,41 +100,13 @@ void CSVFetchThread::execute()
 {
     OStringBuffer aBuffer(64000);
     std::unique_ptr<SvStream> pStream = DataProvider::FetchStreamFromURL(maURL, aBuffer);
-    SCROW nCurRow = 0;
-    SCCOL nCol = 0;
-    while (pStream->good())
-    {
-        if (mbTerminate)
-            break;
+    if (mbTerminate)
+        return;
 
-        Line aLine;
-        aLine.maCells.clear();
-        pStream->ReadLine(aLine.maLine);
-        CSVHandler aHdl(aLine, MAXCOL);
-        orcus::csv_parser<CSVHandler> parser(aLine.maLine.getStr(), aLine.maLine.getLength(), aHdl, maConfig);
-        parser.parse();
+    CSVHandler aHdl(&mrDocument);
+    orcus::csv_parser<CSVHandler> parser(aBuffer.getStr(), aBuffer.getLength(), aHdl, maConfig);
+    parser.parse();
 
-        if (aLine.maCells.empty())
-        {
-            break;
-        }
-
-        nCol = 0;
-        const char* pLineHead = aLine.maLine.getStr();
-        for (auto& rCell : aLine.maCells)
-        {
-            if (rCell.mbValue)
-            {
-                mrDocument.SetValue(ScAddress(nCol, nCurRow, 0 /* Tab */), rCell.mfValue);
-            }
-            else
-            {
-                mrDocument.SetString(nCol, nCurRow, 0 /* Tab */, OUString(pLineHead+rCell.maStr.Pos, rCell.maStr.Size, RTL_TEXTENCODING_UTF8));
-            }
-            ++nCol;
-        }
-        nCurRow++;
-    }
     SolarMutexGuard aGuard;
     mpIdle->Start();
 }
