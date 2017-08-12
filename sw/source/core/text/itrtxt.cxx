@@ -226,14 +226,12 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
 
-    if ( pGrid && GetInfo().SnapToGrid() )
+    if ( pGrid && GetInfo().SnapToGrid() && pGrid->IsSquaredMode() )
     {
         const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
-        if ( !pGrid->IsSquaredMode() )
-            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
-        else if ( GetInfo().IsMulti() )
+        if ( GetInfo().IsMulti() )
             // we are inside the GetCharRect recursion for multi portions
             // we center the portion in its surrounding line
             nOfst = ( m_pCurr->Height() - nPorHeight ) / 2 + nPorAscent;
