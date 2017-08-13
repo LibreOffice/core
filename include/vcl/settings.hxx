@@ -79,7 +79,7 @@ namespace o3tl
 
 enum class MouseMiddleButtonAction
 {
-    Nothing, AutoScroll
+    Nothing, AutoScroll, PasteSelection
 };
 
 enum class MouseWheelBehaviour
