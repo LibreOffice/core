@@ -23,8 +23,6 @@ public:
 
     ScDataProvidersTest();
 
-    ScDocShell& getDocShell();
-
     virtual void setUp() override;
     virtual void tearDown() override;
 
