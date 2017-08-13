@@ -151,8 +151,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     if (aUniqueName.isEmpty())
     {
         sal_Int32 nUserIndex = 1;
-        OUString aUser(SvxResId(pPrefixResId));
-        aUser += " ";
+        const OUString aUser(SvxResId(pPrefixResId)) + " ";
 
         if( pDefaults.get() )
         {
@@ -199,7 +198,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     }
                     else
                     {
-                        OUString aEntryName = pEntry->GetName();
+                        const OUString aEntryName = pEntry->GetName();
                         if(aEntryName.getLength() >= aUser.getLength())
                         {
                             sal_Int32 nThisIndex = aEntryName.copy( aUser.getLength() ).toInt32();
@@ -232,8 +231,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     }
                 }
             }
-            aUniqueName = aUser;
-            aUniqueName += OUString::number( nUserIndex );
+            aUniqueName = aUser + OUString::number( nUserIndex );
         }
     }
 
@@ -624,9 +622,8 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLineDash.DashLen = rXD.GetDashLen();
             aLineDash.Distance = rXD.GetDistance();
 
-            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   <<= aApiName;
+            aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[1].Name    = "LineDash";
             aPropSeq[1].Value   <<= aLineDash;
             rVal <<= aPropSeq;
@@ -635,8 +632,7 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 
         case MID_NAME:
         {
-            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            rVal <<= aApiName;
+            rVal <<= SvxUnogetApiNameForItem(Which(), GetName());
             break;
         }
 
@@ -1017,8 +1013,7 @@ bool XLineStartItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-        rVal <<= aApiName;
+        rVal <<= SvxUnogetApiNameForItem(Which(), GetName());
     }
     else
     {
@@ -1256,9 +1251,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( !bFoundExisting )
             {
-                aUniqueName = aUser;
-                aUniqueName += " ";
-                aUniqueName += OUString::number( nUserIndex );
+                aUniqueName = aUser + " " + OUString::number( nUserIndex );
             }
         }
 
@@ -1512,9 +1505,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             if( !bFoundExisting )
             {
-                aUniqueName = aUser;
-                aUniqueName += " ";
-                aUniqueName += OUString::number( nUserIndex );
+                aUniqueName = aUser + " " + OUString::number( nUserIndex );
             }
         }
 
@@ -1553,8 +1544,7 @@ bool XLineEndItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-        rVal <<= aApiName;
+        rVal <<= SvxUnogetApiNameForItem(Which(), GetName();
     }
     else
     {
@@ -2066,9 +2056,8 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
             aGradient2.EndIntensity = aXGradient.GetEndIntens();
             aGradient2.StepCount = aXGradient.GetSteps();
 
-            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   <<= aApiName;
+            aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[1].Name    = "FillGradient";
             aPropSeq[1].Value   <<= aGradient2;
             rVal <<= aPropSeq;
@@ -2097,8 +2086,7 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
         case MID_NAME:
         {
-            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            rVal <<= aApiName;
+            rVal <<= SvxUnogetApiNameForItem(Which(), GetName());
             break;
         }
 
@@ -2479,9 +2467,8 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             aUnoHatch.Distance = aHatch.GetDistance();
             aUnoHatch.Angle = aHatch.GetAngle();
 
-            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   <<= aApiName;
+            aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[1].Name    = "FillHatch";
             aPropSeq[1].Value   <<= aUnoHatch;
             rVal <<= aPropSeq;
@@ -2502,8 +2489,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
 
         case MID_NAME:
         {
-            OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            rVal <<= aApiName;
+            rVal <<= SvxUnogetApiNameForItem(Which(), GetName());
             break;
         }
 
