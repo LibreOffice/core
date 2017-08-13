@@ -211,9 +211,9 @@ void ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
     {
         SAL_WARN("sc.orcus", "Malformed XML error: " << e.what());
     }
-    catch (const std::exception&)
+    catch (const std::exception& e)
     {
-        SAL_WARN("sc.orcus", "parsing failed with an unknown error");
+        SAL_WARN("sc.orcus", "parsing failed with an unknown error " << e.what());
     }
 }
 

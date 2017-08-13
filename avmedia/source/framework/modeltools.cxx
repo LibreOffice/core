@@ -26,6 +26,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
+#include <boost/exception/diagnostic_information.hpp>
 
 #include <config_features.h>
 
@@ -206,9 +207,9 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, const uno::Reference<
         // Write out modified json
         json_parser::write_json( sUrl, aTree );
     }
-    catch ( boost::exception const& )
+    catch ( boost::exception const& e )
     {
-        SAL_WARN("avmedia.opengl", "Exception while parsing *.json file");
+        SAL_WARN("avmedia.opengl", "Exception while parsing *.json file " << boost::diagnostic_information(e));
         return;
     }
 

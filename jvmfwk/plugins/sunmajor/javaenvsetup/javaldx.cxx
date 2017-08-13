@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 #include "sal/main.h"
 #include "sal/types.h"
 #include "osl/thread.h"
@@ -101,9 +102,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         OString sPaths = getLD_LIBRARY_PATH(aInfo->arVendorData);
         fprintf(stdout, "%s\n", sPaths.getStr());
     }
-    catch (const std::exception&)
+    catch (const std::exception& e)
     {
-        fprintf(stderr,"javaldx failed!\n");
+        std::cerr << "javaldx failed! " << e.what() << std::endl;
         return -1;
     }
 
