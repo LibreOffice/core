@@ -433,12 +433,6 @@
     <prop oor:name="UseSystemPrintDialog" install:module="macosx">
       <value>true</value>
     </prop>
-    <prop oor:name="TemplateRepositoryUrls">
-      <value/>
-    </prop>
-    <prop oor:name="TemplateRepositoryNames">
-      <value/>
-    </prop>
     <prop oor:name="FilePickerPlacesUrls">
       <value/>
     </prop>
