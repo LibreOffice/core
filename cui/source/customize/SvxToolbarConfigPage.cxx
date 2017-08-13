@@ -125,6 +125,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
         LINK( this, SvxToolbarConfigPage, SelectToolbar ) );
     m_pContentsListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbarEntry ) );
+    m_pCommandCategoryListBox->SetSelectHdl(
+        LINK( this, SvxToolbarConfigPage, SelectCategory ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
@@ -291,6 +293,12 @@ void SvxToolbarConfigPage::Init()
 
     m_pTopLevelListBox->SelectEntryPos(nPos);
     m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+
+    m_pCommandCategoryListBox->Init(
+        comphelper::getProcessComponentContext(),
+        m_xFrame,
+        vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions );
 }
 
 SaveInData* SvxToolbarConfigPage::CreateSaveInData(
@@ -307,6 +315,12 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
 {
     UpdateButtonStates();
 }
+
+IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, ListBox&, void )
+{
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions );
+}
+
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
