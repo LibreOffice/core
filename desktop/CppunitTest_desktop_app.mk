@@ -49,6 +49,14 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     vcl \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_use_static_libraries,desktop_app,\
+    $(if $(ENABLE_ONLINE_UPDATE_MAR),\
+        windows_process )\
+))
+endif
+
+
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_CppunitTest_use_static_libraries,desktop_app,\
