@@ -464,12 +464,8 @@ void SvxSearchCharSet::AppendCharToList(sal_UCS4 sChar)
 
 void SvxSearchCharSet::AppendCharList(std::vector<sal_UCS4> sList)
 {
-    std::vector<sal_UCS4>::iterator list_iter = sList.begin();
-    while(list_iter != sList.end())
-    {
-        AppendCharToList(*list_iter);
-        list_iter++;
-    }
+    for (auto& it : sList)
+        AppendCharToList(it);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
