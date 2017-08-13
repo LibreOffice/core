@@ -135,7 +135,7 @@ MakeCommandLine(int argc, wchar_t **argv)
     int len = 0;
 
     // The + 1 of the last argument handles the allocation for null termination
-    for (i = 0; i < argc; ++i)
+    for (i = 0; i < argc && argv[i]; ++i)
         len += ArgStrLen(argv[i]) + 1;
 
     // Protect against callers that pass 0 arguments
@@ -147,7 +147,7 @@ MakeCommandLine(int argc, wchar_t **argv)
         return nullptr;
 
     wchar_t *c = s;
-    for (i = 0; i < argc; ++i)
+    for (i = 0; i < argc && argv[i]; ++i)
     {
         c = ArgToString(c, argv[i]);
         if (i + 1 != argc)
