@@ -158,7 +158,7 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
     */
 
 {
-    ErrCode nErrCode = pErr->GetErrorCode().IgnoreWarning();
+    ErrCode nErrCode(sal_uInt32(pErr->GetErrorCode()) & ERRCODE_ERROR_MASK);
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return false;
     if(GetErrorString(nErrCode, rStr))
