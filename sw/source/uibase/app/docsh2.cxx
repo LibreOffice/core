@@ -887,34 +887,36 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         0
                     };
 
-                    const char* aHTMLHelpIds[] =
-                    {
-                         HID_SEND_HTML_CTRL_PUSHBUTTON_OK,
-                         HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL,
-                         HID_SEND_HTML_CTRL_LISTBOX_FILTER,
-                         HID_SEND_HTML_CTRL_CONTROL_FILEVIEW,
-                         HID_SEND_HTML_CTRL_EDIT_FILEURL,
-                         HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION,
-                         HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE,
-                         ""
-                    };
-
-                    const char* aMasterHelpIds[] =
-                    {
-                         HID_SEND_MASTER_CTRL_PUSHBUTTON_OK,
-                         HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL,
-                         HID_SEND_MASTER_CTRL_LISTBOX_FILTER,
-                         HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW,
-                         HID_SEND_MASTER_CTRL_EDIT_FILEURL,
-                         HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION,
-                         HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE,
-                         ""
-                    };
-
                     if (bCreateHtml)
+                    {
+                        const char* aHTMLHelpIds[] =
+                        {
+                             HID_SEND_HTML_CTRL_PUSHBUTTON_OK,
+                             HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL,
+                             HID_SEND_HTML_CTRL_LISTBOX_FILTER,
+                             HID_SEND_HTML_CTRL_CONTROL_FILEVIEW,
+                             HID_SEND_HTML_CTRL_EDIT_FILEURL,
+                             HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION,
+                             HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE,
+                             ""
+                        };
                         aDlgHelper.SetControlHelpIds( nControlIds, aHTMLHelpIds );
+                    }
                     else
+                    {
+                        const char* aMasterHelpIds[] =
+                        {
+                             HID_SEND_MASTER_CTRL_PUSHBUTTON_OK,
+                             HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL,
+                             HID_SEND_MASTER_CTRL_LISTBOX_FILTER,
+                             HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW,
+                             HID_SEND_MASTER_CTRL_EDIT_FILEURL,
+                             HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION,
+                             HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE,
+                             ""
+                        };
                         aDlgHelper.SetControlHelpIds( nControlIds, aMasterHelpIds );
+                    }
                     uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
                     std::shared_ptr<const SfxFilter> pFlt;
