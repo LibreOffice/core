@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_targets,sal,\
     Executable_processcmdlineargs \
     Executable_executeprocess \
     Executable_terminateprocess \
+    Executable_setgetenv \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\

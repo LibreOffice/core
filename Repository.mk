@@ -88,6 +88,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     processcmdlineargs \
     executeprocess \
     terminateprocess \
+    setgetenv \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
