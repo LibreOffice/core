@@ -19,6 +19,7 @@
  */
 static int ArgStrLen(const wchar_t *s)
 {
+    int backslashes = 0;
     int i = wcslen(s);
     BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
     // Only add doublequotes if the string contains a space or a tab
@@ -31,7 +32,6 @@ static int ArgStrLen(const wchar_t *s)
 
     if (hasDoubleQuote)
     {
-        int backslashes = 0;
         while (*s)
         {
             if (*s == '\\')
@@ -67,6 +67,7 @@ static int ArgStrLen(const wchar_t *s)
  */
 static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 {
+    int backslashes = 0;
     BOOL hasDoubleQuote = wcschr(s, L'"') != nullptr;
     // Only add doublequotes if the string contains a space or a tab
     BOOL addDoubleQuotes = wcspbrk(s, L" \t") != nullptr;
@@ -79,7 +80,7 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 
     if (hasDoubleQuote)
     {
-        int backslashes = 0;
+        int i;
         while (*s)
         {
             if (*s == '\\')
@@ -91,7 +92,7 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
                 if (*s == '"')
                 {
                     // Escape the doublequote and all backslashes preceding the doublequote
-                    for (int i = 0; i <= backslashes; ++i)
+                    for (i = 0; i <= backslashes; ++i)
                     {
                         *d = '\\';
                         ++d;
@@ -130,10 +131,11 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 wchar_t*
 MakeCommandLine(int argc, wchar_t **argv)
 {
+    int i;
     int len = 0;
 
     // The + 1 of the last argument handles the allocation for null termination
-    for (int i = 0; i < argc; ++i)
+    for (i = 0; i < argc; ++i)
         len += ArgStrLen(argv[i]) + 1;
 
     // Protect against callers that pass 0 arguments
@@ -145,7 +147,7 @@ MakeCommandLine(int argc, wchar_t **argv)
         return nullptr;
 
     wchar_t *c = s;
-    for (int i = 0; i < argc; ++i)
+    for (i = 0; i < argc; ++i)
     {
         c = ArgToString(c, argv[i]);
         if (i + 1 != argc)
