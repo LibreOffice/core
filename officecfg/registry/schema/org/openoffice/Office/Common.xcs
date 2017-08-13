@@ -6421,14 +6421,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="IsSystemFont" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Allows the user to change the UI font to the system
-          default.</desc>
-          <label>Use system default user interface font</label>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="IsSelectionInReadonly" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Indicates whether the cursor is displayed in read-only
