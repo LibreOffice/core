@@ -417,102 +417,57 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
     double fSingleDashLen = (double)GetDashLen();
     double fSingleDotLen = (double)GetDotLen();
 
+    if (fLineWidth == 0.0)
+        fLineWidth = SMALLEST_DASH_WIDTH;
+
     if(GetDashStyle() == css::drawing::DashStyle_RECTRELATIVE || GetDashStyle() == css::drawing::DashStyle_ROUNDRELATIVE)
     {
-        if(fLineWidth != 0.0)
+        double fFactor = fLineWidth / 100.0;
+
+        if(GetDashes())
         {
-            double fFactor = fLineWidth / 100.0;
-
-            if(GetDashes())
+            if(GetDashLen())
             {
-                if(GetDashLen())
-                {
-                    // is a dash
-                    fSingleDashLen *= fFactor;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDashLen = fLineWidth;
-                }
+                // is a dash
+                fSingleDashLen *= fFactor;
             }
-
-            if(GetDots())
+            else
             {
-                if(GetDotLen())
-                {
-                    // is a dash
-                    fSingleDotLen *= fFactor;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDotLen = fLineWidth;
-                }
-            }
-
-            if(GetDashes() || GetDots())
-            {
-                if(GetDistance())
-                {
-                    fDashDotDistance *= fFactor;
-                }
-                else
-                {
-                    fDashDotDistance = fLineWidth;
-                }
+                // is a dot
+                fSingleDashLen = fLineWidth;
             }
         }
-        else
+
+        if(GetDots())
         {
-            if(GetDashes())
+            if(GetDotLen())
             {
-                if(GetDashLen())
-                {
-                    // is a dash
-                    fSingleDashLen = (SMALLEST_DASH_WIDTH * fSingleDashLen) / 100.0;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDashLen = SMALLEST_DASH_WIDTH;
-                }
+                // is a dash
+                fSingleDotLen *= fFactor;
             }
-
-            if(GetDots())
+            else
             {
-                if(GetDotLen())
-                {
-                    // is a dash
-                    fSingleDotLen = (SMALLEST_DASH_WIDTH * fSingleDotLen) / 100.0;
-                }
-                else
-                {
-                    // is a dot
-                    fSingleDotLen = SMALLEST_DASH_WIDTH;
-                }
+                // is a dot
+                fSingleDotLen = fLineWidth;
             }
+        }
 
-            if(GetDashes() || GetDots())
+        if(GetDashes() || GetDots())
+        {
+            if(GetDistance())
             {
-                if(GetDistance())
-                {
-                    // dash as distance
-                    fDashDotDistance = (SMALLEST_DASH_WIDTH * fDashDotDistance) / 100.0;
-                }
-                else
-                {
-                    // dot as distance
-                    fDashDotDistance = SMALLEST_DASH_WIDTH;
-                }
+                // dash as distance
+                fDashDotDistance *= fFactor;
+            }
+            else
+            {
+                // dot as distance
+                fDashDotDistance = fLineWidth;
             }
         }
     }
     else
     {
-        // smallest dot size compare value
-        double fDotCompVal(fLineWidth != 0.0 ? fLineWidth : SMALLEST_DASH_WIDTH);
-
         // absolute values
         if(GetDashes())
         {
@@ -527,9 +482,9 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
             else
             {
                 // is a dot
-                if(fSingleDashLen < fDotCompVal)
+                if(fSingleDashLen < fLineWidth)
                 {
-                    fSingleDashLen = fDotCompVal;
+                    fSingleDashLen = fLineWidth;
                 }
             }
         }
@@ -547,9 +502,9 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
             else
             {
                 // is a dot
-                if(fSingleDotLen < fDotCompVal)
+                if(fSingleDotLen < fLineWidth)
                 {
-                    fSingleDotLen = fDotCompVal;
+                    fSingleDotLen = fLineWidth;
                 }
             }
         }
@@ -567,9 +522,9 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
             else
             {
                 // dot as distance
-                if(fDashDotDistance < fDotCompVal)
+                if(fDashDotDistance < fLineWidth)
                 {
-                    fDashDotDistance = fDotCompVal;
+                    fDashDotDistance = fLineWidth;
                 }
             }
         }
