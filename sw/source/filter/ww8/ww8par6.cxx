@@ -1806,8 +1806,6 @@ nLineSpace(0),
 bAutoWidth(false),
 bToggelPos(false)
 {
-    memset( this, 0, sizeof( WW8SwFlyPara ) );  // initialize
-
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
     const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(0x2416).pSprm;
     if (bIsTable && rWW.nSp37 == 2)
