@@ -1438,17 +1438,17 @@ namespace emfio
                              .ReadInt32( cxDest )
                              .ReadInt32( cyDest );
 
-                        Bitmap      aBitmap;
-                        tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
-
-                        if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
-                           || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
-                           )
+                        if (!mpInputStream->good() ||
+                            ((SAL_MAX_UINT32 - 14) < cbBitsSrc) ||
+                            ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc))
                         {
                             bStatus = false;
                         }
                         else
                         {
+                            Bitmap aBitmap;
+                            tools::Rectangle aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
+
                             sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
                             if ( nSize <= ( mnEndPos - mnStartPos ) )
                             {
@@ -1525,8 +1525,8 @@ namespace emfio
                             // const basegfx::B2DVector aTransVec(aWT * basegfx::B2DVector(aLogFont.lfWidth, aLogFont.lfHeight));
                             // aLogFont.lfWidth = aTransVec.getX();
                             // aLogFont.lfHeight = aTransVec.getY();
-
-                            CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
+                            if (mpInputStream->good())
+                                CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
                         }
                     }
                     break;
