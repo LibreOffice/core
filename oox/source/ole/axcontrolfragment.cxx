@@ -130,11 +130,30 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                     Reference< XInputStream > xStrgStrm = getFilter().openInputStream( aFragmentPath );
                     if( xStrgStrm.is() )
                     {
+                        // Try to import as a parent control
+                        bool bImportedAsParent = false;
                         OleStorage aStorage( getFilter().getComponentContext(), xStrgStrm, false );
                         BinaryXInputStream aInStrm( aStorage.openInputStream( "f" ), true );
                         if( !aInStrm.isEof() )
+                        {
                             if( AxContainerModelBase* pModel = dynamic_cast< AxContainerModelBase* >( mrControl.createModelFromGuid( aClassId ) ) )
+                            {
                                 pModel->importBinaryModel( aInStrm );
+                                bImportedAsParent = true;
+                            }
+                        }
+                        // Import it as a non-parent control
+                        if(!bImportedAsParent)
+                        {
+                            BinaryXInputStream aInStrm2(aStorage.openInputStream("contents"), true);
+                            if (!aInStrm2.isEof())
+                            {
+                                if (ControlModelBase* pModel = mrControl.createModelFromGuid(aClassId))
+                                {
+                                    pModel->importBinaryModel(aInStrm2);
+                                }
+                            }
+                        }
                     }
                 }
             }
