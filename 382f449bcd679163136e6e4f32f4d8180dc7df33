@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a30005ac",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-13T09:00:06Z",
+      "side": 1,
+      "message": "please add some newlines for readability",
+      "range": {
+        "startLine": 1784,
+        "startChar": 0,
+        "endLine": 1790,
+        "endChar": 74
+      },
+      "revId": "382f449bcd679163136e6e4f32f4d8180dc7df33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_830309b8",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-13T09:00:06Z",
+      "side": 1,
+      "message": "forgot to remove the memset?",
+      "range": {
+        "startLine": 1793,
+        "startChar": 4,
+        "endLine": 1793,
+        "endChar": 61
+      },
+      "revId": "382f449bcd679163136e6e4f32f4d8180dc7df33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
