@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c387d110",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-13T12:03:38Z",
+      "side": 1,
+      "message": "yeah, this could defintely do with some newlines to make it easier to read",
+      "revId": "35ec75d7a43143049815248cb7f3d53ac9228b44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
