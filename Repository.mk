@@ -87,6 +87,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     getprocessinfo \
     processcmdlineargs \
     executeprocess \
+    terminateprocess \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
