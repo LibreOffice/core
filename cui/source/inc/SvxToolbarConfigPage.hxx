@@ -56,6 +56,8 @@ private:
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
     DECL_LINK( MoveHdl, Button *, void );
 
+    DECL_LINK( SelectCategory, ListBox&, void );
+
     void            UpdateButtonStates() override;
     short           QueryReset() override;
     void            Init() override;
