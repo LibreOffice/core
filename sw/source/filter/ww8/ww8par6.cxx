@@ -1780,12 +1780,34 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
                             const sal_uInt32 nWWPgTop,
                             const sal_uInt32 nPgWidth,
                             const sal_Int32 nIniFlyDx,
-                            const sal_Int32 nIniFlyDy )
+                            const sal_Int32 nIniFlyDy ):
+pFlyFormat(nullptr),
+nXPos(0),
+nYPos(0),
+nLeMgn(rWW.nLeMgn),
+nRiMgn(rWW.nRiMgn),
+nUpMgn(rWW.nUpMgn),
+nLoMgn(rWW.nLoMgn),
+nWidth(rWW.nSp28),
+nHeight(rWW.nSp45),
+nNetWidth(rWW.nSp28),
+eHeightFix(ATT_FIX_SIZE),
+eAnchor(RndStdIds::FLY_AT_PARA),
+eHRel(text::RelOrientation::PAGE_FRAME),
+eVRel(text::RelOrientation::FRAME),
+eVAlign(text::VertOrientation::NONE),
+eHAlign(text::HoriOrientation::NONE),
+eSurround(( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE),
+nXBind(( rWW.nSp29 & 0xc0 ) >> 6),
+nYBind(( rWW.nSp29 & 0x30 ) >> 4),
+nNewNetWidth(MINFLY),
+xMainTextPos(nullptr),
+nLineSpace(0),
+bAutoWidth(false),
+bToggelPos(false)
 {
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // initialize
-    nNewNetWidth = MINFLY;                    // minimum
 
-    eSurround = ( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE;
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
     const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(0x2416).pSprm;
     if (bIsTable && rWW.nSp37 == 2)
@@ -1797,14 +1819,11 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
      have an explicitly specified behaviour for these circumstances.
     */
 
-    nHeight = rWW.nSp45;
     if( nHeight & 0x8000 )
     {
         nHeight &= 0x7fff;
         eHeightFix = ATT_MIN_SIZE;
     }
-    else
-        eHeightFix = ATT_FIX_SIZE;
 
     if( nHeight <= MINFLY )
     {                           // no data, or bad data
@@ -1812,7 +1831,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         nHeight = MINFLY;
     }
 
-    nWidth = nNetWidth = rWW.nSp28;
     if( nWidth <= 10 )                              // auto width
     {
         bAutoWidth = true;
@@ -1821,16 +1839,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     }
     if( nWidth <= MINFLY )
         nWidth = nNetWidth = MINFLY;              // minimum width
-
-    eVAlign = text::VertOrientation::NONE;                            // defaults
-    eHAlign = text::HoriOrientation::NONE;
-    nYPos = 0;
-    nXPos = 0;
-
-    nRiMgn = rWW.nRiMgn;
-    nLeMgn = rWW.nLeMgn;
-    nLoMgn = rWW.nLoMgn;
-    nUpMgn = rWW.nUpMgn;
 
     /*
     See issue #i9178# for the 9 anchoring options, and make sure they stay
@@ -1842,11 +1850,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     // the Fly will end up in the wrong position.
     // The only problem is with inside/outside.
 
-    // Bindung
-    nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
     //#i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
-    eAnchor = RndStdIds::FLY_AT_PARA;
     rIo.m_pLastAnchorPos.reset( new SwPosition(*rPaM.GetPoint()));
 
     switch (nYBind)
@@ -1858,7 +1863,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
             eVRel = text::RelOrientation::PAGE_FRAME;
             break;
         default:    //relative to text
-            eVRel = text::RelOrientation::FRAME;
+            // put in initialization part eVRel = text::RelOrientation::FRAME;
             break;
     }
 
@@ -1909,7 +1914,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
             break;  // corrections from ini file
     }
 
-    nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
 // #i18732#
     switch (nXBind)           // X - binding -> transform coordinates
     {
@@ -1920,7 +1924,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
             eHRel = text::RelOrientation::PAGE_PRINT_AREA;
             break;
         default:    //relative to page
-            eHRel = text::RelOrientation::PAGE_FRAME;
+            // put in initialization part eHRel= text::RelOrientation::PAGE_FRAME;
             break;
     }
 
