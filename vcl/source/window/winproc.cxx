@@ -755,6 +755,8 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             MouseMiddleButtonAction nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
             if ( nMiddleAction == MouseMiddleButtonAction::AutoScroll )
                 bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, nullptr, true, &aChildPos );
+            else if ( nMiddleAction == MouseMiddleButtonAction::PasteSelection )
+                bRet = !ImplCallCommand( pChild, CommandEventId::PasteSelection, nullptr, true, &aChildPos );
         }
         else
         {
