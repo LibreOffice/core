@@ -90,7 +90,7 @@ OUString normalizePath(const OUString& rPath)
         aPath = aTempPath.copy(0, i) + aPath.copy(nIndex + 3);
     }
 
-    return aPath;
+    return aPath.replaceAll("\\", "/");
 }
 
 void CopyFileToDir(const OUString& rTempDirURL, const OUString rFileName, const OUString& rOldDir)
