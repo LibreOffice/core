@@ -232,10 +232,10 @@ SdPage* DocumentHelper::AddMasterPage (
             pClonedMasterPage = nullptr;
             DBG_UNHANDLED_EXCEPTION();
         }
-        catch(const ::std::exception&)
+        catch(const ::std::exception& e)
         {
             pClonedMasterPage = nullptr;
-            SAL_WARN("sd", "caught general exception");
+            SAL_WARN("sd", "caught general exception " << e.what());
         }
         catch(...)
         {
