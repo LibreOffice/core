@@ -725,6 +725,7 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         else
         {
             rArea = lastLayoutResultRectangle;
+            mpLayouter->UpdateBorderLayout();
         }
     }
 }
