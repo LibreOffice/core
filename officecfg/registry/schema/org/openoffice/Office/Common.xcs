@@ -695,32 +695,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="JobDescription">
-      <info>
-        <deprecated>Use cfg package Jobs instead of this.</deprecated>
-        <desc>Use cfg package Jobs instead of this.</desc>
-      </info>
-      <prop oor:name="ServiceName" oor:type="xs:string">
-        <info>
-          <desc>Use cfg package Jobs instead of this.</desc>
-        </info>
-      </prop>
-      <prop oor:name="UserInteraction" oor:type="xs:boolean">
-        <info>
-          <desc>Use cfg package Jobs instead of this.</desc>
-        </info>
-      </prop>
-      <prop oor:name="AllowAsync" oor:type="xs:boolean">
-        <info>
-          <desc>Use cfg package Jobs instead of this.</desc>
-        </info>
-      </prop>
-      <group oor:name="ExecutionArguments" oor:extensible="true">
-        <info>
-          <desc>Use cfg package Jobs instead of this.</desc>
-        </info>
-      </group>
-    </group>
     <group oor:name="TrustedAuthor">
       <info>
         <desc>All Certificate information needed to handle and identify the
@@ -6667,24 +6641,6 @@
           </info>
         </prop>
       </group>
-    </group>
-    <group oor:name="Startup">
-      <info>
-        <deprecated>Use cfg package Jobs instead of this.</deprecated>
-        <desc>Uses cfg package Jobs instead of this component.</desc>
-      </info>
-      <set oor:name="Run" oor:node-type="JobDescription">
-        <info>
-          <deprecated>Use cfg package Jobs instead of this.</deprecated>
-          <desc>Uses cfg package Jobs instead of this component.</desc>
-        </info>
-      </set>
-      <set oor:name="RunOnce" oor:node-type="JobDescription">
-        <info>
-          <deprecated>Use cfg package Jobs instead of this.</deprecated>
-          <desc>Uses cfg package Jobs instead of this component.</desc>
-        </info>
-      </set>
     </group>
     <group oor:name="SmartTags">
       <info>

@@ -411,22 +411,6 @@
       </node>
     </node>
   </node>
-  <node oor:name="Startup">
-    <node oor:name="RunOnce">
-      <node oor:name="AddressSourcePilot" oor:op="replace">
-        <prop oor:name="ServiceName">
-          <value>com.sun.star.ui.dialogs.AddressBookSourcePilot</value>
-        </prop>
-        <prop oor:name="UserInteraction">
-          <value>true</value>
-        </prop>
-        <prop oor:name="AllowAsync">
-          <value>false</value>
-        </prop>
-        <node oor:name="ExecutionArguments"/>
-      </node>
-    </node>
-  </node>
   <node oor:name="Misc">
     <prop oor:name="UseSystemFileDialog">
     </prop>
