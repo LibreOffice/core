@@ -354,7 +354,9 @@ class LOKitThread extends Thread {
             case LOEvent.UPDATE_CALC_HEADERS:
                 updateCalcHeaders();
                 break;
-
+            case LOEvent.REFRESH:
+                refresh();
+                break;
         }
     }
 

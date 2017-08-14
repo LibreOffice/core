@@ -157,4 +157,15 @@
     <string name="action_pwd_dialog_cancel">Cancel</string>
     <string name="action_pwd_dialog_title">Please enter password</string>
 
+    <!-- Insert Image Strings -->
+    <string name="take_photo">Take Photo</string>
+    <string name="select_photo">Select Photo</string>
+    <string name="select_photo_title">Select Picture</string>
+    <string name="no_camera_found">No Camera Found</string>
+    <string name="compress_photo_smallest_size">Smallest Size</string>
+    <string name="compress_photo_medium_size">Medium Size</string>
+    <string name="compress_photo_max_quality">Max Quality</string>
+    <string name="compress_photo_no_compress">Don\'t Compress</string>
+    <string name="compress_photo_title">Do you want to compress the photo?</string>
+
 </resources>
