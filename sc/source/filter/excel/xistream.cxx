@@ -128,7 +128,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
 {
     maEncryptionData.realloc( 0 );
 
-    /*  Convert password to a byte string. TODO: this needs some finetuning
+    /*  Convert password to a byte string. TODO: this needs some fine tuning
         according to the spec... */
     OString aBytePassword = OUStringToOString( rPassword, osl_getThreadTextEncoding() );
     sal_Int32 nLen = aBytePassword.getLength();

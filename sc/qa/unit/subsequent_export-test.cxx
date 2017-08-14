@@ -545,7 +545,7 @@ void ScExportTest::testPivotExportXLSX()
     // MS Excel is very sensitive for proper values of fields:
     // containsMixedTypes, containsSemiMixedTypes, containsInteger, containsBlank
     // If it is not properly set, then Excel is not opening spreadsheet properly.
-    // This test case ensures, that such values are properly set according to documentaion:
+    // This test case ensures, that such values are properly set according to documentation:
     // https://technet.microsoft.com/en-us/library/documentformat.openxml.spreadsheet.shareditems.aspx
 
     ScDocShellRef xShell = loadDoc("pivot.", FORMAT_XLSX);
