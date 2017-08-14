@@ -653,8 +653,9 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
         const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
-            sal_uInt32 nDirection = (sal_uInt32)reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetEntryData( nPos ));
-            rSet->Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
+            SvxFrameDirection eDirection = static_cast<SvxFrameDirection>(
+                        reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetEntryData( nPos )));
+            rSet->Put( SvxFrameDirectionItem(eDirection, RES_FRAMEDIR) );
         }
     }
     return true;

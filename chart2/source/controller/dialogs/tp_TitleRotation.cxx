@@ -113,7 +113,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
     m_pOrientHlp->SetStackedState( bStacked ? TRISTATE_TRUE : TRISTATE_FALSE );
 
     if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SfxItemState::SET)
-        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue()) );
+        m_pLbTextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue() );
 }
 
 } //namespace chart

@@ -204,7 +204,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
         m_pOrientHlp->SetStackedState( TRISTATE_INDET );
 
     if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue()) );
+        m_pLbTextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 
     // Text overlap ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );

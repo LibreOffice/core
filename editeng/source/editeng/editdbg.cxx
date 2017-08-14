@@ -66,7 +66,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     {
         case EE_PARA_WRITINGDIR:
             aDebStr.append("WritingDir=");
-            aDebStr.append(static_cast<sal_Int32>(static_cast<const SvxFrameDirectionItem&>(rItem).GetValue()));
+            aDebStr.append(static_cast<const SvxFrameDirectionItem&>(rItem).GetEnumValue());
         break;
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:

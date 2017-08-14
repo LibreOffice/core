@@ -3090,7 +3090,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         SvxFrameDirection nVal = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR)).GetValue();
         sal_Int32 nPos;
         for( nPos = m_pTextFlowLB->GetEntryCount(); nPos; )
-            if( (SvxFrameDirection)reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( --nPos )) == nVal )
+            if( static_cast<SvxFrameDirection>(reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( --nPos ))) == nVal )
                 break;
         m_pTextFlowLB->SelectEntryPos( nPos );
         m_pTextFlowLB->SaveValue();
@@ -3149,9 +3149,9 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         sal_Int32 nPos = m_pTextFlowLB->GetSelectEntryPos();
         if( m_pTextFlowLB->IsValueChangedFromSaved() )
         {
-            sal_uInt16 nData = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( nPos ));
-            bRet |= nullptr != rSet->Put( SvxFrameDirectionItem(
-                                    (SvxFrameDirection)nData, RES_FRAMEDIR ));
+            SvxFrameDirection eDirection = static_cast<SvxFrameDirection>(
+                        reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( nPos )));
+            bRet |= nullptr != rSet->Put( SvxFrameDirectionItem(eDirection, RES_FRAMEDIR ));
         }
     }
     if(m_pWrtSh)
