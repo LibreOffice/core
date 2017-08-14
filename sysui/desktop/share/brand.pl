@@ -22,7 +22,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 #
 # This tool is used to re-write and substitute variables
-# into Unix .desktop, mimelnk, .keys files etc.
+# into Unix .desktop, .keys files etc.
 #
 
 $destdir = pop @ARGV;
