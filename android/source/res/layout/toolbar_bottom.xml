@@ -328,6 +328,16 @@
                                     android:paddingBottom="12dp"
                                     android:paddingTop="12dp"
                                     app:srcCompat="@drawable/ic_rect" />
+
+                                <ImageButton
+                                    android:id="@+id/button_insert_picture"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.25"
+                                    android:background="@drawable/image_button_background"
+                                    android:paddingBottom="12dp"
+                                    android:paddingTop="12dp"
+                                    app:srcCompat="@drawable/ic_folder_black_24dp" />
                             </LinearLayout>
                         </ScrollView>
                     </LinearLayout>
