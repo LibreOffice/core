@@ -172,6 +172,8 @@ void ScParallelismTest::testSUMIFS()
         OString sMessage = "At row " + OString::number(i+1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), m_pDoc->GetValue(5, 10+i%10, 0), m_pDoc->GetValue(15, i, 0), 1e-10);
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScParallelismTest);
