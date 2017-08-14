@@ -1168,8 +1168,8 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        SvxFrameDirection eAttrDir = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(
-                                        aAttrSet.Get( EE_PARA_WRITINGDIR )).GetValue();
+        SvxFrameDirection eAttrDir = static_cast<const SvxFrameDirectionItem&>(
+                aAttrSet.Get( EE_PARA_WRITINGDIR )).GetValue();
         if ( eAttrDir == SvxFrameDirection::Environment )
         {
             //  get "environment" direction from page style

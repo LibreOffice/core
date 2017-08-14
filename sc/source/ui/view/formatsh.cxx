@@ -2697,8 +2697,8 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     EEHorizontalTextDirection eBidiDir = EE_HTEXTDIR_DEFAULT;
     if ( !bBidiDontCare )
     {
-        SvxFrameDirection eCellDir = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(
-                                        rAttrSet.Get( ATTR_WRITINGDIR )).GetValue();
+        SvxFrameDirection eCellDir = static_cast<const SvxFrameDirectionItem&>(
+                rAttrSet.Get( ATTR_WRITINGDIR )).GetValue();
         if ( eCellDir == SvxFrameDirection::Environment )
             eBidiDir = (EEHorizontalTextDirection)GetViewData()->GetDocument()->
                                 GetEditTextDirection( GetViewData()->GetTabNo() );

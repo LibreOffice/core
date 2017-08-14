@@ -370,7 +370,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
     if ( pStyle )
     {
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
-        SvxFrameDirection eDirection = (SvxFrameDirection)
+        SvxFrameDirection eDirection =
             static_cast<const SvxFrameDirectionItem&>(rStyleSet.Get( ATTR_WRITINGDIR )).GetValue();
 
         if ( eDirection == SvxFrameDirection::Horizontal_LR_TB )
