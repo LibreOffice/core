@@ -357,7 +357,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
         m_pLB_LabelPlacement->SetNoSelection();
 
     if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLB_TextDirection->SelectEntryValue( SvxFrameDirection(static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue()) );
+        m_pLB_TextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 
     if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {
