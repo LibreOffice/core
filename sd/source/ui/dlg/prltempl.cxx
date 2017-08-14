@@ -243,6 +243,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
         aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
         aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
+        aSet.Put (SvxPatternListItem(pPatternList,SID_PATTERN_LIST));
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
