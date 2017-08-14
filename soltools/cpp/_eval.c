@@ -28,7 +28,7 @@
 
 struct value
 {
-    long val;
+    int val;
     int type;
 };
 
@@ -407,7 +407,7 @@ int
 {
     struct value v1;
     struct value v2 = { 0, UND };
-    long rv1, rv2;
+    int rv1, rv2;
     int rtype, oper;
 
     rv2 = 0;
@@ -620,7 +620,7 @@ struct value
     struct value v;
     Nlist *np;
     int i, base;
-    unsigned long n;
+    unsigned int n;
     uchar *p, c;
 
     v.type = SGN;

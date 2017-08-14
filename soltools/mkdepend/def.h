@@ -138,7 +138,7 @@ struct filepointer {
     char    *f_p;
     char    *f_base;
     char    *f_end;
-    long    f_line;
+    int      f_line;
 };
 
 #ifndef X_NOT_STDC_ENV
