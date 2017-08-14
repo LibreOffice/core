@@ -123,7 +123,7 @@ void CopyUpdaterToTempDir(const OUString& rInstallDirURL, const OUString& rTempD
 #ifdef UNX
 typedef char CharT;
 #define tstrncpy std::strncpy
-#elif _WIN32
+#elif defined(_WIN32)
 typedef wchar_t CharT;
 #define tstrncpy std::wcsncpy
 #else
@@ -134,7 +134,7 @@ void createStr(const OUString& rStr, CharT** pArgs, size_t i)
 {
 #ifdef UNX
     OString aStr = OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
-#elif _WIN32
+#elif defined(_WIN32)
     OUString aStr = rStr;
 #else
 #error "Need an implementation"
@@ -177,7 +177,7 @@ CharT** createCommandLine()
     {
 #ifdef UNX
         OUString aPID("0");
-#elif _WIN32
+#elif defined(_WIN32)
         oslProcessInfo aInfo;
         aInfo.Size = sizeof(oslProcessInfo);
         osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &aInfo);
@@ -290,7 +290,7 @@ bool update()
             printf("execv failed with error %d %s\n",errno,strerror(errno));
             bSuccess = false;
         }
-#elif _WIN32
+#elif defined(_WIN32)
         bSuccess = WinLaunchChild((wchar_t*)aUpdaterPath.getStr(), 8, pArgs);
 #endif
     }
