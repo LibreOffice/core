@@ -88,7 +88,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="displaymasterobjects">
-            <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterobjects">Display Objects</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterobjects">Display Master Objects</property>
             <property name="use_action_appearance">True</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -165,7 +165,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="displaymasterbackground">
-            <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterbackground">Display Background</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|displaymasterbackground">Display Master Background</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
