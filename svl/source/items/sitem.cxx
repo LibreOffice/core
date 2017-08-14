@@ -72,11 +72,4 @@ bool SfxSetItem::GetPresentation
     return false;
 }
 
-
-SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const
-{
-    GetItemSet().Store(rStream);
-    return rStream;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
