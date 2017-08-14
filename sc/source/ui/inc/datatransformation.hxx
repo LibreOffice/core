@@ -19,10 +19,15 @@ namespace sc {
 
 class SC_DLLPUBLIC DataTransformation
 {
+protected:
+
+    static SCROW getLastRow(ScDocument& rDoc, SCCOL nCol);
+
 public:
     virtual ~DataTransformation();
 
     virtual void Transform(ScDocument& rDoc) = 0;
+
 };
 
 class SC_DLLPUBLIC ColumnRemoveTransformation : public DataTransformation
@@ -34,6 +39,17 @@ public:
     ColumnRemoveTransformation(SCCOL nCol);
     virtual ~ColumnRemoveTransformation() override;
 
+    virtual void Transform(ScDocument& rDoc) override;
+};
+
+class SC_DLLPUBLIC SplitColumnTransformation : public DataTransformation
+{
+    SCCOL mnCol;
+    sal_Unicode mcSeparator;
+
+public:
+
+    SplitColumnTransformation(SCCOL nCol, sal_Unicode cSeparator);
     virtual void Transform(ScDocument& rDoc) override;
 };
 

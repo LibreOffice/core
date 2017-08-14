@@ -17,6 +17,15 @@ DataTransformation::~DataTransformation()
 {
 }
 
+SCROW DataTransformation::getLastRow(ScDocument& rDoc, SCCOL nCol)
+{
+    SCROW nStartRow = 0;
+    SCROW nEndRow = MAXROW;
+    rDoc.ShrinkToDataArea(0, nCol, nStartRow, nCol, nEndRow);
+
+    return nEndRow;
+}
+
 ColumnRemoveTransformation::ColumnRemoveTransformation(SCCOL nCol):
     mnCol(nCol)
 {
@@ -29,6 +38,34 @@ ColumnRemoveTransformation::~ColumnRemoveTransformation()
 void ColumnRemoveTransformation::Transform(ScDocument& rDoc)
 {
     rDoc.DeleteCol(0, 0, MAXROW, 0, mnCol, 1);
+}
+
+SplitColumnTransformation::SplitColumnTransformation(SCCOL nCol, sal_Unicode cSeparator):
+    mnCol(nCol),
+    mcSeparator(cSeparator)
+{
+}
+
+void SplitColumnTransformation::Transform(ScDocument& rDoc)
+{
+    rDoc.InsertCol(0, 0, MAXROW, 0, mnCol + 1, 1);
+
+    SCROW nEndRow = getLastRow(rDoc, mnCol);
+    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+    {
+        CellType eType;
+        rDoc.GetCellType(mnCol, nRow, 0, eType);
+        if (eType == CELLTYPE_STRING)
+        {
+            OUString aStr = rDoc.GetString(mnCol, nRow, 0);
+            sal_Int32 nIndex = aStr.indexOf(mcSeparator);
+            if (nIndex != -1)
+            {
+                rDoc.SetString(mnCol + 1, nRow, 0, aStr.copy(nIndex + 1));
+                rDoc.SetString(mnCol, nRow, 0, aStr.copy(0, nIndex));
+            }
+        }
+    }
 }
 
 }
