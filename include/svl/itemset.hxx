@@ -202,9 +202,6 @@ public:
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
-    void                        Load( SvStream & );
-    void                        Store( SvStream &, bool bDirect = false ) const;
-
     bool                        operator==(const SfxItemSet &) const;
 
     /** Compare possibly ignoring SfxItemPool pointer.
@@ -220,7 +217,6 @@ public:
      */
     bool                        Equals(const SfxItemSet &, bool bComparePool) const;
 
-    sal_Int32                   getHash() const;
     OString                     stringify() const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };

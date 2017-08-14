@@ -1323,127 +1323,6 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
     return 0;
 }
 
-/**
- * Saves the SfxItemSet instance to the supplied Stream.
- * The surrogates as well as the ones with 'bDirect == true' are saved
- * to the stream in the following way:
- *
- *  sal_uInt16  ... Count of the set Items
- *  Count*  m_pPool->StoreItem()
- *
- *  @see SfxItemPool::StoreItem() const
- *  @see SfxItemSet::Load(SvStream&,bool,const SfxItemPool*)
- */
-void SfxItemSet::Store
-(
-    SvStream&   rStream,        // Target stream for normal Items
-    bool        bDirect         /* true: Save Items directly
-                                   false: Surrogates */
-)   const
-{
-    assert(m_pPool);
-
-    // Remember position of the count (to be able to correct it, if need be)
-    sal_uLong nCountPos = rStream.Tell();
-    rStream.WriteUInt16( m_nCount );
-
-    // If there's nothing to save, don't construct an ItemIter
-    if (m_nCount)
-    {
-        // Keep record of how many Items are really saved
-        sal_uInt16 nWrittenCount = 0; // Count of Items streamed in 'rStream'
-
-        // Iterate over all set Items
-        SfxItemIter aIter(*this);
-        for ( const SfxPoolItem *pItem = aIter.FirstItem();
-              pItem;
-              pItem = aIter.NextItem() )
-        {
-            // Let Items (if need be as a Surrogate) be saved via Pool
-            SAL_WARN_IF(IsInvalidItem(pItem), "svl.items", "can't store invalid items");
-            if ( !IsInvalidItem(pItem) &&
-                 m_pPool->StoreItem( rStream, *pItem, bDirect ) )
-                // Item was streamed in 'rStream'
-                ++nWrittenCount;
-        }
-
-        // Fewer written than read (e.g. old format)
-        if (nWrittenCount != m_nCount)
-        {
-            // Store real count in the stream
-            sal_uLong nPos = rStream.Tell();
-            rStream.Seek( nCountPos );
-            rStream.WriteUInt16( nWrittenCount );
-            rStream.Seek( nPos );
-        }
-    }
-}
-
-/**
- * This method loads an SfxItemSet from a stream.
- * If the SfxItemPool was loaded without RefCounts the loaded Item
- * references are counted, else we assume the they were accounted for
- * when loading the SfxItemPool.
- *
- * @see SfxItemSet::Store(Stream&,bool) const
- */
-void SfxItemSet::Load
-(
-    SvStream&           rStream    //  Stream we're loading from
-)
-{
-    assert(m_pPool);
-
-    // Resolve Surrogates with ItemSet's Pool
-    const SfxItemPool *pRefPool = m_pPool;
-
-    // Load Item count and as many Items
-    sal_uInt16 nCount = 0;
-    rStream.ReadUInt16( nCount );
-
-    const size_t nMinRecordSize = sizeof(sal_uInt16) * 2;
-    const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
-    if (nCount > nMaxRecords)
-    {
-        SAL_WARN("svl.items", "Parsing error: " << nMaxRecords <<
-                 " max possible entries, but " << nCount << " claimed, truncating");
-        nCount = nMaxRecords;
-    }
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-    {
-        // Load Surrogate/Item and resolve Surrogate
-        const SfxPoolItem *pItem =
-                m_pPool->LoadItem( rStream, pRefPool );
-
-        // Did we load an Item or resolve a Surrogate?
-        if ( pItem )
-        {
-            // Find position for Item pointer in the set
-            sal_uInt16 nWhich = pItem->Which();
-            SfxItemArray ppFnd = m_pItems;
-            const sal_uInt16* pPtr = m_pWhichRanges;
-            while ( *pPtr )
-            {
-                // In this Range??
-                if ( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
-                {
-                    // Remember Item pointer in the set
-                    ppFnd += nWhich - *pPtr;
-                    SAL_WARN_IF( *ppFnd, "svl.items", "Item is present twice, with ID/pos " << nWhich);
-                    *ppFnd = pItem;
-                    ++m_nCount;
-                    break;
-                }
-
-                // In the range array and Item array to the next Which range
-                ppFnd += *(pPtr+1) - *pPtr + 1;
-                pPtr += 2;
-            }
-        }
-    }
-}
-
 bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 {
     return Equals( rCmp, true);
@@ -1585,16 +1464,9 @@ void SfxItemSet::PutDirect(const SfxPoolItem &rItem)
     }
 }
 
-sal_Int32 SfxItemSet::getHash() const
-{
-    return stringify().hashCode();
-}
-
 OString SfxItemSet::stringify() const
 {
     SvMemoryStream aStream;
-    Store(aStream, true);
-    aStream.Flush();
     return OString(
         static_cast<char const *>(aStream.GetData()), aStream.GetEndOfData());
 }
