@@ -444,8 +444,12 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     return true;                // move Nodes lying in between
 }
 
-bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
+bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam, bool bRedlineDelete )
 {
+    // Make sure the Track Changes mode is the same
+    if( m_bRedlineDelete != bRedlineDelete )
+        return false;
+
     // Is Undo greater than one Node (that is Start and EndString)?
     if( !m_pSttStr || m_pSttStr->isEmpty() || m_pEndStr )
         return false;

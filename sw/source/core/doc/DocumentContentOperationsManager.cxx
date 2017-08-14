@@ -3590,7 +3590,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
                     SwUndoDelete * const pUndoDel( dynamic_cast< SwUndoDelete* >( pLastUndo ) );
                     if( pUndoDel )
                     {
-                        bMerged = pUndoDel->CanGrouping( &m_rDoc, rPam );
+                        bMerged = pUndoDel->CanGrouping( &m_rDoc, rPam, bRedlineDelete );
                         // if CanGrouping() returns true it's already merged
                     }
                 }
