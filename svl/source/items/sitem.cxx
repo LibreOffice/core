@@ -75,7 +75,7 @@ bool SfxSetItem::GetPresentation
 
 SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const
 {
-    GetItemSet().Store(rStream);
+    //TODO: Remove it in a subsequent patches
     return rStream;
 }
 
