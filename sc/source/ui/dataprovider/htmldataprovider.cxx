@@ -55,28 +55,64 @@ OString toString(const xmlChar* pStr)
     return OString(reinterpret_cast<const char*>(pStr), xmlStrlen(pStr));
 }
 
+OUString trim_string(const OUString& aStr)
+{
+    OUString aOldString;
+    OUString aString = aStr;
+    do
+    {
+        aOldString = aString;
+        aString = comphelper::string::strip(aString, ' ');
+        aString = comphelper::string::strip(aString, '\n');
+        aString = comphelper::string::strip(aString, '\r');
+        aString = comphelper::string::strip(aString, '\t');
+    }
+    while (aOldString != aString);
+
+    return aString;
+}
+
+OUString get_node_str(xmlNodePtr pNode)
+{
+    OUStringBuffer aStr;
+    for (xmlNodePtr cur_node = pNode->children; cur_node; cur_node = cur_node->next)
+    {
+        if (cur_node->type == XML_TEXT_NODE)
+        {
+            OUString aString = OStringToOUString(toString(cur_node->content), RTL_TEXTENCODING_UTF8);
+            aStr.append(trim_string(aString));
+        }
+        else if (cur_node->type == XML_ELEMENT_NODE)
+        {
+            aStr.append(get_node_str(cur_node));
+        }
+    }
+
+    return aStr.makeStringAndClear();
+}
+
 }
 
 void HTMLFetchThread::handleCell(xmlNodePtr pCellNode, SCROW nRow, SCCOL nCol)
 {
+    OUStringBuffer aStr;
     for (xmlNodePtr cur_node = pCellNode->children; cur_node; cur_node = cur_node->next)
     {
         if (cur_node->type == XML_TEXT_NODE)
         {
             OUString aString = OStringToOUString(toString(cur_node->content), RTL_TEXTENCODING_UTF8);
-            OUString aOldString;
-            do
-            {
-                aOldString = aString;
-                aString = comphelper::string::strip(aString, ' ');
-                aString = comphelper::string::strip(aString, '\n');
-                aString = comphelper::string::strip(aString, '\r');
-                aString = comphelper::string::strip(aString, '\t');
-            }
-            while (aOldString != aString);
-
-            mrDocument.SetString(nCol, nRow, 0, aString);
+            aStr.append(trim_string(aString));
         }
+        else if (cur_node->type == XML_ELEMENT_NODE)
+        {
+            aStr.append(get_node_str(cur_node));
+        }
+    }
+
+    if (!aStr.isEmpty())
+    {
+        OUString aCellStr = aStr.makeStringAndClear();
+        mrDocument.SetString(nCol, nRow, 0, aCellStr);
     }
 }
 
@@ -139,6 +175,9 @@ void HTMLFetchThread::execute()
 {
     OStringBuffer aBuffer(64000);
     std::unique_ptr<SvStream> pStream = DataProvider::FetchStreamFromURL(maURL, aBuffer);
+
+    if (aBuffer.isEmpty())
+        return;
 
     htmlDocPtr pHtmlPtr = htmlParseDoc(reinterpret_cast<xmlChar*>(const_cast<char*>(aBuffer.getStr())), nullptr);
 
