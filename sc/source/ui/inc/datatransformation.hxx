@@ -11,12 +11,13 @@
 #define INCLUDED_SC_SOURCE_UI_DATAPROVIDER_DATATRANSFORMATION_HXX
 
 #include <address.hxx>
+#include <scdllapi.h>
 
 class ScDocument;
 
 namespace sc {
 
-class DataTransformation
+class SC_DLLPUBLIC DataTransformation
 {
 public:
     virtual ~DataTransformation();
@@ -24,7 +25,7 @@ public:
     virtual void Transform(ScDocument& rDoc) = 0;
 };
 
-class ColumnRemoveTransformation : public DataTransformation
+class SC_DLLPUBLIC ColumnRemoveTransformation : public DataTransformation
 {
     SCCOL mnCol;
 
