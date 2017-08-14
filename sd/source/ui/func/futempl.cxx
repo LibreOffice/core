@@ -414,12 +414,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             SfxItemSet aTempSet(*pOutSet);
                             static_cast<SdStyleSheet*>(pStyleSheet)->AdjustToFontHeight(aTempSet);
 
-                            const SvxBrushItem* pBrushItem = aTempSet.GetItem<SvxBrushItem>(XATTR_FILLBACKGROUND);
-                            if( pBrushItem )
+                            if( aNewAttr.GetItemState( XATTR_FILLBACKGROUND, true, &pItem ) == SfxItemState::SET)
                             {
-                               SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
-                               aTempSet.ClearItem(XATTR_FILLBACKGROUND);
-                               aTempSet.Put(aBackColorItem);
+                                const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
+                                SvxBackgroundColorItem aBackColorItem( pBrushItem->GetColor(), EE_CHAR_BKGCOLOR);
+                                aTempSet.ClearItem(XATTR_FILLBACKGROUND);
+                                aTempSet.Put(aBackColorItem);
                             }
                             /* Special treatment: reset the INVALIDS to
                                NULL-Pointer (otherwise INVALIDs or pointer point
