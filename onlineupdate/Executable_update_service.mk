@@ -22,7 +22,7 @@ $(eval $(call gb_Executable_set_include,update_service,\
 
 $(eval $(call gb_Executable_use_static_libraries,update_service,\
 	updatehelper \
-	winhelper \
+	windows_process \
 ))
 
 $(eval $(call gb_Executable_add_libs,update_service,\
