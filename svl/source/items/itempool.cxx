@@ -241,13 +241,6 @@ SfxItemPool::SfxItemPool
             pImpl->maPoolDefaults[n]->SetKind(SfxItemKind::PoolDefault);
         }
 
-    // Copy Version map
-    for (std::shared_ptr<SfxPoolVersion_Impl>& pOld : rPool.pImpl->aVersions)
-    {
-        SfxPoolVersion_ImplPtr pNew = std::make_shared<SfxPoolVersion_Impl>( *pOld );
-        pImpl->aVersions.push_back( pNew );
-    }
-
     // Repair linkage
     if ( rPool.pImpl->mpSecondary )
         SetSecondaryPool( rPool.pImpl->mpSecondary->Clone() );

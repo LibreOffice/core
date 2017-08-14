@@ -103,7 +103,6 @@ struct SfxItemPool_Impl
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     sal_uInt16*                     mpPoolRanges;
-    std::deque< SfxPoolVersion_ImplPtr > aVersions;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     sal_uInt16                      mnFileFormatVersion;

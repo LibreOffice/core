@@ -176,27 +176,6 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         writeByteString(rStream, pImpl->aName);
     }
 
-    // VersionMaps
-    {
-        SfxMultiVarRecordWriter aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP );
-        for (std::shared_ptr<SfxPoolVersion_Impl>& pVer : pImpl->aVersions)
-        {
-            aVerRec.NewContent();
-            rStream.WriteUInt16( pVer->_nVer ).WriteUInt16( pVer->_nStart ).WriteUInt16( pVer->_nEnd );
-            sal_uInt16 nCount = pVer->_nEnd - pVer->_nStart + 1;
-            sal_uInt16 nNewWhich = 0;
-            for ( sal_uInt16 n = 0; n < nCount; ++n )
-            {
-                nNewWhich = pVer->_pMap[n];
-                rStream.WriteUInt16( nNewWhich );
-            }
-
-            // Workaround for bug in SetVersionMap 312
-            if ( SOFFICE_FILEFORMAT_31 == pImpl->mnFileFormatVersion )
-                rStream.WriteUInt16( nNewWhich+1 );
-        }
-    }
-
     // Pooled Items
     {
         SfxMultiMixRecordWriter aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS );
@@ -595,24 +574,6 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             // Read header for single versions
             sal_uInt16 nVersion(0), nHStart(0), nHEnd(0);
             rStream.ReadUInt16( nVersion ).ReadUInt16( nHStart ).ReadUInt16( nHEnd );
-            sal_uInt16 nCount = nHEnd - nHStart + 1;
-
-            // Is new version is known?
-            if ( nVerNo >= pImpl->aVersions.size() )
-            {
-                // Add new Version
-                const size_t nMaxRecords = rStream.remainingSize() / sizeof(sal_uInt16);
-                if (nCount > nMaxRecords)
-                {
-                    SAL_WARN("svl.items", "Parsing error: " << nMaxRecords <<
-                             " max possible entries, but " << nCount << " claimed, truncating");
-                    nCount = nMaxRecords;
-                }
-                sal_uInt16 *pMap = new sal_uInt16[nCount]{};
-                for ( sal_uInt16 n = 0; n < nCount; ++n )
-                    rStream.ReadUInt16( pMap[n] );
-                SetVersionMap( nVersion, nHStart, nHEnd, pMap );
-            }
         }
         pImpl->nVersion = nOwnVersion;
     }
@@ -966,7 +927,6 @@ void SfxItemPool::SetVersionMap
     // Create new map entry to insert
     const SfxPoolVersion_ImplPtr pVerMap = std::make_shared<SfxPoolVersion_Impl>(
                 nVer, nOldStart, nOldEnd, pOldWhichIdTab );
-    pImpl->aVersions.push_back( pVerMap );
 
     DBG_ASSERT( nVer > pImpl->nVersion, "Versions not sorted" );
     pImpl->nVersion = nVer;
@@ -1018,56 +978,6 @@ sal_uInt16 SfxItemPool::GetNewWhich
         if ( pImpl->mpSecondary )
             return pImpl->mpSecondary->GetNewWhich( nFileWhich );
         SAL_WARN( "svl.items", "unknown which in GetNewWhich(), with ID/pos " << nFileWhich);
-    }
-
-    // Newer/the same/older version?
-    short nDiff = (short)pImpl->nLoadingVersion - (short)pImpl->nVersion;
-
-    // WhichId of a newer version?
-    if ( nDiff > 0 )
-    {
-        // Map step by step from the top version down to the file version
-        for ( size_t nMap = pImpl->aVersions.size(); nMap > 0; --nMap )
-        {
-            SfxPoolVersion_ImplPtr pVerInfo = pImpl->aVersions[nMap-1];
-            if ( pVerInfo->_nVer > pImpl->nVersion )
-            {   sal_uInt16 nOfs;
-                sal_uInt16 nCount = pVerInfo->_nEnd - pVerInfo->_nStart + 1;
-                for ( nOfs = 0;
-                      nOfs <= nCount &&
-                        pVerInfo->_pMap[nOfs] != nFileWhich;
-                      ++nOfs )
-                    continue;
-
-                if ( pVerInfo->_pMap[nOfs] == nFileWhich )
-                    nFileWhich = pVerInfo->_nStart + nOfs;
-                else
-                    return 0;
-            }
-            else
-                break;
-        }
-    }
-
-    // WhichId of a newer version?
-    else if ( nDiff < 0 )
-    {
-        // Map step by step from the top version down to the file version
-        for (std::shared_ptr<SfxPoolVersion_Impl>& pVerInfo : pImpl->aVersions)
-        {
-            if ( pVerInfo->_nVer > pImpl->nLoadingVersion )
-            {
-                if (nFileWhich >= pVerInfo->_nStart &&
-                            nFileWhich <= pVerInfo->_nEnd)
-                {
-                    nFileWhich = pVerInfo->_pMap[nFileWhich - pVerInfo->_nStart];
-                }
-                else
-                {
-                    SAL_WARN("svl.items", "which-id unknown in version");
-                }
-            }
-        }
     }
 
     // Return original (nDiff==0) or mapped (nDiff!=0) Id
