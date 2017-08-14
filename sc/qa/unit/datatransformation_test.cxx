@@ -29,9 +29,11 @@ public:
     virtual void tearDown() override;
 
     void testColumnRemove();
+    void testColumnSplit();
 
     CPPUNIT_TEST_SUITE(ScDataTransformationTest);
     CPPUNIT_TEST(testColumnRemove);
+    CPPUNIT_TEST(testColumnSplit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -67,6 +69,30 @@ void ScDataTransformationTest::testColumnRemove()
             }
         }
     }
+}
+
+void ScDataTransformationTest::testColumnSplit()
+{
+    m_pDoc->SetString(2, 0, 0, "Test1,Test2");
+    m_pDoc->SetString(2, 1, 0, "Test1,");
+    m_pDoc->SetString(2, 2, 0, ",Test1");
+    m_pDoc->SetString(2, 3, 0, "Test1,Test2,Test3");
+    m_pDoc->SetString(3, 0, 0, "AnotherString");
+
+    sc::SplitColumnTransformation aTransform(2, ',');
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("AnotherString"), m_pDoc->GetString(4, 0, 0));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(2, 3, 0));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2"), m_pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(3, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2,Test3"), m_pDoc->GetString(3, 3, 0));
 }
 
 ScDataTransformationTest::ScDataTransformationTest() :
