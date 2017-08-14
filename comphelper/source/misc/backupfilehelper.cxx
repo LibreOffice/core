@@ -654,9 +654,9 @@ namespace
 
                     if (aList.is())
                     {
-                        const long nLength(aList->getLength());
+                        const sal_Int32 nLength(aList->getLength());
 
-                        for (long a(0); a < nLength; a++)
+                        for (sal_Int32 a(0); a < nLength; a++)
                         {
                             const uno::Reference< xml::dom::XElement > aChild(aList->item(a), uno::UNO_QUERY);
 
@@ -765,9 +765,9 @@ namespace
 
                     if (aList.is())
                     {
-                        const long nLength(aList->getLength());
+                        const sal_Int32 nLength(aList->getLength());
 
-                        for (long a(0); a < nLength; a++)
+                        for (sal_Int32 a(0); a < nLength; a++)
                         {
                             const uno::Reference< xml::dom::XElement > aChild(aList->item(a), uno::UNO_QUERY);
 

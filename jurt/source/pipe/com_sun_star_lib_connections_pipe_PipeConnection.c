@@ -467,7 +467,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
 
     short   state   = START;
     oslPipe npipe;          /* native pipe */
-    long    count;          /* number of bytes has been written */
+    sal_Int32 count;        /* number of bytes has been written */
     jsize   nwrite;         /* number of bytes to write */
     jbyte * nbuff = NULL;   /* native buffer */
 

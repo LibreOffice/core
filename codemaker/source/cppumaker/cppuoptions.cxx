@@ -278,7 +278,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
                     ret = initOptions(rargc, rargv, bCmdFile);
 
-                    for (long j=0; j < rargc; j++)
+                    for (int j=0; j < rargc; j++)
                     {
                         free(rargv[j]);
                     }
