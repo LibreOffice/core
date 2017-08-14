@@ -17,7 +17,7 @@
 #include "check.hxx"
 
 /**
-The types 'long' and 'unsigned long' are different sizes on different platforms, making them wholy unsuitable
+The types 'long' and 'unsigned long' are different sizes on different platforms, making them wholly unsuitable
 for portable code.
 And when I mean different sizes, I mean 64bit Linux and 64bit Windows have different sizes.
  */

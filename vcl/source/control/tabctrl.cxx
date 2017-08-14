@@ -2533,7 +2533,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         }
     }
 
-    // potition the shortcutbox
+    // position the shortcutbox
     m_pShortcuts->SetPosPixel(Point(0, 0));
 
     // position the menu
