@@ -141,7 +141,6 @@ cd -
 # desktop files will be added by the corresponding add_wrapper command
 if test -f $DESTDIR/gid_Module_Root_Brand ; then
     for dir in $PREFIXDIR/share/application-registry \
-               $PREFIXDIR/share/mimelnk/application \
                $PREFIXDIR/share/mime/packages \
                $PREFIXDIR/share/mime-info \
                $PREFIXDIR/share/icons ; do

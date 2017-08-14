@@ -29,11 +29,6 @@ if [ "${KDEMAINDIR}" ]; then
   done
   unset targetdir destfile
 
-  mkdir -p "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application"
-  for i in `cat mimelnklist`; do
-    cp "${i}" "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application/${PREFIX}-`basename ${i}`"
-  done
-  chmod 0644 "${DESTDIR}/${KDEMAINDIR}/share/mimelnk/application/"*
 fi
 
 if [ "${GNOMEDIR}" ]; then

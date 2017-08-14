@@ -66,7 +66,6 @@ cd $RPM_BUILD_ROOT
 rm -rf usr/share/application-registry
 rm -rf usr/share/applications.flag
 rm -rf usr/share/mime-info
-rm -rf usr/share/mimelnk
 rm -rf usr/share/applnk-redhat
 #find usr/share/icons -name '*.png' -exec chmod g+w {} \;
 
