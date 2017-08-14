@@ -45,10 +45,12 @@ public:
 
     void testSUMIFS();
     void testDivision();
+    void testVLOOKUP();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
     CPPUNIT_TEST(testDivision);
+    CPPUNIT_TEST(testVLOOKUP);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -187,6 +189,69 @@ void ScParallelismTest::testDivision()
             CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), static_cast<double>(i)/(i%10), m_pDoc->GetValue(2, i, 0), 1e-10);
         else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#DIV/0!"), m_pDoc->GetString(2, i, 0));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testVLOOKUP()
+{
+    m_pDoc->InsertTab(0, "1");
+
+    for (auto i = 1; i < 1000; i++)
+    {
+        if (i%5)
+            m_pDoc->SetValue(0, i, 0, i);
+        else
+            m_pDoc->SetValue(0, i, 0, i+0.1);
+
+        if (i%2)
+            m_pDoc->SetValue(1, i, 0, i*10);
+        else
+            m_pDoc->SetString(1, i, 0, "N" + OUString::number(i*10));
+
+        if (i%3)
+        {
+            m_pDoc->SetFormula(ScAddress(2, i, 0),
+                               "=VLOOKUP(" + OUString::number(i) + "; "
+                               "A$2:B$1000; 2; 0)",
+                               formula::FormulaGrammar::GRAM_NATIVE_UI);
+        }
+
+        else
+        {
+            m_pDoc->SetFormula(ScAddress(2, i, 0),
+                               "=VLOOKUP(42.42; "
+                               "A$2:B$1000; 2; 0)",
+                               formula::FormulaGrammar::GRAM_NATIVE_UI);
+        }
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    for (auto i = 1; i < 1000; i++)
+    {
+        OString sMessage = "At row " + OString::number(i+1);
+        if (i%3)
+        {
+            if (i%5)
+            {
+                if (i%2)
+                    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), static_cast<double>(i*10), m_pDoc->GetValue(2, i, 0), 1e-10);
+                else
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("N" + OUString::number(i*10)), m_pDoc->GetString(2, i, 0));
+            }
+            else
+            {
+                // The corresponding value in A is i+0.1
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#N/A"), m_pDoc->GetString(2, i, 0));
+            }
+        }
+        else
+        {
+            // The 42.42 is never found
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#N/A"), m_pDoc->GetString(2, i, 0));
+        }
     }
 
     m_pDoc->DeleteTab(0);
