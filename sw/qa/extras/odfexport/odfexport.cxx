@@ -304,15 +304,6 @@ DECLARE_ODFEXPORT_TEST(testOOoxmlEmbedded, "oooxml_embedded.sxw")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(SOFFICE_FILEFORMAT_8), comphelper::OStorageHelper::GetXStorageFormat(xStorage4));
 }
 
-DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
-{
-    //Note this is for a crash test
-    //Counting the Number of Frames and checking with the expected count
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
-}
-
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 {
     // See ooxmlexport's testFdo38244().
@@ -1103,44 +1094,6 @@ DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
     CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
     xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmark"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
-    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
-
-    xPara.set(getParagraphOrTable(17), uno::UNO_QUERY);
-    xPortions.set(xPara->createEnumeration());
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(" X"), xPortion->getString());
-    CPPUNIT_ASSERT(!xPortions->hasMoreElements());
-
-    xPara.set(getParagraphOrTable(18), uno::UNO_QUERY);
-    xPortions.set(xPara->createEnumeration());
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("X "), xPortion->getString());
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
-    CPPUNIT_ASSERT_EQUAL(OUString(" "), xPortion->getString());
-    xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Redline"), getProperty<OUString>(xPortion, "TextPortionType"));
     CPPUNIT_ASSERT(!getProperty<bool>(xPortion, "IsCollapsed"));
     xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(xPortion, "TextPortionType"));
