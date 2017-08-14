@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9ee27c9e",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-14T20:09:22Z",
+      "side": 0,
+      "message": "this should hopefully be removable too?",
+      "revId": "0342c5e8086c8200ecadbe9d52dd4ef6a093effb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_beed7890",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-14T20:09:22Z",
+      "side": 0,
+      "message": "and this",
+      "revId": "0342c5e8086c8200ecadbe9d52dd4ef6a093effb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5ed814f0",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-14T20:09:22Z",
+      "side": 0,
+      "message": "i think this function pretty useless if you remove that, since that was its main purpose - best to remove the whole function",
+      "revId": "0342c5e8086c8200ecadbe9d52dd4ef6a093effb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7ee5d0a6",
+        "filename": "svl/source/items/poolio.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-14T20:09:22Z",
+      "side": 0,
+      "message": "i hope this function should no longer be called?",
+      "revId": "0342c5e8086c8200ecadbe9d52dd4ef6a093effb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
