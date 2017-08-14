@@ -30,10 +30,12 @@ public:
 
     void testColumnRemove();
     void testColumnSplit();
+    void testColumnMerge();
 
     CPPUNIT_TEST_SUITE(ScDataTransformationTest);
     CPPUNIT_TEST(testColumnRemove);
     CPPUNIT_TEST(testColumnSplit);
+    CPPUNIT_TEST(testColumnMerge);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -93,6 +95,32 @@ void ScDataTransformationTest::testColumnSplit()
     CPPUNIT_ASSERT_EQUAL(OUString(""), m_pDoc->GetString(3, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Test1"), m_pDoc->GetString(3, 2, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Test2,Test3"), m_pDoc->GetString(3, 3, 0));
+}
+
+void ScDataTransformationTest::testColumnMerge()
+{
+    m_pDoc->SetString(2, 0, 0, "Berlin");
+    m_pDoc->SetString(2, 1, 0, "Brussels");
+    m_pDoc->SetString(2, 2, 0, "Paris");
+    m_pDoc->SetString(2, 3, 0, "Peking");
+
+    m_pDoc->SetString(4, 0, 0, "Germany");
+    m_pDoc->SetString(4, 1, 0, "Belgium");
+    m_pDoc->SetString(4, 2, 0, "France");
+    m_pDoc->SetString(4, 3, 0, "China");
+
+    sc::MergeColumnTransformation aTransform(2, 4, ", ");
+    aTransform.Transform(*m_pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Berlin, Germany"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Brussels, Belgium"), m_pDoc->GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Paris, France"), m_pDoc->GetString(2, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Peking, China"), m_pDoc->GetString(2, 3, 0));
+
+    for (SCROW nRow = 0; nRow <= 3; ++nRow)
+    {
+        CPPUNIT_ASSERT(m_pDoc->GetString(4, nRow, 0).isEmpty());
+    }
 }
 
 ScDataTransformationTest::ScDataTransformationTest() :
