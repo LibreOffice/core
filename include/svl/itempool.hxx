@@ -198,7 +198,6 @@ public:
                                                    const sal_uInt16 *pWhichIdTab );
     sal_uInt16                      GetNewWhich( sal_uInt16 nOldWhich ) const;
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
-    bool                            IsCurrentVersionLoading() const;
 
     static bool                     IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }
