@@ -15,6 +15,7 @@
 #include <rtl/strbuf.hxx>
 
 #include "htmldataprovider.hxx"
+#include "datatransformation.hxx"
 
 using namespace com::sun::star;
 
@@ -175,6 +176,12 @@ DataProvider::~DataProvider()
 
 void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
 {
+    // first apply all data transformations
+    for (auto& itr : maDataTransformations)
+    {
+        itr->Transform(rDoc);
+    }
+
     bool bShrunk = false;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
@@ -213,6 +220,11 @@ ScDBDataManager::~ScDBDataManager()
 void ScDBDataManager::SetDatabase(const OUString& rDBName)
 {
     maDBName = rDBName;
+}
+
+void ScDBDataManager::AddDataTransformation(std::unique_ptr<sc::DataTransformation> mpDataTransformation)
+{
+    maDataTransformations.push_back(std::move(mpDataTransformation));
 }
 
 ScDBData* ScDBDataManager::getDBData()
