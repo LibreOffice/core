@@ -103,18 +103,14 @@ struct SfxItemPool_Impl
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     sal_uInt16*                     mpPoolRanges;
-    std::deque< SfxPoolVersion_ImplPtr > aVersions;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     sal_uInt16                      mnFileFormatVersion;
     sal_uInt16                      nVersion;
-    sal_uInt16                      nLoadingVersion;
     sal_uInt16                      nInitRefCount; // 1, during load, may be 2
-    sal_uInt16                      nVerStart, nVerEnd; // WhichRange in versions
-    sal_uInt8                       nMajorVer, nMinorVer; // The Pool itself
+    sal_uInt16                      nStoringStart, nStoringEnd; // Range to be saved
     MapUnit                         eDefMetric;
     bool                            bInSetItem;
-    bool                            bStreaming; // in Load() or Store()
     bool                            mbPersistentRefCounts;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
@@ -129,15 +125,11 @@ struct SfxItemPool_Impl
         , mnEnd(nEnd)
         , mnFileFormatVersion(0)
         , nVersion(0)
-        , nLoadingVersion(0)
         , nInitRefCount(0)
-        , nVerStart(0)
-        , nVerEnd(0)
-        , nMajorVer(0)
-        , nMinorVer(0)
+        , nStoringStart(0)
+        , nStoringEnd(0)l
         , eDefMetric(MapUnit::MapCM)
         , bInSetItem(false)
-        , bStreaming(false)
         , mbPersistentRefCounts(false)
     {
         DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
@@ -158,9 +150,6 @@ struct SfxItemPool_Impl
         delete[] mpPoolRanges;
         mpPoolRanges = nullptr;
     }
-
-    void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
-                      SfxPoolItem const * pDefItem, SfxPoolItemArray_Impl ** pArr);
 
     // unit testing
     friend class PoolItemTest;
