@@ -53,6 +53,18 @@ public:
     virtual void Transform(ScDocument& rDoc) override;
 };
 
+class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
+{
+    SCCOL mnCol1;
+    SCCOL mnCol2;
+    OUString maMergeString;
+
+public:
+
+    MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, const OUString& rMergeString);
+    virtual void Transform(ScDocument& rDoc) override;
+};
+
 }
 
 #endif

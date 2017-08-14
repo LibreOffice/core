@@ -68,6 +68,29 @@ void SplitColumnTransformation::Transform(ScDocument& rDoc)
     }
 }
 
+MergeColumnTransformation::MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, const OUString& rMergeString):
+    mnCol1(nCol1),
+    mnCol2(nCol2),
+    maMergeString(rMergeString)
+{
+}
+
+void MergeColumnTransformation::Transform(ScDocument& rDoc)
+{
+    SCROW nEndRow1 = getLastRow(rDoc, mnCol1);
+    SCROW nEndRow2 = getLastRow(rDoc, mnCol2);
+    SCROW nEndRow = std::max(nEndRow1, nEndRow2);
+
+    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+    {
+        OUString aStr1 = rDoc.GetString(mnCol1, nRow, 0);
+        OUString aStr2 = rDoc.GetString(mnCol2, nRow, 0);
+        rDoc.SetString(mnCol1, nRow, 0, aStr1 + maMergeString + aStr2);
+    }
+
+    rDoc.DeleteCol(0, 0, MAXROW, 0, mnCol2, 1);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
