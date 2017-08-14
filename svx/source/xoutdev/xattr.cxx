@@ -2918,15 +2918,6 @@ SfxPoolItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
     return new XLineAttrSetItem( *this, pPool );
 }
 
-/// create a set item out of a stream
-SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
-{
-    auto pSet2 = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
-                                    svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{});
-    pSet2->Load( rStream );
-    return new XLineAttrSetItem( std::move(pSet2) );
-}
-
 /// fill attribute set item
 XFillAttrSetItem::XFillAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
     SfxSetItem( XATTRSET_FILL, std::move(pItemSet))
@@ -2953,15 +2944,6 @@ XFillAttrSetItem::XFillAttrSetItem( const XFillAttrSetItem& rFillAttr,
 SfxPoolItem* XFillAttrSetItem::Clone( SfxItemPool* pPool ) const
 {
     return new XFillAttrSetItem( *this, pPool );
-}
-
-/// create a set item out of a stream
-SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*/) const
-{
-    auto pSet2 = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
-                                    svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-    pSet2->Load( rStream );
-    return new XFillAttrSetItem( std::move(pSet2) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

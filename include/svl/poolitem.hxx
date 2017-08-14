@@ -287,8 +287,6 @@ public:
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override = 0;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override = 0;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const override;
 
     const SfxItemSet&       GetItemSet() const
                             { return *pSet; }

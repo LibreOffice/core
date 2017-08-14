@@ -229,38 +229,6 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-
-SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_uInt8 eType;
-    bool bLand;
-    sal_uInt16 nUse;
-
-    // UNICODE: rStream >> sStr;
-    OUString sStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-
-    rStream.ReadUChar( eType );
-    rStream.ReadCharAsBool( bLand );
-    rStream.ReadUInt16( nUse );
-
-    SvxPageItem* pPage = new SvxPageItem( Which() );
-    pPage->SetDescName( sStr );
-    pPage->SetNumType( (SvxNumType)eType );
-    pPage->SetLandscape( bLand );
-    pPage->SetPageUsage( (SvxPageUsage)nUse );
-    return pPage;
-}
-
-
-SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    // UNICODE: rStrm << aDescName;
-    rStrm.WriteUniOrByteString(aDescName, rStrm.GetStreamCharSet());
-
-    rStrm.WriteUChar( eNumType ).WriteBool( bLandscape ).WriteUInt16( (sal_uInt16)eUse );
-    return rStrm;
-}
-
 // HeaderFooterSet
 SvxSetItem::SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet ) :
 
@@ -296,23 +264,6 @@ bool SvxSetItem::GetPresentation
 {
     rText.clear();
     return false;
-}
-
-SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const
-{
-    SfxItemSet* _pSet = new SfxItemSet( *GetItemSet().GetPool(),
-                                       GetItemSet().GetRanges() );
-
-    _pSet->Load( rStrm );
-
-    return new SvxSetItem( Which(), *_pSet );
-}
-
-SvStream& SvxSetItem::Store(SvStream &rStrm, sal_uInt16 nItemVersion) const
-{
-    GetItemSet().Store( rStrm, nItemVersion );
-
-    return rStrm;
 }
 
 

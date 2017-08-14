@@ -37,7 +37,6 @@ public:
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr,
                                              SfxItemPool* pItemPool);
     virtual SfxPoolItem*    Clone( SfxItemPool* pToPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVersion ) const override;
 };
 
 #endif
