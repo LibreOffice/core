@@ -97,13 +97,6 @@ void ScParallelismTest::testSUMIFS()
 
     m_pDoc->SetValue(0, 0, 0, 1001);
 
-    /*E1*/ m_pDoc->SetFormula(ScAddress(5, 0, 0),
-                              "=$F$2+$F$3",
-                              formula::FormulaGrammar::GRAM_ENGLISH);
-    /*F1*/ m_pDoc->SetFormula(ScAddress(6, 0, 0),
-                              "=SUM($F$2:$F$3)",
-                              formula::FormulaGrammar::GRAM_ENGLISH);
-
     for (auto i = 1; i < 1000; i++)
     {
         /*A*/ m_pDoc->SetValue(0, i, 0, i/10 + 1000);
@@ -142,12 +135,6 @@ void ScParallelismTest::testSUMIFS()
     OUString sFormula;
 
     std::cerr << "A1=" << m_pDoc->GetValue(0, 0, 0) << std::endl;
-
-    m_pDoc->GetFormula(5, 0, 0, sFormula);
-    std::cerr << "E1=\"" << sFormula << "\"=" << m_pDoc->GetValue(5, 0, 0) << std::endl;
-
-    m_pDoc->GetFormula(6, 0, 0, sFormula);
-    std::cerr << "F1=\"" << sFormula << "\"=" << m_pDoc->GetValue(6, 0, 0) << std::endl;
 
     std::cerr << "      A,B,C  F  L,M" << std::endl;
     for (auto i = 1; i < 30; i++)
