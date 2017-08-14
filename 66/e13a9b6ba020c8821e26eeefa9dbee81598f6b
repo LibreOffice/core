@@ -1,0 +1,7 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Katarina Behrens <Katarina.Behrens@cib.de>
+Submitted-by: Katarina Behrens <Katarina.Behrens@cib.de>
+Submitted-at: Mon, 14 Aug 2017 15:20:19 +0200
+Reviewed-on: https://gerrit.libreoffice.org/41104
+Project: core
+Branch: refs/heads/feature/gsoc17-revamp-customize-dialog
