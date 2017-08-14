@@ -207,6 +207,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
         RemoveTabPage( "RID_SVXPAGE_TABULATOR");
         RemoveTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH");
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
+        RemoveTabPage( "RID_SVXPAGE_BACKGROUND" );
     }
 
     // set title and add corresponding pages to dialog
