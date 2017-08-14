@@ -94,6 +94,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private SearchController mSearchController;
     private CalcHeadersController mCalcHeadersController;
     private boolean mIsSpreadsheet;
+    public boolean pendingInsertGraphic; // boolean indicating a pending insert graphic action, used in LOKitTileProvider.postLoad()
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -819,6 +820,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             builder.setMessage(R.string.alert_copy_svg_slide_show_to_clipboard)
                     .setPositiveButton(R.string.alert_copy_svg_slide_show_to_clipboard_dismiss, null).show();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mFormattingController.handleActivityResult(requestCode, resultCode, data);
+        hideBottomToolbar();
     }
 }
 
