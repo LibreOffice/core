@@ -28,6 +28,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <queue>
+#include <vector>
 
 #include "officecfg/Office/Calc.hxx"
 
@@ -44,6 +45,7 @@ namespace sc {
 class DataProvider;
 class CSVDataProvider;
 class ScDBDataManager;
+class DataTransformation;
 
 class CSVFetchThread : public salhelper::Thread
 {
@@ -84,7 +86,8 @@ protected:
 
 public:
     DataProvider();
-    virtual ~DataProvider() = 0;
+
+    virtual ~DataProvider();
 
     virtual void Import() = 0;
 
@@ -131,11 +134,15 @@ class ScDBDataManager
     OUString maDBName;
     ScDocument* mpDoc;
 
+    std::vector<std::unique_ptr<sc::DataTransformation>> maDataTransformations;
+
 public:
     ScDBDataManager(const OUString& rDBName, bool bAllowResize, ScDocument* pDoc);
     ~ScDBDataManager();
 
     void SetDatabase(const OUString& rDBName);
+
+    void AddDataTransformation(std::unique_ptr<sc::DataTransformation> mpDataTransformation);
 
     ScDBData* getDBData();
 
@@ -156,5 +163,6 @@ public:
 };
 
 }
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
