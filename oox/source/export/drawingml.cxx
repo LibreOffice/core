@@ -3021,6 +3021,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
 
     if( nEffectToken > 0 )
     {
+        mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
         mpFS->startElement( nEffectToken, xOuterShdwAttrList );
 
         if( bContainsColor )
@@ -3032,6 +3033,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
         }
 
         mpFS->endElement( nEffectToken );
+        mpFS->endElementNS(XML_a, XML_effectLst);
     }
 }
 
@@ -3075,14 +3077,10 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             aShadowGrabBag[2].Name = "RgbClrTransparency";
             aShadowGrabBag[2].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
 
-            mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
             WriteShapeEffect( "outerShdw", aShadowGrabBag );
-            mpFS->endElementNS(XML_a, XML_effectLst);
         }
         return;
     }
-
-    mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
 
     for( sal_Int32 i=0; i < aEffects.getLength(); ++i )
     {
@@ -3090,8 +3088,6 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         aEffects[i].Value >>= aEffectProps;
         WriteShapeEffect( aEffects[i].Name, aEffectProps );
     }
-
-    mpFS->endElementNS(XML_a, XML_effectLst);
 }
 
 void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
