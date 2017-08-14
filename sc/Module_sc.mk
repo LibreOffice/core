@@ -44,6 +44,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_mark_test \
 	CppunitTest_sc_core \
 	CppunitTest_sc_dataprovider \
+	CppunitTest_sc_datatransformation \
 ))
 
 ifneq ($(ENABLE_HEADLESS),TRUE)
