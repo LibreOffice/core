@@ -179,10 +179,7 @@ SfxItemPool::SfxItemPool
     pImpl->eDefMetric = MapUnit::MapTwip;
     pImpl->nVersion = 0;
     pImpl->bStreaming = false;
-    pImpl->nLoadingVersion = 0;
     pImpl->nInitRefCount = 1;
-    pImpl->nVerStart = pImpl->mnStart;
-    pImpl->nVerEnd = pImpl->mnEnd;
     pImpl->bInSetItem = false;
     pImpl->nStoringStart = nStartWhich;
     pImpl->nStoringEnd = nEndWhich;
@@ -213,10 +210,7 @@ SfxItemPool::SfxItemPool
     pImpl->eDefMetric = rPool.pImpl->eDefMetric;
     pImpl->nVersion = rPool.pImpl->nVersion;
     pImpl->bStreaming = false;
-    pImpl->nLoadingVersion = 0;
     pImpl->nInitRefCount = 1;
-    pImpl->nVerStart = rPool.pImpl->nVerStart;
-    pImpl->nVerEnd = rPool.pImpl->nVerEnd;
     pImpl->bInSetItem = false;
     pImpl->nStoringStart = pImpl->mnStart;
     pImpl->nStoringEnd = pImpl->mnEnd;
@@ -244,13 +238,6 @@ SfxItemPool::SfxItemPool
             pImpl->maPoolDefaults[n] = rPool.pImpl->maPoolDefaults[n]->Clone(this); //resets kind
             pImpl->maPoolDefaults[n]->SetKind(SfxItemKind::PoolDefault);
         }
-
-    // Copy Version map
-    for (std::shared_ptr<SfxPoolVersion_Impl>& pOld : rPool.pImpl->aVersions)
-    {
-        SfxPoolVersion_ImplPtr pNew = std::make_shared<SfxPoolVersion_Impl>( *pOld );
-        pImpl->aVersions.push_back( pNew );
-    }
 
     // Repair linkage
     if ( rPool.pImpl->mpSecondary )

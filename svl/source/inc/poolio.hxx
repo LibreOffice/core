@@ -103,14 +103,11 @@ struct SfxItemPool_Impl
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     sal_uInt16*                     mpPoolRanges;
-    std::deque< SfxPoolVersion_ImplPtr > aVersions;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     sal_uInt16                      mnFileFormatVersion;
     sal_uInt16                      nVersion;
-    sal_uInt16                      nLoadingVersion;
     sal_uInt16                      nInitRefCount; // 1, during load, may be 2
-    sal_uInt16                      nVerStart, nVerEnd; // WhichRange in versions
     sal_uInt16                      nStoringStart, nStoringEnd; // Range to be saved
     sal_uInt8                       nMajorVer, nMinorVer; // The Pool itself
     MapUnit                         eDefMetric;
@@ -130,10 +127,7 @@ struct SfxItemPool_Impl
         , mnEnd(nEnd)
         , mnFileFormatVersion(0)
         , nVersion(0)
-        , nLoadingVersion(0)
         , nInitRefCount(0)
-        , nVerStart(0)
-        , nVerEnd(0)
         , nStoringStart(0)
         , nStoringEnd(0)
         , nMajorVer(0)
