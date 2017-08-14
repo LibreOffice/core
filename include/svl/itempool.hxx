@@ -174,7 +174,6 @@ public:
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;
     bool                            IsInRange( sal_uInt16 nWhich ) const;
-    bool                            IsInVersionsRange( sal_uInt16 nWhich ) const;
     bool                            IsInStoringRange( sal_uInt16 nWhich ) const;
     void                            SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     void                            SetSecondaryPool( SfxItemPool *pPool );
@@ -198,7 +197,6 @@ public:
                                                    const sal_uInt16 *pWhichIdTab );
     sal_uInt16                      GetNewWhich( sal_uInt16 nOldWhich ) const;
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
-    bool                            IsCurrentVersionLoading() const;
 
     static bool                     IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }
