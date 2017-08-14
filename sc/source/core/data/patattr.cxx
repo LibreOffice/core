@@ -143,53 +143,6 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
 }
 
-SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */ ) const
-{
-    OUString* pStr;
-    bool    bHasStyle;
-
-    rStream.ReadCharAsBool( bHasStyle );
-
-    if ( bHasStyle )
-    {
-        short   eFamDummy;
-        pStr = new OUString;
-        *pStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-        rStream.ReadInt16( eFamDummy ); // due to old data format
-    }
-    else
-        pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
-
-    auto pNewSet = o3tl::make_unique<SfxItemSet>( *GetItemSet().GetPool(),
-                                       svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
-    pNewSet->Load( rStream );
-
-    ScPatternAttr* pPattern = new ScPatternAttr( std::move(pNewSet) );
-
-    pPattern->pName.reset( pStr );
-
-    return pPattern;
-}
-
-SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */) const
-{
-    rStream.WriteBool( true );
-
-    if ( pStyle )
-        rStream.WriteUniOrByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
-    else if ( pName )                   // when style is/was deleted
-        rStream.WriteUniOrByteString( *pName, rStream.GetStreamCharSet() );
-    else
-        rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
-                                    rStream.GetStreamCharSet() );
-
-    rStream.WriteInt16( (sal_uInt16) SfxStyleFamily::Para );  // due to old data format
-
-    GetItemSet().Store( rStream );
-
-    return rStream;
-}
-
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
 {
     SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;

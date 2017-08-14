@@ -64,8 +64,6 @@ public:
                             virtual ~ScPatternAttr() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const override;
-    virtual SvStream&       Store(SvStream& rStream, sal_uInt16 nItemVersion) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
 
