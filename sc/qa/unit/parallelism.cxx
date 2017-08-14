@@ -198,9 +198,11 @@ void ScParallelismTest::testVLOOKUP()
 {
     m_pDoc->InsertTab(0, "1");
 
-    for (auto i = 1; i < 1000; i++)
+    for (auto i = 1; i < 2000; i++)
     {
-        if (i%5)
+        if (i == 1042)
+            m_pDoc->SetValue(0, i, 0, 1042.42);
+        else if (i%5)
             m_pDoc->SetValue(0, i, 0, i);
         else
             m_pDoc->SetValue(0, i, 0, i+0.1);
@@ -210,29 +212,35 @@ void ScParallelismTest::testVLOOKUP()
         else
             m_pDoc->SetString(1, i, 0, "N" + OUString::number(i*10));
 
-        if (i%3)
+        if (i < 1000)
         {
             m_pDoc->SetFormula(ScAddress(2, i, 0),
                                "=VLOOKUP(" + OUString::number(i) + "; "
-                               "A$2:B$1000; 2; 0)",
+                               "A$2:B$2000; 2; 0)",
                                formula::FormulaGrammar::GRAM_NATIVE_UI);
         }
 
         else
         {
-            m_pDoc->SetFormula(ScAddress(2, i, 0),
-                               "=VLOOKUP(42.42; "
-                               "A$2:B$1000; 2; 0)",
-                               formula::FormulaGrammar::GRAM_NATIVE_UI);
+            if (i == 1042)
+                m_pDoc->SetFormula(ScAddress(2, i, 0),
+                                   "=VLOOKUP(1042.42; "
+                                   "A$2:B$2000; 2; 0)",
+                                   formula::FormulaGrammar::GRAM_NATIVE_UI);
+            else
+                m_pDoc->SetFormula(ScAddress(2, i, 0),
+                                   "=VLOOKUP(1.234; "
+                                   "A$2:B$2000; 2; 0)",
+                                   formula::FormulaGrammar::GRAM_NATIVE_UI);
         }
     }
 
     m_xDocShell->DoHardRecalc();
 
-    for (auto i = 1; i < 1000; i++)
+    for (auto i = 1; i < 2000; i++)
     {
         OString sMessage = "At row " + OString::number(i+1);
-        if (i%3)
+        if (i < 1000)
         {
             if (i%5)
             {
@@ -249,8 +257,10 @@ void ScParallelismTest::testVLOOKUP()
         }
         else
         {
-            // The 42.42 is never found
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#N/A"), m_pDoc->GetString(2, i, 0));
+            if (i == 1042)
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("N" + OUString::number(i*10)), m_pDoc->GetString(2, i, 0));
+            else
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), OUString("#N/A"), m_pDoc->GetString(2, i, 0));
         }
     }
 
