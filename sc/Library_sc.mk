@@ -385,6 +385,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/condformat/colorformat \
     sc/source/ui/dataprovider/csvdataprovider \
     sc/source/ui/dataprovider/dataprovider \
+    sc/source/ui/dataprovider/datatransformation \
     sc/source/ui/dataprovider/htmldataprovider \
     sc/source/ui/dbgui/asciiopt \
     sc/source/ui/dbgui/consdlg \
