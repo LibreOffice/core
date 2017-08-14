@@ -211,6 +211,8 @@ public:
     void        SetSelected(bool bSel)               { mbSelected = bSel; }
     bool        IsSelected() const                   { return mbSelected; }
 
+    bool        Equals(const SdPage&) const;
+
     void        SetFadeEffect(css::presentation::FadeEffect eNewEffect);
     css::presentation::FadeEffect  GetFadeEffect() const;
 
@@ -375,7 +377,7 @@ public:
     void addAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, int nIndex );
     void removeAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
-    OString stringify() const;
+
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
     sal_uInt16 getPageId() { return mnPageId; }
 

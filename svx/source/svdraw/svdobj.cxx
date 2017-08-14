@@ -1690,38 +1690,6 @@ bool SdrObject::HasTextEdit() const
     return false;
 }
 
-OString SdrObject::stringify() const
-{
-    OStringBuffer aString(100);
-    aString.append(aAnchor.X()).
-            append(aAnchor.Y()).
-            append(aGridOffset.X()).
-            append(aGridOffset.Y()).
-            append((sal_Int32)nOrdNum).
-            append((sal_Int32)mnNavigationPosition).
-            append(mbSupportTextIndentingOnLineWidthChange).
-            append(mbLineIsOutsideGeometry).
-            append(bMarkProt).
-            append(bIs3DObj).
-            append(bIsEdge).
-            append(bClosedObj).
-            append(bNotVisibleAsMaster).
-            append(bEmptyPresObj).
-            append(mbVisible).
-            append(bNoPrint).
-            append(bSizProt).
-            append(bMovProt).
-            append(false).
-            append(bInserted).
-            append(false).
-            append(bVirtObj).
-            append(sal_uInt8(mnLayerID));
-
-    aString.append(GetMergedItemSet().stringify());
-
-    return aString.makeStringAndClear();
-}
-
 void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObject"));
