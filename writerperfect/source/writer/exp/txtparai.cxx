@@ -62,9 +62,21 @@ XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, cons
     return nullptr;
 }
 
-void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
 {
-    mrImport.GetGenerator().openParagraph(librevenge::RVNGPropertyList());
+    librevenge::RVNGPropertyList aPropertyList;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        if (rAttributeName != "text:style-name")
+        {
+            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+            aPropertyList.insert(sName.getStr(), sValue.getStr());
+        }
+    }
+
+    mrImport.GetGenerator().openParagraph(aPropertyList);
 }
 
 void XMLParaContext::endElement(const OUString &/*rName*/)
