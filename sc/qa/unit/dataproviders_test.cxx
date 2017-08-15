@@ -28,10 +28,12 @@ public:
 
     void testCSVImport();
     void testDataLargerThanDB();
+    void testHTMLImport();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
     CPPUNIT_TEST(testDataLargerThanDB);
+    CPPUNIT_TEST(testHTMLImport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -93,6 +95,46 @@ void ScDataProvidersTest::testDataLargerThanDB()
     CPPUNIT_ASSERT_EQUAL(OUString("test1"), m_pDoc->GetString(0, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("test2"), m_pDoc->GetString(1, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(2, 1, 0));
+}
+
+void ScDataProvidersTest::testHTMLImport()
+{
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    CPPUNIT_ASSERT(bInserted);
+
+    OUString aFileURL;
+    createFileURL("test1.", "html", aFileURL);
+    sc::ExternalDataSource aDataSource(aFileURL, "org.libreoffice.calc.html", m_pDoc);
+    aDataSource.setID("//table");
+    aDataSource.setDBData(pDBData);
+
+
+    m_pDoc->GetExternalDataMapper().insertDataSource(aDataSource);
+    auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
+    CPPUNIT_ASSERT(!rDataSources.empty());
+
+    rDataSources[0].refresh(m_pDoc, true);
+    Scheduler::ProcessEventsToIdle();
+
+
+    std::vector<OUString> aCarManufacturers = {"Audi", "GM", "Nissan", "Ferrari", "Peugeot"};
+    std::vector<OUString> aCities = {"Berlin", "San Francisco", "Tokyo", "Rome", "Paris"};
+    std::vector<double> aFirstCol = {1, 10, -100, -0.11111, 1};
+    std::vector<double> aSecondCol = {2, 2.1, 40179, 2, 2,}; // 40179 is equal to 2010-1-1
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col3"), m_pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Col4"), m_pDoc->GetString(3, 0, 0));
+
+    for (SCROW nRow = 0; nRow <= 4; ++nRow)
+    {
+        ASSERT_DOUBLES_EQUAL(aFirstCol[nRow], m_pDoc->GetValue(0, nRow + 1, 0));
+        ASSERT_DOUBLES_EQUAL(aSecondCol[nRow], m_pDoc->GetValue(1, nRow + 1, 0));
+        CPPUNIT_ASSERT_EQUAL(aCarManufacturers[nRow], m_pDoc->GetString(2, nRow + 1, 0));
+        CPPUNIT_ASSERT_EQUAL(aCities[nRow], m_pDoc->GetString(3, nRow + 1, 0));
+    }
 }
 
 ScDataProvidersTest::ScDataProvidersTest() :

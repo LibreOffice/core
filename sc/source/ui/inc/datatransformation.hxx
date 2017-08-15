@@ -13,6 +13,8 @@
 #include <address.hxx>
 #include <scdllapi.h>
 
+#include <sortparam.hxx>
+
 class ScDocument;
 
 namespace sc {
@@ -62,6 +64,16 @@ class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
 public:
 
     MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, const OUString& rMergeString);
+    virtual void Transform(ScDocument& rDoc) override;
+};
+
+class SC_DLLPUBLIC SortTransformation : public DataTransformation
+{
+    ScSortParam maSortParam;
+public:
+
+    SortTransformation(const ScSortParam& rParam);
+
     virtual void Transform(ScDocument& rDoc) override;
 };
 
