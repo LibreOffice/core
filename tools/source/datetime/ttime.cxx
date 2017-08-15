@@ -23,6 +23,7 @@
 
 #if defined(_WIN32)
 #include <windows.h>
+#include <mmsystem.h>
 #elif defined UNX
 #include <unistd.h>
 #include <limits.h>
@@ -34,6 +35,7 @@
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>
+#include <mach/mach_time.h>
 #endif
 
 #include <sal/log.hxx>
@@ -411,30 +413,54 @@ Time tools::Time::GetUTCOffset()
 
 sal_uInt64 tools::Time::GetSystemTicks()
 {
-#if defined(_WIN32)
-    static LARGE_INTEGER nTicksPerSecond;
-    static bool bTicksPerSecondInitialized = false;
-    if (!bTicksPerSecondInitialized)
-    {
-        QueryPerformanceFrequency(&nTicksPerSecond);
-        bTicksPerSecondInitialized = true;
-    }
+    return tools::Time::GetMonotonicTicks() / 1000;
+}
 
-    LARGE_INTEGER nPerformanceCount;
-    QueryPerformanceCounter(&nPerformanceCount);
-
-    return static_cast<sal_uInt64>(
-        (nPerformanceCount.QuadPart*1000)/nTicksPerSecond.QuadPart);
-#else
-    timeval tv;
-    int n = gettimeofday (&tv, nullptr);
-    if (n == -1) {
-        int e = errno;
-        SAL_WARN("tools.datetime", "gettimeofday failed: " << e);
-    }
-    return static_cast<sal_uInt64>(tv.tv_sec) * 1000
-        + static_cast<sal_uInt64>(tv.tv_usec) / 1000;
+#ifdef _WIN32
+static LARGE_INTEGER initPerformanceFrequency()
+{
+    LARGE_INTEGER nTicksPerSecond = { 0 };
+    if (!QueryPerformanceFrequency(&nTicksPerSecond))
+        nTicksPerSecond.QuadPart = 0;
+    return nTicksPerSecond;
+}
 #endif
+
+sal_uInt64 tools::Time::GetMonotonicTicks()
+{
+#ifdef _WIN32
+    static const LARGE_INTEGER nTicksPerSecond = initPerformanceFrequency();
+    if (nTicksPerSecond.QuadPart > 0)
+    {
+        LARGE_INTEGER nPerformanceCount;
+        QueryPerformanceCounter(&nPerformanceCount);
+        return static_cast<sal_uInt64>(
+            ( nPerformanceCount.QuadPart * 1000 * 1000 ) / nTicksPerSecond.QuadPart );
+    }
+    else
+    {
+        return static_cast<sal_uInt64>( timeGetTime() * 1000 );
+    }
+#else
+    sal_uInt64 nMicroSeconds;
+#ifdef __MACH__
+    static mach_timebase_info_data_t info = { 0, 0 };
+    if ( 0 == info.numer )
+        mach_timebase_info( &info );
+    nMicroSeconds = mach_absolute_time() * (double) (info.numer / info.denom) / 1000;
+#else
+#if defined(USE_CLOCK_GETTIME)
+    struct timespec currentTime;
+    clock_gettime( CLOCK_MONOTONIC, &currentTime );
+    nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_nsec / 1000;
+#else
+    struct timeval currentTime;
+    gettimeofday( &currentTime, nullptr );
+    nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_usec;
+#endif
+#endif // __MACH__
+    return nMicroSeconds;
+#endif // _WIN32
 }
 
 } /* namespace tools */
