@@ -633,8 +633,12 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     }
 
     auto const t1 = expr->getTypeAsWritten();
-    auto const t2 = sub->getType().getDesugaredType(compiler.getASTContext());
+    auto const t2 = sub->getType().getDesugaredType(compiler.getASTContext()); // look through templated wrapped types
     if (t1 != t2)
+        return true;
+    // if we are casting from/to a typedef, ignore it, even if the underlying types are the same
+    if ((loplugin::TypeCheck(t1).Typedef() || loplugin::TypeCheck(sub->getType()).Typedef())
+        && t1 != sub->getType())
         return true;
     if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr()))
         return true;
