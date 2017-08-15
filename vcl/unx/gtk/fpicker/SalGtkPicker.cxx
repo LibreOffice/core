@@ -23,6 +23,7 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -119,9 +120,13 @@ GtkWindow* RunDialog::GetTransientFor()
     return pParent;
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit > const & rToolkit ) :
-    cppu::WeakComponentImplHelper< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mxToolkit(rToolkit)
+RunDialog::RunDialog(GtkWidget *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
+                                         const uno::Reference<frame::XDesktop>& rDesktop)
+    : cppu::WeakComponentImplHelper<awt::XTopWindowListener, frame::XTerminateListener>(maLock)
+    , mpDialog(pDialog)
+    , mbTerminateDesktop(false)
+    , mxToolkit(rToolkit)
+    , mxDesktop(rDesktop)
 {
 }
 
@@ -153,13 +158,17 @@ void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
 
 void SAL_CALL RunDialog::queryTermination( const css::lang::EventObject& )
 {
+    SolarMutexGuard g;
+
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
+
+    mbTerminateDesktop = true;
+
+    throw css::frame::TerminationVetoException();
 }
 
 void SAL_CALL RunDialog::notifyTermination( const css::lang::EventObject& )
 {
-    SolarMutexGuard g;
-
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, nullptr);
 }
 
 void RunDialog::cancel()
@@ -168,17 +177,50 @@ void RunDialog::cancel()
     gtk_widget_hide( mpDialog );
 }
 
+namespace
+{
+    class ExecuteInfo
+    {
+    private:
+        css::uno::Reference<css::frame::XDesktop> mxDesktop;
+    public:
+        ExecuteInfo(const css::uno::Reference<css::frame::XDesktop>& rDesktop)
+            : mxDesktop(rDesktop)
+        {
+        }
+        void terminate()
+        {
+            mxDesktop->terminate();
+        }
+    };
+}
+
 gint RunDialog::run()
 {
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
 
-    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
+    mxDesktop->addTerminateListener(this);
+    gint nStatus = gtk_dialog_run(GTK_DIALOG(mpDialog));
+    mxDesktop->removeTerminateListener(this);
 
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);
 
+    if (mbTerminateDesktop)
+    {
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo(mxDesktop);
+        Application::PostUserEvent(LINK(nullptr, RunDialog, TerminateDesktop), pExecuteInfo);
+    }
+
     return nStatus;
+}
+
+IMPL_STATIC_LINK(RunDialog, TerminateDesktop, void*, p, void)
+{
+    ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
+    pExecuteInfo->terminate();
+    delete pExecuteInfo;
 }
 
 SalGtkPicker::SalGtkPicker( const uno::Reference<uno::XComponentContext>& xContext )
