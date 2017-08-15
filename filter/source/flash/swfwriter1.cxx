@@ -383,7 +383,7 @@ FlashFont& Writer::Impl_getFont( const vcl::Font& rFont )
 }
 
 
-void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth )
+void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth )
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -471,7 +471,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     }
 }
 
-void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor )
+void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor )
 {
     sal_Int32 nLen = rText.getLength();
 
@@ -503,18 +503,18 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     else
     {
         Size    aNormSize;
-        std::unique_ptr<long[]> pOwnArray;
-        long* pDX;
+        std::unique_ptr<sal_Int32[]> pOwnArray;
+        sal_Int32* pDX;
 
         // get text sizes
         if( pDXArray )
         {
             aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-            pDX = const_cast<long*>(pDXArray);
+            pDX = const_cast<sal_Int32*>(pDXArray);
         }
         else
         {
-            pOwnArray.reset(new long[ nLen ]);
+            pOwnArray.reset(new sal_Int32[ nLen ]);
             aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray.get() ), 0 );
             pDX = pOwnArray.get();
         }

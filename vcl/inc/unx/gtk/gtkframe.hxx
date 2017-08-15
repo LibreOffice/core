@@ -207,9 +207,9 @@ class GtkSalFrame : public SalFrame
 
 #if GTK_CHECK_VERSION(3,0,0)
     OUString                        m_aTooltip;
-    tools::Rectangle                       m_aHelpArea;
-    long                            m_nWidthRequest;
-    long                            m_nHeightRequest;
+    tools::Rectangle                m_aHelpArea;
+    sal_Int32                       m_nWidthRequest;
+    sal_Int32                       m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
     GtkDropTarget*                  m_pDropTarget;
     GtkDragSource*                  m_pDragSource;
@@ -320,12 +320,12 @@ class GtkSalFrame : public SalFrame
     }
 
     //call gtk_window_resize
-    void window_resize(long nWidth, long nHeight);
+    void window_resize(sal_Int32 nWidth, sal_Int32 nHeight);
     //call gtk_widget_set_size_request
-    void widget_set_size_request(long nWidth, long nHeight);
+    void widget_set_size_request(sal_Int32 nWidth, sal_Int32 nHeight);
 
-    void resizeWindow( long nWidth, long nHeight );
-    void moveWindow( long nX, long nY );
+    void resizeWindow( sal_Int32 nWidth, sal_Int32 nHeight );
+    void moveWindow( sal_Int32 nX, sal_Int32 nY );
 
     Size calcDefaultSize();
 
@@ -457,10 +457,10 @@ public:
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -478,7 +478,7 @@ public:
     // pointer style
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( sal_Int32 nX, sal_Int32 nY ) override;
 
     // flush output buffer
     using SalFrame::Flush;
@@ -525,7 +525,7 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void                BeginSetClipRegion( sal_uLong nRects ) override;
     // add a rectangle to the clip region
-    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     // done setting up the clipregion
     virtual void                EndSetClipRegion() override;
 
@@ -546,7 +546,7 @@ public:
     //to GtkData to rethrow them after the gsignal is processed when its safe
     //to do so again in our own code after the g_main_context_iteration call
     //which triggers the gsignals.
-    long                        CallCallbackExc(SalEvent nEvent, const void* pEvent) const;
+    sal_Int32                   CallCallbackExc(SalEvent nEvent, const void* pEvent) const;
 
 
     static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,

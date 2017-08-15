@@ -76,7 +76,7 @@ private:
     OUString            maPlaceholderText;
     OUString            maSaveValue;
     OUString            maUndoText;
-    long                mnXOffset;
+    sal_Int32           mnXOffset;
     Selection           maSelection;
     sal_uInt16          mnAlign;
     sal_Int32           mnMaxTextLen;
@@ -109,8 +109,8 @@ private:
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = nullptr, bool bIsUserInput = false );
     SAL_DLLPRIVATE static OUString ImplGetValidString( const OUString& rString );
-    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd);
-    SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXStart, long nXEnd);
+    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, sal_Int32 nXStart, sal_Int32 nXEnd);
+    SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext const & rRenderContext, sal_Int32 nXStart, sal_Int32 nXEnd);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
@@ -122,7 +122,7 @@ private:
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
-    SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
+    SAL_DLLPRIVATE sal_Int32   ImplGetTextYPosition() const;
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker();
     SAL_DLLPRIVATE static css::uno::Reference<css::i18n::XBreakIterator > ImplGetBreakIterator();
     SAL_DLLPRIVATE void        filterText();
@@ -134,8 +134,8 @@ protected:
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE ControlType ImplGetNativeControlType() const;
-    SAL_DLLPRIVATE long        ImplGetExtraXOffset() const;
-    SAL_DLLPRIVATE long        ImplGetExtraYOffset() const;
+    SAL_DLLPRIVATE sal_Int32   ImplGetExtraXOffset() const;
+    SAL_DLLPRIVATE sal_Int32   ImplGetExtraYOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );
 
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
@@ -247,7 +247,7 @@ public:
 
     sal_Int32           GetCharPos( const Point& rWindowPos ) const;
 
-    // shows a warning box saying "text too long, truncated"
+    // shows a warning box saying "text too sal_Int32, truncated"
     static void         ShowTruncationWarning( vcl::Window* pParent );
 
     static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );

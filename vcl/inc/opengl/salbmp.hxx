@@ -81,7 +81,7 @@ public:
 
 public:
 
-    bool            Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight );
+    bool            Create( const OpenGLTexture& rTex, sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight );
     OpenGLTexture&  GetTexture() const;
     const BitmapPalette& GetBitmapPalette() const { return maPalette; }
 

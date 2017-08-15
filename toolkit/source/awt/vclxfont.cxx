@@ -177,7 +177,7 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence
     {
         vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
-        std::unique_ptr<long []> pDXA(new long[str.getLength()]);
+        std::unique_ptr<sal_Int32 []> pDXA(new sal_Int32[str.getLength()]);
         nRet = pOutDev->GetTextArray( str, pDXA.get() );
         rDXArray = css::uno::Sequence<sal_Int32>( str.getLength() );
         for(int i = 0; i < str.getLength(); i++)

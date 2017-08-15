@@ -406,21 +406,21 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-long Edit::ImplGetExtraXOffset() const
+sal_Int32 Edit::ImplGetExtraXOffset() const
 {
     // MT 09/2002: nExtraOffsetX should become a member, instead of checking every time,
     // but I need an incompatible update for this...
     // #94095# Use extra offset only when edit has a border
-    long nExtraOffset = 0;
+    sal_Int32 nExtraOffset = 0;
     if( ( GetStyle() & WB_BORDER ) || ( mbIsSubEdit && ( GetParent()->GetStyle() & WB_BORDER ) ) )
         nExtraOffset = 2;
 
     return nExtraOffset;
 }
 
-long Edit::ImplGetExtraYOffset() const
+sal_Int32 Edit::ImplGetExtraYOffset() const
 {
-    long nExtraOffset = 0;
+    sal_Int32 nExtraOffset = 0;
     ControlType eCtrlType = ImplGetNativeControlType();
     if (eCtrlType != ControlType::EditboxNoBorder)
     {
@@ -460,7 +460,7 @@ void Edit::ImplInvalidateOrRepaint()
         Invalidate();
 }
 
-long Edit::ImplGetTextYPosition() const
+sal_Int32 Edit::ImplGetTextYPosition() const
 {
     if ( GetStyle() & WB_TOP )
         return ImplGetExtraXOffset();
@@ -479,22 +479,22 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const OUString aText = ImplGetText();
     const sal_Int32 nLen = aText.getLength();
 
-    long nDXBuffer[256];
-    std::unique_ptr<long[]> pDXBuffer;
-    long* pDX = nDXBuffer;
+    sal_Int32 nDXBuffer[256];
+    std::unique_ptr<sal_Int32[]> pDXBuffer;
+    sal_Int32* pDX = nDXBuffer;
 
     if (nLen)
     {
         if ((size_t) (2 * nLen) > SAL_N_ELEMENTS(nDXBuffer))
         {
-            pDXBuffer.reset(new long[2 * (nLen + 1)]);
+            pDXBuffer.reset(new sal_Int32[2 * (nLen + 1)]);
             pDX = pDXBuffer.get();
         }
 
         GetCaretPositions(aText, pDX, 0, nLen);
     }
 
-    long nTH = GetTextHeight();
+    sal_Int32 nTH = GetTextHeight();
     Point aPos(mnXOffset, ImplGetTextYPosition());
 
     vcl::Cursor* pCursor = GetCursor();
@@ -739,7 +739,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
         }
     }
 
-    maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
+    maText.remove( aSelection.Min(), aSelection.Len() );
     maSelection.Min() = aSelection.Min();
     maSelection.Max() = aSelection.Min();
     ImplAlignAndPaint();
@@ -802,9 +802,9 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     ImplClearLayoutData();
 
     if ( aSelection.Len() )
-        maText.remove( static_cast<sal_Int32>(aSelection.Min()), static_cast<sal_Int32>(aSelection.Len()) );
+        maText.remove( aSelection.Min(), aSelection.Len() );
     else if ( !mbInsertMode && (aSelection.Max() < maText.getLength()) )
-        maText.remove( static_cast<sal_Int32>(aSelection.Max()), 1 );
+        maText.remove( aSelection.Max(), 1 );
 
     // take care of input-sequence-checking now
     if (bIsUserInput && !rStr.isEmpty())
@@ -824,7 +824,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
         if (bIsInputSequenceChecking && (xISC = ImplGetInputSequenceChecker()).is())
         {
             sal_Unicode cChar = rStr[0];
-            sal_Int32 nTmpPos = static_cast< sal_Int32 >( aSelection.Min() );
+            sal_Int32 nTmpPos = aSelection.Min();
             sal_Int16 nCheckMode = officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get()?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
@@ -871,7 +871,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     }
 
     if ( !aNewText.isEmpty() )
-        maText.insert( static_cast<sal_Int32>(aSelection.Min()), aNewText );
+        maText.insert( aSelection.Min(), aNewText );
 
     if ( !pNewSel )
     {
@@ -975,7 +975,7 @@ ControlType Edit::ImplGetNativeControlType() const
     return nCtrl;
 }
 
-void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd )
+void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, sal_Int32 nXStart, sal_Int32 nXEnd )
 {
     /*
     * note: at this point the cursor must be switched off already
@@ -996,7 +996,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     }
 }
 
-void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXStart, long nXEnd)
+void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext, sal_Int32 nXStart, sal_Int32 nXEnd)
 {
     // this is not needed when double-buffering
     if (SupportsDoubleBuffering())
@@ -1072,17 +1072,17 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     vcl::Cursor* pCursor = GetCursor();
     OUString aText = ImplGetText();
 
-    long nTextPos = 0;
+    sal_Int32 nTextPos = 0;
 
-    long   nDXBuffer[256];
-    std::unique_ptr<long[]> pDXBuffer;
-    long*  pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    std::unique_ptr<sal_Int32[]> pDXBuffer;
+    sal_Int32*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
             pDX = pDXBuffer.get();
         }
 
@@ -1094,21 +1094,21 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             nTextPos = pDX[ 2*aText.getLength()-1 ];
     }
 
-    long nCursorWidth = 0;
+    sal_Int32 nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.getLength()) )
         nCursorWidth = GetTextWidth(aText, maSelection.Max(), 1);
-    long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
+    sal_Int32 nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
 
     // cursor should land in visible area
     const Size aOutSize = GetOutputSizePixel();
     if ( (nCursorPosX < 0) || (nCursorPosX >= aOutSize.Width()) )
     {
-        long nOldXOffset = mnXOffset;
+        sal_Int32 nOldXOffset = mnXOffset;
 
         if ( nCursorPosX < 0 )
         {
             mnXOffset = - nTextPos;
-            long nMaxX = 0;
+            sal_Int32 nMaxX = 0;
             mnXOffset += aOutSize.Width() / 5;
             if ( mnXOffset > nMaxX )
                 mnXOffset = nMaxX;
@@ -1119,7 +1119,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             // Something more?
             if ( (aOutSize.Width()-ImplGetExtraXOffset()) < nTextPos )
             {
-                long nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
+                sal_Int32 nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
                 if ( mnXOffset < nMaxNegX )  // both negativ...
                     mnXOffset = nMaxNegX;
@@ -1134,8 +1134,8 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             ImplInvalidateOrRepaint();
     }
 
-    const long nTextHeight = GetTextHeight();
-    const long nCursorPosY = ImplGetTextYPosition();
+    const sal_Int32 nTextHeight = GetTextHeight();
+    const sal_Int32 nCursorPosY = ImplGetTextYPosition();
     if (pCursor)
     {
         pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
@@ -1146,8 +1146,8 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
 void Edit::ImplAlign()
 {
-    long nTextWidth = GetTextWidth( ImplGetText() );
-    long nOutWidth = GetOutputSizePixel().Width();
+    sal_Int32 nTextWidth = GetTextWidth( ImplGetText() );
+    sal_Int32 nOutWidth = GetOutputSizePixel().Width();
 
     if ( mnAlign == EDIT_ALIGN_LEFT )
     {
@@ -1157,7 +1157,7 @@ void Edit::ImplAlign()
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
-        long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraXOffset();
+        sal_Int32 nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraXOffset();
         bool bRTL = IsRTLEnabled();
         if( mbIsSubEdit && GetParent() )
             bRTL = GetParent()->IsRTLEnabled();
@@ -1193,17 +1193,17 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
-    long   nDXBuffer[256];
-    std::unique_ptr<long[]> pDXBuffer;
-    long*  pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    std::unique_ptr<sal_Int32[]> pDXBuffer;
+    sal_Int32*  pDX = nDXBuffer;
     if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
-        pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+        pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
         pDX = pDXBuffer.get();
     }
 
     GetCaretPositions( aText, pDX, 0, aText.getLength() );
-    long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
+    sal_Int32 nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
     for (sal_Int32 i = 0; i < aText.getLength(); aText.iterateCodePoints(&i))
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
@@ -1227,7 +1227,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     {
         nIndex = 0;
         sal_Int32 nFinalIndex = 0;
-        long nDiff = std::abs( pDX[0]-nX );
+        sal_Int32 nDiff = std::abs( pDX[0]-nX );
         sal_Int32 i = 0;
         if (!aText.isEmpty())
         {
@@ -1235,7 +1235,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         }
         while (i < aText.getLength())
         {
-            long nNewDiff = std::abs( pDX[2*i]-nX );
+            sal_Int32 nNewDiff = std::abs( pDX[2*i]-nX );
 
             if( nNewDiff < nDiff )
             {
@@ -1784,8 +1784,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
         }
     }
 
-    const long nOnePixel = GetDrawPixel( pDev, 1 );
-    const long nOffX = 3*nOnePixel;
+    const sal_Int32 nOnePixel = GetDrawPixel( pDev, 1 );
+    const sal_Int32 nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     tools::Rectangle aTextRect( aPos, aSize );
 
@@ -1800,9 +1800,9 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
     aTextRect.Right() -= nOffX;
 
     OUString    aText = ImplGetText();
-    long        nTextHeight = pDev->GetTextHeight();
-    long        nTextWidth = pDev->GetTextWidth( aText );
-    long        nOffY = (aSize.Height() - nTextHeight) / 2;
+    sal_Int32   nTextHeight = pDev->GetTextHeight();
+    sal_Int32   nTextWidth = pDev->GetTextWidth( aText );
+    sal_Int32   nOffY = (aSize.Height() - nTextHeight) / 2;
 
     // Clipping?
     if ( (nOffY < 0) ||
@@ -2033,7 +2033,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         delete mpIMEInfos;
-        sal_Int32 nPos = static_cast<sal_Int32>(maSelection.Max());
+        sal_Int32 nPos = maSelection.Max();
         mpIMEInfos = new Impl_IMEInfos( nPos, OUString(maText.getStr() + nPos ) );
         mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
@@ -2126,22 +2126,22 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {
             OUString aText = ImplGetText();
-            long   nDXBuffer[256];
-            std::unique_ptr<long[]> pDXBuffer;
-            long*  pDX = nDXBuffer;
+            sal_Int32   nDXBuffer[256];
+            std::unique_ptr<sal_Int32[]> pDXBuffer;
+            sal_Int32*  pDX = nDXBuffer;
 
             if( !aText.isEmpty() )
             {
                 if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
                 {
-                    pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
+                    pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
                     pDX = pDXBuffer.get();
                 }
 
                 GetCaretPositions( aText, pDX, 0, aText.getLength() );
             }
-            long    nTH = GetTextHeight();
-            Point   aPos( mnXOffset, ImplGetTextYPosition() );
+            sal_Int32 nTH = GetTextHeight();
+            Point     aPos( mnXOffset, ImplGetTextYPosition() );
 
             std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
@@ -2277,8 +2277,8 @@ void Edit::ImplShowDDCursor()
 {
     if (!mpDDInfo->bVisCursor)
     {
-        long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
-        long nTextHeight = GetTextHeight();
+        sal_Int32 nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
+        sal_Int32 nTextHeight = GetTextHeight();
         tools::Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
         mpDDInfo->aCursor.SetWindow( this );
         mpDDInfo->aCursor.SetPos( aCursorRect.TopLeft() );
@@ -2493,8 +2493,8 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
                 ImplShowCursor();
 
                 bool bCaret = false, bSelection = false;
-                long nB=aNew.Max(), nA=aNew.Min(),oB=aTemp.Max(), oA=aTemp.Min();
-                long nGap = nB-nA, oGap = oB-oA;
+                sal_Int32 nB=aNew.Max(), nA=aNew.Min(),oB=aTemp.Max(), oA=aTemp.Min();
+                sal_Int32 nGap = nB-nA, oGap = oB-oA;
                 if (nB != oB)
                     bCaret = true;
                 if (nGap != 0 || oGap != 0)
@@ -2855,7 +2855,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
         {
             if ( aSel.Max() > mpDDInfo->nDropPos )
             {
-                long nLen = aSel.Len();
+                sal_Int32 nLen = aSel.Len();
                 aSel.Min() += nLen;
                 aSel.Max() += nLen;
             }

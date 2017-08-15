@@ -3955,11 +3955,11 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 
     long nStandardColMinWidth = approximate_char_width() * 16;
     long nYesNoWidth = approximate_char_width() * 5;
-    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sYes));
-    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sNo));
+    nYesNoWidth = std::max(sal_Int32(nYesNoWidth), GetTextWidth(m_sYes));
+    nYesNoWidth = std::max(sal_Int32(nYesNoWidth), GetTextWidth(m_sNo));
     for (sal_uInt16 i = 1; i < 6; i++)
     {
-        long nColWidth = std::max(nStandardColMinWidth,
+        long nColWidth = std::max(sal_Int32(nStandardColMinWidth),
                                   GetTextWidth(GetColumnTitle(i)));
         nColWidth += 12;
         aWidths.push_back(nColWidth);
@@ -3967,7 +3967,7 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 
     for (sal_uInt16 i = 6; i < 8; i++)
     {
-        long nColWidth = std::max(nYesNoWidth,
+        long nColWidth = std::max(sal_Int32(nYesNoWidth),
                                   GetTextWidth(GetColumnTitle(i)));
         nColWidth += 12;
         aWidths.push_back(nColWidth);
@@ -3984,7 +3984,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 
     long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
 
-    aSize.Width() = std::max(aSize.Width(), nWidth);
+    aSize.Width() = std::max(aSize.Width(), sal_Int32(nWidth));
 
     return aSize;
 }

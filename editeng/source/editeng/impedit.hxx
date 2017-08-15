@@ -640,7 +640,7 @@ private:
     bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
 
     bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_Int32 nStartPos,
-                                                  long* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
+                                                  sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
 
     void                ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, sal_Int32 nIndex );

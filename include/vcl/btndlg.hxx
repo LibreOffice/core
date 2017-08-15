@@ -61,8 +61,8 @@ public:
 
     sal_uInt16          GetCurButtonId() const { return mnCurButtonId; }
 
-    void                AddButton( const OUString& rText, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, long nSepPixel = 0 );
-    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, long nSepPixel = 0 );
+    void                AddButton( const OUString& rText, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, sal_Int32 nSepPixel = 0 );
+    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags = ButtonDialogFlags::NONE, sal_Int32 nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
 
     void                Clear();
@@ -75,7 +75,7 @@ public:
 
 protected:
                         ButtonDialog( WindowType nType );
-    SAL_DLLPRIVATE long ImplGetButtonSize();
+    SAL_DLLPRIVATE sal_Int32 ImplGetButtonSize();
 
 private:
                         ButtonDialog( const ButtonDialog & ) = delete;
@@ -85,7 +85,7 @@ private:
     std::vector<std::unique_ptr<ImplBtnDlgItem>> m_ItemList;
     Size                maPageSize;
     Size                maCtrlSize;
-    long                mnButtonSize;
+    sal_Int32           mnButtonSize;
     sal_uInt16          mnCurButtonId;
     sal_uInt16          mnFocusButtonId;
     bool                mbFormat;

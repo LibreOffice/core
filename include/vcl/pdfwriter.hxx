@@ -736,7 +736,7 @@ The following structure describes the permissions used in PDF security
 
     void               SetClipRegion();
     void               SetClipRegion( const basegfx::B2DPolyPolygon& rRegion );
-    void               MoveClipRegion( long nHorzMove, long nVertMove );
+    void               MoveClipRegion( sal_Int32 nHorzMove, sal_Int32 nVertMove );
     void               IntersectClipRegion( const tools::Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
@@ -766,12 +766,12 @@ The following structure describes the permissions used in PDF security
     /* actual drawing functions */
     void                DrawText( const Point& rPos, const OUString& rText );
 
-    void                DrawTextLine( const Point& rPos, long nWidth,
+    void                DrawTextLine( const Point& rPos, sal_Int32 nWidth,
                                       FontStrikeout eStrikeout,
                                       FontLineStyle eUnderline,
                                       FontLineStyle eOverline );
     void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
-                                       const long* pDXAry,
+                                       const sal_Int32* pDXAry,
                                        sal_Int32 nIndex,
                                        sal_Int32 nLen );
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,

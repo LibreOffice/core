@@ -29,11 +29,11 @@ namespace vcl
     class SAL_NO_VTABLE ITextLayout
     {
     public:
-        virtual long        GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual sal_Int32        GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength,
                                 MetricVector* _pVector, OUString* _pDisplayText ) = 0;
-        virtual void        GetCaretPositions( const OUString& _rText, long* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
-        virtual sal_Int32   GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual void        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual sal_Int32   GetTextBreak( const OUString& _rText, sal_Int32 _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
     protected:
@@ -53,7 +53,7 @@ namespace vcl
         virtual ~DefaultTextLayout();
 
         // ITextLayout overridables
-        virtual long        GetTextWidth( const OUString& _rText,
+        virtual sal_Int32        GetTextWidth( const OUString& _rText,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
 
@@ -65,12 +65,12 @@ namespace vcl
                                       OUString* _pDisplayText ) override;
 
         virtual void        GetCaretPositions( const OUString& _rText,
-                                               long* _pCaretXArray,
+                                               sal_Int32* _pCaretXArray,
                                                sal_Int32 _nStartIndex,
                                                sal_Int32 _nLength ) const override;
 
         virtual sal_Int32   GetTextBreak( const OUString& _rText,
-                                          long _nMaxTextWidth,
+                                          sal_Int32 _nMaxTextWidth,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
 

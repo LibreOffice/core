@@ -42,7 +42,7 @@ public: // TODO: make data members private
     ImplFontMetricDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
-    long            mnLineHeight;
+    sal_Int32       mnLineHeight;
     sal_uInt32      mnRefCount;
     short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
     short           mnOrientation;          // text angle in 3600 system

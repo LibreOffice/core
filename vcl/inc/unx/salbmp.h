@@ -49,11 +49,11 @@ private:
     static BitmapBuffer*        ImplCreateDIB(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
-                                    long nX,
-                                    long nY,
-                                    long nWidth,
-                                    long nHeight,
+                                    sal_Int32 nDrawableDepth,
+                                    sal_Int32 nX,
+                                    sal_Int32 nY,
+                                    sal_Int32 nWidth,
+                                    sal_Int32 nHeight,
                                     bool bGrey
                                 );
 
@@ -77,31 +77,31 @@ public:
     SAL_DLLPRIVATE bool         ImplCreateFromDrawable(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
-                                    long nX,
-                                    long nY,
-                                    long nWidth,
-                                    long nHeight
+                                    sal_Int32 nDrawableDepth,
+                                    sal_Int32 nX,
+                                    sal_Int32 nY,
+                                    sal_Int32 nWidth,
+                                    sal_Int32 nHeight
                                 );
 
     SAL_DLLPRIVATE XImage*      ImplCreateXImage(
                                     SalDisplay const * pSalDisp,
                                     SalX11Screen nXScreen,
-                                    long nDepth,
+                                    sal_Int32 nDepth,
                                     const SalTwoRect& rTwoRect
                                 ) const;
 
     SAL_DLLPRIVATE ImplSalDDB*  ImplGetDDB(
                                     Drawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
+                                    sal_Int32 nDrawableDepth,
                                     const SalTwoRect&
                                 ) const;
 
     void                        ImplDraw(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
+                                    sal_Int32 nDrawableDepth,
                                     const SalTwoRect& rTwoRect,
                                     const GC& rGC
                                 ) const;
@@ -156,19 +156,19 @@ private:
 
     Pixmap          maPixmap;
     SalTwoRect      maTwoRect;
-    long            mnDepth;
+    sal_Int32            mnDepth;
     SalX11Screen    mnXScreen;
 
     static void     ImplDraw(
                         Drawable aSrcDrawable,
-                        long nSrcDrawableDepth,
+                        sal_Int32 nSrcDrawableDepth,
                         Drawable aDstDrawable,
-                        long nSrcX,
-                        long nSrcY,
-                        long nDestWidth,
-                        long nDestHeight,
-                        long nDestX,
-                        long nDestY,
+                        sal_Int32 nSrcX,
+                        sal_Int32 nSrcY,
+                        sal_Int32 nDestWidth,
+                        sal_Int32 nDestHeight,
+                        sal_Int32 nDestX,
+                        sal_Int32 nDestY,
                         const GC& rGC
                     );
 
@@ -184,22 +184,22 @@ public:
                     ImplSalDDB(
                         Drawable aDrawable,
                         SalX11Screen nXScreen,
-                        long nDrawableDepth,
-                        long nX,
-                        long nY,
-                        long nWidth,
-                        long nHeight
+                        sal_Int32 nDrawableDepth,
+                        sal_Int32 nX,
+                        sal_Int32 nY,
+                        sal_Int32 nWidth,
+                        sal_Int32 nHeight
                     );
 
                     ~ImplSalDDB();
 
     Pixmap          ImplGetPixmap() const { return maPixmap; }
-    long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
-    long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
-    long            ImplGetDepth() const { return mnDepth; }
+    sal_Int32            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
+    sal_Int32            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
+    sal_Int32            ImplGetDepth() const { return mnDepth; }
     const SalX11Screen& ImplGetScreen() const { return mnXScreen; }
 
-    bool            ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
+    bool            ImplMatches( SalX11Screen nXScreen, sal_Int32 nDepth, const SalTwoRect& rTwoRect ) const;
 
     void            ImplDraw(
                         Drawable aDrawable,

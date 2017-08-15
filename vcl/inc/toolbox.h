@@ -37,7 +37,7 @@ struct ImplToolItem
     VclPtr<vcl::Window> mpWindow; //don't dispose mpWindow - we get copied around
     void*               mpUserData;
     Image               maImage;
-    long                mnImageAngle;
+    sal_Int32           mnImageAngle;
     bool                mbMirrorMode;
     OUString            maText;
     OUString            maQuickHelpText;
@@ -50,8 +50,8 @@ struct ImplToolItem
     Size                maMinimalItemSize;
     /// The overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]
     Size                maItemSize;
-    long                mnSepSize;
-    long                mnDropDownArrowWidth;
+    sal_Int32           mnSepSize;
+    sal_Int32           mnDropDownArrowWidth;
     /// Size of the content (bitmap or text, without dropdown) that we have in the item.
     Size                maContentSize;
     ToolBoxItemType     meType;
@@ -79,7 +79,7 @@ struct ImplToolItem
     // the default size is the precomputed size for standard items
     // ie those that are just ordinary buttons (no windows or text etc.)
     // bCheckMaxWidth indicates that item windows must not exceed maxWidth in which case they will be painted as buttons
-    Size                GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
+    Size                GetSize( bool bHorz, bool bCheckMaxWidth, sal_Int32 maxWidth, const Size& rDefaultSize );
 
     // only useful for buttons: returns if the text or image part or both can be drawn according to current button drawing style
     void DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbImage, bool& rbText ) const;
@@ -137,7 +137,7 @@ struct ImplToolBoxPrivateData
 
     // a dummy item representing the custom menu button
     ImplToolItem   maMenubuttonItem;
-    long           mnMenuButtonWidth;
+    sal_Int32      mnMenuButtonWidth;
 
     Wallpaper   maDisplayBackground;
 

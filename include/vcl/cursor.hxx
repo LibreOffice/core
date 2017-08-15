@@ -45,7 +45,7 @@ class VCL_DLLPUBLIC Cursor
 private:
     ImplCursorData* mpData;
     VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
-    long            mnSlant;
+    sal_Int32       mnSlant;
     Size            maSize;
     Point           maPos;
     short           mnOrientation;
@@ -81,9 +81,9 @@ public:
 
     void            SetSize( const Size& rNewSize );
     const Size&     GetSize() const { return maSize; }
-    void            SetWidth( long nNewWidth );
-    long            GetWidth() const { return maSize.Width(); }
-    long            GetHeight() const { return maSize.Height(); }
+    void            SetWidth( sal_Int32 nNewWidth );
+    sal_Int32       GetWidth() const { return maSize.Width(); }
+    sal_Int32       GetHeight() const { return maSize.Height(); }
 
     void            SetOrientation( short nOrientation = 0 );
 

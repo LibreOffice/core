@@ -219,19 +219,19 @@ void Slider::ImplUpdateLinkedField()
         mpLinkedField->SetValue(mnThumbPos);
 }
 
-long Slider::ImplCalcThumbPos( long nPixPos )
+sal_Int32 Slider::ImplCalcThumbPos( sal_Int32 nPixPos )
 {
     // calculate position
-    long nCalcThumbPos;
+    sal_Int32 nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPixPos-mnThumbPixOffset, mnMaxRange-mnMinRange, mnThumbPixRange-1 );
     nCalcThumbPos += mnMinRange;
     return nCalcThumbPos;
 }
 
-long Slider::ImplCalcThumbPosPix( long nPos )
+sal_Int32 Slider::ImplCalcThumbPosPix( sal_Int32 nPos )
 {
     // calculate position
-    long nCalcThumbPos;
+    sal_Int32 nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPos-mnMinRange, mnThumbPixRange-1, mnMaxRange-mnMinRange );
     // at the beginning and end we try to display Slider correctly
     if ( !nCalcThumbPos && (mnThumbPos > mnMinRange) )
@@ -249,12 +249,12 @@ void Slider::ImplCalc( bool bUpdate )
 
     if ( mbCalcSize )
     {
-        long nOldChannelPixOffset   = mnChannelPixOffset;
-        long nOldChannelPixRange    = mnChannelPixRange;
-        long nOldChannelPixTop      = mnChannelPixTop;
-        long nOldChannelPixBottom   = mnChannelPixBottom;
-        long nCalcWidth;
-        long nCalcHeight;
+        sal_Int32 nOldChannelPixOffset   = mnChannelPixOffset;
+        sal_Int32 nOldChannelPixRange    = mnChannelPixRange;
+        sal_Int32 nOldChannelPixTop      = mnChannelPixTop;
+        sal_Int32 nOldChannelPixBottom   = mnChannelPixBottom;
+        sal_Int32 nCalcWidth;
+        sal_Int32 nCalcHeight;
 
         maChannel1Rect.SetEmpty();
         maChannel2Rect.SetEmpty();
@@ -346,7 +346,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 
     if (!maChannel1Rect.IsEmpty())
     {
-        long        nRectSize;
+        sal_Int32        nRectSize;
         tools::Rectangle   aRect = maChannel1Rect;
         rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
         if (GetStyle() & WB_HORZ)
@@ -390,7 +390,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 
     if (!maChannel2Rect.IsEmpty())
     {
-        long nRectSize;
+        sal_Int32 nRectSize;
         tools::Rectangle aRect = maChannel2Rect;
         rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         if (GetStyle() & WB_HORZ)
@@ -481,11 +481,11 @@ bool Slider::ImplIsPageDown( const Point& rPos )
     return aRect.IsInside( rPos );
 }
 
-long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
+sal_Int32 Slider::ImplSlide( sal_Int32 nNewPos, bool bCallEndSlide )
 {
-    long nOldPos = mnThumbPos;
+    sal_Int32 nOldPos = mnThumbPos;
     SetThumbPos( nNewPos );
-    long nDelta = mnThumbPos-nOldPos;
+    sal_Int32 nDelta = mnThumbPos-nOldPos;
     if ( nDelta )
     {
         Slide();
@@ -495,9 +495,9 @@ long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
     return nDelta;
 }
 
-long Slider::ImplDoAction( bool bCallEndSlide )
+sal_Int32 Slider::ImplDoAction( bool bCallEndSlide )
 {
-    long nDelta = 0;
+    sal_Int32 nDelta = 0;
 
     switch ( meScrollType )
     {
@@ -585,7 +585,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     }
 }
 
-void Slider::ImplDoSlide( long nNewPos )
+void Slider::ImplDoSlide( sal_Int32 nNewPos )
 {
     if ( meScrollType != ScrollType::DontKnow )
         return;
@@ -720,7 +720,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         // special handling for dragging
         if ( meScrollType == ScrollType::Drag )
         {
-            long nMovePix;
+            sal_Int32 nMovePix;
             Point aCenterPos = maThumbRect.Center();
             if ( GetStyle() & WB_HORZ )
                 nMovePix = rMousePos.X()-(aCenterPos.X()+mnMouseOff);
@@ -734,7 +734,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                     mnThumbPixPos = mnThumbPixOffset;
                 if ( mnThumbPixPos > (mnThumbPixOffset+mnThumbPixRange-1) )
                     mnThumbPixPos = mnThumbPixOffset+mnThumbPixRange-1;
-                long nOldPos = mnThumbPos;
+                sal_Int32 nOldPos = mnThumbPos;
                 mnThumbPos = ImplCalcThumbPos( mnThumbPixPos );
                 if ( nOldPos != mnThumbPos )
                 {
@@ -918,12 +918,12 @@ void Slider::EndSlide()
     maEndSlideHdl.Call( this );
 }
 
-void Slider::SetRangeMin(long nNewRange)
+void Slider::SetRangeMin(sal_Int32 nNewRange)
 {
     SetRange(Range(nNewRange, GetRangeMax()));
 }
 
-void Slider::SetRangeMax(long nNewRange)
+void Slider::SetRangeMax(sal_Int32 nNewRange)
 {
     SetRange(Range(GetRangeMin(), nNewRange));
 }
@@ -933,8 +933,8 @@ void Slider::SetRange( const Range& rRange )
     // adjust Range
     Range aRange = rRange;
     aRange.Justify();
-    long nNewMinRange = aRange.Min();
-    long nNewMaxRange = aRange.Max();
+    sal_Int32 nNewMinRange = aRange.Min();
+    sal_Int32 nNewMaxRange = aRange.Max();
 
     // reset Range if different
     if ( (mnMinRange != nNewMinRange) ||
@@ -953,7 +953,7 @@ void Slider::SetRange( const Range& rRange )
     }
 }
 
-void Slider::SetThumbPos( long nNewThumbPos )
+void Slider::SetThumbPos( sal_Int32 nNewThumbPos )
 {
     if ( nNewThumbPos < mnMinRange )
         nNewThumbPos = mnMinRange;
@@ -970,8 +970,8 @@ void Slider::SetThumbPos( long nNewThumbPos )
 
 Size Slider::CalcWindowSizePixel()
 {
-    long nWidth = mnMaxRange-mnMinRange+(SLIDER_THUMB_HALFSIZE*2)+1;
-    long nHeight = SLIDER_HEIGHT;
+    sal_Int32 nWidth = mnMaxRange-mnMinRange+(SLIDER_THUMB_HALFSIZE*2)+1;
+    sal_Int32 nHeight = SLIDER_HEIGHT;
     Size aSize;
     if ( GetStyle() & WB_HORZ )
     {

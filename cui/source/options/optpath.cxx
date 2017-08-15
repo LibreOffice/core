@@ -336,7 +336,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
         {
             OUString aStr(CuiResId(pId));
 
-            nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
+            nWidth1 = std::max(sal_Int32(nWidth1), pPathBox->GetTextWidth(aStr));
             aStr += "\t";
             OUString sInternal, sUser, sWritable;
             bool bReadOnly = false;
@@ -346,7 +346,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 sTmpPath += OUStringLiteral1(MULTIPATH_DELIMITER);
             sTmpPath += sWritable;
             const OUString aValue = Convert_Impl( sTmpPath );
-            nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
+            nWidth2 = std::max(sal_Int32(nWidth2), pPathBox->GetTextWidth(aValue));
             aStr += aValue;
             SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
             if ( bReadOnly )

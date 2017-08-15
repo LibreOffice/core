@@ -103,7 +103,7 @@ ImplAnimView::~ImplAnimView()
     Animation::ImplDecAnimCount();
 }
 
-bool ImplAnimView::matches( OutputDevice* pOut, long nExtraData ) const
+bool ImplAnimView::matches( OutputDevice* pOut, sal_Int32 nExtraData ) const
 {
     bool bRet = false;
 

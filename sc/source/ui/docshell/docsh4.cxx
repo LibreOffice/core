@@ -1983,7 +1983,7 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
 namespace {
 
-void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
+void SnapHor( const ScDocument& rDoc, SCTAB nTab, sal_Int32& rVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);
@@ -2003,7 +2003,7 @@ void SnapHor( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCCOL& rStartCol )
     rStartCol = nCol;
 }
 
-void SnapVer( const ScDocument& rDoc, SCTAB nTab, long& rVal, SCROW& rStartRow )
+void SnapVer( const ScDocument& rDoc, SCTAB nTab, sal_Int32& rVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);

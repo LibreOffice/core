@@ -52,12 +52,12 @@ private:
     WheelMode           mnWheelMode;
     sal_uLong           mnMaxWidth;
     sal_uLong           mnActDist;
-    long                mnActDeltaX;
-    long                mnActDeltaY;
+    sal_Int32           mnActDeltaX;
+    sal_Int32           mnActDeltaY;
     void                ImplCreateImageList();
     void                ImplSetRegion(const Bitmap& rRegionBmp);
     using Window::ImplGetMousePointer;
-    PointerStyle        ImplGetMousePointer( long nDistX, long nDistY );
+    PointerStyle        ImplGetMousePointer( sal_Int32 nDistX, sal_Int32 nDistY );
     void                ImplDrawWheel(vcl::RenderContext& rRenderContext);
     void                ImplRecalcScrollValues();
 

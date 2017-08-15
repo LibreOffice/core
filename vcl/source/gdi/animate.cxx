@@ -48,13 +48,13 @@ BitmapChecksum AnimationBitmap::GetChecksum() const
     UInt32ToSVBT32( aSizePix.Height(), aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) nWait, aBT32 );
+    UInt32ToSVBT32( (sal_Int32) nWait, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) eDisposal, aBT32 );
+    UInt32ToSVBT32( (sal_Int32) eDisposal, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) bUserInput, aBT32 );
+    UInt32ToSVBT32( (sal_Int32) bUserInput, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     return nCrc;
@@ -220,7 +220,7 @@ BitmapChecksum Animation::GetChecksum() const
     return nCrc;
 }
 
-bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long nExtraData,
+bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, sal_Int32 nExtraData,
                        OutputDevice* pFirstFrameOutDev )
 {
     bool bRet = false;
@@ -282,7 +282,7 @@ bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
     return bRet;
 }
 
-void Animation::Stop( OutputDevice* pOut, long nExtraData )
+void Animation::Stop( OutputDevice* pOut, sal_Int32 nExtraData )
 {
     for( size_t i = 0; i < maViewList.size(); )
     {

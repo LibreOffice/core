@@ -50,9 +50,9 @@ class VCL_DLLPUBLIC TabControl : public Control
 {
 protected:
     ImplTabCtrlData*    mpTabCtrlData;
-    long                mnLastWidth;
-    long                mnLastHeight;
-    long                mnMaxPageWidth;
+    sal_Int32           mnLastWidth;
+    sal_Int32           mnLastHeight;
+    sal_Int32           mnMaxPageWidth;
     sal_uInt16          mnActPageId;
     sal_uInt16          mnCurPageId;
     bool                mbFormat;
@@ -65,8 +65,8 @@ protected:
     using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( bool bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
-    SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
-    SAL_DLLPRIVATE tools::Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
+    SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, sal_Int32 nMaxWidth );
+    SAL_DLLPRIVATE tools::Rectangle    ImplGetTabRect( sal_uInt16 nPos, sal_Int32 nWidth = -1, sal_Int32 nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
     virtual void                ImplActivateTabPage( bool bNext );
@@ -87,7 +87,7 @@ protected:
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
     SAL_DLLPRIVATE tools::Rectangle*   ImplFindPartRect( const Point& rPt );
-    virtual bool                ImplPlaceTabs( long nWidth );
+    virtual bool                ImplPlaceTabs( sal_Int32 nWidth );
     virtual void                ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 public:
@@ -165,12 +165,12 @@ public:
     // returns (control relative) bounding rectangle for the
     // character at index nIndex relative to the text of page nPageId
     using Control::GetCharacterBounds;
-    tools::Rectangle GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( sal_uInt16 nPageId, sal_Int32 nIndex ) const;
 
     // returns the index relative to the text of page nPageId (also returned)
     // at position rPoint (control relative)
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const;
+    sal_Int32 GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const;
 
     // returns the rectangle of the tab for page nPageId
     tools::Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
@@ -211,7 +211,7 @@ public:
     static sal_uInt16   GetHeaderHeight();
 
 protected:
-    virtual bool ImplPlaceTabs( long nWidth ) override;
+    virtual bool ImplPlaceTabs( sal_Int32 nWidth ) override;
     virtual void ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void ImplActivateTabPage( bool bNext ) override;
 

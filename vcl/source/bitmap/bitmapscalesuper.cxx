@@ -26,47 +26,47 @@
 
 namespace {
 
-#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7L)+nFrac*((long)(cVal1)-(cVal0)))>>7L))
+#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((sal_Int32)(cVal0)<<7L)+nFrac*((sal_Int32)(cVal1)-(cVal0)))>>7L))
 
-void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
+void generateMap(sal_Int32 nW, sal_Int32 nDstW, bool bHMirr, sal_Int32* pMapIX, sal_Int32* pMapFX)
 {
     const double fRevScaleX = (nDstW > 1L) ? (double) (nW - 1) / (nDstW - 1) : 0.0;
 
-    long nTemp = nW - 2L;
-    long nTempX = nW - 1L;
-    for (long nX = 0L; nX < nDstW; nX++)
+    sal_Int32 nTemp = nW - 2L;
+    sal_Int32 nTempX = nW - 1L;
+    for (sal_Int32 nX = 0L; nX < nDstW; nX++)
     {
         double fTemp = nX * fRevScaleX;
         if (bHMirr)
             fTemp = nTempX - fTemp;
-        pMapIX[nX] = MinMax((long) fTemp, 0, nTemp);
-        pMapFX[nX] = (long) ((fTemp - pMapIX[nX]) * 128.0);
+        pMapIX[nX] = MinMax((sal_Int32) fTemp, 0, nTemp);
+        pMapFX[nX] = (sal_Int32) ((fTemp - pMapIX[nX]) * 128.0);
     }
 }
 
 struct ScaleContext {
     BitmapReadAccess  *mpSrc;
     BitmapWriteAccess *mpDest;
-    long mnSrcW, mnDestW;
-    long mnSrcH, mnDestH;
+    sal_Int32 mnSrcW, mnDestW;
+    sal_Int32 mnSrcH, mnDestH;
     bool mbHMirr, mbVMirr;
-    std::unique_ptr<long[]> mpMapIX;
-    std::unique_ptr<long[]> mpMapIY;
-    std::unique_ptr<long[]> mpMapFX;
-    std::unique_ptr<long[]> mpMapFY;
+    std::unique_ptr<sal_Int32[]> mpMapIX;
+    std::unique_ptr<sal_Int32[]> mpMapIY;
+    std::unique_ptr<sal_Int32[]> mpMapFX;
+    std::unique_ptr<sal_Int32[]> mpMapFY;
     ScaleContext( BitmapReadAccess *pSrc,
                   BitmapWriteAccess *pDest,
-                  long nSrcW, long nDestW,
-                  long nSrcH, long nDestH,
+                  sal_Int32 nSrcW, sal_Int32 nDestW,
+                  sal_Int32 nSrcH, sal_Int32 nDestH,
                   bool bHMirr, bool bVMirr)
         : mpSrc( pSrc ), mpDest( pDest )
         , mnSrcW( nSrcW ), mnDestW( nDestW )
         , mnSrcH( nSrcH ), mnDestH( nDestH )
         , mbHMirr( bHMirr ), mbVMirr( bVMirr )
-        , mpMapIX( new long[ nDestW ] )
-        , mpMapIY( new long[ nDestH ] )
-        , mpMapFX( new long[ nDestW ] )
-        , mpMapFY( new long[ nDestH ] )
+        , mpMapIX( new sal_Int32[ nDestW ] )
+        , mpMapIY( new sal_Int32[ nDestH ] )
+        , mpMapFX( new sal_Int32[ nDestW ] )
+        , mpMapFY( new sal_Int32[ nDestH ] )
     {
         generateMap(nSrcW, nDestW, bHMirr, mpMapIX.get(), mpMapFX.get());
         generateMap(nSrcH, nDestH, bVMirr, mpMapIY.get(), mpMapFY.get());
@@ -76,13 +76,13 @@ struct ScaleContext {
 #define SCALE_THREAD_STRIP 32
 struct ScaleRangeContext {
     ScaleContext *mrCtx;
-    long mnStartY, mnEndY;
-    ScaleRangeContext( ScaleContext *rCtx, long nStartY )
+    sal_Int32 mnStartY, mnEndY;
+    ScaleRangeContext( ScaleContext *rCtx, sal_Int32 nStartY )
         : mrCtx( rCtx ), mnStartY( nStartY ),
           mnEndY( nStartY + SCALE_THREAD_STRIP ) {}
 };
 
-typedef void (*ScaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
+typedef void (*ScaleRangeFn)(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY);
 
 class ScaleTask : public comphelper::ThreadTask
 {
@@ -100,21 +100,21 @@ public:
     }
 };
 
-void scalePallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
+void scalePallete8bit(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTempY = rCtx.mpMapIY[ nY ];
-        long nTempFY = rCtx.mpMapFY[ nY ];
+        sal_Int32 nTempY = rCtx.mpMapIY[ nY ];
+        sal_Int32 nTempFY = rCtx.mpMapFY[ nY ];
         Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
         Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
 
-        for(long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+        for(sal_Int32 nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nTempX = rCtx.mpMapIX[ nX ];
-            long nTempFX = rCtx.mpMapFX[ nX ];
+            sal_Int32 nTempX = rCtx.mpMapIX[ nX ];
+            sal_Int32 nTempFX = rCtx.mpMapFX[ nX ];
 
             const BitmapColor& rCol0 = rCtx.mpSrc->GetPaletteColor( pLine0[ nTempX ] );
             const BitmapColor& rCol2 = rCtx.mpSrc->GetPaletteColor( pLine1[ nTempX ] );
@@ -137,19 +137,19 @@ void scalePallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scalePalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
+void scalePalleteGeneral(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTempY = rCtx.mpMapIY[ nY ];
-        long nTempFY = rCtx.mpMapFY[ nY ];
+        sal_Int32 nTempY = rCtx.mpMapIY[ nY ];
+        sal_Int32 nTempFY = rCtx.mpMapFY[ nY ];
 
-        for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nTempX = rCtx.mpMapIX[ nX ];
-            long nTempFX = rCtx.mpMapFX[ nX ];
+            sal_Int32 nTempX = rCtx.mpMapIX[ nX ];
+            sal_Int32 nTempFX = rCtx.mpMapFX[ nX ];
 
             BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( nTempY, nTempX ) );
             BitmapColor aCol1 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( nTempY, ++nTempX ) );
@@ -171,21 +171,21 @@ void scalePalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scale24bitBGR(ScaleContext &rCtx, long nStartY, long nEndY)
+void scale24bitBGR(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTempY = rCtx.mpMapIY[ nY ];
-        long nTempFY = rCtx.mpMapFY[ nY ];
+        sal_Int32 nTempY = rCtx.mpMapIY[ nY ];
+        sal_Int32 nTempFY = rCtx.mpMapFY[ nY ];
         Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
         Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
 
-        for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nOff = 3L * rCtx.mpMapIX[ nX ];
-            long nTempFX = rCtx.mpMapFX[ nX ];
+            sal_Int32 nOff = 3L * rCtx.mpMapIX[ nX ];
+            sal_Int32 nTempFX = rCtx.mpMapFX[ nX ];
 
             Scanline pTmp0 = pLine0 + nOff ;
             Scanline pTmp1 = pTmp0 + 3L;
@@ -210,21 +210,21 @@ void scale24bitBGR(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scale24bitRGB(ScaleContext &rCtx, long nStartY, long nEndY)
+void scale24bitRGB(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTempY = rCtx.mpMapIY[ nY ];
-        long nTempFY = rCtx.mpMapFY[ nY ];
+        sal_Int32 nTempY = rCtx.mpMapIY[ nY ];
+        sal_Int32 nTempFY = rCtx.mpMapFY[ nY ];
         Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
         Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
 
-        for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nOff = 3L * rCtx.mpMapIX[ nX ];
-            long nTempFX = rCtx.mpMapFX[ nX ];
+            sal_Int32 nOff = 3L * rCtx.mpMapIX[ nX ];
+            sal_Int32 nTempFX = rCtx.mpMapFX[ nX ];
 
             Scanline pTmp0 = pLine0 + nOff;
             Scanline pTmp1 = pTmp0 + 3L;
@@ -249,19 +249,19 @@ void scale24bitRGB(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleNonPalleteGeneral(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTempY = rCtx.mpMapIY[ nY ];
-        long nTempFY = rCtx.mpMapFY[ nY ];
+        sal_Int32 nTempY = rCtx.mpMapIY[ nY ];
+        sal_Int32 nTempFY = rCtx.mpMapFY[ nY ];
 
-        for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nTempX = rCtx.mpMapIX[ nX ];
-            long nTempFX = rCtx.mpMapFX[ nX ];
+            sal_Int32 nTempX = rCtx.mpMapIX[ nX ];
+            sal_Int32 nTempFX = rCtx.mpMapFX[ nX ];
 
             BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nTempY, nTempX );
             BitmapColor aCol1 = rCtx.mpSrc->GetPixel( nTempY, ++nTempX );
@@ -283,17 +283,17 @@ void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
+void scalePallete8bit2(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nMax = 1 << 7L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY == nEndY )
         {
             nLineStart = rCtx.mpMapIY[ nY ];
@@ -305,13 +305,13 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
             nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
-        for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            long nRowStart;
-            long nRowRange;
+            sal_Int32 nRowStart;
+            sal_Int32 nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.mpMapIX[ nX ];
@@ -323,20 +323,20 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
-            long nTotalWeightY = 0;
+            sal_Int32 nSumR = 0;
+            sal_Int32 nSumG = 0;
+            sal_Int32 nSumB = 0;
+            sal_Int32 nTotalWeightY = 0;
 
-            for(long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
-                long nTotalWeightX = 0;
+                sal_Int32 nSumRowR = 0;
+                sal_Int32 nSumRowG = 0;
+                sal_Int32 nSumRowB = 0;
+                sal_Int32 nTotalWeightX = 0;
 
-                for(long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     const BitmapColor& rCol = rCtx.mpSrc->GetPaletteColor( pTmpY[ nRowStart + j ] );
 
@@ -349,7 +349,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else if( j == 0 )
                     {
-                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
+                        sal_Int32 nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *rCol.GetBlue()) ;
                         nSumRowG += ( nWeightX *rCol.GetGreen()) ;
                         nSumRowR += ( nWeightX *rCol.GetRed()) ;
@@ -357,7 +357,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else if ( nRowRange == j )
                     {
-                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
+                        sal_Int32 nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *rCol.GetBlue() );
                         nSumRowG += ( nWeightX *rCol.GetGreen() );
                         nSumRowR += ( nWeightX *rCol.GetRed() );
@@ -372,7 +372,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                 }
 
-                long nWeightY = nMax;
+                sal_Int32 nWeightY = nMax;
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
@@ -408,17 +408,17 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
+void scalePalleteGeneral2(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nMax = 1 << 7L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY ==nEndY )
         {
             nLineStart = rCtx.mpMapIY[ nY ];
@@ -430,12 +430,12 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
             nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
-        for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            long nRowStart, nRowRange;
+            sal_Int32 nRowStart, nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.mpMapIX[ nX ];
@@ -447,19 +447,19 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
-            long nTotalWeightY = 0;
+            sal_Int32 nSumR = 0;
+            sal_Int32 nSumG = 0;
+            sal_Int32 nSumB = 0;
+            sal_Int32 nTotalWeightY = 0;
 
-            for(long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
-                long nTotalWeightX = 0;
+                sal_Int32 nSumRowR = 0;
+                sal_Int32 nSumRowG = 0;
+                sal_Int32 nSumRowB = 0;
+                sal_Int32 nTotalWeightX = 0;
 
-                for(long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor ( rCtx.mpSrc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
 
@@ -474,7 +474,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     else if( j == 0 )
                     {
 
-                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
+                        sal_Int32 nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
                         nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
                         nSumRowR += ( nWeightX *aCol0.GetRed()) ;
@@ -483,7 +483,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     else if ( nRowRange == j )
                     {
 
-                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
+                        sal_Int32 nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue() );
                         nSumRowG += ( nWeightX *aCol0.GetGreen() );
                         nSumRowR += ( nWeightX *aCol0.GetRed() );
@@ -499,7 +499,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                 }
 
-                long nWeightY = nMax;
+                sal_Int32 nWeightY = nMax;
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
@@ -535,18 +535,18 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
+void scale24bitBGR2(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nMax = 1 << 7L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        long nLineStart;
-        long nLineRange;
+        sal_Int32 nLineStart;
+        sal_Int32 nLineRange;
         if( nY ==nEndY )
         {
             nLineStart = rCtx.mpMapIY[ nY ];
@@ -558,13 +558,13 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
             nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
-        for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            long nRowStart;
-            long nRowRange;
+            sal_Int32 nRowStart;
+            sal_Int32 nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.mpMapIX[ nX ];
@@ -576,21 +576,21 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
-            long nTotalWeightY = 0;
+            sal_Int32 nSumR = 0;
+            sal_Int32 nSumG = 0;
+            sal_Int32 nSumB = 0;
+            sal_Int32 nTotalWeightY = 0;
 
-            for(long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 Scanline pTmpX = pTmpY + 3L * nRowStart;
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
-                long nTotalWeightX = 0;
+                sal_Int32 nSumRowR = 0;
+                sal_Int32 nSumRowG = 0;
+                sal_Int32 nSumRowB = 0;
+                sal_Int32 nTotalWeightX = 0;
 
-                for(long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     if(nX == nEndX )
                     {
@@ -601,7 +601,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else if( j == 0 )
                     {
-                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
+                        sal_Int32 nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowR += ( nWeightX *( *pTmpX )) ;pTmpX++;
@@ -609,7 +609,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else if ( nRowRange == j )
                     {
-                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
+                        sal_Int32 nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowR += ( nWeightX *( *pTmpX ) );pTmpX++;
@@ -624,7 +624,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                 }
 
-                long nWeightY = nMax;
+                sal_Int32 nWeightY = nMax;
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
@@ -658,17 +658,17 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
+void scale24bitRGB2(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nMax = 1 << 7L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY ==nEndY )
         {
             nLineStart = rCtx.mpMapIY[ nY ];
@@ -680,12 +680,12 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
             nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
-        for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            long nRowStart, nRowRange;
+            sal_Int32 nRowStart, nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.mpMapIX[ nX ];
@@ -697,21 +697,21 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
-            long nTotalWeightY = 0;
+            sal_Int32 nSumR = 0;
+            sal_Int32 nSumG = 0;
+            sal_Int32 nSumB = 0;
+            sal_Int32 nTotalWeightY = 0;
 
-            for(long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
                 Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 Scanline pTmpX = pTmpY + 3L * nRowStart;
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
-                long nTotalWeightX = 0;
+                sal_Int32 nSumRowR = 0;
+                sal_Int32 nSumRowG = 0;
+                sal_Int32 nSumRowB = 0;
+                sal_Int32 nTotalWeightX = 0;
 
-                for(long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     if(nX == nEndX )
                     {
@@ -722,7 +722,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else if( j == 0 )
                     {
-                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
+                        sal_Int32 nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowR += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowB += ( nWeightX *( *pTmpX )) ;pTmpX++;
@@ -730,7 +730,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else if ( nRowRange == j )
                     {
-                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
+                        sal_Int32 nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowR += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowB += ( nWeightX *( *pTmpX ) );pTmpX++;
@@ -745,7 +745,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                 }
 
-                long nWeightY = nMax;
+                sal_Int32 nWeightY = nMax;
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
@@ -779,17 +779,17 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
     }
 }
 
-void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
+void scaleNonPalleteGeneral2(ScaleContext &rCtx, sal_Int32 nStartY, sal_Int32 nEndY)
 {
-    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const sal_Int32 nStartX = 0, nEndX = rCtx.mnDestW - 1L;
+    const sal_Int32 nMax = 1 << 7L;
 
-    for( long nY = nStartY; nY <= nEndY; nY++ )
+    for( sal_Int32 nY = nStartY; nY <= nEndY; nY++ )
     {
-        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
-        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
+        sal_Int32 nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        sal_Int32 nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
-        long nLineStart, nLineRange;
+        sal_Int32 nLineStart, nLineRange;
         if( nY ==nEndY )
         {
             nLineStart = rCtx.mpMapIY[ nY ];
@@ -801,12 +801,12 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
             nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
-        for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+        for( sal_Int32 nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
-            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
+            sal_Int32 nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            sal_Int32 nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
-            long nRowStart, nRowRange;
+            sal_Int32 nRowStart, nRowRange;
             if( nX == nEndX )
             {
                 nRowStart = rCtx.mpMapIX[ nX ];
@@ -818,19 +818,19 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
-            long nSumR = 0;
-            long nSumG = 0;
-            long nSumB = 0;
-            long nTotalWeightY = 0;
+            sal_Int32 nSumR = 0;
+            sal_Int32 nSumG = 0;
+            sal_Int32 nSumB = 0;
+            sal_Int32 nTotalWeightY = 0;
 
-            for(long i = 0; i<= nLineRange; i++)
+            for(sal_Int32 i = 0; i<= nLineRange; i++)
             {
-                long nSumRowR = 0;
-                long nSumRowG = 0;
-                long nSumRowB = 0;
-                long nTotalWeightX = 0;
+                sal_Int32 nSumRowR = 0;
+                sal_Int32 nSumRowG = 0;
+                sal_Int32 nSumRowB = 0;
+                sal_Int32 nTotalWeightX = 0;
 
-                for(long j = 0; j <= nRowRange; j++)
+                for(sal_Int32 j = 0; j <= nRowRange; j++)
                 {
                     BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nLineStart + i, nRowStart + j );
 
@@ -845,7 +845,7 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     else if( j == 0 )
                     {
 
-                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
+                        sal_Int32 nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
                         nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
                         nSumRowR += ( nWeightX *aCol0.GetRed()) ;
@@ -854,7 +854,7 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     else if ( nRowRange == j )
                     {
 
-                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
+                        sal_Int32 nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue() );
                         nSumRowG += ( nWeightX *aCol0.GetGreen() );
                         nSumRowR += ( nWeightX *aCol0.GetRed() );
@@ -869,7 +869,7 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                 }
 
-                long nWeightY = nMax;
+                sal_Int32 nWeightY = nMax;
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
@@ -927,8 +927,8 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
     double fScaleX = std::fabs(mrScaleX);
     double fScaleY = std::fabs(mrScaleY);
 
-    const long nDstW = FRound(aSizePix.Width()  * fScaleX);
-    const long nDstH = FRound(aSizePix.Height() * fScaleY);
+    const sal_Int32 nDstW = FRound(aSizePix.Width()  * fScaleX);
+    const sal_Int32 nDstH = FRound(aSizePix.Height() * fScaleY);
 
     const double fScaleThresh = 0.6;
 
@@ -940,8 +940,8 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
     Bitmap aOutBmp(Size(nDstW, nDstH), 24);
     Bitmap::ScopedWriteAccess pWriteAccess(aOutBmp);
 
-    const long nStartY = 0;
-    const long nEndY   = nDstH - 1L;
+    const sal_Int32 nStartY = 0;
+    const sal_Int32 nEndY   = nDstH - 1L;
 
     if (pReadAccess && pWriteAccess)
     {
@@ -1011,7 +1011,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
                 sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
                 sal_uInt32 nStripsPerThread = nStrips / nThreads;
                 SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
-                long nStripY = nStartY;
+                sal_Int32 nStripY = nStartY;
                 for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
                 {
                     ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );

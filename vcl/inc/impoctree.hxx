@@ -24,9 +24,9 @@
 
 class ImpErrorQuad
 {
-    long nRed;
-    long nGreen;
-    long nBlue;
+    sal_Int32 nRed;
+    sal_Int32 nGreen;
+    sal_Int32 nBlue;
 
 public:
 
@@ -38,9 +38,9 @@ public:
     }
 
     ImpErrorQuad( const BitmapColor& rColor )
-        : nRed( (long) rColor.GetRed() << 5L )
-        , nGreen( (long) rColor.GetGreen() << 5L )
-        , nBlue( (long) rColor.GetBlue() << 5L )
+        : nRed( (sal_Int32) rColor.GetRed() << 5L )
+        , nGreen( (sal_Int32) rColor.GetGreen() << 5L )
+        , nBlue( (sal_Int32) rColor.GetBlue() << 5L )
     {
     }
 
@@ -57,16 +57,16 @@ public:
 
 inline void ImpErrorQuad::operator=( const BitmapColor& rColor )
 {
-    nRed = (long) rColor.GetRed() << 5L;
-    nGreen = (long) rColor.GetGreen() << 5L;
-    nBlue = (long) rColor.GetBlue() << 5L;
+    nRed = (sal_Int32) rColor.GetRed() << 5L;
+    nGreen = (sal_Int32) rColor.GetGreen() << 5L;
+    nBlue = (sal_Int32) rColor.GetBlue() << 5L;
 }
 
 inline ImpErrorQuad& ImpErrorQuad::operator-=( const BitmapColor& rColor )
 {
-    nRed -= ( (long) rColor.GetRed() << 5L );
-    nGreen -= ( (long) rColor.GetGreen() << 5L );
-    nBlue -= ( (long) rColor.GetBlue() << 5L );
+    nRed -= ( (sal_Int32) rColor.GetRed() << 5L );
+    nGreen -= ( (sal_Int32) rColor.GetGreen() << 5L );
+    nBlue -= ( (sal_Int32) rColor.GetBlue() << 5L );
 
     return *this;
 }

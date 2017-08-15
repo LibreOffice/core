@@ -129,7 +129,7 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
     }
 }
 
-void* JPEGWriter::GetScanline( long nY )
+void* JPEGWriter::GetScanline( sal_Int32 nY )
 {
     void* pScanline = nullptr;
 
@@ -142,12 +142,12 @@ void* JPEGWriter::GetScanline( long nY )
         else if( mpBuffer )
         {
             BitmapColor aColor;
-            long        nWidth = mpReadAccess->Width();
+            sal_Int32        nWidth = mpReadAccess->Width();
             sal_uInt8*  pTmp = mpBuffer;
 
             if( mpReadAccess->HasPalette() )
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 {
                     aColor = mpReadAccess->GetPaletteColor( mpReadAccess->GetPixelIndex( nY, nX ) );
                     *pTmp++ = aColor.GetRed();
@@ -160,7 +160,7 @@ void* JPEGWriter::GetScanline( long nY )
             }
             else
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 {
                     aColor = mpReadAccess->GetPixel( nY, nX );
                     *pTmp++ = aColor.GetRed();
@@ -203,11 +203,11 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         {                // check if source is greyscale only
             bool bIsGrey = true;
 
-            long nWidth = mpReadAccess->Width();
-            for ( long nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )
+            sal_Int32 nWidth = mpReadAccess->Width();
+            for ( sal_Int32 nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )
             {
                 BitmapColor aColor;
-                for( long nX = 0L; bIsGrey && ( nX < nWidth ); nX++ )
+                for( sal_Int32 nX = 0L; bIsGrey && ( nX < nWidth ); nX++ )
                 {
                     aColor = mpReadAccess->HasPalette() ? mpReadAccess->GetPaletteColor( mpReadAccess->GetPixelIndex( nY, nX ) )
                                                 : mpReadAccess->GetPixel( nY, nX );

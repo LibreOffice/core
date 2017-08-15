@@ -104,17 +104,17 @@ public:
     void                            SetDoubleClickTime( sal_uInt64 nDoubleClkTime );
     sal_uInt64                      GetDoubleClickTime() const;
 
-    void                            SetDoubleClickWidth( long nDoubleClkWidth );
-    long                            GetDoubleClickWidth() const;
+    void                            SetDoubleClickWidth( sal_Int32 nDoubleClkWidth );
+    sal_Int32                       GetDoubleClickWidth() const;
 
-    void                            SetDoubleClickHeight( long nDoubleClkHeight );
-    long                            GetDoubleClickHeight() const;
+    void                            SetDoubleClickHeight( sal_Int32 nDoubleClkHeight );
+    sal_Int32                       GetDoubleClickHeight() const;
 
-    void                            SetStartDragWidth( long nDragWidth );
-    long                            GetStartDragWidth() const;
+    void                            SetStartDragWidth( sal_Int32 nDragWidth );
+    sal_Int32                       GetStartDragWidth() const;
 
-    void                            SetStartDragHeight( long nDragHeight );
-    long                            GetStartDragHeight() const;
+    void                            SetStartDragHeight( sal_Int32 nDragHeight );
+    sal_Int32                       GetStartDragHeight() const;
 
     sal_uInt16                      GetStartDragCode() const;
 
@@ -475,29 +475,29 @@ public:
     void                            SetTabFont( const vcl::Font& rFont );
     const vcl::Font&                GetTabFont() const;
 
-    long                            GetBorderSize() const;
+    sal_Int32                       GetBorderSize() const;
 
-    void                            SetTitleHeight( long nSize );
-    long                            GetTitleHeight() const;
+    void                            SetTitleHeight( sal_Int32 nSize );
+    sal_Int32                       GetTitleHeight() const;
 
-    void                            SetFloatTitleHeight( long nSize );
-    long                            GetFloatTitleHeight() const;
+    void                            SetFloatTitleHeight( sal_Int32 nSize );
+    sal_Int32                       GetFloatTitleHeight() const;
 
-    long                            GetTearOffTitleHeight() const;
+    sal_Int32                       GetTearOffTitleHeight() const;
 
-    void                            SetScrollBarSize( long nSize );
-    long                            GetScrollBarSize() const;
+    void                            SetScrollBarSize( sal_Int32 nSize );
+    sal_Int32                       GetScrollBarSize() const;
 
-    void                            SetMinThumbSize( long nSize );
-    long                            GetMinThumbSize() const;
+    void                            SetMinThumbSize( sal_Int32 nSize );
+    sal_Int32                       GetMinThumbSize() const;
 
-    void                            SetSpinSize( long nSize );
-    long                            GetSpinSize() const;
+    void                            SetSpinSize( sal_Int32 nSize );
+    sal_Int32                       GetSpinSize() const;
 
-    long                            GetSplitSize() const;
+    sal_Int32                       GetSplitSize() const;
 
-    void                            SetCursorSize( long nSize );
-    long                            GetCursorSize() const;
+    void                            SetCursorSize( sal_Int32 nSize );
+    sal_Int32                       GetCursorSize() const;
 
     void                            SetCursorBlinkTime( sal_uInt64 nBlinkTime );
     sal_uInt64                      GetCursorBlinkTime() const;
@@ -511,7 +511,7 @@ public:
     void                            SetDisplayOptions( DisplayOptions nOptions );
     DisplayOptions                  GetDisplayOptions() const;
 
-    void                            SetAntialiasingMinPixelHeight( long nMinPixel );
+    void                            SetAntialiasingMinPixelHeight( sal_Int32 nMinPixel );
     sal_uLong                       GetAntialiasingMinPixelHeight() const;
 
     void                            SetOptions( StyleSettingsOptions nOptions );

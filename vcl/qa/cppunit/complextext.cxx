@@ -9,7 +9,8 @@
 
 #include <ostream>
 #include <vector>
-std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
+#include <sal/types.h>
+std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec);
 
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -21,7 +22,7 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 
 #include <config_test.h>
 
-std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
+std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec)
 {
     rStream << "{ ";
     for (size_t i = 0; i < rVec.size() - 1; i++)
@@ -74,18 +75,18 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
-    std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
+    std::vector<sal_Int32> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
-    std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
-    long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
+    std::vector<sal_Int32> aCharWidths(aOneTwoThree.getLength(), 0);
+    sal_Int32 nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
-    CPPUNIT_ASSERT_EQUAL(72L, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(72, nTextWidth);
     CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
 
     // text advance width and line height
-    CPPUNIT_ASSERT_EQUAL(72L, pOutDev->GetTextWidth(aOneTwoThree));
-    CPPUNIT_ASSERT_EQUAL(13L, pOutDev->GetTextHeight());
+    CPPUNIT_ASSERT_EQUAL(72, pOutDev->GetTextWidth(aOneTwoThree));
+    CPPUNIT_ASSERT_EQUAL(13, pOutDev->GetTextHeight());
 
     // exact bounding rectangle, not essentially the same as text width/height
 #if defined(MACOSX) || defined(_WIN32)
@@ -96,7 +97,7 @@ void VclComplexTextTest::testArabic()
     // if run on Win7 KVM QXL / Spice GUI, we "miss" the first pixel column?!
     if ( 1 == aBoundRect.Left() )
     {
-        long &rLeft = aTestRect.Left();
+        sal_Int32 &rLeft = aTestRect.Left();
         ++rLeft;
     }
 #endif

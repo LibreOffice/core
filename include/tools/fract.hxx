@@ -49,6 +49,7 @@ public:
     long            GetDenominator() const;
 
     operator        long() const;
+    operator        sal_Int32() const;
     operator        double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac );

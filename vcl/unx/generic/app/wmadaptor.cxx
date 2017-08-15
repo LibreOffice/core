@@ -59,7 +59,7 @@ public:
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const override;
     virtual void frameIsMapping( X11SalFrame* pFrame ) const override;
-    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const override;
+    virtual void setUserTime( X11SalFrame* i_pFrame, sal_Int32 i_nUserTime ) const override;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -437,7 +437,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            m_nDesktops = *reinterpret_cast<long*>(pProperty);
+            m_nDesktops = *reinterpret_cast<sal_Int32*>(pProperty);
             XFree( pProperty );
             pProperty = nullptr;
             // get work areas
@@ -458,7 +458,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 )
             {
                 m_aWMWorkAreas = ::std::vector< tools::Rectangle > ( m_nDesktops );
-                long* pValues = reinterpret_cast<long*>(pProperty);
+                sal_Int32* pValues = reinterpret_cast<sal_Int32*>(pProperty);
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
                     Point aPoint( pValues[4*i],
@@ -693,7 +693,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            m_nDesktops = *reinterpret_cast<long*>(pProperty);
+            m_nDesktops = *reinterpret_cast<sal_Int32*>(pProperty);
             XFree( pProperty );
             pProperty = nullptr;
         }
@@ -1267,7 +1267,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         // set mwm hints
         struct _mwmhints {
             unsigned long flags, func, deco;
-            long input_mode;
+            sal_Int32 input_mode;
             unsigned long status;
         } aHint;
 
@@ -1776,7 +1776,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
             int nFormat;
             unsigned long nItems, nBytesLeft;
             unsigned char* pData = nullptr;
-            long nOffset = 0;
+            sal_Int32 nOffset = 0;
             do
             {
                 XGetWindowProperty( m_pDisplay,
@@ -2202,14 +2202,14 @@ void NetWMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
 /*
  * WMAdaptor::setUserTime
  */
-void WMAdaptor::setUserTime( X11SalFrame*, long ) const
+void WMAdaptor::setUserTime( X11SalFrame*, sal_Int32 ) const
 {
 }
 
 /*
  * NetWMAdaptor::setUserTime
  */
-void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
+void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, sal_Int32 i_nUserTime ) const
 {
     if( m_aWMAtoms[NET_WM_USER_TIME] )
     {
@@ -2232,7 +2232,7 @@ void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
 {
     if( m_aWMAtoms[NET_WM_PID] )
     {
-        long nPID = (long)getpid();
+        sal_Int32 nPID = (sal_Int32)getpid();
         XChangeProperty( m_pDisplay,
                          i_pFrame->GetShellWindow(),
                          m_aWMAtoms[NET_WM_PID],

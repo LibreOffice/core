@@ -93,12 +93,12 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
     if( pMaskAcc && pAcc )
     {
         const BitmapColor   aReplace( cReplaceTransparency );
-        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
+        const sal_Int32          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+        const sal_Int32          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
-        for( long nY = 0L; nY < nHeight; nY++ )
-            for( long nX = 0L; nX < nWidth; nX++ )
+        for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
+            for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 if( pMaskAcc->GetPixel( nY, nX ) == aMaskWhite )
                     pAcc->SetPixel( nY, nX, aReplace );
     }
@@ -112,15 +112,15 @@ bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
 
     if( pAcc && pAcc->GetBitCount() == 8 )
     {
-        const long nWidth = pAcc->Width(), nHeight = pAcc->Height();
+        const sal_Int32 nWidth = pAcc->Width(), nHeight = pAcc->Height();
 
         if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
         {
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
             {
                 Scanline pScan = pAcc->GetScanline( nY );
 
-                for( long nX = 0L; nX < nWidth; nX++, pScan++ )
+                for( sal_Int32 nX = 0L; nX < nWidth; nX++, pScan++ )
                 {
                     if( *pScan == cSearchTransparency )
                         *pScan = cReplaceTransparency;
@@ -131,9 +131,9 @@ bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
         {
             BitmapColor aReplace( cReplaceTransparency );
 
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 {
                     if( pAcc->GetPixel( nY, nX ).GetIndex() == cSearchTransparency )
                         pAcc->SetPixel( nY, nX, aReplace );

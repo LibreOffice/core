@@ -44,9 +44,9 @@ public:
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) override;
     virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) override;
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
-                                                 long& rOutWidth, long& rOutHeight,
-                                                 long& rPageOffX, long& rPageOffY,
-                                                 long& rPageWidth, long& rPageHeight ) override;
+                                                 sal_Int32& rOutWidth, sal_Int32& rOutHeight,
+                                                 sal_Int32& rPageOffX, sal_Int32& rPageOffY,
+                                                 sal_Int32& rPageWidth, sal_Int32& rPageHeight ) override;
     virtual sal_uInt32              GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) override;
     virtual sal_uInt16              GetPaperBinCount( const ImplJobSetup* pSetupData ) override;
     virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin ) override;

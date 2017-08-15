@@ -425,9 +425,9 @@ void DeInitVCL()
 #if OSL_DEBUG_LEVEL > 0
     OStringBuffer aBuf( 256 );
     aBuf.append( "DeInitVCL: some top Windows are still alive\n" );
-    long nTopWindowCount = Application::GetTopWindowCount();
-    long nBadTopWindows = nTopWindowCount;
-    for( long i = 0; i < nTopWindowCount; i++ )
+    sal_Int32 nTopWindowCount = Application::GetTopWindowCount();
+    sal_Int32 nBadTopWindows = nTopWindowCount;
+    for( sal_Int32 i = 0; i < nTopWindowCount; i++ )
     {
         vcl::Window* pWin = Application::GetTopWindow( i );
         // default window will be destroyed further down

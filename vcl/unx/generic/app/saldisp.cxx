@@ -93,7 +93,7 @@ inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
 inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 
-inline double Hypothenuse( long w, long h )
+inline double Hypothenuse( sal_Int32 w, sal_Int32 h )
 { return sqrt( (double)((w*w)+(h*h)) ); }
 #endif
 
@@ -130,7 +130,7 @@ static int sal_significantBits( Pixel nMask )
 }
 
 // check if the resolution is sane
-static bool sal_ValidDPI(long nDPI)
+static bool sal_ValidDPI(sal_Int32 nDPI)
 {
     return (nDPI >= 50) && (nDPI <= 500);
 }
@@ -592,7 +592,7 @@ void SalDisplay::Init()
     if( pValStr != nullptr )
     {
         const OString aValStr( pValStr );
-        const long nDPI = (long) aValStr.toDouble();
+        const sal_Int32 nDPI = (sal_Int32) aValStr.toDouble();
         // guard against insane resolution
         if( sal_ValidDPI(nDPI) )
         {
@@ -606,11 +606,11 @@ void SalDisplay::Init()
          *  reported screen sizes and resolution. If there are multiple
          *  screens, just fall back to the default 96x96
          */
-        long xDPI = 96;
-        long yDPI = 96;
+        sal_Int32 xDPI = 96;
+        sal_Int32 yDPI = 96;
         if (m_aScreens.size() == 1) {
-            xDPI = (long)round(DisplayWidth(pDisp_, 0)*25.4/DisplayWidthMM(pDisp_, 0));
-            yDPI = (long)round(DisplayHeight(pDisp_, 0)*25.4/DisplayHeightMM(pDisp_, 0));
+            xDPI = (sal_Int32)round(DisplayWidth(pDisp_, 0)*25.4/DisplayWidthMM(pDisp_, 0));
+            yDPI = (sal_Int32)round(DisplayHeight(pDisp_, 0)*25.4/DisplayHeightMM(pDisp_, 0));
             // if either is invalid set it equal to the other
             if (!sal_ValidDPI(xDPI) && sal_ValidDPI(yDPI))
                 xDPI = yDPI;
@@ -2260,7 +2260,7 @@ void SalDisplay::PrintInfo() const
 }
 #endif
 
-void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+void SalDisplay::addXineramaScreenUnique( int i, sal_Int32 i_nX, sal_Int32 i_nY, sal_Int32 i_nWidth, sal_Int32 i_nHeight )
 {
     // see if any frame buffers are at the same coordinates
     // this can happen with weird configuration e.g. on
@@ -2371,7 +2371,7 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
         aFD.fd = ConnectionNumber(GetDisplay());
         aFD.events = POLLIN;
         aFD.revents = 0;
-        long nTimeout = 1000;
+        sal_Int32 nTimeout = 1000;
         (void)poll(&aFD, 1, nTimeout);
         if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
         {

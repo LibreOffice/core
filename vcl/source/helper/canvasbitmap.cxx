@@ -491,7 +491,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
 
         // can return bitmap data as-is
-        for( long y=aRequestedBytes.Top(); y<aRequestedBytes.Bottom(); ++y )
+        for( sal_Int32 y=aRequestedBytes.Top(); y<aRequestedBytes.Bottom(); ++y )
         {
             Scanline pScan = m_pBmpAcc->GetScanline(y);
             memcpy(pOutBuf, pScan+aRequestedBytes.Left(), aRequestedBytes.getWidth());
@@ -508,14 +508,14 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         OSL_ENSURE((m_nBitsPerOutputPixel & 0x07) == 0,
                    "Transparent bitmap bitcount not integer multiple of 8" );
 
-        for( long y=aRequestedArea.Top(); y<aRequestedArea.Bottom(); ++y )
+        for( sal_Int32 y=aRequestedArea.Top(); y<aRequestedArea.Bottom(); ++y )
         {
             sal_Int8* pOutScan = pOutBuf;
 
             if( m_nBitsPerInputPixel < 8 )
             {
                 // input less than a byte - copy via GetPixel()
-                for( long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
+                for( sal_Int32 x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
                     *pOutScan++ = m_pBmpAcc->GetPixelIndex(y,x);
                     *pOutScan++ = m_pAlphaAcc->GetPixelIndex(y,x);
@@ -523,14 +523,14 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
             }
             else
             {
-                const long nNonAlphaBytes( m_nBitsPerInputPixel/8 );
-                const long nScanlineOffsetLeft(aRequestedArea.Left()*nNonAlphaBytes);
+                const sal_Int32 nNonAlphaBytes( m_nBitsPerInputPixel/8 );
+                const sal_Int32 nScanlineOffsetLeft(aRequestedArea.Left()*nNonAlphaBytes);
                 Scanline  pScan = m_pBmpAcc->GetScanline(y) + nScanlineOffsetLeft;
 
                 // input integer multiple of byte - copy directly
-                for( long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
+                for( sal_Int32 x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
-                    for( long i=0; i<nNonAlphaBytes; ++i )
+                    for( sal_Int32 i=0; i<nNonAlphaBytes; ++i )
                         *pOutScan++ = *pScan++;
                     *pOutScan++ = m_pAlphaAcc->GetPixelIndex( y, x );
                 }
@@ -570,7 +570,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     bitmapLayout.ScanLineBytes =
     bitmapLayout.ScanLineStride= aRet.getLength();
 
-    const long nScanlineLeftOffset( pos.X*m_nBitsPerInputPixel/8 );
+    const sal_Int32 nScanlineLeftOffset( pos.X*m_nBitsPerInputPixel/8 );
     if( !m_aBmpEx.IsTransparent() )
     {
         assert(m_pBmpAcc && "Invalid bmp read access");
@@ -597,7 +597,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         }
         else
         {
-            const long nNonAlphaBytes( m_nBitsPerInputPixel/8 );
+            const sal_Int32 nNonAlphaBytes( m_nBitsPerInputPixel/8 );
             Scanline  pScan = m_pBmpAcc->GetScanline(pos.Y);
 
             // input integer multiple of byte - copy directly
@@ -1179,7 +1179,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
 
     if( m_aBmpEx.IsTransparent() )
     {
-        const long      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        const sal_Int32      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         const sal_Int32 nBytesPerPixel((m_nBitsPerOutputPixel+7)/8);
         const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
         for( std::size_t i=0; i<nLen; i+=nBytesPerPixel )
@@ -1234,7 +1234,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
 
     if( m_aBmpEx.IsTransparent() )
     {
-        const long      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        const sal_Int32      nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         const sal_Int32 nBytesPerPixel((m_nBitsPerOutputPixel+7)/8);
         const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
         for( std::size_t i=0; i<nLen; i+=nBytesPerPixel )
@@ -1286,7 +1286,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
 
     if( m_aBmpEx.IsTransparent() )
     {
-        const long nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        const sal_Int32 nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         for( std::size_t i=0; i<nLen; ++i )
         {
             const BitmapColor aCol(toByteColor(rgbColor[i].Red),
@@ -1335,7 +1335,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
 
     if( m_aBmpEx.IsTransparent() )
     {
-        const long nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        const sal_Int32 nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         for( std::size_t i=0; i<nLen; ++i )
         {
             const BitmapColor aCol(toByteColor(rgbColor[i].Red),
@@ -1384,7 +1384,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
 
     if( m_aBmpEx.IsTransparent() )
     {
-        const long nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
+        const sal_Int32 nNonAlphaBytes( (m_nBitsPerInputPixel+7)/8 );
         for( std::size_t i=0; i<nLen; ++i )
         {
             const double nAlpha( rgbColor[i].Alpha );

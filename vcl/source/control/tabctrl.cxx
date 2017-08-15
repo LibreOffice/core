@@ -212,7 +212,7 @@ ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const
     return nullptr;
 }
 
-Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
+Size TabControl::ImplGetItemSize( ImplTabItem* pItem, sal_Int32 nMaxWidth )
 {
     pItem->maFormatText = pItem->maText;
     Size aSize( GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
@@ -355,17 +355,17 @@ namespace MinimumRaggednessWrap
     }
 };
 
-bool TabControl::ImplPlaceTabs( long nWidth )
+bool TabControl::ImplPlaceTabs( sal_Int32 nWidth )
 {
     if ( nWidth <= 0 )
         return false;
     if ( mpTabCtrlData->maItemList.empty() )
         return false;
 
-    long nMaxWidth = nWidth;
+    sal_Int32 nMaxWidth = nWidth;
 
-    const long nOffsetX = 2 + GetItemsOffset().X();
-    const long nOffsetY = 2 + GetItemsOffset().Y();
+    const sal_Int32 nOffsetX = 2 + GetItemsOffset().X();
+    const sal_Int32 nOffsetY = 2 + GetItemsOffset().Y();
 
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
     //of ugly bare tabs on lines of their own
@@ -385,13 +385,13 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         nMaxWidth = mnMaxPageWidth;
     nMaxWidth -= GetItemsOffset().X();
 
-    long nX = nOffsetX;
-    long nY = nOffsetY;
+    sal_Int32 nX = nOffsetX;
+    sal_Int32 nY = nOffsetY;
 
     sal_uInt16 nLines = 0;
     sal_uInt16 nCurLine = 0;
 
-    long nLineWidthAry[100];
+    sal_Int32 nLineWidthAry[100];
     sal_uInt16 nLinePosAry[101];
     nLineWidthAry[0] = 0;
     nLinePosAry[0] = 0;
@@ -441,8 +441,8 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
     if ( nLines )
     { // two or more lines
-        long nLineHeightAry[100];
-        long nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
+        sal_Int32 nLineHeightAry[100];
+        sal_Int32 nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
 
         for ( sal_uInt16 i = 0; i < nLines+1; i++ )
         {
@@ -454,9 +454,9 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
         nLinePosAry[nLines+1] = (sal_uInt16)mpTabCtrlData->maItemList.size();
 
-        long nDX = 0;
-        long nModDX = 0;
-        long nIDX = 0;
+        sal_Int32 nDX = 0;
+        sal_Int32 nModDX = 0;
+        sal_Int32 nIDX = 0;
 
         sal_uInt16 i = 0;
         sal_uInt16 n = 0;
@@ -521,7 +521,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
     return true;
 }
 
-tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHeight )
+tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Size aWinSize = Control::GetOutputSizePixel();
     if ( nWidth < 0 )
@@ -531,8 +531,8 @@ tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, l
 
     if ( mpTabCtrlData->maItemList.empty() )
     {
-        long nW = nWidth-TAB_OFFSET*2;
-        long nH = nHeight-TAB_OFFSET*2;
+        sal_Int32 nW = nWidth-TAB_OFFSET*2;
+        sal_Int32 nH = nHeight-TAB_OFFSET*2;
         return (nW > 0 && nH > 0)
         ? tools::Rectangle( Point( TAB_OFFSET, TAB_OFFSET ), Size( nW, nH ) )
         : tools::Rectangle();
@@ -547,8 +547,8 @@ tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, l
             nLastPos = 0;
 
         tools::Rectangle aRect = ImplGetTabRect( nLastPos, nWidth, nHeight );
-        long nW = nWidth-TAB_OFFSET*2;
-        long nH = nHeight-aRect.Bottom()-TAB_OFFSET*2;
+        sal_Int32 nW = nWidth-TAB_OFFSET*2;
+        sal_Int32 nH = nHeight-aRect.Bottom()-TAB_OFFSET*2;
         aRect = (nW > 0 && nH > 0)
         ? tools::Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ), Size( nW, nH ) )
         : tools::Rectangle();
@@ -721,8 +721,8 @@ void TabControl::ImplShowFocus()
     const ImplTabItem&       rItem       = mpTabCtrlData->maItemList[ nCurPos ];
     Size                     aTabSize    = aRect.GetSize();
     Size aImageSize( 0, 0 );
-    long                     nTextHeight = GetTextHeight();
-    long                     nTextWidth  = GetCtrlTextWidth( rItem.maFormatText );
+    sal_Int32                     nTextHeight = GetTextHeight();
+    sal_Int32                     nTextWidth  = GetCtrlTextWidth( rItem.maFormatText );
     sal_uInt16                   nOff;
 
     if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::Mono) )
@@ -748,8 +748,8 @@ void TabControl::ImplShowFocus()
     else
     {
         // show focus around image
-        long nXPos = aRect.Left()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-1;
-        long nYPos = aRect.Top();
+        sal_Int32 nXPos = aRect.Left()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-1;
+        sal_Int32 nYPos = aRect.Top();
         if( aImageSize.Height() < aRect.GetHeight() )
             nYPos += (aRect.GetHeight() - aImageSize.Height())/2;
 
@@ -769,8 +769,8 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     tools::Rectangle aRect = pItem->maRect;
-    long nLeftBottom = aRect.Bottom();
-    long nRightBottom = aRect.Bottom();
+    sal_Int32 nLeftBottom = aRect.Bottom();
+    sal_Int32 nRightBottom = aRect.Bottom();
     bool bLeftBorder = true;
     bool bRightBorder = true;
     sal_uInt16 nOff;
@@ -912,16 +912,16 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
 
     Size aTabSize = aRect.GetSize();
     Size aImageSize(0, 0);
-    long nTextHeight = rRenderContext.GetTextHeight();
-    long nTextWidth = rRenderContext.GetCtrlTextWidth(pItem->maFormatText);
+    sal_Int32 nTextHeight = rRenderContext.GetTextHeight();
+    sal_Int32 nTextWidth = rRenderContext.GetCtrlTextWidth(pItem->maFormatText);
     if (!!pItem->maTabImage)
     {
         aImageSize = pItem->maTabImage.GetSizePixel();
         if (!pItem->maFormatText.isEmpty())
             aImageSize.Width() += GetTextHeight() / 4;
     }
-    long nXPos = aRect.Left() + ((aTabSize.Width() - nTextWidth - aImageSize.Width()) / 2) - nOff - nOff3;
-    long nYPos = aRect.Top() + ((aTabSize.Height() - nTextHeight) / 2) - nOff3;
+    sal_Int32 nXPos = aRect.Left() + ((aTabSize.Width() - nTextWidth - aImageSize.Width()) / 2) - nOff - nOff3;
+    sal_Int32 nYPos = aRect.Top() + ((aTabSize.Height() - nTextHeight) / 2) - nOff3;
     if (!pItem->maFormatText.isEmpty())
     {
         DrawTextFlags nStyle = DrawTextFlags::Mnemonic;
@@ -1123,7 +1123,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
     else
     {
-        long nTopOff = 1;
+        sal_Int32 nTopOff = 1;
         if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
@@ -1248,7 +1248,7 @@ void TabControl::setAllocation(const Size &rAllocation)
     {
         // get the listbox' preferred size
         Size aTabCtrlSize( GetSizePixel() );
-        long nPrefWidth = mpTabCtrlData->mpListBox->get_preferred_size().Width();
+        sal_Int32 nPrefWidth = mpTabCtrlData->mpListBox->get_preferred_size().Width();
         if( nPrefWidth > aTabCtrlSize.Width() )
             nPrefWidth = aTabCtrlSize.Width();
         Size aNewSize( nPrefWidth, LogicToPixel( Size( 12, 12 ), MapMode( MapUnit::MapAppFont ) ).Height() );
@@ -1263,7 +1263,7 @@ void TabControl::setAllocation(const Size &rAllocation)
 
     // check what needs to be invalidated
     Size aNewSize = rAllocation;
-    long nNewWidth = aNewSize.Width();
+    sal_Int32 nNewWidth = aNewSize.Width();
     for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
@@ -2023,7 +2023,7 @@ void TabControl::SetPageImage( sal_uInt16 i_nPageId, const Image& i_rImage )
     }
 }
 
-tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) const
+tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, sal_Int32 nIndex ) const
 {
     tools::Rectangle aRet;
 
@@ -2044,9 +2044,9 @@ tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, long nIndex
     return aRet;
 }
 
-long TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const
+sal_Int32 TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const
 {
-    long nRet = -1;
+    sal_Int32 nRet = -1;
 
     if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
         FillLayoutData();
@@ -2147,14 +2147,14 @@ Size TabControl::calculateRequisition() const
         pThis->ActivatePage();
     }
 
-    long nTabLabelsBottom = 0, nTabLabelsRight = 0;
+    sal_Int32 nTabLabelsBottom = 0, nTabLabelsRight = 0;
     for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
         TabControl* pThis = const_cast<TabControl*>(this);
 
         sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
-        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
+        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), SAL_MAX_INT32);
         if (aTabRect.Bottom() > nTabLabelsBottom)
             nTabLabelsBottom = aTabRect.Bottom();
         if (aTabRect.Right() > nTabLabelsRight)
@@ -2343,18 +2343,18 @@ sal_uInt16 NotebookbarTabControlBase::GetHeaderHeight()
     return m_nHeaderHeight;
 }
 
-bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
+bool NotebookbarTabControlBase::ImplPlaceTabs( sal_Int32 nWidth )
 {
     if ( nWidth <= 0 )
         return false;
     if ( mpTabCtrlData->maItemList.empty() )
         return false;
 
-    long nMaxWidth = nWidth;
-    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
+    sal_Int32 nMaxWidth = nWidth;
+    sal_Int32 nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
 
-    const long nOffsetX = 2 + GetItemsOffset().X();
-    const long nOffsetY = 2 + GetItemsOffset().Y();
+    const sal_Int32 nOffsetX = 2 + GetItemsOffset().X();
+    const sal_Int32 nOffsetY = 2 + GetItemsOffset().Y();
 
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
     //of ugly bare tabs on lines of their own
@@ -2365,7 +2365,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin() + 1;
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
+        sal_Int32 aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
         if( !it->maText.isEmpty() && aSize < 100)
             aSize = 100;
         aWidths.push_back(aSize);
@@ -2378,13 +2378,13 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         nMaxWidth = mnMaxPageWidth;
     nMaxWidth -= GetItemsOffset().X();
 
-    long nX = nOffsetX;
-    long nY = nOffsetY;
+    sal_Int32 nX = nOffsetX;
+    sal_Int32 nY = nOffsetY;
 
     sal_uInt16 nLines = 0;
     sal_uInt16 nCurLine = 0;
 
-    long nLineWidthAry[100];
+    sal_Int32 nLineWidthAry[100];
     sal_uInt16 nLinePosAry[101];
     nLineWidthAry[0] = 0;
     nLinePosAry[0] = 0;
@@ -2455,8 +2455,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     if ( nLines )
     { // two or more lines
-        long nLineHeightAry[100];
-        long nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
+        sal_Int32 nLineHeightAry[100];
+        sal_Int32 nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
 
         for ( sal_uInt16 i = 0; i < nLines+1; i++ )
         {
@@ -2468,9 +2468,9 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
         nLinePosAry[nLines+1] = (sal_uInt16)mpTabCtrlData->maItemList.size();
 
-        long nDX = 0;
-        long nModDX = 0;
-        long nIDX = 0;
+        sal_Int32 nDX = 0;
+        sal_Int32 nModDX = 0;
+        sal_Int32 nIDX = 0;
 
         sal_uInt16 i = 0;
         sal_uInt16 n = 0;
@@ -2631,7 +2631,7 @@ void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, co
     }
     else
     {
-        long nTopOff = 1;
+        sal_Int32 nTopOff = 1;
         if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
@@ -2787,14 +2787,14 @@ Size NotebookbarTabControlBase::calculateRequisition() const
         pThis->ActivatePage();
     }
 
-    long nTabLabelsBottom = 0, nTabLabelsRight = 0;
+    sal_Int32 nTabLabelsBottom = 0, nTabLabelsRight = 0;
     for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
         NotebookbarTabControlBase* pThis = const_cast<NotebookbarTabControlBase*>(this);
 
         sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
-        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
+        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), SAL_MAX_INT32);
         if (aTabRect.Bottom() > nTabLabelsBottom)
         {
             nTabLabelsBottom = aTabRect.Bottom();

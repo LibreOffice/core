@@ -159,7 +159,7 @@ void X11SalFrame::setXEmbedInfo()
 {
     if( m_bXEmbed )
     {
-        long aInfo[2];
+        sal_Int32 aInfo[2];
         aInfo[0] = 1; // XEMBED protocol version
         aInfo[1] = (bMapped_ ? 1 : 0); // XEMBED_MAPPED
         XChangeProperty( pDisplay_->GetDisplay(),
@@ -458,7 +458,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 
         nStyle_ |= SalFrameStyleFlags::PLUG;
         Attributes.override_redirect = True;
-        if( pParentData->nSize >= sizeof(SystemParentData) )
+        if( pParentData->nSize >= sal_Int32(sizeof(SystemParentData)) )
             m_bXEmbed = pParentData->bXEmbedSupport;
 
         int x_ret, y_ret;
@@ -1132,7 +1132,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
     }
 }
 
-void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void X11SalFrame::SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( ! IsChildWindow() )
     {
@@ -1156,7 +1156,7 @@ void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
     }
 }
 
-void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
+void X11SalFrame::SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( ! IsChildWindow() )
     {
@@ -1441,7 +1441,7 @@ void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
 
-void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
+void X11SalFrame::GetClientSize( sal_Int32 &rWidth, sal_Int32 &rHeight )
 {
     if( ! bViewable_  )
     {
@@ -1598,7 +1598,7 @@ void X11SalFrame::updateScreenNumber()
         maGeometry.nDisplayScreenNumber = m_nXScreen.getXScreen();
 }
 
-void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void X11SalFrame::SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags )
 {
     if( nStyle_ & SalFrameStyleFlags::PLUG )
         return;
@@ -1723,7 +1723,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             }
             if (pState->mnMask & WindowStateMask::Width)
             {
-                long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
+                sal_Int32 nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
                 aPosSize.setWidth (nWidth);
                 bDoAdjust = true;
             }
@@ -1758,14 +1758,14 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 }
 
                 // adjust position so that frame fits onto screen
-                if( aPosSize.Right()+(long)aGeom.nRightDecoration > aScreenSize.Width()-1 )
-                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - (long)aGeom.nRightDecoration, 0 );
-                if( aPosSize.Bottom()+(long)aGeom.nBottomDecoration > aScreenSize.Height()-1 )
-                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - (long)aGeom.nBottomDecoration );
-                if( aPosSize.Left() < (long)aGeom.nLeftDecoration )
-                    aPosSize.Move( (long)aGeom.nLeftDecoration - aPosSize.Left(), 0 );
-                if( aPosSize.Top() < (long)aGeom.nTopDecoration )
-                    aPosSize.Move( 0, (long)aGeom.nTopDecoration - aPosSize.Top() );
+                if( aPosSize.Right()+aGeom.nRightDecoration > aScreenSize.Width()-1 )
+                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - aGeom.nRightDecoration, 0 );
+                if( aPosSize.Bottom()+aGeom.nBottomDecoration > aScreenSize.Height()-1 )
+                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - aGeom.nBottomDecoration );
+                if( aPosSize.Left() < aGeom.nLeftDecoration )
+                    aPosSize.Move( aGeom.nLeftDecoration - aPosSize.Left(), 0 );
+                if( aPosSize.Top() < aGeom.nTopDecoration )
+                    aPosSize.Move( 0, aGeom.nTopDecoration - aPosSize.Top() );
             }
 
             SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
@@ -1865,8 +1865,8 @@ void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
     if( maGeometry.nWidth < 1 || maGeometry.nHeight < 1 )
     {
         const Size& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
-        long w = aScreenSize.Width()  - maGeometry.nLeftDecoration - maGeometry.nRightDecoration;
-        long h = aScreenSize.Height() - maGeometry.nTopDecoration - maGeometry.nBottomDecoration;
+        sal_Int32 w = aScreenSize.Width()  - maGeometry.nLeftDecoration - maGeometry.nRightDecoration;
+        sal_Int32 h = aScreenSize.Height() - maGeometry.nTopDecoration - maGeometry.nBottomDecoration;
 
         rPosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ), Size( w, h ) );
     }
@@ -2265,7 +2265,7 @@ void X11SalFrame::SetPointer( PointerStyle ePointerStyle )
                         CurrentTime );
 }
 
-void X11SalFrame::SetPointerPos(long nX, long nY)
+void X11SalFrame::SetPointerPos(sal_Int32 nX, sal_Int32 nY)
 {
     /* when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
@@ -2507,7 +2507,7 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
 
 bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
-    if( pNewParent->nSize >= sizeof(SystemParentData) )
+    if( pNewParent->nSize >= sal_Int32(sizeof(SystemParentData)) )
         m_bXEmbed = pNewParent->aWindow != None && pNewParent->bXEmbedSupport;
 
     createNewWindow(pNewParent->aWindow);
@@ -2624,7 +2624,7 @@ Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
 
 } // namespace
 
-long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
+sal_Int32 X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt = {0, 0, 0, 0, 0};
     SalEvent            nEvent = SalEvent::NONE;
@@ -2973,7 +2973,7 @@ bool X11SalFrame::endUnicodeSequence()
     return bWasInput;
 }
 
-long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
+sal_Int32 X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 {
     if( pEvent->type == KeyRelease )
     {
@@ -3314,7 +3314,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     return True;
 }
 
-long X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
+sal_Int32 X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
 {
     // ReflectionX in Windows mode changes focus while mouse is grabbed
     if( nVisibleFloats > 0 && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "ReflectionX Windows" )
@@ -3358,7 +3358,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 
-            long nRet = CallCallback( SalEvent::GetFocus,  nullptr );
+            sal_Int32 nRet = CallCallback( SalEvent::GetFocus,  nullptr );
             if ((mpParent != nullptr && nStyle_ == SalFrameStyleFlags::NONE)
                 && pSVData->maWinData.mpFirstFloat )
             {
@@ -3380,7 +3380,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
     return 0;
 }
 
-long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
+sal_Int32 X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 {
     XRectangle  aRect = { 0, 0, 0, 0 };
     sal_uInt16      nCount = 0;
@@ -3509,7 +3509,7 @@ void X11SalFrame::setPendingSizeEvent()
     mPendingSizeEvent = true;
 }
 
-long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
+sal_Int32 X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
 {
     // NOTE: if you add more tests in this function, make sure to update size_event_predicate()
     // so that it finds exactly the same events
@@ -3601,7 +3601,7 @@ IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise, Timer *, void)
         ToTop( SalFrameToTop::NONE );
 }
 
-long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
+sal_Int32 X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 {
     Display        *pDisplay   = pEvent->display;
     ::Window        hWM_Parent;
@@ -3747,7 +3747,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
          */
         maGeometry.nX       = xp + nLeft;
         maGeometry.nY       = yp + nTop;
-        bResized = w != maGeometry.nWidth || h != maGeometry.nHeight;
+        bResized = sal_Int32(w) != maGeometry.nWidth || sal_Int32(h) != maGeometry.nHeight;
         maGeometry.nWidth   = w;
         maGeometry.nHeight = h;
     }
@@ -3785,7 +3785,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     return 1;
 }
 
-long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
+sal_Int32 X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
 {
     Atom          actual_type;
     int           actual_format;
@@ -3822,7 +3822,7 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
     return 1;
 }
 
-long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
+sal_Int32 X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
 {
     const WMAdaptor& rWMAdaptor( *pDisplay_->getWMAdaptor() );
 
@@ -3883,9 +3883,9 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
     return 0;
 }
 
-long X11SalFrame::Dispatch( XEvent *pEvent )
+sal_Int32 X11SalFrame::Dispatch( XEvent *pEvent )
 {
-    long nRet = 0;
+    sal_Int32 nRet = 0;
 
     if( -1 == nCaptured_ )
     {
@@ -4134,7 +4134,7 @@ void X11SalFrame::BeginSetClipRegion( sal_uLong nRects )
     m_nCurClipRect = 0;
 }
 
-void X11SalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void X11SalFrame::UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( m_pClipRectangles && m_nCurClipRect < m_nMaxClipRect )
     {

@@ -579,8 +579,8 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 
         double fX = aOfs.X();
         double fY = aOfs.Y();
-        long nX = static_cast<long>( +fCos * fX + fSin * fY );
-        long nY = static_cast<long>( +fCos * fY - fSin * fX );
+        sal_Int32 nX = static_cast<sal_Int32>( +fCos * fX + fSin * fY );
+        sal_Int32 nY = static_cast<sal_Int32>( +fCos * fY - fSin * fX );
         aPos += Point( nX, nY );
     }
 
@@ -813,7 +813,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
 void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 {
     const int nLength = rStr.getLength();
-    long nOffset = 0;
+    sal_Int32 nOffset = 0;
 
     for( std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin(), pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
     {
@@ -830,11 +830,11 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 
             // calculate compression values
             const bool bVertical = false;
-            long nKernFirst = +CalcAsianKerning( cHere, true, bVertical );
-            long nKernNext  = -CalcAsianKerning( cNext, false, bVertical );
+            sal_Int32 nKernFirst = +CalcAsianKerning( cHere, true, bVertical );
+            sal_Int32 nKernNext  = -CalcAsianKerning( cNext, false, bVertical );
 
             // apply punctuation compression to logical glyph widths
-            long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
+            sal_Int32 nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
             if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
             {
                 int nGlyphWidth = pGlyphIter->mnOrigWidth;
@@ -851,7 +851,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     // initialize result array
     for (int i = 0; i < nMaxIndex; ++i)
@@ -860,8 +860,8 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
     // calculate caret positions using glyph array
     for (auto const& aGlyphItem : m_GlyphItems)
     {
-        long nXPos = aGlyphItem.maLinearPos.X();
-        long nXRight = nXPos + aGlyphItem.mnOrigWidth;
+        sal_Int32 nXPos = aGlyphItem.maLinearPos.X();
+        sal_Int32 nXRight = nXPos + aGlyphItem.mnOrigWidth;
         int n = aGlyphItem.mnCharPos;
         int nCurrIdx = 2 * (n - mnMinCharPos);
         // tdf#86399 if this is not the start of a cluster, don't overwrite the caret bounds of the cluster start
@@ -929,7 +929,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
 
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
-    long nYPos = pGlyphIter->maLinearPos.Y();
+    sal_Int32 nYPos = pGlyphIter->maLinearPos.Y();
     for(;;)
     {
         // update return data with glyph info
@@ -943,7 +943,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
         if( nCount >= nLen )
             break;
 
-        long nGlyphAdvance = pGlyphIter[1].maLinearPos.X() - pGlyphIter->maLinearPos.X();
+        sal_Int32 nGlyphAdvance = pGlyphIter[1].maLinearPos.X() - pGlyphIter->maLinearPos.X();
         // stop when next x-position is unexpected
         if( pGlyphIter->mnOrigWidth != nGlyphAdvance )
             break;
@@ -968,7 +968,7 @@ int GenericSalLayout::GetNextGlyphs(int nLen, const GlyphItem** pGlyphs,
     return nCount;
 }
 
-void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
+void GenericSalLayout::MoveGlyph( int nStart, sal_Int32 nNewXPos )
 {
     if( nStart >= (int)m_GlyphItems.size() )
         return;
@@ -982,7 +982,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
     if( pGlyphIter->IsRTLGlyph() )
         nNewXPos += pGlyphIter->mnNewWidth - pGlyphIter->mnOrigWidth;
     // calculate the x-offset to the old position
-    long nXDelta = nNewXPos - pGlyphIter->maLinearPos.X();
+    sal_Int32 nXDelta = nNewXPos - pGlyphIter->maLinearPos.X();
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
@@ -1204,7 +1204,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     mnLevel = nLevel;
 
     // prepare merge the fallback levels
-    long nXPos = 0;
+    sal_Int32 nXPos = 0;
     double fUnitMul = 1.0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
@@ -1230,7 +1230,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // use base(n==0) or fallback(n>=1) level
             fUnitMul = mnUnitsPerPixel;
             fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-            long nNewPos = static_cast<long>(nXPos/fUnitMul + 0.5);
+            sal_Int32 nNewPos = static_cast<sal_Int32>(nXPos/fUnitMul + 0.5);
             mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
         }
         else
@@ -1368,7 +1368,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // the measured width is still in fallback font units
             // => convert it to base level font units
             if( n > 0 ) // optimization: because (fUnitMul==1.0) for (n==0)
-                nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
+                nRunAdvance = static_cast<sal_Int32>(nRunAdvance*fUnitMul + 0.5);
         }
 
         // calculate new x position (in base level units)
@@ -1507,14 +1507,14 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     return nMaxWidth;
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
 
     if( mnLevel > 1 )
     {
-        std::unique_ptr<long[]> const pTempPos(new long[nMaxIndex]);
+        std::unique_ptr<sal_Int32[]> const pTempPos(new sal_Int32[nMaxIndex]);
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos.get() );
@@ -1523,8 +1523,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
             for( int i = 0; i < nMaxIndex; ++i )
                 if( pTempPos[i] >= 0 )
                 {
-                    long w = pTempPos[i];
-                    w = static_cast<long>(w*fUnitMul + 0.5);
+                    sal_Int32 w = pTempPos[i];
+                    w = static_cast<sal_Int32>(w*fUnitMul + 0.5);
                     pCaretXArray[i] = w;
                 }
         }

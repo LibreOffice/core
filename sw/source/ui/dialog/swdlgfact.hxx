@@ -238,7 +238,7 @@ class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
     //from class SalFrame
     virtual void     SetWindowState( const OString & rStr ) override;
     virtual OString  GetWindowState() const override;
-    virtual void     EndDialog(long) override;
+    virtual void     EndDialog(sal_Int32) override;
 };
 
 class SwInsFootNoteDlg;
@@ -355,7 +355,7 @@ public:
     virtual         ~AbstractMailMergeWizard_Impl() override;
     virtual void    dispose() override;
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
-    virtual long    GetResult() override;
+    virtual sal_Int32 GetResult() override;
 
     virtual OUString            GetReloadDocument() const override;
     virtual bool                ShowPage( sal_uInt16 nLevel ) override;

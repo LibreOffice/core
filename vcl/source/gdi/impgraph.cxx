@@ -918,14 +918,14 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 }
 
 void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                                     const Size& rDestSize, long nExtraData,
+                                     const Size& rDestSize, sal_Int32 nExtraData,
                                      OutputDevice* pFirstFrameOutDev )
 {
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
         mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
 }
 
-void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nExtraData )
+void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, sal_Int32 nExtraData )
 {
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
         mpAnimation->Stop( pOutDev, nExtraData );

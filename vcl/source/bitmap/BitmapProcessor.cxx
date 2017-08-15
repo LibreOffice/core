@@ -25,9 +25,9 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
 
     if (pRead && pWrite)
     {
-        for (long nY = 0; nY < aSize.Height(); ++nY)
+        for (sal_Int32 nY = 0; nY < aSize.Height(); ++nY)
         {
-            for (long nX = 0; nX < aSize.Width(); ++nX)
+            for (sal_Int32 nX = 0; nX < aSize.Width(); ++nX)
             {
                 BitmapColor aColor = pRead->HasPalette() ?
                                         pRead->GetPaletteColor(pRead->GetPixelIndex(nY, nX)) :
@@ -87,9 +87,9 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
         {
             BitmapColor aGreyAlphaValue(0);
 
-            for (long nY = 0; nY < aSize.Height(); ++nY)
+            for (sal_Int32 nY = 0; nY < aSize.Height(); ++nY)
             {
-                for (long nX = 0; nX < aSize.Width(); ++nX)
+                for (sal_Int32 nX = 0; nX < aSize.Width(); ++nX)
                 {
                     const sal_uInt8 nLum(pRead->GetLuminance(nY, nX));
                     BitmapColor aGreyValue(nLum, nLum, nLum);
@@ -111,9 +111,9 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
         {
             BitmapColor aGreyAlphaValue(0);
 
-            for (long nY = 0; nY < aSize.Height(); ++nY)
+            for (sal_Int32 nY = 0; nY < aSize.Height(); ++nY)
             {
-                for (long nX = 0; nX < aSize.Width(); ++nX)
+                for (sal_Int32 nX = 0; nX < aSize.Width(); ++nX)
                 {
                     const sal_uInt8 nLum(pRead->GetLuminance(nY, nX));
                     BitmapColor aGreyValue(nLum, nLum, nLum);
@@ -142,13 +142,13 @@ void BitmapProcessor::colorizeImage(BitmapEx const & rBitmapEx, Color aColor)
     if (pWriteAccess)
     {
         BitmapColor aBitmapColor;
-        const long nW = pWriteAccess->Width();
-        const long nH = pWriteAccess->Height();
+        const sal_Int32 nW = pWriteAccess->Width();
+        const sal_Int32 nH = pWriteAccess->Height();
         std::vector<sal_uInt8> aMapR(256);
         std::vector<sal_uInt8> aMapG(256);
         std::vector<sal_uInt8> aMapB(256);
-        long nX;
-        long nY;
+        sal_Int32 nX;
+        sal_Int32 nY;
 
         const sal_uInt8 cR = aColor.GetRed();
         const sal_uInt8 cG = aColor.GetGreen();

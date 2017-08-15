@@ -196,9 +196,9 @@ public:
         std::vector<tools::Rectangle> aRegions;
 
         // Make small cleared area for these guys
-        long nBorderSize = std::min(aSize.Height() / 32, aSize.Width() / 32);
-        long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
-        long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
+        sal_Int32 nBorderSize = std::min(aSize.Height() / 32, aSize.Width() / 32);
+        sal_Int32 nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
+        sal_Int32 nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
         for (int y = 0; y < nY; y++)
         {
             for (int x = 0; x < nX; x++)
@@ -308,9 +308,9 @@ public:
                 rDev.SetLineColor(Color(COL_BLACK));
                 rDev.DrawRect(r);
 
-                for(long i=0; i<r.GetHeight(); i+=15)
+                for(sal_Int32 i=0; i<r.GetHeight(); i+=15)
                     rDev.DrawLine(Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i));
-                for(long i=0; i<r.GetWidth(); i+=15)
+                for(sal_Int32 i=0; i<r.GetWidth(); i+=15)
                     rDev.DrawLine(Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()));
 
                 // Should draw a white-line across the middle
@@ -545,7 +545,7 @@ public:
 
             Point aPos(r.Left(), r.Top()+20);
 
-            long nMaxTextHeight = 0;
+            sal_Int32 nMaxTextHeight = 0;
             for (size_t i = 0; i < SAL_N_ELEMENTS(aRuns); ++i)
             {
                 // Legend
@@ -578,7 +578,7 @@ public:
                     OUString aString(aRuns[i].mpString,
                                      strlen(aRuns[i].mpString),
                                      RTL_TEXTENCODING_UTF8);
-                    long nNewX = drawStringBox(rDev, aPos, aString,
+                    sal_Int32 nNewX = drawStringBox(rDev, aPos, aString,
                                                nMaxTextHeight);
 
                     aPos.X() = nNewX;
@@ -600,9 +600,9 @@ public:
             rDev.SetClipRegion();
         }
         // render text, bbox, DX arrays etc.
-        static long drawStringBox(OutputDevice &rDev, Point aPos,
+        static sal_Int32 drawStringBox(OutputDevice &rDev, Point aPos,
                            const OUString &aText,
-                           long &nMaxTextHeight)
+                           sal_Int32 &nMaxTextHeight)
         {
             rDev.Push();
             {
@@ -629,9 +629,9 @@ public:
                 }
 
                 // DX array rendering
-                long *pItems = new long[aText.getLength()+10];
+                sal_Int32 *pItems = new sal_Int32[aText.getLength()+10];
                 rDev.GetTextArray(aText, pItems);
-                for (long j = 0; j < aText.getLength(); ++j)
+                for (sal_Int32 j = 0; j < aText.getLength(); ++j)
                 {
                     Point aTop = aTextRect.TopLeft();
                     Point aBottom = aTop;
@@ -721,8 +721,8 @@ public:
         {
             maCheckered.RenderRegion(rDev, r, rCtx);
 
-            long nDx = r.GetWidth()/20;
-            long nDy = r.GetHeight()/20;
+            sal_Int32 nDx = r.GetWidth()/20;
+            sal_Int32 nDy = r.GetHeight()/20;
             tools::Rectangle aShrunk(r);
             aShrunk.Move(nDx, nDy);
             aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
@@ -859,7 +859,7 @@ public:
 
             Point aRenderPt(r.TopLeft());
 
-            long aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
+            sal_Int32 aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
 
             // and yes - we really do this in the page border rendering code ...
             for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
@@ -1223,7 +1223,7 @@ public:
 
         void doDrawIcons(OutputDevice &rDev, tools::Rectangle r, bool bExpanded)
         {
-            long nMaxH = 0;
+            sal_Int32 nMaxH = 0;
             Point p(r.LeftCenter());
             size_t nToRender = maIcons.size();
 
@@ -1312,22 +1312,22 @@ public:
                     {
                         BitmapColor aColW = pAccW->GetPixel(y,x);
                         BitmapColor aColB = pAccB->GetPixel(y,x);
-                        long nAR = (long)(aColW.GetRed() - aColB.GetRed()); // (1-a)
-                        long nAG = (long)(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
-                        long nAB = (long)(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
+                        sal_Int32 nAR = (sal_Int32)(aColW.GetRed() - aColB.GetRed()); // (1-a)
+                        sal_Int32 nAG = (sal_Int32)(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
+                        sal_Int32 nAB = (sal_Int32)(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
 
 #define CLAMP(a,b,c) (((a)<=(b))?(b):(((a)>=(c))?(c):(a)))
 
                         // we get the most precision from the largest delta
-                        long nInverseAlpha = std::max(nAR, std::max(nAG, nAB)); // (1-a)
+                        sal_Int32 nInverseAlpha = std::max(nAR, std::max(nAG, nAB)); // (1-a)
                         nInverseAlpha = CLAMP(nInverseAlpha, 0, 255);
-                        long nAlpha = 255 - nInverseAlpha;
+                        sal_Int32 nAlpha = 255 - nInverseAlpha;
 
                         pMaskAcc->SetPixel(y,x,BitmapColor((sal_Int8)CLAMP(nInverseAlpha,0,255)));
                         // now recover the pixels
-                        long nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
-                        long nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
-                        long nB = (aColW.GetBlue() + aColB.GetBlue() - nInverseAlpha) * 128;
+                        sal_Int32 nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
+                        sal_Int32 nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
+                        sal_Int32 nB = (aColW.GetBlue() + aColB.GetBlue() - nInverseAlpha) * 128;
                         if (nAlpha == 0)
                         { // doesn't matter what's behind transparency
                             nR = nG = nB = 0;
@@ -1778,7 +1778,8 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
         mrRenderer.SetSizePixel(GetSizePixel());
-        fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+        fprintf(stderr, "DemoWin::Paint(%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ")\n",
+                rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
         if (mrRenderer.getIterCount() == 0)
             mrRenderer.drawToDevice(rRenderContext, GetSizePixel(), false);
         else
@@ -2136,7 +2137,7 @@ include/vcl/outdev.hxx:                                              DrawTextFla
 
     bool                        GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                                  sal_uLong nLayoutWidth = 0, const long* pDXArray = nullptr ) const;
+                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = nullptr ) const;
 
 
     void                        DrawText( const Point& rStartPt, const OUString& rStr,

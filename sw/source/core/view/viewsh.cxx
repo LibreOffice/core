@@ -1270,8 +1270,8 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
             aRect.Height( aSize.Height() );
             if ( pRect )
             {
-                aRect.Pos().X() = std::max(aRect.Left(),pRect->Left()-aPixSz.Width());
-                aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
+                aRect.Pos().X() = std::max(sal_Int32(aRect.Left()),pRect->Left()-aPixSz.Width());
+                aRect.Right( std::min(sal_Int32(aRect.Right()+2*aPixSz.Width()), pRect->Right()+aPixSz.Width()));
             }
             else
                 aRect.SSize().Width() += 2*aPixSz.Width();

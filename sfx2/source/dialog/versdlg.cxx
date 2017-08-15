@@ -177,7 +177,7 @@ void SfxVersionsTabListBox_Impl::setColSizes()
     long nMaxAuthorWidth = nRest/4;
     for (std::set<OUString>::iterator aI = aAuthors.begin(), aEnd = aAuthors.end(); aI != aEnd; ++aI)
     {
-        nMaxAuthorWidth = std::max(nMaxAuthorWidth, GetTextWidth(*aI));
+        nMaxAuthorWidth = std::max(sal_Int32(nMaxAuthorWidth), GetTextWidth(*aI));
         if (nMaxAuthorWidth > nRest/2)
         {
             nMaxAuthorWidth = nRest/2;

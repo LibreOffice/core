@@ -143,11 +143,11 @@ private:
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
     void WMFRecord_Ellipse(const tools::Rectangle& rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
-    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const long* pDXAry );
-    void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, const long* pDXAry);
+    bool WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rStr, const sal_Int32* pDXAry );
+    void WMFRecord_ExtTextOut(const Point& rPoint, const OUString& rString, const sal_Int32* pDXAry);
 
     void TrueExtTextOut(const Point& rPoint, const OUString& rString,
-                        const OString& rByteString, const long* pDXAry);
+                        const OString& rByteString, const sal_Int32* pDXAry);
     void TrueTextOut(const Point& rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
@@ -157,7 +157,7 @@ private:
     void WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly);
     void WMFRecord_Rectangle(const tools::Rectangle & rRect);
     void WMFRecord_RestoreDC();
-    void WMFRecord_RoundRect(const tools::Rectangle & rRect, long nHorzRound, long nVertRound);
+    void WMFRecord_RoundRect(const tools::Rectangle & rRect, sal_Int32 nHorzRound, sal_Int32 nVertRound);
     void WMFRecord_SaveDC();
     void WMFRecord_SelectObject(sal_uInt16 nObjectHandle);
     void WMFRecord_SetBkMode(bool bTransparent);

@@ -118,8 +118,7 @@ const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYS
 bool WinSalFrame::mbInReparent = FALSE;
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
-//#define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
-#define Uni_UTF32ToSurrogate2(ch)   (((unsigned long) (ch) - 0x10000) % 0x400 + 0xDC00)
+#define Uni_UTF32ToSurrogate2(ch)   (((unsigned sal_Int32) (ch) - 0x10000) % 0x400 + 0xDC00)
 #define Uni_SupplementaryPlanesStart    0x10000
 
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
@@ -153,10 +152,10 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
                 RECT aRect2 = aRect;
                 AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
                                     FALSE,  GetWindowExStyle( pFrame->mhWnd ) );
-                long nTopDeco = abs( aRect.top - aRect2.top );
-                long nLeftDeco = abs( aRect.left - aRect2.left );
-                long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
-                long nRightDeco = abs( aRect.right - aRect2.right );
+                sal_Int32 nTopDeco = abs( aRect.top - aRect2.top );
+                sal_Int32 nLeftDeco = abs( aRect.left - aRect2.left );
+                sal_Int32 nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+                sal_Int32 nRightDeco = abs( aRect.right - aRect2.right );
 
                 pFrame->maState.mnX      = aRect.left + nLeftDeco;
                 pFrame->maState.mnY      = aRect.top + nTopDeco;
@@ -173,10 +172,10 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             RECT aRect2 = aRect;
             AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
                             FALSE,     GetWindowExStyle( pFrame->mhWnd ) );
-            long nTopDeco = abs( aRect.top - aRect2.top );
-            long nLeftDeco = abs( aRect.left - aRect2.left );
-            long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
-            long nRightDeco = abs( aRect.right - aRect2.right );
+            sal_Int32 nTopDeco = abs( aRect.top - aRect2.top );
+            sal_Int32 nLeftDeco = abs( aRect.left - aRect2.left );
+            sal_Int32 nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+            sal_Int32 nRightDeco = abs( aRect.right - aRect2.right );
 
             pFrame->maState.mnState &= ~WindowStateState(WindowStateState::Minimized | WindowStateState::Maximized);
             // subtract decoration
@@ -1221,19 +1220,19 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
 
-void WinSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void WinSalFrame::SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     mnMinWidth  = nWidth;
     mnMinHeight = nHeight;
 }
 
-void WinSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void WinSalFrame::SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     mnMaxWidth  = nWidth;
     mnMaxHeight = nHeight;
 }
 
-void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
+void WinSalFrame::SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight,
                                                    sal_uInt16 nFlags )
 {
     bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
@@ -1618,7 +1617,7 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
     rRect.Bottom()   = aRect.bottom-1;
 }
 
-void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void WinSalFrame::GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight )
 {
     rWidth  = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;
@@ -1654,10 +1653,10 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     RECT aRect2 = aWinRect;
     AdjustWindowRectEx( &aRect2, GetWindowStyle( mhWnd ),
                     FALSE,     GetWindowExStyle( mhWnd ) );
-    long nTopDeco = abs( aWinRect.top - aRect2.top );
-    long nLeftDeco = abs( aWinRect.left - aRect2.left );
-    long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
-    long nRightDeco = abs( aWinRect.right - aRect2.right );
+    sal_Int32 nTopDeco = abs( aWinRect.top - aRect2.top );
+    sal_Int32 nLeftDeco = abs( aWinRect.left - aRect2.left );
+    sal_Int32 nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
+    sal_Int32 nRightDeco = abs( aWinRect.right - aRect2.right );
 
     // adjust window position/size to fit the screen
     if ( !(pState->mnMask & (WindowStateMask::X | WindowStateMask::Y)) )
@@ -2170,7 +2169,7 @@ void WinSalFrame::CaptureMouse( bool bCapture )
     SendMessageW( mhWnd, nMsg, 0, 0 );
 }
 
-void WinSalFrame::SetPointerPos( long nX, long nY )
+void WinSalFrame::SetPointerPos( sal_Int32 nX, sal_Int32 nY )
 {
     POINT aPt;
     aPt.x = (int)nX;
@@ -2568,9 +2567,9 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Fon
     }
 }
 
-static long ImplA2I( const BYTE* pStr )
+static sal_Int32 ImplA2I( const BYTE* pStr )
 {
-    long    n = 0;
+    sal_Int32    n = 0;
     int     nSign = 1;
 
     if ( *pStr == '-' )
@@ -2597,8 +2596,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aMouseSettings.SetDoubleClickTime( GetDoubleClickTime() );
     aMouseSettings.SetDoubleClickWidth( GetSystemMetrics( SM_CXDOUBLECLK ) );
     aMouseSettings.SetDoubleClickHeight( GetSystemMetrics( SM_CYDOUBLECLK ) );
-    long nDragWidth = GetSystemMetrics( SM_CXDRAG );
-    long nDragHeight = GetSystemMetrics( SM_CYDRAG );
+    sal_Int32 nDragWidth = GetSystemMetrics( SM_CXDRAG );
+    sal_Int32 nDragHeight = GetSystemMetrics( SM_CYDRAG );
     if ( nDragWidth )
         aMouseSettings.SetStartDragWidth( nDragWidth );
     if ( nDragHeight )
@@ -2699,7 +2698,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     if ( aSalShlData.mbWXP )
     {
         // only xp supports a different menu bar color
-        long bFlatMenus = 0;
+        sal_Int32 bFlatMenus = 0;
         SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
         if( bFlatMenus )
         {
@@ -2917,15 +2916,15 @@ void WinSalFrame::BeginSetClipRegion( sal_uLong nRects )
     mbFirstClipRect       = TRUE;
 }
 
-void WinSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void WinSalFrame::UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( ! mpClipRgnData )
         return;
 
     RECT*       pRect = mpNextClipRect;
     RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
-    long        nRight = nX + nWidth;
-    long        nBottom = nY + nHeight;
+    sal_Int32        nRight = nX + nWidth;
+    sal_Int32        nBottom = nY + nHeight;
 
     if ( mbFirstClipRect )
     {
@@ -2996,7 +2995,7 @@ void WinSalFrame::EndSetClipRegion()
     }
 }
 
-static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
+static sal_Int32 ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -3017,7 +3016,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         }
     }
     SalMouseEvent   aMouseEvt;
-    long            nRet;
+    sal_Int32            nRet;
     SalEvent        nEvent = SalEvent::NONE;
     bool            bCall = TRUE;
 
@@ -3162,7 +3161,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     return nRet;
 }
 
-static long ImplHandleMouseActivateMsg( HWND hWnd )
+static sal_Int32 ImplHandleMouseActivateMsg( HWND hWnd )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -3174,7 +3173,7 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
     return pFrame->CallCallback( SalEvent::MouseActivate, nullptr );
 }
 
-static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+static sal_Int32 ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     DBG_ASSERT( nMsg == WM_MOUSEWHEEL ||
                 nMsg == WM_MOUSEHWHEEL,
@@ -3182,7 +3181,7 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 
     ImplSalYieldMutexAcquireWithWait();
 
-    long        nRet = 0;
+    sal_Int32        nRet = 0;
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
@@ -3334,7 +3333,7 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
     return bRet;
 }
 
-static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
+static sal_Int32 ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
     static bool         bIgnoreCharMsg  = FALSE;
@@ -3426,7 +3425,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         aKeyEvt.mnRepeat    = nRepeat;
         nLastChar = 0;
         nLastVKChar = 0;
-        long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+        sal_Int32 nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
         pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
         return nRet;
     }
@@ -3459,7 +3458,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
          nLastChar = 0;
          nLastVKChar = 0;
-         long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+         sal_Int32 nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
          pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
 
          return nRet;
@@ -3579,7 +3578,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnRepeat    = nRepeat;
 
                 bIgnoreCharMsg = bCharPeek ? TRUE : FALSE;
-                long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
+                sal_Int32 nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 // independent part only reacts on keyup but Windows does not send
                 // keyup for VK_HANJA
                 if( aKeyEvt.mnCode == KEY_HANGUL_HANJA )
@@ -3608,7 +3607,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     }
 }
 
-long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
+sal_Int32 ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
                              WPARAM wParam, LPARAM lParam )
 {
     if ( (nMsg == WM_KEYDOWN) || (nMsg == WM_KEYUP) )
@@ -3647,7 +3646,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
 
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
-                long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
+                sal_Int32 nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 return nRet;
             }
             else
@@ -3658,7 +3657,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
     return 0;
 }
 
-long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+sal_Int32 ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -3688,7 +3687,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     aKeyEvt.mnCode     |= nModCode;
     aKeyEvt.mnCharCode  = ImplGetCharCode( pFrame, cKeyCode );
     aKeyEvt.mnRepeat    = nRepeat;
-    long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+    sal_Int32 nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
     pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
     return nRet;
 }
@@ -4030,9 +4029,9 @@ static void ImplHandleCloseMsg( HWND hWnd )
         }
 }
 
-static long ImplHandleShutDownMsg( HWND hWnd )
+static sal_Int32 ImplHandleShutDownMsg( HWND hWnd )
 {
-    long nRet = 0;
+    sal_Int32 nRet = 0;
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, 0, 0, DeferPolicy::Blocked );
     if ( pFrame )
     {
@@ -4657,7 +4656,7 @@ static bool ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM )
     else
         aMenuEvt.mpMenu = nullptr;
 
-    long nRet = pFrame->CallCallback( SalEvent::MenuActivate, &aMenuEvt );
+    sal_Int32 nRet = pFrame->CallCallback( SalEvent::MenuActivate, &aMenuEvt );
     if( nRet )
         nRet = pFrame->CallCallback( SalEvent::MenuDeactivate, &aMenuEvt );
     if( nRet )
@@ -4685,7 +4684,7 @@ static bool ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     if( nFlags & MF_POPUP )
         bByPosition = TRUE;
 
-    long nRet = 0;
+    sal_Int32 nRet = 0;
     if ( hMenu && !pFrame->mLastActivatedhMenu )
     {
         // we never activated a menu (ie, no WM_INITMENUPOPUP has occurred yet)
@@ -4750,7 +4749,7 @@ static bool ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM )
     if ( !pFrame )
         return false;
 
-    long nRet = 0;
+    sal_Int32 nRet = 0;
     if( !HIWORD(wParam) )
     {
         // Menu command
@@ -4823,7 +4822,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
             aKeyEvt.mnCode      = KEY_MENU;
             aKeyEvt.mnCharCode  = 0;
             aKeyEvt.mnRepeat    = 0;
-            long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+            sal_Int32 nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
             pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
             return int(nRet != 0);
         }
@@ -4857,7 +4856,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                     aKeyEvt.mnCode     |= nModCode;
                     aKeyEvt.mnCharCode  = cKeyCode;
                     aKeyEvt.mnRepeat    = 0;
-                    long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+                    sal_Int32 nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
                     pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
                     return int(nRet != 0);
                 }

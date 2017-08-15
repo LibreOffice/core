@@ -39,7 +39,7 @@ public:
 private:
     VclPtr<Dialog>  mpPrevExecuteDlg;
     std::unique_ptr<DialogImpl>     mpDialogImpl;
-    long            mnMousePositioned;
+    sal_Int32       mnMousePositioned;
     bool            mbInExecute;
     bool            mbInClose;
     bool            mbModalMode;
@@ -119,7 +119,7 @@ public:
     // Dialog::Execute replacement API
 public:
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl );
-    long            GetResult() const;
+    sal_Int32       GetResult() const;
 private:
     bool            ImplStartExecuteModal();
     static void     ImplEndExecuteModal();
@@ -128,7 +128,7 @@ public:
     // Dialog::Execute replacement API
 
 
-    void            EndDialog( long nResult = 0 );
+    void            EndDialog( sal_Int32 nResult = 0 );
     static void     EndAllDialogs( vcl::Window const * pParent );
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,

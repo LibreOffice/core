@@ -711,8 +711,8 @@ bool Spline2Poly(tools::Polygon const & rSpln, bool Periodic, tools::Polygon& rP
                 bEnd=t>=tv[i+1];
                 if (bEnd) t=tv[i+1];
                 dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
-                long x=long(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
-                long y=long(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
+                sal_Int32 x=sal_Int32(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
+                sal_Int32 y=sal_Int32(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
                 if (x<MinKoord) x=MinKoord;
                 if (x>MaxKoord) x=MaxKoord;
                 if (y<MinKoord) y=MinKoord;

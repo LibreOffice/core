@@ -477,7 +477,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Rotate( long nAngle10, const Color& rFillColor );
+    bool                    Rotate( sal_Int32 nAngle10, const Color& rFillColor );
 
     /** Create on-off mask from bitmap
 
@@ -595,7 +595,7 @@ public:
     bool                    Vectorize(
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce,
-                                const Link<long,void>* pProgress );
+                                const Link<sal_Int32,void>* pProgress );
 
     /** Change various global color characteristics
 
@@ -684,10 +684,10 @@ public:
     SAL_DLLPRIVATE void     ImplMedianCut(
                                 sal_uLong* pColBuf,
                                 BitmapPalette& rPal,
-                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
-                                long nColors, long nPixels, long& rIndex );
+                                sal_Int32 nR1, sal_Int32 nR2, sal_Int32 nG1, sal_Int32 nG2, sal_Int32 nB1, sal_Int32 nB2,
+                                sal_Int32 nColors, sal_Int32 nPixels, sal_Int32& rIndex );
 
-    SAL_DLLPRIVATE bool     ImplConvolute3( const long* pMatrix );
+    SAL_DLLPRIVATE bool     ImplConvolute3( const sal_Int32* pMatrix );
 
     SAL_DLLPRIVATE bool     ImplMedianFilter();
     SAL_DLLPRIVATE bool     ImplSobelGrey();

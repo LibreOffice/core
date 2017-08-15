@@ -71,7 +71,7 @@ class SdVectorizeDlg : public ModalDialog
     void                AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
                                  long nPosX, long nPosY, long nWidth, long nHeight );
 
-                        DECL_LINK( ProgressHdl, long, void );
+                        DECL_LINK( ProgressHdl, sal_Int32, void );
                         DECL_LINK( ClickPreviewHdl, Button*, void );
                         DECL_LINK( ClickOKHdl, Button*, void );
                         DECL_LINK( ToggleHdl, CheckBox&, void );

@@ -352,7 +352,7 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
         OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, nCharsInLine, 'x');
         OUString aXXX = aBuf.makeStringAndClear();
-        long nWidth = GetTextWidth( aXXX );
+        sal_Int32 nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
         tools::Rectangle aTry1( aTmpPoint, aTmpSize );
         DrawTextFlags nDrawFlags = DrawTextFlags::MultiLine | DrawTextFlags::WordBreak |
@@ -604,7 +604,7 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
     {
         if ( !(nStyle & QuickHelpFlags::NoAutoPos) )
         {
-            long nScreenHeight = aScreenRect.GetHeight();
+            sal_Int32 nScreenHeight = aScreenRect.GetHeight();
             aPos.X() -= 4;
             if ( aPos.Y() > aScreenRect.Top()+nScreenHeight-(nScreenHeight/4) )
                 aPos.Y() -= aSz.Height()+4;

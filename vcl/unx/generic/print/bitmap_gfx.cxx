@@ -493,9 +493,9 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle&
     // image body
     std::unique_ptr<HexEncoder> xEncoder(new HexEncoder (mpPageBody));
 
-    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    for (sal_Int32 nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
-        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        for (sal_Int32 nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nByte = rBitmap.GetPixelGray (nRow, nColumn);
             xEncoder->EncodeByte (nByte);
@@ -596,9 +596,9 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const tools::Rectangle&
 
     std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
 
-    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    for (sal_Int32 nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
-        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        for (sal_Int32 nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nByte = rBitmap.GetPixelGray (nRow, nColumn);
             xEncoder->EncodeByte (nByte);
@@ -614,12 +614,12 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const tools::Rectangle&
 
     std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
 
-    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    for (sal_Int32 nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
-        long      nBitPos = 0;
+        sal_Int32      nBitPos = 0;
         unsigned char nByte   = 0;
 
-        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        for (sal_Int32 nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nBit   = rBitmap.GetPixelIdx (nRow, nColumn);
             nByte |= nBit << (7 - nBitPos);
@@ -645,9 +645,9 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const tools::Rectang
 
     std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
 
-    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    for (sal_Int32 nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
-        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        for (sal_Int32 nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             unsigned char nByte = rBitmap.GetPixelIdx (nRow, nColumn);
             xEncoder->EncodeByte (nByte);
@@ -663,9 +663,9 @@ PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const tools::Recta
 
     std::unique_ptr<ByteEncoder> xEncoder(new LZWEncoder(mpPageBody));
 
-    for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
+    for (sal_Int32 nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
-        for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
+        for (sal_Int32 nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
             PrinterColor aColor = rBitmap.GetPixelRGB (nRow, nColumn);
             xEncoder->EncodeByte (aColor.GetRed());

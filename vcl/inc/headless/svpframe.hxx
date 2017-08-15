@@ -45,10 +45,10 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 #ifndef IOS
     cairo_surface_t*                    m_pSurface;
 #endif
-    long                                m_nMinWidth;
-    long                                m_nMinHeight;
-    long                                m_nMaxWidth;
-    long                                m_nMaxHeight;
+    sal_Int32                           m_nMinWidth;
+    sal_Int32                           m_nMinHeight;
+    sal_Int32                           m_nMaxWidth;
+    sal_Int32                           m_nMaxHeight;
 
     SystemEnvData                       m_aSystemChildData;
 
@@ -78,10 +78,10 @@ public:
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -92,7 +92,7 @@ public:
     virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( sal_Int32 nX, sal_Int32 nY ) override;
     using SalFrame::Flush;
     virtual void                Flush() override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
@@ -110,7 +110,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent ) override;
     virtual void                ResetClipRegion() override;
     virtual void                BeginSetClipRegion( sal_uLong nRects ) override;
-    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                EndSetClipRegion() override;
 
     /*TODO: functional implementation */

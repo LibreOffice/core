@@ -606,7 +606,7 @@ void GDIMetaFile::RemoveAction( size_t nPos )
 bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );
-    long        nMoveX, nMoveY;
+    sal_Int32        nMoveX, nMoveY;
     double      fScaleX, fScaleY;
     bool        bRet;
 
@@ -645,7 +645,7 @@ bool GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
     return bRet;
 }
 
-void GDIMetaFile::Move( long nX, long nY )
+void GDIMetaFile::Move( sal_Int32 nX, sal_Int32 nY )
 {
     const Size      aBaseOffset( nX, nY );
     Size            aOffset( aBaseOffset );
@@ -679,7 +679,7 @@ void GDIMetaFile::Move( long nX, long nY )
     }
 }
 
-void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
+void GDIMetaFile::Move( sal_Int32 nX, sal_Int32 nY, sal_Int32 nDPIX, sal_Int32 nDPIY )
 {
     const Size      aBaseOffset( nX, nY );
     Size            aOffset( aBaseOffset );
@@ -711,8 +711,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             {
                 aOffset = aMapVDev->LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev->GetMapMode() );
-                aOffset.Width() = static_cast<long>(aOffset.Width() * (double)aMap.GetScaleX());
-                aOffset.Height() = static_cast<long>(aOffset.Height() * (double)aMap.GetScaleY());
+                aOffset.Width() = static_cast<sal_Int32>(aOffset.Width() * (double)aMap.GetScaleX());
+                aOffset.Height() = static_cast<sal_Int32>(aOffset.Height() * (double)aMap.GetScaleY());
             }
             else
                 aOffset = OutputDevice::LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev->GetMapMode() );
@@ -783,8 +783,8 @@ void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
 Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
                                         const Size& rOffset, double fSin, double fCos )
 {
-    const long nX = rPt.X() - rRotatePt.X();
-    const long nY = rPt.Y() - rRotatePt.Y();
+    const sal_Int32 nX = rPt.X() - rRotatePt.X();
+    const sal_Int32 nY = rPt.Y() - rRotatePt.Y();
 
     return Point( FRound( fCos * nX + fSin * nY ) + rRotatePt.X() + rOffset.Width(),
                   -FRound( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
@@ -835,7 +835,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
     }
 }
 
-void GDIMetaFile::Rotate( long nAngle10 )
+void GDIMetaFile::Rotate( sal_Int32 nAngle10 )
 {
     nAngle10 %= 3600;
     nAngle10 = ( nAngle10 < 0 ) ? ( 3599 + nAngle10 ) : nAngle10;
@@ -2142,7 +2142,7 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
         const bool bGamma = ( fGamma != 1.0 );
 
         // create mapping table
-        for( long nX = 0; nX < 256; nX++ )
+        for( sal_Int32 nX = 0; nX < 256; nX++ )
         {
             if(!msoBrightness)
             {
@@ -2213,19 +2213,19 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
 
     for( sal_uLong i = 0; i < nColorCount; i++ )
     {
-        long        nVal;
+        sal_Int32        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
-        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal, 0L );
-        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal, 255L );
+        aColParam.pMinR[ i ] = (sal_uLong) std::max( nVal, 0 );
+        aColParam.pMaxR[ i ] = (sal_uLong) std::min( nVal, 255 );
 
         nVal = pSearchColors[ i ].GetGreen();
-        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal, 0L );
-        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal, 255L );
+        aColParam.pMinG[ i ] = (sal_uLong) std::max( nVal, 0 );
+        aColParam.pMaxG[ i ] = (sal_uLong) std::min( nVal, 255 );
 
         nVal = pSearchColors[ i ].GetBlue();
-        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal, 0L );
-        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal, 255L );
+        aColParam.pMinB[ i ] = (sal_uLong) std::max( nVal, 0 );
+        aColParam.pMaxB[ i ] = (sal_uLong) std::min( nVal, 255 );
     }
 
     aColParam.pDstCols = pReplaceColors;
@@ -2820,7 +2820,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
     const Point     aBRPix( aVDev->LogicToPixel( Point( GetPrefSize().Width() - 1, GetPrefSize().Height() - 1 ), GetPrefMapMode() ) );
     Size            aDrawSize( aVDev->LogicToPixel( GetPrefSize(), GetPrefMapMode() ) );
     Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
-    sal_uInt32      nMaximumExtent = 256;
+    sal_Int32       nMaximumExtent = 256;
 
     if (!rBitmapEx.IsEmpty())
         rBitmapEx.SetEmpty();
@@ -2828,10 +2828,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
     // determine size that has the same aspect ratio as image size and
     // fits into the rectangle determined by nMaximumExtent
     if ( aSizePix.Width() && aSizePix.Height()
-      && ( sal::static_int_cast< unsigned long >(aSizePix.Width()) >
-               nMaximumExtent ||
-           sal::static_int_cast< unsigned long >(aSizePix.Height()) >
-               nMaximumExtent ) )
+         && ( aSizePix.Width() > nMaximumExtent || aSizePix.Height() > nMaximumExtent ))
     {
         const Size  aOldSizePix( aSizePix );
         double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();

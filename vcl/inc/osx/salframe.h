@@ -114,10 +114,10 @@ public:
     virtual void                SetMenu( SalMenu* pSalMenu ) override;
     virtual void                DrawMenuBar() override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -128,7 +128,7 @@ public:
     virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( sal_Int32 nX, sal_Int32 nY ) override;
     virtual void                Flush( void ) override;
     virtual void                Flush( const tools::Rectangle& ) override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
@@ -154,7 +154,7 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void BeginSetClipRegion( sal_uLong nRects ) override;
     // add a rectangle to the clip region
-    virtual void UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     // done setting up the clipregion
     virtual void EndSetClipRegion() override;
 

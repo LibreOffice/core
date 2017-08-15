@@ -203,7 +203,7 @@ public:
     virtual SalTimer*           CreateSalTimer() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
-                                                     long &nDX, long &nDY,
+                                                     sal_Int32 &nDX, sal_Int32 &nDY,
                                                      DeviceFormat eFormat,
                                                      const SystemGraphicsData* = nullptr ) override;
     virtual SalBitmap*          CreateSalBitmap() override;

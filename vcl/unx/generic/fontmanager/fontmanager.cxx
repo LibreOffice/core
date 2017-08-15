@@ -999,7 +999,7 @@ bool PrintFontManager::createFontSubset(
         }
         else
         {
-            SAL_WARN_IF( (pGlyphIds[i] & 0x007f0000), "vcl", "overlong glyph id" );
+            SAL_WARN_IF( (pGlyphIds[i] & 0x007f0000), "vcl", "oversal_Int32 glyph id" );
             SAL_WARN_IF( (int)pNewEncoding[i] >= nGlyphs, "vcl", "encoding wrong" );
             SAL_WARN_IF( pEnc[pNewEncoding[i]] != 0 || pGID[pNewEncoding[i]] != 0, "vcl", "duplicate encoded glyph" );
             pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
@@ -1031,7 +1031,7 @@ bool PrintFontManager::createFontSubset(
     if( GetSfntTable( pTTFont, O_CFF, &pCffBytes, &nCffLength ) )
     {
         rInfo.LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength );
-#if 1 // TODO: remove 16bit->long conversion when related methods handle non-16bit glyphids
+#if 1 // TODO: remove 16bit->sal_Int32 conversion when related methods handle non-16bit glyphids
         sal_GlyphId aRequestedGlyphIds[256];
         for( int i = 0; i < nGlyphs; ++i )
             aRequestedGlyphIds[i] = pGID[i];

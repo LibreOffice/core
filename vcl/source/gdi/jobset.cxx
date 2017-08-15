@@ -125,12 +125,12 @@ void ImplJobSetup::SetPaperFormat(Paper ePaperFormat)
     mePaperFormat = ePaperFormat;
 }
 
-void ImplJobSetup::SetPaperWidth(long nPaperWidth)
+void ImplJobSetup::SetPaperWidth(sal_Int32 nPaperWidth)
 {
     mnPaperWidth = nPaperWidth;
 }
 
-void ImplJobSetup::SetPaperHeight(long nPaperHeight)
+void ImplJobSetup::SetPaperHeight(sal_Int32 nPaperHeight)
 {
     mnPaperHeight = nPaperHeight;
 }
@@ -271,8 +271,8 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 rJobData.SetDuplexMode( DuplexMode::Unknown );
                 rJobData.SetPaperBin( SVBT16ToShort( pOldJobData->nPaperBin ) );
                 rJobData.SetPaperFormat( (Paper)SVBT16ToShort( pOldJobData->nPaperFormat ) );
-                rJobData.SetPaperWidth( (long)SVBT32ToUInt32( pOldJobData->nPaperWidth ) );
-                rJobData.SetPaperHeight( (long)SVBT32ToUInt32( pOldJobData->nPaperHeight ) );
+                rJobData.SetPaperWidth( (sal_Int32)SVBT32ToUInt32( pOldJobData->nPaperWidth ) );
+                rJobData.SetPaperHeight( (sal_Int32)SVBT32ToUInt32( pOldJobData->nPaperHeight ) );
                 if ( rJobData.GetDriverDataLen() )
                 {
                     const sal_uInt8* pDriverData = reinterpret_cast<sal_uInt8*>(pOldJobData) + nOldJobDataSize;

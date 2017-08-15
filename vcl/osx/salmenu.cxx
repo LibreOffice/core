@@ -878,11 +878,11 @@ tools::Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, S
     aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
     aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
 
-    return tools::Rectangle( Point(static_cast<long int>(aRect.origin.x),
-                static_cast<long int>(aRect.origin.y)
+    return tools::Rectangle( Point(static_cast<sal_Int32 int>(aRect.origin.x),
+                static_cast<sal_Int32 int>(aRect.origin.y)
                 ),
-              Size( static_cast<long int>(aRect.size.width),
-                static_cast<long int>(aRect.size.height)
+              Size( static_cast<sal_Int32 int>(aRect.size.width),
+                static_cast<sal_Int32 int>(aRect.size.height)
               )
             );
 }

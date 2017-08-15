@@ -82,7 +82,7 @@ public:
         HeaderBar &rBar = GetTheHeaderBar();
         if (rBar.GetItemCount() < 4)
             return;
-        long nCheckWidth = std::max(GetControlColumnWidth() + 12,
+        long nCheckWidth = std::max(sal_Int32(GetControlColumnWidth() + 12),
             rBar.LogicToPixel(Size(15, 0), MapUnit::MapAppFont).Width());
         long nVersionWidth = 12 +
             std::max(rBar.GetTextWidth(rBar.GetItemText(3)),
@@ -91,7 +91,7 @@ public:
             std::max(rBar.GetTextWidth(rBar.GetItemText(4)),
             GetTextWidth(m_sAccessibilityText));
         long nVendorWidth =
-            std::max(GetSizePixel().Width() - (nCheckWidth + nVersionWidth + nFeatureWidth),
+            std::max(sal_Int32(GetSizePixel().Width() - (nCheckWidth + nVersionWidth + nFeatureWidth)),
             6 + std::max(rBar.GetTextWidth(rBar.GetItemText(2)),
             GetTextWidth("Sun Microsystems Inc.")));
         long aStaticTabs[]= { 4, 0, 0, 0, 0, 0 };

@@ -83,14 +83,14 @@ class VCL_PLUGIN_PUBLIC WindowStateData
 {
 private:
     WindowStateMask     mnValidMask;
-    int                 mnX;
-    int                 mnY;
-    unsigned int        mnWidth;
-    unsigned int        mnHeight;
-    int                 mnMaximizedX;
-    int                 mnMaximizedY;
-    unsigned int        mnMaximizedWidth;
-    unsigned int        mnMaximizedHeight;
+    sal_Int32           mnX;
+    sal_Int32           mnY;
+    sal_Int32           mnWidth;
+    sal_Int32           mnHeight;
+    sal_Int32           mnMaximizedX;
+    sal_Int32           mnMaximizedY;
+    sal_Int32           mnMaximizedWidth;
+    sal_Int32           mnMaximizedHeight;
     WindowStateState    mnState;
 
 public:
@@ -111,24 +111,24 @@ public:
     void        SetMask( WindowStateMask nValidMask ) { mnValidMask = nValidMask; }
     WindowStateMask GetMask() const { return mnValidMask; }
 
-    void         SetX( int nX ) { mnX = nX; }
-    int          GetX() const { return mnX; }
-    void         SetY( int nY ) { mnY = nY; }
-    int          GetY() const { return mnY; }
-    void         SetWidth( unsigned int nWidth ) { mnWidth = nWidth; }
-    unsigned int GetWidth() const { return mnWidth; }
-    void         SetHeight( unsigned int nHeight ) { mnHeight = nHeight; }
-    unsigned int GetHeight() const { return mnHeight; }
+    void         SetX( sal_Int32 nX ) { mnX = nX; }
+    sal_Int32    GetX() const { return mnX; }
+    void         SetY( sal_Int32 nY ) { mnY = nY; }
+    sal_Int32    GetY() const { return mnY; }
+    void         SetWidth( sal_Int32 nWidth ) { mnWidth = nWidth; }
+    sal_Int32    GetWidth() const { return mnWidth; }
+    void         SetHeight( sal_Int32 nHeight ) { mnHeight = nHeight; }
+    sal_Int32    GetHeight() const { return mnHeight; }
     void         SetState( WindowStateState nState ) { mnState = nState; }
     WindowStateState GetState() const { return mnState; }
-    void         SetMaximizedX( int nRX ) { mnMaximizedX = nRX; }
-    int          GetMaximizedX() const { return mnMaximizedX; }
-    void         SetMaximizedY( int nRY ) { mnMaximizedY = nRY; }
-    int          GetMaximizedY() const { return mnMaximizedY; }
-    void         SetMaximizedWidth( unsigned int nRWidth ) { mnMaximizedWidth = nRWidth; }
-    unsigned int GetMaximizedWidth() const { return mnMaximizedWidth; }
-    void         SetMaximizedHeight( unsigned int nRHeight ) { mnMaximizedHeight = nRHeight; }
-    unsigned int GetMaximizedHeight() const { return mnMaximizedHeight; }
+    void         SetMaximizedX( sal_Int32 nRX ) { mnMaximizedX = nRX; }
+    sal_Int32    GetMaximizedX() const { return mnMaximizedX; }
+    void         SetMaximizedY( sal_Int32 nRY ) { mnMaximizedY = nRY; }
+    sal_Int32    GetMaximizedY() const { return mnMaximizedY; }
+    void         SetMaximizedWidth( sal_Int32 nRWidth ) { mnMaximizedWidth = nRWidth; }
+    sal_Int32    GetMaximizedWidth() const { return mnMaximizedWidth; }
+    void         SetMaximizedHeight( int nRHeight ) { mnMaximizedHeight = nRHeight; }
+    sal_Int32    GetMaximizedHeight() const { return mnMaximizedHeight; }
 };
 
 
@@ -175,7 +175,7 @@ public:
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDeferredInit; }
 
 private:
-    SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window const * i_pConfigureWin );
+    SAL_DLLPRIVATE void ImplMoveToScreen( sal_Int32& io_rX, sal_Int32& io_rY, sal_Int32 i_nWidth, sal_Int32 i_nHeight, vcl::Window const * i_pConfigureWin );
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
     DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Timer*, void );
 
