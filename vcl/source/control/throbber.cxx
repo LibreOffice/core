@@ -112,7 +112,7 @@ void Throbber::initImages()
         size_t nPreferredSet = 0;
         if ( aImageSets.size() > 1 )
         {
-            long nMinimalDistance = ::std::numeric_limits< long >::max();
+            sal_Int32 nMinimalDistance = ::std::numeric_limits< sal_Int32 >::max();
             for (   ::std::vector< ::std::vector< Image > >::const_iterator check = aImageSets.begin();
                     check != aImageSets.end();
                     ++check

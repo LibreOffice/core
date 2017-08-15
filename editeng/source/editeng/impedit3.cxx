@@ -156,7 +156,7 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                               const Point& rPnt,
                               size_t nIndex,
                               size_t nMaxEnd,
-                              const long* pDXArray,
+                              const sal_Int32* pDXArray,
                               WrongList const * pWrongs,
                               short nOrientation,
                               const Point& rOrigin,
@@ -403,7 +403,7 @@ void ImpEditEngine::FormatDoc()
             if ( aInvalidRect.IsEmpty() )
             {
                 // For Paperwidth 0 (AutoPageSize) it would otherwise be Empty()...
-                long nWidth = std::max( (long)1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
+                long nWidth = std::max( 1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
                 Range aInvRange( GetInvalidYOffsets( pParaPortion ) );
                 aInvalidRect = tools::Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
@@ -732,7 +732,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( (sal_Int32) GetXValue( aBulletArea.Right() ) );
+            pParaPortion->SetBulletX( (sal_Int32) GetXValue( (long)aBulletArea.Right() ) );
         else
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
     }
@@ -750,7 +750,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     ImplInitLayoutMode( GetRefDevice(), nPara, nIndex );
 
     bool bCalcCharPositions = true;
-    std::unique_ptr<long[]> pBuf(new long[ pNode->Len() ]);
+    std::unique_ptr<sal_Int32[]> pBuf(new sal_Int32[ pNode->Len() ]);
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
     TabInfo aCurrentTab;
@@ -1141,7 +1141,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
                 {
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                    long* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
+                    sal_Int32* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
                     bCompressedChars |= ImplCalcAsianCompression(
                         pNode, pPortion, nTmpPos, pDXArray, 10000, false);
                 }
@@ -1312,7 +1312,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break position...
-                long* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
+                sal_Int32* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
                 ImplCalcAsianCompression(
                     pNode, pPortion, nPortionStart, pDXArray, 10000, true);
             }
@@ -1651,7 +1651,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( (sal_Int32) GetXValue( aBulletArea.Right() ) );
+            pParaPortion->SetBulletX( (sal_Int32) GetXValue( (long)aBulletArea.Right() ) );
         else
             pParaPortion->SetBulletX( 0 ); // If Bullet set incorrectly.
         if ( pParaPortion->GetBulletX() > nStartX )
@@ -3122,8 +3122,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                const long* pDXArray = nullptr;
-                                std::unique_ptr<long[]> pTmpDXArray;
+                                const sal_Int32* pDXArray = nullptr;
+                                std::unique_ptr<sal_Int32[]> pTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
                                 {
@@ -3300,7 +3300,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         }
                                     }
 
-                                    pTmpDXArray.reset(new long[ aText.getLength() ]);
+                                    pTmpDXArray.reset(new sal_Int32[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
                                     vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
@@ -3330,7 +3330,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     nTextLen = aText.getLength();
 
                                     // crash when accessing 0 pointer in pDXArray
-                                    pTmpDXArray.reset(new long[ aText.getLength() ]);
+                                    pTmpDXArray.reset(new sal_Int32[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
                                     vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
@@ -3977,8 +3977,8 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     {
         // in this case one can redraw directly without invalidating the
         // Portions
-        sal_Int32 nFirstPortion = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
-        sal_Int32 nLastPortion = std::max( static_cast<sal_Int32>(aOldPositions.Max()), nNewPos );
+        sal_Int32 nFirstPortion = std::min( aOldPositions.Min(), nNewPos );
+        sal_Int32 nLastPortion = std::max( aOldPositions.Max(), nNewPos );
 
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
@@ -3996,7 +3996,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     else
     {
         // redraw from the upper invalid position
-        sal_Int32 nFirstInvPara = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
+        sal_Int32 nFirstInvPara = std::min( aOldPositions.Min(), nNewPos );
         InvalidateFromParagraph( nFirstInvPara );
     }
     return aSel;
@@ -4410,7 +4410,7 @@ Color ImpEditEngine::GetAutoColor() const
 
 bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                                              TextPortion* pTextPortion, sal_Int32 nStartPos,
-                                             long* pDXArray, sal_uInt16 n100thPercentFromMax,
+                                             sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax,
                                              bool bManipulateDXArray)
 {
     DBG_ASSERT( GetAsianCompressionMode() != CharCompressType::NONE, "ImplCalcAsianCompression - Why?" );
@@ -4577,7 +4577,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
                 sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
                 sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-                long* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
+                sal_Int32* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
                 if ( pTP->GetExtraInfos()->pOrgDXArray )
                     memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
                 ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (sal_uInt16)nCompressPercent, true );

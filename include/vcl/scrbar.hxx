@@ -41,29 +41,29 @@ struct ImplScrollBarData;
 class VCL_DLLPUBLIC ScrollBar : public Control
 {
 private:
-    tools::Rectangle       maBtn1Rect;
-    tools::Rectangle       maBtn2Rect;
-    tools::Rectangle       maPage1Rect;
-    tools::Rectangle       maPage2Rect;
-    tools::Rectangle       maThumbRect;
-    tools::Rectangle       maTrackRect;
+    tools::Rectangle   maBtn1Rect;
+    tools::Rectangle   maBtn2Rect;
+    tools::Rectangle   maPage1Rect;
+    tools::Rectangle   maPage2Rect;
+    tools::Rectangle   maThumbRect;
+    tools::Rectangle   maTrackRect;
     ImplScrollBarData* mpData;
-    long            mnStartPos;
-    long            mnMouseOff;
-    long            mnThumbPixRange;
-    long            mnThumbPixPos;
-    long            mnThumbPixSize;
-    long            mnMinRange;
-    long            mnMaxRange;
-    long            mnThumbPos;
-    long            mnVisibleSize;
-    long            mnLineSize;
-    long            mnPageSize;
-    long            mnDelta;
-    sal_uInt16      mnStateFlags;
-    ScrollType      meScrollType;
-    bool            mbCalcSize;
-    bool            mbFullDrag;
+    sal_Int32          mnStartPos;
+    sal_Int32          mnMouseOff;
+    sal_Int32          mnThumbPixRange;
+    sal_Int32          mnThumbPixPos;
+    sal_Int32          mnThumbPixSize;
+    sal_Int32          mnMinRange;
+    sal_Int32          mnMaxRange;
+    sal_Int32          mnThumbPos;
+    sal_Int32          mnVisibleSize;
+    sal_Int32          mnLineSize;
+    sal_Int32          mnPageSize;
+    sal_Int32          mnDelta;
+    sal_uInt16         mnStateFlags;
+    ScrollType         meScrollType;
+    bool               mbCalcSize;
+    bool               mbFullDrag;
     Link<ScrollBar*,void>       maScrollHdl;
     Link<ScrollBar*,void>       maEndScrollHdl;
 
@@ -72,13 +72,13 @@ private:
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplUpdateRects( bool bUpdate = true );
-    SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
-    SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
+    SAL_DLLPRIVATE sal_Int32    ImplCalcThumbPos( sal_Int32 nPixPos );
+    SAL_DLLPRIVATE sal_Int32    ImplCalcThumbPosPix( sal_Int32 nPos );
     SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
     SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     using Window::ImplScroll;
-    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, bool bCallEndScroll );
-    SAL_DLLPRIVATE long         ImplDoAction( bool bCallEndScroll );
+    SAL_DLLPRIVATE sal_Int32    ImplScroll( sal_Int32 nNewPos, bool bCallEndScroll );
+    SAL_DLLPRIVATE sal_Int32    ImplDoAction( bool bCallEndScroll );
     SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE void         ImplInvert();
     SAL_DLLPRIVATE bool         ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
@@ -108,27 +108,27 @@ public:
     void            Scroll();
     virtual void    EndScroll();
 
-    long            DoScroll( long nNewPos );
-    long            DoScrollAction( ScrollType eScrollType );
+    sal_Int32       DoScroll( sal_Int32 nNewPos );
+    sal_Int32       DoScrollAction( ScrollType eScrollType );
 
     void            EnableDrag() { mbFullDrag = true; }
 
-    void            SetRangeMin( long nNewRange );
-    long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax( long nNewRange );
-    long            GetRangeMax() const { return mnMaxRange; }
+    void            SetRangeMin( sal_Int32 nNewRange );
+    sal_Int32       GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax( sal_Int32 nNewRange );
+    sal_Int32       GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
     Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
-    void            SetThumbPos( long nThumbPos );
-    long            GetThumbPos() const { return mnThumbPos; }
-    void            SetLineSize( long nNewSize ) { mnLineSize = nNewSize; }
-    long            GetLineSize() const { return mnLineSize; }
-    void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
-    long            GetPageSize() const { return mnPageSize; }
-    void            SetVisibleSize( long nNewSize );
-    long            GetVisibleSize() const { return mnVisibleSize; }
+    void            SetThumbPos( sal_Int32 nThumbPos );
+    sal_Int32       GetThumbPos() const { return mnThumbPos; }
+    void            SetLineSize( sal_Int32 nNewSize ) { mnLineSize = nNewSize; }
+    sal_Int32       GetLineSize() const { return mnLineSize; }
+    void            SetPageSize( sal_Int32 nNewSize ) { mnPageSize = nNewSize; }
+    sal_Int32       GetPageSize() const { return mnPageSize; }
+    void            SetVisibleSize( sal_Int32 nNewSize );
+    sal_Int32       GetVisibleSize() const { return mnVisibleSize; }
 
-    long            GetDelta() const { return mnDelta; }
+    sal_Int32       GetDelta() const { return mnDelta; }
     ScrollType      GetType() const { return meScrollType; }
 
     void            SetScrollHdl( const Link<ScrollBar*,void>& rLink ) { maScrollHdl = rLink; }

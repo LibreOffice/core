@@ -47,10 +47,10 @@ public:
     // override all pure virtual methods
     virtual void                    ResetClipRegion() override;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) override;
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    EndSetClipRegion() override;
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    Show( bool bVisible ) override;
 
     virtual void                    SetForwardKey( bool bEnable ) override;

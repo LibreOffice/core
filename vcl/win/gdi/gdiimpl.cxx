@@ -289,7 +289,7 @@ void WinSalGraphicsImpl::freeResources()
 {
 }
 
-bool WinSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uLong)
+bool WinSalGraphicsImpl::drawEPS(sal_Int32, sal_Int32, sal_Int32, sal_Int32, void*, sal_uLong)
 {
     return false;
 }
@@ -374,9 +374,9 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
     }
 }
 
-void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
-                            long nSrcX, long nSrcY,
-                            long nSrcWidth, long nSrcHeight,
+void WinSalGraphicsImpl::copyArea( sal_Int32 nDestX, sal_Int32 nDestY,
+                            sal_Int32 nSrcX, sal_Int32 nSrcY,
+                            sal_Int32 nSrcWidth, sal_Int32 nSrcHeight,
                             bool bWindowInvalidate )
 {
     bool    bRestoreClipRgn = false;
@@ -791,8 +791,8 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     }
 }
 
-bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool WinSalGraphicsImpl::drawAlphaRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth,
+                                    sal_Int32 nHeight, sal_uInt8 nTransparency )
 {
     if( mbPen || !mbBrush || mbXORMode )
         return false; // can only perform solid fills without XOR.
@@ -852,7 +852,7 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
     DeleteBrush( hMaskBrush );
 }
 
-SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap* WinSalGraphicsImpl::getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nDX, sal_Int32 nDY )
 {
     SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No ::GetBitmap() from printer possible!" );
 
@@ -888,7 +888,7 @@ SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
     return pSalBitmap;
 }
 
-SalColor WinSalGraphicsImpl::getPixel( long nX, long nY )
+SalColor WinSalGraphicsImpl::getPixel( sal_Int32 nX, sal_Int32 nY )
 {
     COLORREF aWinCol = ::GetPixel( mrParent.getHDC(), (int) nX, (int) nY );
 
@@ -900,7 +900,7 @@ SalColor WinSalGraphicsImpl::getPixel( long nX, long nY )
                               GetBValue( aWinCol ) );
 }
 
-void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void WinSalGraphicsImpl::invert( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, SalInvert nFlags )
 {
     if ( nFlags & SalInvert::TrackFrame )
     {
@@ -1012,7 +1012,7 @@ sal_uInt16 WinSalGraphicsImpl::GetBitCount() const
     return (sal_uInt16)GetDeviceCaps( mrParent.getHDC(), BITSPIXEL );
 }
 
-long WinSalGraphicsImpl::GetGraphicsWidth() const
+sal_Int32 WinSalGraphicsImpl::GetGraphicsWidth() const
 {
     if( mrParent.gethWnd() && IsWindow( mrParent.gethWnd() ) )
     {
@@ -1230,13 +1230,13 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
         for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
-            const long nW(aRectIter->GetWidth());
-            const long nH(aRectIter->GetHeight());
+            const sal_Int32 nW(aRectIter->GetWidth());
+            const sal_Int32 nH(aRectIter->GetHeight());
 
             if(nW && nH)
             {
-                const long nRight(aRectIter->Left() + nW);
-                const long nBottom(aRectIter->Top() + nH);
+                const sal_Int32 nRight(aRectIter->Left() + nW);
+                const sal_Int32 nBottom(aRectIter->Top() + nH);
 
                 if(bFirstClipRect)
                 {
@@ -1480,15 +1480,15 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
             if ( 24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount )
             {
                 BYTE* pTmp = pSalData->mpDitherDIBData;
-                long* pDitherDiff = pSalData->mpDitherDiff;
+                sal_Int32* pDitherDiff = pSalData->mpDitherDiff;
                 BYTE* pDitherLow = pSalData->mpDitherLow;
                 BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
-                for( long nY = 0L; nY < 8L; nY++ )
+                for( sal_Int32 nY = 0L; nY < 8L; nY++ )
                 {
-                    for( long nX = 0L; nX < 8L; nX++ )
+                    for( sal_Int32 nX = 0L; nX < 8L; nX++ )
                     {
-                        const long nThres = aOrdDither16Bit[ nY ][ nX ];
+                        const sal_Int32 nThres = aOrdDither16Bit[ nY ][ nX ];
                         *pTmp++ = DMAP( nBlue, nThres );
                         *pTmp++ = DMAP( nGreen, nThres );
                         *pTmp++ = DMAP( nRed, nThres );
@@ -1507,15 +1507,15 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
             else
             {
                 BYTE* pTmp = pSalData->mpDitherDIBData;
-                long* pDitherDiff = pSalData->mpDitherDiff;
+                sal_Int32* pDitherDiff = pSalData->mpDitherDiff;
                 BYTE* pDitherLow = pSalData->mpDitherLow;
                 BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
-                for ( long nY = 0L; nY < 8L; nY++ )
+                for ( sal_Int32 nY = 0L; nY < 8L; nY++ )
                 {
-                    for ( long nX = 0L; nX < 8L; nX++ )
+                    for ( sal_Int32 nX = 0L; nX < 8L; nX++ )
                     {
-                        const long nThres = aOrdDither8Bit[ nY ][ nX ];
+                        const sal_Int32 nThres = aOrdDither8Bit[ nY ][ nX ];
                         *pTmp = DMAP( nRed, nThres ) + DMAP( nGreen, nThres ) * 6 + DMAP( nBlue, nThres ) * 36;
                         pTmp++;
                     }
@@ -1563,7 +1563,7 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     SetFillColor( ImplGetROPSalColor( nROPColor ) );
 }
 
-void WinSalGraphicsImpl::drawPixel( long nX, long nY )
+void WinSalGraphicsImpl::drawPixel( sal_Int32 nX, sal_Int32 nY )
 {
     if ( mbXORMode )
     {
@@ -1577,7 +1577,7 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY )
         SetPixel( mrParent.getHDC(), (int)nX, (int)nY, mnPenColor );
 }
 
-void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
+void WinSalGraphicsImpl::drawPixel( sal_Int32 nX, sal_Int32 nY, SalColor nSalColor )
 {
     COLORREF nCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                 SALCOLOR_GREEN( nSalColor ),
@@ -1600,7 +1600,7 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
         ::SetPixel( mrParent.getHDC(), (int)nX, (int)nY, nCol );
 }
 
-void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void WinSalGraphicsImpl::drawLine( sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 )
 {
     MoveToEx( mrParent.getHDC(), (int)nX1, (int)nY1, nullptr );
 
@@ -1640,7 +1640,7 @@ void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
     }
 }
 
-void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
+void WinSalGraphicsImpl::drawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if ( !mbPen )
     {
@@ -2148,10 +2148,10 @@ void paintToGdiPlus(
 
 void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
-    long rSrcWidth,
-    long rDestWidth,
-    long rSrcHeight,
-    long rDestHeight)
+    sal_Int32 rSrcWidth,
+    sal_Int32 rDestWidth,
+    sal_Int32 rSrcHeight,
+    sal_Int32 rDestHeight)
 {
     const bool bSameWidth(rSrcWidth == rDestWidth);
     const bool bSameHeight(rSrcHeight == rDestHeight);
@@ -2275,13 +2275,13 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
 
     if(aARGB.get())
     {
-        const long nSrcWidth(aARGB->GetWidth());
-        const long nSrcHeight(aARGB->GetHeight());
+        const sal_Int32 nSrcWidth(aARGB->GetWidth());
+        const sal_Int32 nSrcHeight(aARGB->GetHeight());
 
         if(nSrcWidth && nSrcHeight)
         {
-            const long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
-            const long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+            const sal_Int32 nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
+            const sal_Int32 nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
 
             if(nDestWidth && nDestHeight)
             {

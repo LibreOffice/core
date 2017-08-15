@@ -533,18 +533,18 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
 
 void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer, const bool bFlip)
 {
-    long nBmpWidth = rBitmapEx.GetSizePixel().Width();
-    long nBmpHeight = rBitmapEx.GetSizePixel().Height();
+    sal_Int32 nBmpWidth = rBitmapEx.GetSizePixel().Width();
+    sal_Int32 nBmpHeight = rBitmapEx.GetSizePixel().Height();
 
     Bitmap aBitmap (rBitmapEx.GetBitmap());
     AlphaMask aAlpha (rBitmapEx.GetAlpha());
     Bitmap::ScopedReadAccess pReadAccces( aBitmap );
     AlphaMask::ScopedReadAccess pAlphaReadAccess( aAlpha );
     size_t i = 0;
-    for (long ny = (bFlip ? nBmpHeight - 1 : 0); (bFlip ? ny >= 0 : ny < nBmpHeight); (bFlip ? ny-- : ny++))
+    for (sal_Int32 ny = (bFlip ? nBmpHeight - 1 : 0); (bFlip ? ny >= 0 : ny < nBmpHeight); (bFlip ? ny-- : ny++))
     {
         Scanline pAScan = pAlphaReadAccess ? pAlphaReadAccess->GetScanline(ny) : nullptr;
-        for(long nx = 0; nx < nBmpWidth; nx++)
+        for(sal_Int32 nx = 0; nx < nBmpWidth; nx++)
         {
             BitmapColor aCol = pReadAccces->GetColor( ny, nx );
             o_pRGBABuffer[i++] = aCol.GetRed();
@@ -555,7 +555,7 @@ void OpenGLHelper::ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx,
     }
 }
 
-void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)
+void OpenGLHelper::renderToFile(sal_Int32 nWidth, sal_Int32 nHeight, const OUString& rFileName)
 {
     OpenGLZone aZone;
 
@@ -574,7 +574,7 @@ void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFile
     CHECK_GL_ERROR();
 }
 
-BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
+BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, sal_Int32 nWidth, sal_Int32 nHeight)
 {
     assert(pBuffer);
     Bitmap aBitmap( Size(nWidth, nHeight), 24 );
@@ -585,11 +585,11 @@ BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffe
         AlphaMask::ScopedWriteAccess pAlphaWriteAccess( aAlpha );
 
         size_t nCurPos = 0;
-        for( long y = 0; y < nHeight; ++y)
+        for( sal_Int32 y = 0; y < nHeight; ++y)
         {
             Scanline pScan = pWriteAccess->GetScanline(y);
             Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
-            for( long x = 0; x < nWidth; ++x )
+            for( sal_Int32 x = 0; x < nWidth; ++x )
             {
                 *pScan++ = pBuffer[nCurPos];
                 *pScan++ = pBuffer[nCurPos+1];
@@ -663,7 +663,7 @@ std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
     return rStrm;
 }
 
-void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
+void OpenGLHelper::createFramebuffer(sal_Int32 nWidth, sal_Int32 nHeight, GLuint& nFramebufferId,
         GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId, bool bRenderbuffer)
 {
     OpenGLZone aZone;

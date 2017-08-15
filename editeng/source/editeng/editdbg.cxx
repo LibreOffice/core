@@ -212,7 +212,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             MapMode aPntMap( MapUnit::MapPoint );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
             aDebStr.append(" Points=");
-            aDebStr.append(static_cast<sal_Int32>(aSz.Height()));
+            aDebStr.append(aSz.Height());
         }
         break;
         case EE_CHAR_FONTWIDTH:
@@ -282,7 +282,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             MapMode aPntMap( MapUnit::MapPoint );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
             aDebStr.append(" Points=");
-            aDebStr.append(static_cast<sal_Int32>(aSz.Height()));
+            aDebStr.append(aSz.Height());
         }
         break;
         case EE_CHAR_WLM:
@@ -389,7 +389,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
             aPortionStr.append(' ');
             aPortionStr.append(rPortion.GetLen());
             aPortionStr.append('(');
-            aPortionStr.append(static_cast<sal_Int32>(rPortion.GetSize().Width()));
+            aPortionStr.append(rPortion.GetSize().Width());
             aPortionStr.append(')');
             aPortionStr.append('[');
             aPortionStr.append(static_cast<sal_Int32>(rPortion.GetKind()));
@@ -456,9 +456,9 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     fprintf( fp, "\n================================================================================" );
     fprintf( fp, "\nControl: %x", unsigned( pEE->GetControlWord() ) );
     fprintf( fp, "\nRefMapMode: %i", int( pEE->pImpEditEngine->pRefDev->GetMapMode().GetMapUnit() ) );
-    fprintf( fp, "\nPaperSize: %li x %li", pEE->GetPaperSize().Width(), pEE->GetPaperSize().Height() );
-    fprintf( fp, "\nMaxAutoPaperSize: %li x %li", pEE->GetMaxAutoPaperSize().Width(), pEE->GetMaxAutoPaperSize().Height() );
-    fprintf( fp, "\nMinAutoPaperSize: %li x %li", pEE->GetMinAutoPaperSize().Width(), pEE->GetMinAutoPaperSize().Height() );
+    fprintf( fp, "\nPaperSize: %" SAL_PRIdINT32 " x %" SAL_PRIdINT32, pEE->GetPaperSize().Width(), pEE->GetPaperSize().Height() );
+    fprintf( fp, "\nMaxAutoPaperSize: %" SAL_PRIdINT32 " x %" SAL_PRIdINT32, pEE->GetMaxAutoPaperSize().Width(), pEE->GetMaxAutoPaperSize().Height() );
+    fprintf( fp, "\nMinAutoPaperSize: %" SAL_PRIdINT32 " x %" SAL_PRIdINT32, pEE->GetMinAutoPaperSize().Width(), pEE->GetMinAutoPaperSize().Height() );
     fprintf( fp, "\nUpdate: %i", pEE->GetUpdateMode() );
     fprintf( fp, "\nNumber of Views: %" SAL_PRI_SIZET "i", pEE->GetViewCount() );
     for ( size_t nView = 0; nView < pEE->GetViewCount(); nView++ )
@@ -467,9 +467,9 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         DBG_ASSERT( pV, "View not found!" );
         fprintf( fp, "\nView %zu: Focus=%i", nView, pV->GetWindow()->HasFocus() );
         tools::Rectangle aR( pV->GetOutputArea() );
-        fprintf( fp, "\n  OutputArea: nX=%li, nY=%li, dX=%li, dY=%li, MapMode = %i", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() , int( pV->GetWindow()->GetMapMode().GetMapUnit() ) );
+        fprintf( fp, "\n  OutputArea: nX=%" SAL_PRIdINT32 ", nY=%" SAL_PRIdINT32 ", dX=%" SAL_PRIdINT32 ", dY=%" SAL_PRIdINT32 ", MapMode = %i", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() , int( pV->GetWindow()->GetMapMode().GetMapUnit() ) );
         aR = pV->GetVisArea();
-        fprintf( fp, "\n  VisArea: nX=%li, nY=%li, dX=%li, dY=%li", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() );
+        fprintf( fp, "\n  VisArea: nX=%" SAL_PRIdINT32 ", nY=%" SAL_PRIdINT32 ", dX=%" SAL_PRIdINT32 ", dY=%" SAL_PRIdINT32, aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() );
         ESelection aSel = pV->GetSelection();
         fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ", End=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
     }

@@ -1471,8 +1471,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                                           aRectFnSet.GetLeft(aTabRect);
                     const SwTwips nTop  = aRectFnSet.GetTop(aTabRect);
 
-                    SwTwips& rPointX = aRectFnSet.IsVert() ? aPt.Y() : aPt.X();
-                    SwTwips& rPointY = aRectFnSet.IsVert() ? aPt.X() : aPt.Y();
+                    sal_Int32& rPointX = aRectFnSet.IsVert() ? aPt.Y() : aPt.X();
+                    sal_Int32& rPointY = aRectFnSet.IsVert() ? aPt.X() : aPt.Y();
 
                     const SwTwips nXDiff = aRectFnSet.XDiff( nLeft, rPointX ) * ( bRTL ? (-1) : 1 );
                     const SwTwips nYDiff = aRectFnSet.YDiff( nTop, rPointY );

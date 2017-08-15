@@ -36,7 +36,7 @@
 #include <opengl/x11/salvd.hxx>
 
 SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
-        long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
+        sal_Int32 &nDX, sal_Int32 &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         X11SalGraphics* pNewGraphics)
 {
     assert(pNewGraphics);
@@ -47,7 +47,7 @@ SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGr
 }
 
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
-        long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
+        sal_Int32 &nDX, sal_Int32 &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
     return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, new X11SalGraphics());
 }
@@ -88,7 +88,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     mxImpl->Init();
 }
 
-X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
+X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, sal_Int32 &nDX, sal_Int32 &nDY,
                                          DeviceFormat eFormat, const SystemGraphicsData *pData,
                                          X11SalGraphics* pNewGraphics) :
     pGraphics_(pNewGraphics),
@@ -128,8 +128,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
                 break;
             nScreen++;
         }
-        nDX_ = (long)w;
-        nDY_ = (long)h;
+        nDX_ = (sal_Int32)w;
+        nDY_ = (sal_Int32)h;
         nDX = nDX_;
         nDY = nDY_;
         m_nXScreen = SalX11Screen( nScreen );
@@ -192,7 +192,7 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { bGraphics_ = false; }
 
-bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
+bool X11SalVirtualDevice::SetSize( sal_Int32 nDX, sal_Int32 nDY )
 {
     if( bExternPixmap_ )
         return false;

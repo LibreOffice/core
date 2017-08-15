@@ -582,7 +582,7 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
     ImplEndRecord();
 }
 
-void EMFWriter::ImplWriteExtent( long nExtent )
+void EMFWriter::ImplWriteExtent( sal_Int32 nExtent )
 {
     nExtent = OutputDevice::LogicToLogic( Size( nExtent, 0 ), maVDev->GetMapMode(), maDestMapMode ).Width();
     m_rStm.WriteInt32( nExtent );
@@ -831,25 +831,25 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
     }
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const long* pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
 {
     sal_Int32 nLen = rText.getLength(), i;
 
     if( nLen )
     {
         sal_uInt32  nNormWidth;
-        std::unique_ptr<long[]> pOwnArray;
-        long*  pDX;
+        std::unique_ptr<sal_Int32[]> pOwnArray;
+        sal_Int32*  pDX;
 
         // get text sizes
         if( pDXArray )
         {
             nNormWidth = maVDev->GetTextWidth( rText );
-            pDX = const_cast<long*>(pDXArray);
+            pDX = const_cast<sal_Int32*>(pDXArray);
         }
         else
         {
-            pOwnArray.reset(new long[ nLen ]);
+            pOwnArray.reset(new sal_Int32[ nLen ]);
             nNormWidth = maVDev->GetTextArray( rText, pOwnArray.get() );
             pDX = pOwnArray.get();
         }
@@ -1178,7 +1178,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const Size      aDestSize( pA->GetSize() );
                 const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
                 const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                long            nMoveX, nMoveY;
+                sal_Int32            nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {

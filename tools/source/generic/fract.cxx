@@ -319,6 +319,19 @@ Fraction::operator long() const
     return boost::rational_cast<long>(mpImpl->value);
 }
 
+#if SAL_TYPES_SIZEOFLONG > 4
+// to prevent 'ambiguous conversion operator' compile errors
+Fraction::operator sal_Int32() const
+{
+    if ( !mpImpl->valid )
+    {
+        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
+        return 0;
+    }
+    return boost::rational_cast<sal_Int32>(mpImpl->value);
+}
+#endif
+
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
 {
     Fraction aErg( rVal1 );

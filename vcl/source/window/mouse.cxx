@@ -134,8 +134,8 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
     if ( mpWindowImpl->mpFrameData->mbMouseIn && mpWindowImpl->mpFrameWindow->mpWindowImpl->mbReallyVisible )
     {
         sal_uInt64 nTime   = tools::Time::GetSystemTicks();
-        long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
-        long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
+        sal_Int32   nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
+        sal_Int32   nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
         sal_uInt16  nCode   = nMouseCode;
         MouseEventModifiers nMode = mpWindowImpl->mpFrameData->mnMouseMode;
         bool    bLeave;

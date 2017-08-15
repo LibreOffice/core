@@ -105,22 +105,22 @@ ControlLayoutData::ControlLayoutData() : m_pParent( nullptr )
 {
 }
 
-tools::Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
+tools::Rectangle ControlLayoutData::GetCharacterBounds( sal_Int32 nIndex ) const
 {
-    return (nIndex >= 0 && nIndex < (long) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
+    return (nIndex >= 0 && nIndex < (sal_Int32) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
 }
 
-tools::Rectangle Control::GetCharacterBounds( long nIndex ) const
+tools::Rectangle Control::GetCharacterBounds( sal_Int32 nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : tools::Rectangle();
 }
 
-long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
+sal_Int32 ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
 {
-    long nIndex = -1;
-    for( long i = m_aUnicodeBoundRects.size()-1; i >= 0; i-- )
+    sal_Int32 nIndex = -1;
+    for( sal_Int32 i = m_aUnicodeBoundRects.size()-1; i >= 0; i-- )
     {
         Point aTopLeft = m_aUnicodeBoundRects[i].TopLeft();
         Point aBottomRight = m_aUnicodeBoundRects[i].BottomRight();
@@ -134,22 +134,22 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
     return nIndex;
 }
 
-long Control::GetIndexForPoint( const Point& rPoint ) const
+sal_Int32 Control::GetIndexForPoint( const Point& rPoint ) const
 {
     if( ! HasLayoutData() )
         FillLayoutData();
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
-long ControlLayoutData::GetLineCount() const
+sal_Int32 ControlLayoutData::GetLineCount() const
 {
-    long nLines = m_aLineIndices.size();
+    sal_Int32 nLines = m_aLineIndices.size();
     if( nLines == 0 && !m_aDisplayText.isEmpty() )
         nLines = 1;
     return nLines;
 }
 
-Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
+Pair ControlLayoutData::GetLineStartEnd( sal_Int32 nLine ) const
 {
     Pair aPair( -1, -1 );
 
@@ -172,14 +172,14 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
     return aPair;
 }
 
-Pair Control::GetLineStartEnd( long nLine ) const
+Pair Control::GetLineStartEnd( sal_Int32 nLine ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
-long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
+sal_Int32 ControlLayoutData::ToRelativeLineIndex( sal_Int32 nIndex ) const
 {
     // is the index sensible at all ?
     if( nIndex >= 0 && nIndex < m_aDisplayText.getLength() )
@@ -211,7 +211,7 @@ long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
     return nIndex;
 }
 
-long Control::ToRelativeLineIndex( long nIndex ) const
+sal_Int32 Control::ToRelativeLineIndex( sal_Int32 nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
@@ -280,7 +280,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     if( !rSubControl.HasLayoutData() || rSubControl.mpControlData->mpLayoutData->m_aDisplayText.isEmpty() )
         return;
 
-    long nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.getLength();
+    sal_Int32 nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.getLength();
     mpControlData->mpLayoutData->m_aDisplayText += rSubControl.mpControlData->mpLayoutData->m_aDisplayText;
     int nLines = rSubControl.mpControlData->mpLayoutData->m_aLineIndices.size();
     int n;

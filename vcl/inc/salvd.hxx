@@ -41,10 +41,10 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
     // Set new size, without saving the old contents
-    virtual bool            SetSize( long nNewDX, long nNewDY ) = 0;
+    virtual bool            SetSize( sal_Int32 nNewDX, sal_Int32 nNewDY ) = 0;
 
     // Set new size using a buffer at the given address
-    virtual bool            SetSizeUsingBuffer( long nNewDX, long nNewDY,
+    virtual bool            SetSizeUsingBuffer( sal_Int32 nNewDX, sal_Int32 nNewDY,
                                                 sal_uInt8 * /* pBuffer */)
         {
             // Only the headless virtual device has an implementation that uses

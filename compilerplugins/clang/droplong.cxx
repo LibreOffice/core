@@ -44,6 +44,8 @@ public:
             return;
         if (startswith(fn, SRCDIR "/bridges/"))
             return;
+        if (startswith(fn, SRCDIR "/tools/source/generic/fract.cxx"))
+            return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 

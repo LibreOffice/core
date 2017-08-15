@@ -130,7 +130,7 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
         // we need to shift the bitmap vertically so that it spans over the
         // menubar conveniently
-        long nMenubarHeight = 0;
+        sal_Int32 nMenubarHeight = 0;
         SystemWindow* pSysWin = GetSystemWindow();
         if (pSysWin && pSysWin->GetMenuBar())
         {

@@ -108,7 +108,7 @@ public:
     vcl::Window*             GetWindow() const;
 
     void                Invalidate();
-    void                Scroll( long nHorzScroll, long nVertScroll );
+    void                Scroll( sal_Int32 nHorzScroll, sal_Int32 nVertScroll );
 
     void                ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true );
     void                HideCursor();

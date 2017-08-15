@@ -88,7 +88,7 @@ public:
     const RegionBand* GetAsRegionBand() const;
 
     // manipulators
-    void Move( long nHorzMove, long nVertMove );
+    void Move( sal_Int32 nHorzMove, sal_Int32 nVertMove );
     void Scale( double fScaleX, double fScaleY );
     bool Union( const tools::Rectangle& rRegion );
     bool Intersect( const tools::Rectangle& rRegion );

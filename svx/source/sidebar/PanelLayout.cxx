@@ -76,7 +76,7 @@ IMPL_LINK_NOARG( PanelLayout, ImplHandlePanelLayoutTimerHdl, Timer*, void )
     VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
 }
 
-void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
+void PanelLayout::setPosSizePixel(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags)
 {
     bool bCanHandleSmallerWidth = false;
     bool bCanHandleSmallerHeight = false;

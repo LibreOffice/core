@@ -188,7 +188,7 @@ namespace
 static QRegion XRegionToQRegion( Region xr )
 {
     QRegion qr;
-    for( long i = 0;
+    for( sal_Int32 i = 0;
          i < xr->numRects;
          ++i )
     {

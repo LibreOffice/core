@@ -109,7 +109,7 @@ void ScCsvRuler::dispose()
 // common ruler handling ------------------------------------------------------
 
 void ScCsvRuler::setPosSizePixel(
-        long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
+        sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags )
 {
     if( nFlags & PosSizeFlags::Height )
         nHeight = GetTextHeight() + mnSplitSize + 2;

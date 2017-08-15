@@ -67,8 +67,8 @@ public:
                                     int nGlyphs,
                                     FontSubsetInfo& rInfo) override;
 
-    virtual const void*         GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
-    virtual void                FreeEmbedFontData( const void* pData, long nDataLen ) override;
+    virtual const void*         GetEmbedFontData(const PhysicalFontFace*, sal_Int32* pDataLen) override;
+    virtual void                FreeEmbedFontData( const void* pData, sal_Int32 nDataLen ) override;
     virtual void                GetGlyphWidths(
                                     const PhysicalFontFace*,
                                     bool bVertical,

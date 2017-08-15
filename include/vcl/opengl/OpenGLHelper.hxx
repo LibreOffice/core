@@ -60,8 +60,8 @@ public:
      * also adds the possibility to mirror the bitmap vertically at the same time.
     **/
     static void ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer, const bool bFlip = false);
-    static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
-    static void renderToFile(long nWidth, long nHeight, const OUString& rFileName);
+    static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, sal_Int32 nWidth, sal_Int32 nHeight);
+    static void renderToFile(sal_Int32 nWidth, sal_Int32 nHeight, const OUString& rFileName);
 
     static const char* GLErrorString(GLenum errorCode);
 
@@ -76,7 +76,7 @@ public:
      * @param bRenderbuffer         true => off-screen rendering, false => rendering to texture
      *          This also affects whether to free with glDeleteRenderbuffers or glDeleteTextures
      */
-    static void createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
+    static void createFramebuffer(sal_Int32 nWidth, sal_Int32 nHeight, GLuint& nFramebufferId,
             GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId, bool bRenderbuffer = true);
 
     /// Get OpenGL version (needs a context)

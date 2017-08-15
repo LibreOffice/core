@@ -33,7 +33,7 @@ void MultiSelection::ImplClear()
     aSels.clear();
 }
 
-size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
+size_t MultiSelection::ImplFindSubSelection( sal_Int32 nIndex ) const
 {
     // iterate through the sub selections
     size_t n = 0;
@@ -148,7 +148,7 @@ void MultiSelection::SelectAll( bool bSelect )
     }
 }
 
-bool MultiSelection::Select( long nIndex, bool bSelect )
+bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
 {
     DBG_ASSERT( aTotRange.IsInside(nIndex), "selected index out of range" );
 
@@ -250,12 +250,12 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
 void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
 {
     Range* pRange;
-    long nOld;
+    sal_Int32 nOld;
 
-    sal_uIntPtr nTmpMin = rIndexRange.Min();
-    sal_uIntPtr nTmpMax = rIndexRange.Max();
-    sal_uIntPtr nCurMin = FirstSelected();
-    sal_uIntPtr nCurMax = LastSelected();
+    sal_Int32 nTmpMin = rIndexRange.Min();
+    sal_Int32 nTmpMax = rIndexRange.Max();
+    sal_Int32 nCurMin = FirstSelected();
+    sal_Int32 nCurMax = LastSelected();
     DBG_ASSERT(aTotRange.IsInside(nTmpMax), "selected index out of range" );
     DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
 
@@ -286,7 +286,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
             {
                 pRange = aSels.front();
                 nOld = pRange->Min();
-                pRange->Min() = (long)nTmpMin;
+                pRange->Min() = nTmpMin;
                 nSelCount += ( nOld - nTmpMin );
             }
             bCurValid = false;
@@ -309,7 +309,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
             {
                 pRange = aSels.back();
                 nOld = pRange->Max();
-                pRange->Max() = (long)nTmpMax;
+                pRange->Max() = nTmpMax;
                 nSelCount += ( nTmpMax - nOld );
             }
             bCurValid = false;
@@ -325,7 +325,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
     }
 }
 
-bool MultiSelection::IsSelected( long nIndex ) const
+bool MultiSelection::IsSelected( sal_Int32 nIndex ) const
 {
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
@@ -333,7 +333,7 @@ bool MultiSelection::IsSelected( long nIndex ) const
     return nSubSelPos < aSels.size() && aSels[ nSubSelPos ]->IsInside(nIndex);
 }
 
-void MultiSelection::Insert( long nIndex, long nCount )
+void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
 {
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
@@ -367,7 +367,7 @@ void MultiSelection::Insert( long nIndex, long nCount )
     aTotRange.Max() += nCount;
 }
 
-void MultiSelection::Remove( long nIndex )
+void MultiSelection::Remove( sal_Int32 nIndex )
 {
     // find the virtual target position
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
@@ -403,7 +403,7 @@ void MultiSelection::Remove( long nIndex )
     aTotRange.Max() -= 1;
 }
 
-long MultiSelection::ImplFwdUnselected()
+sal_Int32 MultiSelection::ImplFwdUnselected()
 {
     if ( !bCurValid )
         return SFX_ENDOFSELECTION;
@@ -419,7 +419,7 @@ long MultiSelection::ImplFwdUnselected()
         return SFX_ENDOFSELECTION;
 }
 
-long MultiSelection::FirstSelected()
+sal_Int32 MultiSelection::FirstSelected()
 {
     bInverseCur = false;
     nCurSubSel = 0;
@@ -431,7 +431,7 @@ long MultiSelection::FirstSelected()
     return SFX_ENDOFSELECTION;
 }
 
-long MultiSelection::LastSelected()
+sal_Int32 MultiSelection::LastSelected()
 {
     nCurSubSel = aSels.size() - 1;
     bCurValid = !aSels.empty();
@@ -442,7 +442,7 @@ long MultiSelection::LastSelected()
     return SFX_ENDOFSELECTION;
 }
 
-long MultiSelection::NextSelected()
+sal_Int32 MultiSelection::NextSelected()
 {
     if ( !bCurValid )
         return SFX_ENDOFSELECTION;

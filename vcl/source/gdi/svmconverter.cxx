@@ -957,7 +957,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
-                    std::unique_ptr<long[]> pDXAry;
+                    std::unique_ptr<sal_Int32[]> pDXAry;
                     sal_Int32 nDXAryLen = 0;
                     if (nAryLen > 0)
                     {
@@ -985,7 +985,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         }
                         else
                         {
-                            pDXAry.reset(new long[nDXAryLen]);
+                            pDXAry.reset(new sal_Int32[nDXAryLen]);
 
                             for (sal_Int32 j = 0; j < nAryLen; ++j)
                                 rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
@@ -995,7 +995,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 if (nAryLen+1 == nStrLen && nIndex >= 0)
                                 {
-                                    std::unique_ptr<long[]> pTmpAry(new long[nStrLen]);
+                                    std::unique_ptr<sal_Int32[]> pTmpAry(new sal_Int32[nStrLen]);
 
                                     aFontVDev->GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
 
@@ -1866,7 +1866,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                 sal_Int32 nAryLen;
                 sal_Int32 nLen = pAct->GetLen();
                 const sal_Int32 nTextLen = aText.getLength();
-                long* pDXArray = pAct->GetDXArray();
+                sal_Int32* pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
@@ -2375,7 +2375,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
                     Point           aSrcPt( rTransMtf.GetPrefMapMode().GetOrigin() );
                     const double    fScaleX = aSrcSize.Width() ? (double) rSize.Width() / aSrcSize.Width() : 1.0;
                     const double    fScaleY = aSrcSize.Height() ? (double) rSize.Height() / aSrcSize.Height() : 1.0;
-                    long            nMoveX, nMoveY;
+                    sal_Int32            nMoveX, nMoveY;
 
                     if( fScaleX != 1.0 || fScaleY != 1.0 )
                     {
@@ -2508,7 +2508,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & r
             {
                 const MetaTextLineAction*   pA = static_cast<const MetaTextLineAction*>(pAction);
                 const Point&                rStartPt = pA->GetStartPoint();
-                const sal_Int32             nWidth = (sal_Int32) pA->GetWidth();
+                const sal_Int32             nWidth = pA->GetWidth();
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
                 const FontLineStyle         eUnderline = pA->GetUnderline();
                 sal_uLong                   nOldPos, nNewPos;

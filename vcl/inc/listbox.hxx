@@ -48,7 +48,7 @@ struct ImplEntryType
     void*       mpUserData;
     bool        mbIsSelected;
     ListBoxEntryFlags mnFlags;
-    long        mnHeight;
+    sal_Int32   mnHeight;
 
     ImplEntryType( const OUString& rStr, const Image& rImage ) :
         maStr( rStr ),
@@ -110,8 +110,8 @@ public:
     /// GetAddedHeight( 0 ) @return 0
     /// GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) @return 0
     /// GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
-    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex ) const;
-    long            GetEntryHeight( sal_Int32  nPos ) const;
+    sal_Int32            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex ) const;
+    sal_Int32            GetEntryHeight( sal_Int32  nPos ) const;
 
     sal_Int32       GetEntryCount() const { return (sal_Int32 )maEntries.size(); }
     bool            HasImages() const { return mnImages != 0; }
@@ -169,15 +169,15 @@ private:
 
     Size            maUserItemSize;
 
-    long            mnMaxTxtHeight;  ///< Maximum height of a text item
-    long            mnMaxTxtWidth;   ///< Maximum width of a text item
+    sal_Int32       mnMaxTxtHeight;  ///< Maximum height of a text item
+    sal_Int32       mnMaxTxtWidth;   ///< Maximum width of a text item
                                      ///< Entry without Image
-    long            mnMaxImgTxtWidth;///< Maximum width of a text item
+    sal_Int32       mnMaxImgTxtWidth;///< Maximum width of a text item
                                      ///< Entry AND Image
-    long            mnMaxImgWidth;   ///< Maximum width of an image item
-    long            mnMaxImgHeight;  ///< Maximum height of an image item
-    long            mnMaxWidth;      ///< Maximum width of an entry
-    long            mnMaxHeight;     ///< Maximum height of an entry
+    sal_Int32       mnMaxImgWidth;   ///< Maximum width of an image item
+    sal_Int32       mnMaxImgHeight;  ///< Maximum height of an image item
+    sal_Int32       mnMaxWidth;      ///< Maximum width of an entry
+    sal_Int32       mnMaxHeight;     ///< Maximum height of an entry
 
     sal_Int32       mnCurrentPos;    ///< Position (Focus)
     sal_Int32       mnTrackingSaveSelection; ///< Selection before Tracking();
@@ -187,9 +187,9 @@ private:
     sal_Int32       mnUserDrawEntry;
 
     sal_Int32       mnTop;           ///< output from line on
-    long            mnLeft;          ///< output from column on
-    long            mnBorder;        ///< distance border - text
-    long            mnTextHeight;    ///< text height
+    sal_Int32       mnLeft;          ///< output from column on
+    sal_Int32       mnBorder;        ///< distance border - text
+    sal_Int32       mnTextHeight;    ///< text height
     ProminentEntry  meProminentType; ///< where is the "prominent" entry
 
     sal_uInt16      mnSelectModifier;   ///< Modifiers
@@ -282,9 +282,9 @@ public:
     using Window::IsVisible;
     bool            IsVisible( sal_Int32  nEntry ) const;
 
-    long            GetLeftIndent() const           { return mnLeft; }
-    void            SetLeftIndent( long n );
-    void            ScrollHorz( long nDiff );
+    sal_Int32            GetLeftIndent() const           { return mnLeft; }
+    void            SetLeftIndent( sal_Int32 n );
+    void            ScrollHorz( sal_Int32 nDiff );
 
     void            AllowGrabFocus( bool b )        { mbGrabFocus = b; }
     bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
@@ -312,8 +312,8 @@ public:
     Size            CalcSize(sal_Int32 nMaxLines) const;
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
-    long            GetEntryHeight() const              { return mnMaxHeight; }
-    long            GetMaxEntryWidth() const            { return mnMaxWidth; }
+    sal_Int32       GetEntryHeight() const              { return mnMaxHeight; }
+    sal_Int32       GetMaxEntryWidth() const            { return mnMaxWidth; }
 
     void            SetScrollHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maScrollHdl = rLink; }
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maSelectHdl = rLink; }
@@ -420,7 +420,7 @@ public:
 
     void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow->SetProminentEntryType( eType ); }
 
-    long            GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
+    sal_Int32       GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
     void            SetLeftIndent( sal_uInt16 n )       { maLBWindow->SetLeftIndent( n ); }
 
     void            SetTravelSelect( bool bTravelSelect ) { maLBWindow->SetTravelSelect( bTravelSelect ); }
@@ -436,8 +436,8 @@ public:
     bool            IsReadOnly() const              { return maLBWindow->IsReadOnly(); }
 
     Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow->CalcSize( nMaxLines ); }
-    long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
-    long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
+    sal_Int32       GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
+    sal_Int32       GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
     void            SetScrollHdl( const Link<ImplListBox*,void>& rLink ) { maScrollHdl = rLink; }
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
@@ -492,8 +492,8 @@ public:
     Size            CalcFloatSize();
     void            StartFloat( bool bStartTracking );
 
-    virtual void    setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    virtual void    setPosSizePixel( sal_Int32 nX, sal_Int32 nY,
+                                     sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     void            SetDropDownLineCount( sal_uInt16 n ) { mnDDLineCount = n; }
     sal_uInt16      GetDropDownLineCount() const { return mnDDLineCount; }

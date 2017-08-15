@@ -60,8 +60,8 @@ public:
     SAL_DLLPRIVATE const tools::Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
     /// The x-coordinate of the vertical separator line, use in MenuButton subclass only.
-    SAL_DLLPRIVATE long             ImplGetSeparatorX() const;
-    SAL_DLLPRIVATE void             ImplSetSeparatorX( long nX );
+    SAL_DLLPRIVATE sal_Int32        ImplGetSeparatorX() const;
+    SAL_DLLPRIVATE void             ImplSetSeparatorX( sal_Int32 nX );
 
 protected:
     explicit            Button( WindowType nType );
@@ -287,7 +287,7 @@ private:
     SAL_DLLPRIVATE void     ImplDrawRadioButton(vcl::RenderContext& rRenderContext );
     SAL_DLLPRIVATE void     ImplUncheckAllOther();
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
-    SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
+    SAL_DLLPRIVATE sal_Int32     ImplGetImageToTextDistance() const;
 
                             RadioButton(const RadioButton &) = delete;
                             RadioButton& operator= (const RadioButton &) = delete;
@@ -406,7 +406,7 @@ private:
                                     const Size& rImageSize, tools::Rectangle& rStateRect,
                                     tools::Rectangle& rMouseRect );
     SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext );
-    SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
+    SAL_DLLPRIVATE sal_Int32    ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
                                 CheckBox(const CheckBox &) = delete;
@@ -460,7 +460,7 @@ public:
 
     static Image    GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
-    Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
+    Size            CalcMinimumSize( sal_Int32 nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const override;
 
     void            SetToggleHdl( const Link<CheckBox&,void>& rLink ) { maToggleHdl = rLink; }

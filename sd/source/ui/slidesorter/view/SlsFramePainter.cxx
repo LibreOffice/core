@@ -181,7 +181,7 @@ void FramePainter::OffsetBitmap::PaintSide (
         {
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
-                Size(std::min(aBitmapSize.Width(),static_cast<long>(nRight-nX+1)),aBitmapSize.Height()),
+                Size(std::min(aBitmapSize.Width(),nRight-nX+1),aBitmapSize.Height()),
                 maBitmap);
         }
     }
@@ -201,7 +201,7 @@ void FramePainter::OffsetBitmap::PaintSide (
         {
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
-                Size(aBitmapSize.Width(), std::min(aBitmapSize.Height(), static_cast<long>(nBottom-nY+1))),
+                Size(aBitmapSize.Width(), std::min(aBitmapSize.Height(), nBottom-nY+1)),
                 maBitmap);
         }
     }
@@ -222,8 +222,8 @@ void FramePainter::OffsetBitmap::PaintCenter (
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
                 Size(
-                    ::std::min(aBitmapSize.Width(), rBox.Right()-nX+1),
-                    std::min(aBitmapSize.Height(), rBox.Bottom()-nY+1)),
+                    std::min(aBitmapSize.Width(),  sal_Int32(rBox.Right()-nX+1)),
+                    std::min(aBitmapSize.Height(), sal_Int32(rBox.Bottom()-nY+1))),
                 maBitmap);
 }
 

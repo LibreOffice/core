@@ -71,9 +71,9 @@ public:
     virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) = 0;
 
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
-                                                 long& rOutWidth, long& rOutHeight,
-                                                 long& rPageOffX, long& rPageOffY,
-                                                 long& rPageWidth, long& rPageHeight ) = 0;
+                                                 sal_Int32& rOutWidth, sal_Int32& rOutHeight,
+                                                 sal_Int32& rPageOffX, sal_Int32& rPageOffY,
+                                                 sal_Int32& rPageWidth, sal_Int32& rPageHeight ) = 0;
     virtual sal_uInt32              GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) = 0;
     virtual sal_uInt16              GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
     virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin ) = 0;

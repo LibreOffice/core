@@ -986,7 +986,7 @@ bool PNGReaderImpl::ImplPreparePass()
 
     // in Interlace mode the size of scanline is not constant
     // so first we calculate the number of entrys
-    long nScanWidth = (maOrigSize.Width() - mnXStart + mnXAdd - 1) / mnXAdd;
+    sal_Int32 nScanWidth = (maOrigSize.Width() - mnXStart + mnXAdd - 1) / mnXAdd;
     mnScansize = nScanWidth;
 
     if( mbRGBTriple )
@@ -1170,7 +1170,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             {
                 if ( mbTransparent )
                 {
-                    for ( long nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
+                    for ( sal_Int32 nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
                     {
                         sal_uInt8 nCol;
                         nShift = (nShift - 1) & 7;
@@ -1185,7 +1185,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else
                 {   // ScanlineFormat::N1BitMsbPal
-                    for ( long nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
+                    for ( sal_Int32 nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
                     {
                         nShift = (nShift - 1) & 7;
 
@@ -1208,7 +1208,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     if ( mnPngDepth == 4 )  // check if source has a two bit pixel format
                     {
-                        for ( long nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, ++nXIndex )
+                        for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, ++nXIndex )
                         {
                             if( nXIndex & 1 )
                             {
@@ -1223,7 +1223,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     }
                     else // if ( mnPngDepth == 2 )
                     {
-                        for ( long nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
+                        for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
                             sal_uInt8 nCol;
                             switch( nXIndex & 3 )
@@ -1257,7 +1257,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     if ( mnPngDepth == 4 )  // maybe the source is a two bitmap graphic
                     {   // ScanlineFormat::N4BitLsnPal
-                        for ( long nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
+                        for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
                             if( nXIndex & 1 )
                                 ImplSetPixel( nY, nX, *pTmp++ & 0x0f );
@@ -1267,7 +1267,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     }
                     else // if ( mnPngDepth == 2 )
                     {
-                        for ( long nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
+                        for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
                             switch( nXIndex & 3 )
                             {
@@ -1299,12 +1299,12 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale
                     {
-                        for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
+                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
                             ImplSetAlphaPixel( nY, nX, pTmp[ 0 ], pTmp[ 1 ] );
                     }
                     else
                     {
-                        for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
+                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
                             ImplSetAlphaPixel( nY, nX, pTmp[ 0 ], pTmp[ 2 ] );
                     }
                 }
@@ -1312,12 +1312,12 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     if ( mnPngDepth == 8 )  // maybe the source is a 16 bit grayscale
                     {
-                        for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp++ )
+                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp++ )
                             ImplSetAlphaPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] );
                     }
                     else
                     {
-                        for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
+                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
                             ImplSetAlphaPixel( nY, nX, *pTmp, mpTransTab[ *pTmp ] );
                     }
                 }
@@ -1334,13 +1334,13 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         }
                         else
                         {
-                            for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd )
+                            for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd )
                                 ImplSetPixel( nY, nX, *pTmp++ );
                         }
                     }
                     else
                     {
-                        for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
+                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 2 )
                             ImplSetPixel( nY, nX, *pTmp );
                     }
                 }
@@ -1399,7 +1399,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     sal_uInt8* pScanline(mpScanline.get());
                     sal_uInt8* pScanlineAlpha(mpScanlineAlpha.get());
 
-                    for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
+                    for (sal_Int32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
                     {
                         // prepare content line as BGR by reordering when copying
                         // do not forget to invert alpha (source is alpha, target is opacity)
@@ -1426,7 +1426,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else
                 {
-                    for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
+                    for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
                     {
                         if(bCustomColorTable)
                         {
@@ -1456,7 +1456,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             else
             {
                 // BMP_FORMAT_64BIT_TC_RGBA
-                for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 8 )
+                for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 8 )
                 {
                     ImplSetAlphaPixel(
                         nY,
@@ -1475,7 +1475,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             // no support currently for DirectScanline, found no real usages in current PNGs, may be added on demand
             if ( mnPngDepth == 8 )  // maybe the source has 16 bit per sample
             {
-                for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
+                for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
                 {
                     sal_uInt8 nRed = pTmp[ 0 ];
                     sal_uInt8 nGreen = pTmp[ 1 ];
@@ -1492,7 +1492,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             else
             {
                 // BMP_FORMAT_48BIT_TC_RGB
-                for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 6 )
+                for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 6 )
                 {
                     sal_uInt8 nRed = pTmp[ 0 ];
                     sal_uInt8 nGreen = pTmp[ 2 ];
@@ -1534,7 +1534,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 #endif
                     sal_uInt8* pScanline(mpScanline.get());
 
-                    for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
+                    for (sal_Int32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
                     {
                         // prepare content line as BGR by reordering when copying
                         if(bCustomColorTable)
@@ -1557,7 +1557,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
                 else
                 {
-                    for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
+                    for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
                     {
                         if(bCustomColorTable)
                         {
@@ -1586,7 +1586,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             {
                 // BMP_FORMAT_48BIT_TC_RGB
                 // no support currently for DirectScanline, found no real usages in current PNGs, may be added on demand
-                for ( long nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 6 )
+                for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 6 )
                 {
                     ImplSetPixel(
                         nY,

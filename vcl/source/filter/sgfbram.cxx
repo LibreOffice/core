@@ -360,12 +360,12 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 }
 
 // for StarDraw embedded SGF vector
-long SgfVectXofs=0;
-long SgfVectYofs=0;
-long SgfVectXmul=0;
-long SgfVectYmul=0;
-long SgfVectXdiv=0;
-long SgfVectYdiv=0;
+sal_Int32 SgfVectXofs=0;
+sal_Int32 SgfVectYofs=0;
+sal_Int32 SgfVectXmul=0;
+sal_Int32 SgfVectYmul=0;
+sal_Int32 SgfVectXdiv=0;
+sal_Int32 SgfVectYdiv=0;
 bool SgfVectScal=false;
 
 Color Hpgl2SvFarbe( sal_uInt8 nFarb )
@@ -411,8 +411,8 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, GDIMetaFile& rMtf)
         bEoDt=(aVect.Flag & 0x4000) !=0;
         bool bPDwn=(aVect.Flag & 0x8000) !=0;
 
-        long x=aVect.x-rHead.Xoffs;
-        long y=rHead.Ysize-(aVect.y-rHead.Yoffs);
+        sal_Int32 x=aVect.x-rHead.Xoffs;
+        sal_Int32 y=rHead.Ysize-(aVect.y-rHead.Yoffs);
         if (SgfVectScal) {
             if (SgfVectXdiv==0) SgfVectXdiv=rHead.Xsize;
             if (SgfVectYdiv==0) SgfVectYdiv=rHead.Ysize;

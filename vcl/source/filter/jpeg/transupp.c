@@ -1236,7 +1236,7 @@ adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
       else
     new_value = new_height; /* ExifImageHeight Tag */
       if (is_motorola) {
-    data[offset+2] = 0; /* Format = unsigned long (4 octets) */
+    data[offset+2] = 0; /* Format = unsigned sal_Int32 (4 octets) */
     data[offset+3] = 4;
     data[offset+4] = 0; /* Number Of Components = 1 */
     data[offset+5] = 0;
@@ -1247,7 +1247,7 @@ adjust_exif_parameters (JOCTET FAR * data, unsigned int length,
     data[offset+10] = (JOCTET)((new_value >> 8) & 0xFF);
     data[offset+11] = (JOCTET)(new_value & 0xFF);
       } else {
-    data[offset+2] = 4; /* Format = unsigned long (4 octets) */
+    data[offset+2] = 4; /* Format = unsigned sal_Int32 (4 octets) */
     data[offset+3] = 0;
     data[offset+4] = 1; /* Number Of Components = 1 */
     data[offset+5] = 0;

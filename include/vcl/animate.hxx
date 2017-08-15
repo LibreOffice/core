@@ -39,7 +39,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
     BitmapEx        aBmpEx;
     Point           aPosPix;
     Size            aSizePix;
-    long            nWait;
+    sal_Int32       nWait;
     Disposal        eDisposal;
     bool            bUserInput;
 
@@ -53,7 +53,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                         const BitmapEx& rBmpEx,
                         const Point& rPosPix,
                         const Size& rSizePix,
-                        long _nWait = 0L,
+                        sal_Int32 _nWait = 0L,
                         Disposal _eDisposal = Disposal::Not
                     ) :
                         aBmpEx      ( rBmpEx ),
@@ -101,10 +101,10 @@ public:
                         OutputDevice* pOutDev,
                         const Point& rDestPt,
                         const Size& rDestSz,
-                        long nExtraData,
+                        sal_Int32 nExtraData,
                         OutputDevice* pFirstFrameOutDev);
 
-    void            Stop( OutputDevice* pOutDev = nullptr, long nExtraData = 0 );
+    void            Stop( OutputDevice* pOutDev = nullptr, sal_Int32 nExtraData = 0 );
 
     void            Draw( OutputDevice* pOutDev, const Point& rDestPt ) const;
     void            Draw( OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz ) const;

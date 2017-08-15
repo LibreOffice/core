@@ -484,8 +484,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     //  if no lines, still space for the outline frame (20 Twips = 1pt)
     //  (HasLines initializes aLines to 0,0,0,0)
-    nTwipsSizeX += aLines.Left() + std::max( aLines.Right(), 20L );
-    nTwipsSizeY += aLines.Top() +  std::max( aLines.Bottom(), 20L );
+    nTwipsSizeX += aLines.Left() + std::max( aLines.Right(), 20 );
+    nTwipsSizeY += aLines.Top() +  std::max( aLines.Bottom(), 20 );
 
     double nScaleX = (double) nDevSizeX / nTwipsSizeX;
     double nScaleY = (double) nDevSizeY / nTwipsSizeY;

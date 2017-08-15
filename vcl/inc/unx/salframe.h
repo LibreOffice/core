@@ -146,14 +146,14 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     void            RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWindows );
     void            RestackChildren();
 
-    long            HandleKeyEvent      ( XKeyEvent         *pEvent );
-    long            HandleMouseEvent    ( XEvent            *pEvent );
-    long            HandleFocusEvent    ( XFocusChangeEvent const *pEvent );
-    long            HandleExposeEvent   ( XEvent            *pEvent );
-    long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-    long            HandleStateEvent    ( XPropertyEvent    *pEvent );
-    long            HandleReparentEvent ( XReparentEvent    *pEvent );
-    long            HandleClientMessage ( XClientMessageEvent*pEvent );
+    sal_Int32       HandleKeyEvent      ( XKeyEvent         *pEvent );
+    sal_Int32       HandleMouseEvent    ( XEvent            *pEvent );
+    sal_Int32       HandleFocusEvent    ( XFocusChangeEvent const *pEvent );
+    sal_Int32       HandleExposeEvent   ( XEvent            *pEvent );
+    sal_Int32       HandleSizeEvent     ( XConfigureEvent   *pEvent );
+    sal_Int32       HandleStateEvent    ( XPropertyEvent    *pEvent );
+    sal_Int32       HandleReparentEvent ( XReparentEvent    *pEvent );
+    sal_Int32       HandleClientMessage ( XClientMessageEvent*pEvent );
 
     DECL_LINK( HandleAlwaysOnTopRaise, Timer*, void );
 
@@ -168,7 +168,7 @@ public:
     X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = nullptr );
     virtual ~X11SalFrame() override;
 
-    long            Dispatch( XEvent *pEvent );
+    sal_Int32            Dispatch( XEvent *pEvent );
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
                           SystemParentData* pParentData, bool bUseGeometry = false );
 
@@ -220,10 +220,10 @@ public:
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -234,7 +234,7 @@ public:
     virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( sal_Int32 nX, sal_Int32 nY ) override;
     using SalFrame::Flush;
     virtual void                Flush() override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
@@ -260,7 +260,7 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) override;
     // add a rectangle to the clip region
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() override;
 

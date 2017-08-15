@@ -29,21 +29,21 @@
 class VCL_DLLPUBLIC SpinButton : public Control
 {
 private:
-    AutoTimer       maRepeatTimer;
-    tools::Rectangle       maUpperRect;
-    tools::Rectangle       maLowerRect;
-    tools::Rectangle       maFocusRect;
-    bool            mbRepeat         : 1;
-    bool            mbUpperIn        : 1;
-    bool            mbLowerIn        : 1;
-    bool            mbInitialUp      : 1;
-    bool            mbInitialDown    : 1;
-    bool            mbHorz           : 1;
-    bool            mbUpperIsFocused : 1;
-    long            mnMinRange;
-    long            mnMaxRange;
-    long            mnValue;
-    long            mnValueStep;
+    AutoTimer         maRepeatTimer;
+    tools::Rectangle  maUpperRect;
+    tools::Rectangle  maLowerRect;
+    tools::Rectangle  maFocusRect;
+    bool              mbRepeat         : 1;
+    bool              mbUpperIn        : 1;
+    bool              mbLowerIn        : 1;
+    bool              mbInitialUp      : 1;
+    bool              mbInitialDown    : 1;
+    bool              mbHorz           : 1;
+    bool              mbUpperIsFocused : 1;
+    sal_Int32         mnMinRange;
+    sal_Int32         mnMaxRange;
+    sal_Int32         mnValue;
+    sal_Int32         mnValueStep;
 
     SAL_DLLPRIVATE tools::Rectangle* ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
@@ -67,15 +67,15 @@ public:
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
-    void            SetRangeMin( long nNewRange );
-    long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax( long nNewRange );
-    long            GetRangeMax() const { return mnMaxRange; }
+    void            SetRangeMin( sal_Int32 nNewRange );
+    sal_Int32       GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax( sal_Int32 nNewRange );
+    sal_Int32       GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
-    void            SetValue( long nValue );
-    long            GetValue() const { return mnValue; }
-    void            SetValueStep( long nNewStep ) { mnValueStep = nNewStep; }
-    long            GetValueStep() const { return mnValueStep; }
+    void            SetValue( sal_Int32 nValue );
+    sal_Int32       GetValue() const { return mnValue; }
+    void            SetValueStep( sal_Int32 nNewStep ) { mnValueStep = nNewStep; }
+    sal_Int32       GetValueStep() const { return mnValueStep; }
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 private:

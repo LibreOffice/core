@@ -77,10 +77,10 @@ protected:
     void ImplScroll( bool bUp );
     void ImplCursorUpDown( bool bUp, bool bHomeEnd = false );
     void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
-    long ImplGetStartY() const;
+    sal_Int32 ImplGetStartY() const;
     tools::Rectangle ImplGetItemRect( sal_uInt16 nPos );
     void RenderHighlightItem( vcl::RenderContext& rRenderContext, sal_uInt16 nPos );
-    long GetInitialItemY( long *pOptStartY = nullptr ) const;
+    sal_Int32 GetInitialItemY( sal_Int32 *pOptStartY = nullptr ) const;
     void InvalidateItem( sal_uInt16 nPos );
 
 public:

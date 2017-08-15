@@ -303,10 +303,10 @@ BitmapChecksum BitmapEx::GetChecksum() const
     SVBT32      aBT32;
     BitmapChecksumOctetArray aBCOA;
 
-    UInt32ToSVBT32( (long) eTransparent, aBT32 );
+    UInt32ToSVBT32( (sal_Int32) eTransparent, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
-    UInt32ToSVBT32( (long) bAlpha, aBT32 );
+    UInt32ToSVBT32( (sal_Int32) bAlpha, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     if( ( TransparentType::Bitmap == eTransparent ) && !aMask.IsEmpty() )
@@ -396,7 +396,7 @@ bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
     return bRet;
 }
 
-bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
+bool BitmapEx::Rotate( sal_Int32 nAngle10, const Color& rFillColor )
 {
     bool bRet = false;
 
@@ -647,7 +647,7 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
 }
 
-BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStandardSize)
+BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const sal_Int32 aStandardSize)
 {
     Point aEmptyPoint(0,0);
     double imgposX = 0;
@@ -696,7 +696,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
 
     // Draw a rect into virDevice
     aVirDevice->DrawRect( aRect );
-    Point aPointPixel( (long)imgposX, (long)imgposY );
+    Point aPointPixel( (sal_Int32)imgposX, (sal_Int32)imgposY );
     aVirDevice->DrawBitmapEx( aPointPixel, aRet );
     aRet = aVirDevice->GetBitmapEx( aEmptyPoint, aStdSize );
 
@@ -836,9 +836,9 @@ namespace
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
                 const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
 
-                for(long y(0); y < aDestinationSizePixel.getHeight(); y++)
+                for(sal_Int32 y(0); y < aDestinationSizePixel.getHeight(); y++)
                 {
-                    for(long x(0); x < aDestinationSizePixel.getWidth(); x++)
+                    for(sal_Int32 x(0); x < aDestinationSizePixel.getWidth(); x++)
                     {
                         const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
 
@@ -1193,8 +1193,8 @@ BitmapEx createBlendFrame(
     pBlendFrameCache->m_aLastColorBottomLeft = aColorBottomLeft;
     pBlendFrameCache->m_aLastResult.Clear();
 
-    const long nW(rSize.Width());
-    const long nH(rSize.Height());
+    const sal_Int32 nW(rSize.Width());
+    const sal_Int32 nH(rSize.Height());
 
     if(nW > 1 && nH > 1)
     {
@@ -1209,8 +1209,8 @@ BitmapEx createBlendFrame(
 
         if(pContent && pAlpha)
         {
-            long x(0);
-            long y(0);
+            sal_Int32 x(0);
+            sal_Int32 y(0);
 
             // x == 0, y == 0, top-left corner
             pContent->SetPixel(0, 0, aColorTopLeft);

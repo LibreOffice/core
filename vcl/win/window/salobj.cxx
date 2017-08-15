@@ -428,8 +428,8 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 
                     // transform coordinates
                     POINT pt;
-                    pt.x = (long) LOWORD( lParam );
-                    pt.y = (long) HIWORD( lParam );
+                    pt.x = (sal_Int32) LOWORD( lParam );
+                    pt.y = (sal_Int32) HIWORD( lParam );
                     MapWindowPoints( hWnd, hWndParent, &pt, 1 );
                     lParam = MAKELPARAM( (WORD) pt.x, (WORD) pt.y );
 
@@ -627,12 +627,12 @@ void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
     mbFirstClipRect       = TRUE;
 }
 
-void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void WinSalObject::UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     RECT*       pRect = mpNextClipRect;
     RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
-    long        nRight = nX + nWidth;
-    long        nBottom = nY + nHeight;
+    sal_Int32        nRight = nX + nWidth;
+    sal_Int32        nBottom = nY + nHeight;
 
     if ( mbFirstClipRect )
     {
@@ -687,7 +687,7 @@ void WinSalObject::EndSetClipRegion()
     SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 
-void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void WinSalObject::SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     sal_uLong nStyle = 0;
     bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;

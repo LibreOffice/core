@@ -47,7 +47,7 @@
 #undef max
 #endif
 
-inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
+inline void ImplSetPixel4( sal_uInt8* pScanline, sal_Int32 nX, const BYTE cIndex )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 

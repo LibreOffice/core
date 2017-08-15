@@ -335,8 +335,8 @@ static void ImplMouseAutoPos( Dialog* pDialog )
 
 struct DialogImpl
 {
-    long    mnResult;
-    bool    mbStartedModal;
+    sal_Int32  mnResult;
+    bool       mbStartedModal;
     Link<Dialog&,void>  maEndDialogHdl;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
@@ -632,7 +632,7 @@ bool Dialog::EventNotify( NotifyEvent& rNEvt )
 //taskbar, menus, etc.
 Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 {
-    long w = rScreenSize.Width();
+    sal_Int32 w = rScreenSize.Width();
     if (w <= 800)
         w -= 15;
     else if (w <= 1024)
@@ -640,14 +640,14 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     else
         w -= 115;
 
-    long h = rScreenSize.Height();
+    sal_Int32 h = rScreenSize.Height();
     if (h <= 768)
         h -= 50;
     else
         h -= 100;
 
-    return Size(std::max<long>(w, 640 - 15),
-                std::max<long>(h, 480 - 50));
+    return Size(std::max<sal_Int32>(w, 640 - 15),
+                std::max<sal_Int32>(h, 480 - 50));
 }
 
 void Dialog::StateChanged( StateChangedType nType )
@@ -908,7 +908,7 @@ short Dialog::Execute()
     }
 #endif
 
-    long nRet = mpDialogImpl->mnResult;
+    sal_Int32 nRet = mpDialogImpl->mnResult;
     mpDialogImpl->mnResult = -1;
     return (short)nRet;
 
@@ -932,7 +932,7 @@ void Dialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
     mpDialogImpl->mbStartedModal = true;
 }
 
-void Dialog::EndDialog( long nResult )
+void Dialog::EndDialog( sal_Int32 nResult )
 {
     if ( mbInExecute )
     {
@@ -989,7 +989,7 @@ void Dialog::EndDialog( long nResult )
     }
 }
 
-long Dialog::GetResult() const
+sal_Int32 Dialog::GetResult() const
 {
     return mpDialogImpl->mnResult;
 }

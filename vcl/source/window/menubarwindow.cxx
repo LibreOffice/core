@@ -77,9 +77,9 @@ void DecoToolBox::calcMinSize()
     aTbx.disposeAndClear();
 }
 
-void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
+void DecoToolBox::SetImages( sal_Int32 nMaxHeight, bool bForce )
 {
-    long border = getMinSize().Height() - maImage.GetSizePixel().Height();
+    sal_Int32 border = getMinSize().Height() - maImage.GetSizePixel().Height();
 
     if( !nMaxHeight && lastSize != -1 )
         nMaxHeight = lastSize + border; // don't change anything if called with 0
@@ -193,7 +193,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     }
 }
 
-void MenuBarWindow::SetHeight(long nHeight)
+void MenuBarWindow::SetHeight(sal_Int32 nHeight)
 {
     setPosSizePixel(0, 0, 0, nHeight, PosSizeFlags::Height);
 }
@@ -288,7 +288,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
              ( pItemData->pSubMenu != pActivePopup ) )
         {
             pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
-            long nX = 0;
+            sal_Int32 nX = 0;
             MenuItemData* pData = nullptr;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
             {
@@ -571,7 +571,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
     if (!pMenu)
         return;
 
-    long nX = 0;
+    sal_Int32 nX = 0;
     size_t nCount = pMenu->pItemList->size();
     for (size_t n = 0; n < nCount; n++)
     {
@@ -646,7 +646,7 @@ tools::Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
     tools::Rectangle aRect;
     if( pMenu )
     {
-        long nX = 0;
+        sal_Int32 nX = 0;
         size_t nCount = pMenu->pItemList->size();
         for ( size_t n = 0; n < nCount; n++ )
         {
@@ -896,10 +896,10 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 void MenuBarWindow::Resize()
 {
-    Size aOutSz = GetOutputSizePixel();
-    long n      = aOutSz.Height()-4;
-    long nX     = aOutSz.Width()-3;
-    long nY     = 2;
+    Size      aOutSz = GetOutputSizePixel();
+    sal_Int32 n      = aOutSz.Height()-4;
+    sal_Int32 nX     = aOutSz.Width()-3;
+    sal_Int32 nY     = 2;
 
     if ( aCloseBtn->IsVisible() )
     {
@@ -907,7 +907,7 @@ void MenuBarWindow::Resize()
         aCloseBtn->SetImages(n);
         Size aTbxSize( aCloseBtn->CalcWindowSizePixel() );
         nX -= aTbxSize.Width();
-        long nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
+        sal_Int32 nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
         aCloseBtn->setPosSizePixel(nX, nTbxY, aTbxSize.Width(), aTbxSize.Height());
         nX -= 3;
         aCloseBtn->Show();
@@ -933,7 +933,7 @@ sal_uInt16 MenuBarWindow::ImplFindEntry( const Point& rMousePos ) const
 {
     if( pMenu )
     {
-        long nX = 0;
+        sal_Int32 nX = 0;
         size_t nCount = pMenu->pItemList->size();
         for ( size_t n = 0; n < nCount; n++ )
         {
@@ -988,7 +988,7 @@ void MenuBarWindow::LayoutChanged()
     ApplySettings(*this);
 
     // if the font was changed.
-    long nHeight = pMenu->ImplCalcSize(this).Height();
+    sal_Int32 nHeight = pMenu->ImplCalcSize(this).Height();
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)

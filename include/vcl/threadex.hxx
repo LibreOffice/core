@@ -135,10 +135,10 @@ private:
     \code{.cpp}
         using namespace vcl::solarthread;
 
-        long n = 3;
-        // calling foo( long & r ):
+        sal_Int32 n = 3;
+        // calling foo( sal_Int32 & r ):
         syncExecute( std::bind( &foo, inout_by_ref(n) ) );
-        // calling foo( long * p ):
+        // calling foo( sal_Int32 * p ):
         syncExecute( std::bind( &foo, inout_by_ptr(&n) ) );
 
         char const* pc = "default";

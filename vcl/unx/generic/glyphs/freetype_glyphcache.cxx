@@ -391,8 +391,8 @@ FreetypeFont::FreetypeFont( const FontSelectPattern& rFSD, FreetypeFontInfo* pFI
     if( rFSD.mnOrientation != 0 )
     {
         const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
-        mnCos = static_cast<long>( 0x10000 * cos( dRad ) + 0.5 );
-        mnSin = static_cast<long>( 0x10000 * sin( dRad ) + 0.5 );
+        mnCos = static_cast<sal_Int32>( 0x10000 * cos( dRad ) + 0.5 );
+        mnSin = static_cast<sal_Int32>( 0x10000 * sin( dRad ) + 0.5 );
     }
 
     // set the pixel size of the font instance
@@ -753,11 +753,11 @@ class PolyArgs
 public:
                 PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints );
 
-    void        AddPoint( long nX, long nY, PolyFlags);
+    void        AddPoint( sal_Int32 nX, sal_Int32 nY, PolyFlags);
     void        ClosePolygon();
 
-    long        GetPosX() const { return maPosition.x;}
-    long        GetPosY() const { return maPosition.y;}
+    sal_Int32        GetPosX() const { return maPosition.x;}
+    sal_Int32        GetPosY() const { return maPosition.y;}
 
 private:
     tools::PolyPolygon& mrPolyPoly;
@@ -789,7 +789,7 @@ PolyArgs::PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
     maPosition.x = maPosition.y = 0;
 }
 
-void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
+void PolyArgs::AddPoint( sal_Int32 nX, sal_Int32 nY, PolyFlags aFlag )
 {
     SAL_WARN_IF( (mnPoints >= mnMaxPoints), "vcl", "FTGlyphOutline: AddPoint overflow!" );
     if( mnPoints >= mnMaxPoints )
@@ -874,12 +874,12 @@ static int FT_conic_to( const FT_Vector* p1, const FT_Vector* p2, void* vpPolyAr
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
 
     // VCL's Polygon only knows cubic beziers
-    const long nX1 = (2 * rA.GetPosX() + 4 * p1->x + 3) / 6;
-    const long nY1 = (2 * rA.GetPosY() + 4 * p1->y + 3) / 6;
+    const sal_Int32 nX1 = (2 * rA.GetPosX() + 4 * p1->x + 3) / 6;
+    const sal_Int32 nY1 = (2 * rA.GetPosY() + 4 * p1->y + 3) / 6;
     rA.AddPoint( nX1, nY1, PolyFlags::Control );
 
-    const long nX2 = (2 * p2->x + 4 * p1->x + 3) / 6;
-    const long nY2 = (2 * p2->y + 4 * p1->y + 3) / 6;
+    const sal_Int32 nX2 = (2 * p2->x + 4 * p1->x + 3) / 6;
+    const sal_Int32 nY2 = (2 * p2->y + 4 * p1->y + 3) / 6;
     rA.AddPoint( nX2, nY2, PolyFlags::Control );
 
     rA.AddPoint( p2->x, p2->y, PolyFlags::Normal );
@@ -946,7 +946,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
         return true;
     }
 
-    long nMaxPoints = 1 + rOutline.n_points * 3;
+    sal_Int32 nMaxPoints = 1 + rOutline.n_points * 3;
     tools::PolyPolygon aToolPolyPolygon;
     PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 

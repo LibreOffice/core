@@ -755,8 +755,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_ROTATE_VALUE ) );
         if( pItem && (pItem->GetValue() != 0) )
         {
-            pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
-            long nTxtWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
+            pEditEngine->SetPaperSize( Size( SAL_MAX_INT32, aSize.getHeight() ) );
+            sal_Int32 nTxtWidth = pEditEngine->CalcTextWidth();
             aSize.setWidth( std::max( aSize.getWidth(), nTxtWidth + 2 ) );
         }
         else
@@ -767,7 +767,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             bool bLineBreak = ( pLineBreakItem && pLineBreakItem->GetValue() );
             if ( !bLineBreak )
             {
-                long nTxtWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
+                sal_Int32 nTxtWidth = pEditEngine->CalcTextWidth();
                 aSize.setWidth( ::std::max( aSize.getWidth(), nTxtWidth ) );
             }
         }

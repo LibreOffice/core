@@ -169,7 +169,7 @@ struct NWFWidgetData
 // Keep a hash table of Widgets->default flags so that we can
 // easily and quickly reset each to a default state before using
 // them
-static std::unordered_map<long, guint>    gWidgetDefaultFlags;
+static std::unordered_map<sal_Int32, guint>    gWidgetDefaultFlags;
 class WidgetDataVector
 {
 private:
@@ -1237,7 +1237,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         GtkRequisition aReq;
         gtk_widget_size_request( widget, &aReq );
         tools::Rectangle aEditRect = rControlRegion;
-        long nHeight = (aEditRect.GetHeight() > aReq.height) ? aEditRect.GetHeight() : aReq.height;
+        sal_Int32 nHeight = (aEditRect.GetHeight() > aReq.height) ? aEditRect.GetHeight() : aReq.height;
         aEditRect = tools::Rectangle( aEditRect.TopLeft(),
                                Size( aEditRect.GetWidth(), nHeight ) );
         rNativeBoundingRegion = aEditRect;
@@ -3412,7 +3412,7 @@ bool GtkSalGraphics::NWPaintGTKProgress(
     h = rControlRectangle.GetHeight();
     tools::Rectangle aRect( Point( 0, 0 ), Size( w, h ) );
 
-    long nProgressWidth = rValue.getNumericVal();
+    sal_Int32 nProgressWidth = rValue.getNumericVal();
 
     BEGIN_PIXMAP_RENDER( aRect, pixDrawable )
     {

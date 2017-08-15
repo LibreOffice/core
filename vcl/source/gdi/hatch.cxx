@@ -54,7 +54,7 @@ Hatch::Hatch( const Hatch& rHatch ) : mpImplHatch( rHatch.mpImplHatch )
 }
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
-              long nDistance, sal_uInt16 nAngle10 ) : mpImplHatch()
+              sal_Int32 nDistance, sal_uInt16 nAngle10 ) : mpImplHatch()
 {
     mpImplHatch->maColor = rColor;
     mpImplHatch->meStyle = eStyle;
@@ -83,7 +83,7 @@ void Hatch::SetColor( const Color& rColor )
     mpImplHatch->maColor = rColor;
 }
 
-void Hatch::SetDistance( long nDistance )
+void Hatch::SetDistance( sal_Int32 nDistance )
 {
     mpImplHatch->mnDistance = nDistance;
 }

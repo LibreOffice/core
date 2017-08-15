@@ -92,11 +92,11 @@ GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
 void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
-    long                    nTop;
-    long                    nTextOff;
+    sal_Int32               nTop;
+    sal_Int32               nTextOff;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     OUString                aText( GetText() );
-    tools::Rectangle               aRect( rPos, rSize );
+    tools::Rectangle        aRect( rPos, rSize );
     DrawTextFlags           nTextStyle = DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::EndEllipsis | DrawTextFlags::Mnemonic;
 
     if ( GetStyle() & WB_NOLABEL )

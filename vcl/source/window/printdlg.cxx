@@ -111,7 +111,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
-    long nTextHeight = maHorzDim->GetTextHeight();
+    sal_Int32 nTextHeight = maHorzDim->GetTextHeight();
     // leave small space for decoration
     aNewSize.Width() -= nTextHeight + 2;
     aNewSize.Height() -= nTextHeight + 2;
@@ -136,8 +136,8 @@ void PrintDialog::PrintPreviewWindow::Resize()
         if( aScaledSize.Width() > aNewSize.Width() )
             fScale = double(aNewSize.Width())/double(aScaledSize.Width());
     }
-    aScaledSize.Width() = long(aScaledSize.Width()*fScale);
-    aScaledSize.Height() = long(aScaledSize.Height()*fScale);
+    aScaledSize.Width() = sal_Int32(aScaledSize.Width()*fScale);
+    aScaledSize.Height() = sal_Int32(aScaledSize.Height()*fScale);
 
     maPreviewSize = aScaledSize;
 
@@ -166,7 +166,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    long nTextHeight = maHorzDim->GetTextHeight();
+    sal_Int32 nTextHeight = maHorzDim->GetTextHeight();
     Size aSize(GetSizePixel());
     Point aOffset((aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2,
                   (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2);
@@ -336,12 +336,12 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
     double fX = double(aSubSize.Width()) / double(aSampleTextSize.Width());
     double fY = double(aSubSize.Height()) / double(aSampleTextSize.Height());
     double fScale = (fX < fY) ? fX : fY;
-    long nFontHeight = long(24.0 * fScale) - 3;
+    sal_Int32 nFontHeight = sal_Int32(24.0 * fScale) - 3;
     if (nFontHeight < 5)
         nFontHeight = 5;
     aFont.SetFontSize(Size( 0, nFontHeight));
     rRenderContext.SetFont(aFont);
-    long nTextHeight = rRenderContext.GetTextHeight();
+    sal_Int32 nTextHeight = rRenderContext.GetTextHeight();
     for (int i = 0; i < nPages; i++)
     {
         OUString aPageText(OUString::number(i + 1));
@@ -1367,8 +1367,8 @@ void PrintDialog::updateNupFromPages()
     sal_IntPtr nPages = sal_IntPtr(maNUpPage.mpNupPagesBox->GetSelectEntryData());
     int nRows   = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols   = int(maNUpPage.mpNupColEdt->GetValue());
-    long nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));
-    long nSheetMargin = maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM ));
+    sal_Int32 nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));
+    sal_Int32 nSheetMargin = maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM ));
     bool bCustom = false;
 
     if( nPages == 1 )
@@ -1425,8 +1425,8 @@ void PrintDialog::updateNupFromPages()
         Size aSize( getJobPageSize() );
 
         // maximum sheet distance: 1/2 sheet
-        long nHorzMax = aSize.Width()/2;
-        long nVertMax = aSize.Height()/2;
+        sal_Int32 nHorzMax = aSize.Width()/2;
+        sal_Int32 nVertMax = aSize.Height()/2;
         if( nSheetMargin > nHorzMax )
             nSheetMargin = nHorzMax;
         if( nSheetMargin > nVertMax )
@@ -1471,8 +1471,8 @@ void PrintDialog::updateNup()
 {
     int nRows         = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols         = int(maNUpPage.mpNupColEdt->GetValue());
-    long nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));
-    long nSheetMargin = maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM ));
+    sal_Int32 nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));
+    sal_Int32 nSheetMargin = maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM ));
 
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;

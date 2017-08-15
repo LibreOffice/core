@@ -116,8 +116,8 @@ public:
     SalFrameGeometry        maGeometry;
 
     // SalGeometryProvider
-    virtual long GetWidth() const override { return maGeometry.nWidth; }
-    virtual long GetHeight() const override { return maGeometry.nHeight; }
+    virtual sal_Int32 GetWidth() const override { return maGeometry.nWidth; }
+    virtual sal_Int32 GetHeight() const override { return maGeometry.nHeight; }
     virtual bool IsOffScreen() const override { return false; }
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
@@ -143,10 +143,10 @@ public:
 
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
-    virtual void            SetMinClientSize( long nWidth, long nHeight ) = 0;
-    virtual void            SetMaxClientSize( long nWidth, long nHeight ) = 0;
-    virtual void            SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) = 0;
-    virtual void            GetClientSize( long& rWidth, long& rHeight ) = 0;
+    virtual void            SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
+    virtual void            SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
+    virtual void            SetPosSize(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags ) = 0;
+    virtual void            GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) = 0;
     virtual void            GetWorkArea( tools::Rectangle& rRect ) = 0;
     virtual SalFrame*       GetParent() const = 0;
     // Note: x will be mirrored at parent if UI mirroring is active
@@ -171,7 +171,7 @@ public:
     // pointer style
     virtual void            SetPointer( PointerStyle ePointerStyle ) = 0;
     virtual void            CaptureMouse( bool bMouse ) = 0;
-    virtual void            SetPointerPos( long nX, long nY ) = 0;
+    virtual void            SetPointerPos( sal_Int32 nX, sal_Int32 nY ) = 0;
 
     // flush output buffer
     virtual void            Flush() = 0;
@@ -230,7 +230,7 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void            BeginSetClipRegion( sal_uLong nRects ) = 0;
     // add a rectangle to the clip region
-    virtual void            UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void            UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
     // done setting up the clipregion
     virtual void            EndSetClipRegion() = 0;
 
@@ -272,8 +272,8 @@ public:
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation
     // (e.g. input methods, printer update handlers).
-    long                    CallCallback( SalEvent nEvent, const void* pEvent ) const
-        { return m_pProc ? long(m_pProc( m_pWindow, nEvent, pEvent )) : 0; }
+    sal_Int32                    CallCallback( SalEvent nEvent, const void* pEvent ) const
+        { return m_pProc ? sal_Int32(m_pProc( m_pWindow, nEvent, pEvent )) : 0; }
 };
 
 #ifdef _WIN32

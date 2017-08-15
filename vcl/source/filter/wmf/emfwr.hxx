@@ -70,7 +70,7 @@ private:
 
     void                ImplWriteColor( const Color& rColor );
     void                ImplWriteRasterOp( RasterOp eRop );
-    void                ImplWriteExtent( long nExtent );
+    void                ImplWriteExtent( sal_Int32 nExtent );
     void                ImplWritePoint( const Point& rPoint );
     void                ImplWriteSize( const Size& rSize);
     void                ImplWriteRect( const tools::Rectangle& rRect );
@@ -78,7 +78,7 @@ private:
     void                ImplWritePolygonRecord( const tools::Polygon& rPoly, bool bClose );
     void                ImplWritePolyPolygonRecord( const tools::PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
-    void                ImplWriteTextRecord( const Point& rPos, const OUString& rText, const long* pDXArray, sal_uInt32 nWidth );
+    void                ImplWriteTextRecord( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
     void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void                ImplWrite( const GDIMetaFile& rMtf );

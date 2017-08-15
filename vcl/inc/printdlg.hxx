@@ -150,7 +150,7 @@ namespace vcl
             BitmapEx                                maCollateBmp;
             BitmapEx                                maNoCollateBmp;
 
-            long                                    mnCollateUIMode;
+            sal_Int32                               mnCollateUIMode;
 
             JobTabPage( VclBuilder* );
 

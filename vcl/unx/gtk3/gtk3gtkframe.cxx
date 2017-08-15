@@ -874,7 +874,7 @@ GtkSalFrame::~GtkSalFrame()
         cairo_surface_destroy(m_pSurface);
 }
 
-void GtkSalFrame::moveWindow( long nX, long nY )
+void GtkSalFrame::moveWindow( sal_Int32 nX, sal_Int32 nY )
 {
     if( isChild( false ) )
     {
@@ -887,12 +887,12 @@ void GtkSalFrame::moveWindow( long nX, long nY )
         gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
 }
 
-void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
+void GtkSalFrame::widget_set_size_request(sal_Int32 nWidth, sal_Int32 nHeight)
 {
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
 }
 
-void GtkSalFrame::window_resize(long nWidth, long nHeight)
+void GtkSalFrame::window_resize(sal_Int32 nWidth, sal_Int32 nHeight)
 {
     m_nWidthRequest = nWidth;
     m_nHeightRequest = nHeight;
@@ -901,7 +901,7 @@ void GtkSalFrame::window_resize(long nWidth, long nHeight)
         gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
-void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
+void GtkSalFrame::resizeWindow( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( isChild( false ) )
     {
@@ -1277,7 +1277,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
 
-    if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
+    if( pSysData->nSize > sal_Int32(sizeof(pSysData->nSize)+sizeof(pSysData->aWindow)) && pSysData->bXEmbedSupport )
     {
         m_pWindow = gtk_plug_new_for_display( getGdkDisplay(), pSysData->aWindow );
         m_bWindowIsGtkPlug  = true;
@@ -1542,7 +1542,7 @@ void GtkSalFrame::setMinMaxSize()
     }
 }
 
-void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void GtkSalFrame::SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( ! isChild() )
     {
@@ -1550,7 +1550,7 @@ void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
         setMinMaxSize();
     }
 }
-void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void GtkSalFrame::SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( ! isChild() )
     {
@@ -1591,7 +1591,7 @@ void GtkSalFrame::AllocateFrame()
     }
 }
 
-void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void GtkSalFrame::SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags )
 {
     if( !m_pWindow || isChild( true, false ) )
         return;
@@ -1636,7 +1636,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     m_bDefaultPos = false;
 }
 
-void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void GtkSalFrame::GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight )
 {
     if( m_pWindow && !(m_nState & GDK_WINDOW_STATE_ICONIFIED) )
     {
@@ -1697,8 +1697,8 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
                                WindowStateMask::Width | WindowStateMask::Height ) )
     {
         sal_uInt16 nPosSizeFlags = 0;
-        long nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
-        long nY         = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
+        sal_Int32 nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
+        sal_Int32 nY         = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
         if( pState->mnMask & WindowStateMask::X )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
         else
@@ -1738,7 +1738,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
 
 namespace
 {
-    void GetPosAndSize(GtkWindow *pWindow, long& rX, long &rY, long &rWidth, long &rHeight)
+    void GetPosAndSize(GtkWindow *pWindow, sal_Int32& rX, sal_Int32 &rY, sal_Int32 &rWidth, sal_Int32 &rHeight)
     {
        gint root_x, root_y;
        gtk_window_get_position(GTK_WINDOW(pWindow), &root_x, &root_y);
@@ -1752,7 +1752,7 @@ namespace
 
     tools::Rectangle GetPosAndSize(GtkWindow *pWindow)
     {
-        long nX, nY, nWidth, nHeight;
+        sal_Int32 nX, nY, nWidth, nHeight;
         GetPosAndSize(pWindow, nX, nY, nWidth, nHeight);
         return tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
     }
@@ -2124,7 +2124,7 @@ void GtkSalFrame::CaptureMouse( bool bCapture )
     getDisplay()->CaptureMouse( bCapture ? this : nullptr );
 }
 
-void GtkSalFrame::SetPointerPos( long nX, long nY )
+void GtkSalFrame::SetPointerPos( sal_Int32 nX, sal_Int32 nY )
 {
     GtkSalFrame* pFrame = this;
     while( pFrame && pFrame->isChild( false ) )
@@ -2397,7 +2397,7 @@ void GtkSalFrame::BeginSetClipRegion( sal_uLong )
     m_pRegion = cairo_region_create();
 }
 
-void GtkSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void GtkSalFrame::UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( m_pRegion )
     {
@@ -2627,8 +2627,8 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     if (!aDel.isDeleted())
     {
         aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-        aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+        aEvent.mnX      = (sal_Int32)pEvent->x_root - pThis->maGeometry.nX;
+        aEvent.mnY      = (sal_Int32)pEvent->y_root - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
 
         if( AllSettings::GetLayoutRTL() )
@@ -2851,8 +2851,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     {
         SalMouseEvent aEvent;
         aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-        aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+        aEvent.mnX      = (sal_Int32)pEvent->x_root - pThis->maGeometry.nX;
+        aEvent.mnY      = (sal_Int32)pEvent->y_root - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
         aEvent.mnButton = 0;
 
@@ -2880,8 +2880,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
-    aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
+    aEvent.mnX      = (sal_Int32)pEvent->x_root - pThis->maGeometry.nX;
+    aEvent.mnY      = (sal_Int32)pEvent->y_root - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
@@ -4332,9 +4332,9 @@ void GtkSalFrame::signalDragDataGet(GtkWidget* /*widget*/, GdkDragContext* /*con
     pThis->m_pDragSource->dragDataGet(data, info);
 }
 
-long GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
+sal_Int32 GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
 {
-    long nRet = 0;
+    sal_Int32 nRet = 0;
     try
     {
         nRet = CallCallback(nEvent, pEvent);

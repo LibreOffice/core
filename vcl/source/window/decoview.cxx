@@ -32,11 +32,11 @@ using namespace std;
 
 namespace {
 
-long AdjustRectToSquare( tools::Rectangle &rRect )
+sal_Int32 AdjustRectToSquare( tools::Rectangle &rRect )
 {
-    const long nWidth = rRect.GetWidth();
-    const long nHeight = rRect.GetHeight();
-    long nSide = std::min( nWidth, nHeight );
+    const sal_Int32 nWidth = rRect.GetWidth();
+    const sal_Int32 nHeight = rRect.GetHeight();
+    sal_Int32 nSide = std::min( nWidth, nHeight );
 
     if ( nSide && !(nSide & 1) )
     {
@@ -55,7 +55,7 @@ long AdjustRectToSquare( tools::Rectangle &rRect )
 
 void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolType eType  )
 {
-    const long nSide = AdjustRectToSquare( nRect );
+    const sal_Int32 nSide = AdjustRectToSquare( nRect );
 
     if ( !nSide ) return;
     if ( nSide==1 )
@@ -65,16 +65,16 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
     }
 
     // Precalculate some values
-    const long n2 = nSide/2;
-    const long n4 = (n2+1)/2;
-    const long n8 = (n4+1)/2;
+    const sal_Int32 n2 = nSide/2;
+    const sal_Int32 n4 = (n2+1)/2;
+    const sal_Int32 n8 = (n4+1)/2;
     const Point aCenter = nRect.Center();
 
     switch ( eType )
     {
         case SymbolType::ARROW_UP:
             pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 ++nRect.Top();
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
@@ -86,7 +86,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
 
         case SymbolType::ARROW_DOWN:
             pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 --nRect.Bottom();
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
@@ -98,7 +98,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
 
         case SymbolType::ARROW_LEFT:
             pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 ++nRect.Left();
                 pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
@@ -110,7 +110,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
 
         case SymbolType::ARROW_RIGHT:
             pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 --nRect.Right();
                 pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
@@ -123,7 +123,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         case SymbolType::SPIN_UP:
             nRect.Top() += n4;
             pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 ++nRect.Top();
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
@@ -134,7 +134,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         case SymbolType::SPIN_DOWN:
             nRect.Bottom() -= n4;
             pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 --nRect.Bottom();
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
@@ -153,7 +153,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 ++nRect.Left();
             }
             pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 ++nRect.Left();
                 pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
@@ -173,7 +173,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                 --nRect.Right();
             }
             pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
-            for ( long i=1; i <= n2; ++i )
+            for ( sal_Int32 i=1; i <= n2; ++i )
             {
                 --nRect.Right();
                 pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
@@ -184,7 +184,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         case SymbolType::PAGEUP:
             pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
             pDev->DrawPixel( Point( aCenter.X(), nRect.Top()+n2 ) );
-            for ( long i=1; i < n2; ++i )
+            for ( sal_Int32 i=1; i < n2; ++i )
             {
                 ++nRect.Top();
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
@@ -197,7 +197,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         case SymbolType::PAGEDOWN:
             pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
             pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom()-n2 ) );
-            for ( long i=1; i < n2; ++i )
+            for ( sal_Int32 i=1; i < n2; ++i )
             {
                 --nRect.Bottom();
                 pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
@@ -210,9 +210,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
         case SymbolType::RADIOCHECKMARK:
             {
                 // Midpoint circle algorithm
-                long x = 0;
-                long y = n2;
-                long p = 1 - n2;
+                sal_Int32 x = 0;
+                sal_Int32 y = n2;
+                sal_Int32 p = 1 - n2;
                 // Draw central line
                 pDev->DrawLine( Point( aCenter.X(), aCenter.Y()-y ),
                                 Point( aCenter.X(), aCenter.Y()+y ) );
@@ -248,7 +248,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                             Point( nRect.Right(), nRect.Bottom() ) );
             pDev->DrawLine( Point( nRect.Left(), nRect.Bottom() ),
                             Point( nRect.Right(), nRect.Top() ) );
-            for ( long i=1; i<n8; ++i )
+            for ( sal_Int32 i=1; i<n8; ++i )
             {
                 pDev->DrawLine( Point( nRect.Left()+i, nRect.Top() ),
                                 Point( nRect.Right(), nRect.Bottom()-i ) );
@@ -276,7 +276,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
 
         case SymbolType::CHECKMARK:
             {
-                long n3 = nSide/3;
+                sal_Int32 n3 = nSide/3;
                 nRect.Top() -= n3/2;
                 nRect.Bottom() -= n3/2;
                 // #106953# never mirror checkmarks
@@ -367,8 +367,8 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
 void ImplDrawDPILineRect( OutputDevice *const pDev, tools::Rectangle& rRect,
                           const Color *const pColor, const bool bRound = false )
 {
-    long nLineWidth = pDev->GetDPIX()/300;
-    long nLineHeight = pDev->GetDPIY()/300;
+    sal_Int32 nLineWidth = pDev->GetDPIX()/300;
+    sal_Int32 nLineHeight = pDev->GetDPIY()/300;
     if ( !nLineWidth )
         nLineWidth = 1;
     if ( !nLineHeight )
@@ -394,8 +394,8 @@ void ImplDrawDPILineRect( OutputDevice *const pDev, tools::Rectangle& rRect,
         }
         else
         {
-            const long nWidth = rRect.GetWidth();
-            const long nHeight = rRect.GetHeight();
+            const sal_Int32 nWidth = rRect.GetWidth();
+            const sal_Int32 nHeight = rRect.GetHeight();
             pDev->SetLineColor();
             pDev->SetFillColor( *pColor );
             pDev->DrawRect( tools::Rectangle( rRect.TopLeft(), Size( nWidth, nLineHeight ) ) );
@@ -594,9 +594,9 @@ void ImplDrawFrame( OutputDevice *const pDev, tools::Rectangle& rRect,
     if( nStyle != DrawFrameStyle::NWF &&
         pWin && pWin->IsNativeControlSupported(ControlType::Frame, ControlPart::Border) )
     {
-        long nControlFlags = static_cast<long>(nStyle);
-        nControlFlags |= static_cast<long>(nFlags);
-        nControlFlags |= static_cast<long>(pWin->GetType() == WindowType::BORDERWINDOW ?
+        sal_Int32 nControlFlags = static_cast<sal_Int32>(nStyle);
+        nControlFlags |= static_cast<sal_Int32>(nFlags);
+        nControlFlags |= static_cast<sal_Int32>(pWin->GetType() == WindowType::BORDERWINDOW ?
                                            DrawFrameFlags::BorderWindowBorder : DrawFrameFlags::NONE);
         ImplControlValue aControlValue( nControlFlags );
 
@@ -1043,15 +1043,15 @@ void DecorationView::DrawHandle(const tools::Rectangle& rRect)
 
     const sal_Int32 nNumberOfPoints = 3;
 
-    long nHalfWidth = aOutputSize.Width() / 2.0f;
+    sal_Int32 nHalfWidth = aOutputSize.Width() / 2.0f;
 
     float fDistance = aOutputSize.Height();
     fDistance /= (nNumberOfPoints + 1);
 
-    long nRadius = aOutputSize.Width();
+    sal_Int32 nRadius = aOutputSize.Width();
     nRadius /= (nNumberOfPoints + 2);
 
-    for (long i = 1; i <= nNumberOfPoints; i++)
+    for (sal_Int32 i = 1; i <= nNumberOfPoints; i++)
     {
         tools::Rectangle aLocation;
         aLocation = tools::Rectangle(nHalfWidth - nRadius,

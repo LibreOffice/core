@@ -210,7 +210,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         // Match the import in sc/source/filter/oox/unitconverter.cxx
         // UnitConverter::finalizeImport()
         for (sal_Unicode cChar = '0'; cChar <= '9'; ++cChar)
-            mrData.mnCharWidth = std::max( pPrinter->GetTextWidth( OUString(cChar)), mrData.mnCharWidth);
+            mrData.mnCharWidth = std::max( pPrinter->GetTextWidth( OUString(cChar)), sal_Int32(mrData.mnCharWidth));
     }
     if( mrData.mnCharWidth <= 0 )
     {

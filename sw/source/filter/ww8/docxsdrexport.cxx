@@ -595,32 +595,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     sal_uInt64 cy = 0 ;
     const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
 
-    // the 'Size' type uses 'long' for width and height, so on
-    // platforms where 'long' is 32 bits they can obviously never be
-    // larger than the max signed 32-bit integer.
-#if SAL_TYPES_SIZEOFLONG > 4
-    if (rSize.Width() > MAX_INTEGER_VALUE)
-        cx = MAX_INTEGER_VALUE ;
+    if (0 > rSize.Width())
+        cx = 0 ;
     else
-#endif
-    {
-        if (0 > rSize.Width())
-            cx = 0 ;
-        else
-            cx = rSize.Width();
-    }
+        cx = rSize.Width();
 
-#if SAL_TYPES_SIZEOFLONG > 4
-    if (rSize.Height() > MAX_INTEGER_VALUE)
-        cy = MAX_INTEGER_VALUE ;
+    if (0 > rSize.Height())
+        cy = 0 ;
     else
-#endif
-    {
-        if (0 > rSize.Height())
-            cy = 0 ;
-        else
-            cy = rSize.Height();
-    }
+        cy = rSize.Height();
 
     OString aWidth(OString::number(TwipsToEMU(cx)));
     //we explicitly check the converted EMU value for the range as mentioned in above comment.

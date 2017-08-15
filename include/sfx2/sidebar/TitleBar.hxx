@@ -43,7 +43,7 @@ public:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
-    virtual void setPosSizePixel (long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
+    virtual void setPosSizePixel (sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
 
     ToolBox& GetToolBox()
     {

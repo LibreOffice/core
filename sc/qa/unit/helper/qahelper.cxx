@@ -180,11 +180,11 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     pPattern = pDoc->GetPattern(0,0,1);
     vcl::Font aFont;
     pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200l, aFont.GetFontSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200, aFont.GetFontSize().getHeight());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor().GetColor());
     pPattern = pDoc->GetPattern(0,1,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", 240l, aFont.GetFontSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", 240, aFont.GetFontSize().getHeight());
     pPattern = pDoc->GetPattern(0,2,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalic());

@@ -145,7 +145,7 @@ void SwOleClient::ViewChanged()
     aVisSize.Width() = Fraction( aVisSize.Width()  ) * GetScaleWidth();
     aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
-    SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
+    SwRect aRect( Point( SAL_MIN_INT32, SAL_MIN_INT32 ), aVisSize );
     rSh.LockView( true );   // Prevent scrolling in the EndAction
     rSh.StartAllAction();
     rSh.RequestObjectResize( aRect, GetObject() );

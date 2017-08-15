@@ -4042,7 +4042,7 @@ long ImpEditEngine::GetXPos(
                         if ( nType == AsianCompressionFlags::PunctuationRight && !pLine->GetCharPosArray().empty() )
                         {
                             sal_Int32 n = nIndex - nTextPortionStart;
-                            const long* pDXArray = &pLine->GetCharPosArray()[0]+( nTextPortionStart-pLine->GetStart() );
+                            const sal_Int32* pDXArray = &pLine->GetCharPosArray()[0]+( nTextPortionStart-pLine->GetStart() );
                             sal_Int32 nCharWidth = ( ( (n+1) < rPortion.GetLen() ) ? pDXArray[n] : rPortion.GetSize().Width() )
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < rPortion.GetLen() )

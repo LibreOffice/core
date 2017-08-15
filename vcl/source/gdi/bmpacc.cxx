@@ -362,7 +362,7 @@ BitmapWriteAccess::~BitmapWriteAccess()
 {
 }
 
-void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
+void BitmapWriteAccess::CopyScanline( sal_Int32 nY, const BitmapReadAccess& rReadAcc )
 {
     assert(nY >= 0 && nY < mpBuffer->mnHeight && "y-coordinate in destination out of range!");
     SAL_WARN_IF( nY >= rReadAcc.Height(), "vcl", "y-coordinate in source out of range!" );
@@ -375,11 +375,11 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
     }
     else
         // TODO: use fastbmp infrastructure
-        for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
+        for( sal_Int32 nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
 
-void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
+void BitmapWriteAccess::CopyScanline( sal_Int32 nY, ConstScanline aSrcScanline,
                                       ScanlineFormat nSrcScanlineFormat, sal_uLong nSrcScanlineSize )
 {
     const ScanlineFormat nFormat = RemoveScanline( nSrcScanlineFormat );
@@ -432,7 +432,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
             {
                 const ColorMask aDummyMask;
 
-                for( long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; nX++ )
                     SetPixel( nY, nX, pFncGetPixel( aSrcScanline, nX, aDummyMask ) );
             }
         }
@@ -446,13 +446,13 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
     {
-        const long  nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() );
+        const sal_Int32  nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() );
         const sal_uLong nCount = nHeight * mpBuffer->mnScanlineSize;
 
         memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }
     else
-        for( long nY = 0, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
+        for( sal_Int32 nY = 0, nHeight = std::min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
             CopyScanline( nY, rReadAcc );
 }
 

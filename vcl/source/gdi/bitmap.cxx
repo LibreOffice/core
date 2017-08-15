@@ -475,11 +475,11 @@ bool Bitmap::Invert()
         }
         else
         {
-            const long  nWidth = pAcc->Width();
-            const long  nHeight = pAcc->Height();
+            const sal_Int32  nWidth = pAcc->Width();
+            const sal_Int32  nHeight = pAcc->Height();
 
-            for( long nX = 0L; nX < nWidth; nX++ )
-                for( long nY = 0L; nY < nHeight; nY++ )
+            for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
+                for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
                     pAcc->SetPixel( nY, nX, pAcc->GetPixel( nY, nX ).Invert() );
         }
 
@@ -503,14 +503,14 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
 
         if( pAcc )
         {
-            const long  nWidth = pAcc->Width();
-            const long  nHeight = pAcc->Height();
-            const long  nWidth1 = nWidth - 1L;
-            const long  nWidth_2 = nWidth >> 1L;
+            const sal_Int32  nWidth = pAcc->Width();
+            const sal_Int32  nHeight = pAcc->Height();
+            const sal_Int32  nWidth1 = nWidth - 1L;
+            const sal_Int32  nWidth_2 = nWidth >> 1L;
 
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
             {
-                for( long nX = 0L, nOther = nWidth1; nX < nWidth_2; nX++, nOther-- )
+                for( sal_Int32 nX = 0L, nOther = nWidth1; nX < nWidth_2; nX++, nOther-- )
                 {
                     const BitmapColor aTemp( pAcc->GetPixel( nY, nX ) );
 
@@ -529,13 +529,13 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
 
         if( pAcc )
         {
-            const long  nScanSize = pAcc->GetScanlineSize();
+            const sal_Int32  nScanSize = pAcc->GetScanlineSize();
             std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[ nScanSize ]);
-            const long  nHeight = pAcc->Height();
-            const long  nHeight1 = nHeight - 1L;
-            const long  nHeight_2 = nHeight >> 1L;
+            const sal_Int32  nHeight = pAcc->Height();
+            const sal_Int32  nHeight1 = nHeight - 1L;
+            const sal_Int32  nHeight_2 = nHeight >> 1L;
 
-            for( long nY = 0L, nOther = nHeight1; nY < nHeight_2; nY++, nOther-- )
+            for( sal_Int32 nY = 0L, nOther = nHeight1; nY < nHeight_2; nY++, nOther-- )
             {
                 memcpy( pBuffer.get(), pAcc->GetScanline( nY ), nScanSize );
                 memcpy( pAcc->GetScanline( nY ), pAcc->GetScanline( nOther ), nScanSize );
@@ -552,14 +552,14 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
 
         if( pAcc )
         {
-            const long  nWidth = pAcc->Width();
-            const long  nWidth1 = nWidth - 1L;
-            const long  nHeight = pAcc->Height();
-            long        nHeight_2 = nHeight >> 1;
+            const sal_Int32  nWidth = pAcc->Width();
+            const sal_Int32  nWidth1 = nWidth - 1L;
+            const sal_Int32  nHeight = pAcc->Height();
+            sal_Int32        nHeight_2 = nHeight >> 1;
 
-            for( long nY = 0L, nOtherY = nHeight - 1L; nY < nHeight_2; nY++, nOtherY-- )
+            for( sal_Int32 nY = 0L, nOtherY = nHeight - 1L; nY < nHeight_2; nY++, nOtherY-- )
             {
-                for( long nX = 0L, nOtherX = nWidth1; nX < nWidth; nX++, nOtherX-- )
+                for( sal_Int32 nX = 0L, nOtherX = nWidth1; nX < nWidth; nX++, nOtherX-- )
                 {
                     const BitmapColor aTemp( pAcc->GetPixel( nY, nX ) );
 
@@ -571,7 +571,7 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
             // ggf. noch mittlere Zeile horizontal spiegeln
             if( nHeight & 1 )
             {
-                for( long nX = 0L, nOtherX = nWidth1, nWidth_2 = nWidth >> 1; nX < nWidth_2; nX++, nOtherX-- )
+                for( sal_Int32 nX = 0L, nOtherX = nWidth1, nWidth_2 = nWidth >> 1; nX < nWidth_2; nX++, nOtherX-- )
                 {
                     const BitmapColor aTemp( pAcc->GetPixel( nHeight_2, nX ) );
                     pAcc->SetPixel( nHeight_2, nX, pAcc->GetPixel( nHeight_2, nOtherX ) );
@@ -589,7 +589,7 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
     return bRet;
 }
 
-bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
+bool Bitmap::Rotate( sal_Int32 nAngle10, const Color& rFillColor )
 {
     bool bRet = false;
 
@@ -617,23 +617,23 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
 
                 if( pWriteAcc )
                 {
-                    const long  nWidth = aSizePix.Width();
-                    const long  nWidth1 = nWidth - 1L;
-                    const long  nHeight = aSizePix.Height();
-                    const long  nHeight1 = nHeight - 1L;
-                    const long  nNewWidth = aNewSizePix.Width();
-                    const long  nNewHeight = aNewSizePix.Height();
+                    const sal_Int32  nWidth = aSizePix.Width();
+                    const sal_Int32  nWidth1 = nWidth - 1L;
+                    const sal_Int32  nHeight = aSizePix.Height();
+                    const sal_Int32  nHeight1 = nHeight - 1L;
+                    const sal_Int32  nNewWidth = aNewSizePix.Width();
+                    const sal_Int32  nNewHeight = aNewSizePix.Height();
 
                     if( 900L == nAngle10 )
                     {
-                        for( long nY = 0L, nOtherX = nWidth1; nY < nNewHeight; nY++, nOtherX-- )
-                            for( long nX = 0L, nOtherY = 0L; nX < nNewWidth; nX++ )
+                        for( sal_Int32 nY = 0L, nOtherX = nWidth1; nY < nNewHeight; nY++, nOtherX-- )
+                            for( sal_Int32 nX = 0L, nOtherY = 0L; nX < nNewWidth; nX++ )
                                 pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nOtherY++, nOtherX ) );
                     }
                     else if( 2700L == nAngle10 )
                     {
-                        for( long nY = 0L, nOtherX = 0L; nY < nNewHeight; nY++, nOtherX++ )
-                            for( long nX = 0L, nOtherY = nHeight1; nX < nNewWidth; nX++ )
+                        for( sal_Int32 nY = 0L, nOtherX = 0L; nY < nNewHeight; nY++, nOtherX++ )
+                            for( sal_Int32 nX = 0L, nOtherY = nHeight1; nX < nNewWidth; nX++ )
                                 pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nOtherY--, nOtherX ) );
                     }
 
@@ -661,18 +661,18 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                     const double        fSinAngle = sin( nAngle10 * F_PI1800 );
                     const double        fXMin = aNewBound.Left();
                     const double        fYMin = aNewBound.Top();
-                    const long          nWidth = aSizePix.Width();
-                    const long          nHeight = aSizePix.Height();
-                    const long          nNewWidth = aNewSizePix.Width();
-                    const long          nNewHeight = aNewSizePix.Height();
-                    long                nX;
-                    long                nY;
-                    long                nRotX;
-                    long                nRotY;
-                    std::unique_ptr<long[]> pCosX(new long[ nNewWidth ]);
-                    std::unique_ptr<long[]> pSinX(new long[ nNewWidth ]);
-                    std::unique_ptr<long[]> pCosY(new long[ nNewHeight ]);
-                    std::unique_ptr<long[]> pSinY(new long[ nNewHeight ]);
+                    const sal_Int32          nWidth = aSizePix.Width();
+                    const sal_Int32          nHeight = aSizePix.Height();
+                    const sal_Int32          nNewWidth = aNewSizePix.Width();
+                    const sal_Int32          nNewHeight = aNewSizePix.Height();
+                    sal_Int32                nX;
+                    sal_Int32                nY;
+                    sal_Int32                nRotX;
+                    sal_Int32                nRotY;
+                    std::unique_ptr<sal_Int32[]> pCosX(new sal_Int32[ nNewWidth ]);
+                    std::unique_ptr<sal_Int32[]> pSinX(new sal_Int32[ nNewWidth ]);
+                    std::unique_ptr<sal_Int32[]> pCosY(new sal_Int32[ nNewHeight ]);
+                    std::unique_ptr<sal_Int32[]> pSinY(new sal_Int32[ nNewHeight ]);
 
                     for ( nX = 0; nX < nNewWidth; nX++ )
                     {
@@ -692,8 +692,8 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
 
                     for( nY = 0L; nY < nNewHeight; nY++ )
                     {
-                        long nSinY = pSinY[ nY ];
-                        long nCosY = pCosY[ nY ];
+                        sal_Int32 nSinY = pSinY[ nY ];
+                        sal_Int32 nCosY = pCosY[ nY ];
 
                         for( nX = 0L; nX < nNewWidth; nX++ )
                         {
@@ -745,13 +745,13 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
 
             if( pWriteAcc )
             {
-                const long nOldX = aRect.Left();
-                const long nOldY = aRect.Top();
-                const long nNewWidth = aNewRect.GetWidth();
-                const long nNewHeight = aNewRect.GetHeight();
+                const sal_Int32 nOldX = aRect.Left();
+                const sal_Int32 nOldY = aRect.Top();
+                const sal_Int32 nNewWidth = aNewRect.GetWidth();
+                const sal_Int32 nNewHeight = aNewRect.GetHeight();
 
-                for( long nY = 0, nY2 = nOldY; nY < nNewHeight; nY++, nY2++ )
-                    for( long nX = 0, nX2 = nOldX; nX < nNewWidth; nX++, nX2++ )
+                for( sal_Int32 nY = 0, nY2 = nOldY; nY < nNewHeight; nY++, nY2++ )
+                    for( sal_Int32 nX = 0, nX2 = nOldX; nX < nNewWidth; nX++, nX2++ )
                         pWriteAcc->SetPixel( nY, nX, pReadAcc->GetPixel( nY2, nX2 ) );
 
                 pWriteAcc.reset();
@@ -848,11 +848,11 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
                     if( pWriteAcc )
                     {
-                        const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                        const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
-                        const long  nSrcEndX = aRectSrc.Left() + nWidth;
-                        const long  nSrcEndY = aRectSrc.Top() + nHeight;
-                        long        nDstY = aRectDst.Top();
+                        const sal_Int32  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                        const sal_Int32  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                        const sal_Int32  nSrcEndX = aRectSrc.Left() + nWidth;
+                        const sal_Int32  nSrcEndY = aRectSrc.Top() + nHeight;
+                        sal_Int32        nDstY = aRectDst.Top();
 
                         if( pReadAcc->HasPalette() && pWriteAcc->HasPalette() )
                         {
@@ -864,19 +864,19 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                                 pMap[ i ] = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( pReadAcc->GetPaletteColor( i ) );
 
-                            for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
-                                for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
+                            for( sal_Int32 nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
+                                for( sal_Int32 nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
                                     pWriteAcc->SetPixelIndex( nDstY, nDstX, pMap[ pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ] );
                         }
                         else if( pReadAcc->HasPalette() )
                         {
-                            for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
-                                for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
+                            for( sal_Int32 nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
+                                for( sal_Int32 nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
                                     pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ) );
                         }
                         else
-                            for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
-                                for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
+                            for( sal_Int32 nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
+                                for( sal_Int32 nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
                                     pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPixel( nSrcY, nSrcX ) );
 
                         pWriteAcc.reset();
@@ -899,39 +899,39 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
 
                 if( pWriteAcc )
                 {
-                    const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                    const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
-                    const long  nSrcX = aRectSrc.Left();
-                    const long  nSrcY = aRectSrc.Top();
-                    const long  nSrcEndX1 = nSrcX + nWidth - 1L;
-                    const long  nSrcEndY1 = nSrcY + nHeight - 1L;
-                    const long  nDstX = aRectDst.Left();
-                    const long  nDstY = aRectDst.Top();
-                    const long  nDstEndX1 = nDstX + nWidth - 1L;
-                    const long  nDstEndY1 = nDstY + nHeight - 1L;
+                    const sal_Int32  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                    const sal_Int32  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                    const sal_Int32  nSrcX = aRectSrc.Left();
+                    const sal_Int32  nSrcY = aRectSrc.Top();
+                    const sal_Int32  nSrcEndX1 = nSrcX + nWidth - 1L;
+                    const sal_Int32  nSrcEndY1 = nSrcY + nHeight - 1L;
+                    const sal_Int32  nDstX = aRectDst.Left();
+                    const sal_Int32  nDstY = aRectDst.Top();
+                    const sal_Int32  nDstEndX1 = nDstX + nWidth - 1L;
+                    const sal_Int32  nDstEndY1 = nDstY + nHeight - 1L;
 
                     if( ( nDstX <= nSrcX ) && ( nDstY <= nSrcY ) )
                     {
-                        for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
-                            for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
+                        for( sal_Int32 nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
+                            for( sal_Int32 nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
                     else if( ( nDstX <= nSrcX ) && ( nDstY >= nSrcY ) )
                     {
-                        for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
-                            for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
+                        for( sal_Int32 nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
+                            for( sal_Int32 nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
                     else if( ( nDstX >= nSrcX ) && ( nDstY <= nSrcY ) )
                     {
-                        for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
-                            for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
+                        for( sal_Int32 nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
+                            for( sal_Int32 nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
                     else
                     {
-                        for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
-                            for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
+                        for( sal_Int32 nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
+                            for( sal_Int32 nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
 
@@ -976,14 +976,14 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 
                     if( pWriteAcc )
                     {
-                        const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                        const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
-                        const long  nSrcEndX = aRectSrc.Left() + nWidth;
-                        const long  nSrcEndY = aRectSrc.Top() + nHeight;
-                        long        nDstY = aRectDst.Top();
+                        const sal_Int32  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                        const sal_Int32  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                        const sal_Int32  nSrcEndX = aRectSrc.Left() + nWidth;
+                        const sal_Int32  nSrcEndY = aRectSrc.Top() + nHeight;
+                        sal_Int32        nDstY = aRectDst.Top();
 
-                        for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
-                            for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
+                        for( sal_Int32 nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
+                            for( sal_Int32 nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
                                 pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPixel( nSrcY, nSrcX ) );
 
                         pWriteAcc.reset();
@@ -1006,39 +1006,39 @@ bool Bitmap::CopyPixel_AlphaOptimized( const tools::Rectangle& rRectDst, const t
 
                 if( pWriteAcc )
                 {
-                    const long  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
-                    const long  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
-                    const long  nSrcX = aRectSrc.Left();
-                    const long  nSrcY = aRectSrc.Top();
-                    const long  nSrcEndX1 = nSrcX + nWidth - 1L;
-                    const long  nSrcEndY1 = nSrcY + nHeight - 1L;
-                    const long  nDstX = aRectDst.Left();
-                    const long  nDstY = aRectDst.Top();
-                    const long  nDstEndX1 = nDstX + nWidth - 1L;
-                    const long  nDstEndY1 = nDstY + nHeight - 1L;
+                    const sal_Int32  nWidth = std::min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                    const sal_Int32  nHeight = std::min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                    const sal_Int32  nSrcX = aRectSrc.Left();
+                    const sal_Int32  nSrcY = aRectSrc.Top();
+                    const sal_Int32  nSrcEndX1 = nSrcX + nWidth - 1L;
+                    const sal_Int32  nSrcEndY1 = nSrcY + nHeight - 1L;
+                    const sal_Int32  nDstX = aRectDst.Left();
+                    const sal_Int32  nDstY = aRectDst.Top();
+                    const sal_Int32  nDstEndX1 = nDstX + nWidth - 1L;
+                    const sal_Int32  nDstEndY1 = nDstY + nHeight - 1L;
 
                     if( ( nDstX <= nSrcX ) && ( nDstY <= nSrcY ) )
                     {
-                        for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
-                            for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
+                        for( sal_Int32 nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
+                            for( sal_Int32 nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
                     else if( ( nDstX <= nSrcX ) && ( nDstY >= nSrcY ) )
                     {
-                        for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
-                            for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
+                        for( sal_Int32 nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
+                            for( sal_Int32 nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
                     else if( ( nDstX >= nSrcX ) && ( nDstY <= nSrcY ) )
                     {
-                        for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
-                            for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
+                        for( sal_Int32 nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
+                            for( sal_Int32 nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
                     else
                     {
-                        for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
-                            for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
+                        for( sal_Int32 nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
+                            for( sal_Int32 nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
                                 pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
                     }
 
@@ -1060,8 +1060,8 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
     if( nDX || nDY )
     {
         const Size          aSizePixel( GetSizePixel() );
-        const long          nWidth = aSizePixel.Width();
-        const long          nHeight = aSizePixel.Height();
+        const sal_Int32          nWidth = aSizePixel.Width();
+        const sal_Int32          nHeight = aSizePixel.Height();
         const Size          aNewSize( nWidth + nDX, nHeight + nDY );
         ScopedReadAccess    pReadAcc(*this);
 
@@ -1074,12 +1074,12 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
             if( pWriteAcc )
             {
                 BitmapColor aColor;
-                const long  nNewX = nWidth;
-                const long  nNewY = nHeight;
-                const long  nNewWidth = pWriteAcc->Width();
-                const long  nNewHeight = pWriteAcc->Height();
-                long        nX;
-                long        nY;
+                const sal_Int32  nNewX = nWidth;
+                const sal_Int32  nNewY = nHeight;
+                const sal_Int32  nNewWidth = pWriteAcc->Width();
+                const sal_Int32  nNewHeight = pWriteAcc->Height();
+                sal_Int32        nX;
+                sal_Int32        nY;
 
                 if( pInitColor )
                     aColor = pWriteAcc->GetBestMatchingColor( *pInitColor );
@@ -1129,22 +1129,22 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 
     if (pWriteAcc && pReadAcc)
     {
-        const long          nWidth = pReadAcc->Width();
-        const long          nHeight = pReadAcc->Height();
+        const sal_Int32          nWidth = pReadAcc->Width();
+        const sal_Int32          nHeight = pReadAcc->Height();
         const BitmapColor   aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
         const BitmapColor   aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
         if( !nTol )
         {
             const BitmapColor   aTest( pReadAcc->GetBestMatchingColor( rTransColor ) );
-            long nX, nY;
+            sal_Int32 nX, nY;
 
             if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ||
                 pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal )
             {
                 // optimized for 4Bit-MSN/LSN source palette
                 const sal_uInt8 cTest = aTest.GetIndex();
-                const long nShiftInit = ( ( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ) ? 4 : 0 );
+                const sal_Int32 nShiftInit = ( ( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ) ? 4 : 0 );
 
                 if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
                     aWhite.GetIndex() == 1 )
@@ -1154,7 +1154,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                     {
                         Scanline pSrc = pReadAcc->GetScanline( nY );
                         Scanline pDst = pWriteAcc->GetScanline( nY );
-                        long nShift = 0;
+                        sal_Int32 nShift = 0;
                         for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
                         {
                             if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
@@ -1169,7 +1169,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                     for( nY = 0L; nY < nHeight; nY++ )
                     {
                         Scanline pSrc = pReadAcc->GetScanline( nY );
-                        long nShift = 0;
+                        sal_Int32 nShift = 0;
                         for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
                         {
                             if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
@@ -1235,19 +1235,19 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
         else
         {
             BitmapColor aCol;
-            long        nR, nG, nB;
-            const long  nMinR = MinMax<long>(rTransColor.GetRed() - nTol, 0, 255);
-            const long  nMaxR = MinMax<long>(rTransColor.GetRed() + nTol, 0, 255);
-            const long  nMinG = MinMax<long>(rTransColor.GetGreen() - nTol, 0, 255);
-            const long  nMaxG = MinMax<long>(rTransColor.GetGreen() + nTol, 0, 255);
-            const long  nMinB = MinMax<long>(rTransColor.GetBlue() - nTol, 0, 255);
-            const long  nMaxB = MinMax<long>(rTransColor.GetBlue() + nTol, 0, 255);
+            sal_Int32        nR, nG, nB;
+            const sal_Int32  nMinR = MinMax<sal_Int32>(rTransColor.GetRed() - nTol, 0, 255);
+            const sal_Int32  nMaxR = MinMax<sal_Int32>(rTransColor.GetRed() + nTol, 0, 255);
+            const sal_Int32  nMinG = MinMax<sal_Int32>(rTransColor.GetGreen() - nTol, 0, 255);
+            const sal_Int32  nMaxG = MinMax<sal_Int32>(rTransColor.GetGreen() + nTol, 0, 255);
+            const sal_Int32  nMinB = MinMax<sal_Int32>(rTransColor.GetBlue() - nTol, 0, 255);
+            const sal_Int32  nMaxB = MinMax<sal_Int32>(rTransColor.GetBlue() + nTol, 0, 255);
 
             if( pReadAcc->HasPalette() )
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                     {
                         aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
                         nR = aCol.GetRed();
@@ -1267,9 +1267,9 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
             }
             else
             {
-                for( long nY = 0L; nY < nHeight; nY++ )
+                for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
                 {
-                    for( long nX = 0L; nX < nWidth; nX++ )
+                    for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                     {
                         aCol = pReadAcc->GetPixel( nY, nX );
                         nR = aCol.GetRed();
@@ -1318,23 +1318,23 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const tools::Rectangle& r
     if( pReadAcc )
     {
         //Rectangle         aSubRect;
-        const long          nLeft = aRect.Left();
-        const long          nTop = aRect.Top();
-        const long          nRight = aRect.Right();
-        const long          nBottom = aRect.Bottom();
+        const sal_Int32          nLeft = aRect.Left();
+        const sal_Int32          nTop = aRect.Top();
+        const sal_Int32          nRight = aRect.Right();
+        const sal_Int32          nBottom = aRect.Bottom();
         const BitmapColor   aMatch( pReadAcc->GetBestMatchingColor( rColor ) );
 
         //RectangleVector aRectangles;
         //aRegion.ImplBeginAddRect();
-        std::vector< long > aLine;
-        long nYStart(nTop);
-        long nY(nTop);
+        std::vector< sal_Int32 > aLine;
+        sal_Int32 nYStart(nTop);
+        sal_Int32 nY(nTop);
 
         for( ; nY <= nBottom; nY++ )
         {
             //aSubRect.Top() = aSubRect.Bottom() = nY;
-            std::vector< long > aNewLine;
-            long nX(nLeft);
+            std::vector< sal_Int32 > aNewLine;
+            sal_Int32 nX(nLeft);
 
             for( ; nX <= nRight; )
             {
@@ -1419,8 +1419,8 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 
     if( pMaskAcc && pAcc )
     {
-        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
+        const sal_Int32          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+        const sal_Int32          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
         BitmapColor         aReplace;
 
@@ -1450,8 +1450,8 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                     // Set all entries to false
                     std::fill( pFlags.get(), pFlags.get()+nMaxColors, false );
 
-                    for( long nY = 0L; nY < nHeight; nY++ )
-                        for( long nX = 0L; nX < nWidth; nX++ )
+                    for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
+                        for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                             pFlags[ pAcc->GetPixelIndex( nY, nX ) ] = true;
 
                     for( sal_uInt16 i = 0UL; i < nMaxColors; i++ )
@@ -1469,8 +1469,8 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
         else
             aReplace = rReplaceColor;
 
-        for( long nY = 0L; nY < nHeight; nY++ )
-            for( long nX = 0L; nX < nWidth; nX++ )
+        for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
+            for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 if( pMaskAcc->GetPixel( nY, nX ) == aMaskWhite )
                     pAcc->SetPixel( nY, nX, aReplace );
 
@@ -1491,12 +1491,12 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
     if( pAcc && pAlphaAcc && pNewAcc )
     {
         BitmapColor aCol;
-        const long  nWidth = std::min( pAlphaAcc->Width(), pAcc->Width() );
-        const long  nHeight = std::min( pAlphaAcc->Height(), pAcc->Height() );
+        const sal_Int32  nWidth = std::min( pAlphaAcc->Width(), pAcc->Width() );
+        const sal_Int32  nHeight = std::min( pAlphaAcc->Height(), pAcc->Height() );
 
-        for( long nY = 0L; nY < nHeight; nY++ )
+        for( sal_Int32 nY = 0L; nY < nHeight; nY++ )
         {
-            for( long nX = 0L; nX < nWidth; nX++ )
+            for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
             {
                 aCol = pAcc->GetColor( nY, nX );
                 pNewAcc->SetPixel( nY, nX, aCol.Merge( rMergeColor, 255 - pAlphaAcc->GetPixelIndex( nY, nX ) ) );
@@ -1549,12 +1549,12 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
 
     if( pAcc )
     {
-        const long  nMinR = MinMax<long>(rSearchColor.GetRed() - nTol, 0, 255);
-        const long  nMaxR = MinMax<long>(rSearchColor.GetRed() + nTol, 0, 255);
-        const long  nMinG = MinMax<long>(rSearchColor.GetGreen() - nTol, 0, 255);
-        const long  nMaxG = MinMax<long>(rSearchColor.GetGreen() + nTol, 0, 255);
-        const long  nMinB = MinMax<long>(rSearchColor.GetBlue() - nTol, 0, 255);
-        const long  nMaxB = MinMax<long>(rSearchColor.GetBlue() + nTol, 0, 255);
+        const sal_Int32  nMinR = MinMax<sal_Int32>(rSearchColor.GetRed() - nTol, 0, 255);
+        const sal_Int32  nMaxR = MinMax<sal_Int32>(rSearchColor.GetRed() + nTol, 0, 255);
+        const sal_Int32  nMinG = MinMax<sal_Int32>(rSearchColor.GetGreen() - nTol, 0, 255);
+        const sal_Int32  nMaxG = MinMax<sal_Int32>(rSearchColor.GetGreen() + nTol, 0, 255);
+        const sal_Int32  nMinB = MinMax<sal_Int32>(rSearchColor.GetBlue() - nTol, 0, 255);
+        const sal_Int32  nMaxB = MinMax<sal_Int32>(rSearchColor.GetBlue() + nTol, 0, 255);
 
         if( pAcc->HasPalette() )
         {
@@ -1575,9 +1575,9 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
             BitmapColor         aCol;
             const BitmapColor   aReplace( pAcc->GetBestMatchingColor( rReplaceColor ) );
 
-            for( long nY = 0L, nHeight = pAcc->Height(); nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0L, nHeight = pAcc->Height(); nY < nHeight; nY++ )
             {
-                for( long nX = 0L, nWidth = pAcc->Width(); nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0L, nWidth = pAcc->Width(); nX < nWidth; nX++ )
                 {
                     aCol = pAcc->GetPixel( nY, nX );
 
@@ -1611,34 +1611,34 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
 
     if( pAcc )
     {
-        std::unique_ptr<long[]> pMinR(new long[ nColorCount ]);
-        std::unique_ptr<long[]> pMaxR(new long[ nColorCount ]);
-        std::unique_ptr<long[]> pMinG(new long[ nColorCount ]);
-        std::unique_ptr<long[]> pMaxG(new long[ nColorCount ]);
-        std::unique_ptr<long[]> pMinB(new long[ nColorCount ]);
-        std::unique_ptr<long[]> pMaxB(new long[ nColorCount ]);
-        long*   pTols;
+        std::unique_ptr<sal_Int32[]> pMinR(new sal_Int32[ nColorCount ]);
+        std::unique_ptr<sal_Int32[]> pMaxR(new sal_Int32[ nColorCount ]);
+        std::unique_ptr<sal_Int32[]> pMinG(new sal_Int32[ nColorCount ]);
+        std::unique_ptr<sal_Int32[]> pMaxG(new sal_Int32[ nColorCount ]);
+        std::unique_ptr<sal_Int32[]> pMinB(new sal_Int32[ nColorCount ]);
+        std::unique_ptr<sal_Int32[]> pMaxB(new sal_Int32[ nColorCount ]);
+        sal_Int32*   pTols;
         sal_uLong   i;
 
         if( !_pTols )
         {
-            pTols = new long[ nColorCount ];
-            memset( pTols, 0, nColorCount * sizeof( long ) );
+            pTols = new sal_Int32[ nColorCount ];
+            memset( pTols, 0, nColorCount * sizeof( sal_Int32 ) );
         }
         else
-            pTols = reinterpret_cast<long*>(_pTols);
+            pTols = reinterpret_cast<sal_Int32*>(_pTols);
 
         for( i = 0UL; i < nColorCount; i++ )
         {
             const Color&    rCol = pSearchColors[ i ];
-            const long      nTol = pTols[ i ];
+            const sal_Int32      nTol = pTols[ i ];
 
-            pMinR[ i ] = MinMax<long>(rCol.GetRed() - nTol, 0, 255);
-            pMaxR[ i ] = MinMax<long>(rCol.GetRed() + nTol, 0, 255);
-            pMinG[ i ] = MinMax<long>(rCol.GetGreen() - nTol, 0, 255);
-            pMaxG[ i ] = MinMax<long>(rCol.GetGreen() + nTol, 0, 255);
-            pMinB[ i ] = MinMax<long>(rCol.GetBlue() - nTol, 0, 255);
-            pMaxB[ i ] = MinMax<long>(rCol.GetBlue() + nTol, 0, 255);
+            pMinR[ i ] = MinMax<sal_Int32>(rCol.GetRed() - nTol, 0, 255);
+            pMaxR[ i ] = MinMax<sal_Int32>(rCol.GetRed() + nTol, 0, 255);
+            pMinG[ i ] = MinMax<sal_Int32>(rCol.GetGreen() - nTol, 0, 255);
+            pMaxG[ i ] = MinMax<sal_Int32>(rCol.GetGreen() + nTol, 0, 255);
+            pMinB[ i ] = MinMax<sal_Int32>(rCol.GetBlue() - nTol, 0, 255);
+            pMaxB[ i ] = MinMax<sal_Int32>(rCol.GetBlue() + nTol, 0, 255);
         }
 
         if( pAcc->HasPalette() )
@@ -1667,9 +1667,9 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
             for( i = 0UL; i < nColorCount; i++ )
                 pReplaces[ i ] = pAcc->GetBestMatchingColor( pReplaceColors[ i ] );
 
-            for( long nY = 0L, nHeight = pAcc->Height(); nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0L, nHeight = pAcc->Height(); nY < nHeight; nY++ )
             {
-                for( long nX = 0L, nWidth = pAcc->Width(); nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0L, nWidth = pAcc->Width(); nX < nWidth; nX++ )
                 {
                     aCol = pAcc->GetPixel( nY, nX );
 
@@ -1721,8 +1721,8 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 
     if( pMaskAcc && pAcc )
     {
-        const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
-        const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
+        const sal_Int32          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+        const sal_Int32          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const Color         aColBlack( COL_BLACK );
         BitmapColor         aPixel;
         BitmapColor         aMaskPixel;
@@ -1734,7 +1734,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
         {
             case BmpCombine::And:
             {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
+                for( sal_Int32 nY = 0L; nY < nHeight; nY++ ) for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 {
                     if( pMaskAcc->GetPixel( nY, nX ) != aMaskBlack && pAcc->GetPixel( nY, nX ) != aBlack )
                         pAcc->SetPixel( nY, nX, aWhite );
@@ -1746,7 +1746,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 
             case BmpCombine::Or:
             {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
+                for( sal_Int32 nY = 0L; nY < nHeight; nY++ ) for( sal_Int32 nX = 0L; nX < nWidth; nX++ )
                 {
                     if( pMaskAcc->GetPixel( nY, nX ) != aMaskBlack || pAcc->GetPixel( nY, nX ) != aBlack )
                         pAcc->SetPixel( nY, nX, aWhite );
@@ -1780,11 +1780,11 @@ bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
 
     if( pAlphaAcc && pAcc )
     {
-        const long          nWidth = std::min( pAlphaAcc->Width(), pAcc->Width() );
-        const long          nHeight = std::min( pAlphaAcc->Height(), pAcc->Height() );
+        const sal_Int32          nWidth = std::min( pAlphaAcc->Width(), pAcc->Width() );
+        const sal_Int32          nHeight = std::min( pAlphaAcc->Height(), pAcc->Height() );
 
-        for( long nY = 0L; nY < nHeight; ++nY )
-            for( long nX = 0L; nX < nWidth; ++nX )
+        for( sal_Int32 nY = 0L; nY < nHeight; ++nY )
+            for( sal_Int32 nX = 0L; nX < nWidth; ++nX )
                 pAcc->SetPixel( nY, nX,
                                 pAcc->GetPixel( nY, nX ).Merge( rBackgroundColor,
                                                                 255 - pAlphaAcc->GetPixelIndex( nY, nX ) ) );

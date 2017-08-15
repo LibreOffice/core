@@ -98,12 +98,12 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     if (mpLineColor)
     {
         const BitmapColor& rLineColor = *mpLineColor.get();
-        long nX, nY;
+        sal_Int32 nX, nY;
 
         if (rStart.X() == rEnd.X())
         {
             // Vertical Line
-            const long nEndY = rEnd.Y();
+            const sal_Int32 nEndY = rEnd.Y();
 
             nX = rStart.X();
             nY = rStart.Y();
@@ -122,7 +122,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         else if (rStart.Y() == rEnd.Y())
         {
             // Horizontal Line
-            const long nEndX = rEnd.X();
+            const sal_Int32 nEndX = rEnd.X();
 
             nX = rStart.X();
             nY = rStart.Y();
@@ -140,12 +140,12 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         }
         else
         {
-            const long  nDX = labs( rEnd.X() - rStart.X() );
-            const long  nDY = labs( rEnd.Y() - rStart.Y() );
-            long nX1;
-            long nY1;
-            long nX2;
-            long nY2;
+            const sal_Int32  nDX = labs( rEnd.X() - rStart.X() );
+            const sal_Int32  nDY = labs( rEnd.Y() - rStart.Y() );
+            sal_Int32 nX1;
+            sal_Int32 nY1;
+            sal_Int32 nX2;
+            sal_Int32 nY2;
 
             if (nDX >= nDY)
             {
@@ -164,9 +164,9 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                     nY2 = rStart.Y();
                 }
 
-                const long nDYX = (nDY - nDX) << 1;
-                const long nDY2 = nDY << 1;
-                long nD = nDY2 - nDX;
+                const sal_Int32 nDYX = (nDY - nDX) << 1;
+                const sal_Int32 nDY2 = nDY << 1;
+                sal_Int32 nD = nDY2 - nDX;
                 bool bPos = nY1 < nY2;
 
                 for (nX = nX1, nY = nY1; nX <= nX2; nX++)
@@ -203,9 +203,9 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                     nY2 = rStart.Y();
                 }
 
-                const long  nDYX = (nDX - nDY) << 1;
-                const long  nDY2 = nDX << 1;
-                long nD = nDY2 - nDY;
+                const sal_Int32  nDYX = (nDX - nDY) << 1;
+                const sal_Int32  nDY2 = nDX << 1;
+                sal_Int32 nD = nDY2 - nDY;
                 bool bPos = nX1 < nX2;
 
                 for (nX = nX1, nY = nY1; nY <= nY2; nY++)
@@ -241,14 +241,14 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
 
         if (!aRect.IsEmpty())
         {
-            const long nStartX = rRect.Left();
-            const long nStartY = rRect.Top();
-            const long nEndX = rRect.Right();
-            const long nEndY = rRect.Bottom();
+            const sal_Int32 nStartX = rRect.Left();
+            const sal_Int32 nStartY = rRect.Top();
+            const sal_Int32 nEndX = rRect.Right();
+            const sal_Int32 nEndY = rRect.Bottom();
 
-            for (long nY = nStartY; nY <= nEndY; nY++)
+            for (sal_Int32 nY = nStartY; nY <= nEndY; nY++)
             {
-                for (long nX = nStartX; nX <= nEndX; nX++)
+                for (sal_Int32 nX = nStartX; nX <= nEndX; nX++)
                 {
                     SetPixel(nY, nX, rFillColor);
                 }

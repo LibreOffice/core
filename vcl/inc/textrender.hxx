@@ -51,8 +51,8 @@ public:
                                         int nGlyphs,
                                         FontSubsetInfo& rInfo) = 0;
 
-    virtual const void*             GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) = 0;
-    virtual void                    FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
+    virtual const void*             GetEmbedFontData(const PhysicalFontFace*, sal_Int32* pDataLen) = 0;
+    virtual void                    FreeEmbedFontData( const void* pData, sal_Int32 nDataLen ) = 0;
     virtual void                    GetGlyphWidths(
                                         const PhysicalFontFace*,
                                         bool bVertical,

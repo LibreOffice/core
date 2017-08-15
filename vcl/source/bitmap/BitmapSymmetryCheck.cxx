@@ -24,18 +24,18 @@ bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
 
 bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 {
-    long nHeight = pReadAccess->Height();
-    long nWidth = pReadAccess->Width();
+    sal_Int32 nHeight = pReadAccess->Height();
+    sal_Int32 nWidth = pReadAccess->Width();
 
-    long nHeightHalf = nHeight / 2;
-    long nWidthHalf = nWidth / 2;
+    sal_Int32 nHeightHalf = nHeight / 2;
+    sal_Int32 nWidthHalf = nWidth / 2;
 
     bool bHeightEven = (nHeight % 2) == 0;
     bool bWidthEven = (nWidth % 2) == 0;
 
-    for (long y = 0; y < nHeightHalf; ++y)
+    for (sal_Int32 y = 0; y < nHeightHalf; ++y)
     {
-        for (long x = 0; x < nWidthHalf; ++x)
+        for (sal_Int32 x = 0; x < nWidthHalf; ++x)
         {
             if (pReadAccess->GetPixel(y, x) != pReadAccess->GetPixel(nHeight - y - 1, x))
             {
@@ -54,7 +54,7 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 
     if (bWidthEven)
     {
-        for (long y = 0; y < nHeightHalf; ++y)
+        for (sal_Int32 y = 0; y < nHeightHalf; ++y)
         {
             if (pReadAccess->GetPixel(y, nWidthHalf) != pReadAccess->GetPixel(nHeight - y - 1, nWidthHalf))
             {
@@ -65,7 +65,7 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 
     if (bHeightEven)
     {
-        for (long x = 0; x < nWidthHalf; ++x)
+        for (sal_Int32 x = 0; x < nWidthHalf; ++x)
         {
             if (pReadAccess->GetPixel(nHeightHalf, x) != pReadAccess->GetPixel(nHeightHalf, nWidth - x - 1))
             {

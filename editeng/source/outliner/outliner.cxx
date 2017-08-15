@@ -960,7 +960,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 if(bStrippingPortions)
                 {
                     const vcl::Font aSvxFont(pOutDev->GetFont());
-                    std::unique_ptr<long[]> pBuf(new long[ pPara->GetText().getLength() ]);
+                    std::unique_ptr<sal_Int32[]> pBuf(new sal_Int32[ pPara->GetText().getLength() ]);
                     pOutDev->GetTextArray( pPara->GetText(), pBuf.get() );
 
                     if(bSymbol)
@@ -1684,7 +1684,7 @@ void Outliner::StripPortions()
 }
 
 void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                            sal_Int32 nTextLen, const long* pDXArray,const SvxFont& rFont,
+                            sal_Int32 nTextLen, const sal_Int32* pDXArray,const SvxFont& rFont,
                             sal_Int32 nPara, sal_uInt8 nRightToLeft,
                             const EEngineData::WrongSpellVector* pWrongSpellVector,
                             const SvxFieldData* pFieldData,

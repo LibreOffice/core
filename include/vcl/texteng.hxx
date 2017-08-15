@@ -119,11 +119,11 @@ private:
     Color               maTextColor;
 
     sal_Int32           mnMaxTextLen;
-    long                mnMaxTextWidth;
-    long                mnCharHeight;
-    long                mnCurTextWidth;
-    long                mnCurTextHeight;
-    long                mnDefTab;
+    sal_Int32           mnMaxTextWidth;
+    sal_Int32           mnCharHeight;
+    sal_Int32           mnCurTextWidth;
+    sal_Int32           mnCurTextHeight;
+    sal_Int32           mnDefTab;
 
     TxtAlign            meAlign;
 
@@ -175,7 +175,7 @@ protected:
 
     bool                CreateLines( sal_uInt32 nPara );
     void                CreateAndInsertEmptyLine( sal_uInt32 nPara );
-    void                ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nPortionStart, long nRemainingWidth );
+    void                ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nPortionStart, sal_Int32 nRemainingWidth );
     std::size_t         SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos );
     void                CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos );
     void                RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_Int32 nNewChars );
@@ -191,20 +191,20 @@ protected:
 
     bool                IsFormatted() const { return mbFormatted; }
 
-    sal_Int32           GetCharPos( sal_uInt32 nPara, std::vector<TextLine>::size_type nLine, long nDocPosX );
+    sal_Int32           GetCharPos( sal_uInt32 nPara, std::vector<TextLine>::size_type nLine, sal_Int32 nDocPosX );
     tools::Rectangle    GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
     sal_Int32           ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara );
-    long                ImpGetPortionXOffset( sal_uInt32 nPara, TextLine const * pLine, std::size_t nTextPortion );
-    long                ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
-    long                ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
+    sal_Int32           ImpGetPortionXOffset( sal_uInt32 nPara, TextLine const * pLine, std::size_t nTextPortion );
+    sal_Int32           ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false );
+    sal_Int32           ImpGetOutputOffset( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, sal_Int32 nIndex2 );
     sal_uInt8           ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos );
     static void         ImpInitLayoutMode( OutputDevice* pOutDev );
     TxtAlign            ImpGetAlign() const;
 
-    long                CalcTextHeight();
-    long                CalcParaHeight( sal_uInt32 nParagraph ) const;
-    long                CalcTextWidth( sal_uInt32 nPara );
-    long                CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen);
+    sal_Int32           CalcTextHeight();
+    sal_Int32           CalcParaHeight( sal_uInt32 nParagraph ) const;
+    sal_Int32           CalcTextWidth( sal_uInt32 nPara );
+    sal_Int32           CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_Int32 nPortionLen);
     Range               GetInvalidYOffsets( sal_uInt32 nPortion );
 
     // for Undo/Redo
@@ -249,17 +249,17 @@ public:
     void                SetMaxTextLen( sal_Int32 nLen );
     sal_Int32           GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMaxTextWidth( long nWidth );
-    long                GetMaxTextWidth() const { return mnMaxTextWidth; }
+    void                SetMaxTextWidth( sal_Int32 nWidth );
+    sal_Int32           GetMaxTextWidth() const { return mnMaxTextWidth; }
 
-    long                GetTextHeight() const;
-    long                CalcTextWidth();
-    long                GetCharHeight() const { return mnCharHeight; }
+    sal_Int32           GetTextHeight() const;
+    sal_Int32           CalcTextWidth();
+    sal_Int32           GetCharHeight() const { return mnCharHeight; }
 
     sal_uInt32          GetParagraphCount() const;
     OUString            GetText( sal_uInt32 nParagraph ) const;
     sal_Int32           GetTextLen( sal_uInt32 nParagraph ) const;
-    long                GetTextHeight( sal_uInt32 nParagraph ) const;
+    sal_Int32           GetTextHeight( sal_uInt32 nParagraph ) const;
 
     void                GetTextPortionRange(const TextPaM& rPaM, sal_Int32& nStart, sal_Int32& nEnd);
 

@@ -61,8 +61,8 @@ public:
 public:
     /** Sets position and size of the ruler. The height is calculated internally. */
     virtual void                setPosSizePixel(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    sal_Int32 nX, sal_Int32 nY,
+                                    sal_Int32 nWidth, sal_Int32 nHeight,
                                     PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     /** Apply current layout data to the ruler. */

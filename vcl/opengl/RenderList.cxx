@@ -195,7 +195,7 @@ void appendRectangle(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndic
 
 } // end anonymous namespace
 
-void RenderList::addDrawPixel(long nX, long nY, SalColor nColor)
+void RenderList::addDrawPixel(sal_Int32 nX, sal_Int32 nY, SalColor nColor)
 {
     if (nColor == SALCOLOR_NONE)
         return;
@@ -207,7 +207,7 @@ void RenderList::addDrawPixel(long nX, long nY, SalColor nColor)
                     nX - 0.5f, nY - 0.5f, nX + 0.5f, nY + 0.5f, nColor, 0.0f);
 }
 
-void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, double fTransparency,
+void RenderList::addDrawRectangle(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, double fTransparency,
                                   SalColor nLineColor, SalColor nFillColor)
 {
     if (nLineColor == SALCOLOR_NONE && nFillColor == SALCOLOR_NONE)
@@ -256,7 +256,7 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
     }
 }
 
-void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, SalColor nLineColor, bool bUseAA)
+void RenderList::addDrawLine(sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2, SalColor nLineColor, bool bUseAA)
 {
     if (nLineColor == SALCOLOR_NONE)
         return;

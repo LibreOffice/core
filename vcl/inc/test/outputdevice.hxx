@@ -45,7 +45,7 @@ protected:
 public:
     OutputDeviceTestCommon();
 
-    void initialSetup(long nWidth, long nHeight, Color aColor);
+    void initialSetup(sal_Int32 nWidth, sal_Int32 nHeight, Color aColor);
 
     static TestResult checkRectangle(Bitmap& rBitmap);
     static TestResult checkFilledRectangle(Bitmap& rBitmap);

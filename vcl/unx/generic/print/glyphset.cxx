@@ -201,7 +201,7 @@ void GlyphSet::DrawGlyph(PrinterGfx& rGfx,
 struct EncEntry
 {
     unsigned char  aEnc;
-    long       aGID;
+    sal_Int32       aGID;
 
     EncEntry() : aEnc( 0 ), aGID( 0 ) {}
 

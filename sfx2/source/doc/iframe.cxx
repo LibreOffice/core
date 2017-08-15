@@ -361,12 +361,12 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     break;
     case WID_FRAME_MARGIN_WIDTH:
     {
-        aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Width();
+        aAny <<= maFrmDescr.GetMargin().Width();
     }
     break;
     case WID_FRAME_MARGIN_HEIGHT:
     {
-        aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Height();
+        aAny <<= maFrmDescr.GetMargin().Height();
     }
     break;
     default: ;

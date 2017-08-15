@@ -568,7 +568,7 @@ void AssignmentPersistentData::ImplCommit()
         long nListBoxWidth = m_pImpl->pFields[0]->approximate_char_width() * 20;
         for (auto aI = m_pImpl->aFieldLabels.cbegin(), aEnd = m_pImpl->aFieldLabels.cend(); aI != aEnd; ++aI)
         {
-            nLabelWidth = std::max(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], *aI, 0x7FFFFFFF).Width());
+            nLabelWidth = std::max(sal_Int32(nLabelWidth), FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], *aI, 0x7FFFFFFF).Width());
         }
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {

@@ -90,7 +90,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, nullptr );
 
-    long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_Int32 nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     SetSizePixel( Size( nScrollSize, nScrollSize ) );
 }
 
@@ -163,7 +163,7 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     {
         if ( GetStyle() & WB_HORZ )
         {
-            const long nSpace = maTrackRect.Right() - maTrackRect.Left();
+            const sal_Int32 nSpace = maTrackRect.Right() - maTrackRect.Left();
             if ( nSpace > 0 )
             {
                 maPage1Rect.Left()   = maTrackRect.Left();
@@ -174,7 +174,7 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
         }
         else
         {
-            const long nSpace = maTrackRect.Bottom() - maTrackRect.Top();
+            const sal_Int32 nSpace = maTrackRect.Bottom() - maTrackRect.Top();
             if ( nSpace > 0 )
             {
                 maPage1Rect.Top()    = maTrackRect.Top();
@@ -201,19 +201,19 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     }
 }
 
-long ScrollBar::ImplCalcThumbPos( long nPixPos )
+sal_Int32 ScrollBar::ImplCalcThumbPos( sal_Int32 nPixPos )
 {
     // Calculate position
-    long nCalcThumbPos;
+    sal_Int32 nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPixPos, mnMaxRange-mnVisibleSize-mnMinRange,
                                 mnThumbPixRange-mnThumbPixSize );
     nCalcThumbPos += mnMinRange;
     return nCalcThumbPos;
 }
 
-long ScrollBar::ImplCalcThumbPosPix( long nPos )
+sal_Int32 ScrollBar::ImplCalcThumbPosPix( sal_Int32 nPos )
 {
-    long nCalcThumbPos;
+    sal_Int32 nCalcThumbPos;
 
     // Calculate position
     nCalcThumbPos = ImplMulDiv( nPos-mnMinRange, mnThumbPixRange-mnThumbPixSize,
@@ -233,7 +233,7 @@ long ScrollBar::ImplCalcThumbPosPix( long nPos )
 void ScrollBar::ImplCalc( bool bUpdate )
 {
     const Size aSize = GetOutputSizePixel();
-    const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
+    const sal_Int32 nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
 
     if ( mbCalcSize )
     {
@@ -687,11 +687,11 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext)
     }
 }
 
-long ScrollBar::ImplScroll( long nNewPos, bool bCallEndScroll )
+sal_Int32 ScrollBar::ImplScroll( sal_Int32 nNewPos, bool bCallEndScroll )
 {
-    long nOldPos = mnThumbPos;
+    sal_Int32 nOldPos = mnThumbPos;
     SetThumbPos( nNewPos );
-    long nDelta = mnThumbPos-nOldPos;
+    sal_Int32 nDelta = mnThumbPos-nOldPos;
     if ( nDelta )
     {
         mnDelta = nDelta;
@@ -703,9 +703,9 @@ long ScrollBar::ImplScroll( long nNewPos, bool bCallEndScroll )
     return nDelta;
 }
 
-long ScrollBar::ImplDoAction( bool bCallEndScroll )
+sal_Int32 ScrollBar::ImplDoAction( bool bCallEndScroll )
 {
-    long nDelta = 0;
+    sal_Int32 nDelta = 0;
 
     switch ( meScrollType )
     {
@@ -808,7 +808,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 
 void ScrollBar::ImplDragThumb( const Point& rMousePos )
 {
-    long nMovePix;
+    sal_Int32 nMovePix;
     if ( GetStyle() & WB_HORZ )
         nMovePix = rMousePos.X()-(maThumbRect.Left()+mnMouseOff);
     else
@@ -822,7 +822,7 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
             mnThumbPixPos = 0;
         if ( mnThumbPixPos > (mnThumbPixRange-mnThumbPixSize) )
             mnThumbPixPos = mnThumbPixRange-mnThumbPixSize;
-        long nOldPos = mnThumbPos;
+        sal_Int32 nOldPos = mnThumbPos;
         mnThumbPos = ImplCalcThumbPos( mnThumbPixPos );
         ImplUpdateRects();
         if ( mbFullDrag && (nOldPos != mnThumbPos) )
@@ -991,7 +991,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         // Restore the old ThumbPosition when canceled
         if ( rTEvt.IsTrackingCanceled() )
         {
-            long nOldPos = mnThumbPos;
+            sal_Int32 nOldPos = mnThumbPos;
             SetThumbPos( mnStartPos );
             mnDelta = mnThumbPos-nOldPos;
             Scroll();
@@ -1301,19 +1301,19 @@ void ScrollBar::EndScroll()
     ImplCallEventListenersAndHandler( VclEventId::ScrollbarEndScroll, [this] () { maEndScrollHdl.Call(this); } );
 }
 
-long ScrollBar::DoScroll( long nNewPos )
+sal_Int32 ScrollBar::DoScroll( sal_Int32 nNewPos )
 {
     if ( meScrollType != ScrollType::DontKnow )
         return 0;
 
     SAL_INFO("vcl.scrollbar", "DoScroll(" << nNewPos << ")");
     meScrollType = ScrollType::Drag;
-    long nDelta = ImplScroll( nNewPos, true );
+    sal_Int32 nDelta = ImplScroll( nNewPos, true );
     meScrollType = ScrollType::DontKnow;
     return nDelta;
 }
 
-long ScrollBar::DoScrollAction( ScrollType eScrollType )
+sal_Int32 ScrollBar::DoScrollAction( ScrollType eScrollType )
 {
     if ( (meScrollType != ScrollType::DontKnow) ||
          (eScrollType == ScrollType::DontKnow) ||
@@ -1321,17 +1321,17 @@ long ScrollBar::DoScrollAction( ScrollType eScrollType )
         return 0;
 
     meScrollType = eScrollType;
-    long nDelta = ImplDoAction( true );
+    sal_Int32 nDelta = ImplDoAction( true );
     meScrollType = ScrollType::DontKnow;
     return nDelta;
 }
 
-void ScrollBar::SetRangeMin( long nNewRange )
+void ScrollBar::SetRangeMin( sal_Int32 nNewRange )
 {
     SetRange( Range( nNewRange, GetRangeMax() ) );
 }
 
-void ScrollBar::SetRangeMax( long nNewRange )
+void ScrollBar::SetRangeMax( sal_Int32 nNewRange )
 {
     SetRange( Range( GetRangeMin(), nNewRange ) );
 }
@@ -1341,8 +1341,8 @@ void ScrollBar::SetRange( const Range& rRange )
     // Adapt Range
     Range aRange = rRange;
     aRange.Justify();
-    long nNewMinRange = aRange.Min();
-    long nNewMaxRange = aRange.Max();
+    sal_Int32 nNewMinRange = aRange.Min();
+    sal_Int32 nNewMaxRange = aRange.Max();
 
     // If Range differs, set a new one
     if ( (mnMinRange != nNewMinRange) ||
@@ -1361,7 +1361,7 @@ void ScrollBar::SetRange( const Range& rRange )
     }
 }
 
-void ScrollBar::SetThumbPos( long nNewThumbPos )
+void ScrollBar::SetThumbPos( sal_Int32 nNewThumbPos )
 {
     if ( nNewThumbPos > mnMaxRange-mnVisibleSize )
         nNewThumbPos = mnMaxRange-mnVisibleSize;
@@ -1375,7 +1375,7 @@ void ScrollBar::SetThumbPos( long nNewThumbPos )
     }
 }
 
-void ScrollBar::SetVisibleSize( long nNewSize )
+void ScrollBar::SetVisibleSize( sal_Int32 nNewSize )
 {
     if ( mnVisibleSize != nNewSize )
     {
@@ -1397,7 +1397,7 @@ Size ScrollBar::GetOptimalSize() const
 
     Size aRet = getCurrentCalcSize();
 
-    const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
+    const sal_Int32 nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
 
     if (GetStyle() & WB_HORZ)
     {
@@ -1427,7 +1427,7 @@ void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
     Window::ImplInit( pParent, nStyle, nullptr );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    long nScrollSize = rStyleSettings.GetScrollBarSize();
+    sal_Int32 nScrollSize = rStyleSettings.GetScrollBarSize();
     SetSizePixel(Size(nScrollSize, nScrollSize));
 }
 
