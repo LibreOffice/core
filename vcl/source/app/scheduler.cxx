@@ -124,20 +124,23 @@ void Scheduler::ImplDeInitScheduler()
 
 void SchedulerMutex::acquire( sal_uInt32 nLockCount )
 {
+    assert(nLockCount > 0);
     for (sal_uInt32 i = 0; i != nLockCount; ++i) {
-        bool ok = maMutex.acquire();
-        assert(ok); (void) ok;
-        ++mnLockDepth;
+        if (!maMutex.acquire())
+            abort();
     }
+    mnLockDepth += nLockCount;
 }
 
 sal_uInt32 SchedulerMutex::release( bool bUnlockAll )
 {
-    assert(mnLockDepth != 0);
-    sal_uInt32 nLockCount = bUnlockAll ? mnLockDepth : 1;
+    assert(mnLockDepth > 0);
+    const sal_uInt32 nLockCount =
+        (bUnlockAll || 0 == mnLockDepth) ? mnLockDepth : 1;
     mnLockDepth -= nLockCount;
     for (sal_uInt32 i = 0; i != nLockCount; ++i) {
-        maMutex.release();
+        if (!maMutex.release())
+            abort();
     }
     return nLockCount;
 }
@@ -373,7 +376,16 @@ next_entry:
         // not run a nested Scheduler loop and don't need a stack push!
         pMostUrgent->mbInScheduler = true;
         sal_uInt32 nLockCount = Unlock( true );
-        pTask->Invoke();
+        try
+        {
+            pTask->Invoke();
+        }
+        catch (...)
+        {
+            SAL_WARN( "vcl.schedule",
+                      "Uncaught exception during Task::Invoke()!" );
+            abort();
+        }
         Lock( nLockCount );
         pMostUrgent->mbInScheduler = false;
 
