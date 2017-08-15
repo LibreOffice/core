@@ -301,15 +301,14 @@ bool Scheduler::ProcessTaskScheduling()
     {
         const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpTask );
         if ( timer )
-            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                << pSchedulerData << " " << *pSchedulerData << " " << *timer );
+            SAL_INFO( "vcl.schedule", pSchedulerData << " "
+                << *pSchedulerData << " " << *timer );
         else if ( pSchedulerData->mpTask )
-            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                << pSchedulerData << " " << *pSchedulerData
-                << " " << *pSchedulerData->mpTask );
+            SAL_INFO( "vcl.schedule", pSchedulerData << " "
+                << *pSchedulerData << " " << *pSchedulerData->mpTask );
         else
-            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                << pSchedulerData << " " << *pSchedulerData << " (to be deleted)" );
+            SAL_INFO( "vcl.schedule", pSchedulerData << " "
+                << *pSchedulerData << " (to be deleted)" );
 
         // Should the Task be released from scheduling or stacked?
         if ( !pSchedulerData->mpTask || !pSchedulerData->mpTask->IsActive()
@@ -361,8 +360,8 @@ next_entry:
 
     if ( pMostUrgent )
     {
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                  << pMostUrgent << "  invoke-in  " << *pMostUrgent->mpTask );
+        SAL_INFO( "vcl.schedule", pMostUrgent
+            << "  invoke-in  " << *pMostUrgent->mpTask );
 
         Task *pTask = pMostUrgent->mpTask;
 
@@ -389,8 +388,7 @@ next_entry:
         Lock( nLockCount );
         pMostUrgent->mbInScheduler = false;
 
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                  << pMostUrgent << "  invoke-out" );
+        SAL_INFO( "vcl.schedule", pMostUrgent << "  invoke-out" );
 
         // eventually pop the scheduler stack
         // this just happens for nested calls, which renders all accounting
@@ -457,20 +455,20 @@ void Task::Start()
         mpSchedulerData = pSchedulerData;
 
         AppendSchedulerData( rSchedCtx, pSchedulerData );
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
-                  << " " << mpSchedulerData << "  added      " << *this );
+        SAL_INFO( "vcl.schedule",
+                  mpSchedulerData << "  added      " << *this );
     }
     else
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
-                  << " " << mpSchedulerData << "  restarted  " << *this );
+        SAL_INFO( "vcl.schedule",
+                  mpSchedulerData << "  restarted  " << *this );
 
-    mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
+    mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
 }
 
 void Task::Stop()
 {
-    SAL_INFO_IF( mbActive, "vcl.schedule", tools::Time::GetSystemTicks()
-                  << " " << mpSchedulerData << "  stopped    " << *this );
+    SAL_INFO_IF( mbActive, "vcl.schedule",
+                 mpSchedulerData << "  stopped    " << *this );
     mbActive = false;
 }
 

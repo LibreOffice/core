@@ -412,6 +412,7 @@ Time tools::Time::GetUTCOffset()
 
 sal_uInt64 tools::Time::GetSystemTicks()
 {
+    // Adapt sal/osl/all/log.cxx SYSTEMTICKS, if you change this
     return osl_getMonotonicTicks() / 1000;
 }
 

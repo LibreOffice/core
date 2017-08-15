@@ -115,6 +115,7 @@ void maybeOutputTimestamp(std::ostringstream &s) {
         return;
     bool outputTimestamp = false;
     bool outputRelativeTimer = false;
+    bool outputSystemTicks = false;
     for (char const * p = env;;) {
         switch (*p++) {
         case '\0':
@@ -159,6 +160,9 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                 sprintf(relativeTimestamp, "%d.%03d", seconds, milliSeconds);
                 s << relativeTimestamp << ':';
             }
+            if (outputSystemTicks) {
+                s << osl_getMonotonicTicks() / 1000 << ':';
+            }
             return;
         case '+':
             {
@@ -170,6 +174,8 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                     outputTimestamp = true;
                 else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
                     outputRelativeTimer = true;
+                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("SYSTEMTICKS")))
+                    outputSystemTicks = true;
                 char const * p2 = p1;
                 while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
                     ++p2;
@@ -339,7 +345,8 @@ sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
             seenWarn = true;
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
-                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")) ||
+                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("SYSTEMTICKS")))
         {
             // handled later
             match = false;

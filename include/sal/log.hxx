@@ -235,7 +235,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
       <switch> ::= <sense><item>
       <sense> ::= "+"|"-"
       <item> ::= <flag>|<level>("."<area>)?
-      <flag> ::= "TIMESTAMP"|"RELATIVETIMER"
+      <flag> ::= "TIMESTAMP"|"RELATIVETIMER"|"SYSTEMTICKS"
       <level> ::= "INFO"|"WARN"
     @endverbatim
 
@@ -245,14 +245,16 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     "+INFO+WARN" is used instead (which in turn results in everything
     being output).
 
-    The "+TIMESTAMP" flag causes each output line (as selected by the level
-    switch(es)) to be prefixed by a timestamp like 2016-08-18:14:04:43.
+    The "+TIMESTAMP" flag causes each SAL_* output line to be prefixed by
+    a timestamp like 2016-08-18:14:04:43.
 
-    The "+RELATIVETIMER" flag causes each output line (as selected by
-    the level switch(es)) to be prefixed by a relative timestamp in
-    seconds since the first output line like 1.312.
+    The "+RELATIVETIMER" flag causes each SAL_* output line to be prefixed by
+    a relative timestamp in seconds since the first output line like 1.312.
 
-    If both +TIMESTAMP and +RELATIVETIMER are specified, they are
+    The "+SYSTEMTICKS" flag causes each SAL_* output line to be prefixed by
+    the current value of tools::Time::GetSystemTicks().
+
+    If +TIMESTAMP, +RELATIVETIMER and +SYSTEMTICKS are specified, they are
     output in that order.
 
     Specifying a flag with a negative sense has no effect. Specifying
