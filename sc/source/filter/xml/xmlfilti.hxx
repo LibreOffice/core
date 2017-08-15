@@ -56,7 +56,7 @@ class ScXMLFilterContext : public ScXMLImportContext
 public:
 
     ScXMLFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -80,7 +80,7 @@ class ScXMLAndContext : public ScXMLImportContext
 public:
 
     ScXMLAndContext( ScXMLImport& rImport, sal_Int32 nElement,
-                     const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
@@ -100,7 +100,7 @@ class ScXMLOrContext : public ScXMLImportContext
 public:
 
     ScXMLOrContext( ScXMLImport& rImport, sal_Int32 nElement,
-                    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
@@ -127,7 +127,7 @@ class ScXMLConditionContext : public ScXMLImportContext
 public:
 
     ScXMLConditionContext( ScXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                           const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                            ScQueryParam& rParam,
                            ScXMLFilterContext* pTempFilterContext);
 
@@ -146,7 +146,7 @@ class ScXMLSetItemContext : public ScXMLImportContext
 {
 public:
     ScXMLSetItemContext(ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLConditionContext& rParent);
 
     virtual ~ScXMLSetItemContext() override;
@@ -174,7 +174,7 @@ class ScXMLDPFilterContext : public ScXMLImportContext
 public:
 
     ScXMLDPFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
     virtual ~ScXMLDPFilterContext() override;
@@ -223,7 +223,7 @@ class ScXMLDPAndContext : public ScXMLImportContext
 public:
 
     ScXMLDPAndContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPAndContext() override;
@@ -240,7 +240,7 @@ class ScXMLDPOrContext : public ScXMLImportContext
 public:
 
     ScXMLDPOrContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPOrContext() override;
@@ -264,7 +264,7 @@ class ScXMLDPConditionContext : public ScXMLImportContext
 public:
 
     ScXMLDPConditionContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPConditionContext() override;

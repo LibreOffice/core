@@ -34,7 +34,7 @@ class ScXMLTableColContext : public ScXMLImportContext
 public:
 
     ScXMLTableColContext( ScXMLImport& rImport, sal_Int32 nElement,
-                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
+                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLTableColContext() override;
 
@@ -57,7 +57,7 @@ class ScXMLTableColsContext : public ScXMLImportContext
 public:
 
     ScXMLTableColsContext( ScXMLImport& rImport, sal_Int32 nElement,
-                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         const bool bHeader, const bool bGroup);
 
     virtual ~ScXMLTableColsContext() override;

@@ -36,7 +36,7 @@ class ScXMLTableSourceContext : public ScXMLImportContext
 
 public:
     ScXMLTableSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLTableSourceContext() override;
 

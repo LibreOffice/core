@@ -42,7 +42,7 @@ class ScXMLCalculationSettingsContext : public ScXMLImportContext
 
 public:
     ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLCalculationSettingsContext() override;
 
@@ -60,24 +60,18 @@ class ScXMLNullDateContext : public ScXMLImportContext
 {
 public:
     ScXMLNullDateContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLNullDateContext() override;
-
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLIterationContext : public ScXMLImportContext
 {
 public:
     ScXMLIterationContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLIterationContext() override;
-
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 #endif

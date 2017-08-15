@@ -33,7 +33,7 @@ using namespace xmloff::token;
 
 ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */ ) :
     ScXMLImportContext( rImport )
 {
     // here are no attributes
@@ -49,9 +49,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::c
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     if ( nElement == XML_ELEMENT( TABLE, XML_DDE_LINK) )
-        pContext = new ScXMLDDELinkContext(GetScImport(), nElement, xAttrList);
+        pContext = new ScXMLDDELinkContext(GetScImport(), nElement, pAttribList);
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport() );
@@ -61,7 +63,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::c
 
 ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */ ) :
     ScXMLImportContext( rImport ),
     aDDELinkTable(),
     aDDELinkRow(),
@@ -84,14 +86,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::cr
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( OFFICE, XML_DDE_SOURCE ):
-            pContext = new ScXMLDDESourceContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDDESourceContext(GetScImport(), nElement, pAttribList, this);
         break;
         case XML_ELEMENT( TABLE, XML_TABLE ):
-            pContext = new ScXMLDDETableContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDDETableContext(GetScImport(), nElement, pAttribList, this);
         break;
     }
 
@@ -187,17 +191,14 @@ void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
 
 ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -234,7 +235,7 @@ void SAL_CALL ScXMLDDESourceContext::endFastElement( sal_Int32 /*nElement*/ )
 
 ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
@@ -250,14 +251,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-            pContext = new ScXMLDDEColumnContext(GetScImport(), nElement, xAttrList, pDDELink);
+            pContext = new ScXMLDDEColumnContext(GetScImport(), nElement, pAttribList, pDDELink);
         break;
         case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
-            pContext = new ScXMLDDERowContext(GetScImport(), nElement, xAttrList, pDDELink);
+            pContext = new ScXMLDDERowContext(GetScImport(), nElement, pAttribList, pDDELink);
         break;
     }
 
@@ -269,19 +272,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
 
 ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
         sal_Int32 nCols(1);
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ) ) );
-        if (aIter != pAttribList->end())
+        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ) ) );
+        if (aIter != rAttrList->end())
             nCols = aIter.toInt32();
 
         pDDELink->AddColumns(nCols);
@@ -294,19 +294,16 @@ ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
 
 ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink),
     nRows(1)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
-        if (aIter != pAttribList->end())
+        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
+        if (aIter != rAttrList->end())
             nRows = aIter.toInt32();
 
         pDDELink->AddRows(nRows);
@@ -321,9 +318,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::cre
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     if (nElement == XML_ELEMENT( TABLE, XML_TABLE_CELL ))
-        pContext = new ScXMLDDECellContext(GetScImport(), nElement, xAttrList, pDDELink);
+        pContext = new ScXMLDDECellContext(GetScImport(), nElement, pAttribList, pDDELink);
 
     if (!pContext)
         pContext = new SvXMLImportContext( GetImport() );
@@ -338,7 +337,7 @@ void SAL_CALL ScXMLDDERowContext::endFastElement( sal_Int32 /*nElement*/ )
 
 ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
     sValue(),
@@ -349,12 +348,9 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
     bEmpty(true),
     pDDELink(pTempDDELink)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {

@@ -32,21 +32,18 @@ using namespace xmloff::token;
 ScXMLConsolidationContext::ScXMLConsolidationContext(
         ScXMLImport& rImport,
         sal_Int32 /*nElement*/,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     eFunction( SUBTOTAL_FUNC_NONE ),
     bLinkToSource( false ),
     bTargetAddr(false)
 {
     rImport.LockSolarMutex();
-    if( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for( auto &aIter : *pAttribList )
+        for (auto &aIter : *rAttrList)
         {
-            switch( aIter.getToken() )
+            switch (aIter.getToken())
             {
                 case XML_ELEMENT( TABLE, XML_FUNCTION ):
                     eFunction = ScXMLConverter::GetSubTotalFuncFromString( aIter.toString() );

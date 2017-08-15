@@ -276,7 +276,7 @@ public:
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-        const uno::Reference<xml::sax::XFastAttributeList>& i_xAttrList,
+        const rtl::Reference<sax_fastparser::FastAttributeList>& i_rAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -305,7 +305,7 @@ SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
 }
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-                                                   const uno::Reference<xml::sax::XFastAttributeList>& /*i_xAttrList*/,
+                                                   const rtl::Reference<sax_fastparser::FastAttributeList>& /*i_rAttrList*/,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
 SvXMLImportContext(i_rImport),
 ScXMLDocContext_Impl(i_rImport),
@@ -368,7 +368,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLBodyContext_Impl::createFastChildContext( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    return GetScImport().CreateBodyContext( xAttrList );
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    return GetScImport().CreateBodyContext( pAttribList );
 }
 
 SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
@@ -685,6 +687,8 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch( nElement )
     {
@@ -700,7 +704,7 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
             GetModel(), uno::UNO_QUERY_THROW);
         // flat OpenDocument file format
         pContext = new ScXMLFlatDocContext_Impl( *this,
-            xAttrList, xDPS->getDocumentProperties());
+            pAttribList, xDPS->getDocumentProperties());
         break;
     }
 
@@ -925,9 +929,9 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const OUString& rLocalName,
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateBodyContext(const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+SvXMLImportContext *ScXMLImport::CreateBodyContext(const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
 {
-    return new ScXMLBodyContext(*this, xAttrList);
+    return new ScXMLBodyContext(*this, rAttrList);
 }
 
 SvXMLImportContext *ScXMLImport::CreateMetaContext(

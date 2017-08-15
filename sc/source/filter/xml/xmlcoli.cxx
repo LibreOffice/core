@@ -41,17 +41,14 @@ using namespace xmloff::token;
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     sVisibility(GetXMLToken(XML_VISIBLE))
 {
     nColCount = 1;
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -148,7 +145,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       const bool bTempHeader, const bool bTempGroup) :
     ScXMLImportContext( rImport ),
     nHeaderStartCol(0),
@@ -165,13 +162,10 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
     else if (bGroup)
     {
         nGroupStartCol = rImport.GetTables().GetCurrentColCount();
-        if ( xAttrList.is() )
+        if ( rAttrList.is() )
         {
-            sax_fastparser::FastAttributeList *pAttribList =
-                sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-            auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
-            if ( aIter != pAttribList->end() && IsXMLToken(aIter, XML_FALSE) )
+            auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
+            if ( aIter != rAttrList->end() && IsXMLToken(aIter, XML_FALSE) )
                 bGroupDisplay = false;
         }
     }
@@ -185,23 +179,25 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColsContext::
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    false, true );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_HEADER_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    true, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, pAttribList,
                                                    false, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-        pContext = new ScXMLTableColContext( GetScImport(), nElement, xAttrList//,
+        pContext = new ScXMLTableColContext( GetScImport(), nElement, pAttribList//,
                                                       //this
                                                       );
         break;

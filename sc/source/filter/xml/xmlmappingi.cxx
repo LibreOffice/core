@@ -26,7 +26,7 @@ using namespace xmloff::token;
 
 ScXMLMappingsContext::ScXMLMappingsContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */ ) :
     ScXMLImportContext( rImport )
 {
     // has no attributes
@@ -43,12 +43,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
                                       const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch( nElement )
     {
         case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
         {
-            pContext = new ScXMLMappingContext( GetScImport(), nElement, xAttrList );
+            pContext = new ScXMLMappingContext( GetScImport(), nElement, pAttribList );
         }
         break;
     }
@@ -61,7 +63,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
 
 ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport )
 {
     OUString aProvider;
@@ -69,14 +71,11 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
     OUString aURL;
     // OUString aFrequency;
     OUString aDBName;
-    if( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for( auto &aIter : *pAttribList )
+        for (auto &aIter : *rAttrList)
         {
-            switch( aIter.getToken() )
+            switch (aIter.getToken())
             {
                 case XML_ELEMENT( XLINK, XML_HREF ):
                 {
@@ -122,16 +121,6 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
 }
 
 ScXMLMappingContext::~ScXMLMappingContext()
-{
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
-}
-
-void SAL_CALL ScXMLMappingContext::endFastElement( sal_Int32 /*nElement*/ )
 {
 }
 

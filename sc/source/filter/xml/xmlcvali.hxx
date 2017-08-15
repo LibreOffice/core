@@ -33,7 +33,7 @@ class ScXMLContentValidationsContext : public ScXMLImportContext
 public:
 
     ScXMLContentValidationsContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
     virtual ~ScXMLContentValidationsContext() override;
 

@@ -57,7 +57,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */ ) :
     ScXMLImportContext( rImport )
 {
     // has no Attributes
@@ -73,12 +73,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTablesCon
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_TABLE ) :
         {
-            pContext = new ScXMLDataPilotTableContext( GetScImport(), nElement, xAttrList);
+            pContext = new ScXMLDataPilotTableContext( GetScImport(), nElement, pAttribList );
         }
         break;
     }
@@ -94,7 +96,7 @@ ScXMLDataPilotTableContext::GrandTotalItem::GrandTotalItem() :
 
 ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     pDoc(GetScImport().GetDocument()),
     pDPObject(nullptr),
@@ -116,12 +118,9 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bDrillDown(true),
     bHeaderGridLayout(false)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -211,47 +210,49 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTableCont
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_DATABASE_SOURCE_SQL ):
         {
-            pContext = new ScXMLDPSourceSQLContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDPSourceSQLContext(GetScImport(), nElement, pAttribList, this);
             nSourceType = SQL;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATABASE_SOURCE_TABLE ):
         {
-            pContext = new ScXMLDPSourceTableContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDPSourceTableContext(GetScImport(), nElement, pAttribList, this);
             nSourceType = TABLE;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATABASE_SOURCE_QUERY ):
         {
-            pContext = new ScXMLDPSourceQueryContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDPSourceQueryContext(GetScImport(), nElement, pAttribList, this);
             nSourceType = QUERY;
         }
         break;
         case XML_ELEMENT( TABLE, XML_SOURCE_SERVICE ):
         {
-            pContext = new ScXMLSourceServiceContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLSourceServiceContext(GetScImport(), nElement, pAttribList, this);
             nSourceType = SERVICE;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_GRAND_TOTAL ):
         case XML_ELEMENT( TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL ):
         {
-            pContext = new ScXMLDataPilotGrandTotalContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDataPilotGrandTotalContext(GetScImport(), nElement, pAttribList, this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_SOURCE_CELL_RANGE ):
         {
-            pContext = new ScXMLSourceCellRangeContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLSourceCellRangeContext(GetScImport(), nElement, pAttribList, this);
             nSourceType = CELLRANGE;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_FIELD ):
-            pContext = new ScXMLDataPilotFieldContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDataPilotFieldContext(GetScImport(), nElement, pAttribList, this);
         break;
     }
 
@@ -576,17 +577,14 @@ void ScXMLDataPilotTableContext::SetGrandTotal(
 
 ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -610,17 +608,14 @@ ScXMLDPSourceSQLContext::~ScXMLDPSourceSQLContext()
 
 ScXMLDPSourceTableContext::ScXMLDPSourceTableContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -642,17 +637,14 @@ ScXMLDPSourceTableContext::~ScXMLDPSourceTableContext()
 
 ScXMLDPSourceQueryContext::ScXMLDPSourceQueryContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -673,17 +665,14 @@ ScXMLDPSourceQueryContext::~ScXMLDPSourceQueryContext()
 
 ScXMLSourceServiceContext::ScXMLSourceServiceContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -712,19 +701,16 @@ ScXMLSourceServiceContext::~ScXMLSourceServiceContext()
 }
 
 ScXMLDataPilotGrandTotalContext::ScXMLDataPilotGrandTotalContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/, const Reference<xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLDataPilotTableContext* pTableContext ) :
     ScXMLImportContext( rImport ),
     mpTableContext(pTableContext),
     meOrientation(NONE),
     mbVisible(false)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -776,17 +762,14 @@ ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
 
 ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -814,11 +797,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceCellRangeCon
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_FILTER ):
-            pContext = new ScXMLDPFilterContext(GetScImport(), nElement, xAttrList, pDataPilotTable);
+            pContext = new ScXMLDPFilterContext(GetScImport(), nElement, pAttribList, pDataPilotTable);
         break;
     }
 
@@ -830,7 +815,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSourceCellRangeCon
 
 ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTable) :
     ScXMLImportContext( rImport ),
     pDataPilotTable(pTempDataPilotTable),
@@ -853,12 +838,9 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     bool bDataLayout = false;
     bool bIgnoreSelectedPage = false;
     OUString aDisplayName;
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -913,17 +895,19 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotFieldCont
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_LEVEL ):
-            pContext = new ScXMLDataPilotLevelContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDataPilotLevelContext(GetScImport(), nElement, pAttribList, this);
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_FIELD_REFERENCE ):
-            pContext = new ScXMLDataPilotFieldReferenceContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDataPilotFieldReferenceContext(GetScImport(), nElement, pAttribList, this);
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_GROUPS ):
-            pContext = new ScXMLDataPilotGroupsContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDataPilotGroupsContext(GetScImport(), nElement, pAttribList, this);
         break;
     }
 
@@ -1019,18 +1003,15 @@ void SAL_CALL ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/
 }
 
 ScXMLDataPilotFieldReferenceContext::ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, sal_Int32 /*+*/,
-                        const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
     ScXMLImportContext( rImport )
 {
     sheet::DataPilotFieldReference aReference;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1088,17 +1069,14 @@ ScXMLDataPilotFieldReferenceContext::~ScXMLDataPilotFieldReferenceContext()
 
 ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1121,23 +1099,25 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotLevelCont
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_SUBTOTALS ):
-            pContext = new ScXMLDataPilotSubTotalsContext(GetScImport(), nElement, xAttrList, pDataPilotField);
+            pContext = new ScXMLDataPilotSubTotalsContext(GetScImport(), nElement, pAttribList, pDataPilotField);
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_MEMBERS ):
-            pContext = new ScXMLDataPilotMembersContext(GetScImport(), nElement, xAttrList, pDataPilotField);
+            pContext = new ScXMLDataPilotMembersContext(GetScImport(), nElement, pAttribList, pDataPilotField);
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_DISPLAY_INFO ):
-            pContext = new ScXMLDataPilotDisplayInfoContext(GetScImport(), nElement, xAttrList, pDataPilotField);
+            pContext = new ScXMLDataPilotDisplayInfoContext(GetScImport(), nElement, pAttribList, pDataPilotField);
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_SORT_INFO ):
-            pContext = new ScXMLDataPilotSortInfoContext(GetScImport(), nElement, xAttrList, pDataPilotField);
+            pContext = new ScXMLDataPilotSortInfoContext(GetScImport(), nElement, pAttribList, pDataPilotField);
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_LAYOUT_INFO ):
-            pContext = new ScXMLDataPilotLayoutInfoContext(GetScImport(), nElement, xAttrList, pDataPilotField);
+            pContext = new ScXMLDataPilotLayoutInfoContext(GetScImport(), nElement, pAttribList, pDataPilotField);
         break;
     }
 
@@ -1148,18 +1128,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotLevelCont
 }
 
 ScXMLDataPilotDisplayInfoContext::ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
     ScXMLImportContext( rImport )
 {
     sheet::DataPilotFieldAutoShowInfo aInfo;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1192,18 +1169,15 @@ ScXMLDataPilotDisplayInfoContext::~ScXMLDataPilotDisplayInfoContext()
 }
 
 ScXMLDataPilotSortInfoContext::ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
     ScXMLImportContext( rImport )
 {
     sheet::DataPilotFieldSortInfo aInfo;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1237,18 +1211,15 @@ ScXMLDataPilotSortInfoContext::~ScXMLDataPilotSortInfoContext()
 }
 
 ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
     ScXMLImportContext( rImport )
 {
     sheet::DataPilotFieldLayoutInfo aInfo;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1277,7 +1248,7 @@ ScXMLDataPilotLayoutInfoContext::~ScXMLDataPilotLayoutInfoContext()
 
 ScXMLDataPilotSubTotalsContext::ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField)
@@ -1294,11 +1265,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotSubTotals
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_SUBTOTAL ):
-            pContext = new ScXMLDataPilotSubTotalContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDataPilotSubTotalContext(GetScImport(), nElement, pAttribList, this);
         break;
     }
 
@@ -1327,17 +1300,14 @@ void ScXMLDataPilotSubTotalsContext::SetDisplayName(const OUString& rName)
 
 ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotSubTotalsContext* pTempDataPilotSubTotals) :
     ScXMLImportContext( rImport ),
     pDataPilotSubTotals(pTempDataPilotSubTotals)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1359,7 +1329,7 @@ ScXMLDataPilotSubTotalContext::~ScXMLDataPilotSubTotalContext()
 
 ScXMLDataPilotMembersContext::ScXMLDataPilotMembersContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField)
@@ -1375,11 +1345,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotMembersCo
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_MEMBER ):
-            pContext = new ScXMLDataPilotMemberContext(GetScImport(), nElement, xAttrList, pDataPilotField);
+            pContext = new ScXMLDataPilotMemberContext(GetScImport(), nElement, pAttribList, pDataPilotField);
         break;
     }
 
@@ -1391,7 +1363,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotMembersCo
 
 ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField),
@@ -1399,12 +1371,9 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
     bDisplayDetails( true ),
     bHasName( false )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -1446,7 +1415,7 @@ void SAL_CALL ScXMLDataPilotMemberContext::endFastElement( sal_Int32 /*nElement*
 
 ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField)
@@ -1460,12 +1429,9 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
     bool                    bAutoStart(true);
     bool                    bAutoEnd(true);
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken() & TOKEN_MASK)
             {
@@ -1557,10 +1523,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupsCon
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     if (nElement == XML_ELEMENT( TABLE, XML_DATA_PILOT_GROUP ))
     {
-        pContext = new ScXMLDataPilotGroupContext(GetScImport(), nElement,  xAttrList, pDataPilotField);
+        pContext = new ScXMLDataPilotGroupContext(GetScImport(), nElement, pAttribList, pDataPilotField);
     }
 
     if( !pContext )
@@ -1571,18 +1539,15 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupsCon
 
 ScXMLDataPilotGroupContext::ScXMLDataPilotGroupContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport ),
     pDataPilotField(pTempDataPilotField)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
-        if (aIter != pAttribList->end())
+        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
+        if (aIter != rAttrList->end())
             sName = aIter.toString();
     }
 }
@@ -1595,11 +1560,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotGroupCont
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     if (nElement == XML_ELEMENT( TABLE, XML_DATA_PILOT_MEMBER ) ||
         nElement == XML_ELEMENT( TABLE, XML_DATA_PILOT_GROUP_MEMBER ))
     {
-        pContext = new ScXMLDataPilotGroupMemberContext(GetScImport(), nElement, xAttrList, this);
+        pContext = new ScXMLDataPilotGroupMemberContext(GetScImport(), nElement, pAttribList, this);
     }
 
     if( !pContext )
@@ -1615,18 +1582,15 @@ void SAL_CALL ScXMLDataPilotGroupContext::endFastElement( sal_Int32 /*nElement*/
 
 ScXMLDataPilotGroupMemberContext::ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDataPilotGroupContext* pTempDataPilotGroup) :
     ScXMLImportContext( rImport ),
     pDataPilotGroup(pTempDataPilotGroup)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
-        if (aIter != pAttribList->end())
+        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_NAME ) ) );
+        if (aIter != rAttrList->end())
             sName = aIter.toString();
     }
 }

@@ -22,17 +22,14 @@ using namespace xmloff::token;
 
 ScXMLDataStreamContext::ScXMLDataStreamContext(
     ScXMLImport& rImport, sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList ) :
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext(rImport),
     mbRefreshOnEmpty(false),
     meInsertPos(sc::ImportPostProcessData::DataStream::InsertBottom)
 {
-    if( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for( auto &aIter : *pAttribList )
+        for (auto &aIter : *rAttrList)
         {
             switch ( aIter.getToken() )
             {

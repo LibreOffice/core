@@ -26,7 +26,7 @@ using namespace com::sun::star;
 
 ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */ ) :
     ScXMLImportContext( rImport )
 {
     // here are no attributes

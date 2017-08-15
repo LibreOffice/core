@@ -33,7 +33,7 @@ using namespace xmloff::token;
 
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList) :
     ScXMLImportContext( rImport ),
     sLink(),
     sTableName(),
@@ -42,12 +42,9 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
     nRefresh(0),
     nMode(sheet::SheetLinkMode_NORMAL)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {

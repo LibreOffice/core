@@ -38,16 +38,13 @@ ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
 ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScXMLImport& rImport,
         sal_Int32 /*nElement*/,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScMyImpCellRangeSource* pCellRangeSource ) :
     ScXMLImportContext( rImport )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {

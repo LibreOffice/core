@@ -48,7 +48,7 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
     ScXMLImport& rImport, sal_Int32 /*nElement*/,
-    const uno::Reference<xml::sax::XFastAttributeList>& /* xAttrList */,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& /* rAttrList */,
     Inserter* pInserter ) :
     ScXMLImportContext( rImport ),
     mpInserter(pInserter)
@@ -65,16 +65,18 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionsCo
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_NAMED_RANGE ):
             pContext = new ScXMLNamedRangeContext(
-                GetScImport(), nElement, xAttrList, mpInserter.get() );
+                GetScImport(), nElement, pAttribList, mpInserter.get() );
             break;
         case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSION ):
             pContext = new ScXMLNamedExpressionContext(
-                GetScImport(), nElement, xAttrList, mpInserter.get() );
+                GetScImport(), nElement, pAttribList, mpInserter.get() );
             break;
     }
 
@@ -87,7 +89,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionsCo
 ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     ScXMLImport& rImport,
     sal_Int32 /*nElement*/,
-    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
     ScXMLImportContext( rImport ),
     mpInserter(pInserter)
@@ -102,12 +104,9 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
             GetScImport().GetDocument()->GetStorageGrammar(),
             formula::FormulaGrammar::CONV_OOO);
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -134,15 +133,9 @@ ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedRangeContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
-}
-
 ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
     ScXMLImport& rImport, sal_Int32 /*nElement*/,
-    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
     ScXMLImportContext( rImport ),
     mpInserter(pInserter)
@@ -152,12 +145,9 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
 
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -181,12 +171,6 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
 
 ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
 {
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
