@@ -1068,3 +1068,127 @@ index fc6c848..4bffb8b 100644
 -- 
 2.12.3
 
+From c28f02f21a6d80ad258cf8f052705508567e2418 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 11 Aug 2017 18:19:15 +0200
+Subject: [PATCH 1/3] Fix image mime-type key
+
+libepubgen expected librevenge:mimetype, but:
+
+1) LO's ODF output has loext:mime-type
+2) libabw generates librevenge:mime-type
+3) libodfgen expects librevenge:mime-type
+
+So probably this one has to be adjusted.
+---
+ src/lib/EPUBHTMLGenerator.cpp | 2 +-
+ src/lib/EPUBTextGenerator.cpp | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 5ef5e14..40c507e 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -866,7 +866,7 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+ 
+   const EPUBPath &path = m_impl->m_imageManager.insert(
+                            RVNGBinaryData(propList["office:binary-data"]->getStr()),
+-                           propList["librevenge:mimetype"]->getStr());
++                           propList["librevenge:mime-type"]->getStr());
+ 
+   RVNGPropertyList attrs;
+   attrs.insert("src", path.relativeTo(m_impl->m_path).str().c_str());
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index e8f785e..cb557b2 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -596,7 +596,7 @@ void EPUBTextGenerator::insertBinaryObject(const librevenge::RVNGPropertyList &p
+ 
+   for (RVNGPropertyList::Iter iter(propList); !iter.last(); iter.next())
+   {
+-    if (RVNGString("librevenge:mimetype") == iter.key())
++    if (RVNGString("librevenge:mime-type") == iter.key())
+       mimetype.reset(iter()->clone());
+     else if (RVNGString("office:binary-data") == iter.key())
+       data.reset(iter()->clone());
+@@ -627,7 +627,7 @@ void EPUBTextGenerator::insertBinaryObject(const librevenge::RVNGPropertyList &p
+     }
+   }
+ 
+-  newPropList.insert("librevenge:mimetype", mimetype->clone());
++  newPropList.insert("librevenge:mime-type", mimetype->clone());
+   newPropList.insert("office:binary-data", data->clone());
+ 
+   if (m_impl->m_inHeader || m_impl->m_inFooter)
+-- 
+2.12.3
+
+From 39470cf360cfc67f2dd078646162a63168a84c05 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 15 Aug 2017 12:12:12 +0200
+Subject: [PATCH 2/3] EPUBSplitGuard: fix tracking current size
+
+In case incrementing size and split affects the reference size, the
+current size won't be ever greather than zero in
+EPUBSplitGuard::canSplit(), and it will always return false.
+
+With this, EPUB_SPLIT_METHOD_PAGE_BREAK works again.
+---
+ src/lib/EPUBSplitGuard.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/EPUBSplitGuard.cpp b/src/lib/EPUBSplitGuard.cpp
+index 8c279c8..15ba20f 100644
+--- a/src/lib/EPUBSplitGuard.cpp
++++ b/src/lib/EPUBSplitGuard.cpp
+@@ -46,7 +46,7 @@ void EPUBSplitGuard::closeLevel()
+ 
+ void EPUBSplitGuard::incrementSize(const unsigned size)
+ {
+-  m_size += size;
++  m_currentSize += size;
+ }
+ 
+ bool EPUBSplitGuard::splitOnPageBreak() const
+@@ -66,7 +66,7 @@ bool EPUBSplitGuard::splitOnSize() const
+ 
+ void EPUBSplitGuard::onSplit()
+ {
+-  m_size = 0;
++  m_currentSize = 0;
+ }
+ 
+ bool EPUBSplitGuard::canSplit(const EPUBSplitMethod method) const
+-- 
+2.12.3
+
+From 3155cb6164f04fa8170dd9912c579ad90586c8a8 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 15 Aug 2017 13:53:16 +0200
+Subject: [PATCH 3/3] EPUBTextGenerator: handle EPUB_SPLIT_METHOD_HEADING
+
+It seems to me this was unimplemented so far.
+---
+ src/lib/EPUBTextGenerator.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index cb557b2..aba8827 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -255,6 +255,12 @@ void EPUBTextGenerator::openParagraph(const librevenge::RVNGPropertyList &propLi
+   m_impl->m_breakAfterPara = breakAfter && ("column" != breakAfter->getStr());
+   if (m_impl->getSplitGuard().splitOnSize())
+     m_impl->startNewHtmlFile();
++
++  // Handle split by chapters.
++  const RVNGProperty *const outlineLevel = propList["text:outline-level"];
++  if (outlineLevel && m_impl->getSplitGuard().splitOnHeading(outlineLevel->getInt()))
++    m_impl->startNewHtmlFile();
++
+   m_impl->getSplitGuard().openLevel();
+ 
+   if (m_impl->m_inHeader || m_impl->m_inFooter)
+-- 
+2.12.3
+
