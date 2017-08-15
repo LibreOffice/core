@@ -168,6 +168,10 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
     // possibly from the numbering.
     case NS_ooxml::LN_CT_Ind_left:
     case NS_ooxml::LN_CT_Ind_right:
+    // \htmautsp arrives after the style table, so only the non-style value is
+    // correct, keep these.
+    case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
+    case NS_ooxml::LN_CT_Spacing_afterAutospacing:
         return true;
 
     default:

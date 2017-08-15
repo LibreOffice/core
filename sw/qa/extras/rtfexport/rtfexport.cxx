@@ -1210,6 +1210,13 @@ DECLARE_RTFEXPORT_TEST(testTdf107620, "tdf107620.docx")
     CPPUNIT_ASSERT(!bAddParaTableSpacing);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf107480, "tdf107480.rtf")
+{
+    // These were 176 (100 twips), as \htmautsp was parsed too late.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+}
+
 DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
 {
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
