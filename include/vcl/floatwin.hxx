@@ -129,6 +129,7 @@ public:
     SAL_DLLPRIVATE tools::Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
     virtual        void             doDeferredInit(WinBits nBits) override;
+    virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override;
 
 public:
     explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle);
