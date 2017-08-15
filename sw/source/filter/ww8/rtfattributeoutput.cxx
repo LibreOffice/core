@@ -85,7 +85,7 @@
 using namespace ::com::sun::star;
 using namespace sw::util;
 
-static OString OutTBLBorderLine(RtfExport const & rExport, const editeng::SvxBorderLine* pLine, const sal_Char* pStr)
+static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBorderLine* pLine, const sal_Char* pStr)
 {
     OStringBuffer aRet;
     if (!pLine->isEmpty())
@@ -165,7 +165,7 @@ static OString OutTBLBorderLine(RtfExport const & rExport, const editeng::SvxBor
     return aRet.makeStringAndClear();
 }
 
-static OString OutBorderLine(RtfExport const & rExport, const editeng::SvxBorderLine* pLine,
+static OString OutBorderLine(RtfExport const& rExport, const editeng::SvxBorderLine* pLine,
                              const sal_Char* pStr, sal_uInt16 nDist, SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE)
 {
     OStringBuffer aRet;
