@@ -79,7 +79,7 @@ ScLookupCache::~ScLookupCache()
 ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress ) const
 {
-    QueryMap::const_iterator it( maQueryMap.find( QueryKey( rQueryAddress,
+    auto it( maQueryMap.find( QueryKey( rQueryAddress,
                     rCriteria.getQueryOp())));
     if (it == maQueryMap.end())
         return NOT_CACHED;
