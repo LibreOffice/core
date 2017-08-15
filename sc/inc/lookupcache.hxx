@@ -191,8 +191,6 @@ private:
 
 };
 
-typedef std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > ScLookupCacheMap;
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

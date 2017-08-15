@@ -111,7 +111,7 @@ using namespace com::sun::star;
 // dtor plus helpers are convenient.
 struct ScLookupCacheMapImpl
 {
-    ScLookupCacheMap aCacheMap;
+    std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > aCacheMap;
     ~ScLookupCacheMapImpl()
     {
         freeCaches();
@@ -120,13 +120,13 @@ struct ScLookupCacheMapImpl
     {
         freeCaches();
         // free mapping
-        ScLookupCacheMap aTmp;
+        std::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash > aTmp;
         aCacheMap.swap( aTmp);
     }
 private:
     void freeCaches()
     {
-        for (ScLookupCacheMap::iterator it( aCacheMap.begin()); it != aCacheMap.end(); ++it)
+        for (auto it( aCacheMap.begin()); it != aCacheMap.end(); ++it)
             delete (*it).second;
     }
 };
@@ -1232,7 +1232,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
     ScLookupCache* pCache = nullptr;
     if (!pLookupCacheMapImpl)
         pLookupCacheMapImpl = new ScLookupCacheMapImpl;
-    ScLookupCacheMap::iterator it( pLookupCacheMapImpl->aCacheMap.find( rRange));
+    auto it( pLookupCacheMapImpl->aCacheMap.find( rRange));
     if (it == pLookupCacheMapImpl->aCacheMap.end())
     {
         pCache = new ScLookupCache( this, rRange);
@@ -1256,7 +1256,7 @@ void ScDocument::AddLookupCache( ScLookupCache & rCache )
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 {
-    ScLookupCacheMap::iterator it( pLookupCacheMapImpl->aCacheMap.find(
+    auto it( pLookupCacheMapImpl->aCacheMap.find(
                 rCache.getRange()));
     if (it == pLookupCacheMapImpl->aCacheMap.end())
     {
