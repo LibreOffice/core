@@ -585,6 +585,17 @@ bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
     return bRet;
 }
 
+void FloatingWindow::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
+{
+    Dialog* pParentDlg = GetParentDialog();
+    SAL_DEBUG("FloatingWindow::LogicInvalidate");
+    if (pParentDlg)
+    {
+        SAL_DEBUG("emitiign FloatingWindow::LogicInvalidate");
+        pParentDlg->InvalidateFloatingWindow(mpImplData->maPos);
+    }
+}
+
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
     if (nType == StateChangedType::InitShow)
@@ -593,7 +604,6 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     }
 
     SystemWindow::StateChanged( nType );
-
     if (nType == StateChangedType::InitShow && IsVisible())
     {
         Dialog* pParentDlg = GetParentDialog();
