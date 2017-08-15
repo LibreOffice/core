@@ -25,6 +25,7 @@
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 
 #include <gtk/gtk.h>
@@ -80,6 +81,7 @@ private:
     osl::Mutex maLock;
     GtkWidget *mpDialog;
     css::uno::Reference< css::awt::XExtendedToolkit>  mxToolkit;
+    css::uno::Reference< css::frame::XDesktop >  mxDesktop;
 public:
 
     // XTopWindowListener
@@ -98,8 +100,8 @@ public:
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 public:
     RunDialog(GtkWidget *pDialog,
-        css::uno::Reference< css::awt::XExtendedToolkit > const &rToolkit
-        );
+        const css::uno::Reference<css::awt::XExtendedToolkit>& rToolkit,
+        const css::uno::Reference<css::frame::XDesktop>& rDesktop);
     virtual ~RunDialog() override;
     gint run();
     void cancel();

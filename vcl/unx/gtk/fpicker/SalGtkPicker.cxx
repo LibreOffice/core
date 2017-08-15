@@ -119,9 +119,12 @@ GtkWindow* RunDialog::GetTransientFor()
     return pParent;
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit > const & rToolkit ) :
-    cppu::WeakComponentImplHelper< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mxToolkit(rToolkit)
+RunDialog::RunDialog(GtkWidget *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
+                                         const uno::Reference<frame::XDesktop>& rDesktop)
+    : cppu::WeakComponentImplHelper<awt::XTopWindowListener, frame::XTerminateListener>(maLock)
+    , mpDialog(pDialog)
+    , mxToolkit(rToolkit)
+    , mxDesktop(rDesktop)
 {
 }
 
@@ -173,7 +176,9 @@ gint RunDialog::run()
     if (mxToolkit.is())
         mxToolkit->addTopWindowListener(this);
 
-    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
+    mxDesktop->addTerminateListener(this);
+    gint nStatus = gtk_dialog_run(GTK_DIALOG(mpDialog));
+    mxDesktop->removeTerminateListener(this);
 
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);

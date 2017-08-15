@@ -26,6 +26,7 @@
 #include <config_gio.h>
 
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -136,10 +137,12 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
         awt::Toolkit::create(m_xContext),
         uno::UNO_QUERY);
 
+    uno::Reference<frame::XDesktop> xDesktop(frame::Desktop::create(m_xContext), uno::UNO_QUERY);
+
     GtkWindow *pParent = RunDialog::GetTransientFor();
     if (pParent)
         gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
-    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
+    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     gint nStatus = pRunDialog->run();
     switch( nStatus )
