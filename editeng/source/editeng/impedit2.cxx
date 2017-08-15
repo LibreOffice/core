@@ -279,11 +279,8 @@ EditPaM ImpEditEngine::DeleteSelected(const EditSelection& rSel)
 
 OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
 {
-    OUString aText;
     if ( !rSel.HasRange() )
-        return aText;
-
-    OUString aSep = EditDoc::GetSepStr( LINEEND_LF );
+        return OUString();
 
     EditSelection aSel( rSel );
     aSel.Adjust( aEditDoc );
@@ -294,6 +291,9 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
     sal_Int32 nEndNode = aEditDoc.GetPos( pEndNode );
 
     OSL_ENSURE( nStartNode <= nEndNode, "Selection not sorted ?" );
+
+    OUString aText;
+    const OUString aSep = EditDoc::GetSepStr( LINEEND_LF );
 
     // iterate over the paragraphs ...
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
@@ -1570,8 +1570,7 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     const EditPaM& rPaM = rCurSel.Min();
     const ContentNode* pNode = rPaM.GetNode();
     // #i50710# line breaks are marked with 0x01 - the break iterator prefers 0x0a for that
-    OUString sParagraph = pNode->GetString();
-    sParagraph = sParagraph.replaceAll("\x01", "\x0a");
+    const OUString sParagraph = pNode->GetString().replaceAll("\x01", "\x0a");
     //return Null if search starts at the beginning of the string
     sal_Int32 nStart = rPaM.GetIndex() ? _xBI->beginOfSentence( sParagraph, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
 
@@ -1639,7 +1638,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         const EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
         while ( pField )
         {
-            OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
+            const OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
             if ( !aFldText.isEmpty() )
             {
                 aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(0,1) );
@@ -1928,7 +1927,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
     const UBiDiLevel nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
     if ( ( bCTL || ( nBidiLevel == 1 /*RTL*/ ) ) && pParaPortion->GetNode()->Len() )
     {
-        OUString aText = pParaPortion->GetNode()->GetString();
+        const OUString aText = pParaPortion->GetNode()->GetString();
 
         // Bidi functions from icu 2.0
 
@@ -2087,7 +2086,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        OUString aStr( rPaM.GetNode()->Copy( rPaM.GetIndex(), nChars ) );
+        const OUString aStr( rPaM.GetNode()->Copy( rPaM.GetIndex(), nChars ) );
 
         // Check whether attributes are deleted or changed:
         const sal_Int32 nStart = rPaM.GetIndex();
@@ -2628,7 +2627,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
-                OUString aOldText( aPaM.GetNode()->Copy(0, nTmpPos) );
+                const OUString aOldText( aPaM.GetNode()->Copy(0, nTmpPos) );
                 OUString aNewText( aOldText );
                 if (pCTLOptions->IsCTLSequenceCheckingTypeAndReplace())
                 {
@@ -2644,7 +2643,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
                             pOldTxt[nChgPos] == pNewTxt[nChgPos] )
                         ++nChgPos;
 
-                    OUString aChgText( aNewText.copy( nChgPos ) );
+                    const OUString aChgText( aNewText.copy( nChgPos ) );
 
                     // select text from first pos to be changed to current pos
                     EditSelection aSel( EditPaM( aPaM.GetNode(), nChgPos ), aPaM );
@@ -2707,7 +2706,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
     if ( GetStatus().DoOnlineSpelling() )
         aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
 
-    OUString aText(convertLineEnd(rStr, LINEEND_LF));
+    const OUString aText(convertLineEnd(rStr, LINEEND_LF));
     SfxVoidItem aTabItem( EE_FEATURE_TAB );
 
     // Converts to linesep = \n
@@ -2938,7 +2937,7 @@ EditPaM ImpEditEngine::InsertParaBreak(const EditSelection& rCurSel)
     {
         sal_Int32 nPara = aEditDoc.GetPos( aPaM.GetNode() );
         OSL_ENSURE( nPara > 0, "AutoIndenting: Error!" );
-        OUString aPrevParaText( GetEditDoc().GetParaAsString( nPara-1 ) );
+        const OUString aPrevParaText( GetEditDoc().GetParaAsString( nPara-1 ) );
         sal_Int32 n = 0;
         while ( ( n < aPrevParaText.getLength() ) &&
                 ( ( aPrevParaText[n] == ' ' ) || ( aPrevParaText[n] == '\t' ) ) )
@@ -2987,7 +2986,7 @@ bool ImpEditEngine::UpdateFields()
                 if ( aStatus.MarkFields() )
                     rField.GetFieldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
 
-                OUString aFldValue =
+                const OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
                         static_cast<const SvxFieldItem&>(*rField.GetItem()),
                         nPara, rField.GetStart(), rField.GetTextColor(), rField.GetFieldColor());
@@ -3468,8 +3467,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     uno::Reference< datatransfer::XTransferable > xDataObj;
     xDataObj = pDataObj;
 
-    OUString aText(convertLineEnd(GetSelected(aSelection), GetSystemLineEnd())); // System specific
-    pDataObj->GetString() = aText;
+    pDataObj->GetString() = convertLineEnd(GetSelected(aSelection), GetSystemLineEnd()); // System specific
 
     WriteRTF( pDataObj->GetRTFStream(), aSelection );
     pDataObj->GetRTFStream().Seek( 0 );
@@ -3501,8 +3499,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
             if ( dynamic_cast<const SvxURLField* >(pFld) !=  nullptr )
             {
                 // Office-Bookmark
-                OUString aURL( static_cast<const SvxURLField*>(pFld)->GetURL() );
-                pDataObj->GetURL() = aURL;
+                pDataObj->GetURL() = static_cast<const SvxURLField*>(pFld)->GetURL();
             }
         }
     }
