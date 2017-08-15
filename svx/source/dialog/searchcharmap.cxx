@@ -321,6 +321,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     aFont.SetTransparent(true);
     rRenderContext.SetFont(aFont);
     rRenderContext.GetFontCharMap(mxFontCharMap);
+    getFavCharacterList();
 
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;

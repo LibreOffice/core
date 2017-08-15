@@ -106,6 +106,7 @@ private:
     DECL_LINK(CharSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK(FavClickHdl, SvxShowCharSet*,void);
     DECL_LINK(SearchCharDoubleClickHdl, SvxShowCharSet*,void);
     DECL_LINK(SearchCharSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(SearchCharHighlightHdl, SvxShowCharSet*, void);
