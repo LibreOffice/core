@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <o3tl/make_unique.hxx>
-
+#include <iostream>
 #include <vector>
 
 using namespace oox;
@@ -51,6 +51,10 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
             const ScDPCache::IndexArrayType* pArray = rCache.GetFieldIndexArray(nField);
             assert(pArray);
             assert(static_cast<size_t>(i) < pArray->size());
+            const ScDPCache::ScDPItemDataVec& rItems = rCache.GetDimMemberValues(nField);
+            std::cout << "    bako nField"<< nField << "  '" << rCache.GetFormattedString(nField, rItems[(*pArray)[i]], false) << " : " << rCache.GetFormattedString(nField, rItems[(*pArray)[i]], true) << " : IsDateDimension: " << rCache.IsDateDimension(nField) << " : " << rCache.GetFormattedString(nField, rItems[(*pArray)[i]], true) << "'  rItems[(*pArray)[i]]: " << rItems[(*pArray)[i]].GetType() << std::endl;
+            // We are using XML_x reference (like: <x v="0"/>), instead of values here (eg: <s v="No Discount"/>).
+            // That's why in SavePivotCacheXml method, we need to list all items.
             pRecStrm->singleElement(XML_x, XML_v, OString::number((*pArray)[i]), FSEND);
         }
         pRecStrm->endElement(XML_r);
@@ -235,12 +239,13 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         std::set<ScDPItemData::Type> aDPTypes;
         double fMin = std::numeric_limits<double>::infinity(), fMax = -std::numeric_limits<double>::infinity();
         bool isValueInteger = true;
+        bool isContainsDate = rCache.IsDateDimension(i);
         double intpart;
         for (; it != itEnd; ++it)
         {
             ScDPItemData::Type eType = it->GetType();
             aDPTypes.insert(eType);
-            if (eType == ScDPItemData::Value)
+            if ((eType == ScDPItemData::Value) && (isContainsDate == false))
             {
                 double fVal = it->GetValue();
                 fMin = std::min(fMin, fVal);
@@ -256,7 +261,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         auto aDPTypeEnd = aDPTypes.cend();
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
-
+        // TODO In same cases, disable listing of items, as it is done in MS Excel.
+        // Exporting savePivotCacheRecordsXml method needs to be updated accordingly
         bool bListItems = true;
 
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
@@ -276,6 +282,9 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         if (!(isContainsString || (aDPTypes.size() > 1)))
             pAttList->add(XML_containsSemiMixedTypes, ToPsz10(false));
 
+        if (isContainsDate)
+            pAttList->add(XML_containsDate, ToPsz10(true));
+
         // default for containsString field is true, so we are writing only when is false
         if (!isContainsString)
             pAttList->add(XML_containsString, ToPsz10(false));
@@ -284,7 +293,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         if (isContainsBlank)
             pAttList->add(XML_containsBlank, ToPsz10(true));
 
-        bool isContainsNumber = aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
+        bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
         if (isContainsNumber)
             pAttList->add(XML_containsNumber, ToPsz10(true));
 
@@ -301,15 +310,6 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         {
             pAttList->add(XML_minValue, OString::number(fMin));
             pAttList->add(XML_maxValue, OString::number(fMax));
-            // If there is only numeric types, then we shouldn't list all items
-            if  (aDPTypesWithoutBlank.size() == 1)
-                bListItems = false;
-        }
-
-        if (isContainsBlank && (aDPTypes.size() == 1))
-        {
-            // If all items are blank, then we shouldn't list all items
-            bListItems = false;
         }
 
         if (bListItems)
@@ -334,9 +334,20 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                             FSEND);
                     break;
                     case ScDPItemData::Value:
-                        pDefStrm->singleElement(XML_n,
-                            XML_v, OString::number(rItem.GetValue()),
-                            FSEND);
+                        if (isContainsDate)
+                        {
+                            // Create combined date and time string according the requirements of ISO 8601.
+                            // A single point in time can be represented by concatenating a complete date expression,
+                            // the letter T as a delimiter, and a valid time expression. For example, "2007-04-05T14:30".
+                            OString aDateTime = XclXmlUtils::ToOString(rCache.GetFormattedString(i, rItem, true)).replaceAt(10, 1, "T");
+                            pDefStrm->singleElement(XML_d,
+                                XML_v, aDateTime,
+                                FSEND);
+                        }
+                        else
+                            pDefStrm->singleElement(XML_n,
+                                XML_v, OString::number(rItem.GetValue()),
+                                FSEND);
                     break;
                     case ScDPItemData::Empty:
                         pDefStrm->singleElement(XML_m, FSEND);

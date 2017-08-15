@@ -552,58 +552,79 @@ void ScExportTest::testPivotExportXLSX()
     CPPUNIT_ASSERT(xShell.is());
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml");
-    CPPUNIT_ASSERT(pSheet);
+    xmlDocPtr pCacheDef = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pCacheDef);
 
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 5);
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 5);
 
     // Four strings and one empty field
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name", "imieinazwisko");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsBlank", "1");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsMixedTypes");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsSemiMixedTypes");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsString");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsNumber");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsInteger");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "minValue");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "maxValue");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "count", "5");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name", "mixed strings and empty");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsBlank", "1");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsMixedTypes");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsSemiMixedTypes");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsDate");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsString");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsNumber");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsInteger");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "minValue");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "maxValue");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "count", "5");
 
     // Two integers and one empty field
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "wartosc");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsBlank", "1");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsMixedTypes");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsSemiMixedTypes");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsString", "0");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsNumber", "1");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsInteger", "1");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "minValue", "111");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "maxValue", "222");
-    // We list items on round-trip and Excel accepts that; so no check for "count" attribute
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "mixed empty fileds and integers");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsBlank", "1");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsMixedTypes");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsSemiMixedTypes");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsDate");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsString", "0");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsNumber", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsInteger", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "minValue", "111");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "maxValue", "222");
+    // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "count", "3");
 
     // Five integers
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name", "druga wartosc");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsBlank");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsMixedTypes");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsSemiMixedTypes", "0");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsString", "0");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsNumber", "1");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsInteger", "1");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "minValue", "1111");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "maxValue", "5555");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "count");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name", "all fields are integers");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsBlank");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsMixedTypes");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsSemiMixedTypes", "0");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsDate");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsString", "0");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsNumber", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsInteger", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "minValue", "1111");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "maxValue", "5555");
+    // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "count", "5");
 
     // Three integers and one string
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name", "trzecia wartosc");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsBlank");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsMixedTypes", "1");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsSemiMixedTypes");
-    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsString");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsNumber", "1");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsInteger", "1");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "minValue", "1234");
-    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "maxValue", "5678");
-    // We list items on round-trip and Excel accepts that; so no check for "count" attribute
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name", "mixed strings and integers");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsBlank");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsMixedTypes", "1");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsSemiMixedTypes");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsDate");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsString");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsNumber", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsInteger", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "minValue", "1234");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "maxValue", "5678");
+    // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "count", "4");
+
+    // Four dates without blanks
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name", "date and time with duplicated entries");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "containsBlank");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "containsMixedTypes");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "containsSemiMixedTypes","0");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsDate", "1");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "containsString", "0");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "containsNumber");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "containsInteger");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "minValue");
+    assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "maxValue");
+    // We list items on round-trip, Excel not, but Excel accepts that; We need list all items, because we are using it as reference in pivotCacheRecords1.xml
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]/x:sharedItems", "count", "4");
 }
 
 void ScExportTest::testCommentExportXLSX()

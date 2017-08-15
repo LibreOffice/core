@@ -1250,7 +1250,10 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
         {
             sal_uInt32 nNumFormat = GetNumberFormat(nDim);
             if (bLocaleIndependent)
-                return GetLocaleIndependentFormattedString( rItem.GetValue(), *pFormatter, nNumFormat);
+                if (IsDateDimension(nDim))
+                    nNumFormat = pFormatter->GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, LANGUAGE_ENGLISH_US);
+                else
+                    return GetLocaleIndependentFormattedString( rItem.GetValue(), *pFormatter, nNumFormat);
 
             OUString aStr;
             Color* pColor = nullptr;
