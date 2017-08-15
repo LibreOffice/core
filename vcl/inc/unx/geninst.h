@@ -30,7 +30,8 @@
 
 class VCL_DLLPUBLIC SalYieldMutexReleaser
 {
-    sal_uLong m_nYieldCount;
+    sal_uInt32 m_nYieldCount;
+
 public:
     inline SalYieldMutexReleaser();
     inline ~SalYieldMutexReleaser();
@@ -38,32 +39,20 @@ public:
 
 inline SalYieldMutexReleaser::SalYieldMutexReleaser()
 {
-    m_nYieldCount = GetSalData()->m_pInstance->ReleaseYieldMutex();
+    m_nYieldCount = GetSalData()->m_pInstance->ReleaseYieldMutex( true );
 }
 
 inline SalYieldMutexReleaser::~SalYieldMutexReleaser()
 {
-    GetSalData()->m_pInstance->AcquireYieldMutex( m_nYieldCount );
+    if ( m_nYieldCount )
+        GetSalData()->m_pInstance->AcquireYieldMutex( m_nYieldCount );
 }
 
-class VCL_DLLPUBLIC SalYieldMutex : public comphelper::SolarMutex
+class VCL_DLLPUBLIC SalYieldMutex : public comphelper::GenericSolarMutex
 {
-    osl::Mutex m_mutex;
-
-protected:
-    sal_uIntPtr         mnCount;
-    oslThreadIdentifier mnThreadId;
-
 public:
-                        SalYieldMutex();
-                        virtual ~SalYieldMutex() override;
-
-    virtual void        acquire() override;
-    virtual void        release() override;
-    virtual bool        tryToAcquire() override;
-
-    sal_uIntPtr GetAcquireCount() const { return mnCount; }
-    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
+    SalYieldMutex();
+    virtual ~SalYieldMutex() override;
 };
 
 /*
@@ -84,9 +73,8 @@ public:
 
     // Yield mutex
     virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uIntPtr         ReleaseYieldMutex() override;
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) override;
-    virtual bool                CheckYieldMutex() override;
+    virtual sal_uInt32         ReleaseYieldMutex( bool bUnlockAll = false ) override;
+    virtual void               AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
 
     // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,

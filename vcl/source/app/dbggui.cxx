@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 void ImplDbgTestSolarMutex()
 {
-    assert(ImplGetSVData()->mpDefInst->CheckYieldMutex() && "SolarMutex not locked");
+    assert(ImplGetSVData()->mpDefInst->GetYieldMutex()->IsCurrentThread() && "SolarMutex not owned!");
 }
 
 void DbgGUIInitSolarMutexCheck()

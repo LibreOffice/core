@@ -387,17 +387,15 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
         nMode |= DM_IN_PROMPT;
     }
 
-    // Release mutex, in the other case we don't get paints and so on
-    sal_uLong nMutexCount=0;
-    if ( pVisibleDlgParent )
-        nMutexCount = ImplSalReleaseYieldMutex();
-
-    BYTE* pOutDevMode = (reinterpret_cast<BYTE*>(pOutBuffer) + pOutBuffer->mnDriverOffset);
-    nRet = DocumentPropertiesW( hWnd, hPrn,
-                                pPrinterNameW,
-                                reinterpret_cast<LPDEVMODEW>(pOutDevMode), reinterpret_cast<LPDEVMODEW>(const_cast<BYTE *>(pInBuffer)), nMode );
-    if ( pVisibleDlgParent )
-        ImplSalAcquireYieldMutex( nMutexCount );
+    BYTE* pOutDevMode;
+    {
+        // Release mutex, in the other case we don't get paints and so on
+        SolarMutexReleaser aReleaser( pVisibleDlgParent );
+        pOutDevMode = (reinterpret_cast<BYTE*>(pOutBuffer) + pOutBuffer->mnDriverOffset);
+        nRet = DocumentPropertiesW( hWnd, hPrn, pPrinterNameW,
+                                    reinterpret_cast<LPDEVMODEW>(pOutDevMode),
+                                    reinterpret_cast<LPDEVMODEW>(const_cast<BYTE *>(pInBuffer)), nMode );
+    }
     ClosePrinter( hPrn );
 
     if( (nRet < 0) || (pVisibleDlgParent && (nRet == IDCANCEL)) )
@@ -1514,6 +1512,14 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     return TRUE;
 }
 
+void WinSalPrinter::DoEndDoc(HDC hDC)
+{
+    CATCH_DRIVER_EX_BEGIN;
+    if( ::EndDoc( hDC ) <= 0 )
+        GetLastError();
+    CATCH_DRIVER_EX_END( "exception in EndDoc", this );
+}
+
 bool WinSalPrinter::EndJob()
 {
     HDC hDC = mhDC;
@@ -1532,13 +1538,10 @@ bool WinSalPrinter::EndJob()
         // it should be safe to release the yield mutex over the EndDoc
         // call, however the real solution is supposed to be the threading
         // framework yet to come.
-        volatile sal_uLong nAcquire = GetSalData()->mpFirstInstance->ReleaseYieldMutex();
-        CATCH_DRIVER_EX_BEGIN;
-        if( ::EndDoc( hDC ) <= 0 )
-            GetLastError();
-        CATCH_DRIVER_EX_END( "exception in EndDoc", this );
-
-        GetSalData()->mpFirstInstance->AcquireYieldMutex( nAcquire );
+        {
+            SolarMutexReleaser aReleaser;
+            DoEndDoc( hDC );
+        }
         DeleteDC( hDC );
         mhDC = nullptr;
     }

@@ -110,29 +110,36 @@ namespace osl
     private:
         Guard( const Guard& ) SAL_DELETED_FUNCTION;
         const Guard& operator = ( const Guard& ) SAL_DELETED_FUNCTION;
-
     protected:
-        T * pT;
+        T * m_pT;
+        const bool m_bAquired;
     public:
 
         /** Acquires the object specified as parameter.
         */
-        Guard(T * pT_) : pT(pT_)
+        Guard(T * pT, bool bAquire = true)
+            : m_pT(pT)
+            , m_bAquired(bAquire)
         {
-            pT->acquire();
+            if ( m_bAquired )
+                m_pT->acquire();
         }
 
         /** Acquires the object specified as parameter.
         */
-        Guard(T & t) : pT(&t)
+        Guard(T & rT, bool bAquire = true)
+            : m_pT(&rT)
+            , m_bAquired( bAquire )
         {
-            pT->acquire();
+            if ( m_bAquired )
+                m_pT->acquire();
         }
 
         /** Releases the mutex or interface. */
         ~Guard()
         {
-            pT->release();
+            if ( m_bAquired )
+                m_pT->release();
         }
     };
 

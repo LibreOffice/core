@@ -28,6 +28,7 @@
 #include <vector>
 
 #include <comphelper/solarmutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/thread.hxx>
 #include <tools/gen.hxx>
@@ -531,7 +532,7 @@ public:
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, AcquireSolarMutex,
     */
-    static sal_uLong            ReleaseSolarMutex();
+    static sal_uInt32           ReleaseSolarMutex();
 
     /** @brief Acquire Solar Mutex(es) for this thread.
 
@@ -541,7 +542,7 @@ public:
      @see Execute, Quit, Reschedule, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex,
     */
-    static void                 AcquireSolarMutex( sal_uLong nCount );
+    static void                 AcquireSolarMutex( sal_uInt32 nCount );
 
     /** Queries whether the application is in "main", i.e. not yet in
         the event loop
@@ -1397,110 +1398,28 @@ private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
 
-
 class VCL_DLLPUBLIC SolarMutexGuard
+    : public osl::Guard<comphelper::SolarMutex>
 {
-private:
-    SolarMutexGuard( const SolarMutexGuard& ) = delete;
-    const SolarMutexGuard& operator = ( const SolarMutexGuard& ) = delete;
-    comphelper::SolarMutex& m_solarMutex;
-
 public:
-    /** Acquires the object specified as parameter.
-     */
-    SolarMutexGuard() :
-        m_solarMutex(Application::GetSolarMutex())
-    {
-        m_solarMutex.acquire();
-    }
-
-    /** Releases the mutex or interface. */
-    ~SolarMutexGuard()
-    {
-        m_solarMutex.release();
-    }
+    SolarMutexGuard( bool bAcquire = true )
+        : osl::Guard<comphelper::SolarMutex>( Application::GetSolarMutex(), bAcquire ) {}
 };
 
-class VCL_DLLPUBLIC SolarMutexClearableGuard final
+class VCL_DLLPUBLIC SolarMutexClearableGuard
+    : public osl::ClearableGuard<comphelper::SolarMutex>
 {
-    SolarMutexClearableGuard( const SolarMutexClearableGuard& ) = delete;
-    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& ) = delete;
-    bool m_bCleared;
-    comphelper::SolarMutex& m_solarMutex;
 public:
-    /** Acquires mutex
-     */
     SolarMutexClearableGuard()
-        : m_bCleared(false)
-        , m_solarMutex( Application::GetSolarMutex() )
-    {
-        m_solarMutex.acquire();
-    }
-
-    /** Releases mutex. */
-    ~SolarMutexClearableGuard()
-    {
-        if( !m_bCleared )
-        {
-            m_solarMutex.release();
-        }
-    }
-
-    /** Releases mutex. */
-    void SAL_CALL clear()
-    {
-        if( !m_bCleared )
-        {
-            m_solarMutex.release();
-            m_bCleared = true;
-        }
-    }
+        : osl::ClearableGuard<comphelper::SolarMutex>( Application::GetSolarMutex() ) {}
 };
 
-class VCL_DLLPUBLIC SolarMutexResettableGuard final
+class VCL_DLLPUBLIC SolarMutexResettableGuard
+    : public osl::ResettableGuard<comphelper::SolarMutex>
 {
-    SolarMutexResettableGuard( const SolarMutexResettableGuard& ) = delete;
-    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& ) = delete;
-    bool m_bCleared;
-    comphelper::SolarMutex& m_solarMutex;
 public:
-    /** Acquires mutex
-     */
     SolarMutexResettableGuard()
-        : m_bCleared(false)
-        , m_solarMutex( Application::GetSolarMutex() )
-    {
-        m_solarMutex.acquire();
-    }
-
-    /** Releases mutex. */
-    ~SolarMutexResettableGuard()
-    {
-        if( !m_bCleared )
-        {
-            m_solarMutex.release();
-        }
-    }
-
-    /** Releases mutex. */
-    void SAL_CALL clear()
-    {
-        if( !m_bCleared)
-        {
-            m_solarMutex.release();
-            m_bCleared = true;
-        }
-    }
-
-    /** Re-acquires mutex. */
-    void SAL_CALL reset()
-    {
-        if( m_bCleared)
-        {
-            m_solarMutex.acquire();
-            m_bCleared = false;
-        }
-    }
+        : osl::ResettableGuard<comphelper::SolarMutex>( Application::GetSolarMutex() ) {}
 };
 
 namespace vcl
@@ -1559,14 +1478,20 @@ public:
 */
 class SolarMutexReleaser
 {
-    sal_uLong mnReleased;
+    sal_uInt32 mnReleased;
 
 public:
-    SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
+    SolarMutexReleaser( bool bDoRelease = true )
+        : mnReleased( 0 )
+    {
+        if ( bDoRelease )
+             mnReleased = Application::ReleaseSolarMutex();
+    }
 
     ~SolarMutexReleaser()
     {
-        Application::ReAcquireSolarMutex(mnReleased);
+        if ( mnReleased )
+            Application::ReAcquireSolarMutex( mnReleased );
     }
 };
 
