@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_794b2a5a",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-15T06:10:16Z",
+      "side": 1,
+      "message": "This, of course, is to be removed in a later version of the change",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 55,
+        "endChar": 413
+      },
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d9789e92",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-15T06:10:16Z",
+      "side": 1,
+      "message": "Else we should create min and max date values. We may not do this check here, but instead add the code to output min\u0026max date below at line 314.",
+      "range": {
+        "startLine": 248,
+        "startChar": 46,
+        "endLine": 248,
+        "endChar": 75
+      },
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f96d5acd",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-15T06:10:16Z",
+      "side": 1,
+      "message": "else if (isContainsDate) { /* add minDate and maxDate */ }",
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
