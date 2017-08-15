@@ -82,9 +82,9 @@ public:
 class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
 {
     friend class SwNodes;
-    mutable SwOLEObj aOLEObj;
-    OUString sChartTableName;     ///< with chart objects: name of referenced table.
-    bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
+    mutable SwOLEObj maOLEObj;
+    OUString msChartTableName;     ///< with chart objects: name of referenced table.
+    bool   mbOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */
 
     SwEmbedObjectLink*  mpObjectLink;
@@ -106,8 +106,8 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
     using SwNoTextNode::GetGraphic;
 
 public:
-    const SwOLEObj& GetOLEObj() const { return aOLEObj; }
-          SwOLEObj& GetOLEObj()       { return aOLEObj; }
+    const SwOLEObj& GetOLEObj() const { return maOLEObj; }
+          SwOLEObj& GetOLEObj()       { return maOLEObj; }
     virtual ~SwOLENode() override;
 
     virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
@@ -127,15 +127,15 @@ public:
     bool IsInGlobalDocSection() const;
     bool IsOLEObjectDeleted() const;
 
-    bool IsOLESizeInvalid() const   { return bOLESizeInvalid; }
-    void SetOLESizeInvalid( bool b ){ bOLESizeInvalid = b; }
+    bool IsOLESizeInvalid() const   { return mbOLESizeInvalid; }
+    void SetOLESizeInvalid( bool b ){ mbOLESizeInvalid = b; }
 
-    sal_Int64 GetAspect() const { return aOLEObj.GetObject().GetViewAspect(); }
-    void SetAspect( sal_Int64 nAspect) { aOLEObj.GetObject().SetViewAspect( nAspect ); }
+    sal_Int64 GetAspect() const { return maOLEObj.GetObject().GetViewAspect(); }
+    void SetAspect( sal_Int64 nAspect) { maOLEObj.GetObject().SetViewAspect( nAspect ); }
 
     /** Remove OLE-object from "memory".
        inline void Unload() { aOLEObj.Unload(); } */
-    OUString GetDescription() const { return aOLEObj.GetDescription(); }
+    OUString GetDescription() const { return maOLEObj.GetDescription(); }
 
     bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();
@@ -146,8 +146,8 @@ public:
     // #i99665#
     bool IsChart() const;
 
-    const OUString& GetChartTableName() const { return sChartTableName; }
-    void SetChartTableName( const OUString& rNm ) { sChartTableName = rNm; }
+    const OUString& GetChartTableName() const { return msChartTableName; }
+    void SetChartTableName( const OUString& rNm ) { msChartTableName = rNm; }
 };
 
 /// Inline methods from Node.hxx
