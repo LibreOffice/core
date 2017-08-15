@@ -709,7 +709,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     {
         // release YieldMutex (and re-acquire at block end)
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         nFound = select( nFDs, &ReadFDS, nullptr, &ExceptionFDS, pTimeout );
     }
     if( nFound < 0 ) // error

@@ -223,13 +223,8 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     if( GetSalData() && GetSalData()->mpFirstInstance )
     {
-        comphelper::SolarMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
-        if( pMutex )
-        {
-            pMutex->acquire();
-            [super displayIfNeeded];
-            pMutex->release();
-        }
+        SolarMutexGuard aGuard;
+        [super displayIfNeeded];
     }
 }
 

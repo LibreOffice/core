@@ -18,8 +18,11 @@
  */
 
 #include <sal/config.h>
-#include <assert.h>
+
 #include <comphelper/solarmutex.hxx>
+
+#include <assert.h>
+#include <cstdlib>
 
 namespace comphelper {
 
@@ -40,6 +43,67 @@ void SolarMutex::setSolarMutex( SolarMutex *pMutex )
 SolarMutex *SolarMutex::get()
 {
     return pSolarMutex;
+}
+
+GenericSolarMutex::GenericSolarMutex()
+    : m_nCount( 0 )
+    , m_nThreadId( 0 )
+    , m_aBeforeReleaseHandler( nullptr )
+{
+    setSolarMutex( this );
+}
+
+GenericSolarMutex::~GenericSolarMutex()
+{
+    setSolarMutex( nullptr );
+}
+
+void GenericSolarMutex::doAcquire( const sal_uInt32 nLockCount )
+{
+    for ( sal_uInt32 n = nLockCount; n ; --n )
+        m_aMutex.acquire();
+    m_nThreadId = osl::Thread::getCurrentIdentifier();
+    m_nCount += nLockCount;
+}
+
+sal_uInt32 GenericSolarMutex::doRelease( bool bUnlockAll )
+{
+    if ( m_nCount == 0 )
+        std::abort();
+    if ( m_nThreadId != osl::Thread::getCurrentIdentifier() )
+        std::abort();
+
+    const sal_uInt32 nCount = bUnlockAll ? m_nCount : 1;
+    m_nCount -= nCount;
+
+    if ( 0 == m_nCount )
+    {
+        if ( m_aBeforeReleaseHandler )
+            m_aBeforeReleaseHandler();
+        m_nThreadId = 0;
+    }
+
+    for ( sal_uInt32 n = nCount ; n ; --n )
+        m_aMutex.release();
+
+    return nCount;
+}
+
+bool GenericSolarMutex::IsCurrentThread() const
+{
+    return m_nThreadId == osl::Thread::getCurrentIdentifier();
+}
+
+bool GenericSolarMutex::tryToAcquire()
+{
+    if ( m_aMutex.tryToAcquire() )
+    {
+        m_nThreadId = osl::Thread::getCurrentIdentifier();
+        m_nCount++;
+        return true;
+    }
+    else
+        return false;
 }
 
 } // namespace comphelper

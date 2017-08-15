@@ -318,8 +318,8 @@ void GtkYieldMutex::ThreadsEnter()
 
 void GtkYieldMutex::ThreadsLeave()
 {
-    assert(mnCount != 0);
-    auto n = mnCount - 1;
+    assert(m_nCount != 0);
+    auto n = m_nCount - 1;
     yieldCounts.push(n);
     for (sal_uIntPtr i = 0; i != n + 1; ++i) {
         release();

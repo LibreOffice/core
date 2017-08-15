@@ -581,13 +581,13 @@ oslThreadIdentifier Application::GetMainThreadIdentifier()
     return ImplGetSVData()->mnMainThreadId;
 }
 
-sal_uLong Application::ReleaseSolarMutex()
+sal_uInt32 Application::ReleaseSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->ReleaseYieldMutex();
+    return pSVData->mpDefInst->ReleaseYieldMutex( true );
 }
 
-void Application::AcquireSolarMutex( sal_uLong nCount )
+void Application::AcquireSolarMutex( sal_uInt32 nCount )
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->AcquireYieldMutex( nCount );

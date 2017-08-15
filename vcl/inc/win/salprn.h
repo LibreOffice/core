@@ -84,6 +84,9 @@ public:
 
     bool                    mbValid;
 
+protected:
+    void                            DoEndDoc(HDC hDC);
+
 public:
     WinSalPrinter();
     virtual ~WinSalPrinter() override;

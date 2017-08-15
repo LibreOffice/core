@@ -256,7 +256,7 @@ SalInstance *CreateSalInstance()
     }
 
     // acquire SolarMutex
-    pInst->AcquireYieldMutex( 1 );
+    pInst->AcquireYieldMutex();
 
     return pInst;
 }
@@ -264,7 +264,7 @@ SalInstance *CreateSalInstance()
 void DestroySalInstance( SalInstance *pInst )
 {
     // release SolarMutex
-    pInst->ReleaseYieldMutex();
+    pInst->ReleaseYieldMutex( true );
 
     delete pInst;
     if( pCloseModule )

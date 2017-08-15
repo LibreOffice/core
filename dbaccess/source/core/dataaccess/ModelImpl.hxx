@@ -118,7 +118,7 @@ class ODatabaseContext;
 class OSharedConnectionManager;
 
 // VosMutexFacade
-/** a class which provides an IMutex interface to an OSL-based mutex
+/** a class which provides an SolarMutex interface to an OSL-based mutex
 */
 class VosMutexFacade : public comphelper::SolarMutex
 {
@@ -128,9 +128,12 @@ public:
     */
     explicit VosMutexFacade( ::osl::Mutex& _rMutex );
 
-    virtual void acquire() override;
-    virtual void release() override;
     virtual bool tryToAcquire() override;
+    virtual bool IsCurrentThread() const override;
+
+protected:
+    virtual void doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32 doRelease( bool bUnlockAll ) override;
 
 private:
     ::osl::Mutex&   m_rMutex;

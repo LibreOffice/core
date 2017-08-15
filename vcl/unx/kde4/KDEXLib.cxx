@@ -208,7 +208,7 @@ static GPollFunc old_gpoll = nullptr;
 
 static gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
-    SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    SolarMutexReleaser aReleaser;
     return old_gpoll( ufds, nfds, timeout );
 }
 #endif
@@ -292,7 +292,7 @@ bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // release the yield lock to prevent deadlock with the main thread
         // (it's ok to release it here, since even normal processYield() would
         // temporarily do it while checking for new events)
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
         return false;
     }
@@ -382,7 +382,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
 {
 #if KDE4_HAVE_GLIB
     if( qApp->thread() != QThread::currentThread()) {
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT createFilePickerSignal( xMSF );
     }
     return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
