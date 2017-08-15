@@ -33,12 +33,15 @@
 #include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
+#include <vcl/textview.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessible; }
 } } }
 
 namespace vcl { class Font; }
+
+using namespace ::com::sun::star;
 
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
@@ -62,15 +65,20 @@ public:
 
     virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
-    void            SelectCharacter( sal_uInt32 cNew );
+    void                    SelectCharacter( sal_uInt32 cNew );
     virtual sal_UCS4        GetSelectCharacter() const;
+    void                    createContextMenu();
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
     void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aSelectHdl = rHdl; }
     void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aHighHdl = rHdl; }
     void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aPreSelectHdl = rHdl; }
+    void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     void            SetFont( const vcl::Font& rFont );
+    bool            isFavChar(const OUString& sTitle, const OUString& rFont);
+    void            getFavCharacterList(); //gets both Fav char and Fav char font list
+    void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
 
     virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     int                         FirstInView() const;
@@ -79,6 +87,7 @@ public:
     virtual void                        SelectIndex( int index, bool bFocus = false );
     void                        OutputIndex( int index );
     void                        DeSelect();
+    void                        CopyToClipboard(const OUString& str);
     bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
     sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
     static sal_uInt16           GetRowPos(sal_uInt16 _nPos);
@@ -111,9 +120,15 @@ protected:
     ItemsMap        m_aItems;
     Link<SvxShowCharSet*,void>     aDoubleClkHdl;
     Link<SvxShowCharSet*,void>     aSelectHdl;
+    Link<SvxShowCharSet*,void>     aFavClickHdl;
     Link<SvxShowCharSet*,void>     aHighHdl;
     Link<SvxShowCharSet*,void>     aPreSelectHdl;
+
+    std::deque<OUString>           maFavCharList;
+    std::deque<OUString>           maFavCharFontList;
+
     rtl::Reference<svx::SvxShowCharSetVirtualAcc> m_xAccessible;
+    uno::Reference< uno::XComponentContext > mxContext;
     long            nX;
     long            nY;
     long            m_nXGap;
@@ -124,6 +139,7 @@ protected:
 
     FontCharMapRef  mxFontCharMap;
     Size            maFontSize;
+    Point           maPosition;
     VclPtr<ScrollBar>  aVscrollSB;
 
     bool mbRecalculateFont  : 1;
@@ -137,6 +153,7 @@ protected:
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_LINK(VscrollHdl, ScrollBar*, void);
+    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
     void            init();
     tools::Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);

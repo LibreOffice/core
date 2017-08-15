@@ -62,31 +62,6 @@
 
 #include <o3tl/make_unique.hxx>
 
-class TETextDataObject :    public css::datatransfer::XTransferable,
-                        public ::cppu::OWeakObject
-
-{
-private:
-    OUString        maText;
-    SvMemoryStream  maHTMLStream;
-
-public:
-    explicit TETextDataObject( const OUString& rText );
-
-    OUString&        GetText() { return maText; }
-    SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
-
-    // css::uno::XInterface
-    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
-
-    // css::datatransfer::XTransferable
-    css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
-    css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
-    sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
-};
-
 TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
 {
 }
