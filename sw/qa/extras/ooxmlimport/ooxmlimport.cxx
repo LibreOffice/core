@@ -730,14 +730,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109316_dropCaps, "tdf109316_dropCaps.docx")
     uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
     css::style::DropCapFormat aDropCap = getProperty<css::style::DropCapFormat>(xSet,"DropCapFormat");
     CPPUNIT_ASSERT_EQUAL( sal_Int8(2), aDropCap.Lines );
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(1), aDropCap.Count );
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(1270), aDropCap.Distance );
 
     xSet.set(getParagraph(2), uno::UNO_QUERY);
     aDropCap = getProperty<css::style::DropCapFormat>(xSet,"DropCapFormat");
     CPPUNIT_ASSERT_EQUAL( sal_Int8(3), aDropCap.Lines );
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(1), aDropCap.Count );
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(508), aDropCap.Distance );
 
     xSet.set(getParagraph(3), uno::UNO_QUERY);
     aDropCap = getProperty<css::style::DropCapFormat>(xSet,"DropCapFormat");
     CPPUNIT_ASSERT_EQUAL( sal_Int8(4), aDropCap.Lines );
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(7), aDropCap.Count );
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(0), aDropCap.Distance );
 }
 
 DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")

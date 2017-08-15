@@ -1124,7 +1124,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     sal_Int32 nLines = rAppendContext.pLastParagraphProperties->GetLines();
                     aDrop.Lines = nLines > 0 && nLines < SAL_MAX_INT8 ? (sal_Int8)nLines : 2;
                     aDrop.Count = rAppendContext.pLastParagraphProperties->GetDropCapLength();
-                    aDrop.Distance  = 0; //TODO: find distance value
+                    sal_Int32 nHSpace = rAppendContext.pLastParagraphProperties->GethSpace();
+                    aDrop.Distance  = nHSpace > 0 && nHSpace < SAL_MAX_INT16 ? (sal_Int16)nHSpace : 0;
                     //completes (5)
                     if( pParaContext->IsFrameMode() )
                         pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
