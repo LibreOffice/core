@@ -57,11 +57,14 @@ class CSVFetchThread : public salhelper::Thread
 
     orcus::csv::parser_config maConfig;
 
+    std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
+
     Idle* mpIdle;
 
 
 public:
-    CSVFetchThread(ScDocument& rDoc, const OUString&, Idle* pIdle);
+    CSVFetchThread(ScDocument& rDoc, const OUString&, Idle* pIdle,
+            const std::vector<std::shared_ptr<sc::DataTransformation>>& mrDataTransformations);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -134,7 +137,7 @@ class ScDBDataManager
     OUString maDBName;
     ScDocument* mpDoc;
 
-    std::vector<std::unique_ptr<sc::DataTransformation>> maDataTransformations;
+    std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
 
 public:
     ScDBDataManager(const OUString& rDBName, bool bAllowResize, ScDocument* pDoc);
@@ -142,7 +145,8 @@ public:
 
     void SetDatabase(const OUString& rDBName);
 
-    void AddDataTransformation(std::unique_ptr<sc::DataTransformation> mpDataTransformation);
+    void AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation);
+    const std::vector<std::shared_ptr<sc::DataTransformation>>& getDataTransformation() const;
 
     ScDBData* getDBData();
 
