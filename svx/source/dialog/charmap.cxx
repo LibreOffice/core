@@ -39,15 +39,21 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <officecfg/Office/Common.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
 #include <svl/itemset.hxx>
 #include <unicode/uchar.h>
+#include <vcl/textview.hxx>
 #include "rtl/ustrbuf.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-
 
 sal_uInt32& SvxShowCharSet::getSelectedChar()
 {
@@ -57,7 +63,9 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 
 SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
+    , mxContext(comphelper::getProcessComponentContext())
     , maFontSize(0, 0)
+    , maPosition(0,0)
     , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
@@ -79,6 +87,7 @@ void SvxShowCharSet::init()
     SetStyle(GetStyle() | WB_CLIPCHILDREN);
     aVscrollSB->SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
     aVscrollSB->EnableDrag();
+    getFavCharacterList();
     // other settings like aVscroll depend on selected font => see RecalculateFont
 
     bDrag = false;
@@ -154,6 +163,16 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
         if ( !(rMEvt.GetClicks() % 2) )
             aDoubleClkHdl.Call( this );
     }
+
+    if(rMEvt.IsRight())
+    {
+        Point aPosition (rMEvt.GetPosPixel());
+        maPosition = aPosition;
+        int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
+        // Fire the focus event
+        SelectIndex( nIndex, true);
+        createContextMenu();
+    }
 }
 
 
@@ -203,6 +222,186 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos)
 {
     return _nPos / COLUMN_COUNT ;
+}
+
+void SvxShowCharSet::getFavCharacterList()
+{
+    maFavCharList.clear();
+    maFavCharFontList.clear();
+    //retrieve recent character list
+    css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
+    for (int i = 0; i < rFavCharList.getLength(); ++i)
+    {
+        maFavCharList.push_back(rFavCharList[i]);
+    }
+
+    //retrieve recent character font list
+    css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
+    for (int i = 0; i < rFavCharFontList.getLength(); ++i)
+    {
+        maFavCharFontList.push_back(rFavCharFontList[i]);
+    }
+}
+
+bool SvxShowCharSet::isFavChar(const OUString& sTitle, const OUString& rFont)
+{
+    auto itChar = std::find_if(maFavCharList.begin(),
+         maFavCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+         maFavCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if Fav char to be added is already in list, return true
+    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+        return true;
+    else
+        return false;
+}
+
+void SvxShowCharSet::createContextMenu()
+{
+    ScopedVclPtrInstance<PopupMenu> pItemMenu;
+    pItemMenu->InsertItem(0,SvxResId(RID_INSERT));
+    sal_UCS4 cChar = GetSelectCharacter();
+    OUString aOUStr( &cChar, 1 );
+    if(!isFavChar(aOUStr, GetFont().GetFamilyName()))
+    {
+        if(maFavCharList.size() < 16)
+            pItemMenu->InsertItem(1,SvxResId(RID_ADD_TO_FAVORITES));
+    }
+    else
+        pItemMenu->InsertItem(1,SvxResId(RID_REMOVE_FAVORITES));
+
+    pItemMenu->InsertItem(2, SvxResId(RID_COPY_CLIPBOARD ));
+    pItemMenu->SetSelectHdl(LINK(this, SvxShowCharSet, ContextMenuSelectHdl));
+    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    GrabFocus();
+    Invalidate();
+}
+
+
+IMPL_LINK(SvxShowCharSet, ContextMenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+    sal_UCS4 cChar = GetSelectCharacter();
+    OUString aOUStr( &cChar, 1 );
+
+    switch(nMenuId)
+    {
+    case 0:
+        aDoubleClkHdl.Call(this);
+        break;
+    case 1:
+        updateFavCharacterList(aOUStr, GetFont().GetFamilyName());
+        aFavClickHdl.Call(this);
+        break;
+    case 2:
+        CopyToClipboard(aOUStr);
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
+
+void SvxShowCharSet::CopyToClipboard(const OUString& aOUStr)
+{
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> rxClipboard(GetClipboard());
+
+    if ( rxClipboard.is() )
+    {
+        TETextDataObject* pDataObj = new TETextDataObject( aOUStr );
+
+        try
+        {
+            rxClipboard->setContents( pDataObj, nullptr );
+
+            css::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, css::uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const css::uno::Exception& )
+        {
+        }
+    }
+}
+
+
+void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
+{
+    if(isFavChar(sTitle, rFont))
+    {
+        auto itChar = std::find_if(maFavCharList.begin(),
+             maFavCharList.end(),
+             [sTitle] (const OUString & a) { return a == sTitle; });
+
+        auto itChar2 = std::find_if(maFavCharFontList.begin(),
+             maFavCharFontList.end(),
+             [rFont] (const OUString & a) { return a == rFont; });
+
+        // if Fav char to be added is already in list, remove it
+        if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+        {
+            maFavCharList.erase( itChar );
+            maFavCharFontList.erase( itChar2);
+        }
+
+        css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+        css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+
+        for (size_t i = 0; i < maFavCharList.size(); ++i)
+        {
+            aFavCharList[i] = maFavCharList[i];
+            aFavCharFontList[i] = maFavCharFontList[i];
+        }
+
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+        officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
+        officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
+        batch->commit();
+        return;
+    }
+
+    auto itChar = std::find_if(maFavCharList.begin(),
+         maFavCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+         maFavCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if Fav char to be added is already in list, remove it
+    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+    {
+        maFavCharList.erase( itChar );
+        maFavCharFontList.erase( itChar2);
+    }
+
+    if (maFavCharList.size() == 16)
+    {
+        maFavCharList.pop_back();
+        maFavCharFontList.pop_back();
+    }
+
+    maFavCharList.push_back(sTitle);
+    maFavCharFontList.push_back(rFont);
+
+    css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+
+    for (size_t i = 0; i < maFavCharList.size(); ++i)
+    {
+        aFavCharList[i] = maFavCharList[i];
+        aFavCharFontList[i] = maFavCharFontList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
+    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
+    batch->commit();
 }
 
 
@@ -545,6 +744,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     aFont.SetTransparent(true);
     rRenderContext.SetFont(aFont);
     rRenderContext.GetFontCharMap(mxFontCharMap);
+    getFavCharacterList();
 
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;

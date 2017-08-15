@@ -243,6 +243,8 @@ void SvxCharacterMap::getRecentCharacterList()
 
 void SvxCharacterMap::getFavCharacterList()
 {
+    maFavCharList.clear();
+    maFavCharFontList.clear();
     //retrieve recent character list
     css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
     for (int i = 0; i < rFavCharList.getLength(); ++i)
@@ -385,6 +387,8 @@ void SvxCharacterMap::updateFavCharControl()
         m_pFavCharView[i]->SetText(OUString());
         m_pFavCharView[i]->Hide();
     }
+    m_pShowSet->getFavCharacterList();
+    m_pSearchSet->getFavCharacterList();
 }
 
 
@@ -476,11 +480,13 @@ void SvxCharacterMap::init()
     m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
+    m_pShowSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
 
     m_pSearchSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, SearchCharDoubleClickHdl ) );
     m_pSearchSet->SetSelectHdl( LINK( this, SvxCharacterMap, SearchCharSelectHdl ) );
     m_pSearchSet->SetHighlightHdl( LINK( this, SvxCharacterMap, SearchCharHighlightHdl ) );
     m_pSearchSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, SearchCharPreSelectHdl ) );
+    m_pSearchSet->SetFavClickHdl( LINK( this, SvxCharacterMap, FavClickHdl ) );
 
     m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
     m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
@@ -948,6 +954,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, Button*, void)
         m_pFavouritesBtn->Disable();
     }
 
+    updateFavCharControl();
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, FavClickHdl, SvxShowCharSet*, void)
+{
+    getFavCharacterList();
     updateFavCharControl();
 }
 
