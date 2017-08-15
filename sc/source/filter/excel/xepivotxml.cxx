@@ -15,6 +15,8 @@
 #include <document.hxx>
 
 #include <oox/export/utils.hxx>
+#include <oox/token/namespaces.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
@@ -49,6 +51,9 @@ void savePivotCacheRecordsXml( XclExpXmlStream& rStrm, const ScDPCache& rCache )
             const ScDPCache::IndexArrayType* pArray = rCache.GetFieldIndexArray(nField);
             assert(pArray);
             assert(static_cast<size_t>(i) < pArray->size());
+
+            // We are using XML_x reference (like: <x v="0"/>), instead of values here (eg: <s v="No Discount"/>).
+            // That's why in SavePivotCacheXml method, we need to list all items.
             pRecStrm->singleElement(XML_x, XML_v, OString::number((*pArray)[i]), FSEND);
         }
         pRecStrm->endElement(XML_r);
@@ -171,6 +176,27 @@ const XclExpXmlPivotCaches::Entry* XclExpXmlPivotCaches::GetCache( sal_Int32 nCa
     return &maCaches[nPos];
 }
 
+namespace {
+/**
+ * Create combined date and time string according the requirements of Excel.
+ * A single point in time can be represented by concatenating a complete date expression,
+ * the letter T as a delimiter, and a valid time expression. For example, "2007-04-05T14:30".
+ *
+ * fSerialDateTime - a number representing the number of days since 1900-Jan-0 (integer portion of the number),
+ * plus a fractional portion of a 24 hour day (fractional portion of the number).
+ */
+OUString GetExcelFormattedDate( double fSerialDateTime, SvNumberFormatter& rFormatter )
+{
+    //::sax::Converter::convertDateTime(sBuf, (DateTime(rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime(), 0, true);
+    css::util::DateTime aUDateTime = (DateTime(*rFormatter.GetNullDate()) + fSerialDateTime).GetUNODateTime();
+    // We need to reset nanoseconds, to avoid string like: "1982-02-18T16:04:47.999999849"
+    aUDateTime.NanoSeconds = 0;
+    OUStringBuffer sBuf;
+    ::sax::Converter::convertDateTime(sBuf, aUDateTime, nullptr, true);
+    return sBuf.makeStringAndClear();
+}
+}
+
 void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entry& rEntry, sal_Int32 nCounter )
 {
     assert(rEntry.mpCache);
@@ -235,6 +261,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         std::set<ScDPItemData::Type> aDPTypes;
         double fMin = std::numeric_limits<double>::infinity(), fMax = -std::numeric_limits<double>::infinity();
         bool isValueInteger = true;
+        bool isContainsDate = rCache.IsDateDimension(i);
         double intpart;
         for (; it != itEnd; ++it)
         {
@@ -245,6 +272,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                 double fVal = it->GetValue();
                 fMin = std::min(fMin, fVal);
                 fMax = std::max(fMax, fVal);
+
                 // Check if all values are integers
                 if (isValueInteger && (modf(fVal, &intpart) != 0.0))
                 {
@@ -256,7 +284,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         auto aDPTypeEnd = aDPTypes.cend();
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
-
+        // TODO In same cases, disable listing of items, as it is done in MS Excel.
+        // Exporting savePivotCacheRecordsXml method needs to be updated accordingly
         bool bListItems = true;
 
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
@@ -276,6 +305,11 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         if (!(isContainsString || (aDPTypes.size() > 1)))
             pAttList->add(XML_containsSemiMixedTypes, XclXmlUtils::ToPsz10(false));
 
+        // OOXTODO: XML_containsNonDate
+
+        if (isContainsDate)
+            pAttList->add(XML_containsDate, XclXmlUtils::ToPsz10(true));
+
         // default for containsString field is true, so we are writing only when is false
         if (!isContainsString)
             pAttList->add(XML_containsString, XclXmlUtils::ToPsz10(false));
@@ -284,7 +318,12 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         if (isContainsBlank)
             pAttList->add(XML_containsBlank, XclXmlUtils::ToPsz10(true));
 
-        bool isContainsNumber = aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
+        // If field contain mixed types (Date and Numbers), MS Excel is saving only "minDate" and "maxDate" and not "minValue" and "maxValue"
+        // Example how Excel is saving mixed Date and Numbers:
+        // <sharedItems containsSemiMixedTypes="0" containsDate="1" containsString="0" containsMixedTypes="1" minDate="1900-01-03T22:26:04" maxDate="1900-01-07T14:02:04" />
+        // Example how Excel is saving Dates only:
+        // <sharedItems containsSemiMixedTypes="0" containsNonDate="0" containsDate="1" containsString="0" minDate="1903-08-24T07:40:48" maxDate="2024-05-23T07:12:00"/>
+        bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
         if (isContainsNumber)
             pAttList->add(XML_containsNumber, XclXmlUtils::ToPsz10(true));
 
@@ -301,15 +340,12 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         {
             pAttList->add(XML_minValue, OString::number(fMin));
             pAttList->add(XML_maxValue, OString::number(fMax));
-            // If there is only numeric types, then we shouldn't list all items
-            if  (aDPTypesWithoutBlank.size() == 1)
-                bListItems = false;
         }
 
-        if (isContainsBlank && (aDPTypes.size() == 1))
+        if (isContainsDate)
         {
-            // If all items are blank, then we shouldn't list all items
-            bListItems = false;
+            pAttList->add(XML_minDate, XclXmlUtils::ToOString(GetExcelFormattedDate(fMin, GetFormatter())));
+            pAttList->add(XML_maxDate, XclXmlUtils::ToOString(GetExcelFormattedDate(fMax, GetFormatter())));
         }
 
         if (bListItems)
@@ -334,9 +370,16 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                             FSEND);
                     break;
                     case ScDPItemData::Value:
-                        pDefStrm->singleElement(XML_n,
-                            XML_v, OString::number(rItem.GetValue()),
-                            FSEND);
+                        if (isContainsDate)
+                        {
+                            pDefStrm->singleElement(XML_d,
+                                XML_v, XclXmlUtils::ToOString(GetExcelFormattedDate(rItem.GetValue(), GetFormatter())),
+                                FSEND);
+                        }
+                        else
+                            pDefStrm->singleElement(XML_n,
+                                XML_v, OString::number(rItem.GetValue()),
+                                FSEND);
                     break;
                     case ScDPItemData::Empty:
                         pDefStrm->singleElement(XML_m, FSEND);
