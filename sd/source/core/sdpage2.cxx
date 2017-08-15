@@ -564,7 +564,8 @@ OString SdPage::stringify() const
              append(OUStringToOString( maLayoutName, RTL_TEXTENCODING_UTF8 )).
              append(OUStringToOString(maSoundFile, RTL_TEXTENCODING_UTF8 )).
              append(mbLoopSound).append(mbStopSound).
-             /*append(OUStringToOString(maCreatedPageName, RTL_TEXTENCODING_UTF8)).
+             /*append(OUStringToOString(maCreatedPageName, RTL_TEXTENCODING_UTF
+8)).
              append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8)).*/
              append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
              append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append((sal_Int32)mnPaperBin).
@@ -576,6 +577,28 @@ OString SdPage::stringify() const
         aString.append(GetObj(i)->stringify());
     return aString.makeStringAndClear();
 }
+
+bool SdPage::Equals(const SdPage& rOtherPage) const
+{
+    bool isEqual = GetObjCount() == rOtherPage.GetObjCount();
+    if( isEqual )
+    {
+        for(size_t i = 0; i < GetObjCount(); ++i)
+            isEqual = isEqual && GetObj(i)->Equals(*(rOtherPage.GetObj(i)));
+    }
+
+    return (isEqual && mePageKind == rOtherPage.mePageKind && meAutoLayout == rOtherPage.meAutoLayout &&
+            mePresChange == rOtherPage.mePresChange && rtl::math::approxEqual(mfTime, rOtherPage.mfTime) &&
+            mbSoundOn == rOtherPage.mbSoundOn && mbExcluded == rOtherPage.mbExcluded &&
+            maLayoutName == rOtherPage.maLayoutName && maSoundFile == rOtherPage.maSoundFile &&
+            mbLoopSound == rOtherPage.mbLoopSound && mbStopSound == rOtherPage.mbStopSound &&
+            maBookmarkName == rOtherPage.maBookmarkName && mbScaleObjects == rOtherPage.mbScaleObjects &&
+            mbBackgroundFullSize == rOtherPage.mbBackgroundFullSize && meCharSet == rOtherPage.meCharSet &&
+            mnPaperBin == rOtherPage.mnPaperBin && meOrientation == rOtherPage.meOrientation &&
+            mnTransitionType == rOtherPage.mnTransitionType && mnTransitionSubtype == rOtherPage.mnTransitionSubtype &&
+            mbTransitionDirection == rOtherPage.mbTransitionDirection && mnTransitionFadeColor == rOtherPage.mnTransitionFadeColor &&
+            rtl::math::approxEqual(mfTransitionDuration, rOtherPage.mfTransitionDuration));
+ }
 
 void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
 {

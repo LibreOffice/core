@@ -1722,6 +1722,20 @@ OString SdrObject::stringify() const
     return aString.makeStringAndClear();
 }
 
+bool SdrObject::Equals(const SdrObject& rOtherObj) const
+{
+    return (aAnchor.X() == rOtherObj.aAnchor.X() && aAnchor.Y() == rOtherObj.aAnchor.Y() &&
+            aGridOffset.X() == rOtherObj.aGridOffset.X() && aGridOffset.Y() == rOtherObj.aGridOffset.Y() &&
+            nOrdNum == rOtherObj.nOrdNum && mnNavigationPosition == rOtherObj.mnNavigationPosition &&
+            mbSupportTextIndentingOnLineWidthChange == rOtherObj.mbSupportTextIndentingOnLineWidthChange &&
+            mbLineIsOutsideGeometry == rOtherObj.mbLineIsOutsideGeometry && bMarkProt == rOtherObj.bMarkProt &&
+            bIs3DObj == rOtherObj.bIs3DObj && bIsEdge == rOtherObj.bIsEdge && bClosedObj == rOtherObj.bClosedObj &&
+            bNotVisibleAsMaster == rOtherObj.bNotVisibleAsMaster && bEmptyPresObj == rOtherObj.bEmptyPresObj &&
+            mbVisible == rOtherObj.mbVisible && bNoPrint == rOtherObj.bNoPrint && bSizProt == rOtherObj.bSizProt &&
+            bMovProt == rOtherObj.bMovProt && bInserted == rOtherObj.bInserted && bVirtObj == rOtherObj.bVirtObj &&
+            mnLayerID == rOtherObj.mnLayerID && GetMergedItemSet().Equals(rOtherObj.GetMergedItemSet(), false) );
+}
+
 void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObject"));

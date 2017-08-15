@@ -789,6 +789,7 @@ public:
     virtual bool HasText() const;
 
     OString stringify() const;
+    bool Equals(const SdrObject&) const;;
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
