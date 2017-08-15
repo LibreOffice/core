@@ -18,7 +18,9 @@
  */
 
 #include <sal/config.h>
+
 #include "system.h"
+#include <mmsystem.h>
 
 #include <filetime.hxx>
 #include <time.hxx>
@@ -198,6 +200,31 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer(void)
   nSeconds = (sal_uInt32)( currentTime.time - startTime.time );
 
   return ( nSeconds * 1000 ) + (long)( currentTime.millitm - startTime.millitm );
+}
+
+sal_uInt64 SAL_CALL osl_getMonotonicTicks(void)
+{
+    static LARGE_INTEGER nTicksPerSecond = { 0 };
+    static bool bTicksPerSecondInitialized = false;
+
+    if (!bTicksPerSecondInitialized)
+    {
+        bTicksPerSecondInitialized = true;
+        if (!QueryPerformanceFrequency(&nTicksPerSecond))
+            nTicksPerSecond.QuadPart = 0;
+    }
+
+    if (nTicksPerSecond.QuadPart > 0)
+    {
+        LARGE_INTEGER nPerformanceCount;
+        QueryPerformanceCounter(&nPerformanceCount);
+        return static_cast<sal_uInt64>(
+            (nPerformanceCount.QuadPart*1000*1000)/nTicksPerSecond.QuadPart);
+    }
+    else
+    {
+        return static_cast<sal_uInt64>( timeGetTime() * 1000 );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

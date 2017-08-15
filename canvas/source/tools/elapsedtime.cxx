@@ -23,81 +23,11 @@
 
 #include <canvas/elapsedtime.hxx>
 
-#if defined(_WIN32)
-
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
-
-// TEMP!!!
-// Awaiting corresponding functionality in OSL
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <winbase.h>
-#include <mmsystem.h>
-#endif
-
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-
 #include <algorithm>
 #include <limits>
 
 namespace canvas {
 namespace tools {
-
-
-#if defined(_WIN32)
-// TODO(Q2): is 0 okay for the failure case here?
-double ElapsedTime::getSystemTime()
-{
-    // TEMP!!!
-    // Awaiting corresponding functionality in OSL
-
-
-    // is there a performance counter available?
-    static bool bTimeSetupDone( false );
-    static bool bPerfTimerAvailable( false );
-    static LONGLONG nPerfCountFreq;
-
-    // TODO(F1): This _might_ cause problems, as it prevents correct
-    // time handling for very long lifetimes of this class's
-    // surrounding component in memory. When the difference between
-    // current sys time and nInitialCount exceeds IEEE double's
-    // mantissa, time will start to run jerky.
-    static LONGLONG nInitialCount;
-
-    if( !bTimeSetupDone )
-    {
-        if( QueryPerformanceFrequency(
-                reinterpret_cast<LARGE_INTEGER *>(&nPerfCountFreq) ) )
-        {
-            // read initial time:
-            QueryPerformanceCounter(
-                reinterpret_cast<LARGE_INTEGER *>(&nInitialCount) );
-            bPerfTimerAvailable = true;
-        }
-        bTimeSetupDone = true;
-    }
-
-    if( bPerfTimerAvailable )
-    {
-        LONGLONG nCurrCount;
-        QueryPerformanceCounter(
-            reinterpret_cast<LARGE_INTEGER *>(&nCurrCount) );
-        nCurrCount -= nInitialCount;
-        return double(nCurrCount) / nPerfCountFreq;
-    }
-    else
-    {
-        LONGLONG nCurrTime = timeGetTime();
-        return double(nCurrTime) / 1000.0;
-    }
-}
-
-#else // ! WNT
 
 // TODO(Q2): is 0 okay for the failure case here?
 double ElapsedTime::getSystemTime()
@@ -108,8 +38,6 @@ double ElapsedTime::getSystemTime()
     else
         return 0.0;
 }
-
-#endif
 
 ElapsedTime::ElapsedTime()
     : m_pTimeBase(),

@@ -39,6 +39,7 @@
 #include <sal/log.hxx>
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
+#include <osl/time.h>
 
 #if defined(__sun) && defined(__GNUC__)
 extern long altzone;
@@ -411,30 +412,7 @@ Time tools::Time::GetUTCOffset()
 
 sal_uInt64 tools::Time::GetSystemTicks()
 {
-#if defined(_WIN32)
-    static LARGE_INTEGER nTicksPerSecond;
-    static bool bTicksPerSecondInitialized = false;
-    if (!bTicksPerSecondInitialized)
-    {
-        QueryPerformanceFrequency(&nTicksPerSecond);
-        bTicksPerSecondInitialized = true;
-    }
-
-    LARGE_INTEGER nPerformanceCount;
-    QueryPerformanceCounter(&nPerformanceCount);
-
-    return static_cast<sal_uInt64>(
-        (nPerformanceCount.QuadPart*1000)/nTicksPerSecond.QuadPart);
-#else
-    timeval tv;
-    int n = gettimeofday (&tv, nullptr);
-    if (n == -1) {
-        int e = errno;
-        SAL_WARN("tools.datetime", "gettimeofday failed: " << e);
-    }
-    return static_cast<sal_uInt64>(tv.tv_sec) * 1000
-        + static_cast<sal_uInt64>(tv.tv_usec) / 1000;
-#endif
+    return osl_getMonotonicTicks() / 1000;
 }
 
 } /* namespace tools */

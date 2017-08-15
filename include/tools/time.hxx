@@ -121,7 +121,7 @@ public:
 
     static Time     GetUTCOffset();
 
-    /// Elapsed time since epoch in milliseconds
+    /// Elapsed time in milliseconds (1e-3) since some unspecified starting point
     static sal_uInt64 GetSystemTicks();
 
     tools::Time&           operator =( const tools::Time& rTime );

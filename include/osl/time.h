@@ -167,10 +167,17 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
 
 
 /** Get the value of the global timer
-    @return current timer value in milli seconds
+    @return current timer value in milliseconds (1e-3s)
  */
-
 SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
+
+
+/** Get the elapsed time since some unspecified starting point
+    This is supposed to be a monotonic time source, which should not be used
+    to measure large time intervals precisely.
+    @return current system ticks in microseconds (1e-6s)
+ */
+SAL_DLLPUBLIC sal_uInt64 SAL_CALL osl_getMonotonicTicks(void);
 
 #ifdef __cplusplus
 }

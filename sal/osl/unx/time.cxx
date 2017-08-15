@@ -29,6 +29,7 @@
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>
+#include <mach/mach_time.h>
 #endif
 
 /* FIXME: detection should be done in configure script */
@@ -277,35 +278,53 @@ void sal_initGlobalTimer()
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
-    sal_uInt32 nSeconds;
+    sal_uInt32 nSeconds, nMilliSeconds;
 
 #ifdef __MACH__
     clock_serv_t cclock;
     mach_timespec_t currentTime;
 
-    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-    clock_get_time(cclock, &currentTime);
-    mach_port_deallocate(mach_task_self(), cclock);
+    host_get_clock_service( mach_host_self(), CALENDAR_CLOCK, &cclock );
+    clock_get_time( cclock, &currentTime );
+    mach_port_deallocate( mach_task_self(), cclock );
 
     nSeconds = ( currentTime.tv_sec - startTime.tv_sec );
-    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
+    nMilliSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / (1000 * 1000) );
 #else
     osl_time_t currentTime;
 
 #if defined(USE_CLOCK_GETTIME)
-    clock_gettime(CLOCK_REALTIME, &currentTime);
-#else
-    gettimeofday( &currentTime, NULL );
-#endif
-
+    clock_gettime( CLOCK_REALTIME, &currentTime );
     nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
-#if defined(USE_CLOCK_GETTIME)
-    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
+    nMilliSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / (1000 * 1000) );
 #else
-    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
+    gettimeofday( &currentTime, nullptr );
+    nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
+    nMilliSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
 #endif
+#endif // __MACH__
+    return nMilliSeconds;
+}
+
+sal_uInt64 SAL_CALL osl_getMonotonicTicks()
+{
+    sal_uInt64 nMicroSeconds;
+#ifdef __MACH__
+    static mach_timebase_info_data_t info = { 0, 0 };
+    if ( 0 == info.numer )
+        mach_timebase_info( &info );
+    nMicroSeconds = mach_absolute_time() * (double) (info.numer / info.denom) / 1000;
+#else
+    osl_time_t currentTime;
+#if defined(USE_CLOCK_GETTIME)
+    clock_gettime( CLOCK_MONOTONIC, &currentTime );
+    nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_nsec / 1000;
+#else
+    gettimeofday( &currentTime, nullptr );
+    nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_usec;
 #endif
-    return nSeconds;
+#endif // __MACH__
+    return nMicroSeconds;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
