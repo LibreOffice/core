@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/salnativewidgets.hxx>
@@ -420,7 +421,20 @@ void Control::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
     // ignore all of those
     if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
     {
-        // For now just invalidate the whole dialog
+        // If parent is a floating window, trigger an invalidate there
+        vcl::Window* pWindow = this;
+        while (pWindow)
+        {
+            if (pWindow->ImplIsFloatingWindow())
+            {
+                dynamic_cast<FloatingWindow*>(pWindow)->LogicInvalidate(nullptr);
+                return;
+            }
+
+            pWindow = pWindow->GetParent();
+        }
+
+        // otherwise, for now, just invalidate the whole dialog
         Dialog* pParentDlg = GetParentDialog();
         if (pParentDlg)
             pParentDlg->LogicInvalidate(nullptr);
