@@ -40,6 +40,7 @@
 
 function mangle_path(path) {
     gsub("\\\\", "/", path);
+    gsub("\r", "", path);
     if( path ~ /^[a-zA-Z]:/ )
         path = tolower(substr(path,0,1)) substr(path,2);
     gsub(WORKDIR, "$(WORKDIR)/", path);
