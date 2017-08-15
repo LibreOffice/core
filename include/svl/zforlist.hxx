@@ -180,7 +180,8 @@ enum NfIndexTableOffset
     NF_FRACTION_10,                         // # ??/10
     NF_FRACTION_100,                        // # ??/100
 
-    NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO (with blank instead of T)
+    NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO 8601 (with blank instead of T)
+    NF_DATETIME_ISO_YYYYMMDDTHHMMSS,        // 1997-10-08T01:23:45          ISO 8601 (with the letter T as a delimiter)
 
     // XXX When adding values here, follow the comment above about
     // svx/source/items/numfmtsh.cxx

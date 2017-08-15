@@ -41,6 +41,12 @@ public:
     const Entry* GetCache( sal_Int32 nCacheId ) const;
 
 private:
+    /**
+     * Create combined date and time string according the requirements of ISO 8601 standard.
+     * A single point in time can be represented by concatenating a complete date expression,
+     * the letter T as a delimiter, and a valid time expression. For example, "2007-04-05T14:30".
+     */
+    OUString GetISO8601FormattedDate(double aDateTime) const;
     void SavePivotCacheXml( XclExpXmlStream& rStrm, const Entry& rEntry, sal_Int32 nCacheId );
 
 private:
