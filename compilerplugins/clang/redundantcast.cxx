@@ -580,7 +580,6 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     if (ignoreLocation(expr)) {
         return true;
     }
-
     // Restrict this to "real" casts (compared to uses of braced-init-list, like
     //
     //   Foo{bar, baz}
@@ -590,7 +589,7 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     //   std::initializer_list<Foo>{bar, baz}
     //
     // ), and only to cases where the sub-expression already is a prvalue of
-    // non-class type (and thus the cast is unlikely meant to create a
+    // non-class type (and thus the cast is unlikely to be meant to create a
     // temporary):
     auto const sub = compat::getSubExprAsWritten(expr);
     if (sub->getValueKind() != VK_RValue || expr->getType()->isRecordType()
@@ -634,7 +633,7 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     }
 
     auto const t1 = expr->getTypeAsWritten();
-    auto const t2 = sub->getType();
+    auto const t2 = sub->getType().getDesugaredType(compiler.getASTContext());
     if (t1 != t2)
         return true;
     if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr()))

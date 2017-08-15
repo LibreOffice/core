@@ -77,7 +77,7 @@ bool WAS_DEFAULT(sal_uInt16 w, SfxItemSet const & s)
 
 #define GET_BOOL(sid,set)   static_cast<const SfxBoolItem&>((set).Get(GetWhich((sid)))).GetValue()
 #define GET_USHORT(sid,set) static_cast<const SfxUInt16Item&>((set).Get(GetWhich((sid)))).GetValue()
-#define GET_SHOW(sid,set)   ( ScVObjMode( static_cast<const ScViewObjectModeItem&>((set).Get(GetWhich((sid)))).GetValue() ) \
+#define GET_SHOW(sid,set)   ( static_cast<const ScViewObjectModeItem&>((set).Get(GetWhich((sid)))).GetValue() \
                               == VOBJ_MODE_SHOW )
 // List box entries "Scaling mode"
 #define SC_TPTABLE_SCALE_PERCENT    0

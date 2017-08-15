@@ -620,7 +620,7 @@ DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
 {
     // 'Track-Changes' (Track Revisions) wasn't exported.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(mxComponent, "RecordChanges")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
@@ -789,7 +789,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo56679, "fdo56679.docx")
     uno::Reference< text::XTextRange > xParagraph = getParagraph( 1 );
     uno::Reference< text::XTextRange > xText = getRun( xParagraph, 2, "This is a simple sentence.");
 
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xText, "CharUnderlineHasColor")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xText, "CharUnderlineHasColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), getProperty<sal_Int32>(xText, "CharUnderlineColor"));
 }
 
@@ -1089,7 +1089,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "MirroredY")
         {
-            CPPUNIT_ASSERT_EQUAL( true, bool(rProp.Value.get<bool>()) );
+            CPPUNIT_ASSERT_EQUAL( true, rProp.Value.get<bool>() );
             return;
         }
     }

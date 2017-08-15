@@ -633,22 +633,22 @@ DECLARE_OOXMLEXPORT_TEST(test77219, "test77219.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape.docx")
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", false, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", false, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf77219_foregroundShape, "tdf77219_foregroundShape.docx")
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", true, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", true, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108973_backgroundTextbox, "tdf108973_backgroundTextbox.docx")
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in front of the paragraph", false, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in front of the paragraph", false, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108973_foregroundTextbox, "tdf108973_foregroundTextbox.docx")
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in front of the paragraph", true, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in front of the paragraph", true, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
@@ -922,7 +922,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79591, "fdo79591.docx")
 DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
 {
     // The problem was that the shape in the header wasn't in the background.
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo80894, "TextFrameRotation.docx")

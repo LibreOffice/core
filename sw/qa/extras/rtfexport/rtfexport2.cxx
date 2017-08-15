@@ -187,8 +187,8 @@ DECLARE_RTFEXPORT_TEST(testN750757, "n750757.rtf")
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin")));
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin")));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xParaEnum->nextElement(), "ParaContextMargin"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo45563, "fdo45563.rtf")

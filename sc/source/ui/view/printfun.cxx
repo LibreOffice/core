@@ -89,7 +89,7 @@ inline sal_uInt16 lcl_GetUShort(const SfxItemSet* pSet, sal_uInt16 nWhich)
 
 inline bool lcl_GetShow(const SfxItemSet* pSet, sal_uInt16 nWhich)
 {
-    return ScVObjMode::VOBJ_MODE_SHOW == ScVObjMode( static_cast<const ScViewObjectModeItem&>(pSet->Get(nWhich)).GetValue() );
+    return ScVObjMode::VOBJ_MODE_SHOW == static_cast<const ScViewObjectModeItem&>(pSet->Get(nWhich)).GetValue();
 }
 
 
