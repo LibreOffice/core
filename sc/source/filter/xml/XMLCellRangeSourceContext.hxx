@@ -43,7 +43,7 @@ class ScXMLCellRangeSourceContext : public ScXMLImportContext
 public:
                                 ScXMLCellRangeSourceContext(
                                     ScXMLImport& rImport,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                                    rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );
     virtual                     ~ScXMLCellRangeSourceContext() override;

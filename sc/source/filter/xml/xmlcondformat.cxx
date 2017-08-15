@@ -35,6 +35,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMAT ):
@@ -57,17 +60,14 @@ void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nEleme
 }
 
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList):
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ):
     ScXMLImportContext( rImport )
 {
     OUString sRange;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -91,22 +91,25 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_CONDITION ):
-            pContext = new ScXMLCondContext( GetScImport(), xAttrList, mxFormat.get() );
+            pContext = new ScXMLCondContext( GetScImport(), pAttribList, mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_COLOR_SCALE ):
             pContext = new ScXMLColorScaleFormatContext( GetScImport(), mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_DATA_BAR ):
-            pContext = new ScXMLDataBarFormatContext( GetScImport(), xAttrList, mxFormat.get() );
+            pContext = new ScXMLDataBarFormatContext( GetScImport(), pAttribList, mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_ICON_SET ):
-            pContext = new ScXMLIconSetFormatContext( GetScImport(), xAttrList, mxFormat.get() );
+            pContext = new ScXMLIconSetFormatContext( GetScImport(), pAttribList, mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_DATE_IS ):
-            pContext = new ScXMLDateContext( GetScImport(), xAttrList, mxFormat.get() );
+            pContext = new ScXMLDateContext( GetScImport(), pAttribList, mxFormat.get() );
             break;
         default:
             break;
@@ -144,10 +147,13 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorSca
     sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_COLOR_SCALE_ENTRY ):
-            pContext = new ScXMLColorScaleFormatEntryContext( GetScImport(), xAttrList, pColorScaleFormat );
+            pContext = new ScXMLColorScaleFormatEntryContext( GetScImport(), pAttribList, pColorScaleFormat );
             break;
         default:
             break;
@@ -157,7 +163,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorSca
 }
 
 ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport ),
     mpDataBarFormat(nullptr),
@@ -173,12 +179,9 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
     OUString sMinLength;
     OUString sMaxLength;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -282,13 +285,16 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
     sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_FORMATTING_ENTRY ):
         case XML_ELEMENT( CALC_EXT, XML_DATA_BAR_ENTRY ):
         {
             ScColorScaleEntry* pEntry(nullptr);
-            pContext = new ScXMLFormattingEntryContext( GetScImport(), xAttrList, pEntry );
+            pContext = new ScXMLFormattingEntryContext( GetScImport(), pAttribList, pEntry );
             if(mnIndex == 0)
             {
                 mpFormatData->mpLowerLimit.reset(pEntry);
@@ -313,17 +319,14 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
 }
 
 ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport )
 {
     OUString aIconSetType, sShowValue;
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -372,12 +375,15 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetF
     sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_FORMATTING_ENTRY ):
             {
                 ScColorScaleEntry* pEntry(nullptr);
-                pContext = new ScXMLFormattingEntryContext( GetScImport(), xAttrList, pEntry );
+                pContext = new ScXMLFormattingEntryContext( GetScImport(), pAttribList, pEntry );
                 mpFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pEntry));
             }
             break;
@@ -551,7 +557,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
 }
 
 ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat ):
     ScXMLImportContext( rImport )
 {
@@ -559,12 +565,9 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport,
     OUString sStyle;
     OUString sAddress;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -623,7 +626,7 @@ void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const O
 }
 
 ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScColorScaleFormat* pFormat):
     ScXMLImportContext( rImport ),
     mpFormatEntry( nullptr )
@@ -635,12 +638,9 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
     OUString sVal;
     OUString sColor;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -672,19 +672,16 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
 }
 
 ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScColorScaleEntry*& pColorScaleEntry):
     ScXMLImportContext( rImport )
 {
     OUString sVal;
     OUString sType;
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -746,17 +743,14 @@ condformat::ScCondFormatDateType getDateFromString(const OUString& rString)
 }
 
 ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScConditionalFormat* pFormat ):
     ScXMLImportContext( rImport )
 {
     OUString sDateType, sStyle;
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {

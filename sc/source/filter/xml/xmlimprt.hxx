@@ -722,7 +722,7 @@ public:
                                      bool bAutoStyles );
 
     SvXMLImportContext *CreateBodyContext(
-                                    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
+                                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual void SetStatistics( const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
 

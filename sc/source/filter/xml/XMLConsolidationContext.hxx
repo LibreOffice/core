@@ -40,7 +40,7 @@ private:
 public:
                                 ScXMLConsolidationContext(
                                     ScXMLImport& rImport,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
+                                    rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList
                                     );
     virtual                     ~ScXMLConsolidationContext() override;
 
