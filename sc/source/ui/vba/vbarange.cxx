@@ -2491,10 +2491,11 @@ ScVbaRange::getMergeCells()
 void
 ScVbaRange::Copy(const ::uno::Any& Destination)
 {
-    if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException("That command cannot be used on multiple selections" );
     if ( Destination.hasValue() )
     {
+        // TODO copy with multiple selections should work here too
+        if ( m_Areas->getCount() > 1 )
+            throw uno::RuntimeException("That command cannot be used on multiple selections" );
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
         uno::Any aRange = xRange->getCellRange();
         uno::Reference< table::XCellRange > xCellRange;
@@ -2512,9 +2513,7 @@ ScVbaRange::Copy(const ::uno::Any& Destination)
     }
     else
     {
-        uno::Reference< frame::XModel > xModel = getModelFromRange( mxRange );
-        Select();
-        excel::implnCopy( xModel );
+        excel::implnCopy( getUnoModel() );
     }
 }
 
