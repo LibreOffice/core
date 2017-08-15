@@ -1102,7 +1102,13 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxColorItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                sal_uInt32 nColor = 0;
+                if ( aAny >>= nColor )
+                {
+                    sal_Int32 nIndexColor = ( nColor == COL_AUTO ) ? xMapper->GetEntryIndex(
+                        XML_NAMESPACE_STYLE, GetXMLToken( XML_USE_WINDOW_FONT_COLOR ), 0 ) : nIndex;
+                    rPropStates.push_back( XMLPropertyState( nIndexColor, aAny ) );
+                }
             }
             break;
             case EE_CHAR_WLM:
