@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_59c10e80",
+        "filename": "compilerplugins/clang/droplong.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-15T07:31:53Z",
+      "side": 1,
+      "message": "Will this be ever true with that trailing slash? :-)",
+      "revId": "39e637ae14f1be9eff7f3869d5db0a5ebbb47b1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
