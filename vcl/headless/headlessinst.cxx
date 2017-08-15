@@ -92,13 +92,13 @@ SalInstance *CreateSalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance( new SalYieldMutex() );
     new HeadlessSalData( pInstance );
-    pInstance->AcquireYieldMutex(1);
+    pInstance->AcquireYieldMutex();
     return pInstance;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    pInst->ReleaseYieldMutex();
+    pInst->ReleaseYieldMutex( true );
     delete pInst;
 }
 
