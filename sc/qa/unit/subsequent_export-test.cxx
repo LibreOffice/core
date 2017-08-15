@@ -26,6 +26,7 @@
 #include "userdat.hxx"
 #include "docsh.hxx"
 #include "patattr.hxx"
+#include "docpool.hxx"
 #include "scitems.hxx"
 #include "document.hxx"
 #include "cellform.hxx"
@@ -61,6 +62,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/colritem.hxx>
 #include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
@@ -1100,7 +1102,7 @@ void ScExportTest::testMiscRowHeightExport()
 
 namespace {
 
-void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nType )
+void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt16 nType, sal_uInt32 nColor = COL_BLACK )
 {
     ESelection aSel;
     aSel.nStartPara = aSel.nEndPara = nPara;
@@ -1141,6 +1143,13 @@ void setAttribute( ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sa
         case EE_CHAR_UNDERLINE:
         {
             SvxUnderlineItem aItem(LINESTYLE_DOUBLE, nType);
+            aItemSet.Put(aItem);
+            rEE.QuickSetAttribs(aItemSet, aSel);
+        }
+        break;
+        case EE_CHAR_COLOR:
+        {
+            SvxColorItem aItem(nColor, nType);
             aItemSet.Put(aItem);
             rEE.QuickSetAttribs(aItemSet, aSel);
         }
@@ -1323,6 +1332,23 @@ void ScExportTest::testRichTextExportODS()
 
                 const SvxEscapementItem* pItem = static_cast<const SvxEscapementItem*>(p);
                 return ((pItem->GetEsc() == nEsc) && (pItem->GetProportionalHeight() == nRelSize));
+            }
+            return false;
+        }
+
+        static bool isColor(const editeng::Section& rAttr, sal_uInt32 nColor)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_COLOR)
+                    continue;
+
+                return static_cast<const SvxColorItem*>(p)->GetValue() == nColor;
             }
             return false;
         }
@@ -1553,6 +1579,32 @@ void ScExportTest::testRichTextExportODS()
             return true;
         }
 
+        bool checkB10(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 1)
+                return false;
+
+            if (pText->GetText(0) != "BLUE AUTO")
+                return false;
+
+            std::vector<editeng::Section> aSecAttrs;
+            pText->GetAllSections(aSecAttrs);
+            if (aSecAttrs.size() != 2)
+                return false;
+
+            // auto color
+            const editeng::Section* pAttr = &aSecAttrs[1];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 5 || pAttr->mnEnd != 9)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isColor(*pAttr, COL_AUTO))
+                return false;
+
+            return true;
+        }
 
     } aCheckFunc;
 
@@ -1654,6 +1706,17 @@ void ScExportTest::testRichTextExportODS()
         pEditText = rDoc3.GetEditText(ScAddress(1,8,0));
         CPPUNIT_ASSERT_MESSAGE("Incorrect B9 value.", aCheckFunc.checkB9(pEditText));
 
+        ScPatternAttr aCellFontColor(rDoc3.GetPool());
+        aCellFontColor.GetItemSet().Put(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
+        // Set font color of B10 to blue.
+        rDoc3.ApplyPattern(1, 9, 0, aCellFontColor);
+        pEE->Clear();
+        pEE->SetText("BLUE AUTO");
+        // Set the color of the string "AUTO" to automatic color.
+        setAttribute(*pEE, 0, 5, 9, EE_CHAR_COLOR, COL_AUTO);
+        rDoc3.SetEditText(ScAddress(1, 9, 0), pEE->CreateTextObject());
+        pEditText = rDoc3.GetEditText(ScAddress(1, 9, 0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B10 value.", aCheckFunc.checkB10(pEditText));
     }
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
@@ -1673,6 +1736,8 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorrect B7 value after save and reload.", aCheckFunc.checkB7(pEditText));
     pEditText = rDoc4.GetEditText(ScAddress(1,7,0));
     CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,9,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B10 value after save and reload.", aCheckFunc.checkB10(pEditText));
 
     xNewDocSh3->DoClose();
 }
