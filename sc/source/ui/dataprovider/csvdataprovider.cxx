@@ -8,6 +8,7 @@
  */
 
 #include <dataprovider.hxx>
+#include "datatransformation.hxx"
 #include <stringutil.hxx>
 
 #if defined(_WIN32)
@@ -64,11 +65,13 @@ public:
 
 namespace sc {
 
-CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL, Idle* pIdle):
+CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL, Idle* pIdle,
+        const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations):
         Thread("CSV Fetch Thread"),
         mrDocument(rDoc),
         maURL (mrURL),
         mbTerminate(false),
+        maDataTransformations(rDataTransformations),
         mpIdle(pIdle)
 {
     maConfig.delimiters.push_back(',');
@@ -107,6 +110,11 @@ void CSVFetchThread::execute()
     orcus::csv_parser<CSVHandler> parser(aBuffer.getStr(), aBuffer.getLength(), aHdl, maConfig);
     parser.parse();
 
+    for (auto& itr : maDataTransformations)
+    {
+        itr->Transform(mrDocument);
+    }
+
     SolarMutexGuard aGuard;
     mpIdle->Start();
 }
@@ -137,7 +145,7 @@ void CSVDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, (SCTAB)0);
-    mxCSVFetchThread = new CSVFetchThread(*mpDoc, maURL, &maIdle);
+    mxCSVFetchThread = new CSVFetchThread(*mpDoc, maURL, &maIdle, mpDBDataManager->getDataTransformation());
     mxCSVFetchThread->launch();
 
     if (mbDeterministic)

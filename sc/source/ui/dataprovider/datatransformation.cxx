@@ -35,7 +35,7 @@ ColumnRemoveTransformation::~ColumnRemoveTransformation()
 {
 }
 
-void ColumnRemoveTransformation::Transform(ScDocument& rDoc)
+void ColumnRemoveTransformation::Transform(ScDocument& rDoc) const
 {
     rDoc.DeleteCol(0, 0, MAXROW, 0, mnCol, 1);
 }
@@ -46,7 +46,7 @@ SplitColumnTransformation::SplitColumnTransformation(SCCOL nCol, sal_Unicode cSe
 {
 }
 
-void SplitColumnTransformation::Transform(ScDocument& rDoc)
+void SplitColumnTransformation::Transform(ScDocument& rDoc) const
 {
     rDoc.InsertCol(0, 0, MAXROW, 0, mnCol + 1, 1);
 
@@ -75,7 +75,7 @@ MergeColumnTransformation::MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, c
 {
 }
 
-void MergeColumnTransformation::Transform(ScDocument& rDoc)
+void MergeColumnTransformation::Transform(ScDocument& rDoc) const
 {
     SCROW nEndRow1 = getLastRow(rDoc, mnCol1);
     SCROW nEndRow2 = getLastRow(rDoc, mnCol2);
@@ -96,7 +96,7 @@ SortTransformation::SortTransformation(const ScSortParam& rSortParam):
 {
 }
 
-void SortTransformation::Transform(ScDocument& rDoc)
+void SortTransformation::Transform(ScDocument& rDoc) const
 {
     rDoc.Sort(0, maSortParam, false, false, nullptr, nullptr);
 }

@@ -28,7 +28,7 @@ protected:
 public:
     virtual ~DataTransformation();
 
-    virtual void Transform(ScDocument& rDoc) = 0;
+    virtual void Transform(ScDocument& rDoc) const = 0;
 
 };
 
@@ -41,7 +41,7 @@ public:
     ColumnRemoveTransformation(SCCOL nCol);
     virtual ~ColumnRemoveTransformation() override;
 
-    virtual void Transform(ScDocument& rDoc) override;
+    virtual void Transform(ScDocument& rDoc) const override;
 };
 
 class SC_DLLPUBLIC SplitColumnTransformation : public DataTransformation
@@ -52,7 +52,7 @@ class SC_DLLPUBLIC SplitColumnTransformation : public DataTransformation
 public:
 
     SplitColumnTransformation(SCCOL nCol, sal_Unicode cSeparator);
-    virtual void Transform(ScDocument& rDoc) override;
+    virtual void Transform(ScDocument& rDoc) const override;
 };
 
 class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
@@ -64,7 +64,7 @@ class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
 public:
 
     MergeColumnTransformation(SCCOL nCol1, SCCOL nCol2, const OUString& rMergeString);
-    virtual void Transform(ScDocument& rDoc) override;
+    virtual void Transform(ScDocument& rDoc) const  override;
 };
 
 class SC_DLLPUBLIC SortTransformation : public DataTransformation
@@ -74,7 +74,7 @@ public:
 
     SortTransformation(const ScSortParam& rParam);
 
-    virtual void Transform(ScDocument& rDoc) override;
+    virtual void Transform(ScDocument& rDoc) const override;
 };
 
 }

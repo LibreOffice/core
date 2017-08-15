@@ -15,6 +15,7 @@
 namespace sc {
 
 class HTMLFetchThread;
+class DataTransformation;
 
 class HTMLDataProvider : public DataProvider
 {

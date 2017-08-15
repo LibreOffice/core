@@ -8,6 +8,7 @@
  */
 
 #include "htmldataprovider.hxx"
+#include "datatransformation.hxx"
 #include <salhelper/thread.hxx>
 
 #include <libxml/HTMLparser.h>
@@ -25,6 +26,7 @@ class HTMLFetchThread : public salhelper::Thread
     ScDocument& mrDocument;
     OUString maURL;
     OUString maID;
+    const std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
 
     Idle* mpIdle;
 
@@ -34,16 +36,19 @@ class HTMLFetchThread : public salhelper::Thread
     void handleCell(xmlNodePtr pCell, SCROW nRow, SCCOL nCol);
 
 public:
-    HTMLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID, Idle* pIdle);
+    HTMLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID, Idle* pIdle,
+            const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations);
 
     virtual void execute() override;
 };
 
-HTMLFetchThread::HTMLFetchThread(ScDocument& rDoc, const OUString& rURL, const OUString& rID, Idle* pIdle):
+HTMLFetchThread::HTMLFetchThread(ScDocument& rDoc, const OUString& rURL, const OUString& rID, Idle* pIdle,
+        const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations):
     salhelper::Thread("HTML Fetch Thread"),
     mrDocument(rDoc),
     maURL(rURL),
     maID(rID),
+    maDataTransformations(rTransformations),
     mpIdle(pIdle)
 {
 }
@@ -196,6 +201,11 @@ void HTMLFetchThread::execute()
     xmlXPathFreeNodeSetList(pXmlXpathObj);
     xmlXPathFreeContext(pXmlXpathCtx);
 
+    for (auto& itr : maDataTransformations)
+    {
+        itr->Transform(mrDocument);
+    }
+
     SolarMutexGuard aGuard;
     mpIdle->Start();
 }
@@ -228,7 +238,8 @@ void HTMLDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, (SCTAB)0);
-    mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, maURL, maID, &maIdle);
+    mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, maURL, maID, &maIdle,
+            mpDBDataManager->getDataTransformation());
     mxHTMLFetchThread->launch();
 
     if (mbDeterministic)
