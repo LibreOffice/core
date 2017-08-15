@@ -930,7 +930,10 @@ class JavaPanZoomController
 
     @Override
     public boolean onDown(MotionEvent motionEvent) {
-        mWaitForDoubleTap = mTarget.getZoomConstraints().getAllowDoubleTapZoom();
+        if (mTarget.getZoomConstraints() != null)
+            mWaitForDoubleTap = mTarget.getZoomConstraints().getAllowDoubleTapZoom();
+        else
+            mWaitForDoubleTap = false;
         return false;
     }
 
