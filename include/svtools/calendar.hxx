@@ -162,7 +162,7 @@ private:
     tools::Rectangle       maPrevRect;
     tools::Rectangle       maNextRect;
     OUString        maDayOfWeekText;
-    long            mnDayOfWeekAry[7];
+    sal_Int32       mnDayOfWeekAry[7];
     Date            maOldFormatFirstDate;
     Date            maOldFormatLastDate;
     Date            maFirstDate;

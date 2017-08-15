@@ -171,7 +171,7 @@ MetaAction* MetaAction::Clone()
     return new MetaAction;
 }
 
-void MetaAction::Move( long, long )
+void MetaAction::Move( sal_Int32, sal_Int32 )
 {
 }
 
@@ -293,7 +293,7 @@ MetaAction* MetaPixelAction::Clone()
     return pClone;
 }
 
-void MetaPixelAction::Move( long nHorzMove, long nVertMove )
+void MetaPixelAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -342,7 +342,7 @@ MetaAction* MetaPointAction::Clone()
     return pClone;
 }
 
-void MetaPointAction::Move( long nHorzMove, long nVertMove )
+void MetaPointAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -401,7 +401,7 @@ MetaAction* MetaLineAction::Clone()
     return pClone;
 }
 
-void MetaLineAction::Move( long nHorzMove, long nVertMove )
+void MetaLineAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maStartPt.Move( nHorzMove, nVertMove );
     maEndPt.Move( nHorzMove, nVertMove );
@@ -463,7 +463,7 @@ MetaAction* MetaRectAction::Clone()
     return pClone;
 }
 
-void MetaRectAction::Move( long nHorzMove, long nVertMove )
+void MetaRectAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -515,7 +515,7 @@ MetaAction* MetaRoundRectAction::Clone()
     return pClone;
 }
 
-void MetaRoundRectAction::Move( long nHorzMove, long nVertMove )
+void MetaRoundRectAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -565,7 +565,7 @@ MetaAction* MetaEllipseAction::Clone()
     return pClone;
 }
 
-void MetaEllipseAction::Move( long nHorzMove, long nVertMove )
+void MetaEllipseAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -615,7 +615,7 @@ MetaAction* MetaArcAction::Clone()
     return pClone;
 }
 
-void MetaArcAction::Move( long nHorzMove, long nVertMove )
+void MetaArcAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move(  nHorzMove, nVertMove );
     maStartPt.Move(  nHorzMove, nVertMove );
@@ -673,7 +673,7 @@ MetaAction* MetaPieAction::Clone()
     return pClone;
 }
 
-void MetaPieAction::Move( long nHorzMove, long nVertMove )
+void MetaPieAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move(  nHorzMove, nVertMove );
     maStartPt.Move(  nHorzMove, nVertMove );
@@ -731,7 +731,7 @@ MetaAction* MetaChordAction::Clone()
     return pClone;
 }
 
-void MetaChordAction::Move( long nHorzMove, long nVertMove )
+void MetaChordAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move(  nHorzMove, nVertMove );
     maStartPt.Move(  nHorzMove, nVertMove );
@@ -795,7 +795,7 @@ MetaAction* MetaPolyLineAction::Clone()
     return pClone;
 }
 
-void MetaPolyLineAction::Move( long nHorzMove, long nVertMove )
+void MetaPolyLineAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPoly.Move( nHorzMove, nVertMove );
 }
@@ -866,7 +866,7 @@ MetaAction* MetaPolygonAction::Clone()
     return pClone;
 }
 
-void MetaPolygonAction::Move( long nHorzMove, long nVertMove )
+void MetaPolygonAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPoly.Move( nHorzMove, nVertMove );
 }
@@ -930,7 +930,7 @@ MetaAction* MetaPolyPolygonAction::Clone()
     return pClone;
 }
 
-void MetaPolyPolygonAction::Move( long nHorzMove, long nVertMove )
+void MetaPolyPolygonAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -1038,7 +1038,7 @@ MetaAction* MetaTextAction::Clone()
     return pClone;
 }
 
-void MetaTextAction::Move( long nHorzMove, long nVertMove )
+void MetaTextAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1092,14 +1092,14 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        mpDXAry.reset( new long[ mnLen ] );
-        memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( long ) );
+        mpDXAry.reset( new sal_Int32[ mnLen ] );
+        memcpy( mpDXAry.get(), rAction.mpDXAry.get(), mnLen * sizeof( sal_Int32 ) );
     }
 }
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
-                                          const long* pDXAry,
+                                          const sal_Int32* pDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
@@ -1112,8 +1112,8 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 
     if (nAryLen > 0)
     {
-        mpDXAry.reset( new long[ nAryLen ] );
-        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(long) );
+        mpDXAry.reset( new sal_Int32[ nAryLen ] );
+        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(sal_Int32) );
     }
 }
 
@@ -1133,7 +1133,7 @@ MetaAction* MetaTextArrayAction::Clone()
     return pClone;
 }
 
-void MetaTextArrayAction::Move( long nHorzMove, long nVertMove )
+void MetaTextArrayAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maStartPt.Move( nHorzMove, nVertMove );
 }
@@ -1192,10 +1192,10 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if( nAryLen )
     {
-        // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
+        // #i9762#, #106172# Ensure that DX array is at least mnLen entries sal_Int32
         if ( mnLen >= nAryLen )
         {
-            mpDXAry.reset( new (std::nothrow)long[ mnLen ] );
+            mpDXAry.reset( new (std::nothrow)sal_Int32[ mnLen ] );
             if ( mpDXAry )
             {
                 sal_Int32 i;
@@ -1264,7 +1264,7 @@ MetaAction* MetaStretchTextAction::Clone()
     return pClone;
 }
 
-void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
+void MetaStretchTextAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1333,7 +1333,7 @@ MetaAction* MetaTextRectAction::Clone()
     return pClone;
 }
 
-void MetaTextRectAction::Move( long nHorzMove, long nVertMove )
+void MetaTextRectAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -1378,7 +1378,7 @@ MetaTextLineAction::MetaTextLineAction() :
 MetaTextLineAction::~MetaTextLineAction()
 {}
 
-MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
+MetaTextLineAction::MetaTextLineAction( const Point& rPos, sal_Int32 nWidth,
                                         FontStrikeout eStrikeout,
                                         FontLineStyle eUnderline,
                                         FontLineStyle eOverline ) :
@@ -1402,7 +1402,7 @@ MetaAction* MetaTextLineAction::Clone()
     return pClone;
 }
 
-void MetaTextLineAction::Move( long nHorzMove, long nVertMove )
+void MetaTextLineAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPos.Move( nHorzMove, nVertMove );
 }
@@ -1476,7 +1476,7 @@ MetaAction* MetaBmpAction::Clone()
     return pClone;
 }
 
-void MetaBmpAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1531,7 +1531,7 @@ MetaAction* MetaBmpScaleAction::Clone()
     return pClone;
 }
 
-void MetaBmpScaleAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpScaleAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1594,7 +1594,7 @@ MetaAction* MetaBmpScalePartAction::Clone()
     return pClone;
 }
 
-void MetaBmpScalePartAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpScalePartAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
@@ -1656,7 +1656,7 @@ MetaAction* MetaBmpExAction::Clone()
     return pClone;
 }
 
-void MetaBmpExAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpExAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1711,7 +1711,7 @@ MetaAction* MetaBmpExScaleAction::Clone()
     return pClone;
 }
 
-void MetaBmpExScaleAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpExScaleAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1774,7 +1774,7 @@ MetaAction* MetaBmpExScalePartAction::Clone()
     return pClone;
 }
 
-void MetaBmpExScalePartAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpExScalePartAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
@@ -1839,7 +1839,7 @@ MetaAction* MetaMaskAction::Clone()
     return pClone;
 }
 
-void MetaMaskAction::Move( long nHorzMove, long nVertMove )
+void MetaMaskAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1896,7 +1896,7 @@ MetaAction* MetaMaskScaleAction::Clone()
     return pClone;
 }
 
-void MetaMaskScaleAction::Move( long nHorzMove, long nVertMove )
+void MetaMaskScaleAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1961,7 +1961,7 @@ MetaAction* MetaMaskScalePartAction::Clone()
     return pClone;
 }
 
-void MetaMaskScalePartAction::Move( long nHorzMove, long nVertMove )
+void MetaMaskScalePartAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
@@ -2025,7 +2025,7 @@ MetaAction* MetaGradientAction::Clone()
     return pClone;
 }
 
-void MetaGradientAction::Move( long nHorzMove, long nVertMove )
+void MetaGradientAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -2079,7 +2079,7 @@ MetaAction* MetaGradientExAction::Clone()
     return pClone;
 }
 
-void MetaGradientExAction::Move( long nHorzMove, long nVertMove )
+void MetaGradientExAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -2135,7 +2135,7 @@ MetaAction* MetaHatchAction::Clone()
     return pClone;
 }
 
-void MetaHatchAction::Move( long nHorzMove, long nVertMove )
+void MetaHatchAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -2192,7 +2192,7 @@ MetaAction* MetaWallpaperAction::Clone()
     return pClone;
 }
 
-void MetaWallpaperAction::Move( long nHorzMove, long nVertMove )
+void MetaWallpaperAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -2245,7 +2245,7 @@ MetaAction* MetaClipRegionAction::Clone()
     return pClone;
 }
 
-void MetaClipRegionAction::Move( long nHorzMove, long nVertMove )
+void MetaClipRegionAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRegion.Move( nHorzMove, nVertMove );
 }
@@ -2295,7 +2295,7 @@ MetaAction* MetaISectRectClipRegionAction::Clone()
     return pClone;
 }
 
-void MetaISectRectClipRegionAction::Move( long nHorzMove, long nVertMove )
+void MetaISectRectClipRegionAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -2343,7 +2343,7 @@ MetaAction* MetaISectRegionClipRegionAction::Clone()
     return pClone;
 }
 
-void MetaISectRegionClipRegionAction::Move( long nHorzMove, long nVertMove )
+void MetaISectRegionClipRegionAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maRegion.Move( nHorzMove, nVertMove );
 }
@@ -2375,7 +2375,7 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction() :
 MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
 {}
 
-MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMove ) :
+MetaMoveClipRegionAction::MetaMoveClipRegionAction( sal_Int32 nHorzMove, sal_Int32 nVertMove ) :
     MetaAction  ( MetaActionType::MOVECLIPREGION ),
     mnHorzMove  ( nHorzMove ),
     mnVertMove  ( nVertMove )
@@ -2955,7 +2955,7 @@ MetaAction* MetaTransparentAction::Clone()
     return pClone;
 }
 
-void MetaTransparentAction::Move( long nHorzMove, long nVertMove )
+void MetaTransparentAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -3022,7 +3022,7 @@ MetaAction* MetaFloatTransparentAction::Clone()
     return pClone;
 }
 
-void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
+void MetaFloatTransparentAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
 }
@@ -3083,7 +3083,7 @@ MetaAction* MetaEPSAction::Clone()
     return pClone;
 }
 
-void MetaEPSAction::Move( long nHorzMove, long nVertMove )
+void MetaEPSAction::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
 }
@@ -3218,7 +3218,7 @@ MetaAction* MetaCommentAction::Clone()
     return pClone;
 }
 
-void MetaCommentAction::Move( long nXMove, long nYMove )
+void MetaCommentAction::Move( sal_Int32 nXMove, sal_Int32 nYMove )
 {
     if ( nXMove || nYMove )
     {

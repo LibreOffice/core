@@ -231,8 +231,8 @@ public:
                             int nOutputHeight,
                             int nTilePosX,
                             int nTilePosY,
-                            long nTileWidth,
-                            long nTileHeight ) override;
+                            sal_Int32 nTileWidth,
+                            sal_Int32 nTileHeight ) override;
     virtual Size getDocumentSize() override;
     virtual void setPart(   int nPart ) override;
     virtual int  getPart() override;

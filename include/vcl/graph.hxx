@@ -179,10 +179,10 @@ public:
     void            StartAnimation( OutputDevice* pOutDev,
                           const Point& rDestPt,
                           const Size& rDestSize,
-                          long nExtraData = 0L,
+                          sal_Int32 nExtraData = 0L,
                           OutputDevice* pFirstFrameOutDev = nullptr );
     void            StopAnimation( OutputDevice* pOutputDevice,
-                          long nExtraData );
+                          sal_Int32 nExtraData );
 
     void            SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
     Link<Animation*,void> GetAnimationNotifyHdl() const;

@@ -83,12 +83,12 @@ public:
     friend SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rEntr);
 };
 
-extern long SgfVectXofs;
-extern long SgfVectYofs;
-extern long SgfVectXmul;
-extern long SgfVectYmul;
-extern long SgfVectXdiv;
-extern long SgfVectYdiv;
+extern sal_Int32 SgfVectXofs;
+extern sal_Int32 SgfVectYofs;
+extern sal_Int32 SgfVectXmul;
+extern sal_Int32 SgfVectYmul;
+extern sal_Int32 SgfVectXdiv;
+extern sal_Int32 SgfVectYdiv;
 extern bool SgfVectScal;
 
 #define BmpFileHeaderSize 14

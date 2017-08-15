@@ -1103,7 +1103,7 @@ void GL3DBarChart::moveToCorner()
     // maStepDirection = (glm::vec3(mnMaxX/2.0f, mnMaxY/2.0f, 0) - maCameraDirection)/ float(mnStepsTotal);
 }
 
-void GL3DBarChart::scroll(long nDelta)
+void GL3DBarChart::scroll(sal_Int32 nDelta)
 {
     {
         SharedResourceAccess aResGuard(maCond1, maCond2);

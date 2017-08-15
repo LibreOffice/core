@@ -176,11 +176,11 @@ void MessBox::ImplPosControls()
     Size            aImageSize;
     Size            aPageSize;
     Size            aMEditSize;
-    long            nTitleWidth;
-    long            nButtonSize = ImplGetButtonSize();
-    long            nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
-    long            nMaxLineWidth;
-    long            nWidth;
+    sal_Int32       nTitleWidth;
+    sal_Int32       nButtonSize = ImplGetButtonSize();
+    sal_Int32       nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
+    sal_Int32       nMaxLineWidth;
+    sal_Int32       nWidth;
     WinBits         nWinStyle = WB_LEFT | WB_NOLABEL;
     DrawTextFlags   nTextStyle = DrawTextFlags::MultiLine | DrawTextFlags::Top | DrawTextFlags::Left;
 

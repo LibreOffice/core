@@ -36,8 +36,8 @@ private:
     sal_uInt16              mnBitCount;             // BitCount (0 or 1)
     bool                    mbGraphics;             // is Graphics used
     bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
-    long                    mnWidth;
-    long                    mnHeight;
+    sal_Int32               mnWidth;
+    sal_Int32               mnHeight;
 
 public:
     HDC getHDC() const { return mhLocalDC; }
@@ -45,18 +45,18 @@ public:
     void setGraphics(WinSalGraphics* pVirGraphics) { mpGraphics = pVirGraphics; }
     WinSalVirtualDevice* getNext() const { return mpNext; }
 
-    WinSalVirtualDevice(HDC hDC = nullptr, HBITMAP hBMP = nullptr, sal_uInt16 nBitCount = 0, bool bForeignDC = false, long nWidth = 0, long nHeight = 0);
+    WinSalVirtualDevice(HDC hDC = nullptr, HBITMAP hBMP = nullptr, sal_uInt16 nBitCount = 0, bool bForeignDC = false, sal_Int32 nWidth = 0, sal_Int32 nHeight = 0);
     virtual ~WinSalVirtualDevice() override;
 
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool            SetSize( long nNewDX, long nNewDY ) override;
+    virtual bool            SetSize( sal_Int32 nNewDX, sal_Int32 nNewDY ) override;
 
-    static HBITMAP ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppDummy);
+    static HBITMAP ImplCreateVirDevBitmap(HDC hDC, sal_Int32 nDX, sal_Int32 nDY, sal_uInt16 nBitCount, void **ppDummy);
 
     // SalGeometryProvider
-    virtual long GetWidth() const override { return mnWidth; }
-    virtual long GetHeight() const override { return mnHeight; }
+    virtual sal_Int32 GetWidth() const override { return mnWidth; }
+    virtual sal_Int32 GetHeight() const override { return mnHeight; }
 };
 
 

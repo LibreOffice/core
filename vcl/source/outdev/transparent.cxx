@@ -169,10 +169,10 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         }
 
         // do painting
-        const long nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        std::unique_ptr<long[]> pMapX(new long[ nSrcWidth + 1 ]);
-        std::unique_ptr<long[]> pMapY(new long[ nSrcHeight + 1 ]);
+        const sal_Int32 nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        sal_Int32 nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        std::unique_ptr<sal_Int32[]> pMapX(new sal_Int32[ nSrcWidth + 1 ]);
+        std::unique_ptr<sal_Int32[]> pMapY(new sal_Int32[ nSrcHeight + 1 ]);
         const bool bOldMap = mbMap;
 
         mbMap = false;
@@ -474,12 +474,12 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         BitmapColor aPixCol;
                         const BitmapColor aFillCol( GetFillColor() );
                         const BitmapColor aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                        const long nWidth = pW->Width();
-                        const long nHeight = pW->Height();
-                        const long nR = aFillCol.GetRed();
-                        const long nG = aFillCol.GetGreen();
-                        const long nB = aFillCol.GetBlue();
-                        long nX, nY;
+                        const sal_Int32 nWidth = pW->Width();
+                        const sal_Int32 nHeight = pW->Height();
+                        const sal_Int32 nR = aFillCol.GetRed();
+                        const sal_Int32 nG = aFillCol.GetGreen();
+                        const sal_Int32 nB = aFillCol.GetBlue();
+                        sal_Int32 nX, nY;
 
                         if( aPaint.GetBitCount() <= 8 )
                         {

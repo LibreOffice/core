@@ -94,7 +94,7 @@ void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
     Invalidate();
 }
 
-void TitleBar::setPosSizePixel (long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
+void TitleBar::setPosSizePixel (sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags)
 {
     Window::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 

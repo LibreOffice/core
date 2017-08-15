@@ -215,7 +215,7 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::N50, this );
     else
     {
-        long nBorder = 1;
+        sal_Int32 nBorder = 1;
         if ( nStyle == ShowTrackFlags::Big )
             nBorder = 5;
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SalInvert::N50, this );
@@ -436,9 +436,9 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-inline long WinFloatRound( double fVal )
+inline sal_Int32 WinFloatRound( double fVal )
 {
-    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
+    return( fVal > 0.0 ? (sal_Int32) ( fVal + 0.5 ) : -(sal_Int32) ( -fVal + 0.5 ) );
 }
 
 void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
@@ -465,9 +465,8 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     }
 }
 
-long Window::CalcZoom( long nCalc ) const
+sal_Int32 Window::CalcZoom( sal_Int32 nCalc ) const
 {
-
     const Fraction& rZoom = GetZoom();
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
@@ -634,9 +633,9 @@ vcl::Font Window::GetDrawPixelFont(OutputDevice const * pDev) const
     return aFont;
 }
 
-long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
+sal_Int32 Window::GetDrawPixel( OutputDevice const * pDev, sal_Int32 nPixels ) const
 {
-    long nP = nPixels;
+    sal_Int32 nP = nPixels;
     if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
     {
         MapMode aMap( MapUnit::Map100thMM );
@@ -652,7 +651,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
 {
     if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
     {
-        long nNewPos = pScrl->GetThumbPos();
+        sal_Int32 nNewPos = pScrl->GetThumbPos();
 
         if ( nN == -LONG_MAX )
             nNewPos += pScrl->GetPageSize();
@@ -667,12 +666,12 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
 
             const double fVal = nNewPos - nN;
 
-            if ( fVal < LONG_MIN )
-                nNewPos = LONG_MIN;
-            else if ( fVal > LONG_MAX )
-                nNewPos = LONG_MAX;
+            if ( fVal < SAL_MIN_INT32 )
+                nNewPos = SAL_MIN_INT32;
+            else if ( fVal > SAL_MAX_INT32 )
+                nNewPos = SAL_MAX_INT32;
             else
-                nNewPos = (long)fVal;
+                nNewPos = (sal_Int32)fVal;
         }
 
         pScrl->DoScroll( nNewPos );
@@ -754,12 +753,12 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                         {
                             double visSizeX = double(pHScrl->GetVisibleSize());
                             double ratioX = deltaXInPixels / double(winSize.getWidth());
-                            long deltaXInLogic = long(visSizeX * ratioX);
+                            sal_Int32 deltaXInLogic = sal_Int32(visSizeX * ratioX);
                             // Touch need to work by pixels. Did not apply this to
                             // Android, as android code may require adaptations
                             // to work with this scrolling code
 #ifndef IOS
-                            long lineSizeX = pHScrl->GetLineSize();
+                            sal_Int32 lineSizeX = pHScrl->GetLineSize();
 
                             if(lineSizeX)
                             {
@@ -785,13 +784,13 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                         {
                             double visSizeY = double(pVScrl->GetVisibleSize());
                             double ratioY = deltaYInPixels / double(winSize.getHeight());
-                            long deltaYInLogic = long(visSizeY * ratioY);
+                            sal_Int32 deltaYInLogic = sal_Int32(visSizeY * ratioY);
 
                             // Touch need to work by pixels. Did not apply this to
                             // Android, as android code may require adaptations
                             // to work with this scrolling code
 #ifndef IOS
-                            long lineSizeY = pVScrl->GetLineSize();
+                            sal_Int32 lineSizeY = pVScrl->GetLineSize();
                             if(lineSizeY)
                             {
                                 deltaYInLogic /= lineSizeY;

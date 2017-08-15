@@ -36,9 +36,9 @@ SvpSalObject::~SvpSalObject()
 
 void SvpSalObject::ResetClipRegion() {}
 void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
-void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
+void SvpSalObject::UnionClipRegion( sal_Int32, sal_Int32, sal_Int32, sal_Int32 ) {}
 void SvpSalObject::EndSetClipRegion() {}
-void SvpSalObject::SetPosSize( long, long, long, long ) {}
+void SvpSalObject::SetPosSize( sal_Int32, sal_Int32, sal_Int32, sal_Int32 ) {}
 void SvpSalObject::Show( bool ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
 

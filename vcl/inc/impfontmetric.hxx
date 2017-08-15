@@ -28,21 +28,21 @@ class ImplFontMetric : public SvRefBase
 public:
     explicit            ImplFontMetric();
 
-    long                GetAscent() const                           { return mnAscent; }
-    long                GetDescent() const                          { return mnDescent; }
-    long                GetInternalLeading() const                  { return mnIntLeading; }
-    long                GetExternalLeading() const                  { return mnExtLeading; }
-    long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
-    long                GetSlant() const                            { return mnSlant; }
-    long                GetBulletOffset() const                     { return mnBulletOffset; }
+    sal_Int32           GetAscent() const                           { return mnAscent; }
+    sal_Int32           GetDescent() const                          { return mnDescent; }
+    sal_Int32           GetInternalLeading() const                  { return mnIntLeading; }
+    sal_Int32           GetExternalLeading() const                  { return mnExtLeading; }
+    sal_Int32           GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
+    sal_Int32           GetSlant() const                            { return mnSlant; }
+    sal_Int32           GetBulletOffset() const                     { return mnBulletOffset; }
 
-    void                SetAscent( long nAscent )                   { mnAscent = nAscent; }
-    void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
-    void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
-    void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
-    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
-    void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
-    void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
+    void                SetAscent( sal_Int32 nAscent )                   { mnAscent = nAscent; }
+    void                SetDescent( sal_Int32 nDescent )                 { mnDescent = nDescent; }
+    void                SetInternalLeading( sal_Int32 nIntLeading )      { mnIntLeading = nIntLeading; }
+    void                SetExternalLeading( sal_Int32 nExtLeading )      { mnExtLeading = nExtLeading; }
+    void                SetLineHeight( sal_Int32 nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
+    void                SetSlant( sal_Int32 nSlant )                     { mnSlant = nSlant; }
+    void                SetBulletOffset( sal_Int32 nOffset )             { mnBulletOffset = nOffset; }
 
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
 
@@ -53,13 +53,13 @@ public:
 private:
     friend class FontMetric;
 
-    long                mnAscent;                      // Ascent
-    long                mnDescent;                     // Descent
-    long                mnIntLeading;                  // Internal Leading
-    long                mnExtLeading;                  // External Leading
-    long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
-    long                mnSlant;                       // Slant
-    long                mnBulletOffset;                // Offset for non-printing character
+    sal_Int32           mnAscent;                      // Ascent
+    sal_Int32           mnDescent;                     // Descent
+    sal_Int32           mnIntLeading;                  // Internal Leading
+    sal_Int32           mnExtLeading;                  // External Leading
+    sal_Int32           mnLineHeight;                  // Ascent+Descent+EmphasisMark
+    sal_Int32           mnSlant;                       // Slant
+    sal_Int32           mnBulletOffset;                // Offset for non-printing character
 
     bool                mbFullstopCentered;
 

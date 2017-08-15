@@ -33,7 +33,7 @@ struct ImplHatch
 {
     Color               maColor;
     HatchStyle          meStyle;
-    long                mnDistance;
+    sal_Int32           mnDistance;
     sal_uInt16          mnAngle;
 
     ImplHatch();
@@ -48,7 +48,7 @@ public:
 
                     Hatch();
                     Hatch( const Hatch& rHatch );
-                    Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, sal_uInt16 nAngle10 );
+                    Hatch( HatchStyle eStyle, const Color& rHatchColor, sal_Int32 nDistance, sal_uInt16 nAngle10 );
                     ~Hatch();
 
     Hatch&          operator=( const Hatch& rHatch );
@@ -60,11 +60,11 @@ public:
     void            SetColor( const Color& rColor  );
     const Color&    GetColor() const { return mpImplHatch->maColor; }
 
-    void            SetDistance( long nDistance  );
-    long            GetDistance() const { return mpImplHatch->mnDistance; }
+    void            SetDistance( sal_Int32 nDistance  );
+    sal_Int32       GetDistance() const { return mpImplHatch->mnDistance; }
 
     void            SetAngle( sal_uInt16 nAngle10 );
-    sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }
+    sal_uInt16      GetAngle() const { return mpImplHatch->mnAngle; }
 
     friend VCL_DLLPUBLIC SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
     friend VCL_DLLPUBLIC SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );

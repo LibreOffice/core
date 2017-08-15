@@ -3077,7 +3077,7 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  )
 void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  int nOutputWidth, int nOutputHeight,
                                  int nTilePosX, int nTilePosY,
-                                 long nTileWidth, long nTileHeight )
+                                 sal_Int32 nTileWidth, sal_Int32 nTileHeight )
 {
     SwViewShell* pViewShell = pDocShell->GetWrtShell();
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,

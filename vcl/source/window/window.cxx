@@ -1182,9 +1182,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
 void Window::ImplInitAppFontData( vcl::Window const * pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    long nTextHeight = pWindow->GetTextHeight();
-    long nTextWidth = pWindow->approximate_char_width() * 8;
-    long nSymHeight = nTextHeight*4;
+    sal_Int32 nTextHeight = pWindow->GetTextHeight();
+    sal_Int32 nTextWidth = pWindow->approximate_char_width() * 8;
+    sal_Int32 nSymHeight = nTextHeight*4;
     // Make the basis wider if the font is too narrow
     // such that the dialog looks symmetrical and does not become too narrow.
     // Add some extra space when the dialog has the same width,
@@ -1433,16 +1433,16 @@ void Window::ImplUpdateSysObjPos()
     }
 }
 
-void Window::ImplPosSizeWindow( long nX, long nY,
-                                long nWidth, long nHeight, PosSizeFlags nFlags )
+void Window::ImplPosSizeWindow( sal_Int32 nX, sal_Int32 nY,
+                                sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags )
 {
     bool    bNewPos         = false;
     bool    bNewSize        = false;
     bool    bCopyBits       = false;
-    long    nOldOutOffX     = mnOutOffX;
-    long    nOldOutOffY     = mnOutOffY;
-    long    nOldOutWidth    = mnOutWidth;
-    long    nOldOutHeight   = mnOutHeight;
+    sal_Int32    nOldOutOffX     = mnOutOffX;
+    sal_Int32    nOldOutOffY     = mnOutOffY;
+    sal_Int32    nOldOutWidth    = mnOutWidth;
+    sal_Int32    nOldOutHeight   = mnOutHeight;
     vcl::Region* pOverlapRegion  = nullptr;
     vcl::Region* pOldRegion      = nullptr;
 
@@ -1493,7 +1493,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
     if ( nFlags & PosSizeFlags::X )
     {
-        long nOrgX = nX;
+        sal_Int32 nOrgX = nX;
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
         OutputDevice *pOutDev = GetOutDev();
         if( pOutDev->HasMirroredGraphics() )
@@ -2049,9 +2049,8 @@ WindowBorderStyle Window::GetBorderStyle() const
     return WindowBorderStyle::NONE;
 }
 
-long Window::CalcTitleWidth() const
+sal_Int32 Window::CalcTitleWidth() const
 {
-
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW )
@@ -2066,7 +2065,7 @@ long Window::CalcTitleWidth() const
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         vcl::Font aFont = GetFont();
         const_cast<vcl::Window*>(this)->SetPointFont(*const_cast<Window*>(this), rStyleSettings.GetTitleFont());
-        long nTitleWidth = GetTextWidth( GetText() );
+        sal_Int32 nTitleWidth = GetTextWidth( GetText() );
         const_cast<vcl::Window*>(this)->SetFont( aFont );
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
         nTitleWidth += rStyleSettings.GetBorderSize() * 2;
@@ -2092,7 +2091,7 @@ void Window::EndExtTextInput()
         ImplGetFrame()->EndExtTextInput( EndExtTextInputFlags::Complete );
 }
 
-void Window::SetCursorRect( const tools::Rectangle* pRect, long nExtTextInputWidth )
+void Window::SetCursorRect( const tools::Rectangle* pRect, sal_Int32 nExtTextInputWidth )
 {
 
     ImplWinData* pWinData = ImplGetWinData();
@@ -2118,20 +2117,18 @@ void Window::SetCursorRect( const tools::Rectangle* pRect, long nExtTextInputWid
 
 const tools::Rectangle* Window::GetCursorRect() const
 {
-
     ImplWinData* pWinData = ImplGetWinData();
     return pWinData->mpCursorRect;
 }
 
-long Window::GetCursorExtTextInputWidth() const
+sal_Int32 Window::GetCursorExtTextInputWidth() const
 {
-
     ImplWinData* pWinData = ImplGetWinData();
     return pWinData->mnCursorExtWidth;
 }
 
-void Window::SetCompositionCharRect( const tools::Rectangle* pRect, long nCompositionLength, bool bVertical ) {
-
+void Window::SetCompositionCharRect( const tools::Rectangle* pRect, sal_Int32 nCompositionLength, bool bVertical )
+{
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
     pWinData->mbVertical = bVertical;
@@ -2140,7 +2137,7 @@ void Window::SetCompositionCharRect( const tools::Rectangle* pRect, long nCompos
     if ( pRect && (nCompositionLength > 0) )
     {
         pWinData->mpCompositionCharRects = new tools::Rectangle[nCompositionLength];
-        for (long i = 0; i < nCompositionLength; ++i)
+        for (sal_Int32 i = 0; i < nCompositionLength; ++i)
             pWinData->mpCompositionCharRects[i] = pRect[i];
     }
 }
@@ -2350,8 +2347,8 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
             // a system resize
             if ( mpWindowImpl->mbWaitSystemResize )
             {
-                long nOutWidth;
-                long nOutHeight;
+                sal_Int32 nOutWidth;
+                sal_Int32 nOutHeight;
                 mpWindowImpl->mpFrame->GetClientSize( nOutWidth, nOutHeight );
                 ImplHandleResize( this, nOutWidth, nOutHeight );
             }
@@ -2704,8 +2701,8 @@ void Window::SetActivateMode( ActivateModeFlags nMode )
     }
 }
 
-void Window::setPosSizePixel( long nX, long nY,
-                              long nWidth, long nHeight, PosSizeFlags nFlags )
+void Window::setPosSizePixel( sal_Int32 nX, sal_Int32 nY,
+                              sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags )
 {
     bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
@@ -2724,7 +2721,7 @@ void Window::setPosSizePixel( long nX, long nY,
         // Note: if we're positioning a frame, the coordinates are interpreted
         // as being the top-left corner of the window's client area and NOT
         // as the position of the border ! (due to limitations of several UNIX window managers)
-        long nOldWidth  = pWindow->mnOutWidth;
+        sal_Int32 nOldWidth  = pWindow->mnOutWidth;
 
         if ( !(nFlags & PosSizeFlags::Width) )
             nWidth = pWindow->mnOutWidth;
@@ -2763,7 +2760,7 @@ void Window::setPosSizePixel( long nX, long nY,
                 OutputDevice *pParentOutDev = pWinParent->GetOutDev();
                 if( pParentOutDev->HasMirroredGraphics() )
                 {
-                    long myWidth = nOldWidth;
+                    sal_Int32 myWidth = nOldWidth;
                     if( !myWidth )
                         myWidth = mpWindowImpl->mpFrame->GetUnmirroredGeometry().nWidth;
                     if( !myWidth )
@@ -2853,10 +2850,10 @@ Point Window::ScreenToOutputPixel( const Point& rPos ) const
     return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
 }
 
-long Window::ImplGetUnmirroredOutOffX()
+sal_Int32 Window::ImplGetUnmirroredOutOffX()
 {
     // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
-    long offx = mnOutOffX;
+    sal_Int32 offx = mnOutOffX;
     OutputDevice *pOutDev = GetOutDev();
     if( pOutDev->HasMirroredGraphics() )
     {
@@ -2879,14 +2876,14 @@ long Window::ImplGetUnmirroredOutOffX()
 Point Window::OutputToNormalizedScreenPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
+    sal_Int32 offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
     return Point( rPos.X()+offx, rPos.Y()+mnOutOffY );
 }
 
 Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
+    sal_Int32 offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
     return Point( rPos.X()-offx, rPos.Y()-mnOutOffY );
 }
 
@@ -2967,7 +2964,7 @@ tools::Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWin
     return tools::Rectangle( aPos, aSize );
 }
 
-void Window::Scroll( long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
+void Window::Scroll( sal_Int32 nHorzScroll, sal_Int32 nVertScroll, ScrollFlags nFlags )
 {
 
     ImplScroll( tools::Rectangle( Point( mnOutOffX, mnOutOffY ),
@@ -2975,7 +2972,7 @@ void Window::Scroll( long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
                 nHorzScroll, nVertScroll, nFlags & ~ScrollFlags::Clip );
 }
 
-void Window::Scroll( long nHorzScroll, long nVertScroll,
+void Window::Scroll( sal_Int32 nHorzScroll, sal_Int32 nVertScroll,
                      const tools::Rectangle& rRect, ScrollFlags nFlags )
 {
     OutputDevice *pOutDev = GetOutDev();

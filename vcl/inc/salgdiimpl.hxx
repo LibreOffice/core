@@ -58,7 +58,7 @@ public:
     virtual sal_uInt16 GetBitCount() const = 0;
 
     // get the width of the device
-    virtual long GetGraphicsWidth() const = 0;
+    virtual sal_Int32 GetGraphicsWidth() const = 0;
 
     // set the clip region to empty
     virtual void ResetClipRegion() = 0;
@@ -87,12 +87,12 @@ public:
     virtual void SetROPFillColor( SalROPColor nROPColor ) = 0;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void drawPixel( long nX, long nY ) = 0;
-    virtual void drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
+    virtual void drawPixel( sal_Int32 nX, sal_Int32 nY ) = 0;
+    virtual void drawPixel( sal_Int32 nX, sal_Int32 nY, SalColor nSalColor ) = 0;
 
-    virtual void drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
+    virtual void drawLine( sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 ) = 0;
 
-    virtual void drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void drawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
 
     virtual void drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
@@ -127,9 +127,9 @@ public:
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void copyArea(
-                long nDestX, long nDestY,
-                long nSrcX, long nSrcY,
-                long nSrcWidth, long nSrcHeight,
+                sal_Int32 nDestX, sal_Int32 nDestY,
+                sal_Int32 nSrcX, sal_Int32 nSrcY,
+                sal_Int32 nSrcWidth, sal_Int32 nSrcHeight,
                 bool bWindowInvalidate ) = 0;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -148,21 +148,21 @@ public:
                 const SalBitmap& rSalBitmap,
                 SalColor nMaskColor ) = 0;
 
-    virtual SalBitmap* getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual SalBitmap* getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
 
-    virtual SalColor getPixel( long nX, long nY ) = 0;
+    virtual SalColor getPixel( sal_Int32 nX, sal_Int32 nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(
-                long nX, long nY,
-                long nWidth, long nHeight,
+                sal_Int32 nX, sal_Int32 nY,
+                sal_Int32 nWidth, sal_Int32 nHeight,
                 SalInvert nFlags) = 0;
 
     virtual void invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
 
     virtual bool drawEPS(
-                long nX, long nY,
-                long nWidth, long nHeight,
+                sal_Int32 nX, sal_Int32 nY,
+                sal_Int32 nWidth, sal_Int32 nHeight,
                 void* pPtr,
                 sal_uLong nSize ) = 0;
 
@@ -190,8 +190,8 @@ public:
                 const SalBitmap* pAlphaBitmap) = 0;
 
     virtual bool drawAlphaRect(
-                    long nX, long nY,
-                    long nWidth, long nHeight,
+                    sal_Int32 nX, sal_Int32 nY,
+                    sal_Int32 nWidth, sal_Int32 nHeight,
                     sal_uInt8 nTransparency ) = 0;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;

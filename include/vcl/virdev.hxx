@@ -53,7 +53,7 @@ private:
     RefDevMode          meRefDevMode;
     bool                mbForceZeroExtleadBug;
 
-    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr );
+    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, sal_Int32 nDX, sal_Int32 nDY, DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                      sal_uInt8* pBuffer );
     SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
@@ -149,7 +149,7 @@ private:
 protected:
     virtual bool        UsePolyPolygonForComplexGradient() override;
 
-    virtual long        GetFontExtLeading() const override;
+    virtual sal_Int32   GetFontExtLeading() const override;
 
 };
 

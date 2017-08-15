@@ -39,22 +39,22 @@ struct VCL_DLLPUBLIC ControlLayoutData
     // where one character may consist of many glyphs
     std::vector< tools::Rectangle >            m_aUnicodeBoundRects;
     // start indices of lines
-    std::vector< long >                 m_aLineIndices;
+    std::vector< sal_Int32 >                 m_aLineIndices;
     // notify parent control on destruction
     VclPtr<const Control>               m_pParent;
 
     ControlLayoutData();
     ~ControlLayoutData();
 
-    tools::Rectangle GetCharacterBounds( long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( sal_Int32 nIndex ) const;
     // returns the character index for corresponding to rPoint (in control coordinates)
     // -1 is returned if no character is at that point
-    long GetIndexForPoint( const Point& rPoint ) const;
+    sal_Int32 GetIndexForPoint( const Point& rPoint ) const;
     // returns the number of lines in the result of GetDisplayText()
-    long GetLineCount() const;
+    sal_Int32 GetLineCount() const;
     // returns the interval [start,end] of line nLine
     // returns [-1,-1] for an invalid line
-    ::Pair GetLineStartEnd( long nLine ) const;
+    ::Pair GetLineStartEnd( sal_Int32 nLine ) const;
     /** ToRelativeLineIndex changes a layout data index to a count relative to its line.
 
     This is equivalent to getting the line start/end pairs with
@@ -67,7 +67,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     the relative index inside the displayed line or -1 if the absolute index does
     not match any line
     */
-    long ToRelativeLineIndex( long nIndex ) const;
+    sal_Int32 ToRelativeLineIndex( sal_Int32 nIndex ) const;
 };
 
 } // namespace vcl

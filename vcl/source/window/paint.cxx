@@ -312,7 +312,7 @@ namespace vcl
 void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
                                           const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                           bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
-                                          Color* pSelectionTextColor, long nCornerRadius, Color const * pPaintColor)
+                                          Color* pSelectionTextColor, sal_Int32 nCornerRadius, Color const * pPaintColor)
 {
     if (rRect.IsEmpty())
         return;
@@ -837,7 +837,7 @@ void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags 
 }
 
 void Window::ImplMoveInvalidateRegion( const tools::Rectangle& rRect,
-                                       long nHorzScroll, long nVertScroll,
+                                       sal_Int32 nHorzScroll, sal_Int32 nVertScroll,
                                        bool bChildren )
 {
     if ( (mpWindowImpl->mnPaintFlags & (ImplPaintFlags::Paint | ImplPaintFlags::PaintAll)) == ImplPaintFlags::Paint )
@@ -860,7 +860,7 @@ void Window::ImplMoveInvalidateRegion( const tools::Rectangle& rRect,
 }
 
 void Window::ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect,
-                                           long nHorzScroll, long nVertScroll,
+                                           sal_Int32 nHorzScroll, sal_Int32 nVertScroll,
                                            bool bChildren )
 {
     // also shift Paint-Region when paints need processing
@@ -1075,10 +1075,10 @@ void Window::SetWindowRegionPixel( const vcl::Region& rRegion )
 
                 mpWindowImpl->mpFrame->EndSetClipRegion();
 
-                //long                nX;
-                //long                nY;
-                //long                nWidth;
-                //long                nHeight;
+                //sal_Int32                nX;
+                //sal_Int32                nY;
+                //sal_Int32                nWidth;
+                //sal_Int32                nHeight;
                 //sal_uLong               nRectCount;
                 //ImplRegionInfo      aInfo;
                 //sal_Bool                bRegionRect;
@@ -1321,8 +1321,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     mbDevOutput = true;
 
     const OutputDevice *pOutDev = GetOutDev();
-    long nOldDPIX = pOutDev->GetDPIX();
-    long nOldDPIY = pOutDev->GetDPIY();
+    sal_Int32 nOldDPIX = pOutDev->GetDPIX();
+    sal_Int32 nOldDPIY = pOutDev->GetDPIY();
     mnDPIX = i_pTargetOutDev->GetDPIX();
     mnDPIY = i_pTargetOutDev->GetDPIY();
     bool bOutput = IsOutputEnabled();
@@ -1415,11 +1415,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     {
         if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
         {
-            long nDeltaX = pChild->mnOutOffX - mnOutOffX;
+            sal_Int32 nDeltaX = pChild->mnOutOffX - mnOutOffX;
 
             if( pOutDev->HasMirroredGraphics() )
                 nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
-            long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
+            sal_Int32 nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
             Point aPos( i_rPos );
             Point aDelta( nDeltaX, nDeltaY );
             aPos += aDelta;
@@ -1505,7 +1505,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
 }
 
 void Window::ImplScroll( const tools::Rectangle& rRect,
-                         long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
+                         sal_Int32 nHorzScroll, sal_Int32 nVertScroll, ScrollFlags nFlags )
 {
     if ( !IsDeviceOutputNecessary() )
         return;

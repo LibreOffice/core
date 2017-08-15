@@ -115,7 +115,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
     VCL_GL_INFO( "~OpenGLSalBitmap" );
 }
 
-bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
+bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     static const BitmapPalette aEmptyPalette;
     OpenGLVCLContextZone aContextZone;
@@ -410,7 +410,7 @@ class ScanlineWriter
     sal_uInt8 mnColorBitSize;  // number of bits a color takes
     sal_uInt8 mnColorBitMask;  // bit mask used to isolate the color
     sal_uInt8* mpCurrentScanline;
-    long mnX;
+    sal_Int32 mnX;
 
 public:
     ScanlineWriter(BitmapPalette& aPalette, sal_Int8 nColorsPerByte)
@@ -425,10 +425,10 @@ public:
     void writeRGB(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB)
     {
         // calculate to which index we will write
-        long nScanlineIndex = mnX / mnColorsPerByte;
+        sal_Int32 nScanlineIndex = mnX / mnColorsPerByte;
 
         // calculate the number of shifts to get the color information to the right place
-        long nShift = (8 - mnColorBitSize) - ((mnX % mnColorsPerByte) * mnColorBitSize);
+        sal_Int32 nShift = (8 - mnColorBitSize) - ((mnX % mnColorsPerByte) * mnColorBitSize);
 
         sal_uInt16 nColorIndex = maPalette.GetBestIndex(BitmapColor(nR, nG, nB));
         mpCurrentScanline[nScanlineIndex] &= ~(mnColorBitMask << nShift); // clear

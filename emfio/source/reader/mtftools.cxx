@@ -1404,7 +1404,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, long* pDXArry, long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString const & rText, sal_Int32* pDXArry, long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1579,13 +1579,13 @@ namespace emfio
             {
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
-                long* pDX = pDXArry;
+                sal_Int32* pDX = pDXArry;
                 if (!pDXArry)
                 {
                     // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
                     SolarMutexGuard aGuard;
                     ScopedVclPtrInstance< VirtualDevice > pVDev;
-                    pDX = new long[ rText.getLength() ];
+                    pDX = new sal_Int32[ rText.getLength() ];
                     pVDev->SetMapMode( MapUnit::Map100thMM );
                     pVDev->SetFont( maLatestFont );
                     pVDev->GetTextArray( rText, pDX, 0, rText.getLength());

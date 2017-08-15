@@ -74,7 +74,7 @@ public:
     bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
     bool    MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const;
 
-    OUString    GetNum( long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep = true, bool bTrailingZeros = true ) const;
+    OUString    GetNum( sal_Int32 nNumber, sal_uInt16 nDecimals, bool bUseThousandSep = true, bool bTrailingZeros = true ) const;
 
     static OUString filterFormattingChars( const OUString& );
 };

@@ -86,7 +86,7 @@ public:
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButtons) override;
 
     virtual void mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons) override;
-    virtual void scroll(long nDelta) override;
+    virtual void scroll(sal_Int32 nDelta) override;
     virtual void contextDestroyed() override;
 
     void setOpenGLWindow(OpenGLWindow* pWindow);

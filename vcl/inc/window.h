@@ -89,10 +89,10 @@ struct ImplWinData
     std::unique_ptr<ExtTextInputAttr[]>
                         mpExtOldAttrAry;
     tools::Rectangle*   mpCursorRect;
-    long                mnCursorExtWidth;
+    sal_Int32           mnCursorExtWidth;
     bool                mbVertical;
     tools::Rectangle*   mpCompositionCharRects;
-    long                mnCompositionCharRects;
+    sal_Int32           mnCompositionCharRects;
     tools::Rectangle*   mpFocusRect;
     tools::Rectangle*   mpTrackRect;
     ShowTrackFlags      mnTrackFlags;
@@ -123,14 +123,14 @@ struct ImplFrameData
     sal_Int32           mnDPIY;                 //< Original Screen Resolution
     ImplSVEvent *       mnFocusId;              //< FocusId for PostUserLink
     ImplSVEvent *       mnMouseMoveId;          //< MoveId for PostUserLink
-    long                mnLastMouseX;           //< last x mouse position
-    long                mnLastMouseY;           //< last y mouse position
-    long                mnBeforeLastMouseX;     //< last but one x mouse position
-    long                mnBeforeLastMouseY;     //< last but one y mouse position
-    long                mnFirstMouseX;          //< first x mouse position by mousebuttondown
-    long                mnFirstMouseY;          //< first y mouse position by mousebuttondown
-    long                mnLastMouseWinX;        //< last x mouse position, rel. to pMouseMoveWin
-    long                mnLastMouseWinY;        //< last y mouse position, rel. to pMouseMoveWin
+    sal_Int32           mnLastMouseX;           //< last x mouse position
+    sal_Int32           mnLastMouseY;           //< last y mouse position
+    sal_Int32           mnBeforeLastMouseX;     //< last but one x mouse position
+    sal_Int32           mnBeforeLastMouseY;     //< last but one y mouse position
+    sal_Int32           mnFirstMouseX;          //< first x mouse position by mousebuttondown
+    sal_Int32           mnFirstMouseY;          //< first y mouse position by mousebuttondown
+    sal_Int32           mnLastMouseWinX;        //< last x mouse position, rel. to pMouseMoveWin
+    sal_Int32           mnLastMouseWinY;        //< last y mouse position, rel. to pMouseMoveWin
     sal_uInt16          mnModalMode;            //< frame based modal count (app based makes no sense anymore)
     sal_uInt64          mnMouseDownTime;        //< mouse button down time for double click
     sal_uInt16          mnClickCount;           //< mouse click count
@@ -246,9 +246,9 @@ public:
     sal_Int32           mnHeightRequest;
     sal_Int32           mnOptimalWidthCache;
     sal_Int32           mnOptimalHeightCache;
-    long                mnX;
-    long                mnY;
-    long                mnAbsScreenX;
+    sal_Int32           mnX;
+    sal_Int32           mnY;
+    sal_Int32           mnAbsScreenX;
     Point               maPos;
     OString             maHelpId;
     OUString            maHelpText;
@@ -261,11 +261,11 @@ public:
     std::vector< VclPtr<FixedText> > m_aMnemonicLabels;
     ImplAccessibleInfos* mpAccessibleInfos;
     VCLXWindow*         mpVCLXWindow;
-    vcl::Region              maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
-    vcl::Region              maWinClipRegion;        //< the (clipping) region that finally corresponds to the VCL window (frame coordinates)
-    vcl::Region              maInvalidateRegion;     //< region that has to be redrawn (frame coordinates)
-    vcl::Region*             mpChildClipRegion;      //< child clip region if CLIPCHILDREN is set (frame coordinates)
-    vcl::Region*             mpPaintRegion;          //< only set during Paint() method call (window coordinates)
+    vcl::Region         maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
+    vcl::Region         maWinClipRegion;        //< the (clipping) region that finally corresponds to the VCL window (frame coordinates)
+    vcl::Region         maInvalidateRegion;     //< region that has to be redrawn (frame coordinates)
+    vcl::Region*        mpChildClipRegion;      //< child clip region if CLIPCHILDREN is set (frame coordinates)
+    vcl::Region*        mpPaintRegion;          //< only set during Paint() method call (window coordinates)
     WinBits             mnStyle;
     WinBits             mnPrevStyle;
     WinBits             mnExtendedStyle;
@@ -379,8 +379,8 @@ class PaintBufferGuard
     bool mbBackground;
     Wallpaper maBackground;
     AllSettings maSettings;
-    long mnOutOffX;
-    long mnOutOffY;
+    sal_Int32 mnOutOffX;
+    sal_Int32 mnOutOffY;
     tools::Rectangle m_aPaintRect;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
@@ -394,9 +394,9 @@ public:
 // helper methods
 
 bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
-                           long nX, long nY, sal_uInt64 nMsgTime,
+                           sal_Int32 nX, sal_Int32 nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
-void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
+void ImplHandleResize( vcl::Window* pWindow, sal_Int32 nNewWidth, sal_Int32 nNewHeight );
 
 #endif // INCLUDED_VCL_INC_WINDOW_H
 

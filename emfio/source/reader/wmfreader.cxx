@@ -566,7 +566,8 @@ namespace emfio
                                                                                        // dxAry will not fit
                     if ( nNewTextLen )
                     {
-                        std::unique_ptr<long[]> pDXAry, pDYAry;
+                        std::unique_ptr<sal_Int32[]> pDXAry;
+                        std::unique_ptr<long[]> pDYAry;
                         sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                         sal_Int32   nDxArySize =  nMaxStreamPos - mpInputStream->Tell();
                         sal_Int32   nDxAryEntries = nDxArySize >> 1;
@@ -575,7 +576,7 @@ namespace emfio
                         if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                         {
                             sal_Int32 i; // needed just outside the for
-                            pDXAry.reset(new long[ nNewTextLen ]);
+                            pDXAry.reset(new sal_Int32[ nNewTextLen ]);
                             if ( nOptions & ETO_PDY )
                             {
                                 pDYAry.reset(new long[ nNewTextLen ]);
@@ -1067,7 +1068,7 @@ namespace emfio
                                                     Point  aPt;
                                                     OUString aString;
                                                     sal_uInt32  nStringLen, nDXCount;
-                                                    std::unique_ptr<long[]> pDXAry;
+                                                    std::unique_ptr<sal_Int32[]> pDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
                                                     aMemoryStream.WriteBytes(pData.get(), nEscLen);
                                                     aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -1086,7 +1087,7 @@ namespace emfio
                                                         if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                             nDXCount = 0;
                                                         if ( nDXCount )
-                                                            pDXAry.reset(new long[ nDXCount ]);
+                                                            pDXAry.reset(new sal_Int32[ nDXCount ]);
                                                         for  (sal_uInt32 i = 0; i < nDXCount; i++ )
                                                         {
                                                             sal_Int32 val;

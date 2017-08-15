@@ -134,8 +134,8 @@ public:
 
     virtual const Wallpaper& GetDisplayBackground() const override;
 
-    virtual void        setPosSizePixel( long nX, long nY,
-                                         long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    virtual void        setPosSizePixel( sal_Int32 nX, sal_Int32 nY,
+                                         sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     tools::Rectangle           GetDropDownPosSizePixel() const;
 
@@ -258,7 +258,7 @@ public:
         if no item is at that point.
      */
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
+    sal_Int32 GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
     void setMaxWidthChars(sal_Int32 nWidth);
 

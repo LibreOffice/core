@@ -93,7 +93,7 @@ void VclFiltersTest::testScaling()
         fprintf( stderr, "scale with type %d\n", int( i ) );
         CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
         Size aAfter( aBitmapEx.GetSizePixel() );
-        fprintf( stderr, "size %ld, %ld\n", aAfter.Width(), aAfter.Height() );
+        fprintf( stderr, "size %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 "\n", aAfter.Width(), aAfter.Height() );
         CPPUNIT_ASSERT( labs (aAfter.Height() - aAfter.Width()) <= 1 );
     }
 }
@@ -127,8 +127,8 @@ void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
     BitmapEx aLoadedBitmapEx = aLoadedGraphic.GetBitmapEx();
     Size aSize = aLoadedBitmapEx.GetSizePixel();
 
-    CPPUNIT_ASSERT_EQUAL(100L, aSize.Width());
-    CPPUNIT_ASSERT_EQUAL(100L, aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(100, aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(100, aSize.Height());
 }
 
 void VclFiltersTest::testExportImport()

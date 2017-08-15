@@ -38,55 +38,55 @@ public:
     explicit        ImplFontMetricData( const FontSelectPattern& );
 
     // font instance attributes from the font request
-    long            GetWidth()                                                      { return mnWidth; }
+    sal_Int32       GetWidth()                                                      { return mnWidth; }
     short           GetOrientation()                                                { return mnOrientation; }
 
-    void            SetWidth(long nWidth)                                           { mnWidth=nWidth; }
+    void            SetWidth(sal_Int32 nWidth)                                           { mnWidth=nWidth; }
     void            SetOrientation(short nOrientation)                              { mnOrientation=nOrientation; }
 
     // font metrics measured for the font instance
-    long            GetAscent()                                                     { return mnAscent; }
-    long            GetDescent()                                                    { return mnDescent; }
-    long            GetInternalLeading()                                            { return mnIntLeading; }
-    long            GetExternalLeading()                                            { return mnExtLeading; }
+    sal_Int32       GetAscent()                                                     { return mnAscent; }
+    sal_Int32       GetDescent()                                                    { return mnDescent; }
+    sal_Int32       GetInternalLeading()                                            { return mnIntLeading; }
+    sal_Int32       GetExternalLeading()                                            { return mnExtLeading; }
     int             GetSlant()                                                      { return mnSlant; }
-    long            GetMinKashida()                                                 { return mnMinKashida; }
+    sal_Int32       GetMinKashida()                                                 { return mnMinKashida; }
 
     void            SetSlant(int nSlant)                                            { mnSlant=nSlant; }
-    void            SetMinKashida( long nMinKashida )                               { mnMinKashida=nMinKashida; }
+    void            SetMinKashida( sal_Int32 nMinKashida )                               { mnMinKashida=nMinKashida; }
 
     // font attributes queried from the font instance
     bool            IsFullstopCentered()                                            { return mbFullstopCentered; }
-    long            GetBulletOffset()                                               { return mnBulletOffset; }
+    sal_Int32       GetBulletOffset()                                               { return mnBulletOffset; }
 
     void            SetFullstopCenteredFlag(bool bFullstopCentered)                 { mbFullstopCentered = bFullstopCentered; }
 
     // font metrics that are usually derived from the measurements
-    long            GetUnderlineSize()                                              { return mnUnderlineSize; }
-    long            GetUnderlineOffset()                                            { return mnUnderlineOffset; }
-    long            GetBoldUnderlineSize()                                          { return mnBUnderlineSize; }
-    long            GetBoldUnderlineOffset()                                        { return mnBUnderlineOffset; }
-    long            GetDoubleUnderlineSize()                                        { return mnDUnderlineSize; }
-    long            GetDoubleUnderlineOffset1()                                     { return mnDUnderlineOffset1; }
-    long            GetDoubleUnderlineOffset2()                                     { return mnDUnderlineOffset2; }
-    long            GetWavelineUnderlineSize()                                      { return mnWUnderlineSize; }
-    long            GetWavelineUnderlineOffset()                                    { return mnWUnderlineOffset; }
-    long            GetAboveUnderlineSize()                                         { return mnAboveUnderlineSize; }
-    long            GetAboveUnderlineOffset()                                       { return mnAboveUnderlineOffset; }
-    long            GetAboveBoldUnderlineSize()                                     { return mnAboveBUnderlineSize; }
-    long            GetAboveBoldUnderlineOffset()                                   { return mnAboveBUnderlineOffset; }
-    long            GetAboveDoubleUnderlineSize()                                   { return mnAboveDUnderlineSize; }
-    long            GetAboveDoubleUnderlineOffset1()                                { return mnAboveDUnderlineOffset1; }
-    long            GetAboveDoubleUnderlineOffset2()                                { return mnAboveDUnderlineOffset2; }
-    long            GetAboveWavelineUnderlineSize()                                 { return mnAboveWUnderlineSize; }
-    long            GetAboveWavelineUnderlineOffset()                               { return mnAboveWUnderlineOffset; }
-    long            GetStrikeoutSize()                                              { return mnStrikeoutSize; }
-    long            GetStrikeoutOffset()                                            { return mnStrikeoutOffset; }
-    long            GetBoldStrikeoutSize()                                          { return mnBStrikeoutSize; }
-    long            GetBoldStrikeoutOffset()                                        { return mnBStrikeoutOffset; }
-    long            GetDoubleStrikeoutSize()                                        { return mnDStrikeoutSize; }
-    long            GetDoubleStrikeoutOffset1()                                     { return mnDStrikeoutOffset1; }
-    long            GetDoubleStrikeoutOffset2()                                     { return mnDStrikeoutOffset2; }
+    sal_Int32       GetUnderlineSize()                                              { return mnUnderlineSize; }
+    sal_Int32       GetUnderlineOffset()                                            { return mnUnderlineOffset; }
+    sal_Int32       GetBoldUnderlineSize()                                          { return mnBUnderlineSize; }
+    sal_Int32       GetBoldUnderlineOffset()                                        { return mnBUnderlineOffset; }
+    sal_Int32       GetDoubleUnderlineSize()                                        { return mnDUnderlineSize; }
+    sal_Int32       GetDoubleUnderlineOffset1()                                     { return mnDUnderlineOffset1; }
+    sal_Int32       GetDoubleUnderlineOffset2()                                     { return mnDUnderlineOffset2; }
+    sal_Int32       GetWavelineUnderlineSize()                                      { return mnWUnderlineSize; }
+    sal_Int32       GetWavelineUnderlineOffset()                                    { return mnWUnderlineOffset; }
+    sal_Int32       GetAboveUnderlineSize()                                         { return mnAboveUnderlineSize; }
+    sal_Int32       GetAboveUnderlineOffset()                                       { return mnAboveUnderlineOffset; }
+    sal_Int32       GetAboveBoldUnderlineSize()                                     { return mnAboveBUnderlineSize; }
+    sal_Int32       GetAboveBoldUnderlineOffset()                                   { return mnAboveBUnderlineOffset; }
+    sal_Int32       GetAboveDoubleUnderlineSize()                                   { return mnAboveDUnderlineSize; }
+    sal_Int32       GetAboveDoubleUnderlineOffset1()                                { return mnAboveDUnderlineOffset1; }
+    sal_Int32       GetAboveDoubleUnderlineOffset2()                                { return mnAboveDUnderlineOffset2; }
+    sal_Int32       GetAboveWavelineUnderlineSize()                                 { return mnAboveWUnderlineSize; }
+    sal_Int32       GetAboveWavelineUnderlineOffset()                               { return mnAboveWUnderlineOffset; }
+    sal_Int32       GetStrikeoutSize()                                              { return mnStrikeoutSize; }
+    sal_Int32       GetStrikeoutOffset()                                            { return mnStrikeoutOffset; }
+    sal_Int32       GetBoldStrikeoutSize()                                          { return mnBStrikeoutSize; }
+    sal_Int32       GetBoldStrikeoutOffset()                                        { return mnBStrikeoutOffset; }
+    sal_Int32       GetDoubleStrikeoutSize()                                        { return mnDStrikeoutSize; }
+    sal_Int32       GetDoubleStrikeoutOffset1()                                     { return mnDStrikeoutOffset1; }
+    sal_Int32       GetDoubleStrikeoutOffset2()                                     { return mnDStrikeoutOffset2; }
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
@@ -96,48 +96,48 @@ public:
 
 private:
     // font instance attributes from the font request
-    long            mnHeight;                   // Font size
-    long            mnWidth;                    // Reference Width
+    sal_Int32       mnHeight;                   // Font size
+    sal_Int32       mnWidth;                    // Reference Width
     short           mnOrientation;              // Rotation in 1/10 degrees
 
     // font metrics measured for the font instance
-    long            mnAscent;                   // Ascent
-    long            mnDescent;                  // Descent
-    long            mnIntLeading;               // Internal Leading
-    long            mnExtLeading;               // External Leading
+    sal_Int32       mnAscent;                   // Ascent
+    sal_Int32       mnDescent;                  // Descent
+    sal_Int32       mnIntLeading;               // Internal Leading
+    sal_Int32       mnExtLeading;               // External Leading
     int             mnSlant;                    // Slant (Italic/Oblique)
-    long            mnMinKashida;               // Minimal width of kashida (Arabic)
+    sal_Int32       mnMinKashida;               // Minimal width of kashida (Arabic)
 
     // font attributes queried from the font instance
     bool            mbFullstopCentered;
-    long            mnBulletOffset;             // Offset to position non-print character
+    sal_Int32       mnBulletOffset;             // Offset to position non-print character
 
     // font metrics that are usually derived from the measurements
-    long            mnUnderlineSize;            // Lineheight of Underline
-    long            mnUnderlineOffset;          // Offset from Underline to Baseline
-    long            mnBUnderlineSize;           // Height of bold underline
-    long            mnBUnderlineOffset;         // Offset from bold underline to baseline
-    long            mnDUnderlineSize;           // Height of double underline
-    long            mnDUnderlineOffset1;        // Offset from double underline to baseline
-    long            mnDUnderlineOffset2;        // Offset from double underline to baseline
-    long            mnWUnderlineSize;           // Height of WaveLine underline
-    long            mnWUnderlineOffset;         // Offset from WaveLine underline to baseline, but centrered to WaveLine
-    long            mnAboveUnderlineSize;       // Height of single underline (for Vertical Right)
-    long            mnAboveUnderlineOffset;     // Offset from single underline to baseline (for Vertical Right)
-    long            mnAboveBUnderlineSize;      // Height of bold underline (for Vertical Right)
-    long            mnAboveBUnderlineOffset;    // Offset from bold underline to baseline (for Vertical Right)
-    long            mnAboveDUnderlineSize;      // Height of double underline (for Vertical Right)
-    long            mnAboveDUnderlineOffset1;   // Offset from double underline to baseline (for Vertical Right)
-    long            mnAboveDUnderlineOffset2;   // Offset from double underline to baseline (for Vertical Right)
-    long            mnAboveWUnderlineSize;      // Height of WaveLine-strike-out (for Vertical Right)
-    long            mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to the WaveLine (for Vertical Right)
-    long            mnStrikeoutSize;            // Height of single strike-out
-    long            mnStrikeoutOffset;          // Offset from single strike-out to baseline
-    long            mnBStrikeoutSize;           // Height of bold strike-out
-    long            mnBStrikeoutOffset;         // Offset of bold strike-out to baseline
-    long            mnDStrikeoutSize;           // Height of double strike-out
-    long            mnDStrikeoutOffset1;        // Offset of double strike-out to baseline
-    long            mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
+    sal_Int32       mnUnderlineSize;            // Lineheight of Underline
+    sal_Int32       mnUnderlineOffset;          // Offset from Underline to Baseline
+    sal_Int32       mnBUnderlineSize;           // Height of bold underline
+    sal_Int32       mnBUnderlineOffset;         // Offset from bold underline to baseline
+    sal_Int32       mnDUnderlineSize;           // Height of double underline
+    sal_Int32       mnDUnderlineOffset1;        // Offset from double underline to baseline
+    sal_Int32       mnDUnderlineOffset2;        // Offset from double underline to baseline
+    sal_Int32       mnWUnderlineSize;           // Height of WaveLine underline
+    sal_Int32       mnWUnderlineOffset;         // Offset from WaveLine underline to baseline, but centrered to WaveLine
+    sal_Int32       mnAboveUnderlineSize;       // Height of single underline (for Vertical Right)
+    sal_Int32       mnAboveUnderlineOffset;     // Offset from single underline to baseline (for Vertical Right)
+    sal_Int32       mnAboveBUnderlineSize;      // Height of bold underline (for Vertical Right)
+    sal_Int32       mnAboveBUnderlineOffset;    // Offset from bold underline to baseline (for Vertical Right)
+    sal_Int32       mnAboveDUnderlineSize;      // Height of double underline (for Vertical Right)
+    sal_Int32       mnAboveDUnderlineOffset1;   // Offset from double underline to baseline (for Vertical Right)
+    sal_Int32       mnAboveDUnderlineOffset2;   // Offset from double underline to baseline (for Vertical Right)
+    sal_Int32       mnAboveWUnderlineSize;      // Height of WaveLine-strike-out (for Vertical Right)
+    sal_Int32       mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to the WaveLine (for Vertical Right)
+    sal_Int32       mnStrikeoutSize;            // Height of single strike-out
+    sal_Int32       mnStrikeoutOffset;          // Offset from single strike-out to baseline
+    sal_Int32       mnBStrikeoutSize;           // Height of bold strike-out
+    sal_Int32       mnBStrikeoutOffset;         // Offset of bold strike-out to baseline
+    sal_Int32       mnDStrikeoutSize;           // Height of double strike-out
+    sal_Int32       mnDStrikeoutOffset1;        // Offset of double strike-out to baseline
+    sal_Int32       mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
 
 };
 

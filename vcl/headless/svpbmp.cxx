@@ -109,8 +109,8 @@ BitmapBuffer* ImplCreateDIB(
     pDIB->mnFormat |= ScanlineFormat::TopDown;
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
-    long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    sal_Int32 nScanlineBase;
+    bool bFail = o3tl::checked_multiply<sal_Int32>(pDIB->mnWidth, nBitCount, nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");

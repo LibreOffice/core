@@ -124,7 +124,7 @@ void SalGenericInstance::jobEndedPrinterUpdate()
 {
 }
 
-bool AquaSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
+bool AquaSalGraphics::drawEPS( sal_Int32, sal_Int32, sal_Int32, sal_Int32, void*, sal_uLong )
 {
     return false;
 }

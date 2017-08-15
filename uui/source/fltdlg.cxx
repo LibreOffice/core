@@ -174,7 +174,7 @@ class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth 
 
         sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) override
         {
-            return (sal_Int32)(m_pDevice->GetTextWidth(sString));
+            return m_pDevice->GetTextWidth(sString);
         }
 
     private:

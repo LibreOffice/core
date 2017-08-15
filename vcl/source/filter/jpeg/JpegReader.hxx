@@ -37,11 +37,11 @@ enum ReadState
 
 struct JPEGCreateBitmapParam
 {
-    unsigned long nWidth;
-    unsigned long nHeight;
-    unsigned long density_unit;
-    unsigned long X_density;
-    unsigned long Y_density;
+    sal_Int32 nWidth;
+    sal_Int32 nHeight;
+    sal_Int32 density_unit;
+    sal_Int32 X_density;
+    sal_Int32 Y_density;
 
     bool bGray;
 };
@@ -52,11 +52,11 @@ class JPEGReader : public GraphicReader
     std::unique_ptr<Bitmap> mpBitmap;
     std::unique_ptr<Bitmap> mpIncompleteAlpha;
 
-    long                mnLastPos;
-    long                mnLastLines;
+    sal_Int32                mnLastPos;
+    sal_Int32                mnLastLines;
     bool                mbSetLogSize;
 
-    Graphic CreateIntermediateGraphic(long nLines);
+    Graphic CreateIntermediateGraphic(sal_Int32 nLines);
 
 public:
             JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );

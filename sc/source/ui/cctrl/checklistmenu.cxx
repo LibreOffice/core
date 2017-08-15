@@ -337,7 +337,7 @@ Size ScMenuFloatingWindow::getMenuSize() const
         if (itr->mbSeparator)
             continue;
 
-        nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);
+        nTextWidth = ::std::max(GetTextWidth(itr->maText), sal_Int32(nTextWidth));
     }
 
     size_t nLastPos = maMenuItems.size()-1;
@@ -995,7 +995,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
         break;
         case CHECK_TOGGLE_ALL:
         {
-            long h = std::min(maChkToggleAll->CalcMinimumSize().Height(), 26L);
+            long h = std::min(maChkToggleAll->CalcMinimumSize().Height(), 26);
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
             rPos.X() += 5;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;

@@ -1794,7 +1794,7 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
  * when less than the desired number of rows fits into
  * the view
  */
-void SwPagePreviewWin::Scroll(long nXMove, long nYMove, ScrollFlags /*nFlags*/)
+void SwPagePreviewWin::Scroll(sal_Int32 nXMove, sal_Int32 nYMove, ScrollFlags /*nFlags*/)
 {
     maPaintedPreviewDocRect.Move(nXMove, nYMove);
     mpPgPreviewLayout->Prepare( 0, maPaintedPreviewDocRect.TopLeft(),

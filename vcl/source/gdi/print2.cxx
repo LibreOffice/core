@@ -411,10 +411,10 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             const MetaLineAction& rMetaLineAction = static_cast<const MetaLineAction&>(rAct);
             aActionBounds = tools::Rectangle( rMetaLineAction.GetStartPoint(),  rMetaLineAction.GetEndPoint() );
             aActionBounds.Justify();
-            const long nLineWidth(rMetaLineAction.GetLineInfo().GetWidth());
+            const sal_Int32 nLineWidth(rMetaLineAction.GetLineInfo().GetWidth());
             if(nLineWidth)
             {
-                const long nHalfLineWidth((nLineWidth + 1) / 2);
+                const sal_Int32 nHalfLineWidth((nLineWidth + 1) / 2);
                 aActionBounds.Left() -= nHalfLineWidth;
                 aActionBounds.Top() -= nHalfLineWidth;
                 aActionBounds.Right() += nHalfLineWidth;
@@ -464,10 +464,10 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         {
             const MetaPolyLineAction& rMetaPolyLineAction = static_cast<const MetaPolyLineAction&>(rAct);
             aActionBounds = rMetaPolyLineAction.GetPolygon().GetBoundRect();
-            const long nLineWidth(rMetaPolyLineAction.GetLineInfo().GetWidth());
+            const sal_Int32 nLineWidth(rMetaPolyLineAction.GetLineInfo().GetWidth());
             if(nLineWidth)
             {
-                const long nHalfLineWidth((nLineWidth + 1) / 2);
+                const sal_Int32 nHalfLineWidth((nLineWidth + 1) / 2);
                 aActionBounds.Left() -= nHalfLineWidth;
                 aActionBounds.Top() -= nHalfLineWidth;
                 aActionBounds.Right() += nHalfLineWidth;
@@ -652,7 +652,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
-                                                     long nMaxBmpDPIX, long nMaxBmpDPIY,
+                                                     sal_Int32 nMaxBmpDPIX, sal_Int32 nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
                                                      bool bDownsampleBitmaps,
                                                      const Color& rBackground
@@ -1363,12 +1363,12 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
         {
             const Color&    rStartColor = rGradient.GetStartColor();
             const Color&    rEndColor = rGradient.GetEndColor();
-            const long      nR = ( ( (long) rStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 +
-                                   ( (long) rEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const long      nG = ( ( (long) rStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 +
-                                   ( (long) rEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const long      nB = ( ( (long) rStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 +
-                                   ( (long) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const sal_Int32      nR = ( ( (sal_Int32) rStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 +
+                                   ( (sal_Int32) rEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const sal_Int32      nG = ( ( (sal_Int32) rStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 +
+                                   ( (sal_Int32) rEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const sal_Int32      nB = ( ( (sal_Int32) rStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 +
+                                   ( (sal_Int32) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) >> 1;
             const Color     aColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
 
             pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );

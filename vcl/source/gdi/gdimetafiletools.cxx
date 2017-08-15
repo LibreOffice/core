@@ -351,8 +351,8 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             case MetaActionType::MOVECLIPREGION :
             {
                 const MetaMoveClipRegionAction* pA = static_cast< const MetaMoveClipRegionAction* >(pAction);
-                const long aHorMove(pA->GetHorzMove());
-                const long aVerMove(pA->GetVertMove());
+                const sal_Int32 aHorMove(pA->GetHorzMove());
+                const sal_Int32 aVerMove(pA->GetVertMove());
 
                 if((aHorMove || aVerMove) && aClips.size() && aClips.back().count())
                 {

@@ -55,7 +55,7 @@ protected:
     virtual             ~VclAbstractDialog2() override;
 public:
     virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) = 0;
-    virtual long        GetResult() = 0;
+    virtual sal_Int32   GetResult() = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
@@ -63,7 +63,7 @@ class VCL_DLLPUBLIC VclAbstractTerminatedDialog : public VclAbstractDialog
 protected:
     virtual             ~VclAbstractTerminatedDialog() override = default;
 public:
-    virtual void        EndDialog(long nResult) = 0;
+    virtual void        EndDialog(sal_Int32 nResult) = 0;
 };
 
 class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog

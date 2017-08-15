@@ -92,7 +92,7 @@ void PasswordTable::setColWidths()
         GetTextWidth("XXXXXXXXXXXX"));
     long nWebSiteWidth = std::max(
         12 + rBar.GetTextWidth(rBar.GetItemText(1)),
-        GetSizePixel().Width() - nUserNameWidth);
+        sal_Int32(GetSizePixel().Width() - nUserNameWidth));
     long aStaticTabs[]= { 2, 0, 0 };
     aStaticTabs[2] = nWebSiteWidth;
     SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);

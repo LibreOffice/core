@@ -874,10 +874,10 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrame *pLay,
         {
             //Calculate the distance between those two points.
             //'delta' X^2 + 'delta' Y^2 = 'distance'^2
-            sal_uInt64 dX = std::max( pCnt->Frame().Left(), rPt.X() ) -
-                       std::min( pCnt->Frame().Left(), rPt.X() ),
-                  dY = std::max( pCnt->Frame().Top(), rPt.Y() ) -
-                       std::min( pCnt->Frame().Top(), rPt.Y() );
+            sal_uInt64 dX = std::max( sal_Int32(pCnt->Frame().Left()), rPt.X() ) -
+                            std::min( sal_Int32(pCnt->Frame().Left()), rPt.X() );
+            sal_uInt64 dY = std::max( sal_Int32(pCnt->Frame().Top()), rPt.Y() ) -
+                            std::min( sal_Int32(pCnt->Frame().Top()), rPt.Y() );
             // square of the difference will do fine here
             const sal_uInt64 nDiff = (dX * dX) + (dY * dY);
             if ( pCnt->Frame().Top() <= rPt.Y() )

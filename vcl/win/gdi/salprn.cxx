@@ -272,7 +272,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         BYTE const * pDriverData = reinterpret_cast<BYTE const *>(pSalDriverData) + pSalDriverData->mnDriverOffset;
         pDevModeW = reinterpret_cast<DEVMODEW const *>(pDriverData);
 
-        long nSysJobSize = -1;
+        sal_Int32 nSysJobSize = -1;
         if( pPrinter && pDevModeW )
         {
             // just too many driver crashes in that area -> check the dmSpecVersion and dmDriverVersion fields always !!!
@@ -319,7 +319,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         if ( (pSetupData->GetSystem() == JOBSETUP_SYSTEM_WINDOWS) &&
              (pPrinter->maDriverName == pSetupData->GetDriver()) &&
              (pSetupData->GetDriverDataLen() > sizeof( SalDriverData )) &&
-             (long)(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
+             (sal_Int32)(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )
         {
             if( pDevModeW &&
@@ -1256,9 +1256,9 @@ sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, P
 }
 
 void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
-                                  long& rOutWidth, long& rOutHeight,
-                                  long& rPageOffX, long& rPageOffY,
-                                  long& rPageWidth, long& rPageHeight )
+                                  sal_Int32& rOutWidth, sal_Int32& rOutHeight,
+                                  sal_Int32& rPageOffX, sal_Int32& rPageOffY,
+                                  sal_Int32& rPageWidth, sal_Int32& rPageHeight )
 {
     HDC hDC = mhDC;
 
@@ -1503,7 +1503,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     if ( nRet <= 0 )
     {
-        long nError = GetLastError();
+        sal_Int32 nError = GetLastError();
         if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
             mnError = SAL_PRINTER_ERROR_ABORT;
         else

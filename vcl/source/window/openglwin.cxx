@@ -126,7 +126,7 @@ void OpenGLWindow::Command( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if(pData->GetMode() == CommandWheelMode::SCROLL)
         {
-            long nDelta = pData->GetDelta();
+            sal_Int32 nDelta = pData->GetDelta();
             mpRenderer->scroll(nDelta);
         }
     }

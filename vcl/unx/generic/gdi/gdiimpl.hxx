@@ -94,7 +94,7 @@ private:
     XID GetXRenderPicture();
     bool drawFilledTrapezoids( const basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
 
-    long GetGraphicsHeight() const;
+    sal_Int32 GetGraphicsHeight() const;
 
     void drawMaskedBitmap( const SalTwoRect& rPosAry,
                                               const SalBitmap& rSalBitmap,
@@ -116,7 +116,7 @@ public:
     virtual sal_uInt16 GetBitCount() const override;
 
     // get the width of the device
-    virtual long GetGraphicsWidth() const override;
+    virtual sal_Int32 GetGraphicsWidth() const override;
 
     // set the clip region to empty
     virtual void ResetClipRegion() override;
@@ -145,12 +145,12 @@ public:
     virtual void SetROPFillColor( SalROPColor nROPColor ) override;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void drawPixel( long nX, long nY ) override;
-    virtual void drawPixel( long nX, long nY, SalColor nSalColor ) override;
+    virtual void drawPixel( sal_Int32 nX, sal_Int32 nY ) override;
+    virtual void drawPixel( sal_Int32 nX, sal_Int32 nY, SalColor nSalColor ) override;
 
-    virtual void drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
+    virtual void drawLine( sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 ) override;
 
-    virtual void drawRect( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void drawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
     virtual void drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
 
@@ -185,9 +185,9 @@ public:
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void copyArea(
-                long nDestX, long nDestY,
-                long nSrcX, long nSrcY,
-                long nSrcWidth, long nSrcHeight,
+                sal_Int32 nDestX, sal_Int32 nDestY,
+                sal_Int32 nSrcX, sal_Int32 nSrcY,
+                sal_Int32 nSrcWidth, sal_Int32 nSrcHeight,
                 bool bWindowInvalidate ) override;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -206,21 +206,21 @@ public:
                 const SalBitmap& rSalBitmap,
                 SalColor nMaskColor ) override;
 
-    virtual SalBitmap* getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual SalBitmap* getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
-    virtual SalColor getPixel( long nX, long nY ) override;
+    virtual SalColor getPixel( sal_Int32 nX, sal_Int32 nY ) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(
-                long nX, long nY,
-                long nWidth, long nHeight,
+                sal_Int32 nX, sal_Int32 nY,
+                sal_Int32 nWidth, sal_Int32 nHeight,
                 SalInvert nFlags) override;
 
     virtual void invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
 
     virtual bool drawEPS(
-                long nX, long nY,
-                long nWidth, long nHeight,
+                sal_Int32 nX, sal_Int32 nY,
+                sal_Int32 nWidth, sal_Int32 nHeight,
                 void* pPtr,
                 sal_uLong nSize ) override;
 
@@ -268,8 +268,8 @@ public:
         fully transparent rectangle
      */
     virtual bool drawAlphaRect(
-                    long nX, long nY,
-                    long nWidth, long nHeight,
+                    sal_Int32 nX, sal_Int32 nY,
+                    sal_Int32 nWidth, sal_Int32 nHeight,
                     sal_uInt8 nTransparency ) override;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;

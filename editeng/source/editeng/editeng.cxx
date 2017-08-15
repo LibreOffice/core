@@ -2441,7 +2441,7 @@ css::uno::Reference< css::datatransfer::XTransferable >
 // ======================    Virtual Methods    ========================
 
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
-                              const long*, const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
+                              const sal_Int32*, const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
                               const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool,
                               const css::lang::Locale*, const Color&, const Color&)
 

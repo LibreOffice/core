@@ -294,7 +294,7 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 }
 
 
-void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
+void ScrollableWindow::Scroll( sal_Int32 nDeltaX, sal_Int32 nDeltaY, ScrollFlags )
 {
     // get the delta in pixel
     Size aDeltaPix( LogicToPixel( Size(nDeltaX, nDeltaY) ) );

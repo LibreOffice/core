@@ -93,7 +93,7 @@ namespace o3tl
     template<> struct typed_flags<SystemWindowFlags> : is_typed_flags<SystemWindowFlags, 0x03> {};
 }
 
-typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
+typedef sal_Int32 (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 
 /** An application can be notified of a number of different events:
     - Type::Accept       - listen for connection to the application (a connection
@@ -872,7 +872,7 @@ public:
           GetActiveTopWindow
 
     */
-    static long                 GetTopWindowCount();
+    static sal_Int32                 GetTopWindowCount();
 
     /** Get the nth top window.
 
@@ -886,7 +886,7 @@ public:
      @see GetFirstTopLevelWindow, GetNextTopLevelWindow, GetTopWindowCount,
           GetActiveTopWindow
     */
-    static vcl::Window*              GetTopWindow( long nIndex );
+    static vcl::Window*              GetTopWindow( sal_Int32 nIndex );
 
     /** Get the "active" top window.
 

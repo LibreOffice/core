@@ -89,10 +89,10 @@ private:
     Size            maMinOutSize;
     Size            maMaxOutSize;
     tools::Rectangle       maDragArea;
-    long            mnTrackX;
-    long            mnTrackY;
-    long            mnTrackWidth;
-    long            mnTrackHeight;
+    sal_Int32       mnTrackX;
+    sal_Int32       mnTrackY;
+    sal_Int32       mnTrackWidth;
+    sal_Int32       mnTrackHeight;
     sal_Int32       mnDockLeft;
     sal_Int32       mnDockTop;
     sal_Int32       mnDockRight;
@@ -155,8 +155,8 @@ public:
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const { return mnFloatBits;}
 
-    void            setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight,
+    void            setPosSizePixel( sal_Int32 nX, sal_Int32 nY,
+                                     sal_Int32 nWidth, sal_Int32 nHeight,
                                      PosSizeFlags nFlags );
     Point           GetPosPixel() const;
     Size            GetSizePixel() const;
@@ -191,8 +191,8 @@ public:
 
     // required because those methods are not virtual in Window (!!!) and must
     // be availbale from the toolkit
-    void        SetPosSizePixel( vcl::Window const *pWin, long nX, long nY,
-                                long nWidth, long nHeight,
+    void        SetPosSizePixel( vcl::Window const *pWin, sal_Int32 nX, sal_Int32 nY,
+                                sal_Int32 nWidth, sal_Int32 nHeight,
                                 PosSizeFlags nFlags );
     tools::Rectangle   GetPosSizePixel( const vcl::Window *pWin );
 };
@@ -213,10 +213,10 @@ private:
     Point           maMouseStart;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
-    long            mnTrackX;
-    long            mnTrackY;
-    long            mnTrackWidth;
-    long            mnTrackHeight;
+    sal_Int32       mnTrackX;
+    sal_Int32       mnTrackY;
+    sal_Int32       mnTrackWidth;
+    sal_Int32       mnTrackHeight;
     sal_Int32       mnDockLeft;
     sal_Int32       mnDockTop;
     sal_Int32       mnDockRight;
@@ -310,8 +310,8 @@ public:
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const;
 
-    virtual void    setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight,
+    virtual void    setPosSizePixel( sal_Int32 nX, sal_Int32 nY,
+                                     sal_Int32 nWidth, sal_Int32 nHeight,
                                      PosSizeFlags nFlags = PosSizeFlags::All ) override;
     using Window::SetPosSizePixel;
     Point           GetPosPixel() const override;

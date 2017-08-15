@@ -59,13 +59,13 @@ void OutputDevice::ImplInitAboveTextLineSize()
     mpFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
 }
 
-void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
-                                      long nCurX, long nCurY,
+void OutputDevice::ImplDrawWavePixel( sal_Int32 nOriginX, sal_Int32 nOriginY,
+                                      sal_Int32 nCurX, sal_Int32 nCurY,
                                       short nOrientation,
                                       SalGraphics* pGraphics,
                                       OutputDevice const * pOutDev,
                                       bool bDrawPixAsRect,
-                                      long nPixWidth, long nPixHeight )
+                                      sal_Int32 nPixWidth, sal_Int32 nPixHeight )
 {
     if ( nOrientation )
     {
@@ -84,17 +84,17 @@ void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
     }
 }
 
-void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
-                                     long nDistX, long nDistY,
-                                     long nWidth, long nHeight,
-                                     long nLineWidth, short nOrientation,
+void OutputDevice::ImplDrawWaveLine( sal_Int32 nBaseX, sal_Int32 nBaseY,
+                                     sal_Int32 nDistX, sal_Int32 nDistY,
+                                     sal_Int32 nWidth, sal_Int32 nHeight,
+                                     sal_Int32 nLineWidth, short nOrientation,
                                      const Color& rColor )
 {
     if ( !nHeight )
         return;
 
-    long nStartX = nBaseX + nDistX;
-    long nStartY = nBaseY + nDistY;
+    sal_Int32 nStartX = nBaseX + nDistX;
+    sal_Int32 nStartY = nBaseY + nDistY;
 
     // If the height is 1 pixel, it's enough output a line
     if ( (nLineWidth == 1) && (nHeight == 1) )
@@ -102,8 +102,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
         mbInitLineColor = true;
 
-        long nEndX = nStartX+nWidth;
-        long nEndY = nStartY;
+        sal_Int32 nEndX = nStartX+nWidth;
+        sal_Int32 nEndY = nStartY;
         if ( nOrientation )
         {
             Point aOriginPt( nBaseX, nBaseY );
@@ -114,15 +114,15 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     }
     else
     {
-        long    nCurX = nStartX;
-        long    nCurY = nStartY;
-        long    nDiffX = 2;
-        long    nDiffY = nHeight-1;
-        long    nCount = nWidth;
-        long    nOffY = -1;
-        long    nPixWidth;
-        long    nPixHeight;
-        bool    bDrawPixAsRect;
+        sal_Int32    nCurX = nStartX;
+        sal_Int32    nCurY = nStartY;
+        sal_Int32    nDiffX = 2;
+        sal_Int32    nDiffY = nHeight-1;
+        sal_Int32    nCount = nWidth;
+        sal_Int32    nOffY = -1;
+        sal_Int32    nPixWidth;
+        sal_Int32    nPixHeight;
+        bool         bDrawPixAsRect;
         // On printers that output pixel via DrawRect()
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
         {
@@ -160,10 +160,10 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         else
         {
             nCurY += nDiffY;
-            long nFreq = nCount / (nDiffX+nDiffY);
+            sal_Int32 nFreq = nCount / (nDiffX+nDiffY);
             while ( nFreq-- )
             {
-                for( long i = nDiffY; i; --i )
+                for( sal_Int32 i = nDiffY; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -171,7 +171,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurX++;
                     nCurY += nOffY;
                 }
-                for( long i = nDiffX; i; --i )
+                for( sal_Int32 i = nDiffX; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -183,7 +183,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             nFreq = nCount % (nDiffX+nDiffY);
             if ( nFreq )
             {
-                for( long i = nDiffY; i && nFreq; --i, --nFreq )
+                for( sal_Int32 i = nDiffY; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -192,7 +192,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurY += nOffY;
 
                 }
-                for( long i = nDiffX; i && nFreq; --i, --nFreq )
+                for( sal_Int32 i = nDiffX; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -204,15 +204,15 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
-                                         long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawWaveTextLine( sal_Int32 nBaseX, sal_Int32 nBaseY,
+                                         sal_Int32 nDistX, sal_Int32 nDistY, sal_Int32 nWidth,
                                          FontLineStyle eTextLine,
                                          Color aColor,
                                          bool bIsAbove )
 {
     LogicalFontInstance* pFontInstance = mpFontInstance;
-    long            nLineHeight;
-    long            nLinePos;
+    sal_Int32            nLineHeight;
+    sal_Int32            nLinePos;
 
     if ( bIsAbove )
     {
@@ -227,7 +227,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
     if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
-    long nLineWidth = (mnDPIX / 300);
+    sal_Int32 nLineWidth = (mnDPIX / 300);
     if ( !nLineWidth )
         nLineWidth = 1;
 
@@ -236,10 +236,10 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
 
     nLinePos += nDistY - (nLineHeight / 2);
 
-    long nLineWidthHeight = ((nLineWidth * mnDPIX) + (mnDPIY / 2)) / mnDPIY;
+    sal_Int32 nLineWidthHeight = ((nLineWidth * mnDPIX) + (mnDPIY / 2)) / mnDPIY;
     if ( eTextLine == LINESTYLE_DOUBLEWAVE )
     {
-        long nOrgLineHeight = nLineHeight;
+        sal_Int32 nOrgLineHeight = nLineHeight;
         nLineHeight /= 3;
         if ( nLineHeight < 2 )
         {
@@ -249,11 +249,11 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                 nLineHeight = 1;
         }
 
-        long nLineDY = nOrgLineHeight-(nLineHeight*2);
+        sal_Int32 nLineDY = nOrgLineHeight-(nLineHeight*2);
         if ( nLineDY < nLineWidthHeight )
             nLineDY = nLineWidthHeight;
 
-        long nLineDY2 = nLineDY/2;
+        sal_Int32 nLineDY2 = nLineDY/2;
         if ( !nLineDY2 )
             nLineDY2 = 1;
 
@@ -272,18 +272,18 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
-                                             long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawStraightTextLine( sal_Int32 nBaseX, sal_Int32 nBaseY,
+                                             sal_Int32 nDistX, sal_Int32 nDistY, sal_Int32 nWidth,
                                              FontLineStyle eTextLine,
                                              Color aColor,
                                              bool bIsAbove )
 {
     LogicalFontInstance*  pFontInstance = mpFontInstance;
-    long            nLineHeight = 0;
-    long            nLinePos  = 0;
-    long            nLinePos2 = 0;
+    sal_Int32            nLineHeight = 0;
+    sal_Int32            nLinePos  = 0;
+    sal_Int32            nLinePos2 = 0;
 
-    const long nY = nDistY;
+    const sal_Int32 nY = nDistY;
 
     if ( eTextLine > UNDERLINE_LAST )
         eTextLine = LINESTYLE_SINGLE;
@@ -352,7 +352,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         mpGraphics->SetFillColor( ImplColorToSal( aColor ) );
         mbInitFillColor = true;
 
-        long nLeft = nDistX;
+        sal_Int32 nLeft = nDistX;
 
         switch ( eTextLine )
         {
@@ -367,12 +367,12 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         case LINESTYLE_DOTTED:
         case LINESTYLE_BOLDDOTTED:
             {
-                long nDotWidth = nLineHeight*mnDPIY;
+                sal_Int32 nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
                 nDotWidth /= mnDPIY;
 
-                long nTempWidth = nDotWidth;
-                long nEnd = nLeft+nWidth;
+                sal_Int32 nTempWidth = nDotWidth;
+                sal_Int32 nEnd = nLeft+nWidth;
                 while ( nLeft < nEnd )
                 {
                     if ( nLeft+nTempWidth > nEnd )
@@ -388,14 +388,14 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         case LINESTYLE_BOLDDASH:
         case LINESTYLE_BOLDLONGDASH:
             {
-                long nDotWidth = nLineHeight*mnDPIY;
+                sal_Int32 nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
                 nDotWidth /= mnDPIY;
 
-                long nMinDashWidth;
-                long nMinSpaceWidth;
-                long nSpaceWidth;
-                long nDashWidth;
+                sal_Int32 nMinDashWidth;
+                sal_Int32 nMinSpaceWidth;
+                sal_Int32 nSpaceWidth;
+                sal_Int32 nDashWidth;
                 if ( (eTextLine == LINESTYLE_LONGDASH) ||
                      (eTextLine == LINESTYLE_BOLDLONGDASH) )
                 {
@@ -420,8 +420,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
                 if ( nSpaceWidth < nMinSpaceWidth )
                     nSpaceWidth = nMinSpaceWidth;
 
-                long nTempWidth = nDashWidth;
-                long nEnd = nLeft+nWidth;
+                sal_Int32 nTempWidth = nDashWidth;
+                sal_Int32 nEnd = nLeft+nWidth;
                 while ( nLeft < nEnd )
                 {
                     if ( nLeft+nTempWidth > nEnd )
@@ -434,20 +434,20 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         case LINESTYLE_DASHDOT:
         case LINESTYLE_BOLDDASHDOT:
             {
-                long nDotWidth = nLineHeight*mnDPIY;
+                sal_Int32 nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
                 nDotWidth /= mnDPIY;
 
-                long nDashWidth = ((100*mnDPIX)+1270)/2540;
-                long nMinDashWidth = nDotWidth*4;
+                sal_Int32 nDashWidth = ((100*mnDPIX)+1270)/2540;
+                sal_Int32 nMinDashWidth = nDotWidth*4;
                 // DashWidth will be increased if the line is getting too thick
                 // in proportion to the line's length
                 if ( nDashWidth < nMinDashWidth )
                     nDashWidth = nMinDashWidth;
 
-                long nTempDotWidth = nDotWidth;
-                long nTempDashWidth = nDashWidth;
-                long nEnd = nLeft+nWidth;
+                sal_Int32 nTempDotWidth = nDotWidth;
+                sal_Int32 nTempDashWidth = nDashWidth;
+                sal_Int32 nEnd = nLeft+nWidth;
                 while ( nLeft < nEnd )
                 {
                     if ( nLeft+nTempDotWidth > nEnd )
@@ -469,20 +469,20 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         case LINESTYLE_DASHDOTDOT:
         case LINESTYLE_BOLDDASHDOTDOT:
             {
-                long nDotWidth = nLineHeight*mnDPIY;
+                sal_Int32 nDotWidth = nLineHeight*mnDPIY;
                 nDotWidth += mnDPIY/2;
                 nDotWidth /= mnDPIY;
 
-                long nDashWidth = ((100*mnDPIX)+1270)/2540;
-                long nMinDashWidth = nDotWidth*4;
+                sal_Int32 nDashWidth = ((100*mnDPIX)+1270)/2540;
+                sal_Int32 nMinDashWidth = nDotWidth*4;
                 // DashWidth will be increased if the line is getting too thick
                 // in proportion to the line's length
                 if ( nDashWidth < nMinDashWidth )
                     nDashWidth = nMinDashWidth;
 
-                long nTempDotWidth = nDotWidth;
-                long nTempDashWidth = nDashWidth;
-                long nEnd = nLeft+nWidth;
+                sal_Int32 nTempDotWidth = nDotWidth;
+                sal_Int32 nTempDashWidth = nDashWidth;
+                sal_Int32 nEnd = nLeft+nWidth;
                 while ( nLeft < nEnd )
                 {
                     if ( nLeft+nTempDotWidth > nEnd )
@@ -515,17 +515,17 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
-                                          long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawStrikeoutLine( sal_Int32 nBaseX, sal_Int32 nBaseY,
+                                          sal_Int32 nDistX, sal_Int32 nDistY, sal_Int32 nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
     LogicalFontInstance*  pFontInstance = mpFontInstance;
-    long            nLineHeight = 0;
-    long            nLinePos  = 0;
-    long            nLinePos2 = 0;
+    sal_Int32            nLineHeight = 0;
+    sal_Int32            nLinePos  = 0;
+    sal_Int32            nLinePos2 = 0;
 
-    long nY = nDistY;
+    sal_Int32 nY = nDistY;
 
     if ( eStrikeout > STRIKEOUT_LAST )
         eStrikeout = STRIKEOUT_SINGLE;
@@ -559,7 +559,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
         mpGraphics->SetFillColor( ImplColorToSal( aColor ) );
         mbInitFillColor = true;
 
-        const long& nLeft = nDistX;
+        const sal_Int32& nLeft = nDistX;
 
         switch ( eStrikeout )
         {
@@ -577,8 +577,8 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
-                                          long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawStrikeoutChar( sal_Int32 nBaseX, sal_Int32 nBaseY,
+                                          sal_Int32 nDistX, sal_Int32 nDistY, sal_Int32 nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
@@ -599,7 +599,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     const OUString aStrikeoutTest(aChars, nTestStrLen);
 
     // calculate approximation of strikeout atom size
-    long nStrikeoutWidth = 0;
+    sal_Int32 nStrikeoutWidth = 0;
     SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
@@ -671,8 +671,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     ImplInitTextColor();
 }
 
-void OutputDevice::ImplDrawTextLine( long nX, long nY,
-                                     long nDistX, DeviceCoordinate nWidth,
+void OutputDevice::ImplDrawTextLine( sal_Int32 nX, sal_Int32 nY,
+                                     sal_Int32 nDistX, DeviceCoordinate nWidth,
                                      FontStrikeout eStrikeout,
                                      FontLineStyle eUnderline,
                                      FontLineStyle eOverline,
@@ -690,7 +690,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 
     if ( IsRTLEnabled() )
     {
-        long nXAdd = nWidth - nDistX;
+        sal_Int32 nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
             nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
 
@@ -763,7 +763,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     nDist = aPos.X() - aStartPt.X();
                     if( mpFontInstance->mnOrientation )
                     {
-                        const long nDY = aPos.Y() - aStartPt.Y();
+                        const sal_Int32 nDY = aPos.Y() - aStartPt.Y();
                         const double fRad = mpFontInstance->mnOrientation * F_PI1800;
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
@@ -797,9 +797,9 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     }
 }
 
-void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
+void OutputDevice::ImplDrawMnemonicLine( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth )
 {
-    long nBaseX = nX;
+    sal_Int32 nBaseX = nX;
     if( /*HasMirroredGraphics() &&*/ IsRTLEnabled() )
     {
         // add some strange offset
@@ -925,7 +925,7 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
         mpAlphaVDev->SetOverlineColor( COL_BLACK );
 }
 
-void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
+void OutputDevice::DrawTextLine( const Point& rPos, sal_Int32 nWidth,
                                  FontStrikeout eStrikeout,
                                  FontLineStyle eUnderline,
                                  FontLineStyle eOverline,
@@ -993,25 +993,25 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     if( mbNewFont && !ImplNewFont() )
         return;
 
-    Point   aStartPt = ImplLogicToDevicePixel( rStartPos );
-    Point   aEndPt = ImplLogicToDevicePixel( rEndPos );
-    long    nStartX = aStartPt.X();
-    long    nStartY = aStartPt.Y();
-    long    nEndX = aEndPt.X();
-    long    nEndY = aEndPt.Y();
-    short   nOrientation = 0;
+    Point     aStartPt = ImplLogicToDevicePixel( rStartPos );
+    Point     aEndPt = ImplLogicToDevicePixel( rEndPos );
+    sal_Int32 nStartX = aStartPt.X();
+    sal_Int32 nStartY = aStartPt.Y();
+    sal_Int32 nEndX = aEndPt.X();
+    sal_Int32 nEndY = aEndPt.Y();
+    short     nOrientation = 0;
 
     // when rotated
     if ( (nStartY != nEndY) || (nStartX > nEndX) )
     {
-        long nDX = nEndX - nStartX;
+        sal_Int32 nDX = nEndX - nStartX;
         double nO = atan2( -nEndY + nStartY, ((nDX == 0L) ? 0.000000001 : nDX) );
         nO /= F_PI1800;
         nOrientation = (short)nO;
         aStartPt.RotateAround( nEndX, nEndY, -nOrientation );
     }
 
-    long nWaveHeight = 3;
+    sal_Int32 nWaveHeight = 3;
     nStartY++;
     nEndY++;
 

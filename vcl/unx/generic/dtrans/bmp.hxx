@@ -34,7 +34,7 @@ namespace x11 {
 sal_uInt8* X11_getBmpFromPixmap( Display* pDisplay,
                                  Drawable aDrawable,
                                  Colormap aColormap,
-                                 sal_Int32& rOutSize );
+                                 long& rOutSize );
 
 void X11_freeBmp( sal_uInt8* pBmp );
 

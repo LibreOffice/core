@@ -2235,7 +2235,7 @@ DrawViewShell* SdXImpressDocument::GetViewShell()
 void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
-                            long nTileWidth, long nTileHeight )
+                            sal_Int32 nTileWidth, sal_Int32 nTileHeight )
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)

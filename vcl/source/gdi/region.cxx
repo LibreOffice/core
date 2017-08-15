@@ -74,7 +74,7 @@ namespace
         return true;
     }
 
-    /** Convert a rectilinear polygon (that is oriented along the primary axes)
+    /** Convert a rectilinear polygon (that is oriented asal_Int32 the primary axes)
         to a list of bands.  For this special form of polygon we can use an
         optimization that prevents the creation of one band per y value.
         However, it still is possible that some temporary bands are created that
@@ -92,7 +92,7 @@ namespace
 
         // Create a new RegionBand object as container of the bands.
         std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
-        long nLineId = 0;
+        sal_Int32 nLineId = 0;
 
         // Iterate over all polygons.
         const sal_uInt16 nPolyCount = rPolyPoly.Count();
@@ -125,8 +125,8 @@ namespace
                 // Sort y-coordinates to simplify the algorithm and store the
                 // direction separately.  The direction is calculated as it is
                 // in other places (but seems to be the wrong way.)
-                const long nTop (::std::min(aStart.Y(), aEnd.Y()));
-                const long nBottom (::std::max(aStart.Y(), aEnd.Y()));
+                const sal_Int32 nTop (::std::min(aStart.Y(), aEnd.Y()));
+                const sal_Int32 nBottom (::std::max(aStart.Y(), aEnd.Y()));
                 const LineType eLineType (aStart.Y() > aEnd.Y() ? LINE_DESCENDING : LINE_ASCENDING);
 
                 // Make sure that the current line is covered by bands.
@@ -186,7 +186,7 @@ namespace
     */
     std::unique_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rPolygonBoundingBox)
     {
-        long nLineID = 0;
+        sal_Int32 nLineID = 0;
 
         // initialisation and creation of Bands
         std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
@@ -421,7 +421,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPoly
     }
 }
 
-void vcl::Region::Move( long nHorzMove, long nVertMove )
+void vcl::Region::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     if(IsNull() || IsEmpty())
     {
@@ -575,10 +575,10 @@ bool vcl::Region::Union( const tools::Rectangle& rRect )
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nLeft(std::min(rRect.Left(), rRect.Right()));
+    const sal_Int32 nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nRight(std::max(rRect.Left(), rRect.Right()));
+    const sal_Int32 nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -667,10 +667,10 @@ bool vcl::Region::Intersect( const tools::Rectangle& rRect )
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nLeft(std::min(rRect.Left(), rRect.Right()));
+    const sal_Int32 nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nRight(std::max(rRect.Left(), rRect.Right()));
+    const sal_Int32 nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -747,10 +747,10 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*pCurrent));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nLeft(std::min(rRect.Left(), rRect.Right()));
+    const sal_Int32 nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nRight(std::max(rRect.Left(), rRect.Right()));
+    const sal_Int32 nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -831,10 +831,10 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
     std::unique_ptr<RegionBand> pNew( o3tl::make_unique<RegionBand>(*getRegionBand()));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nLeft(std::min(rRect.Left(), rRect.Right()));
+    const sal_Int32 nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const sal_Int32 nRight(std::max(rRect.Left(), rRect.Right()));
+    const sal_Int32 nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -1704,7 +1704,7 @@ static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rect
 
     if( nPoints == 4 || (nPoints == 5 && pPoints[0] == pPoints[4]) )
     {
-        long nX1 = pPoints[0].X(), nX2 = pPoints[2].X(), nY1 = pPoints[0].Y(), nY2 = pPoints[2].Y();
+        sal_Int32 nX1 = pPoints[0].X(), nX2 = pPoints[2].X(), nY1 = pPoints[0].Y(), nY2 = pPoints[2].Y();
 
         if( ( (pPoints[1].X() == nX1 && pPoints[3].X() == nX2) && (pPoints[1].Y() == nY2 && pPoints[3].Y() == nY1) )
          || ( (pPoints[1].X() == nX2 && pPoints[3].X() == nX1) && (pPoints[1].Y() == nY1 && pPoints[3].Y() == nY2) ) )
@@ -1713,7 +1713,7 @@ static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rect
 
             if( pRectOut )
             {
-                long nSwap;
+                sal_Int32 nSwap;
 
                 if( nX2 < nX1 )
                 {

@@ -327,10 +327,10 @@ public:
 
 struct VCL_DLLPUBLIC BitmapBuffer
 {
-    ScanlineFormat       mnFormat;
-    long            mnWidth;
-    long            mnHeight;
-    long            mnScanlineSize;
+    ScanlineFormat  mnFormat;
+    sal_Int32       mnWidth;
+    sal_Int32       mnHeight;
+    sal_Int32       mnScanlineSize;
     sal_uInt16      mnBitCount;
     ColorMask       maColorMask;
     BitmapPalette   maPalette;
@@ -470,7 +470,7 @@ inline BitmapColor& BitmapColor::Invert()
 inline sal_uInt8 BitmapColor::GetLuminance() const
 {
     assert( !mbIndex && "Pixel represents index into colortable" );
-    return (static_cast<unsigned long>(mcBlueOrIndex) * 28UL + static_cast<unsigned long>(mcGreen) * 151UL + static_cast<unsigned long>(mcRed) * 77UL) >> 8;
+    return (static_cast<sal_Int32>(mcBlueOrIndex) * 28UL + static_cast<sal_Int32>(mcGreen) * 151UL + static_cast<sal_Int32>(mcRed) * 77UL) >> 8;
 }
 
 

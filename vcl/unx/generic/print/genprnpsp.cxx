@@ -271,7 +271,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
     struct stat aStat;
     if( stat( aFilename.getStr(), &aStat ) )
         fprintf( stderr, "stat( %s ) failed\n", aFilename.getStr() );
-    fprintf( stderr, "Tmp file %s has modes: 0%03lo\n", aFilename.getStr(), (long)aStat.st_mode );
+    fprintf( stderr, "Tmp file %s has modes: 0%03lo\n", aFilename.getStr(), (sal_Int32)aStat.st_mode );
 #endif
     const char* argv[4];
     if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )
@@ -700,9 +700,9 @@ bool PspSalInfoPrinter::SetData(
 
 void PspSalInfoPrinter::GetPageInfo(
     const ImplJobSetup* pJobSetup,
-    long& rOutWidth, long& rOutHeight,
-    long& rPageOffX, long& rPageOffY,
-    long& rPageWidth, long& rPageHeight )
+    sal_Int32& rOutWidth, sal_Int32& rOutHeight,
+    sal_Int32& rPageOffX, sal_Int32& rPageOffY,
+    sal_Int32& rPageWidth, sal_Int32& rPageHeight )
 {
     if( ! pJobSetup )
         return;
@@ -982,8 +982,8 @@ struct PDFNewJobParameters
 
     bool operator==(const PDFNewJobParameters& rComp ) const
     {
-        const long nRotatedWidth = rComp.maPageSize.Height();
-        const long nRotatedHeight = rComp.maPageSize.Width();
+        const sal_Int32 nRotatedWidth = rComp.maPageSize.Height();
+        const sal_Int32 nRotatedHeight = rComp.maPageSize.Width();
         Size aCompLSSize(nRotatedWidth, nRotatedHeight);
         return
             (maPageSize == rComp.maPageSize || maPageSize == aCompLSSize)

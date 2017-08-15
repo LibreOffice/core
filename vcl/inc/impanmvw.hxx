@@ -33,7 +33,7 @@ struct AInfo
     Size            aStartSize;
     VclPtr<OutputDevice>   pOutDev;
     void*           pViewData;
-    long            nExtraData;
+    sal_Int32       nExtraData;
     bool            bPause;
 
     AInfo();
@@ -48,7 +48,7 @@ private:
 
     Animation*      mpParent;
     VclPtr<OutputDevice>   mpOut;
-    long            mnExtraData;
+    sal_Int32       mnExtraData;
     Point           maPt;
     Point           maDispPt;
     Point           maRestPt;
@@ -72,7 +72,7 @@ private:
                                   OutputDevice* pFirstFrameOutDev = nullptr );
                     ~ImplAnimView();
 
-    bool            matches( OutputDevice* pOut, long nExtraData ) const;
+    bool            matches( OutputDevice* pOut, sal_Int32 nExtraData ) const;
     void            drawToPos( sal_uLong nPos );
     void            draw( sal_uLong nPos, VirtualDevice* pVDev=nullptr );
     void            repaint();

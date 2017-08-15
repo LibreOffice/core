@@ -244,8 +244,10 @@ void SdrPageView::InvalidateAllWin()
     if(IsVisible() && GetPage())
     {
         tools::Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
-        aRect.Union(GetPage()->GetAllObjBoundRect());
-        GetView().InvalidateAllWin(aRect);
+        auto x = GetPage()->GetAllObjBoundRect();
+        auto x2 = aRect;
+        x2.Union(x);
+        GetView().InvalidateAllWin(x2);
     }
 }
 

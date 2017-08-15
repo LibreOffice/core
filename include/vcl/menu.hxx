@@ -171,7 +171,7 @@ protected:
     SAL_DLLPRIVATE sal_uInt16 ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetNextVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE void ImplPaint(vcl::RenderContext& rRenderContext,
-                                  sal_uInt16 nBorder, long nOffY = 0, MenuItemData const * pThisDataOnly = nullptr,
+                                  sal_uInt16 nBorder, sal_Int32 nOffY = 0, MenuItemData const * pThisDataOnly = nullptr,
                                   bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
     SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const tools::Rectangle& rRect) const;
     SAL_DLLPRIVATE void ImplSelect();
@@ -186,11 +186,11 @@ protected:
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
     // return value is maximum width and height of checkboxes and radiobuttons
-    SAL_DLLPRIVATE Size ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, long& rCheckHeight, long& rRadioHeight) const;
+    SAL_DLLPRIVATE Size ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, sal_Int32& rCheckHeight, sal_Int32& rRadioHeight) const;
 
     // returns native submenu arrow size and spacing from right border
     // return value is whether it's supported natively
-    SAL_DLLPRIVATE static bool ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, long& rArrowSpacing);
+    SAL_DLLPRIVATE static bool ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, sal_Int32& rArrowSpacing);
 
     SAL_DLLPRIVATE void ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void ImplRemoveDel( ImplMenuDelData &rDel );
@@ -360,10 +360,10 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, sal_Int32 nIndex ) const;
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
+    sal_Int32 GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
     // returns the bounding rectangle for an item at pos nItemPos
     tools::Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
 
@@ -489,8 +489,8 @@ private:
 protected:
     SAL_DLLPRIVATE sal_uInt16 ImplExecute( const VclPtr<vcl::Window>& pW, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst );
     SAL_DLLPRIVATE void ImplFlushPendingSelect();
-    SAL_DLLPRIVATE long ImplCalcHeight( sal_uInt16 nEntries ) const;
-    SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible = nullptr ) const;
+    SAL_DLLPRIVATE sal_Int32 ImplCalcHeight( sal_uInt16 nEntries ) const;
+    SAL_DLLPRIVATE sal_uInt16 ImplCalcVisEntries( sal_Int32 nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible = nullptr ) const;
 
 public:
     PopupMenu();

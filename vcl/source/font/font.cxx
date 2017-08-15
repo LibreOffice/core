@@ -669,10 +669,10 @@ const OUString& Font::GetFamilyName() const { return mpImplFont->GetFamilyName()
 const OUString& Font::GetStyleName() const { return mpImplFont->maStyleName; }
 
 const Size& Font::GetFontSize() const { return mpImplFont->GetFontSize(); }
-void Font::SetFontHeight( long nHeight ) { SetFontSize( Size( mpImplFont->GetFontSize().Width(), nHeight ) ); }
-long Font::GetFontHeight() const { return mpImplFont->GetFontSize().Height(); }
-void Font::SetAverageFontWidth( long nWidth ) { SetFontSize( Size( nWidth, mpImplFont->GetFontSize().Height() ) ); }
-long Font::GetAverageFontWidth() const { return mpImplFont->GetFontSize().Width(); }
+void Font::SetFontHeight( sal_Int32 nHeight ) { SetFontSize( Size( mpImplFont->GetFontSize().Width(), nHeight ) ); }
+sal_Int32 Font::GetFontHeight() const { return mpImplFont->GetFontSize().Height(); }
+void Font::SetAverageFontWidth( sal_Int32 nWidth ) { SetFontSize( Size( nWidth, mpImplFont->GetFontSize().Height() ) ); }
+sal_Int32 Font::GetAverageFontWidth() const { return mpImplFont->GetFontSize().Width(); }
 
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->GetCharSet(); }
 

@@ -177,7 +177,7 @@ tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
     tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
     // apply scaling to object area and convert to pixels
     aLogicRect.SetSize( Size( Fraction( aLogicRect.GetWidth() ) * m_aScaleWidth,
-                                Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
+                              Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
     return aLogicRect;
 }
 

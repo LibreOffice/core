@@ -168,9 +168,9 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
     mxImpl->copyBits( rPosAry, pSSrcGraphics );
 }
 
-void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
-                                long nSrcX,     long nSrcY,
-                                long nSrcWidth, long nSrcHeight,
+void X11SalGraphics::copyArea ( sal_Int32 nDestX,    sal_Int32 nDestY,
+                                sal_Int32 nSrcX,     sal_Int32 nSrcY,
+                                sal_Int32 nSrcWidth, sal_Int32 nSrcHeight,
                                 bool bWindowInvalidate)
 {
     mxImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, bWindowInvalidate );
@@ -218,8 +218,8 @@ bool X11SalGraphics::drawTransformedBitmap(
     return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap );
 }
 
-bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool X11SalGraphics::drawAlphaRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth,
+                                    sal_Int32 nHeight, sal_uInt8 nTransparency )
 {
     return mxImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
@@ -231,20 +231,20 @@ void X11SalGraphics::drawMask( const SalTwoRect& rPosAry,
     mxImpl->drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
 
-SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap *X11SalGraphics::getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nDX, sal_Int32 nDY )
 {
     return mxImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
-SalColor X11SalGraphics::getPixel( long nX, long nY )
+SalColor X11SalGraphics::getPixel( sal_Int32 nX, sal_Int32 nY )
 {
     return mxImpl->getPixel( nX, nY );
 }
 
-void X11SalGraphics::invert( long       nX,
-                                long        nY,
-                                long        nDX,
-                                long        nDY,
+void X11SalGraphics::invert( sal_Int32       nX,
+                                sal_Int32        nY,
+                                sal_Int32        nDX,
+                                sal_Int32        nDY,
                                 SalInvert   nFlags )
 {
     mxImpl->invert( nX, nY, nDX, nDY, nFlags );

@@ -160,7 +160,7 @@ bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemo
     return bEqual;
 }
 
-OUString vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep, bool bTrailingZeros ) const
+OUString vcl::I18nHelper::GetNum( sal_Int32 nNumber, sal_uInt16 nDecimals, bool bUseThousandSep, bool bTrailingZeros ) const
 {
     return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }

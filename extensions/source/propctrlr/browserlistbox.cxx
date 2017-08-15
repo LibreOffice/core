@@ -1175,8 +1175,8 @@ namespace pcr
                 if ( nScrollOffset )
                 {
                     long nNewThumbPos = m_aVScroll->GetThumbPos() + nScrollOffset;
-                    nNewThumbPos = std::max( nNewThumbPos, m_aVScroll->GetRangeMin() );
-                    nNewThumbPos = std::min( nNewThumbPos, m_aVScroll->GetRangeMax() );
+                    nNewThumbPos = std::max( sal_Int32(nNewThumbPos), m_aVScroll->GetRangeMin() );
+                    nNewThumbPos = std::min( sal_Int32(nNewThumbPos), m_aVScroll->GetRangeMax() );
                     m_aVScroll->DoScroll( nNewThumbPos );
                     nNewThumbPos = m_aVScroll->GetThumbPos();
 

@@ -239,7 +239,7 @@ namespace
         aFontItem.PutValue( uno::makeAny( aControlFont ), 0 );
         _rItemSet.Put(aFontItem);
 
-        _rItemSet.Put(SvxFontHeightItem(OutputDevice::LogicToLogic(Size(0, (sal_Int32)aFont.GetFontHeight()), MapUnit::MapPoint, MapUnit::MapTwip).Height(),100,_nFontHeight));
+        _rItemSet.Put(SvxFontHeightItem(OutputDevice::LogicToLogic(Size(0, aFont.GetFontHeight()), MapUnit::MapPoint, MapUnit::MapTwip).Height(),100,_nFontHeight));
         lang::Locale aLocale;
         switch(_nWhich)
         {
