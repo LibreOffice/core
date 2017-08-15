@@ -150,7 +150,8 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_FRACTION + 6, // NF_FRACTION_16
     ZF_STANDARD_FRACTION + 7, // NF_FRACTION_10
     ZF_STANDARD_FRACTION + 8, // NF_FRACTION_100
-    ZF_STANDARD_DATETIME + 2 // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
+    ZF_STANDARD_DATETIME + 2, // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
+    ZF_STANDARD_DATETIME + 3 // NF_DATETIME_ISO_YYYYMMDDTHHMMSS
 };
 
 /**
@@ -2562,6 +2563,16 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_DATETIME+2 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS */ );
 
+    // YYYY-MM-DDTHH:MM:SS   ISO 8601
+    aBuf.append( rKeyword[NF_KEY_YYYY]).append('-').
+        append( rKeyword[NF_KEY_MM]).append('-').
+        append( rKeyword[NF_KEY_DD]).append('T').
+        append( rKeyword[NF_KEY_HH]).append(':').
+        append( rKeyword[NF_KEY_MMI]).append(':').
+        append( rKeyword[NF_KEY_SS]);
+    aSingleFormatCode.Code = aBuf.makeStringAndClear();
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_DATETIME+3 /* NF_DATETIME_ISO_YYYYMMDDTHHMMSS */ );
 
     // Scientific number
     aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER, aLocale );

@@ -50,7 +50,7 @@ private:
         double mfValue;
     };
 
-    sal_uInt8 meType:3;
+    Type meType:String;
     bool mbStringInterned:1;
 
     void DisposeString();

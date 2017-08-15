@@ -180,9 +180,10 @@ enum NfIndexTableOffset
     NF_FRACTION_10,                         // # ??/10
     NF_FRACTION_100,                        // # ??/100
 
-    NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO (with blank instead of T)
+    NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO 8601 (with blank instead of T)
+    NF_DATETIME_ISO_YYYYMMDDTHHMMSS,        // 1997-10-08T01:23:45          ISO 8601 (with the letter T as a delimiter)
 
-    NF_INDEX_TABLE_ENTRIES                  // == 59, reserved up to 59 to not use in i18npool locale data.
+    NF_INDEX_TABLE_ENTRIES                  // == 60, reserved up to 60 to not use in i18npool locale data.
 };
 
 
