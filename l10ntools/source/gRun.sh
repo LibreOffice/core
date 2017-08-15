@@ -384,7 +384,7 @@ ${MYCMD} --base starmath/source --files commands.src smres.src symbol.src
 
 ${MYCMD} --files svl/source/misc/mediatyp.src
 
-${MYCMD} --base svtools/source/contnr --files fileview.src svcontnr.src templwin.src
+${MYCMD} --base svtools/source/contnr --files fileview.src templwin.src
 
 ${MYCMD} --base svtools/source/control --files calendar.src ctrlbox.src ctrltool.src filectrl.src ruler.src
 
