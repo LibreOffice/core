@@ -138,6 +138,7 @@ public:
     static OUString GetLocaleIndependentFormattedNumberString( double fValue );
     static OUString GetLocaleIndependentFormattedString( double fValue, SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
     OUString GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
+    OUString GetISO8601FormattedDate(double aDateTime) const;
     SvNumberFormatter* GetNumberFormatter() const;
 
     long AppendGroupField();

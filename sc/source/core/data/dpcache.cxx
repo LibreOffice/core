@@ -1290,6 +1290,21 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
     return rItem.GetString();
 }
 
+OUString ScDPCache::GetISO8601FormattedDate(double aDateTime) const
+{
+    // Format value using the stored number format.
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    if (pFormatter)
+    {
+        sal_uInt32 nNumFormat = pFormatter->GetFormatIndex(NF_DATETIME_ISO_YYYYMMDDTHHMMSS, LANGUAGE_ENGLISH_US);
+        OUString aStr;
+        Color* pColor = nullptr;
+        pFormatter->GetOutputString(aDateTime, nNumFormat, aStr, &pColor);
+        return aStr;
+    }
+    return OUString::number( aDateTime );
+}
+
 SvNumberFormatter* ScDPCache::GetNumberFormatter() const
 {
     return mpDoc->GetFormatTable();
