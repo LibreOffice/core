@@ -145,7 +145,7 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 ScDocument::HardRecalcState ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
 {
     ScDocument::HardRecalcState eState = pDoc->GetHardRecalcState();
-    if (eState == ScDocument::HARDRECALCSTATE_OFF)
+    if (eState == ScDocument::HardRecalcState::OFF)
     {
         if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
         {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
@@ -156,7 +156,7 @@ ScDocument::HardRecalcState ScBroadcastAreaSlot::CheckHardRecalcStateCondition()
                 pShell->SetError(SCWARN_CORE_HARD_RECALC);
 
             pDoc->SetAutoCalc( false );
-            eState = ScDocument::HARDRECALCSTATE_ETERNAL;
+            eState = ScDocument::HardRecalcState::ETERNAL;
             pDoc->SetHardRecalcState( eState );
         }
     }
@@ -168,7 +168,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
 {
     bool bNewArea = false;
     OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
-    if (CheckHardRecalcStateCondition() == ScDocument::HARDRECALCSTATE_ETERNAL)
+    if (CheckHardRecalcStateCondition() == ScDocument::HardRecalcState::ETERNAL)
         return false;
     if ( !rpArea )
     {
@@ -209,7 +209,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
 void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 {
     OSL_ENSURE( pArea, "InsertListeningArea: pArea NULL");
-    if (CheckHardRecalcStateCondition() == ScDocument::HARDRECALCSTATE_ETERNAL)
+    if (CheckHardRecalcStateCondition() == ScDocument::HardRecalcState::ETERNAL)
         return;
     if (aBroadcastAreaTbl.insert( pArea).second)
         pArea->IncRef();

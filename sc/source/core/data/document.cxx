@@ -3915,7 +3915,7 @@ void ScDocument::CalcAll()
     // In eternal hard recalc state caches were not added as listeners,
     // invalidate them so the next non-CalcAll() normal lookup will not be
     // presented with outdated data.
-    if (GetHardRecalcState() == HARDRECALCSTATE_ETERNAL)
+    if (GetHardRecalcState() == HardRecalcState::ETERNAL)
         ClearLookupCaches();
 }
 

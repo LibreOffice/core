@@ -179,7 +179,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nInterpreterTableOpLevel(0),
         nSrcVer( SC_CURRENT_VERSION ),
         nFormulaTrackCount(0),
-        eHardRecalcState(HARDRECALCSTATE_OFF),
+        eHardRecalcState(HardRecalcState::OFF),
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),

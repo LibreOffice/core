@@ -2254,7 +2254,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
         return;
     }
 
-    if ( pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
+    if ( pDocument->GetHardRecalcState() == ScDocument::HardRecalcState::OFF )
     {
         if (nHint == SfxHintId::ScDataChanged || nHint == SfxHintId::ScTableOpDirty || (bSubTotal && nHint == SfxHintId::ScHiddenRowsChanged))
         {
@@ -2311,7 +2311,7 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
     if (IsInChangeTrack())
         return;
 
-    if ( pDocument->GetHardRecalcState() != ScDocument::HARDRECALCSTATE_OFF )
+    if ( pDocument->GetHardRecalcState() != ScDocument::HardRecalcState::OFF )
     {
         SetDirtyVar();
         pDocument->SetStreamValid(aPos.Tab(), false);
@@ -2354,7 +2354,7 @@ void ScFormulaCell::SetDirtyVar()
 void ScFormulaCell::SetDirtyAfterLoad()
 {
     bDirty = true;
-    if ( pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
+    if ( pDocument->GetHardRecalcState() == ScDocument::HardRecalcState::OFF )
         pDocument->PutInFormulaTree( this );
 }
 
@@ -2367,7 +2367,7 @@ void ScFormulaCell::SetTableOpDirty()
 {
     if ( !IsInChangeTrack() )
     {
-        if ( pDocument->GetHardRecalcState() != ScDocument::HARDRECALCSTATE_OFF )
+        if ( pDocument->GetHardRecalcState() != ScDocument::HardRecalcState::OFF )
             bTableOpDirty = true;
         else
         {

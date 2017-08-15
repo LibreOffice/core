@@ -299,11 +299,11 @@ friend class sc::TableColumnBlockPositionSet;
     typedef std::vector<ScTable*> TableContainer;
 
 public:
-    enum HardRecalcState
+    enum class HardRecalcState
     {
-        HARDRECALCSTATE_OFF = 0,    /// normal calculation of dependencies
-        HARDRECALCSTATE_TEMPORARY,  /// CalcAll() without broadcast/notify but setting up new listeners
-        HARDRECALCSTATE_ETERNAL     /// no new listeners are setup, no broadcast/notify
+        OFF,        /// normal calculation of dependencies
+        TEMPORARY,  /// CalcAll() without broadcast/notify but setting up new listeners
+        ETERNAL     /// no new listeners are setup, no broadcast/notify
     };
 
 private:
