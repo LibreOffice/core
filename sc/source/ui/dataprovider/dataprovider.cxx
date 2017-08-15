@@ -177,10 +177,6 @@ DataProvider::~DataProvider()
 void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
 {
     // first apply all data transformations
-    for (auto& itr : maDataTransformations)
-    {
-        itr->Transform(rDoc);
-    }
 
     bool bShrunk = false;
     SCCOL nStartCol = 0;
@@ -222,9 +218,14 @@ void ScDBDataManager::SetDatabase(const OUString& rDBName)
     maDBName = rDBName;
 }
 
-void ScDBDataManager::AddDataTransformation(std::unique_ptr<sc::DataTransformation> mpDataTransformation)
+void ScDBDataManager::AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation)
 {
     maDataTransformations.push_back(std::move(mpDataTransformation));
+}
+
+const std::vector<std::shared_ptr<sc::DataTransformation>>& ScDBDataManager::getDataTransformation() const
+{
+    return maDataTransformations;
 }
 
 ScDBData* ScDBDataManager::getDBData()
