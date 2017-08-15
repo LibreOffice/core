@@ -130,7 +130,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 public:
 
     ScXMLTableRowCellContext( ScXMLImport& rImport,
-                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                       const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 
     virtual ~ScXMLTableRowCellContext() override;

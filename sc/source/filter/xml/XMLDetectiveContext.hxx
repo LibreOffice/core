@@ -101,7 +101,7 @@ private:
 public:
                                 ScXMLDetectiveHighlightedContext(
                                     ScXMLImport& rImport,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveHighlightedContext() override;
@@ -118,7 +118,7 @@ private:
 public:
                                 ScXMLDetectiveOperationContext(
                                     ScXMLImport& rImport,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
+                                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList
                                     );
     virtual                     ~ScXMLDetectiveOperationContext() override;
 

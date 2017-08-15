@@ -58,7 +58,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
-                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList ) :
+                                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
@@ -90,13 +90,10 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
         pDoc->SetStorageGrammar( eGrammar);
     }
 
-    if( !xAttrList.is() )
+    if ( !rAttrList.is() )
         return;
 
-    sax_fastparser::FastAttributeList *pAttribList =
-        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-    for( auto &it : *pAttribList )
+    for (auto &it : *rAttrList)
     {
         sal_Int32 nToken = it.getToken();
         if( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) == ( nToken & NMSP_MASK ) )
@@ -135,16 +132,18 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     }
 
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch( nElement )
     {
     case XML_ELEMENT( TABLE, XML_TRACKED_CHANGES ):
         pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
         if (pChangeTrackingImportHelper)
-            pContext = new ScXMLTrackedChangesContext( GetScImport(), xAttrList, pChangeTrackingImportHelper);
+            pContext = new ScXMLTrackedChangesContext( GetScImport(), pAttribList, pChangeTrackingImportHelper);
         break;
     case XML_ELEMENT( TABLE, XML_CALCULATION_SETTINGS ):
-        pContext = new ScXMLCalculationSettingsContext( GetScImport(), xAttrList );
+        pContext = new ScXMLCalculationSettingsContext( GetScImport(), pAttribList );
         bHadCalculationSettings = true;
         break;
     case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATIONS ):
@@ -161,7 +160,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         }
         else
         {
-            pContext = new ScXMLTableContext( GetScImport(), xAttrList );
+            pContext = new ScXMLTableContext( GetScImport(), pAttribList );
         }
         break;
     case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSIONS ):
@@ -177,19 +176,19 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGE ):
         pContext = new ScXMLDatabaseRangeContext ( GetScImport(),
-                                                        xAttrList );
+                                                        pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_DATA_PILOT_TABLES ):
         pContext = new ScXMLDataPilotTablesContext ( GetScImport() );
         break;
     case XML_ELEMENT( TABLE, XML_CONSOLIDATION ):
-        pContext = new ScXMLConsolidationContext ( GetScImport(), xAttrList );
+        pContext = new ScXMLConsolidationContext ( GetScImport(), pAttribList );
         break;
     case XML_ELEMENT( TABLE, XML_DDE_LINKS ):
         pContext = new ScXMLDDELinksContext ( GetScImport() );
         break;
     case XML_ELEMENT( CALC_EXT, XML_DATA_STREAM_SOURCE ):
-        pContext = new ScXMLDataStreamContext(GetScImport(), xAttrList);
+        pContext = new ScXMLDataStreamContext(GetScImport(), pAttribList);
         break;
     }
 

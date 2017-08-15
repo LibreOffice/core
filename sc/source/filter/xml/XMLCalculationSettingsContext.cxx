@@ -32,7 +32,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
-                                      const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) :
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     fIterationEpsilon(0.001),
     nIterationCount(100),
@@ -47,14 +47,11 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     aNullDate.Day = 30;
     aNullDate.Month = 12;
     aNullDate.Year = 1899;
-    if( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for( auto &aIter : *pAttribList )
+        for (auto &aIter : *rAttrList)
         {
-            switch( aIter.getToken() )
+            switch (aIter.getToken())
             {
             case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
                 if( IsXMLToken( aIter, XML_FALSE ) )
@@ -99,11 +96,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSetting
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     if (nElement == XML_ELEMENT( TABLE, XML_NULL_DATE ))
-        pContext = new ScXMLNullDateContext(GetScImport(), xAttrList, this);
+        pContext = new ScXMLNullDateContext(GetScImport(), pAttribList, this);
     else if (nElement == XML_ELEMENT( TABLE, XML_ITERATION ))
-        pContext = new ScXMLIterationContext(GetScImport(), xAttrList, this);
+        pContext = new ScXMLIterationContext(GetScImport(), pAttribList, this);
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport() );
@@ -142,17 +141,14 @@ void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElem
 }
 
 ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
-                                      const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                                      rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
     ScXMLImportContext( rImport )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_DATE_VALUE ) ) );
-        if (aIter != pAttribList->end())
+        auto &aIter( rAttrList->find( XML_ELEMENT( TABLE, XML_DATE_VALUE ) ) );
+        if (aIter != rAttrList->end())
         {
             util::DateTime aDateTime;
             ::sax::Converter::parseDateTime(aDateTime, nullptr, aIter.toString());
@@ -169,23 +165,14 @@ ScXMLNullDateContext::~ScXMLNullDateContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNullDateContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
-}
-
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
-                                      const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                                      rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
     ScXMLImportContext( rImport )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -206,12 +193,6 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
 
 ScXMLIterationContext::~ScXMLIterationContext()
 {
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLIterationContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

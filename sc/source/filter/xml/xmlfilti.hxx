@@ -56,7 +56,7 @@ class ScXMLFilterContext : public ScXMLImportContext
 public:
 
     ScXMLFilterContext( ScXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -79,7 +79,12 @@ class ScXMLAndContext : public ScXMLImportContext
 
 public:
 
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
     ScXMLAndContext( ScXMLImport& rImport,
+=======
+    ScXMLAndContext( ScXMLImport& rImport, sal_Int32 nElement,
+                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+>>>>>>> Refactoring fastcontexts code:
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
@@ -98,7 +103,12 @@ class ScXMLOrContext : public ScXMLImportContext
 
 public:
 
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
     ScXMLOrContext( ScXMLImport& rImport,
+=======
+    ScXMLOrContext( ScXMLImport& rImport, sal_Int32 nElement,
+                    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+>>>>>>> Refactoring fastcontexts code:
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
@@ -125,7 +135,7 @@ class ScXMLConditionContext : public ScXMLImportContext
 public:
 
     ScXMLConditionContext( ScXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                           const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                            ScQueryParam& rParam,
                            ScXMLFilterContext* pTempFilterContext);
 
@@ -144,7 +154,7 @@ class ScXMLSetItemContext : public ScXMLImportContext
 {
 public:
     ScXMLSetItemContext(ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLConditionContext& rParent);
 
     virtual ~ScXMLSetItemContext() override;
@@ -171,8 +181,13 @@ class ScXMLDPFilterContext : public ScXMLImportContext
 
 public:
 
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
     ScXMLDPFilterContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+=======
+    ScXMLDPFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+>>>>>>> Refactoring fastcontexts code:
                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
     virtual ~ScXMLDPFilterContext() override;
@@ -220,7 +235,12 @@ class ScXMLDPAndContext : public ScXMLImportContext
     ScXMLDPFilterContext* pFilterContext;
 public:
 
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
     ScXMLDPAndContext( ScXMLImport& rImport,
+=======
+    ScXMLDPAndContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+>>>>>>> Refactoring fastcontexts code:
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPAndContext() override;
@@ -236,7 +256,12 @@ class ScXMLDPOrContext : public ScXMLImportContext
     ScXMLDPFilterContext* pFilterContext;
 public:
 
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
     ScXMLDPOrContext( ScXMLImport& rImport,
+=======
+    ScXMLDPOrContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
+>>>>>>> Refactoring fastcontexts code:
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPOrContext() override;
@@ -260,7 +285,7 @@ class ScXMLDPConditionContext : public ScXMLImportContext
 public:
 
     ScXMLDPConditionContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPConditionContext() override;

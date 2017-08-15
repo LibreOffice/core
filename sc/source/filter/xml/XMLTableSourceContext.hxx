@@ -35,8 +35,13 @@ class ScXMLTableSourceContext : public ScXMLImportContext
     css::sheet::SheetLinkMode          nMode;
 
 public:
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
     ScXMLTableSourceContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+=======
+    ScXMLTableSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
+>>>>>>> Refactoring fastcontexts code:
 
     virtual ~ScXMLTableSourceContext() override;
 

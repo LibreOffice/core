@@ -32,7 +32,12 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
+<<<<<<< cad80f35f4944ebd23ea7818e7a3e9e825b55b28
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+=======
+                                      sal_Int32 /*nElement*/,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList) :
+>>>>>>> Refactoring fastcontexts code:
     ScXMLImportContext( rImport ),
     sLink(),
     sTableName(),
@@ -41,12 +46,9 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
     nRefresh(0),
     nMode(sheet::SheetLinkMode_NORMAL)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {

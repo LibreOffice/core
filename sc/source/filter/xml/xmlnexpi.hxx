@@ -88,13 +88,10 @@ public:
 
     ScXMLNamedRangeContext(
         ScXMLImport& rImport,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedRangeContext() override;
-
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;
@@ -106,13 +103,10 @@ public:
 
     ScXMLNamedExpressionContext(
         ScXMLImport& rImport,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionContext() override;
-
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;

@@ -34,8 +34,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
-                                      const css::uno::Reference<
-                                      css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     ScXMLImportContext( rImport ),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
@@ -46,12 +45,9 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     bIsCaseSensitive(false),
     bEnabledUserList(false)
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -114,12 +110,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLSortContext::creat
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_SORT_BY ):
         {
-            pContext = new ScXMLSortByContext( GetScImport(), nElement, xAttrList, this );
+            pContext = new ScXMLSortByContext( GetScImport(), nElement, pAttribList, this );
         }
         break;
     }
@@ -202,19 +200,16 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
 
 ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
                                       sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       ScXMLSortContext* pTempSortContext) :
     ScXMLImportContext( rImport ),
     pSortContext(pTempSortContext),
     sDataType(GetXMLToken(XML_AUTOMATIC)),
     sOrder(GetXMLToken(XML_ASCENDING))
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
