@@ -41,7 +41,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 define gb_GeneratedPackage__check_dirs
-$(if $(PACKAGE_DIRS),,$(call gb_Ouput_error,no dirs were added))
+$(if $(PACKAGE_DIRS),,$(call gb_Output_error,no dirs were added))
 $(foreach pair,$(PACKAGE_DIRS),\
 	$(if $(wildcard $(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair))),,\
 		$(call gb_Output_error,source dir $(PACKAGE_SOURCEDIR)/$(call gb_GeneratedPackage__get_srcdir,$(pair)) does not exist) \
