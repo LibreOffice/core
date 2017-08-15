@@ -3023,7 +3023,7 @@ OUString SwTextNode::GetExpandText(  const sal_Int32 nIdx,
         eMode |= ExpandMode::ExpandFootnote;
 
     ModelToViewHelper aConversionMap(*this, eMode);
-    OUString aExpandText = aConversionMap.getViewText();
+    const OUString aExpandText = aConversionMap.getViewText();
     const sal_Int32 nExpandBegin = aConversionMap.ConvertToViewPosition( nIdx );
     sal_Int32 nEnd = nLen == -1 ? GetText().getLength() : nIdx + nLen;
     const sal_Int32 nExpandEnd = aConversionMap.ConvertToViewPosition( nEnd );
@@ -3991,11 +3991,9 @@ void SwTextNode::SetListId(OUString const& rListId)
 
 OUString SwTextNode::GetListId() const
 {
-    OUString sListId;
-
     const SfxStringItem& rListIdItem =
                 dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
-    sListId = rListIdItem.GetValue();
+    const OUString sListId {rListIdItem.GetValue()};
 
     // As long as no explicit list id attribute is set, use the list id of
     // the list, which has been created for the applied list style.
@@ -4004,7 +4002,7 @@ OUString SwTextNode::GetListId() const
         SwNumRule* pRule = GetNumRule();
         if ( pRule )
         {
-            sListId = pRule->GetDefaultListId();
+            return pRule->GetDefaultListId();
         }
     }
 

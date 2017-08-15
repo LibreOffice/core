@@ -401,8 +401,8 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
             }
         }
     }
-
-    m_aExpand = aNewExpand;
+    else
+        m_aExpand = aNewExpand;
 
     const_cast<SwTextField*>(this)->NotifyContentChange( const_cast<SwFormatField&>(GetFormatField()) );
 }
