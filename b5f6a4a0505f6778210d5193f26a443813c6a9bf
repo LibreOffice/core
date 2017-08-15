@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5ddd796f",
+        "filename": "icon-themes/tango/cmd/lc_preformattedparastyle.png",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-08-15T22:12:57Z",
+      "side": 1,
+      "message": "This icon uses a different rasterization style than the H1, H2… ones. Also, the letters are smaller—you could try basing in in a condensed font like Open Sans Condensed.",
+      "revId": "b5f6a4a0505f6778210d5193f26a443813c6a9bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7dda357a",
+        "filename": "icon-themes/tango/cmd/lc_quoteparastyle.png",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-08-15T22:12:57Z",
+      "side": 1,
+      "message": "These icons could work better against dark backgrounds (e.g. Adwaita Dark and Breeze Dark) by adding an outline and using a bit of relief.",
+      "revId": "b5f6a4a0505f6778210d5193f26a443813c6a9bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
