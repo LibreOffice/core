@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b9ed9290",
+        "filename": "sd/source/core/sdpage2.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-15T14:08:49Z",
+      "side": 0,
+      "message": "comparing of the GetObj() is missing in Equals",
+      "revId": "718cdd43c25783d9cd402e381123efe3981cc514",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d9f25e6f",
+        "filename": "svx/source/svdraw/svdobj.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-15T14:08:49Z",
+      "side": 0,
+      "message": "we need an Equals here too",
+      "revId": "718cdd43c25783d9cd402e381123efe3981cc514",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

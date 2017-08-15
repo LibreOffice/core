@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_79e5eaa6",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-15T14:08:49Z",
+      "side": 1,
+      "message": "this is inverted, should be !Equals",
+      "revId": "9c8c5d4ec55fe12f927016c182620682048d59bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
