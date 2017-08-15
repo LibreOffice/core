@@ -1690,36 +1690,18 @@ bool SdrObject::HasTextEdit() const
     return false;
 }
 
-OString SdrObject::stringify() const
+bool SdrObject::Equals(const SdrObject& rOtherObj) const
 {
-    OStringBuffer aString(100);
-    aString.append(aAnchor.X()).
-            append(aAnchor.Y()).
-            append(aGridOffset.X()).
-            append(aGridOffset.Y()).
-            append((sal_Int32)nOrdNum).
-            append((sal_Int32)mnNavigationPosition).
-            append(mbSupportTextIndentingOnLineWidthChange).
-            append(mbLineIsOutsideGeometry).
-            append(bMarkProt).
-            append(bIs3DObj).
-            append(bIsEdge).
-            append(bClosedObj).
-            append(bNotVisibleAsMaster).
-            append(bEmptyPresObj).
-            append(mbVisible).
-            append(bNoPrint).
-            append(bSizProt).
-            append(bMovProt).
-            append(false).
-            append(bInserted).
-            append(false).
-            append(bVirtObj).
-            append(sal_uInt8(mnLayerID));
-
-    aString.append(GetMergedItemSet().stringify());
-
-    return aString.makeStringAndClear();
+    return (aAnchor.X() == rOtherObj.aAnchor.X() && aAnchor.Y() == rOtherObj.aAnchor.Y() &&
+            aGridOffset.X() == rOtherObj.aGridOffset.X() && aGridOffset.Y() == rOtherObj.aGridOffset.Y() &&
+            nOrdNum == rOtherObj.nOrdNum && mnNavigationPosition == rOtherObj.mnNavigationPosition &&
+            mbSupportTextIndentingOnLineWidthChange == rOtherObj.mbSupportTextIndentingOnLineWidthChange &&
+            mbLineIsOutsideGeometry == rOtherObj.mbLineIsOutsideGeometry && bMarkProt == rOtherObj.bMarkProt &&
+            bIs3DObj == rOtherObj.bIs3DObj && bIsEdge == rOtherObj.bIsEdge && bClosedObj == rOtherObj.bClosedObj &&
+            bNotVisibleAsMaster == rOtherObj.bNotVisibleAsMaster && bEmptyPresObj == rOtherObj.bEmptyPresObj &&
+            mbVisible == rOtherObj.mbVisible && bNoPrint == rOtherObj.bNoPrint && bSizProt == rOtherObj.bSizProt &&
+            bMovProt == rOtherObj.bMovProt && bInserted == rOtherObj.bInserted && bVirtObj == rOtherObj.bVirtObj &&
+            mnLayerID == rOtherObj.mnLayerID && GetMergedItemSet().Equals(rOtherObj.GetMergedItemSet(), false) );
 }
 
 void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
