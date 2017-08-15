@@ -215,6 +215,7 @@ HTMLDataProvider::~HTMLDataProvider()
 {
     if (mxHTMLFetchThread.is())
     {
+        SolarMutexReleaser aReleaser;
         mxHTMLFetchThread->join();
     }
 }
@@ -229,6 +230,12 @@ void HTMLDataProvider::Import()
     mpDoc->ResetClip(mpDocument, (SCTAB)0);
     mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, maURL, maID, &maIdle);
     mxHTMLFetchThread->launch();
+
+    if (mbDeterministic)
+    {
+        SolarMutexReleaser aReleaser;
+        mxHTMLFetchThread->join();
+    }
 }
 
 IMPL_LINK_NOARG(HTMLDataProvider, ImportFinishedHdl, Timer*, void)
