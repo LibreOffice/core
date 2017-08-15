@@ -113,7 +113,14 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
-    g_info("lok_dialog_signal_button: %d, %d (in twips: %d, %d)",
+    std::string aEventType = "unknown";
+    if (pEvent->type == GDK_BUTTON_PRESS)
+        aEventType = "BUTTON_PRESS";
+    else if (pEvent->type == GDK_BUTTON_RELEASE)
+        aEventType = "BUTTON_RELEASE";
+
+    g_info("lok_dialog_signal_button (type: %s): %d, %d (in twips: %d, %d)",
+           aEventType.c_str(),
            (int)pEvent->x, (int)pEvent->y,
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
@@ -197,7 +204,7 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
-    g_info("lok_dialog_signal_button: %d, %d (in twips: %d, %d)",
+    g_info("lok_dialog_signal_motion: %d, %d (in twips: %d, %d)",
            (int)pEvent->x, (int)pEvent->y,
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
@@ -478,7 +485,14 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
-    g_info("lok_dialog_floating_win_signal_button: %d, %d (in twips: %d, %d)",
+    std::string aEventType = "unknown";
+    if (pEvent->type == GDK_BUTTON_PRESS)
+        aEventType = "BUTTON_PRESS";
+    else if (pEvent->type == GDK_BUTTON_RELEASE)
+        aEventType = "BUTTON_RELEASE";
+
+    g_info("lok_dialog_floating_win_signal_button (type: %s): %d, %d (in twips: %d, %d)",
+           aEventType.c_str(),
            (int)pEvent->x, (int)pEvent->y,
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
