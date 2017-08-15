@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_99b6163c",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-15T06:45:05Z",
+      "side": 1,
+      "message": "Here and elsewhere: shouldn\u0027t this be #ifndef __ANDROID__?",
+      "revId": "d38253fa00f3c8bd062fe5f53acd43dca090dd7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b9811250",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 5
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-15T06:45:05Z",
+      "side": 1,
+      "message": "Please turn the code removal to #ifndef __ANDROID__ ... #endif",
+      "revId": "d38253fa00f3c8bd062fe5f53acd43dca090dd7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d986de64",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-15T06:45:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d38253fa00f3c8bd062fe5f53acd43dca090dd7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
