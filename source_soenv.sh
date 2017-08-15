@@ -106,7 +106,7 @@ else
         ;;
         # the result here (whether you get x86_64) seems to depend on $CC...
         i[3456]86-*-darwin*|x86_64-*-darwin*)
-            . ./MacOSXX86Env.Set.sh
+            . ./MacOSXX64Env.Set.sh
         ;;
         powerpc-*-darwin*)
             . ./MacOSXPPCEnv.Set.sh
