@@ -7,16 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifdef _WIN32
-#include <prewin.h>
-#include <postwin.h>
-#elif defined __MACH__
-#include <mach/mach_time.h>
-#else
-#include <sys/time.h>
-#endif
-
-#include <time.h>
 #include <math.h>
 #include <float.h>
 #include <iostream>
@@ -30,6 +20,7 @@
 #include <opencl/platforminfo.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
+#include <tools/time.hxx>
 
 #include <opencl/OpenCLZone.hxx>
 
@@ -61,15 +52,6 @@ struct LibreOfficeDeviceEvaluationIO
     std::vector<double> output;
     unsigned long inputSize;
     unsigned long outputSize;
-};
-
-struct timer
-{
-#ifdef _WIN32
-    LARGE_INTEGER start;
-#else
-    long long start;
-#endif
 };
 
 const char* source = STRINGIFY(
@@ -128,47 +110,6 @@ const char* source = STRINGIFY(
     );
 
 size_t sourceSize[] = { strlen(source) };
-
-/*************************************************************************/
-/* INTERNAL FUNCTIONS                                                    */
-/*************************************************************************/
-/* Timer functions - start timer */
-void timerStart(timer* mytimer)
-{
-#ifdef _WIN32
-    QueryPerformanceCounter(&mytimer->start);
-#elif defined __MACH__
-    mytimer->start = mach_absolute_time();
-#else
-    struct timespec s;
-    clock_gettime(CLOCK_MONOTONIC, &s);
-    mytimer->start = (long long)s.tv_sec * (long long)1.0E6 + (long long)s.tv_nsec / (long long)1.0E3;
-#endif
-}
-
-/* Timer functions - get current value */
-double timerCurrent(timer const * mytimer)
-{
-#ifdef _WIN32
-    LARGE_INTEGER stop, frequency;
-    QueryPerformanceCounter(&stop);
-    QueryPerformanceFrequency(&frequency);
-    double time = ((double)(stop.QuadPart - mytimer->start.QuadPart) / frequency.QuadPart);
-#elif defined __MACH__
-    static mach_timebase_info_data_t info = { 0, 0 };
-    if (info.numer == 0)
-        mach_timebase_info(&info);
-    long long stop = mach_absolute_time();
-    double time = ((stop - mytimer->start) * (double) info.numer / info.denom) / 1.0E9;
-#else
-    struct timespec s;
-    long long stop;
-    clock_gettime(CLOCK_MONOTONIC, &s);
-    stop = (long long)s.tv_sec * (long long)1.0E6 + (long long)s.tv_nsec / (long long)1.0E3;
-    double time = ((double)(stop - mytimer->start) / 1.0E6);
-#endif
-    return time;
-}
 
 /* Random number generator */
 double random(double min, double max)
@@ -283,8 +224,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
             else
             {
                 /* Build program succeeded */
-                timer kernelTime;
-                timerStart(&kernelTime);
+                sal_uInt64 kernelTime = tools::Time::GetMonotonicTicks();
 
                 /* Run kernel */
                 cl_kernel clKernel = clCreateKernel(clProgram, "DynamicKernel", &clStatus);
@@ -321,7 +261,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
                 clReleaseMemObject(clResult);
                 clReleaseKernel(clKernel);
 
-                rDevice.fTime = timerCurrent(&kernelTime);
+                rDevice.fTime = tools::Time::GetMonotonicTicks() - kernelTime;
                 rDevice.bErrors = false;
             }
 
@@ -334,8 +274,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
     {
         /* Evaluating an Native CPU device */
         SAL_INFO("opencl.device", "Device: \"CPU\" (Native) evaluation...");
-        timer kernelTime;
-        timerStart(&kernelTime);
+        sal_uInt64 kernelTime = tools::Time::GetMonotonicTicks();
 
         unsigned long j;
         for (j = 0; j < testData->outputSize; j++)
@@ -354,13 +293,13 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
             // Don't run for much longer than one second
             if (j > 0 && j % 100 == 0)
             {
-                rDevice.fTime = timerCurrent(&kernelTime);
+                rDevice.fTime = tools::Time::GetMonotonicTicks() - kernelTime;
                 if (rDevice.fTime >= 1)
                     break;
             }
         }
 
-        rDevice.fTime = timerCurrent(&kernelTime);
+        rDevice.fTime = tools::Time::GetMonotonicTicks() - kernelTime;
 
         // Scale time to how long it would have taken to go all the way to outputSize
         rDevice.fTime /= ((double) j / testData->outputSize);

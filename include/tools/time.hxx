@@ -121,8 +121,24 @@ public:
 
     static Time     GetUTCOffset();
 
-    /// Elapsed time since epoch in milliseconds
+    /**
+     * Elapsed time in milliseconds (1e-3) since some unspecified starting point
+     *
+     * Convenience function, which just calls GetMonotonicTicks() / 1000.
+     */
     static sal_uInt64 GetSystemTicks();
+
+    /**
+     * Elapsed time in microseconds (1e-6) since some unspecified starting point
+     *
+     * Uses the high-precision, monotonic time sources provided by the OS, if
+     * available. Don't try to relate it to the system time, and also it's long
+     * time accuracy is not the best. Primarly used to mesure small time intervals
+     * for the VCL scheduler.
+     *
+     * @return current system ticks in microseconds (1e-6s)
+     */
+    static sal_uInt64 GetMonotonicTicks();
 
     tools::Time&           operator =( const tools::Time& rTime );
     Time            operator -() const
