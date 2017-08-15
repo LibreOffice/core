@@ -698,7 +698,7 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
         aSelection.Justify();
         OUString aText = GetField()->GetText();
         // leave it as is if selected until end
-        if ( (sal_Int32)aSelection.Max() == aText.getLength() )
+        if ( aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
                 aSelection.Min() = SELECTION_MAX;
@@ -1061,7 +1061,7 @@ static FieldUnit eDefaultUnit = FUNIT_NONE;
 FieldUnit MetricField::GetDefaultUnit() { return eDefaultUnit; }
 void MetricField::SetDefaultUnit( FieldUnit meUnit ) { eDefaultUnit = meUnit; }
 
-static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
+static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, sal_Int32& nDecDigits )
 {
     switch( meUnit )
     {
@@ -1197,7 +1197,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
         return nValue;
     }
 
-    long nDecDigits = nDigits;
+    sal_Int32 nDecDigits = nDigits;
     FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
 
     if ( nDecDigits < 0 )
@@ -1252,7 +1252,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
         return nValue;
     }
 
-    long nDecDigits = nDigits;
+    sal_Int32 nDecDigits = nDigits;
     FieldUnit eFieldUnit = ImplMap2FieldUnit( eOutUnit, nDecDigits );
 
     if ( nDecDigits < 0 )

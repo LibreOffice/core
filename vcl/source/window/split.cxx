@@ -169,7 +169,7 @@ void Splitter::SetHorizontal(bool bNew)
     }
 }
 
-void Splitter::SetKeyboardStepSize( long nStepSize )
+void Splitter::SetKeyboardStepSize( sal_Int32 nStepSize )
 {
     mnKeyboardStepSize = nStepSize;
 }
@@ -198,8 +198,8 @@ bool Splitter::ImplSplitterActive()
 
     bool bActive = true;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    long nA = rSettings.GetScrollBarSize();
-    long nB = rSettings.GetSplitSize();
+    sal_Int32 nA = rSettings.GetScrollBarSize();
+    sal_Int32 nB = rSettings.GetSplitSize();
 
     Size aSize = GetOutputSize();
     if ( mbHorzSplit )
@@ -228,7 +228,7 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 aPos.Y() = mnLastSplitPos;
             ImplSplitMousePos( aPos );
-            long nTemp = mnSplitPos;
+            sal_Int32 nTemp = mnSplitPos;
             if ( mbHorzSplit )
                 SetSplitPosPixel( aPos.X() );
             else
@@ -251,7 +251,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
 
         if ( !rTEvt.IsTrackingCanceled() )
         {
-            long nNewPos;
+            sal_Int32 nNewPos;
             if ( mbHorzSplit )
                 nNewPos = maDragPos.X();
             else
@@ -291,7 +291,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
         if ( mbDragFull )
         {
             maDragPos = aNewPos;
-            long nNewPos;
+            sal_Int32 nNewPos;
             if ( mbHorzSplit )
                 nNewPos = maDragPos.X();
             else
@@ -326,7 +326,7 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
 
         if ( nCode != KEY_ESCAPE )
         {
-            long nNewPos;
+            sal_Int32 nNewPos;
             if ( mbHorzSplit )
                 nNewPos = maDragPos.X();
             else
@@ -411,7 +411,7 @@ void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
             }
 
             maDragPos = aNewPos;
-            long nNewPos;
+            sal_Int32 nNewPos;
             if ( mbHorzSplit )
                 nNewPos = maDragPos.X();
             else
@@ -451,7 +451,7 @@ void Splitter::SetDragRectPixel( const tools::Rectangle& rDragRect, vcl::Window*
         mpRefWin = _pRefWin;
 }
 
-void Splitter::SetSplitPosPixel( long nNewPos )
+void Splitter::SetSplitPosPixel( sal_Int32 nNewPos )
 {
     mnSplitPos = nNewPos;
 }
@@ -521,7 +521,7 @@ void Splitter::ImplRestoreSplitter()
     }
 
     ImplSplitMousePos( aPos );
-    long nTemp = mnSplitPos;
+    sal_Int32 nTemp = mnSplitPos;
     if ( mbHorzSplit )
         SetSplitPosPixel( aPos.X() );
     else
@@ -611,7 +611,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                 else
                     aPos.Y() = 0;
                 ImplSplitMousePos( aPos );
-                long nTemp = mnSplitPos;
+                sal_Int32 nTemp = mnSplitPos;
                 if ( mbHorzSplit )
                     SetSplitPosPixel( aPos.X() );
                 else

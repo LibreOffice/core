@@ -713,8 +713,8 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap const * pPixmap, X11Pixmap
     Display* pDisplay = mrX11Parent.GetXDisplay();
     bool bInverted = false;
 
-    const long nWidth = pPixmap->GetWidth();
-    const long nHeight = pPixmap->GetHeight();
+    const sal_Int32 nWidth = pPixmap->GetWidth();
+    const sal_Int32 nHeight = pPixmap->GetHeight();
     SalTwoRect aPosAry(0, 0, nWidth, nHeight, nX, nY, nWidth, nHeight);
 
     PreDraw();

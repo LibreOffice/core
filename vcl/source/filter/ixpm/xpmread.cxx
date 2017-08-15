@@ -60,7 +60,7 @@ private:
     Bitmap::ScopedWriteAccess   mpAcc;
     Bitmap                      maMaskBmp;
     Bitmap::ScopedWriteAccess   mpMaskAcc;
-    long                        mnLastPos;
+    sal_Int32                   mnLastPos;
 
     sal_uLong               mnWidth;
     sal_uLong               mnHeight;
@@ -469,7 +469,7 @@ void XPMReader::ImplGetRGBHex(colordata &rDest, sal_uLong  nAdd)
     }
 }
 
-// ImplGetUlong returns the value of a up to 6-digit long ASCII-decimal number.
+// ImplGetUsal_Int32 returns the value of a up to 6-digit long ASCII-decimal number.
 
 sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
 {

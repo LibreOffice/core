@@ -34,7 +34,7 @@ public:
                ~SalClipRegion();
 
     void        BeginSetClipRegion( sal_uIntPtr nRects );
-    void        UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    void        UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight );
 
     XRectangle *EndSetClipRegion()  {
         return ClipRectangleList.get(); }
@@ -71,10 +71,10 @@ public:
     // override all pure virtual methods
     virtual void                    ResetClipRegion() override;
     virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) override;
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    EndSetClipRegion() override;
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    Show( bool bVisible ) override;
     virtual void                    GrabFocus() override;
 

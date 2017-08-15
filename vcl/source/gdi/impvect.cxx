@@ -53,11 +53,11 @@ namespace ImplVectorizer
     ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
     void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce );
     bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
-    bool     ImplIsUp( ImplVectMap const * pMap, long nY, long nX );
+    bool     ImplIsUp( ImplVectMap const * pMap, sal_Int32 nY, sal_Int32 nX );
     void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
 }
 
-struct ChainMove { long nDX; long nDY; };
+struct ChainMove { sal_Int32 nDX; sal_Int32 nDY; };
 
 static const ChainMove aImplMove[ 8 ] =   {
                                         { 1, 0 },
@@ -193,38 +193,38 @@ private:
 
     Scanline        mpBuf;
     Scanline*       mpScan;
-    long            mnWidth;
-    long            mnHeight;
+    sal_Int32            mnWidth;
+    sal_Int32            mnHeight;
 
 public:
 
-                    ImplVectMap( long nWidth, long nHeight );
+                    ImplVectMap( sal_Int32 nWidth, sal_Int32 nHeight );
                     ~ImplVectMap();
 
-    long     Width() const { return mnWidth; }
-    long     Height() const { return mnHeight; }
+    sal_Int32     Width() const { return mnWidth; }
+    sal_Int32     Height() const { return mnHeight; }
 
-    inline void     Set( long nY, long nX, sal_uInt8 cVal );
-    inline sal_uInt8        Get( long nY, long nX ) const;
+    inline void     Set( sal_Int32 nY, sal_Int32 nX, sal_uInt8 cVal );
+    inline sal_uInt8        Get( sal_Int32 nY, sal_Int32 nX ) const;
 
-    inline bool     IsFree( long nY, long nX ) const;
-    inline bool     IsCont( long nY, long nX ) const;
-    inline bool     IsDone( long nY, long nX ) const;
+    inline bool     IsFree( sal_Int32 nY, sal_Int32 nX ) const;
+    inline bool     IsCont( sal_Int32 nY, sal_Int32 nX ) const;
+    inline bool     IsDone( sal_Int32 nY, sal_Int32 nX ) const;
 
 };
 
-ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
+ImplVectMap::ImplVectMap( sal_Int32 nWidth, sal_Int32 nHeight ) :
     mnWidth ( nWidth ),
     mnHeight( nHeight )
 {
-    const long  nWidthAl = ( nWidth >> 2 ) + 1;
-    const long  nSize = nWidthAl * nHeight;
+    const sal_Int32  nWidthAl = ( nWidth >> 2 ) + 1;
+    const sal_Int32  nSize = nWidthAl * nHeight;
     Scanline    pTmp = mpBuf = static_cast<Scanline>(rtl_allocateMemory( nSize ));
 
     memset( mpBuf, 0, nSize );
     mpScan = static_cast<Scanline*>(rtl_allocateMemory( nHeight * sizeof( Scanline ) ));
 
-    for( long nY = 0; nY < nHeight; pTmp += nWidthAl )
+    for( sal_Int32 nY = 0; nY < nHeight; pTmp += nWidthAl )
         mpScan[ nY++ ] = pTmp;
 }
 
@@ -234,28 +234,28 @@ ImplVectMap::~ImplVectMap()
     rtl_freeMemory( mpScan );
 }
 
-inline void ImplVectMap::Set( long nY, long nX, sal_uInt8 cVal )
+inline void ImplVectMap::Set( sal_Int32 nY, sal_Int32 nX, sal_uInt8 cVal )
 {
     const sal_uInt8 cShift = sal::static_int_cast<sal_uInt8>(6 - ( ( nX & 3 ) << 1 ));
     ( ( mpScan[ nY ][ nX >> 2 ] ) &= ~( 3 << cShift ) ) |= ( cVal << cShift );
 }
 
-inline sal_uInt8    ImplVectMap::Get( long nY, long nX ) const
+inline sal_uInt8    ImplVectMap::Get( sal_Int32 nY, sal_Int32 nX ) const
 {
     return sal::static_int_cast<sal_uInt8>( ( ( mpScan[ nY ][ nX >> 2 ] ) >> ( 6 - ( ( nX & 3 ) << 1 ) ) ) & 3 );
 }
 
-inline bool ImplVectMap::IsFree( long nY, long nX ) const
+inline bool ImplVectMap::IsFree( sal_Int32 nY, sal_Int32 nX ) const
 {
     return( VECT_FREE_INDEX == Get( nY, nX ) );
 }
 
-inline bool ImplVectMap::IsCont( long nY, long nX ) const
+inline bool ImplVectMap::IsCont( sal_Int32 nY, sal_Int32 nX ) const
 {
     return( VECT_CONT_INDEX == Get( nY, nX ) );
 }
 
-inline bool ImplVectMap::IsDone( long nY, long nX ) const
+inline bool ImplVectMap::IsDone( sal_Int32 nY, sal_Int32 nX ) const
 {
     return( VECT_DONE_INDEX == Get( nY, nX ) );
 }
@@ -330,8 +330,8 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
 
         if( nFlag & VECT_POLY_INLINE_INNER )
         {
-            long nFirstX, nFirstY;
-            long nLastX, nLastY;
+            sal_Int32 nFirstX, nFirstY;
+            sal_Int32 nLastX, nLastY;
 
             nFirstX = nLastX = maStartPt.X();
             nFirstY = nLastY = maStartPt.Y();
@@ -437,8 +437,8 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
         }
         else if( nFlag & VECT_POLY_INLINE_OUTER )
         {
-            long nFirstX, nFirstY;
-            long nLastX, nLastY;
+            sal_Int32 nFirstX, nFirstY;
+            sal_Int32 nLastX, nLastY;
 
             nFirstX = nLastX = maStartPt.X();
             nFirstY = nLastY = maStartPt.Y();
@@ -544,7 +544,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
         }
         else
         {
-            long nLastX = maStartPt.X(), nLastY = maStartPt.Y();
+            sal_Int32 nLastX = maStartPt.X(), nLastY = maStartPt.Y();
 
             aArr.ImplSetSize( mnCount + 1 );
             aArr[ 0 ] = Point( nLastX, nLastY );
@@ -583,8 +583,8 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
     for( n = nNewPos = 1; n < nCount; )
     {
         const Point& rPt = rArr[ n++ ];
-        const long   nX = BACK_MAP( rPt.X() );
-        const long   nY = BACK_MAP( rPt.Y() );
+        const sal_Int32   nX = BACK_MAP( rPt.X() );
+        const sal_Int32   nY = BACK_MAP( rPt.Y() );
 
         if( nX != pLast->X() || nY != pLast->Y() )
         {
@@ -626,7 +626,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 namespace ImplVectorizer {
 
 bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                    sal_uInt8 cReduce, const Link<long,void>* pProgress )
+                    sal_uInt8 cReduce, const Link<sal_Int32,void>* pProgress )
 {
     bool bRet = false;
 
@@ -640,8 +640,8 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         tools::PolyPolygon         aPolyPoly;
         double              fPercent = 0.0;
         double              fPercentStep_2 = 0.0;
-        const long          nWidth = pRAcc->Width();
-        const long          nHeight = pRAcc->Height();
+        const sal_Int32          nWidth = pRAcc->Width();
+        const sal_Int32          nHeight = pRAcc->Height();
         const sal_uInt16        nColorCount = pRAcc->GetPaletteEntryCount();
         sal_uInt16              n;
         ImplColorSet*       pColorSet = reinterpret_cast<ImplColorSet*>(new sal_uInt8[ 256 * sizeof( ImplColorSet ) ]);
@@ -656,8 +656,8 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             pColorSet[ n ].maColor = pRAcc->GetPaletteColor( n );
         }
 
-        for( long nY = 0; nY < nHeight; nY++ )
-            for( long nX = 0; nX < nWidth; nX++ )
+        for( sal_Int32 nY = 0; nY < nHeight; nY++ )
+            for( sal_Int32 nX = 0; nX < nWidth; nX++ )
                 pColorSet[ pRAcc->GetPixel( nY, nX ).GetIndex() ].mbSet = true;
 
         qsort( pColorSet, 256, sizeof( ImplColorSet ), ImplColorSetCmpFnc );
@@ -731,7 +731,7 @@ void ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly )
     if( rPolyPoly.Count() > VECT_POLY_MAX )
     {
         tools::PolyPolygon aNewPolyPoly;
-        long        nReduce = 0;
+        sal_Int32        nReduce = 0;
         sal_uInt16      nNewCount;
 
         do
@@ -764,14 +764,14 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
 
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {
-        const long          nOldWidth = pRAcc->Width();
-        const long          nOldHeight = pRAcc->Height();
-        const long          nNewWidth = ( nOldWidth << 2 ) + 4;
-        const long          nNewHeight = ( nOldHeight << 2 ) + 4;
+        const sal_Int32          nOldWidth = pRAcc->Width();
+        const sal_Int32          nOldHeight = pRAcc->Height();
+        const sal_Int32          nNewWidth = ( nOldWidth << 2 ) + 4;
+        const sal_Int32          nNewHeight = ( nOldHeight << 2 ) + 4;
         const BitmapColor   aTest( pRAcc->GetBestMatchingColor( rColor ) );
-        std::unique_ptr<long[]> pMapIn(new long[ std::max( nOldWidth, nOldHeight ) ]);
-        std::unique_ptr<long[]> pMapOut(new long[ std::max( nOldWidth, nOldHeight ) ]);
-        long                nX, nY, nTmpX, nTmpY;
+        std::unique_ptr<sal_Int32[]> pMapIn(new sal_Int32[ std::max( nOldWidth, nOldHeight ) ]);
+        std::unique_ptr<sal_Int32[]> pMapOut(new sal_Int32[ std::max( nOldWidth, nOldHeight ) ]);
+        sal_Int32                nX, nY, nTmpX, nTmpY;
 
         pMap = new ImplVectMap( nNewWidth, nNewHeight );
 
@@ -847,11 +847,11 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
 
 void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce )
 {
-    const long nWidth = pMap->Width(), nHeight= pMap->Height();
+    const sal_Int32 nWidth = pMap->Width(), nHeight= pMap->Height();
 
-    for( long nY = 0; nY < nHeight; nY++ )
+    for( sal_Int32 nY = 0; nY < nHeight; nY++ )
     {
-        long    nX = 0;
+        sal_Int32    nX = 0;
         bool    bInner = true;
 
         while( nX < nWidth )
@@ -897,7 +897,7 @@ void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 
             else
             {
                 // process done segment
-                const long nStartSegX = nX++;
+                const sal_Int32 nStartSegX = nX++;
 
                 while( pMap->IsDone( nY, nX ) )
                     nX++;
@@ -911,8 +911,8 @@ void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 
 
 bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
 {
-    long                nActX = rStartPt.X();
-    long                nActY = rStartPt.Y();
+    sal_Int32                nActX = rStartPt.X();
+    sal_Int32                nActY = rStartPt.Y();
     sal_uLong               nFound;
     sal_uLong               nLastDir = 0UL;
     sal_uLong               nDir;
@@ -922,8 +922,8 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
         nFound = 0UL;
 
         // first try last direction
-        long nTryX = nActX + aImplMove[ nLastDir ].nDX;
-        long nTryY = nActY + aImplMove[ nLastDir ].nDY;
+        sal_Int32 nTryX = nActX + aImplMove[ nLastDir ].nDX;
+        sal_Int32 nTryY = nActY + aImplMove[ nLastDir ].nDY;
 
         if( pMap->IsCont( nTryY, nTryX ) )
         {
@@ -959,7 +959,7 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
     return true;
 }
 
-bool ImplIsUp( ImplVectMap const * pMap, long nY, long nX )
+bool ImplIsUp( ImplVectMap const * pMap, sal_Int32 nY, sal_Int32 nX )
 {
     if( pMap->IsDone( nY - 1, nX ) )
         return true;

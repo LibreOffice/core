@@ -22,20 +22,20 @@
 
 struct ImplMapRes
 {
-    long                mnMapOfsX;          // Offset in X direction
-    long                mnMapOfsY;          // Offset in Y direction
-    long                mnMapScNumX;        // Scaling factor - numerator in X direction
-    long                mnMapScNumY;        // Scaling factor - numerator in Y direction
-    long                mnMapScDenomX;      // Scaling factor - denominator in X direction
-    long                mnMapScDenomY;      // Scaling factor - denominator in Y direction
+    sal_Int32                mnMapOfsX;          // Offset in X direction
+    sal_Int32                mnMapOfsY;          // Offset in Y direction
+    sal_Int32                mnMapScNumX;        // Scaling factor - numerator in X direction
+    sal_Int32                mnMapScNumY;        // Scaling factor - numerator in Y direction
+    sal_Int32                mnMapScDenomX;      // Scaling factor - denominator in X direction
+    sal_Int32                mnMapScDenomY;      // Scaling factor - denominator in Y direction
 };
 
 struct ImplThresholdRes
 {
-    long                mnThresLogToPixX;   // Thresholds for calculation
-    long                mnThresLogToPixY;   // with BigInts
-    long                mnThresPixToLogX;   // ""
-    long                mnThresPixToLogY;   // ""
+    sal_Int32                mnThresLogToPixX;   // Thresholds for calculation
+    sal_Int32                mnThresLogToPixY;   // with BigInts
+    sal_Int32                mnThresPixToLogX;   // ""
+    sal_Int32                mnThresPixToLogY;   // ""
 };
 
 #endif // INCLUDED_VCL_OUTDEVMAP_HXX

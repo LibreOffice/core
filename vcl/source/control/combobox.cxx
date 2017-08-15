@@ -159,7 +159,7 @@ void ComboBox::ImplCalcEditHeight()
                                 aControlValue,
                                 aBoundRegion, aContentRegion ) )
     {
-        const long nNCHeight = aBoundRegion.GetHeight();
+        const sal_Int32 nNCHeight = aBoundRegion.GetHeight();
         if (m_pImpl->m_nDDHeight < nNCHeight)
             m_pImpl->m_nDDHeight = sal::static_int_cast<sal_uInt16>(nNCHeight);
     }
@@ -311,7 +311,7 @@ IMPL_LINK(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
 
     {
         OUString    aFullText = rEdit.GetText();
-        OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
+        OUString    aStartText = aFullText.copy( 0, aSel.Max() );
         sal_Int32   nStart = m_pImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
@@ -533,7 +533,7 @@ sal_uInt16 ComboBox::GetDropDownLineCount() const
     return nLines;
 }
 
-void ComboBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
+void ComboBox::setPosSizePixel( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight,
                                 PosSizeFlags nFlags )
 {
     if( IsDropDownBox() && ( nFlags & PosSizeFlags::Size ) )
@@ -986,7 +986,7 @@ void ComboBox::SetDoubleClickHdl(const Link<ComboBox&,void>& rLink) { m_pImpl->m
 
 const Link<ComboBox&,void>& ComboBox::GetDoubleClickHdl() const { return m_pImpl->m_DoubleClickHdl; }
 
-long ComboBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
+sal_Int32 ComboBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
 {
     return m_pImpl->m_pImplLB->GetEntryHeight() * nLines;
 }
@@ -996,9 +996,9 @@ Size ComboBox::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-long ComboBox::getMaxWidthScrollBarAndDownButton() const
+sal_Int32 ComboBox::getMaxWidthScrollBarAndDownButton() const
 {
-    long nButtonDownWidth = 0;
+    sal_Int32 nButtonDownWidth = 0;
 
     vcl::Window *pBorder = GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
@@ -1014,7 +1014,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
         nButtonDownWidth = aContent.getWidth();
     }
 
-    long nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_Int32 nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
 
     return std::max(nScrollBarWidth, nButtonDownWidth);
 }
@@ -1039,7 +1039,7 @@ Size ComboBox::CalcMinimumSize() const
 
     if (m_pImpl->m_nMaxWidthChars != -1)
     {
-        long nMaxWidth = m_pImpl->m_nMaxWidthChars * approximate_char_width();
+        sal_Int32 nMaxWidth = m_pImpl->m_nMaxWidthChars * approximate_char_width();
         aSz.Width() = std::min(aSz.Width(), nMaxWidth);
     }
 
@@ -1064,8 +1064,8 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
-        long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
-        long nLines = aSz.Height() / nEntryHeight;
+        sal_Int32 nEntryHeight = CalcBlockSize( 1, 1 ).Height();
+        sal_Int32 nLines = aSz.Height() / nEntryHeight;
         if ( nLines < 1 )
             nLines = 1;
         aSz.Height() = nLines * nEntryHeight;
@@ -1123,7 +1123,7 @@ Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    long nCharWidth = GetTextWidth(OUString(u'x'));
+    sal_Int32 nCharWidth = GetTextWidth(OUString(u'x'));
     if ( !IsDropDownBox() )
     {
         Size aOutSz = m_pImpl->m_pImplLB->GetMainWindow()->GetOutputSizePixel();
@@ -1175,9 +1175,9 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
     // contents
     if ( !IsDropDownBox() )
     {
-        long        nOnePixel = GetDrawPixel( pDev, 1 );
-        long        nTextHeight = pDev->GetTextHeight();
-        long        nEditHeight = nTextHeight + 6*nOnePixel;
+        sal_Int32     nOnePixel = GetDrawPixel( pDev, 1 );
+        sal_Int32     nTextHeight = pDev->GetTextHeight();
+        sal_Int32     nEditHeight = nTextHeight + 6*nOnePixel;
         DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 
         // First, draw the edit part
@@ -1396,13 +1396,13 @@ void ComboBox::SetBorderStyle( WindowBorderStyle nBorderStyle )
     }
 }
 
-long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
+sal_Int32 ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
 
     // check whether rPoint fits at all
-    long nIndex = Control::GetIndexForPoint( rPoint );
+    sal_Int32 nIndex = Control::GetIndexForPoint( rPoint );
     if( nIndex != -1 )
     {
         // point must be either in main list window
@@ -1435,8 +1435,8 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
 {
     ComboBoxBounds aBounds;
 
-    long    nTop = 0;
-    long    nBottom = rOutSz.Height();
+    sal_Int32    nTop = 0;
+    sal_Int32    nBottom = rOutSz.Height();
 
     vcl::Window *pBorder = m_rThis.GetWindow( GetWindowType::Border );
     ImplControlValue aControlValue;
@@ -1475,7 +1475,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     }
     else
     {
-        long nSBWidth = m_rThis.GetSettings().GetStyleSettings().GetScrollBarSize();
+        sal_Int32 nSBWidth = m_rThis.GetSettings().GetStyleSettings().GetScrollBarSize();
         nSBWidth = m_rThis.CalcZoom( nSBWidth );
         aBounds.aSubEditSize = Size(rOutSz.Width() - nSBWidth, rOutSz.Height());
         aBounds.aButtonPos = Point(rOutSz.Width() - nSBWidth, nTop);

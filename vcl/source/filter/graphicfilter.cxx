@@ -1677,7 +1677,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 {
                     SvMemoryStream aMemStream;
                     ZCodec aCodec;
-                    long nMemoryLength;
+                    sal_Int32 nMemoryLength;
 
                     aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
                     nMemoryLength = aCodec.Decompress(rIStream, aMemStream);

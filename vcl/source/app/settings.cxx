@@ -64,10 +64,10 @@ struct ImplMouseData
 
     MouseSettingsOptions            mnOptions;
     sal_uInt64                      mnDoubleClkTime;
-    long                            mnDoubleClkWidth;
-    long                            mnDoubleClkHeight;
-    long                            mnStartDragWidth;
-    long                            mnStartDragHeight;
+    sal_Int32                       mnDoubleClkWidth;
+    sal_Int32                       mnDoubleClkHeight;
+    sal_Int32                       mnStartDragWidth;
+    sal_Int32                       mnStartDragHeight;
     sal_uInt16                      mnStartDragCode;
     sal_uInt16                      mnContextMenuCode;
     sal_uInt16                      mnContextMenuClicks;
@@ -153,15 +153,15 @@ struct ImplStyleData
     vcl::Font                       maIconFont;
     vcl::Font                       maTabFont;
     vcl::Font                       maGroupFont;
-    long                            mnBorderSize;
-    long                            mnTitleHeight;
-    long                            mnFloatTitleHeight;
-    long                            mnTearOffTitleHeight;
-    long                            mnScrollBarSize;
-    long                            mnSplitSize;
-    long                            mnSpinSize;
-    long                            mnCursorSize;
-    long                            mnAntialiasedMin;
+    sal_Int32                       mnBorderSize;
+    sal_Int32                       mnTitleHeight;
+    sal_Int32                       mnFloatTitleHeight;
+    sal_Int32                       mnTearOffTitleHeight;
+    sal_Int32                       mnScrollBarSize;
+    sal_Int32                       mnSplitSize;
+    sal_Int32                       mnSpinSize;
+    sal_Int32                       mnCursorSize;
+    sal_Int32                       mnAntialiasedMin;
     sal_uInt64                      mnCursorBlinkTime;
     DragFullOptions                 mnDragFullOptions;
     SelectionOptions                mnSelectionOptions;
@@ -175,7 +175,7 @@ struct ImplStyleData
     TriState                        meUseImagesInMenus;
     bool                            mnUseFlatBorders;
     bool                            mbPreferredUseImagesInMenus;
-    long                            mnMinThumbSize;
+    sal_Int32                       mnMinThumbSize;
     std::shared_ptr<vcl::IconThemeScanner>
                                     mIconThemeScanner;
     std::shared_ptr<vcl::IconThemeSelector>
@@ -319,52 +319,52 @@ MouseSettings::GetDoubleClickTime() const
 }
 
 void
-MouseSettings::SetDoubleClickWidth( long nDoubleClkWidth )
+MouseSettings::SetDoubleClickWidth( sal_Int32 nDoubleClkWidth )
 {
     CopyData();
     mxData->mnDoubleClkWidth = nDoubleClkWidth;
 }
 
-long
+sal_Int32
 MouseSettings::GetDoubleClickWidth() const
 {
     return mxData->mnDoubleClkWidth;
 }
 
 void
-MouseSettings::SetDoubleClickHeight( long nDoubleClkHeight )
+MouseSettings::SetDoubleClickHeight( sal_Int32 nDoubleClkHeight )
 {
     CopyData();
     mxData->mnDoubleClkHeight = nDoubleClkHeight;
 }
 
-long
+sal_Int32
 MouseSettings::GetDoubleClickHeight() const
 {
     return mxData->mnDoubleClkHeight;
 }
 
 void
-MouseSettings::SetStartDragWidth( long nDragWidth )
+MouseSettings::SetStartDragWidth( sal_Int32 nDragWidth )
 {
     CopyData();
     mxData->mnStartDragWidth = nDragWidth;
 }
 
-long
+sal_Int32
 MouseSettings::GetStartDragWidth() const
 {
     return mxData->mnStartDragWidth;
 }
 
 void
-MouseSettings::SetStartDragHeight( long nDragHeight )
+MouseSettings::SetStartDragHeight( sal_Int32 nDragHeight )
 {
     CopyData();
     mxData->mnStartDragHeight = nDragHeight;
 }
 
-long
+sal_Int32
 MouseSettings::GetStartDragHeight() const
 {
     return mxData->mnStartDragHeight;
@@ -1723,97 +1723,97 @@ StyleSettings::GetTabFont() const
     return mxData->maTabFont;
 }
 
-long
+sal_Int32
 StyleSettings::GetBorderSize() const
 {
     return mxData->mnBorderSize;
 }
 
 void
-StyleSettings::SetTitleHeight( long nSize )
+StyleSettings::SetTitleHeight( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnTitleHeight = nSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetTitleHeight() const
 {
     return mxData->mnTitleHeight;
 }
 
 void
-StyleSettings::SetFloatTitleHeight( long nSize )
+StyleSettings::SetFloatTitleHeight( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnFloatTitleHeight = nSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetFloatTitleHeight() const
 {
     return mxData->mnFloatTitleHeight;
 }
 
-long
+sal_Int32
 StyleSettings::GetTearOffTitleHeight() const
 {
     return mxData->mnTearOffTitleHeight;
 }
 
 void
-StyleSettings::SetScrollBarSize( long nSize )
+StyleSettings::SetScrollBarSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnScrollBarSize = nSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetScrollBarSize() const
 {
     return mxData->mnScrollBarSize;
 }
 
 void
-StyleSettings::SetMinThumbSize( long nSize )
+StyleSettings::SetMinThumbSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnMinThumbSize = nSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetMinThumbSize() const
 {
     return mxData->mnMinThumbSize;
 }
 
 void
-StyleSettings::SetSpinSize( long nSize )
+StyleSettings::SetSpinSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnSpinSize = nSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetSpinSize() const
 {
     return mxData->mnSpinSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetSplitSize() const
 {
     return mxData->mnSplitSize;
 }
 
 void
-StyleSettings::SetCursorSize( long nSize )
+StyleSettings::SetCursorSize( sal_Int32 nSize )
 {
     CopyData();
     mxData->mnCursorSize = nSize;
 }
 
-long
+sal_Int32
 StyleSettings::GetCursorSize() const
 {
     return mxData->mnCursorSize;
@@ -1829,7 +1829,7 @@ StyleSettings::SetCursorBlinkTime( sal_uInt64 nBlinkTime )
 sal_uInt64
 StyleSettings::GetCursorBlinkTime() const
 {
-    return (long) mxData->mnCursorBlinkTime;
+    return (sal_Int32) mxData->mnCursorBlinkTime;
 }
 
 void
@@ -1872,7 +1872,7 @@ StyleSettings::GetDisplayOptions() const
 }
 
 void
-StyleSettings::SetAntialiasingMinPixelHeight( long nMinPixel )
+StyleSettings::SetAntialiasingMinPixelHeight( sal_Int32 nMinPixel )
 {
     CopyData();
     mxData->mnAntialiasedMin = nMinPixel;

@@ -2052,7 +2052,7 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName )
             sal_Int32 nPixelHeight = pGrid->GetDataRowHeight();
             // take the zoom factor into account
             nPixelHeight = pGrid->CalcReverseZoom(nPixelHeight);
-            aProp <<= (sal_Int32)pGrid->PixelToLogic(Point(0,nPixelHeight),MapUnit::Map10thMM).Y();
+            aProp <<= pGrid->PixelToLogic(Point(0,nPixelHeight),MapUnit::Map10thMM).Y();
         }
         else if ( _rPropertyName == FM_PROP_HASNAVIGATION )
         {

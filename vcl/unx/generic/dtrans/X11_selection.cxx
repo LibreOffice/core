@@ -102,7 +102,7 @@ extern "C"
     }
 }
 
-static const long nXdndProtocolRevision = 5;
+static const sal_Int32 nXdndProtocolRevision = 5;
 
 // mapping between mime types (or what the office thinks of mime types)
 // and X convention types
@@ -1147,7 +1147,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
             {
                 osl::MutexGuard aGuard(m_aMutex);
 
-                sal_Int32 nOutSize = 0;
+                long nOutSize = 0;
                 sal_uInt8* pBytes = X11_getBmpFromPixmap( m_pDisplay, aPixmap, aColormap, nOutSize );
                 if( pBytes )
                 {
@@ -1408,7 +1408,7 @@ PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
 static std::size_t GetTrueFormatSize(int nFormat)
 {
     // http://mail.gnome.org/archives/wm-spec-list/2003-March/msg00067.html
-    return nFormat == 32 ? sizeof(long) : nFormat/8;
+    return nFormat == 32 ? sizeof(sal_Int32) : nFormat/8;
 }
 
 bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
@@ -1526,7 +1526,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
             rInc.m_nTransferStartTime   = time( nullptr );
 
             // use incr protocol, signal start to requestor
-            long nMinSize = m_nIncrementalThreshold;
+            sal_Int32 nMinSize = m_nIncrementalThreshold;
             XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
             XChangeProperty( m_pDisplay, requestor, property,
                              m_nINCRAtom, 32,  PropModeReplace, reinterpret_cast<unsigned char*>(&nMinSize), 1 );
@@ -1609,7 +1609,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         }
         else if( rRequest.target == m_nTIMESTAMPAtom )
         {
-            long nTimeStamp = (long)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
+            sal_Int32 nTimeStamp = (sal_Int32)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
             XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
                              XA_INTEGER, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&nTimeStamp), 1 );
             aNotify.xselection.property = rRequest.property;
@@ -2649,7 +2649,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                 aEvent.xclient.message_type = m_nXdndLeave;
                 aEvent.xclient.window       = m_aDropWindow;
                 aEvent.xclient.data.l[0]    = m_aWindow;
-                memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
+                memset( aEvent.xclient.data.l+1, 0, sizeof(sal_Int32)*4);
                 m_aDropWindow = m_aDropProxy = None;
                 XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
             }
@@ -3078,7 +3078,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, ::Window aRoot )
                 aEvent.xclient.window       = m_aDropWindow;
                 aEvent.xclient.data.l[0]    = m_aWindow;
                 aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
-                memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
+                memset( aEvent.xclient.data.l + 2, 0, sizeof( sal_Int32 )*3 );
                 // fill in data types
                 ::std::list< Atom > aConversions;
                 getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
@@ -3493,7 +3493,7 @@ void SelectionManager::transferablesFlavorsChanged()
 
         aEvent.xclient.message_type = m_nXdndEnter;
         aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
-        memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
+        memset( aEvent.xclient.data.l + 2, 0, sizeof( sal_Int32 )*3 );
         // fill in data types
         if( nTypes > 3 )
             aEvent.xclient.data.l[1] |= 1;
@@ -3914,7 +3914,7 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
             aEvent.xclient.message_type = m_nXdndLeave;
             aEvent.xclient.window       = m_aDropWindow;
             aEvent.xclient.data.l[0]    = m_aWindow;
-            memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
+            memset( aEvent.xclient.data.l+1, 0, sizeof(sal_Int32)*4);
             m_aDropWindow = m_aDropProxy = None;
             XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
         }

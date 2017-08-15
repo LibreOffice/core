@@ -31,9 +31,9 @@
 
 // we don't actually handle units beyond, hence the zeros in the arrays
 static const MapUnit s_MaxValidUnit = MapUnit::MapPixel;
-static const o3tl::enumarray<MapUnit,long> aImplNumeratorAry =
+static const o3tl::enumarray<MapUnit,sal_Int32> aImplNumeratorAry =
      {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1, 0, 0, 0 };
-static const o3tl::enumarray<MapUnit,long> aImplDenominatorAry =
+static const o3tl::enumarray<MapUnit,sal_Int32> aImplDenominatorAry =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1, 0, 0, 0 };
 
 /*
@@ -41,7 +41,7 @@ Reduces accuracy until it is a fraction (should become
 ctor fraction once); we could also do this with BigInts
 */
 
-static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
+static Fraction ImplMakeFraction( sal_Int32 nN1, sal_Int32 nN2, sal_Int32 nD1, sal_Int32 nD2 )
 {
     if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
     {
@@ -49,7 +49,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
         return Fraction( 1, 1 );
     }
 
-    long i = 1;
+    sal_Int32 i = 1;
 
     if ( nN1 < 0 ) { i = -i; nN1 = -nN1; }
     if ( nN2 < 0 ) { i = -i; nN2 = -nN2; }
@@ -82,11 +82,11 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 // rMapRes.nMapScNum?
 // rMapRes.nMapScDenom?         > 0
 
-static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
+static void ImplCalcBigIntThreshold( sal_Int32 nDPIX, sal_Int32 nDPIY,
                                      const ImplMapRes& rMapRes,
                                      ImplThresholdRes& rThresRes )
 {
-    if ( nDPIX && (LONG_MAX / nDPIX < std::abs( rMapRes.mnMapScNumX ) ) ) // #111139# avoid div by zero
+    if ( nDPIX && (SAL_MAX_INT32 / nDPIX < std::abs( rMapRes.mnMapScNumX ) ) ) // #111139# avoid div by zero
     {
         rThresRes.mnThresLogToPixX = 0;
         rThresRes.mnThresPixToLogX = 0;
@@ -94,24 +94,24 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     else
     {
         // calculate thresholds for BigInt arithmetic
-        long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
+        sal_Int32    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
         sal_uLong   nDenomX     = rMapRes.mnMapScDenomX;
-        long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
+        sal_Int32    nProductX   = nDPIX * rMapRes.mnMapScNumX;
 
         if ( !nProductX )
-            rThresRes.mnThresLogToPixX = LONG_MAX;
+            rThresRes.mnThresLogToPixX = SAL_MAX_INT32;
         else
-            rThresRes.mnThresLogToPixX = std::abs( (LONG_MAX - nDenomHalfX) / nProductX );
+            rThresRes.mnThresLogToPixX = std::abs( (SAL_MAX_INT32 - nDenomHalfX) / nProductX );
 
         if ( !nDenomX )
-            rThresRes.mnThresPixToLogX = LONG_MAX;
+            rThresRes.mnThresPixToLogX = SAL_MAX_INT32;
         else if ( nProductX >= 0 )
-            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (sal_Int32)(((sal_Int64)SAL_MAX_INT32 - (sal_Int64)( nProductX/2)) / nDenomX);
         else
-            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (sal_Int32)(((sal_Int64)SAL_MAX_INT32 + (sal_Int64)(-nProductX/2)) / nDenomX);
     }
 
-    if ( nDPIY && (LONG_MAX / nDPIY < std::abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
+    if ( nDPIY && (SAL_MAX_INT32 / nDPIY < std::abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
     {
         rThresRes.mnThresLogToPixY = 0;
         rThresRes.mnThresPixToLogY = 0;
@@ -119,21 +119,21 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     else
     {
         // calculate thresholds for BigInt arithmetic
-        long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
+        sal_Int32    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
         sal_uLong   nDenomY     = rMapRes.mnMapScDenomY;
-        long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
+        sal_Int32    nProductY   = nDPIY * rMapRes.mnMapScNumY;
 
         if ( !nProductY )
-            rThresRes.mnThresLogToPixY = LONG_MAX;
+            rThresRes.mnThresLogToPixY = SAL_MAX_INT32;
         else
-            rThresRes.mnThresLogToPixY = std::abs( (LONG_MAX - nDenomHalfY) / nProductY );
+            rThresRes.mnThresLogToPixY = std::abs( (SAL_MAX_INT32 - nDenomHalfY) / nProductY );
 
         if ( !nDenomY )
-            rThresRes.mnThresPixToLogY = LONG_MAX;
+            rThresRes.mnThresPixToLogY = SAL_MAX_INT32;
         else if ( nProductY >= 0 )
-            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (sal_Int32)(((sal_Int64)SAL_MAX_INT32 - (sal_Int64)( nProductY/2)) / nDenomY);
         else
-            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (sal_Int32)(((sal_Int64)SAL_MAX_INT32 + (sal_Int64)(-nProductY/2)) / nDenomY);
     }
 
     rThresRes.mnThresLogToPixX /= 2;
@@ -143,7 +143,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
 }
 
 static void ImplCalcMapResolution( const MapMode& rMapMode,
-                                   long nDPIX, long nDPIY, ImplMapRes& rMapRes )
+                                   sal_Int32 nDPIX, sal_Int32 nDPIY, ImplMapRes& rMapRes )
 {
     switch ( rMapMode.GetMapUnit() )
     {
@@ -273,7 +273,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aX += BigInt(nXNumerator / 2);
         }
         aX /= BigInt(nXNumerator);
-        rMapRes.mnMapOfsX = (long)aX + aOrigin.X();
+        rMapRes.mnMapOfsX = (sal_Int32)aX + aOrigin.X();
         BigInt aY( rMapRes.mnMapOfsY );
         aY *= BigInt( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
@@ -291,7 +291,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aY += BigInt(nYNumerator / 2);
         }
         aY /= BigInt(nYNumerator);
-        rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
+        rMapRes.mnMapOfsY = (sal_Int32)aY + aOrigin.Y();
     }
 
     // calculate scaling factor according to MapMode
@@ -311,7 +311,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
 }
 
 inline void ImplCalcMapResolution( const MapMode& rMapMode,
-                                   long nDPIX, long nDPIY,
+                                   sal_Int32 nDPIX, sal_Int32 nDPIY,
                                    ImplMapRes& rMapRes,
                                    ImplThresholdRes& rThresRes )
 {
@@ -338,11 +338,10 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
-                              long nThres )
+static sal_Int32 ImplLogicToPixel( sal_Int32 n, sal_Int32 nDPI, sal_Int32 nMapNum, sal_Int32 nMapDenom,
+                              sal_Int32 nThres )
 {
     assert(nDPI > 0);
-#if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
         n *= nMapNum * nDPI;
@@ -354,20 +353,15 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
         }
     }
     else
-#else
-    (void) nThres;
-    assert(nMapNum >= 0);
-    assert(nMapNum == 0 || std::abs(n) < std::numeric_limits<long>::max() / nMapNum / nDPI); //detect overflows
-#endif
     {
         sal_Int64 n64 = n;
         n64 *= nMapNum;
         n64 *= nDPI;
         if( nMapDenom == 1 )
-            n = (long)n64;
+            n = (sal_Int32)n64;
         else
         {
-            n = (long)(2 * n64 / nMapDenom);
+            n = (sal_Int32)(2 * n64 / nMapDenom);
             if( n < 0 ) --n; else ++n;
             n /= 2;
         }
@@ -375,33 +369,29 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
     return n;
 }
 
-static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
-                              long nThres )
+static sal_Int32 ImplPixelToLogic( sal_Int32 n, sal_Int32 nDPI, sal_Int32 nMapNum, sal_Int32 nMapDenom,
+                              sal_Int32 nThres )
 {
     assert(nDPI > 0);
-    long nDenom = nDPI * nMapNum;
+    sal_Int32 nDenom = nDPI * nMapNum;
     if (nDenom == 0)
     {
         return 0;
     }
 
-#if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
         n = (2 * n * nMapDenom) / nDenom;
     else
-#else
-    (void) nThres;
-#endif
     {
         sal_Int64 n64 = n;
         n64 *= nMapDenom;
-        n = (long)(2 * n64 / nDenom);
+        n = (sal_Int32)(2 * n64 / nDenom);
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
 }
 
-long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
+sal_Int32 OutputDevice::ImplLogicXToDevicePixel( sal_Int32 nX ) const
 {
     if ( !mbMap )
         return nX+mnOutOffX;
@@ -411,7 +401,7 @@ long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
                              maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX;
 }
 
-long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
+sal_Int32 OutputDevice::ImplLogicYToDevicePixel( sal_Int32 nY ) const
 {
     if ( !mbMap )
         return nY+mnOutOffY;
@@ -421,7 +411,7 @@ long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
                              maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY;
 }
 
-long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
+sal_Int32 OutputDevice::ImplLogicWidthToDevicePixel( sal_Int32 nWidth ) const
 {
     if ( !mbMap )
         return nWidth;
@@ -431,7 +421,7 @@ long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
                              maThresRes.mnThresLogToPixX );
 }
 
-long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
+sal_Int32 OutputDevice::ImplLogicHeightToDevicePixel( sal_Int32 nHeight ) const
 {
     if ( !mbMap )
         return nHeight;
@@ -449,7 +439,7 @@ float OutputDevice::ImplFloatLogicHeightToDevicePixel( float fLogicHeight) const
     return fPixelHeight;
 }
 
-long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
+sal_Int32 OutputDevice::ImplDevicePixelToLogicWidth( sal_Int32 nWidth ) const
 {
     if ( !mbMap )
         return nWidth;
@@ -459,7 +449,7 @@ long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
                              maThresRes.mnThresPixToLogX );
 }
 
-long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
+sal_Int32 OutputDevice::ImplDevicePixelToLogicHeight( sal_Int32 nHeight ) const
 {
     if ( !mbMap )
         return nHeight;
@@ -583,12 +573,12 @@ LineInfo OutputDevice::ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const
     if( aInfo.GetStyle() == LineStyle::Dash )
     {
         if( aInfo.GetDotCount() && aInfo.GetDotLen() )
-            aInfo.SetDotLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1L ) );
+            aInfo.SetDotLen( std::max<sal_Int32>( ImplLogicWidthToDevicePixel( aInfo.GetDotLen() ), 1 ) );
         else
             aInfo.SetDotCount( 0 );
 
         if( aInfo.GetDashCount() && aInfo.GetDashLen() )
-            aInfo.SetDashLen( std::max( ImplLogicWidthToDevicePixel( aInfo.GetDashLen() ), 1L ) );
+            aInfo.SetDashLen( std::max<sal_Int32>( ImplLogicWidthToDevicePixel( aInfo.GetDashLen() ), 1 ) );
         else
             aInfo.SetDashCount( 0 );
 
@@ -1491,8 +1481,8 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 }
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
-    long nNumerator      = 1;       \
-    long nDenominator    = 1;       \
+    sal_Int32 nNumerator      = 1;       \
+    sal_Int32 nDenominator    = 1;       \
     SAL_WARN_IF( eUnitSource > s_MaxValidUnit, "vcl.gdi", "Invalid source map unit");    \
     SAL_WARN_IF( eUnitDest > s_MaxValidUnit, "vcl.gdi", "Invalid destination map unit"); \
     if( (eUnitSource <= s_MaxValidUnit) && (eUnitDest <= s_MaxValidUnit) )  \
@@ -1521,22 +1511,22 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
     ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
 
 // return (n1 * n2 * n3) / (n4 * n5)
-static long fn5( const long n1,
-                 const long n2,
-                 const long n3,
-                 const long n4,
-                 const long n5 )
+static sal_Int32 fn5( const sal_Int32 n1,
+                 const sal_Int32 n2,
+                 const sal_Int32 n3,
+                 const sal_Int32 n4,
+                 const sal_Int32 n5 )
 {
     if ( n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0 || n5 == 0 )
         return 0;
-    if ( LONG_MAX / std::abs(n2) < std::abs(n3) )
+    if ( SAL_MAX_INT32 / std::abs(n2) < std::abs(n3) )
     {
         // a6 is skipped
         BigInt a7 = n2;
         a7 *= n3;
         a7 *= n1;
 
-        if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
+        if ( SAL_MAX_INT32 / std::abs(n4) < std::abs(n5) )
         {
             BigInt a8 = n4;
             a8 *= n5;
@@ -1552,7 +1542,7 @@ static long fn5( const long n1,
         } // of if
         else
         {
-            long n8 = n4 * n5;
+            sal_Int32 n8 = n4 * n5;
 
             if ( a7.IsNeg() )
                 a7 -= n8 / 2;
@@ -1561,18 +1551,18 @@ static long fn5( const long n1,
 
             a7 /= n8;
         } // of else
-        return (long)a7;
+        return (sal_Int32)a7;
     } // of if
     else
     {
-        long n6 = n2 * n3;
+        sal_Int32 n6 = n2 * n3;
 
-        if ( LONG_MAX / std::abs(n1) < std::abs(n6) )
+        if ( SAL_MAX_INT32 / std::abs(n1) < std::abs(n6) )
         {
             BigInt a7 = n1;
             a7 *= n6;
 
-            if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
+            if ( SAL_MAX_INT32 / std::abs(n4) < std::abs(n5) )
             {
                 BigInt a8 = n4;
                 a8 *= n5;
@@ -1588,7 +1578,7 @@ static long fn5( const long n1,
             } // of if
             else
             {
-                long n8 = n4 * n5;
+                sal_Int32 n8 = n4 * n5;
 
                 if ( a7.IsNeg() )
                     a7 -= n8 / 2;
@@ -1597,13 +1587,13 @@ static long fn5( const long n1,
 
                 a7 /= n8;
             } // of else
-            return (long)a7;
+            return (sal_Int32)a7;
         } // of if
         else
         {
-            long n7 = n1 * n6;
+            sal_Int32 n7 = n1 * n6;
 
-            if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
+            if ( SAL_MAX_INT32 / std::abs(n4) < std::abs(n5) )
             {
                 BigInt a7 = n7;
                 BigInt a8 = n4;
@@ -1617,19 +1607,19 @@ static long fn5( const long n1,
                     a7 += a9;
 
                 a7 /= a8;
-                return (long)a7;
+                return (sal_Int32)a7;
             } // of if
             else
             {
-                const long n8 = n4 * n5;
-                const long n8_2 = n8 / 2;
+                const sal_Int32 n8 = n4 * n5;
+                const sal_Int32 n8_2 = n8 / 2;
 
                 if( n7 < 0 )
                 {
-                    if( ( n7 - LONG_MIN ) >= n8_2 )
+                    if( ( n7 - SAL_MIN_INT32 ) >= n8_2 )
                         n7 -= n8_2;
                 }
-                else if( ( LONG_MAX - n7 ) >= n8_2 )
+                else if( ( SAL_MAX_INT32 - n7 ) >= n8_2 )
                     n7 += n8_2;
 
                 return n7 / n8;
@@ -1639,11 +1629,11 @@ static long fn5( const long n1,
 }
 
 // return (n1 * n2) / n3
-static long fn3( const long n1, const long n2, const long n3 )
+static sal_Int32 fn3( const sal_Int32 n1, const sal_Int32 n2, const sal_Int32 n3 )
 {
     if ( n1 == 0 || n2 == 0 || n3 == 0 )
         return 0;
-    if ( LONG_MAX / std::abs(n1) < std::abs(n2) )
+    if ( SAL_MAX_INT32 / std::abs(n1) < std::abs(n2) )
     {
         BigInt a4 = n1;
         a4 *= n2;
@@ -1654,19 +1644,19 @@ static long fn3( const long n1, const long n2, const long n3 )
             a4 += n3 / 2;
 
         a4 /= n3;
-        return (long)a4;
+        return (sal_Int32)a4;
     } // of if
     else
     {
-        long        n4 = n1 * n2;
-        const long  n3_2 = n3 / 2;
+        sal_Int32        n4 = n1 * n2;
+        const sal_Int32  n3_2 = n3 / 2;
 
         if( n4 < 0 )
         {
-            if( ( n4 - LONG_MIN ) >= n3_2 )
+            if( ( n4 - SAL_MIN_INT32 ) >= n3_2 )
                 n4 -= n3_2;
         }
-        else if( ( LONG_MAX - n4 ) >= n3_2 )
+        else if( ( SAL_MAX_INT32 - n4 ) >= n3_2 )
             n4 += n3_2;
 
         return n4 / n3;
@@ -1889,7 +1879,7 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     }
 }
 
-long OutputDevice::LogicToLogic( long nLongSource,
+sal_Int32 OutputDevice::LogicToLogic( sal_Int32 nLongSource,
                                  MapUnit eUnitSource, MapUnit eUnitDest )
 {
     if ( eUnitSource == eUnitDest )
@@ -1918,7 +1908,7 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 }
 
 
-DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
+DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( sal_Int32 nWidth ) const
 {
     if ( !mbMap )
         return (DeviceCoordinate)nWidth;

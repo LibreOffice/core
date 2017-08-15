@@ -260,9 +260,9 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
         SwSelUnions aUnions;
         ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
-        Point aCurrentTopLeft( LONG_MAX, LONG_MAX );
-        Point aCurrentTopRight( 0, LONG_MAX );
-        Point aCurrentBottomLeft( LONG_MAX, 0 );
+        Point aCurrentTopLeft( SAL_MAX_INT32, SAL_MAX_INT32 );
+        Point aCurrentTopRight( 0, SAL_MAX_INT32 );
+        Point aCurrentBottomLeft( SAL_MAX_INT32, 0 );
         Point aCurrentBottomRight( 0, 0 );
         const SwCellFrame* pCurrentTopLeftFrame     = nullptr;
         const SwCellFrame* pCurrentTopRightFrame    = nullptr;

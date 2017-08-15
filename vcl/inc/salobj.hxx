@@ -38,10 +38,10 @@ public:
 
     virtual void                    ResetClipRegion() = 0;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void                    UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
     virtual void                    EndSetClipRegion() = 0;
 
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void                    SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
     virtual void                    Show( bool bVisible ) = 0;
     virtual void                    Enable( bool /* nEnable */ ) {} // overridden by WinSalObject
     virtual void                    GrabFocus() {}

@@ -88,7 +88,7 @@ public:
                                           bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual SalVirtualDevice* CreateVirtualDevice( SalGraphics* pGraphics,
-                                                   long &nDX, long &nDY,
+                                                   sal_Int32 &nDX, sal_Int32 &nDY,
                                                    DeviceFormat eFormat,
                                                    const SystemGraphicsData *pData = nullptr ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,

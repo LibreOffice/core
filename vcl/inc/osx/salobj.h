@@ -38,16 +38,16 @@ public:
     NSClipView*                 mpClipView;
     SystemEnvData               maSysData;
 
-    long                        mnClipX;
-    long                        mnClipY;
-    long                        mnClipWidth;
-    long                        mnClipHeight;
+    sal_Int32                   mnClipX;
+    sal_Int32                   mnClipY;
+    sal_Int32                   mnClipWidth;
+    sal_Int32                   mnClipHeight;
     bool                        mbClip;
 
-    long                        mnX;
-    long                        mnY;
-    long                        mnWidth;
-    long                        mnHeight;
+    sal_Int32                   mnX;
+    sal_Int32                   mnY;
+    sal_Int32                   mnWidth;
+    sal_Int32                   mnHeight;
 
     void setClippedPosSize();
 
@@ -56,9 +56,9 @@ public:
 
     virtual void                    ResetClipRegion() override;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) override;
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    EndSetClipRegion() override;
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    Show( bool bVisible ) override;
     virtual const SystemEnvData*    GetSystemData() const override;
 };

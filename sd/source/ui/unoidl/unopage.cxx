@@ -1034,10 +1034,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= GetPage()->GetLwrBorder();
         break;
     case WID_PAGE_WIDTH:
-        aAny <<= (sal_Int32)( GetPage()->GetSize().getWidth() );
+        aAny <<= GetPage()->GetSize().getWidth();
         break;
     case WID_PAGE_HEIGHT:
-        aAny <<= (sal_Int32)( GetPage()->GetSize().getHeight() );
+        aAny <<= GetPage()->GetSize().getHeight();
         break;
     case WID_PAGE_ORIENT:
         aAny <<= view::PaperOrientation(

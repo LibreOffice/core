@@ -1558,7 +1558,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
 
 /* end i12626 methods */
 
-static const long unsetRun[256] =
+static const sal_Int32 unsetRun[256] =
 {
     8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, /* 0x00 - 0x0f */
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, /* 0x10 - 0x1f */
@@ -1578,7 +1578,7 @@ static const long unsetRun[256] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0xf0 - 0xff */
 };
 
-static const long setRun[256] =
+static const sal_Int32 setRun[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x00 - 0x0f */
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* 0x10 - 0x1f */
@@ -1598,24 +1598,24 @@ static const long setRun[256] =
     4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8, /* 0xf0 - 0xff */
 };
 
-inline bool isSet( const Scanline i_pLine, long i_nIndex )
+inline bool isSet( const Scanline i_pLine, sal_Int32 i_nIndex )
 {
     return (i_pLine[ i_nIndex/8 ] & (0x80 >> (i_nIndex&7))) != 0;
 }
 
-long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_bSet )
+sal_Int32 findBitRun( const Scanline i_pLine, sal_Int32 i_nStartIndex, sal_Int32 i_nW, bool i_bSet )
 {
     if( i_nStartIndex < 0 )
         return i_nW;
 
-    long nIndex = i_nStartIndex;
+    sal_Int32 nIndex = i_nStartIndex;
     if( nIndex < i_nW )
     {
         const sal_uInt8 * pByte = i_pLine + (nIndex/8);
         sal_uInt8 nByte = *pByte;
 
         // run up to byte boundary
-        long nBitInByte = (nIndex & 7);
+        sal_Int32 nBitInByte = (nIndex & 7);
         if( nBitInByte )
         {
             sal_uInt8 nMask = 0x80 >> nBitInByte;
@@ -1635,7 +1635,7 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
         }
 
         sal_uInt8 nRunByte;
-        const long* pRunTable;
+        const sal_Int32* pRunTable;
         if( i_bSet )
         {
             nRunByte = 0xff;
@@ -1927,7 +1927,7 @@ static const PixelCode BlackPixelCodes[] =
     { 2560, 12, 0x1F }  // 0000 0001 1111
 };
 
-void PDFWriterImpl::putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState )
+void PDFWriterImpl::putG4Span( sal_Int32 i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState )
 {
     const PixelCode* pTable = i_bWhitePixel ? WhitePixelCodes : BlackPixelCodes;
     // maximum encoded span is 2560 consecutive pixels
@@ -1950,8 +1950,8 @@ void PDFWriterImpl::putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState&
 
 void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
 {
-    long nW = i_pBitmap->Width();
-    long nH = i_pBitmap->Height();
+    sal_Int32 nW = i_pBitmap->Width();
+    sal_Int32 nH = i_pBitmap->Height();
     if( nW <= 0 || nH <= 0 )
         return;
     if( i_pBitmap->GetBitCount() != 1 )
@@ -1962,20 +1962,20 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
     // the first reference line is virtual and completely empty
     const Scanline pFirstRefLine = static_cast<Scanline>(rtl_allocateZeroMemory( nW/8 + 1 ));
     Scanline pRefLine = pFirstRefLine;
-    for( long nY = 0; nY < nH; nY++ )
+    for( sal_Int32 nY = 0; nY < nH; nY++ )
     {
         const Scanline pCurLine = i_pBitmap->GetScanline( nY );
-        long nLineIndex = 0;
+        sal_Int32 nLineIndex = 0;
         bool bRunSet = (*pCurLine & 0x80) != 0;
         bool bRefSet = (*pRefLine & 0x80) != 0;
-        long nRunIndex1 = bRunSet ? 0 : findBitRun( pCurLine, 0, nW, bRunSet );
-        long nRefIndex1 = bRefSet ? 0 : findBitRun( pRefLine, 0, nW, bRefSet );
+        sal_Int32 nRunIndex1 = bRunSet ? 0 : findBitRun( pCurLine, 0, nW, bRunSet );
+        sal_Int32 nRefIndex1 = bRefSet ? 0 : findBitRun( pRefLine, 0, nW, bRefSet );
         for( ; nLineIndex < nW; )
         {
-            long nRefIndex2 = findBitRun( pRefLine, nRefIndex1, nW, isSet( pRefLine, nRefIndex1 ) );
+            sal_Int32 nRefIndex2 = findBitRun( pRefLine, nRefIndex1, nW, isSet( pRefLine, nRefIndex1 ) );
             if( nRefIndex2 >= nRunIndex1 )
             {
-                long nDiff = nRefIndex1 - nRunIndex1;
+                sal_Int32 nDiff = nRefIndex1 - nRunIndex1;
                 if( -3 <= nDiff && nDiff <= 3 )
                 {   // vertical coding
                     static const struct
@@ -2002,7 +2002,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
                 {   // difference too large, horizontal coding
                     // emit horz code 001
                     putG4Bits( 3, 0x1, aBitState );
-                    long nRunIndex2 = findBitRun( pCurLine, nRunIndex1, nW, isSet( pCurLine, nRunIndex1 ) );
+                    sal_Int32 nRunIndex2 = findBitRun( pCurLine, nRunIndex1, nW, isSet( pCurLine, nRunIndex1 ) );
                     bool bWhiteFirst = ( nLineIndex + nRunIndex1 == 0 || ! isSet( pCurLine, nLineIndex ) );
                     putG4Span( nRunIndex1 - nLineIndex, bWhiteFirst, aBitState );
                     putG4Span( nRunIndex2 - nRunIndex1, ! bWhiteFirst, aBitState );

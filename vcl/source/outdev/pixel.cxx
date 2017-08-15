@@ -41,8 +41,8 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
         if ( !mbOutputClipped )
         {
-            const long nX = ImplLogicXToDevicePixel( rPt.X() );
-            const long nY = ImplLogicYToDevicePixel( rPt.Y() );
+            const sal_Int32 nX = ImplLogicXToDevicePixel( rPt.X() );
+            const sal_Int32 nY = ImplLogicYToDevicePixel( rPt.Y() );
             const SalColor aSalCol = mpGraphics->GetPixel( nX, nY, this );
             aColor.SetRed( SALCOLOR_RED( aSalCol ) );
             aColor.SetGreen( SALCOLOR_GREEN( aSalCol ) );

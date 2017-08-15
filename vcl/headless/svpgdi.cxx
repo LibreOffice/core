@@ -370,7 +370,7 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
     }
 }
 
-bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
+bool SvpSalGraphics::drawAlphaRect(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt8 nTransparency)
 {
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
@@ -447,7 +447,7 @@ sal_uInt16 SvpSalGraphics::GetBitCount() const
     return 32;
 }
 
-long SvpSalGraphics::GetGraphicsWidth() const
+sal_Int32 SvpSalGraphics::GetGraphicsWidth() const
 {
     return m_pSurface ? m_aFrameSize.getX() : 0;
 }
@@ -520,7 +520,7 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
     }
 }
 
-void SvpSalGraphics::drawPixel( long nX, long nY )
+void SvpSalGraphics::drawPixel( sal_Int32 nX, sal_Int32 nY )
 {
     if (m_aLineColor != SALCOLOR_NONE)
     {
@@ -528,7 +528,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY )
     }
 }
 
-void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void SvpSalGraphics::drawPixel( sal_Int32 nX, sal_Int32 nY, SalColor nSalColor )
 {
     SalColor aOrigFillColor = m_aFillColor;
     SalColor aOrigLineColor = m_aLineColor;
@@ -543,7 +543,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     m_aLineColor = aOrigLineColor;
 }
 
-void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
+void SvpSalGraphics::drawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // because of the -1 hack we have to do fill and draw separately
     SalColor aOrigFillColor = m_aFillColor;
@@ -718,7 +718,7 @@ static void AddPolygonToPath(cairo_t* cr, const basegfx::B2DPolygon& rPolygon, b
     }
 }
 
-void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void SvpSalGraphics::drawLine( sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 )
 {
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(nX1, nY1), 2);
@@ -966,12 +966,12 @@ void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
     releaseCairoContext(cr, true, extents);
 }
 
-void SvpSalGraphics::copyArea( long nDestX,
-                               long nDestY,
-                               long nSrcX,
-                               long nSrcY,
-                               long nSrcWidth,
-                               long nSrcHeight,
+void SvpSalGraphics::copyArea( sal_Int32 nDestX,
+                               sal_Int32 nDestY,
+                               sal_Int32 nSrcX,
+                               sal_Int32 nSrcY,
+                               sal_Int32 nSrcWidth,
+                               sal_Int32 nSrcHeight,
                                bool /*bWindowInvalidate*/ )
 {
     SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
@@ -1137,7 +1137,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     releaseCairoContext(cr, false, extents);
 }
 
-SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
+SalBitmap* SvpSalGraphics::getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
     pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), BitmapPalette());
@@ -1156,7 +1156,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     return pBitmap;
 }
 
-SalColor SvpSalGraphics::getPixel( long nX, long nY )
+SalColor SvpSalGraphics::getPixel( sal_Int32 nX, sal_Int32 nY )
 {
     cairo_surface_t *target = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
     cairo_t* cr = cairo_create(target);
@@ -1263,7 +1263,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
     releaseCairoContext(cr, false, extents);
 }
 
-void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void SvpSalGraphics::invert( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, SalInvert nFlags )
 {
     basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
 
@@ -1281,7 +1281,7 @@ void SvpSalGraphics::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInver
     invert(aPoly, nFlags);
 }
 
-bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
+bool SvpSalGraphics::drawEPS( sal_Int32, sal_Int32, sal_Int32, sal_Int32, void*, sal_uLong )
 {
     return false;
 }

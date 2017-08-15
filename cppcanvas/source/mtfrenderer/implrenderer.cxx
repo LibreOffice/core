@@ -852,7 +852,7 @@ namespace cppcanvas
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
-                                             const long*                    pCharWidths,
+                                             const sal_Int32*               pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -985,7 +985,7 @@ namespace cppcanvas
                 {
                     long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    long* pStrikeoutCharWidths = new long[nLen];
+                    sal_Int32* pStrikeoutCharWidths = new sal_Int32[nLen];
 
                     for ( int i = 0;i<nLen; i++)
                     {
@@ -1568,8 +1568,8 @@ namespace cppcanvas
                         // least one dimension
                       
                         // Remark the 1L cannot be replaced, that would cause max to compare long/int
-                        const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
-                                                std::max( aMtfSizePixPre.Height(), 1L ) );
+                        const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1 ),
+                                                std::max( aMtfSizePixPre.Height(), 1 ) );
 
                         // Setup local transform, such that the
                         // metafile renders itself into the given
@@ -2574,7 +2574,7 @@ namespace cppcanvas
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        std::unique_ptr< long []> pDXArray( new long[nLen] );
+                        std::unique_ptr< sal_Int32 []> pDXArray( new sal_Int32[nLen] );
 
                         rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
                                             pAct->GetIndex(), pAct->GetLen() );
@@ -2582,7 +2582,7 @@ namespace cppcanvas
                         const sal_Int32 nWidthDifference( pAct->GetWidth() - pDXArray[ nLen-1 ] );
 
                         // Last entry of pDXArray contains total width of the text
-                        long* p = pDXArray.get();
+                        sal_Int32* p = pDXArray.get();
                         for (sal_Int32 i = 1; i <= nLen; ++i)
                         {
                             // calc ratio for every array entry, to
@@ -2591,7 +2591,7 @@ namespace cppcanvas
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            *p++ += (long)i*nWidthDifference/nLen;
+                            *p++ += i*nWidthDifference/nLen;
                         }
 
                         createTextAction(
@@ -2903,8 +2903,8 @@ namespace cppcanvas
             // #i44110# correct null-sized output - there are shapes
             // which have zero size in at least one dimension
             // Remark the 1L cannot be replaced, that would cause max to compare long/int
-            const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
-                                    std::max( aMtfSizePixPre.Height(), 1L ) );
+            const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1 ),
+                                    std::max( aMtfSizePixPre.Height(), 1 ) );
 
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,

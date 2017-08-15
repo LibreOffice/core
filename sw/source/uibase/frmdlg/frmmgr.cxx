@@ -571,7 +571,7 @@ void SwFlyFrameAttrMgr::SetHeightSizeType( SwFrameSize eType )
 void SwFlyFrameAttrMgr::SetSize( const Size& rSize )
 {
     SwFormatFrameSize aSize( GetFrameSize() );
-    aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
+    aSize.SetSize(Size(std::max(rSize.Width(), MINFLY), std::max(rSize.Height(), MINFLY)));
     m_aSet.Put( aSize );
 }
 

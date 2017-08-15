@@ -38,21 +38,21 @@ public:
                         FontMetric( const FontMetric& );  // TODO make this explicit
     virtual             ~FontMetric() override;
 
-    long                GetAscent() const;
-    long                GetDescent() const;
-    long                GetInternalLeading() const;
-    long                GetExternalLeading() const;
-    long                GetLineHeight() const;
-    long                GetSlant() const;
-    long                GetBulletOffset() const;
+    sal_Int32           GetAscent() const;
+    sal_Int32           GetDescent() const;
+    sal_Int32           GetInternalLeading() const;
+    sal_Int32           GetExternalLeading() const;
+    sal_Int32           GetLineHeight() const;
+    sal_Int32           GetSlant() const;
+    sal_Int32           GetBulletOffset() const;
 
-    void                SetAscent(long);
-    void                SetDescent(long);
-    void                SetExternalLeading(long);
-    void                SetInternalLeading(long);
-    void                SetLineHeight(long);
-    void                SetSlant(long);
-    void                SetBulletOffset(long);
+    void                SetAscent(sal_Int32);
+    void                SetDescent(sal_Int32);
+    void                SetExternalLeading(sal_Int32);
+    void                SetInternalLeading(sal_Int32);
+    void                SetLineHeight(sal_Int32);
+    void                SetSlant(sal_Int32);
+    void                SetBulletOffset(sal_Int32);
 
     bool                IsFullstopCentered() const;
 

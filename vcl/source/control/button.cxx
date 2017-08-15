@@ -73,7 +73,7 @@ public:
     ImplCommonButtonData();
 
     tools::Rectangle       maFocusRect;
-    long            mnSeparatorX;
+    sal_Int32       mnSeparatorX;
     DrawButtonFlags mnButtonState;
     bool            mbSmallSymbol;
 
@@ -190,12 +190,12 @@ void Button::SetFocusRect( const tools::Rectangle& rFocusRect )
     ImplSetFocusRect( rFocusRect );
 }
 
-long Button::ImplGetSeparatorX() const
+sal_Int32 Button::ImplGetSeparatorX() const
 {
     return mpButtonData->mnSeparatorX;
 }
 
-void Button::ImplSetSeparatorX( long nX )
+void Button::ImplSetSeparatorX( sal_Int32 nX )
 {
     mpButtonData->mnSeparatorX = nX;
 }
@@ -287,7 +287,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     Point aTextPos = rPos;
     tools::Rectangle aUnion = tools::Rectangle(aImagePos, aImageSize);
     tools::Rectangle aSymbol;
-    long nSymbolHeight = 0;
+    sal_Int32 nSymbolHeight = 0;
 
     if (bDrawText || bHasSymbol)
     {
@@ -351,7 +351,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
             if (bAddImageSep && bDrawImage)
             {
-                long nDiff = (aImageSize.Height() - aTextSize.Height()) / 3;
+                sal_Int32 nDiff = (aImageSize.Height() - aTextSize.Height()) / 3;
                 if (nDiff > 0)
                     nImageSep += nDiff;
             }
@@ -424,8 +424,8 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     // Now place the combination of text and image in the output area of the button
     // according to the window style (WinBits)
-    long nXOffset = 0;
-    long nYOffset = 0;
+    sal_Int32 nXOffset = 0;
+    sal_Int32 nYOffset = 0;
 
     if (nWinStyle & WB_CENTER)
     {
@@ -783,7 +783,7 @@ DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
 }
 
 static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
-                                      long nX, long nY,
+                                      sal_Int32 nX, sal_Int32 nY,
                                       Color const & rColor, bool bBlack )
 {
     Color aOldLineColor = pDev->GetLineColor();
@@ -851,12 +851,12 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     if ( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
          mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
     {
-        long nSeparatorX = 0;
+        sal_Int32 nSeparatorX = 0;
         tools::Rectangle aSymbolRect = aInRect;
         if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
         {
             // calculate symbol size
-            long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
+            sal_Int32 nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
 
             nSeparatorX = aInRect.Right() - 2*nSymbolSize;
             aSize.Width() -= 2*nSymbolSize;
@@ -871,7 +871,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
         else
             ImplCalcSymbolRect( aSymbolRect );
 
-        long nDistance = (aSymbolRect.GetHeight() > 10) ? 2 : 1;
+        sal_Int32 nDistance = (aSymbolRect.GetHeight() > 10) ? 2 : 1;
         DecorationView aDecoView( pDev );
         if( bMenuBtnSep && nSeparatorX > 0 )
         {
@@ -1625,7 +1625,7 @@ Size PushButton::CalcMinimumSize() const
     if( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
         mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
     {
-        long nSymbolSize = GetTextHeight() / 2 + 1;
+        sal_Int32 nSymbolSize = GetTextHeight() / 2 + 1;
         aSize.Width() += 2*nSymbolSize;
     }
     if ( !PushButton::GetText().isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
@@ -1633,7 +1633,7 @@ Size PushButton::CalcMinimumSize() const
         Size textSize = GetTextRect( tools::Rectangle( Point(), Size( 0x7fffffff, 0x7fffffff ) ),
                                      PushButton::GetText(), ImplGetTextStyle( DrawFlags::NONE ) ).GetSize();
         aSize.Width() += textSize.Width();
-        aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
+        aSize.Height() = std::max( aSize.Height(), sal_Int32( textSize.Height() * 1.15 ) );
     }
 
     // cf. ImplDrawPushButton ...
@@ -2012,7 +2012,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         {
             DrawTextFlags nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
 
-            const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
+            const sal_Int32 nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
             Size aSize( rSize );
             Point aPos( rPos );
             aPos.X() += rImageSize.Width() + nImageSep;
@@ -2072,8 +2072,8 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         bool        bTopImage   = (nWinStyle & WB_TOP) != 0;
         Size        aImageSize  = maImage.GetSizePixel();
         tools::Rectangle   aImageRect( rPos, rSize );
-        long        nTextHeight = pDev->GetTextHeight();
-        long        nTextWidth  = pDev->GetCtrlTextWidth( aText );
+        sal_Int32   nTextHeight = pDev->GetTextHeight();
+        sal_Int32   nTextWidth  = pDev->GetCtrlTextWidth( aText );
 
         // calculate position and sizes
         if ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) )
@@ -2437,8 +2437,8 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
                   aImageSize, aStateRect, aMouseRect );
 
         Point   aCenterPos = aStateRect.Center();
-        long    nRadX = aImageSize.Width()/2;
-        long    nRadY = aImageSize.Height()/2;
+        sal_Int32    nRadX = aImageSize.Width()/2;
+        sal_Int32    nRadY = aImageSize.Height()/2;
 
         pDev->SetLineColor();
         pDev->SetFillColor( Color( COL_BLACK ) );
@@ -2674,7 +2674,7 @@ void RadioButton::Check( bool bCheck )
     }
 }
 
-long RadioButton::ImplGetImageToTextDistance() const
+sal_Int32 RadioButton::ImplGetImageToTextDistance() const
 {
     // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
     // which might have been aligned with the text of the check box
@@ -3026,13 +3026,13 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     pDev->Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
-    long nLineY = rPos.Y() + (rSize.Height()-1)/2;
+    sal_Int32 nLineY = rPos.Y() + (rSize.Height()-1)/2;
     if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
          ( HasImage() && !  (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
     {
         DrawTextFlags nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
 
-        const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
+        const sal_Int32 nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
         Size aSize( rSize );
         Point aPos( rPos );
         aPos.X() += rImageSize.Width() + nImageSep;
@@ -3105,7 +3105,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
             SetLineColor( Color( COL_BLACK ) );
         else
             SetLineColor( rStyleSettings.GetShadowColor() );
-        long nLineX = rMouseRect.Right()+nLineSpace;
+        sal_Int32 nLineX = rMouseRect.Right()+nLineSpace;
         DrawLine( Point( nLineX, nLineY ), Point( rPos.X() + rSize.Width()-1, nLineY ) );
         if ( !(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         {
@@ -3279,7 +3279,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
     Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
     Size        aBrd2Size = pDev->LogicToPixel( Size( 30, 30 ), aResMapMode );
-    long        nCheckWidth = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode ).Width();
+    sal_Int32        nCheckWidth = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode ).Width();
     vcl::Font   aFont = GetDrawPixelFont( pDev );
     tools::Rectangle   aStateRect;
     tools::Rectangle   aMouseRect;
@@ -3342,8 +3342,8 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         Point   aTempPos21( aPos21 );
         Point   aTempPos22( aPos22 );
         pDev->SetLineColor( Color( COL_BLACK ) );
-        long nDX = 0;
-        for ( long i = 0; i < nCheckWidth; i++ )
+        sal_Int32 nDX = 0;
+        for ( sal_Int32 i = 0; i < nCheckWidth; i++ )
         {
             if ( !(i % 2) )
             {
@@ -3546,7 +3546,7 @@ void CheckBox::EnableTriState( bool bTriState )
     }
 }
 
-long CheckBox::ImplGetImageToTextDistance() const
+sal_Int32 CheckBox::ImplGetImageToTextDistance() const
 {
     // 4 pixels, but take zoom into account, so the text doesn't "jump" relative to surrounding elements,
     // which might have been aligned with the text of the check box
@@ -3686,7 +3686,7 @@ void CheckBox::ImplSetMinimumNWFSize()
     Pop();
 }
 
-Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
+Size CheckBox::CalcMinimumSize( sal_Int32 nMaxWidth ) const
 {
     Size aSize = ImplGetCheckImageSize();
     nMaxWidth -= aSize.Width();

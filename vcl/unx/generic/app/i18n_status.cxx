@@ -155,7 +155,7 @@ void XIMStatusWindow::layout()
     if (m_bAnchoredAtRight && IsVisible())
     {
         SalFrame* pFrame = static_cast<SalFrame*>(GetSystemData()->pSalFrame);
-        long nDelta = pFrame->maGeometry.nWidth - m_aWindowSize.Width();
+        sal_Int32 nDelta = pFrame->maGeometry.nWidth - m_aWindowSize.Width();
         pFrame->SetPosSize( pFrame->maGeometry.nX + nDelta,
                             pFrame->maGeometry.nY,
                             m_aWindowSize.Width(),
@@ -374,7 +374,7 @@ void I18NStatus::setStatusText( const OUString& rText )
         bool bVisible = true;
         if( m_pParent )
         {
-            long w, h;
+            sal_Int32 w, h;
             m_pParent->GetClientSize( w, h );
             if( w == 0 || h == 0 )
             {

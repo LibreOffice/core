@@ -48,8 +48,8 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
 {
     SAL_WARN_IF( nDigits >= 10, "vcl", "LongCurrency may only have 9 decimal places" );
 
-    if ( rNumber.IsZero() || (long)rNumber )
-        return rLocaleDataWrapper.getCurr( (long)rNumber, nDigits, rCurrSymbol, bShowThousandSep );
+    if ( rNumber.IsZero() || (sal_Int32)rNumber )
+        return rLocaleDataWrapper.getCurr( (sal_Int32)rNumber, nDigits, rCurrSymbol, bShowThousandSep );
 
     BigInt aTmp( ImplPower10( nDigits ) );
     BigInt aInteger( rNumber );
@@ -66,7 +66,7 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     if ( rNumber.IsNeg() )
         aFraction *= -1;
 
-    OUStringBuffer aTemplate = rLocaleDataWrapper.getCurr( (long)aFraction, nDigits, rCurrSymbol, bShowThousandSep );
+    OUStringBuffer aTemplate = rLocaleDataWrapper.getCurr( (sal_Int32)aFraction, nDigits, rCurrSymbol, bShowThousandSep );
     while( !aInteger.IsZero() )
     {
         aFraction  = aInteger;
@@ -75,7 +75,7 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
         if( !aInteger.IsZero() )
             aFraction += aTmp;
 
-        OUString aFractionStr = rLocaleDataWrapper.getNum( (long)aFraction, 0 );
+        OUString aFractionStr = rLocaleDataWrapper.getNum( (sal_Int32)aFraction, 0 );
 
         sal_Int32 nSPos = aTemplate.indexOf( '1' );
         if (nSPos == -1)

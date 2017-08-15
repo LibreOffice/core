@@ -85,11 +85,11 @@ private:
     ImplBorderWindowView*   mpBorderView;
     VclPtr<vcl::Window>     mpMenuBarWindow;
     VclPtr<NotebookBar>     mpNotebookBar;
-    long                    mnMinWidth;
-    long                    mnMinHeight;
-    long                    mnMaxWidth;
-    long                    mnMaxHeight;
-    long                    mnOrgMenuHeight;
+    sal_Int32               mnMinWidth;
+    sal_Int32               mnMinHeight;
+    sal_Int32               mnMaxWidth;
+    sal_Int32               mnMaxHeight;
+    sal_Int32               mnOrgMenuHeight;
     BorderWindowTitleType   mnTitleType;
     WindowBorderStyle       mnBorderStyle;
     bool                    mbFloatWindow;
@@ -157,14 +157,14 @@ public:
     void                    CloseNotebookBar();
     const VclPtr<NotebookBar>& GetNotebookBar() const { return mpNotebookBar; }
 
-    void                    SetMinOutputSize( long nWidth, long nHeight )
+    void                    SetMinOutputSize( sal_Int32 nWidth, sal_Int32 nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }
-    void                    SetMaxOutputSize( long nWidth, long nHeight )
+    void                    SetMaxOutputSize( sal_Int32 nWidth, sal_Int32 nHeight )
                                 { mnMaxWidth = nWidth; mnMaxHeight = nHeight; }
 
     void                    GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
-    long                    CalcTitleWidth() const;
+    sal_Int32                    CalcTitleWidth() const;
 
     tools::Rectangle               GetMenuRect() const;
 
@@ -175,27 +175,27 @@ struct ImplBorderFrameData
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
     VclPtr<OutputDevice>     mpOutDev;
-    tools::Rectangle                maTitleRect;
-    tools::Rectangle                maCloseRect;
-    tools::Rectangle                maRollRect;
-    tools::Rectangle                maDockRect;
-    tools::Rectangle                maMenuRect;
-    tools::Rectangle                maHideRect;
-    tools::Rectangle                maHelpRect;
+    tools::Rectangle         maTitleRect;
+    tools::Rectangle         maCloseRect;
+    tools::Rectangle         maRollRect;
+    tools::Rectangle         maDockRect;
+    tools::Rectangle         maMenuRect;
+    tools::Rectangle         maHideRect;
+    tools::Rectangle         maHelpRect;
     Point                    maMouseOff;
-    long                     mnWidth;
-    long                     mnHeight;
-    long                     mnTrackX;
-    long                     mnTrackY;
-    long                     mnTrackWidth;
-    long                     mnTrackHeight;
+    sal_Int32                mnWidth;
+    sal_Int32                mnHeight;
+    sal_Int32                mnTrackX;
+    sal_Int32                mnTrackY;
+    sal_Int32                mnTrackWidth;
+    sal_Int32                mnTrackHeight;
     sal_Int32                mnLeftBorder;
     sal_Int32                mnTopBorder;
     sal_Int32                mnRightBorder;
     sal_Int32                mnBottomBorder;
-    long                     mnNoTitleTop;
-    long                     mnBorderSize;
-    long                     mnTitleHeight;
+    sal_Int32                mnNoTitleTop;
+    sal_Int32                mnBorderSize;
+    sal_Int32                mnTitleHeight;
     BorderWindowHitTest      mnHitTest;
     DrawButtonFlags          mnCloseState;
     DrawButtonFlags          mnRollState;
@@ -218,10 +218,10 @@ public:
     virtual bool            Tracking( const TrackingEvent& rTEvt );
     virtual OUString        RequestHelp( const Point& rPos, tools::Rectangle& rHelpRect );
 
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
+    virtual void            Init( OutputDevice* pDev, sal_Int32 nWidth, sal_Int32 nHeight ) = 0;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const = 0;
-    virtual long            CalcTitleWidth() const = 0;
+    virtual sal_Int32            CalcTitleWidth() const = 0;
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) = 0;
     virtual tools::Rectangle       GetMenuRect() const;
 
@@ -229,7 +229,7 @@ public:
     static BorderWindowHitTest ImplHitTest( ImplBorderFrameData const * pData, const Point& rPos );
     static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
     static OUString         ImplRequestHelp( ImplBorderFrameData const * pData, const Point& rPos, tools::Rectangle& rHelpRect );
-    static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
+    static sal_Int32        ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };
 
 class ImplNoBorderWindowView : public ImplBorderWindowView
@@ -237,10 +237,10 @@ class ImplNoBorderWindowView : public ImplBorderWindowView
 public:
                             ImplNoBorderWindowView();
 
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) override;
+    virtual void            Init( OutputDevice* pDev, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
-    virtual long            CalcTitleWidth() const override;
+    virtual sal_Int32       CalcTitleWidth() const override;
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
@@ -248,8 +248,8 @@ class ImplSmallBorderWindowView : public ImplBorderWindowView
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
     VclPtr<OutputDevice>     mpOutDev;
-    long                    mnWidth;
-    long                    mnHeight;
+    sal_Int32               mnWidth;
+    sal_Int32               mnHeight;
     sal_Int32               mnLeftBorder;
     sal_Int32               mnTopBorder;
     sal_Int32               mnRightBorder;
@@ -259,10 +259,10 @@ class ImplSmallBorderWindowView : public ImplBorderWindowView
 public:
                             ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow );
 
-    virtual void            Init( OutputDevice* pOutDev, long nWidth, long nHeight ) override;
+    virtual void            Init( OutputDevice* pOutDev, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
-    virtual long            CalcTitleWidth() const override;
+    virtual sal_Int32       CalcTitleWidth() const override;
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 
@@ -282,10 +282,10 @@ public:
     virtual OUString        RequestHelp( const Point& rPos, tools::Rectangle& rHelpRect ) override;
     virtual tools::Rectangle       GetMenuRect() const override;
 
-    virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) override;
+    virtual void            Init( OutputDevice* pDev, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const override;
-    virtual long            CalcTitleWidth() const override;
+    virtual sal_Int32       CalcTitleWidth() const override;
     virtual void            DrawWindow(vcl::RenderContext& rRenderContext, const Point* pOffset = nullptr) override;
 };
 

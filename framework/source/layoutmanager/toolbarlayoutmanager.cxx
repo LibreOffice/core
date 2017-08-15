@@ -2232,7 +2232,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
 
         if ( nSpace > 0 )
         {
-            sal_Int32 nMove = std::min( nSpace, static_cast<sal_Int32>(aFrontDockingRect.getWidth()) );
+            sal_Int32 nMove = std::min( nSpace, aFrontDockingRect.getWidth() );
             if ( bHorzDockArea )
                 aFrontDockingRect.Move( -nMove, 0 );
             else
@@ -2721,7 +2721,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                         if ( bHorizontalDockArea )
                         {
                             sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( aContainerWinSize.Width() -  aWindowRect.Left() ),
-                                                                                    sal_Int32( aTrackingRect.getWidth() )));
+                                                                                    aTrackingRect.getWidth()));
                             if ( nSize == 0 )
                                 nSize = aWindowRect.getWidth();
 
@@ -2736,7 +2736,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                         {
                             sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32(
                                                     nTopDockingAreaSize + nMaxLeftRightDockAreaSize - aWindowRect.Top() ),
-                                                    sal_Int32( aTrackingRect.getHeight() )));
+                                                    aTrackingRect.getHeight() ));
                             if ( nSize == 0 )
                                 nSize = aWindowRect.getHeight();
 
@@ -2758,7 +2758,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                         if ( bHorizontalDockArea )
                         {
                             sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32(( aContainerWinSize.Width() ) - aWindowRect.Right() ),
-                                                                                    sal_Int32( aTrackingRect.getWidth() )));
+                                                                                    aTrackingRect.getWidth() ));
                             if ( nSize == 0 )
                             {
                                 aUIElementRect.SetPos( ::Point( aContainerWinSize.Width() - aTrackingRect.getWidth(), aWindowRect.Top() ));
@@ -2779,7 +2779,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                         else
                         {
                             sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( nTopDockingAreaSize + nMaxLeftRightDockAreaSize - aWindowRect.Bottom() ),
-                                                                                    sal_Int32( aTrackingRect.getHeight() )));
+                                                                                    aTrackingRect.getHeight() ));
                             aUIElementRect.SetPos( ::Point( aWindowRect.Left(), aWindowRect.Bottom() ));
                             aUIElementRect.SetSize( ::Size( aWindowRect.getWidth(), nSize ));
 
@@ -2880,7 +2880,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                                           sal_Int32( 0 )));
 
             sal_Int32 nSize = std::min( aContainerWinSize.Width(), rTrackingRect.getWidth() );
-            sal_Int32 nDockHeight = std::max( static_cast<sal_Int32>(aDockingAreaRect.getHeight()), sal_Int32( 0 ));
+            sal_Int32 nDockHeight = std::max( aDockingAreaRect.getHeight(), sal_Int32( 0 ));
             if ( nDockHeight == 0 )
             {
                 sal_Int32 nPosY( std::max( aDockingAreaRect.Top(), aDockingAreaRect.Bottom() ));
@@ -2925,8 +2925,8 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                                 std::max<sal_Int32>( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aTrackingRect.getHeight() ),
                                                      nTopDockingAreaSize ));
 
-            sal_Int32 nSize = std::min( nMaxDockingAreaHeight, static_cast<sal_Int32>(aTrackingRect.getHeight()) );
-            sal_Int32 nDockWidth = std::max( static_cast<sal_Int32>(aDockingAreaRect.getWidth()), sal_Int32( 0 ));
+            sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aTrackingRect.getHeight() );
+            sal_Int32 nDockWidth = std::max( aDockingAreaRect.getWidth(), sal_Int32( 0 ));
             if ( nDockWidth == 0 )
             {
                 sal_Int32 nPosX( std::max( aDockingAreaRect.Left(), aDockingAreaRect.Right() ));
@@ -3030,7 +3030,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
     ::tools::Rectangle aTrackingRect( rTrackingRect );
     if ( bHorizontalDockArea )
     {
-        sal_Int32 nPosX( std::max( sal_Int32( rTrackingRect.Left()), sal_Int32( 0 )));
+        sal_Int32 nPosX( std::max( rTrackingRect.Left(), sal_Int32( 0 )));
         if (( nPosX + rTrackingRect.getWidth()) > rContainerWinSize.Width() )
             nPosX = std::min( nPosX,
                                 std::max( sal_Int32( rContainerWinSize.Width() - rTrackingRect.getWidth() ),
@@ -3056,7 +3056,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
                                 std::max<sal_Int32>( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aTrackingRect.getHeight() ),
                                                      nTopDockingAreaSize ));
 
-        sal_Int32 nSize = std::min( nMaxDockingAreaHeight, static_cast<sal_Int32>(aTrackingRect.getHeight()) );
+        sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aTrackingRect.getHeight() );
 
         aTrackingRect.SetPos( ::Point( rRowColumnRect.Left(), nPosY ));
         aTrackingRect.setWidth( rRowColumnRect.getWidth() );

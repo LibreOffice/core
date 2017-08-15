@@ -49,8 +49,8 @@
 static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
                           const Size& rObjSize, const Size& rWinSize )
 {
-    long    nX;
-    long    nY;
+    sal_Int32    nX;
+    sal_Int32    nY;
 
     if ( nStyle & WB_LEFT )
         nX = 0;
@@ -313,7 +313,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth)
+Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt, sal_Int32 nMaxWidth)
 {
     DrawTextFlags nStyle = ImplGetTextStyle( pControl->GetStyle() );
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
@@ -323,7 +323,7 @@ Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt,
                                        rTxt, nStyle).GetSize();
 }
 
-Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
+Size FixedText::CalcMinimumTextSize( Control const *pControl, sal_Int32 nMaxWidth )
 {
     Size aSize = getTextDimensions(pControl, pControl->GetText(), nMaxWidth);
 
@@ -339,7 +339,7 @@ Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
     return aSize;
 }
 
-Size FixedText::CalcMinimumSize( long nMaxWidth ) const
+Size FixedText::CalcMinimumSize( sal_Int32 nMaxWidth ) const
 {
     return CalcWindowSize( CalcMinimumTextSize ( this, nMaxWidth ) );
 }
@@ -510,18 +510,18 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
     {
         if (nWinStyle & WB_VERT)
         {
-            long nX = (aOutSize.Width() - 1) / 2;
+            sal_Int32 nX = (aOutSize.Width() - 1) / 2;
             aDecoView.DrawSeparator(Point(nX, 0), Point(nX, aOutSize.Height() - 1));
         }
         else
         {
-            long nY = (aOutSize.Height() - 1) / 2;
+            sal_Int32 nY = (aOutSize.Height() - 1) / 2;
             aDecoView.DrawSeparator(Point(0, nY), Point(aOutSize.Width() - 1, nY), false);
         }
     }
     else if (nWinStyle & WB_VERT)
     {
-        long nWidth = rRenderContext.GetTextWidth(aText);
+        sal_Int32 nWidth = rRenderContext.GetTextWidth(aText);
         rRenderContext.Push(PushFlags::FONT);
         vcl::Font aFont(rRenderContext.GetFont());
         aFont.SetOrientation(900);
@@ -557,7 +557,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
 
         aRect = DrawControlText(*this, aRect, aText, nStyle, nullptr, nullptr);
 
-        long nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
+        sal_Int32 nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
         aDecoView.DrawSeparator(Point(aRect.Right() + FIXEDLINE_TEXT_BORDER, nTop), Point(aOutSize.Width() - 1, nTop), false);
         if (aRect.Left() > FIXEDLINE_TEXT_BORDER)
             aDecoView.DrawSeparator(Point(0, nTop), Point(aRect.Left() - FIXEDLINE_TEXT_BORDER, nTop), false);

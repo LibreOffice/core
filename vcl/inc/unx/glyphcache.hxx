@@ -89,7 +89,7 @@ private:
     FontList                maFontList;
     sal_uLong               mnMaxSize;      // max overall cache size in bytes
     mutable sal_uLong       mnBytesUsed;
-    mutable long            mnLruIndex;
+    mutable sal_Int32       mnLruIndex;
     mutable int             mnGlyphCount;
     FreetypeFont*           mpCurrentGCFont;
 
@@ -101,17 +101,17 @@ class GlyphData
 public:
                             GlyphData() : mnLruValue(0) {}
 
-    const tools::Rectangle&        GetBoundRect() const        { return maBoundRect; }
+    const tools::Rectangle& GetBoundRect() const        { return maBoundRect; }
     void                    SetBoundRect(tools::Rectangle r)   { maBoundRect = r; }
 
-    void                    SetLruValue( int n ) const  { mnLruValue = n; }
-    long                    GetLruValue() const         { return mnLruValue;}
+    void                    SetLruValue( sal_Int32 n ) const  { mnLruValue = n; }
+    sal_Int32               GetLruValue() const         { return mnLruValue;}
 
 private:
-    tools::Rectangle               maBoundRect;
+    tools::Rectangle        maBoundRect;
 
     // used by GlyphCache for cache LRU algorithm
-    mutable long            mnLruValue;
+    mutable sal_Int32       mnLruValue;
 };
 
 class VCL_DLLPUBLIC FreetypeFont final
@@ -150,12 +150,12 @@ private:
     friend class CairoTextRender;
 
     void                    AddRef() const      { ++mnRefCount; }
-    long                    GetRefCount() const { return mnRefCount; }
-    long                    Release() const;
+    sal_Int32               GetRefCount() const { return mnRefCount; }
+    sal_Int32               Release() const;
     sal_uLong               GetByteCount() const { return mnBytesUsed; }
 
     void                    InitGlyphData(const GlyphItem&, GlyphData&) const;
-    void                    GarbageCollect( long );
+    void                    GarbageCollect( sal_Int32 );
     void                    ReleaseFromGarbageCollect();
 
     void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
@@ -166,15 +166,15 @@ private:
     const FontSelectPattern maFontSelData;
 
     // used by GlyphCache for cache LRU algorithm
-    mutable long            mnRefCount;
+    mutable sal_Int32       mnRefCount;
     mutable sal_uLong       mnBytesUsed;
 
     FreetypeFont*           mpPrevGCFont;
     FreetypeFont*           mpNextGCFont;
 
     // 16.16 fixed point values used for a rotated font
-    long                    mnCos;
-    long                    mnSin;
+    sal_Int32               mnCos;
+    sal_Int32               mnSin;
 
     int                     mnWidth;
     int                     mnPrioEmbedded;

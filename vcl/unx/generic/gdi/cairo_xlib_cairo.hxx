@@ -39,7 +39,7 @@ namespace cairo {
         explicit X11SysData( const SystemEnvData& );
 
         void*   pDisplay;       // the relevant display connection
-        long    hDrawable;      // a drawable
+        sal_Int32    hDrawable;      // a drawable
         void*   pVisual;        // the visual in use
         int nScreen;        // the current screen of the drawable
         void*   pRenderFormat;  // render format for drawable
@@ -49,9 +49,9 @@ namespace cairo {
     struct X11Pixmap
     {
         void* mpDisplay;  // the relevant display connection
-        long  mhDrawable; // a drawable
+        sal_Int32  mhDrawable; // a drawable
 
-        X11Pixmap( long hDrawable, void* pDisplay ) :
+        X11Pixmap( sal_Int32 hDrawable, void* pDisplay ) :
             mpDisplay(pDisplay),
             mhDrawable(hDrawable)
         {}

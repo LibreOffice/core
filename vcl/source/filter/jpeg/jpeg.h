@@ -43,15 +43,15 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
 bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                   long nWidth, long nHeight, basegfx::B2DSize const &  aPPI, bool bGreyScale,
-                   long nQualityPercent, long aChromaSubsampling,
+                   sal_Int32 nWidth, sal_Int32 nHeight, basegfx::B2DSize const &  aPPI, bool bGreyScale,
+                   sal_Int32 nQualityPercent, sal_Int32 aChromaSubsampling,
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 
-void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, sal_Int32* pLines,
                   Size const & previewSize, GraphicFilterImportFlags nImportFlags,
                   Bitmap::ScopedWriteAccess* ppAccess );
 
-void    Transform(void* pInputStream, void* pOutputStream, long nAngle);
+void    Transform(void* pInputStream, void* pOutputStream, sal_Int32 nAngle);
 
 /* Expanded data source object for stdio input */
 

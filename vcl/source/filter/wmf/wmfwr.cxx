@@ -443,7 +443,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const long* pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const sal_Int32* pDXAry )
 {
     bool bEscapeUsed = false;
 
@@ -543,7 +543,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
                                       const OUString& rString,
-                                      const long* pDXAry )
+                                      const sal_Int32* pDXAry )
 {
     sal_Int32 nOriginalTextLen = rString.getLength();
 
@@ -558,7 +558,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
-                                const OString& rByteString, const long* pDXAry )
+                                const OString& rByteString, const sal_Int32* pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -680,7 +680,7 @@ void WMFWriter::WMFRecord_RestoreDC()
     pWMF->WriteInt16( -1 );
 }
 
-void WMFWriter::WMFRecord_RoundRect(const tools::Rectangle & rRect, long nHorzRound, long nVertRound)
+void WMFWriter::WMFRecord_RoundRect(const tools::Rectangle & rRect, sal_Int32 nHorzRound, sal_Int32 nVertRound)
 {
     WriteRecordHeader(0x00000009,W_META_ROUNDRECT);
     WriteHeightWidth(Size(nHorzRound,nVertRound));
@@ -1199,7 +1199,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     pVirDev->SetFont( aSrcFont );
                     const sal_Int32 nLen = aTemp.getLength();
-                    std::unique_ptr<long[]> pDXAry(nLen ? new long[ nLen ] : nullptr);
+                    std::unique_ptr<sal_Int32[]> pDXAry(nLen ? new sal_Int32[ nLen ] : nullptr);
                     const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                     if (nLen && nNormSize == 0)
                     {
@@ -1415,7 +1415,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                                 else
                                     aX += BigInt( aScaleX.GetNumerator()/2 );
                             aX /= BigInt( aScaleX.GetNumerator() );
-                            aOrigin.X() = (long)aX + aMM.GetOrigin().X();
+                            aOrigin.X() = (sal_Int32)aX + aMM.GetOrigin().X();
                             BigInt aY( aOrigin.Y() );
                             aY *= BigInt( aScaleY.GetDenominator() );
                             if( aOrigin.Y() >= 0 )
@@ -1429,7 +1429,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                                 else
                                     aY += BigInt( aScaleY.GetNumerator()/2 );
                             aY /= BigInt( aScaleY.GetNumerator() );
-                            aOrigin.Y() = (long)aY + aMM.GetOrigin().Y();
+                            aOrigin.Y() = (sal_Int32)aY + aMM.GetOrigin().Y();
                             aSrcMapMode.SetOrigin( aOrigin );
 
                             aScaleX *= aSrcMapMode.GetScaleX();
@@ -1567,7 +1567,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const Size      aDestSize( pA->GetSize() );
                     const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
                     const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                    long            nMoveX, nMoveY;
+                    sal_Int32            nMoveX, nMoveY;
 
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
@@ -1717,7 +1717,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     {
         aTargetMapMode = MapMode( MapUnit::MapInch );
 
-        const long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
+        const sal_Int32      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
         const Fraction  aFrac( 1, nUnit );
 
         aTargetMapMode.SetScaleX( aFrac );

@@ -40,20 +40,20 @@ class SAL_WARN_UNUSED Pair
 {
 public:
                         Pair() : nA(0), nB(0) {}
-                        Pair( long _nA, long _nB ) : nA(_nA), nB(_nB) {}
+                        Pair( sal_Int32 _nA, sal_Int32 _nB ) : nA(_nA), nB(_nB) {}
 
-    long                A() const { return nA; }
-    long                B() const { return nB; }
+    sal_Int32           A() const { return nA; }
+    sal_Int32           B() const { return nB; }
 
-    long&               A() { return nA; }
-    long&               B() { return nB; }
+    sal_Int32&          A() { return nA; }
+    sal_Int32&          B() { return nB; }
 
     TOOLS_DLLPUBLIC friend SvStream&    ReadPair( SvStream& rIStream, Pair& rPair );
     TOOLS_DLLPUBLIC friend SvStream&    WritePair( SvStream& rOStream, const Pair& rPair );
 
 protected:
-    long                nA;
-    long                nB;
+    sal_Int32           nA;
+    sal_Int32           nB;
 };
 
 namespace tools { namespace detail {
@@ -72,36 +72,36 @@ class SAL_WARN_UNUSED SAL_DLLPUBLIC_EXPORT Point : public Pair
 {
 public:
                         Point() {}
-                        Point( long nX, long nY ) : Pair( nX, nY ) {}
+                        Point( sal_Int32 nX, sal_Int32 nY ) : Pair( nX, nY ) {}
 
-    long                X() const { return nA; }
-    long                Y() const { return nB; }
+    sal_Int32           X() const { return nA; }
+    sal_Int32           Y() const { return nB; }
 
-    long&               X() { return nA; }
-    long&               Y() { return nB; }
+    sal_Int32&          X() { return nA; }
+    sal_Int32&          Y() { return nB; }
 
-    void                Move( long nHorzMove, long nVertMove );
+    void                Move( sal_Int32 nHorzMove, sal_Int32 nVertMove );
 
-    void                RotateAround( long& rX, long& rY, short nOrientation ) const;
+    void                RotateAround( sal_Int32& rX, sal_Int32& rY, short nOrientation ) const;
 
 
     Point&              operator += ( const Point& rPoint );
     Point&              operator -= ( const Point& rPoint );
-    Point&              operator *= ( const long nVal );
-    Point&              operator /= ( const long nVal );
+    Point&              operator *= ( const sal_Int32 nVal );
+    Point&              operator /= ( const sal_Int32 nVal );
 
     friend inline Point operator+( const Point &rVal1, const Point &rVal2 );
     friend inline Point operator-( const Point &rVal1, const Point &rVal2 );
-    friend inline Point operator*( const Point &rVal1, const long nVal2 );
-    friend inline Point operator/( const Point &rVal1, const long nVal2 );
+    friend inline Point operator*( const Point &rVal1, const sal_Int32 nVal2 );
+    friend inline Point operator/( const Point &rVal1, const sal_Int32 nVal2 );
 
-    long                getX() const { return X(); }
-    long                getY() const { return Y(); }
-    void                setX(long nX)  { X() = nX; }
-    void                setY(long nY)  { Y() = nY; }
+    sal_Int32           getX() const { return X(); }
+    sal_Int32           getY() const { return Y(); }
+    void                setX(sal_Int32 nX)  { X() = nX; }
+    void                setY(sal_Int32 nY)  { Y() = nY; }
 };
 
-inline void Point::Move( long nHorzMove, long nVertMove )
+inline void Point::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     nA += nHorzMove;
     nB += nVertMove;
@@ -121,14 +121,14 @@ inline Point& Point::operator -= ( const Point& rPoint )
     return *this;
 }
 
-inline Point& Point::operator *= ( const long nVal )
+inline Point& Point::operator *= ( const sal_Int32 nVal )
 {
     nA *= nVal;
     nB *= nVal;
     return *this;
 }
 
-inline Point& Point::operator /= ( const long nVal )
+inline Point& Point::operator /= ( const sal_Int32 nVal )
 {
     nA /= nVal;
     nB /= nVal;
@@ -145,12 +145,12 @@ inline Point operator-( const Point &rVal1, const Point &rVal2 )
     return Point( rVal1.nA-rVal2.nA, rVal1.nB-rVal2.nB );
 }
 
-inline Point operator*( const Point &rVal1, const long nVal2 )
+inline Point operator*( const Point &rVal1, const sal_Int32 nVal2 )
 {
     return Point( rVal1.nA*nVal2, rVal1.nB*nVal2 );
 }
 
-inline Point operator/( const Point &rVal1, const long nVal2 )
+inline Point operator/( const Point &rVal1, const sal_Int32 nVal2 )
 {
     return Point( rVal1.nA/nVal2, rVal1.nB/nVal2 );
 }
@@ -178,18 +178,18 @@ class SAL_WARN_UNUSED Size : public Pair
 {
 public:
                     Size() {}
-                    Size( long nWidth, long nHeight ) : Pair( nWidth, nHeight ) {}
+                    Size( sal_Int32 nWidth, sal_Int32 nHeight ) : Pair( nWidth, nHeight ) {}
 
-    long            Width() const  { return nA; }
-    long            Height() const { return nB; }
+    sal_Int32       Width() const  { return nA; }
+    sal_Int32       Height() const { return nB; }
 
-    long&           Width()  { return nA; }
-    long&           Height() { return nB; }
+    sal_Int32&      Width()  { return nA; }
+    sal_Int32&      Height() { return nB; }
 
-    long            getWidth() const { return Width(); }
-    long            getHeight() const { return Height(); }
-    void            setWidth(long nWidth)  { Width() = nWidth; }
-    void            setHeight(long nHeight)  { Height() = nHeight; }
+    sal_Int32       getWidth() const { return Width(); }
+    sal_Int32       getHeight() const { return Height(); }
+    void            setWidth(sal_Int32 nWidth)  { Width() = nWidth; }
+    void            setHeight(sal_Int32 nHeight)  { Height() = nHeight; }
 };
 
 inline bool operator ==(Size const & s1, Size const & s2)
@@ -211,27 +211,27 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 // Range
 
-#define RANGE_MAX   LONG_MAX
+#define RANGE_MAX   SAL_MAX_INT32
 
 class SAL_WARN_UNUSED Range : public Pair
 {
 public:
                     Range() {}
-                    Range( long nMin, long nMax ) : Pair( nMin, nMax ) {}
+                    Range( sal_Int32 nMin, sal_Int32 nMax ) : Pair( nMin, nMax ) {}
 
-    long            Min() const { return nA; }
-    long            Max() const { return nB; }
-    long            Len() const { return nB - nA + 1; }
+    sal_Int32       Min() const { return nA; }
+    sal_Int32       Max() const { return nB; }
+    sal_Int32       Len() const { return nB - nA + 1; }
 
-    long&           Min() { return nA; }
-    long&           Max() { return nB; }
+    sal_Int32&      Min() { return nA; }
+    sal_Int32&      Max() { return nB; }
 
-    bool            IsInside( long nIs ) const;
+    bool            IsInside( sal_Int32 nIs ) const;
 
     void            Justify();
 };
 
-inline bool Range::IsInside( long nIs ) const
+inline bool Range::IsInside( sal_Int32 nIs ) const
 {
     return ((nA <= nIs) && (nIs <= nB ));
 }
@@ -240,9 +240,7 @@ inline void Range::Justify()
 {
     if ( nA > nB )
     {
-        long nHelp = nA;
-        nA = nB;
-        nB = nHelp;
+        std::swap(nA,nB);
     }
 }
 
@@ -265,35 +263,35 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 // Selection
 
-#define SELECTION_MIN   LONG_MIN
-#define SELECTION_MAX   LONG_MAX
+#define SELECTION_MIN   SAL_MIN_INT32
+#define SELECTION_MAX   SAL_MAX_INT32
 
 class SAL_WARN_UNUSED Selection : public Pair
 {
 public:
                     Selection() {}
-                    Selection( long nPos ) : Pair( nPos, nPos ) {}
-                    Selection( long nMin, long nMax ) : Pair( nMin, nMax ) {}
+                    Selection( sal_Int32 nPos ) : Pair( nPos, nPos ) {}
+                    Selection( sal_Int32 nMin, sal_Int32 nMax ) : Pair( nMin, nMax ) {}
 
-    long            Min() const { return nA; }
-    long            Max() const { return nB; }
-    long            Len() const { return nB - nA; }
+    sal_Int32       Min() const { return nA; }
+    sal_Int32       Max() const { return nB; }
+    sal_Int32       Len() const { return nB - nA; }
 
-    long&           Min() { return nA; }
-    long&           Max() { return nB; }
+    sal_Int32&      Min() { return nA; }
+    sal_Int32&      Max() { return nB; }
 
-    bool            IsInside( long nIs ) const;
+    bool            IsInside( sal_Int32 nIs ) const;
 
     void            Justify();
 
     bool            operator !() const { return !Len(); }
 
-    long            getMin() const { return Min(); }
-    void            setMin(long nMin)  { Min() = nMin; }
-    void            setMax(long nMax)  { Max() = nMax; }
+    sal_Int32       getMin() const { return Min(); }
+    void            setMin(sal_Int32 nMin)  { Min() = nMin; }
+    void            setMax(sal_Int32 nMax)  { Max() = nMax; }
 };
 
-inline bool Selection::IsInside( long nIs ) const
+inline bool Selection::IsInside( sal_Int32 nIs ) const
 {
     return ((nA <= nIs) && (nIs < nB ));
 }
@@ -302,9 +300,7 @@ inline void Selection::Justify()
 {
     if ( nA > nB )
     {
-        long nHelp = nA;
-        nA = nB;
-        nB = nHelp;
+        std::swap(nA,nB);
     }
 }
 
@@ -327,8 +323,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
 // Rectangle
 
 #define RECT_EMPTY  ((short)-32767)
-#define RECT_MAX    LONG_MAX
-#define RECT_MIN    LONG_MIN
+#define RECT_MAX    SAL_MAX_INT32
+#define RECT_MIN    SAL_MIN_INT32
 
 /// Note: this class is a true marvel of engineering: because the author
 /// could not decide whether it's better to have a closed or half-open
@@ -346,19 +342,19 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle
 public:
                         Rectangle();
                         Rectangle( const Point& rLT, const Point& rRB );
-                        Rectangle( long nLeft, long nTop,
-                                   long nRight, long nBottom );
+                        Rectangle( sal_Int32 nLeft, sal_Int32 nTop,
+                                   sal_Int32 nRight, sal_Int32 nBottom );
                         Rectangle( const Point& rLT, const Size& rSize );
 
-    long                Left() const    { return nLeft;   }
-    long                Right() const   { return nRight;  }
-    long                Top() const     { return nTop;    }
-    long                Bottom() const  { return nBottom; }
+    sal_Int32           Left() const    { return nLeft;   }
+    sal_Int32           Right() const   { return nRight;  }
+    sal_Int32           Top() const     { return nTop;    }
+    sal_Int32           Bottom() const  { return nBottom; }
 
-    long&               Left()          { return nLeft;   }
-    long&               Right()         { return nRight;  }
-    long&               Top()           { return nTop;    }
-    long&               Bottom()        { return nBottom; }
+    sal_Int32&          Left()          { return nLeft;   }
+    sal_Int32&          Right()         { return nRight;  }
+    sal_Int32&          Top()           { return nTop;    }
+    sal_Int32&          Bottom()        { return nBottom; }
 
     inline Point        TopLeft() const;
     inline Point        TopRight() const;
@@ -371,15 +367,15 @@ public:
     inline Point        Center() const;
 
     /// Move the top and left edges by a delta, preserving width and height
-    inline void         Move( long nHorzMoveDelta, long nVertMoveDelta );
+    inline void         Move( sal_Int32 nHorzMoveDelta, sal_Int32 nVertMoveDelta );
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
 
     /// Returns the difference between right and left, assuming the range is inclusive.
-    inline long         GetWidth() const;
+    inline sal_Int32    GetWidth() const;
     /// Returns the difference between bottom and top, assuming the range is inclusive.
-    inline long         GetHeight() const;
+    inline sal_Int32    GetHeight() const;
 
     tools::Rectangle&          Union( const tools::Rectangle& rRect );
     tools::Rectangle&          Intersection( const tools::Rectangle& rRect );
@@ -408,32 +404,32 @@ public:
     TOOLS_DLLPUBLIC friend SvStream&    WriteRectangle( SvStream& rOStream, const tools::Rectangle& rRect );
 
     // ONE
-    long                getX() const { return nLeft; }
-    long                getY() const { return nTop; }
+    sal_Int32           getX() const { return nLeft; }
+    sal_Int32           getY() const { return nTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
-    long                getWidth() const { return nRight - nLeft; }
+    sal_Int32           getWidth() const { return nRight - nLeft; }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
-    long                getHeight() const { return nBottom - nTop; }
+    sal_Int32           getHeight() const { return nBottom - nTop; }
     /// Set the left edge of the rectangle to x, preserving the width
-    void                setX( long x ) { nRight  += x - nLeft; nLeft = x; }
+    void                setX( sal_Int32 x ) { nRight  += x - nLeft; nLeft = x; }
     /// Set the top edge of the rectangle to y, preserving the height
-    void                setY( long y ) { nBottom += y - nTop;  nTop  = y; }
-    void                setWidth( long n ) { nRight = nLeft + n; }
-    void                setHeight( long n ) { nBottom = nTop + n; }
+    void                setY( sal_Int32 y ) { nBottom += y - nTop;  nTop  = y; }
+    void                setWidth( sal_Int32 n ) { nRight = nLeft + n; }
+    void                setHeight( sal_Int32 n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
     rtl::OString        toString() const;
 
     /**
      * Expands the rectangle in all directions by the input value.
      */
-    inline void expand(long nExpandBy);
-    inline void shrink(long nShrinkBy);
+    inline void expand(sal_Int32 nExpandBy);
+    inline void shrink(sal_Int32 nShrinkBy);
 
 private:
-    long                nLeft;
-    long                nTop;
-    long                nRight;
-    long                nBottom;
+    sal_Int32            nLeft;
+    sal_Int32            nTop;
+    sal_Int32            nRight;
+    sal_Int32            nBottom;
 };
 }
 
@@ -451,8 +447,8 @@ inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
     nBottom = rRB.Y();
 }
 
-inline tools::Rectangle::Rectangle( long _nLeft,  long _nTop,
-                             long _nRight, long _nBottom )
+inline tools::Rectangle::Rectangle( sal_Int32 _nLeft,  sal_Int32 _nTop,
+                             sal_Int32 _nRight, sal_Int32 _nBottom )
 {
     nLeft   = _nLeft;
     nTop    = _nTop;
@@ -536,7 +532,7 @@ inline Point tools::Rectangle::Center() const
         return Point( nLeft+(nRight-nLeft)/2 , nTop+(nBottom-nTop)/2 );
 }
 
-inline void tools::Rectangle::Move( long nHorzMove, long nVertMove )
+inline void tools::Rectangle::Move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     nLeft += nHorzMove;
     nTop  += nVertMove;
@@ -556,9 +552,9 @@ inline void tools::Rectangle::SetPos( const Point& rPoint )
     nTop  = rPoint.Y();
 }
 
-inline long tools::Rectangle::GetWidth() const
+inline sal_Int32 tools::Rectangle::GetWidth() const
 {
-    long n;
+    sal_Int32 n;
     if ( nRight == RECT_EMPTY )
         n = 0;
     else
@@ -573,9 +569,9 @@ inline long tools::Rectangle::GetWidth() const
     return n;
 }
 
-inline long tools::Rectangle::GetHeight() const
+inline sal_Int32 tools::Rectangle::GetHeight() const
 {
-    long n;
+    sal_Int32 n;
     if ( nBottom == RECT_EMPTY )
         n = 0;
     else
@@ -665,7 +661,7 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
 }
 }
 
-inline void tools::Rectangle::expand(long nExpandBy)
+inline void tools::Rectangle::expand(sal_Int32 nExpandBy)
 {
     nLeft   -= nExpandBy;
     nTop    -= nExpandBy;
@@ -673,7 +669,7 @@ inline void tools::Rectangle::expand(long nExpandBy)
     nBottom += nExpandBy;
 }
 
-inline void tools::Rectangle::shrink(long nShrinkBy)
+inline void tools::Rectangle::shrink(sal_Int32 nShrinkBy)
 {
     nLeft   += nShrinkBy;
     nTop    += nShrinkBy;

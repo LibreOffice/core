@@ -52,7 +52,7 @@ typedef struct CGContext *CGContextRef;
 
 struct SystemEnvData
 {
-    unsigned long       nSize;          // size in bytes of this structure
+    sal_Int32           nSize;          // size in bytes of this structure
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
@@ -64,12 +64,12 @@ struct SystemEnvData
     // Nothing
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
-    long                aWindow;        // the window of the object
+    sal_Int32           aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
-    // note: this is a "long" in Xlib *but* in the protocol it's only 32-bit
+    // note: this is a "sal_Int32" in Xlib *but* in the protocol it's only 32-bit
     // however, the GTK3 vclplug wants to store pointers in here!
     sal_IntPtr          aShellWindow;   // the window of the frame's shell
     const char*         pToolkit;       // the toolkit in use (gtk2 vs gtk3)
@@ -100,7 +100,7 @@ struct SystemEnvData
 
 struct SystemParentData
 {
-    unsigned long   nSize;            // size in bytes of this structure
+    sal_Int32       nSize;            // size in bytes of this structure
 #if defined(_WIN32)
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
@@ -110,7 +110,7 @@ struct SystemParentData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    long            aWindow;          // the window of the object
+    sal_Int32       aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
                                       // should support the XEmbed protocol
 #endif
@@ -127,7 +127,7 @@ struct SystemMenuData
 
 struct SystemGraphicsData
 {
-    unsigned long   nSize;          // size in bytes of this structure
+    sal_Int32       nSize;          // size in bytes of this structure
 #if defined(_WIN32)
     HDC             hDC;            // handle to a device context
     HWND            hWnd;           // optional handle to a window
@@ -139,7 +139,7 @@ struct SystemGraphicsData
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
-    long            hDrawable;      // a drawable
+    sal_Int32       hDrawable;      // a drawable
     void*           pVisual;        // the visual in use
     int             nScreen;        // the current screen of the drawable
     void*           pXRenderFormat;  // render format for drawable
@@ -182,7 +182,7 @@ struct SystemWindowData
 
 struct SystemGlyphData
 {
-    unsigned long        index;
+    sal_Int32            index;
     double               x;
     double               y;
     int                  fallbacklevel;

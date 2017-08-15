@@ -115,7 +115,7 @@ Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) cons
         aSize = PixelToLogic( aSize, aMap );
         aSize.Height() += 5;
         aSize.Height() /= 10;
-        long nRound = aSize.Height() % 5;
+        sal_Int32 nRound = aSize.Height() % 5;
         if ( nRound >= 3 )
             aSize.Height() += (5-nRound);
         else
@@ -285,9 +285,9 @@ SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
 
 void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine,
                                         tools::Rectangle& rRect1, tools::Rectangle& rRect2,
-                                        long& rYOff, long& rWidth,
+                                        sal_Int32& rYOff, sal_Int32& rWidth,
                                         FontEmphasisMark eEmphasis,
-                                        long nHeight )
+                                        sal_Int32 nHeight )
 {
     static const PolyFlags aAccentPolyFlags[24] =
     {
@@ -301,7 +301,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
         PolyFlags::Normal, PolyFlags::Control, PolyFlags::Control
     };
 
-    static const long aAccentPos[48] =
+    static const sal_Int32 aAccentPos[48] =
     {
          78,      0,
         348,     79,
@@ -337,7 +337,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
         return;
 
     FontEmphasisMark    nEmphasisStyle = eEmphasis & FontEmphasisMark::Style;
-    long                nDotSize = 0;
+    sal_Int32                nDotSize = 0;
     switch ( nEmphasisStyle )
     {
         case FontEmphasisMark::Dot:
@@ -349,7 +349,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                 rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
             else
             {
-                long nRad = nDotSize/2;
+                sal_Int32 nRad = nDotSize/2;
                 tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
             }
@@ -366,11 +366,11 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                 rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
             else
             {
-                long nRad = nDotSize/2;
+                sal_Int32 nRad = nDotSize/2;
                 tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
                 // BorderWidth is 15%
-                long nBorder = (nDotSize*150)/1000;
+                sal_Int32 nBorder = (nDotSize*150)/1000;
                 if ( nBorder <= 1 )
                     rPolyLine = true;
                 else
@@ -392,7 +392,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
                 rRect1 = tools::Rectangle( Point(), Size( nDotSize, nDotSize ) );
             else
             {
-                long nRad = nDotSize/2;
+                sal_Int32 nRad = nDotSize/2;
                 tools::Polygon aPoly( Point( nRad, nRad ), nRad, nRad );
                 rPolyPoly.Insert( aPoly );
             }
@@ -436,8 +436,8 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
     }
 
     // calculate position
-    long nOffY = 1+(mnDPIY/300); // one visible pixel space
-    long nSpaceY = nHeight-nDotSize;
+    sal_Int32 nOffY = 1+(mnDPIY/300); // one visible pixel space
+    sal_Int32 nSpaceY = nHeight-nDotSize;
     if ( nSpaceY >= nOffY*2 )
         rYOff += nOffY;
     if ( !(eEmphasis & FontEmphasisMark::PosBelow) )
@@ -470,7 +470,7 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont 
     return nEmphasisMark;
 }
 
-long OutputDevice::GetFontExtLeading() const
+sal_Int32 OutputDevice::GetFontExtLeading() const
 {
     return mpFontInstance->mxFontMetric->GetExternalLeading();
 }
@@ -1105,7 +1105,7 @@ bool OutputDevice::ImplNewFont() const
     if ( maFont.GetEmphasisMark() & FontEmphasisMark::Style )
     {
         FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-        long                nEmphasisHeight = (pFontInstance->mnLineHeight*250)/1000;
+        sal_Int32                nEmphasisHeight = (pFontInstance->mnLineHeight*250)/1000;
         if ( nEmphasisHeight < 1 )
             nEmphasisHeight = 1;
         if ( nEmphasisMark & FontEmphasisMark::PosBelow )
@@ -1184,7 +1184,7 @@ void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance 
     }
 }
 
-void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
+void OutputDevice::ImplDrawEmphasisMark( sal_Int32 nBaseX, sal_Int32 nX, sal_Int32 nY,
                                          const tools::PolyPolygon& rPolyPoly, bool bPolyLine,
                                          const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 )
 {
@@ -1239,9 +1239,9 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     tools::PolyPolygon  aPolyPoly;
     tools::Rectangle           aRect1;
     tools::Rectangle           aRect2;
-    long                nEmphasisYOff;
-    long                nEmphasisWidth;
-    long                nEmphasisHeight;
+    sal_Int32                nEmphasisYOff;
+    sal_Int32                nEmphasisWidth;
+    sal_Int32                nEmphasisHeight;
     bool                bPolyLine;
 
     if ( nEmphasisMark & FontEmphasisMark::PosBelow )
@@ -1273,8 +1273,8 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     else
         aOffset.Y() -= mpFontInstance->mxFontMetric->GetAscent() + nEmphasisYOff;
 
-    long nEmphasisWidth2  = nEmphasisWidth / 2;
-    long nEmphasisHeight2 = nEmphasisHeight / 2;
+    sal_Int32 nEmphasisWidth2  = nEmphasisWidth / 2;
+    sal_Int32 nEmphasisHeight2 = nEmphasisHeight / 2;
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
     Point aOutPoint;
@@ -1425,7 +1425,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     return pSalLayout;
 }
 
-long OutputDevice::GetMinKashida() const
+sal_Int32 OutputDevice::GetMinKashida() const
 {
     if( mbNewFont && !ImplNewFont() )
         return 0;

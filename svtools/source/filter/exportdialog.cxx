@@ -224,13 +224,13 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
             else
                 nColor = 1;
             pFilterOptions->WriteInt32("ColorMode", nColor);
-            pFilterOptions->WriteInt32("Quality", static_cast<sal_Int32>(mpSbCompression->GetThumbPos()));
+            pFilterOptions->WriteInt32("Quality", mpSbCompression->GetThumbPos());
         }
         break;
 
         case FORMAT_PNG :
         {
-            pFilterOptions->WriteInt32("Compression", static_cast<sal_Int32>(mpSbCompression->GetThumbPos()));
+            pFilterOptions->WriteInt32("Compression", mpSbCompression->GetThumbPos());
             sal_Int32 nInterlace = 0;
             if ( mpCbInterlaced->IsChecked() )
                 nInterlace++;

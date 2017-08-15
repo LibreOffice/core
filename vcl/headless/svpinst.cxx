@@ -274,7 +274,7 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 #ifndef IOS
 
 SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
-                                                       long &nDX, long &nDY,
+                                                       sal_Int32 &nDX, sal_Int32 &nDY,
                                                        DeviceFormat eFormat,
                                                        const SystemGraphicsData* /* pData */ )
 {

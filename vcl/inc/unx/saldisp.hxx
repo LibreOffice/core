@@ -298,7 +298,7 @@ protected:
     void            processRandREvent( XEvent* );
 
     void            doDestruct();
-    void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
+    void            addXineramaScreenUnique( int i, sal_Int32 i_nX, sal_Int32 i_nY, sal_Int32 i_nWidth, sal_Int32 i_nHeight );
 public:
     static bool BestOpenGLVisual(Display* pDisplay, int nScreen, XVisualInfo& rVI);
     static bool BestVisual(Display *pDisp, int nScreen, XVisualInfo &rVI);

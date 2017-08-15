@@ -48,14 +48,14 @@ public:
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
-    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
-    virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
+    virtual bool        SetSize( sal_Int32 nNewDX, sal_Int32 nNewDY ) override;
+    virtual bool        SetSizeUsingBuffer( sal_Int32 nNewDX, sal_Int32 nNewDY,
                                             sal_uInt8 * pBuffer
                                           ) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const override;
-    virtual long GetHeight() const override;
+    virtual sal_Int32 GetWidth() const override;
+    virtual sal_Int32 GetHeight() const override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

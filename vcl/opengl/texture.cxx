@@ -546,10 +546,10 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
     }
     else
     {
-        long nWidth = maRect.GetWidth();
-        long nHeight = maRect.GetHeight();
-        long nX = maRect.Left();
-        long nY = mpImpl->mnHeight - maRect.Top() - nHeight;
+        sal_Int32 nWidth = maRect.GetWidth();
+        sal_Int32 nHeight = maRect.GetHeight();
+        sal_Int32 nX = maRect.Left();
+        sal_Int32 nY = mpImpl->mnHeight - maRect.Top() - nHeight;
 
         // Retrieve current context
         ImplSVData* pSVData = ImplGetSVData();

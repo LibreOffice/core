@@ -103,7 +103,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
                                              Display* pDisplay,
                                              XImage* pImage,
                                              Colormap aColormap,
-                                             sal_Int32& rOutSize
+                                             long& rOutSize
                                              )
 {
     sal_uInt32 nColors = 0;
@@ -235,7 +235,7 @@ static void getShift( unsigned long nMask, int& rShift, int& rSigBits, int& rShi
 static sal_uInt8* X11_getTCBmpFromImage(
                                              Display* pDisplay,
                                              XImage* pImage,
-                                             sal_Int32& rOutSize,
+                                             long& rOutSize,
                                              int nScreenNo
                                              )
 {
@@ -312,7 +312,7 @@ sal_uInt8* x11::X11_getBmpFromPixmap(
                                 Display* pDisplay,
                                 Drawable aDrawable,
                                 Colormap aColormap,
-                                sal_Int32& rOutSize
+                                long& rOutSize
                                 )
 {
     // get geometry of drawable

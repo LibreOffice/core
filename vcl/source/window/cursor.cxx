@@ -34,7 +34,7 @@ struct ImplCursorData
     Point           maPixPos;           // Pixel-Position
     Point           maPixRotOff;        // Pixel-Offset-Position
     Size            maPixSize;          // Pixel-Size
-    long            mnPixSlant;         // Pixel-Slant
+    sal_Int32       mnPixSlant;         // Pixel-Slant
     short           mnOrientation;      // Pixel-Orientation
     CursorDirection mnDirection;        // indicates writing direction
     sal_uInt16      mnStyle;            // Cursor-Style
@@ -357,7 +357,7 @@ void vcl::Cursor::SetSize( const Size& rSize )
     }
 }
 
-void vcl::Cursor::SetWidth( long nNewWidth )
+void vcl::Cursor::SetWidth( sal_Int32 nNewWidth )
 {
     if ( maSize.Width() != nNewWidth )
     {

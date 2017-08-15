@@ -30,7 +30,7 @@
 #include <win/salvd.h>
 #include "opengl/win/gdiimpl.hxx"
 
-HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
+HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, sal_Int32 nDX, sal_Int32 nDY, sal_uInt16 nBitCount, void **ppData)
 {
     HBITMAP hBitmap;
 
@@ -71,7 +71,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
 }
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
-                                                       long &nDX, long &nDY,
+                                                       sal_Int32 &nDX, sal_Int32 &nDY,
                                                        DeviceFormat eFormat,
                                                        const SystemGraphicsData* pData )
 {
@@ -145,7 +145,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
 }
 
-WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, long nWidth, long nHeight)
+WinSalVirtualDevice::WinSalVirtualDevice(HDC hDC, HBITMAP hBMP, sal_uInt16 nBitCount, bool bForeignDC, sal_Int32 nWidth, sal_Int32 nHeight)
     : mhLocalDC(hDC),          // HDC or 0 for Cache Device
       mhBmp(hBMP),             // Memory Bitmap
       mpGraphics(nullptr),     // current VirDev graphics
@@ -206,7 +206,7 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
     mbGraphics = false;
 }
 
-bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
+bool WinSalVirtualDevice::SetSize( sal_Int32 nDX, sal_Int32 nDY )
 {
     if( mbForeignDC || !mhBmp )
         return true;    // ???

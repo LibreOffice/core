@@ -150,7 +150,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     {
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
-            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+            aLineInfo.SetWidth( static_cast<sal_Int32>(fLineWidth+0.5) );
 
         const tools::Polygon aToolsPolygon( rB2DPolygon );
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
@@ -230,7 +230,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         const tools::Polygon aToolsPolygon( rB2DPolygon );
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
-            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+            aLineInfo.SetWidth( static_cast<sal_Int32>(fLineWidth+0.5) );
 
         drawPolyLine( aToolsPolygon, aLineInfo );
     }
@@ -358,7 +358,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
             {
                 LineInfo aLineInfo;
                 if( fLineWidth != 0.0 )
-                    aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+                    aLineInfo.SetWidth( static_cast<sal_Int32>(fLineWidth+0.5) );
                 // Transport known information, might be needed
                 aLineInfo.SetLineJoin(eLineJoin);
                 aLineInfo.SetLineCap(eLineCap);

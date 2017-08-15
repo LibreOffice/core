@@ -697,8 +697,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             // Update all windows
             vcl::Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
             // Reset data that needs to be re-calculated
-            long nOldDPIX = 0;
-            long nOldDPIY = 0;
+            sal_Int32 nOldDPIX = 0;
+            sal_Int32 nOldDPIY = 0;
             if ( pFirstFrame )
             {
                 nOldDPIX = pFirstFrame->GetDPIX();
@@ -1094,9 +1094,9 @@ vcl::Window* Application::GetNextTopLevelWindow( vcl::Window const * pWindow )
     return pWindow->mpWindowImpl->mpFrameData->mpNextFrame;
 }
 
-long    Application::GetTopWindowCount()
+sal_Int32    Application::GetTopWindowCount()
 {
-    long nRet = 0;
+    sal_Int32 nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : nullptr;
     while( pWin )
@@ -1108,9 +1108,9 @@ long    Application::GetTopWindowCount()
     return nRet;
 }
 
-vcl::Window* Application::GetTopWindow( long nIndex )
+vcl::Window* Application::GetTopWindow( sal_Int32 nIndex )
 {
-    long nIdx = 0;
+    sal_Int32 nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window *pWin = pSVData ? pSVData->maWinData.mpFirstFrame.get() : nullptr;
     while( pWin )
@@ -1268,12 +1268,12 @@ tools::Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 }
 
 namespace {
-unsigned long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRect )
+sal_Int32 calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_rRect )
 {
     const Point aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
                        (i_rRect.Top() + i_rRect.Bottom())/ 2 );
-    const long nDX = aRectCenter.X() - i_rPoint.X();
-    const long nDY = aRectCenter.Y() - i_rPoint.Y();
+    const sal_Int32 nDX = aRectCenter.X() - i_rPoint.X();
+    const sal_Int32 nDY = aRectCenter.Y() - i_rPoint.Y();
     return nDX*nDX + nDY*nDY;
 }
 }
@@ -1285,7 +1285,7 @@ unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
 
     const unsigned int nScreens = GetScreenCount();
     unsigned int nBestMatchScreen = 0;
-    unsigned long nOverlap = 0;
+    sal_Int32 nOverlap = 0;
     for( unsigned int i = 0; i < nScreens; i++ )
     {
         const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
@@ -1296,7 +1296,7 @@ unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
         tools::Rectangle aIntersection( aCurScreenRect.GetIntersection( i_rRect ) );
         if( ! aIntersection.IsEmpty() )
         {
-            const unsigned long nCurOverlap( aIntersection.GetWidth() * aIntersection.GetHeight() );
+            const sal_Int32 nCurOverlap( aIntersection.GetWidth() * aIntersection.GetHeight() );
             if( nCurOverlap > nOverlap )
             {
                 nOverlap = nCurOverlap;
@@ -1310,11 +1310,11 @@ unsigned int Application::GetBestScreen( const tools::Rectangle& i_rRect )
     // finally the screen which center is nearest to the rect is the best
     const Point aCenter( (i_rRect.Left() + i_rRect.Right())/2,
                          (i_rRect.Top() + i_rRect.Bottom())/2 );
-    unsigned long nDist = ULONG_MAX;
+    sal_Int32 nDist = SAL_MAX_INT32;
     for( unsigned int i = 0; i < nScreens; i++ )
     {
         const tools::Rectangle aCurScreenRect( GetScreenPosSizePixel( i ) );
-        const unsigned long nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
+        const sal_Int32 nCurDist( calcDistSquare( aCenter, aCurScreenRect ) );
         if( nCurDist < nDist )
         {
             nBestMatchScreen = i;

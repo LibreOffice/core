@@ -41,8 +41,8 @@ public:
     SystemEnvData           maSysData;              // system data
     SalFrameState           maState;                // frame state
     int                     mnShowState;            // show state
-    long                    mnWidth;                // client width in pixeln
-    long                    mnHeight;               // client height in pixeln
+    sal_Int32               mnWidth;                // client width in pixeln
+    sal_Int32               mnHeight;               // client height in pixeln
     int                     mnMinWidth;             // min. client width in pixeln
     int                     mnMinHeight;            // min. client height in pixeln
     int                     mnMaxWidth;             // max. client width in pixeln
@@ -95,10 +95,10 @@ public:
     virtual void                DrawMenuBar() override;
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) override;
     virtual void                Show( bool bVisible, bool bNoActivate = FALSE ) override;
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual void                SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -109,7 +109,7 @@ public:
     virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( sal_Int32 nX, sal_Int32 nY ) override;
     using SalFrame::Flush;
     virtual void                Flush() override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
@@ -129,7 +129,7 @@ public:
     virtual void                SetApplicationID( const OUString &rApplicationID ) override;
     virtual void                ResetClipRegion() override;
     virtual void                BeginSetClipRegion( sal_uIntPtr nRects ) override;
-    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                EndSetClipRegion() override;
 };
 

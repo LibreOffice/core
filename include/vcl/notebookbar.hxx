@@ -30,7 +30,7 @@ public:
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+    virtual void setPosSizePixel(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
     virtual void Resize() override;
 
     void SetSystemWindow(SystemWindow* pSystemWindow);

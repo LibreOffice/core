@@ -75,8 +75,8 @@ public:
     virtual LogicalFontInstance*  CreateFontInstance( FontSelectPattern& ) const = 0;
     virtual PhysicalFontFace* Clone() const = 0;
 
-    int                     GetHeight() const           { return mnHeight; }
-    int                     GetWidth() const            { return mnWidth; }
+    sal_Int32               GetHeight() const           { return mnHeight; }
+    sal_Int32               GetWidth() const            { return mnWidth; }
     virtual sal_IntPtr      GetFontId() const = 0;
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
@@ -85,10 +85,10 @@ public:
 
 protected:
     explicit                PhysicalFontFace( const FontAttributes& );
-    void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
+    void                    SetBitmapSize( sal_Int32 nW, sal_Int32 nH ) { mnWidth=nW; mnHeight=nH; }
 
-    long                    mnWidth;    // Width (in pixels)
-    long                    mnHeight;   // Height (in pixels)
+    sal_Int32               mnWidth;    // Width (in pixels)
+    sal_Int32               mnHeight;   // Height (in pixels)
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX

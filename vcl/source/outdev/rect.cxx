@@ -244,25 +244,25 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     if( mbOutputClipped )
         return;
 
-    const long nDistX = std::max( rDist.Width(), 1L );
-    const long nDistY = std::max( rDist.Height(), 1L );
-    long nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
-    long nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
-    const long nRight = aDstRect.Right();
-    const long nBottom = aDstRect.Bottom();
-    const long nStartX = ImplLogicXToDevicePixel( nX );
-    const long nEndX = ImplLogicXToDevicePixel( nRight );
-    const long nStartY = ImplLogicYToDevicePixel( nY );
-    const long nEndY = ImplLogicYToDevicePixel( nBottom );
-    long nHorzCount = 0L;
-    long nVertCount = 0L;
+    const sal_Int32 nDistX = std::max<sal_Int32>( rDist.Width(), 1 );
+    const sal_Int32 nDistY = std::max<sal_Int32>( rDist.Height(), 1 );
+    sal_Int32 nX = ( rRect.Left() >= aDstRect.Left() ) ? rRect.Left() : ( rRect.Left() + ( ( aDstRect.Left() - rRect.Left() ) / nDistX ) * nDistX );
+    sal_Int32 nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
+    const sal_Int32 nRight = aDstRect.Right();
+    const sal_Int32 nBottom = aDstRect.Bottom();
+    const sal_Int32 nStartX = ImplLogicXToDevicePixel( nX );
+    const sal_Int32 nEndX = ImplLogicXToDevicePixel( nRight );
+    const sal_Int32 nStartY = ImplLogicYToDevicePixel( nY );
+    const sal_Int32 nEndY = ImplLogicYToDevicePixel( nBottom );
+    sal_Int32 nHorzCount = 0;
+    sal_Int32 nVertCount = 0;
 
     std::vector< sal_Int32 > aVertBuf;
     std::vector< sal_Int32 > aHorzBuf;
 
     if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::HorzLines ) )
     {
-        aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2L );
+        aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2 );
         aVertBuf[ nVertCount++ ] = nStartY;
         while( ( nY += nDistY ) <= nBottom )
         {
@@ -291,9 +291,9 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
     if( nFlags & DrawGridFlags::Dots )
     {
-        for( long i = 0L; i < nVertCount; i++ )
+        for( sal_Int32 i = 0L; i < nVertCount; i++ )
         {
-            for( long j = 0L, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
+            for( sal_Int32 j = 0L, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
             {
                 mpGraphics->DrawPixel( aHorzBuf[ j ], Y, this );
             }
@@ -303,7 +303,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     {
         if( nFlags & DrawGridFlags::HorzLines )
         {
-            for( long i = 0L; i < nVertCount; i++ )
+            for( sal_Int32 i = 0L; i < nVertCount; i++ )
             {
                 nY = aVertBuf[ i ];
                 mpGraphics->DrawLine( nStartX, nY, nEndX, nY, this );
@@ -312,7 +312,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
         if( nFlags & DrawGridFlags::VertLines )
         {
-            for( long i = 0L; i < nHorzCount; i++ )
+            for( sal_Int32 i = 0L; i < nHorzCount; i++ )
             {
                 nX = aHorzBuf[ i ];
                 mpGraphics->DrawLine( nX, nStartY, nX, nEndY, this );
@@ -366,10 +366,10 @@ BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
             const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
             const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
-            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
-            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
-            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
-            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+            const sal_Int32 nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const sal_Int32 nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const sal_Int32 nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const sal_Int32 nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
 
             rTwoRect.mnSrcX = aCropRect.Left();
             rTwoRect.mnSrcY = aCropRect.Top();
@@ -407,10 +407,10 @@ void AdjustTwoRect( SalTwoRect& rTwoRect, const tools::Rectangle& rValidSrcRect 
             const double fFactorX = ( rTwoRect.mnSrcWidth > 1 ) ? (double) ( rTwoRect.mnDestWidth - 1 ) / ( rTwoRect.mnSrcWidth - 1 ) : 0.0;
             const double fFactorY = ( rTwoRect.mnSrcHeight > 1 ) ? (double) ( rTwoRect.mnDestHeight - 1 ) / ( rTwoRect.mnSrcHeight - 1 ) : 0.0;
 
-            const long nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
-            const long nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
-            const long nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
-            const long nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
+            const sal_Int32 nDstX1 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Left() - rTwoRect.mnSrcX ) );
+            const sal_Int32 nDstY1 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Top() - rTwoRect.mnSrcY ) );
+            const sal_Int32 nDstX2 = rTwoRect.mnDestX + FRound( fFactorX * ( aCropRect.Right() - rTwoRect.mnSrcX ) );
+            const sal_Int32 nDstY2 = rTwoRect.mnDestY + FRound( fFactorY * ( aCropRect.Bottom() - rTwoRect.mnSrcY ) );
 
             rTwoRect.mnSrcX = aCropRect.Left();
             rTwoRect.mnSrcY = aCropRect.Top();

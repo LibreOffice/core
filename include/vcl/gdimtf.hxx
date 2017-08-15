@@ -110,12 +110,12 @@ public:
 
     void            Clear();
     bool            Mirror( BmpMirrorFlags nMirrorFlags );
-    void            Move( long nX, long nY );
+    void            Move( sal_Int32 nX, sal_Int32 nY );
     // additional Move method getting specifics how to handle MapMode( MapUnit::MapPixel )
-    void            Move( long nX, long nY, long nDPIX, long nDPIY );
+    void            Move( sal_Int32 nX, sal_Int32 nY, sal_Int32 nDPIX, sal_Int32 nDPIY );
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
-    void            Rotate( long nAngle10 );
+    void            Rotate( sal_Int32 nAngle10 );
     void            Clip( const tools::Rectangle& );
     /* get the bound rect of the contained actions
      * caveats:

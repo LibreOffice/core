@@ -49,6 +49,10 @@ public:
     long            GetDenominator() const;
 
     operator        long() const;
+#if SAL_TYPES_SIZEOFLONG > 4
+    // to prevent 'ambiguous conversion operator' compile errors
+    operator        sal_Int32() const;
+#endif
     operator        double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac );

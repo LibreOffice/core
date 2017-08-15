@@ -93,7 +93,7 @@ Size NotebookBar::GetOptimalSize() const
     return Control::GetOptimalSize();
 }
 
-void NotebookBar::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
+void NotebookBar::setPosSizePixel(sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags)
 {
     bool bCanHandleSmallerWidth = false;
     bool bCanHandleSmallerHeight = false;

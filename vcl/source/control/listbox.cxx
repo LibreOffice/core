@@ -375,8 +375,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
         }
     }
 
-    const long nOnePixel = GetDrawPixel( pDev, 1 );
-    const long nOffX = 3*nOnePixel;
+    const sal_Int32 nOnePixel = GetDrawPixel( pDev, 1 );
+    const sal_Int32 nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     tools::Rectangle aTextRect( aPos, aSize );
 
@@ -393,9 +393,9 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     if ( IsDropDownBox() )
     {
         OUString   aText = GetSelectEntry();
-        long       nTextHeight = pDev->GetTextHeight();
-        long       nTextWidth = pDev->GetTextWidth( aText );
-        long       nOffY = (aSize.Height()-nTextHeight) / 2;
+        sal_Int32       nTextHeight = pDev->GetTextHeight();
+        sal_Int32       nTextWidth = pDev->GetTextWidth( aText );
+        sal_Int32       nOffY = (aSize.Height()-nTextHeight) / 2;
 
         // Clipping?
         if ( (nOffY < 0) ||
@@ -412,7 +412,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
     }
     else
     {
-        long        nTextHeight = pDev->GetTextHeight();
+        sal_Int32        nTextHeight = pDev->GetTextHeight();
         sal_uInt16  nLines = ( nTextHeight > 0 ) ? (sal_uInt16)(aSize.Height() / nTextHeight) : 1;
         tools::Rectangle   aClip( aPos, aSize );
 
@@ -547,7 +547,7 @@ sal_uInt16 ListBox::GetDropDownLineCount() const
     return mnLineCount;
 }
 
-void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
+void ListBox::setPosSizePixel( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags )
 {
     if( IsDropDownBox() && ( nFlags & PosSizeFlags::Size ) )
     {
@@ -571,8 +571,8 @@ void ListBox::Resize()
     if( IsDropDownBox() )
     {
         // Initialize the dropdown button size with the standard scrollbar width
-        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        long nBottom = aOutSz.Height();
+        sal_Int32 nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        sal_Int32 nBottom = aOutSz.Height();
 
         // Note: in case of no border, pBorder will actually be this
         vcl::Window *pBorder = GetWindow( GetWindowType::Border );
@@ -586,7 +586,7 @@ void ListBox::Resize()
         if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::ButtonDown,
                     aArea, ControlState::NONE, aControlValue, aBound, aContent) )
         {
-            long nTop = 0;
+            sal_Int32 nTop = 0;
             // Convert back from border space to local coordinates
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move( -aPoint.X(), -aPoint.Y() );
@@ -610,7 +610,7 @@ void ListBox::Resize()
                     // let's do the best we can and center vertically, so it doesn't look
                     // completely wrong.
                     Size aSz( GetOutputSizePixel() );
-                    long nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
+                    sal_Int32 nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
                     aContent.Top() -= nDiff;
                     aContent.Bottom() -= nDiff;
                 }
@@ -660,13 +660,13 @@ void ListBox::FillLayoutData() const
     }
 }
 
-long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
+sal_Int32 ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
 
     // Check whether rPoint fits at all
-    long nIndex = Control::GetIndexForPoint( rPoint );
+    sal_Int32 nIndex = Control::GetIndexForPoint( rPoint );
     if( nIndex != -1 )
     {
         // Point must be either in main list window
@@ -1230,7 +1230,7 @@ Size ListBox::CalcSubEditSize() const
 
         if (m_nMaxWidthChars != -1)
         {
-            long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
+            sal_Int32 nMaxWidth = m_nMaxWidthChars * approximate_char_width();
             aSz.Width() = std::min(aSz.Width(), nMaxWidth);
         }
 
@@ -1255,8 +1255,8 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
     aSz.Height() -= nTop+nBottom;
     if ( !IsDropDownBox() )
     {
-        long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
-        long nLines = aSz.Height() / nEntryHeight;
+        sal_Int32 nEntryHeight = CalcBlockSize( 1, 1 ).Height();
+        sal_Int32 nLines = aSz.Height() / nEntryHeight;
         if ( nLines < 1 )
             nLines = 1;
         aSz.Height() = nLines * nEntryHeight;

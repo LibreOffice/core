@@ -288,8 +288,8 @@ public:
                             int nOutputHeight,
                             int nTilePosX,
                             int nTilePosY,
-                            long nTileWidth,
-                            long nTileHeight ) override;
+                            sal_Int32 nTileWidth,
+                            sal_Int32 nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::getDocumentSize().
     virtual Size getDocumentSize() override;
@@ -345,8 +345,8 @@ public:
     /// @see vcl::ITiledRenderable::getCellCursor().
     virtual OString getCellCursor( int nOutputWidth,
                                    int nOutputHeight,
-                                   long nTileWidth,
-                                   long nTileHeight ) override;
+                                   sal_Int32 nTileWidth,
+                                   sal_Int32 nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::getPointer().
     virtual Pointer getPointer() override;

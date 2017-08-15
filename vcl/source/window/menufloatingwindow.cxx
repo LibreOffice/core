@@ -151,9 +151,9 @@ void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 }
 
 /// Get a negative pixel offset for an offset menu
-long MenuFloatingWindow::ImplGetStartY() const
+sal_Int32 MenuFloatingWindow::ImplGetStartY() const
 {
-    long nY = 0;
+    sal_Int32 nY = 0;
     if( pMenu )
     {
         // avoid crash if somehow menu got disposed, and MenuItemList is empty (workaround for tdf#104686)
@@ -199,8 +199,8 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
     if( ! pMenu )
         return;
 
-    long nY = GetInitialItemY();
-    long nMouseY = rMEvt.GetPosPixel().Y();
+    sal_Int32 nY = GetInitialItemY();
+    sal_Int32 nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= nY ) && ( nMouseY < aOutSz.Height() ) )
     {
@@ -211,7 +211,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
             if ( pMenu->ImplIsVisible( n ) )
             {
                 MenuItemData* pItemData = pMenu->pItemList->GetDataFromPos( n );
-                long nOldY = nY;
+                sal_Int32 nOldY = nY;
                 nY += pItemData->aSz.Height();
                 if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) && pMenu->ImplIsSelectable( n ) )
                 {
@@ -220,7 +220,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                     {
                         // only when clicked over the arrow...
                         Size aSz = GetOutputSizePixel();
-                        long nFontHeight = GetTextHeight();
+                        sal_Int32 nFontHeight = GetTextHeight();
                         bPopupArea = ( rMEvt.GetPosPixel().X() >= ( aSz.Width() - nFontHeight - nFontHeight/4 ) );
                     }
 
@@ -321,7 +321,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
         if ( pItemData->bEnabled && pItemData->pSubMenu && pItemData->pSubMenu->GetItemCount() && ( pItemData->pSubMenu != pActivePopup ) )
         {
             pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
-            long nY = nScrollerHeight+ImplGetStartY();
+            sal_Int32 nY = nScrollerHeight+ImplGetStartY();
             MenuItemData* pData = nullptr;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
             {
@@ -557,7 +557,7 @@ void MenuFloatingWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             // not when clicked over the arrow...
             Size aSz = GetOutputSizePixel();
-            long nFontHeight = GetTextHeight();
+            sal_Int32 nFontHeight = GetTextHeight();
             if ( rMEvt.GetPosPixel().X() < ( aSz.Width() - nFontHeight - nFontHeight/4 ) )
                 EndExecute();
         }
@@ -615,7 +615,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         const auto pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
         if ( pItemData )
         {
-            long nScrollEntryHeight = pItemData->aSz.Height();
+            sal_Int32 nScrollEntryHeight = pItemData->aSz.Height();
 
             if ( !bScrollDown )
             {
@@ -638,7 +638,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         const auto pItemData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry );
         if ( pItemData )
         {
-            long nScrollEntryHeight = pItemData->aSz.Height();
+            sal_Int32 nScrollEntryHeight = pItemData->aSz.Height();
 
             nFirstEntry = pMenu->ImplGetNextVisible( nFirstEntry );
             SAL_WARN_IF( nFirstEntry == ITEMPOS_INVALID, "vcl", "Scroll?!" );
@@ -649,7 +649,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
                 Invalidate();
             }
 
-            long nHeight = GetOutputSizePixel().Height();
+            sal_Int32 nHeight = GetOutputSizePixel().Height();
             sal_uInt16 nLastVisible;
             static_cast<PopupMenu*>(pMenu.get())->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
             if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
@@ -669,9 +669,9 @@ void MenuFloatingWindow::ImplScroll( const Point& rMousePos )
 {
     Size aOutSz = GetOutputSizePixel();
 
-    long nY = nScrollerHeight;
-    long nMouseY = rMousePos.Y();
-    long nDelta = 0;
+    sal_Int32 nY = nScrollerHeight;
+    sal_Int32 nMouseY = rMousePos.Y();
+    sal_Int32 nDelta = 0;
 
     if ( bScrollUp && ( nMouseY < nY ) )
     {
@@ -687,7 +687,7 @@ void MenuFloatingWindow::ImplScroll( const Point& rMousePos )
     if ( nDelta )
     {
         aScrollTimer.Stop();    // if scrolled through MouseMove.
-        long nTimeout;
+        sal_Int32 nTimeout;
         if ( nDelta < 3 )
             nTimeout = 200;
         else if ( nDelta < 5 )
@@ -766,9 +766,9 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
 
 /// Calculate the initial vertical pixel offset of the first item.
 /// May be negative for scrolled windows.
-long MenuFloatingWindow::GetInitialItemY(long *pStartY) const
+sal_Int32 MenuFloatingWindow::GetInitialItemY(sal_Int32 *pStartY) const
 {
-    long nStartY = ImplGetStartY();
+    sal_Int32 nStartY = ImplGetStartY();
     if (pStartY)
         *pStartY = nStartY;
     return nScrollerHeight + nStartY +
@@ -781,12 +781,12 @@ void MenuFloatingWindow::InvalidateItem(sal_uInt16 nPos)
     if (!pMenu)
         return;
 
-    long nY = GetInitialItemY();
+    sal_Int32 nY = GetInitialItemY();
     size_t nCount = pMenu->pItemList->size();
     for (size_t n = 0; n < nCount; n++)
     {
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
-        long nHeight = pData->aSz.Height();
+        sal_Int32 nHeight = pData->aSz.Height();
         if (n == nPos)
         {
             Size aWidth( GetSizePixel() );
@@ -804,9 +804,9 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
 
     Size aSz(GetOutputSizePixel());
 
-    long nX = 0;
-    long nStartY;
-    long nY = GetInitialItemY(&nStartY);
+    sal_Int32 nX = 0;
+    sal_Int32 nStartY;
+    sal_Int32 nY = GetInitialItemY(&nStartY);
 
     int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
 
@@ -826,7 +826,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                 tools::Rectangle aItemRect(Point(nX + nOuterSpaceX, nY), Size(aSz.Width() - 2 * nOuterSpaceX, pData->aSz.Height()));
                 if (pData->nBits & MenuItemBits::POPUPSELECT)
                 {
-                    long nFontHeight = GetTextHeight();
+                    sal_Int32 nFontHeight = GetTextHeight();
                     aItemRect.Right() -= nFontHeight + nFontHeight / 4;
                 }
 
@@ -887,8 +887,8 @@ tools::Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
 
     tools::Rectangle aRect;
     Size    aSz = GetOutputSizePixel();
-    long    nStartY = ImplGetStartY();
-    long    nY = nScrollerHeight+nStartY;
+    sal_Int32    nStartY = ImplGetStartY();
+    sal_Int32    nY = nScrollerHeight+nStartY;
 
     size_t nCount = pMenu->pItemList->size();
     for ( size_t n = 0; n < nCount; n++ )
@@ -902,7 +902,7 @@ tools::Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
                 aRect = tools::Rectangle( Point( 0, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
                 if ( pData->nBits & MenuItemBits::POPUPSELECT )
                 {
-                    long nFontHeight = GetTextHeight();
+                    sal_Int32 nFontHeight = GetTextHeight();
                     aRect.Right() -= nFontHeight + nFontHeight/4;
                 }
             }
@@ -1180,7 +1180,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
         rRenderContext.SetClipRegion();
-        long nX = 0;
+        sal_Int32 nX = 0;
         Size aPxSize(GetOutputSizePixel());
         aPxSize.Width() -= nX;
         ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
@@ -1210,8 +1210,8 @@ void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bo
     rRenderContext.SetClipRegion();
 
     Size aOutSz(GetOutputSizePixel());
-    long nY = bUp ? 0 : (aOutSz.Height() - nScrollerHeight);
-    long nX = 0;
+    sal_Int32 nY = bUp ? 0 : (aOutSz.Height() - nScrollerHeight);
+    sal_Int32 nX = 0;
     tools::Rectangle aRect(Point(nX, nY), Size(aOutSz.Width() - nX, nScrollerHeight));
 
     DecorationView aDecoView(&rRenderContext);

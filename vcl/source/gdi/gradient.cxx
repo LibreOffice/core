@@ -158,10 +158,10 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
                           fWidth  * fabs( sin( fAngle ) );
                 fDX     = (fDX - fWidth)  * 0.5 + 0.5;
                 fDY     = (fDY - fHeight) * 0.5 + 0.5;
-        aRect.Left()   -= (long) fDX;
-        aRect.Right()  += (long) fDX;
-        aRect.Top()    -= (long) fDY;
-        aRect.Bottom() += (long) fDY;
+        aRect.Left()   -= (sal_Int32) fDX;
+        aRect.Right()  += (sal_Int32) fDX;
+        aRect.Top()    -= (sal_Int32) fDY;
+        aRect.Bottom() += (sal_Int32) fDY;
 
         rBoundRect = aRect;
         rCenter = rRect.Center();
@@ -179,10 +179,10 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
             fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
             fDY = ( fDY - fHeight ) * 0.5 + 0.5;
 
-            aRect.Left()   -= (long) fDX;
-            aRect.Right()  += (long) fDX;
-            aRect.Top()    -= (long) fDY;
-            aRect.Bottom() += (long) fDY;
+            aRect.Left()   -= (sal_Int32) fDX;
+            aRect.Right()  += (sal_Int32) fDX;
+            aRect.Top()    -= (sal_Int32) fDY;
+            aRect.Bottom() += (sal_Int32) fDY;
         }
 
         Size aSize( aRect.GetSize() );
@@ -190,21 +190,21 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
         if( GetStyle() == GradientStyle::Radial )
         {
             // Calculation of radii for circle
-            aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
+            aSize.Width() = (sal_Int32)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
             aSize.Height() = aSize.Width();
         }
         else if( GetStyle() == GradientStyle::Elliptical )
         {
             // Calculation of radii for ellipse
-            aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
-            aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
+            aSize.Width() = (sal_Int32)( 0.5 + (double) aSize.Width()  * 1.4142 );
+            aSize.Height() = (sal_Int32)( 0.5 + (double) aSize.Height() * 1.4142 );
         }
 
         // Calculate new centers
-        long    nZWidth = aRect.GetWidth() * (long) GetOfsX() / 100;
-        long    nZHeight = aRect.GetHeight() * (long) GetOfsY() / 100;
-        long    nBorderX = (long) GetBorder() * aSize.Width()  / 100;
-        long    nBorderY = (long) GetBorder() * aSize.Height() / 100;
+        sal_Int32    nZWidth = aRect.GetWidth() * (sal_Int32) GetOfsX() / 100;
+        sal_Int32    nZHeight = aRect.GetHeight() * (sal_Int32) GetOfsY() / 100;
+        sal_Int32    nBorderX = (sal_Int32) GetBorder() * aSize.Width()  / 100;
+        sal_Int32    nBorderY = (sal_Int32) GetBorder() * aSize.Height() / 100;
         rCenter = Point( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
 
         // Respect borders

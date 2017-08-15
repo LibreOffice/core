@@ -622,7 +622,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
                     bInCluster = true;
 
-                long nGlyphFlags = 0;
+                sal_Int32 nGlyphFlags = 0;
                 if (bRightToLeft)
                     nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
 

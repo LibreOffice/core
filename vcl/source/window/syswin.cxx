@@ -553,16 +553,16 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     OStringBuffer rStrBuf;
 
     if ( nValidMask & WindowStateMask::X )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetX()));
+        rStrBuf.append(rData.GetX());
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::Y )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetY()));
+        rStrBuf.append(rData.GetY());
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::Width )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetWidth()));
+        rStrBuf.append(rData.GetWidth());
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::Height )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetHeight()));
+        rStrBuf.append(rData.GetHeight());
     rStrBuf.append( ';' );
     if ( nValidMask & WindowStateMask::State )
     {
@@ -573,22 +573,22 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     }
     rStrBuf.append(';');
     if ( nValidMask & WindowStateMask::MaximizedX )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedX()));
+        rStrBuf.append(rData.GetMaximizedX());
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::MaximizedY )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedY()));
+        rStrBuf.append(rData.GetMaximizedY());
     rStrBuf.append( ',' );
     if ( nValidMask & WindowStateMask::MaximizedWidth )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedWidth()));
+        rStrBuf.append(rData.GetMaximizedWidth());
     rStrBuf.append(',');
     if ( nValidMask & WindowStateMask::MaximizedHeight )
-        rStrBuf.append(static_cast<sal_Int32>(rData.GetMaximizedHeight()));
+        rStrBuf.append(rData.GetMaximizedHeight());
     rStrBuf.append(';');
 
     return rStrBuf.makeStringAndClear();
 }
 
-void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window const * i_pConfigureWin )
+void SystemWindow::ImplMoveToScreen( sal_Int32& io_rX, sal_Int32& io_rY, sal_Int32 i_nWidth, sal_Int32 i_nHeight, vcl::Window const * i_pConfigureWin )
 {
     tools::Rectangle aScreenRect;
     if( !Application::IsUnifiedDisplay() )
@@ -706,16 +706,16 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
                         if( std::abs(g.nX-aState.mnX) < 2 && std::abs(g.nY-aState.mnY) < 5 )
                         {
-                            long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                            if( (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||
-                                (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
+                            sal_Int32 displacement = g.nTopDecoration ? g.nTopDecoration : 20;
+                            if( (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > aDesktop.Right() ||
+                                (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > aDesktop.Bottom() )
                             {
                                 // displacing would leave screen
                                 aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                                 aState.mnY = displacement;
                                 if( bWrapped ||
-                                    (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||
-                                    (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
+                                    (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > aDesktop.Right() ||
+                                    (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > aDesktop.Bottom() )
                                     break;  // further displacement not possible -> break
                                 // avoid endless testing
                                 bWrapped = true;
@@ -768,18 +768,18 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         if( IsRollUp() )
             RollDown();
 
-        long nX         = rData.GetX();
-        long nY         = rData.GetY();
-        long nWidth     = rData.GetWidth();
-        long nHeight    = rData.GetHeight();
+        sal_Int32 nX         = rData.GetX();
+        sal_Int32 nY         = rData.GetY();
+        sal_Int32 nWidth     = rData.GetWidth();
+        sal_Int32 nHeight    = rData.GetHeight();
         const SalFrameGeometry& rGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
-        if( nX + nWidth > (long) rGeom.nWidth )
+        if( nX + nWidth > rGeom.nWidth )
             nX = rGeom.nWidth - nWidth;
         if( nY < 0 )
             nY = 0;
-        if( nY + nHeight > (long) rGeom.nHeight )
+        if( nY + nHeight > rGeom.nHeight )
             nY = rGeom.nHeight - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );

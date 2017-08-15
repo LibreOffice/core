@@ -58,7 +58,7 @@ using namespace vcl;
 
 inline FIXED FixedFromDouble( double d )
 {
-    const long l = (long) ( d * 65536. );
+    const sal_Int32 l = (sal_Int32) ( d * 65536. );
     return *reinterpret_cast<FIXED const *>(&l);
 }
 
@@ -577,10 +577,10 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
         rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
 
-        long nFontHeight = rLogFont.lfHeight;
+        sal_Int32 nFontHeight = rLogFont.lfHeight;
         if ( nFontHeight < 0 )
             nFontHeight = -nFontHeight;
-        long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
+        sal_Int32 nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
         if( !nDPIY )
             nDPIY = 600;
         nFontHeight *= 72;
@@ -1393,8 +1393,8 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
         // of previous segment
         sal_uInt16 nPnt = 0;
 
-        long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
-        long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
+        sal_Int32 nX = IntTimes256FromFixed( pHeader->pfxStart.x );
+        sal_Int32 nY = IntTimes256FromFixed( pHeader->pfxStart.y );
         pPoints[ nPnt ] = Point( nX, nY );
         pFlags[ nPnt++ ] = PolyFlags::Normal;
 
@@ -1711,7 +1711,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     return (nRC == SF_OK);
 }
 
-const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, sal_Int32* pDataLen)
 {
     // create matching FontSelectPattern
     // we need just enough to get to the font file data
@@ -1730,7 +1730,7 @@ const void* WinSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long
     return pData;
 }
 
-void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
+void WinSalGraphics::FreeEmbedFontData( const void* pData, sal_Int32 /*nLen*/ )
 {
     delete[] static_cast<char const *>(pData);
 }

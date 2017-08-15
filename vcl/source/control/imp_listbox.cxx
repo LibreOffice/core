@@ -286,9 +286,9 @@ sal_Int32 ImplEntryList::FindEntry( const void* pData ) const
     return nPos;
 }
 
-long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginIndex ) const
+sal_Int32 ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginIndex ) const
 {
-    long nHeight = 0;
+    sal_Int32 nHeight = 0;
     sal_Int32 nStart = i_nEndIndex > i_nBeginIndex ? i_nBeginIndex : i_nEndIndex;
     sal_Int32 nStop  = i_nEndIndex > i_nBeginIndex ? i_nEndIndex : i_nBeginIndex;
     sal_Int32 nEntryCount = GetEntryCount();
@@ -305,8 +305,8 @@ long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginInd
         sal_Int32 nIndex = nStart;
         while( nIndex != LISTBOX_ENTRY_NOTFOUND && nIndex < nStop )
         {
-            long nPosHeight = GetEntryPtr( nIndex )->mnHeight;
-            if (nHeight > ::std::numeric_limits<long>::max() - nPosHeight)
+            sal_Int32 nPosHeight = GetEntryPtr( nIndex )->mnHeight;
+            if (nHeight > ::std::numeric_limits<sal_Int32>::max() - nPosHeight)
             {
                 SAL_WARN( "vcl", "ImplEntryList::GetAddedHeight: truncated");
                 break;
@@ -320,7 +320,7 @@ long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginInd
     return i_nEndIndex > i_nBeginIndex ? nHeight : -nHeight;
 }
 
-long ImplEntryList::GetEntryHeight( sal_Int32 nPos ) const
+sal_Int32 ImplEntryList::GetEntryHeight( sal_Int32 nPos ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
     return pImplEntry ? pImplEntry->mnHeight : 0;
@@ -592,13 +592,13 @@ void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
 
 struct ImplEntryMetrics
 {
-    bool    bText;
-    bool    bImage;
-    long    nEntryWidth;
-    long    nEntryHeight;
-    long    nTextWidth;
-    long    nImgWidth;
-    long    nImgHeight;
+    bool       bText;
+    bool       bImage;
+    sal_Int32  nEntryWidth;
+    sal_Int32  nEntryHeight;
+    sal_Int32  nTextWidth;
+    sal_Int32  nImgWidth;
+    sal_Int32  nImgHeight;
 };
 
 void ImplListBoxWindow::EnableQuickSelection( bool b )
@@ -775,7 +775,7 @@ void ImplListBoxWindow::ImplHideFocusRect()
 
 sal_Int32 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
 {
-    long nY = mnBorder;
+    sal_Int32 nY = mnBorder;
 
     sal_Int32 nSelect = mnTop;
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nSelect );
@@ -809,9 +809,9 @@ bool ImplListBoxWindow::IsVisible( sal_Int32 i_nEntry ) const
 sal_Int32 ImplListBoxWindow::GetLastVisibleEntry() const
 {
     sal_Int32 nPos = mnTop;
-    long nWindowHeight = GetSizePixel().Height();
+    sal_Int32 nWindowHeight = GetSizePixel().Height();
     sal_Int32 nCount = mpEntryList->GetEntryCount();
-    long nDiff;
+    sal_Int32 nDiff;
     for( nDiff = 0; nDiff < nWindowHeight && nPos < nCount; nDiff = mpEntryList->GetAddedHeight( nPos, mnTop ) )
         nPos++;
 
@@ -1139,7 +1139,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
 
         if( bFocusChanged )
         {
-            long nHeightDiff = mpEntryList->GetAddedHeight( nSelect, mnTop );
+            sal_Int32 nHeightDiff = mpEntryList->GetAddedHeight( nSelect, mnTop );
             maFocusRect.SetPos( Point( 0, nHeightDiff ) );
             Size aSz( maFocusRect.GetWidth(),
                       mpEntryList->GetEntryHeight( nSelect ) );
@@ -1179,7 +1179,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 mbTrackingSelect = false;
                 if ( mnTrackingSaveSelection != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop );
+                    sal_Int32 nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop );
                     maFocusRect.SetPos( Point( 0, nHeightDiff ) );
                     Size aSz( maFocusRect.GetWidth(),
                               mpEntryList->GetEntryHeight( mnCurrentPos ) );
@@ -1312,7 +1312,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                long nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop );
+                sal_Int32 nHeightDiff = mpEntryList->GetAddedHeight( mnCurrentPos, mnTop );
                 maFocusRect.SetPos( Point( 0, nHeightDiff ) );
                 Size aSz( maFocusRect.GetWidth(), mpEntryList->GetEntryHeight( mnCurrentPos ) );
                 maFocusRect.SetSize( aSz );
@@ -1450,10 +1450,10 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     nTmp += mnTop - 1;
                     if( mnCurrentPos == nTmp && mnCurrentPos != nCount - 1 )
                     {
-                        long nTmp2 = std::min( (long)(nCount-nCurVis), (long)((long)mnTop+(long)nCurVis-1) );
-                        nTmp2 = std::max( (long)0 , nTmp2 );
+                        sal_Int32 nTmp2 = std::min( (sal_Int32)(nCount-nCurVis), (sal_Int32)(mnTop+nCurVis-1) );
+                        nTmp2 = std::max( (sal_Int32)0 , nTmp2 );
                         nTmp = (sal_Int32)(nTmp2+(nCurVis-1) );
-                        SetTopEntry( (sal_Int32)nTmp2 );
+                        SetTopEntry( nTmp2 );
                     }
                     // find first selectable starting from nTmp looking backwards
                     nSelect = mpEntryList->FindFirstSelectable( nTmp, false );
@@ -1691,8 +1691,8 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     if (!pEntry)
         return;
 
-    long nWidth = GetOutputSizePixel().Width();
-    long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
+    sal_Int32 nWidth = GetOutputSizePixel().Width();
+    sal_Int32 nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     tools::Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->mnHeight));
 
     if (mpEntryList->IsEntryPosSelected(nPos))
@@ -1744,7 +1744,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     if (mbInUserDraw)
         nPos = mnUserDrawEntry; // real entry, not the matching entry from MRU
 
-    long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
+    sal_Int32 nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     Size aImgSz;
 
     if (bDrawImage && mpEntryList->HasImages())
@@ -1794,7 +1794,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         OUString aStr(mpEntryList->GetEntryText(nPos));
         if (!aStr.isEmpty())
         {
-            long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * mnBorder);
+            sal_Int32 nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * mnBorder);
             // a multiline entry should only be as wide a the window
             if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
                 nMaxWidth = GetOutputSizePixel().Width() - 2 * mnBorder;
@@ -1804,7 +1804,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
             if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
             {
-                long nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
+                sal_Int32 nImageWidth = std::max(mnMaxImgWidth, maUserItemSize.Width());
                 aTextRect.Left() += nImageWidth + IMG_TXT_DISTANCE;
             }
 
@@ -1856,8 +1856,8 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const to
     if (mbHasFocusRect)
         ImplHideFocusRect();
 
-    long nY = 0; // + mnBorder;
-    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    sal_Int32 nY = 0; // + mnBorder;
+    sal_Int32 nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
 
     for (sal_Int32 i = mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++)
     {
@@ -1870,7 +1870,7 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const to
         nY += pEntry->mnHeight;
     }
 
-    long nHeightDiff = mpEntryList->GetAddedHeight(mnCurrentPos, mnTop);
+    sal_Int32 nHeightDiff = mpEntryList->GetAddedHeight(mnCurrentPos, mnTop);
     maFocusRect.SetPos(Point(0, nHeightDiff));
     Size aSz(maFocusRect.GetWidth(), mpEntryList->GetEntryHeight(mnCurrentPos));
     maFocusRect.SetSize(aSz);
@@ -1888,7 +1888,7 @@ sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
     // FIXME: ListBoxEntryFlags::MultiLine
 
     const sal_Int32 nCount = mpEntryList->GetEntryCount()-mnTop;
-    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    sal_Int32 nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
     sal_uInt16 nEntries = static_cast< sal_uInt16 >( ( nHeight + mnMaxHeight - 1 ) / mnMaxHeight );
     if( nEntries > nCount )
         nEntries = static_cast<sal_uInt16>(nCount);
@@ -1921,7 +1921,7 @@ void ImplListBoxWindow::GetFocus()
     sal_Int32 nPos = mnCurrentPos;
     if ( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
-    long nHeightDiff = mpEntryList->GetAddedHeight( nPos, mnTop );
+    sal_Int32 nHeightDiff = mpEntryList->GetAddedHeight( nPos, mnTop );
     maFocusRect.SetPos( Point( 0, nHeightDiff ) );
     Size aSz( maFocusRect.GetWidth(), mpEntryList->GetEntryHeight( nPos ) );
     maFocusRect.SetSize( aSz );
@@ -1940,7 +1940,7 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
     if( mpEntryList->GetEntryCount() == 0 )
         return;
 
-    long nWHeight = PixelToLogic( GetSizePixel() ).Height();
+    sal_Int32 nWHeight = PixelToLogic( GetSizePixel() ).Height();
 
     sal_Int32 nLastEntry = mpEntryList->GetEntryCount()-1;
     if( nTop > nLastEntry )
@@ -1952,7 +1952,7 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
     if ( nTop != mnTop )
     {
         ImplClearLayoutData();
-        long nDiff = mpEntryList->GetAddedHeight( mnTop, nTop );
+        sal_Int32 nDiff = mpEntryList->GetAddedHeight( mnTop, nTop );
         Update();
         ImplHideFocusRect();
         mnTop = nTop;
@@ -1969,24 +1969,24 @@ void ImplListBoxWindow::ShowProminentEntry( sal_Int32 nEntryPos )
     if( meProminentType == ProminentEntry::MIDDLE )
     {
         sal_Int32 nPos = nEntryPos;
-        long nWHeight = PixelToLogic( GetSizePixel() ).Height();
+        sal_Int32 nWHeight = PixelToLogic( GetSizePixel() ).Height();
         while( nEntryPos > 0 && mpEntryList->GetAddedHeight( nPos+1, nEntryPos ) < nWHeight/2 )
             nEntryPos--;
     }
     SetTopEntry( nEntryPos );
 }
 
-void ImplListBoxWindow::SetLeftIndent( long n )
+void ImplListBoxWindow::SetLeftIndent( sal_Int32 n )
 {
     ScrollHorz( n - mnLeft );
 }
 
-void ImplListBoxWindow::ScrollHorz( long n )
+void ImplListBoxWindow::ScrollHorz( sal_Int32 n )
 {
-    long nDiff = 0;
+    sal_Int32 nDiff = 0;
     if ( n > 0 )
     {
-        long nWidth = GetOutputSizePixel().Width();
+        sal_Int32 nWidth = GetOutputSizePixel().Width();
         if( ( mnMaxWidth - mnLeft + n ) > nWidth )
             nDiff = n;
     }
@@ -1994,7 +1994,7 @@ void ImplListBoxWindow::ScrollHorz( long n )
     {
         if( mnLeft )
         {
-            long nAbs = -n;
+            sal_Int32 nAbs = -n;
             nDiff = - ( ( mnLeft > nAbs ) ? nAbs : mnLeft );
         }
     }
@@ -2027,7 +2027,7 @@ tools::Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_Int32 nItem ) cons
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nItem );
     Size aSz( GetSizePixel().Width(), pEntry ? pEntry->mnHeight : GetEntryHeight() );
-    long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList()->GetMRUCount()*GetEntryHeight();
+    sal_Int32 nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList()->GetMRUCount()*GetEntryHeight();
     tools::Rectangle aRect( Point( 0, nY ), aSz );
     return aRect;
 }
@@ -2225,7 +2225,7 @@ IMPL_LINK_NOARG(ImplListBox, MRUChanged, LinkParamNone*, void)
 
 IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
 {
-    long nSet = GetTopEntry();
+    sal_Int32 nSet = GetTopEntry();
     if( nSet > mpVScrollBar->GetRangeMax() )
         mpVScrollBar->SetRangeMax( GetEntryList()->GetEntryCount() );
     mpVScrollBar->SetThumbPos( GetTopEntry() );
@@ -2277,11 +2277,11 @@ void ImplListBox::ImplCheckScrollBars()
     // horizontal ScrollBar
     if( mbAutoHScroll )
     {
-        long nWidth = (sal_uInt16) aOutSz.Width();
+        sal_Int32 nWidth = (sal_uInt16) aOutSz.Width();
         if ( mbVScroll )
             nWidth -= mpVScrollBar->GetSizePixel().Width();
 
-        long nMaxWidth = GetMaxEntryWidth();
+        sal_Int32 nMaxWidth = GetMaxEntryWidth();
         if( nWidth < nMaxWidth )
         {
             if( !mbHScroll )
@@ -2353,7 +2353,7 @@ void ImplListBox::ImplResizeControls()
     // visible is already determined in ImplCheckScrollBars
 
     Size aOutSz = GetOutputSizePixel();
-    long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_Int32 nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     nSBWidth = CalcZoom( nSBWidth );
 
     Size aInnerSz( aOutSz );
@@ -2748,7 +2748,7 @@ void ImplWin::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
 
 void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
 {
-    long nBorder = 1;
+    sal_Int32 nBorder = 1;
     Size aOutSz(GetOutputSizePixel());
 
     bool bImage = !!maImage;
@@ -2929,7 +2929,7 @@ bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
     return FloatingWindow::PreNotify( rNEvt );
 }
 
-void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
+void ImplListBoxFloatingWindow::setPosSizePixel( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags )
 {
     FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 
@@ -2981,7 +2981,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         nLines = mnDDLineCount;
 
     Size aSz = mpImplLB->CalcSize( nLines );
-    long nMaxHeight = aSz.Height() + nTop + nBottom;
+    sal_Int32 nMaxHeight = aSz.Height() + nTop + nBottom;
 
     if ( mnDDLineCount )
         aFloatSz.Height() = nMaxHeight;
@@ -2996,11 +2996,11 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         if ( ( aFloatSz.Height() < nMaxHeight ) || ( mnDDLineCount && ( mnDDLineCount < mpImplLB->GetEntryList()->GetEntryCount() ) ) )
         {
             // then we also need the vertical Scrollbar
-            long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+            sal_Int32 nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             aFloatSz.Width() += nSBWidth;
         }
 
-        long nDesktopWidth = GetDesktopRectPixel().getWidth();
+        sal_Int32 nDesktopWidth = GetDesktopRectPixel().getWidth();
         if (aFloatSz.Width() > nDesktopWidth)
             // Don't exceed the desktop width.
             aFloatSz.Width() = nDesktopWidth;
@@ -3020,8 +3020,8 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         aFloatSz.Width() = aParentSz.Width();
 
     // align height to entries...
-    long nInnerHeight = aFloatSz.Height() - nTop - nBottom;
-    long nEntryHeight = mpImplLB->GetEntryHeight();
+    sal_Int32 nInnerHeight = aFloatSz.Height() - nTop - nBottom;
+    sal_Int32 nEntryHeight = mpImplLB->GetEntryHeight();
     if ( nInnerHeight % nEntryHeight )
     {
         nInnerHeight /= nEntryHeight;
@@ -3034,7 +3034,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
     {
         // The max width of list box entries exceeds the window width.
         // Account for the scroll bar height.
-        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        sal_Int32 nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
         aFloatSz.Height() += nSBWidth;
     }
 

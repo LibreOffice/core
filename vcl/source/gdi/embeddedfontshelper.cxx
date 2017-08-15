@@ -186,7 +186,7 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
 // to have a different meaning (guessing from code, IsSubsettable() might
 // possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
 // So just try to open the data as ttf and see.
-bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, long size, FontRights rights )
+bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, sal_Int32 size, FontRights rights )
 {
     TrueTypeFont* font;
     if( OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) == SF_OK )
@@ -262,7 +262,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     }
     if( selected != nullptr )
     {
-        long size;
+        sal_Int32 size;
         if (const void* data = graphics->GetEmbedFontData(selected, &size))
         {
             if( sufficientTTFRights( data, size, rights ))

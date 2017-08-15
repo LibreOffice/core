@@ -98,7 +98,7 @@ public:
     // override all pure virtual methods
     virtual void                    GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     virtual sal_uInt16              GetBitCount() const override;
-    virtual long                    GetGraphicsWidth() const override;
+    virtual sal_Int32                    GetGraphicsWidth() const override;
 
     virtual void                    ResetClipRegion() override;
     virtual bool                    setClipRegion( const vcl::Region& ) override;
@@ -132,8 +132,8 @@ public:
                                         int nGlyphs,
                                         FontSubsetInfo& rInfo ) override;
 
-    virtual const void*             GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
-    virtual void                    FreeEmbedFontData( const void* pData, long nDataLen ) override;
+    virtual const void*             GetEmbedFontData(const PhysicalFontFace*, sal_Int32* pDataLen) override;
+    virtual void                    FreeEmbedFontData( const void* pData, sal_Int32 nDataLen ) override;
 
     virtual void                    GetGlyphWidths(
                                         const PhysicalFontFace*,
@@ -147,10 +147,10 @@ public:
     virtual void                    DrawTextLayout( const CommonSalLayout& ) override;
 
     virtual bool                    supportsOperation( OutDevSupportType ) const override;
-    virtual void                    drawPixel( long nX, long nY ) override;
-    virtual void                    drawPixel( long nX, long nY, SalColor nSalColor ) override;
-    virtual void                    drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
-    virtual void                    drawRect( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                    drawPixel( sal_Int32 nX, sal_Int32 nY ) override;
+    virtual void                    drawPixel( sal_Int32 nX, sal_Int32 nY, SalColor nSalColor ) override;
+    virtual void                    drawLine( sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 ) override;
+    virtual void                    drawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     virtual void                    drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void                    drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
 
@@ -190,12 +190,12 @@ public:
 #endif
 
     virtual void                    copyArea(
-                                        long nDestX,
-                                        long nDestY,
-                                        long nSrcX,
-                                        long nSrcY,
-                                        long nSrcWidth,
-                                        long nSrcHeight,
+                                        sal_Int32 nDestX,
+                                        sal_Int32 nDestY,
+                                        sal_Int32 nSrcX,
+                                        sal_Int32 nSrcY,
+                                        sal_Int32 nSrcWidth,
+                                        sal_Int32 nSrcHeight,
                                         bool bWindowInvalidate ) override;
 
     virtual void                    copyBits(
@@ -216,12 +216,12 @@ public:
                                         const SalBitmap& rSalBitmap,
                                         SalColor nMaskColor ) override;
 
-    virtual SalBitmap*              getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual SalColor                getPixel( long nX, long nY ) override;
-    virtual void                    invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags ) override;
+    virtual SalBitmap*              getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    virtual SalColor                getPixel( sal_Int32 nX, sal_Int32 nY ) override;
+    virtual void                    invert( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, SalInvert nFlags ) override;
     virtual void                    invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) override;
 
-    virtual bool                    drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize ) override;
+    virtual bool                    drawEPS( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, void* pPtr, sal_uIntPtr nSize ) override;
 
     virtual bool                    blendBitmap(
                                         const SalTwoRect&,
@@ -246,8 +246,8 @@ public:
                                         const SalBitmap* pAlphaBitmap) override;
 
     virtual bool                    drawAlphaRect(
-                                        long nX, long nY, long nWidth,
-                                        long nHeight, sal_uInt8 nTransparency ) override;
+                                        sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth,
+                                        sal_Int32 nHeight, sal_uInt8 nTransparency ) override;
 
     virtual SystemGraphicsData      GetGraphicsData() const override;
 
