@@ -71,7 +71,7 @@ CommandWheelData::CommandWheelData()
     mbDeltaIsPixel  = false;
 }
 
-CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
+CommandWheelData::CommandWheelData( sal_Int32 nWheelDelta, sal_Int32 nWheelNotchDelta,
                                     double nScrollLines,
                                     CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
                                     bool bHorz, bool bDeltaIsPixel )
@@ -85,7 +85,7 @@ CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
     mbDeltaIsPixel  = bDeltaIsPixel;
 }
 
-CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
+CommandScrollData::CommandScrollData( sal_Int32 nDeltaX, sal_Int32 nDeltaY )
 {
     mnDeltaX    = nDeltaX;
     mnDeltaY    = nDeltaY;

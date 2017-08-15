@@ -96,12 +96,12 @@ protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
 
-    virtual long getPrimaryDimension(const Size &rSize) const = 0;
-    virtual void setPrimaryDimension(Size &rSize, long) const = 0;
-    virtual long getPrimaryCoordinate(const Point &rPos) const = 0;
-    virtual void setPrimaryCoordinate(Point &rPos, long) const = 0;
-    virtual long getSecondaryDimension(const Size &rSize) const = 0;
-    virtual void setSecondaryDimension(Size &rSize, long) const = 0;
+    virtual sal_Int32 getPrimaryDimension(const Size &rSize) const = 0;
+    virtual void setPrimaryDimension(Size &rSize, sal_Int32) const = 0;
+    virtual sal_Int32 getPrimaryCoordinate(const Point &rPos) const = 0;
+    virtual void setPrimaryCoordinate(Point &rPos, sal_Int32) const = 0;
+    virtual sal_Int32 getSecondaryDimension(const Size &rSize) const = 0;
+    virtual void setSecondaryDimension(Size &rSize, sal_Int32) const = 0;
 
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const = 0;
 };
@@ -115,27 +115,27 @@ public:
         m_bVerticalContainer = true;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nHeight) const override
+    virtual void setPrimaryDimension(Size &rSize, sal_Int32 nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual sal_Int32 getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getY();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, sal_Int32 nPos) const override
     {
         rPos.setY(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nWidth) const override
+    virtual void setSecondaryDimension(Size &rSize, sal_Int32 nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
@@ -154,27 +154,27 @@ public:
         m_bVerticalContainer = false;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nWidth) const override
+    virtual void setPrimaryDimension(Size &rSize, sal_Int32 nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual sal_Int32 getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getX();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, sal_Int32 nPos) const override
     {
         rPos.setX(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nHeight) const override
+    virtual void setSecondaryDimension(Size &rSize, sal_Int32 nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
@@ -212,8 +212,8 @@ private:
     VclButtonBoxStyle m_eLayoutStyle;
     struct Requisition
     {
-        std::vector<long> m_aMainGroupDimensions;
-        std::vector<long> m_aSubGroupDimensions;
+        std::vector<sal_Int32> m_aMainGroupDimensions;
+        std::vector<sal_Int32> m_aSubGroupDimensions;
         Size m_aMainGroupSize;
         Size m_aSubGroupSize;
     };
@@ -230,27 +230,27 @@ public:
         m_bVerticalContainer = true;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nHeight) const override
+    virtual void setPrimaryDimension(Size &rSize, sal_Int32 nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual sal_Int32 getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getY();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, sal_Int32 nPos) const override
     {
         rPos.setY(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nWidth) const override
+    virtual void setSecondaryDimension(Size &rSize, sal_Int32 nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
@@ -269,27 +269,27 @@ public:
         m_bVerticalContainer = false;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nWidth) const override
+    virtual void setPrimaryDimension(Size &rSize, sal_Int32 nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual sal_Int32 getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getX();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, sal_Int32 nPos) const override
     {
         rPos.setX(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual sal_Int32 getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nHeight) const override
+    virtual void setSecondaryDimension(Size &rSize, sal_Int32 nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
@@ -310,7 +310,7 @@ private:
 public:
     struct Value
     {
-        long m_nValue;
+        sal_Int32 m_nValue;
         bool m_bExpand;
         Value() : m_nValue(0), m_bExpand(false) {}
     };
@@ -370,17 +370,17 @@ class VCL_DLLPUBLIC VclVPaned : public VclContainer
 {
 private:
     VclPtr<Splitter> m_pSplitter;
-    long m_nPosition;
+    sal_Int32 m_nPosition;
     DECL_LINK(SplitHdl, Splitter*, void);
-    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+    void arrange(const Size& rAllocation, sal_Int32 nFirstHeight, sal_Int32 nSecondHeight);
 public:
     VclVPaned(vcl::Window *pParent);
     virtual ~VclVPaned() override { disposeOnce(); }
     virtual void dispose() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    long get_position() const { return m_nPosition; }
-    void set_position(long nPosition) { m_nPosition = nPosition; }
+    sal_Int32 get_position() const { return m_nPosition; }
+    void set_position(sal_Int32 nPosition) { m_nPosition = nPosition; }
 };
 
 class VCL_DLLPUBLIC VclFrame : public VclBin

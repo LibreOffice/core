@@ -66,14 +66,14 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
 
     if( !!*pAcc )
     {
-        const long      nWidth = pAcc->Width();
-        const long      nHeight = pAcc->Height();
+        const sal_Int32      nWidth = pAcc->Width();
+        const sal_Int32      nHeight = pAcc->Height();
 
         if( pAcc->HasPalette() )
         {
-            for( long nY = 0; nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0; nY < nHeight; nY++ )
             {
-                for( long nX = 0; nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0; nX < nWidth; nX++ )
                 {
                     pColor = &pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
                     nLevel = 0;
@@ -90,9 +90,9 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
 
             pColor = &aColor;
 
-            for( long nY = 0; nY < nHeight; nY++ )
+            for( sal_Int32 nY = 0; nY < nHeight; nY++ )
             {
-                for( long nX = 0; nX < nWidth; nX++ )
+                for( sal_Int32 nX = 0; nX < nWidth; nX++ )
                 {
                     aColor = pAcc->GetPixel( nY, nX );
                     nLevel = 0;
@@ -234,31 +234,31 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
 {
     const int     nColorMax = 1 << OCTREE_BITS;
-    const unsigned long xsqr = 1 << ( nBits << 1 );
-    const unsigned long xsqr2 = xsqr << 1;
+    const sal_uInt32 xsqr = 1 << ( nBits << 1 );
+    const sal_uInt32 xsqr2 = xsqr << 1;
     const int     nColors = rPal.GetEntryCount();
-    const long      x = 1 << nBits;
-    const long      x2 = x >> 1;
+    const sal_Int32      x = 1 << nBits;
+    const sal_Int32      x2 = x >> 1;
     sal_uLong           r, g, b;
-    long            rxx, gxx, bxx;
+    sal_Int32            rxx, gxx, bxx;
 
     ImplCreateBuffers( nColorMax );
 
     for( int nIndex = 0; nIndex < nColors; nIndex++ )
     {
         const BitmapColor&  rColor = rPal[ (sal_uInt16) nIndex ];
-        const long          cRed = rColor.GetRed();
-        const long          cGreen = rColor.GetGreen();
-        const long          cBlue = rColor.GetBlue();
+        const sal_Int32          cRed = rColor.GetRed();
+        const sal_Int32          cGreen = rColor.GetGreen();
+        const sal_Int32          cBlue = rColor.GetBlue();
 
-        long rdist = cRed - x2;
-        long gdist = cGreen - x2;
-        long bdist = cBlue - x2;
+        sal_Int32 rdist = cRed - x2;
+        sal_Int32 gdist = cGreen - x2;
+        sal_Int32 bdist = cBlue - x2;
         rdist = rdist*rdist + gdist*gdist + bdist*bdist;
 
-        const long crinc = ( xsqr - ( cRed << nBits ) ) << 1;
-        const long cginc = ( xsqr - ( cGreen << nBits ) ) << 1;
-        const long cbinc = ( xsqr - ( cBlue << nBits ) ) << 1;
+        const sal_Int32 crinc = ( xsqr - ( cRed << nBits ) ) << 1;
+        const sal_Int32 cginc = ( xsqr - ( cGreen << nBits ) ) << 1;
+        const sal_Int32 cbinc = ( xsqr - ( cBlue << nBits ) ) << 1;
 
         sal_uLong* cdp = reinterpret_cast<sal_uLong*>(pBuffer);
         sal_uInt8* crgbp = pMap;
@@ -268,7 +268,7 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             for( g = 0, gdist = rdist, gxx = cginc; g < nColorMax;  gdist += gxx, g++, gxx += xsqr2 )
             {
                 for( b = 0, bdist = gdist, bxx = cbinc; b < nColorMax; bdist += bxx, b++, cdp++, crgbp++, bxx += xsqr2 )
-                    if ( !nIndex || ( (long) *cdp ) > bdist )
+                    if ( !nIndex || ( (sal_Int32) *cdp ) > bdist )
                     {
                         *cdp = bdist;
                         *crgbp = (sal_uInt8) nIndex;

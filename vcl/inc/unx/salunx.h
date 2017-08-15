@@ -22,7 +22,7 @@
 
 #include "unx/salunxtime.h"
 
-inline long Divide( long nDividend, long nDivisor )
+inline sal_Int32 Divide( sal_Int32 nDividend, sal_Int32 nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
 
 #endif

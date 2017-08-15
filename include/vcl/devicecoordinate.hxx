@@ -19,7 +19,7 @@ typedef double DeviceCoordinate;
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
 
 #include <basegfx/point/b2ipoint.hxx>
-typedef long DeviceCoordinate;
+typedef sal_Int32 DeviceCoordinate;
 
 #endif /* ! Carpet Cushion */
 

@@ -307,7 +307,7 @@ void FreetypeFont::ReleaseFromGarbageCollect()
     mpNextGCFont = nullptr;
 }
 
-long FreetypeFont::Release() const
+sal_Int32 FreetypeFont::Release() const
 {
     SAL_WARN_IF( mnRefCount <= 0, "vcl", "FreetypeFont: RefCount underflow" );
     return --mnRefCount;
@@ -331,7 +331,7 @@ const tools::Rectangle& FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph)
     return rGlyphData.GetBoundRect();
 }
 
-void FreetypeFont::GarbageCollect( long nMinLruIndex )
+void FreetypeFont::GarbageCollect( sal_Int32 nMinLruIndex )
 {
     GlyphList::iterator it = maGlyphList.begin();
     while( it != maGlyphList.end() )

@@ -1589,12 +1589,13 @@ namespace emfio
                                 }
                             }
 
-                            std::unique_ptr<long[]> pDXAry, pDYAry;
+                            std::unique_ptr<sal_Int32[]> pDXAry;
+                            std::unique_ptr<long[]> pDYAry;
                             sal_Int32 nDxSize = nLen * ((nOptions & ETO_PDY) ? 8 : 4);
                             if ( offDx && (( nCurPos + offDx + nDxSize ) <= nNextPos ) && nNextPos <= mnEndPos )
                             {
                                 mpInputStream->Seek( nCurPos + offDx );
-                                pDXAry.reset( new long[aText.getLength()] );
+                                pDXAry.reset( new sal_Int32[aText.getLength()] );
                                 if (nOptions & ETO_PDY)
                                 {
                                     pDYAry.reset( new long[aText.getLength()] );

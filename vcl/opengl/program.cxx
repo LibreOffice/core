@@ -276,7 +276,7 @@ void OpenGLProgram::SetColor( const OString& rName, const Color& rColor )
         SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 }
 
-void OpenGLProgram::SetColorWithIntensity( const OString& rName, const Color& rColor, long nFactor )
+void OpenGLProgram::SetColorWithIntensity( const OString& rName, const Color& rColor, sal_Int32 nFactor )
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform4f( nUniform,

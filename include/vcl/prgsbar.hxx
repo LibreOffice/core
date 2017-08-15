@@ -50,8 +50,8 @@ class VCL_DLLPUBLIC ProgressBar : public vcl::Window
 {
 private:
     Point               maPos;
-    long                mnPrgsWidth;
-    long                mnPrgsHeight;
+    sal_Int32           mnPrgsWidth;
+    sal_Int32           mnPrgsHeight;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
     sal_uInt16          mnPreviousPercent;

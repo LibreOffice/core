@@ -74,72 +74,72 @@ bool FontMetric::operator==( const FontMetric& rFontMetric ) const
     return false;
 }
 
-long FontMetric::GetAscent() const
+sal_Int32 FontMetric::GetAscent() const
 {
     return mxImplMetric->GetAscent();
 }
 
-void FontMetric::SetAscent( long nAscent )
+void FontMetric::SetAscent( sal_Int32 nAscent )
 {
     mxImplMetric->SetAscent( nAscent );
 }
 
-long FontMetric::GetDescent() const
+sal_Int32 FontMetric::GetDescent() const
 {
     return mxImplMetric->GetDescent();
 }
 
-void FontMetric::SetDescent( long nDescent )
+void FontMetric::SetDescent( sal_Int32 nDescent )
 {
     mxImplMetric->SetDescent( nDescent );
 }
 
-long FontMetric::GetInternalLeading() const
+sal_Int32 FontMetric::GetInternalLeading() const
 {
     return mxImplMetric->GetInternalLeading();
 }
 
-void FontMetric::SetInternalLeading( long nLeading )
+void FontMetric::SetInternalLeading( sal_Int32 nLeading )
 {
     mxImplMetric->SetInternalLeading( nLeading );
 }
 
-long FontMetric::GetExternalLeading() const
+sal_Int32 FontMetric::GetExternalLeading() const
 {
     return mxImplMetric->GetExternalLeading();
 }
 
-void FontMetric::SetExternalLeading( long nLeading )
+void FontMetric::SetExternalLeading( sal_Int32 nLeading )
 {
     mxImplMetric->SetExternalLeading( nLeading );
 }
 
-long FontMetric::GetLineHeight() const
+sal_Int32 FontMetric::GetLineHeight() const
 {
     return mxImplMetric->GetLineHeight();
 }
 
-void FontMetric::SetLineHeight( long nHeight )
+void FontMetric::SetLineHeight( sal_Int32 nHeight )
 {
     mxImplMetric->SetLineHeight( nHeight );
 }
 
-long FontMetric::GetSlant() const
+sal_Int32 FontMetric::GetSlant() const
 {
     return mxImplMetric->GetSlant();
 }
 
-void FontMetric::SetSlant( long nSlant )
+void FontMetric::SetSlant( sal_Int32 nSlant )
 {
     mxImplMetric->SetSlant( nSlant );
 }
 
-long FontMetric::GetBulletOffset() const
+sal_Int32 FontMetric::GetBulletOffset() const
 {
     return mxImplMetric->GetBulletOffset();
 }
 
-void FontMetric::SetBulletOffset( long nOffset )
+void FontMetric::SetBulletOffset( sal_Int32 nOffset )
 {
     mxImplMetric->SetBulletOffset( nOffset );
 }
@@ -240,7 +240,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
-    long nDescent = mnDescent;
+    sal_Int32 nDescent = mnDescent;
     if ( nDescent <= 0 )
     {
         nDescent = mnAscent / 10;
@@ -254,36 +254,36 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     if( 3*nDescent > mnAscent )
         nDescent = mnAscent / 3;
 
-    long nLineHeight = ((nDescent*25)+50) / 100;
+    sal_Int32 nLineHeight = ((nDescent*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
-    long nLineHeight2 = nLineHeight / 2;
+    sal_Int32 nLineHeight2 = nLineHeight / 2;
     if ( !nLineHeight2 )
         nLineHeight2 = 1;
 
-    long nBLineHeight = ((nDescent*50)+50) / 100;
+    sal_Int32 nBLineHeight = ((nDescent*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
-    long nBLineHeight2 = nBLineHeight/2;
+    sal_Int32 nBLineHeight2 = nBLineHeight/2;
     if ( !nBLineHeight2 )
         nBLineHeight2 = 1;
 
-    long n2LineHeight = ((nDescent*16)+50) / 100;
+    sal_Int32 n2LineHeight = ((nDescent*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
-    long n2LineDY = n2LineHeight;
+    sal_Int32 n2LineDY = n2LineHeight;
      /* #117909#
       * add some pixels to minimum double line distance on higher resolution devices
       */
-    long nMin2LineDY = 1 + pDev->GetDPIY()/150;
+    sal_Int32 nMin2LineDY = 1 + pDev->GetDPIY()/150;
     if ( n2LineDY < nMin2LineDY )
         n2LineDY = nMin2LineDY;
-    long n2LineDY2 = n2LineDY/2;
+    sal_Int32 n2LineDY2 = n2LineDY/2;
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    long nUnderlineOffset = mnDescent/2 + 1;
-    long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
+    sal_Int32 nUnderlineOffset = mnDescent/2 + 1;
+    sal_Int32 nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
 
     mnUnderlineSize        = nLineHeight;
     mnUnderlineOffset      = nUnderlineOffset - nLineHeight2;
@@ -295,7 +295,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDUnderlineOffset1    = nUnderlineOffset - n2LineDY2 - n2LineHeight;
     mnDUnderlineOffset2    = mnDUnderlineOffset1 + n2LineDY + n2LineHeight;
 
-    long nWCalcSize = mnDescent;
+    sal_Int32 nWCalcSize = mnDescent;
     if ( nWCalcSize < 6 )
     {
         if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
@@ -342,7 +342,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 
 void ImplFontMetricData::ImplInitAboveTextLineSize()
 {
-    long nIntLeading = mnIntLeading;
+    sal_Int32 nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)
     // if no leading is available, we assume 15% of the ascent
     if ( nIntLeading <= 0 )
@@ -352,19 +352,19 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
             nIntLeading = 1;
     }
 
-    long nLineHeight = ((nIntLeading*25)+50) / 100;
+    sal_Int32 nLineHeight = ((nIntLeading*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
 
-    long nBLineHeight = ((nIntLeading*50)+50) / 100;
+    sal_Int32 nBLineHeight = ((nIntLeading*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
 
-    long n2LineHeight = ((nIntLeading*16)+50) / 100;
+    sal_Int32 n2LineHeight = ((nIntLeading*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
 
-    long nCeiling = -mnAscent;
+    sal_Int32 nCeiling = -mnAscent;
 
     mnAboveUnderlineSize       = nLineHeight;
     mnAboveUnderlineOffset     = nCeiling + (nIntLeading - nLineHeight + 1) / 2;
@@ -376,7 +376,7 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
     mnAboveDUnderlineOffset1   = nCeiling + (nIntLeading - 3*n2LineHeight + 1) / 2;
     mnAboveDUnderlineOffset2   = nCeiling + (nIntLeading +   n2LineHeight + 1) / 2;
 
-    long nWCalcSize = nIntLeading;
+    sal_Int32 nWCalcSize = nIntLeading;
     if ( nWCalcSize < 6 )
     {
         if ( (nWCalcSize == 1) || (nWCalcSize == 2) )

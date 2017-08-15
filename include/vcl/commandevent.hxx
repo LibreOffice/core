@@ -138,8 +138,8 @@ enum class CommandWheelMode
 class VCL_DLLPUBLIC CommandWheelData
 {
 private:
-    long              mnDelta;
-    long              mnNotchDelta;
+    sal_Int32         mnDelta;
+    sal_Int32         mnNotchDelta;
     double            mnLines;
     CommandWheelMode  mnWheelMode;
     sal_uInt16        mnCode;
@@ -148,13 +148,13 @@ private:
 
 public:
                     CommandWheelData();
-                    CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
+                    CommandWheelData( sal_Int32 nWheelDelta, sal_Int32 nWheelNotchDelta,
                                       double nScrollLines,
                                       CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
                                       bool bHorz, bool bDeltaIsPixel = false );
 
-    long            GetDelta() const { return mnDelta; }
-    long            GetNotchDelta() const { return mnNotchDelta; }
+    sal_Int32       GetDelta() const { return mnDelta; }
+    sal_Int32       GetNotchDelta() const { return mnNotchDelta; }
     double          GetScrollLines() const { return mnLines; }
     bool            IsHorz() const { return mbHorz; }
     bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
@@ -174,14 +174,14 @@ public:
 class VCL_DLLPUBLIC CommandScrollData
 {
 private:
-    long            mnDeltaX;
-    long            mnDeltaY;
+    sal_Int32       mnDeltaX;
+    sal_Int32       mnDeltaY;
 
 public:
-                    CommandScrollData( long nDeltaX, long nDeltaY );
+                    CommandScrollData( sal_Int32 nDeltaX, sal_Int32 nDeltaY );
 
-    long            GetDeltaX() const { return mnDeltaX; }
-    long            GetDeltaY() const { return mnDeltaY; }
+    sal_Int32       GetDeltaX() const { return mnDeltaX; }
+    sal_Int32       GetDeltaY() const { return mnDeltaY; }
 };
 
 class VCL_DLLPUBLIC CommandModKeyData
@@ -238,7 +238,7 @@ enum class MediaCommand
     VolumeMute            = 16,// Mute the volume.
     VolumeUp              = 17,// Raise the volume.
     Menu                  = 18,// Button Menu pressed.
-    PlayHold              = 20,// Button Play (long) pressed.
+    PlayHold              = 20,// Button Play (sal_Int32) pressed.
     NextTrackHold         = 21,// Button Right holding pressed.
 };
 

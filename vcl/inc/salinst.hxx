@@ -90,7 +90,7 @@ public:
     // its size; otherwise these remain unchanged.
     virtual SalVirtualDevice*
                             CreateVirtualDevice( SalGraphics* pGraphics,
-                                                 long &rDX, long &rDY,
+                                                 sal_Int32 &rDX, sal_Int32 &rDY,
                                                  DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) = 0;
 
     // Printer

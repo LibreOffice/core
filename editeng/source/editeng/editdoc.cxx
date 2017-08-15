@@ -540,12 +540,12 @@ ExtraPortionInfo::~ExtraPortionInfo()
 {
 }
 
-void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen )
+void ExtraPortionInfo::SaveOrgDXArray( const sal_Int32* pDXArray, sal_Int32 nLen )
 {
     if (pDXArray)
     {
-        pOrgDXArray.reset(new long[nLen]);
-        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(long) );
+        pOrgDXArray.reset(new sal_Int32[nLen]);
+        memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(sal_Int32) );
     }
     else
         pOrgDXArray.reset();

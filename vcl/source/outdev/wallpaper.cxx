@@ -52,8 +52,8 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
         mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
 
-void OutputDevice::DrawWallpaper( long nX, long nY,
-                                  long nWidth, long nHeight,
+void OutputDevice::DrawWallpaper( sal_Int32 nX, sal_Int32 nY,
+                                  sal_Int32 nWidth, sal_Int32 nHeight,
                                   const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -66,8 +66,8 @@ void OutputDevice::DrawWallpaper( long nX, long nY,
         DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }
 
-void OutputDevice::DrawColorWallpaper( long nX, long nY,
-                                       long nWidth, long nHeight,
+void OutputDevice::DrawColorWallpaper( sal_Int32 nX, sal_Int32 nY,
+                                       sal_Int32 nWidth, sal_Int32 nHeight,
                                        const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -105,8 +105,8 @@ void OutputDevice::Erase()
         mpAlphaVDev->Erase();
 }
 
-void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
-                                            long nWidth, long nHeight,
+void OutputDevice::DrawBitmapWallpaper( sal_Int32 nX, sal_Int32 nY,
+                                            sal_Int32 nWidth, sal_Int32 nHeight,
                                             const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -127,8 +127,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     else
         aBmpEx = rWallpaper.GetBitmap();
 
-    const long nBmpWidth = aBmpEx.GetSizePixel().Width();
-    const long nBmpHeight = aBmpEx.GetSizePixel().Height();
+    const sal_Int32 nBmpWidth = aBmpEx.GetSizePixel().Width();
+    const sal_Int32 nBmpHeight = aBmpEx.GetSizePixel().Height();
     const bool bTransparent = aBmpEx.IsTransparent();
 
     // draw background
@@ -240,10 +240,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     default:
         {
-            const long nRight = nX + nWidth - 1L;
-            const long nBottom = nY + nHeight - 1L;
-            long nFirstX;
-            long nFirstY;
+            const sal_Int32 nRight = nX + nWidth - 1L;
+            const sal_Int32 nBottom = nY + nHeight - 1L;
+            sal_Int32 nFirstX;
+            sal_Int32 nFirstY;
 
             if( eStyle == WallpaperStyle::Tile )
             {
@@ -256,10 +256,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                 nFirstY = aPos.Y() + ( ( aSize.Height() - nBmpHeight ) >> 1 );
             }
 
-            const long nOffX = ( nFirstX - nX ) % nBmpWidth;
-            const long nOffY = ( nFirstY - nY ) % nBmpHeight;
-            long nStartX = nX + nOffX;
-            long nStartY = nY + nOffY;
+            const sal_Int32 nOffX = ( nFirstX - nX ) % nBmpWidth;
+            const sal_Int32 nOffY = ( nFirstY - nY ) % nBmpHeight;
+            sal_Int32 nStartX = nX + nOffX;
+            sal_Int32 nStartY = nY + nOffY;
 
             if( nOffX > 0L )
                 nStartX -= nBmpWidth;
@@ -267,9 +267,9 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             if( nOffY > 0L )
                 nStartY -= nBmpHeight;
 
-            for( long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
+            for( sal_Int32 nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
             {
-                for( long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
+                for( sal_Int32 nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
                 {
                     DrawBitmapEx( Point( nBmpX, nBmpY ), aBmpEx );
                 }
@@ -343,8 +343,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
-void OutputDevice::DrawGradientWallpaper( long nX, long nY,
-                                          long nWidth, long nHeight,
+void OutputDevice::DrawGradientWallpaper( sal_Int32 nX, sal_Int32 nY,
+                                          sal_Int32 nWidth, sal_Int32 nHeight,
                                           const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());

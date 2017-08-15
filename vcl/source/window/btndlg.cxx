@@ -28,7 +28,7 @@ struct ImplBtnDlgItem
 {
     sal_uInt16              mnId;
     bool                    mbOwnButton;
-    long                    mnSepSize;
+    sal_Int32               mnSepSize;
     VclPtr<PushButton>      mpPushButton;
 
     ImplBtnDlgItem() : mnId(0), mbOwnButton(false), mnSepSize(0) {}
@@ -104,27 +104,27 @@ ImplBtnDlgItem* ButtonDialog::ImplGetItem( sal_uInt16 nId ) const
     return nullptr;
 }
 
-long ButtonDialog::ImplGetButtonSize()
+sal_Int32 ButtonDialog::ImplGetButtonSize()
 {
     if ( !mbFormat )
         return mnButtonSize;
 
     // Calculate ButtonSize
-    long nLastSepSize = 0;
-    long nSepSize = 0;
+    sal_Int32 nLastSepSize = 0;
+    sal_Int32 nSepSize = 0;
     maCtrlSize = Size( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
 
     for (auto & it : m_ItemList)
     {
         nSepSize += nLastSepSize;
 
-        long nTxtWidth = it->mpPushButton->GetCtrlTextWidth(it->mpPushButton->GetText());
+        sal_Int32 nTxtWidth = it->mpPushButton->GetCtrlTextWidth(it->mpPushButton->GetText());
         nTxtWidth += IMPL_EXTRA_BUTTON_WIDTH;
 
         if ( nTxtWidth > maCtrlSize.Width() )
             maCtrlSize.Width() = nTxtWidth;
 
-        long nTxtHeight = it->mpPushButton->GetTextHeight();
+        sal_Int32 nTxtHeight = it->mpPushButton->GetTextHeight();
         nTxtHeight += IMPL_EXTRA_BUTTON_HEIGHT;
 
         if ( nTxtHeight > maCtrlSize.Height() )
@@ -158,8 +158,8 @@ void ButtonDialog::ImplPosControls()
 
     // determine dialog size
     Size            aDlgSize = maPageSize;
-    long            nX;
-    long            nY;
+    sal_Int32       nX;
+    sal_Int32       nY;
     if ( GetStyle() & WB_HORZ )
     {
         if ( mnButtonSize+(IMPL_DIALOG_OFFSET*2) > aDlgSize.Width() )
@@ -261,7 +261,7 @@ void ButtonDialog::StateChanged( StateChangedType nType )
 }
 
 void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
-                              ButtonDialogFlags nBtnFlags, long nSepPixel )
+                              ButtonDialogFlags nBtnFlags, sal_Int32 nSepPixel )
 {
     // PageItem anlegen
     std::unique_ptr<ImplBtnDlgItem> pItem(new ImplBtnDlgItem);
@@ -282,7 +282,7 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
 }
 
 void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
-                              ButtonDialogFlags nBtnFlags, long nSepPixel )
+                              ButtonDialogFlags nBtnFlags, sal_Int32 nSepPixel )
 {
     // PageItem anlegen
     std::unique_ptr<ImplBtnDlgItem> pItem(new ImplBtnDlgItem);

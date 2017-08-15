@@ -483,9 +483,9 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
 }
 
 void ScModelObj::paintTile( VirtualDevice& rDevice,
-                            int nOutputWidth, int nOutputHeight,
-                            int nTilePosX, int nTilePosY,
-                            long nTileWidth, long nTileHeight )
+                            sal_Int32 nOutputWidth, sal_Int32 nOutputHeight,
+                            sal_Int32 nTilePosX, sal_Int32 nTilePosY,
+                            sal_Int32 nTileWidth, sal_Int32 nTileHeight )
 {
     // There seems to be no clear way of getting the grid window for this
     // particular document, hence we need to hope we get the right window.
@@ -964,7 +964,7 @@ OUString ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle)
 }
 
 OString ScModelObj::getCellCursor( int nOutputWidth, int nOutputHeight,
-                                   long nTileWidth, long nTileHeight )
+                                   sal_Int32 nTileWidth, sal_Int32 nTileHeight )
 {
     SolarMutexGuard aGuard;
 

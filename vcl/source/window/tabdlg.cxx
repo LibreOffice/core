@@ -36,9 +36,9 @@ void TabDialog::ImplPosControls()
     if (isLayoutEnabled())
         return;
 
-    Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
-    long        nDownCtrl = 0;
-    long        nOffY = 0;
+    Size             aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
+    sal_Int32        nDownCtrl = 0;
+    sal_Int32        nOffY = 0;
     vcl::Window*     pTabControl = nullptr;
 
     vcl::Window* pChild = GetWindow( GetWindowType::FirstChild );
@@ -51,17 +51,17 @@ void TabDialog::ImplPosControls()
             else if ( pTabControl )
             {
                 Size aOptimalSize(pChild->get_preferred_size());
-                long nTxtWidth = aOptimalSize.Width();
+                sal_Int32 nTxtWidth = aOptimalSize.Width();
                 if ( nTxtWidth > aCtrlSize.Width() )
                     aCtrlSize.Width() = nTxtWidth;
-                long nTxtHeight = aOptimalSize.Height();
+                sal_Int32 nTxtHeight = aOptimalSize.Height();
                 if ( nTxtHeight > aCtrlSize.Height() )
                     aCtrlSize.Height() = nTxtHeight;
                 nDownCtrl++;
             }
             else
             {
-                long nHeight = pChild->GetSizePixel().Height();
+                sal_Int32 nHeight = pChild->GetSizePixel().Height();
                 if ( nHeight > nOffY )
                     nOffY = nHeight;
             }
@@ -86,15 +86,15 @@ void TabDialog::ImplPosControls()
 
         Size    aDlgSize( aTabSize.Width() + IMPL_DIALOG_OFFSET*2,
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
-        long    nBtnEx = 0;
+        sal_Int32 nBtnEx = 0;
 
         // consider Preview-Fenster and adapt the sizes/offsets
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
-            long    nViewOffX = 0;
-            long    nViewOffY = 0;
-            long    nViewWidth = 0;
-            long    nViewHeight = 0;
+            sal_Int32    nViewOffX = 0;
+            sal_Int32    nViewOffY = 0;
+            sal_Int32    nViewWidth = 0;
+            sal_Int32    nViewHeight = 0;
             PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
             Size    aViewSize = mpViewWindow->GetSizePixel();
             if (  meViewAlign == WindowAlign::Top )
@@ -145,13 +145,13 @@ void TabDialog::ImplPosControls()
         // position all other Children
         bool bTabCtrl   = false;
         int  nLines     = 0;
-        long nX;
-        long nY         = aDlgSize.Height();
-        long nTopX      = IMPL_DIALOG_OFFSET;
+        sal_Int32 nX;
+        sal_Int32 nY         = aDlgSize.Height();
+        sal_Int32 nTopX      = IMPL_DIALOG_OFFSET;
 
         // all buttons are right aligned under Windows 95
         nX = IMPL_DIALOG_OFFSET;
-        long nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
+        sal_Int32 nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
         if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
             nX = (aTabSize.Width()+nBtnEx) - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
 

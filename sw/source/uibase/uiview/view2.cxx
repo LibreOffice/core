@@ -815,7 +815,7 @@ void SwView::Execute(SfxRequest &rReq)
                     if(pSdrView)
                     {
                         LeaveDrawCreate();
-                        Point aPt(LONG_MIN, LONG_MIN);
+                        Point aPt(SAL_MIN_INT32, SAL_MIN_INT32);
                         //go out of the frame
                         m_pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
                         SfxBindings& rBind = GetViewFrame()->GetBindings();

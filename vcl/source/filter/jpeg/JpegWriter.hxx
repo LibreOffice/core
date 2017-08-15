@@ -45,7 +45,7 @@ public:
                 const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                 bool* pExportWasGrey );
 
-    void*       GetScanline( long nY );
+    void*       GetScanline( sal_Int32 nY );
     bool    Write( const Graphic& rGraphic );
 
 };

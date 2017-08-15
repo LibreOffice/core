@@ -433,10 +433,10 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 {
     if ( rc.top == 0 && bHorizontal )
     {
-        const long GRADIENT_HEIGHT = 32;
+        const sal_Int32 GRADIENT_HEIGHT = 32;
 
-        long gradient_break = rc.top;
-        long gradient_bottom = rc.bottom - 1;
+        sal_Int32 gradient_break = rc.top;
+        sal_Int32 gradient_bottom = rc.bottom - 1;
         GRADIENT_RECT g_rect[1] = { { 0, 1 } };
 
         // very slow gradient at the top (if we have space for that)
@@ -479,7 +479,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         // when done for the vertical ones too
         if ( bHorizontal )
         {
-            long from_x, from_y, to_x, to_y;
+            sal_Int32 from_x, from_y, to_x, to_y;
 
             from_x = rc.left;
             to_x = rc.right;
@@ -985,7 +985,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, PP_BAR, iState, &rc, &aProgressRect) != S_OK )
             return false;
 
-        long nProgressWidth = aValue.getNumericVal();
+        sal_Int32 nProgressWidth = aValue.getNumericVal();
         nProgressWidth *= (aProgressRect.right - aProgressRect.left);
         nProgressWidth /= (rc.right - rc.left);
         if( AllSettings::GetLayoutRTL() )
@@ -1005,13 +1005,13 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         RECT aTRect = rc;
         if( nPart == ControlPart::TrackHorzArea )
         {
-            long nH = aTrackRect.GetHeight();
+            sal_Int32 nH = aTrackRect.GetHeight();
             aTRect.top += (rc.bottom - rc.top - nH)/2;
             aTRect.bottom = aTRect.top + nH;
         }
         else
         {
-            long nW = aTrackRect.GetWidth();
+            sal_Int32 nW = aTrackRect.GetWidth();
             aTRect.left += (rc.right - rc.left - nW)/2;
             aTRect.right = aTRect.left + nW;
         }
@@ -1123,7 +1123,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPSEPARATOR, 0, tools::Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
                 // center the separator inside the passed rectangle
-                long nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
+                sal_Int32 nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
                 rc.top += nDY;
                 rc.bottom = rc.top+aRect.GetHeight()-1;
                 return ImplDrawTheme( hTheme, hDC, MENU_POPUPSEPARATOR, 0, rc, aCaption );
@@ -1395,7 +1395,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
             if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
             {
-                long nFontHeight = aNonClientMetrics.lfMessageFont.lfHeight;
+                sal_Int32 nFontHeight = aNonClientMetrics.lfMessageFont.lfHeight;
                 if( nFontHeight < 0 )
                     nFontHeight = -nFontHeight;
 
@@ -1448,7 +1448,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             tools::Rectangle aThumbRect = ImplGetThemeRect( hTheme, hDC, iPart, iState, tools::Rectangle() );
             if( nPart == ControlPart::ThumbHorz )
             {
-                long nW = aThumbRect.GetWidth();
+                sal_Int32 nW = aThumbRect.GetWidth();
                 tools::Rectangle aRect( rControlRegion );
                 aRect.Right() = aRect.Left() + nW - 1;
                 rNativeContentRegion = aRect;
@@ -1456,7 +1456,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             }
             else
             {
-                long nH = aThumbRect.GetHeight();
+                sal_Int32 nH = aThumbRect.GetHeight();
                 tools::Rectangle aRect( rControlRegion );
                 aRect.Bottom() = aRect.Top() + nH - 1;
                 rNativeContentRegion = aRect;

@@ -424,7 +424,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     //line within that
     long nMinWidth = GetTextWidth("----------");
     Size aSize = CalcSubEditSize();
-    aSize.Width() = std::max(nMinWidth, aSize.Width());
+    aSize.Width() = std::max(sal_Int32(nMinWidth), aSize.Width());
     aSize.Width() -= aTxtSize.Width();
     aSize.Width() -= 6;
     aSize.Height() = aTxtSize.Height();

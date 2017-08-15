@@ -306,7 +306,7 @@ namespace cairocanvas
         setupLayoutMode( rOutDev, mnTextDirection );
 
         // TODO(P2): cache that
-        std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< sal_Int32 []> aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
 
         if( maLogicalAdvancements.getLength() )
         {
@@ -538,7 +538,7 @@ namespace cairocanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( long*                       outputOffsets,
+    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const

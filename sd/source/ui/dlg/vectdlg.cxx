@@ -158,7 +158,7 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 
     if( !!aTmp )
     {
-        const Link<long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
+        const Link<sal_Int32,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
         aTmp.Vectorize( rMtf, (sal_uInt8) m_pMtReduce->GetValue(), &aPrgsHdl );
 
         if( m_pCbFillHoles->IsChecked() )
@@ -260,7 +260,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
-IMPL_LINK( SdVectorizeDlg, ProgressHdl, long, nData, void )
+IMPL_LINK( SdVectorizeDlg, ProgressHdl, sal_Int32, nData, void )
 {
     m_pPrgs->SetValue( (sal_uInt16)nData );
 }

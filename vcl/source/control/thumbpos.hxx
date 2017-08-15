@@ -10,12 +10,12 @@
 #ifndef INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
 #define INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
 
-inline long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
+inline sal_Int32 ImplMulDiv( sal_Int32 nNumber, sal_Int32 nNumerator, sal_Int32 nDenominator )
 {
     if (!nDenominator)
         return 0;
     double n = ((double)nNumber * (double)nNumerator) / (double)nDenominator;
-    return (long)n;
+    return (sal_Int32)n;
 }
 
 #endif // INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX

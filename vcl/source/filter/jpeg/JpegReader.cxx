@@ -48,15 +48,15 @@ extern "C" void init_source (j_decompress_ptr cinfo)
     source->no_data_available = FALSE;
 }
 
-long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
+sal_Int32 StreamRead( SvStream* pStream, void* pBuffer, sal_Int32 nBufferSize )
 {
-    long nRead = 0;
+    sal_Int32 nRead = 0;
 
     if( pStream->GetError() != ERRCODE_IO_PENDING )
     {
-        long nInitialPosition = pStream->Tell();
+        sal_Int32 nInitialPosition = pStream->Tell();
 
-        nRead = static_cast<long>(pStream->ReadBytes(pBuffer, nBufferSize));
+        nRead = static_cast<sal_Int32>(pStream->ReadBytes(pBuffer, nBufferSize));
 
         if( pStream->GetError() == ERRCODE_IO_PENDING )
         {
@@ -109,9 +109,9 @@ extern "C" void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
      */
     if (numberOfBytes > 0)
     {
-        while (numberOfBytes > (long) source->pub.bytes_in_buffer)
+        while (numberOfBytes > (sal_Int32) source->pub.bytes_in_buffer)
         {
-            numberOfBytes -= (long) source->pub.bytes_in_buffer;
+            numberOfBytes -= (sal_Int32) source->pub.bytes_in_buffer;
             (void) fill_input_buffer(cinfo);
 
             /* note we assume that fill_input_buffer will never return false,
@@ -217,7 +217,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
 
     if (mbSetLogSize)
     {
-        unsigned long nUnit = rParam.density_unit;
+        sal_Int32 nUnit = rParam.density_unit;
 
         if (((1 == nUnit) || (2 == nUnit)) && rParam.X_density && rParam.Y_density )
         {
@@ -235,7 +235,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
     return true;
 }
 
-Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
+Graphic JPEGReader::CreateIntermediateGraphic(sal_Int32 nLines)
 {
     Graphic aGraphic;
     const Size aSizePixel(mpBitmap->GetSizePixel());
@@ -248,7 +248,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
 
     if (nLines && (nLines < aSizePixel.Height()))
     {
-        const long nNewLines = nLines - mnLastLines;
+        const sal_Int32 nNewLines = nLines - mnLastLines;
 
         if (nNewLines > 0)
         {
@@ -284,7 +284,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportF
     mrStream.Seek( mnLastPos );
 
     // read the (partial) image
-    long nLines;
+    sal_Int32 nLines;
     ReadJPEG( this, &mrStream, &nLines, GetPreviewSize(), nImportFlags, ppAccess );
 
     auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);

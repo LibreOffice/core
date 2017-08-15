@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-long ImplSysChildProc( void* pInst, SalObjEvent nEvent )
+sal_Int32 ImplSysChildProc( void* pInst, SalObjEvent nEvent )
 {
     VclPtr<SystemChildWindow> pWindow = static_cast<SystemChildWindow*>(pInst);
 

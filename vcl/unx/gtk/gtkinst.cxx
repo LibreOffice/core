@@ -325,7 +325,7 @@ void GtkYieldMutex::ThreadsLeave()
 }
 
 SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
-                                                    long &nDX, long &nDY,
+                                                    sal_Int32 &nDX, sal_Int32 &nDY,
                                                     DeviceFormat eFormat,
                                                     const SystemGraphicsData *pGd )
 {

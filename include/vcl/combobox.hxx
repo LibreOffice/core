@@ -41,7 +41,7 @@ protected:
     SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
-    SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;
+    SAL_DLLPRIVATE sal_Int32 getMaxWidthScrollBarAndDownButton() const;
 
 protected:
     bool            IsDropDownBox() const;
@@ -67,7 +67,7 @@ public:
 
     virtual const Wallpaper& GetDisplayBackground() const override;
 
-    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    virtual void    setPosSizePixel( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     tools::Rectangle       GetDropDownPosSizePixel() const;
 
@@ -98,10 +98,11 @@ public:
     sal_Int32       GetEntryCount() const;
 
     bool            IsTravelSelect() const;
+
     bool            IsInDropDown() const;
     void            ToggleDropDown();
 
-    long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
+    sal_Int32       CalcWindowSizePixel( sal_uInt16 nLines ) const;
 
     void            SetUserItemSize( const Size& rSz );
     void            EnableUserDraw( bool bUserDraw );
@@ -168,7 +169,7 @@ public:
         if no item is at that point.
      */
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
+    sal_Int32 GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
     void setMaxWidthChars(sal_Int32 nWidth);
 

@@ -178,10 +178,10 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     // check, if we have to adjust the point
     if ( !Frame().IsInside( aPoint ) )
     {
-        aPoint.X() = std::max( aPoint.X(), Frame().Left() );
-        aPoint.X() = std::min( aPoint.X(), Frame().Right() );
-        aPoint.Y() = std::max( aPoint.Y(), Frame().Top() );
-        aPoint.Y() = std::min( aPoint.Y(), Frame().Bottom() );
+        aPoint.X() = std::max( aPoint.X(), sal_Int32(Frame().Left()) );
+        aPoint.X() = std::min( aPoint.X(), sal_Int32(Frame().Right()) );
+        aPoint.Y() = std::max( aPoint.Y(), sal_Int32(Frame().Top()) );
+        aPoint.Y() = std::min( aPoint.Y(), sal_Int32(Frame().Bottom()) );
     }
 
     bool bTextRet = false;

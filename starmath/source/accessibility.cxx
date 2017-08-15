@@ -486,7 +486,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 aTLPos.X() -= 0;
                 Size  aSize (pNode->GetSize());
 
-                long* pXAry = new long[ aNodeText.getLength() ];
+                sal_Int32* pXAry = new sal_Int32[ aNodeText.getLength() ];
                 pWin->SetFont( pNode->GetFont() );
                 pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.getLength() );
                 aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
@@ -558,7 +558,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 
                 long nNodeX = pNode->GetLeft();
 
-                long* pXAry = new long[ aTxt.getLength() ];
+                sal_Int32* pXAry = new sal_Int32[ aTxt.getLength() ];
                 pWin->SetFont( pNode->GetFont() );
                 pWin->GetTextArray( aTxt, pXAry, 0, aTxt.getLength() );
                 for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)

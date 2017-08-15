@@ -25,7 +25,7 @@ public:
     virtual void update() = 0;
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButtons) = 0;
     virtual void mouseDragMove(const Point& rPosBegin, const Point& rPosEnd, sal_uInt16 nButtons) = 0;
-    virtual void scroll(long nDelta) = 0;
+    virtual void scroll(sal_Int32 nDelta) = 0;
 
     virtual void contextDestroyed() = 0;
 };

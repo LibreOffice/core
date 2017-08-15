@@ -28,27 +28,27 @@
 class VCL_DLLPUBLIC Slider : public Control
 {
 private:
-    tools::Rectangle       maChannel1Rect;
-    tools::Rectangle       maChannel2Rect;
-    tools::Rectangle       maThumbRect;
-    long            mnStartPos;
-    long            mnMouseOff;
-    long            mnThumbPixOffset;
-    long            mnThumbPixRange;
-    long            mnThumbPixPos;
-    long            mnChannelPixOffset;
-    long            mnChannelPixRange;
-    long            mnChannelPixTop;
-    long            mnChannelPixBottom;
-    long            mnMinRange;
-    long            mnMaxRange;
-    long            mnThumbPos;
-    long            mnLineSize;
-    long            mnPageSize;
-    sal_uInt16      mnStateFlags;
-    ScrollType      meScrollType;
-    bool            mbCalcSize;
-    bool            mbFullDrag;
+    tools::Rectangle   maChannel1Rect;
+    tools::Rectangle   maChannel2Rect;
+    tools::Rectangle   maThumbRect;
+    sal_Int32          mnStartPos;
+    sal_Int32          mnMouseOff;
+    sal_Int32          mnThumbPixOffset;
+    sal_Int32          mnThumbPixRange;
+    sal_Int32          mnThumbPixPos;
+    sal_Int32          mnChannelPixOffset;
+    sal_Int32          mnChannelPixRange;
+    sal_Int32          mnChannelPixTop;
+    sal_Int32          mnChannelPixBottom;
+    sal_Int32          mnMinRange;
+    sal_Int32          mnMaxRange;
+    sal_Int32          mnThumbPos;
+    sal_Int32          mnLineSize;
+    sal_Int32          mnPageSize;
+    sal_uInt16         mnStateFlags;
+    ScrollType         meScrollType;
+    bool               mbCalcSize;
+    bool               mbFullDrag;
 
     VclPtr<NumericField> mpLinkedField;
 
@@ -64,16 +64,16 @@ private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
     SAL_DLLPRIVATE void ImplUpdateRects( bool bUpdate = true );
-    SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
-    SAL_DLLPRIVATE long ImplCalcThumbPosPix( long nPos );
+    SAL_DLLPRIVATE sal_Int32 ImplCalcThumbPos( sal_Int32 nPixPos );
+    SAL_DLLPRIVATE sal_Int32 ImplCalcThumbPosPix( sal_Int32 nPos );
     SAL_DLLPRIVATE void ImplCalc( bool bUpdate = true );
     SAL_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE bool ImplIsPageUp( const Point& rPos );
     SAL_DLLPRIVATE bool ImplIsPageDown( const Point& rPos );
-    SAL_DLLPRIVATE long ImplSlide( long nNewPos, bool bCallEndSlide );
-    SAL_DLLPRIVATE long ImplDoAction( bool bCallEndSlide );
+    SAL_DLLPRIVATE sal_Int32 ImplSlide( sal_Int32 nNewPos, bool bCallEndSlide );
+    SAL_DLLPRIVATE sal_Int32 ImplDoAction( bool bCallEndSlide );
     SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction );
-    SAL_DLLPRIVATE void ImplDoSlide( long nNewPos );
+    SAL_DLLPRIVATE void ImplDoSlide( sal_Int32 nNewPos );
     SAL_DLLPRIVATE void ImplDoSlideAction( ScrollType eScrollType );
     SAL_DLLPRIVATE void ImplUpdateLinkedField();
 
@@ -93,17 +93,17 @@ public:
     void            Slide();
     void            EndSlide();
 
-    void            SetRangeMin(long nNewRange);
-    long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax(long nNewRange);
-    long            GetRangeMax() const { return mnMaxRange; }
+    void            SetRangeMin(sal_Int32 nNewRange);
+    sal_Int32       GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax(sal_Int32 nNewRange);
+    sal_Int32       GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
-    void            SetThumbPos( long nThumbPos );
-    long            GetThumbPos() const { return mnThumbPos; }
-    void            SetLineSize( long nNewSize ) { mnLineSize = nNewSize; }
-    long            GetLineSize() const { return mnLineSize; }
-    void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
-    long            GetPageSize() const { return mnPageSize; }
+    void            SetThumbPos( sal_Int32 nThumbPos );
+    sal_Int32       GetThumbPos() const { return mnThumbPos; }
+    void            SetLineSize( sal_Int32 nNewSize ) { mnLineSize = nNewSize; }
+    sal_Int32       GetLineSize() const { return mnLineSize; }
+    void            SetPageSize( sal_Int32 nNewSize ) { mnPageSize = nNewSize; }
+    sal_Int32       GetPageSize() const { return mnPageSize; }
 
     Size            CalcWindowSizePixel();
 

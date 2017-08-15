@@ -171,7 +171,7 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr ); }
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
@@ -181,7 +181,7 @@ public:
     virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
 
     // used by glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
+    virtual void    MoveGlyph( int nStart, sal_Int32 nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
 
@@ -215,7 +215,7 @@ public:
     virtual void    DrawText( SalGraphics& ) const override;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const override;
     virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
                                   const PhysicalFontFace** pFallbackFonts = nullptr) const override;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
@@ -236,7 +236,7 @@ protected:
 
 private:
     // dummy implementations
-    virtual void    MoveGlyph( int, long ) override {}
+    virtual void    MoveGlyph( int, sal_Int32 ) override {}
     virtual void    DropGlyph( int ) override {}
     virtual void    Simplify( bool ) override {}
 
@@ -267,7 +267,7 @@ struct GlyphItem
 
 public:
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth )
+                sal_Int32 nFlags, int nOrigWidth )
             :   mnFlags(nFlags)
             ,   mnCharPos(nCharPos)
             ,   mnOrigWidth(nOrigWidth)
@@ -279,7 +279,7 @@ public:
             { }
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth, int nXOffset )
+                sal_Int32 nFlags, int nOrigWidth, int nXOffset )
             :   mnFlags(nFlags)
             ,   mnCharPos(nCharPos)
             ,   mnOrigWidth(nOrigWidth)
@@ -321,7 +321,7 @@ public:
     virtual DeviceCoordinate GetTextWidth() const override;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const override;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const override;
+    virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const override;
 
     // used by display layers
     virtual int     GetNextGlyphs(int nLen, const GlyphItem** pGlyphs, Point& rPos, int&,
@@ -332,7 +332,7 @@ protected:
     virtual         ~GenericSalLayout() override;
 
     // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) override;
+    virtual void    MoveGlyph( int nStart, sal_Int32 nNewXPos ) override;
     virtual void    DropGlyph( int nStart ) override;
     virtual void    Simplify( bool bIsBase ) override;
 

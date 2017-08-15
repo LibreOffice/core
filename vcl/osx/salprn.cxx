@@ -105,7 +105,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
         if( mpPrintInfo )
         {
             // FIXME: get printer resolution
-            long nDPIX = 720, nDPIY = 720;
+            sal_Int32 nDPIX = 720, nDPIY = 720;
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
             NSRect aImageRect = [mpPrintInfo imageablePageBounds];
@@ -202,7 +202,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
     return bSuccess;
 }
 
-void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation )
+void AquaSalInfoPrinter::setPaperSize( sal_Int32 i_nWidth, sal_Int32 i_nHeight, Orientation i_eSetOrientation )
 {
 
     Orientation ePaperOrientation = Orientation::Portrait;
@@ -235,7 +235,7 @@ bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, ImplJobSetup* io_pSetupD
         if( i_nFlags & JobSetFlags::PAPERSIZE )
         {
             // set paper format
-            long width = 21000, height = 29700;
+            sal_Int32 width = 21000, height = 29700;
             if( io_pSetupData->GetPaperFormat() == PAPER_USER )
             {
                 // #i101108# sanity check
@@ -298,9 +298,9 @@ sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapT
 }
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
-                                  long& o_rOutWidth, long& o_rOutHeight,
-                                  long& o_rPageOffX, long& o_rPageOffY,
-                                  long& o_rPageWidth, long& o_rPageHeight )
+                                  sal_Int32& o_rOutWidth, sal_Int32& o_rOutHeight,
+                                  sal_Int32& o_rPageOffX, sal_Int32& o_rPageOffY,
+                                  sal_Int32& o_rPageWidth, sal_Int32& o_rPageHeight )
 {
     if( mpPrintInfo )
     {
@@ -310,14 +310,14 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                      fYScaling = static_cast<double>(nDPIY)/72.0;
 
         NSSize aPaperSize = [mpPrintInfo paperSize];
-        o_rPageWidth  = static_cast<long>( double(aPaperSize.width) * fXScaling );
-        o_rPageHeight = static_cast<long>( double(aPaperSize.height) * fYScaling );
+        o_rPageWidth  = static_cast<sal_Int32>( double(aPaperSize.width) * fXScaling );
+        o_rPageHeight = static_cast<sal_Int32>( double(aPaperSize.height) * fYScaling );
 
         NSRect aImageRect = [mpPrintInfo imageablePageBounds];
-        o_rPageOffX   = static_cast<long>( aImageRect.origin.x * fXScaling );
-        o_rPageOffY   = static_cast<long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling );
-        o_rOutWidth   = static_cast<long>( aImageRect.size.width * fXScaling );
-        o_rOutHeight  = static_cast<long>( aImageRect.size.height * fYScaling );
+        o_rPageOffX   = static_cast<sal_Int32>( aImageRect.origin.x * fXScaling );
+        o_rPageOffY   = static_cast<sal_Int32>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling );
+        o_rOutWidth   = static_cast<sal_Int32>( aImageRect.size.width * fXScaling );
+        o_rOutHeight  = static_cast<sal_Int32>( aImageRect.size.height * fYScaling );
 
         if( mePageOrientation == Orientation::Landscape )
         {
@@ -659,7 +659,7 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
     }
 }
 
-const PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const
+const PaperInfo* AquaSalInfoPrinter::matchPaper( sal_Int32 i_nWidth, sal_Int32 i_nHeight, Orientation& o_rOrientation ) const
 {
     if( ! m_bPapersInit )
         const_cast<AquaSalInfoPrinter*>(this)->InitPaperFormats( nullptr );

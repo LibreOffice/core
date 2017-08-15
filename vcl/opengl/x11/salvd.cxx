@@ -33,7 +33,7 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
 }
 
 X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics const * pGraphics,
-                                                      long &nDX, long &nDY,
+                                                      sal_Int32 &nDX, sal_Int32 &nDY,
                                                       const SystemGraphicsData *pData,
                                                       X11SalGraphics* pNewGraphics) :
     mpGraphics(pNewGraphics),
@@ -74,7 +74,7 @@ void X11OpenGLSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 }
 
 
-bool X11OpenGLSalVirtualDevice::SetSize( long nDX, long nDY )
+bool X11OpenGLSalVirtualDevice::SetSize( sal_Int32 nDX, sal_Int32 nDY )
 {
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;

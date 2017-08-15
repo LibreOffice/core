@@ -106,10 +106,10 @@ public:
 
     void                SetFontSize( const Size& );
     const Size&         GetFontSize() const;
-    void                SetFontHeight( long nHeight );
-    long                GetFontHeight() const;
-    void                SetAverageFontWidth( long nWidth );
-    long                GetAverageFontWidth() const;
+    void                SetFontHeight( sal_Int32 nHeight );
+    sal_Int32           GetFontHeight() const;
+    void                SetAverageFontWidth( sal_Int32 nWidth );
+    sal_Int32           GetAverageFontWidth() const;
 
     // Prefer LanguageTag over LanguageType
     void                SetLanguageTag( const LanguageTag & );

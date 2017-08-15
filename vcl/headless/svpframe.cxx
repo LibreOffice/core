@@ -218,19 +218,19 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     }
 }
 
-void SvpSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void SvpSalFrame::SetMinClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     m_nMinWidth = nWidth;
     m_nMinHeight = nHeight;
 }
 
-void SvpSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void SvpSalFrame::SetMaxClientSize( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     m_nMaxWidth = nWidth;
     m_nMaxHeight = nHeight;
 }
 
-void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void SvpSalFrame::SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags )
 {
     if( (nFlags & SAL_FRAME_POSSIZE_X) != 0 )
         maGeometry.nX = nX;
@@ -239,17 +239,17 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     if( (nFlags & SAL_FRAME_POSSIZE_WIDTH) != 0 )
     {
         maGeometry.nWidth = nWidth;
-        if( m_nMaxWidth > 0 && maGeometry.nWidth > (unsigned int)m_nMaxWidth )
+        if( m_nMaxWidth > 0 && maGeometry.nWidth > m_nMaxWidth )
             maGeometry.nWidth = m_nMaxWidth;
-        if( m_nMinWidth > 0 && maGeometry.nWidth < (unsigned int)m_nMinWidth )
+        if( m_nMinWidth > 0 && maGeometry.nWidth < m_nMinWidth )
             maGeometry.nWidth = m_nMinWidth;
     }
     if( (nFlags & SAL_FRAME_POSSIZE_HEIGHT) != 0 )
     {
         maGeometry.nHeight = nHeight;
-        if( m_nMaxHeight > 0 && maGeometry.nHeight > (unsigned int)m_nMaxHeight )
+        if( m_nMaxHeight > 0 && maGeometry.nHeight > m_nMaxHeight )
             maGeometry.nHeight = m_nMaxHeight;
-        if( m_nMinHeight > 0 && maGeometry.nHeight < (unsigned int)m_nMinHeight )
+        if( m_nMinHeight > 0 && maGeometry.nHeight < m_nMinHeight )
             maGeometry.nHeight = m_nMinHeight;
     }
 #ifndef IOS
@@ -285,7 +285,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 #endif
 }
 
-void SvpSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void SvpSalFrame::GetClientSize( sal_Int32& rWidth, sal_Int32& rHeight )
 {
     rWidth = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;
@@ -314,10 +314,10 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
     // Request for position or size change
     if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
     {
-        long nX = maGeometry.nX;
-        long nY = maGeometry.nY;
-        long nWidth = maGeometry.nWidth;
-        long nHeight = maGeometry.nHeight;
+        sal_Int32 nX = maGeometry.nX;
+        sal_Int32 nY = maGeometry.nY;
+        sal_Int32 nWidth = maGeometry.nWidth;
+        sal_Int32 nHeight = maGeometry.nHeight;
 
         // change requested properties
         if (pState->mnMask & WindowStateMask::X)
@@ -374,7 +374,7 @@ void SvpSalFrame::CaptureMouse( bool )
 {
 }
 
-void SvpSalFrame::SetPointerPos( long, long )
+void SvpSalFrame::SetPointerPos( sal_Int32, sal_Int32 )
 {
 }
 
@@ -454,7 +454,7 @@ void SvpSalFrame::BeginSetClipRegion( sal_uLong )
 {
 }
 
-void SvpSalFrame::UnionClipRegion( long, long, long, long )
+void SvpSalFrame::UnionClipRegion( sal_Int32, sal_Int32, sal_Int32, sal_Int32 )
 {
 }
 

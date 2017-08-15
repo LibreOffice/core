@@ -22,11 +22,11 @@
 #include <tools/gen.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-void Point::RotateAround( long& rX, long& rY,
+void Point::RotateAround( sal_Int32& rX, sal_Int32& rY,
                           short nOrientation ) const
 {
-    const long nOriginX = X();
-    const long nOriginY = Y();
+    const sal_Int32 nOriginX = X();
+    const sal_Int32 nOriginY = Y();
 
     if ( (nOrientation >= 0) && !(nOrientation % 900) )
     {
@@ -40,7 +40,7 @@ void Point::RotateAround( long& rX, long& rY,
 
             if ( nOrientation == 900 )
             {
-                long nTemp = rX;
+                sal_Int32 nTemp = rX;
                 rX = rY;
                 rY = -nTemp;
             }
@@ -51,7 +51,7 @@ void Point::RotateAround( long& rX, long& rY,
             }
             else /* ( nOrientation == 2700 ) */
             {
-                long nTemp = rX;
+                sal_Int32 nTemp = rX;
                 rX = -rY;
                 rY = nTemp;
             }
@@ -67,12 +67,12 @@ void Point::RotateAround( long& rX, long& rY,
         double nSin = sin( nRealOrientation );
 
         // Translation...
-        long nX = rX-nOriginX;
-        long nY = rY-nOriginY;
+        sal_Int32 nX = rX-nOriginX;
+        sal_Int32 nY = rY-nOriginY;
 
         // Rotation...
-        rX = +((long)(nCos*nX + nSin*nY)) + nOriginX;
-        rY = -((long)(nSin*nX - nCos*nY)) + nOriginY;
+        rX = +((sal_Int32)(nCos*nX + nSin*nY)) + nOriginX;
+        rY = -((sal_Int32)(nSin*nX - nCos*nY)) + nOriginY;
     }
 }
 

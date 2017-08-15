@@ -109,7 +109,7 @@ namespace
         size_t nExtraSpaceInScanLine = pDIB->mnScanlineSize - pDIB->mnWidth * pDIB->mnBitCount / 8;
         if (nExtraSpaceInScanLine)
         {
-            for (long i = 0; i < pDIB->mnHeight; ++i)
+            for (sal_Int32 i = 0; i < pDIB->mnHeight; ++i)
             {
                 sal_uInt8 *pRow = pDIB->mpBits + (i * pDIB->mnScanlineSize);
                 memset(pRow + (pDIB->mnScanlineSize - nExtraSpaceInScanLine), 0, nExtraSpaceInScanLine);
@@ -193,8 +193,8 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
-    long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    sal_Int32 nScanlineBase;
+    bool bFail = o3tl::checked_multiply<sal_Int32>(pDIB->mnWidth, nBitCount, nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
@@ -236,11 +236,11 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     Drawable aDrawable,
     SalX11Screen nScreen,
-    long nDrawableDepth,
-    long nX,
-    long nY,
-    long nWidth,
-    long nHeight,
+    sal_Int32 nDrawableDepth,
+    sal_Int32 nX,
+    sal_Int32 nY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
     bool bGrey
 ) {
     BitmapBuffer* pDIB = nullptr;
@@ -405,7 +405,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 XImage* X11SalBitmap::ImplCreateXImage(
     SalDisplay const *pSalDisp,
     SalX11Screen nScreen,
-    long nDepth,
+    sal_Int32 nDepth,
     const SalTwoRect& rTwoRect
 ) const
 {
@@ -426,8 +426,8 @@ XImage* X11SalBitmap::ImplCreateXImage(
     if( mpDIB && mpDIB->mnWidth && mpDIB->mnHeight )
     {
         Display*    pXDisp = pSalDisp->GetDisplay();
-        long        nWidth = rTwoRect.mnDestWidth;
-        long        nHeight = rTwoRect.mnDestHeight;
+        sal_Int32        nWidth = rTwoRect.mnDestWidth;
+        sal_Int32        nHeight = rTwoRect.mnDestHeight;
 
         if( 1 == GetBitCount() )
             nDepth = 1;
@@ -585,11 +585,11 @@ XImage* X11SalBitmap::ImplCreateXImage(
 bool X11SalBitmap::ImplCreateFromDrawable(
     Drawable aDrawable,
     SalX11Screen nScreen,
-    long nDrawableDepth,
-    long nX,
-    long nY,
-    long nWidth,
-    long nHeight
+    sal_Int32 nDrawableDepth,
+    sal_Int32 nX,
+    sal_Int32 nY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight
 ) {
     Destroy();
 
@@ -602,7 +602,7 @@ bool X11SalBitmap::ImplCreateFromDrawable(
 ImplSalDDB* X11SalBitmap::ImplGetDDB(
     Drawable          aDrawable,
     SalX11Screen      nXScreen,
-    long              nDrawableDepth,
+    sal_Int32              nDrawableDepth,
     const SalTwoRect& rTwoRect
 ) const
 {
@@ -701,7 +701,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
 void X11SalBitmap::ImplDraw(
     Drawable           aDrawable,
     SalX11Screen       nXScreen,
-    long               nDrawableDepth,
+    sal_Int32               nDrawableDepth,
     const SalTwoRect&  rTwoRect,
     const GC&          rGC
 ) const
@@ -780,7 +780,7 @@ bool X11SalBitmap::Create(
         css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
-            long pixmapHandle;
+            sal_Int32 pixmapHandle;
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
 
                 mbGrey = bMask;
@@ -956,11 +956,11 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
 ImplSalDDB::ImplSalDDB(
     Drawable aDrawable,
     SalX11Screen nXScreen,
-    long nDrawableDepth,
-    long nX,
-    long nY,
-    long nWidth,
-    long nHeight
+    sal_Int32 nDrawableDepth,
+    sal_Int32 nX,
+    sal_Int32 nY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight
 )   : maTwoRect(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight)
     , mnDepth( nDrawableDepth )
     , mnXScreen( nXScreen )
@@ -1001,7 +1001,7 @@ ImplSalDDB::~ImplSalDDB()
         XFreePixmap( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay(), maPixmap );
 }
 
-bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const
+bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, sal_Int32 nDepth, const SalTwoRect& rTwoRect ) const
 {
     bool bRet = false;
 
@@ -1049,14 +1049,14 @@ void ImplSalDDB::ImplDraw(
 
 void ImplSalDDB::ImplDraw(
     Drawable aSrcDrawable,
-    long nSrcDrawableDepth,
+    sal_Int32 nSrcDrawableDepth,
     Drawable aDstDrawable,
-    long nSrcX,
-    long nSrcY,
-    long nDestWidth,
-    long nDestHeight,
-    long nDestX,
-    long nDestY,
+    sal_Int32 nSrcX,
+    sal_Int32 nSrcY,
+    sal_Int32 nDestWidth,
+    sal_Int32 nDestHeight,
+    sal_Int32 nDestX,
+    sal_Int32 nDestY,
     const GC& rGC
 ) {
     SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());

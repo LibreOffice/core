@@ -2544,8 +2544,8 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
                     const SvxSizeItem& rSize = static_cast <const SvxSizeItem&>( rSet.Get(SID_ATTR_PAGE_SIZE));
                     sal_uInt8 nMemberId = pEntry->nMemberId & 0x7f;
 
-                    if((LONG_MAX == rSize.GetSize().Width() && (MID_SIZE_WIDTH == nMemberId || MID_SIZE_SIZE == nMemberId)) ||
-                        (LONG_MAX == rSize.GetSize().Height() && MID_SIZE_HEIGHT == nMemberId))
+                    if((SAL_MAX_INT32 == rSize.GetSize().Width() && (MID_SIZE_WIDTH == nMemberId || MID_SIZE_SIZE == nMemberId)) ||
+                        (SAL_MAX_INT32 == rSize.GetSize().Height() && MID_SIZE_HEIGHT == nMemberId))
                     {
                         pStates[i] = beans::PropertyState_DEFAULT_VALUE;
                     }

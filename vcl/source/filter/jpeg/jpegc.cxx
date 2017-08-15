@@ -80,7 +80,7 @@ private:
     jpeg_compress_struct &m_cinfo;
 };
 
-void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, sal_Int32* pLines,
                Size const & previewSize, GraphicFilterImportFlags nImportFlags,
                Bitmap::ScopedWriteAccess* ppAccess )
 {
@@ -106,8 +106,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         cinfo.quantize_colors = FALSE;
 
         /* change scale for preview import */
-        long nPreviewWidth = previewSize.Width();
-        long nPreviewHeight = previewSize.Height();
+        sal_Int32 nPreviewWidth = previewSize.Width();
+        sal_Int32 nPreviewHeight = previewSize.Height();
         if( nPreviewWidth || nPreviewHeight )
         {
             if( nPreviewWidth == 0 )
@@ -145,8 +145,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 
         jpeg_calc_output_dimensions(&cinfo);
 
-        long nWidth = cinfo.output_width;
-        long nHeight = cinfo.output_height;
+        sal_Int32 nWidth = cinfo.output_width;
+        sal_Int32 nHeight = cinfo.output_height;
 
         bool bGray = (cinfo.output_components == 1);
 
@@ -238,7 +238,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                     if (cinfo.out_color_space == JCS_CMYK)
                     {
                         // convert CMYK to RGB
-                        for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
+                        for (sal_Int32 cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
                         {
                             int color_C = 255 - pCYMKBuffer[cmyk + 0];
                             int color_M = 255 - pCYMKBuffer[cmyk + 1];
@@ -279,8 +279,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                long nWidth, long nHeight, basegfx::B2DSize const & rPPI, bool bGreys,
-                long nQualityPercent, long aChromaSubsampling,
+                sal_Int32 nWidth, sal_Int32 nHeight, basegfx::B2DSize const & rPPI, bool bGreys,
+                sal_Int32 nQualityPercent, sal_Int32 aChromaSubsampling,
                 css::uno::Reference<css::task::XStatusIndicator> const & status )
 {
     try
@@ -288,7 +288,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
         jpeg_compress_struct        cinfo;
         jpeg_error_mgr              jerr;
         void*                       pScanline;
-        long                        nY;
+        sal_Int32                        nY;
 
         cinfo.err = jpeg_std_error( &jerr );
         jerr.error_exit = errorExit;
@@ -363,7 +363,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     return true;
 }
 
-void Transform(void* pInputStream, void* pOutputStream, long nAngle)
+void Transform(void* pInputStream, void* pOutputStream, sal_Int32 nAngle)
 {
     try
     {

@@ -81,7 +81,7 @@ public:
     HGLOBAL                 mhDitherDIB;            // dither memory handle
     BYTE*                   mpDitherDIB;            // dither memory
     BYTE*                   mpDitherDIBData;        // beginning of DIB data
-    long*                   mpDitherDiff;           // Dither mapping table
+    sal_Int32*              mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
     HANDLE                  mnTimerId;              ///< Windows timer id
@@ -184,8 +184,8 @@ void EmitTimerCallback();
 
 void SalTestMouseLeave();
 
-long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
+sal_Int32 ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+sal_Int32 ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
 bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
 WinSalObject* ImplFindSalObject( HWND hWndChild );

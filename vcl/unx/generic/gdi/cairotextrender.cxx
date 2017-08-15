@@ -515,7 +515,7 @@ bool CairoTextRender::CreateFontSubset(
     return bSuccess;
 }
 
-const void* CairoTextRender::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* CairoTextRender::GetEmbedFontData(const PhysicalFontFace* pFont, sal_Int32* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -526,7 +526,7 @@ const void* CairoTextRender::GetEmbedFontData(const PhysicalFontFace* pFont, lon
     return GenPspGraphics::DoGetEmbedFontData(aFont, pDataLen);
 }
 
-void CairoTextRender::FreeEmbedFontData( const void* pData, long nLen )
+void CairoTextRender::FreeEmbedFontData( const void* pData, sal_Int32 nLen )
 {
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }

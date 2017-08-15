@@ -832,7 +832,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
                 }
                 nMin -= MINFLY;
             }
-            aSz.Width() = std::max( aSz.Width(), nMin );
+            aSz.Width() = std::max( aSz.Width(), sal_Int32(nMin) );
         }
 
         SwFrameFormat *pFormat = GetFormat();

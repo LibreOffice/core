@@ -66,7 +66,7 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 }
 
 
-LineInfo::LineInfo( LineStyle eStyle, long nWidth ) : mpImplLineInfo()
+LineInfo::LineInfo( LineStyle eStyle, sal_Int32 nWidth ) : mpImplLineInfo()
 {
     mpImplLineInfo->meStyle = eStyle;
     mpImplLineInfo->mnWidth = nWidth;
@@ -106,7 +106,7 @@ void LineInfo::SetStyle( LineStyle eStyle )
     mpImplLineInfo->meStyle = eStyle;
 }
 
-void LineInfo::SetWidth( long nWidth )
+void LineInfo::SetWidth( sal_Int32 nWidth )
 {
     mpImplLineInfo->mnWidth = nWidth;
 }
@@ -116,7 +116,7 @@ void LineInfo::SetDashCount( sal_uInt16 nDashCount )
     mpImplLineInfo->mnDashCount = nDashCount;
 }
 
-void LineInfo::SetDashLen( long nDashLen )
+void LineInfo::SetDashLen( sal_Int32 nDashLen )
 {
     mpImplLineInfo->mnDashLen = nDashLen;
 }
@@ -126,12 +126,12 @@ void LineInfo::SetDotCount( sal_uInt16 nDotCount )
     mpImplLineInfo->mnDotCount = nDotCount;
 }
 
-void LineInfo::SetDotLen( long nDotLen )
+void LineInfo::SetDotLen( sal_Int32 nDotLen )
 {
     mpImplLineInfo->mnDotLen = nDotLen;
 }
 
-void LineInfo::SetDistance( long nDistance )
+void LineInfo::SetDistance( sal_Int32 nDistance )
 {
     mpImplLineInfo->mnDistance = nDistance;
 }

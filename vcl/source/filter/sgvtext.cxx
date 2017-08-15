@@ -163,8 +163,8 @@ bool CheckTextOutl(ObjAreaType const & F, ObjLineType const & L)
 
 short hPoint2Sgf(short a)
 {
-    long b;
-    b=long(a)*127*SgfDpmm/(144*5);
+    sal_Int32 b;
+    b=sal_Int32(a)*127*SgfDpmm/(144*5);
     return short(b);
 }
 
@@ -179,8 +179,8 @@ short hPoint2Sgf(short a)
 
 sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 {
-    long ret;
-    ret=long(MaxGrad)*long(CharTopToBase) /long(100);
+    sal_Int32 ret;
+    ret=sal_Int32(MaxGrad)*sal_Int32(CharTopToBase) /sal_Int32(100);
     return sal_uInt16(ret);
 }
 
@@ -215,9 +215,9 @@ UCHAR ConvertTextChar(UCHAR c)
     return c;
 }
 
-long ChgValue(long Def, long Min, long Max, UCHAR FlgVal, long NumVal)
+sal_Int32 ChgValue(sal_Int32 Def, sal_Int32 Min, sal_Int32 Max, UCHAR FlgVal, sal_Int32 NumVal)
 {
-    long r=0;
+    sal_Int32 r=0;
 
     if (FlgVal==EscDeflt) {
         r=Def;                          // return to default
@@ -270,8 +270,8 @@ UCHAR ProcessOne(const UCHAR* TBuf, sal_uInt16& Index,
     bool  Ende;
     bool  q;
     UCHAR FlgVal;
-    long  NumVal;
-    long  Sgn;
+    sal_Int32  NumVal;
+    sal_Int32  Sgn;
     short i;
     bool  EoVal;
 
@@ -938,7 +938,7 @@ void TextType::Draw(OutputDevice& rOut, UCHAR* pBuffer)
                 if (LineFit) FitXDiv=xLine[lc+1];
                 if (FitXDiv>0) {
                     for (i=1;i<=l+1;i++) {
-                        const long Temp=long(xLine[i])*long(FitXMul) /long(FitXDiv);
+                        const sal_Int32 Temp=sal_Int32(xLine[i])*sal_Int32(FitXMul) /sal_Int32(FitXDiv);
                         xLine[i]=short(Temp);
                     }
                     LF=MulDiv(LF,FitYMul,FitYDiv);
@@ -956,10 +956,10 @@ void TextType::Draw(OutputDevice& rOut, UCHAR* pBuffer)
                 i=1;
                 while (i<=l) {
                     c=GetTextCharConv(Buf,Index2,T,T2,l-i,false);
-                    long xp1,yp1;       // due to overflow danger
+                    sal_Int32 xp1,yp1;       // due to overflow danger
                     PointType Pos;
-                    xp1=long(Pos1.x)+xPos+long(xLine[i]);
-                    yp1=long(Pos1.y)+yPos;
+                    xp1=sal_Int32(Pos1.x)+xPos+sal_Int32(xLine[i]);
+                    yp1=sal_Int32(Pos1.y)+yPos;
                     if (xp1>32000) xp1=32000;
                     if (xp1<-12000) xp1=-12000;
                     if (yp1>32000) yp1=32000;

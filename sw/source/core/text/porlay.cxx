@@ -1569,7 +1569,7 @@ size_t SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
     return SAL_MAX_SIZE;
 }
 
-long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
+long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              bool bCenter,
                              Point* pPoint ) const
@@ -1686,8 +1686,8 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
 // total number of kashida positions, or the number of kashida positions after some positions
 // have been dropped, depending on the state of the aKashidaInvalid array.
 
-sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
-                                        long* pScrArray,
+sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
+                                        sal_Int32* pScrArray,
                                         sal_Int32 nStt,
                                         sal_Int32 nLen,
                                         long nSpaceAdd ) const
@@ -1954,8 +1954,8 @@ bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, const sal_Int32* pKashida
     return true;
 }
 
-sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArray,
-                                     long* pScrArray, sal_Int32 nStt,
+sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rText, sal_Int32* pKernArray,
+                                     sal_Int32* pScrArray, sal_Int32 nStt,
                                      sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
                                      long nSpaceAdd )
 {
@@ -2222,8 +2222,8 @@ sal_Int32 SwScriptInfo::CountCJKCharacters( const OUString &rText, sal_Int32 nPo
     return nCount;
 }
 
-void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
-                                     long* pScrArray, sal_Int32 nStt,
+void SwScriptInfo::CJKJustify( const OUString& rText, sal_Int32* pKernArray,
+                                     sal_Int32* pScrArray, sal_Int32 nStt,
                                      sal_Int32 nLen, LanguageType aLang,
                                      long nSpaceAdd, bool bIsSpaceStop )
 {

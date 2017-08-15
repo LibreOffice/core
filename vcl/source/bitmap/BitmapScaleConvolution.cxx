@@ -33,12 +33,12 @@ namespace
 {
 
 void ImplCalculateContributions(
-    const long aSourceSize,
-    const long aDestinationSize,
-    long& aNumberOfContributions,
+    const sal_Int32 aSourceSize,
+    const sal_Int32 aDestinationSize,
+    sal_Int32& aNumberOfContributions,
     double*& pWeights,
-    long*& pPixels,
-    long*& pCount,
+    sal_Int32*& pPixels,
+    sal_Int32*& pCount,
     const Kernel& aKernel)
 {
     const double fSamplingRadius(aKernel.GetWidth());
@@ -46,19 +46,19 @@ void ImplCalculateContributions(
     const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
     const double fFilterFactor((fScale < 1.0) ? fScale : 1.0);
 
-    aNumberOfContributions = (long(fabs(ceil(fScaledRadius))) * 2) + 1;
-    const long nAllocSize(aDestinationSize * aNumberOfContributions);
+    aNumberOfContributions = (sal_Int32(fabs(ceil(fScaledRadius))) * 2) + 1;
+    const sal_Int32 nAllocSize(aDestinationSize * aNumberOfContributions);
     pWeights = new double[nAllocSize];
-    pPixels = new long[nAllocSize];
-    pCount = new long[aDestinationSize];
+    pPixels = new sal_Int32[nAllocSize];
+    pCount = new sal_Int32[aDestinationSize];
 
-    for(long i(0); i < aDestinationSize; i++)
+    for(sal_Int32 i(0); i < aDestinationSize; i++)
     {
-        const long aIndex(i * aNumberOfContributions);
+        const sal_Int32 aIndex(i * aNumberOfContributions);
         const double aCenter(i / fScale);
         const sal_Int32 aLeft(static_cast< sal_Int32 >(floor(aCenter - fScaledRadius)));
         const sal_Int32 aRight(static_cast< sal_Int32 >(ceil(aCenter + fScaledRadius)));
-        long aCurrentCount(0);
+        sal_Int32 aCurrentCount(0);
 
         for(sal_Int32 j(aLeft); j <= aRight; j++)
         {
@@ -71,8 +71,8 @@ void ImplCalculateContributions(
             }
 
             // Handling on edges
-            const long aPixelIndex(MinMax(j, 0, aSourceSize - 1));
-            const long nIndex(aIndex + aCurrentCount);
+            const sal_Int32 aPixelIndex(MinMax(j, 0, aSourceSize - 1));
+            const sal_Int32 nIndex(aIndex + aCurrentCount);
 
             pWeights[nIndex] = aWeight;
             pPixels[nIndex] = aPixelIndex;
@@ -88,8 +88,8 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 {
     // Do horizontal filtering
     OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
-    const long nWidth(rSource.GetSizePixel().Width());
-    const long nNewWidth(FRound(nWidth * rScaleX));
+    const sal_Int32 nWidth(rSource.GetSizePixel().Width());
+    const sal_Int32 nNewWidth(FRound(nWidth * rScaleX));
 
     if(nWidth == nNewWidth)
     {
@@ -101,11 +101,11 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     if(pReadAcc)
     {
         double* pWeights = nullptr;
-        long* pPixels = nullptr;
-        long* pCount = nullptr;
-        long aNumberOfContributions(0);
+        sal_Int32* pPixels = nullptr;
+        sal_Int32* pCount = nullptr;
+        sal_Int32 aNumberOfContributions(0);
 
-        const long nHeight(rSource.GetSizePixel().Height());
+        const sal_Int32 nHeight(rSource.GetSizePixel().Height());
         ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
         Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
@@ -113,19 +113,19 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
         if(bResult)
         {
-            for(long y(0); y < nHeight; y++)
+            for(sal_Int32 y(0); y < nHeight; y++)
             {
-                for(long x(0); x < nNewWidth; x++)
+                for(sal_Int32 x(0); x < nNewWidth; x++)
                 {
-                    const long aBaseIndex(x * aNumberOfContributions);
+                    const sal_Int32 aBaseIndex(x * aNumberOfContributions);
                     double aSum(0.0);
                     double aValueRed(0.0);
                     double aValueGreen(0.0);
                     double aValueBlue(0.0);
 
-                    for(long j(0); j < pCount[x]; j++)
+                    for(sal_Int32 j(0); j < pCount[x]; j++)
                     {
-                        const long aIndex(aBaseIndex + j);
+                        const sal_Int32 aIndex(aBaseIndex + j);
                         const double aWeight(pWeights[aIndex]);
                         BitmapColor aColor;
 
@@ -174,8 +174,8 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 {
     // Do vertical filtering
     OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
-    const long nHeight(rSource.GetSizePixel().Height());
-    const long nNewHeight(FRound(nHeight * rScaleY));
+    const sal_Int32 nHeight(rSource.GetSizePixel().Height());
+    const sal_Int32 nNewHeight(FRound(nHeight * rScaleY));
 
     if(nHeight == nNewHeight)
     {
@@ -187,11 +187,11 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     if(pReadAcc)
     {
         double* pWeights = nullptr;
-        long* pPixels = nullptr;
-        long* pCount = nullptr;
-        long aNumberOfContributions(0);
+        sal_Int32* pPixels = nullptr;
+        sal_Int32* pCount = nullptr;
+        sal_Int32 aNumberOfContributions(0);
 
-        const long nWidth(rSource.GetSizePixel().Width());
+        const sal_Int32 nWidth(rSource.GetSizePixel().Width());
         ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
         rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
         Bitmap::ScopedWriteAccess pWriteAcc(rTarget);
@@ -199,19 +199,19 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
         if(pWriteAcc)
         {
-            for(long x(0); x < nWidth; x++)
+            for(sal_Int32 x(0); x < nWidth; x++)
             {
-                for(long y(0); y < nNewHeight; y++)
+                for(sal_Int32 y(0); y < nNewHeight; y++)
                 {
-                    const long aBaseIndex(y * aNumberOfContributions);
+                    const sal_Int32 aBaseIndex(y * aNumberOfContributions);
                     double aSum(0.0);
                     double aValueRed(0.0);
                     double aValueGreen(0.0);
                     double aValueBlue(0.0);
 
-                    for(long j(0); j < pCount[y]; j++)
+                    for(sal_Int32 j(0); j < pCount[y]; j++)
                     {
-                        const long aIndex(aBaseIndex + j);
+                        const sal_Int32 aIndex(aBaseIndex + j);
                         const double aWeight(pWeights[aIndex]);
                         BitmapColor aColor;
 
@@ -267,10 +267,10 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
     const bool bMirrorVer(rScaleY < 0.0);
     const double fScaleX(bMirrorHor ? -rScaleX : rScaleX);
     const double fScaleY(bMirrorVer ? -rScaleY : rScaleY);
-    const long nWidth(rBitmap.GetSizePixel().Width());
-    const long nHeight(rBitmap.GetSizePixel().Height());
-    const long nNewWidth(FRound(nWidth * fScaleX));
-    const long nNewHeight(FRound(nHeight * fScaleY));
+    const sal_Int32 nWidth(rBitmap.GetSizePixel().Width());
+    const sal_Int32 nHeight(rBitmap.GetSizePixel().Height());
+    const sal_Int32 nNewWidth(FRound(nWidth * fScaleX));
+    const sal_Int32 nNewHeight(FRound(nHeight * fScaleY));
     const bool bScaleHor(nWidth != nNewWidth);
     const bool bScaleVer(nHeight != nNewHeight);
     const bool bMirror(bMirrorHor || bMirrorVer);
@@ -296,8 +296,8 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
             nMirrorFlags |= BmpMirrorFlags::Vertical;
         }
 
-        const long nStartSize(nWidth * nHeight);
-        const long nEndSize(nNewWidth * nNewHeight);
+        const sal_Int32 nStartSize(nWidth * nHeight);
+        const sal_Int32 nEndSize(nNewWidth * nNewHeight);
 
         bMirrorAfter = nStartSize > nEndSize;
 
@@ -311,8 +311,8 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
     if (bResult)
     {
-        const long nInBetweenSizeHorFirst(nHeight * nNewWidth);
-        const long nInBetweenSizeVerFirst(nNewHeight * nWidth);
+        const sal_Int32 nInBetweenSizeHorFirst(nHeight * nNewWidth);
+        const sal_Int32 nInBetweenSizeVerFirst(nNewHeight * nWidth);
         Bitmap aSource(rBitmap);
 
         if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)

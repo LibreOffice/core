@@ -149,7 +149,7 @@ void AquaSalObject::BeginSetClipRegion( sal_uLong )
     mbClip = false;
 }
 
-void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void AquaSalObject::UnionClipRegion( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     if( mbClip )
     {
@@ -183,7 +183,7 @@ void AquaSalObject::EndSetClipRegion()
     setClippedPosSize();
 }
 
-void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void AquaSalObject::SetPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     mnX = nX;
     mnY = nY;

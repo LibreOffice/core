@@ -39,8 +39,8 @@ public:
                             int nOutputHeight,
                             int nTilePosX,
                             int nTilePosY,
-                            long nTileWidth,
-                            long nTileHeight ) = 0;
+                            sal_Int32 nTileWidth,
+                            sal_Int32 nTileHeight ) = 0;
 
     /**
      * Get the document size in twips.
@@ -159,8 +159,8 @@ public:
      */
     virtual OString getCellCursor(int /*nOutputWidth*/,
                                   int /*nOutputHeight*/,
-                                  long /*nTileWidth*/,
-                                  long /*nTileHeight*/)
+                                  sal_Int32 /*nTileWidth*/,
+                                  sal_Int32 /*nTileHeight*/)
     {
         return OString();
     }

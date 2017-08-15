@@ -430,7 +430,7 @@ sal_uInt16 OpenGLSalGraphicsImpl::GetBitCount() const
 }
 
 // get the width of the device
-long OpenGLSalGraphicsImpl::GetGraphicsWidth() const
+sal_Int32 OpenGLSalGraphicsImpl::GetGraphicsWidth() const
 {
     return GetWidth();
 }
@@ -853,12 +853,12 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     }
 }
 
-void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
+void OpenGLSalGraphicsImpl::DrawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    long nX1( nX );
-    long nY1( nY );
-    long nX2( nX + nWidth );
-    long nY2( nY + nHeight );
+    sal_Int32 nX1( nX );
+    sal_Int32 nY1( nY );
+    sal_Int32 nX2( nX + nWidth );
+    sal_Int32 nY2( nY + nHeight );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
@@ -867,10 +867,10 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::DrawRect( const tools::Rectangle& rRect )
 {
-    long nX1( rRect.Left() );
-    long nY1( rRect.Top() );
-    long nX2( rRect.Right() );
-    long nY2( rRect.Bottom() );
+    sal_Int32 nX1( rRect.Left() );
+    sal_Int32 nY1( rRect.Top() );
+    sal_Int32 nX2( rRect.Right() );
+    sal_Int32 nY2( rRect.Bottom() );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
@@ -950,10 +950,10 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( const SalTwoRect& rPosAry )
 
     SAL_INFO("vcl.opengl", "draw texture rect");
 
-    long nX = rPosAry.mnDestX;
-    long nY = rPosAry.mnDestY;
-    long nWidth  = rPosAry.mnDestWidth;
-    long nHeight = rPosAry.mnDestHeight;
+    sal_Int32 nX = rPosAry.mnDestX;
+    sal_Int32 nY = rPosAry.mnDestY;
+    sal_Int32 nWidth  = rPosAry.mnDestWidth;
+    sal_Int32 nHeight = rPosAry.mnDestHeight;
 
     std::vector<GLfloat> aVertices;
     aVertices.reserve(8);
@@ -1049,8 +1049,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
 
     GLfloat aTexCoord[8];
 
-    const long nDestWidth = basegfx::fround(basegfx::B2DVector(rX - rNull).getLength());
-    const long nDestHeight = basegfx::fround(basegfx::B2DVector(rY - rNull).getLength());
+    const sal_Int32 nDestWidth = basegfx::fround(basegfx::B2DVector(rX - rNull).getLength());
+    const sal_Int32 nDestHeight = basegfx::fround(basegfx::B2DVector(rY - rNull).getLength());
 
     // Invisibly small images shouldn't divide by zero.
     if( nDestHeight == 0 || nDestWidth == 0 )
@@ -1418,7 +1418,7 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
         return;
     Color aStartCol = rGradient.GetStartColor();
     Color aEndCol = rGradient.GetEndColor();
-    long nFactor = rGradient.GetStartIntensity();
+    sal_Int32 nFactor = rGradient.GetStartIntensity();
     mpProgram->SetColorWithIntensity( "start_color", aStartCol, nFactor );
     nFactor = rGradient.GetEndIntensity();
     mpProgram->SetColorWithIntensity( "end_color", aEndCol, nFactor );
@@ -1444,7 +1444,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
         return;
     Color aStartCol = rGradient.GetStartColor();
     Color aEndCol = rGradient.GetEndColor();
-    long nFactor = rGradient.GetStartIntensity();
+    sal_Int32 nFactor = rGradient.GetStartIntensity();
     mpProgram->SetColorWithIntensity( "start_color", aStartCol, nFactor );
     nFactor = rGradient.GetEndIntensity();
     mpProgram->SetColorWithIntensity( "end_color", aEndCol, nFactor );
@@ -1496,7 +1496,7 @@ void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const
         return;
     Color aStartCol = rGradient.GetStartColor();
     Color aEndCol = rGradient.GetEndColor();
-    long nFactor = rGradient.GetStartIntensity();
+    sal_Int32 nFactor = rGradient.GetStartIntensity();
     mpProgram->SetColorWithIntensity( "start_color", aStartCol, nFactor );
     nFactor = rGradient.GetEndIntensity();
     mpProgram->SetColorWithIntensity( "end_color", aEndCol, nFactor );
@@ -1516,28 +1516,28 @@ void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const
     DrawRect( rRect );
 }
 
-void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY)
+void OpenGLSalGraphicsImpl::drawPixel(sal_Int32 nX, sal_Int32 nY)
 {
     VCL_GL_INFO("::drawPixel: (" << nX << ", " << nY << ")");
     mpRenderList->addDrawPixel(nX, nY, mnLineColor);
     PostBatchDraw();
 }
 
-void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY, SalColor nSalColor)
+void OpenGLSalGraphicsImpl::drawPixel(sal_Int32 nX, sal_Int32 nY, SalColor nSalColor)
 {
     VCL_GL_INFO("::drawPixel: (" << nX << ", " << nY << ")");
     mpRenderList->addDrawPixel(nX, nY, nSalColor);
     PostBatchDraw();
 }
 
-void OpenGLSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
+void OpenGLSalGraphicsImpl::drawLine(sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2)
 {
     VCL_GL_INFO("::drawLine (" << nX1 << ", " << nY1 << ") (" << nX2 << ", " << nY2 << ")");
     mpRenderList->addDrawLine(nX1, nY1, nX2, nY2, mnLineColor, mrParent.getAntiAliasB2DDraw());
     PostBatchDraw();
 }
 
-void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
+void OpenGLSalGraphicsImpl::drawRect( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     VCL_GL_INFO("::drawRect (" << nX << ", " << nY << ") [" << nWidth << ", " << nHeight << "]");
     mpRenderList->addDrawRectangle(nX, nY, nWidth, nHeight, 0.0, mnLineColor, mnFillColor);
@@ -1637,9 +1637,9 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygonBezier(
 
 // CopyArea --> No RasterOp, but ClipRegion
 void OpenGLSalGraphicsImpl::copyArea(
-            long nDestX, long nDestY,
-            long nSrcX, long nSrcY,
-            long nSrcWidth, long nSrcHeight, bool /*bWindowInvalidate*/ )
+            sal_Int32 nDestX, sal_Int32 nDestY,
+            sal_Int32 nSrcX, sal_Int32 nSrcY,
+            sal_Int32 nSrcWidth, sal_Int32 nSrcHeight, bool /*bWindowInvalidate*/ )
 {
     VCL_GL_INFO( "::copyArea " << nSrcX << "," << nSrcY << " >> " << nDestX << "," << nDestY << " (" << nSrcWidth << "," << nSrcHeight << ")" );
     OpenGLTexture aTexture;
@@ -1725,7 +1725,7 @@ void OpenGLSalGraphicsImpl::drawMask(
     PostBatchDraw();
 }
 
-SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
+SalBitmap* OpenGLSalGraphicsImpl::getBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     FlushDeferredDrawing();
 
@@ -1745,7 +1745,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
     return pBitmap;
 }
 
-SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
+SalColor OpenGLSalGraphicsImpl::getPixel( sal_Int32 nX, sal_Int32 nY )
 {
     FlushDeferredDrawing();
 
@@ -1762,8 +1762,8 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
 
 // invert --> ClipRegion (only Windows or VirDevs)
 void OpenGLSalGraphicsImpl::invert(
-            long nX, long nY,
-            long nWidth, long nHeight,
+            sal_Int32 nX, sal_Int32 nY,
+            sal_Int32 nWidth, sal_Int32 nHeight,
             SalInvert nFlags)
 {
     PreDraw();
@@ -1795,8 +1795,8 @@ void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, 
 }
 
 bool OpenGLSalGraphicsImpl::drawEPS(
-            long /*nX*/, long /*nY*/,
-            long /*nWidth*/, long /*nHeight*/,
+            sal_Int32 /*nX*/, sal_Int32 /*nY*/,
+            sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/,
             void* /*pPtr*/,
             sal_uLong /*nSize*/ )
 {
@@ -1947,8 +1947,8 @@ bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
     fully transparent rectangle
  */
 bool OpenGLSalGraphicsImpl::drawAlphaRect(
-                long nX, long nY,
-                long nWidth, long nHeight,
+                sal_Int32 nX, sal_Int32 nY,
+                sal_Int32 nWidth, sal_Int32 nHeight,
                 sal_uInt8 nTransparency )
 {
     VCL_GL_INFO("::drawAlphaRect (" << nX << ", " << nY << ") [" << nWidth << ", " << nHeight << "]");
@@ -2010,7 +2010,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         VCL_GL_INFO("::drawGradient -> DrawRect (no gradient)");
 
         Color aColor = rGradient.GetStartColor();
-        long nIntensity = rGradient.GetStartIntensity();
+        sal_Int32 nIntensity = rGradient.GetStartIntensity();
         if (UseSolid(MAKE_SALCOLOR(aColor.GetRed()  * nIntensity / 100.0,
                                    aColor.GetGreen()* nIntensity / 100.0,
                                    aColor.GetBlue() * nIntensity / 100.0)))

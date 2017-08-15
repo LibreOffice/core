@@ -117,7 +117,7 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    long nDX, long nDY, DeviceFormat eFormat, const SystemGraphicsData *pData )
+                                    sal_Int32 nDX, sal_Int32 nDY, DeviceFormat eFormat, const SystemGraphicsData *pData )
 {
     SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << "," << static_cast<int>(eFormat) << ")" );
 
@@ -302,7 +302,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
 
     bool bRet;
-    long nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
+    sal_Int32 nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
 
     if ( nNewWidth < 1 )
         nNewWidth = 1;
@@ -342,8 +342,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();
             if ( pGraphics )
             {
-                long nWidth;
-                long nHeight;
+                sal_Int32 nWidth;
+                sal_Int32 nHeight;
                 if ( mnOutWidth < nNewWidth )
                     nWidth = mnOutWidth;
                 else
@@ -549,7 +549,7 @@ void VirtualDevice::Compat_ZeroExtleadBug()
     mbForceZeroExtleadBug = true;
 }
 
-long VirtualDevice::GetFontExtLeading() const
+sal_Int32 VirtualDevice::GetFontExtLeading() const
 {
 #ifdef UNX
     // backwards compatible line metrics after fixing #i60945#

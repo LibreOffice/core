@@ -1074,7 +1074,7 @@ public:
     virtual void update() override;
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) override;
     virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) override;
-    virtual void scroll(long nDelta) override;
+    virtual void scroll(sal_Int32 nDelta) override;
     virtual void contextDestroyed() override;
 
 #if HAVE_FEATURE_OPENGL
@@ -1122,7 +1122,7 @@ void GL2DRenderer::mouseDragMove(const Point& , const Point& , sal_uInt16 )
 {
 }
 
-void GL2DRenderer::scroll(long )
+void GL2DRenderer::scroll(sal_Int32 )
 {
 }
 

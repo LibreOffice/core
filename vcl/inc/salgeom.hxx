@@ -24,11 +24,11 @@
 
 struct SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
-    long                nX, nY;
+    sal_Int32           nX, nY;
     // dimensions of the drawable area in pixel
-    unsigned long       nWidth, nHeight;
+    sal_Int32           nWidth, nHeight;
     // thickness of the decoration in pixel
-    unsigned long       nLeftDecoration,
+    sal_Int32           nLeftDecoration,
                         nTopDecoration,
                         nRightDecoration,
                         nBottomDecoration;
@@ -52,8 +52,8 @@ struct SalFrameGeometry {
 class VCL_PLUGIN_PUBLIC SalGeometryProvider {
 public:
     virtual ~SalGeometryProvider() {}
-    virtual long GetWidth() const = 0;
-    virtual long GetHeight() const = 0;
+    virtual sal_Int32 GetWidth() const = 0;
+    virtual sal_Int32 GetHeight() const = 0;
     virtual bool IsOffScreen() const = 0;
 };
 

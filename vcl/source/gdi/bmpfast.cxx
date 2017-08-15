@@ -817,7 +817,7 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 
     if( bByteFill )
     {
-        long nByteCount = rDst.mnHeight * rDst.mnScanlineSize;
+        sal_Int32 nByteCount = rDst.mnHeight * rDst.mnScanlineSize;
         memset( rDst.mpBits, nFillByte, nByteCount );
         return true;
     }
