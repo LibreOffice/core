@@ -1122,7 +1122,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     //handles (4) and part of (5)
                     //create a DropCap property, add it to the property sequence of finishParagraph
                     sal_Int32 nLines = rAppendContext.pLastParagraphProperties->GetLines();
-                    aDrop.Lines = nLines > 0 && nLines < 254 ? (sal_Int8)++nLines : 2;
+                    aDrop.Lines = nLines > 0 && nLines < SAL_MAX_INT8 ? (sal_Int8)nLines : 2;
                     aDrop.Count = rAppendContext.pLastParagraphProperties->GetDropCapLength();
                     aDrop.Distance  = 0; //TODO: find distance value
                     //completes (5)
