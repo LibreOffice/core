@@ -2199,9 +2199,9 @@ void SAL_CALL LayoutManager::unlock()
     // conform to documentation: unlock with lock count == 0 means force a layout
 
     SolarMutexClearableGuard aWriteLock;
-        if ( bDoLayout )
-                m_aAsyncLayoutTimer.Stop();
-        aWriteLock.clear();
+    if ( bDoLayout )
+        m_aAsyncLayoutTimer.Stop();
+    aWriteLock.clear();
 
     Any a( nLockCount );
     implts_notifyListeners( frame::LayoutManagerEvents::UNLOCK, a );
@@ -2598,9 +2598,9 @@ void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
         if ( !m_aAsyncLayoutTimer.IsActive() )
         {
             m_aAsyncLayoutTimer.Invoke();
+            if ( m_nLockCount == 0 )
+                m_aAsyncLayoutTimer.Start();
         }
-        if ( m_nLockCount == 0 )
-            m_aAsyncLayoutTimer.Start();
     }
     else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
     {
@@ -2670,7 +2670,6 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent )
 IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
 {
     SolarMutexClearableGuard aReadLock;
-    m_aAsyncLayoutTimer.Stop();
 
     if( !m_xContainerWindow.is() )
         return;
