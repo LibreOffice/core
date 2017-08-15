@@ -37,19 +37,15 @@ class ApplicationEvent;
 class Image;
 enum class SalEvent;
 
-class SalYieldMutex : public comphelper::SolarMutex
+class SalYieldMutex : public comphelper::GenericSolarMutex
 {
-    osl::Mutex m_mutex;
-    sal_uLong                                   mnCount;
-    oslThreadIdentifier                         mnThreadId;
+protected:
+    virtual void            doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32      doRelease( bool bUnlockAll ) override;
 
 public:
-                                                SalYieldMutex();
-    virtual void                                acquire() override;
-    virtual void                                release() override;
-    virtual bool                                tryToAcquire() override;
-    sal_uLong                                   GetAcquireCount() const { return mnCount; }
-    oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
+    SalYieldMutex();
+    virtual ~SalYieldMutex();
 };
 
 class AquaSalInstance : public SalInstance
@@ -105,9 +101,8 @@ public:
     virtual SalSystem*      CreateSalSystem() override;
     virtual SalBitmap*      CreateSalBitmap() override;
     virtual comphelper::SolarMutex* GetYieldMutex() override;
-    virtual sal_uLong       ReleaseYieldMutex() override;
-    virtual void            AcquireYieldMutex( sal_uLong nCount ) override;
-    virtual bool            CheckYieldMutex() override;
+    virtual sal_uInt32      ReleaseYieldMutex( bool bUnlockAll = false ) override;
+    virtual void            AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
     virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents,
                                     sal_uLong nReleased) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;
@@ -157,15 +152,6 @@ public:
     static const short DispatchTimerEvent = 30;
 
     static NSMenu* GetDynamicDockMenu();
-};
-
-// helper class: inverted solar guard
-class YieldMutexReleaser
-{
-    sal_uLong mnCount;
-    public:
-    YieldMutexReleaser();
-    ~YieldMutexReleaser();
 };
 
 CGImageRef CreateCGImage( const Image& );

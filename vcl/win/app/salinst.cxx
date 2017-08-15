@@ -96,99 +96,47 @@ void SalAbort( const OUString& rErrorText, bool )
 
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-class SalYieldMutex : public comphelper::SolarMutex
+class SalYieldMutex : public comphelper::GenericSolarMutex
 {
 public: // for ImplSalYield() and ImplSalYieldMutexAcquireWithWait()
-    osl::Mutex                  m_mutex;
-    osl::Condition              m_condition; /// for MsgWaitForMultipleObjects()
-    WinSalInstance*             mpInstData;
-    sal_uLong                   mnCount;
-    DWORD                       mnThreadId;
+    osl::Condition            m_condition; /// for MsgWaitForMultipleObjects()
+
+protected:
+    virtual void              doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32        doRelease( bool bUnlockAll ) override;
+
+    static void               BeforeReleaseHandler();
 
 public:
-    explicit SalYieldMutex( WinSalInstance* pInstData );
+    explicit SalYieldMutex();
 
-    virtual void                acquire() override;
-    virtual void                release() override;
-    virtual bool                tryToAcquire() override;
-
-    sal_uLong                   GetAcquireCount( sal_uLong nThreadId );
+    virtual bool              IsCurrentThread() const override;
 };
 
-SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
+SalYieldMutex::SalYieldMutex()
 {
-    mpInstData  = pInstData;
-    mnCount     = 0;
-    mnThreadId  = 0;
+    SetBeforeReleaseHandler( &SalYieldMutex::BeforeReleaseHandler );
 }
 
-void SalYieldMutex::acquire()
+void SalYieldMutex::BeforeReleaseHandler()
 {
-    m_mutex.acquire();
-    mnCount++;
-    mnThreadId = GetCurrentThreadId();
-}
+    OpenGLContext::prepareForYield();
 
-void SalYieldMutex::release()
-{
-    DWORD nThreadId = GetCurrentThreadId();
-    assert(mnThreadId == nThreadId);
-
-    bool const isRelease(1 == mnCount);
-    if ( isRelease )
+    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
     {
-        OpenGLContext::prepareForYield();
-
-        SalData* pSalData = GetSalData();
-        if ( pSalData->mnAppThreadId != nThreadId )
-        {
-            // If we don't call these message, the Output from the
-            // Java clients doesn't come in the right order
-            GdiFlush();
-
-        }
-        mnThreadId = 0;
+        // If we don't call these message, the Output from the
+        // Java clients doesn't come in the right order
+        GdiFlush();
     }
-
-    mnCount--;
-    m_mutex.release();
-
-    if ( isRelease )
-    {   // do this *after* release
-        m_condition.set(); // wake up ImplSalYieldMutexAcquireWithWait()
-    }
-}
-
-bool SalYieldMutex::tryToAcquire()
-{
-    if( m_mutex.tryToAcquire() )
-    {
-        mnCount++;
-        mnThreadId = GetCurrentThreadId();
-        return true;
-    }
-    else
-        return false;
-}
-
-sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
-{
-    if ( nThreadId == mnThreadId )
-        return mnCount;
-    else
-        return 0;
 }
 
 /// note: while VCL is fully up and running (other threads started and
 /// before shutdown), the main thread must acquire SolarMutex only via
 /// this function to avoid deadlock
-void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount )
+void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
-    if ( !pInst )
-        return;
-
-    if ( pInst->IsMainThread() )
+    if ( pInst && pInst->IsMainThread() )
     {
         // tdf#96887 If this is the main thread, then we must wait for two things:
         // - the mpSalYieldMutex being freed
@@ -197,26 +145,41 @@ void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount )
         // needed because if we don't reschedule, then we create deadlocks if a
         // Window's create/destroy is called via SendMessage() from another thread.
         // Have a look at the osl_waitCondition implementation for more info.
-        SalYieldMutex * const pYieldMutex = pInst->mpSalYieldMutex;
-        osl::Condition &rCondition = pYieldMutex->m_condition;
-        while ( nCount )
-        {
-            do {
-                // reset condition *before* acquiring!
-                rCondition.reset();
-                if (pYieldMutex->tryToAcquire())
-                    break;
-                // wait for SalYieldMutex::release() to set the condition
-                osl::Condition::Result res = rCondition.wait();
-                assert(osl::Condition::Result::result_ok == res);
-            }
-            while ( true );
-            --nCount;
+        do {
+            // reset condition *before* acquiring!
+            m_condition.reset();
+            if (m_aMutex.tryToAcquire())
+                break;
+            // wait for SalYieldMutex::release() to set the condition
+            osl::Condition::Result res = m_condition.wait();
+            assert(osl::Condition::Result::result_ok == res);
         }
+        while ( true );
     }
     else
-        // If this is not the main thread, call acquire directly.
-        ImplSalAcquireYieldMutex( nCount );
+        m_aMutex.acquire();
+    ++m_nCount;
+    --nLockCount;
+
+    comphelper::GenericSolarMutex::doAcquire( nLockCount );
+}
+
+sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
+{
+    sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+
+    // wake up ImplSalYieldMutexAcquireWithWait() after release
+    if ( 0 == m_nCount )
+        m_condition.set();
+
+    return nCount;
+}
+
+void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount )
+{
+    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    if ( pInst )
+        pInst->mpSalYieldMutex->acquire( nCount );
 }
 
 bool ImplSalYieldMutexTryToAcquire()
@@ -238,47 +201,10 @@ void ImplSalYieldMutexRelease()
     }
 }
 
-sal_uLong ImplSalReleaseYieldMutex()
+bool SalYieldMutex::IsCurrentThread() const
 {
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
-    if ( !pInst )
-        return 0;
-
-    SalYieldMutex*  pYieldMutex = pInst->mpSalYieldMutex;
-    const sal_uLong nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
-    sal_uLong       n = nCount;
-    while ( n )
-    {
-        pYieldMutex->release();
-        n--;
-    }
-
-    return nCount;
-}
-
-void ImplSalAcquireYieldMutex( sal_uLong nCount )
-{
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
-    if ( !pInst )
-        return;
-
-    SalYieldMutex*  pYieldMutex = pInst->mpSalYieldMutex;
-    while ( nCount )
-    {
-        pYieldMutex->acquire();
-        nCount--;
-    }
-}
-
-bool WinSalInstance::CheckYieldMutex()
-{
-    SalData*    pSalData = GetSalData();
-    if ( pSalData->mpFirstInstance )
-    {
-        SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
-        return (pYieldMutex->mnThreadId == (GetCurrentThreadId()));
-    }
-    return true;
+    // For the Windows backend, the LO identifier is the system thread ID
+    return m_nThreadId == GetCurrentThreadId();
 }
 
 void SalData::initKeyCodeMap()
@@ -520,14 +446,12 @@ void DestroySalInstance( SalInstance* pInst )
 WinSalInstance::WinSalInstance()
 {
     mhComWnd                 = nullptr;
-    mpSalYieldMutex          = new SalYieldMutex( this );
+    mpSalYieldMutex          = new SalYieldMutex();
     mpSalYieldMutex->acquire();
-    ::comphelper::SolarMutex::setSolarMutex( mpSalYieldMutex );
 }
 
 WinSalInstance::~WinSalInstance()
 {
-    ::comphelper::SolarMutex::setSolarMutex( nullptr );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     DestroyWindow( mhComWnd );
@@ -538,14 +462,14 @@ comphelper::SolarMutex* WinSalInstance::GetYieldMutex()
     return mpSalYieldMutex;
 }
 
-sal_uLong WinSalInstance::ReleaseYieldMutex()
+sal_uInt32 WinSalInstance::ReleaseYieldMutex( bool bUnlockAll )
 {
-    return ImplSalReleaseYieldMutex();
+    return mpSalYieldMutex->release( bUnlockAll );
 }
 
-void WinSalInstance::AcquireYieldMutex( sal_uLong nCount )
+void WinSalInstance::AcquireYieldMutex( sal_uInt32 nCount )
 {
-    ImplSalAcquireYieldMutex( nCount );
+    mpSalYieldMutex->acquire( nCount );
 }
 
 static void ImplSalDispatchMessage( MSG* pMsg )
@@ -615,8 +539,8 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
     bool bDidWork = false;
     // NOTE: if nReleased != 0 this will be called without SolarMutex
     //       so don't do anything dangerous before releasing it here
-    sal_uLong const nCount = (nReleased != 0)
-                             ? nReleased : ImplSalReleaseYieldMutex();
+    sal_uInt32 const nCount = (nReleased != 0)
+                              ? nReleased : mpSalYieldMutex->release( true );
     if ( !IsMainThread() )
     {
         // #97739# A SendMessage call blocks until the called thread (here: the main thread)
@@ -635,16 +559,13 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
             // If you change the SendMessageW function, you might need to update
             // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
             bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
-
-        ImplSalAcquireYieldMutex( nCount );
     }
     else
     {
         if (nReleased == 0) // tdf#99383 ReAcquireSolarMutex shouldn't Yield
             bDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
-
-        ImplSalYieldMutexAcquireWithWait( nCount );
     }
+    mpSalYieldMutex->acquire( nCount );
 
     return bDidWork;
 }

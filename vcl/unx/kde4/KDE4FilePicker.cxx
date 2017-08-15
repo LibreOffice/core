@@ -200,7 +200,7 @@ KDE4FilePicker::~KDE4FilePicker()
 void KDE4FilePicker::cleanupProxy()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT cleanupProxySignal();
     }
     delete _dialog;
@@ -221,7 +221,7 @@ void SAL_CALL KDE4FilePicker::removeFilePickerListener( const uno::Reference<XFi
 void SAL_CALL KDE4FilePicker::setTitle( const OUString &title )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setTitleSignal( title );
     }
 
@@ -231,7 +231,7 @@ void SAL_CALL KDE4FilePicker::setTitle( const OUString &title )
 sal_Int16 SAL_CALL KDE4FilePicker::execute()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT executeSignal();
     }
 
@@ -267,7 +267,7 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
 void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setMultiSelectionModeSignal( multiSelect );
     }
 
@@ -290,7 +290,7 @@ void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
 void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setDefaultNameSignal( name );
     }
 
@@ -301,7 +301,7 @@ void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
 void SAL_CALL KDE4FilePicker::setDisplayDirectory( const OUString &dir )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setDisplayDirectorySignal( dir );
     }
 
@@ -312,7 +312,7 @@ void SAL_CALL KDE4FilePicker::setDisplayDirectory( const OUString &dir )
 OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT getDisplayDirectorySignal();
     }
 
@@ -323,7 +323,7 @@ OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
 uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT getFilesSignal();
     }
     uno::Sequence< OUString > seq = getSelectedFiles();
@@ -335,7 +335,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
 uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT getSelectedFilesSignal();
     }
     KUrl::List urls = _dialog->selectedUrls();
@@ -349,7 +349,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
 void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUString &filter )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT appendFilterSignal( title, filter );
     }
 
@@ -375,7 +375,7 @@ void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUStrin
 void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setCurrentFilterSignal( title );
     }
 
@@ -385,7 +385,7 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
 OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT getCurrentFilterSignal();
     }
 
@@ -405,7 +405,7 @@ OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
 void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& rGroupTitle, const uno::Sequence<beans::StringPair>& filters)
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT appendFilterGroupSignal( rGroupTitle, filters );
     }
 
@@ -420,7 +420,7 @@ void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& rGroupTitle, co
 void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16 nControlAction, const uno::Any &value )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setValueSignal( controlId, nControlAction, value );
     }
 
@@ -444,7 +444,7 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
         return uno::Any( false );
 
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT getValueSignal( controlId, nControlAction );
     }
 
@@ -463,7 +463,7 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
 void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enable )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT enableControlSignal( controlId, enable );
     }
 
@@ -476,7 +476,7 @@ void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enabl
 void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &label )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT setLabelSignal( controlId, label );
     }
 
@@ -492,7 +492,7 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &lab
 OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT getLabelSignal( controlId );
     }
 
@@ -607,7 +607,7 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT initializeSignal( args );
     }
 
@@ -767,7 +767,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
 void KDE4FilePicker::checkProtocol()
 {
     if( qApp->thread() != QThread::currentThread() ) {
-        SalYieldMutexReleaser rel;
+        SolarMutexReleaser aReleaser;
         return Q_EMIT checkProtocolSignal();
     }
 

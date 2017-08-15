@@ -447,7 +447,7 @@ bool GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     bool bWasEvent = false;
     {
         // release YieldMutex (and re-acquire at block end)
-        SalYieldMutexReleaser aReleaser;
+        SolarMutexReleaser aReleaser;
         if( m_aDispatchMutex.tryToAcquire() )
             bDispatchThread = true;
         else if( ! bWait )
@@ -688,9 +688,7 @@ extern "C" {
         if( !pTSource->pInstance )
             return FALSE;
 
-        GtkData *pSalData = static_cast< GtkData* >( GetSalData());
-
-        osl::Guard< comphelper::SolarMutex > aGuard( pSalData->m_pInstance->GetYieldMutex() );
+        SolarMutexGuard aGuard;
 
         sal_gtk_timeout_defer( pTSource );
 
@@ -784,7 +782,7 @@ gboolean GtkData::userEventFn( gpointer data )
     gboolean bContinue = FALSE;
     GtkData *pThis = static_cast<GtkData *>(data);
     SalGenericData *pData = GetGenericData();
-    osl::Guard< comphelper::SolarMutex > aGuard( pData->m_pInstance->GetYieldMutex() );
+    SolarMutexGuard aGuard;
     const SalGenericDisplay *pDisplay = pData->GetDisplay();
     if (pDisplay)
     {

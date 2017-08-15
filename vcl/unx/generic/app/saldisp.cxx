@@ -378,9 +378,8 @@ static int DisplayHasEvent( int fd, void * data )
 
   bool result;
 
-  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  SolarMutexGuard aGuard;
   result = pDisplay->IsEvent();
-  GetSalData()->m_pInstance->GetYieldMutex()->release();
   return int(result);
 }
 static int DisplayQueue( int fd, void * data )
@@ -390,11 +389,9 @@ static int DisplayQueue( int fd, void * data )
               "wrong fd in DisplayHasEvent" );
   int result;
 
-  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  SolarMutexGuard aGuard;
   result =  XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
-  GetSalData()->m_pInstance->GetYieldMutex()->release();
-
   return result;
 }
 static int DisplayYield( int fd, void * data )
@@ -403,9 +400,8 @@ static int DisplayYield( int fd, void * data )
   SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
 
-  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  SolarMutexGuard aGuard;
   pDisplay->Yield();
-  GetSalData()->m_pInstance->GetYieldMutex()->release();
   return 1;
 }
 
@@ -1911,8 +1907,7 @@ void SalX11Display::Yield()
         return;
 
     XEvent aEvent;
-    DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
-                osl::Thread::getCurrentIdentifier(),
+    DBG_ASSERT( GetSalData()->m_pInstance->GetYieldMutex()->IsCurrentThread(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );
