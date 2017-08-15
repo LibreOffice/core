@@ -1255,7 +1255,7 @@ bool ErrorResource::getString(ErrCode nErrorCode, OUString &rString) const
 {
     for (const std::pair<const char*, ErrCode>* pStringArray = m_pStringArray; pStringArray->first != nullptr; ++pStringArray)
     {
-        if (ErrCode(nErrorCode.GetRest()) == pStringArray->second)
+        if (nErrorCode.GetRest() == pStringArray->second.GetRest())
         {
             rString = Translate::get(pStringArray->first, m_rResLocale);
             return true;
