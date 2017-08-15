@@ -22,9 +22,12 @@
 
 #include <sal/config.h>
 
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace comphelper {
+
 
 /**
  * Abstract SolarMutex interface, needed for VCL's
@@ -37,29 +40,82 @@ namespace comphelper {
  */
 class COMPHELPER_DLLPUBLIC SolarMutex {
 public:
-    virtual void acquire() = 0;
+    typedef void (*BeforeReleaseHandler) ();
 
-    virtual void release() = 0;
+    void acquire( sal_uInt32 nLockCount = 1 );
+    sal_uInt32 release( bool bUnlockAll = false );
 
     virtual bool tryToAcquire() = 0;
+
+    // returns true, if the mutex is owned by the current thread
+    virtual bool IsCurrentThread() const = 0;
 
     /// Help components to get the SolarMutex easily.
     static SolarMutex *get();
 
-    /// semi-private: allow VCL to push its one-big-lock down here.
-    static void setSolarMutex( SolarMutex *pMutex );
-
 protected:
     SolarMutex();
-
     virtual ~SolarMutex();
+
+    /// allow VCL to push its one-big-lock down here.
+    static void setSolarMutex( SolarMutex *pMutex );
+
+    virtual sal_uInt32 doRelease( bool bUnlockAll ) = 0;
+    virtual void doAcquire( sal_uInt32 nLockCount ) = 0;
+
 private:
     SolarMutex(const SolarMutex&) = delete;
     SolarMutex& operator=(const SolarMutex&) = delete;
 };
 
+inline void SolarMutex::acquire( sal_uInt32 nLockCount )
+{
+    assert( nLockCount > 0 );
+    doAcquire( nLockCount );
 }
 
-#endif
+inline sal_uInt32 SolarMutex::release( bool bUnlockAll )
+{
+     return doRelease( bUnlockAll );
+}
+
+
+/**
+ * Generic implementation of the abstract SolarMutex interface.
+ *
+ * Treat this as a singleton, as its constructor calls
+ * setSolarMutex( this )!
+ *
+ * Kept seperately from SolarMutex, so others can implement fascades.
+ */
+class COMPHELPER_DLLPUBLIC GenericSolarMutex
+    : public SolarMutex
+{
+public:
+    void SetBeforeReleaseHandler( const BeforeReleaseHandler& rLink )
+         { m_aBeforeReleaseHandler = rLink; }
+
+    virtual bool tryToAcquire() override;
+    virtual bool IsCurrentThread() const override;
+
+protected:
+    osl::Mutex           m_aMutex;
+    sal_uInt32           m_nCount;
+    oslThreadIdentifier  m_nThreadId;
+
+    virtual void doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32 doRelease( bool bUnlockAll ) override;
+
+protected:
+    GenericSolarMutex();
+    virtual ~GenericSolarMutex() override;
+
+private:
+    BeforeReleaseHandler  m_aBeforeReleaseHandler;
+};
+
+}
+
+#endif // INCLUDED_COMPHELPER_SOLARMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

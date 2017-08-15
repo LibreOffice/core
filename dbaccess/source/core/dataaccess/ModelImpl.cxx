@@ -92,19 +92,27 @@ VosMutexFacade::VosMutexFacade( ::osl::Mutex& _rMutex )
 {
 }
 
-void VosMutexFacade::acquire()
+void VosMutexFacade::doAcquire( sal_uInt32 nLockCount )
 {
+    assert( 1 == nLockCount ); (void) nLockCount;
     m_rMutex.acquire();
 }
 
-void VosMutexFacade::release()
+sal_uInt32 VosMutexFacade::doRelease( bool bUnlockAll )
 {
+    assert( !bUnlockAll ); (void) bUnlockAll;
     m_rMutex.release();
+    return 1;
 }
 
 bool VosMutexFacade::tryToAcquire()
 {
     return m_rMutex.tryToAcquire();
+}
+
+bool VosMutexFacade::IsCurrentThread() const
+{
+    return true;
 }
 
 // DocumentStorageAccess

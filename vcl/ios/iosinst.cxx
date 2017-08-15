@@ -172,13 +172,13 @@ SalInstance *CreateSalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( new SalYieldMutex() );
     new IosSalData( pInstance );
-    pInstance->AcquireYieldMutex(1);
+    pInstance->AcquireYieldMutex();
     return pInstance;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-    pInst->ReleaseYieldMutex();
+    pInst->ReleaseYieldMutex( true );
     delete pInst;
 }
 
