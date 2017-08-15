@@ -3044,9 +3044,12 @@ static OUString getMimeType(const OUString& sImageUrl)
     Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
 
     OUString aSourceMimeType;
-    Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
-    if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
+    Reference<XPropertySet> const xGraphicPropertySet(xGraphic, UNO_QUERY);
+    if (xGraphicPropertySet.is() && // it's null if it's an external link
+        (xGraphicPropertySet->getPropertyValue("MimeType") >>= aSourceMimeType))
+    {
         return aSourceMimeType;
+    }
     return OUString("");
 }
 
