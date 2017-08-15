@@ -29,6 +29,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -722,6 +723,21 @@ DECLARE_OOXMLIMPORT_TEST(testTdf75573_lostTable, "tdf75573_lostTable.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of frames/shapes", sal_Int32(0), xDraws->getCount() );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of pages", 3, getPages() );
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf109316_dropCaps, "tdf109316_dropCaps.docx")
+{
+    uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
+    css::style::DropCapFormat aDropCap = getProperty<css::style::DropCapFormat>(xSet,"DropCapFormat");
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(2), aDropCap.Lines );
+
+    xSet.set(getParagraph(2), uno::UNO_QUERY);
+    aDropCap = getProperty<css::style::DropCapFormat>(xSet,"DropCapFormat");
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(3), aDropCap.Lines );
+
+    xSet.set(getParagraph(3), uno::UNO_QUERY);
+    aDropCap = getProperty<css::style::DropCapFormat>(xSet,"DropCapFormat");
+    CPPUNIT_ASSERT_EQUAL( sal_Int8(4), aDropCap.Lines );
 }
 
 DECLARE_OOXMLIMPORT_TEST(lineWpsOnly, "line-wps-only.docx")
