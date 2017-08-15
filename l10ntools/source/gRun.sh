@@ -222,7 +222,7 @@ ${MYCMD} --base connectivity/source/resource --files conn_error_message.src conn
 
 ${MYCMD} --base cui/source/customize --files acccfg.src cfg.src macropg.src
 
-${MYCMD} --base cui/source/dialogs --files cuires.src fmsearch.src gallery.src hyperdlg.src multipat.src passwdomdlg.src scriptdlg.src svuidlg.src
+${MYCMD} --base cui/source/dialogs --files fmsearch.src gallery.src hyperdlg.src multipat.src passwdomdlg.src scriptdlg.src svuidlg.src
 
 ${MYCMD} --base cui/source/options --files connpooloptions.src dbregister.src doclinkdialog.src optchart.src optcolor.src optdict.src optfltr.src optgdlg.src optinet2.src optjava.src optlingu.src optpath.src personalization.src treeopt.src
 
