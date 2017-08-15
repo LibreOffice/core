@@ -25,7 +25,6 @@
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
-#include <unordered_map>
 
 
 #include <svx/strings.hrc>

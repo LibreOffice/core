@@ -688,8 +688,7 @@ void SvxCharacterMap::toggleSearchView(bool state)
     isSearchMode = state;
     m_pHexCodeText->SetReadOnly(state);
     m_pDecimalCodeText->SetReadOnly(state);
-    m_pSubsetLB->SetReadOnly(state);
-    m_pSubsetLB->Invalidate();
+    m_pSubsetLB->Disable(state);
 
     if(state)
     {
