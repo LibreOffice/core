@@ -292,7 +292,7 @@ ${MYCMD} --base extensions/source/bibliography --files bib.src sections.src tool
 
 ${MYCMD} --base extensions/source/dbpilots --files commonpagesdbp.src dbpilots.src gridpages.src groupboxpages.src listcombopages.src
 
-${MYCMD} --base extensions/source/propctrlr --files formlinkdialog.src formres.src pcrmiscres.src propres.src selectlabeldialog.src
+${MYCMD} --base extensions/source/propctrlr --files formlinkdialog.src pcrmiscres.src propres.src selectlabeldialog.src
 
 ${MYCMD} --files extensions/source/scanner/strings.src
 
