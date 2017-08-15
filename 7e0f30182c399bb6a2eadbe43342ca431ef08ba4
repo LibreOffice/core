@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_dd9a49c5",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-15T20:32:03Z",
+      "side": 1,
+      "message": "a typo that Windows build have spotted :)",
+      "range": {
+        "startLine": 620,
+        "startChar": 79,
+        "endLine": 620,
+        "endChar": 80
+      },
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_794b2a5a",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 1
