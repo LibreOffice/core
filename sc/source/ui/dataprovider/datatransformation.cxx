@@ -91,6 +91,16 @@ void MergeColumnTransformation::Transform(ScDocument& rDoc)
     rDoc.DeleteCol(0, 0, MAXROW, 0, mnCol2, 1);
 }
 
+SortTransformation::SortTransformation(const ScSortParam& rSortParam):
+    maSortParam(rSortParam)
+{
+}
+
+void SortTransformation::Transform(ScDocument& rDoc)
+{
+    rDoc.Sort(0, maSortParam, false, false, nullptr, nullptr);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
