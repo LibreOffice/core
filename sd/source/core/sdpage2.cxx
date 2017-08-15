@@ -557,25 +557,27 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
     ActionChanged();
 }
 
-OString SdPage::stringify() const
+bool SdPage::Equals(const SdPage& rOtherPage) const
 {
-    OStringBuffer aString(100);
-    aString.append((sal_Int32)mePageKind).append((sal_Int32)meAutoLayout).append((sal_Int32)mePresChange).append(mfTime).append(mbSoundOn).append(mbExcluded).
-             append(OUStringToOString( maLayoutName, RTL_TEXTENCODING_UTF8 )).
-             append(OUStringToOString(maSoundFile, RTL_TEXTENCODING_UTF8 )).
-             append(mbLoopSound).append(mbStopSound).
-             /*append(OUStringToOString(maCreatedPageName, RTL_TEXTENCODING_UTF8)).
-             append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8)).*/
-             append(OUStringToOString(maBookmarkName, RTL_TEXTENCODING_UTF8)).
-             append(mbScaleObjects).append(mbBackgroundFullSize).append((sal_Int32)meCharSet).append((sal_Int32)mnPaperBin).
-             append((sal_Int32)meOrientation).append((sal_Int32)mnTransitionType).append((sal_Int32)mnTransitionSubtype).append(mbTransitionDirection).
-             append(mnTransitionFadeColor).append(mfTransitionDuration);//.append(mbIsPrecious);
+    bool isEqual = GetObjCount() == rOtherPage.GetObjCount();
+    if( isEqual )
+    {
+        for(size_t i = 0; i < GetObjCount(); ++i)
+            isEqual = isEqual && GetObj(i)->Equals(*(rOtherPage.GetObj(i)));
+    }
 
-    const size_t n = GetObjCount();
-    for(size_t i = 0; i < n; ++i)
-        aString.append(GetObj(i)->stringify());
-    return aString.makeStringAndClear();
-}
+    return (isEqual && mePageKind == rOtherPage.mePageKind && meAutoLayout == rOtherPage.meAutoLayout &&
+            mePresChange == rOtherPage.mePresChange && mfTime == rOtherPage.mfTime &&
+            mbSoundOn == rOtherPage.mbSoundOn && mbExcluded == rOtherPage.mbExcluded &&
+            maLayoutName == rOtherPage.maLayoutName && maSoundFile == rOtherPage.maSoundFile &&
+            mbLoopSound == rOtherPage.mbLoopSound && mbStopSound == rOtherPage.mbStopSound &&
+            maBookmarkName == rOtherPage.maBookmarkName && mbScaleObjects == rOtherPage.mbScaleObjects &&
+            mbBackgroundFullSize == rOtherPage.mbBackgroundFullSize && meCharSet == rOtherPage.meCharSet &&
+            mnPaperBin == rOtherPage.mnPaperBin && meOrientation == rOtherPage.meOrientation &&
+            mnTransitionType == rOtherPage.mnTransitionType && mnTransitionSubtype == rOtherPage.mnTransitionSubtype &&
+            mbTransitionDirection == rOtherPage.mbTransitionDirection && mnTransitionFadeColor == rOtherPage.mnTransitionFadeColor &&
+            mfTransitionDuration == rOtherPage.mfTransitionDuration);
+ }
 
 void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
 {
