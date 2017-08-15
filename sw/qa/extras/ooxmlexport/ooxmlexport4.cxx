@@ -121,8 +121,8 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapePicture, "groupshape-picture.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(getShape(1), "TextAutoGrowHeight")));
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(getShape(2), "TextAutoGrowHeight")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "TextAutoGrowHeight"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(2), "TextAutoGrowHeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")

@@ -814,7 +814,7 @@ DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 {
     // Footer wasn't disabled -- instead empty footer was exported.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(xStyle, "FooterIsOn")));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle, "FooterIsOn"));
 }
 
 DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")

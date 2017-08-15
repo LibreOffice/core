@@ -571,7 +571,7 @@ DECLARE_OOXMLIMPORT_TEST(testTableWidth, "table_width.docx")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Relative width wasn't recognized during import.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative"));
 
     uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -780,7 +780,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf48658_transparentOLEheader, "tdf48658_transparen
 {
     // The problem was that the shape in the header was hidden in the background.
     // The round-tripped document was always fine (even before the fix) but the shape numbers change, so import-only test.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(getShape(1), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Opaque"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeParaAdjust, "dml-groupshape-paraadjust.docx")
@@ -1412,10 +1412,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109306, "tdf109306.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Both types of relative width specification (pct): simple integers (in fiftieths of percent)
     // and floats with "%" unit specification must be treated correctly
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(90), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xTables->getByIndex(1), "IsWidthRelative")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(1), "IsWidthRelative"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(80), getProperty<sal_Int16>(xTables->getByIndex(1), "RelativeWidth"));
 }
 
@@ -1427,7 +1427,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
     // Until it's correctly implemented, we assign it 100% relative width.
     // Previously, the table (without explicitly set width) had huge actual width
     // and extended far outside of page's right border.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
