@@ -1256,6 +1256,11 @@
 // String for saving modified image (instead of original)
 #define RID_SVXSTR_SAVE_MODIFIED_IMAGE                      NC_("RID_SVXSTR_SAVE_MODIFIED_IMAGE", "The image has been modified. By default the original image will be saved.\nDo you want to save the modified version instead ?")
 
+#define RID_ADD_TO_FAVORITES                                NC_("RID_SUBSETMAP", "Add to Favorites")
+#define RID_REMOVE_FAVORITES                                NC_("RID_SUBSETMAP", "Remove from Favorites")
+#define RID_INSERT                                          NC_("RID_SUBSETMAP", "Insert")
+#define RID_COPY_CLIPBOARD                                  NC_("RID_SUBSETMAP", "Copy to Clipboard")
+
 #define RID_SUBSETSTR_BASIC_LATIN                           NC_("RID_SUBSETMAP", "Basic Latin")
 #define RID_SUBSETSTR_LATIN_1                               NC_("RID_SUBSETMAP", "Latin-1")
 #define RID_SUBSETSTR_LATIN_EXTENDED_A                      NC_("RID_SUBSETMAP", "Latin Extended-A")
