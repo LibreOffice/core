@@ -1557,12 +1557,12 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         if (rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, true,&pItem ) == SfxItemState::SET)
         {
             pHorJustify = static_cast<const SvxHorJustifyItem*>(pItem);
-            eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
+            eHorJustify = pHorJustify->GetValue();
         }
         if (rAttrSet.GetItemState(ATTR_VER_JUSTIFY, true,&pItem ) == SfxItemState::SET)
         {
             pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
-            eVerJustify = SvxCellVerJustify( pVerJustify->GetValue() );
+            eVerJustify = pVerJustify->GetValue();
         }
 
         switch ( nSlot )
@@ -2299,7 +2299,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     {
         case SfxItemState::SET:
             {
-                switch ( SvxCellHorJustify( pHorJustify->GetValue() ) )
+                switch ( pHorJustify->GetValue() )
                 {
                     case SvxCellHorJustify::Standard:
                         break;
@@ -2367,7 +2367,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     {
         case SfxItemState::SET:
             {
-                eVerJustify = SvxCellVerJustify( pVerJustify->GetValue() );
+                eVerJustify = pVerJustify->GetValue();
 
                 switch ( eVerJustify )
                 {

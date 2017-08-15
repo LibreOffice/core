@@ -649,8 +649,8 @@ DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
 DECLARE_RTFIMPORT_TEST(testBackground, "background.rtf")
 {
     // The first shape wasn't in the foreground.
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(getShape(1), "Opaque")));
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<bool>(getShape(2), "Opaque")));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "Opaque"));
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(2), "Opaque"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo74823, "fdo74823.rtf")

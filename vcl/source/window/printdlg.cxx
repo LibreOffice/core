@@ -1367,8 +1367,8 @@ void PrintDialog::updateNupFromPages()
     sal_IntPtr nPages = sal_IntPtr(maNUpPage.mpNupPagesBox->GetSelectEntryData());
     int nRows   = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols   = int(maNUpPage.mpNupColEdt->GetValue());
-    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM )));
-    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM )));
+    long nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));
+    long nSheetMargin = maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM ));
     bool bCustom = false;
 
     if( nPages == 1 )
@@ -1471,8 +1471,8 @@ void PrintDialog::updateNup()
 {
     int nRows         = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols         = int(maNUpPage.mpNupColEdt->GetValue());
-    long nPageMargin  = long(maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM )));
-    long nSheetMargin = long(maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM )));
+    long nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));
+    long nSheetMargin = maNUpPage.mpSheetMarginEdt->Denormalize(maNUpPage.mpSheetMarginEdt->GetValue( FUNIT_100TH_MM ));
 
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;

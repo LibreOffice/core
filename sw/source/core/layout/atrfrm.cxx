@@ -430,7 +430,7 @@ SwFormatFillOrder::SwFormatFillOrder( SwFillOrder nFO )
 {}
 SfxPoolItem*  SwFormatFillOrder::Clone( SfxItemPool* ) const
 {
-    return new SwFormatFillOrder( SwFillOrder(GetValue()) );
+    return new SwFormatFillOrder( GetValue() );
 }
 
 sal_uInt16  SwFormatFillOrder::GetValueCount() const
