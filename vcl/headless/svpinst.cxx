@@ -370,6 +370,12 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
 
         DoReleaseYield(nTimeoutMS);
     }
+    else if ( bEvent )
+    {
+        // Drain the wakeup pipe
+        int buffer;
+        while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0);
+    }
 
     return bEvent;
 }
@@ -394,8 +400,7 @@ void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
     if( (aPoll.revents & POLLIN) != 0 )
     {
         int buffer;
-        while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0)
-            continue;
+        while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0);
     }
 }
 
