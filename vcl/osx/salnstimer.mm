@@ -30,7 +30,13 @@
 -(void)timerElapsed:(NSTimer*)pTimer
 {
     (void)pTimer;
-    ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, YES );
+    // nil the timer, as it is just invalidated after the firing function
+    AquaSalTimer::pRunningTimer = nil;
+    const AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    if (pInst->mbIsLiveResize)
+        AquaSalTimer::handleDispatchTimerEvent();
+    else
+        ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, YES );
 }
 
 @end

@@ -347,6 +347,7 @@ void DestroySalInstance( SalInstance* pInst )
 AquaSalInstance::AquaSalInstance()
  : maUserEventListMutex()
  , maWaitingYieldCond()
+ , mbIsLiveResize( false )
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();

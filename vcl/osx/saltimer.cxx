@@ -83,7 +83,7 @@ static void ImplSalStartTimer( sal_uLong nMS )
         return;
     }
 
-    if ( 0 == nMS )
+    if ( 0 == nMS && !pSalData->mpFirstInstance->mbIsLiveResize )
     {
         ImplSalStopTimer();
         ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, NO );
@@ -93,7 +93,7 @@ static void ImplSalStartTimer( sal_uLong nMS )
         NSTimeInterval aTI = double(nMS) / 1000.0;
         if( AquaSalTimer::pRunningTimer != nil )
         {
-            if (rtl::math::approxEqual(
+            if ([AquaSalTimer::pRunningTimer isValid] && rtl::math::approxEqual(
                     [AquaSalTimer::pRunningTimer timeInterval], aTI))
             {
                 // set new fire date

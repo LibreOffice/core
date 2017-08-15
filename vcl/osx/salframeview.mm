@@ -533,6 +533,17 @@ private:
 
 -(void)drawRect: (NSRect)aRect
 {
+    if( GetSalData()->mpFirstInstance )
+    {
+        const bool bIsLiveResize = [self inLiveResize];
+        const bool bWasLiveResize = GetSalData()->mpFirstInstance->mbIsLiveResize;
+        if ( bWasLiveResize != bIsLiveResize )
+        {
+            GetSalData()->mpFirstInstance->mbIsLiveResize = bIsLiveResize;
+            Scheduler::ProcessTaskScheduling();
+        }
+    }
+
     // HOTFIX: #i93512# prevent deadlocks if any other thread already has the SalYieldMutex
     TryGuard aTryGuard;
     if( !aTryGuard.IsGuarded() )

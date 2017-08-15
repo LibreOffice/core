@@ -74,6 +74,7 @@ public:
     std::list< SalUserEvent >               maUserEvents;
     osl::Mutex                              maUserEventListMutex;
     osl::Condition                          maWaitingYieldCond;
+    bool                                    mbIsLiveResize;
 
     static std::list<const ApplicationEvent*> aAppEventList;
 

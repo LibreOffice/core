@@ -91,9 +91,14 @@ can be added to the scheduler reasonably.
 
 == MacOS implementation details ==
 
-Generally the Scheduler is handled as expected. There is a workaround for a
-problem for pushing tasks to an empty queue, as [NSApp postEvent: ...
-atStart: NO] doesn't append the event, if the message queue is empty.
+Generally the Scheduler is handled as expected, except on resize, which is
+handled with different runloop-modes in MacOS. In case of a resize, the normal
+runloop is suspended in sendEvent, so we can't call the scheduler via posted
+main loop-events. Instead the schedule the timer again.
+
+There is also a workaround for a problem for pushing tasks to an empty queue,
+as [NSApp postEvent: ... atStart: NO] doesn't append the event, if the
+message queue is empty.
 
 Probably that's the reason, why some code comments spoke of lost events and
 there was some distinct additional event processing implemented.
