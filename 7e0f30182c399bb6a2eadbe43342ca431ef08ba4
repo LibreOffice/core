@@ -25,6 +25,40 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_3ded0d8c",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-16T10:55:09Z",
+      "side": 1,
+      "message": "Nitpick: please, when nesting if use block braces to clarify\n\n if()\n {\n     if()\n         ...\n     else\n         ...\n }",
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9dfc4140",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-16T10:55:09Z",
+      "side": 1,
+      "message": "This looks odd.\n\nGetNumberFormat(nDim) returns maFields[nDim]-\u003emnNumFormat and GetLocaleIndependentFormattedString() for that via GetLocaleIndependentFormat() determines the type with SvNumberFormatter::GetType( nNumFormat) and chooses the proper format for DATE, TIME and DATETIME.\n\nIsDateDimension(nDim) uses SvNumberFormatter::GetType(maFields[nDim]-\u003emnNumFormat) and returns true for DATE or DATETIME.\n\nEffectively this change now formats also DATE fields as DATETIME, which is wrong.\n\nCould you elaborate why you changed this?",
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_794b2a5a",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 1
