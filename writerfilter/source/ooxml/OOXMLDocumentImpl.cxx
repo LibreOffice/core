@@ -169,10 +169,6 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     {
         importSubStreamRelations(pStream, OOXMLStream::CUSTOMXMLPROPS);
     }
-    if(OOXMLStream::ACTIVEX == nType)
-    {
-        importSubStreamRelations(pStream, OOXMLStream::ACTIVEXBIN);
-    }
     if(OOXMLStream::CHARTS == nType)
     {
         importSubStreamRelations(pStream, OOXMLStream::EMBEDDINGS);
@@ -223,14 +219,8 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
                 mxCustomXmlProsDom = xRelation;
             }
         }
-        else if(OOXMLStream::ACTIVEXBIN == nType)
-        {
-            // imporing activex.bin files for activex.xml from activeX folder.
-            mxActiveXBin = xcpInputStream;
-        }
         else if(OOXMLStream::EMBEDDINGS == nType)
         {
-            // imporing activex.bin files for activex.xml from activeX folder.
             mxEmbeddings = xcpInputStream;
         }
         else if(OOXMLStream::CHARTS == nType)
@@ -484,8 +474,6 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         // Custom xml's are handled as part of grab bag.
         resolveCustomXmlStream(rStream);
-
-        resolveActiveXStream(rStream);
 
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
@@ -796,62 +784,6 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
         mxEmbeddingsList = comphelper::containerToSequence(aEmbeddings);
 }
 
-void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
-{
-    // Resolving all ActiveX[n].xml files from ActiveX folder.
-    uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
-    xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY);
-    if (xRelationshipAccess.is())
-    {
-        static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control";
-        static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/control";
-        bool bFound = false;
-        sal_Int32 counter = 0;
-        uno::Sequence< uno::Sequence< beans::StringPair > > aSeqs = xRelationshipAccess->getAllRelationships();
-        uno::Sequence<uno::Reference<xml::dom::XDocument> > xActiveXDomListTemp(aSeqs.getLength());
-        uno::Sequence<uno::Reference<io::XInputStream> > xActiveXBinListTemp(aSeqs.getLength());
-        for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
-        {
-            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
-            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
-            {
-                beans::StringPair aPair = aSeq[i];
-                // Need to resolve only ActiveX files from document relationships.
-                // Skipping other files.
-                if (aPair.Second == sCustomType ||
-                        aPair.Second == sCustomTypeStrict)
-                    bFound = true;
-                else if(aPair.First == "Target" && bFound)
-                {
-                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
-                    // to ensure ActiveX.xml target is visited in lcl_getTarget.
-                    customTarget = aPair.Second;
-                }
-            }
-            if(bFound)
-            {
-                uno::Reference<xml::dom::XDocument> activeXTemp = importSubStream(OOXMLStream::ACTIVEX);
-                // This will add all ActiveX[n].xml to grabbag list.
-                if(activeXTemp.is())
-                {
-                    xActiveXDomListTemp[counter] = activeXTemp;
-                    if(mxActiveXBin.is())
-                    {
-                        xActiveXBinListTemp[counter] = mxActiveXBin;
-                    }
-                    counter++;
-                    resolveFastSubStream(rStream, OOXMLStream::ACTIVEX);
-                }
-                bFound = false;
-            }
-        }
-        xActiveXDomListTemp.realloc(counter);
-        xActiveXBinListTemp.realloc(counter);
-        mxActiveXDomList = xActiveXDomListTemp;
-        mxActiveXBinList = xActiveXBinListTemp;
-    }
-}
-
 uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getGlossaryDocDom( )
 {
     return mxGlossaryDocDom;
@@ -932,16 +864,6 @@ uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustom
 uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustomXmlDomPropsList( )
 {
     return mxCustomXmlDomPropsList;
-}
-
-uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getActiveXDomList( )
-{
-    return mxActiveXDomList;
-}
-
-uno::Sequence<uno::Reference<io::XInputStream> > OOXMLDocumentImpl::getActiveXBinList( )
-{
-    return mxActiveXBinList;
 }
 
 uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
