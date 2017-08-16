@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column:100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -187,6 +187,11 @@ inline void applyStartToEndFlags(ScRefFlags &target)
 class SAL_WARN_UNUSED ScAddress
 {
 private:
+    // Even if the fields are in the order "row, column, tab", in all (?) the ScAddress and
+    // ScDocument APIs that take separate row, column, and tab parameters, the parameters are in the
+    // order "column, row, tab", which matches the most common (A1) address syntax, if you ignore
+    // the sheet (tab). Don't let this confuse you, like it confused me for a while.
+
     SCROW   nRow;
     SCCOL   nCol;
     SCTAB   nTab;
