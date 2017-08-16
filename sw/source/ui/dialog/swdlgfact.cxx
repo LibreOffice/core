@@ -406,7 +406,7 @@ OString AbstractFieldInputDlg_Impl::GetWindowState() const
     return pDlg->GetWindowState();
 }
 
-void AbstractFieldInputDlg_Impl::EndDialog(long n)
+void AbstractFieldInputDlg_Impl::EndDialog(sal_Int32 n)
 {
     pDlg->EndDialog(n);
 }
@@ -597,7 +597,7 @@ void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link<Dialog&,void>& 
         LINK( this, AbstractMailMergeWizard_Impl, EndDialogHdl ) );
 }
 
-long AbstractMailMergeWizard_Impl::GetResult()
+sal_Int32 AbstractMailMergeWizard_Impl::GetResult()
 {
     return pDlg->GetResult();
 }
