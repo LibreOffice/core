@@ -1695,7 +1695,7 @@ public:
                 sc::formula_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
 
-                for (; it != itEnd; /* incrementing throug std::advance*/)
+                for (; it != itEnd; /* incrementing through std::advance*/)
                 {
                     const ScFormulaCell* pCell = *it;
                     OUString aFormula;
