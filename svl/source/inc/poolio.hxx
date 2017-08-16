@@ -38,29 +38,6 @@ static const sal_uInt32 SFX_ITEMS_DIRECT  = 0xffffffff;
 static const sal_uInt32 SFX_ITEMS_NULL    = 0xfffffff0;  // instead StoreSurrogate
 static const sal_uInt32 SFX_ITEMS_DEFAULT = 0xfffffffe;
 
-struct SfxPoolVersion_Impl
-{
-    sal_uInt16          _nVer;
-    sal_uInt16          _nStart, _nEnd;
-    const sal_uInt16*         _pMap;
-
-                    SfxPoolVersion_Impl( sal_uInt16 nVer, sal_uInt16 nStart, sal_uInt16 nEnd,
-                                         const sal_uInt16 *pMap )
-                    :   _nVer( nVer ),
-                        _nStart( nStart ),
-                        _nEnd( nEnd ),
-                        _pMap( pMap )
-                    {}
-                    SfxPoolVersion_Impl( const SfxPoolVersion_Impl &rOrig )
-                    :   _nVer( rOrig._nVer ),
-                        _nStart( rOrig._nStart ),
-                        _nEnd( rOrig._nEnd ),
-                        _pMap( rOrig._pMap )
-                    {}
-};
-
-typedef std::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
-
 /**
  * This array contains a set of SfxPoolItems, if those items are
  * poolable then each item has a unique set of properties, and we
@@ -106,13 +83,9 @@ struct SfxItemPool_Impl
     sal_uInt16*                     mpPoolRanges;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
-    sal_uInt16                      mnFileFormatVersion;
-    sal_uInt16                      nVersion;
     sal_uInt16                      nInitRefCount; // 1, during load, may be 2
-    sal_uInt16                      nVerStart, nVerEnd; // WhichRange in versions
     MapUnit                         eDefMetric;
     bool                            bInSetItem;
-    bool                            mbPersistentRefCounts;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
         : maPoolItems(nEnd - nStart + 1)
@@ -124,14 +97,9 @@ struct SfxItemPool_Impl
         , mpPoolRanges(nullptr)
         , mnStart(nStart)
         , mnEnd(nEnd)
-        , mnFileFormatVersion(0)
-        , nVersion(0)
         , nInitRefCount(0)
-        , nVerStart(0)
-        , nVerEnd(0)
         , eDefMetric(MapUnit::MapCM)
         , bInSetItem(false)
-        , mbPersistentRefCounts(false)
     {
         DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
     }

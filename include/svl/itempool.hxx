@@ -91,8 +91,7 @@ public:
                                     SfxItemPool( const OUString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
                                                  const SfxItemInfo *pItemInfos,
-                                                 std::vector<SfxPoolItem*> *pDefaults = nullptr,
-                                                 bool bLoadRefCounts = true );
+                                                 std::vector<SfxPoolItem*> *pDefaults = nullptr );
 
 protected:
     virtual                         ~SfxItemPool();
@@ -159,7 +158,6 @@ public:
     sal_uInt16                      GetFirstWhich() const;
     sal_uInt16                      GetLastWhich() const;
     bool                            IsInRange( sal_uInt16 nWhich ) const;
-    bool                            IsInVersionsRange( sal_uInt16 nWhich ) const;
     void                            SetSecondaryPool( SfxItemPool *pPool );
     SfxItemPool*                    GetSecondaryPool() const;
     SfxItemPool*                    GetMasterPool() const;
@@ -175,9 +173,6 @@ public:
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;
-
-    sal_uInt16                      GetNewWhich( sal_uInt16 nOldWhich ) const;
-    void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
 
     static bool                     IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }

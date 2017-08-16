@@ -179,7 +179,7 @@ ScDocumentPool::ScDocumentPool()
 
     :   SfxItemPool ( "ScDocumentPool",
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
-                        aItemInfos, nullptr, false/*bLoadRefCounts*/ ),
+                        aItemInfos, nullptr ),
     mnCurrentMaxKey(0)
 {
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
