@@ -783,7 +783,7 @@ void SdActiveXControlsTest::testOptionButtonProperties()
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
 
     xPropertySet->getPropertyValue("State") >>= nState;
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState); // TriState / undefiend imported as unchecked
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nState); // TriState / undefined imported as unchecked
 
     xPropertySet->getPropertyValue("Align") >>= nAlign;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::TextAlign::RIGHT), nAlign);
