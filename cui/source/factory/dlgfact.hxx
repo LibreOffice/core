@@ -84,7 +84,7 @@ public:
     virtual         ~VclAbstractDialog2_Impl() override;
     virtual void    dispose() override;
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
-    virtual long    GetResult() override;
+    virtual sal_Int32 GetResult() override;
 private:
     DECL_LINK( EndDialogHdl, Dialog&, void );
 };
@@ -135,7 +135,7 @@ public:
 class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConversionDialog
 {
     DECL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl,HangulHanjaConversionDialog)
-    virtual void      EndDialog(long nResult) override;
+    virtual void      EndDialog(sal_Int32 nResult) override;
     virtual void      EnableRubySupport( bool _bVal ) override;
     virtual void      SetByCharacter( bool _bByCharacter ) override ;
     virtual void      SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) override;

@@ -160,7 +160,7 @@ void  VclAbstractDialog2_Impl::StartExecuteModal( const Link<Dialog&,void>& rEnd
 }
 
 // virtual
-long VclAbstractDialog2_Impl::GetResult()
+sal_Int32 VclAbstractDialog2_Impl::GetResult()
 {
     return m_pDlg->GetResult();
 }
@@ -236,7 +236,7 @@ SvxDistributeVertical AbstractSvxDistributeDialog_Impl::GetDistributeVer()const
     return pDlg->GetDistributeVer();
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::EndDialog(long nResult)
+void AbstractHangulHanjaConversionDialog_Impl::EndDialog(sal_Int32 nResult)
 {
     pDlg->EndDialog(nResult);
 }
