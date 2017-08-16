@@ -256,7 +256,7 @@ sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
             sal_Int32 nScroll = (GetFirstVisPos() > 0) ? CSV_SCROLL_DIST : 0;
             nNewPos = std::max( nPos, GetFirstVisPos() + nScroll );
         }
-        else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1L )
+        else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1 )
         {
             sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? CSV_SCROLL_DIST : 0;
             nNewPos = std::min( nNewPos, GetLastVisPos() - nScroll - sal_Int32( 1 ) );

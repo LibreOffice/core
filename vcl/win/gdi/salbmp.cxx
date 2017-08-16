@@ -880,7 +880,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                 }
                 else if( ( pBIH->biBitCount == 16 ) || ( pBIH->biBitCount == 32 ) )
                 {
-                    sal_uLong nOffset = 0UL;
+                    sal_uLong nOffset = 0;
 
                     if( pBIH->biCompression == BI_BITFIELDS )
                     {
@@ -978,7 +978,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
             {
                 nRunByte = *pRLE++;
 
-                if( nRunByte > 2UL )
+                if( nRunByte > 2 )
                 {
                     if( bRLE4 )
                     {
@@ -1010,7 +1010,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                 else if( !nRunByte )
                 {
                     pDIB = ( pRow += nWidthAl );
-                    nX = 0UL;
+                    nX = 0;
                 }
                 else if( nRunByte == 1 )
                     bEndDecoding = TRUE;

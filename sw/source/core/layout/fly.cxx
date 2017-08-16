@@ -1787,7 +1787,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
         if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
             nDist = LONG_MAX - nSize;
 
-        if ( nDist <= 0L )
+        if ( nDist <= 0 )
             return 0L;
 
         if ( Lower()->IsColumnFrame() )
@@ -1871,7 +1871,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
             nVal = std::min( nDist, nHeight - nFormatHeight );
         }
 
-        if ( nVal <= 0L )
+        if ( nVal <= 0 )
             return 0L;
 
         if ( Lower()->IsColumnFrame() )

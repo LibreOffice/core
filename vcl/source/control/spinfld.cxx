@@ -557,7 +557,7 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
                 if (pData->GetMode() == CommandWheelMode::SCROLL)
                 {
-                    if (pData->GetDelta() < 0L)
+                    if (pData->GetDelta() < 0)
                         Down();
                     else
                         Up();

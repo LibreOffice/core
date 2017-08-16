@@ -246,21 +246,21 @@ inline void HTMLParser::StartPRE()
 {
     bReadPRE = true;
     bPre_IgnoreNewPara = true;
-    nPre_LinePos = 0UL;
+    nPre_LinePos = 0;
 }
 
 inline void HTMLParser::StartListing()
 {
     bReadListing = true;
     bPre_IgnoreNewPara = true;
-    nPre_LinePos = 0UL;
+    nPre_LinePos = 0;
 }
 
 inline void HTMLParser::StartXMP()
 {
     bReadXMP = true;
     bPre_IgnoreNewPara = true;
-    nPre_LinePos = 0UL;
+    nPre_LinePos = 0;
 }
 
 #endif

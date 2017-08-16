@@ -135,7 +135,7 @@ namespace
                 if(aCandidate.areControlPointsUsed())
                 {
                     // compare with the maximum for bezier curved polygons
-                    bNeedToSplit = nPointCount > ((MAX_POLYGON_POINT_COUNT_METAFILE / 3L) - 1L);
+                    bNeedToSplit = nPointCount > ((MAX_POLYGON_POINT_COUNT_METAFILE / 3L) - 1);
                 }
                 else
                 {

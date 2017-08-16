@@ -216,7 +216,7 @@ public:
         return GetPointMarkDescription(true);
     }
 
-    // pPage=0L: Selection of everything! Respect Pages
+    // pPage=0: Selection of everything! Respect Pages
     bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
     bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
 

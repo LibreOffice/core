@@ -233,7 +233,7 @@ FltError ImportLotus::Read(SvStream& rIn)
     bool            bRead = true;
     sal_uInt16          nOp;
     sal_uInt16          nRecLen;
-    sal_uInt32          nNextRec = 0UL;
+    sal_uInt32          nNextRec = 0;
     FltError        eRet = eERR_OK;
 
     nTab = 0;

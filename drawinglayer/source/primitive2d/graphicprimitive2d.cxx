@@ -34,7 +34,7 @@ namespace drawinglayer
     {
         void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& ) const
         {
-            if(255L == getGraphicAttr().GetTransparency())
+            if(255 == getGraphicAttr().GetTransparency())
             {
                 // content is invisible, done
                 return;

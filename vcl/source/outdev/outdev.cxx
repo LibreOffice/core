@@ -339,7 +339,7 @@ void OutputDevice::SetRefPoint()
         mpMetaFile->AddAction( new MetaRefPointAction( Point(), false ) );
 
     mbRefPoint = false;
-    maRefPoint.X() = maRefPoint.Y() = 0L;
+    maRefPoint.X() = maRefPoint.Y() = 0;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetRefPoint();

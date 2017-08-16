@@ -241,7 +241,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
                 return pColorList->GetIndex( pColorEntry->GetName() );
         }
     }
-    return -1L;
+    return -1;
 }
 
 

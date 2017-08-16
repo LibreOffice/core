@@ -1041,7 +1041,7 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
     }
     else
     {
-        rStm.SeekRel( -4L );
+        rStm.SeekRel( -4 );
         n32 = 0;
         rStm.ReadUInt32( n32 );
 

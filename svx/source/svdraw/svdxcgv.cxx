@@ -206,7 +206,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
         SdrOutliner& rOutliner = pObj->GetModel()->GetHitTestOutliner();
         rOutliner.SetText(*pObj->GetOutlinerParaObject());
 
-        if(1L == rOutliner.GetParagraphCount())
+        if(1 == rOutliner.GetParagraphCount())
         {
             SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0L);
 
