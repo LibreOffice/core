@@ -38,7 +38,7 @@ protected:
     std::unique_ptr<SfxItemInfo[]> mpLocalItemInfos;
 
 public:
-    XOutdevItemPool( SfxItemPool* pMaster, bool bLoadRefCounts = true);
+    XOutdevItemPool( SfxItemPool* pMaster);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
     virtual SfxItemPool* Clone() const override;

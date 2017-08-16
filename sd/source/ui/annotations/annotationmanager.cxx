@@ -109,7 +109,7 @@ SfxItemPool* GetAnnotationPool()
     static SfxItemPool* s_pAnnotationPool = nullptr;
     if( s_pAnnotationPool == nullptr )
     {
-        s_pAnnotationPool = EditEngine::CreatePool( false );
+        s_pAnnotationPool = EditEngine::CreatePool();
         s_pAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         vcl::Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );

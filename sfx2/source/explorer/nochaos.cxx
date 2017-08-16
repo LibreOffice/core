@@ -98,8 +98,6 @@ CntItemPool::CntItemPool()
 : SfxItemPool( "chaos", WID_CHAOS_START, WID_CHAOS_START, nullptr ),
   _nRefs( 0 )
 {
-    SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
-
     FreezeIdRanges();
 
     // Create static defaults.

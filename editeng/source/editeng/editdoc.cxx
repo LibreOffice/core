@@ -1927,7 +1927,7 @@ void ItemList::Insert( const SfxPoolItem* pItem )
 
 EditDoc::EditDoc( SfxItemPool* pPool ) :
     nLastCache(0),
-    pItemPool(pPool ? pPool : new EditEngineItemPool(false)),
+    pItemPool(pPool ? pPool : new EditEngineItemPool()),
     nDefTab(DEFTAB),
     bIsVertical(false),
     bIsTopToBottomVert(false),
@@ -3021,9 +3021,9 @@ void CharAttribList::dumpAsXml(struct _xmlTextWriter* pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
+EditEngineItemPool::EditEngineItemPool()
     : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,
-                    aItemInfos, nullptr, bPersistenRefCounts )
+                    aItemInfos, nullptr )
 {
     m_xDefItems = EditDLL::Get().GetGlobalData()->GetDefItems();
     SetDefaults(m_xDefItems->getDefaults());
