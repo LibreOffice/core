@@ -24,14 +24,14 @@
 #include <rtl/cipher.h>
 
 #define RTL_CIPHER_NTOHL(c, l) \
-    ((l)  = ((sal_uInt32)(*((c)++))) << 24L, \
-     (l) |= ((sal_uInt32)(*((c)++))) << 16L, \
+    ((l)  = ((sal_uInt32)(*((c)++))) << 24, \
+     (l) |= ((sal_uInt32)(*((c)++))) << 16, \
      (l) |= ((sal_uInt32)(*((c)++))) <<  8L, \
      (l) |= ((sal_uInt32)(*((c)++))))
 
 #define RTL_CIPHER_HTONL(l, c) \
-    (*((c)++) = (sal_uInt8)(((l) >> 24L) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >> 16L) & 0xff), \
+    (*((c)++) = (sal_uInt8)(((l) >> 24) & 0xff), \
+     *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
      *((c)++) = (sal_uInt8)(((l) >>  8L) & 0xff), \
      *((c)++) = (sal_uInt8)(((l)       ) & 0xff))
 
@@ -45,17 +45,17 @@
             SAL_FALLTHROUGH; \
         case 7: (xr) |= ((sal_uInt32)(*(--(c)))) <<  8L; \
             SAL_FALLTHROUGH; \
-        case 6: (xr) |= ((sal_uInt32)(*(--(c)))) << 16L; \
+        case 6: (xr) |= ((sal_uInt32)(*(--(c)))) << 16; \
             SAL_FALLTHROUGH; \
-        case 5: (xr) |= ((sal_uInt32)(*(--(c)))) << 24L; \
+        case 5: (xr) |= ((sal_uInt32)(*(--(c)))) << 24; \
             SAL_FALLTHROUGH; \
         case 4: (xl)  = ((sal_uInt32)(*(--(c)))); \
             SAL_FALLTHROUGH; \
         case 3: (xl) |= ((sal_uInt32)(*(--(c)))) <<  8L; \
             SAL_FALLTHROUGH; \
-        case 2: (xl) |= ((sal_uInt32)(*(--(c)))) << 16L; \
+        case 2: (xl) |= ((sal_uInt32)(*(--(c)))) << 16; \
             SAL_FALLTHROUGH; \
-        case 1: (xl) |= ((sal_uInt32)(*(--(c)))) << 24L; \
+        case 1: (xl) |= ((sal_uInt32)(*(--(c)))) << 24; \
     } \
 }
 
@@ -68,17 +68,17 @@
             SAL_FALLTHROUGH; \
         case 7: *(--(c)) = (sal_uInt8)(((xr) >>  8L) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 6: *(--(c)) = (sal_uInt8)(((xr) >> 16L) & 0xff); \
+        case 6: *(--(c)) = (sal_uInt8)(((xr) >> 16) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 5: *(--(c)) = (sal_uInt8)(((xr) >> 24L) & 0xff); \
+        case 5: *(--(c)) = (sal_uInt8)(((xr) >> 24) & 0xff); \
             SAL_FALLTHROUGH; \
         case 4: *(--(c)) = (sal_uInt8)(((xl)       ) & 0xff); \
             SAL_FALLTHROUGH; \
         case 3: *(--(c)) = (sal_uInt8)(((xl) >>  8L) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 2: *(--(c)) = (sal_uInt8)(((xl) >> 16L) & 0xff); \
+        case 2: *(--(c)) = (sal_uInt8)(((xl) >> 16) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 1: *(--(c)) = (sal_uInt8)(((xl) >> 24L) & 0xff); \
+        case 1: *(--(c)) = (sal_uInt8)(((xl) >> 24) & 0xff); \
     } \
 }
 

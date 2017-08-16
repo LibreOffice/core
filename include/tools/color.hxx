@@ -188,7 +188,7 @@ inline sal_uInt8 Color::GetLuminance() const
 {
     return static_cast<sal_uInt8>((COLORDATA_BLUE(mnColor) * 29UL +
                                    COLORDATA_GREEN(mnColor) * 151UL +
-                                   COLORDATA_RED(mnColor) * 76UL) >> 8UL);
+                                   COLORDATA_RED(mnColor) * 76UL) >> 8);
 }
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )

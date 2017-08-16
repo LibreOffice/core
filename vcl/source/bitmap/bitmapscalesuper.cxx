@@ -26,7 +26,7 @@
 
 namespace {
 
-#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7L)+nFrac*((long)(cVal1)-(cVal0)))>>7L))
+#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7)+nFrac*((long)(cVal1)-(cVal0)))>>7))
 
 void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
 {
@@ -286,7 +286,7 @@ void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const long nMax = 1 << 7;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -342,10 +342,10 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
 
                     if(nX == nEndX )
                     {
-                        nSumRowB += rCol.GetBlue() << 7L;
-                        nSumRowG += rCol.GetGreen() << 7L;
-                        nSumRowR += rCol.GetRed() << 7L;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += rCol.GetBlue() << 7;
+                        nSumRowG += rCol.GetGreen() << 7;
+                        nSumRowR += rCol.GetRed() << 7;
+                        nTotalWeightX += 1 << 7;
                     }
                     else if( j == 0 )
                     {
@@ -365,10 +365,10 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else
                     {
-                        nSumRowB += rCol.GetBlue() << 7L;
-                        nSumRowG += rCol.GetGreen() << 7L;
-                        nSumRowR += rCol.GetRed() << 7L;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += rCol.GetBlue() << 7;
+                        nSumRowG += rCol.GetGreen() << 7;
+                        nSumRowR += rCol.GetRed() << 7;
+                        nTotalWeightX += 1 << 7;
                     }
                 }
 
@@ -411,7 +411,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const long nMax = 1 << 7;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -466,10 +466,10 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     if(nX == nEndX )
                     {
 
-                        nSumRowB += aCol0.GetBlue() << 7L;
-                        nSumRowG += aCol0.GetGreen() << 7L;
-                        nSumRowR += aCol0.GetRed() << 7L;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += aCol0.GetBlue() << 7;
+                        nSumRowG += aCol0.GetGreen() << 7;
+                        nSumRowR += aCol0.GetRed() << 7;
+                        nTotalWeightX += 1 << 7;
                     }
                     else if( j == 0 )
                     {
@@ -492,10 +492,10 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     else
                     {
 
-                        nSumRowB += aCol0.GetBlue() << 7L;
-                        nSumRowG += aCol0.GetGreen() << 7L;
-                        nSumRowR += aCol0.GetRed() << 7L;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += aCol0.GetBlue() << 7;
+                        nSumRowG += aCol0.GetGreen() << 7;
+                        nSumRowR += aCol0.GetRed() << 7;
+                        nTotalWeightX += 1 << 7;
                     }
                 }
 
@@ -538,7 +538,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const long nMax = 1 << 7;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -594,10 +594,10 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                 {
                     if(nX == nEndX )
                     {
-                        nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowG += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowR += ( *pTmpX ) << 7;pTmpX++;
+                        nTotalWeightX += 1 << 7;
                     }
                     else if( j == 0 )
                     {
@@ -617,10 +617,10 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else
                     {
-                        nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowG += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowR += ( *pTmpX ) << 7;pTmpX++;
+                        nTotalWeightX += 1 << 7;
                     }
                 }
 
@@ -661,7 +661,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const long nMax = 1 << 7;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -715,10 +715,10 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                 {
                     if(nX == nEndX )
                     {
-                        nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowR += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowG += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowB += ( *pTmpX ) << 7;pTmpX++;
+                        nTotalWeightX += 1 << 7;
                     }
                     else if( j == 0 )
                     {
@@ -738,10 +738,10 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else
                     {
-                        nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
-                        nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowR += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowG += ( *pTmpX ) << 7;pTmpX++;
+                        nSumRowB += ( *pTmpX ) << 7;pTmpX++;
+                        nTotalWeightX += 1 << 7;
                     }
                 }
 
@@ -782,7 +782,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
 void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
-    const long nMax = 1 << 7L;
+    const long nMax = 1 << 7;
 
     for( long nY = nStartY; nY <= nEndY; nY++ )
     {
@@ -837,10 +837,10 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     if(nX == nEndX )
                     {
 
-                        nSumRowB += aCol0.GetBlue() << 7L;
-                        nSumRowG += aCol0.GetGreen() << 7L;
-                        nSumRowR += aCol0.GetRed() << 7L;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += aCol0.GetBlue() << 7;
+                        nSumRowG += aCol0.GetGreen() << 7;
+                        nSumRowR += aCol0.GetRed() << 7;
+                        nTotalWeightX += 1 << 7;
                     }
                     else if( j == 0 )
                     {
@@ -862,10 +862,10 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
                     }
                     else
                     {
-                        nSumRowB += aCol0.GetBlue() << 7L;
-                        nSumRowG += aCol0.GetGreen() << 7L;
-                        nSumRowR += aCol0.GetRed() << 7L;
-                        nTotalWeightX += 1 << 7L;
+                        nSumRowB += aCol0.GetBlue() << 7;
+                        nSumRowG += aCol0.GetGreen() << 7;
+                        nSumRowR += aCol0.GetRed() << 7;
+                        nTotalWeightX += 1 << 7;
                     }
                 }
 

@@ -615,7 +615,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                                 cTmp = *pTmp++;
                             }
 
-                            auto nIndex = (cTmp >> ( --nShift << 2UL ) ) & 0x0f;
+                            auto nIndex = (cTmp >> ( --nShift << 2 ) ) & 0x0f;
                             rAcc.SetPixelIndex(nY, nX, SanitizePaletteIndex(nIndex, rPalette, bForceToMonoWhileReading));
                         }
                     }
