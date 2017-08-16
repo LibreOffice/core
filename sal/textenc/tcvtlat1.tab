@@ -1038,7 +1038,7 @@ static ImplTextEncodingData const aImplIBM865TextEncodingData
 
 /* ISO-8859-14 */
 /* approximately like Latin1 */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-14.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -1166,7 +1166,7 @@ static ImplTextEncodingData const aImplISO885914TextEncodingData
 
 /* ISO-8859-15 */
 /* approximately like Latin1, but with Euro (former CURRENCY symbol to A4) */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-15.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 

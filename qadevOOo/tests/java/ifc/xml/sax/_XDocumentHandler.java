@@ -150,7 +150,7 @@ public class _XDocumentHandler extends MultiMethodTest {
 
         if (targetDocSet == null){
             log.println("object relation 'XDocumentHandler.TargetDocumentSetter' not used.");
-            log.println("be sure that the test have a target to write throu");
+            log.println("be sure that the test have a target to write through");
         }
     }
 

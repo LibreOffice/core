@@ -613,7 +613,7 @@ enum MSO_BlipFlags {
    /* Or the following flags with any of the above. */
    mso_blipflagDontSave = 4,  // A "dont" is the depression in the metal
                               // body work of an automobile caused when a
-                              // cyclist violently thrusts his or her nose
+                              // cyclist violently trusts his or her nose
                               // at it, thus a DontSave is another name for
                               // a cycle lane.
    mso_blipflagDoNotSave = 4, // For those who prefer English

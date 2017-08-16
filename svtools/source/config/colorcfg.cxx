@@ -442,7 +442,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0xCE7B00, // SQLSTRING
         COL_BLACK, // SQLOPERATOR
         0x0000E6, // SQLKEYWORD
-        0x259D9D, // SQLPARAMTER
+        0x259D9D, // SQLPARAMETER
         COL_GRAY, // SQLCOMMENT
     };
     Color aRet;
