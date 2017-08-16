@@ -1376,7 +1376,7 @@ void ToolbarMenu::Command( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
         {
-            implCursorUpDown( pData->GetDelta() > 0L, false );
+            implCursorUpDown( pData->GetDelta() > 0, false );
         }
     }
 }

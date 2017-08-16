@@ -1173,7 +1173,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
 {
     // #i22167#
     // change to double precision usage to not lose decimal places
-    const bool bNegative(nVal < 0L);
+    const bool bNegative(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc(aSysLoc.GetLocaleData());
     double fLocalValue(double(nVal) * double(aUIUnitFact));

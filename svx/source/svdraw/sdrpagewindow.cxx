@@ -232,7 +232,7 @@ namespace
 
         if(aCandidate.count())
         {
-            const sal_uInt32 nLoopCount(aCandidate.isClosed() ? aCandidate.count() : aCandidate.count() - 1L);
+            const sal_uInt32 nLoopCount(aCandidate.isClosed() ? aCandidate.count() : aCandidate.count() - 1);
             rOutDev.SetFillColor();
             rOutDev.SetLineColor(aColor);
 
@@ -249,7 +249,7 @@ namespace
 
     void impTryTest(const SdrPageView& rPageView, OutputDevice& rOutDev)
     {
-        if(rPageView.GetPage() && rPageView.GetPage()->GetObjCount() >= 2L)
+        if(rPageView.GetPage() && rPageView.GetPage()->GetObjCount() >= 2)
         {
             SdrPage* pPage = rPageView.GetPage();
             SdrObject* pObjA = pPage->GetObj(0);

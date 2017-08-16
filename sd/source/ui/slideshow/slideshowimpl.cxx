@@ -653,7 +653,7 @@ void SAL_CALL SlideshowImpl::disposing()
         Help::EnableExtHelp();
 
         showChildWindows();
-        mnChildMask = 0UL;
+        mnChildMask = 0;
     }
 
     // show current window again
@@ -2321,7 +2321,7 @@ static const FncGetChildWindowId aShowChildren[] =
 
 void SlideshowImpl::hideChildWindows()
 {
-    mnChildMask = 0UL;
+    mnChildMask = 0;
 
     if( ANIMATIONMODE_SHOW == meAnimationMode )
     {

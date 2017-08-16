@@ -179,7 +179,7 @@ public:
     void            StartAnimation( OutputDevice* pOutDev,
                           const Point& rDestPt,
                           const Size& rDestSize,
-                          long nExtraData = 0L,
+                          long nExtraData = 0,
                           OutputDevice* pFirstFrameOutDev = nullptr );
     void            StopAnimation( OutputDevice* pOutputDevice,
                           long nExtraData );

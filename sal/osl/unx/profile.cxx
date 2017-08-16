@@ -1023,7 +1023,7 @@ static bool OslProfile_rewindFile(osl_TFile* pFile, bool bTruncate)
     {
         pFile->m_pReadPtr  = pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf);
 
-        bRet = (lseek(pFile->m_Handle, SEEK_SET, 0L) == 0L);
+        bRet = (lseek(pFile->m_Handle, SEEK_SET, 0L) == 0);
 
         if (bTruncate)
         {

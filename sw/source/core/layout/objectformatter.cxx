@@ -103,7 +103,7 @@ class SwPageNumAndTypeOfAnchors
 
         sal_uInt32 GetPageNum( sal_uInt32 _nIndex ) const
         {
-            sal_uInt32 nRetPgNum = 0L;
+            sal_uInt32 nRetPgNum = 0;
 
             if ( _nIndex < Count())
             {

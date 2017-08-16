@@ -452,12 +452,12 @@ public:
 
         method replaced 'old' method <bool IsMoveable() const>.
         Determines, if frame is moveable in given environment. if no environment
-        is given (parameter _pLayoutFrame == 0L), the movability in the actual
+        is given (parameter _pLayoutFrame == 0), the movability in the actual
         environment (<GetUpper()) is checked.
 
         @param _pLayoutFrame
         input parameter - given environment (layout frame), in which the movability
-        will be checked. If not set ( == 0L ), actual environment is taken.
+        will be checked. If not set ( == 0 ), actual environment is taken.
 
         @return boolean, indicating, if frame is moveable in given environment
     */

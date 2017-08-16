@@ -105,7 +105,7 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
         const sal_uInt32 nRepeatCount(nRelativeTime / mnDuration);
         sal_uInt32 nFrameTime(nRelativeTime - (nRepeatCount * mnDuration));
 
-        if(DoAlternate() && (nRepeatCount + 1L) % 2L)
+        if(DoAlternate() && (nRepeatCount + 1) % 2L)
             nFrameTime = mnDuration - nFrameTime;
 
         return mfStart + ((mfStop - mfStart) *
@@ -120,7 +120,7 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
         {
             const sal_uInt32 nRepeatCount(nRelativeTime / mnDuration);
 
-            if((nRepeatCount + 1L) % 2L)
+            if((nRepeatCount + 1) % 2L)
                 nFrameTime = mnDuration - nFrameTime;
         }
 
@@ -304,7 +304,7 @@ double ActivityImpl::GetMixerState( sal_uInt32 nTime )
             else
             {
                 // end of animation, take last entry's end
-                fRetval = maVector[maVector.size() - 1L].GetStop();
+                fRetval = maVector[maVector.size() - 1].GetStop();
             }
         }
 
@@ -320,25 +320,25 @@ sal_uInt32 ActivityImpl::GetStepWidthLogic() const
 
     sal_uInt32 nRetval(0);
 
-    if(mnStepWidth < 0L)
+    if(mnStepWidth < 0)
     {
         // is in pixels, convert to logical units
         nRetval = (-mnStepWidth * PIXEL_TO_LOGIC);
     }
-    else if(mnStepWidth > 0L)
+    else if(mnStepWidth > 0)
     {
         // is in logical units
         nRetval = mnStepWidth;
     }
 
-    if(0L == nRetval)
+    if(0 == nRetval)
     {
         // step 1 pixel, canned value
 
         // with very high DPIs like in PDF export, this can
         // still get zero.  for that cases, set a default, too (taken
         // from ainfoscrolltext.cxx)
-        nRetval = 100L;
+        nRetval = 100;
     }
 
     return nRetval;
@@ -462,7 +462,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 (fRelativeDistance * fDistanceLogic) / GetStepWidthLogic();
             nLoopTime = FRound(fNumberSteps * mnFrequency);
 
-            if(0L == mnRepeat)
+            if(0 == mnRepeat)
             {
                 if(!DoScrollIn())
                 {
@@ -478,8 +478,8 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
             {
                 sal_uInt32 nNumRepeat(mnRepeat);
 
-                if(DoAlternate() && (nNumRepeat + 1L) % 2L)
-                    nNumRepeat += 1L;
+                if(DoAlternate() && (nNumRepeat + 1) % 2L)
+                    nNumRepeat += 1;
 
                 // ending main loop
                 ScrollTextAnimNode aMainNode(
@@ -827,7 +827,7 @@ ActivityImpl::ActivityImpl(
         // eg VisibleWhenStopped is grayed out and needs to be corrected here.
         mbVisibleWhenStopped = true;
         mbVisibleWhenStarted = false;
-        mnRepeat = 0L;
+        mnRepeat = 0;
     }
 
     // Get animation direction

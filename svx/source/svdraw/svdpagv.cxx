@@ -393,7 +393,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
 
 void SdrPageView::SetDesignMode( bool _bDesignMode ) const
 {
-    for ( sal_uInt32 i = 0L; i < PageWindowCount(); ++i )
+    for ( sal_uInt32 i = 0; i < PageWindowCount(); ++i )
     {
         const SdrPageWindow& rPageViewWindow = *GetPageWindow(i);
         rPageViewWindow.SetDesignMode( _bDesignMode );

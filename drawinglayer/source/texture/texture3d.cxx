@@ -158,11 +158,11 @@ namespace drawinglayer
             {
                 rX = (sal_Int32)((rUV.getX() - maTopLeft.getX()) * mfMulX);
 
-                if(rX >= 0L && rX < mpReadBitmap->Width())
+                if(rX >= 0 && rX < mpReadBitmap->Width())
                 {
                     rY = (sal_Int32)((rUV.getY() - maTopLeft.getY()) * mfMulY);
 
-                    return (rY >= 0L && rY < mpReadBitmap->Height());
+                    return (rY >= 0 && rY < mpReadBitmap->Height());
                 }
             }
 

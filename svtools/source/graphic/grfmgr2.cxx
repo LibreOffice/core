@@ -333,7 +333,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         fRevScaleX = (double) ( aBitmapWidth  - 1 ) / (double)( aUnrotatedWidth  - 1 );
         // create horizontal mapping table
         long x;
-        for( x = 0, nTmpX = aBitmapWidth - 1L, nTmp = aBitmapWidth - 2L >= 0 ? aBitmapWidth -2L : 0L; x < aUnrotatedWidth; x++ )
+        for( x = 0, nTmpX = aBitmapWidth - 1, nTmp = aBitmapWidth - 2 >= 0 ? aBitmapWidth -2 : 0L; x < aUnrotatedWidth; x++ )
         {
             fTmp = x * fRevScaleX;
 
@@ -372,7 +372,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         fRevScaleY = (double) ( aBitmapHeight  - 1 ) / (double)( aUnrotatedHeight - 1 );
         // create vertical mapping table
         long y;
-        for( y = 0, nTmpY = aBitmapHeight - 1L, nTmp = aBitmapHeight - 2L >= 0 ? aBitmapHeight - 2L : 0L; y < aUnrotatedHeight; y++ )
+        for( y = 0, nTmpY = aBitmapHeight - 1, nTmp = aBitmapHeight - 2 >= 0 ? aBitmapHeight - 2 : 0L; y < aUnrotatedHeight; y++ )
         {
             fTmp = y * fRevScaleY;
 
@@ -414,8 +414,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
     const double        fCosAngle = cos( nRot10 * F_PI1800 );
     const double        fSinAngle = sin( nRot10 * F_PI1800 );
-    const long          aTargetWidth  = nEndX - nStartX + 1L;
-    const long          aTargetHeight = nEndY - nStartY + 1L;
+    const long          aTargetWidth  = nEndX - nStartX + 1;
+    const long          aTargetHeight = nEndY - nStartY + 1;
     std::unique_ptr<long[]> pCosX(new long[ aTargetWidth ]);
     std::unique_ptr<long[]> pSinX(new long[ aTargetWidth ]);
     std::unique_ptr<long[]> pCosY(new long[ aTargetHeight ]);
@@ -467,8 +467,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                             nUnRotX = ( pCosX[ x ] - nSinY ) >> 8;
                             nUnRotY = ( pSinX[ x ] + nCosY ) >> 8;
 
-                            if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
-                                ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                            if( ( nUnRotX >= 0 ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                ( nUnRotY >= 0 ) && ( nUnRotY < aUnrotatedHeight ) )
                             {
                                 nTmpX = pMapIX[ nUnRotX ];
                                 nTmpFX = pMapFX[ nUnRotX ];
@@ -509,8 +509,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                             nUnRotX = ( pCosX[ x ] - nSinY ) >> 8;
                             nUnRotY = ( pSinX[ x ] + nCosY ) >> 8;
 
-                            if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
-                                ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                            if( ( nUnRotX >= 0 ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                ( nUnRotY >= 0 ) && ( nUnRotY < aUnrotatedHeight ) )
                             {
                                 nTmpX = pMapIX[ nUnRotX ];
                                 nTmpFX = pMapFX[ nUnRotX ];
@@ -648,8 +648,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                                     nUnRotX = ( pCosX[ nX ] - nSinY ) >> 8;
                                     nUnRotY = ( pSinX[ nX ] + nCosY ) >> 8;
 
-                                    if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
-                                        ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                                    if( ( nUnRotX >= 0 ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                        ( nUnRotY >= 0 ) && ( nUnRotY < aUnrotatedHeight ) )
                                     {
                                         nTmpX = pMapIX[ nUnRotX ];
                                         nTmpFX = pMapFX[ nUnRotX ];
@@ -747,8 +747,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                                 nUnRotX = ( pCosX[ nX ] - nSinY ) >> 8;
                                 nUnRotY = ( pSinX[ nX ] + nCosY ) >> 8;
 
-                                if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
-                                    ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                                if( ( nUnRotX >= 0 ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                    ( nUnRotY >= 0 ) && ( nUnRotY < aUnrotatedHeight ) )
                                 {
                                     nTmpX = pMapIX[ nUnRotX ];
                                     nTmpFX = pMapFX[ nUnRotX ];
@@ -803,11 +803,11 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                         aTestB = pMAcc->GetBestMatchingColor( Color( COL_BLACK ) );
 
                     // create new horizontal mapping table
-                    for( long nX = 0UL; nX < aUnrotatedWidth; nX++ )
+                    for( long nX = 0; nX < aUnrotatedWidth; nX++ )
                         pMapLX[ nX ] = FRound( (double) pMapIX[ nX ] + pMapFX[ nX ] / 1048576.0 );
 
                     // create new vertical mapping table
-                    for( long nY = 0UL; nY < aUnrotatedHeight; nY++ )
+                    for( long nY = 0; nY < aUnrotatedHeight; nY++ )
                         pMapLY[ nY ] = FRound( (double) pMapIY[ nY ] + pMapFY[ nY ] / 1048576.0 );
 
                     // do mask rotation
@@ -821,8 +821,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
                             nUnRotX = ( pCosX[ nX ] - nSinY ) >> 8;
                             nUnRotY = ( pSinX[ nX ] + nCosY ) >> 8;
 
-                            if( ( nUnRotX >= 0L ) && ( nUnRotX < aUnrotatedWidth ) &&
-                                ( nUnRotY >= 0L ) && ( nUnRotY < aUnrotatedHeight ) )
+                            if( ( nUnRotX >= 0 ) && ( nUnRotX < aUnrotatedWidth ) &&
+                                ( nUnRotY >= 0 ) && ( nUnRotY < aUnrotatedHeight ) )
                             {
                                 if( pMAcc )
                                 {
@@ -931,7 +931,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             }
             else
             {
-                nStartX = -1L; // invalid
+                nStartX = -1; // invalid
             }
         }
         else
@@ -939,12 +939,12 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
             aOutPoint = pOutputDevice->PixelToLogic( aOutputPointPix );
             aOutSize = pOutputDevice->PixelToLogic( aOutputSizePix );
             nStartX = nStartY = 0;
-            nEndX = aOutputSizePix.Width() - 1L;
-            nEndY = aOutputSizePix.Height() - 1L;
+            nEndX = aOutputSizePix.Width() - 1;
+            nEndY = aOutputSizePix.Height() - 1;
         }
 
         // do transformation
-        if( nStartX >= 0L )
+        if( nStartX >= 0 )
         {
             const bool bSimple = ( 1 == nW || 1 == nH );
 

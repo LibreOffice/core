@@ -316,7 +316,7 @@ sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
 
 double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
 {
-    return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
+    return 40960.0 / ::std::max( nXclDefFontHeight - 15, 60L ) + 50.0;
 }
 
 // formatting

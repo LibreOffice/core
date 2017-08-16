@@ -346,7 +346,7 @@ void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
 {
     aUndoGraphic = aRedoGraphic = Graphic();
     aGraphic = rGraphic;
-    nGrfChanged = 0UL;
+    nGrfChanged = 0;
     m_pContourWnd->SetGraphic( aGraphic );
 }
 

@@ -297,7 +297,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
     exportXML( rExport, rExport.GetAttrList(), rSet, rUnitConverter,
                rExport.GetNamespaceMap(), nFlags, &aIndexArray );
 
-    if( rExport.GetAttrList().getLength() > 0L ||
+    if( rExport.GetAttrList().getLength() > 0 ||
         (nFlags & SvXmlExportFlags::EMPTY) ||
         !aIndexArray.empty() )
     {

@@ -1044,7 +1044,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
     if(!bBrk && !pWin)
     {
-        for(i = 0L; i < nWinCount && !pWin; i++)
+        for(i = 0; i < nWinCount && !pWin; i++)
         {
             SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
 
@@ -1226,7 +1226,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             // register all windows as OutlinerViews with the Outliner
             if(!bOnlyOneView)
             {
-                for(i = 0L; i < nWinCount; i++)
+                for(i = 0; i < nWinCount; i++)
                 {
                     SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
                     OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();

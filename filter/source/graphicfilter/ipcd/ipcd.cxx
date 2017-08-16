@@ -305,7 +305,7 @@ void PCDReader::ReadImage()
                     }
                 }
                 // conversion of nL,nCb,nCr in nRed,nGreen,nBlue:
-                nL *= 89024L;
+                nL *= 89024;
                 nCb -= 156;
                 nCr -= 137;
                 nRed = ( nL + nCr * 119374L + 0x8000 ) >> 16;

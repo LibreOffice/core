@@ -2440,7 +2440,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             {
                 SdrModel* pModel = pPageObj->GetModel();
                 SdrPage* pNewPage = nullptr;
-                const sal_uInt16 nDestinationPageNum((sal_uInt16)((nPageNum << 1) - 1L));
+                const sal_uInt16 nDestinationPageNum((sal_uInt16)((nPageNum << 1) - 1));
 
                 if(pModel)
                 {

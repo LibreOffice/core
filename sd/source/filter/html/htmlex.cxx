@@ -2796,14 +2796,14 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
     OUStringBuffer aStr;
     const sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
 
-    for ( sal_uInt32 nXPoly = 0L; nXPoly < nNoOfPolygons; nXPoly++ )
+    for ( sal_uInt32 nXPoly = 0; nXPoly < nNoOfPolygons; nXPoly++ )
     {
         const ::basegfx::B2DPolygon& aPolygon = rPolyPolygon.getB2DPolygon(nXPoly);
         const sal_uInt32 nNoOfPoints(aPolygon.count());
 
         aStr.append("<area shape=\"polygon\" alt=\"\" coords=\"");
 
-        for ( sal_uInt32 nPoint = 0L; nPoint < nNoOfPoints; nPoint++ )
+        for ( sal_uInt32 nPoint = 0; nPoint < nNoOfPoints; nPoint++ )
         {
             const ::basegfx::B2DPoint aB2DPoint(aPolygon.getB2DPoint(nPoint));
             Point aPnt(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));

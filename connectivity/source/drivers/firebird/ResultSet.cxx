@@ -136,7 +136,7 @@ sal_Bool SAL_CALL OResultSet::next()
     {
         return true;
     }
-    else if (fetchStat == 100L) // END OF DATASET
+    else if (fetchStat == 100) // END OF DATASET
     {
         m_bIsAfterLastRow = true;
         return false;

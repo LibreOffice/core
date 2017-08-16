@@ -291,7 +291,7 @@ void ImplPolygon::ImplCreateFlagArray()
 inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
     const long nDX = rPt.X() - rCenter.X();
-    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0L ) ? 0.000000001 : nDX ) );
+    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
 
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
@@ -1396,7 +1396,7 @@ bool Polygon::IsInside( const Point& rPoint ) const
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "IsInside could fail with beziers!" );
 
     const tools::Rectangle aBound( GetBoundRect() );
-    const Line      aLine( rPoint, Point( aBound.Right() + 100L, rPoint.Y() ) );
+    const Line      aLine( rPoint, Point( aBound.Right() + 100, rPoint.Y() ) );
     sal_uInt16          nCount = mpImplPolygon->mnPoints;
     sal_uInt16          nPCounter = 0;
 
@@ -1813,14 +1813,14 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
     if(bCurve)
     {
         // #127979# Reduce source point count hard to the limit of the tools Polygon
-        if(nB2DLocalCount > ((0x0000ffff / 3L) - 1L))
+        if(nB2DLocalCount > ((0x0000ffff / 3L) - 1))
         {
             OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
-            nB2DLocalCount = ((0x0000ffff / 3L) - 1L);
+            nB2DLocalCount = ((0x0000ffff / 3L) - 1);
         }
 
         // calculate target point count
-        const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1L : 0L ));
+        const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1 : 0L ));
 
         if(nLoopCount)
         {
@@ -1889,7 +1889,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
             else
             {
                 // add last point as closing point
-                const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1L));
+                const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1));
                 const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
                 mpImplPolygon->mpPointAry[nArrayInsert] = aEnd;
                 mpImplPolygon->mpFlagAry[nArrayInsert] = PolyFlags::Normal;
@@ -1907,10 +1907,10 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
     else
     {
         // #127979# Reduce source point count hard to the limit of the tools Polygon
-        if(nB2DLocalCount > (0x0000ffff - 1L))
+        if(nB2DLocalCount > (0x0000ffff - 1))
         {
             OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
-            nB2DLocalCount = (0x0000ffff - 1L);
+            nB2DLocalCount = (0x0000ffff - 1);
         }
 
         if(nB2DLocalCount)

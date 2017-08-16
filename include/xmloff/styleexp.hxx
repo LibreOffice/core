@@ -85,13 +85,13 @@ public:
 //      const OUString& rFamily, const OUString& rXMLFamily,
 //      const rtl::Reference < XMLPropertySetMapper >& rPropMapper,
 //      bool bUsed, sal_uInt16 nFamily = 0,
-//      const OUString* pPrefix = 0L);
+//      const OUString* pPrefix = 0);
 
 //  void exportStyleFamily(
 //      const sal_Char *pFamily, const OUString& rXMLFamily,
 //      const rtl::Reference < XMLPropertySetMapper >& rPropMapper,
 //      bool bUsed, sal_uInt16 nFamily = 0,
-//      const OUString* pPrefix = 0L);
+//      const OUString* pPrefix = 0);
 
     bool exportDefaultStyle(
         const css::uno::Reference< css::beans::XPropertySet > & xPropSet,

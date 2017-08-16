@@ -313,7 +313,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     m_pLbPages->SetDropDownLineCount(10);
 
     // fill Listbox with page names of Docs
-    for( long nPage = 0L;
+    for( long nPage = 0;
          nPage < rDoc.GetSdPageCount( PageKind::Standard );
          nPage++ )
     {
@@ -409,7 +409,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
             sal_uLong nPosCP = TREELIST_APPEND;
             SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
             if( pEntry )
-                nPosCP = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry ) + 1L;
+                nPosCP = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry ) + 1;
 
             for( sal_Int32 i = 0; i < nCount; i++ )
             {

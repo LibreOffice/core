@@ -335,7 +335,7 @@ void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
 {
     sal_Int32 nActionSize;
     sal_Int16 nType;
-    for (sal_uLong i = 0UL; i < nSkipCount; ++i)
+    for (sal_uLong i = 0; i < nSkipCount; ++i)
     {
         rIStm.ReadInt16(nType).ReadInt32(nActionSize);
         if (!rIStm.good() || nActionSize < 4)

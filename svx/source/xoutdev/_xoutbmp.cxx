@@ -445,7 +445,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
     const Size  aSize( rBmp.GetSizePixel() );
     Bitmap      aRetBmp;
 
-    if( ( aSize.Width() > 2L ) && ( aSize.Height() > 2L ) )
+    if( ( aSize.Width() > 2 ) && ( aSize.Height() > 2 ) )
     {
         Bitmap aWorkBmp( rBmp );
 
@@ -460,9 +460,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
             if( pReadAcc && pWriteAcc )
             {
                 const long          nWidth = aSize.Width();
-                const long          nWidth2 = nWidth - 2L;
+                const long          nWidth2 = nWidth - 2;
                 const long          nHeight = aSize.Height();
-                const long          nHeight2 = nHeight - 2L;
+                const long          nHeight2 = nHeight - 2;
                 const long          lThres2 = (long) cThreshold * cThreshold;
                 const sal_uInt8 nWhitePalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_WHITE))));
                 const sal_uInt8 nBlackPalIdx(static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(Color(COL_BLACK))));
@@ -472,14 +472,14 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 
                 // initialize border with white pixels
                 pWriteAcc->SetLineColor( Color( COL_WHITE) );
-                pWriteAcc->DrawLine( Point(), Point( nWidth - 1L, 0L ) );
-                pWriteAcc->DrawLine( Point( nWidth - 1L, 0L ), Point( nWidth - 1L, nHeight - 1L ) );
-                pWriteAcc->DrawLine( Point( nWidth - 1L, nHeight - 1L ), Point( 0L, nHeight - 1L ) );
-                pWriteAcc->DrawLine( Point( 0, nHeight - 1L ), Point() );
+                pWriteAcc->DrawLine( Point(), Point( nWidth - 1, 0L ) );
+                pWriteAcc->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
+                pWriteAcc->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
+                pWriteAcc->DrawLine( Point( 0, nHeight - 1 ), Point() );
 
-                for( long nY = 0L, nY1 = 1L, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
+                for( long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
                 {
-                    for( long nX = 0L, nXDst = 1L, nXTmp; nX < nWidth2; nX++, nXDst++ )
+                    for( long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
                     {
                         nXTmp = nX;
 
@@ -558,12 +558,12 @@ tools::Polygon XOutBitmap::GetContour( const Bitmap& rBmp, const XOutFlags nFlag
             const Size&         rPrefSize = aWorkBmp.GetPrefSize();
             const double        fFactorX = (double) rPrefSize.Width() / nWidth;
             const double        fFactorY = (double) rPrefSize.Height() / nHeight;
-            const long          nStartX1 = aWorkRect.Left() + 1L;
+            const long          nStartX1 = aWorkRect.Left() + 1;
             const long          nEndX1 = aWorkRect.Right();
-            const long          nStartX2 = nEndX1 - 1L;
-            const long          nStartY1 = aWorkRect.Top() + 1L;
+            const long          nStartX2 = nEndX1 - 1;
+            const long          nStartY1 = aWorkRect.Top() + 1;
             const long          nEndY1 = aWorkRect.Bottom();
-            const long          nStartY2 = nEndY1 - 1L;
+            const long          nStartY2 = nEndY1 - 1;
             std::unique_ptr<Point[]> pPoints1;
             std::unique_ptr<Point[]> pPoints2;
             long                nX, nY;
