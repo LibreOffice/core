@@ -729,7 +729,7 @@ sal_Int32 SwAccessibleTable::GetIndexOfSelectedChild(
     // iterate over all children to n-th isAccessibleChildSelected()
     sal_Int32 nChildren = const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(); // #i77106#
     if( nSelectedChildIndex >= nChildren )
-        return -1L;
+        return -1;
 
     sal_Int32 n = 0;
     while( n < nChildren )
@@ -744,7 +744,7 @@ sal_Int32 SwAccessibleTable::GetIndexOfSelectedChild(
         ++n;
     }
 
-    return n < nChildren ? n : -1L;
+    return n < nChildren ? n : -1;
 }
 
 void SwAccessibleTable::GetStates(

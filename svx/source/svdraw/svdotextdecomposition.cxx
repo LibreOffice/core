@@ -761,8 +761,8 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
+    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
     const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
@@ -928,8 +928,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     }
 
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
+    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
     const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const bool bTopToBottom(rSdrBlockTextPrimitive.getOutlinerParaObject().IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
@@ -1310,7 +1310,7 @@ void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::animation::A
     const double fHalfInnerPath(fTimeForInnerPath * 0.5);
     const sal_uInt32 nDoubleRepeat(nRepeat / 2L);
 
-    if(nDoubleRepeat || 0L == nRepeat)
+    if(nDoubleRepeat || 0 == nRepeat)
     {
         // double forth and back loop
         drawinglayer::animation::AnimationEntryLoop aLoop(nDoubleRepeat ? nDoubleRepeat : ENDLESS_LOOP);
@@ -1361,9 +1361,9 @@ void impCreateSlideTiming(const SfxItemSet& rSet, drawinglayer::animation::Anima
     rAnimList.append(aOutIn);
 
     // loop. In loop, move out and in again
-    if(nRepeat > 1L || 0L == nRepeat)
+    if(nRepeat > 1 || 0 == nRepeat)
     {
-        drawinglayer::animation::AnimationEntryLoop aLoop(nRepeat ? nRepeat - 1L : ENDLESS_LOOP);
+        drawinglayer::animation::AnimationEntryLoop aLoop(nRepeat ? nRepeat - 1 : ENDLESS_LOOP);
         drawinglayer::animation::AnimationEntryLinear aTime0(fTimeFullPath * 0.5, fFrequency, 0.5, fStartPosition);
         aLoop.append(aTime0);
         drawinglayer::animation::AnimationEntryLinear aTime1(fTimeFullPath * 0.5, fFrequency, fStartPosition, 0.5);
@@ -1524,8 +1524,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
-    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
-    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
+    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
+    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
 
     // Text
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();

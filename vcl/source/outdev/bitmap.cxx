@@ -642,13 +642,13 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
     if (bHMirr)
     {
         aOutSz.Width() = -aOutSz.Width();
-        aOutPt.X() -= aOutSz.Width() - 1L;
+        aOutPt.X() -= aOutSz.Width() - 1;
     }
 
     if (bVMirr)
     {
         aOutSz.Height() = -aOutSz.Height();
-        aOutPt.Y() -= aOutSz.Height() - 1L;
+        aOutPt.Y() -= aOutSz.Height() - 1;
     }
 
     if (!aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
@@ -744,11 +744,11 @@ private:
                                   long nOutDimention, long nOffset, long* pMap, long* pMapOffset)
     {
 
-        const double fReverseScale = (std::abs(nOutDimention) > 1L) ? (nSrcDimension - 1L) / double(std::abs(nOutDimention) - 1L) : 0.0;
+        const double fReverseScale = (std::abs(nOutDimention) > 1) ? (nSrcDimension - 1) / double(std::abs(nOutDimention) - 1) : 0.0;
 
-        long nSampleRange = std::max(0L, nSrcDimension - 2L);
+        long nSampleRange = std::max(0L, nSrcDimension - 2);
 
-        for (long i = 0L; i < nDstDimension; i++)
+        for (long i = 0; i < nDstDimension; i++)
         {
             double fTemp = std::abs((nOffset + i) * fReverseScale);
 
@@ -807,7 +807,7 @@ public:
 
         sal_uInt8 nColor1, nColor2, nColor3, nAlpha;
 
-        for (long nY = 0L; nY < nDstHeight; nY++)
+        for (long nY = 0; nY < nDstHeight; nY++)
         {
             const long nMapY  = mpMapY[nY];
             const long nMapFY = mpMapYOffset[nY];
@@ -822,13 +822,13 @@ public:
 
             pDestScanline = pDestination->GetScanline(nY);
 
-            for (long nX = 0L; nX < nDstWidth; nX++)
+            for (long nX = 0; nX < nDstWidth; nX++)
             {
                 const long nMapX = mpMapX[nX];
                 const long nMapFX = mpMapXOffset[nX];
 
-                pColorSample1 = pLine0 + 3L * nMapX;
-                pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3L : pColorSample1;
+                pColorSample1 = pLine0 + 3 * nMapX;
+                pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3 : pColorSample1;
                 nColor1Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
@@ -839,8 +839,8 @@ public:
                 pColorSample2++;
                 nColor3Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
-                pColorSample1 = pLine1 + 3L * nMapX;
-                pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3L : pColorSample1;
+                pColorSample1 = pLine1 + 3 * nMapX;
+                pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3 : pColorSample1;
                 nColor1Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
@@ -852,11 +852,11 @@ public:
                 nColor3Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLineAlpha0 + nMapX;
-                pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1L : pColorSample1;
+                pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1 : pColorSample1;
                 nAlphaLine1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLineAlpha1 + nMapX;
-                pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1L : pColorSample1;
+                pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1 : pColorSample1;
                 nAlphaLine2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 nColor1 = (nColor1Line1 + nMapFY * ((nColor1Line2 >> 7) - (nColor1Line1 >> 7))) >> 7;
@@ -911,9 +911,9 @@ private:
         long nMirrorOffset = 0;
 
         if (bMirror)
-            nMirrorOffset = (nDstLocation << 1) + nSrcDimension - 1L;
+            nMirrorOffset = (nDstLocation << 1) + nSrcDimension - 1;
 
-        for (long i = 0L; i < nDstDimension; ++i, ++nOffset)
+        for (long i = 0; i < nDstDimension; ++i, ++nOffset)
         {
             pMap[i] = nDstLocation + nOffset * nSrcDimension / nOutDimention;
             if (bMirror)

@@ -887,7 +887,7 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
     if( basegfx::tools::isConvex( aPolygon ) )
     {
-        if( nPoints > 2L )
+        if( nPoints > 2 )
             DrawConvexPolygon( nPoints, pPtAry );
     }
     else

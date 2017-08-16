@@ -210,7 +210,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
     {
         const double fStep = 100. / nCount;
 
-        nMinPercent = 0L;
+        nMinPercent = 0;
         nMaxPercent = (sal_uLong) fStep;
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
@@ -506,7 +506,7 @@ void GIFWriter::WriteAccess()
                 aCompressor.Compress( m_pAcc->GetScanline( nY ), nWidth );
             else
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( long nX = 0; nX < nWidth; nX++ )
                     pBuffer[ nX ] = m_pAcc->GetPixelIndex( nY, nX );
 
                 aCompressor.Compress( pBuffer.get(), nWidth );

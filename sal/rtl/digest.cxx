@@ -31,12 +31,12 @@
 #define RTL_DIGEST_HTONL(l,c) \
     (*((c)++) = (sal_uInt8)(((l) >> 24) & 0xff), \
      *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >>  8L) & 0xff), \
+     *((c)++) = (sal_uInt8)(((l) >>  8) & 0xff), \
      *((c)++) = (sal_uInt8)(((l)       ) & 0xff))
 
 #define RTL_DIGEST_LTOC(l,c) \
     (*((c)++) = (sal_uInt8)(((l)       ) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >>  8L) & 0xff), \
+     *((c)++) = (sal_uInt8)(((l) >>  8) & 0xff), \
      *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
      *((c)++) = (sal_uInt8)(((l) >> 24) & 0xff))
 
@@ -612,9 +612,9 @@ static void endMD5(DigestContextMD5 *ctx)
 
     switch (ctx->m_nDatLen & 0x03)
     {
-        case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
+        case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0;
             SAL_FALLTHROUGH;
-        case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
+        case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8;
             SAL_FALLTHROUGH;
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16;
             SAL_FALLTHROUGH;
@@ -1034,9 +1034,9 @@ static void endSHA(DigestContextSHA *ctx)
 
     switch (ctx->m_nDatLen & 0x03)
     {
-        case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
+        case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0;
             SAL_FALLTHROUGH;
-        case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
+        case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8;
             SAL_FALLTHROUGH;
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16;
             SAL_FALLTHROUGH;

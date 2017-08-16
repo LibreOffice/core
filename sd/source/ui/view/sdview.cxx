@@ -457,7 +457,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 /**
  * The event will be forwarded to the View
  */
-void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
+void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0*/)
 {
     // execute ??
     if (mnLockRedrawSmph == 0)

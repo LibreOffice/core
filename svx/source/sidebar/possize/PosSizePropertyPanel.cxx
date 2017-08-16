@@ -1053,7 +1053,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fRight  -= maRect.getWidth();
     fBottom -= maRect.getHeight();
 
-    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1L));
+    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
     fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);

@@ -43,7 +43,7 @@ ErrCode ImportLotus::Read()
     sal_uInt16          nOp;
     sal_uInt16          nSubType;
     sal_uInt16          nRecLen;
-    sal_uInt32          nNextRec = 0UL;
+    sal_uInt32          nNextRec = 0;
     ErrCode        eRet = ERRCODE_NONE;
 //  ScFormulaCell   *pLastFormCell;
 
@@ -230,7 +230,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
     bool            bRead = true;
     sal_uInt16          nOp;
     sal_uInt16          nRecLen;
-    sal_uInt32          nNextRec = 0UL;
+    sal_uInt32          nNextRec = 0;
     ErrCode             eRet = ERRCODE_NONE;
 
     nTab = 0;

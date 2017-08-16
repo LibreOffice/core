@@ -1281,7 +1281,7 @@ static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
     OD 08.08.2003 #110978#
     method replaced 'old' method <sal_Bool IsMoveable() const>.
     Determines, if frame is moveable in given environment. if no environment
-    is given (parameter _pLayoutFrame == 0L), the movability in the actual
+    is given (parameter _pLayoutFrame == 0), the movability in the actual
     environment (<GetUpper()) is checked.
 */
 bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const

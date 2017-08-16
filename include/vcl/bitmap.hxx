@@ -495,7 +495,7 @@ public:
 
         @return the resulting bitmask.
      */
-    Bitmap                  CreateMask( const Color& rTransColor, sal_uLong nTol = 0UL ) const;
+    Bitmap                  CreateMask( const Color& rTransColor, sal_uLong nTol = 0 ) const;
 
     /** Create region of similar colors in a given rectangle
 

@@ -435,7 +435,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
 {
     const size_t nCount(GetMarkCount());
 
-    if(mbNameOk && 1L == nCount)
+    if(mbNameOk && 1 == nCount)
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
@@ -456,7 +456,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
         {
             const_cast<SdrMarkList*>(this)->maMarkName = ImpGetResStr(STR_ObjNameNoObj);
         }
-        else if(1L == nCount)
+        else if(1 == nCount)
         {
             if(pMark->GetMarkedSdrObj())
             {
@@ -547,7 +547,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
         const SdrMark* pMark = GetMark(n1stMarkNum);
         OUString aNam;
 
-        if(1L == nMarkPtObjCnt)
+        if(1 == nMarkPtObjCnt)
         {
             if(pMark->GetMarkedSdrObj())
             {
@@ -585,7 +585,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 
         OUString aStr1;
 
-        if(1L == nMarkPtCnt)
+        if(1 == nMarkPtCnt)
         {
             aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoint : STR_ViewMarkedPoint));
         }

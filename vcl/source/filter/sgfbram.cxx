@@ -238,7 +238,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead)
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(sal_uInt16 i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // up to 3 bytes
-            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
+            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1)*(sal_uLong)nWdtOut); // write backwards
             rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     } else if (nColors==16) {
@@ -286,7 +286,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead)
                 }
             }
             for(sal_uInt16 i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // up to 3 bytes
-            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
+            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1)*(sal_uLong)nWdtOut); // write backwards
             rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     } else if (nColors==256) {
@@ -315,7 +315,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead)
             for(sal_uInt16 i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(sal_uInt16 i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // up to 3 bytes
-            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
+            rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1)*(sal_uLong)nWdtOut); // write backwards
             rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     }

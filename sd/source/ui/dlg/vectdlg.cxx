@@ -223,9 +223,9 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
                               long nPosX, long nPosY, long nWidth, long nHeight )
 {
-    sal_uLong           nSumR = 0UL, nSumG = 0UL, nSumB = 0UL;
-    const long      nRight = nPosX + nWidth - 1L;
-    const long      nBottom = nPosY + nHeight - 1L;
+    sal_uLong           nSumR = 0, nSumG = 0, nSumB = 0;
+    const long      nRight = nPosX + nWidth - 1;
+    const long      nBottom = nPosY + nHeight - 1;
     const double    fMult = 1.0 / ( nWidth * nHeight );
 
     for( long nY = nPosY; nY <= nBottom; nY++ )
@@ -249,11 +249,11 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
 
     aRect = PixelToLogic( aRect, rMtf.GetPrefMapMode() );
 
-    if( aRect.Right() > ( rMaxSize.Width() - 1L ) )
-        aRect.Right() = rMaxSize.Width() - 1L;
+    if( aRect.Right() > ( rMaxSize.Width() - 1 ) )
+        aRect.Right() = rMaxSize.Width() - 1;
 
-    if( aRect.Bottom() > ( rMaxSize.Height() - 1L ) )
-        aRect.Bottom() = rMaxSize.Height() - 1L;
+    if( aRect.Bottom() > ( rMaxSize.Height() - 1 ) )
+        aRect.Bottom() = rMaxSize.Height() - 1;
 
     rMtf.AddAction( new MetaLineColorAction( aColor, true ) );
     rMtf.AddAction( new MetaFillColorAction( aColor, true ) );

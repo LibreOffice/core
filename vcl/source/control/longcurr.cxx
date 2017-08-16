@@ -61,7 +61,7 @@ OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt 
     if ( !aInteger.IsZero() )
     {
         aFraction += aTmp;
-        aTmp       = 1000000000L;
+        aTmp       = 1000000000;
     }
     if ( rNumber.IsNeg() )
         aFraction *= -1;

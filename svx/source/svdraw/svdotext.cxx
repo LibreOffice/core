@@ -1856,7 +1856,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
     // temporarily disable object rotation.
     sal_Int32 nAngle(aGeo.nRotationAngle);
-    aGeo.nRotationAngle = 0L;
+    aGeo.nRotationAngle = 0;
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
     aGeo.nRotationAngle = nAngle;
 

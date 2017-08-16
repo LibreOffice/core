@@ -1923,7 +1923,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
         if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
             nDist = LONG_MAX - nFrameHeight;
 
-        if ( nDist <= 0L )
+        if ( nDist <= 0 )
             return 0L;
 
         bool bInCalcContent = GetUpper() && IsInFly() && FindFlyFrame()->IsLocked();

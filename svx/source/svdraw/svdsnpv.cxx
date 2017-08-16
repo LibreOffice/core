@@ -337,7 +337,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                 if (bOPntSnap && nMaxPointSnapCount>0)
                 {
                     sal_uInt32 nCount(pO->GetSnapPointCount());
-                    for (sal_uInt32 i(0); i < nCount && nMaxPointSnapCount > 0L; i++)
+                    for (sal_uInt32 i(0); i < nCount && nMaxPointSnapCount > 0; i++)
                     {
                         Point aP(pO->GetSnapPoint(i));
                         dx1=x-aP.X();

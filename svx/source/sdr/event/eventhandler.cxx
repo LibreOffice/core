@@ -97,7 +97,7 @@ namespace sdr
         // for control
         bool TimerEventHandler::IsEmpty() const
         {
-            return (0L == maVector.size());
+            return (0 == maVector.size());
         }
 
         // The timer when it is triggered; from class Timer

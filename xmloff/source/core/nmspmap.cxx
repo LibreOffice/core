@@ -308,7 +308,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
     rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
 
         sal_Int32 nColonPos = rAttrName.indexOf( ':' );
-        if( -1L == nColonPos )
+        if( -1 == nColonPos )
         {
             // case: no ':' found -> default namespace
             (xEntry->sPrefix).clear();
@@ -318,7 +318,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
         {
             // normal case: ':' found -> get prefix/suffix
             xEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
-            xEntry->sName = rAttrName.copy( nColonPos + 1L );
+            xEntry->sName = rAttrName.copy( nColonPos + 1 );
         }
 
         if( pPrefix )
@@ -337,7 +337,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
         else if ( xEntry->sPrefix == sXMLNS )
             // not found, but xmlns prefix: return xmlns 'namespace'
             nKey = xEntry->nKey = XML_NAMESPACE_XMLNS;
-        else if( nColonPos == -1L )
+        else if( nColonPos == -1 )
             // not found, and no namespace: 'namespace' none
             nKey = xEntry->nKey = XML_NAMESPACE_NONE;
         else

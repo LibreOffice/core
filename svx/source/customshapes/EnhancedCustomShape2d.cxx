@@ -1507,7 +1507,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                     break;
                 case MOVETO :
                 {
-                    if(aNewB2DPolygon.count() > 1L)
+                    if(aNewB2DPolygon.count() > 1)
                     {
                         // #i76201# Add conversion to closed polygon when first and last points are equal
                         basegfx::tools::checkClosed(aNewB2DPolygon);
@@ -1533,7 +1533,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                 {
                     if(aNewB2DPolygon.count())
                     {
-                        if(aNewB2DPolygon.count() > 1L)
+                        if(aNewB2DPolygon.count() > 1)
                         {
                             aNewB2DPolygon.setClosed(true);
                             aNewB2DPolyPolygon.append(aNewB2DPolygon);
@@ -1564,7 +1564,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                 {
                     if ( nPntCount )
                     {
-                        if(aNewB2DPolygon.count() > 1L)
+                        if(aNewB2DPolygon.count() > 1)
                         {
                             // #i76201# Add conversion to closed polygon when first and last points are equal
                             basegfx::tools::checkClosed(aNewB2DPolygon);
@@ -1771,7 +1771,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                 case ARC :
                 case CLOCKWISEARC :
                 {
-                    if(aNewB2DPolygon.count() > 1L)
+                    if(aNewB2DPolygon.count() > 1)
                     {
                         // #i76201# Add conversion to closed polygon when first and last points are equal
                         basegfx::tools::checkClosed(aNewB2DPolygon);
@@ -1952,7 +1952,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
     if ( rSegmentInd == nSegInfoSize )
         rSegmentInd++;
 
-    if(aNewB2DPolygon.count() > 1L)
+    if(aNewB2DPolygon.count() > 1)
     {
         // #i76201# Add conversion to closed polygon when first and last points are equal
         basegfx::tools::checkClosed(aNewB2DPolygon);
@@ -2265,7 +2265,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             vObjectList = vTempList;
         }
 
-        if(1L == vObjectList.size())
+        if(1 == vObjectList.size())
         {
             // a single object, correct some values
             AdaptObjColor(*vObjectList[0L],rCustomShapeSet,nColorIndex,nColorCount);

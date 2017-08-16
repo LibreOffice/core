@@ -103,7 +103,7 @@ public:
 
     void                SetGraphic( const Graphic& rGraphic );
     const Graphic&      GetGraphic() const { return aGraphic; }
-    bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
+    bool                IsGraphicChanged() const { return nGrfChanged > 0; }
 
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     tools::PolyPolygon  GetPolyPolygon();

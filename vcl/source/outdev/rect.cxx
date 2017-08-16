@@ -254,15 +254,15 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     const long nEndX = ImplLogicXToDevicePixel( nRight );
     const long nStartY = ImplLogicYToDevicePixel( nY );
     const long nEndY = ImplLogicYToDevicePixel( nBottom );
-    long nHorzCount = 0L;
-    long nVertCount = 0L;
+    long nHorzCount = 0;
+    long nVertCount = 0;
 
     std::vector< sal_Int32 > aVertBuf;
     std::vector< sal_Int32 > aHorzBuf;
 
     if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::HorzLines ) )
     {
-        aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2L );
+        aVertBuf.resize( aDstRect.GetHeight() / nDistY + 2 );
         aVertBuf[ nVertCount++ ] = nStartY;
         while( ( nY += nDistY ) <= nBottom )
         {
@@ -272,7 +272,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
     if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::VertLines ) )
     {
-        aHorzBuf.resize( aDstRect.GetWidth() / nDistX + 2L );
+        aHorzBuf.resize( aDstRect.GetWidth() / nDistX + 2 );
         aHorzBuf[ nHorzCount++ ] = nStartX;
         while( ( nX += nDistX ) <= nRight )
         {
@@ -291,9 +291,9 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
     if( nFlags & DrawGridFlags::Dots )
     {
-        for( long i = 0L; i < nVertCount; i++ )
+        for( long i = 0; i < nVertCount; i++ )
         {
-            for( long j = 0L, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
+            for( long j = 0, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
             {
                 mpGraphics->DrawPixel( aHorzBuf[ j ], Y, this );
             }
@@ -303,7 +303,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     {
         if( nFlags & DrawGridFlags::HorzLines )
         {
-            for( long i = 0L; i < nVertCount; i++ )
+            for( long i = 0; i < nVertCount; i++ )
             {
                 nY = aVertBuf[ i ];
                 mpGraphics->DrawLine( nStartX, nY, nEndX, nY, this );
@@ -312,7 +312,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
 
         if( nFlags & DrawGridFlags::VertLines )
         {
-            for( long i = 0L; i < nHorzCount; i++ )
+            for( long i = 0; i < nHorzCount; i++ )
             {
                 nX = aHorzBuf[ i ];
                 mpGraphics->DrawLine( nX, nStartY, nX, nEndY, this );
