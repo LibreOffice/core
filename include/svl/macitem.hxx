@@ -130,8 +130,6 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}

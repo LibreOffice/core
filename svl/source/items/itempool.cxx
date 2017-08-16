@@ -168,19 +168,16 @@ SfxItemPool::SfxItemPool
     sal_uInt16          nEndWhich,      /* Last WhichId of the Pool */
     const SfxItemInfo*  pInfo,          /* SID Map and Item flags */
     std::vector<SfxPoolItem*>*
-                        pDefaults,      /* Pointer to static Defaults;
+                        pDefaults       /* Pointer to static Defaults;
                                            is directly referenced by the Pool,
                                            but no transfer of ownership */
-    bool                bLoadRefCounts  /* Load RefCounts or set to 1? */
 ) :
     pItemInfos(pInfo),
     pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
     pImpl->eDefMetric = MapUnit::MapTwip;
-    pImpl->nVersion = 0;
     pImpl->nInitRefCount = 1;
     pImpl->bInSetItem = false;
-    pImpl->mbPersistentRefCounts = bLoadRefCounts;
 
     if ( pDefaults )
         SetDefaults(pDefaults);
@@ -205,10 +202,8 @@ SfxItemPool::SfxItemPool
     pImpl( new SfxItemPool_Impl( this, rPool.pImpl->aName, rPool.pImpl->mnStart, rPool.pImpl->mnEnd ) )
 {
     pImpl->eDefMetric = rPool.pImpl->eDefMetric;
-    pImpl->nVersion = rPool.pImpl->nVersion;
     pImpl->nInitRefCount = 1;
     pImpl->bInSetItem = false;
-    pImpl->mbPersistentRefCounts = rPool.pImpl->mbPersistentRefCounts;
 
     // Take over static Defaults
     if ( bCloneStaticDefaults )
@@ -961,20 +956,6 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
         return 0;
     }
     return pItemInfos[nWhich - pImpl->mnStart]._nSID;
-}
-
-/**
- * You must call this function to set the file format version after
- * concatenating your secondary-pools but before you store any
- * pool, itemset or item. Only set the version at the master pool,
- * never at any secondary pool.
- */
-void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
-{
-    DBG_ASSERT( this == pImpl->mpMaster,
-                "SfxItemPool::SetFileFormatVersion() but not a master pool" );
-    for ( SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
-        pPool->pImpl->mnFileFormatVersion = nFileFormatVersion;
 }
 
 void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
