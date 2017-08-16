@@ -546,7 +546,7 @@ public:
     //to GtkData to rethrow them after the gsignal is processed when its safe
     //to do so again in our own code after the g_main_context_iteration call
     //which triggers the gsignals.
-    long                        CallCallbackExc(SalEvent nEvent, const void* pEvent) const;
+    bool                        CallCallbackExc(SalEvent nEvent, const void* pEvent) const;
 
 
     static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,

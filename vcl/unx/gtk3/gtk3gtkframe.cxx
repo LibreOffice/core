@@ -4332,9 +4332,9 @@ void GtkSalFrame::signalDragDataGet(GtkWidget* /*widget*/, GdkDragContext* /*con
     pThis->m_pDragSource->dragDataGet(data, info);
 }
 
-long GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
+bool GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
 {
-    long nRet = 0;
+    bool nRet = false;
     try
     {
         nRet = CallCallback(nEvent, pEvent);

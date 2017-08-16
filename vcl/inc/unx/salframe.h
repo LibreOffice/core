@@ -146,14 +146,14 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     void            RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWindows );
     void            RestackChildren();
 
-    long            HandleKeyEvent      ( XKeyEvent         *pEvent );
-    long            HandleMouseEvent    ( XEvent            *pEvent );
-    long            HandleFocusEvent    ( XFocusChangeEvent const *pEvent );
-    long            HandleExposeEvent   ( XEvent            *pEvent );
-    long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-    long            HandleStateEvent    ( XPropertyEvent    *pEvent );
-    long            HandleReparentEvent ( XReparentEvent    *pEvent );
-    long            HandleClientMessage ( XClientMessageEvent*pEvent );
+    bool            HandleKeyEvent      ( XKeyEvent         *pEvent );
+    bool            HandleMouseEvent    ( XEvent            *pEvent );
+    bool            HandleFocusEvent    ( XFocusChangeEvent const *pEvent );
+    bool            HandleExposeEvent   ( XEvent            *pEvent );
+    bool            HandleSizeEvent     ( XConfigureEvent   *pEvent );
+    bool            HandleStateEvent    ( XPropertyEvent    *pEvent );
+    bool            HandleReparentEvent ( XReparentEvent    *pEvent );
+    bool            HandleClientMessage ( XClientMessageEvent*pEvent );
 
     DECL_LINK( HandleAlwaysOnTopRaise, Timer*, void );
 
@@ -168,7 +168,7 @@ public:
     X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = nullptr );
     virtual ~X11SalFrame() override;
 
-    long            Dispatch( XEvent *pEvent );
+    bool            Dispatch( XEvent *pEvent );
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
                           SystemParentData* pParentData, bool bUseGeometry = false );
 
