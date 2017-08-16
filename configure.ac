@@ -1128,7 +1128,7 @@ libo_FUZZ_ARG_ENABLE(werror,
 
 libo_FUZZ_ARG_ENABLE(assert-always-abort,
     AS_HELP_STRING([--enable-assert-always-abort],
-        [make assert() abort even in release code.]),
+        [make assert() abort even when building without --enable-debug or --enable-dbgutil.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(dbgutil,
