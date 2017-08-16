@@ -50,8 +50,6 @@ published exception SQLException: com::sun::star::uno::Exception
 
     /** returns an integer error code that is specific to each vendor.  Normally this will
         be the actual error code returned by the underlying database.
-        A chain to the next Exception.  This can be used to provide additional
-        error information.
      */
     long            ErrorCode;
 
