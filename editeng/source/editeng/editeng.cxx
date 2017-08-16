@@ -2570,9 +2570,9 @@ void EditEngine::FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 )
 
 // ======================     Static Methods     =======================
 
-SfxItemPool* EditEngine::CreatePool( bool bPersistentRefCounts )
+SfxItemPool* EditEngine::CreatePool()
 {
-    SfxItemPool* pPool = new EditEngineItemPool( bPersistentRefCounts );
+    SfxItemPool* pPool = new EditEngineItemPool();
     return pPool;
 }
 

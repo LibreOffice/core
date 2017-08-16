@@ -90,7 +90,7 @@ void SwAttrPool::createAndAddSecondaryPools()
     pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem((300 * 72) / 127));
     pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem((300 * 72) / 127));
 
-    SfxItemPool *pEEgPool = EditEngine::CreatePool(false);
+    SfxItemPool *pEEgPool = EditEngine::CreatePool();
 
     pSdrPool->SetSecondaryPool(pEEgPool);
 

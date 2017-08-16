@@ -118,7 +118,7 @@ void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mpItemPool = new EditEngineItemPool(true);
+    mpItemPool = new EditEngineItemPool();
 
     SfxApplication::GetOrCreate();
 }

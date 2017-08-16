@@ -27,8 +27,8 @@
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
 
-XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
-    : SfxItemPool("XOutdevItemPool", SDRATTR_START, SDRATTR_END, nullptr, nullptr, bLoadRefCounts)
+XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
+    : SfxItemPool("XOutdevItemPool", SDRATTR_START, SDRATTR_END, nullptr, nullptr)
     , mpLocalPoolDefaults(new std::vector<SfxPoolItem*>(SDRATTR_END - SDRATTR_START + 1))
     , mpLocalItemInfos(new SfxItemInfo[SDRATTR_END - SDRATTR_START + 1])
 {
