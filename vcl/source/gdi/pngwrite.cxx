@@ -113,7 +113,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     , mnFilterType(0)
     , mnBBP(0)
     , mbTrueAlpha(false)
-    , mnCRC(0UL)
+    , mnCRC(0)
 {
     if (!rBmpEx.IsEmpty())
     {

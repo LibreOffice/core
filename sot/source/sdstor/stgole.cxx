@@ -107,7 +107,7 @@ bool StgCompObjStream::Load()
     m_aUserName.clear();
     if( GetError() != ERRCODE_NONE )
         return false;
-    Seek( 8L );     // skip the first part
+    Seek( 8 );     // skip the first part
     sal_Int32 nMarker = 0;
     ReadInt32( nMarker );
     if( nMarker == -1L )
@@ -144,7 +144,7 @@ bool StgCompObjStream::Store()
 {
     if( GetError() != ERRCODE_NONE )
         return false;
-    Seek( 0L );
+    Seek( 0 );
     OString aAsciiUserName(OUStringToOString(m_aUserName, RTL_TEXTENCODING_MS_1252));
     WriteInt16( 1 );          // Version?
     WriteInt16( -2 );                     // 0xFFFE = Byte Order Indicator
@@ -172,7 +172,7 @@ bool StgOleStream::Store()
     if( GetError() != ERRCODE_NONE )
         return false;
 
-    Seek( 0L );
+    Seek( 0 );
     WriteInt32( 0x02000001 );         // OLE version, format
     WriteInt32( 0 );             // Object flags
     WriteInt32( 0 );                  // Update Options

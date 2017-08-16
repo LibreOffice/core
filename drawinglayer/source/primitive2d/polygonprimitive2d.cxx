@@ -248,7 +248,7 @@ namespace drawinglayer
                     basegfx::B2DPolyPolygon aAreaPolyPolygon;
                     const double fMiterMinimumAngle(getLineAttribute().getMiterMinimumAngle());
 
-                    for(sal_uInt32 a(0L); a < nCount; a++)
+                    for(sal_uInt32 a(0); a < nCount; a++)
                     {
                         // New version of createAreaGeometry; now creates bezier polygons
                         aAreaPolyPolygon.append(basegfx::tools::createAreaGeometry(
@@ -262,7 +262,7 @@ namespace drawinglayer
                     }
 
                     // create primitive
-                    for(sal_uInt32 b(0L); b < aAreaPolyPolygon.count(); b++)
+                    for(sal_uInt32 b(0); b < aAreaPolyPolygon.count(); b++)
                     {
                         // put into single polyPolygon primitives to make clear that this is NOT meant
                         // to be painted as a single tools::PolyPolygon (XORed as fill rule). Alternatively, a

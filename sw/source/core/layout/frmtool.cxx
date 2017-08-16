@@ -719,7 +719,7 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
     SwFrameNotify( pContentFrame ),
     // OD 08.01.2004 #i11859#
     mbChkHeightOfLastLine( false ),
-    mnHeightOfLastLine( 0L ),
+    mnHeightOfLastLine( 0 ),
     // OD 2004-02-26 #i25029#
     mbInvalidatePrevPrtArea( false ),
     mbBordersJoinedWithPrev( false )

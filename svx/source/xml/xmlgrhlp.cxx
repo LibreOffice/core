@@ -317,7 +317,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                         sal_uIntPtr nStreamLen_ = pDest->Tell();
                         if (nStreamLen_)
                         {
-                            pDest->Seek(0L);
+                            pDest->Seek(0);
                             GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pDest ,nFormat,&nDeterminedFormat );
                         }
                     }

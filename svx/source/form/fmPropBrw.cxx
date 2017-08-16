@@ -516,7 +516,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
         if(pPageView)
         {
-            SdrPageWindow* pPageWindow = pPageView->GetPageWindow(0L);
+            SdrPageWindow* pPageWindow = pPageView->GetPageWindow(0);
 
             if(pPageWindow)
             {

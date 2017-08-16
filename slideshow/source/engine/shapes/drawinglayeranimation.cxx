@@ -318,7 +318,7 @@ sal_uInt32 ActivityImpl::GetStepWidthLogic() const
     // #i69847# Assuming higher DPI
     sal_uInt32 const PIXEL_TO_LOGIC = 30;
 
-    sal_uInt32 nRetval(0L);
+    sal_uInt32 nRetval(0);
 
     if(mnStepWidth < 0L)
     {
@@ -555,7 +555,7 @@ ScrollTextAnimNode* ActivityImpl::ImpGetScrollTextAnimNode(
 
 sal_uInt32 ActivityImpl::ImpRegisterAgainScrollTextMixerState(sal_uInt32 nTime)
 {
-    sal_uInt32 nRetval(0L);
+    sal_uInt32 nRetval(0);
     ImpForceScrollTextAnimNodes();
 
     if(!maVector.empty())

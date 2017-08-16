@@ -141,7 +141,7 @@ namespace drawinglayer
             maGraphicAttr(rGraphicAttr)
         {
             // reset some values from GraphicAttr which are part of transformation already
-            maGraphicAttr.SetRotation(0L);
+            maGraphicAttr.SetRotation(0);
         }
 
         bool SdrGrafPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const

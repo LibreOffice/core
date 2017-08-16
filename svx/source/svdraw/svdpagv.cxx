@@ -154,7 +154,7 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     pAktGroup = nullptr;
     SetAktGroupAndList(nullptr, mpPage);
 
-    for(sal_uInt32 a(0L); a < rNewView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < rNewView.PaintWindowCount(); a++)
     {
         AddPaintWindowToPageView(*rNewView.GetPaintWindow(a));
     }
@@ -213,7 +213,7 @@ void SdrPageView::Show()
     {
         mbVisible = true;
 
-        for(sal_uInt32 a(0L); a < GetView().PaintWindowCount(); a++)
+        for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
         {
             AddPaintWindowToPageView(*GetView().GetPaintWindow(a));
         }
@@ -369,7 +369,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
                     // paints into an unknown device other than the view was created for (e.g. VirtualDevice)
                     if(PageWindowCount())
                     {
-                        SdrPageWindow* pExistingPageWindow = GetPageWindow(0L);
+                        SdrPageWindow* pExistingPageWindow = GetPageWindow(0);
                         SdrPaintWindow& rExistingPaintWindow = pExistingPageWindow->GetPaintWindow();
                         const vcl::Region& rExistingRegion = rExistingPaintWindow.GetRedrawRegion();
                         aTemporaryPaintWindow.SetRedrawRegion(rExistingRegion);
@@ -382,7 +382,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
         else
         {
             // paint in all known windows
-            for(sal_uInt32 a(0L); a < PageWindowCount(); a++)
+            for(sal_uInt32 a(0); a < PageWindowCount(); a++)
             {
                 SdrPageWindow* pTarget = GetPageWindow(a);
                 pTarget->RedrawLayer(&nID, pRedirector, nullptr);
@@ -692,7 +692,7 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
     if (GetView().IsHlplVisible() && nNum<aHelpLines.GetCount()) {
         const SdrHelpLine& rHL=aHelpLines[nNum];
 
-        for(sal_uInt32 a(0L); a < GetView().PaintWindowCount(); a++)
+        for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
         {
             SdrPaintWindow* pCandidate = GetView().GetPaintWindow(a);
 

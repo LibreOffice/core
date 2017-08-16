@@ -47,7 +47,7 @@ namespace drawinglayer
             {
                 const size_t nCount(rSource.size());
 
-                for(size_t a(0L); a < nCount; a++)
+                for(size_t a(0); a < nCount; a++)
                 {
                     // get reference
                     const primitive3d::Primitive3DReference xReference(rSource[a]);

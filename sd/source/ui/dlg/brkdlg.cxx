@@ -105,7 +105,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
       return true;
 
     // update status bar or show a error message?
-    if(nInit == reinterpret_cast<void*>(1L))
+    if(nInit == reinterpret_cast<void*>(1))
     {
         ScopedVclPtrInstance< MessageDialog > aErrBox(this, SdResId(STR_BREAK_FAIL));
         aErrBox->Execute();

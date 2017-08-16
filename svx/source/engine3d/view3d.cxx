@@ -689,7 +689,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
             if(pObj->GetPage() && GetModel()->IsUndoEnabled() )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
             pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-            pObj->SetMergedItem(XLineWidthItem(0L));
+            pObj->SetMergedItem(XLineWidthItem(0));
         }
     }
 }

@@ -334,7 +334,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 bEOF = bEOFSave;
 
                 // first parse the number
-                sTmpBuffer.setLength( 0L );
+                sTmpBuffer.setLength( 0 );
                 do {
                     sTmpBuffer.append( cNextCh );
                     cNextCh = GetNextChar();

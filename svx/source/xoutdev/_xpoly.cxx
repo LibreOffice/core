@@ -892,7 +892,7 @@ XPolyPolygon::XPolyPolygon( XPolyPolygon&& rXPolyPoly )
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
     : pImpXPolyPolygon()
 {
-    for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
+    for(sal_uInt32 a(0); a < rPolyPolygon.count(); a++)
     {
         const basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
         XPolygon aNewPoly(aCandidate);
@@ -1001,7 +1001,7 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 {
     basegfx::B2DPolyPolygon aRetval;
 
-    for(sal_uInt16 a(0L); a < Count(); a++)
+    for(sal_uInt16 a(0); a < Count(); a++)
     {
         const XPolygon& rPoly = (*this)[a];
         aRetval.append(rPoly.getB2DPolygon());

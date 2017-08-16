@@ -269,7 +269,7 @@ void StgDirEntry::OpenStream( StgIo& rIo )
     if( m_bInvalid && m_aEntry.GetSize() )
     {
         // This entry has invalid data, so delete that data
-        SetSize( 0L );
+        SetSize( 0 );
 //      bRemoved = bInvalid = false;
     }
     m_nPos = 0;
@@ -355,8 +355,8 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
                 if( nOldSize )
                 {
                     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nOldSize ]);
-                    pOld->Pos2Page( 0L );
-                    m_pStgStrm->Pos2Page( 0L );
+                    pOld->Pos2Page( 0 );
+                    m_pStgStrm->Pos2Page( 0 );
                     if( pOld->Read( pBuf.get(), nOldSize )
                         && m_pStgStrm->Write( pBuf.get(), nOldSize ) )
                         bRes = true;
@@ -500,8 +500,8 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
         sal_uLong Pos = rDest.Tell();
         sal_uInt8 aTempBytes[ 4096 ];
         void* p = static_cast<void*>( aTempBytes );
-        Seek( 0L );
-        rDest.Seek( 0L );
+        Seek( 0 );
+        rDest.Seek( 0 );
         while( n )
         {
             sal_Int32 nn = n;
@@ -576,7 +576,7 @@ bool StgDirEntry::Strm2Tmp()
 
                     sal_uInt8 aTempBytes[ 4096 ];
                     void* p = static_cast<void*>( aTempBytes );
-                    m_pStgStrm->Pos2Page( 0L );
+                    m_pStgStrm->Pos2Page( 0 );
                     while( n )
                     {
                         sal_uLong nn = n;
@@ -636,7 +636,7 @@ bool StgDirEntry::Tmp2Strm()
         if( pNewStrm->SetSize( n ) )
         {
             sal_uInt8 p[ 4096 ];
-            m_pTmpStrm->Seek( 0L );
+            m_pTmpStrm->Seek( 0 );
             while( n )
             {
                 sal_uLong nn = n;
@@ -657,7 +657,7 @@ bool StgDirEntry::Tmp2Strm()
             }
             else
             {
-                m_pStgStrm->SetSize( 0L );
+                m_pStgStrm->SetSize( 0 );
                 delete m_pStgStrm;
                 m_pStgStrm = pNewStrm;
                 pNewStrm->SetEntry( *this );

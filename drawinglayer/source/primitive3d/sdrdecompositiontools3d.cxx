@@ -146,7 +146,7 @@ namespace drawinglayer
             // create primitives
             Primitive3DContainer aRetval(aScaledPolyPolygon.count());
 
-            for(sal_uInt32 a(0L); a < aScaledPolyPolygon.count(); a++)
+            for(sal_uInt32 a(0); a < aScaledPolyPolygon.count(); a++)
             {
                 const Primitive3DReference xRef(new PolygonStrokePrimitive3D(aScaledPolyPolygon.getB3DPolygon(a), aLineAttribute, aStrokeAttribute));
                 aRetval[a] = xRef;

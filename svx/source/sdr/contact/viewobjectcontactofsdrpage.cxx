@@ -535,7 +535,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
             const basegfx::BColor aRGBColorB(0.0, 0.0, 0.0);
             xRetval.resize(nCount);
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
                 const SdrHelpLine& rHelpLine = rHelpLineList[(sal_uInt16)a];
                 const basegfx::B2DPoint aPosition((double)rHelpLine.GetPos().X(), (double)rHelpLine.GetPos().Y());

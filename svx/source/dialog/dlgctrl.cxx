@@ -1581,7 +1581,7 @@ void SvxXLinePreview::Resize()
     SvxPreviewBase::Resize();
 
     const Size aOutputSize(GetOutputSize());
-    const sal_Int32 nDistance(500L);
+    const sal_Int32 nDistance(500);
     const sal_Int32 nAvailableLength(aOutputSize.Width() - (4 * nDistance));
 
     // create DrawObectA

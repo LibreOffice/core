@@ -244,8 +244,8 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
 
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
-    Fraction scaleX = Fraction(nOutputWidth, 96) * Fraction(1440L) / Fraction(nTileWidth);
-    Fraction scaleY = Fraction(nOutputHeight, 96) * Fraction(1440L) / Fraction(nTileHeight);
+    Fraction scaleX = Fraction(nOutputWidth, 96) * Fraction(1440) / Fraction(nTileWidth);
+    Fraction scaleY = Fraction(nOutputHeight, 96) * Fraction(1440) / Fraction(nTileHeight);
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);

@@ -1823,7 +1823,7 @@ void SdrOle2Obj::GetObjRef_Impl()
                 ClearGraphic();
 
                 // if status was not set before, force it back
-                // to not set, so that SetGraphic(0L) above does not
+                // to not set, so that SetGraphic(0) above does not
                 // set the modified state of the model.
                 if(!bWasChanged && pModel && pModel->IsChanged())
                 {

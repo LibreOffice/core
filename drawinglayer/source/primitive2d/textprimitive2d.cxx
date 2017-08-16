@@ -186,7 +186,7 @@ namespace drawinglayer
             aRetval.resize(nCount);
 
             // color-filled polypolygons
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
                 // prepare polypolygon
                 basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];

@@ -1025,14 +1025,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             aTemplateValue >>= sTmpl;
 
                             sal_Int32 nColonPos = sTmpl.indexOf( ':' );
-                            OUString sPrefix = sTmpl.copy( 0L, nColonPos );
+                            OUString sPrefix = sTmpl.copy( 0, nColonPos );
                             if ( sPrefix == "Style" )
                             {
-                                aTemplateName = sTmpl.copy( 7L );   //get string behind "Style: "
+                                aTemplateName = sTmpl.copy( 7 );   //get string behind "Style: "
                             }
                             else if ( sPrefix == "Outline" )
                             {
-                                nTemplateOutlineLevel = ( sTmpl.copy( 15L )).toInt32(); //get string behind "Outline: Leve  ";
+                                nTemplateOutlineLevel = ( sTmpl.copy( 15 )).toInt32(); //get string behind "Outline: Leve  ";
                                 bCreateByOutlineLevel = true;
                             }
 

@@ -538,7 +538,7 @@ void SdrHdl::CreateB2dIAObject()
 
         if(pPageView)
         {
-            for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+            for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
             {
                 // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
                 const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
@@ -1105,7 +1105,7 @@ void SdrHdlColor::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -1260,7 +1260,7 @@ void SdrHdlGradient::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -1418,7 +1418,7 @@ void SdrHdlLine::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -1474,7 +1474,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -1530,7 +1530,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -1708,7 +1708,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -1770,7 +1770,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -2362,7 +2362,7 @@ void SdrCropHdl::CreateB2dIAObject()
         const BitmapEx aHandlesBitmap(SIP_SA_CROP_MARKERS);
         BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
-        for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+        for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
         {
             const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
@@ -2612,7 +2612,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
 
     const drawinglayer::primitive2d::Primitive2DContainer aSequence { aTransparenceMaskedGraphic };
 
-    for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+    for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
     {
         // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
         const SdrPageWindow& rPageWindow = *(pPageView->GetPageWindow(b));

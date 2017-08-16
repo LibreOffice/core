@@ -277,7 +277,7 @@ namespace sdr
                             // force ItemSet
                             GetObjectItemSet();
 
-                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0L));
+                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
                             mpItemSet->Put(aNewSet);
                         }
 

@@ -234,7 +234,7 @@ namespace
 
             if(mxBreak.is())
             {
-                sal_Int32 nDone(0L);
+                sal_Int32 nDone(0);
                 nNextGlyphLen = mxBreak->nextCharacters(pCandidate->getText(), nPosition,
                     rFontLocale, CharacterIteratorMode::SKIPCELL, 1, nDone) - nPosition;
             }
@@ -573,7 +573,7 @@ namespace
             basegfx::B2DPolyPolygon aB2DPolyPolygon = *aPolygon;
             aB2DPolyPolygon.transform(rTransform);
 
-            for(sal_uInt32 a(0L); a < aB2DPolyPolygon.count(); a++)
+            for(sal_uInt32 a(0); a < aB2DPolyPolygon.count(); a++)
             {
                 // create one primitive per polygon
                 drawinglayer::primitive2d::PolygonStrokePrimitive2D* pNew =
@@ -621,7 +621,7 @@ namespace
                             // create UnifiedTransparencePrimitive2D
                             drawinglayer::primitive2d::Primitive2DContainer aStrokePrimitiveSequence(nStrokeCount);
 
-                            for(sal_uInt32 b(0L); b < nStrokeCount; b++)
+                            for(sal_uInt32 b(0); b < nStrokeCount; b++)
                             {
                                 aStrokePrimitiveSequence[b] = drawinglayer::primitive2d::Primitive2DReference(aStrokePrimitives[b]);
                             }
@@ -648,7 +648,7 @@ namespace
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval(nNewCount);
 
-            for(sal_uInt32 a(0L); a < nNewCount; a++)
+            for(sal_uInt32 a(0); a < nNewCount; a++)
             {
                 aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(aNewPrimitives[a]);
             }

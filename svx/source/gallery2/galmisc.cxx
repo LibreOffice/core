@@ -102,7 +102,7 @@ bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
         GalleryCodec    aCodec( rIStm );
 
         aCodec.Read( aMemStm );
-        aMemStm.Seek( 0UL );
+        aMemStm.Seek( 0 );
 
         if( 1 == nVersion )
         {

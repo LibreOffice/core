@@ -1332,8 +1332,8 @@ void UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     if( pDestStm->SetSize( n ) && n )
     {
         std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
-        Seek( 0L );
-        pDestStm->Seek( 0L );
+        Seek( 0 );
+        pDestStm->Seek( 0 );
         while( n )
         {
             sal_uInt32 nn = n;

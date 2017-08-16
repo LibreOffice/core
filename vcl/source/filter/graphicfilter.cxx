@@ -1832,7 +1832,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                         nStatus = ERRCODE_GRFILTER_FILTERERROR;
                     else
                     {
-                        aTempStream.Seek( 0L );
+                        aTempStream.Seek( 0 );
                         ReadGraphic( aTempStream, rGraphic );
 
                         if( aTempStream.GetError() )

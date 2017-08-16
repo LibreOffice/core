@@ -63,13 +63,13 @@ void GalleryCodec::Write( SvStream& rStmToWrite )
 
     rStmToWrite.Seek( STREAM_SEEK_TO_END );
     const sal_uInt32 nSize = rStmToWrite.Tell();
-    rStmToWrite.Seek( 0UL );
+    rStmToWrite.Seek( 0 );
 
     rStm.WriteChar( 'S' ).WriteChar( 'V' ).WriteChar( 'R' ).WriteChar( 'L' ).WriteChar( 'E' ).WriteChar( '2' );
     rStm.WriteUInt32( nSize );
 
     nPos = rStm.Tell();
-    rStm.SeekRel( 4UL );
+    rStm.SeekRel( 4 );
 
     ZCodec aCodec;
     aCodec.BeginCompression();

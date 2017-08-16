@@ -301,17 +301,17 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 
             if(pAccess && nWidth > 0 && nHeight > 0)
             {
-                sal_uInt32 nRt(0L);
-                sal_uInt32 nGn(0L);
-                sal_uInt32 nBl(0L);
-                const sal_uInt32 nMaxSteps(8L);
-                const sal_uInt32 nXStep((nWidth > nMaxSteps) ? nWidth / nMaxSteps : 1L);
-                const sal_uInt32 nYStep((nHeight > nMaxSteps) ? nHeight / nMaxSteps : 1L);
-                sal_uInt32 nCount(0L);
+                sal_uInt32 nRt(0);
+                sal_uInt32 nGn(0);
+                sal_uInt32 nBl(0);
+                const sal_uInt32 nMaxSteps(8);
+                const sal_uInt32 nXStep((nWidth > nMaxSteps) ? nWidth / nMaxSteps : 1);
+                const sal_uInt32 nYStep((nHeight > nMaxSteps) ? nHeight / nMaxSteps : 1);
+                sal_uInt32 nCount(0);
 
-                for(sal_uInt32 nY(0L); nY < nHeight; nY += nYStep)
+                for(sal_uInt32 nY(0); nY < nHeight; nY += nYStep)
                 {
-                    for(sal_uInt32 nX(0L); nX < nWidth; nX += nXStep)
+                    for(sal_uInt32 nX(0); nX < nWidth; nX += nXStep)
                     {
                         const BitmapColor& rCol2 = pAccess->GetColor(nY, nX);
 

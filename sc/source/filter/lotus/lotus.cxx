@@ -40,7 +40,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
 
     ErrCode            eRet;
 
-    pStream->Seek( 0UL );
+    pStream->Seek( 0 );
 
     pStream->SetBufferSize( 32768 );
 
@@ -56,7 +56,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     // WARNING: QUICK-HACK for WK1 / WKS  <->  WK3 / WK4
     if( eRet == ErrCode(0xFFFFFFFF) )
     {
-        pStream->Seek( 0UL );
+        pStream->Seek( 0 );
 
         pStream->SetBufferSize( 32768 );
 

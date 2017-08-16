@@ -144,7 +144,7 @@ namespace sdr
             }
 
             // also send the user calls
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
                 GetSdrObject().SendUserCall(SdrUserCallType::ChangeAttr, rChange.GetRectangle(a));
             }
