@@ -118,7 +118,7 @@ ScXMLTableRowCellContext::Field::~Field()
 }
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                                       const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     ScXMLImportContext( rImport ),
@@ -157,12 +157,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
     std::unique_ptr<OUString> xStyleName;
     std::unique_ptr<OUString> xCurrencySymbol;
-    if( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for( auto &it : *pAttribList )
+        for (auto &it : *rAttrList)
         {
             switch ( it.getToken() )
             {
@@ -702,6 +699,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     // bool bTextP(false);
     switch (nElement)
@@ -734,7 +733,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             if (!pCellRangeSource)
                 pCellRangeSource = new ScMyImpCellRangeSource();
             pContext = new ScXMLCellRangeSourceContext(
-                rXMLImport, xAttrList, pCellRangeSource );
+                rXMLImport, pAttribList, pCellRangeSource );
         }
         break;
     }

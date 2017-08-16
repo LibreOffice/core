@@ -47,7 +47,7 @@ class ScXMLSortContext : public ScXMLImportContext
 public:
 
     ScXMLSortContext( ScXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
     virtual ~ScXMLSortContext() override;
@@ -71,7 +71,7 @@ class ScXMLSortByContext : public ScXMLImportContext
 public:
 
     ScXMLSortByContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLSortContext* pTempSortContext);
 
     virtual ~ScXMLSortByContext() override;

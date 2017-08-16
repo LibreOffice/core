@@ -76,14 +76,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext*     pContext    = nullptr;
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_HIGHLIGHTED_RANGE ):
-            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), xAttrList, pDetectiveObjVec );
+            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), pAttribList, pDetectiveObjVec );
         break;
         case XML_ELEMENT( TABLE, XML_OPERATION ):
-            pContext = new ScXMLDetectiveOperationContext( GetScImport(), xAttrList );
+            pContext = new ScXMLDetectiveOperationContext( GetScImport(), pAttribList );
         break;
     }
     if( !pContext )
@@ -94,19 +96,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::
 
 ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         ScXMLImport& rImport,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
     ScXMLImportContext( rImport ),
     pDetectiveObjVec( pNewDetectiveObjVec ),
     aDetectiveObj(),
     bValid( false )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -158,17 +157,14 @@ void SAL_CALL ScXMLDetectiveHighlightedContext::endFastElement( sal_Int32 /*nEle
 
 ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         ScXMLImport& rImport,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     aDetectiveOp(),
     bHasType( false )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {

@@ -49,7 +49,7 @@ class ScXMLTableContext : public ScXMLImportContext
 public:
 
     ScXMLTableContext( ScXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLTableContext() override;
 
@@ -68,7 +68,7 @@ class ScXMLTableProtectionContext : public ScXMLImportContext
 {
 public:
     ScXMLTableProtectionContext( ScXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLTableProtectionContext() override;
 
