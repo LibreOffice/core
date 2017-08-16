@@ -88,11 +88,11 @@ public:
     void startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize);
     void endDMLAnchorInline(const SwFrameFormat* pFrameFormat);
     /// Writes a drawing as VML data.
-    void writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft);
+    void writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat);
     /// Writes a drawing as DML.
     void writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat, int nAnchorId);
     /// Writes shape in both DML and VML format.
-    void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft, int nAnchorId);
+    void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat, int nAnchorId);
     /// Write <a:effectLst>, the effect list.
     void writeDMLEffectLst(const SwFrameFormat& rFrameFormat);
     /// Writes a diagram (smartart).
