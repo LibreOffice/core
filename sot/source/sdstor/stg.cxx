@@ -154,7 +154,7 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p )
 
 
 StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
-             : OLEStorageBase( p, q, m_nMode ), nPos( 0L )
+             : OLEStorageBase( p, q, m_nMode ), nPos( 0 )
 {
     // The dir entry may be 0; this means that the stream is invalid.
     if( q && p )
@@ -375,7 +375,7 @@ Storage::Storage( SvStream& r, bool bDirect )
     {
         pIo->SetStrm( &r, false );
         sal_uLong nSize = r.Seek( STREAM_SEEK_TO_END );
-        r.Seek( 0L );
+        r.Seek( 0 );
         // Initializing is OK if the stream is empty
         Init( nSize == 0 );
         if( pEntry )
@@ -420,7 +420,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
     pIo->SetStrm( &rStrm );
 
     sal_uLong nSize = pStream->Seek( STREAM_SEEK_TO_END );
-    pStream->Seek( 0L );
+    pStream->Seek( 0 );
     // Initializing is OK if the stream is empty
     Init( nSize == 0 );
     if( pEntry )
@@ -445,7 +445,7 @@ void Storage::Init( bool bCreate )
     if( pIo->Good() && pIo->GetStrm() )
     {
         sal_uLong nSize = pIo->GetStrm()->Seek( STREAM_SEEK_TO_END );
-        pIo->GetStrm()->Seek( 0L );
+        pIo->GetStrm()->Seek( 0 );
         if( nSize )
         {
             bHdrLoaded = pIo->Load();

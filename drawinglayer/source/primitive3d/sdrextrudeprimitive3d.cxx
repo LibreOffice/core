@@ -57,7 +57,7 @@ namespace drawinglayer
 
                 if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordinatesX || bCreateTextureCoordinatesY))
                 {
-                    const basegfx::B2DPolygon aFirstPolygon(maCorrectedPolyPolygon.getB2DPolygon(0L));
+                    const basegfx::B2DPolygon aFirstPolygon(maCorrectedPolyPolygon.getB2DPolygon(0));
                     const double fFrontLength(basegfx::tools::getLength(aFirstPolygon));
                     const double fFrontArea(basegfx::tools::getArea(aFirstPolygon));
                     const double fSqrtFrontArea(sqrt(fFrontArea));
@@ -428,7 +428,7 @@ namespace drawinglayer
             }
 
             // no close front/back when polygon is not closed
-            if(getPolyPolygon().count() && !getPolyPolygon().getB2DPolygon(0L).isClosed())
+            if(getPolyPolygon().count() && !getPolyPolygon().getB2DPolygon(0).isClosed())
             {
                 mbCloseFront = mbCloseBack = false;
             }

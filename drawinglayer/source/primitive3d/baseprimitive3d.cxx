@@ -141,7 +141,7 @@ namespace drawinglayer
             {
                 const size_t nCount(size());
 
-                for(size_t a(0L); a < nCount; a++)
+                for(size_t a(0); a < nCount; a++)
                 {
                     aRetval.expand(getB3DRangeFromPrimitive3DReference((*this)[a], aViewInformation));
                 }
@@ -202,7 +202,7 @@ namespace drawinglayer
                 return false;
             }
 
-            for(size_t a(0L); a < nCount; a++)
+            for(size_t a(0); a < nCount; a++)
             {
                 if(!arePrimitive3DReferencesEqual((*this)[a], rB[a]))
                 {

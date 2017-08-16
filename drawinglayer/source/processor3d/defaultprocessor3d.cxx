@@ -381,7 +381,7 @@ namespace drawinglayer
             {
                 // get plane normal of polygon in view coordinates (with ZBuffer values),
                 // left-handed coordinate system
-                const basegfx::B3DVector aPlaneNormal(aFill.getB3DPolygon(0L).getNormal());
+                const basegfx::B3DVector aPlaneNormal(aFill.getB3DPolygon(0).getNormal());
 
                 if(aPlaneNormal.getZ() > 0.0)
                 {
@@ -398,7 +398,7 @@ namespace drawinglayer
                 {
                     // get plane normal of polygon in view coordinates (with ZBuffer values),
                     // left-handed coordinate system
-                    const basegfx::B3DVector aPlaneNormal(aFill.getB3DPolygon(0L).getNormal());
+                    const basegfx::B3DVector aPlaneNormal(aFill.getB3DPolygon(0).getNormal());
 
                     if(aPlaneNormal.getZ() > 0.0)
                     {
@@ -427,11 +427,11 @@ namespace drawinglayer
                         const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
 
                         // solve color model for each normal vector, set colors at points. Clear normals.
-                        for(sal_uInt32 a(0L); a < aFill.count(); a++)
+                        for(sal_uInt32 a(0); a < aFill.count(); a++)
                         {
                             basegfx::B3DPolygon aPartFill(aFill.getB3DPolygon(a));
 
-                            for(sal_uInt32 b(0L); b < aPartFill.count(); b++)
+                            for(sal_uInt32 b(0); b < aPartFill.count(); b++)
                             {
                                 // solve color model. Transform normal to eye coor
                                 const basegfx::B3DVector aNormal(aPartFill.getNormal(b));
@@ -448,7 +448,7 @@ namespace drawinglayer
                     case css::drawing::ShadeMode_FLAT:
                     {
                         // flat shading. Get plane vector in eye coordinates
-                        const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0L).getNormal());
+                        const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0).getNormal());
 
                         // prepare color model parameters, evtl. use blend color
                         const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());

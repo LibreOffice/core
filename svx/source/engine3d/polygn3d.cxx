@@ -61,7 +61,7 @@ void E3dPolygonObj::CreateDefaultNormals()
     basegfx::B3DPolyPolygon aPolyNormals;
 
     // Create a complete tools::PolyPolygon with the plane normal
-    for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)
+    for(sal_uInt32 a(0); a < aPolyPoly3D.count(); a++)
     {
         // Find source polygon
         const basegfx::B3DPolygon aPolygon(aPolyPoly3D.getB3DPolygon(a));
@@ -73,7 +73,7 @@ void E3dPolygonObj::CreateDefaultNormals()
         basegfx::B3DVector aNormal(-aPolygon.getNormal());
 
         // Fill new polygon
-        for(sal_uInt32 b(0L); b < aPolygon.count(); b++)
+        for(sal_uInt32 b(0); b < aPolygon.count(); b++)
         {
             aNormals.append(aNormal);
         }
@@ -92,7 +92,7 @@ void E3dPolygonObj::CreateDefaultTexture()
     // Create a complete tools::PolyPolygon with the texture coordinates
     // The texture coordinates extend over X,Y and Z
     // on the whole extreme values in the range 0.0 .. 1.0
-    for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)
+    for(sal_uInt32 a(0); a < aPolyPoly3D.count(); a++)
     {
         // Find source polygon
         const basegfx::B3DPolygon& aPolygon(aPolyPoly3D.getB3DPolygon(a));
@@ -128,7 +128,7 @@ void E3dPolygonObj::CreateDefaultTexture()
         basegfx::B2DPolygon aTexture;
 
         // Fill new polygon
-        for(sal_uInt32 b(0L); b < aPolygon.count(); b++)
+        for(sal_uInt32 b(0); b < aPolygon.count(); b++)
         {
             basegfx::B2DPoint aTex;
             const basegfx::B3DPoint aCandidate(aPolygon.getB3DPoint(b));

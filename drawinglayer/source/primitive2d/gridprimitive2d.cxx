@@ -67,7 +67,7 @@ namespace drawinglayer
                 double fViewStepX((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(fStepX, 0.0)).getLength());
                 double fViewStepY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fStepY)).getLength());
                 double fSmallStepX(1.0), fViewSmallStepX(1.0), fSmallStepY(1.0), fViewSmallStepY(1.0);
-                sal_uInt32 nSmallStepsX(0L), nSmallStepsY(0L);
+                sal_uInt32 nSmallStepsX(0), nSmallStepsY(0);
 
                 // setup subdivisions
                 if(getSubdivisionsX())

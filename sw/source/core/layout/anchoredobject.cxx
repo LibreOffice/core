@@ -72,7 +72,7 @@ SwAnchoredObject::SwAnchoredObject() :
     mpPageFrame( nullptr ),
     maRelPos(),
     maLastCharRect(),
-    mnLastTopOfLine( 0L ),
+    mnLastTopOfLine( 0 ),
     mpVertPosOrientFrame( nullptr ),
     // --> #i28701#
     mbPositioningInProgress( false ),

@@ -761,7 +761,7 @@ Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea() const
 
     if( mpView && mpView->PaintWindowCount())
     {
-        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(0L);
+        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(0);
         aVisArea = pPaintWindow->GetVisibleArea();
     }
 

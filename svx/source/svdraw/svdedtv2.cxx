@@ -1341,8 +1341,8 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             {
                 if(!aPolygon.isClosed())
                 {
-                    const basegfx::B2DPoint aPointA(aPolygon.getB2DPoint(0));
-                    const basegfx::B2DPoint aPointB(aPolygon.getB2DPoint(nPointCount - 1));
+                    const basegfx::B2DPoint aPointA(aPolygon.getB2DPoint(0L));
+                    const basegfx::B2DPoint aPointB(aPolygon.getB2DPoint(nPointCount - 1L));
                     const double fDistance(basegfx::B2DVector(aPointB - aPointA).getLength());
                     const double fJoinTolerance(10.0);
 
@@ -1416,7 +1416,7 @@ bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, 
     else if(bMakeLines && 1 == nPolygonCount)
     {
         // #i69172# ..or with at least 2 edges (curves or lines)
-        const basegfx::B2DPolygon aPolygon(rPpolyPolygon.getB2DPolygon(0L));
+        const basegfx::B2DPolygon aPolygon(rPpolyPolygon.getB2DPolygon(0));
         const sal_uInt32 nPointCount(aPolygon.count());
 
         if(nPointCount > 2)

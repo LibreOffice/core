@@ -197,10 +197,10 @@ void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
     pDestStm->ClearBuffer();
     if( !pOwnStm || !pDestStm->pOwnStm )
     {
-        // Wenn Ole2 oder nicht nur eigene StorageStreams
-        sal_uLong nPos = Tell();    // Position merken
-        Seek( 0L );
-        pDestStm->SetSize( 0 ); // Ziel-Stream leeren
+        // If Ole2 or not only own StorageStreams
+        sal_uLong nPos = Tell();    // save position
+        Seek( 0 );
+        pDestStm->SetSize( 0 ); // empty target stream
 
         std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ 8192 ]);
         sal_uLong  nRead;

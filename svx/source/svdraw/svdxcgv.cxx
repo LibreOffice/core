@@ -208,7 +208,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
 
         if(1 == rOutliner.GetParagraphCount())
         {
-            SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0L);
+            SfxStyleSheet* pCandidate = rOutliner.GetStyleSheet(0);
 
             if(pCandidate)
             {

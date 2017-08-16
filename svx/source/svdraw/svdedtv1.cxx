@@ -1168,7 +1168,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         // #i38135#
         if(bResetAnimationTimer)
         {
-            SetAnimationTimer(0L);
+            SetAnimationTimer(0);
         }
 
         // better check before what to do:

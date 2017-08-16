@@ -694,7 +694,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground()
     throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
-    sal_Int32 nColor (0L);
+    sal_Int32 nColor (0);
 
     try
     {

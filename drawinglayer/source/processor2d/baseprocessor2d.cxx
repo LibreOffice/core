@@ -54,7 +54,7 @@ namespace drawinglayer
             {
                 const sal_Int32 nCount(rSource.size());
 
-                for(sal_Int32 a(0L); a < nCount; a++)
+                for(sal_Int32 a(0); a < nCount; a++)
                 {
                     // get reference
                     const primitive2d::Primitive2DReference xReference(rSource[a]);

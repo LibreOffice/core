@@ -335,8 +335,8 @@ CSS1Token CSS1Parser::GetNextToken()
                 nlLinePos = nlLinePosSave;
                 bEOF = bEOFSave;
 
-                // erstmal die Zahl scannen
-                sTmpBuffer.setLength( 0L );
+                // first parse the number
+                sTmpBuffer.setLength( 0 );
                 do {
                     sTmpBuffer.append( cNextCh );
                     cNextCh = GetNextChar();

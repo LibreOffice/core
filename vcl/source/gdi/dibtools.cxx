@@ -1594,7 +1594,7 @@ bool ImplReadDIB(
 {
     const SvStreamEndian nOldFormat(rIStm.GetEndian());
     const sal_uLong nOldPos(rIStm.Tell());
-    sal_uLong nOffset(0UL);
+    sal_uLong nOffset(0);
     bool bRet(false);
 
     rIStm.SetEndian(SvStreamEndian::LITTLE);

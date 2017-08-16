@@ -210,7 +210,7 @@ static vcl::Window* ImpGetViewWin(SdrView* pView)
     if( pView )
     {
         const sal_uInt32 nCount(pView->PaintWindowCount());
-        for(sal_uInt32 nNum(0L); nNum < nCount; nNum++)
+        for(sal_uInt32 nNum(0); nNum < nCount; nNum++)
         {
             OutputDevice* pOut = &(pView->GetPaintWindow(nNum)->GetOutputDevice());
 

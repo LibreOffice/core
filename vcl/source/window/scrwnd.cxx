@@ -38,12 +38,12 @@
 
 ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
             FloatingWindow  ( pParent, 0 ),
-            mnRepaintTime   ( 1UL ),
+            mnRepaintTime   ( 1 ),
             mnTimeout       ( DEF_TIMEOUT ),
             mnWheelMode     ( WheelMode::NONE ),
-            mnActDist       ( 0UL ),
-            mnActDeltaX     ( 0L ),
-            mnActDeltaY     ( 0L )
+            mnActDist       ( 0 ),
+            mnActDeltaX     ( 0 ),
+            mnActDeltaY     ( 0 )
 {
     // we need a parent
     SAL_WARN_IF( !pParent, "vcl", "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );

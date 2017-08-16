@@ -163,7 +163,7 @@ WKTYP ScanVersion(SvStream& aStream)
 
 FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
-    aStream.Seek( 0UL );
+    aStream.Seek( 0 );
 
     // make document pointer global
     rContext.pDoc = pDocument;

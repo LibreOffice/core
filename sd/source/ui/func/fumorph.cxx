@@ -262,9 +262,9 @@ void FuMorph::ImpEqualizePolyPointCount(
     // transpose points to have smooth linear blending
     ::basegfx::B2DPolygon aPoly2;
     aPoly2.append(::basegfx::B2DPoint(), nCnt);
-    sal_uInt32 nInd(ImpGetNearestIndex(aPoly1, aTrans * rBig.getB2DPoint(0L)));
+    sal_uInt32 nInd(ImpGetNearestIndex(aPoly1, aTrans * rBig.getB2DPoint(0)));
 
-    for(sal_uInt32 a(0L); a < nCnt; a++)
+    for(sal_uInt32 a(0); a < nCnt; a++)
     {
         aPoly2.setB2DPoint((a + nCnt - nInd) % nCnt, aPoly1.getB2DPoint(a));
     }
@@ -281,7 +281,7 @@ sal_uInt32 FuMorph::ImpGetNearestIndex(
     double fMinDist = 0.0;
     sal_uInt32 nActInd = 0;
 
-    for(sal_uInt32 a(0L); a < rPoly.count(); a++)
+    for(sal_uInt32 a(0); a < rPoly.count(); a++)
     {
         double fNewDist(::basegfx::B2DVector(rPoly.getB2DPoint(a) - rPos).getLength());
 
@@ -310,13 +310,13 @@ void FuMorph::ImpAddPolys(
         ::basegfx::B2DPoint aNewPoint(aToBeCopiedPolySize.getCenter());
         ::basegfx::B2DPolygon aNewPoly;
 
-        const ::basegfx::B2DRange aSrcSize(::basegfx::tools::getRange(rBigger.getB2DPolygon(0L)));
+        const ::basegfx::B2DRange aSrcSize(::basegfx::tools::getRange(rBigger.getB2DPolygon(0)));
         const ::basegfx::B2DPoint aSrcPos(aSrcSize.getCenter());
-        const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmaller.getB2DPolygon(0L)));
+        const ::basegfx::B2DRange aDstSize(::basegfx::tools::getRange(rSmaller.getB2DPolygon(0)));
         const ::basegfx::B2DPoint aDstPos(aDstSize.getCenter());
         aNewPoint = aNewPoint - aSrcPos + aDstPos;
 
-        for(sal_uInt32 a(0L); a < aToBeCopied.count(); a++)
+        for(sal_uInt32 a(0); a < aToBeCopied.count(); a++)
         {
             aNewPoly.append(aNewPoint);
         }
@@ -455,14 +455,14 @@ void FuMorph::ImpInsertPolygons(
     ::basegfx::B2DPolyPolygon* pNewPolyPolygon = new ::basegfx::B2DPolyPolygon();
     const double fFactor = 1.0 - fMorphingFactor;
 
-    for(sal_uInt32 a(0L); a < rPolyPolyStart.count(); a++)
+    for(sal_uInt32 a(0); a < rPolyPolyStart.count(); a++)
     {
         const ::basegfx::B2DPolygon aPolyStart(rPolyPolyStart.getB2DPolygon(a));
         const ::basegfx::B2DPolygon aPolyEnd(rPolyPolyEnd.getB2DPolygon(a));
         const sal_uInt32 nCount(aPolyStart.count());
         ::basegfx::B2DPolygon aNewPolygon;
 
-        for(sal_uInt32 b(0L); b < nCount; b++)
+        for(sal_uInt32 b(0); b < nCount; b++)
         {
             const ::basegfx::B2DPoint& aPtStart(aPolyStart.getB2DPoint(b));
             const ::basegfx::B2DPoint& aPtEnd(aPolyEnd.getB2DPoint(b));

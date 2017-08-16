@@ -80,7 +80,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             eVertOrient = text::VertOrientation::TOP;
         }
         // #i26791# - get vertical offset to frame anchor position.
-        SwTwips nVertOffsetToFrameAnchorPos( 0L );
+        SwTwips nVertOffsetToFrameAnchorPos( 0 );
         SwTwips nRelPosY =
                 GetVertRelPos( GetAnchorFrame(), GetAnchorFrame(), eVertOrient,
                                 aVert.GetRelationOrient(), aVert.GetPos(),

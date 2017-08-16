@@ -514,7 +514,7 @@ void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const b
 
     if(pLinePolyPolygon && 1 == rPolyPolygon.count())
     {
-        if(rPolyPolygon.getB2DPolygon(0L).isClosed())
+        if(rPolyPolygon.getB2DPolygon(0).isClosed())
         {
             // open polygon
             bSimple = true;

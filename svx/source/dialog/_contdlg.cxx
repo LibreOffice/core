@@ -217,7 +217,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
         pUpdateEditingObject( nullptr ),
         pCheckObj           ( nullptr ),
         aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
-        nGrfChanged         ( 0UL ),
+        nGrfChanged         ( 0 ),
         bExecState          ( false ),
         bUpdateGraphicLinked( false ),
         bGraphicLinked      ( false )
@@ -275,7 +275,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
     aPos.X() += aTbxSize.Width() + LogicToPixel( Size( 3, 0 ), MapMode( MapUnit::MapAppFont ) ).Width();
     m_pMtfTolerance->SetPosPixel( aPos );
-    m_pMtfTolerance->SetValue( 10L );
+    m_pMtfTolerance->SetValue( 10 );
 
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
 

@@ -187,7 +187,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 if ( pAnchorPageFrame != _rAnchoredObj.GetPageFrame() )
                 {
                     bool bInsert( true );
-                    sal_uInt32 nToPageNum( 0L );
+                    sal_uInt32 nToPageNum( 0 );
                     const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
                     if ( SwLayouter::FrameMovedFwdByObjPos(
                                             rDoc, mrAnchorTextFrame, nToPageNum ) )
@@ -221,7 +221,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                         "<SwObjectFormatterTextFrame::DoFormatObj(..)> - anchored object not collected!?" );
                 --nIdx;
 
-                sal_uInt32 nToPageNum( 0L );
+                sal_uInt32 nToPageNum( 0 );
                 // #i43913#
                 bool bDummy( false );
                 // #i58182# - consider new method signature
@@ -233,7 +233,7 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     // #i49987# - consider, that anchor frame
                     // could already been marked to move forward.
                     bool bInsert( true );
-                    sal_uInt32 nMovedFwdToPageNum( 0L );
+                    sal_uInt32 nMovedFwdToPageNum( 0 );
                     const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
                     if ( SwLayouter::FrameMovedFwdByObjPos(
                                             rDoc, mrAnchorTextFrame, nMovedFwdToPageNum ) )
@@ -347,7 +347,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         // section the anchor frame is in.
         FormatAnchorFrameForCheckMoveFwd();
 
-        sal_uInt32 nToPageNum( 0L );
+        sal_uInt32 nToPageNum( 0 );
         // #i43913#
         bool bInFollow( false );
         SwAnchoredObject* pObj = nullptr;
@@ -371,7 +371,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
                  bInFollow )
             {
                 bool bInsert( true );
-                sal_uInt32 nTmpToPageNum( 0L );
+                sal_uInt32 nTmpToPageNum( 0 );
                 const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
                 if ( SwLayouter::FrameMovedFwdByObjPos(
                                         rDoc, mrAnchorTextFrame, nTmpToPageNum ) )
@@ -403,7 +403,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
             // #i49987# - consider, that anchor frame
             // could already been marked to move forward.
             bool bInsert( true );
-            sal_uInt32 nMovedFwdToPageNum( 0L );
+            sal_uInt32 nMovedFwdToPageNum( 0 );
             const SwDoc& rDoc = *(GetPageFrame().GetFormat()->GetDoc());
             if ( SwLayouter::FrameMovedFwdByObjPos(
                                     rDoc, mrAnchorTextFrame, nMovedFwdToPageNum ) )

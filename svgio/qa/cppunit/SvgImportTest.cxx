@@ -141,7 +141,7 @@ bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive
     if(nCount != rB.getLength())
         return false;
 
-    for(sal_Int32 a(0L); a < nCount; a++) {
+    for(sal_Int32 a(0); a < nCount; a++) {
         if(!drawinglayer::primitive2d::arePrimitive2DReferencesEqual(rA[a], rB[a]))
             return false;
     }

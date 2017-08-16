@@ -40,7 +40,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
 
     FltError            eRet;
 
-    pStream->Seek( 0UL );
+    pStream->Seek( 0 );
 
     pStream->SetBufferSize( 32768 );
 
@@ -56,7 +56,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     // WARNING: QUICK-HACK for WK1 / WKS  <->  WK3 / WK4
     if( eRet == 0xFFFFFFFF )
     {
-        pStream->Seek( 0UL );
+        pStream->Seek( 0 );
 
         pStream->SetBufferSize( 32768 );
 

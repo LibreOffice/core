@@ -288,7 +288,7 @@ namespace drawinglayer
             }
 
             // no close front/back when polygon is not closed
-            if(getPolyPolygon().count() && !getPolyPolygon().getB2DPolygon(0L).isClosed())
+            if(getPolyPolygon().count() && !getPolyPolygon().getB2DPolygon(0).isClosed())
             {
                 mbCloseFront = mbCloseBack = false;
             }

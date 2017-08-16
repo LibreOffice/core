@@ -2404,7 +2404,7 @@ void Sc10Import::LoadObjects()
 
 FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {
-    rStream.Seek( 0UL );
+    rStream.Seek( 0 );
     Sc10Import  aImport( rStream, pDocument );
     return ( FltError ) aImport.Import();
 }

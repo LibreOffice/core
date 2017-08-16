@@ -25,7 +25,7 @@
 #include <svx/scene3d.hxx>
 
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bool bReverse)
-:   mnIndex(0L),
+:   mnIndex(0),
     mbReverse(bReverse)
 {
     ImpProcessObjectList(rObjList, eMode, true);
@@ -33,7 +33,7 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bo
 }
 
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode)
-:   mnIndex(0L),
+:   mnIndex(0),
     mbReverse(false)
 {
     ImpProcessObjectList(rObjList, eMode, bUseZOrder);
@@ -41,7 +41,7 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrI
 }
 
 SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode )
-:   mnIndex(0L),
+:   mnIndex(0),
     mbReverse(false)
 {
     if ( dynamic_cast<const SdrObjGroup*>(&rObj) !=  nullptr )
@@ -52,7 +52,7 @@ SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode )
 }
 
 SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode )
-:   mnIndex(0L),
+:   mnIndex(0),
     mbReverse(false)
 {
     ImpProcessMarkList(rMarkList, eMode);

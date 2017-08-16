@@ -47,7 +47,7 @@ namespace drawinglayer
 
             if(nCount)
             {
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                for(sal_uInt32 a(0); a < nCount; a++)
                 {
                     rContainer.push_back(new PolygonHairlinePrimitive2D(aPolyPolygon.getB2DPolygon(a), getBColor()));
                 }
@@ -98,7 +98,7 @@ namespace drawinglayer
 
             if(nCount)
             {
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                for(sal_uInt32 a(0); a < nCount; a++)
                 {
                     rContainer.push_back(
                         new PolygonMarkerPrimitive2D(
@@ -162,7 +162,7 @@ namespace drawinglayer
 
             if(nCount)
             {
-                for(sal_uInt32 a(0L); a < nCount; a++)
+                for(sal_uInt32 a(0); a < nCount; a++)
                 {
                     rContainer.push_back(
                         new PolygonStrokePrimitive2D(

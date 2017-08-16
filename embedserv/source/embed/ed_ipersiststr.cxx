@@ -164,7 +164,7 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > const & xTemp
 
 
 EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const GUID* guid )
-: m_refCount( 0L )
+: m_refCount( 0 )
 , m_xFactory( xFactory )
 , m_guid( *guid )
 , m_bIsDirty( false )

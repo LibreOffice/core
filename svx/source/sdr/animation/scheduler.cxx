@@ -52,8 +52,8 @@ namespace sdr
 
 
         Scheduler::Scheduler()
-        :   mnTime(0L),
-            mnDeltaTime(0L),
+        :   mnTime(0),
+            mnDeltaTime(0),
             mbIsPaused(false)
         {
         }

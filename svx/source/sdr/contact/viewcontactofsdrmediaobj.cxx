@@ -121,7 +121,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::create
     // and/or BoundRect
     const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
     const OUString& rURL(GetSdrMediaObj().getURL());
-    const sal_uInt32 nPixelBorder(4L);
+    const sal_uInt32 nPixelBorder(4);
     const drawinglayer::primitive2d::Primitive2DReference xRetval(
         new drawinglayer::primitive2d::MediaPrimitive2D(
             aTransform, rURL, aBackgroundColor, nPixelBorder,

@@ -98,7 +98,7 @@ namespace drawinglayer
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
                     const css::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
 
-                    for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
+                    for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
                     {
                         // create tube primitives
                         const Primitive3DReference xRef(
@@ -114,7 +114,7 @@ namespace drawinglayer
                 else
                 {
                     // create hair line data for all sub polygons
-                    for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
+                    for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
                     {
                         const basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
                         const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(aCandidate, getLineAttribute().getColor()));

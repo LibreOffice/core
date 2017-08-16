@@ -408,7 +408,7 @@ sal_uInt32 SvParser::GetNextChar()
     if( c == '\n' )
     {
         IncLineNr();
-        SetLinePos( 1L );
+        SetLinePos( 1 );
     }
     else
         IncLinePos();

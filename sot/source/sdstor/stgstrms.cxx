@@ -1144,8 +1144,8 @@ bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
     if( GetError() == SVSTREAM_OK )
     {
         std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
-        rSrc.Seek( 0L );
-        Seek( 0L );
+        rSrc.Seek( 0 );
+        Seek( 0 );
         while( n )
         {
             const sal_uInt64 nn = std::min<sal_uInt64>(n, 4096);
@@ -1203,7 +1203,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
             if( i )
             {
-                Seek( 0L );
+                Seek( 0 );
                 while( i )
                 {
                     const sal_uInt64 nb = std::min<sal_uInt64>(i, 4096);

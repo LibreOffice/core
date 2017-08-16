@@ -163,8 +163,8 @@ void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutputStream 
     sal_uInt32 nStoredControls = 0;
     sal_Int32 nDataBeginMark = xMark->createMark();
 
-    OutStream->writeLong( 0L ); // DataLen
-    OutStream->writeLong( 0L ); // nStoredControls
+    OutStream->writeLong( 0 ); // DataLen
+    OutStream->writeLong( 0 ); // nStoredControls
 
     sal_uInt32 nCtrls = rCtrls.getLength();
     for ( sal_uInt32 n = 0; n < nCtrls; n++ )

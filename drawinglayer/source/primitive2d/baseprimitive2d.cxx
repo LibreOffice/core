@@ -176,7 +176,7 @@ namespace drawinglayer
             {
                 const sal_Int32 nCount(this->size());
 
-                for(sal_Int32 a(0L); a < nCount; a++)
+                for(sal_Int32 a(0); a < nCount; a++)
                 {
                     aRetval.expand(getB2DRangeFromPrimitive2DReference((*this)[a], aViewInformation));
                 }
@@ -237,7 +237,7 @@ namespace drawinglayer
                 return false;
             }
 
-            for(size_t a(0L); a < nCount; a++)
+            for(size_t a(0); a < nCount; a++)
             {
                 if(!arePrimitive2DReferencesEqual((*this)[a], rB[a]))
                 {

@@ -281,8 +281,8 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
         // no shadow
         aTempSet.Put(makeSdrShadowItem(false));
-        aTempSet.Put(makeSdrShadowXDistItem(0L));
-        aTempSet.Put(makeSdrShadowYDistItem(0L));
+        aTempSet.Put(makeSdrShadowXDistItem(0));
+        aTempSet.Put(makeSdrShadowYDistItem(0));
 
         // line color and transparency like shadow
         if(bLineUsed)
@@ -358,9 +358,9 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
                     if(pWriteAccess)
                     {
-                        for(long y(0L); y < pReadAccess->Height(); y++)
+                        for(long y(0); y < pReadAccess->Height(); y++)
                         {
-                            for(long x(0L); x < pReadAccess->Width(); x++)
+                            for(long x(0); x < pReadAccess->Width(); x++)
                             {
                                 sal_uInt16 nLuminance((sal_uInt16)pReadAccess->GetLuminance(y, x) + 1);
                                 const BitmapColor aDestColor(

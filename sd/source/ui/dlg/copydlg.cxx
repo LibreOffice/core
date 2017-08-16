@@ -107,7 +107,7 @@ void CopyDlg::Reset()
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
             m_pNumFldCopies->SetValue( static_cast<const SfxUInt16Item*>( pPoolItem )->GetValue() );
         else
-            m_pNumFldCopies->SetValue( 1L );
+            m_pNumFldCopies->SetValue( 1 );
 
         long nMoveX = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
@@ -122,7 +122,7 @@ void CopyDlg::Reset()
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             m_pMtrFldAngle->SetValue( static_cast<const SfxInt32Item*>( pPoolItem )->GetValue() );
         else
-            m_pMtrFldAngle->SetValue( 0L );
+            m_pMtrFldAngle->SetValue( 0 );
 
         long nWidth = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData, Button*, void)
  */
 IMPL_LINK_NOARG(CopyDlg, SetDefault, Button*, void)
 {
-    m_pNumFldCopies->SetValue( 1L );
+    m_pNumFldCopies->SetValue( 1 );
 
     long nValue = 500;
     SetMetricValue( *m_pMtrFldMoveX, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);

@@ -1897,7 +1897,7 @@ void SmParser::DoFontSize()
     }
 
     // get number argument
-    Fraction  aValue( 1L );
+    Fraction  aValue( 1 );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
         double fTmp = OUString(m_aCurToken.aText).toDouble();

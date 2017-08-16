@@ -83,7 +83,7 @@ ImplMarkingOverlay::ImplMarkingOverlay(const SdrPaintView& rView, const basegfx:
 :   maSecondPosition(rStartPos),
     mbUnmarking(bUnmarking)
 {
-    for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
         rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
@@ -110,7 +110,7 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
     if(rNewPosition != maSecondPosition)
     {
         // apply to OverlayObjects
-        for(sal_uInt32 a(0L); a < maObjects.count(); a++)
+        for(sal_uInt32 a(0); a < maObjects.count(); a++)
         {
             sdr::overlay::OverlayRollingRectangleStriped& rCandidate = static_cast< sdr::overlay::OverlayRollingRectangleStriped&>(maObjects.getOverlayObject(a));
             rCandidate.setSecondPosition(rNewPosition);
@@ -636,7 +636,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     // remember old focus handle values to search for it again
     const SdrHdl* pSaveOldFocusHdl = maHdlList.GetFocusHdl();
     bool bSaveOldFocus(false);
-    sal_uInt32 nSavePolyNum(0L), nSavePointNum(0L);
+    sal_uInt32 nSavePolyNum(0), nSavePointNum(0);
     SdrHdlKind eSaveKind(SdrHdlKind::Move);
     SdrObject* pSaveObj = nullptr;
 

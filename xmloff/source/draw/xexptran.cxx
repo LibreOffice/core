@@ -252,7 +252,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
     OUString aEmptySpace(" ");
 
     const sal_uInt32 nCount = maList.size();
-    for(sal_uInt32 a(0L); a < nCount; a++)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
         ImpSdXMLExpTransObj2DBase* pObj = maList[a].get();
         switch(pObj->mnType)
@@ -485,7 +485,7 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
     rFullTrans.identity();
 
     const sal_uInt32 nCount = maList.size();
-    for(sal_uInt32 a(0L); a < nCount; a++)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
         ImpSdXMLExpTransObj2DBase* pObj = maList[a].get();
         switch(pObj->mnType)
@@ -631,7 +631,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
     OUString aEmptySpace(" ");
 
     const sal_uInt32 nCount = maList.size();
-    for(sal_uInt32 a(0L); a < nCount; a++)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
         ImpSdXMLExpTransObj3DBase* pObj = maList[a].get();
         switch(pObj->mnType)
@@ -964,7 +964,7 @@ void SdXMLImExTransform3D::GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans)
     rFullTrans.identity();
 
     const sal_uInt32 nCount = maList.size();
-    for(sal_uInt32 a(0L); a < nCount; a++)
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
         ImpSdXMLExpTransObj3DBase* pObj = maList[a].get();
         switch(pObj->mnType)

@@ -46,7 +46,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     sal_uInt32 nCount(rPolyPolygon.count());
     mpPolyPolygon = new tools::PolyPolygon( (sal_uInt16)nCount );
 
-    for(sal_uInt32 i(0L); i < nCount; i++)
+    for(sal_uInt32 i(0); i < nCount; i++)
     {
         const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(i).getDefaultAdaptiveSubdivision());
         nPointCount += aCandidate.count();
@@ -58,7 +58,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
         nCount = pLinePolyPolygon->count();
         mpLinePolyPolygon = new tools::PolyPolygon();
 
-        for(sal_uInt32 i(0L); i < nCount; i++)
+        for(sal_uInt32 i(0); i < nCount; i++)
         {
             const basegfx::B2DPolygon aCandidate(pLinePolyPolygon->getB2DPolygon(i).getDefaultAdaptiveSubdivision());
             nPointCount += aCandidate.count();

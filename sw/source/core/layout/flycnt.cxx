@@ -417,7 +417,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // #i40444#
                     // #i58182# - usage of new method
                     // <SwObjectFormatterTextFrame::CheckMovedFwdCondition(..)>
-                    sal_uInt32 nToPageNum( 0L );
+                    sal_uInt32 nToPageNum( 0 );
                     bool bDummy( false );
                     if ( SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                         *this, GetPageFrame()->GetPhyPageNum(),
@@ -428,7 +428,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         // directly, that it is moved forward by object positioning.
                         SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
                         bool bInsert( true );
-                        sal_uInt32 nAnchorFrameToPageNum( 0L );
+                        sal_uInt32 nAnchorFrameToPageNum( 0 );
                         const SwDoc& rDoc = *(GetFrameFormat().GetDoc());
                         if ( SwLayouter::FrameMovedFwdByObjPos(
                                                 rDoc, *pAnchorTextFrame, nAnchorFrameToPageNum ) )

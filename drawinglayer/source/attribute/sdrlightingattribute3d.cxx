@@ -145,7 +145,7 @@ namespace drawinglayer
                 basegfx::B3DVector aEyeNormal(rNormalInEyeCoordinates);
                 aEyeNormal.normalize();
 
-                for(sal_uInt32 a(0L); a < nLightCount; a++)
+                for(sal_uInt32 a(0); a < nLightCount; a++)
                 {
                     const Sdr3DLightAttribute& rLight(mpSdrLightingAttribute->getLightVector()[a]);
                     const double fCosFac(rLight.getDirection().scalar(aEyeNormal));

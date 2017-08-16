@@ -76,7 +76,7 @@ namespace
     :   Timer( "drawinglayer ImpTimedRefDev destroy mpVirDev" ),
         mrOwnerOfMe(rOwnerOfMe),
         mpVirDev(nullptr),
-        mnUseCount(0L)
+        mnUseCount(0)
     {
         SetTimeout(3L * 60L * 1000L); // three minutes
         Start();

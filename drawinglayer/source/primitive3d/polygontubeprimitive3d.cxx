@@ -44,7 +44,7 @@ namespace drawinglayer
                 ::osl::Mutex m_aMutex;
             public:
                 TubeBuffer()
-                    : m_nLineTubeSegments(0L)
+                    : m_nLineTubeSegments(0)
                 {
                 }
 
@@ -317,7 +317,7 @@ namespace drawinglayer
                             // create half-sphere
                             const basegfx::B3DPolyPolygon aSphere(basegfx::tools::createUnitSphereFillPolyPolygon(nHorSeg, nVerSeg, true, F_PI2, -F_PI2, 0.0, fAngle));
 
-                            for(sal_uInt32 a(0L); a < aSphere.count(); a++)
+                            for(sal_uInt32 a(0); a < aSphere.count(); a++)
                             {
                                 const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
                                 const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
@@ -361,7 +361,7 @@ namespace drawinglayer
                         aNewPolygon.setClosed(true);
                         aMiterPolygon.setClosed(true);
 
-                        for(sal_uInt32 a(0L); a < nVerSeg; a++)
+                        for(sal_uInt32 a(0); a < nVerSeg; a++)
                         {
                             const bool bFirst(0 == a);
                             const bool bLast(a + 1 == nVerSeg);
@@ -460,7 +460,7 @@ namespace drawinglayer
                             }
 
                             // set normals
-                            for(sal_uInt32 b(0L); b < aNewPolygon.count(); b++)
+                            for(sal_uInt32 b(0); b < aNewPolygon.count(); b++)
                             {
                                 aNewPolygon.setNormal(b, basegfx::B3DVector(aNewPolygon.getB3DPoint(b)));
                             }
@@ -476,7 +476,7 @@ namespace drawinglayer
                             if(bMiter && aMiterPolygon.count())
                             {
                                 // set normals
-                                for(sal_uInt32 c(0L); c < aMiterPolygon.count(); c++)
+                                for(sal_uInt32 c(0); c < aMiterPolygon.count(); c++)
                                 {
                                     aMiterPolygon.setNormal(c, basegfx::B3DVector(aMiterPolygon.getB3DPoint(c)));
                                 }

@@ -1907,7 +1907,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     //       the left and right border distances are different.
     // no adjustments possible, if frame has automatic width.
     // determine left border distance
-    sal_Int16 nLeBorderMgn( 0L );
+    sal_Int16 nLeBorderMgn( 0 );
     if ( !bAutoWidth )
     {
         WW8_BRCVer9 &rBrc = rWW.brc[WW8_LEFT];
@@ -1915,7 +1915,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         nLeBorderMgn = nLeBorderMgn + nTemp;
     }
     // determine right border distance
-    sal_Int16 nRiBorderMgn( 0L );
+    sal_Int16 nRiBorderMgn( 0 );
     if ( !bAutoWidth )
     {
         WW8_BRCVer9 &rBrc = rWW.brc[WW8_RIGHT];
