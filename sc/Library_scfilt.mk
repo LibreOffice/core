@@ -163,7 +163,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/addressconverter \
 	sc/source/filter/oox/autofilterbuffer \
 	sc/source/filter/oox/autofiltercontext \
-	sc/source/filter/oox/biffcodec \
 	sc/source/filter/oox/biffhelper \
 	sc/source/filter/oox/chartsheetfragment \
 	sc/source/filter/oox/commentsbuffer \
