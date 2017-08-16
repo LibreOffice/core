@@ -2272,6 +2272,17 @@ formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, S
     return aCol[nCol].FetchVectorRefArray(nRow1, nRow2);
 }
 
+bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+{
+    if (nRow2 < nRow1)
+        return false;
+
+    if ( !IsColValid( nCol ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
+        return false;
+
+    return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2);
+}
+
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
 {
     if ( !IsColRowValid( nCol, nRow ) )
@@ -2325,6 +2336,14 @@ void ScTable::SetFormulaResults(
         return;
 
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
+}
+
+void ScTable::CalculateInColumnInThread( SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].CalculateInThread( nRow, nLen, nThisThread, nThreadsTotal );
 }
 
 #if DUMP_COLUMN_STORAGE

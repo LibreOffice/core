@@ -1337,6 +1337,7 @@ void ScDocShell::DoRecalc( bool bApi )
 
 void ScDocShell::DoHardRecalc()
 {
+    auto start = std::chrono::steady_clock::now();
     WaitObject aWaitObj( GetActiveDialogParent() );
     ScTabViewShell* pSh = GetBestViewShell();
     if ( pSh )
@@ -1367,6 +1368,8 @@ void ScDocShell::DoHardRecalc()
         aDocument.SetStreamValid(nTab, false);
 
     PostPaintGridAll();
+    auto end = std::chrono::steady_clock::now();
+    SAL_INFO("sc.timing", "ScDocShell::DoHardRecalc(): took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms");
 }
 
 void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
