@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
+#include <memory>
 #include <vector>
 
 // data to be sent with docking events
@@ -164,11 +165,14 @@ public:
 
 class VCL_DLLPUBLIC DockingManager
 {
-    ::std::vector<ImplDockingWindowWrapper *> mDockingWindows;
+    std::vector<std::unique_ptr<ImplDockingWindowWrapper>> mvDockingWindows;
 
 public:
     DockingManager();
     ~DockingManager();
+
+    DockingManager& operator=( DockingManager const & ) = delete; // MSVC2015 workaround
+    DockingManager( DockingManager const & ) = delete; // MSVC2015 workaround
 
     void AddWindow( const vcl::Window *pWin );
     void RemoveWindow( const vcl::Window *pWin );
