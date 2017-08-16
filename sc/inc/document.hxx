@@ -2305,6 +2305,7 @@ public:
     std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
 
     SC_DLLPUBLIC void StoreTabToCache(SCTAB nTab, SvStream& rStrm) const;
+    SC_DLLPUBLIC void RestoreTabFromCache(SCTAB nTab, SvStream& rStream);
 
 #if DUMP_COLUMN_STORAGE
     SC_DLLPUBLIC void DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const;
