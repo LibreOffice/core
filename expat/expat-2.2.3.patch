@@ -1,6 +1,6 @@
 --- misc/expat-2.2.3/lib/makefile.mk	Wed Aug 20 14:33:55 2008
 +++ misc/build/expat-2.2.3/lib/makefile.mk	Wed Aug 20 14:26:42 2008
-@@ -1 +1,85 @@
+@@ -1 +1,91 @@
 -dummy
 +#**************************************************************
 +#  
@@ -72,13 +72,19 @@
 +#  use UNICODE only because shell/shlxthandler
 +#  doesn't link against ascii_expat_xmlparse
 +#---------------------------------------------------------
++.IF "$(OS)"=="WNT"
++ LOADLIBOBJFILE_X64=$(SLO_X64)/loadlibrary.obj
++.ELSE
++ LOADLIBOBJFILE_X64=
++.ENDIF
 +SLOFILES_X64=$(SLO_X64)$/xmlparse.obj \
 +             $(SLO_X64)$/xmlrole.obj \
-+             $(SLO_X64)$/xmltok.obj
++             $(SLO_X64)$/xmltok.obj \
++             $(LOADLIBOBJFILE_X64)
 +CDEFS_X64+=-DXML_UNICODE -DWIN32
 +CFLAGS_X64+=-I..
 +LIB1TARGET_X64=$(SLB_X64)$/$(TARGET)_xmlparse.lib
-+LIB1OBJFILES_X64=$(SLO_X64)$/xmlparse.obj
++LIB1OBJFILES_X64=$(SLO_X64)$/xmlparse.obj  $(LOADLIBOBJFILE_X64)
 +LIB2TARGET_X64=$(SLB_X64)$/$(TARGET)_xmltok.lib
 +LIB2OBJFILES_X64=$(SLO_X64)$/xmlrole.obj $(SLO_X64)$/xmltok.obj
 +.ENDIF # "$(BUILD_X64)"!=""
