@@ -1128,7 +1128,7 @@ libo_FUZZ_ARG_ENABLE(werror,
 
 libo_FUZZ_ARG_ENABLE(assert-always-abort,
     AS_HELP_STRING([--enable-assert-always-abort],
-        [make assert() abort even when building without --enable-debug or --enable-dbgutil.]),
+        [make assert() failures abort even when building without --enable-debug or --enable-dbgutil.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(dbgutil,
@@ -4571,9 +4571,9 @@ else
 fi
 AC_SUBST(ENABLE_WERROR)
 
-dnl Set the ASSERT_ALWAYS_ABORT variable. (Activate --enable-assert-always-abort)
+dnl Check for --enable-assert-always-abort, set ASSERT_ALWAYS_ABORT
 dnl ===================================================================
-AC_MSG_CHECKING([whether to have assert to abort in release code])
+AC_MSG_CHECKING([whether to have assert() failures abort even without --enable-debug])
 if test -n "$enable_assert_always_abort" -a "$enable_assert_always_abort" = "yes"; then
     ASSERT_ALWAYS_ABORT="TRUE"
     AC_MSG_RESULT([yes])
