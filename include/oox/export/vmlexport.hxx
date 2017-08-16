@@ -84,9 +84,6 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
     bool m_bInline; // css::text::TextContentAnchorType_AS_CHARACTER
 
-    /// Parent position.
-    const Point* m_pNdTopLeft;
-
     /// The object we're exporting.
     const SdrObject* m_pSdrObject;
 
@@ -128,7 +125,7 @@ public:
     /// Call this when you need to export the object as VML.
     OString AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
-            sal_Int16 eVRel = -1, const Point* pNdTopLeft = nullptr, const bool bOOxmlExport = false );
+            sal_Int16 eVRel = -1, const bool bOOxmlExport = false );
     OString AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport = false );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
