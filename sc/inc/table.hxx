@@ -1010,6 +1010,8 @@ public:
 
     void StoreToCache(SvStream& rStrm) const;
 
+    void RestoreFromCache(SvStream& rStrm);
+
 #if DUMP_COLUMN_STORAGE
     void DumpColumnStorage( SCCOL nCol ) const;
 #endif

@@ -673,6 +673,7 @@ public:
     void EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 );
 
     void StoreToCache(SvStream& rStrm) const;
+    void RestoreFromCache(SvStream& rStrm);
 
 #if DUMP_COLUMN_STORAGE
     void DumpColumnStorage() const;

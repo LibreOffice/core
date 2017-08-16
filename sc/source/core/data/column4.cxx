@@ -1708,4 +1708,63 @@ void ScColumn::StoreToCache(SvStream& rStrm) const
     sc::ParseBlock(maCells.begin(), maCells, aFunc, (SCROW)0, nLastRow);
 }
 
+void ScColumn::RestoreFromCache(SvStream& rStrm)
+{
+    sal_uInt64 nStoredCol = 0;
+    rStrm.ReadUInt64(nStoredCol);
+    if (nStoredCol != static_cast<sal_uInt64>(nCol))
+        throw std::exception();
+
+    sal_uInt64 nLastRow = 0;
+    rStrm.ReadUInt64(nLastRow);
+    sal_uInt64 nReadRow = 0;
+    while (nReadRow < nLastRow)
+    {
+        sal_uInt64 nStartRow = 0;
+        sal_uInt64 nDataSize = 0;
+        rStrm.ReadUInt64(nStartRow);
+        rStrm.ReadUInt64(nDataSize);
+        sal_uInt8 nType = 0;
+        rStrm.ReadUChar(nType);
+        switch (nType)
+        {
+            case 0:
+                // nothing to do
+                maCells.set_empty(nStartRow, nDataSize);
+            break;
+            case 1:
+            {
+                // nDataSize double values
+                std::vector<double> aValues(nDataSize);
+                for (SCROW nRow = 0; nRow < static_cast<SCROW>(nDataSize); ++nRow)
+                {
+                    rStrm.ReadDouble(aValues[nRow]);
+                }
+                maCells.set(nStartRow, aValues.begin(), aValues.end());
+            }
+            break;
+            case 2:
+            {
+                std::vector<svl::SharedString> aStrings(nDataSize);
+                svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
+                for (SCROW nRow = 0; nRow < static_cast<SCROW>(nDataSize); ++nRow)
+                {
+                    sal_Int32 nStrLength = 0;
+                    rStrm.ReadInt32(nStrLength);
+                    std::unique_ptr<char[]> pStr(new char[nStrLength]);
+                    rStrm.ReadBytes(pStr.get(), nStrLength);
+                    OString aOStr(pStr.get(), nStrLength);
+                    OUString aStr = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
+                    aStrings[nRow] = rPool.intern(aStr);
+                }
+                maCells.set(nStartRow, aStrings.begin(), aStrings.end());
+
+            }
+            break;
+        }
+
+        nReadRow += nDataSize;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
