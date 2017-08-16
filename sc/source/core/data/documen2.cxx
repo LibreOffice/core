@@ -165,9 +165,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         pDocOptions( nullptr ),
         pExtDocOptions( nullptr ),
         pConsolidateDlgData( nullptr ),
-        pRecursionHelper( nullptr ),
         pAutoNameCache( nullptr ),
-        pLookupCacheMapImpl( nullptr ),
         pPreviewFont( nullptr ),
         pPreviewCellStyle( nullptr ),
         nUnoObjectId( 0 ),
@@ -176,9 +174,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbThreadedGroupCalcInProgress( false ),
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
-        nInterpretLevel(0),
-        nMacroInterpretLevel(0),
-        nInterpreterTableOpLevel(0),
         nSrcVer( SC_CURRENT_VERSION ),
         nFormulaTrackCount(0),
         eHardRecalcState(HardRecalcState::OFF),
@@ -400,7 +395,12 @@ ScDocument::~ScDocument()
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
     DELETEZ( pChartListenerCollection);   // before pBASM because of potential Listener!
-    DELETEZ( pLookupCacheMapImpl);  // before pBASM because of listeners
+
+    if (maThreadSpecific.find(this) != maThreadSpecific.end())
+    {
+        DELETEZ( maThreadSpecific[this].pLookupCacheMapImpl ); // before pBASM because of listeners
+    }
+
     // destroy BroadcastAreas first to avoid un-needed Single-EndListenings of Formula-Cells
     delete pBASM;       // BroadcastAreaSlotMachine
     pBASM = nullptr;
@@ -449,13 +449,16 @@ ScDocument::~ScDocument()
     mxPoolHelper.clear();
 
     delete pScriptTypeData;
-    delete pRecursionHelper;
+    if (maThreadSpecific.find(this) != maThreadSpecific.end())
+        delete maThreadSpecific[this].pRecursionHelper;
 
     delete pPreviewFont;
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
 
     mpFormulaGroupCxt.reset();
     mpCellStringPool.reset();
+
+    maThreadSpecific.erase(this);
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
@@ -1231,10 +1234,10 @@ ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {
     ScLookupCache* pCache = nullptr;
-    if (!pLookupCacheMapImpl)
-        pLookupCacheMapImpl = new ScLookupCacheMapImpl;
-    auto it( pLookupCacheMapImpl->aCacheMap.find( rRange));
-    if (it == pLookupCacheMapImpl->aCacheMap.end())
+    if (!maThreadSpecific[this].pLookupCacheMapImpl)
+        maThreadSpecific[this].pLookupCacheMapImpl = new ScLookupCacheMapImpl;
+    auto it( maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.find( rRange));
+    if (it == maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.end())
     {
         pCache = new ScLookupCache( this, rRange);
         AddLookupCache( *pCache);
@@ -1246,7 +1249,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 
 void ScDocument::AddLookupCache( ScLookupCache & rCache )
 {
-    if (!pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
+    if (!maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
                 ScLookupCache*>( rCache.getRange(), &rCache)).second)
     {
         OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
@@ -1257,24 +1260,24 @@ void ScDocument::AddLookupCache( ScLookupCache & rCache )
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 {
-    auto it( pLookupCacheMapImpl->aCacheMap.find(
+    auto it( maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.find(
                 rCache.getRange()));
-    if (it == pLookupCacheMapImpl->aCacheMap.end())
+    if (it == maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.end())
     {
         OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
     }
     else
     {
         ScLookupCache* pCache = (*it).second;
-        pLookupCacheMapImpl->aCacheMap.erase( it);
+        maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.erase( it);
         EndListeningArea( pCache->getRange(), false, &rCache);
     }
 }
 
 void ScDocument::ClearLookupCaches()
 {
-    if( pLookupCacheMapImpl )
-        pLookupCacheMapImpl->clear();
+    if( maThreadSpecific[this].pLookupCacheMapImpl )
+        maThreadSpecific[this].pLookupCacheMapImpl->clear();
 }
 
 bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)
