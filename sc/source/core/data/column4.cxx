@@ -1788,6 +1788,34 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
 
             }
             break;
+            case 3:
+            {
+                std::vector<ScFormulaCell*> aFormulaCells(nDataSize);
+
+                ScAddress aAddr(nCol, nStartRow, nTab);
+                const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
+                for (SCROW nRow = 0; nRow < static_cast<SCROW>(nDataSize);)
+                {
+                    sal_uInt64 nFormulaGroupSize = 0;
+                    rStrm.ReadUInt64(nFormulaGroupSize);
+                    sal_Int32 nStrLength = 0;
+                    rStrm.ReadInt32(nStrLength);
+                    std::unique_ptr<char[]> pStr(new char[nStrLength]);
+                    rStrm.ReadBytes(pStr.get(), nStrLength);
+                    OString aOStr(pStr.get(), nStrLength);
+                    OUString aStr = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
+                    for (sal_uInt64 i = 0; i < nFormulaGroupSize; ++i)
+                    {
+                        aFormulaCells[nRow + i] = new ScFormulaCell(pDocument, aAddr, aStr, eGrammar);
+                        aAddr.IncRow();
+                    }
+
+                    nRow += nFormulaGroupSize;
+                }
+
+                maCells.set(nStartRow, aFormulaCells.begin(), aFormulaCells.end());
+            }
+            break;
         }
 
         nReadRow += nDataSize;
