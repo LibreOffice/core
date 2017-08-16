@@ -153,12 +153,12 @@ void CopyDlg::Reset()
         else
             m_pNumFldCopies->SetValue( 1 );
 
-        long nMoveX = 500L;
+        long nMoveX = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             nMoveX = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
         SetMetricValue( *m_pMtrFldMoveX, Fraction(nMoveX) / maUIScale, MapUnit::Map100thMM);
 
-        long nMoveY = 500L;
+        long nMoveY = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             nMoveY = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
         SetMetricValue( *m_pMtrFldMoveY, Fraction(nMoveY) / maUIScale, MapUnit::Map100thMM);
@@ -168,12 +168,12 @@ void CopyDlg::Reset()
         else
             m_pMtrFldAngle->SetValue( 0 );
 
-        long nWidth = 0L;
+        long nWidth = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             nWidth = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
         SetMetricValue( *m_pMtrFldWidth, Fraction(nWidth) / maUIScale, MapUnit::Map100thMM);
 
-        long nHeight = 0L;
+        long nHeight = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             nHeight = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
         SetMetricValue( *m_pMtrFldHeight, Fraction(nHeight) / maUIScale, MapUnit::Map100thMM);
@@ -288,11 +288,11 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault, Button*, void)
 {
     m_pNumFldCopies->SetValue( 1 );
 
-    long nValue = 500L;
+    long nValue = 500;
     SetMetricValue( *m_pMtrFldMoveX, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
     SetMetricValue( *m_pMtrFldMoveY, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
 
-    nValue = 0L;
+    nValue = 0;
     m_pMtrFldAngle->SetValue( nValue );
     SetMetricValue( *m_pMtrFldWidth, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
     SetMetricValue( *m_pMtrFldHeight, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);

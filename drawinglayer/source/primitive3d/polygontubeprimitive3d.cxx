@@ -362,8 +362,8 @@ namespace drawinglayer
 
                         for(sal_uInt32 a(0); a < nVerSeg; a++)
                         {
-                            const bool bFirst(0L == a);
-                            const bool bLast(a + 1L == nVerSeg);
+                            const bool bFirst(0 == a);
+                            const bool bLast(a + 1 == nVerSeg);
 
                             if(bFirst || !bLast)
                             {

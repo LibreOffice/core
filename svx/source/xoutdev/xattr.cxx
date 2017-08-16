@@ -1127,7 +1127,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             return new XLineStartItem( "", maPolyPolygon );
         }
 
-        if( maPolyPolygon.count() > 1L )
+        if( maPolyPolygon.count() > 1 )
         {
             // check if the polygon is closed
             if(!maPolyPolygon.isClosed())
@@ -1383,7 +1383,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             return new XLineEndItem( "", maPolyPolygon );
         }
 
-        if( maPolyPolygon.count() > 1L )
+        if( maPolyPolygon.count() > 1 )
         {
             // check if the polygon is closed
             if(!maPolyPolygon.isClosed())

@@ -161,7 +161,7 @@ void ImplPointArray::ImplSetSize( sal_uLong nSize )
     const sal_uLong nTotal = nSize * sizeof( Point );
 
     mnSize = nSize;
-    mnRealSize = 0UL;
+    mnRealSize = 0;
 
     if( mpArray )
         rtl_freeMemory( mpArray );
@@ -311,7 +311,7 @@ void ImplChain::ImplBeginAdd( const Point& rStartPt )
 {
     maPoly = tools::Polygon();
     maStartPt = rStartPt;
-    mnCount = 0UL;
+    mnCount = 0;
 }
 
 inline void ImplChain::ImplAdd( sal_uInt8 nCode )
@@ -914,12 +914,12 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
     long                nActX = rStartPt.X();
     long                nActY = rStartPt.Y();
     sal_uLong               nFound;
-    sal_uLong               nLastDir = 0UL;
+    sal_uLong               nLastDir = 0;
     sal_uLong               nDir;
 
     do
     {
-        nFound = 0UL;
+        nFound = 0;
 
         // first try last direction
         long nTryX = nActX + aImplMove[ nLastDir ].nDX;
@@ -929,12 +929,12 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
         {
             rChain.ImplAdd( (sal_uInt8) nLastDir );
             pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
-            nFound = 1UL;
+            nFound = 1;
         }
         else
         {
             // try other directions
-            for( nDir = 0UL; nDir < 8UL; nDir++ )
+            for( nDir = 0; nDir < 8; nDir++ )
             {
                 // we already tried nLastDir
                 if( nDir != nLastDir )
@@ -946,7 +946,7 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
                     {
                         rChain.ImplAdd( (sal_uInt8) nDir );
                         pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
-                        nFound = 1UL;
+                        nFound = 1;
                         nLastDir = nDir;
                         break;
                     }

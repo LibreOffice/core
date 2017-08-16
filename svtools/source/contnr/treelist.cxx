@@ -342,7 +342,7 @@ void SvTreeList::Move( SvTreeListEntry* pSrcEntry, SvTreeListEntry* pDstEntry )
     if ( !pDstEntry )
     {
         pParent = pRootItem;
-        nPos = 0UL;
+        nPos = 0;
     }
     else
     {

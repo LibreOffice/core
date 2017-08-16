@@ -112,7 +112,7 @@ public:
 
 Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene const & rScene)
 {
-    // only called when rScene.GetSubList() and nObjCount > 1L
+    // only called when rScene.GetSubList() and nObjCount > 1
     SdrObjList* pList = rScene.GetSubList();
     const size_t nObjCount(pList->GetObjCount());
 

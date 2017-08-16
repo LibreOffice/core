@@ -270,7 +270,7 @@ sal_uInt32 SdrCaptionObj::GetHdlCount() const
 {
     sal_uInt32 nCount1(SdrRectObj::GetHdlCount());
     // Currently only dragging the tail's end is implemented.
-    return nCount1 + 1L;
+    return nCount1 + 1;
 }
 
 SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const

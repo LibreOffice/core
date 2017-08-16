@@ -29,7 +29,7 @@
 #define MIN_TIMEOUT 2
 #define INC_TIMEOUT 0
 
-sal_uLong Animation::mnAnimCount = 0UL;
+sal_uLong Animation::mnAnimCount = 0;
 
 BitmapChecksum AnimationBitmap::GetChecksum() const
 {
@@ -261,7 +261,7 @@ bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
             {
                 maTimer.Stop();
                 mbIsInAnimation = false;
-                mnPos = 0UL;
+                mnPos = 0;
             }
 
             if( !pMatch )
@@ -326,7 +326,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
         else
         {
             const size_t nOldPos = mnPos;
-            const_cast<Animation*>(this)->mnPos = mbLoopTerminated ? ( nCount - 1UL ) : mnPos;
+            const_cast<Animation*>(this)->mnPos = mbLoopTerminated ? ( nCount - 1 ) : mnPos;
             delete new ImplAnimView( const_cast<Animation*>(this), pOut, rDestPt, rDestSz, 0 );
             const_cast<Animation*>(this)->mnPos = nOldPos;
         }
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer *, void)
                 {
                     Stop();
                     mbLoopTerminated = true;
-                    mnPos = nAnimCount - 1UL;
+                    mnPos = nAnimCount - 1;
                     maBitmapEx = maList[ mnPos ]->aBmpEx;
                     return;
                 }
@@ -680,7 +680,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
 
     if( nCount )
     {
-        const sal_uInt32    nDummy32 = 0UL;
+        const sal_uInt32    nDummy32 = 0;
 
         // If no BitmapEx was set we write the first Bitmap of
         // the Animation

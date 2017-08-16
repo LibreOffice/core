@@ -3092,8 +3092,8 @@ Size SwXTextDocument::getDocumentSize()
     SwViewShell* pViewShell = pDocShell->GetWrtShell();
     Size aDocSize = pViewShell->GetDocSize();
 
-    return Size(aDocSize.Width()  + 2L * DOCUMENTBORDER,
-                aDocSize.Height() + 2L * DOCUMENTBORDER);
+    return Size(aDocSize.Width()  + 2 * DOCUMENTBORDER,
+                aDocSize.Height() + 2 * DOCUMENTBORDER);
 }
 
 void SwXTextDocument::setPart(int nPart)

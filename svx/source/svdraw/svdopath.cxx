@@ -295,7 +295,7 @@ void ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const Poi
 
     // #i21479#
     // Also copy the end point when no end point is set yet
-    if (!bMouseDown || (0L == aBezEnd.X() && 0L == aBezEnd.Y())) aBezEnd=rP2;
+    if (!bMouseDown || (0 == aBezEnd.X() && 0 == aBezEnd.Y())) aBezEnd=rP2;
 
     bBezier=true;
 }
@@ -870,7 +870,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat const & rDrag)
                 basegfx::B2DPolygon aCandidate(aTempPolyPolygon.getB2DPolygon(nPoly));
                 aCandidate.remove(nPnt);
 
-                if(aCandidate.count() < 2L)
+                if(aCandidate.count() < 2)
                 {
                     aTempPolyPolygon.remove(nPoly);
                 }
@@ -1565,9 +1565,9 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const Sdr
         return aRetval;
 
     ImpPathCreateUser* pU = static_cast<ImpPathCreateUser*>(rDrag.GetUser());
-    basegfx::B2DPolygon aNewPolygon(aRetval.count() ? aRetval.getB2DPolygon(aRetval.count() - 1L) : basegfx::B2DPolygon());
+    basegfx::B2DPolygon aNewPolygon(aRetval.count() ? aRetval.getB2DPolygon(aRetval.count() - 1) : basegfx::B2DPolygon());
 
-    if(pU->IsFormFlag() && aNewPolygon.count() > 1L)
+    if(pU->IsFormFlag() && aNewPolygon.count() > 1)
     {
         // remove last segment and replace with current
         // do not forget to rescue the previous control point which will be lost when
@@ -1588,7 +1588,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const Sdr
 
     if(aRetval.count())
     {
-        aRetval.setB2DPolygon(aRetval.count() - 1L, aNewPolygon);
+        aRetval.setB2DPolygon(aRetval.count() - 1, aNewPolygon);
     }
     else
     {
@@ -1681,7 +1681,7 @@ SdrPathObj::~SdrPathObj()
 
 static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    return (1L == rPolyPolygon.count() && 2L == rPolyPolygon.getB2DPolygon(0).count());
+    return (1 == rPolyPolygon.count() && 2 == rPolyPolygon.getB2DPolygon(0).count());
 }
 
 static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
@@ -2576,8 +2576,8 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
         double fSmallestCut;
         basegfx::tools::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
         basegfx::B2DPolygon aCandidate(GetPathPoly().getB2DPolygon(nSmallestPolyIndex));
-        const bool bBefore(!aCandidate.isClosed() && 0L == nSmallestEdgeIndex && 0.0 == fSmallestCut);
-        const bool bAfter(!aCandidate.isClosed() && aCandidate.count() == nSmallestEdgeIndex + 2L && 1.0 == fSmallestCut);
+        const bool bBefore(!aCandidate.isClosed() && 0 == nSmallestEdgeIndex && 0.0 == fSmallestCut);
+        const bool bAfter(!aCandidate.isClosed() && aCandidate.count() == nSmallestEdgeIndex + 2 && 1.0 == fSmallestCut);
 
         if(bBefore)
         {
@@ -2593,7 +2593,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
                 }
             }
 
-            nNewHdl = 0L;
+            nNewHdl = 0;
         }
         else if(bAfter)
         {
@@ -2609,7 +2609,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
                 }
             }
 
-            nNewHdl = aCandidate.count() - 1L;
+            nNewHdl = aCandidate.count() - 1;
         }
         else
         {
@@ -2649,10 +2649,10 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
             }
             else
             {
-                aCandidate.insert(nSmallestEdgeIndex + 1L, aTestPoint);
+                aCandidate.insert(nSmallestEdgeIndex + 1, aTestPoint);
             }
 
-            nNewHdl = nSmallestEdgeIndex + 1L;
+            nNewHdl = nSmallestEdgeIndex + 1;
         }
 
         maPathPolygon.setB2DPolygon(nSmallestPolyIndex, aCandidate);
@@ -2676,7 +2676,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 
     if(PolyPolygonEditor::GetRelativePolyPoint(aLocalPolyPolygon, nHdlNum, nPoly, nPnt))
     {
-        if(0L == nPoly)
+        if(0 == nPoly)
         {
             const basegfx::B2DPolygon aCandidate(aLocalPolyPolygon.getB2DPolygon(nPoly));
             const sal_uInt32 nPointCount(aCandidate.count());
@@ -2696,10 +2696,10 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
                 }
                 else
                 {
-                    if(nPointCount >= 3L && nPnt != 0L && nPnt + 1L < nPointCount)
+                    if(nPointCount >= 3 && nPnt != 0 && nPnt + 1 < nPointCount)
                     {
                         // split in two objects at point nPnt
-                        basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1L);
+                        basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1);
                         SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
 
                         pNewObj = Clone();
@@ -2857,7 +2857,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         if(OBJ_LINE == meKind)
         {
             // ignore shear and rotate, just use scale and translate
-            OSL_ENSURE(GetPathPoly().count() > 0L && GetPathPoly().getB2DPolygon(0).count() > 1L, "OBJ_LINE with too few polygons (!)");
+            OSL_ENSURE(GetPathPoly().count() > 0 && GetPathPoly().getB2DPolygon(0).count() > 1, "OBJ_LINE with too few polygons (!)");
             // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
             // itself, else this method will no longer return the full polygon information (curve will
             // be lost)

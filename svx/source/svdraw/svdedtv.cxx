@@ -278,7 +278,7 @@ void SdrEditView::EndUndo()
     // #i13033#
     // Comparison changed to 1L since EndUndo() is called later now
     // and EndUndo WILL change count to count-1
-    if(1L == mpModel->GetUndoBracketLevel())
+    if(1 == mpModel->GetUndoBracketLevel())
     {
         ImpBroadcastEdgesOfMarkedNodes();
     }

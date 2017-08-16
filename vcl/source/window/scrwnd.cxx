@@ -184,7 +184,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
 {
     if( mnActDist < WHEEL_RADIUS )
     {
-        mnActDeltaX = mnActDeltaY = 0L;
+        mnActDeltaX = mnActDeltaY = 0;
         mnTimeout = DEF_TIMEOUT;
     }
     else
@@ -201,7 +201,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             nCurTime = MAX_TIME;
 
         if( !nCurTime )
-            nCurTime = 1UL;
+            nCurTime = 1;
 
         if( mnRepaintTime <= nCurTime )
             mnTimeout = nCurTime - mnRepaintTime;
@@ -210,7 +210,7 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             sal_uInt64 nMult = mnRepaintTime / nCurTime;
 
             if( !( mnRepaintTime % nCurTime ) )
-                mnTimeout = 0UL;
+                mnTimeout = 0;
             else
                 mnTimeout = ++nMult * nCurTime - mnRepaintTime;
 
@@ -325,14 +325,14 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     {
         switch( eActStyle )
         {
-            case( PointerStyle::AutoScrollN ):   mnActDeltaX = +0L; mnActDeltaY = +1L; break;
-            case( PointerStyle::AutoScrollS ):   mnActDeltaX = +0L; mnActDeltaY = -1L; break;
-            case( PointerStyle::AutoScrollW ):   mnActDeltaX = +1L; mnActDeltaY = +0L; break;
-            case( PointerStyle::AutoScrollE ):   mnActDeltaX = -1L; mnActDeltaY = +0L; break;
-            case( PointerStyle::AutoScrollNW ):  mnActDeltaX = +1L; mnActDeltaY = +1L; break;
-            case( PointerStyle::AutoScrollNE ):  mnActDeltaX = -1L; mnActDeltaY = +1L; break;
-            case( PointerStyle::AutoScrollSW ):  mnActDeltaX = +1L; mnActDeltaY = -1L; break;
-            case( PointerStyle::AutoScrollSE ):  mnActDeltaX = -1L; mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollN ):   mnActDeltaX = +0; mnActDeltaY = +1; break;
+            case( PointerStyle::AutoScrollS ):   mnActDeltaX = +0; mnActDeltaY = -1; break;
+            case( PointerStyle::AutoScrollW ):   mnActDeltaX = +1; mnActDeltaY = +0; break;
+            case( PointerStyle::AutoScrollE ):   mnActDeltaX = -1; mnActDeltaY = +0; break;
+            case( PointerStyle::AutoScrollNW ):  mnActDeltaX = +1; mnActDeltaY = +1; break;
+            case( PointerStyle::AutoScrollNE ):  mnActDeltaX = -1; mnActDeltaY = +1; break;
+            case( PointerStyle::AutoScrollSW ):  mnActDeltaX = +1; mnActDeltaY = -1; break;
+            case( PointerStyle::AutoScrollSE ):  mnActDeltaX = -1; mnActDeltaY = -1; break;
 
             default:
             break;

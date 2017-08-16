@@ -193,7 +193,7 @@ TTimeValue Timer::getRemainingTime() const
         if (secs > 0)
         {
             secs  -= 1;
-            nsecs += 1000000000L;
+            nsecs += 1000000000;
         }
         else
             return TTimeValue(0, 0);

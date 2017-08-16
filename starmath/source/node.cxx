@@ -1541,8 +1541,8 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         eRectPos = RectPos::Bottom;
         nDistScript *= + rFormat.GetDistance(DIS_LOWERLIMIT);
     }
-    nDistBody   /= 100L;
-    nDistScript /= 100L;
+    nDistBody   /= 100;
+    nDistScript /= 100;
 
     Point  aPos = pBrace->AlignTo(*pBody, eRectPos, RectHorAlign::Center, RectVerAlign::Baseline);
     aPos.Y() += nDistBody;

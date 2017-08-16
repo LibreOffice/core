@@ -1005,7 +1005,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
     if ( (nStartY != nEndY) || (nStartX > nEndX) )
     {
         long nDX = nEndX - nStartX;
-        double nO = atan2( -nEndY + nStartY, ((nDX == 0L) ? 0.000000001 : nDX) );
+        double nO = atan2( -nEndY + nStartY, ((nDX == 0) ? 0.000000001 : nDX) );
         nO /= F_PI1800;
         nOrientation = (short)nO;
         aStartPt.RotateAround( nEndX, nEndY, -nOrientation );

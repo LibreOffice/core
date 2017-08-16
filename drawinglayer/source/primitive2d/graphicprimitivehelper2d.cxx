@@ -121,9 +121,9 @@ namespace drawinglayer
 
                 // Bad trap: There are animated gifs with no set WaitTime (!).
                 // In that case use a default value.
-                if (0L == nWaitTime)
+                if (0 == nWaitTime)
                 {
-                    nWaitTime = 100L;
+                    nWaitTime = 100;
                 }
 
                 return nWaitTime;
@@ -409,7 +409,7 @@ namespace drawinglayer
                 // create frame representation in VirtualDevices
                 if (nIndex >= nLen)
                 {
-                    nIndex = nLen - 1L;
+                    nIndex = nLen - 1;
                 }
 
                 // check buffering shortcuts, may already be created

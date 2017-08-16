@@ -897,7 +897,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 case MID_FRMSIZE_REL_COL_WIDTH:
                 {
                     sal_Int32 nPos = rValue.indexOf( '*' );
-                    if( -1L != nPos )
+                    if( -1 != nPos )
                     {
                         sal_Int32 nValue = rValue.toInt32();
                         if( nValue < MINLAY )

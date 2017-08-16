@@ -75,11 +75,11 @@ d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & maR.mnOr ) >> maR.mnO
 
 
 #define COLOR_TO_MASK( d_rCol, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_ALPHA ) \
-( ( ( ( d_RS < 0L ) ? ( (sal_uInt32) (d_rCol).GetRed() >> -d_RS ) :     \
+( ( ( ( d_RS < 0 ) ? ( (sal_uInt32) (d_rCol).GetRed() >> -d_RS ) :     \
     ( (sal_uInt32) (d_rCol).GetRed() << d_RS ) ) & d_RM ) |             \
-  ( ( ( d_GS < 0L ) ? ( (sal_uInt32) (d_rCol).GetGreen() >> -d_GS ) :   \
+  ( ( ( d_GS < 0 ) ? ( (sal_uInt32) (d_rCol).GetGreen() >> -d_GS ) :   \
     ( (sal_uInt32) (d_rCol).GetGreen() << d_GS ) ) & d_GM ) |           \
-  ( ( ( d_BS < 0L ) ? ( (sal_uInt32) (d_rCol).GetBlue() >> -d_BS ) :    \
+  ( ( ( d_BS < 0 ) ? ( (sal_uInt32) (d_rCol).GetBlue() >> -d_BS ) :    \
     ( (sal_uInt32) (d_rCol).GetBlue() << d_BS ) ) & d_BM ) | \
     d_ALPHA )
 

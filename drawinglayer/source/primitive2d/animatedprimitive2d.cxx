@@ -158,7 +158,7 @@ namespace drawinglayer
                     fState = 1.0;
                 }
 
-                const double fIndex(fState * (double)(nSize - 1L));
+                const double fIndex(fState * (double)(nSize - 1));
                 const sal_uInt32 nIndA(sal_uInt32(floor(fIndex)));
                 const double fOffset(fIndex - (double)nIndA);
                 basegfx::B2DHomMatrix aTargetTransform;
@@ -172,7 +172,7 @@ namespace drawinglayer
                 else
                 {
                     // interpolate. Get involved buffered decomposed matrices
-                    const sal_uInt32 nIndB((nIndA + 1L) % nSize);
+                    const sal_uInt32 nIndB((nIndA + 1) % nSize);
                     std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
 
                     // interpolate for fOffset [0.0 .. 1.0[

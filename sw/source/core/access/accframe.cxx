@@ -460,7 +460,7 @@ sal_Int32 SwAccessibleFrame::GetChildIndex( SwAccessibleMap& rAccMap,
     sal_Int32 nPos = 0;
     return GetChildIndex( rAccMap, maVisArea, *mpFrame, rChild, nPos, IsInPagePreview() )
            ? nPos
-           : -1L;
+           : -1;
 }
 
 sw::access::SwAccessibleChild SwAccessibleFrame::GetChildAtPixel(

@@ -85,7 +85,7 @@ inline sal_uInt16 Octree::GetBestPaletteIndex( const BitmapColor& rColor )
 {
     pColor = &rColor;
     nPalIndex = 65535;
-    nLevel = 0L;
+    nLevel = 0;
     GetPalIndex( pTree );
     return nPalIndex;
 }

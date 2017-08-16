@@ -5689,9 +5689,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
 
                             if( pAcc->HasPalette() )
                             {
-                                for( long nY = 0L; nY < nHeight; nY++ )
+                                for( long nY = 0; nY < nHeight; nY++ )
                                 {
-                                    for( long nX = 0L; nX < nWidth; nX++ )
+                                    for( long nX = 0; nX < nWidth; nX++ )
                                     {
                                         const BitmapColor& rCol = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
                                         nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
@@ -5700,9 +5700,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                             }
                             else
                             {
-                                for( long nY = 0L; nY < nHeight; nY++ )
+                                for( long nY = 0; nY < nHeight; nY++ )
                                 {
-                                    for( long nX = 0L; nX < nWidth; nX++ )
+                                    for( long nX = 0; nX < nWidth; nX++ )
                                     {
                                         const BitmapColor aCol( pAcc->GetPixel( nY, nX ) );
                                         nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();

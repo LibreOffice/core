@@ -759,7 +759,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         nWidth = nDefWidth;
                     nWidth += + 2 * aBorder.Width();
 
-                    nWidth = std::max( nWidth, 2L * aBorder.Width() + 4L*MM50 );
+                    nWidth = std::max( nWidth, 2L * aBorder.Width() + 4*MM50 );
                     Frame().Width( nWidth );
 
                     SwLayoutFrame *pBody = FindBodyCont();
@@ -1177,7 +1177,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // because of its object positioning.
     if ( !static_cast<SwTextFrame*>(this)->IsFollow() )
     {
-        sal_uInt32 nToPageNum = 0L;
+        sal_uInt32 nToPageNum = 0;
         const bool bMoveFwdByObjPos = SwLayouter::FrameMovedFwdByObjPos(
                                                     *(GetAttrSet()->GetDoc()),
                                                     *(static_cast<SwTextFrame*>(this)),
