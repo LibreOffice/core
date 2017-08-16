@@ -77,8 +77,8 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
 ScCalcConfig *ScInterpreter::mpGlobalConfig = nullptr;
-ScTokenStack* ScInterpreter::pGlobalStack = nullptr;
-bool ScInterpreter::bGlobalStackInUse = false;
+thread_local ScTokenStack* ScInterpreter::pGlobalStack = nullptr;
+thread_local bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
 using ::std::unique_ptr;
