@@ -2731,8 +2731,8 @@ void SvxIconChoiceCtrl_Impl::DrawFocusRect(vcl::RenderContext& rRenderContext)
     LineInfo aLineInfo(LineStyle::Dash);
 
     aLineInfo.SetDashLen(1);
-    aLineInfo.SetDotLen(1L);
-    aLineInfo.SetDistance(1L);
+    aLineInfo.SetDotLen(1);
+    aLineInfo.SetDistance(1);
     aLineInfo.SetDotCount(1);
 
     rRenderContext.DrawPolyLine(aPolygon, aLineInfo);

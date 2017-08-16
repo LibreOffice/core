@@ -153,7 +153,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createGlueP
             std::vector< basegfx::B2DPoint > aGluepointVector;
 
             // create GluePoint primitives. ATM these are relative to the SnapRect
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
                 const SdrGluePoint& rCandidate = (*pGluePointList)[(sal_uInt16)a];
                 const Point aPosition(rCandidate.GetAbsolutePos(GetSdrObject()));

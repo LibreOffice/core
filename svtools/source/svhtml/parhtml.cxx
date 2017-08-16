@@ -42,9 +42,9 @@
 using namespace ::com::sun::star;
 
 
-const sal_Int32 MAX_LEN( 1024L );
+const sal_Int32 MAX_LEN( 1024 );
 
-const sal_Int32 MAX_ENTITY_LEN( 8L );
+const sal_Int32 MAX_ENTITY_LEN( 8 );
 
 
 // Tables to convert option values into strings
@@ -876,7 +876,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                     nNextCh = '<';
 
                     // Don't append string to token.
-                    sTmpBuffer.setLength( 0L );
+                    sTmpBuffer.setLength( 0 );
                 }
                 else
                 {

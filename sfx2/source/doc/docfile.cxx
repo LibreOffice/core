@@ -1469,7 +1469,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
     {
         pImpl->xStorage.clear();
         if ( pImpl->m_pInStream )
-            pImpl->m_pInStream->Seek( 0L );
+            pImpl->m_pInStream->Seek( 0 );
     }
 
     pImpl->bIsStorage = pImpl->xStorage.is();

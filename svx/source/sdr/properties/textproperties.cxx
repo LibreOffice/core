@@ -124,7 +124,7 @@ namespace sdr
                             // force ItemSet
                             GetObjectItemSet();
 
-                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0L));
+                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
                             mpItemSet->Put(aNewSet);
                         }
 
@@ -153,7 +153,7 @@ namespace sdr
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             // #i25616#
-            sal_Int32 nOldLineWidth(0L);
+            sal_Int32 nOldLineWidth(0);
 
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {

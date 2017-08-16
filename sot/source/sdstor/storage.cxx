@@ -199,7 +199,7 @@ void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
     {
         // If Ole2 or not only own StorageStreams
         sal_uLong nPos = Tell();    // save position
-        Seek( 0L );
+        Seek( 0 );
         pDestStm->SetSize( 0 ); // empty target stream
 
         std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ 8192 ]);

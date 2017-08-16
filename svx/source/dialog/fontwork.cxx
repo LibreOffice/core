@@ -765,8 +765,8 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Timer *, void)
     nValue = GetCoreValue(*m_pMtrFldTextStart, MapUnit::Map100thMM);
     XFormTextStartItem aStartItem( nValue );
 
-    sal_Int32 nValueX(0L);
-    sal_Int32 nValueY(0L);
+    sal_Int32 nValueX(0);
+    sal_Int32 nValueY(0);
 
     // #i19251#
     // The two involved fields/items are used double and contain/give different

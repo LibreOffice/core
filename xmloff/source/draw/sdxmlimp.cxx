@@ -268,8 +268,8 @@ SdXMLImport::SdXMLImport(
     OUString const & implementationName,
     bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
-    mnNewPageCount(0L),
-    mnNewMasterPageCount(0L),
+    mnNewPageCount(0),
+    mnNewMasterPageCount(0),
     mbIsDraw(bIsDraw),
     mbLoadDoc(true),
     mbPreview(false),

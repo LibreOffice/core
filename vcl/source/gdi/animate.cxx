@@ -788,7 +788,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
 
 AInfo::AInfo() : pOutDev( nullptr ),
                               pViewData( nullptr ),
-                              nExtraData( 0L ),
+                              nExtraData( 0 ),
                               bPause( false ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

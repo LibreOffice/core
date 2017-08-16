@@ -79,7 +79,7 @@ public:
     /** convert to ERRCODE_NONE if it's a warning, else return the error */
     ErrCode IgnoreWarning() const {
         return (m_value & ERRCODE_WARNING_MASK)
-              ? ErrCode(0UL)
+              ? ErrCode(0)
               : ErrCode(static_cast<sal_uInt32>(m_value & ERRCODE_ERROR_MASK));
     }
 
@@ -199,7 +199,7 @@ inline std::ostream& operator<<(std::ostream& os, const ErrCode& err)
 #define ERRCODE_CLASS_RUNTIME            (22  << ERRCODE_CLASS_SHIFT)
 #define ERRCODE_CLASS_COMPILER           (23  << ERRCODE_CLASS_SHIFT)
 
-#define ERRCODE_NONE                     ErrCode(0UL)
+#define ERRCODE_NONE                     ErrCode(0)
 
 #define ERRCODE_IO_MISPLACEDCHAR         ErrCode(1UL  | ERRCODE_CLASS_PARAMETER | ERRCODE_AREA_IO)
 #define ERRCODE_IO_NOTEXISTS             ErrCode(2UL  | ERRCODE_CLASS_NOTEXISTS | ERRCODE_AREA_IO)

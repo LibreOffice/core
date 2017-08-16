@@ -275,7 +275,7 @@ void SdPathHdl::CreateB2dIAObject()
 
             if(pPageView)
             {
-                for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+                for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 

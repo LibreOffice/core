@@ -58,7 +58,7 @@ namespace sdr
 
             if(bNormals || bTexture)
             {
-                for(sal_uInt32 a(0L); a < aPolyPolygon3D.count(); a++)
+                for(sal_uInt32 a(0); a < aPolyPolygon3D.count(); a++)
                 {
                     basegfx::B3DPolygon aCandidate3D(aPolyPolygon3D.getB3DPolygon(a));
                     basegfx::B3DPolygon aNormals3D;
@@ -74,7 +74,7 @@ namespace sdr
                         aTexture2D = aPolyTexture2D.getB2DPolygon(a);
                     }
 
-                    for(sal_uInt32 b(0L); b < aCandidate3D.count(); b++)
+                    for(sal_uInt32 b(0); b < aCandidate3D.count(); b++)
                     {
                         if(bNormals)
                         {

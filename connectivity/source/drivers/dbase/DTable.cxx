@@ -270,7 +270,7 @@ void ODbaseTable::readHeader()
 void ODbaseTable::fillColumns()
 {
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-    m_pFileStream->Seek(32L);
+    m_pFileStream->Seek(32);
 
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
@@ -548,7 +548,7 @@ bool ODbaseTable::ReadMemoHeader()
 {
     m_pMemoStream->SetEndian(SvStreamEndian::LITTLE);
     m_pMemoStream->RefreshBuffer();         // make sure that the header information is actually read again
-    m_pMemoStream->Seek(0L);
+    m_pMemoStream->Seek(0);
 
     (*m_pMemoStream).ReadUInt32( m_aMemoHeader.db_next );
     switch (m_aHeader.type)
@@ -556,7 +556,7 @@ bool ODbaseTable::ReadMemoHeader()
         case dBaseIIIMemo:  // dBase III: fixed block size
         case dBaseIVMemo:
             // sometimes dBase3 is attached to dBase4 memo
-            m_pMemoStream->Seek(20L);
+            m_pMemoStream->Seek(20);
             (*m_pMemoStream).ReadUInt16( m_aMemoHeader.db_size );
             if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size != 512)  // 1 is also for dBase 3
                 m_aMemoHeader.db_typ  = MemodBaseIV;
@@ -582,7 +582,7 @@ bool ODbaseTable::ReadMemoHeader()
         case VisualFoxProAuto:
         case FoxProMemo:
             m_aMemoHeader.db_typ    = MemoFoxPro;
-            m_pMemoStream->Seek(6L);
+            m_pMemoStream->Seek(6);
             m_pMemoStream->SetEndian(SvStreamEndian::BIG);
             (*m_pMemoStream).ReadUInt16( m_aMemoHeader.db_size );
             break;
@@ -1174,7 +1174,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     char aBuffer[21];               // write buffer
     memset(aBuffer,0,sizeof(aBuffer));
 
-    m_pFileStream->Seek(0L);
+    m_pFileStream->Seek(0);
     (*m_pFileStream).WriteUChar( nDbaseType );                            // dBase format
     (*m_pFileStream).WriteUChar( aDate.GetYearUnsigned() % 100 );         // current date
 
@@ -1342,12 +1342,12 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 
         (*m_pFileStream).WriteUChar( FIELD_DESCRIPTOR_TERMINATOR );              // end of header
         (*m_pFileStream).WriteChar( (char)DBF_EOL );
-        m_pFileStream->Seek(10L);
+        m_pFileStream->Seek(10);
         (*m_pFileStream).WriteUInt16( nRecLength );                                     // set record length afterwards
 
         if (bCreateMemo)
         {
-            m_pFileStream->Seek(0L);
+            m_pFileStream->Seek(0);
             if (nDbaseType == VisualFoxPro)
                 (*m_pFileStream).WriteUChar( FoxProMemo );
             else
@@ -1379,7 +1379,7 @@ bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 
     m_pMemoStream->SetStreamSize(512);
 
-    m_pMemoStream->Seek(0L);
+    m_pMemoStream->Seek(0);
     (*m_pMemoStream).WriteUInt32( 1 );                  // pointer to the first free block
 
     m_pMemoStream->Flush();
@@ -1493,7 +1493,7 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
         {
             (*m_pFileStream).WriteChar( (char)DBF_EOL ); // write EOL
             // raise number of datasets in the header:
-            m_pFileStream->Seek( 4L );
+            m_pFileStream->Seek( 4 );
             (*m_pFileStream).WriteUInt32( m_aHeader.nbRecords + 1 );
 
             m_pFileStream->Flush();
@@ -2004,7 +2004,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
             {
                 char sHeader[4];
                 m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
-                m_pMemoStream->SeekRel(4L);
+                m_pMemoStream->SeekRel(4);
                 m_pMemoStream->ReadBytes(sHeader, 4);
 
                 std::size_t nOldSize;
@@ -2097,7 +2097,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
         m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
         // Write the new block number
-        m_pMemoStream->Seek(0L);
+        m_pMemoStream->Seek(0);
         (*m_pMemoStream).WriteUInt32( m_aMemoHeader.db_next );
         m_pMemoStream->Flush();
     }

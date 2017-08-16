@@ -636,7 +636,7 @@ namespace sw
                 // in the given PolyPolygon. Anything else which might be thought of
                 // for reducing to a single polygon will just need nore power and
                 // cannot create more correct results.
-                sal_uInt32 nPointCount(0L);
+                sal_uInt32 nPointCount(0);
                 sal_uInt16 a;
 
                 for(a = 0; a < rPolyPoly.Count(); a++)
@@ -651,7 +651,7 @@ namespace sw
                 }
 
                 tools::Polygon aRetval((sal_uInt16)nPointCount);
-                sal_uInt32 nAppendIndex(0L);
+                sal_uInt32 nAppendIndex(0);
 
                 for(a = 0; a < rPolyPoly.Count(); a++)
                 {

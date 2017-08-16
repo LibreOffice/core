@@ -542,10 +542,10 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 #define REMEMBERED_TIMES_COUNT  (10)
     static bool bDoTimerTest(false);
     static bool bTimesInited(false);
-    static sal_uInt32 nRepeatCount(10L);
+    static sal_uInt32 nRepeatCount(10);
     static double fLastTimes[REMEMBERED_TIMES_COUNT];
     const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
-    sal_uInt32 count(1L);
+    sal_uInt32 count(1);
     sal_uInt32 a;
 
     if(bDoTimerTest)
@@ -876,7 +876,7 @@ void SdrPaintView::GlueInvalidate() const
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
-    for(sal_uInt32 nWinNum(0L); nWinNum < nWindowCount; nWinNum++)
+    for(sal_uInt32 nWinNum(0); nWinNum < nWindowCount; nWinNum++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(nWinNum);
 
@@ -904,7 +904,7 @@ void SdrPaintView::InvalidateAllWin()
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
-    for(sal_uInt32 a(0L); a < nWindowCount; a++)
+    for(sal_uInt32 a(0); a < nWindowCount; a++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
 
@@ -919,7 +919,7 @@ void SdrPaintView::InvalidateAllWin(const tools::Rectangle& rRect)
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
-    for(sal_uInt32 a(0L); a < nWindowCount; a++)
+    for(sal_uInt32 a(0); a < nWindowCount; a++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
 
@@ -1195,7 +1195,7 @@ void SdrPaintView::SetAnimationPause( bool bSet )
 
         if(mpPageView)
         {
-            for(sal_uInt32 b(0L); b < mpPageView->PageWindowCount(); b++)
+            for(sal_uInt32 b(0); b < mpPageView->PageWindowCount(); b++)
             {
                 SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
                 sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
@@ -1307,7 +1307,7 @@ void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
     if(mpPageView)
     {
         // first, reset all timers at all windows to 0L
-        for(sal_uInt32 a(0L); a < mpPageView->PageWindowCount(); a++)
+        for(sal_uInt32 a(0); a < mpPageView->PageWindowCount(); a++)
         {
             SdrPageWindow& rPageWindow = *mpPageView->GetPageWindow(a);
             sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();

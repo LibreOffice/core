@@ -113,7 +113,7 @@ namespace
         OSL_ENSURE(rPolA.count() == rPolB.count(), "impAddInBetweenFill: unequally sized polygons (!)");
         const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
 
-        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+        for(sal_uInt32 a(0); a < nPolygonCount; a++)
         {
             const basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
@@ -135,7 +135,7 @@ namespace
                     fTexHorMultiplicatorB = basegfx::fTools::equalZero(fPolygonLengthB) ? 1.0 : 1.0 / fPolygonLengthB;
                 }
 
-                for(sal_uInt32 b(0L); b < nEdgeCount; b++)
+                for(sal_uInt32 b(0); b < nEdgeCount; b++)
                 {
                     const sal_uInt32 nIndexA(b);
                     const sal_uInt32 nIndexB((b + 1L) % nPointCount);
@@ -189,11 +189,11 @@ namespace
         basegfx::B3DPolyPolygon& rCandidate,
         const basegfx::B3DVector& rNormal)
     {
-        for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+        for(sal_uInt32 a(0); a < rCandidate.count(); a++)
         {
             basegfx::B3DPolygon aSub(rCandidate.getB3DPolygon(a));
 
-            for(sal_uInt32 b(0L); b < aSub.count(); b++)
+            for(sal_uInt32 b(0); b < aSub.count(); b++)
             {
                 aSub.setNormal(b, rNormal);
             }
@@ -210,7 +210,7 @@ namespace
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
         const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
 
-        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+        for(sal_uInt32 a(0); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
@@ -220,10 +220,10 @@ namespace
             if(nPointCount)
             {
                 basegfx::B3DPoint aPrevA(aSubA.getB3DPoint(nPointCount - 1L));
-                basegfx::B3DPoint aCurrA(aSubA.getB3DPoint(0L));
+                basegfx::B3DPoint aCurrA(aSubA.getB3DPoint(0));
                 const bool bClosed(aSubA.isClosed());
 
-                for(sal_uInt32 b(0L); b < nPointCount; b++)
+                for(sal_uInt32 b(0); b < nPointCount; b++)
                 {
                     const sal_uInt32 nIndNext((b + 1L) % nPointCount);
                     const basegfx::B3DPoint aNextA(aSubA.getB3DPoint(nIndNext));
@@ -294,14 +294,14 @@ namespace
         OSL_ENSURE(rPolA.count() == rPolB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
         const sal_uInt32 nPolygonCount(std::min(rPolA.count(), rPolB.count()));
 
-        for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+        for(sal_uInt32 a(0); a < nPolygonCount; a++)
         {
             basegfx::B3DPolygon aSubA(rPolA.getB3DPolygon(a));
             const basegfx::B3DPolygon aSubB(rPolB.getB3DPolygon(a));
             OSL_ENSURE(aSubA.count() == aSubB.count(), "sdrExtrudePrimitive3D: unequally sized polygons (!)");
             const sal_uInt32 nPointCount(std::min(aSubA.count(), aSubB.count()));
 
-            for(sal_uInt32 b(0L); b < nPointCount; b++)
+            for(sal_uInt32 b(0); b < nPointCount; b++)
             {
                 const basegfx::B3DVector aVA(aSubA.getNormal(b) * fWeightA);
                 const basegfx::B3DVector aVB(aSubB.getNormal(b) * fWeightB);
@@ -427,7 +427,7 @@ namespace drawinglayer
                 // create segments (a + 1 .. nSteps)
                 const double fStepSize(1.0 / (double)nSteps);
 
-                for(sal_uInt32 a(0L); a < nSteps; a++)
+                for(sal_uInt32 a(0); a < nSteps; a++)
                 {
                     const double fStep((double)(a + 1L) * fStepSize);
                     basegfx::B2DPolyPolygon aNewPoly(bBackScale ? basegfx::tools::interpolate(aFront, aBack, fStep) : aFront);
@@ -563,7 +563,7 @@ namespace drawinglayer
             basegfx::B3DPolyPolygon aRetval;
             const sal_uInt32 nNumSlices(rSliceVector.size());
 
-            for(sal_uInt32 a(0L); a < nNumSlices; a++)
+            for(sal_uInt32 a(0); a < nNumSlices; a++)
             {
                 aRetval.append(rSliceVector[a].getB3DPolyPolygon());
             }
@@ -672,7 +672,7 @@ namespace drawinglayer
 
                                         if(aFront.count())
                                         {
-                                            aNormal = -aFront.getB3DPolygon(0L).getNormal();
+                                            aNormal = -aFront.getB3DPolygon(0).getNormal();
                                         }
 
                                         impSetNormal(aFront, aNormal);
@@ -766,7 +766,7 @@ namespace drawinglayer
 
                                     if(bCreateNormals)
                                     {
-                                        const basegfx::B3DVector aNormal(aBack.count() ? aBack.getB3DPolygon(0L).getNormal() : basegfx::B3DVector(0.0, 0.0, 1.0));
+                                        const basegfx::B3DVector aNormal(aBack.count() ? aBack.getB3DPolygon(0).getNormal() : basegfx::B3DVector(0.0, 0.0, 1.0));
                                         impSetNormal(aBack, aNormal);
 
                                         if(bHasSlant)
@@ -874,7 +874,7 @@ namespace drawinglayer
 
                         if(aFront.count())
                         {
-                            aNormal = -aFront.getB3DPolygon(0L).getNormal();
+                            aNormal = -aFront.getB3DPolygon(0).getNormal();
                         }
 
                         impSetNormal(aFront, aNormal);

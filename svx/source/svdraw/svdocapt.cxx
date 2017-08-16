@@ -289,7 +289,7 @@ SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
         if(nPntNum < aTailPoly.GetSize())
         {
             SdrHdl* pHdl = new SdrHdl(aTailPoly.GetPoint((sal_uInt16)nPntNum), SdrHdlKind::Poly);
-            pHdl->SetPolyNum(1L);
+            pHdl->SetPolyNum(1);
             pHdl->SetPointNum(nPntNum);
             return pHdl;
         }

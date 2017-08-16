@@ -105,7 +105,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
             // collect primitive data in a sequence; this will already use the updated ViewInformation2D
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
                 const ViewObjectContact& rViewObjectContact = GetPaintObjectViewContact(a).GetViewObjectContact(*this);
 

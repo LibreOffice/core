@@ -477,7 +477,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // #i26791# - local variable <nVertOffsetToFrameAnchorPos>
             // for determination of the 'vertical' offset to the frame anchor
             // position
-            SwTwips nVertOffsetToFrameAnchorPos( 0L );
+            SwTwips nVertOffsetToFrameAnchorPos( 0 );
             // #i22341# - add special case for vertical alignment
             // at top of line.
             if ( mbAnchorToChar &&
@@ -814,7 +814,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 }
                 else
                 {
-                    SwTwips nTmpRelPosY( 0L );
+                    SwTwips nTmpRelPosY( 0 );
                     if ( aRectFnSet.IsVert() )
                         nTmpRelPosY = aRelPos.X() - nDist;
                     else
@@ -1004,7 +1004,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                       : pOrientFrame;
 
         // #i26791# - get 'horizontal' offset to frame anchor position.
-        SwTwips nHoriOffsetToFrameAnchorPos( 0L );
+        SwTwips nHoriOffsetToFrameAnchorPos( 0 );
         SwTwips nRelPosX = CalcRelPosX( *pHoriOrientFrame, aEnvOfObj,
                                          aHori, rLR, rUL, bWrapThrough,
                                          ( aRectFnSet.IsVert() ? aRelPos.X() : aRelPos.Y() ),

@@ -2596,7 +2596,7 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                     const PptSlidePersistEntry& rPersist = (*pPageList)[ nMasterNum ];    // get the masterpage's persistentry
                     if ( rPersist.pPresentationObjects )
                     {
-                        sal_uInt32 nCurrent(0L);
+                        sal_uInt32 nCurrent(0);
                         DffRecordList* pCList = maShapeRecords.pCList;              // we got a backup of the current position
                         if ( pCList )
                             nCurrent = pCList->nCurrent;

@@ -67,7 +67,7 @@ namespace
         const sal_Int32 nCount(rPrimitiveVector.size());
         drawinglayer::primitive2d::Primitive2DContainer aRetval(nCount);
 
-        for(sal_Int32 a(0L); a < nCount; a++)
+        for(sal_Int32 a(0); a < nCount; a++)
         {
             aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(rPrimitiveVector[a]);
         }

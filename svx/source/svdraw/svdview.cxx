@@ -88,7 +88,7 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(
     const SdrView& rView,
     const basegfx::B2DPolyPolygon& rLinePolyPolygon)
 {
-    for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
         rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
@@ -1450,7 +1450,7 @@ void SdrView::SetMasterPagePaintCaching(bool bOn)
 
         if(pPageView)
         {
-            for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+            for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
             {
                 SdrPageWindow* pPageWindow = pPageView->GetPageWindow(b);
                 assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");

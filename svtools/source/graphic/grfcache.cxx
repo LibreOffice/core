@@ -824,10 +824,10 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 
 GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
     maReleaseTimer          ( "svtools::GraphicCache maReleaseTimer" ),
-    mnReleaseTimeoutSeconds ( 0UL ),
+    mnReleaseTimeoutSeconds ( 0 ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
-    mnUsedDisplaySize       ( 0UL )
+    mnUsedDisplaySize       ( 0 )
 {
     maReleaseTimer.SetInvokeHandler( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
     maReleaseTimer.SetTimeout( 10000 );

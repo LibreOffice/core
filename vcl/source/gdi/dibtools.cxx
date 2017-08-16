@@ -84,17 +84,17 @@ struct DIBInfoHeader
     sal_uInt32      nColsImportant;
 
     DIBInfoHeader()
-    :   nSize(0UL),
-        nWidth(0UL),
-        nHeight(0UL),
+    :   nSize(0),
+        nWidth(0),
+        nHeight(0),
         nPlanes(0),
         nBitCount(0),
         nCompression(0),
         nSizeImage(0),
-        nXPelsPerMeter(0UL),
-        nYPelsPerMeter(0UL),
-        nColsUsed(0UL),
-        nColsImportant(0UL)
+        nXPelsPerMeter(0),
+        nYPelsPerMeter(0),
+        nColsUsed(0),
+        nColsImportant(0)
     {}
 };
 
@@ -116,19 +116,19 @@ struct DIBV5Header : public DIBInfoHeader
 
     DIBV5Header()
     :   DIBInfoHeader(),
-        nV5RedMask(0UL),
-        nV5GreenMask(0UL),
-        nV5BlueMask(0UL),
-        nV5AlphaMask(0UL),
-        nV5CSType(0UL),
+        nV5RedMask(0),
+        nV5GreenMask(0),
+        nV5BlueMask(0),
+        nV5AlphaMask(0),
+        nV5CSType(0),
         aV5Endpoints(),
-        nV5GammaRed(0UL),
-        nV5GammaGreen(0UL),
-        nV5GammaBlue(0UL),
-        nV5Intent(0UL),
-        nV5ProfileData(0UL),
-        nV5ProfileSize(0UL),
-        nV5Reserved(0UL)
+        nV5GammaRed(0),
+        nV5GammaGreen(0),
+        nV5GammaBlue(0),
+        nV5Intent(0),
+        nV5ProfileData(0),
+        nV5ProfileSize(0),
+        nV5Reserved(0)
     {}
 };
 
@@ -1594,7 +1594,7 @@ bool ImplReadDIB(
 {
     const SvStreamEndian nOldFormat(rIStm.GetEndian());
     const sal_uLong nOldPos(rIStm.Tell());
-    sal_uLong nOffset(0UL);
+    sal_uLong nOffset(0);
     bool bRet(false);
 
     rIStm.SetEndian(SvStreamEndian::LITTLE);

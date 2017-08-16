@@ -134,7 +134,7 @@ bool PolyPolygonIsMixedOpenAndClosed( const basegfx::B2DPolyPolygon& rPoly )
 
     // PolyPolygon is mixed open and closed if there is more than one
     // polygon and there are both closed and open polygons.
-    for( sal_uInt32 a(0L); !bRetval && a < rPoly.count(); a++ )
+    for( sal_uInt32 a(0); !bRetval && a < rPoly.count(); a++ )
     {
         if ( (rPoly.getB2DPolygon(a)).isClosed() )
         {
@@ -1559,7 +1559,7 @@ struct ShapeWritingVisitor
                 // split mixed polypolygons into single polygons and add them one by one
                 if( PolyPolygonIsMixedOpenAndClosed(aPoly) )
                 {
-                    for( sal_uInt32 i(0L); i<aPoly.count(); ++i ) {
+                    for( sal_uInt32 i(0); i<aPoly.count(); ++i ) {
                         writePathShape(xAttrs,
                                        xUnoAttrs,
                                        sStyleId,

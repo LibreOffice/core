@@ -389,9 +389,9 @@ SdXMLExport::SdXMLExport(
     bool bIsDraw, SvXMLExportFlags nExportFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
         (bIsDraw) ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
-    mnDocMasterPageCount(0L),
-    mnDocDrawPageCount(0L),
-    mnObjectCount(0L),
+    mnDocMasterPageCount(0),
+    mnDocDrawPageCount(0),
+    mnObjectCount(0),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList),
     mpPageMasterUsageList(new ImpXMLEXPPageMasterList),
     mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList),
@@ -604,13 +604,13 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 // #82003# helper function for recursive object count
 sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(const Reference< drawing::XShapes >& xShapes)
 {
-    sal_uInt32 nRetval(0L);
+    sal_uInt32 nRetval(0);
 
     if(xShapes.is())
     {
         sal_Int32 nCount = xShapes->getCount();
 
-        for(sal_Int32 a(0L); a < nCount; a++)
+        for(sal_Int32 a(0); a < nCount; a++)
         {
             Any aAny(xShapes->getByIndex(a));
             Reference< drawing::XShapes > xGroup;
@@ -2174,7 +2174,7 @@ void SdXMLExport::ExportAutoStyles_()
         }
 
         // create auto style infos for objects on master pages
-        for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
+        for(sal_Int32 nMPageId(0); nMPageId < mnDocMasterPageCount; nMPageId++)
         {
             Reference< XDrawPage > xMasterPage(mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
 

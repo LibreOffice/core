@@ -135,7 +135,7 @@ namespace drawinglayer
             const sal_uInt32 nCount(rmMatrixStack.size());
             maMatrixStack.reserve(nCount);
 
-            for(sal_uInt32 a(0L); a < nCount; a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
                 maMatrixStack.push_back(basegfx::tools::B2DHomMatrixBufferedDecompose(rmMatrixStack[a]));
             }

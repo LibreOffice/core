@@ -54,7 +54,7 @@ public:
     bool                      bMenuBarOn;
 
     explicit SfxFrame_Impl()
-        :nType( 0L )
+        :nType( 0 )
         ,pCurrentViewFrame( nullptr )
         ,pDescr( nullptr )
         ,bClosing(false)

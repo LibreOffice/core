@@ -3374,7 +3374,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         {
             // First, determine number of anchor text node in the copied range.
             // Note: The anchor text node *have* to be inside the copied range.
-            sal_uLong nAnchorTextNdNumInRange( 0L );
+            sal_uLong nAnchorTextNdNumInRange( 0 );
             bool bAnchorTextNdFound( false );
             SwNodeIndex aIdx( rRg.aStart );
             while ( !bAnchorTextNdFound && aIdx <= rRg.aEnd )

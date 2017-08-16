@@ -55,7 +55,7 @@ public:
 ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos)
 :   maPosition(rStartPos)
 {
-    for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
         rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
@@ -129,7 +129,7 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
     mnHelpLineNumber(nHelpLineNumber),
     meHelpLineKind(eKind)
 {
-    for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
         rtl::Reference< sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
@@ -337,7 +337,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                 if (bOPntSnap && nMaxPointSnapCount>0)
                 {
                     sal_uInt32 nCount(pO->GetSnapPointCount());
-                    for (sal_uInt32 i(0L); i < nCount && nMaxPointSnapCount > 0L; i++)
+                    for (sal_uInt32 i(0); i < nCount && nMaxPointSnapCount > 0L; i++)
                     {
                         Point aP(pO->GetSnapPoint(i));
                         dx1=x-aP.X();

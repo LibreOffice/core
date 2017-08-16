@@ -117,7 +117,7 @@ namespace drawinglayer
             // build vector of PolyPolygons
             std::vector< basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
 
-            for(sal_uInt32 a(0L); a < aFill.count(); a++)
+            for(sal_uInt32 a(0); a < aFill.count(); a++)
             {
                 a3DPolyPolygonVector.push_back(basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
             }

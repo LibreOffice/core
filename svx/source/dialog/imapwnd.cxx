@@ -99,7 +99,7 @@ void IMapWindow::ReplaceImageMap( const ImageMap& rImageMap )
     if(GetSdrModel())
     {
         // try to access page
-        pPage = GetSdrModel()->GetPage(0L);
+        pPage = GetSdrModel()->GetPage(0);
     }
 
     if(pPage)
@@ -309,7 +309,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         {
             SdrCircObj* pCircObj = const_cast<SdrCircObj*>( static_cast<const SdrCircObj*>(&rObj) );
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>( pCircObj->ConvertToPolyObj( false, false ) );
-            tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
+            tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
             delete pPathObj;
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
@@ -328,7 +328,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
 
             if ( rXPolyPoly.count() )
             {
-                tools::Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
+                tools::Polygon aPoly(rXPolyPoly.getB2DPolygon(0));
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
                 pPathObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
             }
@@ -375,7 +375,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             {
                 const SdrCircObj& rCircObj = static_cast<const SdrCircObj&>(rObj);
                 SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rCircObj.ConvertToPolyObj( false, false ) );
-                tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
+                tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0));
 
                 IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
@@ -396,7 +396,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 
                 if ( rXPolyPoly.count() )
                 {
-                    tools::Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
+                    tools::Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0));
                     IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
                     pUserData->ReplaceObject( IMapObjectPtr(pObj) );
                 }

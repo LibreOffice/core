@@ -257,7 +257,7 @@ namespace drawinglayer
         {
             basegfx::B2DPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rSource.count(); a++)
+            for(sal_uInt32 a(0); a < rSource.count(); a++)
             {
                 // get point, transform to eye coordinate system
                 basegfx::B3DPoint aCandidate(rSource.getB3DPoint(a));
@@ -286,7 +286,7 @@ namespace drawinglayer
         {
             basegfx::B2DPolyPolygon aRetval;
 
-            for(sal_uInt32 a(0L); a < rSource.count(); a++)
+            for(sal_uInt32 a(0); a < rSource.count(); a++)
             {
                 aRetval.append(impDoShadowProjection(rSource.getB3DPolygon(a)));
             }

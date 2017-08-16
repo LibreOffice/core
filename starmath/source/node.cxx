@@ -174,7 +174,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
                 break;
 
             case FontSizeType::DIVIDE:
-                if (rSize != Fraction(0L))
+                if (rSize != Fraction(0))
                     aFntSize.Height()   = static_cast<long>(Fraction(aFntSize.Height()) / rSize);
                 break;
             default:

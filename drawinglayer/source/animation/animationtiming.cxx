@@ -162,7 +162,7 @@ namespace drawinglayer
 
         AnimationEntryList::Entries::size_type AnimationEntryList::impGetIndexAtTime(double fTime, double &rfAddedTime) const
         {
-            Entries::size_type nIndex(0L);
+            Entries::size_type nIndex(0);
 
             while(nIndex < maEntries.size() && basegfx::fTools::lessOrEqual(rfAddedTime + maEntries[nIndex]->getDuration(), fTime))
             {

@@ -39,7 +39,7 @@ namespace sdr
             {
                 const sal_Int32 nCount(maAnimatedPrimitives.size());
 
-                for(sal_Int32 a(0L); a < nCount; a++)
+                for(sal_Int32 a(0); a < nCount; a++)
                 {
                     const drawinglayer::primitive2d::Primitive2DReference xRef(maAnimatedPrimitives[a]);
                     const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* pCandidate = dynamic_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* >(xRef.get());

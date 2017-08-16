@@ -3237,14 +3237,14 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
                                     _rNewAnchorFormat.GetContentAnchor()->nNode )
         {
             // determine 'old' number of anchor frames
-            sal_uInt32 nOldNumOfAnchFrame( 0L );
+            sal_uInt32 nOldNumOfAnchFrame( 0 );
             SwIterator<SwFrame,SwContentNode> aOldIter( *(aOldAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode()) );
             for( SwFrame* pOld = aOldIter.First(); pOld; pOld = aOldIter.Next() )
             {
                 ++nOldNumOfAnchFrame;
             }
             // determine 'new' number of anchor frames
-            sal_uInt32 nNewNumOfAnchFrame( 0L );
+            sal_uInt32 nNewNumOfAnchFrame( 0 );
             SwIterator<SwFrame,SwContentNode> aNewIter( *(_rNewAnchorFormat.GetContentAnchor()->nNode.GetNode().GetContentNode()) );
             for( SwFrame* pNew = aNewIter.First(); pNew; pNew = aNewIter.Next() )
             {

@@ -2245,9 +2245,9 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // that VirtualDevices use a DPI of 96.
     // We specifically calculate these scales first as we're still
     // in TWIPs, and might as well minimize the number of conversions.
-    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440) /
                                 Fraction( nTileWidth);
-    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440) /
                                 Fraction( nTileHeight);
 
     // svx seems to be the only component that works natively in

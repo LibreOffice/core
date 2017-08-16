@@ -662,7 +662,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
 
     // Remember position for length
     sal_Int32 nObjLenMark = xMarkStream->createMark();
-    OutStream->writeLong( 0L );
+    OutStream->writeLong( 0 );
 
     OutStream->writeLong( aIndex.size() );
 

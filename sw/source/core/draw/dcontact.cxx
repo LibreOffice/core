@@ -376,7 +376,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
 /// get maximum order number of anchored objects handled by with contact
 sal_uInt32 SwContact::GetMaxOrdNum() const
 {
-    sal_uInt32 nMaxOrdNum( 0L );
+    sal_uInt32 nMaxOrdNum( 0 );
 
     std::list< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
@@ -1224,8 +1224,8 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
                 }
-                SwTwips nXPosDiff(0L);
-                SwTwips nYPosDiff(0L);
+                SwTwips nXPosDiff(0);
+                SwTwips nYPosDiff(0);
                 switch ( eLayoutDir )
                 {
                     case SwFrameFormat::HORI_L2R:
@@ -2035,7 +2035,7 @@ namespace sdr
         {
             const sal_uInt32 nSubHierarchyCount(rVOC.GetViewContact().GetObjectCount());
 
-            for(sal_uInt32 a(0L); a < nSubHierarchyCount; a++)
+            for(sal_uInt32 a(0); a < nSubHierarchyCount; a++)
             {
                 const ViewObjectContact& rCandidate(rVOC.GetViewContact().GetViewContact(a).GetViewObjectContact(rVOC.GetObjectContact()));
 

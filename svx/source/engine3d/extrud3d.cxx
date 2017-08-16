@@ -153,7 +153,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         basegfx::B2DPolyPolygon aTemp(maExtrudePolygon);
         aTemp.removeDoublePoints();
         aTemp = basegfx::tools::correctOrientations(aTemp);
-        const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aTemp.getB2DPolygon(0L));
+        const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aTemp.getB2DPolygon(0));
 
         if(basegfx::B2VectorOrientation::Positive == aOrient)
         {

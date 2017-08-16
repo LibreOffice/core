@@ -136,7 +136,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size 
 
 drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 {
-    drawing::PointSequenceSequence aPolyPolygon(1L);
+    drawing::PointSequenceSequence aPolyPolygon(1);
     drawing::PointSequence aPolygon = comphelper::containerToSequence(mPoints);
     aPolyPolygon[0] = aPolygon;
     return aPolyPolygon;

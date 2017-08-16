@@ -70,7 +70,7 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
 
     if(maPolyPoly2D.count())
     {
-        const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0L));
+        const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0));
         sal_uInt32 nSegCnt(rPoly.count());
 
         if(nSegCnt && !rPoly.isClosed())
@@ -127,7 +127,7 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
 
         if(maPolyPoly2D.count())
         {
-            const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0L));
+            const basegfx::B2DPolygon rPoly(maPolyPoly2D.getB2DPolygon(0));
             sal_uInt32 nSegCnt(rPoly.count());
 
             if(nSegCnt && !rPoly.isClosed())

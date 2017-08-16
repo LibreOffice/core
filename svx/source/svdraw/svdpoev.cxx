@@ -365,7 +365,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
             for(SdrUShortCont::const_reverse_iterator it = rPts.rbegin(); it != rPts.rend(); ++it)
             {
-                sal_uInt32 nNewPt0Idx(0L);
+                sal_uInt32 nNewPt0Idx(0);
                 SdrObject* pNewObj = pObj->RipPoint(*it, nNewPt0Idx);
 
                 if(pNewObj)
