@@ -1808,6 +1808,15 @@ void ScDocument::UnlockAdjustHeight()
         --nAdjustHeightLock;
 }
 
+bool ScDocument::HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength )
+{
+    SCTAB nTab = rPos.Tab();
+    if (!TableExists(nTab))
+        return false;
+
+    return maTabs[nTab]->HandleRefArrayForParallelism(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+}
+
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 {
     if ( rOld == rNew )

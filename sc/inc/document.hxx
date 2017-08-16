@@ -2008,6 +2008,8 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
+    void CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+
     /**
      * Transfer a series of contiguous cell values from specified position to
      * the passed container. The specified segment will become empty after the
@@ -2296,6 +2298,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
     formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
+    bool HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength );
 
     /**
      * Call this before any operations that might trigger one or more formula
@@ -2335,6 +2338,7 @@ public:
     void                ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
     void                SwapNonEmpty( sc::TableValues& rValues );
     void                finalizeOutlineImport();
+    bool                TableExists( SCTAB nTab ) const;
 
     SC_DLLPUBLIC ScColumnsRange GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 
@@ -2355,7 +2359,6 @@ private:
         ScDocument* mpDoc;
     };
 
-    bool TableExists( SCTAB nTab ) const;
     ScTable* FetchTable( SCTAB nTab );
     const ScTable* FetchTable( SCTAB nTab ) const;
 
