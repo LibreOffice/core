@@ -301,7 +301,7 @@ void ImplChain::ImplGetSpace()
     const sal_uLong nOldArraySize = mnArraySize;
     sal_uInt8*      pNewCodes;
 
-    mnArraySize = mnArraySize << 1UL;
+    mnArraySize = mnArraySize << 1;
     pNewCodes = new sal_uInt8[ mnArraySize ];
     memcpy( pNewCodes, mpCodes.get(), nOldArraySize );
     mpCodes.reset( pNewCodes );

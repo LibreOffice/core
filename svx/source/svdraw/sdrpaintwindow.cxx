@@ -173,7 +173,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
             int nR = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
             int nG = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
             int nB = comphelper::rng::uniform_int_distribution(0, 0x7F-1);
-            const Color aColor(((((nR|0x80)<<8L)|(nG|0x80))<<8L)|(nB|0x80));
+            const Color aColor(((((nR|0x80)<<8)|(nG|0x80))<<8)|(nB|0x80));
 
             mpOutputDevice->SetLineColor(aColor);
             mpOutputDevice->SetFillColor();

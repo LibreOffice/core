@@ -1425,7 +1425,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
             for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
             {
                 const long nMapY = pMapY[ nY ];
-                const long nModY = ( nOutY & 0x0FL ) << 4L;
+                const long nModY = ( nOutY & 0x0FL ) << 4;
                 int nOutX;
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
@@ -1435,14 +1435,14 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
 
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
-                                              nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
-                                              nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
+                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
+                                              nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
+                                              nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
                     pW->SetPixel( nY, nX, aIndex );
 
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16UL ] +
-                                                   nVCLGLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16UL ] +
-                                                   nVCLBLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16UL ] ) );
+                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
+                                                   nVCLGLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] +
+                                                   nVCLBLut[ ( nVCLLut[ 255-nResAlpha ] + nD ) >> 16 ] ) );
                     pAlphaW->SetPixel( nY, nX, aIndex );
                 }
             }
@@ -1518,7 +1518,7 @@ Bitmap OutputDevice::BlendBitmap(
                 {
                     nMapY = aBmpRect.Bottom() - nMapY;
                 }
-                const long nModY = ( nOutY & 0x0FL ) << 4L;
+                const long nModY = ( nOutY & 0x0FL ) << 4;
                 int nOutX;
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
@@ -1532,9 +1532,9 @@ Bitmap OutputDevice::BlendBitmap(
 
                     aDstCol = pB->GetColor( nY, nX );
                     aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pA->GetPixelIndex( nMapY, nMapX ) );
-                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
-                                              nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
-                                              nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
+                    aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16 ] +
+                                              nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16 ] +
+                                              nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16 ] ) );
                     pW->SetPixel( nY, nX, aIndex );
                 }
             }

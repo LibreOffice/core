@@ -84,7 +84,7 @@ namespace internal
                 // Costs about 17 cycles on a RISC machine with infinite
                 // instruction level parallelism (~42 basic
                 // instructions). Thus I truly doubt this pays off...
-                return reinterpret_cast< ::std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16L);
+                return reinterpret_cast< ::std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16);
             }
         };
 
