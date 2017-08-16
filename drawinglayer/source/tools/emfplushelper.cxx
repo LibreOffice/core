@@ -30,10 +30,6 @@ namespace emfplushelper
     {
     }
 
-    EmfPlusHelper::~EmfPlusHelper()
-    {
-    }
-
     void EmfPlusHelper::processEmfPlusData(
         SvMemoryStream& rMS,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation)
