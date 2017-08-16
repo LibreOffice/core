@@ -2658,8 +2658,8 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
         case ScMatrixMode::Formula :
         case ScMatrixMode::Reference :
         {
-            static SCCOL nC;
-            static SCROW nR;
+            static thread_local SCCOL nC;
+            static thread_local SCROW nR;
             ScAddress aOrg;
             if ( !GetMatrixOrigin( aOrg ) )
                 return sc::MatrixEdge::Nothing;
