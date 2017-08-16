@@ -64,7 +64,7 @@ interface XAsyncOutputMonitor {
        <code>waitForCompletion</code> has very specific semantics&mdash;it just
        blocks long enough so that any errors encountered during previous calls
        to com::sun::star::io::XOutputStream::writeBytes()
-       can reliably be reported.  It specificially does not guarantee that any
+       can reliably be reported.  It specifically does not guarantee that any
        data have safely been stored on a stable physical medium, like a hard
        disk (and it is completely unspecified whether <code>flush</code> should
        give this guarantee).</p>

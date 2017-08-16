@@ -982,7 +982,7 @@ IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated, LinkParamNone*, void)
 }
 
 // GetMySubShell / SetMySubShell: simulate old behavior,
-// so that there is only one SubShell (only whithin the 5 own SubShells)
+// so that there is only one SubShell (only within the 5 own SubShells)
 
 SfxShell* ScTabViewShell::GetMySubShell() const
 {

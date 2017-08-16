@@ -3126,7 +3126,7 @@ void AttributeOutputBase::TextFootnote( const SwFormatFootnote& rFootnote )
     TextFootnote_Impl( rFootnote );
 
     if ( !sBkmkNm.isEmpty() )
-        GetExport().AppendBookmark( sBkmkNm ); // FIXME: Why is it added twice?  Shouldn't this one go to WW8AttributeOuput::TextFootnote_Impl()?
+        GetExport().AppendBookmark( sBkmkNm ); // FIXME: Why is it added twice?  Shouldn't this one go to WW8AttributeOutput::TextFootnote_Impl()?
 }
 
 void WW8AttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )

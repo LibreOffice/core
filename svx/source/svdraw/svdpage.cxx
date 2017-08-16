@@ -105,7 +105,7 @@ SdrObjList::~SdrObjList()
 {
 
     // To avoid that the Clear() method will broadcast changes when in destruction
-    // which would call virtual methos (not allowed in destructor), the model is set
+    // which would call virtual method (not allowed in destructor), the model is set
     // to NULL here.
     pModel = nullptr;
 

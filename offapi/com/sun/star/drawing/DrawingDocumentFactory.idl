@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** @deprecated Pleas use the factory interface of the service GenericDrawingDocument.
+/** @deprecated Please use the factory interface of the service GenericDrawingDocument.
  */
 published service DrawingDocumentFactory
 {

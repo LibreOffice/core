@@ -540,7 +540,7 @@ public:
 
     /** suggests a default width for a column containing a given text
 
-        The width is calculated so that the text fits completely, plus som margin.
+        The width is calculated so that the text fits completely, plus some margin.
     */
     sal_uLong         GetDefaultColumnWidth( const OUString& _rText ) const;
 

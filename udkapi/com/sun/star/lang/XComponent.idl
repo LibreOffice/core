@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module lang {
 
  published interface XEventListener;
 
-/** allows to exclicitly free resources and break cyclic references.
+/** allows to explicitly free resources and break cyclic references.
 
     <p>Actually the real lifetime of an UNO object is controlled by
     references kept on interfaces of this object. But there are two

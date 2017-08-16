@@ -136,7 +136,7 @@ sub create_featurecomponent_table
 
     installer::windows::idtglobal::write_idt_header(\@featurecomponenttable, "featurecomponent");
 
-    # This is the first time, that features and componentes are related
+    # This is the first time, that features and components are related
     # Problem: How about created profiles, configurationfiles, services.rdb
     # -> simple solution: putting them all to the root module
     # Otherwise profiles and configurationfiles cannot be created the way, they are now created

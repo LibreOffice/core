@@ -282,7 +282,7 @@
               <value>Institution</value>
             </prop>
             <prop oor:name="AssignedFieldName">
-              <value>Institutn</value>
+              <value>Institution</value>
             </prop>
           </node>
           <node oor:name="Journal" oor:op="replace">

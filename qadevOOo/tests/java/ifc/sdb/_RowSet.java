@@ -50,7 +50,7 @@ import com.sun.star.uno.Type;
  *
  * Properties are tested in a safe way, this means that old
  * properties' values are restored to their previous values
- * after testing. These values are meaningfull for further
+ * after testing. These values are meaningful for further
  * testing. <p>
  *
  * Properties testing is automated by <code>lib.MultiPropertyTest</code>.

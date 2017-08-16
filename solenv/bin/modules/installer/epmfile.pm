@@ -1333,7 +1333,7 @@ sub replace_variables_in_shellscripts
 }
 
 ############################################################
-# Determinig the directory created by epm, in which the
+# Determining the directory created by epm, in which the
 # RPMS or Solaris packages are created.
 ############################################################
 

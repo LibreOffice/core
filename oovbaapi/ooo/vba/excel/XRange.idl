@@ -123,7 +123,7 @@ interface XRange
         [in] any Orientation, [in] any SortMethod, [in] any DataOption1,
         [in] any DataOption2, [in] any DataOption3 );
     XRange End( [in] long Direction );
-    // bizarely I have to define Character method as character otherwise
+    // bizarrely I have to define Character method as character otherwise
     // idl complains
     XCharacters characters([in] any Start, [in] any Length);
     void Delete( [in] any Shift );

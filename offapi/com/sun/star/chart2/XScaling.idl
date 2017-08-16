@@ -45,7 +45,7 @@ interface XScaling : ::com::sun::star::uno::XInterface
      * Get an interface object that conforms to a scaling rule that
      * is the reverse of the original scaling rule.
      *
-     * @return internface object that represents the reversed
+     * @return interface object that represents the reversed
      *         scaling rule.
      */
     com::sun::star::chart2::XScaling getInverseScaling();

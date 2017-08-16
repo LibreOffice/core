@@ -142,7 +142,7 @@ Returns the repository root, retrieved by educated guess...
 
 RepositoryHelper::get_initial_directory()
 
-Returns full path to the initialistion directory.
+Returns full path to the initialisation directory.
 
 =head2 EXPORT
 

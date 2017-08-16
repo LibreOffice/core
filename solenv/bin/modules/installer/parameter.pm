@@ -237,7 +237,7 @@ sub setglobalvariables
 {
     # Setting the installertype directory corresponding to the environment variable PKGFORMAT
     # The global variable $installer::globals::packageformat can only contain one package format.
-    # If PKGFORMAT cotains more than one format (for example "rpm deb") this is splitted in the
+    # If PKGFORMAT contains more than one format (for example "rpm deb") this is splitted in the
     # makefile calling the perl program.
     $installer::globals::installertypedir = $installer::globals::packageformat;
 

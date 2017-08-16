@@ -57,7 +57,7 @@ public:
         @verbatim
         This method will try to login the user at the denoted file server.
         If a network resource named \\server\username exists and this resource
-        could be connected by this user, the methos will return true and getHomeDir
+        could be connected by this user, the method will return true and getHomeDir
         will return \\server\username.
         @endverbatim
 

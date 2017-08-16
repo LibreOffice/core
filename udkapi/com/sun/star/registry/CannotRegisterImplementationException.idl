@@ -30,7 +30,7 @@
     method, but the component cannot be registered. The reason for this exception could be:<br>
     <br><ul>
     <li>the component cannot be found or cannot be loaded (missing path or classpath)
-    <li>the component doesn't provide the necessary specifactions (exported registration functions for a
+    <li>the component doesn't provide the necessary specifications (exported registration functions for a
     C++ component (shared library) or a named registration class with the appropriate methods for
     a Java component (normally a jar file)).
     </ul><br>

@@ -592,7 +592,7 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
         // #i19251#
         // The two involved fields/items are used double and contain/give different
         // values regarding to the access method. Thus, here we need to separate the access
-        // methos regarding to the kind of value accessed.
+        // methods regarding to the kind of value accessed.
         if (m_pTbxShadow->IsItemChecked(nShadowSlantId))
         {
             // #i19251#
@@ -620,7 +620,7 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
         // #i19251#
         // The two involved fields/items are used double and contain/give different
         // values regarding to the access method. Thus, here we need to separate the access
-        // methos regarding to the kind of value accessed.
+        // methods regarding to the kind of value accessed.
         if (m_pTbxShadow->IsItemChecked(nShadowSlantId))
         {
             m_pMtrFldShadowY->SetValue(pItem->GetValue());
@@ -771,7 +771,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Timer *, void)
     // #i19251#
     // The two involved fields/items are used double and contain/give different
     // values regarding to the access method. Thus, here we need to separate the access
-    // methos regarding to the kind of value accessed.
+    // method regarding to the kind of value accessed.
     if (nLastShadowTbxId == nShadowNormalId)
     {
         nValueX = GetCoreValue(*m_pMtrFldShadowX, MapUnit::Map100thMM);

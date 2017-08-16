@@ -157,7 +157,7 @@
 			</xs:element>
 			<xs:element name="Locality" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Details of Locality which is a named densely populated area  (a place) such as town, village, suburb, etc. A locality composes of many individual addresses.  Many localities exist in an administrative area or a sub adminisrative area. A locality can also have sub localities. For example, a municipality locality can have many villages associated with it which are sub localities. Example: Tamil Nadu State, Erode District, Bhavani Taluk, Paruvachi Village is a valid address in India. Tamil Nadu is the Administrative Area, Erode is the sub admin area, Bhavani is the locality, and Paruvachi is the sub locality</xs:documentation>
+					<xs:documentation>Details of Locality which is a named densely populated area  (a place) such as town, village, suburb, etc. A locality composes of many individual addresses.  Many localities exist in an administrative area or a sub administrative area. A locality can also have sub localities. For example, a municipality locality can have many villages associated with it which are sub localities. Example: Tamil Nadu State, Erode District, Bhavani Taluk, Paruvachi Village is a valid address in India. Tamil Nadu is the Administrative Area, Erode is the sub admin area, Bhavani is the locality, and Paruvachi is the sub locality</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
@@ -457,7 +457,7 @@
 					</xs:sequence>
 					<xs:attribute name="Meridian" type="MeridianCodeList">
 						<xs:annotation>
-							<xs:documentation>The collection of the coordinate numeric values for latitude amd longtitude depends on the agreed position of the meridian. Declaration of the meridian is necessary as it cannot be assumed in the data</xs:documentation>
+							<xs:documentation>The collection of the coordinate numeric values for latitude amd longitude depends on the agreed position of the meridian. Declaration of the meridian is necessary as it cannot be assumed in the data</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 					<xs:attribute name="MeridianCodeType" type="ct:String">
@@ -587,7 +587,7 @@
 			<xs:extension base="ct:String">
 				<xs:attribute name="Type" type="IdentifierElementTypeList">
 					<xs:annotation>
-						<xs:documentation>Indicates which part of number or identifier this element contains. Some "numbers" are as simple as 42 and some "numbers" are more like complex aplhanumberic identifiers as Postcodes in UK or Canada, e.g. M2H 2S5. It may be necessary to separate the "number" into sub-elements and indicate what type of information each of them contains.</xs:documentation>
+						<xs:documentation>Indicates which part of number or identifier this element contains. Some "numbers" are as simple as 42 and some "numbers" are more like complex alphanumeric identifiers as Postcodes in UK or Canada, e.g. M2H 2S5. It may be necessary to separate the "number" into sub-elements and indicate what type of information each of them contains.</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 				<xs:attributeGroup ref="ct:grAbbreviation"/>
