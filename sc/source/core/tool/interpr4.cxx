@@ -3823,8 +3823,8 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     {
         bGlobalStackInUse = true;
         if (!pGlobalStack)
-            pGlobalStack = new ScTokenStack;
-        pStackObj = pGlobalStack;
+            pGlobalStack.reset(new ScTokenStack);
+        pStackObj = pGlobalStack.get();
     }
     else
     {
@@ -3835,7 +3835,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
 
 ScInterpreter::~ScInterpreter()
 {
-    if ( pStackObj == pGlobalStack )
+    if ( pStackObj == pGlobalStack.get() )
         bGlobalStackInUse = false;
     else
         delete pStackObj;
@@ -3868,7 +3868,7 @@ void ScInterpreter::MergeCalcConfig()
 void ScInterpreter::GlobalExit()
 {
     OSL_ENSURE(!bGlobalStackInUse, "who is still using the TokenStack?");
-    DELETEZ(pGlobalStack);
+    pGlobalStack.reset();
 }
 
 namespace {
