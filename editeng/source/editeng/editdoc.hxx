@@ -836,7 +836,7 @@ class EditEngineItemPool : public SfxItemPool
 private:
     std::shared_ptr<DefItems> m_xDefItems;
 public:
-    EditEngineItemPool(bool bPersistenRefCounts);
+    EditEngineItemPool();
 protected:
     virtual ~EditEngineItemPool() override;
 };

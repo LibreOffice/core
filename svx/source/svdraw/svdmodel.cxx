@@ -174,7 +174,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     {
         pItemPool=new SdrItemPool(nullptr, false/*bLoadRefCounts*/);
         // Outliner doesn't have its own Pool, so use the EditEngine's
-        SfxItemPool* pOutlPool=EditEngine::CreatePool( false/*bLoadRefCounts*/ );
+        SfxItemPool* pOutlPool=EditEngine::CreatePool();
         // OutlinerPool as SecondaryPool of SdrPool
         pItemPool->SetSecondaryPool(pOutlPool);
         // remember that I created both pools myself
