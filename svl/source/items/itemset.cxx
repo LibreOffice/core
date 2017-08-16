@@ -1429,7 +1429,7 @@ void SfxItemSet::PutDirect(const SfxPoolItem &rItem)
     const sal_uInt16* pPtr = m_pWhichRanges;
     const sal_uInt16 nWhich = rItem.Which();
 #ifdef DBG_UTIL
-    IsPoolDefaultItem(&rItem) || m_pPool->GetSurrogate(&rItem);
+    IsPoolDefaultItem(&rItem) || m_pPool->CheckItemInPool(&rItem);
         // Only cause assertion in the callees
 #endif
     while( *pPtr )
