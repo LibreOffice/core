@@ -60,7 +60,6 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLText
     , m_eHRel( 0 )
     , m_eVRel( 0 )
     , m_bInline( false )
-    , m_pNdTopLeft( nullptr )
     , m_pSdrObject( nullptr )
     , m_pShapeAttrList( nullptr )
     , m_nShapeType( ESCHER_ShpInst_Nil )
@@ -1280,14 +1279,13 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft, const bool bOOxmlExport )
+OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
     m_eVOri = eVOri;
     m_eHRel = eHRel;
     m_eVRel = eVRel;
-    m_pNdTopLeft = pNdTopLeft;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;
 }

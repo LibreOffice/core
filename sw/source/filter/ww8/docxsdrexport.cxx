@@ -754,7 +754,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
     m_pImpl->m_bDrawingOpen = false;
 }
 
-void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft)
+void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat)
 {
     bool bSwapInPage = false;
     if (!sdrObj->GetPage())
@@ -778,7 +778,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     m_pImpl->m_rExport.VMLExporter().AddSdrObject(*sdrObj,
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
-            rVertOri.GetRelationOrient(), (&rNdTopLeft), true);
+            rVertOri.GetRelationOrient(), true);
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_pict);
 
     if (bSwapInPage)
@@ -928,7 +928,7 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
     return supported;
 }
 
-void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft, int nAnchorId)
+void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat, int nAnchorId)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;
@@ -958,13 +958,13 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrame
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-        writeVMLDrawing(sdrObj, rFrameFormat, rNdTopLeft);
+        writeVMLDrawing(sdrObj, rFrameFormat);
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Fallback);
 
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
     }
     else
-        writeVMLDrawing(sdrObj, rFrameFormat, rNdTopLeft);
+        writeVMLDrawing(sdrObj, rFrameFormat);
 
     m_pImpl->m_bDMLAndVMLDrawingOpen = false;
 }
