@@ -381,7 +381,7 @@ void SwTableFormula::RelNmsToBoxNms( const SwTable& rTable, OUString& rNewStr,
 {
     // relative name w.r.t. box name (external presentation)
     SwNode* pNd = static_cast<SwNode*>(pPara);
-    OSL_ENSURE( pNd, "Feld steht in keinem TextNode" );
+    OSL_ENSURE( pNd, "Field isn't in any TextNode" );
     const SwTableBox *pBox = rTable.GetTableBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 

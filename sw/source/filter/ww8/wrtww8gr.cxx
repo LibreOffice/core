@@ -872,7 +872,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 // It writes out all the graphics and remembers the file locations of the graphics,
 // so when writing the attributes of the items it can be patched into PicLocFc-SPRMs.
 // The search in the attributes for the Magic sal_uLong and patching
-// happens when writing the attributes. Class SwWW8WrGrf-Klasse provides with
+// happens when writing the attributes. Class SwWW8WrGrf provides with
 // GetFPos() sequentially the positions
 void SwWW8WrGrf::Write()
 {

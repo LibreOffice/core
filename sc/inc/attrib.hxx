@@ -201,7 +201,7 @@ public:
 
     ScTableListItem& operator=( const ScTableListItem &rCpy );
 
-    // "pure virtual Methoden" from SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
