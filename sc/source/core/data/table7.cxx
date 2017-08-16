@@ -433,4 +433,14 @@ void ScTable::StoreToCache(SvStream& rStrm) const
     }
 }
 
+void ScTable::RestoreFromCache(SvStream& rStrm)
+{
+    sal_uInt64 nCols = 0;
+    rStrm.ReadUInt64(nCols);
+    for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(nCols); ++nCol)
+    {
+        aCol[nCol].RestoreFromCache(rStrm);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
