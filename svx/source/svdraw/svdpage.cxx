@@ -1159,12 +1159,12 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 :   SdrObjList(&rNewModel, this),
     mpViewContact(nullptr),
-    nWdt(10L),
-    nHgt(10L),
-    nBordLft(0L),
-    nBordUpp(0L),
-    nBordRgt(0L),
-    nBordLwr(0L),
+    mnWidth(10L),
+    mnHeight(10L),
+    mnBorderLeft(0L),
+    mnBorderUpper(0L),
+    mnBorderRight(0L),
+    mnBorderLower(0L),
     mpLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
     mpSdrPageProperties(nullptr),
     mpMasterPageDescriptor(nullptr),
@@ -1184,12 +1184,12 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
 :   SdrObjList(rSrcPage.pModel, this),
     tools::WeakBase< SdrPage >(),
     mpViewContact(nullptr),
-    nWdt(rSrcPage.nWdt),
-    nHgt(rSrcPage.nHgt),
-    nBordLft(rSrcPage.nBordLft),
-    nBordUpp(rSrcPage.nBordUpp),
-    nBordRgt(rSrcPage.nBordRgt),
-    nBordLwr(rSrcPage.nBordLwr),
+    mnWidth(rSrcPage.mnWidth),
+    mnHeight(rSrcPage.mnHeight),
+    mnBorderLeft(rSrcPage.mnBorderLeft),
+    mnBorderUpper(rSrcPage.mnBorderUpper),
+    mnBorderRight(rSrcPage.mnBorderRight),
+    mnBorderLower(rSrcPage.mnBorderLower),
     mpLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
     mpSdrPageProperties(nullptr),
     mpMasterPageDescriptor(nullptr),
@@ -1257,12 +1257,12 @@ void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
     mbMaster = rSrcPage.mbMaster;
     mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
     aPrefVisiLayers = rSrcPage.aPrefVisiLayers;
-    nWdt = rSrcPage.nWdt;
-    nHgt = rSrcPage.nHgt;
-    nBordLft = rSrcPage.nBordLft;
-    nBordUpp = rSrcPage.nBordUpp;
-    nBordRgt = rSrcPage.nBordRgt;
-    nBordLwr = rSrcPage.nBordLwr;
+    mnWidth = rSrcPage.mnWidth;
+    mnHeight = rSrcPage.mnHeight;
+    mnBorderLeft = rSrcPage.mnBorderLeft;
+    mnBorderUpper = rSrcPage.mnBorderUpper;
+    mnBorderRight = rSrcPage.mnBorderRight;
+    mnBorderLower = rSrcPage.mnBorderLower;
     nPageNum = rSrcPage.nPageNum;
 
     if(rSrcPage.TRG_HasMasterPage())
@@ -1313,15 +1313,15 @@ void SdrPage::SetSize(const Size& aSiz)
 {
     bool bChanged(false);
 
-    if(aSiz.Width() != nWdt)
+    if(aSiz.Width() != mnWidth)
     {
-        nWdt = aSiz.Width();
+        mnWidth = aSiz.Width();
         bChanged = true;
     }
 
-    if(aSiz.Height() != nHgt)
+    if(aSiz.Height() != mnHeight)
     {
-        nHgt = aSiz.Height();
+        mnHeight = aSiz.Height();
         bChanged = true;
     }
 
@@ -1333,12 +1333,12 @@ void SdrPage::SetSize(const Size& aSiz)
 
 Size SdrPage::GetSize() const
 {
-    return Size(nWdt,nHgt);
+    return Size(mnWidth,mnHeight);
 }
 
-sal_Int32 SdrPage::GetWdt() const
+sal_Int32 SdrPage::GetWidth() const
 {
-    return nWdt;
+    return mnWidth;
 }
 
 void SdrPage::SetOrientation(Orientation eOri)
@@ -1361,36 +1361,36 @@ Orientation SdrPage::GetOrientation() const
     return eRet;
 }
 
-sal_Int32 SdrPage::GetHgt() const
+sal_Int32 SdrPage::GetHeight() const
 {
-    return nHgt;
+    return mnHeight;
 }
 
 void  SdrPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 nLwr)
 {
     bool bChanged(false);
 
-    if(nBordLft != nLft)
+    if(mnBorderLeft != nLft)
     {
-        nBordLft = nLft;
+        mnBorderLeft = nLft;
         bChanged = true;
     }
 
-    if(nBordUpp != nUpp)
+    if(mnBorderUpper != nUpp)
     {
-        nBordUpp = nUpp;
+        mnBorderUpper = nUpp;
         bChanged = true;
     }
 
-    if(nBordRgt != nRgt)
+    if(mnBorderRight != nRgt)
     {
-        nBordRgt = nRgt;
+        mnBorderRight = nRgt;
         bChanged = true;
     }
 
-    if(nBordLwr != nLwr)
+    if(mnBorderLower != nLwr)
     {
-        nBordLwr =  nLwr;
+        mnBorderLower =  nLwr;
         bChanged = true;
     }
 
@@ -1400,60 +1400,60 @@ void  SdrPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int
     }
 }
 
-void  SdrPage::SetLftBorder(sal_Int32 nBorder)
+void  SdrPage::SetLeftBorder(sal_Int32 nBorder)
 {
-    if(nBordLft != nBorder)
+    if(mnBorderLeft != nBorder)
     {
-        nBordLft = nBorder;
+        mnBorderLeft = nBorder;
         SetChanged();
     }
 }
 
-void  SdrPage::SetUppBorder(sal_Int32 nBorder)
+void  SdrPage::SetUpperBorder(sal_Int32 nBorder)
 {
-    if(nBordUpp != nBorder)
+    if(mnBorderUpper != nBorder)
     {
-        nBordUpp = nBorder;
+        mnBorderUpper = nBorder;
         SetChanged();
     }
 }
 
-void  SdrPage::SetRgtBorder(sal_Int32 nBorder)
+void  SdrPage::SetRightBorder(sal_Int32 nBorder)
 {
-    if(nBordRgt != nBorder)
+    if(mnBorderRight != nBorder)
     {
-        nBordRgt=nBorder;
+        mnBorderRight=nBorder;
         SetChanged();
     }
 }
 
-void  SdrPage::SetLwrBorder(sal_Int32 nBorder)
+void  SdrPage::SetLowerBorder(sal_Int32 nBorder)
 {
-    if(nBordLwr != nBorder)
+    if(mnBorderLower != nBorder)
     {
-        nBordLwr=nBorder;
+        mnBorderLower=nBorder;
         SetChanged();
     }
 }
 
-sal_Int32 SdrPage::GetLftBorder() const
+sal_Int32 SdrPage::GetLeftBorder() const
 {
-    return nBordLft;
+    return mnBorderLeft;
 }
 
-sal_Int32 SdrPage::GetUppBorder() const
+sal_Int32 SdrPage::GetUpperBorder() const
 {
-    return nBordUpp;
+    return mnBorderUpper;
 }
 
-sal_Int32 SdrPage::GetRgtBorder() const
+sal_Int32 SdrPage::GetRightBorder() const
 {
-    return nBordRgt;
+    return mnBorderRight;
 }
 
-sal_Int32 SdrPage::GetLwrBorder() const
+sal_Int32 SdrPage::GetLowerBorder() const
 {
-    return nBordLwr;
+    return mnBorderLower;
 }
 
 void SdrPage::impl_setModelForLayerAdmin(SdrModel* const pNewModel)

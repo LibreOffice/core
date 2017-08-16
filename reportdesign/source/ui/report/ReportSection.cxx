@@ -221,11 +221,11 @@ void OReportSection::fill()
     uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
     const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
     const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-    m_pPage->SetLftBorder(nLeftMargin);
-    m_pPage->SetRgtBorder(nRightMargin);
+    m_pPage->SetLeftBorder(nLeftMargin);
+    m_pPage->SetRightBorder(nRightMargin);
 
 // LLA: TODO
-//  m_pPage->SetUppBorder(-10000);
+//  m_pPage->SetUpperBorder(-10000);
 
     m_pView->SetDesignMode();
 
@@ -484,11 +484,11 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 
             if ( _rEvent.PropertyName == PROPERTY_LEFTMARGIN )
             {
-                m_pPage->SetLftBorder(nLeftMargin);
+                m_pPage->SetLeftBorder(nLeftMargin);
             }
             else if ( _rEvent.PropertyName == PROPERTY_RIGHTMARGIN )
             {
-                m_pPage->SetRgtBorder(nRightMargin);
+                m_pPage->SetRightBorder(nRightMargin);
             }
             const Size aOldPageSize = m_pPage->GetSize();
             sal_Int32 nNewHeight = 5*m_xSection->getHeight();

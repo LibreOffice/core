@@ -3056,7 +3056,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-    tools::Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
+    tools::Rectangle aRect( rPage.GetLeftBorder(), rPage.GetUpperBorder(), rPage.GetWidth()-rPage.GetRightBorder(), rPage.GetHeight()-rPage.GetLowerBorder() );
     pRet = new SdrRectObj( aRect );
     pRet->SetModel( pSdrModel );
 

@@ -79,10 +79,10 @@ protected:
     OUString getBookmarkURL() const;
     void setBookmarkURL( OUString const & rURL );
 
-    void SetLftBorder( sal_Int32 nValue );
-    void SetRgtBorder( sal_Int32 nValue );
-    void SetUppBorder( sal_Int32 nValue );
-    void SetLwrBorder( sal_Int32 nValue );
+    void SetLeftBorder( sal_Int32 nValue );
+    void SetRightBorder( sal_Int32 nValue );
+    void SetUpperBorder( sal_Int32 nValue );
+    void SetLowerBorder( sal_Int32 nValue );
 
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );

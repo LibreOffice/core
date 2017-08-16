@@ -801,9 +801,9 @@ namespace {
             const Size aPrintSize (rPrinter.GetOutputSize());
 
             const sal_Int32 nPageWidth (aPageSize.Width() + mnGap
-                - pPageToPrint->GetLftBorder() - pPageToPrint->GetRgtBorder());
+                - pPageToPrint->GetLeftBorder() - pPageToPrint->GetRightBorder());
             const sal_Int32 nPageHeight (aPageSize.Height() + mnGap
-                - pPageToPrint->GetUppBorder() - pPageToPrint->GetLwrBorder());
+                - pPageToPrint->GetUpperBorder() - pPageToPrint->GetLowerBorder());
             if (nPageWidth<=0 || nPageHeight<=0)
                 return;
 
@@ -1927,8 +1927,8 @@ private:
                 rInfo.msPageString.clear();
             rInfo.msPageString += rInfo.msTimeDate;
 
-            long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
-            long aPageHeight  = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
+            long aPageWidth   = aPageSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
+            long aPageHeight  = aPageSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder();
             // Bugfix for 44530:
             // if it was implicitly changed (Landscape/Portrait),
             // this is considered for tiling, respectively for the splitting up
@@ -2164,9 +2164,9 @@ private:
             // keep the page content at its position if it fits, otherwise
             // move it to the printable area
             const long nPageWidth (
-                rInfo.maPageSize.Width() - rPage.GetLftBorder() - rPage.GetRgtBorder());
+                rInfo.maPageSize.Width() - rPage.GetLeftBorder() - rPage.GetRightBorder());
             const long nPageHeight (
-                rInfo.maPageSize.Height() - rPage.GetUppBorder() - rPage.GetLwrBorder());
+                rInfo.maPageSize.Height() - rPage.GetUpperBorder() - rPage.GetLowerBorder());
 
             Point aOrigin ( 0, 0 );
 
