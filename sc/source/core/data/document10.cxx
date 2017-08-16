@@ -948,4 +948,13 @@ void ScDocument::StoreTabToCache(SCTAB nTab, SvStream& rStrm) const
     pTab->StoreToCache(rStrm);
 }
 
+void ScDocument::RestoreTabFromCache(SCTAB nTab, SvStream& rStrm)
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->RestoreFromCache(rStrm);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
