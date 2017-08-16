@@ -214,7 +214,7 @@ basegfx::B3DPolygon EnhancedCustomShape3d::Transformation2D::ApplySkewSettings( 
     basegfx::B3DPolygon aRetval;
 
     sal_uInt32 j;
-    for ( j = 0L; j < rPoly3D.count(); j++ )
+    for ( j = 0; j < rPoly3D.count(); j++ )
     {
         const basegfx::B3DPoint aPoint(rPoly3D.getB3DPoint(j));
         double fDepth(-( aPoint.getZ() * fSkew ) / 100.0);
@@ -748,12 +748,12 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
     basegfx::B3DPolygon aBoundVolume;
     const tools::Polygon aPolygon( rBoundRect );
 
-    for ( i = 0L; i < 4L; i++ )
+    for ( i = 0; i < 4; i++ )
     {
         aBoundVolume.append(basegfx::B3DPoint(aPolygon[ (sal_uInt16)i ].X() - aCenter.X(), aPolygon[ (sal_uInt16)i ].Y() - aCenter.Y(), fExtrusionForward));
     }
 
-    for ( i = 0L; i < 4L; i++ )
+    for ( i = 0; i < 4; i++ )
     {
         aBoundVolume.append(basegfx::B3DPoint(aPolygon[ (sal_uInt16)i ].X() - aCenter.X(), aPolygon[ (sal_uInt16)i ].Y() - aCenter.Y(), fExtrusionBackward));
     }
@@ -786,7 +786,7 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
         aBoundVolume = aTransformation2D.ApplySkewSettings( aBoundVolume );
 
     tools::Polygon aTransformed( 8 );
-    for ( i = 0L; i < 8L; i++ )
+    for ( i = 0; i < 8; i++ )
         aTransformed[ (sal_uInt16)i ] = aTransformation2D.Transform2D( aBoundVolume.getB3DPoint( i ) );
 
     return aTransformed.GetBoundRect();

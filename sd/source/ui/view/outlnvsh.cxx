@@ -1319,7 +1319,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( pFirstPara == pLastPara )
     {
         // how many pages are we before the selected page?
-        sal_uLong nPos = 0L;
+        sal_uLong nPos = 0;
         while( pFirstPara )
         {
             pFirstPara = pOlView->GetPrevTitle( pFirstPara );
@@ -1670,7 +1670,7 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     // how many paragraphs in the outline?
     sal_Int32 nTitlePara     = rOutliner.GetAbsPos( pPara );
     sal_Int32 nPara          = nTitlePara + 1;
-    sal_Int32 nParasInLayout = 0L;
+    sal_Int32 nParasInLayout = 0;
     pPara = rOutliner.GetParagraph( nPara );
     while( pPara && !::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
     {

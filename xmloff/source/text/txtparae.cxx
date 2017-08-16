@@ -770,7 +770,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             ppAddStates++;
         }
     }
-    if( (aPropStates.size() - nIgnoreProps) > 0L )
+    if( (aPropStates.size() - nIgnoreProps) > 0 )
     {
         // erase the character style, otherwise the autostyle cannot be found!
         // erase the hyperlink, otherwise the autostyle cannot be found!

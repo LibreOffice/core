@@ -81,7 +81,7 @@ public:
 
     static tools::PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const tools::Rectangle* pRect = nullptr,
-                                            const sal_uIntPtr nFlags = 0L );
+                                            const sal_uIntPtr nFlags = 0 );
 };
 
 #endif // INCLUDED_SVX_CONTDLG_HXX

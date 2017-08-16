@@ -785,8 +785,8 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
     {
         RulerLine   pHLines[2];
         RulerLine   pVLines[2];
-        long        nHOffs = 0L;
-        long        nVOffs = 0L;
+        long        nHOffs = 0;
+        long        nVOffs = 0;
         sal_uInt16      nCnt;
 
         if (mpHorizontalRuler.get() != nullptr)

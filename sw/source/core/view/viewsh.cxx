@@ -347,9 +347,9 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         aTmp1 = GetOut()->LogicToPixel( aTmp1 );
                         tools::Rectangle aTmp2( GetOut()->PixelToLogic( aTmp1 ) );
                         if ( aTmp2.Left() > aRect.Left() )
-                            aTmp1.Left() = std::max( 0L, aTmp1.Left() - 1L );
+                            aTmp1.Left() = std::max( 0L, aTmp1.Left() - 1 );
                         if ( aTmp2.Top() > aRect.Top() )
-                            aTmp1.Top() = std::max( 0L, aTmp1.Top() - 1L );
+                            aTmp1.Top() = std::max( 0L, aTmp1.Top() - 1 );
                         aTmp1.Right() += 1;
                         aTmp1.Bottom() += 1;
                         aTmp1 = GetOut()->PixelToLogic( aTmp1 );
@@ -1032,7 +1032,7 @@ void SwViewShell::SizeChgNotify()
                 {
                     Size aDocSize = GetDocSize();
                     std::stringstream ss;
-                    ss << aDocSize.Width() + 2L * DOCUMENTBORDER << ", " << aDocSize.Height() + 2L * DOCUMENTBORDER;
+                    ss << aDocSize.Width() + 2 * DOCUMENTBORDER << ", " << aDocSize.Height() + 2 * DOCUMENTBORDER;
                     OString sSize = ss.str().c_str();
                     GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
                 }

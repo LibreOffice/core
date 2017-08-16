@@ -2625,7 +2625,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
     {
         nDiv = 1;
         sal_uInt64 nBasis = ((sal_uInt64)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
-        sal_uInt64 nFracPrev = 1L, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
+        sal_uInt64 nFracPrev = 1, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
         double fRemainder = fNumber;
 
         // Use continued fraction representation of fNumber

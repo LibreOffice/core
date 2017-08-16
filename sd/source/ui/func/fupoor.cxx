@@ -627,14 +627,14 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         pEdgeObj = static_cast<SdrEdgeObj*>(pHdl->GetObj());
 
-                        if(0L == pHdl->GetPointNum())
+                        if(0 == pHdl->GetPointNum())
                         {
                             if(pEdgeObj->GetConnection(true).GetObject())
                             {
                                 bIsMoveOfConnectedHandle = true;
                             }
                         }
-                        if(1L == pHdl->GetPointNum())
+                        if(1 == pHdl->GetPointNum())
                         {
                             if(pEdgeObj->GetConnection(false).GetObject())
                             {

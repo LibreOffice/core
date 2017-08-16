@@ -127,7 +127,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         }
 
         ::tools::Rectangle           aRect;
-        sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
+        sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0, lSizeY = 0, lAngle = 0;
         sal_uInt16              nNumber = 0;
         Color               aStartColor, aEndColor;
         bool                bColor = false;
@@ -189,13 +189,13 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         // calculate number of possible copies
         aRect = mpView->GetAllMarkedRect();
 
-        if( lWidth < 0L )
+        if( lWidth < 0 )
         {
             long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
             nNumber = (sal_uInt16) std::min( nTmp, (long)nNumber );
         }
 
-        if( lHeight < 0L )
+        if( lHeight < 0 )
         {
             long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
             nNumber = (sal_uInt16) std::min( nTmp, (long)nNumber );

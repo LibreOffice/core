@@ -2427,7 +2427,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 
     return bSuccess ?
         GetPortionData().GetAccessiblePosition( aPos.nContent.GetIndex() )
-        : -1L;
+        : -1;
 }
 
 OUString SwAccessibleParagraph::getSelectedText()

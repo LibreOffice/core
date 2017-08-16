@@ -76,7 +76,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
                                         ? nEnd - nStt + 32
                                         : 0 )) );
         pStrm->WriteStream( rStream );
-        pStrm->SetStreamSize( nEnd - nStt + 1L );
+        pStrm->SetStreamSize( nEnd - nStt + 1 );
         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
         return pStrm.get();
     }

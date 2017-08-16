@@ -110,7 +110,7 @@ bool StgCompObjStream::Load()
     Seek( 8 );     // skip the first part
     sal_Int32 nMarker = 0;
     ReadInt32( nMarker );
-    if( nMarker == -1L )
+    if( nMarker == -1 )
     {
         ReadClsId( *this, m_aClsId );
         sal_Int32 nLen1 = 0;
@@ -149,7 +149,7 @@ bool StgCompObjStream::Store()
     WriteInt16( 1 );          // Version?
     WriteInt16( -2 );                     // 0xFFFE = Byte Order Indicator
     WriteInt32( 0x0A03 );         // Windows 3.10
-    WriteInt32( -1L );
+    WriteInt32( -1 );
     WriteClsId( *this, m_aClsId );             // Class ID
     WriteInt32( aAsciiUserName.getLength() + 1 );
     WriteCharPtr( aAsciiUserName.getStr() );

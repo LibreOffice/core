@@ -46,7 +46,7 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
             aCandidate.remove(nPnt);
 
 
-            if( aCandidate.count() < 2L )
+            if( aCandidate.count() < 2 )
             {
                 maPolyPolygon.remove(nPoly);
             }

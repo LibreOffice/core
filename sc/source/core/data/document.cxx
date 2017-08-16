@@ -6042,7 +6042,7 @@ void ScDocument::StylesToNames()
 
 sal_uLong ScDocument::GetCellCount() const
 {
-    sal_uLong nCellCount = 0L;
+    sal_uLong nCellCount = 0;
 
     TableContainer::const_iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)
@@ -6054,7 +6054,7 @@ sal_uLong ScDocument::GetCellCount() const
 
 sal_uLong ScDocument::GetFormulaGroupCount() const
 {
-    sal_uLong nFormulaGroupCount = 0L;
+    sal_uLong nFormulaGroupCount = 0;
 
     ScFormulaGroupIterator aIter( const_cast<ScDocument*>(this) );
     for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())

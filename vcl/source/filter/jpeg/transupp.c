@@ -30,7 +30,7 @@ jdiv_round_up (long a, long b)
 /* Compute a/b rounded up to next integer, ie, ceil(a/b) */
 /* Assumes a >= 0, b > 0 */
 {
-  return (a + b - 1L) / b;
+  return (a + b - 1) / b;
 }
 
 #if JPEG_LIB_VERSION >= 70

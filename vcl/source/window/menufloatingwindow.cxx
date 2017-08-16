@@ -1278,7 +1278,7 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
         {
-            ImplScroll( pData->GetDelta() > 0L );
+            ImplScroll( pData->GetDelta() > 0 );
             MouseMove( MouseEvent( GetPointerPosPixel(), 0 ) );
         }
     }

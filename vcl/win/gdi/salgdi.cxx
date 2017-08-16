@@ -170,14 +170,14 @@ void ImplInitSalGDI()
             pBIH->biPlanes = 1;
             pBIH->biBitCount = 24;
 
-            for( n = 0; n < 256L; n++ )
+            for( n = 0; n < 256; n++ )
                 pSalData->mpDitherDiff[ n ] = n - ( n & 248L );
 
-            for( n = 0; n < 256L; n++ )
+            for( n = 0; n < 256; n++ )
                 pSalData->mpDitherLow[ n ] = (BYTE) ( n & 248 );
 
-            for( n = 0; n < 256L; n++ )
-                pSalData->mpDitherHigh[ n ] = (BYTE) std::min( pSalData->mpDitherLow[ n ] + 8L, 255L );
+            for( n = 0; n < 256; n++ )
+                pSalData->mpDitherHigh[ n ] = (BYTE) std::min( pSalData->mpDitherLow[ n ] + 8, 255 );
         }
     }
     else if ( (nRasterCaps & RC_PALETTE) && (nBitCount == 8) )
@@ -248,13 +248,13 @@ void ImplInitSalGDI()
             for( n = 0; n < nDitherPalCount; n++ )
                 pColors[ n ] = (short)( n + DITHER_MAX_SYSCOLOR );
 
-            for( n = 0; n < 256L; n++ )
+            for( n = 0; n < 256; n++ )
                 pSalData->mpDitherDiff[ n ] = n % 51L;
 
-            for( n = 0; n < 256L; n++ )
+            for( n = 0; n < 256; n++ )
                 pSalData->mpDitherLow[ n ] = (BYTE) ( n / 51L );
 
-            for( n = 0; n < 256L; n++ )
+            for( n = 0; n < 256; n++ )
                 pSalData->mpDitherHigh[ n ] = (BYTE)std::min( pSalData->mpDitherLow[ n ] + 1, 5 );
         }
 

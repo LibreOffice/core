@@ -30,7 +30,7 @@
 // previews that are currently not visible.  The visible previews are all
 // held in memory at all times.  This default is used only when the
 // configuration does not have a value.
-static const sal_Int32 MAXIMAL_CACHE_SIZE = 4L*1024L*1024L;
+static const sal_Int32 MAXIMAL_CACHE_SIZE = 4*1024L*1024L;
 
 using namespace ::com::sun::star::uno;
 

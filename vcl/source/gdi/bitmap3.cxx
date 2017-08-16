@@ -37,7 +37,7 @@
 #include "octree.hxx"
 #include "BitmapScaleConvolution.hxx"
 
-#define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
+#define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10)|((sal_uLong)(_def_cG)<<5)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255))
 
 #define CALC_ERRORS                                                             \
@@ -1227,9 +1227,9 @@ bool Bitmap::ImplDitherMatrix()
 
         if( pReadAcc->HasPalette() )
         {
-            for( sal_uLong nY = 0UL; nY < nHeight; nY++ )
+            for( sal_uLong nY = 0; nY < nHeight; nY++ )
             {
-                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
+                for( sal_uLong nX = 0, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
                 {
                     const BitmapColor aCol( pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) ) );
                     const sal_uLong nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
@@ -1244,9 +1244,9 @@ bool Bitmap::ImplDitherMatrix()
         }
         else
         {
-            for( sal_uLong nY = 0UL; nY < nHeight; nY++ )
+            for( sal_uLong nY = 0; nY < nHeight; nY++ )
             {
-                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
+                for( sal_uLong nX = 0, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
                 {
                     const BitmapColor aCol( pReadAcc->GetPixel( nY, nX ) );
                     const sal_uLong nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
@@ -1777,7 +1777,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
         if( pWAcc )
         {
-            const sal_uLong nSize = 32768UL * sizeof( sal_uLong );
+            const sal_uLong nSize = 32768 * sizeof( sal_uLong );
             sal_uLong* pColBuf = static_cast<sal_uLong*>(rtl_allocateMemory( nSize ));
             const long nWidth = pWAcc->Width();
             const long nHeight = pWAcc->Height();

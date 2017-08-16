@@ -90,8 +90,8 @@ void LwpPoint::Read(LwpObjectStream *pStrm)
 */
 void LwpPoint::Reset()
 {
-    m_nX=0L;
-    m_nY=0L;
+    m_nX=0;
+    m_nY=0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

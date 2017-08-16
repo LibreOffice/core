@@ -459,14 +459,14 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 nStartPara = 0;
                 nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
             }
-            long nUpper = 0L;
+            long nUpper = 0;
             for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
                 const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
                 const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( rItems.Get( EE_PARA_ULSPACE ) );
                 nUpper = std::max( nUpper, (long)rItem.GetUpper() );
             }
-            if( nUpper == 0L )
+            if( nUpper == 0 )
                 rSet.DisableItem( SID_PARASPACE_DECREASE );
         }
         else

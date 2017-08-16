@@ -1260,7 +1260,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
                 // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
                 // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
-                for( sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); i++ )
+                for( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); i++ )
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
 
@@ -1411,7 +1411,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
                 // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
                 // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
-                for( sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); i++ )
+                for( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); i++ )
                 {
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
 

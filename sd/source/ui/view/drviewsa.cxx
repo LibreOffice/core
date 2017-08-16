@@ -315,7 +315,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     SetName ("DrawViewShell");
 
-    mnLockCount = 0UL;
+    mnLockCount = 0;
 
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 

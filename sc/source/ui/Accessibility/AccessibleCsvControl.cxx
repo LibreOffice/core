@@ -292,7 +292,7 @@ static sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
         nApiLimit = lcl_GetApiPos( nExp );
     }
     sal_Int32 nRelPos = nApiPos - nApiBase;
-    return nRulerPos + nRelPos / nDiv * 10 + ::std::max( nRelPos % nDiv - nDiv + 10L, 0L );
+    return nRulerPos + nRelPos / nDiv * 10 + ::std::max<sal_Int32>( nRelPos % nDiv - nDiv + 10, 0 );
 }
 
 /** Expands the sequence's size and returns the base index of the new inserted elements. */

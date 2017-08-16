@@ -668,7 +668,7 @@ namespace basegfx
         const sal_uInt32 nInitialDivisions(3);
         B2DPolygon aInitialPolygon;
 
-        // as start make a fix division, creates nInitialDivisions + 2L points
+        // as start make a fix division, creates nInitialDivisions + 2 points
         aInitialPolygon.append(getStartPoint());
         adaptiveSubdivideByCount(aInitialPolygon, nInitialDivisions);
 

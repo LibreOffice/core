@@ -117,7 +117,7 @@ XMLCharContext::XMLCharContext(
                 IsXMLToken( aLocalName, XML_C ) )
             {
                 sal_Int32 nTmp = xAttrList->getValueByIndex(i).toInt32();
-                if( nTmp > 0L )
+                if( nTmp > 0 )
                 {
                     if( nTmp > USHRT_MAX )
                         m_nCount = USHRT_MAX;
@@ -1829,7 +1829,7 @@ XMLParaContext::XMLParaContext(
         case XML_TOK_TEXT_P_LEVEL:
             {
                 sal_Int32 nTmp = rValue.toInt32();
-                if( nTmp > 0L )
+                if( nTmp > 0 )
                 {
                     if( nTmp > 127 )
                         nTmp = 127;

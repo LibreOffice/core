@@ -608,7 +608,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         {
             if(bLayoutRTL)
             {
-                aDrawingRectPixel.Left() = 0L;
+                aDrawingRectPixel.Left() = 0;
             }
             else
             {

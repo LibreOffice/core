@@ -276,7 +276,7 @@ namespace drawinglayer
 
             if(nTempStartWidth)
             {
-                if(nTempStartWidth < 0L)
+                if(nTempStartWidth < 0)
                 {
                     fStartWidth = ((double)(-nTempStartWidth) * fWidth) * 0.01;
                 }
@@ -299,7 +299,7 @@ namespace drawinglayer
 
             if(nTempEndWidth)
             {
-                if(nTempEndWidth < 0L)
+                if(nTempEndWidth < 0)
                 {
                     fEndWidth = ((double)(-nTempEndWidth) * fWidth) * 0.01;
                 }
@@ -882,7 +882,7 @@ namespace drawinglayer
             css::drawing::ProjectionMode aProjectionMode(css::drawing::ProjectionMode_PARALLEL);
             const sal_uInt16 nProjectionValue(static_cast<const Svx3DPerspectiveItem&>(rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue());
 
-            if(1L == nProjectionValue)
+            if(1 == nProjectionValue)
             {
                 aProjectionMode = css::drawing::ProjectionMode_PERSPECTIVE;
             }
@@ -897,15 +897,15 @@ namespace drawinglayer
             css::drawing::ShadeMode aShadeMode(css::drawing::ShadeMode_FLAT);
             const sal_uInt16 nShadeValue(static_cast<const Svx3DShadeModeItem&>(rSet.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue());
 
-            if(1L == nShadeValue)
+            if(1 == nShadeValue)
             {
                 aShadeMode = css::drawing::ShadeMode_PHONG;
             }
-            else if(2L == nShadeValue)
+            else if(2 == nShadeValue)
             {
                 aShadeMode = css::drawing::ShadeMode_SMOOTH;
             }
-            else if(3L == nShadeValue)
+            else if(3 == nShadeValue)
             {
                 aShadeMode = css::drawing::ShadeMode_DRAFT;
             }

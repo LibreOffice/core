@@ -487,8 +487,8 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     pRet->Put( SdOptionsSnapItem( pOptions, pFrameView ) );
 
     // TP_SCALE:
-    sal_uInt32 nW = 10L;
-    sal_uInt32 nH = 10L;
+    sal_uInt32 nW = 10;
+    sal_uInt32 nH = 10;
     sal_Int32  nX;
     sal_Int32  nY;
     if( pDocSh )

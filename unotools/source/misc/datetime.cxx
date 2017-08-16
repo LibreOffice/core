@@ -36,7 +36,7 @@ namespace
         bool bNeg = false;
         rValue = 0;
 
-        sal_Int32 nPos = 0L;
+        sal_Int32 nPos = 0;
         sal_Int32 nLen = rString.getLength();
 
         // skip white space

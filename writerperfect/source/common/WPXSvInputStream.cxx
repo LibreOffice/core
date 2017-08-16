@@ -507,12 +507,12 @@ const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned
 long WPXSvInputStreamImpl::tell()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
-        return -1L;
+        return -1;
     else
     {
         const sal_Int64 tmpPosition = mxSeekable->getPosition();
         if ((tmpPosition < 0) || (tmpPosition > LONG_MAX))
-            return -1L;
+            return -1;
         return (long)tmpPosition;
     }
 }

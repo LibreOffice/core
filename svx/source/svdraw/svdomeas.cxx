@@ -339,7 +339,7 @@ long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, lon
 
     if(bCenter)
     {
-        nHeight /= 2L;
+        nHeight /= 2;
     }
 
     return nHeight;
@@ -1090,14 +1090,14 @@ sal_uInt32 SdrMeasureObj::GetPointCount() const
 
 Point SdrMeasureObj::GetPoint(sal_uInt32 i) const
 {
-     return (0L == i) ? aPt1 : aPt2;
+     return (0 == i) ? aPt1 : aPt2;
 }
 
 void SdrMeasureObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
-    if (0L == i)
+    if (0 == i)
         aPt1=rPnt;
-    if (1L == i)
+    if (1 == i)
         aPt2=rPnt;
     SetRectsDirty();
     SetTextDirty();
