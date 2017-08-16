@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7d231506",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-16T10:07:40Z",
+      "side": 1,
+      "message": "This dynamic_cast seems to be superfluous. If GetHRuler returns a SvxRuler reference, and GetPageWidth is a member of SvxRuler class, GetHRuler().GetPageWidth() should just work. No need to dynamic cast it here, no ?",
+      "revId": "022edfd8a4a29c277c34c841a9ea13f08d5cebec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9d20c1f9",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-08-16T10:07:40Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "022edfd8a4a29c277c34c841a9ea13f08d5cebec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
