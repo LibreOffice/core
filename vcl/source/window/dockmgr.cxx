@@ -273,25 +273,14 @@ DockingManager::DockingManager()
 
 DockingManager::~DockingManager()
 {
-    ::std::vector< ImplDockingWindowWrapper* >::iterator p;
-    p = mDockingWindows.begin();
-    for(; p != mDockingWindows.end(); ++p )
-    {
-        delete (*p);
-    }
-    mDockingWindows.clear();
 }
 
 ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const vcl::Window *pWindow )
 {
-    ::std::vector< ImplDockingWindowWrapper* >::iterator p;
-    p = mDockingWindows.begin();
-    while( p != mDockingWindows.end() )
+    for( auto& xWrapper : mvDockingWindows )
     {
-        if( (*p)->mpDockingWindow == pWindow )
-            return (*p);
-        else
-            ++p;
+        if( xWrapper->mpDockingWindow == pWindow )
+            return xWrapper.get();
     }
     return nullptr;
 }
@@ -375,26 +364,18 @@ void DockingManager::AddWindow( const vcl::Window *pWindow )
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
         return;
-    else
-        pWrapper = new ImplDockingWindowWrapper( pWindow );
-
-    mDockingWindows.push_back( pWrapper );
+    mvDockingWindows.emplace_back( new ImplDockingWindowWrapper( pWindow ) );
 }
 
 void DockingManager::RemoveWindow( const vcl::Window *pWindow )
 {
-    ::std::vector< ImplDockingWindowWrapper* >::iterator p;
-    p = mDockingWindows.begin();
-    while( p != mDockingWindows.end() )
+    for( auto it = mvDockingWindows.begin(); it != mvDockingWindows.end(); ++it )
     {
-        if( (*p)->mpDockingWindow == pWindow )
+        if( (*it)->mpDockingWindow == pWindow )
         {
-            delete (*p);
-            mDockingWindows.erase( p );
+            mvDockingWindows.erase( it );
             break;
         }
-        else
-            ++p;
     }
 }
 
