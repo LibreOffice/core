@@ -191,8 +191,7 @@ private:
     static ScCalcConfig& GetOrCreateGlobalConfig();
     static ScCalcConfig *mpGlobalConfig;
 
-    static ScTokenStack*    pGlobalStack;
-    static bool             bGlobalStackInUse;
+    static thread_local std::unique_ptr<ScTokenStack>  pGlobalStack;
 
     ScCalcConfig maCalcConfig;
     formula::FormulaTokenIterator aCode;
