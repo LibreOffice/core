@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_60136e5d",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2357,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-16T14:21:42Z",
+      "side": 1,
+      "message": "Late comment: I don\u0027t think this is correct handling. So far UNO API calls could repeatedly lock the document without any side effect of incrementing or decrementing a lock counter, and any unlock would really unlock. I think the old behavior should be restored.",
+      "revId": "4aca927040f67c2b68f412234e37ec740346a005",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
