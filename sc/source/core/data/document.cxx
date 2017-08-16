@@ -6769,4 +6769,70 @@ ScMutationGuard::~ScMutationGuard()
 #endif
 }
 
+thread_local std::map<const ScDocument *, ScDocumentThreadSpecific> ScDocument::maThreadSpecific;
+
+bool ScDocument::IsInInterpreter() const
+{
+    if (maThreadSpecific.find(this) != maThreadSpecific.end())
+        return maThreadSpecific[this].nInterpretLevel != 0;
+    return false;
+}
+
+void ScDocument::IncInterpretLevel()
+{
+    if (maThreadSpecific[this].nInterpretLevel < USHRT_MAX)
+        maThreadSpecific[this].nInterpretLevel++;
+}
+
+void ScDocument::DecInterpretLevel()
+{
+    if (maThreadSpecific[this].nInterpretLevel)
+        maThreadSpecific[this].nInterpretLevel--;
+}
+
+sal_uInt16 ScDocument::GetMacroInterpretLevel()
+{
+    if (maThreadSpecific.find(this) != maThreadSpecific.end())
+        return maThreadSpecific[this].nMacroInterpretLevel;
+    return 0;
+}
+
+void ScDocument::IncMacroInterpretLevel()
+{
+    if (maThreadSpecific[this].nMacroInterpretLevel < USHRT_MAX)
+        maThreadSpecific[this].nMacroInterpretLevel++;
+}
+
+void ScDocument::DecMacroInterpretLevel()
+{
+    if (maThreadSpecific[this].nMacroInterpretLevel)
+        maThreadSpecific[this].nMacroInterpretLevel--;
+}
+
+bool ScDocument::IsInInterpreterTableOp() const
+{
+    if (maThreadSpecific.find(this) != maThreadSpecific.end())
+        return maThreadSpecific[this].nInterpreterTableOpLevel != 0;
+    return false;
+}
+
+void ScDocument::IncInterpreterTableOpLevel()
+{
+    if (maThreadSpecific[this].nInterpreterTableOpLevel < USHRT_MAX)
+        maThreadSpecific[this].nInterpreterTableOpLevel++;
+}
+
+void ScDocument::DecInterpreterTableOpLevel()
+{
+    if (maThreadSpecific[this].nInterpreterTableOpLevel)
+        maThreadSpecific[this].nInterpreterTableOpLevel--;
+}
+
+ScRecursionHelper& ScDocument::GetRecursionHelper()
+{
+    if (!maThreadSpecific[this].pRecursionHelper)
+        maThreadSpecific[this].pRecursionHelper = CreateRecursionHelperInstance();
+    return *maThreadSpecific[this].pRecursionHelper;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
