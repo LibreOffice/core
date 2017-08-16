@@ -14,3 +14,28 @@ Dumps the graphic objects and their position and size in pixel.
 
 Dumps the SfxItemSet representing the cell properties' of the
 current selection as a xml file. The file will be named dump.xml
+
+=== The Cache Format ===
+
+ScDocument::StoreTabToCache allows storing the content (not the formatting)
+of a table to a binary cache format.
+
+The format is column orientated which allows quick serialization of the table.
+
+Header:
+    * Number of Columns: 64 bit unsigned integer
+
+Column:
+    * Column Index: 64 bit unsigned integer
+    * Column Size: 64 bit unsigned integer
+    * For each cell type block a new ColumnBlock
+
+ColumnBlock:
+    * Start Row: 64 bit unsigned integer
+    * Block Size: 64 bit unsigned integer
+    * Type: 8 bit unsigned integer
+        - 0 : empty
+        - 1 : numeric
+            * for each cell: 64 bit IEEE 754 double precision value
+        - 2 : string
+            * for each cell: 32 bit signed string length followed by string length bytes of the string (UTF-8)

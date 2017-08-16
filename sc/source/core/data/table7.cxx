@@ -417,4 +417,20 @@ void ScTable::finalizeOutlineImport()
     }
 }
 
+void ScTable::StoreToCache(SvStream& rStrm) const
+{
+    SCCOL nStartCol = 0;
+    SCCOL nEndCol = MAXCOL;
+    SCROW nStartRow = 0;
+    SCROW nEndRow = MAXROW;
+
+    GetDataArea(nStartCol, nStartRow, nEndCol, nEndRow, false, false);
+
+    rStrm.WriteUInt64(nEndCol + 1);
+    for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
+    {
+        aCol[nCol].StoreToCache(rStrm);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

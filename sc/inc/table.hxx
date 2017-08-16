@@ -1008,6 +1008,8 @@ public:
 
     void finalizeOutlineImport();
 
+    void StoreToCache(SvStream& rStrm) const;
+
 #if DUMP_COLUMN_STORAGE
     void DumpColumnStorage( SCCOL nCol ) const;
 #endif

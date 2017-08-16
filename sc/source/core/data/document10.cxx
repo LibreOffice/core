@@ -939,4 +939,13 @@ sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
     return *mpDataMapper;
 }
 
+void ScDocument::StoreTabToCache(SCTAB nTab, SvStream& rStrm) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->StoreToCache(rStrm);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
