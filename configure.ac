@@ -1374,7 +1374,9 @@ libo_FUZZ_ARG_ENABLE(extension-update,
 
 libo_FUZZ_ARG_ENABLE(release-build,
     AS_HELP_STRING([--enable-release-build],
-        [Enable release build.
+        [Enable release build. Note that the "release build" choice is orthogonal to
+         whether symbols are present, debug info is generated, or optimization
+         is done.
          See http://wiki.documentfoundation.org/Development/DevBuild]),
 ,)
 
