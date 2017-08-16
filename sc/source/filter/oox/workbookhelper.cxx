@@ -36,9 +36,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/token/properties.hxx>
-#include <vcl/msgbox.hxx>
 #include "addressconverter.hxx"
-#include "biffcodec.hxx"
 #include "connectionsbuffer.hxx"
 #include "defnamesbuffer.hxx"
 #include "excelchartconverter.hxx"
@@ -57,7 +55,6 @@
 #include "viewsettings.hxx"
 #include "workbooksettings.hxx"
 #include "worksheetbuffer.hxx"
-#include "scmod.hxx"
 #include "docsh.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
@@ -72,12 +69,8 @@
 #include "globstr.hrc"
 
 #include "formulabuffer.hxx"
-#include <vcl/mapmod.hxx>
 #include "editutil.hxx"
 #include <editeng/editstat.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <officecfg/Office/Calc.hxx>
 
 #include <memory>
 

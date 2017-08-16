@@ -20,14 +20,13 @@
 #include <memory>
 #include "worksheetsettings.hxx"
 
+#include <oox/core/binarycodec.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "biffcodec.hxx"
 #include "pagesettings.hxx"
-#include "workbooksettings.hxx"
 #include "tabprotection.hxx"
 #include "document.hxx"
 
