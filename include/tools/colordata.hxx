@@ -93,7 +93,7 @@ constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
 #define COL_AUTHOR9_LIGHT           RGB_COLORDATA(255, 231, 199)
 
 #define COLOR_CHANNEL_MERGE( _def_cDst, _def_cSrc, _def_cSrcTrans ) \
-    ((sal_uInt8)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst)))>>8L))
+    ((sal_uInt8)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8)|(_def_cDst)))>>8))
 
 #endif
 

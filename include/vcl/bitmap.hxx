@@ -775,7 +775,7 @@ inline sal_uLong Bitmap::GetColorCount() const
 inline sal_uLong Bitmap::GetSizeBytes() const
 {
     const Size aSizePix( GetSizePixel() );
-    return( ( (sal_uLong) aSizePix.Width() * aSizePix.Height() * GetBitCount() ) >> 3UL );
+    return( ( (sal_uLong) aSizePix.Width() * aSizePix.Height() * GetBitCount() ) >> 3 );
 }
 
 #endif // INCLUDED_VCL_BITMAP_HXX

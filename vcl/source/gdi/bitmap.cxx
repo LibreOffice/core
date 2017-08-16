@@ -506,7 +506,7 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
             const long  nWidth = pAcc->Width();
             const long  nHeight = pAcc->Height();
             const long  nWidth1 = nWidth - 1L;
-            const long  nWidth_2 = nWidth >> 1L;
+            const long  nWidth_2 = nWidth >> 1;
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
@@ -533,7 +533,7 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
             std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[ nScanSize ]);
             const long  nHeight = pAcc->Height();
             const long  nHeight1 = nHeight - 1L;
-            const long  nHeight_2 = nHeight >> 1L;
+            const long  nHeight_2 = nHeight >> 1;
 
             for( long nY = 0L, nOther = nHeight1; nY < nHeight_2; nY++, nOther-- )
             {

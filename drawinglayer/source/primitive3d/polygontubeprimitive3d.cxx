@@ -301,7 +301,7 @@ namespace drawinglayer
                 basegfx::B2DLineJoin aLineJoin)
             {
                 // nSegments is for whole circle, adapt to half circle
-                const sal_uInt32 nVerSeg(nSegments >> 1L);
+                const sal_uInt32 nVerSeg(nSegments >> 1);
                 std::vector< BasePrimitive3D* > aResultVector;
 
                 if(nVerSeg)

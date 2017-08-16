@@ -102,25 +102,25 @@ void BitmapReadAccess::SetPixelForN8BitTcMask(Scanline pScanline, long nX, const
 BitmapColor BitmapReadAccess::GetPixelForN16BitTcMsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask)
 {
     BitmapColor aColor;
-    rMask.GetColorFor16BitMSB( aColor, pScanline + ( nX << 1UL ) );
+    rMask.GetColorFor16BitMSB( aColor, pScanline + ( nX << 1 ) );
     return aColor;
 }
 
 void BitmapReadAccess::SetPixelForN16BitTcMsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
 {
-    rMask.SetColorFor16BitMSB( rBitmapColor, pScanline + ( nX << 1UL ) );
+    rMask.SetColorFor16BitMSB( rBitmapColor, pScanline + ( nX << 1 ) );
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN16BitTcLsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask)
 {
     BitmapColor aColor;
-    rMask.GetColorFor16BitLSB( aColor, pScanline + ( nX << 1UL ) );
+    rMask.GetColorFor16BitLSB( aColor, pScanline + ( nX << 1 ) );
     return aColor;
 }
 
 void BitmapReadAccess::SetPixelForN16BitTcLsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
 {
-    rMask.SetColorFor16BitLSB( rBitmapColor, pScanline + ( nX << 1UL ) );
+    rMask.SetColorFor16BitLSB( rBitmapColor, pScanline + ( nX << 1 ) );
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN24BitTcBgr(ConstScanline pScanline, long nX, const ColorMask&)
@@ -250,13 +250,13 @@ void BitmapReadAccess::SetPixelForN32BitTcRgba(Scanline pScanline, long nX, cons
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask)
 {
     BitmapColor aColor;
-    rMask.GetColorFor32Bit( aColor, pScanline + ( nX << 2UL ) );
+    rMask.GetColorFor32Bit( aColor, pScanline + ( nX << 2 ) );
     return aColor;
 }
 
 void BitmapReadAccess::SetPixelForN32BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
 {
-    rMask.SetColorFor32Bit( rBitmapColor, pScanline + ( nX << 2UL ) );
+    rMask.SetColorFor32Bit( rBitmapColor, pScanline + ( nX << 2 ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

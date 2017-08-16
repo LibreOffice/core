@@ -1229,13 +1229,13 @@ bool Bitmap::ImplDitherMatrix()
         {
             for( sal_uLong nY = 0UL; nY < nHeight; nY++ )
             {
-                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
+                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
                 {
                     const BitmapColor aCol( pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) ) );
                     const sal_uLong nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const sal_uLong nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
-                    const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
-                    const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
+                    const sal_uLong nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16;
+                    const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16;
+                    const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16;
 
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );
@@ -1246,13 +1246,13 @@ bool Bitmap::ImplDitherMatrix()
         {
             for( sal_uLong nY = 0UL; nY < nHeight; nY++ )
             {
-                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4UL; nX < nWidth; nX++ )
+                for( sal_uLong nX = 0UL, nModY = ( nY & 0x0FUL ) << 4; nX < nWidth; nX++ )
                 {
                     const BitmapColor aCol( pReadAcc->GetPixel( nY, nX ) );
                     const sal_uLong nD = nVCLDitherLut[ nModY + ( nX & 0x0FUL ) ];
-                    const sal_uLong nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16UL;
-                    const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16UL;
-                    const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16UL;
+                    const sal_uLong nR = ( nVCLLut[ aCol.GetRed() ] + nD ) >> 16;
+                    const sal_uLong nG = ( nVCLLut[ aCol.GetGreen() ] + nD ) >> 16;
+                    const sal_uLong nB = ( nVCLLut[ aCol.GetBlue() ] + nD ) >> 16;
 
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ nR ] + nVCLGLut[ nG ] + nVCLBLut[ nB ] ) );
                     pWriteAcc->SetPixel( nY, nX, aIndex );

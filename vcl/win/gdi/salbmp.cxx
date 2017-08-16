@@ -986,7 +986,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                 {
                     if( bRLE4 )
                     {
-                        nCountByte = nRunByte >> 1UL;
+                        nCountByte = nRunByte >> 1;
 
                         for( i = 0; i < nCountByte; i++ )
                         {
