@@ -23,10 +23,12 @@ public:
 
     void testCacheSimple();
     void testCacheString();
+    void testCacheFormula();
 
     CPPUNIT_TEST_SUITE(ScCacheTest);
     CPPUNIT_TEST(testCacheSimple);
     CPPUNIT_TEST(testCacheString);
+    CPPUNIT_TEST(testCacheFormula);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -81,6 +83,36 @@ void ScCacheTest::testCacheString()
     CPPUNIT_ASSERT_EQUAL(OUString("TestString"), aNewDoc.GetString(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("asjdaonfdssda"), aNewDoc.GetString(0, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("da"), aNewDoc.GetString(0, 2, 0));
+}
+
+void ScCacheTest::testCacheFormula()
+{
+    ScDocument aDoc;
+    aDoc.InsertTab(0, "test");
+
+    aDoc.SetString(0, 0, 0, "=B1");
+    aDoc.SetString(0, 1, 0, "=B2");
+    aDoc.SetString(0, 2, 0, "=B3");
+    aDoc.SetString(0, 3, 0, "=B4");
+    aDoc.SetString(0, 4, 0, "=B5");
+    aDoc.SetString(0, 5, 0, "=B1");
+
+    SvMemoryStream aStrm;
+    aDoc.StoreTabToCache(0, aStrm);
+
+    aStrm.Seek(0);
+
+    ScDocument aNewDoc;
+    aNewDoc.InsertTab(0, "test");
+    aNewDoc.RestoreTabFromCache(0, aStrm);
+
+    std::vector<OUString> aFormulas = {"=B1", "=B2", "=B3", "=B4", "=B5", "=B1"};
+    for (SCROW nRow = 0; nRow <= 5; ++nRow)
+    {
+        OUString aFormula;
+        aNewDoc.GetFormula(0, nRow, 0, aFormula);
+        CPPUNIT_ASSERT_EQUAL(aFormulas[nRow], aFormula);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCacheTest);
