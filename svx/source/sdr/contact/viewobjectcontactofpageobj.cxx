@@ -164,7 +164,7 @@ void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRang
 
     if(pStartPage && !rRange.isEmpty())
     {
-        const basegfx::B2DRange aPageRange(0.0, 0.0, (double)pStartPage->GetWdt(), (double)pStartPage->GetHgt());
+        const basegfx::B2DRange aPageRange(0.0, 0.0, (double)pStartPage->GetWidth(), (double)pStartPage->GetHeight());
 
         if(rRange.overlaps(aPageRange))
         {

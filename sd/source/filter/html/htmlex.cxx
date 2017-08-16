@@ -1689,12 +1689,12 @@ bool HtmlExport::CreateHtmlForPresPages()
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
-                sal_uLong nPageWidth = pPage->GetSize().Width() - pPage->GetLftBorder() -
-                                   pPage->GetRgtBorder();
+                sal_uLong nPageWidth = pPage->GetSize().Width() - pPage->GetLeftBorder() -
+                                   pPage->GetRightBorder();
 
                 // BoundRect is relative to the physical page origin, not the
                 // origin of ordinates
-                aRect.Move(-pPage->GetLftBorder(), -pPage->GetUppBorder());
+                aRect.Move(-pPage->GetLeftBorder(), -pPage->GetUpperBorder());
 
                 double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
                 aRect.Left()   = (long)(aRect.Left() * fLogicToPixel);
@@ -1744,8 +1744,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                  GetRectangle(false));
 
                                 // conversion into pixel coordinates
-                                aArea.Move(aLogPos.X() - pPage->GetLftBorder(),
-                                           aLogPos.Y() - pPage->GetUppBorder());
+                                aArea.Move(aLogPos.X() - pPage->GetLeftBorder(),
+                                           aLogPos.Y() - pPage->GetUpperBorder());
                                 aArea.Left()   = (long)(aArea.Left() * fLogicToPixel);
                                 aArea.Top()    = (long)(aArea.Top() * fLogicToPixel);
                                 aArea.Right()  = (long)(aArea.Right() * fLogicToPixel);
@@ -1759,8 +1759,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 Point aCenter(static_cast<IMapCircleObject*>(pArea)->
                                                  GetCenter(false));
-                                aCenter += Point(aLogPos.X() - pPage->GetLftBorder(),
-                                                 aLogPos.Y() - pPage->GetUppBorder());
+                                aCenter += Point(aLogPos.X() - pPage->GetLeftBorder(),
+                                                 aLogPos.Y() - pPage->GetUpperBorder());
                                 aCenter.X() = (long)(aCenter.X() * fLogicToPixel);
                                 aCenter.Y() = (long)(aCenter.Y() * fLogicToPixel);
 
@@ -1777,8 +1777,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 tools::Polygon aArea(static_cast<IMapPolygonObject*>(pArea)->GetPolygon(false));
                                 aStr.append(CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()),
-                                                                  Size(aLogPos.X() - pPage->GetLftBorder(),
-                                                                       aLogPos.Y() - pPage->GetUppBorder()),
+                                                                  Size(aLogPos.X() - pPage->GetLeftBorder(),
+                                                                       aLogPos.Y() - pPage->GetUpperBorder()),
                                                                   fLogicToPixel, aURL));
                             }
                             break;
@@ -1882,7 +1882,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                   pObject->GetObjIdentifier() == OBJ_PLIN ||
                                   pObject->GetObjIdentifier() == OBJ_POLY))
                         {
-                            aStr.append(CreateHTMLPolygonArea(static_cast<SdrPathObj*>(pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef));
+                            aStr.append(CreateHTMLPolygonArea(static_cast<SdrPathObj*>(pObject)->GetPathPoly(), Size(-pPage->GetLeftBorder(), -pPage->GetUpperBorder()), fLogicToPixel, aHRef));
                         }
                         // something completely different: use the BoundRect
                         else

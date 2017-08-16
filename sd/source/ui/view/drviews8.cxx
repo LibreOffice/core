@@ -75,8 +75,8 @@ void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-                    aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+                    aPageSize.Width() -= pPage->GetLeftBorder() + pPage->GetRightBorder();
+                    aPageSize.Height() -= pPage->GetUpperBorder() + pPage->GetLowerBorder();
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
@@ -96,7 +96,7 @@ void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
                     }
 
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
-                    aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
+                    aPnt += Point( pPage->GetLeftBorder(), pPage->GetUpperBorder() );
                     Rectangle   aRect( aPnt, aBmpSize );
                     SdrGrafObj* pGrafObj = nullptr;
                     bool        bInsertNewObject = true;

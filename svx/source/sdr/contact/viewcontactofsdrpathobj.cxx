@@ -96,8 +96,8 @@ namespace sdr
                 //polygon chain to cover the length in applyLineDashing if this
                 //line is dashed
                 const SdrPage* pPage = GetPathObj().GetPage();
-                sal_Int32 nPageWidth = pPage ? pPage->GetWdt() : 0;
-                sal_Int32 nPageHeight = pPage ? pPage->GetHgt() : 0;
+                sal_Int32 nPageWidth = pPage ? pPage->GetWidth() : 0;
+                sal_Int32 nPageHeight = pPage ? pPage->GetHeight() : 0;
 
                 //But, see tdf#101187, only do this if our generous clip region
                 //would not over flow into a tiny clip region

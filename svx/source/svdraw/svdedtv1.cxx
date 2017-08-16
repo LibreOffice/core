@@ -1825,9 +1825,9 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
             }
             else
             {
-                aBound=Rectangle(pPage->GetLftBorder(),pPage->GetUppBorder(),
-                                 pPage->GetWdt()-pPage->GetRgtBorder(),
-                                 pPage->GetHgt()-pPage->GetLwrBorder());
+                aBound=Rectangle(pPage->GetLeftBorder(),pPage->GetUpperBorder(),
+                                 pPage->GetWidth()-pPage->GetRightBorder(),
+                                 pPage->GetHeight()-pPage->GetLowerBorder());
             }
         }
         else

@@ -141,8 +141,8 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
     if(mpPage)
     {
-        aPgOrg.X()=mpPage->GetLftBorder();
-        aPgOrg.Y()=mpPage->GetUppBorder();
+        aPgOrg.X()=mpPage->GetLeftBorder();
+        aPgOrg.Y()=mpPage->GetUpperBorder();
     }
     mbHasMarked = false;
     aLayerVisi.SetAll();
@@ -239,14 +239,14 @@ void SdrPageView::Hide()
 Rectangle SdrPageView::GetPageRect() const
 {
     if (GetPage()==nullptr) return Rectangle();
-    return Rectangle(Point(),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
+    return Rectangle(Point(),Size(GetPage()->GetWidth()+1,GetPage()->GetHeight()+1));
 }
 
 void SdrPageView::InvalidateAllWin()
 {
     if(IsVisible() && GetPage())
     {
-        Rectangle aRect(Point(0,0),Size(GetPage()->GetWdt()+1,GetPage()->GetHgt()+1));
+        Rectangle aRect(Point(0,0),Size(GetPage()->GetWidth()+1,GetPage()->GetHeight()+1));
         aRect.Union(GetPage()->GetAllObjBoundRect());
         GetView().InvalidateAllWin(aRect);
     }
@@ -495,10 +495,10 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         long nWrX=0;
         long nWrY=0;
         Point aOrg(aPgOrg);
-        long x1=GetPage()->GetLftBorder()+1+nWrX;
-        long x2=GetPage()->GetWdt()-GetPage()->GetRgtBorder()-1+nWrY;
-        long y1=GetPage()->GetUppBorder()+1+nWrX;
-        long y2=GetPage()->GetHgt()-GetPage()->GetLwrBorder()-1+nWrY;
+        long x1=GetPage()->GetLeftBorder()+1+nWrX;
+        long x2=GetPage()->GetWidth()-GetPage()->GetRightBorder()-1+nWrY;
+        long y1=GetPage()->GetUpperBorder()+1+nWrX;
+        long y2=GetPage()->GetHeight()-GetPage()->GetLowerBorder()-1+nWrY;
         const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
         sal_uInt16 nGridPaintAnz=1;

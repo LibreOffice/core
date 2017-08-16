@@ -22,20 +22,20 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrMetricItem makeSdrTextMinFrameHeightItem(long nHgt) {
-    return SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, nHgt);
+inline SdrMetricItem makeSdrTextMinFrameHeightItem(long mnHeight) {
+    return SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, mnHeight);
 }
 
-inline SdrMetricItem makeSdrTextMaxFrameHeightItem(long nHgt) {
-    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, nHgt);
+inline SdrMetricItem makeSdrTextMaxFrameHeightItem(long mnHeight) {
+    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEHEIGHT, mnHeight);
 }
 
-inline SdrMetricItem makeSdrTextMinFrameWidthItem(long nWdt) {
-    return SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, nWdt);
+inline SdrMetricItem makeSdrTextMinFrameWidthItem(long mnWidth) {
+    return SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, mnWidth);
 };
 
-inline SdrMetricItem makeSdrTextMaxFrameWidthItem(long nWdt) {
-    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, nWdt);
+inline SdrMetricItem makeSdrTextMaxFrameWidthItem(long mnWidth) {
+    return SdrMetricItem(SDRATTR_TEXT_MAXFRAMEWIDTH, mnWidth);
 }
 
 #endif

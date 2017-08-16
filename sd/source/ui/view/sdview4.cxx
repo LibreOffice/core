@@ -195,8 +195,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         pNewGrafObj = new SdrGrafObj( rGraphic, Rectangle( rPos, aSize ) );
         SdrPage* pPage = pPV->GetPage();
         Size aPageSize( pPage->GetSize() );
-        aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-        aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+        aPageSize.Width()  -= pPage->GetLeftBorder() + pPage->GetRightBorder();
+        aPageSize.Height() -= pPage->GetUpperBorder() + pPage->GetLowerBorder();
         pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), true );
 
         SdrInsertFlags nOptions = SdrInsertFlags::SETDEFLAYER;
