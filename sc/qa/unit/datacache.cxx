@@ -49,6 +49,15 @@ void ScCacheTest::testCacheSimple()
 
     SvMemoryStream aStrm;
     aDoc.StoreTabToCache(0, aStrm);
+
+    aStrm.Seek(0);
+
+    ScDocument aNewDoc;
+    aNewDoc.InsertTab(0, "test");
+    aNewDoc.RestoreTabFromCache(0, aStrm);
+
+    for (SCROW nRow = 0; nRow < 10; ++nRow)
+        ASSERT_DOUBLES_EQUAL(nRow, aNewDoc.GetValue(0, nRow, 0));
 }
 
 void ScCacheTest::testCacheString()
@@ -62,6 +71,16 @@ void ScCacheTest::testCacheString()
 
     SvMemoryStream aStrm;
     aDoc.StoreTabToCache(0, aStrm);
+
+    aStrm.Seek(0);
+
+    ScDocument aNewDoc;
+    aNewDoc.InsertTab(0, "test");
+    aNewDoc.RestoreTabFromCache(0, aStrm);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("TestString"), aNewDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("asjdaonfdssda"), aNewDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("da"), aNewDoc.GetString(0, 2, 0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCacheTest);
