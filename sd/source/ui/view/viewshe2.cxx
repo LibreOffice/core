@@ -490,8 +490,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
                             pPage->GetSize(),
-                            pPage->GetLftBorder(), pPage->GetRgtBorder(),
-                            pPage->GetUppBorder(), pPage->GetLwrBorder(),
+                            pPage->GetLeftBorder(), pPage->GetRightBorder(),
+                            pPage->GetUpperBorder(), pPage->GetLowerBorder(),
                             pPage->GetOrientation(),
                             pPage->GetPaperBin(),
                             pPage->IsBackgroundFullSize(),
@@ -538,8 +538,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
                                 pPage->GetSize(),
-                                pPage->GetLftBorder(), pPage->GetRgtBorder(),
-                                pPage->GetUppBorder(), pPage->GetLwrBorder(),
+                                pPage->GetLeftBorder(), pPage->GetRightBorder(),
+                                pPage->GetUpperBorder(), pPage->GetLowerBorder(),
                                 pPage->GetOrientation(),
                                 pPage->GetPaperBin(),
                                 pPage->IsBackgroundFullSize(),
@@ -611,7 +611,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     UpdateScrollBars();
 
-    Point aNewOrigin(pPage->GetLftBorder(), pPage->GetUppBorder());
+    Point aNewOrigin(pPage->GetLeftBorder(), pPage->GetUpperBorder());
 
     if (pView)
     {

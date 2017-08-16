@@ -536,7 +536,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         if( pRefPage )
         {
             pHandoutPage->SetSize(pRefPage->GetSize());
-            pHandoutPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
+            pHandoutPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
         }
         else
         {
@@ -552,10 +552,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         SdPage* pHandoutMPage = AllocSdPage(true);
         pHandoutMPage->SetSize( pHandoutPage->GetSize() );
         pHandoutMPage->SetPageKind(PageKind::Handout);
-        pHandoutMPage->SetBorder( pHandoutPage->GetLftBorder(),
-                                  pHandoutPage->GetUppBorder(),
-                                  pHandoutPage->GetRgtBorder(),
-                                  pHandoutPage->GetLwrBorder() );
+        pHandoutMPage->SetBorder( pHandoutPage->GetLeftBorder(),
+                                  pHandoutPage->GetUpperBorder(),
+                                  pHandoutPage->GetRightBorder(),
+                                  pHandoutPage->GetLowerBorder() );
         InsertMasterPage(pHandoutMPage, 0);
         pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
 
@@ -575,7 +575,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
             if( pRefPage )
             {
                 pPage->SetSize( pRefPage->GetSize() );
-                pPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
+                pPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
             }
             else if (meDocType == DocumentType::Draw)
             {
@@ -626,10 +626,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         // Insert master page, then register this with the page
         SdPage* pMPage = AllocSdPage(true);
         pMPage->SetSize( pPage->GetSize() );
-        pMPage->SetBorder( pPage->GetLftBorder(),
-                           pPage->GetUppBorder(),
-                           pPage->GetRgtBorder(),
-                           pPage->GetLwrBorder() );
+        pMPage->SetBorder( pPage->GetLeftBorder(),
+                           pPage->GetUpperBorder(),
+                           pPage->GetRightBorder(),
+                           pPage->GetLowerBorder() );
         InsertMasterPage(pMPage, 1);
         pPage->TRG_SetMasterPage( *pMPage );
         if( bClipboard )
@@ -644,7 +644,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         if( pRefPage )
         {
             pNotesPage->SetSize( pRefPage->GetSize() );
-            pNotesPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
+            pNotesPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
         }
         else
         {
@@ -669,10 +669,10 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         SdPage* pNotesMPage = AllocSdPage(true);
         pNotesMPage->SetSize( pNotesPage->GetSize() );
         pNotesMPage->SetPageKind(PageKind::Notes);
-        pNotesMPage->SetBorder( pNotesPage->GetLftBorder(),
-                                pNotesPage->GetUppBorder(),
-                                pNotesPage->GetRgtBorder(),
-                                pNotesPage->GetLwrBorder() );
+        pNotesMPage->SetBorder( pNotesPage->GetLeftBorder(),
+                                pNotesPage->GetUpperBorder(),
+                                pNotesPage->GetRightBorder(),
+                                pNotesPage->GetLowerBorder() );
         InsertMasterPage(pNotesMPage, 2);
         pNotesPage->TRG_SetMasterPage( *pNotesMPage );
         if( bClipboard )
@@ -1216,10 +1216,10 @@ void SdDrawDocument::CheckMasterPages()
                     if( pRefNotesPage )
                     {
                         pNewNotesPage->SetSize( pRefNotesPage->GetSize() );
-                        pNewNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
-                                                pRefNotesPage->GetUppBorder(),
-                                                pRefNotesPage->GetRgtBorder(),
-                                                pRefNotesPage->GetLwrBorder() );
+                        pNewNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
+                                                pRefNotesPage->GetUpperBorder(),
+                                                pRefNotesPage->GetRightBorder(),
+                                                pRefNotesPage->GetLowerBorder() );
                     }
                     InsertMasterPage(pNewNotesPage,  nPage );
                     pNewNotesPage->SetLayoutName( pPage->GetLayoutName() );
@@ -1287,10 +1287,10 @@ sal_uInt16 SdDrawDocument::CreatePage (
     // Set the size here since else the presobj autolayout
     // will be wrong.
     pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
-    pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
-                              pPreviousStandardPage->GetUppBorder(),
-                              pPreviousStandardPage->GetRgtBorder(),
-                              pPreviousStandardPage->GetLwrBorder() );
+    pStandardPage->SetBorder( pPreviousStandardPage->GetLeftBorder(),
+                              pPreviousStandardPage->GetUpperBorder(),
+                              pPreviousStandardPage->GetRightBorder(),
+                              pPreviousStandardPage->GetLowerBorder() );
 
     // Use master page of current page.
     pStandardPage->TRG_SetMasterPage(pPreviousStandardPage->TRG_GetMasterPage());
@@ -1476,10 +1476,10 @@ void SdDrawDocument::SetupNewPage (
     if (pPreviousPage != nullptr)
     {
         pPage->SetSize( pPreviousPage->GetSize() );
-        pPage->SetBorder( pPreviousPage->GetLftBorder(),
-            pPreviousPage->GetUppBorder(),
-            pPreviousPage->GetRgtBorder(),
-            pPreviousPage->GetLwrBorder() );
+        pPage->SetBorder( pPreviousPage->GetLeftBorder(),
+            pPreviousPage->GetUpperBorder(),
+            pPreviousPage->GetRightBorder(),
+            pPreviousPage->GetLowerBorder() );
     }
     pPage->SetName(sPageName);
 

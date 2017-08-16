@@ -425,7 +425,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             {
                 mpDrawView->BrkAction();
                 SdPage* pPage = static_cast<SdPage*>( mpDrawView->GetSdrPageView()->GetPage() );
-                Point aOrg(pPage->GetLftBorder(), pPage->GetUppBorder());
+                Point aOrg(pPage->GetLeftBorder(), pPage->GetUpperBorder());
                 mpDrawView->GetSdrPageView()->SetPageOrigin(aOrg);
                 GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
             }

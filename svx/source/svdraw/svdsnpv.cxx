@@ -303,12 +303,12 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if (mbBordVisible && bBordSnap) {
         SdrPage* pPage=pPV->GetPage();
-        long xs=pPage->GetWdt();
-        long ys=pPage->GetHgt();
-        long lft=pPage->GetLftBorder();
-        long rgt=pPage->GetRgtBorder();
-        long upp=pPage->GetUppBorder();
-        long lwr=pPage->GetLwrBorder();
+        long xs=pPage->GetWidth();
+        long ys=pPage->GetHeight();
+        long lft=pPage->GetLeftBorder();
+        long rgt=pPage->GetRightBorder();
+        long upp=pPage->GetUpperBorder();
+        long lwr=pPage->GetLowerBorder();
         long a;
         a=x- lft    ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left margin
         a=x-(xs-rgt); if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // right margin

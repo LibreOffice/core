@@ -215,7 +215,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageFill::cre
     {
         const SdrPage& rPage = getPage();
 
-        const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+        const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWidth(), (double)rPage.GetHeight());
         const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
         Color aPageFillColor;
 
@@ -344,7 +344,7 @@ bool ViewObjectContactOfInnerPageBorder::isPrimitiveVisible(const DisplayInfo& r
 
     const SdrPage& rPage = getPage();
 
-    if(!rPage.GetLftBorder() && !rPage.GetUppBorder() && !rPage.GetRgtBorder() && !rPage.GetLwrBorder())
+    if(!rPage.GetLeftBorder() && !rPage.GetUpperBorder() && !rPage.GetRightBorder() && !rPage.GetLowerBorder())
     {
         return false;
     }
@@ -454,10 +454,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageGrid::cre
         const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
         basegfx::B2DHomMatrix aGridMatrix;
-        aGridMatrix.set(0, 0, (double)(rPage.GetWdt() - (rPage.GetRgtBorder() + rPage.GetLftBorder())));
-        aGridMatrix.set(1, 1, (double)(rPage.GetHgt() - (rPage.GetLwrBorder() + rPage.GetUppBorder())));
-        aGridMatrix.set(0, 2, (double)rPage.GetLftBorder());
-        aGridMatrix.set(1, 2, (double)rPage.GetUppBorder());
+        aGridMatrix.set(0, 0, (double)(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
+        aGridMatrix.set(1, 1, (double)(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
+        aGridMatrix.set(0, 2, (double)rPage.GetLeftBorder());
+        aGridMatrix.set(1, 2, (double)rPage.GetUpperBorder());
 
         const Size aRaw(rView.GetGridCoarse());
         const Size aFine(rView.GetGridFine());

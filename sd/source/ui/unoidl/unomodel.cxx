@@ -508,10 +508,10 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
             pStandardPage = mpDoc->AllocSdPage(false);
 
         pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
-        pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
-                                    pPreviousStandardPage->GetUppBorder(),
-                                    pPreviousStandardPage->GetRgtBorder(),
-                                    pPreviousStandardPage->GetLwrBorder() );
+        pStandardPage->SetBorder( pPreviousStandardPage->GetLeftBorder(),
+                                    pPreviousStandardPage->GetUpperBorder(),
+                                    pPreviousStandardPage->GetRightBorder(),
+                                    pPreviousStandardPage->GetLowerBorder() );
         pStandardPage->SetOrientation( pPreviousStandardPage->GetOrientation() );
         pStandardPage->SetName(OUString());
 
@@ -543,10 +543,10 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
             pNotesPage = mpDoc->AllocSdPage(false);
 
         pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
-        pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
-                                pPreviousNotesPage->GetUppBorder(),
-                                pPreviousNotesPage->GetRgtBorder(),
-                                pPreviousNotesPage->GetLwrBorder() );
+        pNotesPage->SetBorder( pPreviousNotesPage->GetLeftBorder(),
+                                pPreviousNotesPage->GetUpperBorder(),
+                                pPreviousNotesPage->GetRightBorder(),
+                                pPreviousNotesPage->GetLowerBorder() );
         pNotesPage->SetOrientation( pPreviousNotesPage->GetOrientation() );
         pNotesPage->SetName(OUString());
         pNotesPage->SetPageKind(PageKind::Notes);
@@ -3165,10 +3165,10 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         // create and insert new draw masterpage
         SdPage* pMPage = mpModel->mpDoc->AllocSdPage(true);
         pMPage->SetSize( pPage->GetSize() );
-        pMPage->SetBorder( pPage->GetLftBorder(),
-                           pPage->GetUppBorder(),
-                           pPage->GetRgtBorder(),
-                           pPage->GetLwrBorder() );
+        pMPage->SetBorder( pPage->GetLeftBorder(),
+                           pPage->GetUpperBorder(),
+                           pPage->GetRightBorder(),
+                           pPage->GetLowerBorder() );
         pMPage->SetLayoutName( aLayoutName );
         pDoc->InsertMasterPage(pMPage,  (sal_uInt16)nInsertPos);
 
@@ -3183,10 +3183,10 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         SdPage* pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
         pMNotesPage->SetSize( pRefNotesPage->GetSize() );
         pMNotesPage->SetPageKind(PageKind::Notes);
-        pMNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),
-                                pRefNotesPage->GetUppBorder(),
-                                pRefNotesPage->GetRgtBorder(),
-                                pRefNotesPage->GetLwrBorder() );
+        pMNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
+                                pRefNotesPage->GetUpperBorder(),
+                                pRefNotesPage->GetRightBorder(),
+                                pRefNotesPage->GetLowerBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
         pDoc->InsertMasterPage(pMNotesPage,  (sal_uInt16)nInsertPos + 1);
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);

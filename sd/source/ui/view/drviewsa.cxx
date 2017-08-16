@@ -438,10 +438,10 @@ void DrawViewShell::SetupPage (Size const &rSize,
             }
             if( bMargin )
             {
-                pPage->SetLftBorder(nLeft);
-                pPage->SetRgtBorder(nRight);
-                pPage->SetUppBorder(nUpper);
-                pPage->SetLwrBorder(nLower);
+                pPage->SetLeftBorder(nLeft);
+                pPage->SetRightBorder(nRight);
+                pPage->SetUpperBorder(nUpper);
+                pPage->SetLowerBorder(nLower);
             }
 
             if ( mePageKind == PageKind::Standard )
@@ -470,10 +470,10 @@ void DrawViewShell::SetupPage (Size const &rSize,
             }
             if( bMargin )
             {
-                pPage->SetLftBorder(nLeft);
-                pPage->SetRgtBorder(nRight);
-                pPage->SetUppBorder(nUpper);
-                pPage->SetLwrBorder(nLower);
+                pPage->SetLeftBorder(nLeft);
+                pPage->SetRightBorder(nRight);
+                pPage->SetUpperBorder(nUpper);
+                pPage->SetLowerBorder(nLower);
             }
 
             if ( mePageKind == PageKind::Standard )
@@ -511,7 +511,7 @@ void DrawViewShell::SetupPage (Size const &rSize,
 
     UpdateScrollBars();
 
-    Point aNewOrigin(mpActualPage->GetLftBorder(), mpActualPage->GetUppBorder());
+    Point aNewOrigin(mpActualPage->GetLeftBorder(), mpActualPage->GetUpperBorder());
     GetView()->GetSdrPageView()->SetPageOrigin(aNewOrigin);
 
     GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);

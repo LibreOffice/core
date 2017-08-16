@@ -137,10 +137,10 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // page with title & structuring!
                     SdPage* pPage = mpDoc->AllocSdPage(false);
                     pPage->SetSize(pActualPage->GetSize() );
-                    pPage->SetBorder(pActualPage->GetLftBorder(),
-                                     pActualPage->GetUppBorder(),
-                                     pActualPage->GetRgtBorder(),
-                                     pActualPage->GetLwrBorder() );
+                    pPage->SetBorder(pActualPage->GetLeftBorder(),
+                                     pActualPage->GetUpperBorder(),
+                                     pActualPage->GetRightBorder(),
+                                     pActualPage->GetLowerBorder() );
                     pPage->SetName(OUString());
 
                     // insert page after current page
@@ -159,10 +159,10 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // notes-page
                     SdPage* pNotesPage = mpDoc->AllocSdPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
-                    pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
-                                          pActualNotesPage->GetUppBorder(),
-                                          pActualNotesPage->GetRgtBorder(),
-                                          pActualNotesPage->GetLwrBorder() );
+                    pNotesPage->SetBorder(pActualNotesPage->GetLeftBorder(),
+                                          pActualNotesPage->GetUpperBorder(),
+                                          pActualNotesPage->GetRightBorder(),
+                                          pActualNotesPage->GetLowerBorder() );
                     pNotesPage->SetPageKind(PageKind::Notes);
                     pNotesPage->SetName(OUString());
 

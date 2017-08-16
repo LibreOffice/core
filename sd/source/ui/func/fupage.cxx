@@ -253,10 +253,10 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, (sal_uInt8)mpPage->GetPaperBin() );
     aNewAttr.Put( aPaperBinItem );
 
-    SvxLRSpaceItem aLRSpaceItem( (sal_uInt16)mpPage->GetLftBorder(), (sal_uInt16)mpPage->GetRgtBorder(), 0, 0, mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE));
+    SvxLRSpaceItem aLRSpaceItem( (sal_uInt16)mpPage->GetLeftBorder(), (sal_uInt16)mpPage->GetRightBorder(), 0, 0, mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE));
     aNewAttr.Put( aLRSpaceItem );
 
-    SvxULSpaceItem aULSpaceItem( (sal_uInt16)mpPage->GetUppBorder(), (sal_uInt16)mpPage->GetLwrBorder(), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
+    SvxULSpaceItem aULSpaceItem( (sal_uInt16)mpPage->GetUpperBorder(), (sal_uInt16)mpPage->GetLowerBorder(), mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
     aNewAttr.Put( aULSpaceItem );
 
     // Applikation
@@ -543,7 +543,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetLeft();
         nRight = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetRight();
 
-        if( mpPage->GetLftBorder() != nLeft || mpPage->GetRgtBorder() != nRight )
+        if( mpPage->GetLeftBorder() != nLeft || mpPage->GetRightBorder() != nRight )
             bSetPageSizeAndBorder = true;
 
     }
@@ -554,7 +554,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         nUpper = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetUpper();
         nLower = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetLower();
 
-        if( mpPage->GetUppBorder() != nUpper || mpPage->GetLwrBorder() != nLower )
+        if( mpPage->GetUpperBorder() != nUpper || mpPage->GetLowerBorder() != nLower )
             bSetPageSizeAndBorder = true;
     }
 
@@ -583,14 +583,14 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if (nLeft == -1 && nUpper != -1)
     {
         bSetPageSizeAndBorder = true;
-        nLeft  = mpPage->GetLftBorder();
-        nRight = mpPage->GetRgtBorder();
+        nLeft  = mpPage->GetLeftBorder();
+        nRight = mpPage->GetRightBorder();
     }
     else if (nLeft != -1 && nUpper == -1)
     {
         bSetPageSizeAndBorder = true;
-        nUpper = mpPage->GetUppBorder();
-        nLower = mpPage->GetLwrBorder();
+        nUpper = mpPage->GetUpperBorder();
+        nLower = mpPage->GetLowerBorder();
     }
 
     if( bSetPageSizeAndBorder || !mbMasterPage )

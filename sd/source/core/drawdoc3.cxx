@@ -421,18 +421,18 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     // Note that the pointers are used later on as general page pointers.
     SdPage* pRefPage = GetSdPage(0, PageKind::Standard);
     Size  aSize(pRefPage->GetSize());
-    sal_Int32 nLeft  = pRefPage->GetLftBorder();
-    sal_Int32 nRight = pRefPage->GetRgtBorder();
-    sal_Int32 nUpper = pRefPage->GetUppBorder();
-    sal_Int32 nLower = pRefPage->GetLwrBorder();
+    sal_Int32 nLeft  = pRefPage->GetLeftBorder();
+    sal_Int32 nRight = pRefPage->GetRightBorder();
+    sal_Int32 nUpper = pRefPage->GetUpperBorder();
+    sal_Int32 nLower = pRefPage->GetLowerBorder();
     Orientation eOrient = pRefPage->GetOrientation();
 
     SdPage* pNPage = GetSdPage(0, PageKind::Notes);
     Size aNSize(pNPage->GetSize());
-    sal_Int32 nNLeft  = pNPage->GetLftBorder();
-    sal_Int32 nNRight = pNPage->GetRgtBorder();
-    sal_Int32 nNUpper = pNPage->GetUppBorder();
-    sal_Int32 nNLower = pNPage->GetLwrBorder();
+    sal_Int32 nNLeft  = pNPage->GetLeftBorder();
+    sal_Int32 nNRight = pNPage->GetRightBorder();
+    sal_Int32 nNUpper = pNPage->GetUpperBorder();
+    sal_Int32 nNLower = pNPage->GetLowerBorder();
     Orientation eNOrient = pNPage->GetOrientation();
 
     // Adapt page size and margins to those of the later pages?
@@ -459,10 +459,10 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         SdPage* pBMPage = pBookmarkDoc->GetSdPage(0,PageKind::Standard);
 
         if (pBMPage->GetSize()        != pRefPage->GetSize()         ||
-            pBMPage->GetLftBorder()   != pRefPage->GetLftBorder()    ||
-            pBMPage->GetRgtBorder()   != pRefPage->GetRgtBorder()    ||
-            pBMPage->GetUppBorder()   != pRefPage->GetUppBorder()    ||
-            pBMPage->GetLwrBorder()   != pRefPage->GetLwrBorder())
+            pBMPage->GetLeftBorder()   != pRefPage->GetLeftBorder()    ||
+            pBMPage->GetRightBorder()   != pRefPage->GetRightBorder()    ||
+            pBMPage->GetUpperBorder()   != pRefPage->GetUpperBorder()    ||
+            pBMPage->GetLowerBorder()   != pRefPage->GetLowerBorder())
         {
             OUString aStr(SdResId(STR_SCALE_OBJECTS));
             sal_uInt16 nBut = ScopedVclPtrInstance<QueryBox>(nullptr, WB_YES_NO_CANCEL, aStr)->Execute();
@@ -1759,30 +1759,30 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (pSourceDoc != this)
         {
             Size aSize(rOldMaster.GetSize());
-            ::tools::Rectangle aBorderRect(rOldMaster.GetLftBorder(),
-                                  rOldMaster.GetUppBorder(),
-                                  rOldMaster.GetRgtBorder(),
-                                  rOldMaster.GetLwrBorder());
+            ::tools::Rectangle aBorderRect(rOldMaster.GetLeftBorder(),
+                                  rOldMaster.GetUpperBorder(),
+                                  rOldMaster.GetRightBorder(),
+                                  rOldMaster.GetLowerBorder());
             pMaster->ScaleObjects(aSize, aBorderRect, true);
             pMaster->SetSize(aSize);
-            pMaster->SetBorder(rOldMaster.GetLftBorder(),
-                               rOldMaster.GetUppBorder(),
-                               rOldMaster.GetRgtBorder(),
-                               rOldMaster.GetLwrBorder());
+            pMaster->SetBorder(rOldMaster.GetLeftBorder(),
+                               rOldMaster.GetUpperBorder(),
+                               rOldMaster.GetRightBorder(),
+                               rOldMaster.GetLowerBorder());
             pMaster->SetOrientation( rOldMaster.GetOrientation() );
             pMaster->SetAutoLayout(pMaster->GetAutoLayout());
 
             aSize = rOldNotesMaster.GetSize();
-            ::tools::Rectangle aNotesBorderRect(rOldNotesMaster.GetLftBorder(),
-                                       rOldNotesMaster.GetUppBorder(),
-                                       rOldNotesMaster.GetRgtBorder(),
-                                       rOldNotesMaster.GetLwrBorder());
+            ::tools::Rectangle aNotesBorderRect(rOldNotesMaster.GetLeftBorder(),
+                                       rOldNotesMaster.GetUpperBorder(),
+                                       rOldNotesMaster.GetRightBorder(),
+                                       rOldNotesMaster.GetLowerBorder());
             pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, true);
             pNotesMaster->SetSize(aSize);
-            pNotesMaster->SetBorder(rOldNotesMaster.GetLftBorder(),
-                                    rOldNotesMaster.GetUppBorder(),
-                                    rOldNotesMaster.GetRgtBorder(),
-                                    rOldNotesMaster.GetLwrBorder());
+            pNotesMaster->SetBorder(rOldNotesMaster.GetLeftBorder(),
+                                    rOldNotesMaster.GetUpperBorder(),
+                                    rOldNotesMaster.GetRightBorder(),
+                                    rOldNotesMaster.GetLowerBorder());
             pNotesMaster->SetOrientation( rOldNotesMaster.GetOrientation() );
             pNotesMaster->SetAutoLayout(pNotesMaster->GetAutoLayout());
 
@@ -1817,10 +1817,10 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         pMaster = AllocSdPage(true);
         pMaster->SetSize(pSelectedPage->GetSize());
-        pMaster->SetBorder(pSelectedPage->GetLftBorder(),
-                           pSelectedPage->GetUppBorder(),
-                           pSelectedPage->GetRgtBorder(),
-                           pSelectedPage->GetLwrBorder() );
+        pMaster->SetBorder(pSelectedPage->GetLeftBorder(),
+                           pSelectedPage->GetUpperBorder(),
+                           pSelectedPage->GetRightBorder(),
+                           pSelectedPage->GetLowerBorder() );
         pMaster->SetName(aName);
         pMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pMaster);
@@ -1833,10 +1833,10 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         pNotesMaster = AllocSdPage(true);
         pNotesMaster->SetPageKind(PageKind::Notes);
         pNotesMaster->SetSize(pNotes->GetSize());
-        pNotesMaster->SetBorder(pNotes->GetLftBorder(),
-                                pNotes->GetUppBorder(),
-                                pNotes->GetRgtBorder(),
-                                pNotes->GetLwrBorder() );
+        pNotesMaster->SetBorder(pNotes->GetLeftBorder(),
+                                pNotes->GetUpperBorder(),
+                                pNotes->GetRightBorder(),
+                                pNotes->GetLowerBorder() );
         pNotesMaster->SetName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pNotesMaster);

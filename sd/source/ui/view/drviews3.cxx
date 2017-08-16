@@ -526,12 +526,12 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
                         SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
                                                 pPage,
-                                                pPage->GetLftBorder(),
-                                                pPage->GetRgtBorder(),
+                                                pPage->GetLeftBorder(),
+                                                pPage->GetRightBorder(),
                                                 nLeft, nRight);
                         pUndoGroup->AddAction(pUndo);
-                        pPage->SetLftBorder(nLeft);
-                        pPage->SetRgtBorder(nRight);
+                        pPage->SetLeftBorder(nLeft);
+                        pPage->SetRightBorder(nRight);
                     }
                     nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
 
@@ -540,12 +540,12 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
                         SdUndoAction* pUndo = new SdPageLRUndoAction(GetDoc(),
                                                 pPage,
-                                                pPage->GetLftBorder(),
-                                                pPage->GetRgtBorder(),
+                                                pPage->GetLeftBorder(),
+                                                pPage->GetRightBorder(),
                                                 nLeft, nRight);
                         pUndoGroup->AddAction(pUndo);
-                        pPage->SetLftBorder(nLeft);
-                        pPage->SetRgtBorder(nRight);
+                        pPage->SetLeftBorder(nLeft);
+                        pPage->SetRightBorder(nRight);
                     }
                     InvalidateWindows();
                 }
@@ -592,12 +592,12 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
                         SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
                                                 pPage,
-                                                pPage->GetUppBorder(),
-                                                pPage->GetLwrBorder(),
+                                                pPage->GetUpperBorder(),
+                                                pPage->GetLowerBorder(),
                                                 nUpper, nLower);
                         pUndoGroup->AddAction(pUndo);
-                        pPage->SetUppBorder(nUpper);
-                        pPage->SetLwrBorder(nLower);
+                        pPage->SetUpperBorder(nUpper);
+                        pPage->SetLowerBorder(nLower);
                     }
                     nPageCnt = GetDoc()->GetMasterSdPageCount(mePageKind);
 
@@ -606,12 +606,12 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         SdPage* pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
                         SdUndoAction* pUndo = new SdPageULUndoAction(GetDoc(),
                                                 pPage,
-                                                pPage->GetUppBorder(),
-                                                pPage->GetLwrBorder(),
+                                                pPage->GetUpperBorder(),
+                                                pPage->GetLowerBorder(),
                                                 nUpper, nLower);
                         pUndoGroup->AddAction(pUndo);
-                        pPage->SetUppBorder(nUpper);
-                        pPage->SetLwrBorder(nLower);
+                        pPage->SetUpperBorder(nUpper);
+                        pPage->SetLowerBorder(nLower);
                     }
                     InvalidateWindows();
                 }
@@ -870,11 +870,11 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aRect) );
     }
 
-    SvxLongLRSpaceItem aLRSpace(aPagePos.X() + mpActualPage->GetLftBorder(),
-                                aRect.Right() + mpActualPage->GetRgtBorder(),
+    SvxLongLRSpaceItem aLRSpace(aPagePos.X() + mpActualPage->GetLeftBorder(),
+                                aRect.Right() + mpActualPage->GetRightBorder(),
                                 GetPool().GetWhich(SID_ATTR_LONG_LRSPACE));
-    SvxLongULSpaceItem aULSpace(aPagePos.Y() + mpActualPage->GetUppBorder(),
-                                aRect.Bottom() + mpActualPage->GetLwrBorder(),
+    SvxLongULSpaceItem aULSpace(aPagePos.Y() + mpActualPage->GetUpperBorder(),
+                                aRect.Bottom() + mpActualPage->GetLowerBorder(),
                                 GetPool().GetWhich(SID_ATTR_LONG_ULSPACE));
     rSet.Put(SvxPagePosSizeItem(Point(0,0) - aPagePos, aViewSize.Width(),
                                                        aViewSize.Height()));

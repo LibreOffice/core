@@ -159,10 +159,10 @@ public:
 
     virtual void    SetSize(const Size& aSize) override;
     virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr) override;
-    virtual void    SetLftBorder(sal_Int32 nBorder) override;
-    virtual void    SetRgtBorder(sal_Int32 nBorder) override;
-    virtual void    SetUppBorder(sal_Int32 nBorder) override;
-    virtual void    SetLwrBorder(sal_Int32 nBorder) override;
+    virtual void    SetLeftBorder(sal_Int32 nBorder) override;
+    virtual void    SetRightBorder(sal_Int32 nBorder) override;
+    virtual void    SetUpperBorder(sal_Int32 nBorder) override;
+    virtual void    SetLowerBorder(sal_Int32 nBorder) override;
     virtual void    SetModel(SdrModel* pNewModel) override;
     virtual bool    IsReadOnly() const override;
 

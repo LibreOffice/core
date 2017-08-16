@@ -385,12 +385,12 @@ public:
     void ActionChanged();
 
 private:
-    sal_Int32 nWdt;     // Seitengroesse
-    sal_Int32 nHgt;     // Seitengroesse
-    sal_Int32 nBordLft; // Seitenrand links
-    sal_Int32 nBordUpp; // Seitenrand oben
-    sal_Int32 nBordRgt; // Seitenrand rechts
-    sal_Int32 nBordLwr; // Seitenrand unten
+    sal_Int32 mnWidth;     // Seitengroesse
+    sal_Int32 mnHeight;     // Seitengroesse
+    sal_Int32 mnBorderLeft; // Seitenrand links
+    sal_Int32 mnBorderUpper; // Seitenrand oben
+    sal_Int32 mnBorderRight; // Seitenrand rechts
+    sal_Int32 mnBorderLower; // Seitenrand unten
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
     std::unique_ptr<SdrPageProperties> mpSdrPageProperties;
@@ -405,7 +405,7 @@ protected:
     // new MasterPageDescriptorVector
     sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
 
-    SdrLayerIDSet           aPrefVisiLayers;
+    SdrLayerIDSet       aPrefVisiLayers;
     sal_uInt16          nPageNum;
 
     bool                mbMaster : 1;               // flag if this is a MasterPage
@@ -450,17 +450,17 @@ public:
     Size GetSize() const;
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    sal_Int32 GetWdt() const;
-    sal_Int32 GetHgt() const;
+    sal_Int32 GetWidth() const;
+    sal_Int32 GetHeight() const;
     virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
-    virtual void  SetLftBorder(sal_Int32 nBorder);
-    virtual void  SetUppBorder(sal_Int32 nBorder);
-    virtual void  SetRgtBorder(sal_Int32 nBorder);
-    virtual void  SetLwrBorder(sal_Int32 nBorder);
-    sal_Int32 GetLftBorder() const;
-    sal_Int32 GetUppBorder() const;
-    sal_Int32 GetRgtBorder() const;
-    sal_Int32 GetLwrBorder() const;
+    virtual void  SetLeftBorder(sal_Int32 nBorder);
+    virtual void  SetUpperBorder(sal_Int32 nBorder);
+    virtual void  SetRightBorder(sal_Int32 nBorder);
+    virtual void  SetLowerBorder(sal_Int32 nBorder);
+    sal_Int32 GetLeftBorder() const;
+    sal_Int32 GetUpperBorder() const;
+    sal_Int32 GetRightBorder() const;
+    sal_Int32 GetLowerBorder() const;
 
     virtual void SetModel(SdrModel* pNewModel) override;
 

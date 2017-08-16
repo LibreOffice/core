@@ -106,8 +106,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createV
     static bool bUseOldPageShadow(false);
     const SdrPage& rPage = getPage();
     basegfx::B2DHomMatrix aPageMatrix;
-    aPageMatrix.set(0, 0, (double)rPage.GetWdt());
-    aPageMatrix.set(1, 1, (double)rPage.GetHgt());
+    aPageMatrix.set(0, 0, (double)rPage.GetWidth());
+    aPageMatrix.set(1, 1, (double)rPage.GetHeight());
 
     if(bUseOldPageShadow)
     {
@@ -209,8 +209,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createV
             {
                 // direct model data is the page size, get and use it
                 const basegfx::B2DRange aInnerRange(
-                    rPage.GetLftBorder(), rPage.GetUppBorder(),
-                    rPage.GetWdt() - rPage.GetRgtBorder(), rPage.GetHgt() - rPage.GetLwrBorder());
+                    rPage.GetLeftBorder(), rPage.GetUpperBorder(),
+                    rPage.GetWidth() - rPage.GetRightBorder(), rPage.GetHeight() - rPage.GetLowerBorder());
                 const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
@@ -246,7 +246,7 @@ ViewObjectContact& ViewContactOfPageFill::CreateObjectSpecificViewObjectContact(
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageFill::createViewIndependentPrimitive2DSequence() const
 {
     const SdrPage& rPage = getPage();
-    const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+    const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWidth(), (double)rPage.GetHeight());
     const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
 
     // We have only the page information, not the view information. Use the
@@ -282,7 +282,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfOuterPageBorder::cr
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPage& rPage = getPage();
-    const basegfx::B2DRange aPageBorderRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
+    const basegfx::B2DRange aPageBorderRange(0.0, 0.0, (double)rPage.GetWidth(), (double)rPage.GetHeight());
 
     // Changed to 0x949599 for renaissance, before svtools::FONTCOLOR was used.
     // Added old case as fallback for HighContrast.
@@ -343,8 +343,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::cr
 {
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageBorderRange(
-        (double)rPage.GetLftBorder(), (double)rPage.GetUppBorder(),
-        (double)(rPage.GetWdt() - rPage.GetRgtBorder()), (double)(rPage.GetHgt() - rPage.GetLwrBorder()));
+        (double)rPage.GetLeftBorder(), (double)rPage.GetUpperBorder(),
+        (double)(rPage.GetWidth() - rPage.GetRightBorder()), (double)(rPage.GetHeight() - rPage.GetLowerBorder()));
     const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
 
     // We have only the page information, not the view information. Use the
