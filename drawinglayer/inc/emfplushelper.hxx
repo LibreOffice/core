@@ -25,7 +25,6 @@
 #include <memory>
 #include <wmfemfhelper.hxx>
 
- /// predefines
 namespace emfplushelper { struct EmfPlusHelperData; }
 namespace wmfemfhelper { class TargetHolders; }
 namespace drawinglayer { namespace geometry { class ViewInformation2D; }}

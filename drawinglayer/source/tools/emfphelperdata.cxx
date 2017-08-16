@@ -343,7 +343,7 @@ namespace emfplushelper
             const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
             if (pen)
             {
-            color = pen->GetColor().getBColor();
+                color = pen->GetColor().getBColor();
             }
         }
         return color;
@@ -394,22 +394,22 @@ namespace emfplushelper
             basegfx::B2DLineJoin lineJoin = basegfx::B2DLineJoin::Round;
             if (pen->penDataFlags & 0x00000008) // additional line join information
             {
-            lineJoin = static_cast<basegfx::B2DLineJoin>(EMFPPen::lcl_convertLineJoinType(pen->lineJoin));
+                lineJoin = static_cast<basegfx::B2DLineJoin>(EMFPPen::lcl_convertLineJoinType(pen->lineJoin));
             }
 
             // we need a line cap attribute
             css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
             if (pen->penDataFlags & 0x00000002) // additional line cap information
             {
-            lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
-            SAL_WARN_IF(pen->startCap != pen->endCap, "cppcanvas.emf", "emf+ pen uses different start and end cap");
+                lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
+                SAL_WARN_IF(pen->startCap != pen->endCap, "cppcanvas.emf", "emf+ pen uses different start and end cap");
             }
             // transform the pen width
             double adjustedPenWidth = pen->penWidth;
             if (!pen->penWidth) // no width specified, then use default value
             {
                 adjustedPenWidth = pen->penUnit == 0 ? 0.18f   // 0.18f is determined by comparison with MSO  (case of Unit == World)
-                                                        : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
+                    : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
             }
 
             // transform and compare to 5 (the value 5 is determined by comparison to MSO)
@@ -445,7 +445,6 @@ namespace emfplushelper
             mrPropertyHolders.Current().setFillColor(::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor());
             mrPropertyHolders.Current().setFillColorActive(true);
             mrPropertyHolders.Current().setLineColorActive(false);
-
         }
         else // use Brush
         {
@@ -498,9 +497,9 @@ namespace emfplushelper
                 // temporal solution: create a solid colored polygon
                 // TODO create a 'real' hatching primitive
                 mrTargetHolders.Current().append(
-                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                    polygon,
-                    fillColor.getBColor()));
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                        polygon,
+                        fillColor.getBColor()));
             }
             else if (brush->type == BrushTypeTextureFill)
             {
@@ -532,7 +531,7 @@ namespace emfplushelper
 
                 if (brush->blendPositions)
                 {
-                     SAL_INFO("cppcanvas.emf", "EMF+\t\tuse blend");
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tuse blend");
 
                     // store the blendpoints in the vector
                     for (int i = 0; i < brush->blendPoints; i++)
@@ -559,7 +558,8 @@ namespace emfplushelper
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tuse color blend");
 
                     // store the colorBlends in the vector
-                    for (int i = 0; i < brush->colorblendPoints; i++) {
+                    for (int i = 0; i < brush->colorblendPoints; i++)
+                    {
                         double aBlendPoint;
                         basegfx::BColor aColor;
                         if (brush->type == BrushTypeLinearGradient)
@@ -606,14 +606,14 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                         new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
-                             aTextureTransformation,
-                             polygon,
-                             aVector,
-                             aStartPoint,
-                             aEndPoint,
-                             false,                  // do not use UnitCoordinates
-                             drawinglayer::primitive2d::SpreadMethod::Pad));
+                        new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
+                            aTextureTransformation,
+                            polygon,
+                            aVector,
+                            aStartPoint,
+                            aEndPoint,
+                            false,                  // do not use UnitCoordinates
+                            drawinglayer::primitive2d::SpreadMethod::Pad));
                 }
                 else // BrushTypePathGradient
                 {
@@ -622,15 +622,15 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                         new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
-                             aTextureTransformation,
-                             polygon,
-                             aVector,
-                             aCenterPoint,
-                             0.5,                   // relative radius
-                             true,                  // use UnitCoordinates to stretch the gradient
-                             drawinglayer::primitive2d::SpreadMethod::Repeat,
-                             nullptr));
+                        new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
+                            aTextureTransformation,
+                            polygon,
+                            aVector,
+                            aCenterPoint,
+                            0.5,                   // relative radius
+                            true,                  // use UnitCoordinates to stretch the gradient
+                            drawinglayer::primitive2d::SpreadMethod::Repeat,
+                            nullptr));
                 }
             }
         }
@@ -1154,7 +1154,7 @@ namespace emfplushelper
                             EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
                             if (!stringFormat || !font)
                             {
-                              break;
+                                break;
                             }
                             mrPropertyHolders.Current().setFont(vcl::Font(font->family , Size(font->emSize,font->emSize)));
                             // done reading
@@ -1184,15 +1184,15 @@ namespace emfplushelper
                             basegfx::BColor color;
                             if (flags & 0x8000) // we use a color
                             {
-                              color = Color(0xff - (brushId >> 24), (brushId >> 16) & 0xff, (brushId >> 8) & 0xff, brushId & 0xff).getBColor();
+                                color = Color(0xff - (brushId >> 24), (brushId >> 16) & 0xff, (brushId >> 8) & 0xff, brushId & 0xff).getBColor();
                             }
                             else // we use a pen
                             {
-                              const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushId & 0xff].get());
-                              if (pen)
-                              {
-                                color = pen->GetColor().getBColor();
-                              }
+                                const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushId & 0xff].get());
+                                if (pen)
+                                {
+                                    color = pen->GetColor().getBColor();
+                                }
                             }
                             mrPropertyHolders.Current().setTextColor(color);
                             mrPropertyHolders.Current().setTextColorActive(true);
@@ -1200,14 +1200,14 @@ namespace emfplushelper
                             std::vector<double> emptyVector;
                             mrTargetHolders.Current().append(
                                 new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                  transformMatrix,
-                                  text,
-                                  0,             // text always starts at 0
-                                  stringLength,
-                                  emptyVector,   // EMF-PLUS has no DX-array
-                                  fontAttribute,
-                                  locale,
-                                  color));
+                                    transformMatrix,
+                                    text,
+                                    0,             // text always starts at 0
+                                    stringLength,
+                                    emptyVector,   // EMF-PLUS has no DX-array
+                                    fontAttribute,
+                                    locale,
+                                    color));
                         }
                         else
                         {
@@ -1432,11 +1432,11 @@ namespace emfplushelper
                         int combineMode = (flags >> 8) & 0xf;
 
                         SAL_INFO("cppcanvas.emf", "EMF+ SetClipRect combine mode: " << combineMode);
-    #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
                         if (combineMode > 1) {
                             SAL_INFO("cppcanvas.emf", "EMF+ TODO combine mode > 1");
                         }
-    #endif
+#endif
 
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh);
@@ -1446,11 +1446,12 @@ namespace emfplushelper
 
                         ::basegfx::B2DPolyPolygon polyPolygon(
                             ::basegfx::B2DPolygon(
-                                ::basegfx::tools::createPolygonFromRect(::basegfx::B2DRectangle(
-                                    mappedPoint.getX(),
-                                    mappedPoint.getY(),
-                                    mappedPoint.getX() + mappedSize.getX(),
-                                    mappedPoint.getY() + mappedSize.getY()))));
+                                ::basegfx::tools::createPolygonFromRect(
+                                    ::basegfx::B2DRectangle(
+                                        mappedPoint.getX(),
+                                        mappedPoint.getY(),
+                                        mappedPoint.getX() + mappedSize.getX(),
+                                        mappedPoint.getY() + mappedSize.getY()))));
 
                         // use existing tooling from wmfemfhelper
                         HandleNewClipRegion(polyPolygon, mrTargetHolders, mrPropertyHolders);
@@ -1550,7 +1551,7 @@ namespace emfplushelper
                             EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
                             if (!font)
                             {
-                              break;
+                                break;
                             }
                             // done reading
 

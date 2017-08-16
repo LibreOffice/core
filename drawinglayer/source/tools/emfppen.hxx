@@ -69,7 +69,6 @@ namespace emfplushelper
 
         static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
         static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);
-
     };
 }
 
