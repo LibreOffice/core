@@ -46,7 +46,7 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
 
             aCandidate.remove(nPnt);
 
-            if( ( mbIsClosed && aCandidate.count() < 3L) || (aCandidate.count() < 2L) )
+            if( ( mbIsClosed && aCandidate.count() < 3) || (aCandidate.count() < 2) )
             {
                 maPolyPolygon.remove(nPoly);
             }
@@ -155,7 +155,7 @@ bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, con
 bool PolyPolygonEditor::GetRelativePolyPoint( const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum )
 {
     const sal_uInt32 nPolyCount(rPoly.count());
-    sal_uInt32 nPolyNum(0L);
+    sal_uInt32 nPolyNum(0);
 
     while(nPolyNum < nPolyCount)
     {

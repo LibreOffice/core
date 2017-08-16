@@ -505,7 +505,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 // #i28701# - correction: use <pAnchorFrameForVertPos>
                 // instead of <pOrientFrame> and do not adjust relative position
                 // to get correct vertical position.
-                nVertOffsetToFrameAnchorPos = 0L;
+                nVertOffsetToFrameAnchorPos = 0;
                 // #i11860# - use new method <GetTopForObjPos>
                 // to get top of frame for object positioning.
                 const SwTwips nTopOfOrient =

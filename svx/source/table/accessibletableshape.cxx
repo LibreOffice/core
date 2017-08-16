@@ -870,7 +870,7 @@ sal_Int32 AccessibleTableShape::GetIndexOfSelectedChild(
     sal_Int32 nChildren = const_cast<AccessibleTableShape*>(this)->getAccessibleChildCount();
 
     if( nSelectedChildIndex >= nChildren )
-        return -1L;
+        return -1;
 
     sal_Int32 n = 0;
     while( n < nChildren )
@@ -885,7 +885,7 @@ sal_Int32 AccessibleTableShape::GetIndexOfSelectedChild(
         ++n;
     }
 
-    return n < nChildren ? n : -1L;
+    return n < nChildren ? n : -1;
 }
 void AccessibleTableShape::getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (IndexOutOfBoundsException )
 {

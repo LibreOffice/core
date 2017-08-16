@@ -640,7 +640,7 @@ bool XFillBmpSizeXItem::GetPresentation
 
 bool XFillBmpSizeXItem::HasMetrics() const
 {
-    return GetValue() > 0L;
+    return GetValue() > 0;
 }
 
 // class XFillBmpTileSizeYItem
@@ -682,7 +682,7 @@ bool XFillBmpSizeYItem::GetPresentation
 
 bool XFillBmpSizeYItem::HasMetrics() const
 {
-    return GetValue() > 0L;
+    return GetValue() > 0;
 }
 
 // class XFillBmpTileLogItem

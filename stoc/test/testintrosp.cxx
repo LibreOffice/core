@@ -482,7 +482,7 @@ void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& 
         PropertyChangeEvent aEvt;
         aEvt.Source = (OWeakObject*)this;
         aEvt.PropertyName = aPropertyName;
-        aEvt.PropertyHandle = 0L;
+        aEvt.PropertyHandle = 0;
         aPropChangeListener->propertyChange( aEvt );
     }
     if( aVetoPropChangeListener.is() && aPropertyName == aVetoPropChangeListenerStr )
@@ -490,7 +490,7 @@ void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& 
         PropertyChangeEvent aEvt;
         aEvt.Source = (OWeakObject*)this;
         aEvt.PropertyName = aVetoPropChangeListenerStr;
-        aEvt.PropertyHandle = 0L;
+        aEvt.PropertyHandle = 0;
         aVetoPropChangeListener->vetoableChange( aEvt );
     }
 

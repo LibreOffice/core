@@ -76,7 +76,7 @@ void GalleryCodec::Write( SvStream& rStmToWrite )
     aCodec.Compress( rStmToWrite, rStm );
     aCodec.EndCompression();
 
-    nCompSize = rStm.Tell() - nPos - 4UL;
+    nCompSize = rStm.Tell() - nPos - 4;
     rStm.Seek( nPos );
     rStm.WriteUInt32( nCompSize );
     rStm.Seek( STREAM_SEEK_TO_END );
@@ -102,7 +102,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
             std::unique_ptr<sal_uInt8[]> pOutBuf(new sal_uInt8[ nUnCompressedSize ]);
             sal_uInt8*  pTmpBuf = pOutBuf.get();
             sal_uInt8*  pLast = pOutBuf.get() + nUnCompressedSize - 1;
-            sal_uIntPtr   nIndex = 0UL, nCountByte, nRunByte;
+            sal_uIntPtr   nIndex = 0, nCountByte, nRunByte;
             bool    bEndDecoding = false;
 
             do

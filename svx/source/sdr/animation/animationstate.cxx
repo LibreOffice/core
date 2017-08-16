@@ -93,7 +93,7 @@ namespace sdr
 
                 // ensure step forward in integer timing, the floating step difference maybe smaller than 1.0. Use
                 // at least 25ms for next step
-                const sal_uInt32 nMinimumStepTime((sal_uInt32)fCurrentTime + 25L);
+                const sal_uInt32 nMinimumStepTime((sal_uInt32)fCurrentTime + 25);
 
                 if(nNextTime <= nMinimumStepTime)
                 {

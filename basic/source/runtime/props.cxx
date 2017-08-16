@@ -51,7 +51,7 @@ RTLFUNC(Err)
         if( bWrite )
         {
             sal_Int32 nVal = rPar.Get( 0 )->GetLong();
-            if( nVal <= 65535L )
+            if( nVal <= 65535 )
                 StarBASIC::Error( StarBASIC::GetSfxFromVBError( (sal_uInt16) nVal ) );
         }
         else

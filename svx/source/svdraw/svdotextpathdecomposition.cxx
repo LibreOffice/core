@@ -712,7 +712,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 aShadowDecomposition);
             sal_uInt32 a;
 
-            for(a = 0L; a < nLoopCount; a++)
+            for(a = 0; a < nLoopCount; a++)
             {
                 // filter text portions for this paragraph
                 ::std::vector< const impPathTextPortion* > aParagraphTextPortions;
@@ -740,7 +740,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 // add shadow primitives to decomposition
                 aRetvalA.resize(nShadowCount);
 
-                for(a = 0L; a < nShadowCount; a++)
+                for(a = 0; a < nShadowCount; a++)
                 {
                     aRetvalA[a] = drawinglayer::primitive2d::Primitive2DReference(aShadowDecomposition[a]);
                 }
@@ -763,7 +763,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 // add normal primitives to decomposition
                 aRetvalB.resize(nRegularCount);
 
-                for(a = 0L; a < nRegularCount; a++)
+                for(a = 0; a < nRegularCount; a++)
                 {
                     aRetvalB[a] = drawinglayer::primitive2d::Primitive2DReference(aRegularDecomposition[a]);
                 }

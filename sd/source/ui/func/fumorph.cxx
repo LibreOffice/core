@@ -128,11 +128,11 @@ void FuMorph::DoExecute( SfxRequest& )
             {
                 aPolyPoly1 = ::basegfx::tools::correctOrientations(aPolyPoly1);
                 aPolyPoly1.removeDoublePoints();
-                ::basegfx::B2VectorOrientation eIsClockwise1(::basegfx::tools::getOrientation(aPolyPoly1.getB2DPolygon(0L)));
+                ::basegfx::B2VectorOrientation eIsClockwise1(::basegfx::tools::getOrientation(aPolyPoly1.getB2DPolygon(0)));
 
                 aPolyPoly2 = ::basegfx::tools::correctOrientations(aPolyPoly2);
                 aPolyPoly2.removeDoublePoints();
-                ::basegfx::B2VectorOrientation eIsClockwise2(::basegfx::tools::getOrientation(aPolyPoly2.getB2DPolygon(0L)));
+                ::basegfx::B2VectorOrientation eIsClockwise2(::basegfx::tools::getOrientation(aPolyPoly2.getB2DPolygon(0)));
 
                 // set same orientation
                 if(eIsClockwise1 != eIsClockwise2)
@@ -149,7 +149,7 @@ void FuMorph::DoExecute( SfxRequest& )
                     aPolyPoly2.flip();
 
                 // force same point counts
-                for( sal_uInt32 a(0L); a < aPolyPoly1.count(); a++ )
+                for( sal_uInt32 a(0); a < aPolyPoly1.count(); a++ )
                 {
                     ::basegfx::B2DPolygon aSub1(aPolyPoly1.getB2DPolygon(a));
                     ::basegfx::B2DPolygon aSub2(aPolyPoly2.getB2DPolygon(a));
@@ -195,21 +195,21 @@ void FuMorph::DoExecute( SfxRequest& )
     {
         // length of step in dest poly
         ::basegfx::B2DPolygon aRetval;
-        const double fStep(::basegfx::tools::getLength(rCandidate) / (double)(rCandidate.isClosed() ? nNum : nNum - 1L));
+        const double fStep(::basegfx::tools::getLength(rCandidate) / (double)(rCandidate.isClosed() ? nNum : nNum - 1));
         double fDestPos(0.0);
         double fSrcPos(0.0);
-        sal_uInt32 nSrcPos(0L);
-        sal_uInt32 nSrcPosNext((nSrcPos + 1L == rCandidate.count()) ? 0L : nSrcPos + 1L);
+        sal_uInt32 nSrcPos(0);
+        sal_uInt32 nSrcPosNext((nSrcPos + 1 == rCandidate.count()) ? 0L : nSrcPos + 1);
         double fNextSrcLen(::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength());
 
-        for(sal_uInt32 b(0L); b < nNum; b++)
+        for(sal_uInt32 b(0); b < nNum; b++)
         {
             // calc fDestPos in source
             while(fSrcPos + fNextSrcLen < fDestPos)
             {
                 fSrcPos += fNextSrcLen;
                 nSrcPos++;
-                nSrcPosNext = (nSrcPos + 1L == rCandidate.count()) ? 0L : nSrcPos + 1L;
+                nSrcPosNext = (nSrcPos + 1 == rCandidate.count()) ? 0L : nSrcPos + 1;
                 fNextSrcLen = ::basegfx::B2DVector(rCandidate.getB2DPoint(nSrcPos) - rCandidate.getB2DPoint(nSrcPosNext)).getLength();
             }
 
@@ -224,7 +224,7 @@ void FuMorph::DoExecute( SfxRequest& )
             fDestPos += fStep;
         }
 
-        if(aRetval.count() >= 3L)
+        if(aRetval.count() >= 3)
         {
             aRetval.setClosed(rCandidate.isClosed());
         }

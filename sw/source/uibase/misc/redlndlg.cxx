@@ -695,7 +695,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         SvTreeListEntry *const pEntry = m_RedlineParents[i]->pTLBParent;
         if (pEntry)
         {
-            long nIdx = aLBoxArr.size() - 1L;
+            long nIdx = aLBoxArr.size() - 1;
             sal_uLong nAbsPos = pModel->GetAbsPos(pEntry);
             while (nIdx >= 0 &&
                     pModel->GetAbsPos(aLBoxArr[ static_cast< sal_uInt16 >(nIdx) ]) > nAbsPos)
@@ -705,7 +705,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     }
 
     // clear TLB from behind
-    long nIdx = (long)aLBoxArr.size() - 1L;
+    long nIdx = (long)aLBoxArr.size() - 1;
     while (nIdx >= 0)
         m_pTable->RemoveEntry(aLBoxArr[ static_cast< sal_uInt16 >(nIdx--) ]);
 

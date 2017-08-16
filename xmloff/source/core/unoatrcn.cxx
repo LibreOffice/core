@@ -64,7 +64,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
     sal_Int32 nPos = aName.indexOf( ':' );
-    if( nPos == -1L )
+    if( nPos == -1 )
     {
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
         {
@@ -76,7 +76,7 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     else
     {
         const OUString aPrefix( aName.copy( 0L, nPos ) );
-        const OUString aLName( aName.copy( nPos+1L ) );
+        const OUString aLName( aName.copy( nPos+1 ) );
 
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
         {
@@ -161,10 +161,10 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
             throw container::NoSuchElementException();
 
         sal_Int32 nPos = aName.indexOf( ':' );
-        if( nPos != -1L )
+        if( nPos != -1 )
         {
             const OUString aPrefix( aName.copy( 0L, nPos ));
-            const OUString aLName( aName.copy( nPos+1L ));
+            const OUString aLName( aName.copy( nPos+1 ));
 
             if( pData->Namespace.isEmpty() )
             {
@@ -203,10 +203,10 @@ throw( lang::IllegalArgumentException, container::ElementExistException, lang::W
         throw container::ElementExistException();
 
     sal_Int32 nPos = aName.indexOf( ':' );
-    if( nPos != -1L )
+    if( nPos != -1 )
     {
         const OUString aPrefix( aName.copy( 0L, nPos ));
-        const OUString aLName( aName.copy( nPos+1L ));
+        const OUString aLName( aName.copy( nPos+1 ));
 
         if( pData->Namespace.isEmpty() )
         {

@@ -1313,7 +1313,7 @@ bool SdrTextAniAmountItem::GetPresentation(
     sal_Int32 nValue(GetValue());
 
     if(!nValue)
-        nValue = -1L;
+        nValue = -1;
 
     if(nValue < 0)
     {

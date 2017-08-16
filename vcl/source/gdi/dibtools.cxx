@@ -84,17 +84,17 @@ struct DIBInfoHeader
     sal_uInt32      nColsImportant;
 
     DIBInfoHeader()
-    :   nSize(0UL),
-        nWidth(0UL),
-        nHeight(0UL),
+    :   nSize(0),
+        nWidth(0),
+        nHeight(0),
         nPlanes(0),
         nBitCount(0),
         nCompression(0),
         nSizeImage(0),
-        nXPelsPerMeter(0UL),
-        nYPelsPerMeter(0UL),
-        nColsUsed(0UL),
-        nColsImportant(0UL)
+        nXPelsPerMeter(0),
+        nYPelsPerMeter(0),
+        nColsUsed(0),
+        nColsImportant(0)
     {}
 };
 
@@ -116,19 +116,19 @@ struct DIBV5Header : public DIBInfoHeader
 
     DIBV5Header()
     :   DIBInfoHeader(),
-        nV5RedMask(0UL),
-        nV5GreenMask(0UL),
-        nV5BlueMask(0UL),
-        nV5AlphaMask(0UL),
-        nV5CSType(0UL),
+        nV5RedMask(0),
+        nV5GreenMask(0),
+        nV5BlueMask(0),
+        nV5AlphaMask(0),
+        nV5CSType(0),
         aV5Endpoints(),
-        nV5GammaRed(0UL),
-        nV5GammaGreen(0UL),
-        nV5GammaBlue(0UL),
-        nV5Intent(0UL),
-        nV5ProfileData(0UL),
-        nV5ProfileSize(0UL),
-        nV5Reserved(0UL)
+        nV5GammaRed(0),
+        nV5GammaGreen(0),
+        nV5GammaBlue(0),
+        nV5Intent(0),
+        nV5ProfileData(0),
+        nV5ProfileSize(0),
+        nV5Reserved(0)
     {}
 };
 
@@ -355,7 +355,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& 
     const sal_uLong nWidth = rAcc.Width();
     sal_uLong       nCountByte;
     sal_uLong       nRunByte;
-    sal_uLong       nX = 0UL;
+    sal_uLong       nX = 0;
     sal_uInt8       cTmp;
     bool        bEndDecoding = false;
 
@@ -375,7 +375,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& 
                 {
                     nCountByte = nRunByte >> 1;
 
-                    for( sal_uLong i = 0UL; i < nCountByte; i++ )
+                    for( sal_uLong i = 0; i < nCountByte; i++ )
                     {
                         if (pRLE == pEndRLE)
                             return false;
@@ -410,7 +410,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& 
                 }
                 else
                 {
-                    for( sal_uLong i = 0UL; i < nRunByte; i++ )
+                    for( sal_uLong i = 0; i < nRunByte; i++ )
                     {
                         if (pRLE == pEndRLE)
                             return false;
@@ -433,7 +433,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& 
             else if( !nRunByte )
             {
                 nY--;
-                nX = 0UL;
+                nX = 0;
             }
             else if( nRunByte == 1 )
                 bEndDecoding = true;
@@ -460,7 +460,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& 
             {
                 nRunByte = nCountByte >> 1;
 
-                for( sal_uLong i = 0UL; i < nRunByte; i++ )
+                for( sal_uLong i = 0; i < nRunByte; i++ )
                 {
                     if( nX < nWidth )
                         rAcc.SetPixelIndex(nY, nX++, SanitizePaletteIndex(cTmp >> 4, rPalette, bForceToMonoWhileReading));
@@ -474,7 +474,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& 
             }
             else
             {
-                for( sal_uLong i = 0UL; ( i < nCountByte ) && ( nX < nWidth ); i++ )
+                for( sal_uLong i = 0; ( i < nCountByte ) && ( nX < nWidth ); i++ )
                     rAcc.SetPixelIndex(nY, nX++, SanitizePaletteIndex(cTmp, rPalette, bForceToMonoWhileReading));
             }
         }
@@ -611,7 +611,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         {
                             if( !nShift )
                             {
-                                nShift = 2UL;
+                                nShift = 2;
                                 cTmp = *pTmp++;
                             }
 
@@ -1030,7 +1030,7 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             rIStm.ReadUInt16( nTmp16 );
             rIStm.SeekRel( 8 );
             rIStm.ReadUInt32( nTmp32 );
-            rOffset = nTmp32 - 28UL;
+            rOffset = nTmp32 - 28;
             bRet = ( 0x4D42 == nTmp16 );
         }
         else // 0x4D42 == nTmp16, 'MB' from BITMAPFILEHEADER
@@ -1094,7 +1094,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
     for ( long nY = nHeight - 1; nY >= 0; nY-- )
     {
         sal_uInt8* pTmp = pBuf.get();
-        nX = nBufCount = 0UL;
+        nX = nBufCount = 0;
 
         while( nX < nWidth )
         {
@@ -1117,7 +1117,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
             else
             {
                 cLast = cPix;
-                nSaveIndex = nX - 1UL;
+                nSaveIndex = nX - 1;
                 bFound = false;
 
                 while( ( nX < nWidth ) && ( nCount < 256 )
@@ -1150,7 +1150,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
                     }
                     else
                     {
-                        for( sal_uLong i = 0UL; i < nCount; i++ )
+                        for( sal_uLong i = 0; i < nCount; i++ )
                             *pTmp++ = rAcc.GetPixelIndex( nY, nSaveIndex++ );
                     }
 

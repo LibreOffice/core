@@ -127,13 +127,13 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
             // Set position to the character behind the ';', so we won't
             // forget this.
-            if( -1L != nPos )
+            if( -1 != nPos )
                 nPos++;
 
             // If the property value was empty, we stop now.
             // If there is a ';' at the first position, the empty name
             // at the start will be removed.
-            if( 0L == nLast )
+            if( 0 == nLast )
                 continue;
 
             // nFirst and nLast now denote the first and last character of
@@ -174,7 +174,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
                     sValue.append( '\'' );
             }
         }
-        while( -1L != nPos );
+        while( -1 != nPos );
 
         rStrExpValue = sValue.makeStringAndClear();
 

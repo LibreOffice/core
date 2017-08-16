@@ -464,7 +464,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
 
     // mirrored horizontically
-    if( aSz.Width() < 0L )
+    if( aSz.Width() < 0 )
     {
         aPt.X() += aSz.Width() + 1;
         aSz.Width() = -aSz.Width();
@@ -472,7 +472,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     }
 
     // mirrored vertically
-    if( aSz.Height() < 0L )
+    if( aSz.Height() < 0 )
     {
         aPt.Y() += aSz.Height() + 1;
         aSz.Height() = -aSz.Height();

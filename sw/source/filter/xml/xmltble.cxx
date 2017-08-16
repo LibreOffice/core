@@ -139,7 +139,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
-            if( nBox < nBoxes-1U || nWidth==0UL )
+            if( nBox < nBoxes-1U || nWidth==0 )
             {
                 nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
                 SwXMLTableColumn_Impl *pCol =
@@ -150,7 +150,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
 
                 if( nBox==nBoxes-1U )
                 {
-                    OSL_ENSURE( nLine==0U && nWidth==0UL,
+                    OSL_ENSURE( nLine==0U && nWidth==0,
                             "parent width will be lost" );
                     nWidth = nCPos;
                 }
@@ -284,7 +284,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
 
     if( bInsert )
     {
-        rFrameFormat.SetName( rNamePrefix + "." + OUString::number(nLine+1UL) );
+        rFrameFormat.SetName( rNamePrefix + "." + OUString::number(nLine+1) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrameFormat );
     }
@@ -730,7 +730,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
         const SwFormatFrameSize& rFrameSize = pTableFormat->GetFrameSize();
 
         sal_uInt32 nAbsWidth = rFrameSize.GetSize().Width();
-        sal_uInt32 nBaseWidth = 0UL;
+        sal_uInt32 nBaseWidth = 0;
         sal_Int8 nPrcWidth = rFrameSize.GetWidthPercent();
 
         bool bFixAbsWidth = nPrcWidth != 0 || /*text::*/HoriOrientation::NONE == eTabHoriOri

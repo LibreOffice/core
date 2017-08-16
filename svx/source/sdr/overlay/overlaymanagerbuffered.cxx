@@ -263,14 +263,14 @@ namespace sdr
                     // truncate aRegionRectanglePixel to destination pixel size, more does
                     // not need to be prepared since destination is a buffer for a window. So,
                     // maximum size indirectly shall be limited to getOutputDevice().GetOutputSizePixel()
-                    if(aRegionRectanglePixel.Left() < 0L)
+                    if(aRegionRectanglePixel.Left() < 0)
                     {
-                        aRegionRectanglePixel.Left() = 0L;
+                        aRegionRectanglePixel.Left() = 0;
                     }
 
-                    if(aRegionRectanglePixel.Top() < 0L)
+                    if(aRegionRectanglePixel.Top() < 0)
                     {
-                        aRegionRectanglePixel.Top() = 0L;
+                        aRegionRectanglePixel.Top() = 0;
                     }
 
                     if(aRegionRectanglePixel.Right() > aDestinationSizePixel.getWidth())

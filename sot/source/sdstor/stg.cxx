@@ -195,7 +195,7 @@ sal_uLong StorageStream::Read( void* pData, sal_uLong nSize )
         nPos += nSize;
     }
     else
-        nSize = 0L;
+        nSize = 0;
     return nSize;
 }
 
@@ -209,7 +209,7 @@ sal_uLong StorageStream::Write( const void* pData, sal_uLong nSize )
         nPos += nSize;
     }
     else
-        nSize = 0L;
+        nSize = 0;
     return nSize;
 }
 

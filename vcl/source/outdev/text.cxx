@@ -260,8 +260,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     long nOldOffY = mnOutOffY;
     bool bOldMap = mbMap;
 
-    mnOutOffX   = 0L;
-    mnOutOffY   = 0L;
+    mnOutOffX   = 0;
+    mnOutOffY   = 0;
     mpMetaFile  = nullptr;
     EnableMapMode( false );
 

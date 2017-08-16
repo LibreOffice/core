@@ -629,7 +629,6 @@ const SwAttrSet* SwFrame::GetAttrSet() const
         return &static_cast<const SwLayoutFrame*>(this)->GetFormat()->GetAttrSet();
 }
 
-//UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrame::getSdrAllFillAttributesHelper() const
 {
     if(IsContentFrame())
@@ -1276,7 +1275,7 @@ static bool lcl_IsInColSct( const SwFrame *pUp )
     OD 08.08.2003 #110978#
     method replaced 'old' method <sal_Bool IsMoveable() const>.
     Determines, if frame is moveable in given environment. if no environment
-    is given (parameter _pLayoutFrame == 0L), the movability in the actual
+    is given (parameter _pLayoutFrame == 0), the movability in the actual
     environment (<this->GetUpper()) is checked.
 */
 bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const

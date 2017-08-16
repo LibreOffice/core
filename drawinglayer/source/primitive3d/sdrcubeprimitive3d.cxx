@@ -91,24 +91,24 @@ namespace drawinglayer
                 if(bObjectSpecificX || bObjectSpecificY)
                 {
                     // object-specific
-                    for(sal_uInt32 a(0L); a < aFill.count(); a++)
+                    for(sal_uInt32 a(0); a < aFill.count(); a++)
                     {
                         basegfx::B3DPolygon aTmpPoly(aFill.getB3DPolygon(a));
 
-                        if(aTmpPoly.count() >= 4L)
+                        if(aTmpPoly.count() >= 4)
                         {
-                            for(sal_uInt32 b(0L); b < 4L; b++)
+                            for(sal_uInt32 b(0); b < 4; b++)
                             {
                                 basegfx::B2DPoint aPoint(aTmpPoly.getTextureCoordinate(b));
 
                                 if(bObjectSpecificX)
                                 {
-                                    aPoint.setX((1L == b || 2L == b) ? 1.0 : 0.0);
+                                    aPoint.setX((1 == b || 2 == b) ? 1.0 : 0.0);
                                 }
 
                                 if(bObjectSpecificY)
                                 {
-                                    aPoint.setY((2L == b || 3L == b) ? 1.0 : 0.0);
+                                    aPoint.setY((2 == b || 3 == b) ? 1.0 : 0.0);
                                 }
 
                                 aTmpPoly.setTextureCoordinate(b, aPoint);
@@ -126,9 +126,9 @@ namespace drawinglayer
             }
 
             // build vector of PolyPolygons
-            ::std::vector< basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
+            std::vector< basegfx::B3DPolyPolygon > a3DPolyPolygonVector;
 
-            for(sal_uInt32 a(0L); a < aFill.count(); a++)
+            for(sal_uInt32 a(0); a < aFill.count(); a++)
             {
                 a3DPolyPolygonVector.push_back(basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
             }

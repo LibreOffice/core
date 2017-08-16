@@ -70,14 +70,14 @@ namespace drawinglayer
                 if(nMaxSteps)
                 {
                     // there IS a color distance
-                    if(nSteps == 0L)
+                    if(nSteps == 0)
                     {
                         nSteps = nMaxSteps;
                     }
 
-                    if(nSteps < 2L)
+                    if(nSteps < 2)
                     {
-                        nSteps = 2L;
+                        nSteps = 2;
                     }
 
                     if(nSteps > nMaxSteps)

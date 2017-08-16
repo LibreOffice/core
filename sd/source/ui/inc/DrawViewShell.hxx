@@ -267,7 +267,7 @@ public:
 
     void            LockInput();
     void            UnlockInput();
-    bool            IsInputLocked() const { return mnLockCount > 0UL; }
+    bool            IsInputLocked() const { return mnLockCount > 0; }
 
     sal_uInt16      GetCurPageId() { return maTabControl->GetCurPageId(); }
     sal_uInt16      GetCurPagePos() { return maTabControl->GetCurPagePos(); }

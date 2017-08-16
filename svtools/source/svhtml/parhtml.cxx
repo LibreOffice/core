@@ -473,7 +473,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 else if( HTML_ISALPHA( nNextCh ) )
                 {
                     OUStringBuffer sEntityBuffer( MAX_ENTITY_LEN );
-                    sal_Int32 nPos = 0L;
+                    sal_Int32 nPos = 0;
                     do
                     {
                         sEntityBuffer.appendUtf32( nNextCh );
@@ -731,7 +731,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     if( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
                         rInput.IsEof() )
                     {
-                        if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1L )
+                        if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1 )
                         {
                             // Have seen s.th. aside from blanks?
                             aToken += sTmpBuffer.makeStringAndClear();

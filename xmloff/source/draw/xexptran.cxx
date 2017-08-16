@@ -334,7 +334,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
         }
 
         // if not the last entry, add one space to next tag
-        if(a + 1UL != maList.size())
+        if(a + 1 != maList.size())
         {
             aNewString += aEmptySpace;
         }
@@ -741,7 +741,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
         }
 
         // if not the last entry, add one space to next tag
-        if(a + 1UL != maList.size())
+        if(a + 1 != maList.size())
         {
             aNewString += aEmptySpace;
         }

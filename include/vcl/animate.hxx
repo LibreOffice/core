@@ -53,7 +53,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                         const BitmapEx& rBmpEx,
                         const Point& rPosPix,
                         const Size& rSizePix,
-                        long _nWait = 0L,
+                        long _nWait = 0,
                         Disposal _eDisposal = Disposal::Not
                     ) :
                         aBmpEx      ( rBmpEx ),

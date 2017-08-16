@@ -196,7 +196,7 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
             sal_Int32 nScroll = (GetFirstVisPos() > 0) ? CSV_SCROLL_DIST : 0;
             nNewPos = GetFirstVisPos() + nScroll;
         }
-        else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1L )
+        else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1 )
         {
             sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? CSV_SCROLL_DIST : 0;
             nNewPos = GetLastVisPos() - nScroll - 1;

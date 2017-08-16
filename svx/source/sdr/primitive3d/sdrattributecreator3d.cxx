@@ -39,11 +39,11 @@ namespace drawinglayer
             css::drawing::NormalsKind aNormalsKind(css::drawing::NormalsKind_SPECIFIC);
             const sal_uInt16 nNormalsValue(static_cast<const Svx3DNormalsKindItem&>(rSet.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue());
 
-            if(1L == nNormalsValue)
+            if(1 == nNormalsValue)
             {
                 aNormalsKind = css::drawing::NormalsKind_FLAT;
             }
-            else if(2L == nNormalsValue)
+            else if(2 == nNormalsValue)
             {
                 aNormalsKind = css::drawing::NormalsKind_SPHERE;
             }
@@ -55,11 +55,11 @@ namespace drawinglayer
             css::drawing::TextureProjectionMode aTextureProjectionX(css::drawing::TextureProjectionMode_OBJECTSPECIFIC);
             const sal_uInt16 nTextureValueX(static_cast<const Svx3DTextureProjectionXItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue());
 
-            if(1L == nTextureValueX)
+            if(1 == nTextureValueX)
             {
                 aTextureProjectionX = css::drawing::TextureProjectionMode_PARALLEL;
             }
-            else if(2L == nTextureValueX)
+            else if(2 == nTextureValueX)
             {
                 aTextureProjectionX = css::drawing::TextureProjectionMode_SPHERE;
             }
@@ -68,11 +68,11 @@ namespace drawinglayer
             css::drawing::TextureProjectionMode aTextureProjectionY(css::drawing::TextureProjectionMode_OBJECTSPECIFIC);
             const sal_uInt16 nTextureValueY(static_cast<const Svx3DTextureProjectionYItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue());
 
-            if(1L == nTextureValueY)
+            if(1 == nTextureValueY)
             {
                 aTextureProjectionY = css::drawing::TextureProjectionMode_PARALLEL;
             }
-            else if(2L == nTextureValueY)
+            else if(2 == nTextureValueY)
             {
                 aTextureProjectionY = css::drawing::TextureProjectionMode_SPHERE;
             }

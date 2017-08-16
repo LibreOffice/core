@@ -175,7 +175,7 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
         if( nNewPos == 0xFFFFFFFF )
         {
             SetError(::GetSvError( GetLastError() ) );
-            nNewPos = 0L;
+            nNewPos = 0;
         }
     }
     else
@@ -278,7 +278,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
 
     DWORD   nOpenAction;
     DWORD   nShareMode      = FILE_SHARE_READ | FILE_SHARE_WRITE;
-    DWORD   nAccessMode     = 0L;
+    DWORD   nAccessMode     = 0;
     UINT    nOldErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX );
 
     if( nMode & StreamMode::SHARE_DENYREAD)
