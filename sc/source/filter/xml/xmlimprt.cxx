@@ -362,7 +362,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLBodyContext_Impl::createFastChildContext( sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    return GetScImport().CreateBodyContext( xAttrList );
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+    return GetScImport().CreateBodyContext( pAttribList );
 }
 
 SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
@@ -919,9 +921,9 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const OUString& rLocalName,
     return pContext;
 }
 
-SvXMLImportContext *ScXMLImport::CreateBodyContext(const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+SvXMLImportContext *ScXMLImport::CreateBodyContext(const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList)
 {
-    return new ScXMLBodyContext(*this, xAttrList);
+    return new ScXMLBodyContext(*this, rAttrList);
 }
 
 SvXMLImportContext *ScXMLImport::CreateMetaContext(

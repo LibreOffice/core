@@ -42,7 +42,7 @@ class ScXMLBodyContext : public ScXMLImportContext
 public:
 
     ScXMLBodyContext( ScXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
+                        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
     virtual ~ScXMLBodyContext() override;
 
