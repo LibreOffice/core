@@ -1632,4 +1632,80 @@ void ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 )
     );
 }
 
+namespace {
+
+class StoreToCacheFunc
+{
+    SvStream& mrStrm;
+public:
+
+    StoreToCacheFunc(SvStream& rStrm):
+        mrStrm(rStrm)
+    {
+    }
+
+    void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )
+    {
+        SCROW nStartRow = node.position + nOffset;
+        mrStrm.WriteUInt64(nStartRow);
+        mrStrm.WriteUInt64(nDataSize);
+        switch (node.type)
+        {
+            case sc::element_type_empty:
+            {
+                mrStrm.WriteUChar(0);
+            }
+            break;
+            case sc::element_type_numeric:
+            {
+                mrStrm.WriteUChar(1);
+                sc::numeric_block::const_iterator it = sc::numeric_block::begin(*node.data);
+                std::advance(it, nOffset);
+                sc::numeric_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                for (; it != itEnd; ++it)
+                {
+                    mrStrm.WriteDouble(*it);
+                }
+            }
+            break;
+            case sc::element_type_string:
+            {
+                mrStrm.WriteUChar(2);
+                sc::string_block::const_iterator it = sc::string_block::begin(*node.data);
+                std::advance(it, nOffset);
+                sc::string_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                for (; it != itEnd; ++it)
+                {
+                    OString aStr = OUStringToOString(it->getString(), RTL_TEXTENCODING_UTF8);
+                    sal_Int32 nStrLength = aStr.getLength();
+                    mrStrm.WriteInt32(nStrLength);
+                    mrStrm.WriteCharPtr(aStr.getStr());
+                }
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                mrStrm.WriteUChar(2);
+            }
+            break;
+        }
+    }
+};
+
+}
+
+void ScColumn::StoreToCache(SvStream& rStrm) const
+{
+    rStrm.WriteUInt64(nCol);
+    SCROW nLastRow = GetLastDataPos();
+    rStrm.WriteUInt64(nLastRow + 1); // the rows are zero based
+
+    StoreToCacheFunc aFunc(rStrm);
+    sc::ParseBlock(maCells.begin(), maCells, aFunc, (SCROW)0, nLastRow);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
