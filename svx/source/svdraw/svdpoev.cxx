@@ -104,7 +104,7 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
         if(PolyPolygonEditor::GetRelativePolyPoint(pPath->GetPathPoly(), nNum, nPolyNum, nPntNum))
         {
             const basegfx::B2DPolygon aLocalPolygon(pPath->GetPathPoly().getB2DPolygon(nPolyNum));
-            bool bCanSegment(bClosed || nPntNum < aLocalPolygon.count() - 1L);
+            bool bCanSegment(bClosed || nPntNum < aLocalPolygon.count() - 1);
 
             if(!bSetMarkedSegmentsKindPossible && bCanSegment)
             {

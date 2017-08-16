@@ -49,7 +49,7 @@ namespace basegfx
     public:
         BPixel()
         {
-            maPixelUnion.maCombinedRGBO.mnValue = 0L;
+            maPixelUnion.maCombinedRGBO.mnValue = 0;
         }
 
         // use explicit here to make sure everyone knows what he is doing. Values range from

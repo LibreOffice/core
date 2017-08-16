@@ -216,7 +216,7 @@ RTLFUNC(Error)
         else
         {
             nCode = rPar.Get( 1 )->GetLong();
-            if( nCode > 65535L )
+            if( nCode > 65535 )
             {
                 StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
             }

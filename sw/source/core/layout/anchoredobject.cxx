@@ -315,7 +315,7 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
 void SwAnchoredObject::CheckTopOfLine( const SwFormatAnchor& _rAnch,
                                         const SwTextFrame& _rAnchorCharFrame )
 {
-    SwTwips nTopOfLine = 0L;
+    SwTwips nTopOfLine = 0;
     if ( _rAnchorCharFrame.GetTopOfLine( nTopOfLine, *_rAnch.GetContentAnchor() ) )
     {
         if ( nTopOfLine != mnLastTopOfLine )

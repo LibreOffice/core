@@ -511,7 +511,7 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
 
     SwAnchoredObject* pRetAnchoredObj = nullptr;
 
-    sal_uInt32 i = 0L;
+    sal_uInt32 i = 0;
     for ( ; i < CountOfCollected(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = GetCollectedObj(i);

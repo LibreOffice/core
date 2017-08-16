@@ -255,7 +255,7 @@ bool GIFReader::ReadGlobalHeader()
 
 void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 {
-    sal_uLong nLen = 3UL * nCount;
+    sal_uLong nLen = 3 * nCount;
     const sal_uInt64 nMaxPossible = rIStm.remainingSize();
     if (nLen > nMaxPossible)
         nLen = nMaxPossible;
@@ -266,7 +266,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     {
         sal_uInt8* pTmp = pBuf.get();
 
-        for (sal_uLong i = 0UL; i < nCount; ++i)
+        for (sal_uLong i = 0; i < nCount; ++i)
         {
             BitmapColor& rColor = (*pPal)[i];
 
@@ -276,11 +276,11 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
         }
 
         // if possible accommodate some standard colours
-        if( nCount < 256UL )
+        if( nCount < 256 )
         {
             (*pPal)[ 255UL ] = Color( COL_WHITE );
 
-            if( nCount < 255UL )
+            if( nCount < 255 )
                 (*pPal)[ 254UL ] = Color( COL_BLACK );
         }
     }
@@ -469,18 +469,18 @@ bool GIFReader::ReadLocalHeader()
 
 sal_uLong GIFReader::ReadNextBlock()
 {
-    sal_uLong   nRet = 0UL;
+    sal_uLong   nRet = 0;
     sal_uLong   nRead;
     sal_uInt8   cBlockSize;
 
     rIStm.ReadUChar( cBlockSize );
 
     if ( rIStm.IsEof() )
-        nRet = 4UL;
+        nRet = 4;
     else if ( NO_PENDING( rIStm ) )
     {
         if ( cBlockSize == 0 )
-            nRet = 2UL;
+            nRet = 2;
         else
         {
             rIStm.ReadBytes( aSrcBuf.data(), cBlockSize );
@@ -488,7 +488,7 @@ sal_uLong GIFReader::ReadNextBlock()
             if( NO_PENDING( rIStm ) )
             {
                 if( bOverreadBlock )
-                    nRet = 3UL;
+                    nRet = 3;
                 else
                 {
                     bool       bEOI;
@@ -510,7 +510,7 @@ sal_uLong GIFReader::ReadNextBlock()
 
 void GIFReader::FillImages( sal_uInt8* pBytes, sal_uLong nCount )
 {
-    for( sal_uLong i = 0UL; i < nCount; i++ )
+    for( sal_uLong i = 0; i < nCount; i++ )
     {
         if( nImageX >= nImageWidth )
         {
@@ -777,7 +777,7 @@ bool GIFReader::ProcessGIF()
             {
                 bRead = true;
 
-                if ( nRet == 1UL )
+                if ( nRet == 1 )
                 {
                     bImGraphicReady = true;
                     eActAction = NEXT_BLOCK_READING;
@@ -785,14 +785,14 @@ bool GIFReader::ProcessGIF()
                 }
                 else
                 {
-                    if( nRet == 2UL )
+                    if( nRet == 2 )
                     {
                         pDecomp.reset();
                         CreateNewBitmaps();
                         eActAction = MARKER_READING;
                         ClearImageExtensions();
                     }
-                    else if( nRet == 3UL )
+                    else if( nRet == 3 )
                     {
                         eActAction = NEXT_BLOCK_READING;
                         bOverreadBlock = true;
