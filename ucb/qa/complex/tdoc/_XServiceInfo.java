@@ -74,7 +74,7 @@ public class _XServiceInfo {
     /**
     * Gets one of the service names returned by
     * <code>getSupportedServiceNames</code> method and
-    * calls the <code>supportsService</code> methos with this
+    * calls the <code>supportsService</code> method with this
     * name. <p>
     * Has <b>OK</b> status if <code>true</code> value is
     * returned.

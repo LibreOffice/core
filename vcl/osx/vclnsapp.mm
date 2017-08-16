@@ -104,7 +104,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             // in the menu code
             // however that is currently being revised, so let's use a preliminary solution here
             // this hack is based on assumption
-            // a) Cmd-W is the same in all languages in OOo's menu conig
+            // a) Cmd-W is the same in all languages in OOo's menu config
             // b) Cmd-W is the same in all languages in on MacOS
             // for now this seems to be true
             unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
@@ -426,7 +426,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             ApplicationEvent aEv(ApplicationEvent::Type::PrivateDoShutdown);
             GetpApp()->AppEvent( aEv );
             ImageTree::get().shutdown();
-            // DeInitVCL should be called in ImplSVMain - unless someon _exits first which
+            // DeInitVCL should be called in ImplSVMain - unless someone exits first which
             // can occur in Desktop::doShutdown for example
         }
     }

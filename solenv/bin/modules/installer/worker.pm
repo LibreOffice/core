@@ -886,7 +886,7 @@ sub collectpackagemaps
 {
     my ( $installdir, $languagestringref, $allvariables ) = @_;
 
-    installer::logger::include_header_into_logfile("Collecing all packagemaps (pkgmap):");
+    installer::logger::include_header_into_logfile("Collecting all packagemaps (pkgmap):");
 
     my $pkgmapdir = installer::systemactions::create_directories("pkgmap", $languagestringref);
     my $subdirname = $allvariables->{'UNIXPRODUCTNAME'} . "_pkgmaps";

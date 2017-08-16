@@ -99,7 +99,7 @@ struct SfxInterface_Impl
 
 static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature);
 
-// constuctor, registeres a new unit
+// constuctor, registers a new unit
 SfxInterface::SfxInterface( const char *pClassName,
                             bool bUsableSuperClass,
                             SfxInterfaceId nId,

@@ -33,7 +33,7 @@
         <info>
           <desc>Used to sort types inside dialogs. Only values &gt; 0 are
           recognized. Types with an order value &lt; 1 will be sorted
-          alphabeticly.</desc>
+          alphabetically.</desc>
         </info>
         <value>0</value>
       </prop>

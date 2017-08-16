@@ -1915,7 +1915,7 @@ static ImplTextEncodingData const aImplMS1257TextEncodingData
 
 /* ISO-8859-2 */
 /* Unix Standard for Eastern European (Latin2) */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-2.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2083,7 +2083,7 @@ static ImplTextEncodingData const aImplISO88592TextEncodingData
 
 /* ISO-8859-3 */
 /* Latin3 (Esperanto, Maltese, Turkish) */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-3.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2244,7 +2244,7 @@ static ImplTextEncodingData const aImplISO88593TextEncodingData
 
 /* ISO-8859-4 */
 /* Latin4 (Estonian, Latvian, Lithuanian) */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-4.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2412,7 +2412,7 @@ static ImplTextEncodingData const aImplISO88594TextEncodingData
 
 /* ISO-8859-5 */
 /* Unix Standard for Cyrillic */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-5.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2510,7 +2510,7 @@ static ImplTextEncodingData const aImplISO88595TextEncodingData
 
 /* ISO-8859-7 */
 /* Unix Standard for Greek */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-7.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2621,7 +2621,7 @@ static ImplTextEncodingData const aImplISO88597TextEncodingData
 
 /* ISO-8859-9 */
 /* Latin5 (Turkish) */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-9.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2721,7 +2721,7 @@ static ImplTextEncodingData const aImplISO88599TextEncodingData
 
 /* ISO-8859-10 */
 /* East European */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-10.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 
@@ -2862,7 +2862,7 @@ static ImplTextEncodingData const aImplISO885910TextEncodingData
 
 /* ISO-8859-13 */
 /* East European */
-/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control caracter like in Unicode */
+/* 1-byte, 0x00-0x7F ASCII without exception, 0x80-0x9F control character like in Unicode */
 /* Convert-Tables: mappings/iso8859/8859-13.txt from 07/27/99 Version 1.0 (based on Unicode 3.0) */
 /* Last-Changes from us: */
 

@@ -1515,7 +1515,7 @@
                     <!--the following choose statement code will process the revised modifier
                         It happens that if a drawing elements has more than 2 modifier, the modifier (or say adj 
                         in wordml) can be adjusted and only the modified adj is recorded.
-                        what makes it more compicated is that adj support both comma and blanks.
+                        what makes it more complicated is that adj support both comma and blanks.
                         so you have to use kickblanks template to kick the blanks and change it to comma version.
                         <key('shapetype',@type)/v:textpath[1]-->
                     <xsl:choose>

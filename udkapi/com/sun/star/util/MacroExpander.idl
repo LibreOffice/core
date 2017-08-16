@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module util {
 
 
 /** This meta service supports the XMacroExpander interface for expanding
-    arbitrary macro expressions, i.e. substitude macro names.
+    arbitrary macro expressions, i.e. substitute macro names.
     The purpose of this service is to separate the use of macrofied strings,
     e.g. urls from the use of services.
 
