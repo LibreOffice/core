@@ -218,8 +218,8 @@ namespace emfplushelper
         SvMemoryStream              mMStream;
 
         /* emf+ graphic state stack */
-        GraphicStateMap         mGSStack;
-        GraphicStateMap         mGSContainerStack;
+        GraphicStateMap             mGSStack;
+        GraphicStateMap             mGSContainerStack;
 
         /// data holders
         wmfemfhelper::TargetHolders&    mrTargetHolders;
