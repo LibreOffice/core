@@ -444,7 +444,7 @@ interface BaseText
         StateMethod = NoState ;
     ]
 
-     // Goto - Methoden
+     // Goto - Methods
 
     SID_FM_TOGGLECONTROLFOCUS
     [
