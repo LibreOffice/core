@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9d49a1d3",
+        "filename": "sc/inc/address.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-16T10:31:42Z",
+      "side": 1,
+      "message": "This may increase memory requirement of an ScAddress object instance on platforms that force alignment of an element to 32-bit boundaries if the element is a 32-bit field, ie. 2(col),2(padding),4(row),2(tab),2(padding) \u003d 12 bytes instead of 8 bytes.\nWith ScRange (two consecutive ScAddress) that would already be 24 bytes instead of 16.\n\nIf alignment is not forced to 32-bit boundaries but packed instead (I doubt we use that anywhere), then the processor instructions to fetch for example the nRow value would be more complicated, as memory access is always done on 64-bit boundaries (the bus width); to obtain nRow 64-bit would be read, then (on a 32-bit target) the upper and lower 16-bit would be extracted by masking and shifting, and then combined into one 32-bit value by ORing those two; on a 64-bit target it\u0027s slightly less overhead. Of course this happens all in registers, but..\n\nI\u0027d rather not have this change.",
+      "revId": "e87a9460b54011aae7843b1b71f82419d6fe0720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
