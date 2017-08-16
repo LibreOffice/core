@@ -37,9 +37,6 @@
     <prop oor:name="ooSetupExtension">
       <value>${PRODUCTEXTENSION}</value>
     </prop>
-    <prop oor:name="ooOpenSourceContext">
-      <value>1</value>
-    </prop>
   </node>
   <node oor:name="Office">
     <node oor:name="Factories">
