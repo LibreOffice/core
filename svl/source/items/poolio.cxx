@@ -88,7 +88,7 @@ sal_uInt16 SfxItemPool::GetSize_Impl() const
 }
 
 
-sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
+bool SfxItemPool::CheckItemInPool(const SfxPoolItem *pItem) const
 {
     DBG_ASSERT( pItem, "no 0-Pointer Surrogate" );
     DBG_ASSERT( !IsInvalidItem(pItem), "no Invalid-Item Surrogate" );
@@ -97,13 +97,13 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     if ( !IsInRange(pItem->Which()) )
     {
         if ( pImpl->mpSecondary )
-            return pImpl->mpSecondary->GetSurrogate( pItem );
+            return pImpl->mpSecondary->CheckItemInPool( pItem );
         SAL_WARN( "svl.items", "unknown Which-Id - don't ask me for surrogates, with ID/pos " << pItem->Which());
     }
 
     // Pointer on static or pool-default attribute?
     if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
-        return SFX_ITEMS_DEFAULT;
+        return true;
 
     SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(pItem->Which())];
     DBG_ASSERT(pItemArr, "ItemArr is not available");
@@ -112,10 +112,10 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     {
         const SfxPoolItem *p = (*pItemArr)[i];
         if ( p == pItem )
-            return i;
+            return true;
     }
     SAL_WARN( "svl.items", "Item not in the pool, with ID/pos " << pItem->Which());
-    return SFX_ITEMS_NULL;
+    return false;
 }
 
 OUString readByteString(SvStream& rStream)
