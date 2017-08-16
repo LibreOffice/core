@@ -3655,7 +3655,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                 }
 
                 // #i79009# For Writer we have to export a broken version of the
-                // range, where every row number is noe too large, so that older
+                // range, where every row number is not too large, so that older
                 // version can correctly read those files.
                 msChartAddress = (bBrokenRangeAvailable ? sBrokenRange : sCellRange);
                 if( !msChartAddress.isEmpty() )

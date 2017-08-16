@@ -58,7 +58,7 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath);
    @param  pustrPath [in]       a system path - must not be NULL
 
    @retval  sal_True    the given path doesn't start with a separator
-   @retval  sal_False   the given path starts with a seperator
+   @retval  sal_False   the given path starts with a separator
 
 */
 bool SAL_CALL osl_systemPathIsRelativePath(

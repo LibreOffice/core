@@ -130,7 +130,7 @@
 	<xsl:template match="/">
 		<!-- debug output of parameter value set -->
 		<xsl:if test="$debugEnabled">
-			<xsl:call-template name="debug-check-paramter" />
+			<xsl:call-template name="debug-check-parameter" />
 		</xsl:if>
 		<!-- gathers style properties and
 			returns them as globalData parameter to the 'start-main' template            -->
@@ -159,7 +159,7 @@
 
 	<!-- debug purpose only:
 		 verbose checking of the parameters of this template-->
-	<xsl:template name="debug-check-paramter">
+	<xsl:template name="debug-check-parameter">
 		<xsl:message>Parameter dpi: <xsl:value-of select="$dpi" /></xsl:message>
 		<xsl:message>Parameter metaFileURL: <xsl:value-of select="$metaFileURL" /></xsl:message>
 		<xsl:message>Parameter stylesFileURL: <xsl:value-of select="$stylesFileURL" /></xsl:message>

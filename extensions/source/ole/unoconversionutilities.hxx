@@ -1952,7 +1952,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
 
         OLECHAR const * sLength= L"length";
 
-        // Get the length of the array. Can also be obtained throu GetNextDispID. The
+        // Get the length of the array. Can also be obtained through GetNextDispID. The
         // method only returns DISPIDs of the array data. Their names are like "0", "1" etc.
         if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, const_cast<OLECHAR **>(&sLength), 1, LOCALE_USER_DEFAULT, &dispid)))
             throw BridgeRuntimeError("[automation bridge] UnoConversionUtilities<T>::dispatchExObject2Sequence \n"
