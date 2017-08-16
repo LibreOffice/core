@@ -506,7 +506,7 @@ public:
 
     virtual tools::Rectangle GetBulletArea( sal_Int32 nPara );
 
-    static SfxItemPool* CreatePool( bool bLoadRefCounts = true );
+    static SfxItemPool* CreatePool();
     static SfxItemPool& GetGlobalItemPool();
     static bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static bool     DoesKeyMoveCursor( const KeyEvent& rKeyEvent );

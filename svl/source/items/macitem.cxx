@@ -245,20 +245,6 @@ bool SvxMacroItem::GetPresentation
 }
 
 
-SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
-{
-    return aMacroTable.Write( rStrm );
-}
-
-
-SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
-{
-    SvxMacroItem* pAttr = new SvxMacroItem( Which() );
-    pAttr->aMacroTable.Read( rStrm, nVersion );
-    return pAttr;
-}
-
-
 void SvxMacroItem::SetMacro( SvMacroItemId nEvent, const SvxMacro& rMacro )
 {
     aMacroTable.Insert( nEvent, rMacro);
