@@ -134,14 +134,6 @@ private:
     bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
     bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
 
-                    enum ScInterpretTailParameter
-                    {
-                        SCITP_NORMAL,
-                        SCITP_FROM_ITERATION,
-                        SCITP_CLOSE_ITERATION_CIRCLE
-                    };
-    void            InterpretTail( ScInterpretTailParameter );
-
     /**
      * Update reference in response to cell copy-n-paste.
      */
@@ -150,6 +142,15 @@ private:
 
     ScFormulaCell( const ScFormulaCell& ) = delete;
 public:
+
+
+                    enum ScInterpretTailParameter
+                    {
+                        SCITP_NORMAL,
+                        SCITP_FROM_ITERATION,
+                        SCITP_CLOSE_ITERATION_CIRCLE
+                    };
+    void            InterpretTail( ScInterpretTailParameter, bool bUpdateProgress );
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
 

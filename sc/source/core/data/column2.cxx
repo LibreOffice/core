@@ -2614,6 +2614,27 @@ copyFirstFormulaBlock(
     return rCxt.setCachedColArray(nTab, nCol, pNumArray, pStrArray);
 }
 
+bool
+DoFormulaBlockForParallelism( const sc::CellStoreType::iterator& itBlk )
+{
+    sc::formula_block::iterator it = sc::formula_block::begin(*itBlk->data);
+    sc::formula_block::iterator itEnd;
+
+    itEnd = it;
+    std::advance(itEnd, itBlk->size);
+    for (; it != itEnd; ++it)
+    {
+        ScFormulaCell& rFC = **it;
+        sc::FormulaResultValue aRes = rFC.GetResult();
+        if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError != FormulaError::NONE)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 struct NonNullStringFinder
 {
     bool operator() (const rtl_uString* p) const { return p != nullptr; }
@@ -2806,6 +2827,27 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 }
 
+bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
+{
+    if (nRow1 > nRow2)
+        return false;
+
+    for (auto itBlk = maCells.begin(); itBlk != maCells.end(); ++itBlk)
+    {
+        switch (itBlk->type)
+        {
+            case sc::element_type_formula:
+            {
+                if (!DoFormulaBlockForParallelism( itBlk))
+                    return false;
+                return true;
+            }
+        }
+    }
+
+    return true;
+}
+
 void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -2859,6 +2901,32 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRe
         rCell.SetResultToken(pResults->get());
         rCell.ResetDirty();
         rCell.SetChanged(true);
+    }
+}
+
+void ScColumn::CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    sc::CellStoreType::iterator it = aPos.first;
+    if (it->type != sc::element_type_formula)
+        // This is not a formula block.
+        return;
+
+    size_t nBlockLen = it->size - aPos.second;
+    if (nBlockLen < nLen)
+        // Length is longer than the length of formula cells. Not good.
+        return;
+
+    sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
+    std::advance(itCell, aPos.second);
+
+    for (size_t i = 0; i < nLen; ++i, ++itCell)
+    {
+        if (nThreadsTotal > 0 && (i % nThreadsTotal) != nThisThread)
+            continue;
+
+        ScFormulaCell& rCell = **itCell;
+        rCell.InterpretTail(ScFormulaCell::SCITP_NORMAL, false);
     }
 }
 

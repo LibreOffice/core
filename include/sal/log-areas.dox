@@ -150,6 +150,8 @@ certain functionality.
 @li @c sc.orcus.style
 @li @c sc.orcus.table
 @li @c sc.qa
+@li @c sc.threaded
+@li @c sc.timing
 @li @c sc.ui - Calc UI
 @li @c sc.uitest - Calc UI Test part
 @li @c sc.viewdata
