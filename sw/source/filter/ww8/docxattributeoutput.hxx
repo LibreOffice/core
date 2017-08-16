@@ -417,7 +417,7 @@ private:
     bool PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
 
-    void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, const Point& rNdTopLeft);
+    void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat);
     bool ExportAsActiveXControl(const SdrObject* pObject) const;
 
     /// checks whether the current component is a diagram
@@ -854,10 +854,9 @@ private:
 
     struct PostponedDrawing
     {
-        PostponedDrawing( const SdrObject* sdrObj, const SwFrameFormat* frm, const Point* pt ) : object( sdrObj ), frame( frm ), point( pt ) {};
+        PostponedDrawing( const SdrObject* sdrObj, const SwFrameFormat* frm) : object( sdrObj ), frame( frm ) {};
         const SdrObject* object;
         const SwFrameFormat* frame;
-        const Point* point;
     };
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedDMLDrawings;
     std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedCustomShape;

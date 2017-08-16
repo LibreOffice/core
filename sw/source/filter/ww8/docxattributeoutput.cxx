@@ -4790,13 +4790,13 @@ void DocxAttributeOutput::WritePostponedActiveXControl()
     for( std::vector<PostponedDrawing>::const_iterator it = m_aPostponedActiveXControls.begin();
          it != m_aPostponedActiveXControls.end(); ++it )
     {
-        WriteActiveXControl(it->object, *(it->frame), *(it->point));
+        WriteActiveXControl(it->object, *(it->frame));
     }
     m_aPostponedActiveXControls.clear();
 }
 
 
-void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft)
+void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat)
 {
     SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(dynamic_cast< const SdrUnoObj*>(pObject));
     if (!pFormObj)
@@ -4833,7 +4833,7 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
         sShapeId = m_rExport.VMLExporter().AddSdrObject(*pObject,
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
-            rVertOri.GetRelationOrient(), &rNdTopLeft, true);
+            rVertOri.GetRelationOrient(), true);
     }
 
     // control
@@ -5013,7 +5013,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
         if ( IsAlternateContentChoiceOpen() )
             m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), m_anchorId++);
     }
     m_bStartedParaSdt = bStartedParaSdt;
     m_pPostponedCustomShape.reset(nullptr);
@@ -5037,14 +5037,14 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
            m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), m_anchorId++);
     }
     m_bStartedParaSdt = bStartedParaSdt;
 
     m_pPostponedOLEs = std::move(pPostponedOLEs);
 }
 
-void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const Point& rNdTopLeft )
+void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const Point& /*rNdTopLeft*/ )
 {
     m_pSerializer->mark(Tag_OutputFlyFrame);
 
@@ -5097,12 +5097,12 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
                                 if( m_rExport.SdrExporter().IsDrawingOpen() )
-                                    m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat()), &rNdTopLeft));
+                                    m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                                 else
                                     m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrameFormat(), m_anchorId++);
                             }
                             else
-                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat(), rNdTopLeft, m_anchorId++);
+                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
                             m_bStartedParaSdt = bStartedParaSdt;
 
                             m_bPostponedProcessingFly = false ;
@@ -5110,12 +5110,12 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                         // IsAlternateContentChoiceOpen(): check is to ensure that only one object is getting added. Without this check, plus one object gets added
                         // m_bParagraphFrameOpen: check if the frame is open.
                         else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen)
-                            m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat()), &rNdTopLeft));
+                            m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                         else
                         {
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
                             m_bPostponedProcessingFly = true ;
-                            m_pPostponedDMLDrawings->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat()), &rNdTopLeft));
+                            m_pPostponedDMLDrawings->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                         }
                     }
                 }
@@ -5166,14 +5166,14 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
             {
                 const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject();
                 if(ExportAsActiveXControl(pObject))
-                    m_aPostponedActiveXControls.push_back(PostponedDrawing(pObject, &(rFrame.GetFrameFormat()), &rNdTopLeft));
+                    m_aPostponedActiveXControls.push_back(PostponedDrawing(pObject, &(rFrame.GetFrameFormat())));
                 else
                     m_aPostponedFormControls.push_back(pObject);
                 m_bPostponedProcessingFly = true ;
             }
             break;
         default:
-            SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame, const Point& rNdTopLeft ) - frame type " <<
+            SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFrame ) - frame type " <<
                     ( rFrame.GetWriterType() == ww8::Frame::eTextBox ? "eTextBox":
                       ( rFrame.GetWriterType() == ww8::Frame::eOle ? "eOle": "???" ) ) );
             break;
