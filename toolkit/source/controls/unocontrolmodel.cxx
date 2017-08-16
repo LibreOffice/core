@@ -557,7 +557,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
     for ( std::set<sal_uInt16>::const_iterator it = aProps.begin(); it != aProps.end(); ++it )
     {
         sal_Int32 nPropDataBeginMark = xMark->createMark();
-        OutStream->writeLong( 0L ); // DataLen
+        OutStream->writeLong( 0 ); // DataLen
 
         const css::uno::Any* pProp = &(maData[*it]);
         OutStream->writeShort( *it );
@@ -712,7 +712,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
         for ( sal_uInt16 n = BASEPROPERTY_FONT_TYPE; n <= BASEPROPERTY_FONT_ATTRIBS; n++ )
         {
             sal_Int32 nPropDataBeginMark = xMark->createMark();
-            OutStream->writeLong( 0L ); // DataLen
+            OutStream->writeLong( 0 ); // DataLen
             OutStream->writeShort( n ); // PropId
             OutStream->writeBoolean( false );   // Void
 

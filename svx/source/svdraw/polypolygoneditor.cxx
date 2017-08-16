@@ -155,7 +155,7 @@ bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, con
 bool PolyPolygonEditor::GetRelativePolyPoint( const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum )
 {
     const sal_uInt32 nPolyCount(rPoly.count());
-    sal_uInt32 nPolyNum(0L);
+    sal_uInt32 nPolyNum(0);
 
     while(nPolyNum < nPolyCount)
     {

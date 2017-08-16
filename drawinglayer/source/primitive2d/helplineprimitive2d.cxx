@@ -111,7 +111,7 @@ namespace drawinglayer
                             // clip against visible area
                             const basegfx::B2DPolyPolygon aResult(basegfx::tools::clipPolygonOnRange(aLine, rViewInformation.getDiscreteViewport(), true, true));
 
-                            for(sal_uInt32 a(0L); a < aResult.count(); a++)
+                            for(sal_uInt32 a(0); a < aResult.count(); a++)
                             {
                                 basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
                                 aPart.transform(rViewInformation.getInverseObjectToViewTransformation());

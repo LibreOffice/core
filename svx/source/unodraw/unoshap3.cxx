@@ -371,7 +371,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
             // set object transformations again at objects
             aIter.Reset();
-            sal_uInt32 nIndex(0L);
+            sal_uInt32 nIndex(0);
             while(aIter.IsMore())
             {
                 E3dObject* p3DObj = static_cast<E3dObject*>(aIter.Next());
@@ -699,7 +699,7 @@ bool PolyPolygonShape3D_to_B3dPolyPolygon(
     drawing::DoubleSequence* pInnerSequenceX = aSourcePolyPolygon.SequenceX.getArray();
     drawing::DoubleSequence* pInnerSequenceY = aSourcePolyPolygon.SequenceY.getArray();
     drawing::DoubleSequence* pInnerSequenceZ = aSourcePolyPolygon.SequenceZ.getArray();
-    for(sal_Int32 a(0L);a<nOuterSequenceCount;a++)
+    for(sal_Int32 a(0);a<nOuterSequenceCount;a++)
     {
         sal_Int32 nInnerSequenceCount = pInnerSequenceX->getLength();
         if(nInnerSequenceCount != pInnerSequenceY->getLength() || nInnerSequenceCount != pInnerSequenceZ->getLength())
@@ -710,7 +710,7 @@ bool PolyPolygonShape3D_to_B3dPolyPolygon(
         double* pArrayX = pInnerSequenceX->getArray();
         double* pArrayY = pInnerSequenceY->getArray();
         double* pArrayZ = pInnerSequenceZ->getArray();
-        for(sal_Int32 b(0L);b<nInnerSequenceCount;b++)
+        for(sal_Int32 b(0);b<nInnerSequenceCount;b++)
         {
             aNewPolygon.append(basegfx::B3DPoint(*pArrayX++,*pArrayY++,*pArrayZ++));
         }
@@ -739,7 +739,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
     drawing::DoubleSequence* pOuterSequenceX = aRetval.SequenceX.getArray();
     drawing::DoubleSequence* pOuterSequenceY = aRetval.SequenceY.getArray();
     drawing::DoubleSequence* pOuterSequenceZ = aRetval.SequenceZ.getArray();
-    for(sal_uInt32 a(0L);a<rSourcePolyPolygon.count();a++)
+    for(sal_uInt32 a(0);a<rSourcePolyPolygon.count();a++)
     {
         const basegfx::B3DPolygon aPoly(rSourcePolyPolygon.getB3DPolygon(a));
         sal_Int32 nPointCount(aPoly.count());
@@ -750,7 +750,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
         double* pInnerSequenceX = pOuterSequenceX->getArray();
         double* pInnerSequenceY = pOuterSequenceY->getArray();
         double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-        for(sal_uInt32 b(0L);b<aPoly.count();b++)
+        for(sal_uInt32 b(0);b<aPoly.count();b++)
         {
             const basegfx::B3DPoint aPoint(aPoly.getB3DPoint(b));
             *pInnerSequenceX++ = aPoint.getX();
@@ -759,7 +759,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
         }
         if(aPoly.isClosed())
         {
-            const basegfx::B3DPoint aPoint(aPoly.getB3DPoint(0L));
+            const basegfx::B3DPoint aPoint(aPoly.getB3DPoint(0));
             *pInnerSequenceX++ = aPoint.getX();
             *pInnerSequenceY++ = aPoint.getY();
             *pInnerSequenceZ++ = aPoint.getZ();

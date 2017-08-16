@@ -1155,8 +1155,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         pPath->SetMergedItemSet(aSet);
         pPath->SetStyleSheet(pStyleSheet, true);
         pGroup->GetSubList()->NbcInsertObject(pPath);
-        aSet.Put(XLineStartWidthItem(0L));
-        aSet.Put(XLineEndWidthItem(0L));
+        aSet.Put(XLineStartWidthItem(0));
+        aSet.Put(XLineEndWidthItem(0));
         nLoopStart = 1;
     }
     else if(nCount == 4)
@@ -1164,7 +1164,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
         sal_Int32 nEndWidth = static_cast<const XLineEndWidthItem&>(aSet.Get(XATTR_LINEENDWIDTH)).GetValue();
-        aSet.Put(XLineEndWidthItem(0L));
+        aSet.Put(XLineEndWidthItem(0));
 
         aPolyPoly.clear();
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
@@ -1176,7 +1176,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineEndWidthItem(nEndWidth));
-        aSet.Put(XLineStartWidthItem(0L));
+        aSet.Put(XLineStartWidthItem(0));
 
         aPolyPoly.clear();
         aPolyPoly.append(aTmpPolyPolygon[1].getB2DPolygon());
@@ -1187,7 +1187,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
-        aSet.Put(XLineEndWidthItem(0L));
+        aSet.Put(XLineEndWidthItem(0));
         nLoopStart = 2;
     }
     else if(nCount == 5)
@@ -1195,7 +1195,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         // five lines, first two are the outer ones
         sal_Int32 nEndWidth = static_cast<const XLineEndWidthItem&>(aSet.Get(XATTR_LINEENDWIDTH)).GetValue();
 
-        aSet.Put(XLineEndWidthItem(0L));
+        aSet.Put(XLineEndWidthItem(0));
 
         aPolyPoly.clear();
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
@@ -1207,7 +1207,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
         aSet.Put(XLineEndWidthItem(nEndWidth));
-        aSet.Put(XLineStartWidthItem(0L));
+        aSet.Put(XLineStartWidthItem(0));
 
         aPolyPoly.clear();
         aPolyPoly.append(aTmpPolyPolygon[1].getB2DPolygon());
@@ -1218,7 +1218,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 
         pGroup->GetSubList()->NbcInsertObject(pPath);
 
-        aSet.Put(XLineEndWidthItem(0L));
+        aSet.Put(XLineEndWidthItem(0));
         nLoopStart = 2;
     }
 

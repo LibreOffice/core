@@ -129,7 +129,7 @@ bool StgHeader::Load( StgIo& rIo )
 
 bool StgHeader::Load( SvStream& r )
 {
-    r.Seek( 0L );
+    r.Seek( 0 );
     r.ReadBytes( m_cSignature, 8 );
     ReadClsId( r, m_aClsId );         // 08 Class ID
     r.ReadInt32( m_nVersion )                   // 1A version number
@@ -157,7 +157,7 @@ bool StgHeader::Store( StgIo& rIo )
         return true;
 
     SvStream& r = *rIo.GetStrm();
-    r.Seek( 0L );
+    r.Seek( 0 );
     r.WriteBytes( m_cSignature, 8 );
     WriteClsId( r, m_aClsId );                   // 08 Class ID
     r.WriteInt32( m_nVersion )                   // 1A version number

@@ -2181,7 +2181,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
             "<SwWW8ImplReader::Read_HdFtTextAsHackedFrame(..)> - missing SdrObject instance" );
     if ( pFrameObj )
     {
-        pFrameObj->SetOrdNum( 0L );
+        pFrameObj->SetOrdNum( 0 );
     }
     MoveInsideFly(pFrame);
 

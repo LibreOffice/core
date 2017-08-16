@@ -1064,7 +1064,7 @@ vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView const & rView)
 {
     const sal_uInt32 nWinCount(rView.PaintWindowCount());
 
-    for(sal_uInt32 a(0L); a < nWinCount; a++)
+    for(sal_uInt32 a(0); a < nWinCount; a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
 

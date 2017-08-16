@@ -58,7 +58,7 @@ void createSubPrimitive3DVector(
             drawinglayer::primitive3d::Primitive3DContainer aNewVisibleTarget;
 
             // add children recursively
-            for(sal_uInt32 a(0L); a < nChildrenCount; a++)
+            for(sal_uInt32 a(0); a < nChildrenCount; a++)
             {
                 createSubPrimitive3DVector(
                     rCandidate.GetViewContact(a),
@@ -286,7 +286,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
         // a 3D transformPrimitive for the start scene. While this is theoretically not
         // a bad thing, for historical reasons the transformation of the outmost scene
         // is seen as part of the ViewTransformation (see text in createViewInformation3D)
-        for(sal_uInt32 a(0L); a < nChildrenCount; a++)
+        for(sal_uInt32 a(0); a < nChildrenCount; a++)
         {
             createSubPrimitive3DVector(
                 GetViewContact(a),
@@ -429,7 +429,7 @@ drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3dScene::getAllPri
     // a 3D transformPrimitive for the start scene. While this is theoretically not
     // a bad thing, for historical reasons the transformation of the outmost scene
     // is seen as part of the ViewTransformation (see text in createViewInformation3D)
-    for(sal_uInt32 a(0L); a < nChildrenCount; a++)
+    for(sal_uInt32 a(0); a < nChildrenCount; a++)
     {
         createSubPrimitive3DVector(GetViewContact(a), aAllPrimitive3DContainer, nullptr, nullptr, false);
     }

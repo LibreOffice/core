@@ -22,7 +22,7 @@
 
 
 CIIAObj::CIIAObj(DocumentHolder* pDocHolder)
-    : m_refCount( 0L ),
+    : m_refCount( 0 ),
       m_rDocHolder( pDocHolder )
 {
 }

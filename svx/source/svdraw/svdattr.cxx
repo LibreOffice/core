@@ -113,7 +113,7 @@ SdrItemPool::SdrItemPool(
 {
     // prepare some constants
     const Color aNullCol(RGB_Color(COL_BLACK));
-    const sal_Int32 nDefEdgeDist(500L); // Defaulting hard for Draw (100TH_MM) currently. MapMode will have to be taken into account in the future.
+    const sal_Int32 nDefEdgeDist(500); // Defaulting hard for Draw (100TH_MM) currently. MapMode will have to be taken into account in the future.
 
     // init the non-persistent items
     for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)

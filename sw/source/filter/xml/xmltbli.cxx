@@ -441,9 +441,9 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     m_bHasStringValue(false),
     m_bValueTypeIsString(false),
     bProtect( false ),
-    nRowSpan( 1UL ),
-    nColSpan( 1UL ),
-    nColRepeat( 1UL ),
+    nRowSpan( 1 ),
+    nColSpan( 1 ),
+    nColRepeat( 1 ),
     bHasTextContent( false ),
     bHasTableContent( false )
 {
@@ -1237,9 +1237,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_bRelWidth( true ),
     m_bHasSubTables( false ),
     m_nHeaderRows( 0 ),
-    m_nCurRow( 0UL ),
-    m_nCurCol( 0UL ),
-    m_nWidth( 0UL )
+    m_nCurRow( 0 ),
+    m_nCurCol( 0 ),
+    m_nWidth( 0 )
 {
     OUString aName;
     OUString sXmlId;
@@ -1378,9 +1378,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_bRelWidth( true ),
     m_bHasSubTables( false ),
     m_nHeaderRows( 0 ),
-    m_nCurRow( 0UL ),
-    m_nCurCol( 0UL ),
-    m_nWidth( 0UL )
+    m_nCurRow( 0 ),
+    m_nCurCol( 0 ),
+    m_nWidth( 0 )
 {
 }
 

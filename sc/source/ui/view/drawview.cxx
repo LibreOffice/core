@@ -503,7 +503,7 @@ void ScDrawView::MarkListHasChanged()
     InvalidateAttribs();                // after the image map editor update
     InvalidateDrawTextAttrs();
 
-    for(sal_uInt32 a(0L); a < PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
     {
         SdrPaintWindow* pPaintWindow = GetPaintWindow(a);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();

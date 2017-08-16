@@ -778,7 +778,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
             if(1L == pLastPoly->GetPathPoly().count())
             {
                 bool bOk(false);
-                basegfx::B2DPolygon aDstPoly(pLastPoly->GetPathPoly().getB2DPolygon(0L));
+                basegfx::B2DPolygon aDstPoly(pLastPoly->GetPathPoly().getB2DPolygon(0));
 
                 // #i102706# Do not merge closed polygons
                 if(aDstPoly.isClosed())
@@ -791,19 +791,19 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
                     const sal_uInt32 nMaxDstPnt(aDstPoly.count() - 1L);
                     const sal_uInt32 nMaxSrcPnt(rSrcPoly.count() - 1L);
 
-                    if(aDstPoly.getB2DPoint(nMaxDstPnt) == rSrcPoly.getB2DPoint(0L))
+                    if(aDstPoly.getB2DPoint(nMaxDstPnt) == rSrcPoly.getB2DPoint(0))
                     {
                         aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1L);
                         bOk = true;
                     }
-                    else if(aDstPoly.getB2DPoint(0L) == rSrcPoly.getB2DPoint(nMaxSrcPnt))
+                    else if(aDstPoly.getB2DPoint(0) == rSrcPoly.getB2DPoint(nMaxSrcPnt))
                     {
                         basegfx::B2DPolygon aNew(rSrcPoly);
                         aNew.append(aDstPoly, 1L, aDstPoly.count() - 1L);
                         aDstPoly = aNew;
                         bOk = true;
                     }
-                    else if(aDstPoly.getB2DPoint(0L) == rSrcPoly.getB2DPoint(0L))
+                    else if(aDstPoly.getB2DPoint(0) == rSrcPoly.getB2DPoint(0))
                     {
                         aDstPoly.flip();
                         aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1L);

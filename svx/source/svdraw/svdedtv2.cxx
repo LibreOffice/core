@@ -686,19 +686,19 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
 {
     const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
-    if(0L == nPolyCount)
+    if(0 == nPolyCount)
     {
         return basegfx::B2DPolygon();
     }
-    else if(1L == nPolyCount)
+    else if(1 == nPolyCount)
     {
-        return rPolyPolygon.getB2DPolygon(0L);
+        return rPolyPolygon.getB2DPolygon(0);
     }
     else
     {
-        basegfx::B2DPolygon aRetval(rPolyPolygon.getB2DPolygon(0L));
+        basegfx::B2DPolygon aRetval(rPolyPolygon.getB2DPolygon(0));
 
-        for(sal_uInt32 a(1L); a < nPolyCount; a++)
+        for(sal_uInt32 a(1); a < nPolyCount; a++)
         {
             basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(a));
 
@@ -706,9 +706,9 @@ basegfx::B2DPolygon SdrEditView::ImpCombineToSinglePolygon(const basegfx::B2DPol
             {
                 if(aCandidate.count())
                 {
-                    const basegfx::B2DPoint aCA(aCandidate.getB2DPoint(0L));
+                    const basegfx::B2DPoint aCA(aCandidate.getB2DPoint(0));
                     const basegfx::B2DPoint aCB(aCandidate.getB2DPoint(aCandidate.count() - 1L));
-                    const basegfx::B2DPoint aRA(aRetval.getB2DPoint(0L));
+                    const basegfx::B2DPoint aRA(aRetval.getB2DPoint(0));
                     const basegfx::B2DPoint aRB(aRetval.getB2DPoint(aRetval.count() - 1L));
 
                     const double fRACA(basegfx::B2DVector(aCA - aRA).getLength());
@@ -1327,7 +1327,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
         else
         {
             // check for Polyline
-            const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0L));
+            const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
             const sal_uInt32 nPointCount(aPolygon.count());
 
             if(nPointCount <= 2L)
@@ -1338,7 +1338,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             {
                 if(!aPolygon.isClosed())
                 {
-                    const basegfx::B2DPoint aPointA(aPolygon.getB2DPoint(0L));
+                    const basegfx::B2DPoint aPointA(aPolygon.getB2DPoint(0));
                     const basegfx::B2DPoint aPointB(aPolygon.getB2DPoint(nPointCount - 1L));
                     const double fDistance(basegfx::B2DVector(aPointB - aPointA).getLength());
                     const double fJoinTolerance(10.0);
@@ -1412,7 +1412,7 @@ bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, 
     else if(bMakeLines && 1L == nPolygonCount)
     {
         // #i69172# ..or with at least 2 edges (curves or lines)
-        const basegfx::B2DPolygon aPolygon(rPpolyPolygon.getB2DPolygon(0L));
+        const basegfx::B2DPolygon aPolygon(rPpolyPolygon.getB2DPolygon(0));
         const sal_uInt32 nPointCount(aPolygon.count());
 
         if(nPointCount > 2L)

@@ -33,7 +33,7 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
     // build up vectors again
     const sal_uInt32 nPageCount(ImpGetPageCount());
 
-    for(sal_uInt32 a(0L); a < nPageCount; a++)
+    for(sal_uInt32 a(0); a < nPageCount; a++)
     {
         SdPage* pCandidate = ImpGetPage(a);
         DBG_ASSERT(pCandidate, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Invalid PageList in Model (!)");
@@ -127,7 +127,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
 
 sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
 {
-    sal_uInt32 nRetval(0L);
+    sal_uInt32 nRetval(0);
 
     if(!mbPageListValid)
     {
@@ -167,7 +167,7 @@ sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
     // build up vectors again
     const sal_uInt32 nPageCount(ImpGetPageCount());
 
-    for(sal_uInt32 a(0L); a < nPageCount; a++)
+    for(sal_uInt32 a(0); a < nPageCount; a++)
     {
         SdPage* pCandidate = ImpGetPage(a);
         if ((pCandidate->GetPageKind() == PageKind::Standard)&&(!pCandidate->IsExcluded())) nVisiblePageCount++;

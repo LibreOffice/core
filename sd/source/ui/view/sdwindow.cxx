@@ -396,8 +396,8 @@ long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        sal_uLong nX(0L);
-        sal_uLong nY(0L);
+        sal_uLong nX(0);
+        sal_uLong nY(0);
 
         const Size aWinSize( PixelToLogic(GetOutputSizePixel()) );
         if(rZoomRect.GetHeight())
@@ -470,8 +470,8 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        sal_uLong nX(0L);
-        sal_uLong nY(0L);
+        sal_uLong nX(0);
+        sal_uLong nY(0);
 
         if(rZoomRect.GetHeight())
         {

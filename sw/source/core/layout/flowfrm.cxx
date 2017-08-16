@@ -2269,7 +2269,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
     if ( pNewUpper &&
          m_rThis.IsTextFrame() && !IsFollow() )
     {
-        sal_uInt32 nToPageNum( 0L );
+        sal_uInt32 nToPageNum( 0 );
         const bool bMoveFwdByObjPos = SwLayouter::FrameMovedFwdByObjPos(
                                                 *(pOldPage->GetFormat()->GetDoc()),
                                                 static_cast<SwTextFrame&>(m_rThis),

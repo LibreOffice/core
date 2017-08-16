@@ -99,7 +99,7 @@ Size GraphicReader::GetPreviewSize() const
 
 ImpGraphic::ImpGraphic() :
         meType          ( GraphicType::NONE ),
-        mnSizeBytes     ( 0UL ),
+        mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false )
 {
@@ -150,7 +150,7 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
-        mnSizeBytes     ( 0UL ),
+        mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false )
 {
@@ -159,7 +159,7 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
-        mnSizeBytes     ( 0UL ),
+        mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false )
 {
@@ -167,7 +167,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 
 ImpGraphic::ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
 :   meType( rVectorGraphicDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
-    mnSizeBytes( 0UL ),
+    mnSizeBytes( 0 ),
     mbSwapOut( false ),
     mbDummyContext  ( false ),
     maVectorGraphicData(rVectorGraphicDataPtr)
@@ -178,7 +178,7 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
         mpAnimation     ( o3tl::make_unique<Animation>( rAnimation ) ),
         meType          ( GraphicType::Bitmap ),
-        mnSizeBytes     ( 0UL ),
+        mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false )
 {
@@ -187,7 +187,7 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
         meType          ( GraphicType::GdiMetafile ),
-        mnSizeBytes     ( 0UL ),
+        mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false )
 {

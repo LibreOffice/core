@@ -1551,7 +1551,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
     if ( nMinTimeout <= 0 )
-        nMinTimeout = sal_Int32( 1000L );
+        nMinTimeout = sal_Int32( 1000 );
     pTimeout->Seconds = nMinTimeout / 1000L;
     pTimeout->Nanosec = ( nMinTimeout % 1000L ) * 1000000L;
 

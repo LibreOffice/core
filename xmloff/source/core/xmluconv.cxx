@@ -491,7 +491,7 @@ static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUStri
     if(_sValue.isEmpty() || _sValue[0] != '(')
         return false;
 
-    sal_Int32 nPos(1L);
+    sal_Int32 nPos(1);
     sal_Int32 nFound = _sValue.indexOf(' ', nPos);
 
     if(nFound == -1 || nFound <= nPos)

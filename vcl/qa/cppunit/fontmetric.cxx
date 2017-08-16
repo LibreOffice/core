@@ -68,13 +68,13 @@ void VclFontMetricTest::testSpacings()
     aFontMetric.SetDescent( 100 );
     CPPUNIT_ASSERT_EQUAL( aFontMetric.GetDescent(), 100L );
 
-    aFontMetric.SetExternalLeading( 100L );
+    aFontMetric.SetExternalLeading( 100 );
     CPPUNIT_ASSERT_EQUAL( aFontMetric.GetExternalLeading(), 100L );
 
-    aFontMetric.SetInternalLeading( 100L );
+    aFontMetric.SetInternalLeading( 100 );
     CPPUNIT_ASSERT_EQUAL( aFontMetric.GetInternalLeading(), 100L );
 
-    aFontMetric.SetLineHeight( 100L );
+    aFontMetric.SetLineHeight( 100 );
     CPPUNIT_ASSERT_EQUAL( aFontMetric.GetLineHeight(), 100L );
 }
 

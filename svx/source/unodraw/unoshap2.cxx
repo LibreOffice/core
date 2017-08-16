@@ -1044,7 +1044,7 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
     // get pointer to external arrays
     drawing::PointSequence* pOuterSequence = rRetval.getArray();
 
-    for(sal_uInt32 a(0L); a < rPolyPoly.count(); a++)
+    for(sal_uInt32 a(0); a < rPolyPoly.count(); a++)
     {
         // get single polygon
         const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(a));
@@ -1061,7 +1061,7 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
         // get pointer to arrays
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
-        for(sal_uInt32 b(0L); b < nPointCount; b++)
+        for(sal_uInt32 b(0); b < nPointCount; b++)
         {
             const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(b));
             *pInnerSequence = awt::Point( basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()) );
@@ -1116,14 +1116,14 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
 
         sal_Int32 nCount = 0;
         if( rPolyPoly.count() > 0 )
-            nCount = rPolyPoly.getB2DPolygon(0L).count();
+            nCount = rPolyPoly.getB2DPolygon(0).count();
 
         drawing::PointSequence aRetval( nCount );
 
         if( nCount > 0 )
         {
             // get single polygon
-            const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(0L));
+            const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(0));
 
             // get pointer to arrays
             awt::Point* pSequence = aRetval.getArray();

@@ -2003,7 +2003,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 xml::sax::InputSource aParserInput;
                 aParserInput.sSystemId = sStrmName;
 
-                xStrm->Seek( 0L );
+                xStrm->Seek( 0 );
                 xStrm->SetBufferSize( 8 * 1024 );
                 aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
 

@@ -61,9 +61,9 @@ namespace
                 {
                     const sal_uInt16 nDivisor(mnAntiAlialize * mnAntiAlialize);
 
-                    for(sal_uInt32 y(0L); y < nHeight; y++)
+                    for(sal_uInt32 y(0); y < nHeight; y++)
                     {
-                        for(sal_uInt32 x(0L); x < nWidth; x++)
+                        for(sal_uInt32 x(0); x < nWidth; x++)
                         {
                             sal_uInt16 nRed(0);
                             sal_uInt16 nGreen(0);
@@ -100,11 +100,11 @@ namespace
                 }
                 else
                 {
-                    sal_uInt32 nIndex(0L);
+                    sal_uInt32 nIndex(0);
 
-                    for(sal_uInt32 y(0L); y < nHeight; y++)
+                    for(sal_uInt32 y(0); y < nHeight; y++)
                     {
-                        for(sal_uInt32 x(0L); x < nWidth; x++)
+                        for(sal_uInt32 x(0); x < nWidth; x++)
                         {
                             const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
 

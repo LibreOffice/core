@@ -1470,7 +1470,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
     {
         const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
 
-        for ( sal_Int32 nPtNum(0L); nPtNum < nCoordSize; nPtNum++ )
+        for ( sal_Int32 nPtNum(0); nPtNum < nCoordSize; nPtNum++ )
         {
             const Point aTempPoint(GetPoint( *pTmp++, true, true ));
             aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
@@ -1726,7 +1726,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
 
                 case QUADRATICCURVETO :
                 {
-                    for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
+                    for ( sal_Int32 i(0); ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
                         if ( rSrcPt )
                         {
@@ -1756,7 +1756,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
 
                 case LINETO :
                 {
-                    for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
+                    for ( sal_Int32 i(0); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
                         SAL_INFO(

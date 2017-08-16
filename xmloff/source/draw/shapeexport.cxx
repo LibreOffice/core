@@ -1920,7 +1920,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
                                   XML_FRAME, bCreateNewline, true );
 
         // evtl. corner radius?
-        sal_Int32 nCornerRadius(0L);
+        sal_Int32 nCornerRadius(0);
         xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
         if(nCornerRadius)
         {
@@ -1954,7 +1954,7 @@ void XMLShapeExport::ImpExportRectangleShape(
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         // evtl. corner radius?
-        sal_Int32 nCornerRadius(0L);
+        sal_Int32 nCornerRadius(0);
         xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
         if(nCornerRadius)
         {
@@ -2934,7 +2934,7 @@ void XMLShapeExport::ImpExportCaptionShape(
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         // evtl. corner radius?
-        sal_Int32 nCornerRadius(0L);
+        sal_Int32 nCornerRadius(0);
         xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
         if(nCornerRadius)
         {

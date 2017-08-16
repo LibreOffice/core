@@ -132,10 +132,10 @@ static void lcl_addOutplaceProperties(
 
         if( aSize.Width() && aSize.Height() )
         {
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(0L) );
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
             pStates++;
 
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(0L) );
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
             pStates++;
 
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any((sal_Int32)aSize.Width()) );

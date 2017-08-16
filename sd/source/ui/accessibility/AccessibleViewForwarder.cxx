@@ -36,7 +36,7 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
       mnWindowId (0)
 {
     // Search the output device to determine its id.
-    for(sal_uInt32 a(0L); a < mpView->PaintWindowCount(); a++)
+    for(sal_uInt32 a(0); a < mpView->PaintWindowCount(); a++)
     {
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(a);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();

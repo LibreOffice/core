@@ -584,7 +584,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
                         if( !InsertObject( aNewObj ) )
                             pEntry->mbDelete = true;
 
-                        pIStm->SetBufferSize( 0L );
+                        pIStm->SetBufferSize( 0 );
                     }
                 }
             }
@@ -941,7 +941,7 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel )
             {
                 xIStm->SetBufferSize( STREAMBUF_SIZE );
                 bRet = GallerySvDrawImport( *xIStm, rModel );
-                xIStm->SetBufferSize( 0L );
+                xIStm->SetBufferSize( 0 );
             }
         }
     }
@@ -986,7 +986,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
                 bRet = InsertObject( aObjSvDraw, nInsertPos );
             }
 
-            xOStm->SetBufferSize( 0L );
+            xOStm->SetBufferSize( 0 );
             xOStm->Commit();
         }
     }
@@ -1071,7 +1071,7 @@ bool GalleryTheme::InsertModelStream( const tools::SvRef<SotStorageStream>& rxMo
                 bRet = InsertObject( aObjSvDraw, nInsertPos );
             }
 
-            xOStm->SetBufferSize( 0L );
+            xOStm->SetBufferSize( 0 );
             xOStm->Commit();
         }
     }

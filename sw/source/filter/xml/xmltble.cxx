@@ -74,7 +74,7 @@ public:
 
     explicit SwXMLTableColumn_Impl(sal_uInt32 nPosition)
         : SwWriteTableCol(nPosition)
-        , nRelWidth(0UL)
+        , nRelWidth(0)
     {};
 
     void SetStyleName( const OUString& rName ) { sStyleName = rName; }
@@ -120,7 +120,7 @@ public:
 
 SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     pLines( &rLines ),
-    nWidth( 0UL )
+    nWidth( 0 )
 {
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0U;

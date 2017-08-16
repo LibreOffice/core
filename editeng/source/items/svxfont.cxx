@@ -353,7 +353,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     {
         const OUString aNewText = CalcCaseMap(rTxt);
         bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
-        sal_Int32 nWidth(0L);
+        sal_Int32 nWidth(0);
 
         if(bCaseMapLengthDiffers)
         {

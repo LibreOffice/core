@@ -269,7 +269,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
         }
     }
 
-    aTempStrm1.Seek(0L);
+    aTempStrm1.Seek(0);
     for (aItr = aEndCps.begin(), n = 0;aItr != aEndCps.end();++aItr,++n)
     {
         if (aItr->second)
@@ -279,7 +279,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
         }
     }
 
-    aTempStrm2.Seek(0L);
+    aTempStrm2.Seek(0);
     rWrt.WriteAsStringTable(aNames, rWrt.pFib->m_fcSttbfbkmk,rWrt.pFib->m_lcbSttbfbkmk);
     SvStream& rStrm = *rWrt.pTableStrm;
     rWrt.pFib->m_fcPlcfbkf = rStrm.Tell();

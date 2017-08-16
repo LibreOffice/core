@@ -236,7 +236,7 @@ namespace
             rOutDev.SetFillColor();
             rOutDev.SetLineColor(aColor);
 
-            for(sal_uInt32 a(0L); a < nLoopCount; a++)
+            for(sal_uInt32 a(0); a < nLoopCount; a++)
             {
                 const basegfx::B2DPoint aBStart(aCandidate.getB2DPoint(a));
                 const basegfx::B2DPoint aBEnd(aCandidate.getB2DPoint((a + 1) % aCandidate.count()));
@@ -252,7 +252,7 @@ namespace
         if(rPageView.GetPage() && rPageView.GetPage()->GetObjCount() >= 2L)
         {
             SdrPage* pPage = rPageView.GetPage();
-            SdrObject* pObjA = pPage->GetObj(0L);
+            SdrObject* pObjA = pPage->GetObj(0);
 
             if(pObjA && dynamic_cast<const SdrPathObj*>( pObjA) !=  nullptr)
             {
@@ -261,7 +261,7 @@ namespace
 
                 basegfx::B2DPolyPolygon aPolyB;
 
-                for(sal_uInt32 a(1L); a < rPageView.GetPage()->GetObjCount(); a++)
+                for(sal_uInt32 a(1); a < rPageView.GetPage()->GetObjCount(); a++)
                 {
                     SdrObject* pObjB = pPage->GetObj(a);
 
@@ -279,7 +279,7 @@ namespace
                     // poly b being closed.
                     basegfx::B2DPolyPolygon aResult(basegfx::tools::clipPolyPolygonOnPolyPolygon(aPolyB, aPolyA));
 
-                    for(sal_uInt32 a(0L); a < aResult.count(); a++)
+                    for(sal_uInt32 a(0); a < aResult.count(); a++)
                     {
                         int nR = comphelper::rng::uniform_int_distribution(0, 254);
                         int nG = comphelper::rng::uniform_int_distribution(0, 254);

@@ -144,8 +144,8 @@ public:
 
 ImplPointArray::ImplPointArray() :
     mpArray     ( nullptr ),
-    mnSize      ( 0UL ),
-    mnRealSize  ( 0UL )
+    mnSize      ( 0 ),
+    mnRealSize  ( 0 )
 
 {
 }
@@ -290,8 +290,8 @@ public:
 };
 
 ImplChain::ImplChain() :
-    mnArraySize ( 1024UL ),
-    mnCount     ( 0UL )
+    mnArraySize ( 1024 ),
+    mnCount     ( 0 )
 {
     mpCodes.reset( new sal_uInt8[ mnArraySize ] );
 }

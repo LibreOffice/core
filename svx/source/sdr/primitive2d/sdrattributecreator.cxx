@@ -289,7 +289,7 @@ namespace drawinglayer
                 {
                     aStartPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
 
-                    if(aStartPolyPolygon.count() && aStartPolyPolygon.getB2DPolygon(0L).count())
+                    if(aStartPolyPolygon.count() && aStartPolyPolygon.getB2DPolygon(0).count())
                     {
                         bStartActive = true;
                         bStartCentered = static_cast<const XLineStartCenterItem&>(rSet.Get(XATTR_LINESTARTCENTER)).GetValue();
@@ -312,7 +312,7 @@ namespace drawinglayer
                 {
                     aEndPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());
 
-                    if(aEndPolyPolygon.count() && aEndPolyPolygon.getB2DPolygon(0L).count())
+                    if(aEndPolyPolygon.count() && aEndPolyPolygon.getB2DPolygon(0).count())
                     {
                         bEndActive = true;
                         bEndCentered = static_cast<const XLineEndCenterItem&>(rSet.Get(XATTR_LINEENDCENTER)).GetValue();

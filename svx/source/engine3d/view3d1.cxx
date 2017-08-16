@@ -105,7 +105,7 @@ SfxItemSet E3dView::Get3DAttributes() const
         svl::Items<SDRATTR_START,      SDRATTR_END,
         SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN>{});
 
-    sal_uInt32 nSelectedItems(0L);
+    sal_uInt32 nSelectedItems(0);
 
     // get attributes from all selected objects
     MergeAttrFromMarked(aSet, false);
@@ -145,7 +145,7 @@ SfxItemSet E3dView::Get3DAttributes() const
 
 void E3dView::Set3DAttributes( const SfxItemSet& rAttr)
 {
-    sal_uInt32 nSelectedItems(0L);
+    sal_uInt32 nSelectedItems(0);
 
     // #i94832# removed usage of E3DModifySceneSnapRectUpdater here.
     // They are not needed here, they are already handled in SetAttrToMarked

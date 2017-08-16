@@ -1833,7 +1833,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
             basegfx::B2DCubicBezier aBezier;
             aBezier.setStartPoint(rPolygon.getB2DPoint(0));
 
-            for(sal_uInt32 a(0L); a < nLoopCount; a++)
+            for(sal_uInt32 a(0); a < nLoopCount; a++)
             {
                 // add current point (always) and remember StartPointIndex for evtl. later corrections
                 const Point aStartPoint(FRound(aBezier.getStartPoint().getX()), FRound(aBezier.getStartPoint().getY()));
@@ -1920,7 +1920,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
             mpImplPolygon = new ImplPolygon( static_cast< sal_uInt16 >(nTargetCount) );
             sal_uInt16 nIndex(0);
 
-            for(sal_uInt32 a(0L); a < nB2DLocalCount; a++)
+            for(sal_uInt32 a(0); a < nB2DLocalCount; a++)
             {
                 basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
                 Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));

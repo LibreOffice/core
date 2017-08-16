@@ -2387,7 +2387,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 aLinePolygonPart->SetModel(pRet->GetModel());
 
                 // correct item properties
-                aSet.Put(XLineWidthItem(0L));
+                aSet.Put(XLineWidthItem(0));
                 aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                 Color aColorLine = static_cast<const XLineColorItem&>(aSet.Get(XATTR_LINECOLOR)).GetColorValue();
                 sal_uInt16 nTransLine = static_cast<const XLineTransparenceItem&>(aSet.Get(XATTR_LINETRANSPARENCE)).GetValue();
@@ -2407,7 +2407,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 aLineHairlinePart = new SdrPathObj(OBJ_PATHLINE, aMergedHairlinePolyPolygon);
                 aLineHairlinePart->SetModel(pRet->GetModel());
 
-                aSet.Put(XLineWidthItem(0L));
+                aSet.Put(XLineWidthItem(0));
                 aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                 aSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
 
@@ -2447,7 +2447,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                     aSet.ClearItem();
                     aSet.Put(pRet->GetMergedItemSet());
                     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-                    aSet.Put(XLineWidthItem(0L));
+                    aSet.Put(XLineWidthItem(0));
 
                     SdrObject* pClone = pRet->Clone();
 

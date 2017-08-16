@@ -684,7 +684,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground()
 sal_Int32 SAL_CALL AccessibleShape::getBackground()
 {
     ThrowIfDisposed ();
-    sal_Int32 nColor (0L);
+    sal_Int32 nColor (0);
 
     try
     {

@@ -825,7 +825,7 @@ void AccObject::UpdateState()
         return ;
     }
 
-    m_pIMAcc->SetState(0L);
+    m_pIMAcc->SetState(0);
 
     if ( m_accRole == POPUP_MENU )
     {

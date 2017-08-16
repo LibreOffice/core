@@ -1681,7 +1681,7 @@ SdrPathObj::~SdrPathObj()
 
 static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    return (1L == rPolyPolygon.count() && 2L == rPolyPolygon.getB2DPolygon(0L).count());
+    return (1L == rPolyPolygon.count() && 2L == rPolyPolygon.getB2DPolygon(0).count());
 }
 
 static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
@@ -1697,9 +1697,9 @@ void SdrPathObj::ImpForceLineAngle()
 {
     if(OBJ_LINE == meKind && lcl_ImpIsLine(GetPathPoly()))
     {
-        const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0L));
-        const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0L));
-        const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1L));
+        const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
+        const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
+        const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
         const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
         const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
         const Point aDelt(aPoint1 - aPoint0);
@@ -1880,9 +1880,9 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
         if(lcl_ImpIsLine(GetPathPoly()))
         {
-            const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0L));
-            const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0L));
-            const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1L));
+            const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0));
+            const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0));
+            const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1));
 
             if(aB2DPoint0 != aB2DPoint1)
             {
@@ -1930,10 +1930,10 @@ OUString SdrPathObj::TakeObjNameSingul() const
         else
         {
             // get point count
-            sal_uInt32 nPointCount(0L);
+            sal_uInt32 nPointCount(0);
             const sal_uInt32 nPolyCount(GetPathPoly().count());
 
-            for(sal_uInt32 a(0L); a < nPolyCount; a++)
+            for(sal_uInt32 a(0); a < nPolyCount; a++)
             {
                 nPointCount += GetPathPoly().getB2DPolygon(a).count();
             }
@@ -2004,10 +2004,10 @@ basegfx::B2DPolyPolygon SdrPathObj::TakeXorPoly() const
 
 sal_uInt32 SdrPathObj::GetHdlCount() const
 {
-    sal_uInt32 nRetval(0L);
+    sal_uInt32 nRetval(0);
     const sal_uInt32 nPolyCount(GetPathPoly().count());
 
-    for(sal_uInt32 a(0L); a < nPolyCount; a++)
+    for(sal_uInt32 a(0); a < nPolyCount; a++)
     {
         nRetval += GetPathPoly().getB2DPolygon(a).count();
     }
@@ -2477,9 +2477,9 @@ bool SdrPathObj::IsPolyObj() const
 sal_uInt32 SdrPathObj::GetPointCount() const
 {
     const sal_uInt32 nPolyCount(GetPathPoly().count());
-    sal_uInt32 nRetval(0L);
+    sal_uInt32 nRetval(0);
 
-    for(sal_uInt32 a(0L); a < nPolyCount; a++)
+    for(sal_uInt32 a(0); a < nPolyCount; a++)
     {
         nRetval += GetPathPoly().getB2DPolygon(a).count();
     }
@@ -2541,8 +2541,8 @@ sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)
     {
         // look for smallest distance data
         const basegfx::B2DPoint aTestPoint(rPos.X(), rPos.Y());
-        sal_uInt32 nSmallestPolyIndex(0L);
-        sal_uInt32 nSmallestEdgeIndex(0L);
+        sal_uInt32 nSmallestPolyIndex(0);
+        sal_uInt32 nSmallestEdgeIndex(0);
         double fSmallestCut;
         basegfx::tools::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
 
@@ -2571,8 +2571,8 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
     {
         // look for smallest distance data
         const basegfx::B2DPoint aTestPoint(rPos.X(), rPos.Y());
-        sal_uInt32 nSmallestPolyIndex(0L);
-        sal_uInt32 nSmallestEdgeIndex(0L);
+        sal_uInt32 nSmallestPolyIndex(0);
+        sal_uInt32 nSmallestEdgeIndex(0);
         double fSmallestCut;
         basegfx::tools::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
         basegfx::B2DPolygon aCandidate(GetPathPoly().getB2DPolygon(nSmallestPolyIndex));
@@ -2658,7 +2658,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
         maPathPolygon.setB2DPolygon(nSmallestPolyIndex, aCandidate);
 
         // create old polygon index from it
-        for(sal_uInt32 a(0L); a < nSmallestPolyIndex; a++)
+        for(sal_uInt32 a(0); a < nSmallestPolyIndex; a++)
         {
             nNewHdl += GetPathPoly().getB2DPolygon(a).count();
         }
@@ -2857,7 +2857,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         if(OBJ_LINE == meKind)
         {
             // ignore shear and rotate, just use scale and translate
-            OSL_ENSURE(GetPathPoly().count() > 0L && GetPathPoly().getB2DPolygon(0L).count() > 1L, "OBJ_LINE with too few polygons (!)");
+            OSL_ENSURE(GetPathPoly().count() > 0L && GetPathPoly().getB2DPolygon(0).count() > 1L, "OBJ_LINE with too few polygons (!)");
             // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
             // itself, else this method will no longer return the full polygon information (curve will
             // be lost)

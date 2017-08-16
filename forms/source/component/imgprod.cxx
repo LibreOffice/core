@@ -306,7 +306,7 @@ bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
     if( ERRCODE_IO_PENDING == mpStm->GetError() )
         mpStm->ResetError();
 
-    mpStm->Seek( 0UL );
+    mpStm->Seek( 0 );
 
     bool bRet = GraphicConverter::Import( *mpStm, rGraphic ) == ERRCODE_NONE;
 
@@ -364,9 +364,9 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
                 {
                     const BitmapColor& rCol = pBmpAcc->GetPaletteColor( (sal_uInt16) i );
 
-                    *pTmp = ( (sal_Int32) rCol.GetRed() ) << (sal_Int32)(24L);
-                    *pTmp |= ( (sal_Int32) rCol.GetGreen() ) << (sal_Int32)(16L);
-                    *pTmp |= ( (sal_Int32) rCol.GetBlue() ) << (sal_Int32)(8L);
+                    *pTmp = ( (sal_Int32) rCol.GetRed() ) << (sal_Int32)(24);
+                    *pTmp |= ( (sal_Int32) rCol.GetGreen() ) << (sal_Int32)(16);
+                    *pTmp |= ( (sal_Int32) rCol.GetBlue() ) << (sal_Int32)(8);
                     *pTmp |= (sal_Int32)(0x000000ffL);
                 }
 
@@ -493,9 +493,9 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
                 {
                     const BitmapColor aCol( pBmpAcc->GetPixel( nY, nX ) );
 
-                    *pTmp = ( (sal_Int32) aCol.GetRed() ) << (sal_Int32)(24L);
-                    *pTmp |= ( (sal_Int32) aCol.GetGreen() ) << (sal_Int32)(16L);
-                    *pTmp |= ( (sal_Int32) aCol.GetBlue() ) << (sal_Int32)(8L);
+                    *pTmp = ( (sal_Int32) aCol.GetRed() ) << 24;
+                    *pTmp |= ( (sal_Int32) aCol.GetGreen() ) << 16;
+                    *pTmp |= ( (sal_Int32) aCol.GetBlue() ) << 8;
 
                     if( pMskAcc->GetPixel( nY, nX ) != aWhite )
                         *pTmp |= 0x000000ffUL;
