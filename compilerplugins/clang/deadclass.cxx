@@ -42,10 +42,6 @@ bool DeadClass::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
     for (auto i = decl->ctor_begin(); i != decl->ctor_end(); ++i) {
         if (!i->isUserProvided())
             continue;
-//        if (i->getTemplatedKind() != clang::FunctionDecl::TK_NonTemplate)
-//            return true;
-//        if (i->getTemplateInstantiationPattern())
-//            return true;
         if (i->isCopyOrMoveConstructor())
             copyMoveCnt++;
         else
@@ -61,7 +57,6 @@ bool DeadClass::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
         for (auto i = decl->ctor_begin(); i != decl->ctor_end(); ++i) {
             if (i->isDeleted())
                 continue;
-            i->dump();
         }
     }
     return true;
