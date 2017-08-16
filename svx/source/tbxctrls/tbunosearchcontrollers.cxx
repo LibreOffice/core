@@ -69,6 +69,7 @@ namespace {
 static const char COMMAND_FINDTEXT[] = ".uno:FindText";
 static const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
 static const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
+static const char COMMAND_FINDALL[] = ".uno:FindAll";
 static const char COMMAND_MATCHCASE[] = ".uno:MatchCase";
 static const char COMMAND_SEARCHFORMATTED[] = ".uno:SearchFormattedDisplayString";
 
@@ -451,8 +452,9 @@ private:
 
     VclPtr<FindTextFieldControl> m_pFindTextFieldControl;
 
-    sal_uInt16 m_nDownSearchId; // item position of findbar
-    sal_uInt16 m_nUpSearchId;   // item position of findbar
+    sal_uInt16 m_nDownSearchId;
+    sal_uInt16 m_nUpSearchId;
+    sal_uInt16 m_nFindAllId;
 
 };
 
@@ -461,6 +463,7 @@ FindTextToolbarController::FindTextToolbarController( const css::uno::Reference<
     , m_pFindTextFieldControl(nullptr)
     , m_nDownSearchId(0)
     , m_nUpSearchId(0)
+    , m_nFindAllId(0)
 {
 }
 
@@ -524,16 +527,9 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
     if ( pToolBox )
     {
-        ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
-        for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
-        {
-            OUString sItemCommand = pToolBox->GetItemCommand(i);
-            sal_uInt16 id = pToolBox->GetItemId(i);
-            if ( sItemCommand == COMMAND_DOWNSEARCH )
-                m_nDownSearchId = id;
-            else if ( sItemCommand == COMMAND_UPSEARCH )
-                m_nUpSearchId = id;
-        }
+        m_nDownSearchId = pToolBox->GetItemId(COMMAND_DOWNSEARCH);
+        m_nUpSearchId = pToolBox->GetItemId(COMMAND_UPSEARCH);
+        m_nFindAllId = pToolBox->GetItemId(COMMAND_FINDALL);
     }
 
     SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
@@ -581,7 +577,7 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl, Edit&, void)
 }
 
 void FindTextToolbarController::textfieldChanged() {
-    // enable or disable item DownSearch/UpSearch of findbar
+    // enable or disable item DownSearch/UpSearch/FindAll of findbar
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( getParent() );
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow.get());
     if ( pToolBox && m_pFindTextFieldControl )
@@ -589,6 +585,7 @@ void FindTextToolbarController::textfieldChanged() {
         bool enableButtons = !m_pFindTextFieldControl->GetText().isEmpty();
         pToolBox->EnableItem(m_nDownSearchId, enableButtons);
         pToolBox->EnableItem(m_nUpSearchId, enableButtons);
+        pToolBox->EnableItem(m_nFindAllId, enableButtons);
     }
 }
 
