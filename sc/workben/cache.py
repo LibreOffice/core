@@ -35,6 +35,17 @@ def parse_block(data, index):
             index += 4
             vals[start_row + i] = data[index:index+str_length].decode("utf-8")
             index += str_length
+    elif block_type == 3:
+        # formula block
+        read_rows = 0
+        while read_rows < data_size:
+            formula_group_size = struct.unpack('Q', data[index:index+8])[0]
+            index += 8
+            str_length = struct.unpack('i', data[index:index+4])[0]
+            index += 4
+            vals[start_row + read_rows] = (data[index:index+str_length].decode("utf-8"), "formula group length %i"% formula_group_size)
+            read_rows += formula_group_size
+            index += str_length
 
     return index, data_size, vals
 
