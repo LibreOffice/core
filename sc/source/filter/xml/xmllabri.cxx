@@ -44,11 +44,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext
     sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext*     pContext(nullptr);
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_LABEL_RANGE ):
-            pContext = new ScXMLLabelRangeContext( GetScImport(), xAttrList );
+            pContext = new ScXMLLabelRangeContext( GetScImport(), pAttribList );
         break;
     }
     if( !pContext )
@@ -59,16 +61,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         ScXMLImport& rImport,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ) :
     ScXMLImportContext( rImport ),
     bColumnOrientation( false )
 {
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -88,12 +87,6 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
 
 ScXMLLabelRangeContext::~ScXMLLabelRangeContext()
 {
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangeContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
 }
 
 void SAL_CALL ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )

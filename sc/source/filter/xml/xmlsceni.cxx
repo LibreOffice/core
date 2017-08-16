@@ -37,7 +37,7 @@ using namespace xmloff::token;
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         ScXMLImport& rImport,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ):
+        const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList ):
     ScXMLImportContext( rImport ),
     aBorderColor( COL_BLACK ),
     bDisplayBorder( true ),
@@ -49,12 +49,9 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
 {
     rImport.LockSolarMutex();
 
-    if ( xAttrList.is() )
+    if ( rAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
-
-        for (auto &aIter : *pAttribList)
+        for (auto &aIter : *rAttrList)
         {
             switch (aIter.getToken())
             {
@@ -98,12 +95,6 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
 ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
 {
     GetScImport().UnlockSolarMutex();
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableScenarioContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return new SvXMLImportContext( GetImport() );
 }
 
 void SAL_CALL ScXMLTableScenarioContext::endFastElement( sal_Int32 /*nElement*/ )
