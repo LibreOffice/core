@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <cassert>
@@ -45,7 +47,7 @@
 #include <chgtrack.hxx>
 #include <tokenarray.hxx>
 
-#include <config_features.h>
+#include <comphelper/threadpool.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 #include <svl/intitem.hxx>
@@ -1524,10 +1526,10 @@ void ScFormulaCell::Interpret()
         bool bGroupInterpreted = InterpretFormulaGroup();
         aDC.leaveGroup();
         if (!bGroupInterpreted)
-            InterpretTail( SCITP_NORMAL);
+            InterpretTail( SCITP_NORMAL, true);
 #else
         if (!InterpretFormulaGroup())
-            InterpretTail( SCITP_NORMAL);
+            InterpretTail( SCITP_NORMAL, true);
 #endif
     }
 
@@ -1590,7 +1592,7 @@ void ScFormulaCell::Interpret()
                     bResumeIteration = false;
                     // Close circle once.
                     rRecursionHelper.GetList().back().pCell->InterpretTail(
-                            SCITP_CLOSE_ITERATION_CIRCLE);
+                            SCITP_CLOSE_ITERATION_CIRCLE, true);
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
                     // Mark all cells being in iteration.
@@ -1619,7 +1621,7 @@ void ScFormulaCell::Interpret()
                                 pIterCell->GetSeenInIteration())
                         {
                             (*aIter).aPreviousResult = pIterCell->aResult;
-                            pIterCell->InterpretTail( SCITP_FROM_ITERATION);
+                            pIterCell->InterpretTail( SCITP_FROM_ITERATION, true);
                         }
                         rDone = rDone && !pIterCell->IsDirtyOrInTableOpDirty();
                     }
@@ -1689,7 +1691,7 @@ void ScFormulaCell::Interpret()
                         ScFormulaCell* pCell = (*aIter).pCell;
                         if (pCell->IsDirtyOrInTableOpDirty())
                         {
-                            pCell->InterpretTail( SCITP_NORMAL);
+                            pCell->InterpretTail( SCITP_NORMAL, true);
                             if (!pCell->IsDirtyOrInTableOpDirty() && !pCell->IsIterCell())
                                 pCell->bRunning = (*aIter).bOldRunning;
                         }
@@ -1722,7 +1724,7 @@ void ScFormulaCell::Interpret()
 #endif
 }
 
-void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
+void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUpdateProgress )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
@@ -1742,7 +1744,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             pCode->SetCodeError( FormulaError::NoCode );
             // This is worth an assertion; if encountered in daily work
             // documents we might need another solution. Or just confirm correctness.
-            OSL_FAIL( "ScFormulaCell::Interpret: no RPN, no error, no token, but hybrid formula string" );
             return;
         }
         CompileTokenArray();
@@ -2103,11 +2104,14 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
 
         // Reschedule slows the whole thing down considerably, thus only execute on percent change
-        ScProgress *pProgress = ScProgress::GetInterpretProgress();
-        if (pProgress && pProgress->Enabled())
+        if (bUpdateProgress)
         {
-            pProgress->SetStateCountDownOnPercent(
-                pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
+            ScProgress *pProgress = ScProgress::GetInterpretProgress();
+            if (pProgress && pProgress->Enabled())
+            {
+                pProgress->SetStateCountDownOnPercent(
+                    pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
+            }
         }
 
         switch (pInterpreter->GetVolatileType())
@@ -4045,6 +4049,113 @@ int splitup(int N, int K, int& A)
 
 } // anonymous namespace
 
+struct ScDependantsCalculator
+{
+    ScDocument& mrDoc;
+    ScTokenArray& mrCode;
+    ScFormulaCell& mrCell;
+    const ScAddress& mrPos;
+
+    ScDependantsCalculator(ScDocument& rDoc, ScTokenArray& rCode, ScFormulaCell& rCell, const ScAddress& rPos) :
+        mrDoc(rDoc),
+        mrCode(rCode),
+        mrCell(rCell),
+        mrPos(rPos)
+    {
+    }
+
+    // FIXME: copy-pasted from ScGroupTokenConverter. factor out somewhere else
+    bool cellIsSelfReferenceRelative(const ScAddress& rRefPos, SCROW nRelRow)
+    {
+        if (rRefPos.Col() != mrPos.Col())
+            return false;
+
+        SCROW nLen = mrCell.GetCellGroup()->mnLength;
+        SCROW nEndRow = mrPos.Row() + nLen - 1;
+
+        if (nRelRow < 0)
+        {
+            SCROW nTest = nEndRow;
+            nTest += nRelRow;
+            if (nTest >= mrPos.Row())
+                return true;
+        }
+        else if (nRelRow > 0)
+        {
+            SCROW nTest = mrPos.Row(); // top row.
+            nTest += nRelRow;
+            if (nTest <= nEndRow)
+                return true;
+        }
+
+        return false;
+    }
+
+    // FIXME: another copy-paste
+    SCROW trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCROW nRowLen)
+    {
+        SCROW nLastRow = nRow + nRowLen - 1; // current last row.
+        nLastRow = mrDoc.GetLastDataRow(nTab, nCol1, nCol2, nLastRow);
+        if (nLastRow < (nRow + nRowLen - 1))
+        {
+            // This can end up negative! Was that the original intent, or
+            // is it accidental? Was it not like that originally but the
+            // surrounding conditions changed?
+            nRowLen = nLastRow - nRow + 1;
+            // Anyway, let's assume it doesn't make sense to return a
+            // negative value here. But should we then return 0 or 1? In
+            // the "Column is empty" case below, we return 1, why!? And,
+            // at the callsites there are tests for a zero value returned
+            // from this function (but not for a negative one).
+            if (nRowLen < 0)
+                nRowLen = 0;
+        }
+        else if (nLastRow == 0)
+            // Column is empty.
+            nRowLen = 1;
+
+        return nRowLen;
+    }
+
+    bool DoIt()
+    {
+// from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
+        for (auto p: mrCode.Tokens())
+        {
+            SCROW nLen = mrCell.GetCellGroup()->mnLength;
+            switch (p->GetType())
+            {
+            case svSingleRef:
+                {
+                    ScSingleRefData aRef = *p->GetSingleRef(); // =Sheet1!A1
+                    ScAddress aRefPos = aRef.toAbs(mrPos);
+                    if (aRef.IsRowRel())
+                    {
+                        if (cellIsSelfReferenceRelative(aRefPos, aRef.Row()))
+                            return false;
+
+                        // Trim data array length to actual data range.
+                        SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), nLen);
+                        // Fetch double array guarantees that the length of the
+                        // returned array equals or greater than the requested
+                        // length.
+
+                        if (mrDoc.TableExists(aRefPos.Tab()) && nTrimLen)
+                        {
+                            if (!mrDoc.HandleRefArrayForParallelism(aRefPos, nTrimLen))
+                                return false;
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        return true;
+    }
+};
+
 bool ScFormulaCell::InterpretFormulaGroup()
 {
     if (!mxGroup || !pCode)
@@ -4079,6 +4190,90 @@ bool ScFormulaCell::InterpretFormulaGroup()
         mxGroup->meCalcState = sc::GroupCalcDisabled;
         aScope.addMessage("matrix skipped");
         return false;
+    }
+
+    if (!ScCalcConfig::isOpenCLEnabled() && std::getenv("CPU_THREADED_CALCULATION"))
+    {
+        // iterate over code in the formula ...
+        // ensure all input is pre-calculated -
+        // to avoid writing during the calculation
+        ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos);
+
+        // Disable or hugely enlarge subset for S/W group
+        // threading interpreter
+
+        if (!aCalculator.DoIt())
+        {
+            mxGroup->meCalcState = sc::GroupCalcDisabled;
+            aScope.addMessage("could not do new dependencies calculation thing");
+            return false;
+        }
+
+        // Then do the threaded calculation
+
+        bool result = true;
+        class Executor : public comphelper::ThreadTask
+        {
+        private:
+            const unsigned mnThisThread;
+            const unsigned mnThreadsTotal;
+            ScDocument* mpDocument;
+            const ScAddress& mrTopPos;
+            SCROW mnLength;
+            std::vector<int>& mrResult;
+
+        public:
+            Executor(std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
+                     unsigned nThisThread,
+                     unsigned nThreadsTotal,
+                     ScDocument* pDocument,
+                     const ScAddress& rTopPos,
+                     SCROW nLength,
+                     std::vector<int>& rResult) :
+                comphelper::ThreadTask(rTag),
+                mnThisThread(nThisThread),
+                mnThreadsTotal(nThreadsTotal),
+                mpDocument(pDocument),
+                mrTopPos(rTopPos),
+                mnLength(nLength),
+                mrResult(rResult)
+            {
+            }
+
+            virtual void doWork() override
+            {
+                mpDocument->CalculateInColumnInThread(mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
+                // FIXME: How to determine whether it "worked" or not? Does it even have a  meaning? Just
+                // drop this as YAGNI?
+                mrResult[mnThisThread] = static_cast<int>(true);
+            }
+
+        };
+
+        comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
+        sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
+
+        SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
+        // Start nThreadCount new threads
+        std::vector<int> vResult(nThreadCount);
+        std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+        for (int i = 0; i < nThreadCount; ++i)
+        {
+            rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, mxGroup->mpTopCell->aPos, mxGroup->mnLength, vResult));
+        }
+        SAL_INFO("sc.threaded", "Joining threads");
+        rThreadPool.waitUntilDone(aTag);
+        SAL_INFO("sc.threaded", "Done");
+        for (int i = 0; i < nThreadCount; ++i)
+        {
+            if (!vResult[i])
+            {
+                SAL_INFO("sc.threaded", "Thread " << i << " failed");
+                result = false;
+            }
+        }
+
+        return result;
     }
 
     switch (pCode->GetVectorState())
