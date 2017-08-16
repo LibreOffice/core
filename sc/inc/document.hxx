@@ -273,6 +273,27 @@ const sal_uInt8 SC_DDE_ENGLISH       = 1;
 const sal_uInt8 SC_DDE_TEXT          = 2;
 const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
 
+struct ScDocumentThreadSpecific
+{
+    sal_uInt16              nInterpretLevel;                // >0 if in interpreter
+    sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
+    sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
+
+    ScRecursionHelper*      pRecursionHelper;               // information for recursive and iterative cell formulas
+
+    ScLookupCacheMapImpl*   pLookupCacheMapImpl;            // cache for lookups like VLOOKUP and MATCH
+
+    ScDocumentThreadSpecific() :
+        nInterpretLevel(0),
+        nMacroInterpretLevel(0),
+        nInterpreterTableOpLevel(0),
+        pRecursionHelper(nullptr),
+        pLookupCacheMapImpl(nullptr)
+    {
+    }
+
+};
+
 enum class ScMutationGuardFlags
 {
     // Bit mask bits
@@ -391,11 +412,7 @@ private:
     std::unique_ptr<ScClipOptions> mpClipOptions;       // clipboard options
     ScConsolidateParam* pConsolidateDlgData;
 
-    ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
-
     ScAutoNameCache*    pAutoNameCache;                 // for automatic name lookup during CompileXML
-
-    ScLookupCacheMapImpl* pLookupCacheMapImpl;          // cache for lookups like VLOOKUP and MATCH
 
     SfxItemSet*         pPreviewFont; // convert to std::unique_ptr or whatever
     ScStyleSheet*       pPreviewCellStyle;
@@ -430,9 +447,7 @@ private:
 
     sal_uLong               nFormulaCodeInTree;             // formula RPN in the formula tree
     sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
-    sal_uInt16              nInterpretLevel;                // >0 if in interpreter
-    sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
-    sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
+    static thread_local std::map<const ScDocument *, ScDocumentThreadSpecific> maThreadSpecific;
     sal_uInt16              nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
@@ -2150,49 +2165,21 @@ public:
 
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }
     sal_uLong           GetFormulaCodeInTree() const { return nFormulaCodeInTree; }
-    bool                IsInInterpreter() const { return nInterpretLevel != 0; }
 
-    void                IncInterpretLevel()
-                            {
-                                if ( nInterpretLevel < USHRT_MAX )
-                                    nInterpretLevel++;
-                            }
-    void                DecInterpretLevel()
-                            {
-                                if ( nInterpretLevel )
-                                    nInterpretLevel--;
-                            }
-    sal_uInt16          GetMacroInterpretLevel() { return nMacroInterpretLevel; }
-    void                IncMacroInterpretLevel()
-                            {
-                                if ( nMacroInterpretLevel < USHRT_MAX )
-                                    nMacroInterpretLevel++;
-                            }
-    void                DecMacroInterpretLevel()
-                            {
-                                if ( nMacroInterpretLevel )
-                                    nMacroInterpretLevel--;
-                            }
-    bool                IsInInterpreterTableOp() const { return nInterpreterTableOpLevel != 0; }
-    void                IncInterpreterTableOpLevel()
-                            {
-                                if ( nInterpreterTableOpLevel < USHRT_MAX )
-                                    nInterpreterTableOpLevel++;
-                            }
-    void                DecInterpreterTableOpLevel()
-                            {
-                                if ( nInterpreterTableOpLevel )
-                                    nInterpreterTableOpLevel--;
-                            }
-                        // add a formula to be remembered for TableOp broadcasts
+    bool                IsInInterpreter() const;
+    void                IncInterpretLevel();
+    void                DecInterpretLevel();
+    sal_uInt16          GetMacroInterpretLevel();
+    void                IncMacroInterpretLevel();
+    void                DecMacroInterpretLevel();
+    bool                IsInInterpreterTableOp() const;
+    void                IncInterpreterTableOpLevel();
+    void                DecInterpreterTableOpLevel();
+
+    // add a formula to be remembered for TableOp broadcasts
     void                AddTableOpFormulaCell( ScFormulaCell* );
     void                InvalidateLastTableOpParams() { aLastTableOpParams.bValid = false; }
-    ScRecursionHelper&  GetRecursionHelper()
-                            {
-                                if (!pRecursionHelper)
-                                    pRecursionHelper = CreateRecursionHelperInstance();
-                                return *pRecursionHelper;
-                            }
+    ScRecursionHelper&  GetRecursionHelper();
     bool                IsInDtorClear() const { return bInDtorClear; }
     void                SetExpandRefs( bool bVal );
     bool                IsExpandRefs() const { return bExpandRefs; }
