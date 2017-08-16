@@ -80,16 +80,11 @@ LwpFormulaArg::~LwpFormulaArg()
 
 LwpFormulaInfo::~LwpFormulaInfo()
 {
-    try{
-        while(m_aStack.size()>0)
-        {
-            LwpFormulaArg* pArg=m_aStack.back();
-            m_aStack.pop_back();
-            delete pArg; pArg=nullptr;
-        }
-    }catch (...)
+    while(m_aStack.size()>0)
     {
-        assert(false);
+        LwpFormulaArg* pArg=m_aStack.back();
+        m_aStack.pop_back();
+        delete pArg; pArg=nullptr;
     }
 }
 
@@ -420,18 +415,12 @@ LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType)
 
 LwpFormulaFunc::~LwpFormulaFunc()
 {
-    try
+    while(m_aArgs.size()>0)
     {
-        while(m_aArgs.size()>0)
-        {
-            LwpFormulaArg* pArg = m_aArgs.back();
-            m_aArgs.pop_back();
-            delete pArg;pArg=nullptr;
-        }
-    }catch (...) {
-        assert(false);
+        LwpFormulaArg* pArg = m_aArgs.back();
+        m_aArgs.pop_back();
+        delete pArg;pArg=nullptr;
     }
-
 }
 void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
 {
