@@ -614,7 +614,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         eDestEnc = osl_getThreadTextEncoding();
 
     const OUString& rOutName = !rName.isEmpty() ? rName : rIMap.GetName();
-    DBG_ASSERT( !rOutName.isEmpty(), "Kein ImageMap-Name" );
+    DBG_ASSERT( !rOutName.isEmpty(), "No ImageMap-Name" );
     if( rOutName.isEmpty() )
         return rStream;
 
