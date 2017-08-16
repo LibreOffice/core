@@ -1011,7 +1011,7 @@ bool lclTryJoin( ScRange& r1, const ScRange& r2 )
     }
 
     // 4) r1 and r2 have equal left and right border
-    if( (n1L == n2L) && (n1R == n2R) )
+    if( (n1 == n2L) && (n1R == n2R) )
     {
         // check that r1 overlaps or touches r2
         if( ((n1T < n2T) && (n2T + 1 <= n1B)) || ((n2T < n1T) && (n1T + 1 <= n2B)) )

@@ -1610,9 +1610,9 @@ SvMemoryStream::SvMemoryStream( void* pBuffer, std::size_t bufSize,
     nEndOfData  = bufSize;
     bOwnsData   = false;
     pBuf        = static_cast<sal_uInt8 *>(pBuffer);
-    nResize     = 0L;
+    nResize     = 0;
     nSize       = bufSize;
-    nPos        = 0L;
+    nPos        = 0;
     SetBufferSize( 0 );
 }
 
@@ -1620,7 +1620,7 @@ SvMemoryStream::SvMemoryStream( std::size_t nInitSize, std::size_t nResizeOffset
 {
     m_isWritable = true;
     bOwnsData   = true;
-    nEndOfData  = 0L;
+    nEndOfData  = 0;
     nResize     = nResizeOffset;
     nPos        = 0;
     pBuf        = nullptr;
@@ -1826,9 +1826,9 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
         {
             memcpy( pNewBuf, pBuf, (size_t)nNewSize );
             if( nPos > nNewSize )
-                nPos = 0L;
+                nPos = 0;
             if( nEndOfData >= nNewSize )
-                nEndOfData = nNewSize-1L;
+                nEndOfData = nNewSize-1;
         }
         else
         {
@@ -1871,7 +1871,7 @@ void* SvMemoryStream::SwitchBuffer()
 
     void* pRetVal = pBuf;
     pBuf          = nullptr;
-    nEndOfData    = 0L;
+    nEndOfData    = 0;
     nResize       = 64;
     nPos          = 0;
 

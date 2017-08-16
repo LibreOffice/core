@@ -952,7 +952,7 @@ sal_uInt32 SdrGrafObj::GetHdlCount() const
 
 SdrHdl* SdrGrafObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    return SdrRectObj::GetHdl( nHdlNum + 1L );
+    return SdrRectObj::GetHdl( nHdlNum + 1 );
 }
 
 void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)

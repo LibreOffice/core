@@ -1823,7 +1823,7 @@ STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
             {
                 return E_INVALIDARG;
             }
-            *nActions = 0L;
+            *nActions = 0;
             IAccessibleAction* pAcc = nullptr;
             HRESULT hr = QueryInterface(IID_IAccessibleAction, reinterpret_cast<void**>(&pAcc));
             if( hr == S_OK )
@@ -1836,7 +1836,7 @@ STDMETHODIMP CMAccessible:: get_nActions(long __RPC_FAR *nActions)
     }
     catch(...)
     {
-        *nActions = 0L;
+        *nActions = 0;
         return S_OK;
     }
 }

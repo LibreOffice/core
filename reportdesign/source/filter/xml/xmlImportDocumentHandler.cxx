@@ -169,10 +169,10 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
                 OUString sLocalName;
                 const OUString sAttrName = _xAttrList->getNameByIndex( i );
                 const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
-                if( -1L == nColonPos )
+                if( -1 == nColonPos )
                     sLocalName = sAttrName;
                 else
-                    sLocalName = sAttrName.copy( nColonPos + 1L );
+                    sLocalName = sAttrName.copy( nColonPos + 1 );
                 const OUString sValue = _xAttrList->getValueByIndex( i );
 
                 switch( m_pReportElemTokenMap->Get( XML_NAMESPACE_REPORT, sLocalName ) )
@@ -218,10 +218,10 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
                 OUString sLocalName;
                 const OUString sAttrName = _xAttrList->getNameByIndex( i );
                 const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
-                if( -1L == nColonPos )
+                if( -1 == nColonPos )
                     sLocalName = sAttrName;
                 else
-                    sLocalName = sAttrName.copy( nColonPos + 1L );
+                    sLocalName = sAttrName.copy( nColonPos + 1 );
                 const OUString sValue = _xAttrList->getValueByIndex( i );
 
                 switch( pMasterElemTokenMap->Get( XML_NAMESPACE_REPORT, sLocalName ) )
@@ -261,10 +261,10 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
             OUString sLocalName;
             const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
-            if( -1L == nColonPos )
+            if( -1 == nColonPos )
                 sLocalName = sAttrName;
             else
-                sLocalName = sAttrName.copy( nColonPos + 1L );
+                sLocalName = sAttrName.copy( nColonPos + 1 );
             if ( sLocalName == "data-source-has-labels" )
             {
                 const OUString sValue = _xAttrList->getValueByIndex( i );

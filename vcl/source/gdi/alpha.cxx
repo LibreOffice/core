@@ -97,8 +97,8 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
         const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
         const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
 
-        for( long nY = 0L; nY < nHeight; nY++ )
-            for( long nX = 0L; nX < nWidth; nX++ )
+        for( long nY = 0; nY < nHeight; nY++ )
+            for( long nX = 0; nX < nWidth; nX++ )
                 if( pMaskAcc->GetPixel( nY, nX ) == aMaskWhite )
                     pAcc->SetPixel( nY, nX, aReplace );
     }
@@ -116,11 +116,11 @@ bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
 
         if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
         {
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( long nY = 0; nY < nHeight; nY++ )
             {
                 Scanline pScan = pAcc->GetScanline( nY );
 
-                for( long nX = 0L; nX < nWidth; nX++, pScan++ )
+                for( long nX = 0; nX < nWidth; nX++, pScan++ )
                 {
                     if( *pScan == cSearchTransparency )
                         *pScan = cReplaceTransparency;
@@ -131,9 +131,9 @@ bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
         {
             BitmapColor aReplace( cReplaceTransparency );
 
-            for( long nY = 0L; nY < nHeight; nY++ )
+            for( long nY = 0; nY < nHeight; nY++ )
             {
-                for( long nX = 0L; nX < nWidth; nX++ )
+                for( long nX = 0; nX < nWidth; nX++ )
                 {
                     if( pAcc->GetPixel( nY, nX ).GetIndex() == cSearchTransparency )
                         pAcc->SetPixel( nY, nX, aReplace );

@@ -127,14 +127,14 @@ long FileStream::stell ()
 {
     if (file)
         return ftell(file);
-    return -1L;
+    return -1;
 }
 
 long FileStream::sseek (long offset, int origin)
 {
     if (file)
         return fseek(file, offset, origin);
-    return -1L;
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

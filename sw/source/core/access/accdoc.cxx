@@ -185,10 +185,10 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
         }
         catch(const css::lang::IndexOutOfBoundsException &)
         {
-            return -1L;
+            return -1;
         }
     }
-    return -1L;
+    return -1;
 }
 
 OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription()

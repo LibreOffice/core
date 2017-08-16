@@ -184,7 +184,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
         Frame().Height( 0 );
         long nWidth = pSh->VisArea().Width();
         if ( !nWidth )
-            nWidth = 5000L;     //aendert sich sowieso
+            nWidth = 5000;     //aendert sich sowieso
         Frame().Width ( nWidth );
     }
     else

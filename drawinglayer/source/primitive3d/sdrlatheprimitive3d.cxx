@@ -214,7 +214,7 @@ namespace drawinglayer
             // that for polyPolygons, the subPolys 1..n only get reSegmented when polygon 0L is different
             // at all (and not always)
             const basegfx::B2DPolygon aSubCandidate(maCorrectedPolyPolygon.getB2DPolygon(0));
-            const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1L : 0L));
+            const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1 : 0L));
 
             if(nSubEdgeCount != getVerticalSegments())
             {

@@ -26,13 +26,13 @@
 #define RTL_CIPHER_NTOHL(c, l) \
     ((l)  = ((sal_uInt32)(*((c)++))) << 24, \
      (l) |= ((sal_uInt32)(*((c)++))) << 16, \
-     (l) |= ((sal_uInt32)(*((c)++))) <<  8L, \
+     (l) |= ((sal_uInt32)(*((c)++))) <<  8, \
      (l) |= ((sal_uInt32)(*((c)++))))
 
 #define RTL_CIPHER_HTONL(l, c) \
     (*((c)++) = (sal_uInt8)(((l) >> 24) & 0xff), \
      *((c)++) = (sal_uInt8)(((l) >> 16) & 0xff), \
-     *((c)++) = (sal_uInt8)(((l) >>  8L) & 0xff), \
+     *((c)++) = (sal_uInt8)(((l) >>  8) & 0xff), \
      *((c)++) = (sal_uInt8)(((l)       ) & 0xff))
 
 #define RTL_CIPHER_NTOHL64(c, xl, xr, n) \
@@ -43,7 +43,7 @@
     { \
         case 8: (xr)  = ((sal_uInt32)(*(--(c)))); \
             SAL_FALLTHROUGH; \
-        case 7: (xr) |= ((sal_uInt32)(*(--(c)))) <<  8L; \
+        case 7: (xr) |= ((sal_uInt32)(*(--(c)))) <<  8; \
             SAL_FALLTHROUGH; \
         case 6: (xr) |= ((sal_uInt32)(*(--(c)))) << 16; \
             SAL_FALLTHROUGH; \
@@ -51,7 +51,7 @@
             SAL_FALLTHROUGH; \
         case 4: (xl)  = ((sal_uInt32)(*(--(c)))); \
             SAL_FALLTHROUGH; \
-        case 3: (xl) |= ((sal_uInt32)(*(--(c)))) <<  8L; \
+        case 3: (xl) |= ((sal_uInt32)(*(--(c)))) <<  8; \
             SAL_FALLTHROUGH; \
         case 2: (xl) |= ((sal_uInt32)(*(--(c)))) << 16; \
             SAL_FALLTHROUGH; \
@@ -66,7 +66,7 @@
     { \
         case 8: *(--(c)) = (sal_uInt8)(((xr)       ) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 7: *(--(c)) = (sal_uInt8)(((xr) >>  8L) & 0xff); \
+        case 7: *(--(c)) = (sal_uInt8)(((xr) >>  8) & 0xff); \
             SAL_FALLTHROUGH; \
         case 6: *(--(c)) = (sal_uInt8)(((xr) >> 16) & 0xff); \
             SAL_FALLTHROUGH; \
@@ -74,7 +74,7 @@
             SAL_FALLTHROUGH; \
         case 4: *(--(c)) = (sal_uInt8)(((xl)       ) & 0xff); \
             SAL_FALLTHROUGH; \
-        case 3: *(--(c)) = (sal_uInt8)(((xl) >>  8L) & 0xff); \
+        case 3: *(--(c)) = (sal_uInt8)(((xl) >>  8) & 0xff); \
             SAL_FALLTHROUGH; \
         case 2: *(--(c)) = (sal_uInt8)(((xl) >> 16) & 0xff); \
             SAL_FALLTHROUGH; \

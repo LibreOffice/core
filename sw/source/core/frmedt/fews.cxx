@@ -990,7 +990,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                  ( _eVertRelOrient == text::RelOrientation::CHAR ||
                    _eVertRelOrient == text::RelOrientation::TEXT_LINE ) )
             {
-                SwTwips nTop = 0L;
+                SwTwips nTop = 0;
                 if ( _eVertRelOrient == text::RelOrientation::CHAR )
                 {
                     SwRect aChRect;
@@ -1036,7 +1036,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                  (_nAnchorId == RndStdIds::FLY_AT_CHAR) &&
                  _eHoriRelOrient == text::RelOrientation::CHAR )
             {
-                SwTwips nLeft = 0L;
+                SwTwips nLeft = 0;
                 SwRect aChRect;
                 if ( _pToCharContentPos )
                 {

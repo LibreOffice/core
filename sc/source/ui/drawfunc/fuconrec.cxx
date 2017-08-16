@@ -68,7 +68,7 @@ namespace {
         OUString aArrowName( SvxResId(pResId) );
         long nCount = pLineEndList->Count();
         long nIndex;
-        for( nIndex = 0L; nIndex < nCount; nIndex++ )
+        for( nIndex = 0; nIndex < nCount; nIndex++ )
         {
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
             if( pEntry->GetName() == aArrowName )

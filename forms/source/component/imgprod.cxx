@@ -105,7 +105,7 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
             *pRead = nCount;
         }
         else
-            *pRead = 0UL;
+            *pRead = 0;
 
         return ERRCODE_NONE;
     }
@@ -418,10 +418,10 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : nullptr;
         const long          nWidth = pBmpAcc->Width();
         const long          nHeight = pBmpAcc->Height();
-        const long          nStartX = 0L;
-        const long          nEndX = nWidth - 1L;
-        const long          nStartY = 0L;
-        const long          nEndY = nHeight - 1L;
+        const long          nStartX = 0;
+        const long          nEndX = nWidth - 1;
+        const long          nStartY = 0;
+        const long          nEndY = nHeight - 1;
         const long          nPartWidth = nEndX - nStartX + 1;
         const long          nPartHeight = nEndY - nStartY + 1;
 

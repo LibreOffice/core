@@ -383,8 +383,8 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     mrOutliner.SetParaFlag( pPara, ParaFlag::ISPAGE );
     // how many titles are there before the new title paragraph?
-    sal_uLong nExample = 0L;            // position of the "example" page
-    sal_uLong nTarget  = 0L;            // position of insertion
+    sal_uLong nExample = 0;            // position of the "example" page
+    sal_uLong nTarget  = 0;            // position of insertion
     while(pPara)
     {
         pPara = GetPrevTitle(pPara);
@@ -501,7 +501,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
     if( ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
     {
         // how many titles are in front of the title paragraph in question?
-        sal_uLong nPos = 0L;
+        sal_uLong nPos = 0;
         while(pPara)
         {
             pPara = GetPrevTitle(pPara);
@@ -629,7 +629,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         // the paragraph was a page but now becomes a normal paragraph
 
         // how many titles are before the title paragraph in question?
-        sal_uLong nPos = 0L;
+        sal_uLong nPos = 0;
         Paragraph* pParagraph = pPara;
         while(pParagraph)
         {
@@ -678,7 +678,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
     else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 2 ) )
     {
         // how many titles are in front of the title paragraph in question?
-        sal_Int32 nPos = -1L;
+        sal_Int32 nPos = -1;
 
         Paragraph* pParagraph = pPara;
         while(pParagraph)
@@ -698,7 +698,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
     }
     // how many titles are in front of the title paragraph in question?
-    sal_Int32 nPos = -1L;
+    sal_Int32 nPos = -1;
 
     Paragraph* pTempPara = pPara;
     while(pTempPara)

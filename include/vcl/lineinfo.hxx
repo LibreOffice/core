@@ -53,7 +53,7 @@ struct ImplLineInfo
 class VCL_DLLPUBLIC LineInfo
 {
 public:
-                    LineInfo( LineStyle eLineStyle = LineStyle::Solid, long nWidth = 0L );
+                    LineInfo( LineStyle eLineStyle = LineStyle::Solid, long nWidth = 0 );
                     LineInfo( const LineInfo& rLineInfo );
                     LineInfo( LineInfo&& rLineInfo );
                     ~LineInfo();

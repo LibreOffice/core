@@ -650,7 +650,7 @@ protected:
 
     /// ReAllocateMemory must update the following variables:
     /// - pBuf: Address of new block
-    /// - nEndOfData: Set to nNewSize-1L , if outside of block
+    /// - nEndOfData: Set to nNewSize-1 , if outside of block
     ///               Set to 0 , if new block size is 0 bytes
     /// - nSize: New block size
     /// - nPos: Set to 0 if position outside of block

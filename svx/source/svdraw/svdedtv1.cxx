@@ -518,7 +518,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         XPolygon aXP((sal_uInt16)nPointCount);
         sal_uInt32 nPtNum;
 
-        for(nPtNum = 0L; nPtNum < nPointCount; nPtNum++)
+        for(nPtNum = 0; nPtNum < nPointCount; nPtNum++)
         {
             Point aPt(pO->GetPoint(nPtNum));
             aXP[(sal_uInt16)nPtNum]=aPt;
@@ -531,7 +531,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
             case SdrCrookMode::Stretch: CrookStretchPoly(aXP,rRef,rRad,bVertical,rMarkRect); break;
         }
 
-        for(nPtNum = 0L; nPtNum < nPointCount; nPtNum++)
+        for(nPtNum = 0; nPtNum < nPointCount; nPtNum++)
         {
             // broadcasting could be optimized here, but for the
             // current two points of the measurement object, it's fine
@@ -632,7 +632,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, con
         XPolygon aXP((sal_uInt16)nPointCount);
         sal_uInt32 nPtNum;
 
-        for(nPtNum = 0L; nPtNum < nPointCount; nPtNum++)
+        for(nPtNum = 0; nPtNum < nPointCount; nPtNum++)
         {
             Point aPt(pO->GetPoint(nPtNum));
             aXP[(sal_uInt16)nPtNum]=aPt;
@@ -640,7 +640,7 @@ void SdrEditView::ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, con
 
         aXP.Distort(rRef, rDistortedRect);
 
-        for(nPtNum = 0L; nPtNum < nPointCount; nPtNum++)
+        for(nPtNum = 0; nPtNum < nPointCount; nPtNum++)
         {
             // broadcasting could be optimized here, but for the
             // current two points of the measurement object it's fine

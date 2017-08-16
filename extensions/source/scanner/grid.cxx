@@ -611,7 +611,7 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
         // user wants to add/delete a button
         if( nMarkerIndex != npos )
         {
-            if( nMarkerIndex != 0 && nMarkerIndex != m_aHandles.size() - 1L)
+            if( nMarkerIndex != 0 && nMarkerIndex != m_aHandles.size() - 1)
             {
                 // delete marker under mouse
                 if( m_nDragIndex == nMarkerIndex )

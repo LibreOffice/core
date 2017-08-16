@@ -459,11 +459,11 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                long nExtraData = 0L,
+                                long nExtraData = 0,
                                 OutputDevice* pFirstFrameOutDev = nullptr
                             );
 
-    void                    StopAnimation( OutputDevice* pOut = nullptr, long nExtraData = 0L );
+    void                    StopAnimation( OutputDevice* pOut = nullptr, long nExtraData = 0 );
 
     static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'

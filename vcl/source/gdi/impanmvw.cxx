@@ -171,9 +171,9 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( pRenderContext->GetClipRegion() ) : nullptr);
 
     aVDev->SetOutputSizePixel( maSzPix, false );
-    nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
+    nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1 );
 
-    for( sal_uLong i = 0UL; i <= nPos; i++ )
+    for( sal_uLong i = 0; i <= nPos; i++ )
         draw( i, aVDev.get() );
 
     if (xOldClip)

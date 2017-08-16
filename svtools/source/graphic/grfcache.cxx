@@ -1214,7 +1214,7 @@ bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, co
 
 bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
 {
-    sal_uLong nFreedSize = 0UL;
+    sal_uLong nFreedSize = 0;
 
     if( nSizeToFree )
     {

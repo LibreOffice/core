@@ -513,7 +513,7 @@ void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const b
 {
     bool bSimple(false);
 
-    if(pLinePolyPolygon && 1L == rPolyPolygon.count())
+    if(pLinePolyPolygon && 1 == rPolyPolygon.count())
     {
         if(rPolyPolygon.getB2DPolygon(0).isClosed())
         {

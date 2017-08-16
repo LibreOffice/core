@@ -915,8 +915,8 @@ sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
         }
         else
         {
-            sal_uInt16 nCenX((sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1L) >> 1);
-            sal_uInt16 nCenY((sal_uInt16)(aBmpEx.GetSizePixel().Height() - 1L) >> 1);
+            sal_uInt16 nCenX((sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1) >> 1);
+            sal_uInt16 nCenY((sal_uInt16)(aBmpEx.GetSizePixel().Height() - 1) >> 1);
 
             if(aMoveOutsideOffset.X() > 0)
             {

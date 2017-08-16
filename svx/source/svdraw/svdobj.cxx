@@ -1183,7 +1183,7 @@ SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, sal_uInt32 /*nPlNum*/) con
 void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
 {
     sal_uInt32 nCount=GetHdlCount();
-    for (sal_uInt32 i=0L; i<nCount; i++) {
+    for (sal_uInt32 i=0; i<nCount; i++) {
         SdrHdl* pHdl=GetHdl(i);
         if (pHdl!=nullptr) {
             rHdlList.AddHdl(pHdl);

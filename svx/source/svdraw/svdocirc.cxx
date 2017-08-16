@@ -176,13 +176,13 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
         if(!bNeed && meCircleKind == OBJ_CARC)
         {
             // start of the line is here if StartPolygon, StartWidth!=0
-            bNeed=static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue().count() != 0L &&
+            bNeed=static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue().count() != 0 &&
                   static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue() != 0;
 
             if(!bNeed)
             {
                 // end of the line is here if EndPolygon, EndWidth!=0
-                bNeed = static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue().count() != 0L &&
+                bNeed = static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue().count() != 0 &&
                         static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue() != 0;
             }
         }
@@ -386,7 +386,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     if (meCircleKind==OBJ_CIRC)
     {
-        nHdlNum += 2L;
+        nHdlNum += 2;
     }
 
     SdrHdl* pH = nullptr;
@@ -404,7 +404,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
         case 1:
             aPnt = GetAnglePnt(maRect,nEndAngle);
             eLocalKind = SdrHdlKind::Circle;
-            nPNum = 2L;
+            nPNum = 2;
             break;
         case 2:
             aPnt = maRect.TopLeft();
@@ -756,12 +756,12 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 {
     const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
 
-    if(rDrag.GetPointCount() < 4L)
+    if(rDrag.GetPointCount() < 4)
     {
         // force to OBJ_CIRC to get full visualisation
         basegfx::B2DPolyPolygon aRetval(ImpCalcXPolyCirc(OBJ_CIRC, pU->aR, pU->nStart, pU->nEnd));
 
-        if(3L == rDrag.GetPointCount())
+        if(3 == rDrag.GetPointCount())
         {
             // add edge to first point on ellipse
             basegfx::B2DPolygon aNew;

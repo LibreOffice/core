@@ -142,7 +142,7 @@ namespace sdr
             {
                 // without delta time, init events by triggering them. This will invalidate
                 // painted objects and add them to the scheduler again
-                mnDeltaTime = 0L;
+                mnDeltaTime = 0;
                 triggerEvents();
                 checkTimeout();
              }

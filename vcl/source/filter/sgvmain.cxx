@@ -829,7 +829,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadGrupType( rInp, aGrup );
                     if (!rInp.GetError()) {
                         rInp.Seek(rInp.Tell()+aGrup.Last);   // object appendix
-                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++; // DrawObjkList(rInp,rOut );
+                        if(aGrup.GetSubPtr()!=0) nGrpCnt++; // DrawObjkList(rInp,rOut );
                     }
                 } break;
                 default: {
@@ -839,7 +839,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
             }
         } // if rInp
         if (!rInp.GetError()) {
-            if (aObjk.Next==0L) {
+            if (aObjk.Next==0) {
                 if (nGrpCnt==0) bEnd=true;
                 else nGrpCnt--;
             }
@@ -859,11 +859,11 @@ void SkipObjkList(SvStream& rInp)
             GrupType aGrup;
             ReadGrupType( rInp, aGrup );
             rInp.Seek(rInp.Tell()+aGrup.Last); // object appendix
-            if(aGrup.GetSubPtr()!=0L) SkipObjkList(rInp);
+            if(aGrup.GetSubPtr()!=0) SkipObjkList(rInp);
         } else {
             ObjkOverSeek(rInp,aObjk);  // to next object
         }
-    } while (aObjk.Next!=0L && !rInp.GetError());
+    } while (aObjk.Next!=0 && !rInp.GetError());
 }
 
 bool SgfFilterSDrw( SvStream& rInp, GDIMetaFile& rMtf )
@@ -883,7 +883,7 @@ bool SgfFilterSDrw( SvStream& rInp, GDIMetaFile& rMtf )
     do {                // read standard page
         ReadPageType( rInp, aPage );
         if (aPage.nList!=0) SkipObjkList(rInp);
-    } while (aPage.Next!=0L && !rInp.GetError());
+    } while (aPage.Next!=0 && !rInp.GetError());
 
     nCharPos=rInp.Tell();
     ReadPageType( rInp, aPage );
@@ -892,17 +892,17 @@ bool SgfFilterSDrw( SvStream& rInp, GDIMetaFile& rMtf )
     Num=aPage.StdPg;
     if (Num!=0) {
       rInp.Seek(nStdPos);
-      while(Num>1 && aPage.Next!=0L && !rInp.GetError()) { // search standard page
+      while(Num>1 && aPage.Next!=0 && !rInp.GetError()) { // search standard page
         ReadPageType( rInp, aPage );
         if (aPage.nList!=0) SkipObjkList(rInp);
         Num--;
       }
       ReadPageType( rInp, aPage );
-      if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev );
+      if(Num==1 && aPage.nList!=0) DrawObjkList( rInp,*pOutDev );
       rInp.Seek(nCharPos);
       ReadPageType( rInp, aPage );
     }
-    if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev );
+    if (aPage.nList!=0) DrawObjkList(rInp,*pOutDev );
 
     rMtf.Stop();
     rMtf.WindStart();

@@ -347,7 +347,7 @@ void PNGWriterImpl::ImplWriteTransparent()
 
     ImplOpenChunk(PNGCHUNK_tRNS);
 
-    for (sal_uLong n = 0UL; n <= nTransIndex; n++)
+    for (sal_uLong n = 0; n <= nTransIndex; n++)
     {
         ImplWriteChunk((nTransIndex == n) ? static_cast<sal_uInt8>(0x0) : static_cast<sal_uInt8>(0xff));
     }

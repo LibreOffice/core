@@ -301,7 +301,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         {
         case XML_TOK_TEXT_LEVEL_ATTR_LEVEL:
             nLevel = rValue.toInt32();
-            if( nLevel >= 1L )
+            if( nLevel >= 1 )
                 nLevel--;
             else
                 nLevel = 0;

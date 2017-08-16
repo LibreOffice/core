@@ -240,8 +240,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     default:
         {
-            const long nRight = nX + nWidth - 1L;
-            const long nBottom = nY + nHeight - 1L;
+            const long nRight = nX + nWidth - 1;
+            const long nBottom = nY + nHeight - 1;
             long nFirstX;
             long nFirstY;
 
@@ -261,10 +261,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             long nStartX = nX + nOffX;
             long nStartY = nY + nOffY;
 
-            if( nOffX > 0L )
+            if( nOffX > 0 )
                 nStartX -= nBmpWidth;
 
-            if( nOffY > 0L )
+            if( nOffY > 0 )
                 nStartY -= nBmpHeight;
 
             for( long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
@@ -290,7 +290,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             const tools::Rectangle aColRect( Point( nX, nY ), Size( nWidth, nHeight ) );
             tools::Rectangle aWorkRect;
 
-            aWorkRect = tools::Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1L );
+            aWorkRect = tools::Rectangle( 0, 0, aOutRect.Right(), aPos.Y() - 1 );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
@@ -300,7 +300,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                                     rWallpaper );
             }
 
-            aWorkRect = tools::Rectangle( 0, aPos.Y(), aPos.X() - 1L, aPos.Y() + aBmpSize.Height() - 1L );
+            aWorkRect = tools::Rectangle( 0, aPos.Y(), aPos.X() - 1, aPos.Y() + aBmpSize.Height() - 1 );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
@@ -311,7 +311,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             }
 
             aWorkRect = tools::Rectangle( aPos.X() + aBmpSize.Width(), aPos.Y(),
-                                   aOutRect.Right(), aPos.Y() + aBmpSize.Height() - 1L );
+                                   aOutRect.Right(), aPos.Y() + aBmpSize.Height() - 1 );
             aWorkRect.Justify();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )

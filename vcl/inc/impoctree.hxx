@@ -101,9 +101,9 @@ inline void ImpErrorQuad::ImplAddColorError7( const ImpErrorQuad& rErrQuad )
 
 inline BitmapColor ImpErrorQuad::ImplGetColor()
 {
-    return BitmapColor( (sal_uInt8) ( ( nRed < 0L ? 0L : nRed > 8160L ? 8160L : nRed ) >> 5 ),
-                        (sal_uInt8) ( ( nGreen < 0L ? 0L : nGreen > 8160L ? 8160L : nGreen ) >> 5 ),
-                        (sal_uInt8) ( ( nBlue < 0L ? 0L : nBlue > 8160L ? 8160L : nBlue ) >> 5 ) );
+    return BitmapColor( (sal_uInt8) ( ( nRed < 0 ? 0L : nRed > 8160 ? 8160L : nRed ) >> 5 ),
+                        (sal_uInt8) ( ( nGreen < 0 ? 0L : nGreen > 8160 ? 8160L : nGreen ) >> 5 ),
+                        (sal_uInt8) ( ( nBlue < 0 ? 0L : nBlue > 8160 ? 8160L : nBlue ) >> 5 ) );
 }
 
 class ImpNodeCache
