@@ -256,6 +256,7 @@ public:
     void testTdf108524();
     void testTableInSection();
     void testTableInNestedSection();
+    void testTableInSectionInTable();
     void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
 
@@ -402,6 +403,7 @@ public:
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
     CPPUNIT_TEST(testLinesInSectionInTable);
+    CPPUNIT_TEST(testTableInSectionInTable);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
 
@@ -5136,6 +5138,14 @@ void SwUiWriterTest::testTableInNestedSection()
     // Make sure the table is inside a section and spans over 2 pages.
     assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
     assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
+}
+
+void SwUiWriterTest::testTableInSectionInTable()
+{
+    // The document has a table, containing a section, containing a nested
+    // table.
+    // This crashed the layout.
+    createDoc("i95698.odt");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

@@ -925,9 +925,21 @@ static bool lcl_FindSectionsInRow( const SwRowFrame& rRow )
                         if (const SwFrame* pSectionLower = pTmpFrame->GetLower())
                         {
                             if (!pSectionLower->IsColumnFrame())
+                            {
                                 // Section has a single column only, try to
                                 // split that.
                                 bRet = false;
+
+                                for (const SwFrame* pFrame = pSectionLower; pFrame; pFrame = pFrame->GetNext())
+                                {
+                                    if (pFrame->IsTabFrame())
+                                    {
+                                        // Section contains a table, no split in that case.
+                                        bRet = true;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
