@@ -1689,7 +1689,34 @@ public:
             break;
             case sc::element_type_formula:
             {
-                mrStrm.WriteUChar(2);
+                mrStrm.WriteUChar(3);
+                sc::formula_block::const_iterator it = sc::formula_block::begin(*node.data);
+                std::advance(it, nOffset);
+                sc::formula_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                for (; it != itEnd; /* incrementing throug std::advance*/)
+                {
+                    const ScFormulaCell* pCell = *it;
+                    OUString aFormula;
+                    pCell->GetFormula(aFormula, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+                    auto xCellGroup = pCell->GetCellGroup();
+                    sal_uInt64 nGroupLength = 0;
+                    if (xCellGroup)
+                    {
+                        nGroupLength = xCellGroup->mnLength;
+                    }
+                    else
+                    {
+                        nGroupLength = 1;
+                    }
+                    mrStrm.WriteUInt64(nGroupLength);
+                    mrStrm.WriteInt32(aFormula.getLength());
+                    mrStrm.WriteCharPtr(OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr());
+
+                    // incrementing the iterator
+                    std::advance(it, nGroupLength);
+                }
             }
             break;
         }
