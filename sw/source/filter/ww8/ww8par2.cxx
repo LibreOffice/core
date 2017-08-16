@@ -4561,17 +4561,17 @@ void WW8RStyle::ImportOldFormatStyles()
         rSt >> cb;
         nByteCount++;
 
-        aCHPXOffsets[stcp].mnSize = 0;
+        aCHPXOffsets.at(stcp).mnSize = 0;
 
         if (cb != 0xFF)
         {
             sal_uInt8 nRemainder = cb;
 
-            aCHPXOffsets[stcp].mnOffset = rSt.Tell();
-            aCHPXOffsets[stcp].mnSize = nRemainder;
+            aCHPXOffsets.at(stcp).mnOffset = rSt.Tell();
+            aCHPXOffsets.at(stcp).mnSize = nRemainder;
 
-            Word2CHPX aChpx = ReadWord2Chpx(rSt, aCHPXOffsets[stcp].mnOffset,
-                aCHPXOffsets[stcp].mnSize);
+            Word2CHPX aChpx = ReadWord2Chpx(rSt, aCHPXOffsets.at(stcp).mnOffset,
+                aCHPXOffsets.at(stcp).mnSize);
             aConvertedChpx.push_back( ChpxToSprms(aChpx) );
 
             nByteCount += nRemainder;

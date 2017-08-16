@@ -4383,6 +4383,11 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 sal_uInt16 nLevelAnz;
                 rIn >> nLevelAnz;
 
+                if (nLevelAnz > 5)
+                {
+                    throw std::range_error("Bad input file, Too many stylesheet levels");
+                }
+
                 sal_uInt16 nLev = 0;
                 sal_Bool bFirst = sal_True;
                 bFoundTxMasterStyleAtom04 = sal_True;
