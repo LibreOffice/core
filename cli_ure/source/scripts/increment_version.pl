@@ -50,54 +50,55 @@ my $sNameForm =
 "For example, valid names are: \n".
 "CLI_URETYPES_NEW_VERSION\nCLI_URETYPES_OLD_VERSION\nCLI_URETYPES_POLICY_VERSION\n";
 
-if (scalar @ARGV < 4) {
+if (scalar @ARGV < 3) {
    print $usage;
    exit -1;
 }
 
 -e "$ARGV[0]" or die "Error: wrong arguments. \n".$usage;
 -e "$ARGV[1]" or die "Error: wrong arguments. \n".$usage;
--e "$ARGV[3]" or die "Error: wrong arguments. \n".$usage;
+#-e "$ARGV[3]" or die "Error: wrong arguments. \n".$usage;
 
+# DISABLED: always increment
 #check if new types have been added since last release.
 #If not, then there is nothing to be done.
 #read in oldVersions line by line and apply the increment operation
-open TYPES, "$ARGV[3]" or die "Cannot open to $ARGV[3] $!";
+#open TYPES, "$ARGV[3]" or die "Cannot open to $ARGV[3] $!";
 
 my $newTypes;
 
 #We look for the line that contains the number of new types
-while(<TYPES>)
-{
-    if (/New and published types/i)
-    {
-    $_ =~ /=\s*(\d+)/;
-    if ( ! defined $1)
-    {
-        print "\n###$ARGV[3] contains an invalid entry for 'New and published types'.  \n\n";
-        exit -1;
-    }
-    $newTypes = $1;
-    }
-}
+#while(<TYPES>)
+#{
+#    if (/New and published types/i)
+#    {
+#    $_ =~ /=\s*(\d+)/;
+#    if ( ! defined $1)
+#    {
+#        print "\n###$ARGV[3] contains an invalid entry for 'New and published types'.  \n\n";
+#        exit -1;
+#    }
+#    $newTypes = $1;
+#    }
+#}
 
 #Check if changeTypes contained the line we are looking for
-if (! defined $newTypes)
-{
-    print "\n###$ARGV[3] does not contain entry about the new types ".
-    "or we are looking for the wrong string! \n\n";
-    exit -1;
-}
+#if (! defined $newTypes)
+#{
+#    print "\n###$ARGV[3] does not contain entry about the new types ".
+#    "or we are looking for the wrong string! \n\n";
+#    exit -1;
+#}
 
-if ( $newTypes == 0)
-{
-    print "\nNo new UNO types since las product update.\n";
-    exit 0;
-}
-else
-{
-    print "\nNew UNO types were added since last release. The version will be increased.\n\n";
-}
+#if ( $newTypes == 0)
+#{
+#    print "\nNo new UNO types since las product update.\n";
+#    exit 0;
+#}
+#else
+#{
+#    print "\nNew UNO types were added since last release. The version will be increased.\n\n";
+#}
 
 #read in incVersions in a list
 my @incVersions = readIncVersions($ARGV[1]);
