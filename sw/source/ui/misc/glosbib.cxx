@@ -94,6 +94,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
     m_pPathLB->Enable();
 
     const size_t nCount = pHdl->GetGroupCnt();
+    /* tdf#111870 "My AutoText" comes from mytexts.bau but should be translated
+       here as well, see also SwGlossaryDlg::Init */
+    const OUString sMyAutoTextEnglish("My AutoText");
     for( size_t i = 0; i < nCount; ++i)
     {
         OUString sTitle;
@@ -102,9 +105,12 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
             continue;
         GlosBibUserData* pData = new GlosBibUserData;
         pData->sGroupName = sGroup;
-        pData->sGroupTitle = sTitle;
+        if ( sTitle == sMyAutoTextEnglish )
+            pData->sGroupTitle = SwResId(STR_MY_AUTOTEXT);
+        else
+            pData->sGroupTitle = sTitle;
         pData->sPath = m_pPathLB->GetEntry(sGroup.getToken(1, GLOS_DELIM).toInt32());
-        SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTitle + "\t" + pData->sPath);
+        SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(pData->sGroupTitle + "\t" + pData->sPath);
         pEntry->SetUserData(pData);
 
     }
