@@ -270,7 +270,7 @@ long SwWrtShell::DelRight()
                 }
                 else
                     EnterStdMode();
-                nRet = 1L;
+                nRet = 1;
                 break;
             }
             else

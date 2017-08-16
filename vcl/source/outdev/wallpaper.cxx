@@ -240,8 +240,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     default:
         {
-            const long nRight = nX + nWidth - 1L;
-            const long nBottom = nY + nHeight - 1L;
+            const long nRight = nX + nWidth - 1;
+            const long nBottom = nY + nHeight - 1;
             long nFirstX;
             long nFirstY;
 
@@ -261,10 +261,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             long nStartX = nX + nOffX;
             long nStartY = nY + nOffY;
 
-            if( nOffX > 0L )
+            if( nOffX > 0 )
                 nStartX -= nBmpWidth;
 
-            if( nOffY > 0L )
+            if( nOffY > 0 )
                 nStartY -= nBmpHeight;
 
             for( long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )

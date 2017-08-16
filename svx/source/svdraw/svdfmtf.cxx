@@ -783,7 +783,7 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
 
         if(pLastPoly)
         {
-            if(1L == pLastPoly->GetPathPoly().count())
+            if(1 == pLastPoly->GetPathPoly().count())
             {
                 bool bOk(false);
                 basegfx::B2DPolygon aDstPoly(pLastPoly->GetPathPoly().getB2DPolygon(0L));
@@ -796,32 +796,32 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
 
                 if(aDstPoly.count())
                 {
-                    const sal_uInt32 nMaxDstPnt(aDstPoly.count() - 1L);
-                    const sal_uInt32 nMaxSrcPnt(rSrcPoly.count() - 1L);
+                    const sal_uInt32 nMaxDstPnt(aDstPoly.count() - 1);
+                    const sal_uInt32 nMaxSrcPnt(rSrcPoly.count() - 1);
 
                     if(aDstPoly.getB2DPoint(nMaxDstPnt) == rSrcPoly.getB2DPoint(0L))
                     {
-                        aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1L);
+                        aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1);
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(0L) == rSrcPoly.getB2DPoint(nMaxSrcPnt))
                     {
                         basegfx::B2DPolygon aNew(rSrcPoly);
-                        aNew.append(aDstPoly, 1L, aDstPoly.count() - 1L);
+                        aNew.append(aDstPoly, 1L, aDstPoly.count() - 1);
                         aDstPoly = aNew;
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(0L) == rSrcPoly.getB2DPoint(0L))
                     {
                         aDstPoly.flip();
-                        aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1L);
+                        aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1);
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(nMaxDstPnt) == rSrcPoly.getB2DPoint(nMaxSrcPnt))
                     {
                         basegfx::B2DPolygon aNew(rSrcPoly);
                         aNew.flip();
-                        aDstPoly.append(aNew, 1L, aNew.count() - 1L);
+                        aDstPoly.append(aNew, 1L, aNew.count() - 1);
                         bOk = true;
                     }
                 }

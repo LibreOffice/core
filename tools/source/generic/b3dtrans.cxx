@@ -270,13 +270,13 @@ void B3dTransformationSet::CalcViewport()
 
     // fill parameters for ViewportTransformation
     // Translation
-    maTranslate.setX((double)maSetBound.Left() + ((maSetBound.GetWidth() - 1L) / 2.0));
-    maTranslate.setY((double)maSetBound.Top() + ((maSetBound.GetHeight() - 1L) / 2.0));
+    maTranslate.setX((double)maSetBound.Left() + ((maSetBound.GetWidth() - 1) / 2.0));
+    maTranslate.setY((double)maSetBound.Top() + ((maSetBound.GetHeight() - 1) / 2.0));
     maTranslate.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
 
     // Scaling
-    maScale.setX((maSetBound.GetWidth() - 1L) / 2.0);
-    maScale.setY((maSetBound.GetHeight() - 1L) / -2.0);
+    maScale.setX((maSetBound.GetWidth() - 1) / 2.0);
+    maScale.setY((maSetBound.GetHeight() - 1) / -2.0);
     maScale.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
 }
 
