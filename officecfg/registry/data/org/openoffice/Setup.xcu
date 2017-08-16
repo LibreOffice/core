@@ -37,12 +37,6 @@
     <prop oor:name="ooSetupExtension">
       <value>${PRODUCTEXTENSION}</value>
     </prop>
-    <prop oor:name="ooXMLFileFormatVersion">
-      <value>1.0</value>
-    </prop>
-    <prop oor:name="ooXMLFileFormatName">
-      <value>OpenOffice.org</value>
-    </prop>
     <prop oor:name="ooOpenSourceContext">
       <value>1</value>
     </prop>

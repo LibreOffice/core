@@ -251,24 +251,6 @@
         <!-- JB: Empty default inserted into empty property node. Remove if NIL
              was intended -->
       </prop>
-      <prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the version of the SO 6/7 or OOo 1.0 xml file
-          formats.</desc>
-        </info>
-        <value/>
-        <!-- JB: Empty default inserted into empty property node. Remove if NIL
-             was intended -->
-      </prop>
-      <prop oor:name="ooXMLFileFormatName" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the name of the SO6/7 or OOo1.0 xml file
-          formats.</desc>
-        </info>
-        <value/>
-        <!-- JB: Empty default inserted into empty property node. Remove if NIL
-             was intended -->
-      </prop>
       <prop oor:name="ooSetupVersion" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>Specifies the version number of the product that appears on the
