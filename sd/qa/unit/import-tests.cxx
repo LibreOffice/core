@@ -70,7 +70,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>

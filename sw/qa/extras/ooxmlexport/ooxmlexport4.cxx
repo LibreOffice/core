@@ -684,27 +684,6 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76312, "FDO76312.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
-{
-    // check XML
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "pepito");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "Manolo");
-
-    // check imported control
-    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
-
-    CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
-
-    uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), "StringItemList");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
-    CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
-    CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
-}
-
 DECLARE_OOXMLEXPORT_TEST(testCheckBoxControl, "checkbox-control.docx")
 {
     // check XML
