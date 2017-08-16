@@ -25,6 +25,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <tools/stream.hxx>
 
 class SfxPoolItem;
 class SfxItemPoolUser;
