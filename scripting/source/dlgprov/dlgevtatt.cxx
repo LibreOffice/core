@@ -568,7 +568,7 @@ namespace dlgprov
         {
             try
             {
-                // Methode ansprechen
+                // call method
                 const Reference< XIdlMethod >& rxMethod = m_xIntrospectionAccess->
                     getMethod( aMethodName, MethodConcept::ALL - MethodConcept::DANGEROUS );
 

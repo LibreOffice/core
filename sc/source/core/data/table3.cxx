@@ -3283,7 +3283,6 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     }
     else
     {
-        //  nix
         for (i=0; i < nCount; i++)
             rQueryParam.GetEntry(i).Clear();
     }

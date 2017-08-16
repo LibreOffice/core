@@ -136,7 +136,7 @@ extern void SbRtl_CLEAR_ALLTABS(StarBASIC * pBasic, SbxArray & rPar, bool bWrite
 extern void SbRtl_CLEAR_TAB(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_SET_TAB(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 
-// Methoden
+// Methods
 
 extern void SbRtl_CreateObject(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Error(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
