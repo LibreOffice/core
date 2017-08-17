@@ -183,9 +183,6 @@ struct ArrayImpl
     long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
     long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
 
-    double              GetHorDiagAngle( size_t nCol, size_t nRow ) const;
-    double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
-
     bool                HasCellRotation() const;
 };
 
@@ -317,35 +314,6 @@ long ArrayImpl::GetColWidth( size_t nFirstCol, size_t nLastCol ) const
 long ArrayImpl::GetRowHeight( size_t nFirstRow, size_t nLastRow ) const
 {
     return GetRowPosition( nLastRow + 1 ) - GetRowPosition( nFirstRow );
-}
-
-double ArrayImpl::GetHorDiagAngle( size_t nCol, size_t nRow ) const
-{
-    double fAngle = 0.0;
-    if( IsValidPos( nCol, nRow ) )
-    {
-        if( !GetCell( nCol, nRow ).IsMerged() )
-        {
-            fAngle = frame::GetHorDiagAngle( maWidths[ nCol ] + 1, maHeights[ nRow ] + 1 );
-        }
-        else
-        {
-            // return correct angle for each cell in the merged range
-            size_t nFirstCol = GetMergedFirstCol( nCol, nRow );
-            size_t nFirstRow = GetMergedFirstRow( nCol, nRow );
-            const Cell& rCell = GetCell( nFirstCol, nFirstRow );
-            long nWidth = GetColWidth( nFirstCol, GetMergedLastCol( nCol, nRow ) ) + rCell.mnAddLeft + rCell.mnAddRight;
-            long nHeight = GetRowHeight( nFirstRow, GetMergedLastRow( nCol, nRow ) ) + rCell.mnAddTop + rCell.mnAddBottom;
-            fAngle = frame::GetHorDiagAngle( nWidth + 1, nHeight + 1 );
-        }
-    }
-    return fAngle;
-}
-
-double ArrayImpl::GetVerDiagAngle( size_t nCol, size_t nRow ) const
-{
-    double fAngle = GetHorDiagAngle( nCol, nRow );
-    return (fAngle > 0.0) ? (F_PI2 - fAngle) : 0.0;
 }
 
 bool ArrayImpl::HasCellRotation() const
@@ -872,19 +840,6 @@ tools::Rectangle Array::GetCellRect( size_t nCol, size_t nRow ) const
     return aRect;
 }
 
-// diagonal frame borders
-double Array::GetHorDiagAngle( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetHorDiagAngle" );
-    return mxImpl->GetHorDiagAngle( nCol, nRow );
-}
-
-double Array::GetVerDiagAngle( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetVerDiagAngle" );
-    return mxImpl->GetVerDiagAngle( nCol, nRow );
-}
-
 // mirroring
 void Array::MirrorSelfX()
 {
@@ -1031,43 +986,37 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
     // *** horizontal frame borders ***
     for( nRow = nFirstRow; nRow <= nLastRow + 1; ++nRow )
     {
-        double fAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow );
-        double fTAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow - 1 );
-
         // *Start*** variables store the data of the left end of the cached frame border
         basegfx::B2DPoint aStartPos( mxImpl->GetColPosition( nFirstCol ), mxImpl->GetRowPosition( nRow ) );
         const Style* pStart = &GetCellStyleTop( nFirstCol, nRow );
-        DiagStyle aStartLFromTR( GetCellStyleBL( nFirstCol, nRow - 1 ), fTAngle );
+        Style aStartLFromTR( GetCellStyleBL( nFirstCol, nRow - 1 ));
         const Style* pStartLFromT = &GetCellStyleLeft( nFirstCol, nRow - 1 );
         const Style* pStartLFromL = &GetCellStyleTop( nFirstCol - 1, nRow );
         const Style* pStartLFromB = &GetCellStyleLeft( nFirstCol, nRow );
-        DiagStyle aStartLFromBR( GetCellStyleTL( nFirstCol, nRow ), fAngle );
+        Style aStartLFromBR( GetCellStyleTL( nFirstCol, nRow ));
 
         // *End*** variables store the data of the right end of the cached frame border
-        DiagStyle aEndRFromTL( GetCellStyleBR( nFirstCol, nRow - 1 ), fTAngle );
+        Style aEndRFromTL( GetCellStyleBR( nFirstCol, nRow - 1 ));
         const Style* pEndRFromT = &GetCellStyleRight( nFirstCol, nRow - 1 );
         const Style* pEndRFromR = &GetCellStyleTop( nFirstCol + 1, nRow );
         const Style* pEndRFromB = &GetCellStyleRight( nFirstCol, nRow );
-        DiagStyle aEndRFromBL( GetCellStyleTR( nFirstCol, nRow ), fAngle );
+        Style aEndRFromBL( GetCellStyleTR( nFirstCol, nRow ));
 
         for( nCol = nFirstCol + 1; nCol <= nLastCol; ++nCol )
         {
-            fAngle = mxImpl->GetHorDiagAngle( nCol, nRow );
-            fTAngle = mxImpl->GetHorDiagAngle( nCol, nRow - 1 );
-
             const Style& rCurr = *pEndRFromR;
 
-            DiagStyle aLFromTR( GetCellStyleBL( nCol, nRow - 1 ), fTAngle );
+            Style aLFromTR( GetCellStyleBL( nCol, nRow - 1 ));
             const Style& rLFromT = *pEndRFromT;
             const Style& rLFromL = *pStart;
             const Style& rLFromB = *pEndRFromB;
-            DiagStyle aLFromBR( GetCellStyleTL( nCol, nRow ), fAngle );
+            Style aLFromBR( GetCellStyleTL( nCol, nRow ));
 
-            DiagStyle aRFromTL( GetCellStyleBR( nCol, nRow - 1 ), fTAngle );
+            Style aRFromTL( GetCellStyleBR( nCol, nRow - 1 ));
             const Style& rRFromT = GetCellStyleRight( nCol, nRow - 1 );
             const Style& rRFromR = GetCellStyleTop( nCol + 1, nRow );
             const Style& rRFromB = GetCellStyleRight( nCol, nRow );
-            DiagStyle aRFromBL( GetCellStyleTR( nCol, nRow ), fAngle );
+            Style aRFromBL( GetCellStyleTR( nCol, nRow ));
 
             // check if current frame border can be connected to cached frame border
             if( !CheckFrameBorderConnectable( *pStart, rCurr, aEndRFromTL, rLFromT, aLFromTR, aEndRFromBL, rLFromB, aLFromBR ) )
@@ -1199,43 +1148,37 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
     // *** vertical frame borders ***
     for( nCol = nFirstCol; nCol <= nLastCol + 1; ++nCol )
     {
-        double fAngle = mxImpl->GetVerDiagAngle( nCol, nFirstRow );
-        double fLAngle = mxImpl->GetVerDiagAngle( nCol - 1, nFirstRow );
-
         // *Start*** variables store the data of the top end of the cached frame border
         basegfx::B2DPoint aStartPos( mxImpl->GetColPosition( nCol ), mxImpl->GetRowPosition( nFirstRow ) );
         const Style* pStart = &GetCellStyleLeft( nCol, nFirstRow );
-        DiagStyle aStartTFromBL( GetCellStyleTR( nCol - 1, nFirstRow ), fLAngle );
+        Style aStartTFromBL( GetCellStyleTR( nCol - 1, nFirstRow ));
         const Style* pStartTFromL = &GetCellStyleTop( nCol - 1, nFirstRow );
         const Style* pStartTFromT = &GetCellStyleLeft( nCol, nFirstRow - 1 );
         const Style* pStartTFromR = &GetCellStyleTop( nCol, nFirstRow );
-        DiagStyle aStartTFromBR( GetCellStyleTL( nCol, nFirstRow ), fAngle );
+        Style aStartTFromBR( GetCellStyleTL( nCol, nFirstRow ));
 
         // *End*** variables store the data of the bottom end of the cached frame border
-        DiagStyle aEndBFromTL( GetCellStyleBR( nCol - 1, nFirstRow ), fLAngle );
+        Style aEndBFromTL( GetCellStyleBR( nCol - 1, nFirstRow ));
         const Style* pEndBFromL = &GetCellStyleBottom( nCol - 1, nFirstRow );
         const Style* pEndBFromB = &GetCellStyleLeft( nCol, nFirstRow + 1 );
         const Style* pEndBFromR = &GetCellStyleBottom( nCol, nFirstRow );
-        DiagStyle aEndBFromTR( GetCellStyleBL( nCol, nFirstRow ), fAngle );
+        Style aEndBFromTR( GetCellStyleBL( nCol, nFirstRow ));
 
         for( nRow = nFirstRow + 1; nRow <= nLastRow; ++nRow )
         {
-            fAngle = mxImpl->GetVerDiagAngle( nCol, nRow );
-            fLAngle = mxImpl->GetVerDiagAngle( nCol - 1, nRow );
-
             const Style& rCurr = *pEndBFromB;
 
-            DiagStyle aTFromBL( GetCellStyleTR( nCol - 1, nRow ), fLAngle );
+            Style aTFromBL( GetCellStyleTR( nCol - 1, nRow ));
             const Style& rTFromL = *pEndBFromL;
             const Style& rTFromT = *pStart;
             const Style& rTFromR = *pEndBFromR;
-            DiagStyle aTFromBR( GetCellStyleTL( nCol, nRow ), fAngle );
+            Style aTFromBR( GetCellStyleTL( nCol, nRow ));
 
-            DiagStyle aBFromTL( GetCellStyleBR( nCol - 1, nRow ), fLAngle );
+            Style aBFromTL( GetCellStyleBR( nCol - 1, nRow ));
             const Style& rBFromL = GetCellStyleBottom( nCol - 1, nRow );
             const Style& rBFromB = GetCellStyleLeft( nCol, nRow + 1 );
             const Style& rBFromR = GetCellStyleBottom( nCol, nRow );
-            DiagStyle aBFromTR( GetCellStyleBL( nCol, nRow ), fAngle );
+            Style aBFromTR( GetCellStyleBL( nCol, nRow ));
 
             // check if current frame border can be connected to cached frame border
             if( !CheckFrameBorderConnectable( *pStart, rCurr,

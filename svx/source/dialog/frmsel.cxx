@@ -360,8 +360,9 @@ void FrameSelectorImpl::InitGlobalGeometry()
     /*  nBetwBordersSize contains the size between an outer and inner frame border (made odd). */
     long nBetwBordersSize = (((nMinSize - nFixedSize) / 2) - 1) | 1;
 
-    /*  The final size of the usable area. */
+    /*  The final size of the usable area. At least do not get negative */
     mnCtrlSize = 2 * nBetwBordersSize + nFixedSize;
+    mnCtrlSize = std::max(mnCtrlSize, static_cast<long>(0));
     mpVirDev->SetOutputSizePixel( Size( mnCtrlSize, mnCtrlSize ) );
 
     /*  Center the virtual device in the control. */
@@ -410,8 +411,10 @@ void FrameSelectorImpl::InitBorderGeometry()
         for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
         {
             tools::Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
-            long nDiagFocusOffsX = frame::GetTLDiagOffset( -mnFocusOffs, mnFocusOffs, maArray.GetHorDiagAngle( nCol, nRow ) );
-            long nDiagFocusOffsY = frame::GetTLDiagOffset( -mnFocusOffs, mnFocusOffs, maArray.GetVerDiagAngle( nCol, nRow ) );
+            const double fHorDiagAngle(atan2(static_cast< double >(std::abs(aRect.GetHeight())), static_cast< double >(std::abs(aRect.GetWidth()))));
+            const double fVerDiagAngle(fHorDiagAngle > 0.0 ? F_PI2 - fHorDiagAngle : 0.0);
+            const long nDiagFocusOffsX(basegfx::fround(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
+            const long nDiagFocusOffsY(basegfx::fround(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
 
             std::vector< Point > aFocusVec;
             aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY ) );
