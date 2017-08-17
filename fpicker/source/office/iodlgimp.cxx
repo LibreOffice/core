@@ -26,7 +26,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
-#include "svl/ctypeitm.hxx"
 #include "svl/eitem.hxx"
 #include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
