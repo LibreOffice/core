@@ -188,6 +188,8 @@ void MacabRecords::initialize()
 
 MacabRecords::~MacabRecords()
 {
+    delete [] lcl_CFTypes;
+    delete [] requiredProperties;
 }
 
 
