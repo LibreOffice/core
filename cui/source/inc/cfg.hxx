@@ -403,6 +403,10 @@ protected:
 
     VclPtr<SvxScriptSelectorDialog>            m_pSelectorDlg;
 
+    // Middle buttons
+    VclPtr<PushButton>                         m_pAddCommandButton;
+    VclPtr<PushButton>                         m_pRemoveCommandButton;
+
     /// the ResourceURL to select when opening the dialog
     OUString                                   m_aURLToSelect;
 
@@ -479,6 +483,9 @@ public:
     */
     static OUString
         GetFrameWithDefaultAndIdentify( css::uno::Reference< css::frame::XFrame >& _inout_rxFrame );
+
+    OUString    GetScriptURL() const;
+    OUString    GetSelectedDisplayName();
 };
 
 class SvxMainMenuOrganizerDialog : public ModalDialog

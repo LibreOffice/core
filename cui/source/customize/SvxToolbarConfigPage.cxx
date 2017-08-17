@@ -135,6 +135,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pMoveDownButton->Enable();
     m_pMoveUpButton->Enable();
 
+    m_pAddCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, AddCommandHdl ) );
+    //m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, RemoveCommandHdl ) );
+
     // default toolbar to select is standardbar unless a different one
     // has been passed in
     m_aURLToSelect = ITEM_TOOLBAR_URL;
@@ -321,6 +324,16 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, ListBox&, void )
     m_pCommandCategoryListBox->categorySelected( m_pFunctions );
 }
 
+IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandHdl, Button *, void )
+{
+    AddFunction();
+}
+
+/*IMPL_LINK_NOARG( SvxToolbarConfigPage, RemoveCommandHdl, Button *, void )
+{
+    //TODO:Implement
+}*/
+
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
@@ -391,14 +404,10 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     UpdateButtonStates();
 }
 
-IMPL_LINK_NOARG( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
-{
-    AddFunction();
-}
-
 void SvxToolbarConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront )
 {
+    // Add the command to the contents listbox of the selected toolbar
     SvTreeListEntry* pNewLBEntry =
         SvxConfigPage::AddFunction( pTarget, bFront, true/*bAllowDuplicates*/ );
 
@@ -416,6 +425,9 @@ void SvxToolbarConfigPage::AddFunction(
             pNewLBEntry, SvButtonState::Tristate );
     }
 
+    // Changes are not visible on the toolbar until this point
+    // TODO: Figure out a way to show the changes on the toolbar, but revert if
+    //       the dialog is closed by pressing "Cancel"
     // get currently selected toolbar and apply change
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
 

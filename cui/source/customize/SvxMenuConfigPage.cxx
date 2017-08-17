@@ -124,6 +124,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
+
+    m_pAddCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, AddCommandHdl ) );
+    //m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -288,6 +291,16 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )
 {
     m_pCommandCategoryListBox->categorySelected( m_pFunctions );
 }
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, Button *, void )
+{
+    AddFunction();
+}
+
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, Button *, void )
+{
+    //TODO:Implement
+}*/
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
     const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
