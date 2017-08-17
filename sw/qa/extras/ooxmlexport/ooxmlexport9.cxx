@@ -636,6 +636,25 @@ DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
     // LO crashed while export because of chararacter background color handling
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Before table background color was white, should be transparent (auto).
+    uno::Reference<text::XTextRange> xCell1(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(xCell1, "BackColor"));
+
+    // Cell with auto color but with 15% fill, shouldn't be transparent.
+    uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd8d8d8), getProperty<sal_Int32>(xCell2, "BackColor"));
+
+    // Cell with color defined (red).
+    uno::Reference<text::XTextRange> xCell3(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xCell3, "BackColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
