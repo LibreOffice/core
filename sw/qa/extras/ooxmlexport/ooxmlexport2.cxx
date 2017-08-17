@@ -252,12 +252,12 @@ DECLARE_OOXMLEXPORT_TEST(testMathD, "math-d.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMathEscaping, "math-escaping.docx")
 {
-    CHECK_FORMULA( OUString::fromUtf8("\xe2\x88\x92 \xe2\x88\x9e < x < \xe2\x88\x9e"), getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( u"\u2212 \u221E < x < \u221E", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathLim, "math-lim.docx")
 {
-    CHECK_FORMULA( OUString::fromUtf8("lim from {x \xe2\x86\x92 1} {x}"), getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( u"lim from {x \u2192 1} {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
@@ -267,32 +267,32 @@ DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMathMso2k7, "math-mso2k7.docx")
 {
-    CHECK_FORMULA( OUString::fromUtf8("A = \xcf\x80 {r} ^ {2}"), getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA( u"A = \u03C0 {r} ^ {2}", getFormula( getRun( getParagraph( 1 ), 1 )));
 // TODO check the stack/binom difference
 //    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
     CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (stack {n # k} right ) {x} ^ {k} {a} ^ {n-k}}",
         getFormula( getRun( getParagraph( 2 ), 1 )));
-    CHECK_FORMULA( OUString::fromUtf8("{left (1+x right )} ^ {n} =1+ {nx} over {1!} + {n left (n-1 right ) {x} ^ {2}} over {2!} +\xe2\x80\xa6"),
+    CHECK_FORMULA( u"{left (1+x right )} ^ {n} =1+ {nx} over {1!} + {n left (n-1 right ) {x} ^ {2}} over {2!} +\u2026",
         getFormula( getRun( getParagraph( 3 ), 1 )));
 // TODO check (cos/sin miss {})
 //    CHECK_FORMULA( "f left (x right ) = {a} rsub {0} + sum from {n=1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {{n\xcf\x80x} over {L}} + {b} rsub {n} sin {{n\xcf\x80x} over {L}} right )}",
-    CHECK_FORMULA( OUString::fromUtf8("f left (x right ) = {a} rsub {0} + sum from {n=1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {n\xcf\x80x} over {L} + {b} rsub {n} sin {n\xcf\x80x} over {L} right )}"),
+    CHECK_FORMULA( u"f left (x right ) = {a} rsub {0} + sum from {n=1} to {\u221E} {left ({a} rsub {n} cos {n\u03C0x} over {L} + {b} rsub {n} sin {n\u03C0x} over {L} right )}",
         getFormula( getRun( getParagraph( 4 ), 1 )));
     CHECK_FORMULA( "{a} ^ {2} + {b} ^ {2} = {c} ^ {2}", getFormula( getRun( getParagraph( 5 ), 1 )));
-    CHECK_FORMULA( OUString::fromUtf8("x = {- b \xc2\xb1 sqrt {{b} ^ {2} -4 ac}} over {2 a}"),
+    CHECK_FORMULA( u"x = {- b \u00B1 sqrt {{b} ^ {2} -4 ac}} over {2 a}",
         getFormula( getRun( getParagraph( 6 ), 1 )));
     CHECK_FORMULA(
-        OUString::fromUtf8("{e} ^ {x} =1+ {x} over {1!} + {{x} ^ {2}} over {2!} + {{x} ^ {3}} over {3!} +\xe2\x80\xa6,    -\xe2\x88\x9e<x<\xe2\x88\x9e"),
+        u"{e} ^ {x} =1+ {x} over {1!} + {{x} ^ {2}} over {2!} + {{x} ^ {3}} over {3!} +\u2026,    -\u221E<x<\u221E",
         getFormula( getRun( getParagraph( 7 ), 1 )));
     CHECK_FORMULA(
 //        "sin {\xce\xb1} \xc2\xb1 sin {\xce\xb2} =2 sin {{1} over {2} left (\xce\xb1\xc2\xb1\xce\xb2 right )} cos {{1} over {2} left (\xce\xb1\xe2\x88\x93\xce\xb2 right )}",
 // TODO check (cos/in miss {})
-        OUString::fromUtf8("sin \xce\xb1 \xc2\xb1 sin \xce\xb2 =2 sin {1} over {2} left (\xce\xb1\xc2\xb1\xce\xb2 right ) cos {1} over {2} left (\xce\xb1\xe2\x88\x93\xce\xb2 right )"),
+        u"sin \u03B1 \u00B1 sin \u03B2 =2 sin {1} over {2} left (\u03B1\u00B1\u03B2 right ) cos {1} over {2} left (\u03B1\u2213\u03B2 right )",
         getFormula( getRun( getParagraph( 8 ), 1 )));
     CHECK_FORMULA(
 //        "cos {\xce\xb1} + cos {\xce\xb2} =2 cos {{1} over {2} left (\xce\xb1+\xce\xb2 right )} cos {{1} over {2} left (\xce\xb1-\xce\xb2 right )}",
 // TODO check (cos/sin miss {})
-        OUString::fromUtf8("cos \xce\xb1 + cos \xce\xb2 =2 cos {1} over {2} left (\xce\xb1+\xce\xb2 right ) cos {1} over {2} left (\xce\xb1-\xce\xb2 right )"),
+        u"cos \u03B1 + cos \u03B2 =2 cos {1} over {2} left (\u03B1+\u03B2 right ) cos {1} over {2} left (\u03B1-\u03B2 right )",
         getFormula( getRun( getParagraph( 9 ), 1 )));
 }
 
@@ -580,7 +580,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableStylerPrSz, "table-style-rPr-sz.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 {
-    CHECK_FORMULA( OUString::fromUtf8("iiint from {V} to <?> {\"div\" \"F\"}  dV= llint from {S} to <?> {\"F\" \xe2\x88\x99 \"n \" dS}"),
+    CHECK_FORMULA( u"iiint from {V} to <?> {\"div\" \"F\"}  dV= llint from {S} to <?> {\"F\" \u2219 \"n \" dS}",
         getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 

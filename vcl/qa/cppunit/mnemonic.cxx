@@ -33,7 +33,7 @@ void VclMnemonicTest::testMnemonic()
     MnemonicGenerator aGenerator;
 
     {
-        OUString sResult = aGenerator.CreateMnemonic(OUString::fromUtf8(u8"ßa"));
+        OUString sResult = aGenerator.CreateMnemonic(u"ßa");
         CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
     }
 

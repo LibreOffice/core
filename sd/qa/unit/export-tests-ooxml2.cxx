@@ -305,7 +305,7 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
             "a14");
         assertXPathContent(pXmlDocContent,
             "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/a14:m/m:oMath/m:sSup/m:e/m:r[1]/m:t",
-            OUString::fromUtf8("\xf0\x9d\x91\x8e")); // non-BMP char
+            u"\U0001D44E"); // non-BMP char
 
         const SdrPage *pPage = GetPage(1, xDocShRef);
         const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));

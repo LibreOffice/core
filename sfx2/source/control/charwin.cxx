@@ -85,10 +85,10 @@ void SvxCharView::InsertCharToDoc()
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     uno::Sequence<beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = OUString::fromUtf8("Symbols");
+    aArgs[0].Name = "Symbols";
     aArgs[0].Value <<= GetText();
 
-    aArgs[1].Name = OUString::fromUtf8("FontName");
+    aArgs[1].Name = "FontName";
     aArgs[1].Value <<= maFont.GetFamilyName();
 
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);

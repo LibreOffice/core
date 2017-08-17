@@ -227,9 +227,9 @@ void ScTiledRenderingTest::testRowColumnSelections()
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with shift modifier
-    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Name = "Row";
     aArgs[0].Value <<= static_cast<sal_Int32>(10 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Name = "Modifier";
     aArgs[1].Value <<= KEY_SHIFT;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
@@ -239,9 +239,9 @@ void ScTiledRenderingTest::testRowColumnSelections()
     CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
 
     // Select the 10th row with ctrl modifier
-    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Name = "Row";
     aArgs[0].Value <<= static_cast<sal_Int32>(13 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Name = "Modifier";
     aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
@@ -253,9 +253,9 @@ void ScTiledRenderingTest::testRowColumnSelections()
     // TODO check that we really selected what we wanted here
 
     // Select Column 5 with ctrl modifier
-    aArgs[0].Name = OUString::fromUtf8("Col");
+    aArgs[0].Name = "Col";
     aArgs[0].Value <<= static_cast<sal_Int32>(5 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Name = "Modifier";
     aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
 
@@ -268,23 +268,23 @@ void ScTiledRenderingTest::testRowColumnSelections()
 
     // Test for deselection of already selected rows
     // First Deselect Row 13 because copy doesn't work for multiple selections
-    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Name = "Row";
     aArgs[0].Value <<= static_cast<sal_Int32>(13 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Name = "Modifier";
     aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Deselect row 10
-    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Name = "Row";
     aArgs[0].Value <<= static_cast<sal_Int32>(10 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Name = "Modifier";
     aArgs[1].Value <<= KEY_MOD1;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Click at row 6 holding shift
-    aArgs[0].Name = OUString::fromUtf8("Row");
+    aArgs[0].Name = "Row";
     aArgs[0].Value <<= static_cast<sal_Int32>(6 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Name = "Modifier";
     aArgs[1].Value <<= KEY_SHIFT;
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
