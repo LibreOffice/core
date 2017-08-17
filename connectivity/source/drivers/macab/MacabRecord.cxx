@@ -55,6 +55,7 @@ MacabRecord::~MacabRecord()
 {
     if(size > 0)
     {
+        releaseFields();
         int i;
         for(i = 0; i < size; i++)
         {
