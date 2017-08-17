@@ -198,7 +198,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
 
     if (xcpInputStream.is())
     {
-        // imporing itemprops files for item.xml from customXml.
+        // importing itemprops files for item.xml from customXml.
         if(OOXMLStream::CUSTOMXMLPROPS == nType)
         {
             try

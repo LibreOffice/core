@@ -514,7 +514,7 @@ void Frame::initListeners()
     SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk.frame", "Frame::Frame(): Interception helper is not valid. XDispatchProvider, "
         "XDispatch, XDispatchProviderInterception are not full supported!" );
     SAL_WARN_IF( !m_xFramesHelper.is(), "fwk.frame", "Frame::Frame(): Frames helper is not valid. XFrames, "
-        "XIndexAccess and XElementAcces are not supported!" );
+        "XIndexAccess and XElementAccess are not supported!" );
     SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk.frame", "Frame::Frame(): DropTarget helper is not valid. "
         "Drag and drop without functionality!" );
 

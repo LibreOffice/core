@@ -499,7 +499,7 @@ void PresenterHelpView::ThrowIfDisposed()
     }
 }
 
-//===== LineDescritor =========================================================
+//===== LineDescriptor =========================================================
 
 namespace {
 
