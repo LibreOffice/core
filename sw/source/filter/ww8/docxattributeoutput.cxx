@@ -50,6 +50,8 @@
 #include <oox/mathml/export.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/relationship.hxx>
+#include <oox/export/vmlexport.hxx>
+#include <oox/ole/olehelper.hxx>
 
 #include <editeng/autokernitem.hxx>
 #include <editeng/unoprnms.hxx>
@@ -2042,6 +2044,8 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WritePostponedDMLDrawing();
 
     WritePostponedOLE();
+
+    WritePostponedActiveXControl();
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
@@ -4781,6 +4785,101 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
     }
 }
 
+void DocxAttributeOutput::WritePostponedActiveXControl()
+{
+    for( std::vector<PostponedDrawing>::const_iterator it = m_aPostponedActiveXControls.begin();
+         it != m_aPostponedActiveXControls.end(); ++it )
+    {
+        WriteActiveXControl(it->object, *(it->frame), *(it->point));
+    }
+    m_aPostponedActiveXControls.clear();
+}
+
+
+void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft)
+{
+    SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(dynamic_cast< const SdrUnoObj*>(pObject));
+    if (!pFormObj)
+        return;
+
+    uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
+    if (!xControlModel.is())
+        return;
+
+    const bool bAnchoredInline = rFrameFormat.GetAnchor().GetAnchorId() == static_cast<RndStdIds>(css::text::TextContentAnchorType_AS_CHARACTER);
+
+    // w:pict for floating embedded control and w:object for inline embedded control
+    if(bAnchoredInline)
+        m_pSerializer->startElementNS(XML_w, XML_object, FSEND);
+    else
+        m_pSerializer->startElementNS(XML_w, XML_pict, FSEND);
+
+    // write ActiveX fragment and ActiveX binary
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape(), uno::UNO_QUERY);
+    std::pair<OString,OString> sRelIdAndName = m_rExport.WriteActiveXObject(xShape, xControlModel);
+
+    // VML shape definition
+    m_rExport.VMLExporter().SetSkipwzName();
+    m_rExport.VMLExporter().SetHashMarkForType();
+    OString sShapeId;
+    if(bAnchoredInline)
+    {
+        sShapeId = m_rExport.VMLExporter().AddInlineSdrObject(*pObject, true);
+    }
+    else
+    {
+        const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
+        const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
+        sShapeId = m_rExport.VMLExporter().AddSdrObject(*pObject,
+            rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
+            rHoriOri.GetRelationOrient(),
+            rVertOri.GetRelationOrient(), &rNdTopLeft, true);
+    }
+
+    // control
+    m_pSerializer->singleElementNS(XML_w, XML_control,
+                                    FSNS(XML_r, XML_id), sRelIdAndName.first.getStr(),
+                                    FSNS(XML_w, XML_name), sRelIdAndName.second.getStr(),
+                                    FSNS(XML_w, XML_shapeid), sShapeId.getStr(),
+                                    FSEND);
+
+    if(bAnchoredInline)
+        m_pSerializer->endElementNS(XML_w, XML_object);
+    else
+        m_pSerializer->endElementNS(XML_w, XML_pict);
+}
+
+bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
+{
+    SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(dynamic_cast< const SdrUnoObj*>(pObject));
+    if (!pFormObj)
+        return false;
+
+    uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
+    if (!xControlModel.is())
+        return false;
+
+    uno::Reference< css::frame::XModel > xModel( m_rExport.m_pDoc->GetDocShell() ? m_rExport.m_pDoc->GetDocShell()->GetModel() : nullptr );
+    if (!xModel.is())
+        return false;
+
+    uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);
+    if (!xInfo.is())
+        return false;
+
+    // See WritePostponedFormControl
+    // By now date field and combobox is handled on a different way, so let's not interfere with the other method.
+    if(xInfo->supportsService("com.sun.star.form.component.DateField") ||
+       xInfo->supportsService("com.sun.star.form.component.ComboBox"))
+        return false;
+
+    oox::ole::OleFormCtrlExportHelper exportHelper(comphelper::getProcessComponentContext(), xModel, xControlModel);
+    if(!exportHelper.isValid())
+        return false;
+
+    return true;
+}
+
 bool DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
     if( !m_pPostponedOLEs )
@@ -5066,7 +5165,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
         case ww8::Frame::eFormControl:
             {
                 const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject();
-                m_aPostponedFormControls.push_back(pObject);
+                if(ExportAsActiveXControl(pObject))
+                    m_aPostponedActiveXControls.push_back(PostponedDrawing(pObject, &(rFrame.GetFrameFormat()), &rNdTopLeft));
+                else
+                    m_aPostponedFormControls.push_back(pObject);
                 m_bPostponedProcessingFly = true ;
             }
             break;

@@ -740,6 +740,7 @@ avLst
 average
 avg
 avgSubtotal
+ax
 axId
 axPos
 axis
@@ -5808,6 +5809,7 @@ xmlPr
 xmlns
 xpath
 xrange
+xsc
 xscale
 xsi
 xy

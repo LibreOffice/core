@@ -9,7 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(_WIN32)
 
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -125,7 +124,7 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
        return;
 
     // Check the watermark ID
-    assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]","id","WordPictureWatermark11962361");
+    assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]","id","WordPictureWatermark11962361");
 }
 
 
@@ -1127,6 +1126,8 @@ DECLARE_OOXMLEXPORT_TEST(testTDF93675, "no-numlevel-but-indented.odt")
     assertXPath(pXmlDoc, "//w:ind", "start", "1418");
 }
 
+
+
 DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -1141,6 +1142,7 @@ DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
 #ifndef MACOSX /* Retina-related rounding rountrip error
                 * hard to smooth out due to the use of string compare
                 * instead of number */
+#if !defined(_WIN32)
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "2351");
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "3171");
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "x", "1695");
@@ -1148,9 +1150,9 @@ DECLARE_OOXMLEXPORT_TEST(testFlipAndRotateCustomShape, "flip_and_rotate.odt")
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "x", "1695");
     assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "y", "1701");
 #endif
+#endif
 }
 
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -329,35 +329,7 @@ Reference< css::frame::XFrame > lcl_getFrame( const  Reference< css::frame::XMod
     return xFrame;
 }
 
-class OleFormCtrlExportHelper final
-{
-    ::oox::ole::EmbeddedControl maControl;
-    ::oox::ole::ControlModelBase* mpModel;
-    ::oox::GraphicHelper maGrfHelper;
-    Reference< XModel > mxDocModel;
-    Reference< XControlModel > mxControlModel;
-
-    OUString maName;
-    OUString maTypeName;
-    OUString maFullName;
-    OUString maGUID;
-public:
-    OleFormCtrlExportHelper( const Reference< XComponentContext >& rxCtx, const Reference< XModel >& xDocModel, const Reference< XControlModel >& xModel );
-    OUString getGUID()
-    {
-        OUString sResult;
-        if ( maGUID.getLength() > 2 )
-            sResult = maGUID.copy(1, maGUID.getLength() - 2 );
-        return sResult;
-    }
-    const OUString& getFullName() { return maFullName; }
-    const OUString& getTypeName() { return maTypeName; }
-    bool isValid() { return mpModel != nullptr; }
-    void exportName( const Reference< XOutputStream >& rxOut );
-    void exportCompObj( const Reference< XOutputStream >& rxOut );
-    void exportControl( const Reference< XOutputStream >& rxOut, const css::awt::Size& rSize );
-};
-OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( "Unknown" ), mpModel( nullptr ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
+OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : mpControl(nullptr), mpModel( nullptr ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
 {
     // try to get the guid
     Reference< css::beans::XPropertySet > xProps( xCntrlModel, UNO_QUERY );
@@ -404,12 +376,16 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
                 aPropSet.getProperty(maName, PROP_Name );
                 maTypeName = OUString::createFromAscii( it->second.sName );
                 maFullName = "Microsoft Forms 2.0 " + maTypeName;
-                maControl =  EmbeddedControl( maName );
+                mpControl.reset(new EmbeddedControl( maName ));
                 maGUID = OUString::createFromAscii( it->second.sGUID );
-                mpModel = maControl.createModelFromGuid( maGUID );
+                mpModel = mpControl->createModelFromGuid( maGUID );
             }
         }
     }
+}
+
+OleFormCtrlExportHelper::~OleFormCtrlExportHelper()
+{
 }
 
 void OleFormCtrlExportHelper::exportName( const Reference< XOutputStream >& rxOut )
@@ -426,13 +402,14 @@ void OleFormCtrlExportHelper::exportCompObj( const Reference< XOutputStream >& r
         mpModel->exportCompObj( aOut );
 }
 
-void OleFormCtrlExportHelper::exportControl( const Reference< XOutputStream >& rxOut, const Size& rSize )
+void OleFormCtrlExportHelper::exportControl( const Reference< XOutputStream >& rxOut, const Size& rSize, bool bAutoClose )
 {
-    oox::BinaryXOutputStream aOut( rxOut, false );
+    oox::BinaryXOutputStream aOut( rxOut, bAutoClose );
     if ( mpModel )
     {
         ::oox::ole::ControlConverter aConv(  mxDocModel, maGrfHelper );
-        maControl.convertFromProperties( mxControlModel, aConv );
+        if(mpControl)
+            mpControl->convertFromProperties( mxControlModel, aConv );
         mpModel->maSize.first = rSize.Width;
         mpModel->maSize.second = rSize.Height;
         mpModel->exportBinaryModel( aOut );
