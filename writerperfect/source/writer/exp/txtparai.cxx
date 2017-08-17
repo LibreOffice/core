@@ -50,6 +50,50 @@ void XMLSpanContext::characters(const OUString &rChars)
     mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 }
 
+/// Handler for <text:a>.
+class XMLHyperlinkContext : public XMLImportContext
+{
+public:
+    XMLHyperlinkContext(XMLImport &rImport);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    void SAL_CALL endElement(const OUString &rName) override;
+    void SAL_CALL characters(const OUString &rChars) override;
+};
+
+XMLHyperlinkContext::XMLHyperlinkContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+void XMLHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    librevenge::RVNGPropertyList aPropertyList;
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        if (rAttributeName == "xlink:href")
+        {
+            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+            aPropertyList.insert(sName.getStr(), sValue.getStr());
+        }
+    }
+
+    mrImport.GetGenerator().openLink(aPropertyList);
+}
+
+void XMLHyperlinkContext::endElement(const OUString &/*rName*/)
+{
+    mrImport.GetGenerator().closeLink();
+}
+
+void XMLHyperlinkContext::characters(const OUString &rChars)
+{
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+}
+
 XMLParaContext::XMLParaContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
@@ -59,6 +103,8 @@ XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, cons
 {
     if (rName == "text:span")
         return new XMLSpanContext(mrImport);
+    if (rName == "text:a")
+        return new XMLHyperlinkContext(mrImport);
     return nullptr;
 }
 
