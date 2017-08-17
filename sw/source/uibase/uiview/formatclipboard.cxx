@@ -373,7 +373,6 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
                 pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL);
             }
         }
     }

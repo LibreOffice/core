@@ -304,8 +304,4 @@ bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
     }
 }
 
-SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, "" )
-{}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
