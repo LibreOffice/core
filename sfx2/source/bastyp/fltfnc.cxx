@@ -60,7 +60,6 @@
 
 #include <rtl/instance.hxx>
 
-#include <svl/ctypeitm.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
 
