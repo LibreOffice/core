@@ -397,7 +397,6 @@
 #include <svx/pageitem.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdangitm.hxx>
-#include <svx/sdasaitm.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdgcoitm.hxx>

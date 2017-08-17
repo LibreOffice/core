@@ -120,7 +120,6 @@
 #include <vcl/svapp.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/sdasaitm.hxx>
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>

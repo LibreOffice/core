@@ -161,7 +161,6 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[SDRATTR_TEXT_ANIDELAY      -SDRATTR_START]=new SdrTextAniDelayItem;
     rPoolDefaults[SDRATTR_TEXT_ANIAMOUNT     -SDRATTR_START]=new SdrTextAniAmountItem;
     rPoolDefaults[SDRATTR_TEXT_CONTOURFRAME  -SDRATTR_START]=new SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, false);
-    rPoolDefaults[SDRATTR_CUSTOMSHAPE_ADJUSTMENT -SDRATTR_START]=new SdrCustomShapeAdjustmentItem;
     rPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SvXMLAttrContainerItem( SDRATTR_XMLATTRIBUTES );
     rPoolDefaults[SDRATTR_TEXT_CHAINNEXTNAME    -SDRATTR_START]=new SfxStringItem(SDRATTR_TEXT_CHAINNEXTNAME, "");
     rPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
@@ -479,7 +478,6 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
         case SDRATTR_TEXT_ANIDELAY          : pResId = SIP_SA_TEXT_ANIDELAY;break;
         case SDRATTR_TEXT_ANIAMOUNT         : pResId = SIP_SA_TEXT_ANIAMOUNT;break;
         case SDRATTR_TEXT_CONTOURFRAME      : pResId = SIP_SA_TEXT_CONTOURFRAME;break;
-        case SDRATTR_CUSTOMSHAPE_ADJUSTMENT : pResId = SIP_SA_CUSTOMSHAPE_ADJUSTMENT;break;
         case SDRATTR_XMLATTRIBUTES          : pResId = SIP_SA_XMLATTRIBUTES;break;
         case SDRATTR_TEXT_USEFIXEDCELLHEIGHT: pResId = SIP_SA_TEXT_USEFIXEDCELLHEIGHT;break;
         case SDRATTR_TEXT_WORDWRAP          : pResId = SIP_SA_WORDWRAP;break;
@@ -1298,117 +1296,6 @@ bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
     if( !( rVal >>= bValue ) )
         return false;
     SetValue( bValue );
-    return true;
-}
-
-
-SdrCustomShapeAdjustmentItem::SdrCustomShapeAdjustmentItem() : SfxPoolItem( SDRATTR_CUSTOMSHAPE_ADJUSTMENT )
-{
-}
-
-SdrCustomShapeAdjustmentItem::~SdrCustomShapeAdjustmentItem()
-{
-}
-
-bool SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
-{
-    bool bRet = SfxPoolItem::operator==( rCmp );
-    if ( bRet )
-    {
-        bRet = GetCount() == static_cast<const SdrCustomShapeAdjustmentItem&>(rCmp).GetCount();
-
-        if (bRet)
-        {
-            for (sal_uInt32 i = 0; i < GetCount(); ++i)
-                if (aAdjustmentValueList[i].nValue != static_cast<const SdrCustomShapeAdjustmentItem&>(rCmp).aAdjustmentValueList[i].nValue)
-                    return false;
-        }
-    }
-    return bRet;
-}
-
-bool SdrCustomShapeAdjustmentItem::GetPresentation(
-    SfxItemPresentation ePresentation, MapUnit /*eCoreMetric*/,
-    MapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper&) const
-{
-    sal_uInt32 i, nCount = GetCount();
-    rText += OUString::number( nCount );
-    for ( i = 0; i < nCount; i++ )
-    {
-        rText = rText + " " + OUString::number( GetValue( i ).nValue );
-    }
-    if ( ePresentation == SfxItemPresentation::Complete )
-    {
-        OUString aStr;
-
-        SdrItemPool::TakeItemName( Which(), aStr );
-        rText = aStr + " " + rText;
-    }
-    return true;
-}
-
-SfxPoolItem* SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
-{
-    SdrCustomShapeAdjustmentItem* pItem = new SdrCustomShapeAdjustmentItem;
-    pItem->aAdjustmentValueList = aAdjustmentValueList;
-    return pItem;
-}
-
-const SdrCustomShapeAdjustmentValue& SdrCustomShapeAdjustmentItem::GetValue( sal_uInt32 nIndex ) const
-{
-#ifdef DBG_UTIL
-    if ( aAdjustmentValueList.size() <= nIndex )
-        OSL_FAIL( "SdrCustomShapeAdjustemntItem::GetValue - nIndex out of range (SJ)" );
-#endif
-    return aAdjustmentValueList[nIndex];
-}
-
-void SdrCustomShapeAdjustmentItem::SetValue( sal_uInt32 nIndex, const SdrCustomShapeAdjustmentValue& rVal )
-{
-    for (sal_uInt32 i = aAdjustmentValueList.size(); i <= nIndex; i++ )
-        aAdjustmentValueList.push_back(SdrCustomShapeAdjustmentValue());
-
-    aAdjustmentValueList[nIndex] = rVal;
-}
-
-sal_uInt16 SdrCustomShapeAdjustmentItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
-{
-    return 1;
-}
-
-bool SdrCustomShapeAdjustmentItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
-{
-    sal_uInt32 i, nCount = GetCount();
-    uno::Sequence< sal_Int32 > aSequence( nCount );
-    if ( nCount )
-    {
-        sal_Int32* pPtr = aSequence.getArray();
-        for ( i = 0; i < nCount; i++ )
-            *pPtr++ = GetValue( i ).nValue;
-    }
-    rVal <<= aSequence;
-    return true;
-}
-
-bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
-{
-    uno::Sequence< sal_Int32 > aSequence;
-    if( !( rVal >>= aSequence ) )
-        return false;
-
-    aAdjustmentValueList.clear();
-
-    sal_uInt32 i, nCount = aSequence.getLength();
-    if ( nCount )
-    {
-        SdrCustomShapeAdjustmentValue val;
-        const sal_Int32* pPtr2 = aSequence.getConstArray();
-        for ( i = 0; i < nCount; i++ )
-        {
-            val.nValue = *pPtr2++;
-            aAdjustmentValueList.push_back(val);
-        }
-    }
     return true;
 }
 
