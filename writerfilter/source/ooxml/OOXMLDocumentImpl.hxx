@@ -49,9 +49,6 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
     css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
-    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxActiveXDomList;
-    css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > mxActiveXBinList;
-    css::uno::Reference<css::io::XInputStream> mxActiveXBin;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     std::vector<css::beans::PropertyValue> aEmbeddings;
@@ -90,7 +87,6 @@ protected:
                    const sal_Int32 nNoteId);
 
     void resolveCustomXmlStream(Stream & rStream);
-    void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
 public:
@@ -135,8 +131,6 @@ public:
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() override;
-    virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList() override;
-    virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() override;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() override;
     virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> >  getGlossaryDomList() override;
     virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() override;

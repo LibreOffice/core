@@ -10,7 +10,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -27,6 +26,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <ftninfo.hxx>
 #include <sfx2/docfile.hxx>
@@ -816,6 +816,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
     // This failed, tab between the footnote number and the footnote content
     // was lost on import.
     CPPUNIT_ASSERT(xTextRange->getString().endsWith("\tfootnote"));
+}
+
+DECLARE_OOXMLIMPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
+{
+    uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xControlShape.is() );
+
+    // Check control type
+    uno::Reference<beans::XPropertySet> xPropertySet( xControlShape->getControl(), uno::UNO_QUERY );
+    uno::Reference<lang::XServiceInfo> xServiceInfo( xPropertySet, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL( true, bool( xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox" ) ) );
+
+    // Check custom label
+    CPPUNIT_ASSERT_EQUAL( OUString( "Custom Caption" ), getProperty<OUString>(xPropertySet, "Label") );
+
+    // Check background color (highlight system color)
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x316AC5 ), getProperty<sal_Int32>(xPropertySet, "BackgroundColor") );
+
+    // Check Text color (active border system color)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), getProperty<sal_Int32>(xPropertySet, "TextColor"));
+
+    // Check state of the checkbox
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPropertySet, "State"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

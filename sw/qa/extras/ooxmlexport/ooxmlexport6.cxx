@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(_WIN32)
+
 
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -455,7 +455,7 @@ DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
     xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
     if (!pXmlDoc)
         return;
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "stroked").match("f"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "stroked").match("f"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
@@ -465,7 +465,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
     xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
     if (!pXmlDoc)
         return;
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
@@ -928,8 +928,6 @@ DECLARE_OOXMLEXPORT_TEST(testSyncedRelativePercent, "tdf93676-1.odt")
     // about at this point is that it's not 255000
     assertXPath(pXmlDoc, "//wp14:pctHeight", 0);
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
