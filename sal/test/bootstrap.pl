@@ -243,7 +243,7 @@ if($state) {
 }
 else {
     print "**** tests NOT passed ****\n";
-    print "Commnent:\n", $comment, "\n";
+    print "Comment:\n", $comment, "\n";
 }
 print "**************************\n";
 

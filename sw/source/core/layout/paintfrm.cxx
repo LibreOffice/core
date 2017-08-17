@@ -473,7 +473,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
 }
 
 /**
- * Check whether the two primitve can be merged
+ * Check whether the two primitive can be merged
  *
  * @param[in]   mergeA  A primitive start and end position
  * @param[in]   mergeB  B primitive start and end position

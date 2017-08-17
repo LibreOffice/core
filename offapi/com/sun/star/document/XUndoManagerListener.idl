@@ -95,7 +95,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     /** is called when an Undo context has been left.
 
         <p>UndoManagerEvent::UndoActionTitle carries the title of the Undo context, and
-        UndoManagerEvent::UndoContextDepth the number of open Undo contexts, exluding the
+        UndoManagerEvent::UndoContextDepth the number of open Undo contexts, excluding the
         one just left.</p>
 
         @see XUndoManager::leaveUndoContext
@@ -104,7 +104,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     */
     void    leftContext( [in] UndoManagerEvent iEvent );
 
-    /** is calledn when a hidden Undo context has been left.
+    /** is called when a hidden Undo context has been left.
 
         <p>UndoManagerEvent::UndoActionTitle is empty, as hidden Undo contexts don't have
         a title.</p>

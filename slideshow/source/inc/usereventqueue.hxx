@@ -42,7 +42,7 @@ class MouseLeaveHandler;
 
 /** This class schedules user-activated events.
 
-    This class registeres at the EventMultiplexer and fires
+    This class registers at the EventMultiplexer and fires
     events registered for certain user actions. Note that all
     events will not be fired immediately after the user action
     occurred, but always added to the EventQueue (and fired the
@@ -62,7 +62,7 @@ public:
 
         @param rEventMultiplexer
         The slideshow-global event source, where this class
-        registeres its event handlers.
+        registers its event handlers.
 
         @param rEventQueue
         Reference to the main event queue. Since we hold this

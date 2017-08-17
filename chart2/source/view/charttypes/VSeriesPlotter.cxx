@@ -1485,7 +1485,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
 
 double VSeriesPlotter::getMinimumZ()
 {
-    //this is the default for all charts without a meaningfull z axis
+    //this is the default for all charts without a meaningful z axis
     return 1.0;
 }
 double VSeriesPlotter::getMaximumZ()

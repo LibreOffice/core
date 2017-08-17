@@ -48,7 +48,7 @@ sub inc_test_version($)
     if ($lastchar =~ /\d/) {
         return "$version" . "$lastchar" . "a";
     } elsif ($lastchar =~ /\w/) {
-        # select next letter alhabeticaly: a->b, b->c, ...
+        # select next letter alphabetically: a->b, b->c, ...
         $lastchar =~ tr/0a-zA-Z/a-zA-Z0/;
         return "$version" . "$lastchar";
     } else {

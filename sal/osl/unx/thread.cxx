@@ -997,7 +997,7 @@ static void osl_thread_textencoding_init_Impl()
     /* determine default text encoding */
     defaultEncoding = osl_getTextEncodingFromLocale(nullptr);
     // Tools string functions call abort() on an unknown encoding so ASCII is a
-    // meaningfull fallback:
+    // meaningful fallback:
     if ( RTL_TEXTENCODING_DONTKNOW == defaultEncoding )
     {
         SAL_WARN("sal.osl", "RTL_TEXTENCODING_DONTKNOW -> _ASCII_US");

@@ -48,7 +48,7 @@ constants TextMarkupType
     const long SMARTTAG = 3;
 
     /** Markup originates from proofreading
-        An inivisible markup type used in proofreading API calls.
+        An invisible markup type used in proofreading API calls.
         @since OOo 3.0.1
      */
     const long SENTENCE = 4;

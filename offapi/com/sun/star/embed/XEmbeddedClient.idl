@@ -36,7 +36,7 @@ published interface XEmbeddedClient: XComponentSupplier
     /** asks client to let the object store itself.
 
         @throws com::sun::star::uno::ObjectSaveVetoException
-            in case container chants to avoid saving of object
+            in case container wants to avoid saving of object
 
         @throws com::sun::star::uno::Exception
             in case of problems during saving

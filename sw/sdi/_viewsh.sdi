@@ -779,7 +779,7 @@ interface BaseTextEditView
     ]
 
       //Extra/Options/View
-        //Will be summerized to Property ViewSettings
+        //Will be summarized to Property ViewSettings
     FN_VIEW_HIDDEN_PARA
     [
         ExecMethod = ExecViewOptions ;

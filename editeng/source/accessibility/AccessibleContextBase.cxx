@@ -146,7 +146,7 @@ bool AccessibleContextBase::GetState (sal_Int16 aState)
 void AccessibleContextBase::SetRelationSet (
     const uno::Reference<XAccessibleRelationSet>& rxNewRelationSet)
 {
-    // Try to emit some meaningfull events indicating differing relations in
+    // Try to emit some meaningful events indicating differing relations in
     // both sets.
     typedef std::pair<short int,short int> RD;
     const RD aRelationDescriptors[] = {

@@ -2,7 +2,7 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
-# The version number in the second argumemnt to AC_INIT should be four numbers separated by
+# The version number in the second argument to AC_INIT should be four numbers separated by
 # periods. Some parts of the code requires the first one to be less than 128 and the others to be less
 # than 256. The four numbers can optionally be followed by a period and a free-form string containing
 # no spaces or periods, like "frobozz-mumble-42" or "alpha0". If the free-form string ends with one or
@@ -4810,7 +4810,7 @@ elif test "$_make_longver" -ge "038100"; then
     dnl ===================================================================
     AC_CHECK_PROGS(SHA1SUM, sha1sum sha1 shasum openssl)
     if test -z "$SHA1SUM"; then
-        AC_MSG_ERROR([install the approproate SHA-1 checksumming program for this OS])
+        AC_MSG_ERROR([install the appropriate SHA-1 checksumming program for this OS])
     elif test "$SHA1SUM" = "openssl"; then
         SHA1SUM="openssl sha1"
     fi

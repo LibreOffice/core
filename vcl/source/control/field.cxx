@@ -965,7 +965,7 @@ void NumericBox::InsertValue( sal_Int64 nValue, sal_Int32 nPos )
 static bool ImplMetricProcessKeyInput( const KeyEvent& rKEvt,
                                        bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
-    // no meaningfull strict format; therefore allow all characters
+    // no meaningful strict format; therefore allow all characters
     return ImplNumericProcessKeyInput( rKEvt, false, bUseThousandSep, rWrapper );
 }
 

@@ -32,7 +32,7 @@ public:
     SwFormatEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
                      bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
 
-    /// "pure virtual methos" of SfxPoolItem
+    /// "pure virtual method" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
