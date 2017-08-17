@@ -1135,6 +1135,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pCommandCategoryListBox, "commandcategorylist");
     get(m_pFunctions, "functions");
 
+    get(m_pAddCommandButton, "add");
+    get(m_pRemoveCommandButton, "remove");
+
     get(m_pTopLevelListBox, "toplevellist");
     get(m_pContents, "contents");
     get(m_pMoveUpButton, "up");
@@ -1165,6 +1168,8 @@ void SvxConfigPage::dispose()
     m_pContents.clear();
     m_pEntries.clear();
     m_pFunctions.clear();
+    m_pAddCommandButton.clear();
+    m_pRemoveCommandButton.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
@@ -1441,6 +1446,30 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
     return sModuleID;
 }
 
+OUString SvxConfigPage::GetScriptURL() const
+{
+    OUString result;
+
+    SvTreeListEntry *pEntry = m_pFunctions->FirstSelected();
+    if ( pEntry )
+    {
+        SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
+        if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT ) ||
+                ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT ) ||
+                ( pData->nKind == SfxCfgKind::GROUP_STYLES )    )
+        {
+            result = pData->sCommand;
+        }
+    }
+
+    return result;
+}
+
+OUString SvxConfigPage::GetSelectedDisplayName()
+{
+    return m_pFunctions->GetEntryText( m_pFunctions->FirstSelected() );
+}
+
 bool SvxConfigPage::FillItemSet( SfxItemSet* )
 {
     bool result = false;
@@ -1554,7 +1583,7 @@ SvxEntries* SvxConfigPage::FindParentForChild(
 SvTreeListEntry* SvxConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
-    OUString aURL = m_pSelectorDlg->GetScriptURL();
+    OUString aURL = GetScriptURL();
 
     if ( aURL.isEmpty() )
     {
@@ -1576,7 +1605,7 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
     pNewEntryData->SetUserDefined();
 
     if ( aDisplayName.isEmpty() )
-        pNewEntryData->SetName( m_pSelectorDlg->GetSelectedDisplayName() );
+        pNewEntryData->SetName( GetSelectedDisplayName() );
 
     // check that this function is not already in the menu
     SvxConfigEntry* pParent = GetTopLevelSelection();
