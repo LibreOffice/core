@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/TextAdjust.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -419,7 +420,24 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType() == "drawing.Control" )
         {
-            break;
+            mpEscherEx->OpenContainer( ESCHER_SpContainer );
+            bool bInline = false;
+            const Reference< XPropertySet > xPropSet(rObj.mXPropSet, UNO_QUERY);
+            if(xPropSet.is())
+            {
+                text::TextContentAnchorType eAnchorType;
+                xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
+                bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+            }
+
+            if(bInline)
+            {
+                ADD_SHAPE( ESCHER_ShpInst_PictureFrame, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR );
+            }
+            else
+            {
+                ADD_SHAPE( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR );
+            }
         }
         else if ( rObj.GetType() == "drawing.Connector" )
         {

@@ -14,7 +14,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -535,62 +534,6 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
         }
     }
     CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
-}
-
-DECLARE_OOXMLEXPORT_TEST(testActiveXGrabBag, "activex.docx")
-{
-    // The problem was that activeX.xml files were missing from docx file after saving file.
-    // This test case tests whether activex files grabbagged properly in correct object.
-
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGrabBag(0);
-    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
-    bool bActiveX = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
-    {
-        if (aGrabBag[i].Name == "OOXActiveX")
-        {
-            bActiveX = true;
-            uno::Reference<xml::dom::XDocument> aActiveXDom;
-            uno::Sequence<uno::Reference<xml::dom::XDocument> > aActiveXDomList;
-            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aActiveXDomList); // PropertyValue of proper type
-            sal_Int32 length = aActiveXDomList.getLength();
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(5), length);
-            aActiveXDom = aActiveXDomList[0];
-            CPPUNIT_ASSERT(aActiveXDom.get()); // Reference not empty
-        }
-    }
-    CPPUNIT_ASSERT(bActiveX); // Grab Bag has all the expected elements
-}
-
-DECLARE_OOXMLEXPORT_TEST(testActiveXBinGrabBag, "activexbin.docx")
-{
-    // The problem was that activeX.bin files were missing from docx file after saving file.
-    // This test case tests whether activex bin files grabbagged properly in correct object.
-
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGrabBag(0);
-    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
-    bool bActiveX = false;
-    for(int i = 0; i < aGrabBag.getLength(); ++i)
-    {
-        if (aGrabBag[i].Name == "OOXActiveXBin")
-        {
-            bActiveX = true;
-            uno::Reference<io::XInputStream> aActiveXBin;
-            uno::Sequence<uno::Reference<io::XInputStream> > aActiveXBinList;
-            CPPUNIT_ASSERT(aGrabBag[i].Value >>= aActiveXBinList); // PropertyValue of proper type
-            sal_Int32 length = aActiveXBinList.getLength();
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(5), length);
-            aActiveXBin = aActiveXBinList[0];
-            CPPUNIT_ASSERT(aActiveXBin.get()); // Reference not empty
-        }
-    }
-    CPPUNIT_ASSERT(bActiveX); // Grab Bag has all the expected elements
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69644, "fdo69644.docx")
