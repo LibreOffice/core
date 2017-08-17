@@ -44,6 +44,16 @@ public:
             return;
         if (startswith(fn, SRCDIR "/bridges/"))
             return;
+        if (startswith(fn, SRCDIR "/registry/"))
+            return;
+        if (startswith(fn, SRCDIR "/tools/source/generic/fract.cxx"))
+            return;
+        if (startswith(fn, SRCDIR "/tools/source/generic/bigint.cxx"))
+            return;
+        // TODO figure out how to cope with iterators
+        if (startswith(fn, SRCDIR "/cppu/source/threadpool/jobqueue.cxx"))
+            return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
@@ -51,24 +61,31 @@ public:
 
     bool VisitBinAssign(BinaryOperator const *);
     bool VisitVarDecl(VarDecl const *);
+    bool VisitCastExpr(CastExpr const *);
 private:
-    bool check(QualType lhs, QualType rhs);
+    bool isOK(QualType lhs, QualType rhs);
 };
 
 bool DropLong::VisitBinAssign(BinaryOperator const * expr)
 {
     if (ignoreLocation(expr))
         return true;
+    StringRef fileName { compiler.getSourceManager().getFilename(expr->getExprLoc()) };
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/tools/bigint.hxx"))
+        return true;
+
+    auto lhsType = expr->getLHS()->getType();
     auto rhsType = expr->getRHS()->IgnoreCasts()->getType();
-    if (check(expr->getLHS()->getType(), rhsType))
+    if (!isOK(lhsType, rhsType))
     {
         report(
             DiagnosticsEngine::Warning,
-            "rather replace long with %0",
+            "rather replace %0 with %1",
             expr->getExprLoc())
+          << lhsType
           << rhsType
           << expr->getSourceRange();
-//        expr->getLHS()->getType()->dump();
+//        lhsType->dump();
     }
     return true;
 }
@@ -77,43 +94,95 @@ bool DropLong::VisitVarDecl(VarDecl const * varDecl)
 {
     if (ignoreLocation(varDecl))
         return true;
+    StringRef fileName { compiler.getSourceManager().getFilename(varDecl->getLocation()) };
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/tools/bigint.hxx"))
+        return true;
     if (!varDecl->hasInit())
         return true;
+    auto lhsType = varDecl->getType();
     auto rhsType = varDecl->getInit()->IgnoreCasts()->getType();
-    if (check(varDecl->getType(), rhsType))
+    if (!isOK(lhsType, rhsType))
     {
         report(
             DiagnosticsEngine::Warning,
-            "rather replace long with %0",
+            "rather replace %0 with %1",
             varDecl->getLocation())
+          << lhsType
           << rhsType
           << varDecl->getSourceRange();
-//        varDecl->getType()->dump();
+//        lhsType->dump();
     }
     return true;
 }
 
-bool DropLong::check(QualType lhs, QualType rhs)
+bool DropLong::VisitCastExpr(CastExpr const * castExpr)
 {
-    if (!lhs->isSpecificBuiltinType(BuiltinType::Kind::Long)
-        && !lhs->isSpecificBuiltinType(BuiltinType::Kind::ULong))
-        return false;
+    if (ignoreLocation(castExpr))
+        return true;
+    StringRef fileName { compiler.getSourceManager().getFilename(castExpr->getExprLoc()) };
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/tools/bigint.hxx"))
+        return true;
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/sal/types.h"))
+        return true;
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/rtl/math.hxx"))
+        return true;
+    // TODO
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/include/tools/helpers.hxx"))
+        return true;
+    if (isa<ImplicitCastExpr>(castExpr))
+        return true;
 
-    if (rhs->isSpecificBuiltinType(BuiltinType::Kind::Long)
-        || rhs->isSpecificBuiltinType(BuiltinType::Kind::ULong))
-        return false;
+    auto type = castExpr->getType();
+    if (loplugin::TypeCheck(type).Typedef())
+    {
+        TypedefType const * typedefType = type->getAs<TypedefType>();
+        if (typedefType->getDecl()->getName() == "sal_uLong")
+            report(
+                DiagnosticsEngine::Warning,
+                "sal_uLong cast from %0",
+                castExpr->getExprLoc())
+              << castExpr->getSubExpr()->getType()
+              << castExpr->getSourceRange();
+    }
+    else if (type->isSpecificBuiltinType(BuiltinType::Kind::Long)
+         || type->isSpecificBuiltinType(BuiltinType::Kind::ULong))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "long cast from %0",
+            castExpr->getExprLoc())
+          << castExpr->getSubExpr()->getType()
+          << castExpr->getSourceRange();
+    }
+    return true;
+}
 
-    // Lots of stuff in the standard library and in sal/types.h is
-    // 'long' on Linux, so just ignore all typedefs.
+bool DropLong::isOK(QualType lhs, QualType rhs)
+{
     if (loplugin::TypeCheck(lhs).Typedef())
-        return false;
+    {
+        TypedefType const * typedefType = lhs->getAs<TypedefType>();
+        // Lots of stuff in the standard library and in sal/types.h is
+        // 'long' on Linux, so just ignore all typedefs.
+        if (typedefType->getDecl()->getName() != "sal_uLong")
+            return true;
+    }
+    else if (lhs->isSpecificBuiltinType(BuiltinType::Kind::Long)
+         || lhs->isSpecificBuiltinType(BuiltinType::Kind::ULong))
+    {
+        if (rhs->isSpecificBuiltinType(BuiltinType::Kind::Long)
+            || rhs->isSpecificBuiltinType(BuiltinType::Kind::ULong))
+            return true;
+    }
+    else
+        return true;
 
     if (isa<SubstTemplateTypeParmType>(lhs))
-        return false;
+        return true;
     if (isa<AutoType>(lhs))
-        return false;
+        return true;
 
-    return true;
+    return false;
 }
 
 loplugin::Plugin::Registration< DropLong > X("droplong", false);
