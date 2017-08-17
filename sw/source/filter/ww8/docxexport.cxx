@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
 
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -40,6 +41,9 @@
 #include <oox/export/shapes.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/relationship.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <oox/ole/olehelper.hxx>
 
 #include <map>
 #include <algorithm>
@@ -419,6 +423,54 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
+std::pair<OString, OString> DocxExport::WriteActiveXObject(const uno::Reference<drawing::XShape>& rxShape,
+                                                           const uno::Reference<awt::XControlModel>& rxControlModel)
+{
+    ++m_nActiveXControls;
+
+    // Write out ActiveX binary
+    const OUString sBinaryFileName = "word/activeX/activeX" + OUString::number(m_nActiveXControls) + ".bin";
+
+    OString sGUID;
+    OString sName;
+    uno::Reference<io::XStream> xOutStorage(m_pFilter->openFragmentStream(sBinaryFileName, "application/vnd.ms-office.activeX"), uno::UNO_QUERY);
+    if(xOutStorage.is())
+    {
+        oox::ole::OleStorage aOleStorage(m_pFilter->getComponentContext(), xOutStorage, false);
+        uno::Reference<io::XOutputStream> xOutputStream(aOleStorage.openOutputStream("contents"), uno::UNO_SET_THROW);
+        uno::Reference< css::frame::XModel > xModel( m_pDoc->GetDocShell() ? m_pDoc->GetDocShell()->GetModel() : nullptr );
+        oox::ole::OleFormCtrlExportHelper exportHelper(comphelper::getProcessComponentContext(), xModel, rxControlModel);
+        if ( !exportHelper.isValid() )
+            return std::make_pair<OString, OString>(OString(), OString());
+        sGUID = OUStringToOString(exportHelper.getGUID(), RTL_TEXTENCODING_UTF8);
+        sName = OUStringToOString(exportHelper.getName(), RTL_TEXTENCODING_UTF8);
+        exportHelper.exportControl(xOutputStream, rxShape->getSize(), true);
+        aOleStorage.commit();
+    }
+
+    // Write out ActiveX fragment
+    const OUString sXMLFileName = "word/activeX/activeX" + OUString::number( m_nActiveXControls ) + ".xml";
+    ::sax_fastparser::FSHelperPtr pActiveXFS = m_pFilter->openFragmentStreamWithSerializer(sXMLFileName, "application/vnd.ms-office.activeX+xml" );
+
+    const OUString sBinaryId = m_pFilter->addRelation( pActiveXFS->getOutputStream(),
+                                                       oox::getRelationship(Relationship::ACTIVEXCONTROLBINARY),
+                                                       sBinaryFileName.copy(sBinaryFileName.lastIndexOf("/") + 1) );
+
+    pActiveXFS->singleElementNS(XML_ax, XML_ocx,
+                                FSNS(XML_xmlns, XML_ax), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(ax)), RTL_TEXTENCODING_UTF8).getStr(),
+                                FSNS(XML_xmlns, XML_r), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
+                                FSNS(XML_ax, XML_classid), OString("{" + sGUID + "}").getStr(),
+                                FSNS(XML_ax, XML_persistence), "persistStorage",
+                                FSNS(XML_r, XML_id), OUStringToOString(sBinaryId, RTL_TEXTENCODING_UTF8).getStr(), FSEND);
+
+    OString sXMLId = OUStringToOString(m_pFilter->addRelation(m_pDocumentFS->getOutputStream(),
+                                                              oox::getRelationship(Relationship::CONTROL),
+                                                              sXMLFileName.copy(sBinaryFileName.indexOf("/") + 1)),
+                                       RTL_TEXTENCODING_UTF8);
+
+    return std::pair<OString, OString>(sXMLId, sName);
+}
+
 void DocxExport::OutputDML(uno::Reference<drawing::XShape> const & xShape)
 {
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
@@ -461,8 +513,6 @@ void DocxExport::ExportDocument_Impl()
     WriteGlossary();
 
     WriteCustomXml();
-
-    WriteActiveX();
 
     WriteEmbeddings();
 
@@ -1171,100 +1221,6 @@ void DocxExport::WriteCustomXml()
     }
 }
 
-void DocxExport::WriteActiveX()
-{
-    uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( aName ) )
-        return;
-
-    uno::Sequence<uno::Reference<xml::dom::XDocument> > activeXDomlist;
-    uno::Sequence<uno::Reference<io::XInputStream> > activeXBinList;
-    uno::Sequence< beans::PropertyValue > propList;
-    xPropSet->getPropertyValue( aName ) >>= propList;
-    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
-    {
-        OUString propName = propList[nProp].Name;
-        if ( propName == "OOXActiveX" )
-        {
-             propList[nProp].Value >>= activeXDomlist;
-             break;
-        }
-    }
-
-    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
-    {
-        OUString propName = propList[nProp].Name;
-        if ( propName == "OOXActiveXBin" )
-        {
-            propList[nProp].Value >>= activeXBinList;
-            break;
-        }
-    }
-
-    for (sal_Int32 j = 0; j < activeXDomlist.getLength(); j++)
-    {
-        uno::Reference<xml::dom::XDocument> activeXDom = activeXDomlist[j];
-        uno::Reference<io::XInputStream> activeXBin = activeXBinList[j];
-
-        if ( activeXDom.is() )
-        {
-            m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                    oox::getRelationship(Relationship::CONTROL),
-                    "activeX/activeX"+OUString::number((j+1))+".xml" );
-
-            uno::Reference< xml::sax::XSAXSerializable > serializer( activeXDom, uno::UNO_QUERY );
-            uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
-            writer->setOutputStream( GetFilter().openFragmentStream( "word/activeX/activeX"+OUString::number((j+1))+".xml",
-                "application/vnd.ms-office.activeX+xml" ) );
-            serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
-                uno::Sequence< beans::StringPair >() );
-        }
-
-        if ( activeXBin.is() )
-        {
-            uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream("word/activeX/activeX"+OUString::number((j+1))+".bin",
-                    "application/vnd.ms-office.activeX");
-
-            try
-            {
-                sal_Int32 nBufferSize = 512;
-                uno::Sequence< sal_Int8 > aDataBuffer(nBufferSize);
-                sal_Int32 nRead;
-                do
-                {
-                    nRead = activeXBin->readBytes( aDataBuffer, nBufferSize );
-                    if( nRead )
-                    {
-                        if( nRead < nBufferSize )
-                        {
-                            nBufferSize = nRead;
-                            aDataBuffer.realloc(nRead);
-                        }
-                        xOutStream->writeBytes( aDataBuffer );
-                    }
-                }
-                while( nRead );
-                xOutStream->flush();
-            }
-            catch(const uno::Exception&)
-            {
-                SAL_WARN("sw.ww8", "WriteActiveX() ::Failed to copy Inputstream to outputstream exception caught!");
-            }
-
-            xOutStream->closeOutput();
-            // Adding itemprops's relationship entry to item.xml.rels file
-            m_pFilter->addRelation( GetFilter().openFragmentStream( "/word/activeX/activeX"+OUString::number((j+1))+".xml",
-                    "application/vnd.ms-office.activeX+xml" ) ,
-                    oox::getRelationship(Relationship::ACTIVEXCONTROLBINARY),
-                    "activeX"+OUString::number((j+1))+".bin" );
-
-        }
-     }
-}
-
 void DocxExport::WriteVBA()
 {
     uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
@@ -1528,6 +1484,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_nHeaders( 0 ),
       m_nFooters( 0 ),
       m_nOLEObjects( 0 ),
+      m_nActiveXControls( 0 ),
       m_nHeadersFootersInSection(0),
       m_pVMLExport( nullptr ),
       m_pSdrExport( nullptr ),

@@ -91,6 +91,9 @@ class DocxExport : public MSWordExportBase
     /// OLE objects counter.
     sal_Int32 m_nOLEObjects;
 
+    /// ActiveX controls counter
+    sal_Int32 m_nActiveXControls;
+
     ///Footer and Header counter in Section properties
     sal_Int32 m_nHeadersFootersInSection;
 
@@ -174,6 +177,8 @@ public:
     /// Returns the relationd id
     OString OutputChart( css::uno::Reference< css::frame::XModel > const & xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr const & m_pSerializer );
     OString WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID);
+    std::pair<OString,OString> WriteActiveXObject(const uno::Reference<css::drawing::XShape>& rxShape,
+                                                  const uno::Reference<awt::XControlModel>& rxControlModel);
 
     /// Writes the shape using drawingML syntax.
     void OutputDML( css::uno::Reference< css::drawing::XShape > const & xShape );
