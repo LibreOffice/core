@@ -10,6 +10,9 @@ case "$1" in
     sr-Latn)
         echo sr@latin
         ;;
+    hu-Hung)
+        echo hu@hung
+        ;;
     *)
         echo $1 | tr '-' '_'
         ;;
