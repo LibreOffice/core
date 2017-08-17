@@ -62,6 +62,7 @@ PaletteManager::PaletteManager() :
 
 PaletteManager::~PaletteManager()
 {
+    m_Palettes.clear();
 }
 
 void PaletteManager::LoadPalettes()
