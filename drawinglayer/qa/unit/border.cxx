@@ -145,7 +145,7 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
         {
             auto pMPLAction = static_cast<MetaPolyLineAction*>(pAction);
 
-            if (0 == pMPLAction->GetLineInfo().GetWidth() && LineStyle::Solid == pMPLAction->GetLineInfo().GetStyle())
+            if (0 == pMPLAction->GetLineInfo().GetWidth() && LineStyle::LINE_SOLID == pMPLAction->GetLineInfo().GetStyle())
             {
                 nPolyLineActionCount++;
             }
