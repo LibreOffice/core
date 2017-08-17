@@ -3755,7 +3755,7 @@
      <table:covered-table-cell/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="ce87" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-      <text:p>Workarround with INT()</text:p>
+      <text:p>Workaround with INT()</text:p>
      </table:table-cell>
      <table:covered-table-cell/>
      <table:table-cell table:number-columns-repeated="4"/>

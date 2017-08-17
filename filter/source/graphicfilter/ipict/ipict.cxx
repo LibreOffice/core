@@ -145,7 +145,7 @@ class PictReader {
 private:
 
     SvStream    * pPict;             // The Pict file to read.
-    VclPtr<VirtualDevice> pVirDev;         // Here the drawing methos will be called.
+    VclPtr<VirtualDevice> pVirDev;   // Here the drawing method will be called.
                                      // A recording into the GDIMetaFile will take place.
 
     sal_uLong     nOrigPos;          // Initial position in pPict.

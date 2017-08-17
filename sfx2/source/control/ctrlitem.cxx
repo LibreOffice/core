@@ -42,7 +42,7 @@ bool SfxControllerItem::IsBound() const
 }
 
 
-// registeres with the id at the bindings
+// registers with the id at the bindings
 
 void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
 {
@@ -182,7 +182,7 @@ SfxControllerItem::SfxControllerItem():
 }
 
 
-// creates a representation of the function nId and registeres it
+// creates a representation of the function nId and registers it
 
 SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
     nId(nID),

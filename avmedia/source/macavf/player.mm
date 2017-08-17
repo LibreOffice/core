@@ -281,7 +281,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
     // get the actual volume
     const float fVolume = [mpPlayer volume];
 
-    // convert into Dezibel value
+    // convert into Decibel value
     // -40dB <-> AVPlayer volume 0.0
     //   0dB <-> AVPlayer volume 1.0
     const int nVolumeDB = (fVolume <= 0) ? -40 : lrint( 20.0*log10(fVolume));

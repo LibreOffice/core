@@ -39,7 +39,7 @@ SvtListener::~SvtListener() COVERITY_NOEXCEPT_FALSE
     EndListeningAll();
 }
 
-// registeres at a specific SvtBroadcaster
+// registers at a specific SvtBroadcaster
 
 bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
 {

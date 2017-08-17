@@ -110,7 +110,7 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
     class OMultiInstanceAutoRegistration
     {
     public:
-        /** automatically registeres a multi instance component
+        /** automatically registers a multi instance component
             <p>Assumed that the template argument has the three methods
                 <ul>
                     <li><code>static OUString getImplementationName_Static()</code><li/>

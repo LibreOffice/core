@@ -117,7 +117,7 @@ inline void SfxStateCache::ClearCache()
 }
 
 
-// registeres a item representing this function
+// registers a item representing this function
 
 inline SfxControllerItem* SfxStateCache::ChangeItemLink( SfxControllerItem* pNewBinding )
 {

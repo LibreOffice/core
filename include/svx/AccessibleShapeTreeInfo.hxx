@@ -56,7 +56,7 @@ class SVX_DLLPUBLIC AccessibleShapeTreeInfo
 {
 public:
     /** Use this constructor to create an empty object that is filled later
-        with more meaningfull data.
+        with more meaningful data.
     */
     AccessibleShapeTreeInfo();
 

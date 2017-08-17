@@ -7,7 +7,7 @@
 		(Using XML Schema based standard code list/enumeration mechanism - OPTION 1 AND DEFAULT)
 		Produced by: OASIS Customer Information Quality Technical Committee
 		URL: http://www.oasis-open.org/committees/ciq
-		Version: 3.0  
+		Version: 3.0
 		Status: Committee Specification
 		Copyright: 2006-07, OASIS, http://www.oasis-open.org
 		Last Modified: 18 September 2007
@@ -197,7 +197,7 @@
 			</xs:enumeration>
 			<xs:enumeration value="Prefix">
 				<xs:annotation>
-					<xs:documentation>Indocates that the element contains some value that is important, but not exactly the number itself. E.g. PoBox can be a prefix in PoBox 2020, street no. A-15, where A is the prefix and 15 is the number</xs:documentation>
+					<xs:documentation>Indicates that the element contains some value that is important, but not exactly the number itself. E.g. PoBox can be a prefix in PoBox 2020, street no. A-15, where A is the prefix and 15 is the number</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="Suffix">
@@ -373,7 +373,7 @@
 			<xs:enumeration value="Number"/>
 			<xs:enumeration value="ReferenceLocation">
 				<xs:annotation>
-					<xs:documentation>Reference location information in support of the sub administrative area.  </xs:documentation>
+					<xs:documentation>Reference location information in support of the sub administrative area</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="Type">
@@ -385,7 +385,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="SubAdministrativeAreaNameCodeList">
 		<xs:annotation>
-			<xs:documentation>A list of codes for name of sub adiministrative area</xs:documentation>
+			<xs:documentation>A list of codes for name of sub administrative area</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:normalizedString"/>
 	</xs:simpleType>
@@ -480,7 +480,7 @@
 			</xs:enumeration>
 			<xs:enumeration value="Unstructured">
 				<xs:annotation>
-					<xs:documentation>Full details of a thorughfare in a single line (unstructured)
+					<xs:documentation>Full details of a thoroughfare in a single line (unstructured)
 e.g. 39 Baker Street North</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>

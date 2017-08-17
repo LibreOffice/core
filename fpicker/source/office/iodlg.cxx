@@ -2509,7 +2509,7 @@ void SvtFileDialog::AddControls_Impl( )
         pImpl->_pLbTemplates->Show();
             // This is strange. During the re-factoring during 96930, I discovered that this help id
             // is set in the "Templates mode". This was hidden in the previous implementation.
-            // Shouldn't this be a more meaningfull help id.
+            // Shouldn't this be a more meaningful help id.
     }
     else if ( _nPickerFlags & PickerFlags::ImageTemplate )
     {

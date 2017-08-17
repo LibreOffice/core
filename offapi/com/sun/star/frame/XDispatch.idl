@@ -72,7 +72,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
             readonly boolean Flag SynchronMode
 
             <p>
-            By default, and absent any arguments, "SychronMode" is
+            By default, and absent any arguments, "SynchronMode" is
             considered `FALSE` and the execution is performed
             asynchronously (i.e. dispatch() returns immediately, and
             the action is performed in the background).  But when set

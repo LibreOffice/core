@@ -21,7 +21,7 @@
  */
 interface XInteractionAuthFallback: com::sun::star::task::XInteractionContinuation
 {
-    /* Authentication code submited by the user */
+    /* Authentication code submitted by the user */
     void setCode( [in] string code );
 };
 

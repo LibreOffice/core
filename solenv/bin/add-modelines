@@ -17,10 +17,10 @@
 
 # NOTE: At present, this script only works for files with C-like comments.
 # NOTE: If you don't specify -p, the script will act on the current working directory.
-# NOTE: If no arguments are specified, the defitions below are in effect.
+# NOTE: If no arguments are specified, the definitions below are in effect.
 
 # TO DO
-#  - Deuglifiy?
+#  - Deuglify?
 #  - Make source file type agnostic modelines?
 #  - Too many/too few comments?
 #  - Handle top level source directories with whitespace names? (Do they exist?)

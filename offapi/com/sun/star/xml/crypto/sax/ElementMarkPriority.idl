@@ -33,7 +33,7 @@ module com { module sun { module star { module xml { module crypto { module sax 
  * The PRI_AFTERMODIFY priority represents the notification will be
  * sent after any internal modification has finished.
  * <p>
- * The PRI_BEFOREMODIFY proirity represents the notification will be
+ * The PRI_BEFOREMODIFY priority represents the notification will be
  * sent before any internal modification happens.
  * <p>
  * So an element mark with PRI_BEFOREMODIFY will be handled first,

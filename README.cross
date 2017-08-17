@@ -77,8 +77,8 @@ libraries on Mac OS X (.dylib)) must be built as static archives
 instead. This has some interesting consequences for how UNO is
 implemented and used.
 
-An iOS app is a "bundle" that contains a single executable, In an app
-using LibreOffice code, that eecutable then congtains the necessary
+An iOS app is a "bundle" that contains a single executable. In an app
+using LibreOffice code, that executable then contains the necessary
 LibreOffice libraries and UNO components statically linked.
 
 The Apple tool-chain for iOS cross-building is available only for OS

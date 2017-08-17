@@ -799,7 +799,7 @@
 					<xsl:when test="$createDiv and normalize-space(.) != ''">
 						<!-- every following frame sibling till the next draw:frame
 							have to be incapuslated within a div with left indent.
-							To be moved altogether arcording the indent (usually right) -->
+							To be moved altogether according the indent (usually right) -->
 						<xsl:comment>Next 'div' added for floating.</xsl:comment>
 						<xsl:element name="div">
 							<xsl:attribute name="style">
@@ -1734,7 +1734,7 @@
 							<xsl:value-of select="$listRestart"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<!-- descdendants restart their list numbering, when an ancestor is not empty -->
+							<!-- descendants restart their list numbering, when an ancestor is not empty -->
 							<xsl:value-of select="not($isEmptyList)"/>
 						</xsl:otherwise>
 					</xsl:choose>
