@@ -334,8 +334,6 @@
 #define UNO_NAME_GRAPHIC_COLOR_MODE             "GraphicColorMode"
 #define UNO_NAME_GRAPHIC_GRAPHICCROP            "GraphicCrop"
 
-#define UNO_NAME_CUSTOMSHAPE_ADJUSTMENT         "CustomShapeAdjustment"
-
 #endif
 
 
