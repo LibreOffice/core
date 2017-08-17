@@ -44,12 +44,6 @@ namespace frame {
 
 namespace {
 
-/** Rounds and casts a double value to a long value. */
-inline long lclD2L( double fValue )
-{
-    return static_cast< long >( (fValue < 0.0) ? (fValue - 0.5) : (fValue + 0.5) );
-}
-
 /** Converts a width in twips to a width in another map unit (specified by fScale). */
 double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
 {
@@ -235,18 +229,6 @@ bool operator<( const Style& rL, const Style& rR )
 }
 
 #undef SCALEVALUE
-
-
-// Various helper functions
-double GetHorDiagAngle( long nWidth, long nHeight )
-{
-    return atan2( static_cast< double >( std::abs( nHeight ) ), static_cast< double >( std::abs( nWidth ) ) );
-}
-
-long GetTLDiagOffset( long nVerOffs, long nDiagOffs, double fAngle )
-{
-    return lclD2L( nVerOffs / tan( fAngle ) + nDiagOffs / sin( fAngle ) );
-}
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
@@ -506,16 +488,16 @@ void CreateBorderPrimitives(
     const basegfx::B2DVector& rX,
     const basegfx::B2DVector& rY,
     const Style& rBorder,
-    const DiagStyle& /*rLFromTR*/,
+    const Style& /*rLFromTR*/,
     const Style& rLFromT,
     const Style& /*rLFromL*/,
     const Style& rLFromB,
-    const DiagStyle& /*rLFromBR*/,
-    const DiagStyle& /*rRFromTL*/,
+    const Style& /*rLFromBR*/,
+    const Style& /*rRFromTL*/,
     const Style& rRFromT,
     const Style& /*rRFromR*/,
     const Style& rRFromB,
-    const DiagStyle& /*rRFromBL*/,
+    const Style& /*rRFromBL*/,
     const Color* pForceColor)
 {
     if (rBorder.Prim())
@@ -665,16 +647,16 @@ void CreateBorderPrimitives(
             rX,
             rY,
             rBorder,
-            DiagStyle(),
+            Style(),
             rLFromT,
             rLFromL,
             rLFromB,
-            DiagStyle(),
-            DiagStyle(),
+            Style(),
+            Style(),
             rRFromT,
             rRFromR,
             rRFromB,
-            DiagStyle(),
+            Style(),
             pForceColor);
     }
 }

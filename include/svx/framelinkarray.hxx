@@ -301,16 +301,6 @@ public:
         Returns total output rectangle of merged ranges. */
     tools::Rectangle           GetCellRect( size_t nCol, size_t nRow ) const;
 
-    // diagonal frame borders -------------------------------------------------
-
-    /** Returns the angle between horizontal and diagonal border of the cell (nCol,nRow).
-        Returns the horizontal angle of merged ranges. */
-    double              GetHorDiagAngle( size_t nCol, size_t nRow ) const;
-
-    /** Returns the angle between vertical and diagonal border of the cell (nCol,nRow).
-        Returns the vertical angle of merged ranges. */
-    double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
-
     // mirroring --------------------------------------------------------------
 
     /** Mirrors the entire array horizontally. */
