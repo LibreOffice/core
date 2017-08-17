@@ -172,6 +172,7 @@ enum OpCode : sal_uInt16
         ocT                 = SC_OPCODE_T,
         ocValue             = SC_OPCODE_VALUE,
         ocClean             = SC_OPCODE_CLEAN,
+        ocClean_OOXML       = SC_OPCODE_CLEAN_OOXML,
         ocChar              = SC_OPCODE_CHAR,
         ocLog10             = SC_OPCODE_LOG10,
         ocEven              = SC_OPCODE_EVEN,

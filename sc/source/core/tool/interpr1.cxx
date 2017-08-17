@@ -3312,9 +3312,27 @@ void ScInterpreter::ScNumberValue()
 }
 
 //2do: this should be a proper unicode string method
+static inline bool lcl_ScInterpreter_IsPrintable_OOXML( sal_Unicode c )
+{
+    return c > 0x1f;
+}
+
+void ScInterpreter::ScClean_OOXML()
+{
+    OUString aStr = GetString().getString();
+    for ( sal_Int32 i = 0; i < aStr.getLength(); i++ )
+    {
+        if ( !lcl_ScInterpreter_IsPrintable_OOXML( aStr[i] ) )
+            aStr = aStr.replaceAt(i,1,"");
+    }
+    PushString(aStr);
+}
+
+
+//2do: this should be a proper unicode string method
 static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 {
-    return 0x20 <= c && c != 0x7f;
+    return ( c > 0x1f && c < 0x7f ) || ( c > 0x9f );
 }
 
 void ScInterpreter::ScClean()
