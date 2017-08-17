@@ -25,10 +25,10 @@
 #include "salgeom.hxx"
 
 #include <vcl/help.hxx>
-#include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-// complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
+#include <vcl/window.hxx>
+    // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
 class AllSettings;
 class SalGraphics;
