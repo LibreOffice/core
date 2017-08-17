@@ -827,7 +827,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     if (bHasHandles && bCustGeom && pShape)
     {
-        WriteShapeTransformation( xShape, XML_a ); // do not flip, polypolygon coordinates are flipped already
+        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false, true );// do not flip, polypolygon coordinates are flipped already
         tools::PolyPolygon aPolyPolygon( pShape->GetLineGeometry(true) );
         sal_Int32 nRotation = 0;
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
@@ -835,8 +835,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
+        // Remove rotation
+        bool bInvertRotation = bFlipH != bFlipV;
         if (nRotation != 0)
-            aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(3600-nRotation/10));
+            aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10));
         WritePolyPolygon( aPolyPolygon );
     }
     else if (bCustGeom)
