@@ -140,17 +140,30 @@ void EPUBPackage::closeCSSFile()
 
 void EPUBPackage::openBinaryFile(const char *pName)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::openBinaryFile, " << pName << ": implement me");
+    assert(pName);
+    assert(!mxOutputStream.is());
+
+    mxOutputStream.set(mxStorage->openStreamElementByHierarchicalName(OUString::fromUtf8(pName), embed::ElementModes::READWRITE), uno::UNO_QUERY);
 }
 
-void EPUBPackage::insertBinaryData(const librevenge::RVNGBinaryData &/*rData*/)
+void EPUBPackage::insertBinaryData(const librevenge::RVNGBinaryData &rData)
 {
-    SAL_WARN("writerperfect", "EPUBPackage::insertBinaryData: implement me");
+    assert(mxOutputStream.is());
+
+    if (rData.empty())
+        return;
+
+    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8 *>(rData.getDataBuffer()), rData.size());
+    mxOutputStream->writeBytes(aData);
 }
 
 void EPUBPackage::closeBinaryFile()
 {
-    SAL_WARN("writerperfect", "EPUBPackage::closeBinaryFile: implement me");
+    assert(mxOutputStream.is());
+
+    uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
+    xTransactedObject->commit();
+    mxOutputStream.clear();
 }
 
 void EPUBPackage::openTextFile(const char *pName)

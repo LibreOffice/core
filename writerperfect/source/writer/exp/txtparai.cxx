@@ -9,6 +9,7 @@
 
 #include "txtparai.hxx"
 
+#include "XMLTextFrameContext.hxx"
 #include "xmlimp.hxx"
 
 using namespace com::sun::star;
@@ -24,6 +25,8 @@ class XMLSpanContext : public XMLImportContext
 public:
     XMLSpanContext(XMLImport &rImport);
 
+    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
     void SAL_CALL characters(const OUString &rChars) override;
@@ -32,6 +35,13 @@ public:
 XMLSpanContext::XMLSpanContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
+}
+
+XMLImportContext *XMLSpanContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    if (rName == "draw:frame")
+        return new XMLTextFrameContext(mrImport);
+    return nullptr;
 }
 
 void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
