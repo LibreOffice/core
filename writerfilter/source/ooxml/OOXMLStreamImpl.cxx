@@ -141,8 +141,6 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const char sThemeType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
     static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
     static const char sCustomPropsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps";
-    static const char sActiveXType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control";
-    static const char sActiveXBinType[] = "http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary";
     static const char sGlossaryType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument";
     static const char sWebSettings[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
     static const char sSettingsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
@@ -162,7 +160,6 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const char sThemeTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/theme";
     static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
     static const char sCustomPropsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps";
-    static const char sActiveXTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/control";
     static const char sGlossaryTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/glossaryDocument";
     static const char sWebSettingsStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
     static const char sSettingsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
@@ -227,14 +224,6 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
             sStreamType = sCustomPropsType;
             sStreamTypeStrict = sCustomPropsTypeStrict;
             break;
-        case ACTIVEX:
-            sStreamType = sActiveXType;
-            sStreamTypeStrict = sActiveXTypeStrict;
-            break;
-        case ACTIVEXBIN:
-            sStreamType = sActiveXBinType;
-            sStreamTypeStrict = sActiveXBinType;
-            break;
         case SETTINGS:
             sStreamType = sSettingsType;
             sStreamTypeStrict = sSettingsTypeStrict;
@@ -298,8 +287,8 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
                     bFound = true;
                 else if (rPair.First == sTarget)
                 {
-                    // checking item[n].xml or activex[n].xml is not visited already.
-                    if(customTarget != rPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType || sStreamType == sFooterType || sStreamType == sHeaderType))
+                    // checking item[n].xml is not visited already.
+                    if(customTarget != rPair.Second && (sStreamType == sCustomType || sStreamType == sChartType || sStreamType == sFooterType || sStreamType == sHeaderType))
                     {
                         bFound = false;
                     }
