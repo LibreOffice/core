@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/ref.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
@@ -52,6 +53,8 @@ namespace oox {
 
 
 namespace ole {
+    class ControlModelBase;
+    class EmbeddedControl;
 
 
 #define OLE_GUID_STDFONT "{0BE35203-8F91-11CE-9DE3-00AA004BB851}"
@@ -130,6 +133,38 @@ namespace OleHelper
                             BinaryInputStream& rInStrm,
                             bool bWithGuid );
 }
+
+class OOX_DLLPUBLIC OleFormCtrlExportHelper final
+{
+    std::unique_ptr<::oox::ole::EmbeddedControl> mpControl;
+    ::oox::ole::ControlModelBase* mpModel;
+    ::oox::GraphicHelper maGrfHelper;
+    css::uno::Reference< css::frame::XModel > mxDocModel;
+    css::uno::Reference< css::awt::XControlModel > mxControlModel;
+
+    OUString maName;
+    OUString maTypeName;
+    OUString maFullName;
+    OUString maGUID;
+public:
+    OleFormCtrlExportHelper( const css::uno::Reference< css::uno::XComponentContext >& rxCtx, const css::uno::Reference< css::frame::XModel >& xDocModel, const css::uno::Reference< css::awt::XControlModel >& xModel );
+    ~OleFormCtrlExportHelper();
+
+    OUString getGUID()
+    {
+        OUString sResult;
+        if ( maGUID.getLength() > 2 )
+            sResult = maGUID.copy(1, maGUID.getLength() - 2 );
+        return sResult;
+    }
+    const OUString& getFullName() { return maFullName; }
+    const OUString& getTypeName() { return maTypeName; }
+    const OUString& getName() { return maName; }
+    bool isValid() { return mpModel != nullptr; }
+    void exportName( const css::uno::Reference< css::io::XOutputStream >& rxOut );
+    void exportCompObj( const css::uno::Reference< css::io::XOutputStream >& rxOut );
+    void exportControl( const css::uno::Reference< css::io::XOutputStream >& rxOut, const css::awt::Size& rSize, bool bAutoClose = false );
+};
 
 // ideally it would be great to get rid of SvxMSConvertOCXControls
 // however msfilter/source/msfilter/svdfppt.cxx still uses
