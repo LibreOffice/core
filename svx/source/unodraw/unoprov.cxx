@@ -687,7 +687,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
         { OUString("CustomShapeData"),          SDRATTR_CUSTOMSHAPE_DATA,               cppu::UnoType<OUString>::get(),  0, 0 },
         { OUString("CustomShapeGeometry"),      SDRATTR_CUSTOMSHAPE_GEOMETRY,
         cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get(),  0, 0 },
-        { OUString("CustomShapeGraphicURL"),        SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL,    cppu::UnoType<OUString>::get(),  0,  0},
         FILL_PROPERTIES
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END

@@ -305,7 +305,6 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[ SDRATTR_CUSTOMSHAPE_ENGINE - SDRATTR_START ] = new SfxStringItem(SDRATTR_CUSTOMSHAPE_ENGINE, "");
     rPoolDefaults[ SDRATTR_CUSTOMSHAPE_DATA - SDRATTR_START ] = new SfxStringItem(SDRATTR_CUSTOMSHAPE_DATA, "");
     rPoolDefaults[ SDRATTR_CUSTOMSHAPE_GEOMETRY - SDRATTR_START ] = new SdrCustomShapeGeometryItem;
-    rPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
 
     SvxBoxItem* pboxItem = new SvxBoxItem( SDRATTR_TABLE_BORDER );
     pboxItem->SetAllDistances( 100 );
@@ -1932,13 +1931,6 @@ SdrMeasureTextUpsideDownItem::~SdrMeasureTextUpsideDownItem()
 SfxPoolItem* SdrMeasureTextUpsideDownItem::Clone(SfxItemPool* ) const
 {
     return new SdrMeasureTextUpsideDownItem(*this);
-}
-SdrCustomShapeReplacementURLItem::~SdrCustomShapeReplacementURLItem()
-{
-}
-SfxPoolItem* SdrCustomShapeReplacementURLItem::Clone( SfxItemPool*) const
-{
-    return new SdrCustomShapeReplacementURLItem(*this);
 }
 
 SfxPoolItem* SdrLayerIdItem::Clone(SfxItemPool* /*pPool*/) const

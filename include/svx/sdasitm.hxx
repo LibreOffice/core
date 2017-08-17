@@ -22,7 +22,6 @@
 
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>
-#include <svl/stritem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -75,14 +74,6 @@ private:
             void SetPropertyValue( const OUString& rSequenceName, const css::beans::PropertyValue& rPropVal );
 
             void ClearPropertyValue( const OUString& rPropertyName );
-};
-
-class SVX_DLLPUBLIC SdrCustomShapeReplacementURLItem : public SfxStringItem
-{
-    public:
-            SdrCustomShapeReplacementURLItem();
-            virtual ~SdrCustomShapeReplacementURLItem() override;
-            virtual SfxPoolItem*        Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
 inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
