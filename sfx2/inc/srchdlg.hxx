@@ -65,10 +65,10 @@ public:
 
     OUString     GetSearchText() const { return m_pSearchEdit->GetText(); }
     void         SetSearchText( const OUString& _rText ) { m_pSearchEdit->SetText( _rText ); }
-    bool         IsOnlyWholeWords() const { return ( m_pWholeWordsBox->IsChecked() ); }
-    bool         IsMarchCase() const { return ( m_pMatchCaseBox->IsChecked() ); }
-    bool         IsWrapAround() const { return ( m_pWrapAroundBox->IsChecked() ); }
-    bool         IsSearchBackwards() const { return ( m_pBackwardsBox->IsChecked() ); }
+    bool         IsOnlyWholeWords() const { return m_pWholeWordsBox->IsChecked(); }
+    bool         IsMarchCase() const { return m_pMatchCaseBox->IsChecked(); }
+    bool         IsWrapAround() const { return m_pWrapAroundBox->IsChecked(); }
+    bool         IsSearchBackwards() const { return m_pBackwardsBox->IsChecked(); }
 
     void            SetFocusOnEdit();
 

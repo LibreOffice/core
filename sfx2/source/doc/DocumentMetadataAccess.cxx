@@ -401,7 +401,7 @@ isPartOfType(struct DocumentMetadataAccess_Impl const & i_rImpl,
                 getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
                 i_xType.get()),
             uno::UNO_SET_THROW);
-        return (xEnum->hasMoreElements());
+        return xEnum->hasMoreElements();
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception & e) {

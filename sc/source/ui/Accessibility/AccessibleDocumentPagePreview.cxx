@@ -1022,7 +1022,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Poi
 
 ::accessibility::AccessibleShape* ScShapeChildren::GetAccShape(const ScShapeChildVec& rShapes, sal_Int32 nIndex) const
 {
-    return (GetAccShape(rShapes[nIndex]));
+    return GetAccShape(rShapes[nIndex]);
 }
 
 void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const MapMode& aMapMode, sal_uInt8 nRangeId)

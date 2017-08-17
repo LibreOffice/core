@@ -201,7 +201,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
 
 RegError ORegKey::closeKey(RegKeyHandle hKey)
 {
-    return (m_pRegistry->closeKey(hKey));
+    return m_pRegistry->closeKey(hKey);
 }
 
 
@@ -209,7 +209,7 @@ RegError ORegKey::closeKey(RegKeyHandle hKey)
 
 RegError ORegKey::deleteKey(const OUString& keyName)
 {
-    return (m_pRegistry->deleteKey(this, keyName));
+    return m_pRegistry->deleteKey(this, keyName);
 }
 
 

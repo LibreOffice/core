@@ -49,7 +49,7 @@ namespace accessibility
     sal_Bool SAL_CALL AccessibleSelectionBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
     {
         ::osl::MutexGuard aGuard( implGetMutex() );
-        return( OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex ) );
+        return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
     }
 
 
@@ -70,7 +70,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleSelectionBase::getSelectedAccessibleChildCount(  )
     {
         ::osl::MutexGuard aGuard( implGetMutex() );
-        return( OCommonAccessibleSelection::getSelectedAccessibleChildCount() );
+        return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
     }
 
 

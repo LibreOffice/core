@@ -507,8 +507,8 @@ extern "C"
 {
 static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecond)
 {
-    return( strcmp( static_cast<ComponentInfo const *>(pFirst)->pName,
-                    static_cast<ComponentInfo const *>(pSecond)->pName ) );
+    return strcmp( static_cast<ComponentInfo const *>(pFirst)->pName,
+                   static_cast<ComponentInfo const *>(pSecond)->pName );
 }
 }
 

@@ -302,7 +302,7 @@ const OUString& MediaWindowImpl::getURL() const
 
 bool MediaWindowImpl::isValid() const
 {
-    return( mxPlayer.is() );
+    return mxPlayer.is();
 }
 
 Size MediaWindowImpl::getPreferredSize() const
