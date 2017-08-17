@@ -937,7 +937,7 @@ void RtfExport::OutputLinkedOLE(const OUString&)
 {
 }
 
-void RtfExport::OutputTextNode(const SwTextNode& rNode)
+void RtfExport::OutputTextNode(SwTextNode& rNode)
 {
     m_nCurrentNodeIndex = rNode.GetIndex();
     if (!m_bOutOutlineOnly || rNode.IsOutline())

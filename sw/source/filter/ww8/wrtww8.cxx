@@ -1492,7 +1492,7 @@ void WW8Export::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos
     }
 }
 
-void WW8Export::AppendSmartTags(const SwTextNode& rTextNode)
+void WW8Export::AppendSmartTags(SwTextNode& rTextNode)
 {
     std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", rTextNode);
     if (!aStatements.empty())
