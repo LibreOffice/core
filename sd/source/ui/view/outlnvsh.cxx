@@ -257,7 +257,7 @@ void OutlineViewShell::ArrangeGUIElements ()
     {
         pWindow->SetMinZoomAutoCalc(false);
 
-        // change OuputArea of the OutlinerView
+        // change OutputArea of the OutlinerView
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
 
         ::tools::Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());

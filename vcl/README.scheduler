@@ -2,7 +2,7 @@
 
 The VCL scheduler handles LOs primary event queue. It is simple by design,
 currently just a single-linked list, processed in list-order by priority
-using round-robin for reoccuring tasks.
+using round-robin for reoccurring tasks.
 
 The scheduler has the following behaviour:
 
@@ -15,7 +15,7 @@ B.6. A small set of priorities instead of an flexible value AKA int
 
 There are some consequences due to this design.
 
-C.1. Higher priorority tasks starve lower priority tasks
+C.1. Higher priority tasks starve lower priority tasks
      As long as a higher task is available, lower tasks are never run!
      See Anti-pattern.
 
@@ -25,8 +25,8 @@ C.2. Tasks should be split into sensible blocks
 
 C.3. This is not an OS scheduler
      There is no real way to "fix" B.2. and B.3.
-     If you need to do an preemptive task, use a thread!
-     Otherwise mke your task suspendable and check SalInstance::AnyInput
+     If you need to do a preemptive task, use a thread!
+     Otherwise make your task suspendable and check SalInstance::AnyInput
      or call Application::Reschedule regularly.
 
 
@@ -39,14 +39,14 @@ C.3. This is not an OS scheduler
   5. The scheduler system event / message has a low system priority.
      All system events should have a higher priority.
 
-Everytime a task is started, the scheduler timer is adjusted. When the timer
+Every time a task is started, the scheduler timer is adjusted. When the timer
 fires, it posts an event to the system message queue. If the next most
-importent task is an Idle (AKA instant, 0ms timeout), the event is pushed to
+important task is an Idle (AKA instant, 0ms timeout), the event is pushed to
 the back of the queue, so we don't starve system messages, otherwise to the
-front. This is especially importent to get a correct SalInstance::AnyInput
+front. This is especially important to get a correct SalInstance::AnyInput
 handling, as this is used to suspend long background Idle tasks.
 
-Everytime the scheduler is invoked it searches for the next task to process,
+Every time the scheduler is invoked it searches for the next task to process,
 restarts the timer with the timeout for the next event and then invokes the
 task. After invoking the task and if the task is still active, it is pushed
 to the end of the queue and the timeout is eventually adjusted.
@@ -54,7 +54,7 @@ to the end of the queue and the timeout is eventually adjusted.
 
 = Locking =
 
-The locking is quite primitve: all interaction with internal Scheduler
+The locking is quite primitive: all interaction with internal Scheduler
 structures are locked. This includes the ImplSchedulerContext and the
 Task::mpSchedulerData, which is actually a part of the scheduler.
 Before invoking the task, we have to release the lock, so others can
@@ -114,8 +114,8 @@ Using SwitchToThread(), this seem to work reasonably well.
 
 == KDE implementation details ==
 
-This inplementation also works as intended. But there is a different Yield
-handling, because Qts QAbstractEventDispatcher::processEvents will allways
+This implementation also works as intended. But there is a different Yield
+handling, because Qts QAbstractEventDispatcher::processEvents will always
 process all pending events.
 
 
@@ -133,7 +133,7 @@ This should be easy to implement.
 == Per priority time-sorted queues ==
 
 This would result in O(1) scheduler. It was used in the Linux kernel for some
-time (search Ingo Molinars O(1) scheduler). This can be a scheduling
+time (search Ingo Molnar's O(1) scheduler). This can be a scheduling
 optimization, which would prevent walking longer event list. But probably the
 management overhead would be too large, as we have many one-shot events.
 

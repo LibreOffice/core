@@ -109,7 +109,7 @@ private:
     */
     void ReadConfiguration( bool bExcludedTypes, bool bRecognize );
 
-    /** Registeres the smart tag manager as listener at the package manager.
+    /** Registers the smart tag manager as listener at the package manager.
     */
     void RegisterListener();
 

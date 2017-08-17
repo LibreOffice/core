@@ -5,7 +5,7 @@
 #   * autogen.lastrun (rw)
 #   * autogen.lastrun.bak (rw)
 #
-# If _no_ parmeters:
+# If _no_ parameters:
 #   Read args from autogen.input or autogen.lastrun
 # Else
 #   Backup autogen.lastrun as autogen.lastrun.bak

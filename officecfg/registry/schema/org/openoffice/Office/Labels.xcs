@@ -34,7 +34,7 @@
         </info>
       </prop>
       <prop oor:name="Measure" oor:type="xs:string">
-        <!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order:
+        <!--Label: Contains the measurement data of the label concatenated by a colon (;) in the following order:
 		'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while 'C' marks a continuous label and 'S' marks a sheet
         -->
         <info>

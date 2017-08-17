@@ -50,7 +50,7 @@ published interface XIdentifierContainer: com::sun::star::container::XIdentifier
             The new element that will be inserted.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the argument is not vailid for this container.
+            if the argument is not valid for this container.
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,

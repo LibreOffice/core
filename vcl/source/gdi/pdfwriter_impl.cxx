@@ -7035,7 +7035,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
 
     updateGraphicsState();
 
-    // get a layout from the OuputDevice's SalGraphics
+    // get a layout from the OutputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos );
     if( pLayout )
@@ -7051,7 +7051,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, con
 
     updateGraphicsState();
 
-    // get a layout from the OuputDevice's SalGraphics
+    // get a layout from the OutputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray );
     if( pLayout )
@@ -7067,7 +7067,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
 
     updateGraphicsState();
 
-    // get a layout from the OuputDevice's SalGraphics
+    // get a layout from the OutputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
     SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, nWidth );
     if( pLayout )

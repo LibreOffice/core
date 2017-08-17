@@ -1115,7 +1115,7 @@
 							</xsl:choose>
 						</xsl:element>
 					</xsl:if>
-					<!-- the type of condition-pos:1,the former third part of General; 2, the last General. the methods handling diffirent -->
+					<!-- the type of condition-pos:1,the former third part of General; 2, the last General. the methods handling different -->
 					<xsl:call-template name="create-number-format-content">
 						<xsl:with-param name="style-type-name" select="$style-type-name"/>
 						<xsl:with-param name="number-format-unit" select="$current-number-format-unit"/>

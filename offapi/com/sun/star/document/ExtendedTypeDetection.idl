@@ -45,7 +45,7 @@ module com { module sun { module star { module document {
         The <strong>ServiceName</strong> - This must be a valid UNO service name.
         It is also an entry in the corresponding configuration list.
         <br>
-        Example: "com.company.devision.DetectService"
+        Example: "com.company.division.DetectService"
         <br>
         Note that this really means the implementation name of the service.
         Because it's not possible otherwise to distinguish between more than one

@@ -339,7 +339,7 @@ static ImplTextEncodingData const aImplIBM850TextEncodingData
 /* ======================================================================= */
 
 /* IBM-860 */
-/* Dos Standard CharSet for Portugiese */
+/* Dos Standard CharSet for Portuguese */
 /* 1-byte, 0x00-0x7F ASCII without exception */
 /* Convert-Tables: mappings/vendors/micsft/pc/cp860.txt from 04/24/96 Version 2.00 */
 /* Last-Changes from us: */

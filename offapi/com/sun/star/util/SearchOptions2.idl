@@ -16,7 +16,7 @@
 
 module com { module sun { module star { module util {
 
-/** This augments com::sun::star::util::SearchOptions to be able to
+/** This argument com::sun::star::util::SearchOptions to be able to
     specify additional search algorithms for use with
     com::sun::star::util::XTextSearch2
 

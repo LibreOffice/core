@@ -58,7 +58,7 @@ public:
 
         @param rEventMultiplexer
         The slideshow-global event source, where this class
-        registeres its event handlers.
+        registers its event handlers.
     */
     ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
                       LayerManagerSharedPtr const& rLayerManager,

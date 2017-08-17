@@ -40,7 +40,7 @@
 */
 published interface XIdlArray: com::sun::star::uno::XInterface
 {
-    /** Rellocates the length of the sequence instance.
+    /** Relocates the length of the sequence instance.
 
         @param array
                sequence instance
