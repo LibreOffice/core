@@ -82,6 +82,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
 
     /// Anchoring.
     sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
+    bool m_bInline; // css::text::TextContentAnchorType_AS_CHARACTER
 
     /// Parent position.
     const Point* m_pNdTopLeft;
@@ -101,11 +102,20 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Remember style, the most important shape attribute ;-)
     OStringBuffer m_ShapeStyle;
 
+    /// Remember the generated shape id.
+    OString m_sShapeId;
+
     /// Remember which shape types we had already written.
     std::vector<bool> m_aShapeTypeWritten;
 
+    /// It seems useless to write out an XML_ID attribute next to XML_id which defines the actual shape id
+    bool m_bSkipwzName;
+
+    /// Use '#' mark for type attribute (check Type Attribute of VML shape in OOXML documentation)
+    bool m_bUseHashMarkForType;
+
 public:
-                        VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr );
+                        VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr);
     virtual             ~VMLExport() override;
 
     const ::sax_fastparser::FSHelperPtr&
@@ -116,11 +126,15 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    void AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
+    OString AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const Point* pNdTopLeft = nullptr, const bool bOOxmlExport = false );
+    OString AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport = false );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
+
+    void    SetSkipwzName() { m_bSkipwzName = true; }
+    void    SetHashMarkForType() { m_bUseHashMarkForType = true; }
 protected:
     /// Add an attribute to the generated <v:shape/> element.
     ///
