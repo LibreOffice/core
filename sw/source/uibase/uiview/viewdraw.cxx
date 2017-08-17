@@ -627,7 +627,7 @@ bool SwView::IsFormMode() const
 {
     if (GetDrawFuncPtr() && GetDrawFuncPtr()->IsCreateObj())
     {
-        return (GetDrawFuncPtr()->IsInsertForm());
+        return GetDrawFuncPtr()->IsInsertForm();
     }
 
     return AreOnlyFormsSelected();

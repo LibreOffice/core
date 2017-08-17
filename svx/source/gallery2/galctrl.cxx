@@ -382,12 +382,12 @@ void GalleryIconView::KeyInput(const KeyEvent& rKEvt)
 
 sal_Int8 GalleryIconView::AcceptDrop(const AcceptDropEvent& /*rEvt*/)
 {
-    return(static_cast<GalleryBrowser2*>(GetParent())->AcceptDrop(*this));
+    return static_cast<GalleryBrowser2*>(GetParent())->AcceptDrop(*this);
 }
 
 sal_Int8 GalleryIconView::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    return(static_cast<GalleryBrowser2*>(GetParent())->ExecuteDrop(rEvt));
+    return static_cast<GalleryBrowser2*>(GetParent())->ExecuteDrop(rEvt);
 }
 
 void GalleryIconView::StartDrag(sal_Int8, const Point&)
@@ -592,7 +592,7 @@ sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
     aEvt.maPosPixel.Y() += GetTitleHeight();
 
-    return( static_cast<GalleryBrowser2*>( GetParent() )->ExecuteDrop( aEvt ) );
+    return static_cast<GalleryBrowser2*>( GetParent() )->ExecuteDrop( aEvt );
 }
 
 void GalleryListView::StartDrag( sal_Int8, const Point& rPosPixel )

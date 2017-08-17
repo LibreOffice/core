@@ -116,7 +116,7 @@ std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
  */
 bool SdInsertPagesObjsDlg::IsLink()
 {
-    return( m_pCbxLink->IsChecked() );
+    return m_pCbxLink->IsChecked();
 }
 
 /**
@@ -124,7 +124,7 @@ bool SdInsertPagesObjsDlg::IsLink()
  */
 bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
-    return( m_pCbxMasters->IsChecked() );
+    return m_pCbxMasters->IsChecked();
 }
 
 /**

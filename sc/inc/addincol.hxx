@@ -219,7 +219,7 @@ public:
     FormulaError        GetErrCode() const      { return nErrCode; }
     bool                HasString() const       { return bHasString; }
     bool                HasMatrix() const       { return xMatrix.get(); }
-    bool                HasVarRes() const       { return ( xVarRes.is() ); }
+    bool                HasVarRes() const       { return xVarRes.is(); }
     double              GetValue() const        { return fValue; }
     const OUString&     GetString() const       { return aString; }
     const ScMatrixRef&  GetMatrix() const       { return xMatrix;}

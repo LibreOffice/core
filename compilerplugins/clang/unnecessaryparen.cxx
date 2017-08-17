@@ -55,6 +55,7 @@ public:
     bool VisitDoStmt(const DoStmt *);
     bool VisitWhileStmt(const WhileStmt *);
     bool VisitSwitchStmt(const SwitchStmt *);
+    bool VisitReturnStmt(const ReturnStmt* );
     bool VisitCallExpr(const CallExpr *);
     bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
     bool TraverseCaseStmt(CaseStmt *);
@@ -159,6 +160,37 @@ bool UnnecessaryParen::VisitWhileStmt(const WhileStmt* whileStmt)
 bool UnnecessaryParen::VisitSwitchStmt(const SwitchStmt* switchStmt)
 {
     VisitSomeStmt(switchStmt, switchStmt->getCond(), "switch");
+    return true;
+}
+
+bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
+{
+    if (ignoreLocation(returnStmt))
+        return true;
+    if (returnStmt->getLocStart().isMacroID())
+        return true;
+
+    if (!returnStmt->getRetValue())
+        return true;
+    auto parenExpr = dyn_cast<ParenExpr>(returnStmt->getRetValue()->IgnoreImpCasts());
+    if (!parenExpr)
+        return true;
+    if (parenExpr->getLocStart().isMacroID())
+        return true;
+    // assignments need extra parentheses or they generate a compiler warning
+    auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
+    if (binaryOp && binaryOp->getOpcode() == BO_Assign)
+        return true;
+
+    // only non-operator-calls for now
+    auto subExpr = parenExpr->getSubExpr();
+    if (isa<CallExpr>(subExpr) && !isa<CXXOperatorCallExpr>(subExpr))
+    {
+        report(
+            DiagnosticsEngine::Warning, "parentheses immediately inside return statement",
+            parenExpr->getLocStart())
+            << parenExpr->getSourceRange();
+    }
     return true;
 }
 

@@ -42,7 +42,7 @@ void SdInsertPasteDlg::dispose()
 
 bool SdInsertPasteDlg::IsInsertBefore() const
 {
-    return( m_pRbBefore->IsChecked() );
+    return m_pRbBefore->IsChecked();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

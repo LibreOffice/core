@@ -208,7 +208,7 @@ public:
     */
     bool SAL_CALL setData(void *pData)
     {
-           return (osl_setThreadKeyData(m_hKey, pData));
+           return osl_setThreadKeyData(m_hKey, pData);
     }
 
     /** Get the data associated with the data key.

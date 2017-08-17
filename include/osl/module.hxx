@@ -123,7 +123,7 @@ public:
 
     void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
     {
-    return ( osl_getSymbol( m_Module, strSymbolName.pData ) );
+        return osl_getSymbol( m_Module, strSymbolName.pData );
     }
 
     /** Get function address by the function name in the module.
@@ -140,7 +140,7 @@ public:
     */
     oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName ) const
     {
-        return ( osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData ) );
+        return osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData );
     }
 
     /// @since LibreOffice 3.5

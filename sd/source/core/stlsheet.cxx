@@ -272,7 +272,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 
         if (pSdSheet)
         {
-            return(pSdSheet->GetItemSet());
+            return pSdSheet->GetItemSet();
         }
         else
         {
