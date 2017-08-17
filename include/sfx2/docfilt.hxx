@@ -78,6 +78,7 @@ public:
     bool IsOwnFormat() const { return bool(nFormatType & SfxFilterFlags::OWN); }
     /// If the filter supports digital signatures.
     bool GetSupportsSigning() const { return bool(nFormatType & SfxFilterFlags::SUPPORTSSIGNING); }
+    bool GetGpgEncryption() const { return bool(nFormatType & SfxFilterFlags::GPGENCRYPTION); }
     bool IsOwnTemplateFormat() const { return bool(nFormatType & SfxFilterFlags::TEMPLATEPATH); }
     bool IsAlienFormat() const { return bool(nFormatType & SfxFilterFlags::ALIEN); }
     bool CanImport() const { return bool(nFormatType & SfxFilterFlags::IMPORT); }
