@@ -113,6 +113,7 @@ enum class SfxFilterFlags
     PREFERED          = 0x10000000L,
     STARTPRESENTATION = 0x20000000L,
     SUPPORTSSIGNING   = 0x40000000L,
+    GPGENCRYPTION     = 0x80000000L,
 };
 namespace o3tl
 {
