@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_433afc37",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:20:16Z",
+      "side": 1,
+      "message": "here the aNewAttr set is created empty",
+      "revId": "f375bd97a726d3afa62c5529ec5b156111847c54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_833ce430",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:20:16Z",
+      "side": 1,
+      "message": "aNewAttr is empty so this is false",
+      "revId": "f375bd97a726d3afa62c5529ec5b156111847c54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a349e0d2",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:20:16Z",
+      "side": 1,
+      "message": "because we didn\u0027t go into the branch above, aNewAttr is still empty so this is always false",
+      "revId": "f375bd97a726d3afa62c5529ec5b156111847c54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
