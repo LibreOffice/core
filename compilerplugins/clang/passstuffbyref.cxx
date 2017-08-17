@@ -31,7 +31,7 @@ class PassStuffByRef:
     public RecursiveASTVisitor<PassStuffByRef>, public loplugin::Plugin
 {
 public:
-    explicit PassStuffByRef(InstantiationData const & data): Plugin(data), mbInsideFunctionDecl(false), mbFoundDisqualifier(false) {}
+    explicit PassStuffByRef(InstantiationData const & data): Plugin(data), mbInsideFunctionDecl(false), mbFoundReturnValueDisqualifier(false) {}
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
@@ -59,12 +59,11 @@ private:
         T * decl, bool (RecursiveASTVisitor::* fn)(T *));
     void checkParams(const FunctionDecl * functionDecl);
     void checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl);
-    bool isFat(QualType type);
     bool isPrimitiveConstRef(QualType type);
     bool isReturnExprDisqualified(const Expr* expr);
 
     bool mbInsideFunctionDecl;
-    bool mbFoundDisqualifier;
+    bool mbFoundReturnValueDisqualifier;
 
     struct FDecl {
         std::set<ParmVarDecl const *> parms;
@@ -185,51 +184,6 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     if (!functionDecl->doesThisDeclarationHaveABody()) {
         return;
     }
-    auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(functionDecl);
-    unsigned n = functionDecl->getNumParams();
-    for (unsigned i = 0; i != n; ++i) {
-        const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
-        auto const t = pvDecl->getType();
-        if (!isFat(t)) {
-            continue;
-        }
-        // Ignore cases where the parameter is std::move'd.
-        // This is a fairly simple check, might need some more complexity if the parameter is std::move'd
-        // somewhere else in the constructor.
-        bool bFoundMove = false;
-        if (cxxConstructorDecl) {
-            for (CXXCtorInitializer const * cxxCtorInitializer : cxxConstructorDecl->inits()) {
-                if (cxxCtorInitializer->isMemberInitializer())
-                {
-                    auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(cxxCtorInitializer->getInit()->IgnoreParenImpCasts());
-                    if (cxxConstructExpr && cxxConstructExpr->getNumArgs() == 1)
-                    {
-                        if (auto callExpr = dyn_cast<CallExpr>(cxxConstructExpr->getArg(0)->IgnoreParenImpCasts())) {
-                            if (loplugin::DeclCheck(callExpr->getCalleeDecl()).Function("move").StdNamespace()) {
-                                bFoundMove = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (bFoundMove) {
-            continue;
-        }
-        report(
-            DiagnosticsEngine::Warning,
-            ("passing %0 by value, rather pass by const lvalue reference"),
-            pvDecl->getLocation())
-            << t << pvDecl->getSourceRange();
-        auto can = functionDecl->getCanonicalDecl();
-        if (can->getLocation() != functionDecl->getLocation()) {
-            report(
-                DiagnosticsEngine::Note, "function is declared here:",
-                can->getLocation())
-                << can->getSourceRange();
-        }
-    }
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(functionDecl)) {
         return;
@@ -241,6 +195,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     {
         return;
     }
+    unsigned n = functionDecl->getNumParams();
     assert(!functionDecls_.empty());
     functionDecls_.back().check = true;
     for (unsigned i = 0; i != n; ++i) {
@@ -311,11 +266,11 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     }
     mbInsideFunctionDecl = true;
-    mbFoundDisqualifier = false;
+    mbFoundReturnValueDisqualifier = false;
     TraverseStmt(functionDecl->getBody());
     mbInsideFunctionDecl = false;
 
-    if (mbFoundDisqualifier)
+    if (mbFoundReturnValueDisqualifier)
         return;
 
     report(
@@ -342,7 +297,7 @@ bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
     const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenCasts();
 
     if (isReturnExprDisqualified(expr)) {
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
         return true;
     }
     return true;
@@ -394,72 +349,18 @@ bool PassStuffByRef::VisitVarDecl(const VarDecl * varDecl)
     // things guarded by locking are probably best left alone
     loplugin::TypeCheck dc(varDecl->getType());
     if (dc.Class("Guard").Namespace("osl").GlobalNamespace())
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
     if (dc.Class("ClearableGuard").Namespace("osl").GlobalNamespace())
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
     if (dc.Class("ResettableGuard").Namespace("osl").GlobalNamespace())
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
     else if (dc.Class("SolarMutexGuard").GlobalNamespace())
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
     else if (dc.Class("SfxModelGuard").GlobalNamespace())
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
     else if (dc.Class("ReadWriteGuard").Namespace("utl").GlobalNamespace())
-        mbFoundDisqualifier = true;
+        mbFoundReturnValueDisqualifier = true;
     return true;
-}
-
-// Would produce a wrong recommendation for
-//
-//   PresenterFrameworkObserver::RunOnUpdateEnd(
-//       xCC,
-//       [pSelf](bool){ return pSelf->ShutdownPresenterScreen(); });
-//
-// in PresenterScreen::RequestShutdownPresenterScreen
-// (sdext/source/presenter/PresenterScreen.cxx), with no obvious way to work
-// around it:
-//
-// bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
-//     if (ignoreLocation(expr)) {
-//         return true;
-//     }
-//     for (auto i(expr->capture_begin()); i != expr->capture_end(); ++i) {
-//         if (i->getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
-//             auto const t = i->getCapturedVar()->getType();
-//             if (isFat(t)) {
-//                 report(
-//                     DiagnosticsEngine::Warning,
-//                     ("%0 capture of %1 variable by copy, rather use capture"
-//                      " by reference---UNLESS THE LAMBDA OUTLIVES THE VARIABLE"),
-//                     i->getLocation())
-//                     << (i->isImplicit() ? "implicit" : "explicit") << t
-//                     << expr->getSourceRange();
-//             }
-//         }
-//     }
-//     return true;
-// }
-
-bool PassStuffByRef::isFat(QualType type) {
-    if (!type->isRecordType()) {
-        return false;
-    }
-    loplugin::TypeCheck tc(type);
-    if ((tc.Class("Reference").Namespace("uno").Namespace("star")
-            .Namespace("sun").Namespace("com").GlobalNamespace())
-        || (tc.Class("Sequence").Namespace("uno").Namespace("star")
-            .Namespace("sun").Namespace("com").GlobalNamespace())
-        || tc.Class("OString").Namespace("rtl").GlobalNamespace()
-        || tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-        || tc.Class("Reference").Namespace("rtl").GlobalNamespace())
-    {
-        return true;
-    }
-    if (type->isIncompleteType()) {
-        return false;
-    }
-    Type const * t2 = type.getTypePtrOrNull();
-    return t2 != nullptr
-        && compiler.getASTContext().getTypeSizeInChars(t2).getQuantity() > 64;
 }
 
 bool PassStuffByRef::isPrimitiveConstRef(QualType type) {
