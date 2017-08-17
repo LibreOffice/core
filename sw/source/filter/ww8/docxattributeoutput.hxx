@@ -724,8 +724,10 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFontsAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pCharLangAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pDropCapSizeAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pSectionSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pDropCapSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
     /// If the current SDT around runs should be ended before the current run.
     bool m_bEndCharSdt;

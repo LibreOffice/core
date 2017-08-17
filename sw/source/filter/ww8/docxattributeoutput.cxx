@@ -904,6 +904,14 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
 
+    if ( m_pDropCapSpacingAttrList.is() )
+    {
+        XFastAttributeListRef xAttrList( m_pDropCapSpacingAttrList.get() );
+        m_pDropCapSpacingAttrList.clear();
+
+        m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
+    }
+
     if ( m_pBackgroundAttrList.is() )
     {
         XFastAttributeListRef xAttrList( m_pBackgroundAttrList.get() );
@@ -1981,6 +1989,13 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
     }
 
+    if ( m_pDropCapSizeAttrList.is() )
+    {
+        XFastAttributeListRef xAttrList( m_pDropCapSizeAttrList.get() );
+        m_pDropCapSizeAttrList.clear();
+        m_pSerializer->singleElementNS( XML_w, XML_sz, xAttrList );
+    }
+
     if ( m_pColorAttrList.is() )
     {
         XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
@@ -2589,9 +2604,32 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
     }
 }
 
-void DocxAttributeOutput::FormatDrop( const SwTextNode& /*rNode*/, const SwFormatDrop& /*rSwFormatDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
+void DocxAttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
 {
     SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop& rSwFormatDrop, sal_uInt16 nStyle )" );
+
+SAL_WARN("DEBUG","::FormatDrop  Drop.Lines["<<(int)rSwFormatDrop.GetLines()<<"] Count["<<(int)rSwFormatDrop.GetChars()<<"] Distance["<<rSwFormatDrop.GetDistance()<<"] text["<<rNode.GetText()<<"]");
+    AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_dropCap ), "drop" );
+    AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_lines ), OString::number( rSwFormatDrop.GetLines() ).getStr() );
+    AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hSpace ), OString::number( rSwFormatDrop.GetDistance() ).getStr() );
+    AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_wrap ), "around" );
+    //AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_vAnchor ), "text" );
+    //AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hAnchor ), "text" );
+
+    const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE));
+    // 240 is roughly the height of a normal font.  MSO needs this to set the frame height approxmiately correct on import. How do you get the current height?
+    AddToAttrList( m_pDropCapSpacingAttrList, FSNS( XML_w, XML_line ), OString::number( rSwFormatDrop.GetLines() * rItem.GetHeight() ).getStr() );
+    AddToAttrList( m_pDropCapSpacingAttrList, FSNS( XML_w, XML_lineRule ), "exact" );
+
+    // 28 is roughly the pt size of a normal font.  MSO needs this to set the text size approxmately correct on import. How do you get the current size?
+    AddToAttrList( m_pDropCapSizeAttrList, FSNS( XML_w, XML_val ), OString::number( rSwFormatDrop.GetLines() * 28 ).getStr() );
+
+SAL_WARN("DEBUG","::FormatDop finished, ParaOpened?["<<m_bParagraphOpened<<"]");
+//I don't know how to properly end one paragraph and start another - but this worked as a sledgehammer approach, although it messes up m_pDropCapSizeAttrList
+    m_pSerializer->endElementNS( XML_w, XML_r );
+    m_pSerializer->endElementNS( XML_w, XML_p );
+    m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 }
 
 void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
