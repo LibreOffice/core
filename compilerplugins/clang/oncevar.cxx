@@ -404,7 +404,7 @@ bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-loplugin::Plugin::Registration< OnceVar > X("oncevar", true);
+loplugin::Plugin::Registration< OnceVar > X("oncevar", false);
 
 }
 
