@@ -25,7 +25,6 @@
 #include <vcl/metric.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/sdasaitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svditer.hxx>

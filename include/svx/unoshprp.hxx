@@ -526,9 +526,6 @@
 #define SPECIAL_3DBACKSCALE_PROPERTIES \
     { OUString(UNO_NAME_3D_BACKSCALE)        ,SDRATTR_3DOBJ_BACKSCALE           , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
 
-#define CUSTOMSHAPE_PROPERTIES \
-    { OUString(UNO_NAME_CUSTOMSHAPE_ADJUSTMENT),SDRATTR_CUSTOMSHAPE_ADJUSTMENT,         cppu::UnoType<css::uno::Sequence<sal_Int32>>::get(), 0, 0}, \
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

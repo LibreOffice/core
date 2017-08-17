@@ -107,11 +107,10 @@
 #define SDRATTR_TEXT_ANIDELAY           (SDRATTR_MISC_FIRST +19)   /*   1116 */ /*   1116 */ /*   1099 sal_uInt16, def=0   - Pool V2/V4 */
 #define SDRATTR_TEXT_ANIAMOUNT          (SDRATTR_MISC_FIRST +20)   /*   1117 */ /*   1117 */ /*   1100 sal_uInt16, def=0   - Pool V2/V4 */
 #define SDRATTR_TEXT_CONTOURFRAME       (SDRATTR_MISC_FIRST +21)   /*   1118 */ /*   1118 */ /*   1101 */             /* Pool V2 */
-#define SDRATTR_CUSTOMSHAPE_ADJUSTMENT  (SDRATTR_MISC_FIRST +22)   /*   1119 */ /*   1119 */ /*   1102 */             /* Pool V2 */
-#define SDRATTR_XMLATTRIBUTES           (SDRATTR_MISC_FIRST +23)   /*   1120 */ /*   1120 */ /*   1103 */             /* Pool V2 */
-#define SDRATTR_TEXT_USEFIXEDCELLHEIGHT (SDRATTR_MISC_FIRST +24)   /*   1121 */ /*   1121 */ /*   1104 */             /* Pool V2 */
-#define SDRATTR_TEXT_WORDWRAP           (SDRATTR_MISC_FIRST +25)   /*   1122 */ /*   1122 */ /*   1105 */             /* Pool V2 */
-#define SDRATTR_TEXT_CHAINNEXTNAME      (SDRATTR_MISC_FIRST +26)   /*   1123 */ /*   1123 */ /*   1106 */             /* Pool V2 */
+#define SDRATTR_XMLATTRIBUTES           (SDRATTR_MISC_FIRST +22)   /*   1120 */ /*   1120 */ /*   1103 */             /* Pool V2 */
+#define SDRATTR_TEXT_USEFIXEDCELLHEIGHT (SDRATTR_MISC_FIRST +23)   /*   1121 */ /*   1121 */ /*   1104 */             /* Pool V2 */
+#define SDRATTR_TEXT_WORDWRAP           (SDRATTR_MISC_FIRST +24)   /*   1122 */ /*   1122 */ /*   1105 */             /* Pool V2 */
+#define SDRATTR_TEXT_CHAINNEXTNAME      (SDRATTR_MISC_FIRST +25)   /*   1123 */ /*   1123 */ /*   1106 */             /* Pool V2 */
 #define SDRATTR_MISC_LAST               (SDRATTR_TEXT_CHAINNEXTNAME)        /* 1125   */ /* 1125   */ /* 1108   */ /* Pool V1: 1056 */
 
 #define SDRATTR_EDGE_FIRST              (SDRATTR_MISC_LAST + 1)      /* 1127   */ /* Pool V4 */
