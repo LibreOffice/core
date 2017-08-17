@@ -155,7 +155,12 @@ bool PassParamsByRef::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr * cxxOp
     if (!mbInsideFunctionDecl)
         return true;
     // if we are assigning to a parameter, it can be inconvenient to make the param pass-by-ref
-    if (!cxxOperatorCallExpr->isAssignmentOp())
+    auto op = cxxOperatorCallExpr->getOperator();
+    if ( op != clang::OverloadedOperatorKind::OO_Equal
+         && op != clang::OverloadedOperatorKind::OO_SlashEqual
+         && op != clang::OverloadedOperatorKind::OO_StarEqual
+         && op != clang::OverloadedOperatorKind::OO_MinusEqual
+         && op != clang::OverloadedOperatorKind::OO_PlusEqual)
         return true;
     auto declRefExpr = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0));
     if (!declRefExpr)
