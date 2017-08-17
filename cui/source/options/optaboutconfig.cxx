@@ -229,7 +229,7 @@ void CuiAboutConfigTabPage::Reset()
 
     m_pPrefBox->SetUpdateMode(false);
     Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", false );
-    //Load all XNameAcces to m_prefBoxEntries
+    //Load all XNameAccess to m_prefBoxEntries
     FillItems( xConfigAccess, nullptr, 0, true );
     //Load xConfigAccess' children to m_prefBox
     FillItems( xConfigAccess );

@@ -1476,7 +1476,7 @@ bool X11SalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPo
     if( !aPolyPoly.count() )
         return true;
 
-    // tesselate the polypolygon into trapezoids
+    // tessellate the polypolygon into trapezoids
     basegfx::B2DTrapezoidVector aB2DTrapVector;
     basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
     const int nTrapCount = aB2DTrapVector.size();
