@@ -22,9 +22,7 @@
 
 #include <map>
 #include <memory>
-#include <array>
 
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 #include "oox/drawingml/shape.hxx"
@@ -62,6 +60,7 @@ struct ConditionAttr
     sal_Int32 mnArg;
     sal_Int32 mnOp;
     OUString msVal;
+    sal_Int32 mnVal;
 };
 
 struct LayoutAtomVisitor;
@@ -198,9 +197,12 @@ public:
         { mbElse=true; }
     virtual void addChild( const LayoutAtomPtr & pNode ) override;
     virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
-    static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    sal_Int32 getNodeCount() const;
 private:
+    static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
+    static bool compareResult(sal_Int32 nOperator, const OUString& sFirst, const OUString& sSecond);
+    const dgm::Point* getPresNode() const;
+    sal_Int32 getNodeCount() const;
+
     bool          mbElse;
     IteratorAttr  maIter;
     ConditionAttr maCond;
@@ -222,26 +224,15 @@ class LayoutNode
     : public LayoutAtom
 {
 public:
-    enum {
-        VAR_animLvl = 0,
-        VAR_animOne,
-        VAR_bulletEnabled,
-        VAR_chMax,
-        VAR_chPref,
-        VAR_dir,
-        VAR_hierBranch,
-        VAR_orgChart,
-        VAR_resizeHandles
-    };
-    // we know that the array is of fixed size
-    // the use of Any allow having empty values
-    typedef std::array<css::uno::Any, 9> VarMap;
+    typedef std::map<sal_Int32, OUString> VarMap;
 
     LayoutNode(const Diagram& rDgm) : LayoutAtom(*this), mrDgm(rDgm), mnChildOrder(0) {}
     const Diagram& getDiagram() const
         { return mrDgm; }
     virtual void accept( LayoutAtomVisitor& ) override;
-    VarMap & variables()
+    VarMap& variables()
+        { return mVariables; }
+    const VarMap& variables() const
         { return mVariables; }
     void setMoveWith( const OUString & sName )
         { msMoveWith = sName; }
