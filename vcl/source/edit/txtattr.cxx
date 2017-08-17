@@ -87,7 +87,7 @@ TextAttrib*     TextAttribProtect::Clone() const
 
 bool TextAttribProtect::operator==( const TextAttrib& rAttr ) const
 {
-    return ( TextAttrib::operator==(rAttr ) );
+    return TextAttrib::operator==(rAttr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

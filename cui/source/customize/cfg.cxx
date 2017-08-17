@@ -3504,7 +3504,7 @@ OUString SvxIconReplacementDialog::ReplaceIconName( const OUString& rMessage )
 sal_uInt16 SvxIconReplacementDialog::ShowDialog()
 {
     Execute();
-    return ( GetCurButtonId() );
+    return GetCurButtonId();
 }
 /*******************************************************************************
 *

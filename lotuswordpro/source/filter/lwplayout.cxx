@@ -659,7 +659,7 @@ double LwpMiddleLayout::GetGeometryHeight()
     LwpLayoutGeometry* pGeo = GetGeometry();
     if(pGeo)
     {
-        return ( LwpTools::ConvertFromUnitsToMetric( pGeo->GetHeight() ) );
+        return LwpTools::ConvertFromUnitsToMetric( pGeo->GetHeight() );
     }
     else
         return -1;
@@ -674,7 +674,7 @@ double LwpMiddleLayout::GetGeometryWidth()
     LwpLayoutGeometry* pGeo = GetGeometry();
     if(pGeo)
     {
-        return ( LwpTools::ConvertFromUnitsToMetric( pGeo->GetWidth() ) );
+        return LwpTools::ConvertFromUnitsToMetric( pGeo->GetWidth() );
     }
     else
         return -1;

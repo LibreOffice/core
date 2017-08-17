@@ -197,7 +197,7 @@ namespace drawinglayer
 
         bool TransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
-            return (GradientTexturePrimitive3D::operator==(rPrimitive));
+            return GradientTexturePrimitive3D::operator==(rPrimitive);
         }
 
         // provide unique ID

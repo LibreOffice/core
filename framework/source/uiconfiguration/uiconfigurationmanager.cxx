@@ -1244,7 +1244,7 @@ sal_Bool SAL_CALL UIConfigurationManager::hasStorage()
     if ( m_bDisposed )
         throw DisposedException();
 
-    return ( m_xDocConfigStorage.is() );
+    return m_xDocConfigStorage.is();
 }
 
 // XUIConfigurationPersistence

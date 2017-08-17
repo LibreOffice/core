@@ -639,7 +639,7 @@ void TransferableHelper::ClearFormats()
 bool TransferableHelper::SetAny( const Any& rAny )
 {
     maAny = rAny;
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -661,7 +661,7 @@ bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& r
     else
         maAny <<= rString;
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -689,7 +689,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -703,7 +703,7 @@ bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf )
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -719,7 +719,7 @@ bool TransferableHelper::SetGraphic( const Graphic& rGraphic )
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -731,7 +731,7 @@ bool TransferableHelper::SetImageMap( const ImageMap& rIMap )
     rIMap.Write( aMemStm );
     maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -744,7 +744,7 @@ bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObje
     WriteTransferableObjectDescriptor( aMemStm, rDesc );
     maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
  }
 
 
@@ -833,7 +833,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         break;
     }
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -847,7 +847,7 @@ bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
     maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 
@@ -877,7 +877,7 @@ bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUse
             maAny <<= aSeq;
     }
 
-    return( maAny.hasValue() );
+    return maAny.hasValue();
 }
 
 

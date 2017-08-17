@@ -142,7 +142,7 @@ private:
 
 inline bool OStorePageManager::isValid() const
 {
-    return (base::isValid() /* @@@ NYI && (m_aRoot.is()) */);
+    return base::isValid() /* @@@ NYI && (m_aRoot.is()) */;
 }
 
 template<> inline OStorePageManager*
