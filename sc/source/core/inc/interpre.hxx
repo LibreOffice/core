@@ -578,6 +578,7 @@ private:
     void ScValue();
     void ScNumberValue();
     void ScClean();
+    void ScClean_MS();
     void ScChar();
     void ScJis();
     void ScAsc();

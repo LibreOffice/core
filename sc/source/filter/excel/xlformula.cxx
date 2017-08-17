@@ -212,6 +212,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocTrunc,              197,    1,  1,  V, { VR, C }, 0, nullptr },
     { ocIsLogical,          198,    1,  1,  V, { VR }, 0, nullptr },
     { ocDBCount2,           199,    3,  3,  V, { RO, RR }, 0, nullptr },
+    { ocClean_MS,           200,    1,  1,  V, { VR }, 0, nullptr },
     { ocCurrency,           204,    1,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, nullptr },
     { ocFindB,              205,    2,  3,  V, { VR }, 0, nullptr },
     { ocSearchB,            206,    2,  3,  V, { VR }, 0, nullptr },

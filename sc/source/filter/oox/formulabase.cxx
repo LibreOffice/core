@@ -361,6 +361,7 @@ static const FunctionData saFuncTableBiff2[] =
     { "TRUNC",                  "TRUNC",                197,    197,    1,  1,  V, { VR, C }, FuncFlags::NONE },
     { "ISLOGICAL",              "ISLOGICAL",            198,    198,    1,  1,  V, { VR }, FuncFlags::NONE },
     { "DCOUNTA",                "DCOUNTA",              199,    199,    3,  3,  V, { RO, RR }, FuncFlags::NONE },
+    { "CLEAN_MS",               "CLEAN_MS",             200,    162,    1,  1,  V, { VR }, FuncFlags::NONE },
     { nullptr,                        "EXTERN.CALL",          255,    255,    1,  MX, R, { RO_E, RO }, FuncFlags::IMPORTONLY },
 
     // *** macro sheet commands ***
