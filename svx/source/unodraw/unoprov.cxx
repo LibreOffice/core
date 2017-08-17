@@ -64,7 +64,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -88,7 +87,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -161,7 +159,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -187,7 +184,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -213,7 +209,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonBezierPropertyMap()
         TEXT_PROPERTIES
         // #FontWork#
         FONTWORK_PROPERTIES
-        CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -419,7 +414,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
 
         SPECIAL_3DBACKSCALE_PROPERTIES
         SPECIAL_3DPOLYGONOBJECT_PROPERTIES
-        CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -694,7 +688,6 @@ SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
         { OUString("CustomShapeGeometry"),      SDRATTR_CUSTOMSHAPE_GEOMETRY,
         cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get(),  0, 0 },
         { OUString("CustomShapeGraphicURL"),        SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL,    cppu::UnoType<OUString>::get(),  0,  0},
-        CUSTOMSHAPE_PROPERTIES
         FILL_PROPERTIES
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END

@@ -50,7 +50,6 @@
 #include <svx/sdggaitm.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/sdasaitm.hxx>
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

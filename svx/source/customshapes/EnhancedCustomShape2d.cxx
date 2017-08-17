@@ -28,7 +28,6 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/sdasaitm.hxx>
 #include <svx/svdmodel.hxx>
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
