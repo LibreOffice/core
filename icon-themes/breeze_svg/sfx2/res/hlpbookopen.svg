@@ -13,7 +13,7 @@
    height="16"
    id="svg3049"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="hlpbookopen.svg"
    inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
    inkscape:export-xdpi="30"
@@ -37,10 +37,10 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1868"
-     inkscape:window-height="1060"
-     inkscape:window-x="50"
-     inkscape:window-y="-3"
+     inkscape:window-width="2560"
+     inkscape:window-height="1378"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      borderlayer="true"
@@ -91,20 +91,11 @@
          transform="translate(6.2937501e-7,-2.041003e-4)"
          id="layer1-6"
          inkscape:label="Capa 1">
-        <rect
+        <path
            style="color:#000000;fill:#f47750;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect2995"
-           width="1.3333333"
-           height="5.3334069"
-           x="8.333333"
-           y="1041.3624" />
-        <rect
-           style="color:#000000;fill:#f47750;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="rect2997"
-           width="1.3333333"
-           height="1.3333367"
-           x="8.333333"
-           y="1038.6958" />
+           d="M 6 6 L 6 7 L 7 7 L 7 6 L 6 6 z M 6 8 L 6 12 L 7 12 L 7 8 L 6 8 z "
+           transform="matrix(1.3333333,0,0,1.3333367,0.3333327,1030.6957)"
+           id="rect2995" />
         <text
            sodipodi:linespacing="125%"
            id="text3781"
@@ -119,9 +110,9 @@
              y="1053.0374" /></text>
         <path
            style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           d="m 4.3333326,1049.3624 0,-4 0,-10.6667 0,-1.3333 1.3333333,0 2.6666666,0 5.3333335,0 4,4 0,2.6667 0,8 0,1.3333 -8.0000002,0 -5.3333332,0 z m 1.3333333,-1.3333 3.9999999,0 6.6666662,0 0,-8 0,-1.3334 -4,0 0,-4 -3.9999995,0 -2.6666666,0 0,10.6667 0,2.6667 z"
-           id="rect3782"
-           inkscape:connector-curvature="0" />
+           d="M 3 2 L 3 3 L 3 11 L 3 14 L 7 14 L 13 14 L 13 13 L 13 7 L 13 5 L 10 2 L 6 2 L 4 2 L 3 2 z M 4 3 L 6 3 L 9 3 L 9 6 L 12 6 L 12 7 L 12 13 L 7 13 L 4 13 L 4 11 L 4 3 z "
+           transform="matrix(1.3333333,0,0,1.3333367,0.3333327,1030.6957)"
+           id="rect3782" />
       </g>
     </g>
   </g>
