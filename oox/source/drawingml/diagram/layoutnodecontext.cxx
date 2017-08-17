@@ -297,12 +297,8 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     {
         // CT_PresentationOf
         // TODO
-        rAttribs.getString( XML_axis );
-        rAttribs.getString( XML_cnt );
-        rAttribs.getString( XML_hideLastTrans );
-        rAttribs.getString( XML_ptType );
-        rAttribs.getString( XML_st );
-        rAttribs.getString( XML_step );
+        IteratorAttr aIterator;
+        aIterator.loadFromXAttr(rAttribs.getFastAttributeList());
         break;
     }
     case DGM_TOKEN( ruleLst ):

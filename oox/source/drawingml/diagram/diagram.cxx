@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <functional>
-
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -47,7 +45,7 @@ namespace oox { namespace drawingml {
 
 namespace dgm {
 
-void Connection::dump()
+void Connection::dump() const
 {
     SAL_INFO(
         "oox.drawingml",
@@ -57,7 +55,7 @@ void Connection::dump()
             << mnSourceOrder << ", dstOrd " << mnDestOrder);
 }
 
-void Point::dump()
+void Point::dump() const
 {
     SAL_INFO(
         "oox.drawingml",
@@ -82,25 +80,15 @@ const dgm::Point* DiagramData::getRootPoint() const
     return nullptr;
 }
 
-void DiagramData::dump()
+void DiagramData::dump() const
 {
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of cnx: " << maConnections.size() );
-    for (auto& rConnection : maConnections)
+    for (const auto& rConnection : maConnections)
         rConnection.dump();
 
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of pt: " << maPoints.size() );
-    for (auto& rPoint : maPoints)
+    for (const auto& rPoint : maPoints)
         rPoint.dump();
-}
-
-void Diagram::setData( const DiagramDataPtr & pData)
-{
-    mpData = pData;
-}
-
-void Diagram::setLayout( const DiagramLayoutPtr & pLayout)
-{
-    mpLayout = pLayout;
 }
 
 #ifdef DEBUG_OOX_DIAGRAM
@@ -135,12 +123,10 @@ static sal_Int32 calcDepth( const OUString& rNodeName,
             !aCurrCxn->msSibTransId.isEmpty() &&
             !aCurrCxn->msSourceId.isEmpty() &&
             !aCurrCxn->msDestId.isEmpty() &&
-            aCurrCxn->mnType != XML_presOf &&
-            aCurrCxn->mnType != XML_presParOf &&
+            aCurrCxn->mnType == XML_parOf &&
             rNodeName == aCurrCxn->msDestId )
         {
-            return calcDepth(aCurrCxn->msSourceId,
-                             rCnx) + 1;
+            return calcDepth(aCurrCxn->msSourceId, rCnx) + 1;
         }
         ++aCurrCxn;
     }
@@ -351,7 +337,7 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
 {
     sal_Int32 length = maMainDomMap.size();
 
-    if ( 0 < maDataRelsMap.getLength() )
+    if (maDataRelsMap.hasElements())
         ++length;
 
     uno::Sequence<beans::PropertyValue> aValue(length);
@@ -360,15 +346,15 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
          i != maMainDomMap.end();
          ++i)
     {
-        pValue[0].Name = i->first;
-        pValue[0].Value <<= i->second;
+        pValue->Name = i->first;
+        pValue->Value <<= i->second;
         ++pValue;
     }
 
-    if ( 0 < maDataRelsMap.getLength() )
+    if (maDataRelsMap.hasElements())
     {
-        pValue[0].Name = "OOXDiagramDataRels";
-        pValue[0].Value <<= maDataRelsMap;
+        pValue->Name = "OOXDiagramDataRels";
+        pValue->Value <<= maDataRelsMap;
         ++pValue;
     }
 
@@ -471,7 +457,9 @@ void loadDiagram( ShapePtr const & pShape,
                     pDiagram,
                     xRefQStyle);
         }
-    } else {
+    }
+    else
+    {
         // We still want to add the XDocuments to the DiagramDomMap
         DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
         rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);

@@ -48,7 +48,7 @@ struct Connection
         mnDestOrder( 0 )
     {}
 
-    void dump();
+    void dump() const;
 
     sal_Int32 mnType;
     OUString msModelId;
@@ -97,7 +97,7 @@ struct Point
         mbCustomText(false),
         mbIsPlaceholder(false)
     {}
-    void dump();
+    void dump() const;
 
     ShapePtr      mpShape;
 
@@ -182,7 +182,7 @@ public:
     ::std::vector<OUString> &getExtDrawings()
         { return maExtDrawings; }
     const dgm::Point* getRootPoint() const;
-    void dump();
+    void dump() const;
 private:
     FillPropertiesPtr mpFillProperties;
     dgm::Connections  maConnections;
@@ -267,12 +267,12 @@ typedef std::map<OUString,DiagramColor> DiagramColorMap;
 class Diagram
 {
 public:
-    void setData( const DiagramDataPtr & );
+    void setData( const DiagramDataPtr & pData )
+        { mpData = pData; }
     const DiagramDataPtr& getData() const
-        {
-            return mpData;
-        }
-    void setLayout( const DiagramLayoutPtr & );
+        { return mpData; }
+    void setLayout( const DiagramLayoutPtr & pLayout )
+        { mpLayout = pLayout; }
 
     DiagramQStyleMap& getStyles() { return maStyles; }
     const DiagramQStyleMap& getStyles() const { return maStyles; }

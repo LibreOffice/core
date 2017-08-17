@@ -55,8 +55,7 @@ public:
                     mrConnection.push_back( dgm::Connection() );
                     dgm::Connection& rConnection=mrConnection.back();
 
-                    const sal_Int32 nType = rAttribs.getToken( XML_type, XML_parOf );
-                    rConnection.mnType = nType;
+                    rConnection.mnType = rAttribs.getToken( XML_type, XML_parOf );
                     rConnection.msModelId = rAttribs.getString( XML_modelId ).get();
                     rConnection.msSourceId = rAttribs.getString( XML_srcId ).get();
                     rConnection.msDestId  = rAttribs.getString( XML_destId ).get();
