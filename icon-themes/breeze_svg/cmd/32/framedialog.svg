@@ -1,1 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><linearGradient id="a"><stop offset="0" stop-color="#1d99f3"/><stop offset=".417" stop-color="#48acf5" stop-opacity=".761"/><stop offset=".667" stop-color="#73c0f7" stop-opacity="0"/><stop offset="1" stop-color="#cae7fc" stop-opacity="0"/></linearGradient></defs><g transform="translate(-384.57 -515.798)"><path d="M388.57 519.798v24h13v-1h-12v-22h22v20h1v-21h-24z" fill="#f60"/><path d="M389.57 520.798v22h12v-1h-11v-20h20v19h1v-20h-22z" fill="#4d4d4d"/><circle cx="411.571" cy="542.798" r="1" fill="#4d4d4d"/><circle cx="407.571" cy="542.798" r="1" fill="#4d4d4d"/><circle cx="403.571" cy="542.798" r="1" fill="#4d4d4d"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+ <path 
+     style="fill:#f47750" 
+     d="M 4 4 L 4 28 L 17 28 L 17 27 L 5 27 L 5 5 L 27 5 L 27 25 L 28 25 L 28 4 L 4 4 z "
+     />
+ <path 
+     style="fill:#4d4d4d" 
+     d="M 5 5 L 5 27 L 17 27 L 17 26 L 6 26 L 6 6 L 26 6 L 26 25 L 27 25 L 27 5 L 5 5 z M 19.001953 26 A 1 1 0 0 0 18.001953 27 A 1 1 0 0 0 19.001953 28 A 1 1 0 0 0 20.001953 27 A 1 1 0 0 0 19.001953 26 z M 23.001953 26 A 1 1 0 0 0 22.001953 27 A 1 1 0 0 0 23.001953 28 A 1 1 0 0 0 24.001953 27 A 1 1 0 0 0 23.001953 26 z M 27.001953 26 A 1 1 0 0 0 26.001953 27 A 1 1 0 0 0 27.001953 28 A 1 1 0 0 0 28.001953 27 A 1 1 0 0 0 27.001953 26 z "
+     />
+</svg>

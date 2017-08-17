@@ -1,66 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32"
-   height="32"
-   viewBox="0 0 32 32"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="pagedialog.svg">
-  <metadata
-     id="metadata18">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs16" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1883"
-     inkscape:window-height="1051"
-     id="namedview14"
-     showgrid="true"
-     inkscape:snap-bbox="true"
-     inkscape:object-nodes="true"
-     inkscape:zoom="14.75"
-     inkscape:cx="11.960961"
-     inkscape:cy="10.968053"
-     inkscape:window-x="33"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4146" />
-  </sodipodi:namedview>
-  <path
-     style="fill:#4d4d4d"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+ <path 
+     style="fill:#4d4d4d" 
      d="M 6 4 L 6 28 L 15 28 L 15 27 L 7 27 L 7 5 L 18 5 L 18 12 L 25 12 L 25 25 L 26 25 L 26 11 L 19 4 L 18 4 L 6 4 z "
-     id="path6" />
-  <path
-     inkscape:connector-curvature="0"
-     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#f47750;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
-     d="m 26,27 c 0,-0.5523 -0.4477,-1 -1,-1 -0.5523,0 -1,0.4477 -1,1 0,0.5523 0.4477,1 1,1 0.5523,0 1,-0.4477 1,-1 z m -4,0 c 0,-0.5523 -0.4477,-1 -1,-1 -0.5523,0 -1,0.4477 -1,1 0,0.5523 0.4477,1 1,1 0.5523,0 1,-0.4477 1,-1 z m -4,0 c 0,-0.5523 -0.4477,-1 -1,-1 -0.5523,0 -1,0.4477 -1,1 0,0.5523 0.4477,1 1,1 0.5523,0 1,-0.4477 1,-1 z"
-     id="path3083" />
+     />
+ <path 
+     style="fill:#f47750" 
+     d="M 17 26 C 16.4477 26 16 26.4477 16 27 C 16 27.5523 16.4477 28 17 28 C 17.5523 28 18 27.5523 18 27 C 18 26.4477 17.5523 26 17 26 z M 21 26 C 20.4477 26 20 26.4477 20 27 C 20 27.5523 20.4477 28 21 28 C 21.5523 28 22 27.5523 22 27 C 22 26.4477 21.5523 26 21 26 z M 25 26 C 24.4477 26 24 26.4477 24 27 C 24 27.5523 24.4477 28 25 28 C 25.5523 28 26 27.5523 26 27 C 26 26.4477 25.5523 26 25 26 z "
+     />
 </svg>

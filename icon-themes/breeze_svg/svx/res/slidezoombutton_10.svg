@@ -14,7 +14,7 @@
    height="10"
    id="svg3288"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="slidezoombutton_10.svg">
   <defs
      id="defs3290">
@@ -53,10 +53,10 @@
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1868"
-     inkscape:window-height="1060"
-     inkscape:window-x="50"
-     inkscape:window-y="-3"
+     inkscape:window-width="2560"
+     inkscape:window-height="1378"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-bbox="true">
     <inkscape:grid
@@ -85,19 +85,14 @@
      inkscape:groupmode="layer"
      transform="translate(0,-6)">
     <path
-       sodipodi:type="arc"
        style="color:#000000;fill:#eff0f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="path4125"
-       sodipodi:cx="5"
-       sodipodi:cy="5"
-       sodipodi:rx="3"
-       sodipodi:ry="3"
-       d="M 8,5 C 8,6.6568542 6.6568542,8 5,8 3.3431458,8 2,6.6568542 2,5 2,3.3431458 3.3431458,2 5,2 6.6568542,2 8,3.3431458 8,5 z"
-       transform="translate(0,6)" />
+       d="M 5 2 A 3 3 0 0 0 2 5 A 3 3 0 0 0 5 8 A 3 3 0 0 0 8 5 A 3 3 0 0 0 5 2 z "
+       transform="translate(0,6)"
+       id="path4125" />
     <path
        style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="M 5,7 C 2.790861,7 1,8.790861 1,11 1,13.209139 2.790861,15 5,15 7.209139,15 9,13.209139 9,11 9,8.790861 7.209139,7 5,7 z M 5,8 C 6.656854,8 8,9.3431458 8,11 8,12.656854 6.656854,14 5,14 3.343146,14 2,12.656854 2,11 2,9.3431458 3.343146,8 5,8 z"
-       id="path4127"
-       inkscape:connector-curvature="0" />
+       d="M 5 1 C 2.790861 1 1 2.790861 1 5 C 1 7.209139 2.790861 9 5 9 C 7.209139 9 9 7.209139 9 5 C 9 2.790861 7.209139 1 5 1 z M 5 2 C 6.656854 2 8 3.3431458 8 5 C 8 6.656854 6.656854 8 5 8 C 3.343146 8 2 6.656854 2 5 C 2 3.3431458 3.343146 2 5 2 z "
+       transform="translate(0,6)"
+       id="path4127" />
   </g>
 </svg>
