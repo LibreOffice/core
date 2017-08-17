@@ -1406,3 +1406,125 @@ index aba8827..b1e33f8 100644
 -- 
 2.12.3
 
+From 8a3cc9733f567864ad0658cf1a25c60d5e7205a6 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 17 Aug 2017 12:01:44 +0200
+Subject: [PATCH] EPUB_SPLIT_METHOD_HEADING: fix unexpected text in chapter
+ names
+
+We used to add text for all headings for the chapter name, but if we
+split on heading 1, then text of heading2+ should not be included.
+---
+ src/lib/EPUBSplitGuard.cpp    | 14 ++++++++++++++
+ src/lib/EPUBSplitGuard.h      |  3 +++
+ src/lib/EPUBTextGenerator.cpp |  6 ++----
+ 3 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/EPUBSplitGuard.cpp b/src/lib/EPUBSplitGuard.cpp
+index 15ba20f..25eae87 100644
+--- a/src/lib/EPUBSplitGuard.cpp
++++ b/src/lib/EPUBSplitGuard.cpp
+@@ -18,6 +18,7 @@ static const unsigned DEFAULT_SPLIT_SIZE = 1 << 16;
+ EPUBSplitGuard::EPUBSplitGuard(const EPUBSplitMethod method)
+   : m_method(method)
+   , m_headingLevel(DEFAULT_SPLIT_HEADING_LEVEL)
++  , m_currentHeadingLevel(0)
+   , m_size(DEFAULT_SPLIT_SIZE)
+   , m_currentSize(0)
+   , m_nestingLevel(0)
+@@ -29,6 +30,11 @@ void EPUBSplitGuard::setSplitHeadingLevel(const unsigned level)
+   m_headingLevel = level;
+ }
+ 
++void EPUBSplitGuard::setCurrentHeadingLevel(const unsigned level)
++{
++  m_currentHeadingLevel = level;
++}
++
+ void EPUBSplitGuard::setSplitSize(const unsigned size)
+ {
+   m_size = size;
+@@ -59,6 +65,14 @@ bool EPUBSplitGuard::splitOnHeading(const unsigned level) const
+   return canSplit(EPUB_SPLIT_METHOD_HEADING) && (m_headingLevel >= level);
+ }
+ 
++bool EPUBSplitGuard::inHeading() const
++{
++  if (!m_currentHeadingLevel)
++    return false;
++
++  return m_headingLevel >= m_currentHeadingLevel;
++}
++
+ bool EPUBSplitGuard::splitOnSize() const
+ {
+   return canSplit(EPUB_SPLIT_METHOD_SIZE) && (m_size <= m_currentSize);
+diff --git a/src/lib/EPUBSplitGuard.h b/src/lib/EPUBSplitGuard.h
+index 17613ac..7bc53ce 100644
+--- a/src/lib/EPUBSplitGuard.h
++++ b/src/lib/EPUBSplitGuard.h
+@@ -21,6 +21,7 @@ public:
+   explicit EPUBSplitGuard(EPUBSplitMethod method);
+ 
+   void setSplitHeadingLevel(unsigned level);
++  void setCurrentHeadingLevel(unsigned level);
+   void setSplitSize(unsigned size);
+ 
+   void openLevel();
+@@ -29,6 +30,7 @@ public:
+ 
+   bool splitOnPageBreak() const;
+   bool splitOnHeading(unsigned level) const;
++  bool inHeading() const;
+   bool splitOnSize() const;
+ 
+   void onSplit();
+@@ -39,6 +41,7 @@ private:
+ private:
+   const EPUBSplitMethod m_method;
+   unsigned m_headingLevel;
++  unsigned m_currentHeadingLevel;
+   unsigned m_size;
+   unsigned m_currentSize;
+   unsigned m_nestingLevel;
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index b1e33f8..5206b37 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -67,7 +67,6 @@ public:
+   bool m_inPageSpan;
+   bool m_inHeader;
+   bool m_inFooter;
+-  bool m_inHeading;
+ 
+   RVNGPropertyList m_pageSpanProps;
+   shared_ptr<EPUBTextElements> m_currentHeader;
+@@ -89,7 +88,6 @@ EPUBTextGenerator::Impl::Impl(EPUBPackage *const package, const EPUBSplitMethod
+   , m_inPageSpan(false)
+   , m_inHeader(false)
+   , m_inFooter(false)
+-  , m_inHeading(false)
+   , m_pageSpanProps()
+   , m_currentHeader()
+   , m_currentFooter()
+@@ -262,7 +260,7 @@ void EPUBTextGenerator::openParagraph(const librevenge::RVNGPropertyList &propLi
+   const RVNGProperty *const outlineLevel = propList["text:outline-level"];
+   if (outlineLevel && m_impl->getSplitGuard().splitOnHeading(outlineLevel->getInt()))
+     m_impl->startNewHtmlFile();
+-  m_impl->m_inHeading = outlineLevel != nullptr;
++  m_impl->getSplitGuard().setCurrentHeadingLevel(outlineLevel ? outlineLevel->getInt() : 0);
+ 
+   m_impl->getSplitGuard().openLevel();
+ 
+@@ -369,7 +367,7 @@ void EPUBTextGenerator::insertText(const librevenge::RVNGString &text)
+   if (m_impl->m_inHeader || m_impl->m_inFooter)
+     m_impl->m_currentHeaderOrFooter->addInsertText(text);
+ 
+-  if (m_impl->m_inHeading)
++  if (m_impl->getSplitGuard().inHeading())
+     m_impl->getHtmlManager().insertHeadingText(text.cstr());
+ 
+   m_impl->getSplitGuard().incrementSize(text.len());
+-- 
+2.12.3
+
