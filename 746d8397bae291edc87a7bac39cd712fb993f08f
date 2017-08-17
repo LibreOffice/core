@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_43883ce8",
+        "filename": "offapi/com/sun/star/util/SearchOptions2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:53:17Z",
+      "side": 1,
+      "message": "this doesn\u0027t even make sense?",
+      "revId": "746d8397bae291edc87a7bac39cd712fb993f08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_636d3832",
+        "filename": "udkapi/com/sun/star/reflection/XIdlArray.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:53:17Z",
+      "side": 1,
+      "message": "should be \"Reallocates\"",
+      "revId": "746d8397bae291edc87a7bac39cd712fb993f08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

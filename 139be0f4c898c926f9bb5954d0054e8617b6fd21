@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_230c1094",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedClient.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:53:17Z",
+      "side": 0,
+      "message": "i think the original artist meant \"wants to\", but it would certainly be interesting to hear it chant!",
+      "revId": "139be0f4c898c926f9bb5954d0054e8617b6fd21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_037e34e4",
+        "filename": "offapi/com/sun/star/frame/XDispatch.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:53:17Z",
+      "side": 0,
+      "message": "couple lines above its \"SynchronMode\"",
+      "revId": "139be0f4c898c926f9bb5954d0054e8617b6fd21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_238330ce",
+        "filename": "offapi/com/sun/star/util/SearchOptions2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-17T19:53:17Z",
+      "side": 0,
+      "message": "\"augments\" is perfectly fine",
+      "revId": "139be0f4c898c926f9bb5954d0054e8617b6fd21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
