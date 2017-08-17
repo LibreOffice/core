@@ -69,7 +69,6 @@ namespace fileaccess {
 
     private:
         OUString m_aContentId;              // The URL string
-        OUString m_aNormalizedId;           // The somehow normalized string
         OUString m_aProviderScheme;
     };
 

@@ -34,15 +34,12 @@ FileContentIdentifier::FileContentIdentifier(
     if( IsNormalized )
     {
         fileaccess::TaskManager::getUrlFromUnq( aUnqPath,m_aContentId );
-        m_aNormalizedId = aUnqPath;
-        TaskManager::getScheme( m_aProviderScheme );
     }
     else
     {
-        fileaccess::TaskManager::getUnqFromUrl( aUnqPath,m_aNormalizedId );
         m_aContentId = aUnqPath;
-        TaskManager::getScheme( m_aProviderScheme );
     }
+    TaskManager::getScheme( m_aProviderScheme );
 }
 
 FileContentIdentifier::~FileContentIdentifier()
