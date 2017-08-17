@@ -65,8 +65,9 @@ void Point::dump() const
 
 } // dgm namespace
 
-DiagramData::DiagramData()
-    : mpFillProperties( new FillProperties )
+DiagramData::DiagramData() :
+    mpFillProperties( new FillProperties ),
+    mnMaxDepth(0)
 {
 }
 
@@ -298,6 +299,8 @@ void Diagram::build(  )
             const sal_Int32 nDepth=calcDepth(aPresOfNodeIterCalcLevel->first,
                                              getData()->getConnections());
             aPresOfNodeIterCalcLevel->second = nDepth != 0 ? nDepth : -1;
+            if (nDepth > getData()->getMaxDepth())
+                getData()->setMaxDepth(nDepth);
             ++aPresOfNodeIterCalcLevel;
         }
 
