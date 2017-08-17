@@ -281,7 +281,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
 
         pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
     }
-    else
+    else if (nWW8BrushStyle || !m_bAutoFillColor)
         pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
                             : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
 
