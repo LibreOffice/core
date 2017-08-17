@@ -57,8 +57,6 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool shouldVisitTemplateInstantiations () const { return true; }
-
     bool VisitBinAssign(BinaryOperator const *);
     bool VisitVarDecl(VarDecl const *);
     bool VisitCastExpr(CastExpr const *);
