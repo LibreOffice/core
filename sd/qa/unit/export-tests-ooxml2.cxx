@@ -104,6 +104,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testTdf111798();
     void testTdf111518();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testTdf111798);
     CPPUNIT_TEST(testTdf111518);
 
     CPPUNIT_TEST_SUITE_END();
@@ -790,6 +792,63 @@ void SdOOXMLExportTest2::testTdf105739()
     }
 
     xShell->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf111798()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf111798.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    const OUString data[][29] =
+    {
+        {
+            "2700000", "2458080", "2414880", "1439640", "1440000",
+            "moveTo",  "0",    "3000",
+            "lnTo[1]", "3000", "3000",
+            "lnTo[2]", "3000", "4000",
+            "lnTo[3]", "4000", "2000",
+            "lnTo[4]", "3000", "0",
+            "lnTo[5]", "3000", "1000",
+            "lnTo[6]", "0",    "1000",
+            "lnTo[7]", "0",    "3000"
+        },
+        {
+            "2700000", "6778080", "2414880", "1439640", "1440000",
+            "moveTo",  "3000", "0",
+            "lnTo[1]", "3000", "3000",
+            "lnTo[2]", "4000", "3000",
+            "lnTo[3]", "2000", "4000",
+            "lnTo[4]", "0", "3000",
+            "lnTo[5]", "1000", "3000",
+            "lnTo[6]", "1000", "0",
+            "lnTo[7]", "3000", "0"
+        }
+    };
+
+    for (size_t nShapeIndex = 0; nShapeIndex < SAL_N_ELEMENTS(data); nShapeIndex++)
+    {
+        size_t nDataIndex = 0;
+
+        const OString sSpPr = "/p:sld/p:cSld/p:spTree/p:sp[" + OString::number(nShapeIndex + 1) + "]/p:spPr";
+        const OString sXfrm = sSpPr + "/a:xfrm";
+        assertXPath(pXmlDoc, sXfrm, "rot", data[nShapeIndex][nDataIndex++]);
+        const OString sOff = sXfrm + "/a:off";
+        assertXPath(pXmlDoc, sOff, "x", data[nShapeIndex][nDataIndex++]);
+        assertXPath(pXmlDoc, sOff, "y", data[nShapeIndex][nDataIndex++]);
+        const OString sExt = sXfrm + "/a:ext";
+        assertXPath(pXmlDoc, sExt, "cx", data[nShapeIndex][nDataIndex++]);
+        assertXPath(pXmlDoc, sExt, "cy", data[nShapeIndex][nDataIndex++]);
+
+        while (nDataIndex < SAL_N_ELEMENTS(data[nShapeIndex]))
+        {
+            const OString sPt = sSpPr + "/a:custGeom/a:pathLst/a:path/a:" + data[nShapeIndex][nDataIndex++].toUtf8() + "/a:pt";
+            assertXPath(pXmlDoc, sPt, "x", data[nShapeIndex][nDataIndex++]);
+            assertXPath(pXmlDoc, sPt, "y", data[nShapeIndex][nDataIndex++]);
+        }
+    }
 }
 
 void SdOOXMLExportTest2::testTdf111518()

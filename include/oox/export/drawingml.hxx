@@ -188,8 +188,8 @@ public:
             const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=nullptr );
     void WriteBlipMode( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
 
-    void WriteShapeTransformation( const css::uno::Reference< css::drawing::XShape >& rXShape,
-                  sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false );
+    void WriteShapeTransformation(const css::uno::Reference< css::drawing::XShape >& rXShape,
+                  sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false, bool bSuppressFlipping = false );
     void WriteTransformation( const Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
