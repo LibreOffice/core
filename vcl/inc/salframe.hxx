@@ -84,8 +84,7 @@ namespace o3tl {
     template<> struct typed_flags<SalFrameStyleFlags> : is_typed_flags<SalFrameStyleFlags, 0x788001ff> {};
 };
 
-// - extended frame style                 -
-// - (sal equivalent to extended WinBits) -
+// Extended frame style (sal equivalent to extended WinBits)
 typedef sal_uInt64 SalExtStyle;
 #define SAL_FRAME_EXT_STYLE_DOCUMENT        SalExtStyle(0x00000001)
 #define SAL_FRAME_EXT_STYLE_DOCMODIFIED     SalExtStyle(0x00000002)
