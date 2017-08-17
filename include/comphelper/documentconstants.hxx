@@ -110,13 +110,15 @@ enum class SfxFilterFlags
 
     ENCRYPTION        = 0x01000000L,
     PASSWORDTOMODIFY  = 0x02000000L,
+    GPGENCRYPTION     = 0x04000000L,
     PREFERED          = 0x10000000L,
     STARTPRESENTATION = 0x20000000L,
     SUPPORTSSIGNING   = 0x40000000L,
 };
+
 namespace o3tl
 {
-    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x739f157fL> {};
+    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x779f157fL> {};
 }
 
 #define SFX_FILTER_NOTINSTALLED (SfxFilterFlags::MUSTINSTALL | SfxFilterFlags::CONSULTSERVICE)
