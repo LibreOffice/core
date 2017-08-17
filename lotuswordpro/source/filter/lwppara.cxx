@@ -904,8 +904,8 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
         m_nLevel = nLevel;//for get para level
     }
 
-    return ( pBulletStyleMgr->AddBulletList(pCont, bOrdered, m_aBulletStyleName,
-            nLevel, m_pBullOver->IsSkip()) );
+    return pBulletStyleMgr->AddBulletList(pCont, bOrdered, m_aBulletStyleName,
+            nLevel, m_pBullOver->IsSkip());
 }
 
 LwpNumberingOverride* LwpPara::GetParaNumbering()

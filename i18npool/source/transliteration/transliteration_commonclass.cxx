@@ -101,7 +101,7 @@ transliteration_commonclass::compareSubstring(
 sal_Int32 SAL_CALL
 transliteration_commonclass::compareString( const OUString& str1, const OUString& str2 )
 {
-    return( compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength()));
+    return compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength());
 }
 
 OUString SAL_CALL

@@ -90,7 +90,7 @@ public:
 
     void SetWindow(vcl::Window* pWin) { pWindow = pWin; }
 
-    sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }
+    sal_uInt16 GetSlotID() const { return aSfxRequest.GetSlot(); }
 
     bool    IsDetectiveHit( const Point& rLogicPos );
 

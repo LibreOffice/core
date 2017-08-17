@@ -856,7 +856,7 @@ inline SwPaM* SwCursorShell::GetStackCursor() const { return m_pStackCursor; }
 
 inline void SwCursorShell::SetMark() { m_pCurrentCursor->SetMark(); }
 
-inline bool SwCursorShell::HasMark() { return( m_pCurrentCursor->HasMark() ); }
+inline bool SwCursorShell::HasMark() { return m_pCurrentCursor->HasMark(); }
 
 inline bool SwCursorShell::IsSelection() const
 {

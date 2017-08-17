@@ -231,7 +231,7 @@ namespace drawinglayer
                 return false;
             }
 
-            return (pA->operator==(*pB));
+            return pA->operator==(*pB);
         }
 
         bool Primitive2DContainer::operator==(const Primitive2DContainer& rB) const

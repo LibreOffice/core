@@ -308,7 +308,7 @@ Type SAL_CALL GlobalEventConfig_Impl::getElementType(  )
 
 bool SAL_CALL GlobalEventConfig_Impl::hasElements(  )
 {
-    return ( m_eventBindingHash.empty() );
+    return m_eventBindingHash.empty();
 }
 
 // and now the wrapper
