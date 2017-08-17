@@ -19,8 +19,6 @@
 
 #include "diagramlayoutatoms.hxx"
 
-#include <functional>
-
 #include <basegfx/numeric/ftools.hxx>
 
 #include "oox/helper/attributelist.hxx"

@@ -19,10 +19,6 @@
 
 #include "layoutatomvisitors.hxx"
 
-#include <functional>
-
-#include <basegfx/numeric/ftools.hxx>
-
 #include "drawingml/customshapeproperties.hxx"
 
 using namespace ::com::sun::star;
