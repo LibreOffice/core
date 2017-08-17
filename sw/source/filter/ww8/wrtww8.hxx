@@ -680,7 +680,7 @@ public:
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) = 0;
 
-    virtual void AppendSmartTags(const SwTextNode& /*rTextNode*/) { }
+    virtual void AppendSmartTags(SwTextNode& /*rTextNode*/) { }
 
     //For i120928,add this interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTextNode& rNd) = 0;
@@ -794,7 +794,7 @@ protected:
     void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos );
 
     /// Output SwTextNode
-    virtual void OutputTextNode( const SwTextNode& );
+    virtual void OutputTextNode( SwTextNode& );
 
     /// Setup the chapter fields (maChapterFieldLocs).
     void GatherChapterFields();
@@ -838,7 +838,7 @@ protected:
     /// Call the right (virtual) function according to the type of the item.
     ///
     /// One of OutputTextNode(), OutputGrfNode(), or OutputOLENode()
-    void OutputContentNode( const SwContentNode& );
+    void OutputContentNode( SwContentNode& );
 
     /// Find the nearest bookmark from the current position.
     ///
@@ -1041,7 +1041,7 @@ public:
 
     virtual void AppendAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen ) override;
 
-    virtual void AppendSmartTags(const SwTextNode& rTextNode) override;
+    virtual void AppendSmartTags(SwTextNode& rTextNode) override;
 
     virtual void ExportGrfBullet(const SwTextNode& rNd) override;
     void OutGrfBullets(const ww8::Frame &rFrame);

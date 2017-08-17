@@ -2022,7 +2022,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nA
     }
 }
 
-void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
+void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 {
     SAL_INFO( "sw.ww8", "<OutWW8_SwTextNode>" );
 
@@ -2197,7 +2197,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
             if ( ch == CH_TXT_ATR_FIELDSTART )
             {
-                SwPosition aPosition( rNode, SwIndex( const_cast< SwTextNode* >( &rNode ), nAktPos ) );
+                SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
@@ -2246,7 +2246,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             }
             else if ( ch == CH_TXT_ATR_FIELDEND )
             {
-                SwPosition aPosition( rNode, SwIndex( const_cast< SwTextNode* >( &rNode ), nAktPos ) );
+                SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
 
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
@@ -2270,7 +2270,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             }
             else if ( ch == CH_TXT_ATR_FORMELEMENT )
             {
-                SwPosition aPosition( rNode, SwIndex( const_cast< SwTextNode* >( &rNode ), nAktPos ) );
+                SwPosition aPosition( rNode, SwIndex( &rNode, nAktPos ) );
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
@@ -3079,7 +3079,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     }
 }
 
-void MSWordExportBase::OutputContentNode( const SwContentNode& rNode )
+void MSWordExportBase::OutputContentNode( SwContentNode& rNode )
 {
     switch ( rNode.GetNodeType() )
     {

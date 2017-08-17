@@ -140,7 +140,7 @@ protected:
     bool DisallowInheritingOutlineNumbering(const SwFormat& rFormat) override;
 
     /// Output SwTextNode is depending on outline export mode
-    void OutputTextNode(const SwTextNode&) override;
+    void OutputTextNode(SwTextNode&) override;
 
     /// Output SwEndNode
     void OutputEndNode(const SwEndNode&) override;

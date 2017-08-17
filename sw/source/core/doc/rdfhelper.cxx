@@ -23,12 +23,9 @@
 
 using namespace com::sun::star;
 
-std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& rType, const SwTextNode& rNode)
+std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& rType, SwTextNode& rTextNode)
 {
     std::map<OUString, OUString> aRet;
-
-    // We only read the node, but CreateXParagraph() needs a non-cost one.
-    auto& rTextNode = const_cast<SwTextNode&>(rNode);
 
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
