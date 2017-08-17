@@ -13,8 +13,6 @@ normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
 def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
-# The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
-# I have not yet found a way of suppressing the gbuild output.
 with io.open("loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
