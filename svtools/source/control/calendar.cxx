@@ -67,79 +67,7 @@ static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, bool 
         pTable->erase( rDate.GetDate() );
 }
 
-static void ImplCalendarSelectDateRange( IntDateSet* pTable,
-                                         const Date& rStartDate,
-                                         const Date& rEndDate,
-                                         bool bSelect )
-{
-    Date aStartDate = rStartDate;
-    Date aEndDate = rEndDate;
-    if ( aStartDate > aEndDate )
-    {
-        Date aTempDate = aStartDate;
-        aStartDate = aEndDate;
-        aEndDate = aTempDate;
-    }
 
-    if ( bSelect )
-    {
-        while ( aStartDate <= aEndDate )
-        {
-            pTable->insert( aStartDate.GetDate() );
-            ++aStartDate;
-        }
-    }
-    else
-    {
-        for ( IntDateSet::const_iterator it = pTable->begin(); it != pTable->end(); )
-        {
-            Date aDate( *it );
-            if ( aDate > aEndDate )
-                break;
-
-            if ( aDate >= aStartDate )
-                it = pTable->erase(it);
-            else
-                ++it;
-        }
-    }
-}
-
-static void ImplCalendarUnSelectDateRange( IntDateSet* pTable,
-                                           IntDateSet* pOldTable,
-                                           const Date& rStartDate,
-                                           const Date& rEndDate )
-{
-    Date aStartDate = rStartDate;
-    Date aEndDate = rEndDate;
-    if ( aStartDate > aEndDate )
-    {
-        Date aTempDate = aStartDate;
-        aStartDate = aEndDate;
-        aEndDate = aTempDate;
-    }
-
-    for ( IntDateSet::const_iterator it = pTable->begin(); it != pTable->end(); )
-    {
-        Date aDate( *it );
-        if ( aDate > aEndDate )
-            break;
-
-        if ( aDate >= aStartDate )
-            it = pTable->erase(it);
-        else
-            ++it;
-    }
-
-    for ( IntDateSet::const_iterator it = pOldTable->begin(); it != pOldTable->end(); ++it )
-    {
-        Date aDate( *it );
-        if ( aDate > aEndDate )
-            break;
-        if ( aDate >= aStartDate )
-            pTable->insert( aDate.GetDate() );
-    }
-}
 
 inline void ImplCalendarClearSelectDate( IntDateSet* pTable )
 {
@@ -162,7 +90,6 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbFormat                = true;
     mbDrag                  = false;
     mbSelection             = false;
-    mbMultiSelection        = false;
     mbUnSel                 = false;
     mbMenuDown              = false;
     mbSpinDown              = false;
@@ -226,7 +153,7 @@ void Calendar::ImplInitSettings()
 }
 
 Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_RANGESELECT | WB_MULTISELECT) ),
+    Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK) ),
     maCalendarWrapper( Application::GetAppLocaleDataWrapper().getComponentContext() ),
     maOldFormatFirstDate( 0, 0, 1900 ),
     maOldFormatLastDate( 0, 0, 1900 ),
@@ -940,7 +867,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 }
 
 void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
-                                bool bMove, bool bExpand, bool bExtended )
+                                bool bMove )
 {
     std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
     Date    aOldDate = maCurDate;
@@ -949,83 +876,19 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
         --aTempDate;
 
-    if ( mbMultiSelection )
+    if ( aTempDate < maCurDate )
+        mbSelLeft = true;
+    else
+        mbSelLeft = false;
+    if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
+        aTempDate = maOldCurDate;
+    if ( !bMove )
+        maAnchorDate = aTempDate;
+    if ( aTempDate != maCurDate )
     {
         maCurDate = aTempDate;
-        mbSelLeft = aTempDate < maAnchorDate;
-
-        if ( bMove )
-        {
-            if ( mbSelLeft )
-            {
-                ImplCalendarUnSelectDateRange( mpSelectTable, mpRestoreSelectTable, Date( 1, 1, 0 ), aTempDate );
-                ImplCalendarUnSelectDateRange( mpSelectTable, mpRestoreSelectTable, maAnchorDate, Date( 31, 12, 9999 ) );
-            }
-            else
-            {
-                ImplCalendarUnSelectDateRange( mpSelectTable, mpRestoreSelectTable, Date( 1, 1, 0 ), maAnchorDate );
-                ImplCalendarUnSelectDateRange( mpSelectTable, mpRestoreSelectTable, aTempDate, Date( 31, 12, 9999 ) );
-            }
-            ImplCalendarSelectDateRange( mpSelectTable, aTempDate, maAnchorDate, !mbUnSel );
-        }
-        else
-        {
-            if ( bExpand )
-            {
-                if ( !bExtended )
-                {
-                    if ( mbSelLeft )
-                    {
-                        ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), aTempDate, false );
-                        ImplCalendarSelectDateRange( mpSelectTable, maAnchorDate, Date( 31, 12, 9999 ), false );
-                    }
-                    else
-                    {
-                        ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), maAnchorDate, false );
-                        ImplCalendarSelectDateRange( mpSelectTable, aTempDate, Date( 31, 12, 9999 ), false );
-                    }
-                }
-                ImplCalendarSelectDateRange( mpSelectTable, aTempDate, maAnchorDate, true );
-            }
-            else if ( bExtended && !(mnWinStyle & WB_RANGESELECT) )
-            {
-                maAnchorDate = aTempDate;
-                if ( IsDateSelected( aTempDate ) )
-                {
-                    mbUnSel = true;
-                    ImplCalendarSelectDate( mpSelectTable, aTempDate, false );
-                }
-                else
-                {
-                    ImplCalendarSelectDate( mpSelectTable, aTempDate, true );
-                }
-            }
-            else
-            {
-                maAnchorDate = aTempDate;
-                ImplCalendarClearSelectDate( mpSelectTable );
-                ImplCalendarSelectDate( mpSelectTable, aTempDate, true );
-            }
-
-            mpRestoreSelectTable = new IntDateSet( *mpSelectTable );
-        }
-    }
-    else
-    {
-        if ( aTempDate < maCurDate )
-            mbSelLeft = true;
-        else
-            mbSelLeft = false;
-        if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
-            aTempDate = maOldCurDate;
-        if ( !bMove )
-            maAnchorDate = aTempDate;
-        if ( aTempDate != maCurDate )
-        {
-            maCurDate = aTempDate;
-            ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
-            ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
-        }
+        ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
+        ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
     }
 
     bool bNewSel = *pOldSel != *mpSelectTable;
@@ -1153,7 +1016,7 @@ void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
         }
     }
     else
-        ImplMouseSelect( aTempDate, nHitTest, true, false, false );
+        ImplMouseSelect( aTempDate, nHitTest, true );
 }
 
 void Calendar::ImplEndTracking( bool bCancel )
@@ -1163,7 +1026,6 @@ void Calendar::ImplEndTracking( bool bCancel )
 
     mbDrag              = false;
     mbSelection         = false;
-    mbMultiSelection    = false;
     mbUnSel             = false;
     mbSpinDown          = false;
     mbPrevIn            = false;
@@ -1269,8 +1131,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                             StartTracking();
                         }
 
-                        mbMultiSelection = (mnWinStyle & (WB_MULTISELECT | WB_RANGESELECT)) != 0;
-                        ImplMouseSelect( aTempDate, nHitTest, false, rMEvt.IsShift(), rMEvt.IsMod1() );
+                        ImplMouseSelect( aTempDate, nHitTest, false );
                     }
                 }
             }
@@ -1311,9 +1172,6 @@ void Calendar::Tracking( const TrackingEvent& rTEvt )
 void Calendar::KeyInput( const KeyEvent& rKEvt )
 {
     Date    aNewDate = maCurDate;
-    bool    bMultiSel = (mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) != 0;
-    bool    bExpand = rKEvt.GetKeyCode().IsShift();
-    bool    bExtended = rKEvt.GetKeyCode().IsMod1();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -1353,23 +1211,6 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             aNewDate.AddDays( aNewDate.GetDaysInMonth() );
             break;
 
-        case KEY_SPACE:
-            if ( bMultiSel && !(mnWinStyle & WB_RANGESELECT) )
-            {
-                if ( !bExpand )
-                {
-                    bool bDateSel = IsDateSelected( maCurDate );
-                    SelectDate( maCurDate, !bDateSel );
-                    mbSelLeft = false;
-                    mbTravelSelect = true;
-                    Select();
-                    mbTravelSelect = false;
-                }
-            }
-            else
-                Control::KeyInput( rKEvt );
-            break;
-
         default:
             Control::KeyInput( rKEvt );
             break;
@@ -1377,38 +1218,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
 
     if ( aNewDate != maCurDate )
     {
-        if ( bMultiSel && bExpand )
-        {
-            std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
-            Date aOldAnchorDate = maAnchorDate;
-            mbSelLeft = aNewDate < maAnchorDate;
-            if ( !bExtended )
-            {
-                if ( mbSelLeft )
-                {
-                    ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), aNewDate, false );
-                    ImplCalendarSelectDateRange( mpSelectTable, maAnchorDate, Date( 31, 12, 9999 ), false );
-                }
-                else
-                {
-                    ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), maAnchorDate, false );
-                    ImplCalendarSelectDateRange( mpSelectTable, aNewDate, Date( 31, 12, 9999 ), false );
-                }
-            }
-            ImplCalendarSelectDateRange( mpSelectTable, aNewDate, maAnchorDate, true );
-            SetCurDate( aNewDate );
-            maAnchorDate = aOldAnchorDate;
-            ImplUpdateSelection( pOldSel.get() );
-        }
-        else
-        {
-            if ( mnWinStyle & WB_RANGESELECT )
-            {
-                SetNoSelection();
-                SelectDate( aNewDate );
-            }
-            SetCurDate( aNewDate );
-        }
+        SetCurDate( aNewDate );
         mbTravelSelect = true;
         Select();
         mbTravelSelect = false;
@@ -1610,13 +1420,8 @@ void Calendar::SetCurDate( const Date& rNewDate )
         maCurDate       = rNewDate;
         maAnchorDate    = maCurDate;
 
-        if ( !(mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) )
-        {
-            ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
-            ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
-        }
-        else if ( !HasFocus() )
-            bUpdate = false;
+        ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
+        ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
 
         // shift actual date in the visible area
         if ( mbFormat || (maCurDate < GetFirstMonth()) )
@@ -1826,7 +1631,6 @@ void Calendar::EndSelection()
 
         mbDrag              = false;
         mbSelection         = false;
-        mbMultiSelection    = false;
         mbSpinDown          = false;
         mbPrevIn            = false;
         mbNextIn            = false;
@@ -2121,11 +1925,6 @@ bool CalendarField::ShowDropDown( bool bShow )
                 aDate = maDefaultDate;
             else
                 aDate = Date( Date::SYSTEM );
-        }
-        if ( pCalendar->GetStyle() & (WB_RANGESELECT | WB_MULTISELECT) )
-        {
-            pCalendar->SetNoSelection();
-            pCalendar->SelectDate( aDate );
         }
         pCalendar->SetCurDate( aDate );
         Point       aPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
