@@ -134,6 +134,7 @@ private:
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
         mpFormulaGroupCxt(nullptr),
+        mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
         maCalcConfig( ScInterpreter::GetGlobalConfig()),
         mpUndoManager( nullptr ),
         mpEditEngine( nullptr ),
@@ -265,11 +266,6 @@ const sfx2::LinkManager* ScDocument::GetLinkManager() const
 
 sc::DocumentLinkManager& ScDocument::GetDocLinkManager()
 {
-    if (!mpDocLinkMgr)
-    {
-        ScMutationGuard aGuard(this, {ScMutationGuardFlags::CORE});
-        mpDocLinkMgr.reset(new sc::DocumentLinkManager(mpShell));
-    }
     return *mpDocLinkMgr;
 }
 
