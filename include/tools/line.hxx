@@ -46,7 +46,7 @@ public:
     bool            Intersection( const tools::Line& rLine, Point& rIntersection ) const;
 
     double          GetDistance( const double& rPtX, const double& rPtY ) const;
-    double          GetDistance( const Point& rPoint ) const { return( GetDistance( rPoint.X(), rPoint.Y() ) ); }
+    double          GetDistance( const Point& rPoint ) const { return GetDistance( rPoint.X(), rPoint.Y() ); }
 };
 
 } // namespace tools
