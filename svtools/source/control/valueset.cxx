@@ -243,11 +243,6 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             maVirDev->DrawRect(aRect);
             Point aTxtPos(aRect.Left() + 2, aRect.Top());
             long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
-            if (nStyle & WB_RADIOSEL)
-            {
-                aTxtPos.X() += 4;
-                aTxtPos.Y() += 4;
-            }
             if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
             {
                 maVirDev->SetClipRegion(vcl::Region(aRect));
@@ -398,8 +393,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     {
         nNoneHeight = nTxtHeight + nOff;
         nNoneSpace = mnSpacing;
-        if (nStyle & WB_RADIOSEL)
-            nNoneHeight += 8;
     }
     else
     {
@@ -799,43 +792,6 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
             if (bDrawSel)
             {
                 rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
-                rRenderContext.DrawRect(aRect);
-            }
-        }
-        else if (nStyle & WB_RADIOSEL)
-        {
-            aRect.Left()   += 3;
-            aRect.Top()    += 3;
-            aRect.Right()  -= 3;
-            aRect.Bottom() -= 3;
-            if (nStyle & WB_DOUBLEBORDER)
-            {
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-            }
-
-            if (bFocus)
-                ShowFocus(aRect);
-
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-
-            if (bDrawSel)
-            {
-                rRenderContext.SetLineColor(aDoubleColor);
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-                rRenderContext.DrawRect(aRect);
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
                 rRenderContext.DrawRect(aRect);
             }
         }
@@ -2217,8 +2173,6 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
     if ( nStyle & WB_NONEFIELD )
     {
         aSize.Height() += nTxtHeight + n + mnSpacing;
-        if ( nStyle & WB_RADIOSEL )
-            aSize.Height() += 8;
     }
 
     // sum possible ScrollBar width
