@@ -1548,6 +1548,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
     getCell(innerTable, "A1", "[outer:A2]\n[inner:A1]");
 }
 
+
+DECLARE_OOXMLIMPORT_TEST(testTdf43017, "tdf43017.docx")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    uno::Reference<text::XTextRange> xText = getRun(xParagraph, 2, "kick the bucket");
+
+    // Ensure that hyperlink text color is not blue (0x0000ff), but default (-1)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Hyperlink color should be black!",
+        sal_Int32(-1), getProperty<sal_Int32>(xText, "CharColor"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
