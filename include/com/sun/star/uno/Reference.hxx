@@ -36,6 +36,12 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
+#if defined LIBO_INTERNAL_ONLY && defined DBG_UTIL
+extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg2(
+    css::uno::XInterface * pInterface,
+    typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C();
+#endif
 
 namespace com
 {
@@ -76,9 +82,15 @@ inline XInterface * BaseReference::iquery_throw(
     XInterface * pQueried = iquery( pInterface, rType );
     if (pQueried)
         return pQueried;
+#if defined LIBO_INTERNAL_ONLY && defined DBG_UTIL
+    throw RuntimeException(
+        ::rtl::OUString( cppu_unsatisfied_iquery_msg2( pInterface, rType.getTypeLibType() ), SAL_NO_ACQUIRE ),
+        Reference< XInterface >( pInterface ) );
+#else
     throw RuntimeException(
         ::rtl::OUString( cppu_unsatisfied_iquery_msg( rType.getTypeLibType() ), SAL_NO_ACQUIRE ),
         Reference< XInterface >( pInterface ) );
+#endif
 }
 
 template< class interface_type >

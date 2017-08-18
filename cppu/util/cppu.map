@@ -156,3 +156,8 @@ GLIBCXX_3.4 {
         _ZGVNSt7num_put*; _ZNSt7num_put*;
         _ZNSs4_Rep20_S_empty_rep_storageE;
 };
+
+PRIVATE_1.0 {
+    global:
+       cppu_unsatisfied_iquery_msg2;
+};
