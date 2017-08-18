@@ -1243,11 +1243,6 @@ void SvxFontNameBox_Impl::Select()
     }
 }
 
-#ifndef WB_NO_DIRECTSELECT
-#define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
-#endif
-
-
 SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
                                PaletteManager&            rPaletteManager,
                                BorderColorStatus&         rBorderColorStatus,
