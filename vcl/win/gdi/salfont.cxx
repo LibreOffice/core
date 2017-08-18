@@ -1144,11 +1144,10 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     rDFA.SetPitch(PITCH_DONTKNOW);
 
     // Create temporary file name
-    char aFileName[] = "soAAT.fot";
     char aResourceName[512];
     int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
     int nLen = ::GetTempPathA( nMaxLen, aResourceName );
-    ::strncpy( aResourceName + nLen, aFileName, std::max( 0, nMaxLen - nLen ));
+    ::strncpy( aResourceName + nLen, "soAAT.fot", std::max( 0, nMaxLen - nLen ));
     ::DeleteFileA( aResourceName );
 
     // Create font resource file (typically with a .fot file name extension).

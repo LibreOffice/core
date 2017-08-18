@@ -589,7 +589,7 @@ bool WinOpenGLContext::ImplInit()
 
     // now setup the shared context; this needs a temporary context already
     // set up in order to work
-    int attribs [] =
+    int const attribs [] =
     {
 #ifdef DBG_UTIL
         WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
