@@ -321,7 +321,9 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, ListBox&, void )
 {
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions );
+    OUString aSearchTerm( m_pSearchEdit->GetText() );
+
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm );
 }
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandHdl, Button *, void )

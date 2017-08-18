@@ -289,7 +289,9 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )
 {
-    m_pCommandCategoryListBox->categorySelected( m_pFunctions );
+    OUString aSearchTerm( m_pSearchEdit->GetText() );
+
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm );
 }
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, Button *, void )

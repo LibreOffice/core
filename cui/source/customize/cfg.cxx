@@ -1133,6 +1133,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     , m_pContentsListBox(nullptr)
     , m_pSelectorDlg(nullptr)
 {
+    get(m_pSearchEdit, "searchEntry");
     get(m_pCommandCategoryListBox, "commandcategorylist");
     get(m_pFunctions, "functions");
 
@@ -1155,6 +1156,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
+
+    m_pSearchEdit->SetUpdateDataHdl ( LINK( this, SvxConfigPage, SearchUpdateHdl ));
+    m_pSearchEdit->EnableUpdateData();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1165,6 +1169,7 @@ SvxConfigPage::~SvxConfigPage()
 void SvxConfigPage::dispose()
 {
     m_pTopLevelListBox.clear();
+    m_pSearchEdit.clear();
     m_pCommandCategoryListBox.clear();
     m_pContents.clear();
     m_pEntries.clear();
@@ -1744,6 +1749,13 @@ IMPL_LINK_NOARG( SvxConfigPage, AsyncInfoMsg, void*, void )
 IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
+}
+
+IMPL_LINK_NOARG(SvxConfigPage, SearchUpdateHdl, Edit&, void)
+{
+    OUString aSearchTerm( m_pSearchEdit->GetText() );
+
+    m_pCommandCategoryListBox->categorySelected( m_pFunctions, aSearchTerm );
 }
 
 void SvxConfigPage::MoveEntry( bool bMoveUp )
