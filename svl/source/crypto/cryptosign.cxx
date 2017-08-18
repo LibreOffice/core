@@ -252,6 +252,9 @@ const SEC_ASN1Template IssuerSerialTemplate[] =
  *     issuerSerial IssuerSerial OPTIONAL
  * }
  */
+
+SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
+
 const SEC_ASN1Template ESSCertIDv2Template[] =
 {
     {SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(ESSCertIDv2)},
