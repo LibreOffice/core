@@ -63,7 +63,6 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             nPolyEdit       ( 0 ),
             bEditMode       ( false ),
             bSdrMode        ( false ),
-            bAnim           ( false ),
             mbInIdleUpdate  ( false ),
             pModel          ( nullptr ),
             pView           ( nullptr )
@@ -103,7 +102,6 @@ void GraphCtrl::dispose()
 void GraphCtrl::SetWinStyle( WinBits nWinBits )
 {
     nWinStyle = nWinBits;
-    bAnim = ( nWinStyle & WB_ANIMATION ) == WB_ANIMATION;
     bSdrMode = ( nWinStyle & WB_SDRMODE ) == WB_SDRMODE;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -168,7 +166,7 @@ void GraphCtrl::InitSdrModel()
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
 {
     // If possible we dither bitmaps for the display
-    if ( !bAnim && ( rGraphic.GetType() == GraphicType::Bitmap )  )
+    if ( rGraphic.GetType() == GraphicType::Bitmap  )
     {
         if ( rGraphic.IsTransparent() )
         {

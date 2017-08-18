@@ -30,7 +30,6 @@ class GraphCtrlUserCall;
 class SvxGraphCtrlAccessibleContext;
 
 #define WB_SDRMODE      ((WinBits)0x0080)
-#define WB_ANIMATION    ((WinBits)0x0100)
 
 class SVX_DLLPUBLIC GraphCtrl : public Control
 {
@@ -51,7 +50,6 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     sal_uInt16          nPolyEdit;
     bool                bEditMode;
     bool                bSdrMode;
-    bool                bAnim;
     bool                mbInIdleUpdate;
 
                         DECL_LINK( UpdateHdl, Timer*, void );
