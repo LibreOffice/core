@@ -13,17 +13,10 @@
 /**
  * Launch a child process with the specified arguments.
  * @note argv[0] is ignored
- * @note The form of this function that takes char **argv expects UTF-8
  */
-
 BOOL
 WinLaunchChild(const wchar_t *exePath, int argc,
                wchar_t **argv, HANDLE userToken = nullptr,
-               HANDLE *hProcess = nullptr);
-
-BOOL
-WinLaunchChild(const wchar_t *exePath, int argc,
-               char **argv, HANDLE userToken = nullptr,
                HANDLE *hProcess = nullptr);
 
 wchar_t* MakeCommandLine(int argc, WCHAR **argv);
