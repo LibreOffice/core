@@ -2207,11 +2207,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
             // First check if the style exists in the document.
-            StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByStyleName( sConvertedName );
+            StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByConvertedStyleName( sConvertedName );
             bool bExists = pEntry.get( ) && ( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR );
-
-            // Add the property if the style exists
-            if ( bExists && m_pImpl->GetTopContext() )
+            // Add the property if the style exists, but do not add it elements in TOC:
+            // they will receive later another style references from TOC
+            if ( bExists && m_pImpl->GetTopContext() && !m_pImpl->IsInTOC())
                 m_pImpl->GetTopContext()->Insert( PROP_CHAR_STYLE_NAME, uno::makeAny( sConvertedName ) );
         }
     break;
