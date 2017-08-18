@@ -51,10 +51,6 @@
 
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.
 // But our adjustments must take place.
-#ifndef WB_RIGHT_ALIGNED
-#define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
-#endif
-
 static bool bProtectDocShellVisArea = false;
 
 static sal_uInt16 nPgNum = 0;
