@@ -461,7 +461,7 @@
 #define HID_FUNC_DM                                             "SC_HID_FUNC_DM"
 #define HID_FUNC_ZEICHEN                                        "SC_HID_FUNC_ZEICHEN"
 #define HID_FUNC_SAEUBERN                                       "SC_HID_FUNC_SAEUBERN"
-#define HID_FUNC_SAEUBERN_OOXML                                 "SC_HID_FUNC_SAEUBERN_OOXML"
+#define HID_FUNC_CLEAN_MS                                       "SC_HID_FUNC_CLEAN_MS"
 #define HID_FUNC_VERKETTEN                                      "SC_HID_FUNC_VERKETTEN"
 #define HID_FUNC_IDENTISCH                                      "SC_HID_FUNC_IDENTISCH"
 #define HID_FUNC_FINDEN                                         "SC_HID_FUNC_FINDEN"

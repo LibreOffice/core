@@ -3312,17 +3312,17 @@ void ScInterpreter::ScNumberValue()
 }
 
 //2do: this should be a proper unicode string method
-static inline bool lcl_ScInterpreter_IsPrintable_OOXML( sal_Unicode c )
+static inline bool lcl_ScInterpreter_IsPrintable_MS( sal_Unicode c )
 {
     return c > 0x1f;
 }
 
-void ScInterpreter::ScClean_OOXML()
+void ScInterpreter::ScClean_MS()
 {
     OUString aStr = GetString().getString();
     for ( sal_Int32 i = 0; i < aStr.getLength(); i++ )
     {
-        if ( !lcl_ScInterpreter_IsPrintable_OOXML( aStr[i] ) )
+        if ( !lcl_ScInterpreter_IsPrintable_MS( aStr[i] ) )
             aStr = aStr.replaceAt(i,1,"");
     }
     PushString(aStr);
