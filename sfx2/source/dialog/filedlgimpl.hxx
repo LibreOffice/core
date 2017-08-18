@@ -76,6 +76,7 @@ namespace sfx2
 
         bool                    mbHasPassword           : 1;
         bool                    mbIsPwdEnabled          : 1;
+        bool                    mbIsGpgEnabled          : 1;
         bool                    m_bHaveFilterOptions    : 1;
         bool                    mbHasVersions           : 1;
         bool                    mbHasAutoExt            : 1;
