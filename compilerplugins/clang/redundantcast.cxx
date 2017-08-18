@@ -645,7 +645,7 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     report(
         DiagnosticsEngine::Warning,
         "redundant functional cast from %0 to %1", expr->getExprLoc())
-        << t2 << t1 << expr->getSourceRange();
+        << sub->getType() << t1 << expr->getSourceRange();
     return true;
 }
 
