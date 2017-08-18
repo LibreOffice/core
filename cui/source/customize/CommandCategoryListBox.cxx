@@ -25,15 +25,27 @@
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 #include <vcl/builderfactory.hxx>
 
+// include search util
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <unotools/textsearch.hxx>
+
 #include "dialmgr.hxx"
 #include "strings.hrc"
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
+#include <i18nutil/searchopt.hxx>
 
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent, WinBits nStyle)
     : ListBox( pParent, nStyle)
 {
     SetDropDownLineCount(25);
+
+    //Initialize search util
+    m_searchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
+    m_searchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+    m_searchOptions.searchFlag |= (css::util::SearchFlags::REG_NOT_BEGINOFLINE
+                                | css::util::SearchFlags::REG_NOT_ENDOFLINE);
 }
 
 VCL_BUILDER_FACTORY(CommandCategoryListBox);
@@ -126,11 +138,25 @@ void CommandCategoryListBox::Init(
 
 void CommandCategoryListBox::FillFunctionsList(
     const css::uno::Sequence<css::frame::DispatchInformation>& xCommands,
-    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox)
+    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
+    const OUString& filterTerm )
 {
+    // Setup search filter parameters
+    m_searchOptions.searchString = filterTerm;
+    utl::TextSearch textSearch( m_searchOptions );
+
     for (const auto & rInfo : xCommands)
     {
-        OUString sUIName = MapCommand2UIName(rInfo.Command);
+        OUString sUIName    = MapCommand2UIName(rInfo.Command);
+        sal_Int32 aStartPos = 0;
+        sal_Int32 aEndPos   = sUIName.getLength();
+
+        // Apply the search filter
+        if (!filterTerm.isEmpty()
+            && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+        {
+            continue;
+        }
 
         SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName );
 
@@ -169,7 +195,8 @@ OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
     return sUIName;
 }
 
-void CommandCategoryListBox::categorySelected( const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox )
+void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
+                                                const OUString& filterTerm )
 {
     SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(GetSelectEntryData());
     pFunctionListBox->SetUpdateMode(false);
@@ -195,7 +222,7 @@ void CommandCategoryListBox::categorySelected( const VclPtr<SfxConfigFunctionLis
                     {
                         lCommands = xProvider->getConfigurableDispatchInformation(
                                         pCurrentInfo->nUniqueID );
-                        FillFunctionsList( lCommands, pFunctionListBox );
+                        FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
                     }
                     catch( css::container::NoSuchElementException& )
                     {
@@ -213,7 +240,7 @@ void CommandCategoryListBox::categorySelected( const VclPtr<SfxConfigFunctionLis
                 xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::frame::DispatchInformation > lCommands =
                 xProvider->getConfigurableDispatchInformation(nGroup);
-            FillFunctionsList( lCommands, pFunctionListBox );
+            FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
             break;
         }
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
