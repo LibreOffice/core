@@ -12,8 +12,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <boost/optional.hpp>
-
 #include "plugin.hxx"
 #include "compat.hxx"
 #include "check.hxx"
@@ -50,7 +48,8 @@ public:
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const *);
     bool TraverseStaticAssertDecl(StaticAssertDecl *);
 private:
-    boost::optional<APSInt> getExprValue(const Expr* arg);
+    // note, abusing std::unique_ptr as a std::optional lookalike
+    std::unique_ptr<APSInt> getExprValue(const Expr* arg);
 };
 
 bool ExpressionAlwaysZero::VisitBinaryOperator( BinaryOperator const * binaryOperator )
@@ -97,17 +96,17 @@ bool ExpressionAlwaysZero::VisitCXXOperatorCallExpr( CXXOperatorCallExpr const *
     return true;
 }
 
-boost::optional<APSInt> ExpressionAlwaysZero::getExprValue(Expr const * expr)
+std::unique_ptr<APSInt> ExpressionAlwaysZero::getExprValue(Expr const * expr)
 {
     expr = expr->IgnoreParenCasts();
     // ignore this, it seems to trigger an infinite recursion
     if (isa<UnaryExprOrTypeTraitExpr>(expr)) {
-        return boost::optional<APSInt>();
+        return std::unique_ptr<APSInt>();
     }
     APSInt x1;
     if (expr->EvaluateAsInt(x1, compiler.getASTContext()))
-        return x1;
-    return boost::optional<APSInt>();
+        return std::unique_ptr<APSInt>(new APSInt(x1));
+    return std::unique_ptr<APSInt>();
 }
 
 // these will often evaluate to zero harmlessly
