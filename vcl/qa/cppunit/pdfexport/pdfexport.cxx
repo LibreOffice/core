@@ -33,8 +33,6 @@ using namespace ::com::sun::star;
 namespace
 {
 
-const char* const DATA_DIRECTORY = "/vcl/qa/cppunit/pdfexport/data/";
-
 /// Tests the PDF export filter.
 class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
@@ -121,6 +119,8 @@ void PdfExportTest::tearDown()
 }
 
 #if HAVE_FEATURE_PDFIUM
+
+const char* const DATA_DIRECTORY = "/vcl/qa/cppunit/pdfexport/data/";
 
 void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocument)
 {
