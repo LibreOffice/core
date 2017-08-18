@@ -10,6 +10,11 @@
 #include <windows.h>
 #endif
 
+/**
+ * Launch a child process with the specified arguments.
+ * @note argv[0] is ignored
+ * @note The form of this function that takes char **argv expects UTF-8
+ */
 
 BOOL
 WinLaunchChild(const wchar_t *exePath, int argc,

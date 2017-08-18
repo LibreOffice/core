@@ -9,6 +9,8 @@
 #include <cstring>
 #include <cwchar>
 
+#include <comphelper/windowsStart.hxx>
+
 // Needed for CreateEnvironmentBlock
 #include <userenv.h>
 #pragma comment(lib, "userenv.lib")
@@ -162,17 +164,6 @@ MakeCommandLine(int argc, wchar_t **argv)
 
     return s;
 }
-
-/**
- * Launch a child process with the specified arguments.
- * @note argv[0] is ignored
- * @note The form of this function that takes char **argv expects UTF-8
- */
-BOOL
-WinLaunchChild(const wchar_t *exePath,
-               int argc, wchar_t **argv,
-               HANDLE userToken = nullptr,
-               HANDLE *hProcess = nullptr);
 
 BOOL
 WinLaunchChild(const wchar_t *exePath,
