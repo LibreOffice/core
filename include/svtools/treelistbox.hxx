@@ -118,11 +118,6 @@ enum class SvTreeAccRoleType
     TREE   = 0x02
 };
 
-typedef sal_Int64   ExtendedWinBits;
-
-// disable the behavior of automatically selecting a "CurEntry" upon painting the control
-#define EWB_NO_AUTO_CURENTRY        0x00000001
-
 enum class SvLBoxItemType {String, Button, ContextBmp};
 
 class SvLBoxTab
@@ -595,7 +590,7 @@ protected:
     void            AdjustEntryHeightAndRecalc();
 public:
 
-    void            SetExtendedWinBits( ExtendedWinBits _nBits );
+    void            SetNoAutoCurEntry( bool b );
 
     void            DisconnectFromModel();
 

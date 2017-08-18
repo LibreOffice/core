@@ -208,7 +208,7 @@ protected:
     Size                    aOutputSize;
     LBoxFlags               nFlags;
     WinBits                 m_nStyle;
-    ExtendedWinBits         nExtendedWinBits;
+    bool                    mbNoAutoCurEntry; // disable the behavior of automatically selecting a "CurEntry" upon painting the control
     SelectionEngine         aSelEng;
     sal_uLong               nVisibleCount;  // Number of lines in control
     bool                    bInVScrollHdl : 1;
@@ -244,7 +244,7 @@ public:
 
     void                Clear();
     void                SetStyle( WinBits i_nWinStyle );
-    void                SetExtendedWindowBits( ExtendedWinBits _nBits );
+    void                SetNoAutoCurEntry( bool b );
     void                SetModel( SvTreeList* pModel ) { pTree = pModel;}
 
     void                EntryInserted( SvTreeListEntry*);
