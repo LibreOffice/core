@@ -379,11 +379,13 @@ private:
 
     DECL_LINK(  SelectSaveInLocation, ListBox&, void );
     DECL_LINK( AsyncInfoMsg, void*, void );
+    DECL_LINK( SearchUpdateHdl, Edit&, void );
 
 protected:
 
     // Left side of the dialog where command categories and the available
     // commands in them are displayed as a searchable list
+    VclPtr<Edit>                               m_pSearchEdit;
     VclPtr<CommandCategoryListBox>             m_pCommandCategoryListBox;
     VclPtr<SfxConfigFunctionListBox>           m_pFunctions;
 

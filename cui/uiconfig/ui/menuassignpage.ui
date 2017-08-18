@@ -487,10 +487,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="searchEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_bottom">5</property>
+                        <property name="placeholder_text" translatable="yes">Type to search</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

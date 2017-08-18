@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
 
 #include <vcl/lstbox.hxx>
+#include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 
 class CommandCategoryListBox : public ListBox
@@ -31,6 +32,9 @@ class CommandCategoryListBox : public ListBox
     css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
+
+    // For search
+    i18nutil::SearchOptions2 m_searchOptions;
 
 public:
     CommandCategoryListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
@@ -44,7 +48,8 @@ public:
                     const OUString& sModuleLongName);
     void        FillFunctionsList(
                     const css::uno::Sequence< css::frame::DispatchInformation >& xCommands,
-                    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox);
+                    const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
+                    const OUString& filterTerm = OUString() );
     OUString    MapCommand2UIName(const OUString& sCommand);
 
     /**
@@ -52,7 +57,8 @@ public:
         And updates the functions list box to include
         the commands in the selected category.
     */
-    void categorySelected( const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox );
+    void categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
+                            const OUString& filterTerm = OUString() );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
