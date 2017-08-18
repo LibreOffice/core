@@ -490,10 +490,6 @@ include/editeng/editobj.hxx:141
     _Bool EditTextObject::Equals(const class EditTextObject &,_Bool) const
     _Bool bComparePool
     0
-include/editeng/fwdtitem.hxx:38
-    void SvxFontWidthItem::SvxFontWidthItem(const unsigned short,const unsigned short,const unsigned short)
-    const unsigned short nSz
-    0
 include/editeng/outliner.hxx:255
     void OutlinerView::SelectRange(int,int)
     int nFirst
