@@ -58,7 +58,7 @@ private:
     DECL_LINK( SelectCategory, ListBox&, void );
 
     DECL_LINK( AddCommandHdl, Button *, void );
-    //DECL_LINK( RemoveCommandHdl, Button *, void );
+    DECL_LINK( RemoveCommandHdl, Button *, void );
 
     void            UpdateButtonStates() override;
     short           QueryReset() override;
