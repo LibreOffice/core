@@ -2084,6 +2084,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
                         xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( zOrder >= 0 ) );
+
                         checkZOrderStatus = true;
                     }
                     else if ( aGrabBag[i].Name == "TxbxHasLink" )
@@ -2185,6 +2186,10 @@ void DomainMapper_Impl::PopShapeContext()
             {
             }
         }
+        uno::Reference<drawing::XShape> xShape(xObj, uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+        xShapePropertySet->setPropertyValue("LayerID", uno::makeAny(sal_Int16(1)));
+        xShapePropertySet->setPropertyValue("LayerName", uno::makeAny(OUString("Heaven")));
         m_aAnchoredStack.pop();
     }
     m_bFrameBtLr = false;

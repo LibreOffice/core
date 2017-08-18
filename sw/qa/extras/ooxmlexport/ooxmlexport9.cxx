@@ -28,8 +28,10 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
+#include <drawdoc.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svx/svdpage.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -759,6 +761,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
     // This failed, tab between the footnote number and the footnote content
     // was lost on import.
     CPPUNIT_ASSERT(xTextRange->getString().endsWith("\tfootnote"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWatermarkLayer, "watermark-layer.docx")
+{
+    // Watermark was not visible if page background was set.
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SdrPage* pPage = pTextDoc->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+
+    CPPUNIT_ASSERT(pObject);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pObject->GetLayer().get());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
