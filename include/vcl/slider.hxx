@@ -49,6 +49,7 @@ private:
     ScrollType      meScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
+    bool            mbScrollTypeSet;
 
     VclPtr<NumericField> mpLinkedField;
 
@@ -104,6 +105,7 @@ public:
     long            GetLineSize() const { return mnLineSize; }
     void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
     long            GetPageSize() const { return mnPageSize; }
+    void            SetScrollTypeSet(bool b) { mbScrollTypeSet = b; }
 
     Size            CalcWindowSizePixel();
 

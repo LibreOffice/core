@@ -133,7 +133,8 @@ void MediaControlBase::InitializeWidgets()
 
     mpTimeSlider->SetRange( Range( 0, AVMEDIA_TIME_RANGE ) );
     mpTimeSlider->SetUpdateMode( true );
-    mpTimeSlider->SetStyle(WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET);
+    mpTimeSlider->SetStyle(WB_HORZ | WB_DRAG | WB_3DLOOK);
+    mpTimeSlider->SetScrollTypeSet(true);
 }
 
 void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)

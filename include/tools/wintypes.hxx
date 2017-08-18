@@ -267,11 +267,7 @@ WinBits const WB_PATH =                 0x00100000;
 WinBits const WB_OPEN =                 0x00200000;
 WinBits const WB_SAVEAS =               0x00400000;
 
-// For Slider
-// Window-Bits for TabControl
-WinBits const WB_SLIDERSET =            0x02000000;
 
-// WindowAlign
 
 enum class WindowAlign { Left, Top, Right, Bottom };
 
