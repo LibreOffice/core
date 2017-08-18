@@ -226,7 +226,7 @@ void Calendar::ImplInitSettings()
 }
 
 Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_RANGESELECT | WB_MULTISELECT) ),
+    Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_MULTISELECT) ),
     maCalendarWrapper( Application::GetAppLocaleDataWrapper().getComponentContext() ),
     maOldFormatFirstDate( 0, 0, 1900 ),
     maOldFormatLastDate( 0, 0, 1900 ),
@@ -987,7 +987,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                 }
                 ImplCalendarSelectDateRange( mpSelectTable, aTempDate, maAnchorDate, true );
             }
-            else if ( bExtended && !(mnWinStyle & WB_RANGESELECT) )
+            else if ( bExtended )
             {
                 maAnchorDate = aTempDate;
                 if ( IsDateSelected( aTempDate ) )
@@ -1269,7 +1269,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                             StartTracking();
                         }
 
-                        mbMultiSelection = (mnWinStyle & (WB_MULTISELECT | WB_RANGESELECT)) != 0;
+                        mbMultiSelection = (mnWinStyle & WB_MULTISELECT) != 0;
                         ImplMouseSelect( aTempDate, nHitTest, false, rMEvt.IsShift(), rMEvt.IsMod1() );
                     }
                 }
@@ -1311,7 +1311,7 @@ void Calendar::Tracking( const TrackingEvent& rTEvt )
 void Calendar::KeyInput( const KeyEvent& rKEvt )
 {
     Date    aNewDate = maCurDate;
-    bool    bMultiSel = (mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) != 0;
+    bool    bMultiSel = (mnWinStyle & WB_MULTISELECT) != 0;
     bool    bExpand = rKEvt.GetKeyCode().IsShift();
     bool    bExtended = rKEvt.GetKeyCode().IsMod1();
 
@@ -1354,7 +1354,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_SPACE:
-            if ( bMultiSel && !(mnWinStyle & WB_RANGESELECT) )
+            if ( bMultiSel )
             {
                 if ( !bExpand )
                 {
@@ -1402,11 +1402,6 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
         }
         else
         {
-            if ( mnWinStyle & WB_RANGESELECT )
-            {
-                SetNoSelection();
-                SelectDate( aNewDate );
-            }
             SetCurDate( aNewDate );
         }
         mbTravelSelect = true;
@@ -1610,7 +1605,7 @@ void Calendar::SetCurDate( const Date& rNewDate )
         maCurDate       = rNewDate;
         maAnchorDate    = maCurDate;
 
-        if ( !(mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) )
+        if ( !(mnWinStyle & WB_MULTISELECT) )
         {
             ImplCalendarSelectDate( mpSelectTable, aOldDate, false );
             ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
@@ -2122,7 +2117,7 @@ bool CalendarField::ShowDropDown( bool bShow )
             else
                 aDate = Date( Date::SYSTEM );
         }
-        if ( pCalendar->GetStyle() & (WB_RANGESELECT | WB_MULTISELECT) )
+        if ( pCalendar->GetStyle() & WB_MULTISELECT )
         {
             pCalendar->SetNoSelection();
             pCalendar->SelectDate( aDate );

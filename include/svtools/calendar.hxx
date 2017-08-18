@@ -58,8 +58,6 @@ WinBits
 WB_BORDER                   We draw a border around the window.
 WB_TABSTOP                  Keyboard control is possible. We get the focus, when
                             the user clicks in the Control.
-WB_RANGESELECT              The user can select multiple days, which need to be
-                            consecutive
 WB_MULTISELECT              The user can select multiple days
 
 --------------------------------------------------------------------------
@@ -97,7 +95,7 @@ If a ContextMenu is displayed, the baseclass' handler must not be called.
 
 --------------------------------------------------------------------------
 
-For multiple selection (WB_RANGESELECT or WB_MULTISELECT) SelectDate(),
+For multiple selection (WB_MULTISELECT) SelectDate(),
 SelectDateRange() can select date ranges. SelectDateRange() selects
 including the end date.
 SetNoSelection() deselects everything.
@@ -127,14 +125,9 @@ calls or by ending a selection.
 
 // Needs to be in agreement with the WinBits in the TabBar or
 // we move it to \vcl\inc\wintypes.hxx
-#ifndef WB_RANGESELECT
-#define WB_RANGESELECT              ((WinBits)0x00200000)
-#endif
 #ifndef WB_MULTISELECT
 #define WB_MULTISELECT              ((WinBits)0x00400000)
 #endif
-
-#define DIB_BOLD                    ((sal_uInt16)0x0001)
 
 typedef std::set<sal_Int32> IntDateSet;
 
@@ -302,9 +295,6 @@ The preferences for the CalendarControl can be set via SetCalendarStyle().
 With EnableToday()/EnableNone() we can enable a TodayButton and a NoneButton.
 
 --------------------------------------------------------------------------
-
-If we set WB_RANGESELECT with SetCalendarStyle(), we can select multiple days
-in the Calendar.
 
 Because we only take over the start date into the field, we should query
 with GetCalendar() in the SelectHandler and with GetSelectDateCount()/GetSelectDate()
