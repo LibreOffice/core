@@ -78,17 +78,10 @@ public:
         WinBits nWinStyle = mrParent.GetStyle();
 
         // draw extra line if above and below border
-        if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
+        if (nWinStyle & WB_BORDER)
         {
             Size aOutputSize(mrParent.GetOutputSizePixel());
             tools::Rectangle aOutRect = mrParent.GetPageArea();
-
-            // also draw border in 3D for 3D-tabs
-            if (nWinStyle & WB_3DTAB)
-            {
-                mrRenderContext.SetLineColor(mrStyleSettings.GetShadowColor());
-                mrRenderContext.DrawLine(Point(aOutRect.Left(), 0), Point(aOutputSize.Width(), 0));
-            }
 
             // draw border (line above and line below)
             mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
@@ -552,9 +545,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbMirrored      = false;
     mbScrollAlwaysEnabled = false;
 
-    if ( nWinStyle & WB_3DTAB )
-        mnOffY++;
-
     ImplInitControls();
 
     if (mpImpl->mpFirstButton)
@@ -645,15 +635,6 @@ void TabBar::ImplGetColors(const StyleSettings& rStyleSettings,
         rFaceTextColor = rStyleSettings.GetButtonTextColor();
     rSelectColor = rStyleSettings.GetActiveTabColor();
     rSelectTextColor = rStyleSettings.GetWindowTextColor();
-
-    // For 3D-tabs the selection- and face-colours are swapped,
-    // as the selected tabs should appear in 3D
-    if (mnWinStyle & WB_3DTAB)
-    {
-        using std::swap;
-        swap(rFaceColor, rSelectColor);
-        swap(rFaceTextColor, rSelectTextColor);
-    }
 }
 
 bool TabBar::ImplCalcWidth()

@@ -36,17 +36,12 @@ WB_MINSCROLL    - The tabs can be scrolled via 2 additional buttons
 WB_RANGESELECT  - Connected ranges can be selected
 WB_MULTISELECT  - single tabs can be selected
 WB_BORDER       - a border is drawn in the top and in the bottom
-WB_TOPBORDER    - a border is drawn in the top
-WB_3DTAB        - the tabs and the border are drawn in 3D
 WB_DRAG         - A StartDrag handler is called by the TabBar, if drag
                   and drop should be started. In addition, drag and drop
                   is activated in the TabBar with EnableDrop().
 WB_SIZEABLE     - a Split handler is called by the TabBar, if the user
                   wants to change the width of the TabBar
 WB_STDTABBAR    - WB_BORDER
-
-If the TabBar should be used for example as Property bar, the WinBits
-WB_TOPBORDER and WB_3DTAB should be set instead of WB_BORDER.
 
 
 Allowed PageBits
@@ -268,8 +263,6 @@ class Button;
 
 #define WB_RANGESELECT      ((WinBits)0x00200000)
 #define WB_MULTISELECT      ((WinBits)0x00400000)
-#define WB_TOPBORDER        ((WinBits)0x04000000)
-#define WB_3DTAB            ((WinBits)0x08000000)
 #define WB_MINSCROLL        ((WinBits)0x20000000)
 #define WB_INSERTTAB        ((WinBits)0x40000000)
 #define WB_STDTABBAR        WB_BORDER
