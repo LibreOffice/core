@@ -143,7 +143,7 @@ MakeCommandLine(int argc, wchar_t **argv)
     if (len == 0)
         len = 1;
 
-    wchar_t *s = (wchar_t*) malloc(len * sizeof(wchar_t));
+    wchar_t *s = static_cast<wchar_t*>(malloc(len * sizeof(wchar_t)));
     if (!s)
         return nullptr;
 
@@ -259,7 +259,7 @@ WinLaunchChild(const wchar_t *exePath,
                       nullptr,
                       GetLastError(),
                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                      (LPTSTR) &lpMsgBuf,
+                      reinterpret_cast<LPTSTR>(&lpMsgBuf),
                       0,
                       nullptr);
         wprintf(L"Error restarting: %s\n", lpMsgBuf ? lpMsgBuf : L"(null)");
