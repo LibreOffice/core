@@ -20,41 +20,7 @@
 #define INCLUDED_EDITENG_OPTITEMS_HXX
 
 #include <svl/poolitem.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <editeng/editengdllapi.h>
-
-// forward ---------------------------------------------------------------
-namespace com { namespace sun { namespace star {
-namespace linguistic2{
-    class XSpellChecker1;
-}}}}
-
-
-// class SfxSpellCheckItem -----------------------------------------------
-
-class EDITENG_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
-{
-public:
-
-    SfxSpellCheckItem( css::uno::Reference<
-                            css::linguistic2::XSpellChecker1 > const &xChecker,
-                       sal_uInt16 nWhich  );
-    SfxSpellCheckItem( const SfxSpellCheckItem& rItem );
-
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                  MapUnit eCoreMetric,
-                                  MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper& ) const override;
-
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    const css::uno::Reference< css::linguistic2::XSpellChecker1 >&
-            GetXSpellChecker() const { return xSpellCheck; }
-
-private:
-    css::uno::Reference< css::linguistic2::XSpellChecker1 >   xSpellCheck;
-};
 
 
 // class SfxHyphenRegionItem ---------------------------------------------

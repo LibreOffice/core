@@ -17,62 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/stream.hxx>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-
 #include <editeng/optitems.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::linguistic2;
-
-// class SfxSpellCheckItem -----------------------------------------------
-
-SfxSpellCheckItem::SfxSpellCheckItem
-(
-    Reference< XSpellChecker1 > const &xChecker,
-    sal_uInt16 _nWhich
-) :
-
-    SfxPoolItem( _nWhich )
-{
-    xSpellCheck = xChecker;
-}
-
-
-SfxSpellCheckItem::SfxSpellCheckItem( const SfxSpellCheckItem& rItem ) :
-
-    SfxPoolItem( rItem ),
-    xSpellCheck( rItem.GetXSpellChecker() )
-{
-}
-
-
-bool SfxSpellCheckItem::GetPresentation
-(
-    SfxItemPresentation ,
-    MapUnit             ,
-    MapUnit             ,
-    OUString&           ,
-    const IntlWrapper&
-)   const
-{
-    return true;
-}
-
-
-SfxPoolItem* SfxSpellCheckItem::Clone( SfxItemPool* ) const
-{
-    return new SfxSpellCheckItem( *this );
-}
-
-
-bool SfxSpellCheckItem::operator==( const SfxPoolItem& rItem ) const
-{
-    assert(SfxPoolItem::operator==(rItem));
-    return ( xSpellCheck == static_cast<const SfxSpellCheckItem&>( rItem ).GetXSpellChecker() );
-}
 
 // class SfxHyphenRegionItem -----------------------------------------------
 
