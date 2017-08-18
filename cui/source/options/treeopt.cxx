@@ -1103,7 +1103,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_HTML_MODE, SID_HTML_MODE,
-                    SID_ATTR_METRIC, SID_ATTR_SPELL,
+                    SID_ATTR_METRIC, SID_ATTR_METRIC,
                     SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                     SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
                     SID_ATTR_YEAR2000, SID_ATTR_YEAR2000>{} );
@@ -1143,15 +1143,14 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
             pRet = o3tl::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
-                    SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
+                    SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE,
+                    SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
-                    SID_ATTR_LANGUAGE, SID_AUTOSPELL_CHECK,
+                    SID_ATTR_LANGUAGE, SID_ATTR_LANGUAGE,
+                    SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED>{});
 
             // for linguistic
-
-            Reference< XSpellChecker1 >  xSpell = LinguMgr::GetSpellChecker();
-            pRet->Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
             SfxHyphenRegionItem aHyphen( SID_ATTR_HYPHENREGION );
 
             sal_Int16   nMinLead  = 2,
