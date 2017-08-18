@@ -1054,12 +1054,12 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SearchUpdateHdl, Edit&, void)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load, Button*, void)
 {
     // ask for filename, where we should load the new config data from
-    StartFileDialog( 0, aLoadAccelConfigStr );
+    StartFileDialog( StartFileDialogType::Open, aLoadAccelConfigStr );
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save, Button*, void)
 {
-    StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
+    StartFileDialog( StartFileDialogType::SaveAs, aSaveAccelConfigStr );
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default, Button*, void)
@@ -1391,9 +1391,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
 }
 
 
-void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& rTitle )
+void SfxAcceleratorConfigPage::StartFileDialog( StartFileDialogType nType, const OUString& rTitle )
 {
-    bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
+    bool bSave = nType == StartFileDialogType::SaveAs;
     short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
     delete m_pFileDlg;

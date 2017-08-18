@@ -103,6 +103,8 @@ namespace sfx2
     class FileDialogHelper;
 }
 
+enum class StartFileDialogType { Open, SaveAs };
+
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
     friend class SfxAccCfgTabListBox_Impl;
@@ -159,7 +161,7 @@ private:
     SvTreeListEntry*            applySearchFilter(OUString const & rSearchTerm, SvTreeListBox* rListBox);
     void                        InitAccCfg();
     sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
-    void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
+    void                        StartFileDialog( StartFileDialogType nType, const OUString& rTitle );
 
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
