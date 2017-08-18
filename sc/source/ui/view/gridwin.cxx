@@ -4473,8 +4473,7 @@ void ScGridWindow::UpdateFormulas()
 
     SCROW nPosY = nY1;
 
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = *pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
