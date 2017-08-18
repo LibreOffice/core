@@ -1383,7 +1383,18 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                     }
                 }
                 else
+                {
+                    if (IsOpenField() && GetTopFieldContext()->GetFieldId() == FIELD_HYPERLINK)
+                    {
+                        // It is content of hyperlink field. We need to create and remember
+                        // character style for later applying to hyperlink
+                        PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(GetTopContext()->GetPropertyValues());
+                        OUString sHyperlinkStyleName = GetStyleSheetTable()->getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
+                        GetTopFieldContext()->SetHyperlinkStyle(sHyperlinkStyleName);
+                    }
+
                     xTextRange = xTextAppend->appendTextPortion(rString, aValues);
+                }
             }
 
             CheckRedline( xTextRange );
@@ -3708,6 +3719,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                 aFieldConversionMap.find(std::get<0>(field));
             if(aIt != aFieldConversionMap.end())
             {
+                pContext->SetFieldId(aIt->second.eFieldId);
+
                 bool bCreateEnhancedField = false;
                 uno::Reference< beans::XPropertySet > xFieldProperties;
                 bool bCreateField = true;
@@ -4752,6 +4765,14 @@ void DomainMapper_Impl::PopFieldContext()
                                 OUString sDisplayName("Index Link");
                                 xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::makeAny(sDisplayName));
                                 xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::makeAny(sDisplayName));
+                            }
+                            else
+                            {
+                                if (!pContext->GetHyperlinkStyle().isEmpty())
+                                {
+                                    xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
+                                    xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::makeAny(pContext->GetHyperlinkStyle()));
+                                }
                             }
                         }
                         else if(m_bStartGenericField)
