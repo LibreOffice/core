@@ -2996,12 +2996,12 @@ void WinSalFrame::EndSetClipRegion()
     }
 }
 
-static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
+static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
-        return 0;
+        return false;
 
     if( nMsg == WM_LBUTTONDOWN || nMsg == WM_MBUTTONDOWN || nMsg == WM_RBUTTONDOWN )
     {
@@ -3013,11 +3013,11 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         {
             BOOL const ret = PostMessageW( hWnd, nMsg, wParam, lParam );
             SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-            return 1;
+            return true;
         }
     }
     SalMouseEvent   aMouseEvt;
-    long            nRet;
+    bool            nRet;
     SalEvent        nEvent = SalEvent::NONE;
     bool            bCall = TRUE;
 
@@ -3056,7 +3056,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                 {
                     if ( (aTempMsg.message == WM_MOUSEMOVE) &&
                          (aTempMsg.wParam == wParam) )
-                        return 1;
+                        return true;
                 }
             }
 
@@ -3142,7 +3142,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     // check if this window was destroyed - this might happen if we are the help window
     // and sent a mouse leave message to the application which killed the help window, ie ourselves
     if( !IsWindow( hWnd ) )
-        return 0;
+        return false;
 
     if ( bCall )
     {
@@ -3157,24 +3157,24 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             SetCursor( pFrame->mhCursor );
     }
     else
-        nRet = 0;
+        nRet = false;
 
     return nRet;
 }
 
-static long ImplHandleMouseActivateMsg( HWND hWnd )
+static bool ImplHandleMouseActivateMsg( HWND hWnd )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
-        return 0;
+        return false;
 
     if ( pFrame->mbFloatWin )
-        return TRUE;
+        return true;
 
     return pFrame->CallCallback( SalEvent::MouseActivate, nullptr );
 }
 
-static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+static bool ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     DBG_ASSERT( nMsg == WM_MOUSEWHEEL ||
                 nMsg == WM_MOUSEHWHEEL,
@@ -3182,7 +3182,7 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 
     ImplSalYieldMutexAcquireWithWait();
 
-    long        nRet = 0;
+    bool nRet = false;
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
@@ -3334,7 +3334,7 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
     return bRet;
 }
 
-static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
+static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
     static bool         bIgnoreCharMsg  = FALSE;
@@ -3353,12 +3353,12 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     if ( nMsg == WM_DEADCHAR )
     {
         nDeadChar = wParam;
-        return 0;
+        return false;
     }
 
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
-        return 0;
+        return false;
 
     // reset the background mode for each text input,
     // as some tools such as RichWin may have changed it
@@ -3390,15 +3390,15 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             // also return zero if a system menubar is available that might process this hotkey
             // this also applies to the OLE inplace embedding where we are a child window
             if( (GetWindowStyle( hWnd ) & WS_CHILD) || GetMenu( hWnd ) || (wParam == 0x20) )
-                return 0;
+                return false;
             else
-                return 1;
+                return true;
         }
 
         // ignore backspace as a single key, so that
         // we do not get problems for combinations w/ a DeadKey
         if ( wParam == 0x08 )    // BACKSPACE
-            return 0;
+            return false;
 
         // only "free flying" WM_CHAR messages arrive here, that are
         // created by typing a ALT-NUMPAD combination
@@ -3426,7 +3426,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         aKeyEvt.mnRepeat    = nRepeat;
         nLastChar = 0;
         nLastVKChar = 0;
-        long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+        bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
         pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
         return nRet;
     }
@@ -3437,7 +3437,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
          if(wParam == UNICODE_NOCHAR)
         {
             rResult = TRUE; // ssa: this will actually return TRUE to windows
-            return 1;       // ...but this will only avoid calling the defwindowproc
+            return true;    // ...but this will only avoid calling the defwindowproc
         }
 
          SalKeyEvent aKeyEvt;
@@ -3459,7 +3459,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
 
          nLastChar = 0;
          nLastVKChar = 0;
-         long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+         bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
          pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
 
          return nRet;
@@ -3538,7 +3538,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                     {
                         PeekMessageW( &aCharMsg, hWnd,
                                          nCharMsg, nCharMsg, PM_REMOVE | PM_NOYIELD );
-                        return 0;
+                        return false;
                     }
                 }
                 else
@@ -3579,7 +3579,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnRepeat    = nRepeat;
 
                 bIgnoreCharMsg = bCharPeek ? TRUE : FALSE;
-                long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
+                bool nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 // independent part only reacts on keyup but Windows does not send
                 // keyup for VK_HANJA
                 if( aKeyEvt.mnCode == KEY_HANGUL_HANJA )
@@ -3603,19 +3603,19 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 return nRet;
             }
             else
-                return 0;
+                return false;
         }
     }
 }
 
-long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
+bool ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
                              WPARAM wParam, LPARAM lParam )
 {
     if ( (nMsg == WM_KEYDOWN) || (nMsg == WM_KEYUP) )
     {
         WinSalFrame* pFrame = GetWindowPtr( hWnd );
         if ( !pFrame )
-            return 0;
+            return false;
 
         sal_uInt16  nRepeat     = LOWORD( lParam )-1;
         sal_uInt16  nModCode    = 0;
@@ -3647,22 +3647,22 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
 
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
-                long nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
+                bool nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
                 return nRet;
             }
             else
-                return 0;
+                return false;
         }
     }
 
-    return 0;
+    return false;
 }
 
-long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+bool ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
-        return 0;
+        return false;
 
     sal_uInt16  nRepeat     = LOWORD( lParam )-1;
     sal_uInt16  nModCode    = 0;
@@ -3688,7 +3688,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     aKeyEvt.mnCode     |= nModCode;
     aKeyEvt.mnCharCode  = ImplGetCharCode( pFrame, cKeyCode );
     aKeyEvt.mnRepeat    = nRepeat;
-    long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+    bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
     pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
     return nRet;
 }
@@ -4030,9 +4030,9 @@ static void ImplHandleCloseMsg( HWND hWnd )
         }
 }
 
-static long ImplHandleShutDownMsg( HWND hWnd )
+static bool ImplHandleShutDownMsg( HWND hWnd )
 {
-    long nRet = 0;
+    bool nRet = false;
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, 0, 0, DeferPolicy::Blocked );
     if ( pFrame )
     {
@@ -4657,13 +4657,13 @@ static bool ImplHandleMenuActivate( HWND hWnd, WPARAM wParam, LPARAM )
     else
         aMenuEvt.mpMenu = nullptr;
 
-    long nRet = pFrame->CallCallback( SalEvent::MenuActivate, &aMenuEvt );
+    bool nRet = pFrame->CallCallback( SalEvent::MenuActivate, &aMenuEvt );
     if( nRet )
         nRet = pFrame->CallCallback( SalEvent::MenuDeactivate, &aMenuEvt );
     if( nRet )
         pFrame->mLastActivatedhMenu = hMenu;
 
-    return (nRet!=0);
+    return nRet;
 }
 
 static bool ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
@@ -4685,7 +4685,7 @@ static bool ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     if( nFlags & MF_POPUP )
         bByPosition = TRUE;
 
-    long nRet = 0;
+    bool nRet = false;
     if ( hMenu && !pFrame->mLastActivatedhMenu )
     {
         // we never activated a menu (ie, no WM_INITMENUPOPUP has occurred yet)
@@ -4741,7 +4741,7 @@ static bool ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
         nRet = pFrame->CallCallback( SalEvent::MenuHighlight, &aMenuEvt );
     }
 
-    return (nRet != 0);
+    return nRet;
 }
 
 static bool ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM )
@@ -4750,7 +4750,7 @@ static bool ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM )
     if ( !pFrame )
         return false;
 
-    long nRet = 0;
+    bool nRet = false;
     if( !HIWORD(wParam) )
     {
         // Menu command
@@ -4768,14 +4768,14 @@ static bool ImplHandleCommand( HWND hWnd, WPARAM wParam, LPARAM )
             nRet = pFrame->CallCallback( SalEvent::MenuCommand, &aMenuEvt );
         }
     }
-    return (nRet != 0);
+    return nRet;
 }
 
-static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static bool ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
-        return 0;
+        return false;
 
     WPARAM nCommand = wParam & 0xFFF0;
 
@@ -4788,7 +4788,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
              (!bMaximize && (nCommand == SC_MAXIMIZE)) ||
              (bMaximize && (nCommand == SC_RESTORE)) )
         {
-            return TRUE;
+            return true;
         }
     }
 
@@ -4797,7 +4797,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
         // do not process SC_KEYMENU if we have a native menu
         // Windows should handle this
         if( GetMenu( hWnd ) )
-            return FALSE;
+            return false;
 
         // Process here KeyMenu events only for Alt to activate the MenuBar,
         // or if a SysChild window is in focus, as Alt-key-combinations are
@@ -4810,22 +4810,22 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
             // Also 32 for space, 99 for c, 100 for d, ...
             // As this is not documented, we check the state of the space-bar
             if ( GetKeyState( VK_SPACE ) & 0x8000 )
-                return 0;
+                return false;
 
             // to avoid activating the MenuBar for Alt+MouseKey
             if ( (GetKeyState( VK_LBUTTON ) & 0x8000) ||
                  (GetKeyState( VK_RBUTTON ) & 0x8000) ||
                  (GetKeyState( VK_MBUTTON ) & 0x8000) ||
                  (GetKeyState( VK_SHIFT )   & 0x8000) )
-                return 1;
+                return true;
 
             SalKeyEvent aKeyEvt;
             aKeyEvt.mnCode      = KEY_MENU;
             aKeyEvt.mnCharCode  = 0;
             aKeyEvt.mnRepeat    = 0;
-            long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+            bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
             pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
-            return int(nRet != 0);
+            return nRet;
         }
         else
         {
@@ -4857,15 +4857,15 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                     aKeyEvt.mnCode     |= nModCode;
                     aKeyEvt.mnCharCode  = cKeyCode;
                     aKeyEvt.mnRepeat    = 0;
-                    long nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
+                    bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
                     pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
-                    return int(nRet != 0);
+                    return nRet;
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
@@ -5509,7 +5509,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             if ( LOWORD( lParam ) == HTCLIENT )
             {
                 ImplSalYieldMutexAcquireWithWait();
-                nRet = ImplHandleMouseActivateMsg( hWnd );
+                nRet = LRESULT(ImplHandleMouseActivateMsg( hWnd ));
                 ImplSalYieldMutexRelease();
                 if ( nRet )
                 {
@@ -5569,7 +5569,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
         case WM_SYSCOMMAND:
             ImplSalYieldMutexAcquireWithWait();
-            nRet = ImplHandleSysCommand( hWnd, wParam, lParam );
+            nRet = LRESULT(ImplHandleSysCommand( hWnd, wParam, lParam ));
             ImplSalYieldMutexRelease();
             if ( nRet )
                 rDef = FALSE;
