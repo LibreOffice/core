@@ -1012,9 +1012,9 @@ WinBits Window::GetPrevStyle() const
     return mpWindowImpl ? mpWindowImpl->mnPrevStyle : 0;
 }
 
-WinBits Window::GetExtendedStyle() const
+WindowExtendedStyle Window::GetExtendedStyle() const
 {
-    return mpWindowImpl ? mpWindowImpl->mnExtendedStyle : 0;
+    return mpWindowImpl ? mpWindowImpl->mnExtendedStyle : WindowExtendedStyle::NONE;
 }
 
 void Window::SetType( WindowType nType )
