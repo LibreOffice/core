@@ -36,12 +36,30 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     OUStringBuffer buf( 64 );
     buf.append( "unsatisfied query for interface of type " );
     buf.append( OUString::unacquired( &pType->pTypeName ) );
-    buf.append( '!' );
     OUString ret( buf.makeStringAndClear() );
     rtl_uString_acquire( ret.pData );
     return ret.pData;
 }
 
+extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg2(
+    css::uno::XInterface * pInterface,
+    typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C()
+{
+    OUStringBuffer buf( 64 );
+    buf.append( "unsatisfied query for interface of type " );
+    buf.append( OUString::unacquired( &pType->pTypeName ) );
+    if (pInterface)
+    {
+        buf.append( "on type " );
+        buf.append( typeid(*pInterface).name() );
+    }
+    else
+        buf.append( "because interface == nullptr" );
+    OUString ret( buf.makeStringAndClear() );
+    rtl_uString_acquire( ret.pData );
+    return ret.pData;
+}
 
 extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
