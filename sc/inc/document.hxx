@@ -326,7 +326,7 @@ private:
 
     std::shared_ptr<svl::SharedStringPool> mpCellStringPool;
     std::shared_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
-    mutable std::unique_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
+    std::unique_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
 
     ScCalcConfig        maCalcConfig;
 
