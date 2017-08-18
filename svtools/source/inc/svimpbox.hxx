@@ -24,6 +24,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/vclevent.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <o3tl/enumarray.hxx>
 #include <vector>
 #include "svtaccessiblefactory.hxx"
 
@@ -88,12 +89,12 @@ friend class ImpLBSelEng;
 friend class SvTreeListBox;
 friend class IconView;
 private:
-    SvTreeList*     pTree;
-    SvTreeListEntry*        pAnchor;
-    SvTreeListEntry*        pMostRightEntry;
-    SvLBoxButton*       pActiveButton;
-    SvTreeListEntry*        pActiveEntry;
-    SvLBoxTab*          pActiveTab;
+    SvTreeList*          pTree;
+    SvTreeListEntry*     pAnchor;
+    SvTreeListEntry*     pMostRightEntry;
+    SvLBoxButton*        pActiveButton;
+    SvTreeListEntry*     pActiveEntry;
+    SvLBoxTab*           pActiveTab;
 
     VclPtr<ScrollBar>    aHorSBar;
     VclPtr<ScrollBarBox> aScrBarBox;
@@ -106,19 +107,19 @@ private:
     static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
     // Node Bitmaps
-    enum ImageType
+    enum class ImageType
     {
-        itNodeExpanded = 0,     // node is expanded ( usually a bitmap showing a minus )
-        itNodeCollapsed,        // node is collapsed ( usually a bitmap showing a plus )
-        itNodeDontKnow,         // don't know the node state
-        itEntryDefExpanded,     // default for expanded entries
-        itEntryDefCollapsed,    // default for collapsed entries
-
-        IT_IMAGE_COUNT
+        NodeExpanded = 0,     // node is expanded ( usually a bitmap showing a minus )
+        NodeCollapsed,        // node is collapsed ( usually a bitmap showing a plus )
+        NodeDontKnow,         // don't know the node state
+        EntryDefExpanded,     // default for expanded entries
+        EntryDefCollapsed,    // default for collapsed entries
+        LAST = EntryDefCollapsed
     };
 
     // all our images
-    Image               m_aNodeAndEntryImages[ IT_IMAGE_COUNT ];
+    o3tl::enumarray<ImageType, Image>
+                        m_aNodeAndEntryImages;
 
     ImpLBSelEng         aFctSet;
     Idle                aAsyncBeginDragIdle;
@@ -164,31 +165,31 @@ private:
     void                SetNodeBmpTabDistance();
 
     // Selection-Engine
-    SvTreeListEntry* MakePointVisible( const Point& rPoint );
+    SvTreeListEntry*    MakePointVisible( const Point& rPoint );
 
     void                SetAnchorSelection( SvTreeListEntry* pOld,
                             SvTreeListEntry* pNewCursor );
     void                BeginDrag();
-    bool ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
-    bool MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry const * pEntry );
-    bool ButtonUpCheckCtrl( const MouseEvent& rMEvt );
-    bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry* );
+    bool                ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
+    bool                MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry const * pEntry );
+    bool                ButtonUpCheckCtrl( const MouseEvent& rMEvt );
+    bool                ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry* );
 
-    bool EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
+    bool                EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
     void                InitScrollBarBox();
     SvLBoxTab*          NextTab( SvLBoxTab const * );
 
-    bool SetMostRight( SvTreeListEntry* pEntry );
+    bool                SetMostRight( SvTreeListEntry* pEntry );
     void                FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* EntryToIgnore );
     void                FindMostRight_Impl( SvTreeListEntry* pParent,SvTreeListEntry* EntryToIgnore  );
     void                NotifyTabsChanged();
 
     // if element at cursor can be expanded in general
-    bool IsExpandable() const;
+    bool                IsExpandable() const;
 
     static  void        implInitDefaultNodeImages();
 
-    void UpdateStringSorter();
+    void                UpdateStringSorter();
 
     short               UpdateContextBmpWidthVector( SvTreeListEntry const * pEntry, short nWidth );
     void                UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry );
@@ -196,8 +197,8 @@ private:
 
     void                CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect );
 
-    bool AreChildrenTransient() const { return bAreChildrenTransient; }
-    void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
+    bool                AreChildrenTransient() const { return bAreChildrenTransient; }
+    void                SetChildrenNotTransient() { bAreChildrenTransient = false; }
 
 protected:
     VclPtr<SvTreeListBox>   pView;
@@ -272,16 +273,16 @@ public:
     void                InvalidateEntry( SvTreeListEntry* );
     void                RecalcFocusRect();
 
-    void SelectEntry( SvTreeListEntry* pEntry, bool bSelect );
+    void                SelectEntry( SvTreeListEntry* pEntry, bool bSelect );
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
 
-    SvTreeListEntry*        GetCurrentEntry() const { return pCursor; }
-    virtual bool                IsEntryInView( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    GetCurrentEntry() const { return pCursor; }
+    virtual bool        IsEntryInView( SvTreeListEntry* pEntry ) const;
     virtual SvTreeListEntry*    GetEntry( const Point& rPos ) const;
     // returns last entry, if Pos below last entry
     virtual SvTreeListEntry*    GetClickedEntry( const Point& ) const;
-    SvTreeListEntry*        GetCurEntry() const { return pCursor; }
+    SvTreeListEntry*    GetCurEntry() const { return pCursor; }
     void                SetCurEntry( SvTreeListEntry* );
     virtual Point       GetEntryPosition( SvTreeListEntry* ) const;
     void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
@@ -314,83 +315,79 @@ public:
 
     void                Invalidate();
     void                DestroyAnchor() { pAnchor=nullptr; aSelEng.Reset(); }
-    void SelAllDestrAnch( bool bSelect, bool bDestroyAnchor = true, bool bSingleSelToo = false );
-    void ShowCursor( bool bShow );
+    void                SelAllDestrAnch( bool bSelect, bool bDestroyAnchor = true, bool bSingleSelToo = false );
+    void                ShowCursor( bool bShow );
 
-    bool RequestHelp( const HelpEvent& rHEvt );
+    bool                RequestHelp( const HelpEvent& rHEvt );
     void                EndSelection();
-    bool IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
-    void EnableAsyncDrag( bool b ) { bAsyncBeginDrag = b; }
-    void SetUpdateMode( bool bMode );
-    bool GetUpdateMode() const { return bUpdateMode; }
-    tools::Rectangle           GetClipRegionRect() const;
-    bool HasHorScrollBar() const { return aHorSBar->IsVisible(); }
+    bool                IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
+    void                EnableAsyncDrag( bool b ) { bAsyncBeginDrag = b; }
+    void                SetUpdateMode( bool bMode );
+    bool                GetUpdateMode() const { return bUpdateMode; }
+    tools::Rectangle    GetClipRegionRect() const;
+    bool                HasHorScrollBar() const { return aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
-    bool IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
-    void         EnableCellFocus() { bIsCellFocusEnabled = true; }
+    bool                IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
+    void                EnableCellFocus() { bIsCellFocusEnabled = true; }
     bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
-    sal_uInt16       GetCurrentTabPos() const { return nCurTabPos; }
+    sal_uInt16          GetCurrentTabPos() const { return nCurTabPos; }
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
 };
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
 {
-    DBG_ASSERT( ( _eType >= 0 ) && ( _eType < IT_IMAGE_COUNT ),
-        "SvImpLBox::implGetImageLocation: invalid image index (will crash)!" );
-
-    Image* _pSet = m_aNodeAndEntryImages;
-    return *( _pSet + (sal_Int32)_eType );
+    return m_aNodeAndEntryImages[_eType];
 }
 
 inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg )
 {
-    implGetImageLocation( itNodeExpanded ) = rImg;
+    implGetImageLocation( ImageType::NodeExpanded ) = rImg;
     SetNodeBmpYOffset( rImg );
 }
 
 inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
-    implGetImageLocation( itNodeCollapsed ) = rImg;
+    implGetImageLocation( ImageType::NodeCollapsed ) = rImg;
     SetNodeBmpYOffset( rImg );
 }
 
 inline const Image& SvImpLBox::GetDontKnowNodeBmp( )
 {
-    return implGetImageLocation( itNodeDontKnow );
+    return implGetImageLocation( ImageType::NodeDontKnow );
 }
 
 inline const Image& SvImpLBox::GetExpandedNodeBmp( )
 {
-    return implGetImageLocation( itNodeExpanded );
+    return implGetImageLocation( ImageType::NodeExpanded );
 }
 
 inline const Image& SvImpLBox::GetCollapsedNodeBmp( )
 {
-    return implGetImageLocation( itNodeCollapsed );
+    return implGetImageLocation( ImageType::NodeCollapsed );
 }
 
 inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg )
 {
-    implGetImageLocation( itEntryDefExpanded ) = _rImg;
+    implGetImageLocation( ImageType::EntryDefExpanded ) = _rImg;
 }
 
 inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg )
 {
-    implGetImageLocation( itEntryDefCollapsed ) = _rImg;
+    implGetImageLocation( ImageType::EntryDefCollapsed ) = _rImg;
 }
 
 inline const Image& SvImpLBox::GetDefaultEntryExpBmp( )
 {
-    return implGetImageLocation( itEntryDefExpanded );
+    return implGetImageLocation( ImageType::EntryDefExpanded );
 }
 
 inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
 {
-    return implGetImageLocation( itEntryDefCollapsed );
+    return implGetImageLocation( ImageType::EntryDefCollapsed );
 }
 
 inline Point SvImpLBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
