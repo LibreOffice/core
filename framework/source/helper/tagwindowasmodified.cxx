@@ -95,9 +95,9 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
         return;
 
     if (bModified)
-        pWindow->SetExtendedStyle(WB_EXT_DOCMODIFIED);
+        pWindow->SetExtendedStyle(WindowExtendedStyle::DocModified);
     else
-        pWindow->SetExtendedStyle(0);
+        pWindow->SetExtendedStyle(WindowExtendedStyle::NONE);
     // <- SYNCHRONIZED
 }
 

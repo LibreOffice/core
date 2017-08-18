@@ -271,10 +271,6 @@ WinBits const WB_SAVEAS =               0x00400000;
 // Window-Bits for TabControl
 WinBits const WB_SLIDERSET =            0x02000000;
 
-// extended WinBits
-WinBits const WB_EXT_DOCUMENT =         0x00000001;
-WinBits const WB_EXT_DOCMODIFIED =      0x00000002;
-
 // WindowAlign
 
 enum class WindowAlign { Left, Top, Right, Bottom };

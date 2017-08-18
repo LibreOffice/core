@@ -263,7 +263,7 @@ public:
     vcl::Region*             mpPaintRegion;          //< only set during Paint() method call (window coordinates)
     WinBits             mnStyle;
     WinBits             mnPrevStyle;
-    WinBits             mnExtendedStyle;
+    WindowExtendedStyle mnExtendedStyle;
     WindowType          mnType;
     ControlPart         mnNativeBackground;
     sal_uInt16          mnWaitCount;

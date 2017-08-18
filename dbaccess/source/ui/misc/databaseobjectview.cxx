@@ -135,7 +135,7 @@ namespace dbaui
                     const Reference< XWindow > xFrameWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
                     VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xFrameWindow );
                     ENSURE_OR_THROW( pContainerWindow, "no implementation access to the frame's container window!" );
-                    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+                    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WindowExtendedStyle::Document );
                 }
 
                 Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );

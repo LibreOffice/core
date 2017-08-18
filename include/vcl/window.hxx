@@ -453,8 +453,9 @@ class ImplDockingWindowWrapper;
 class ImplPopupFloatWin;
 class MenuFloatingWindow;
 class LifecycleTest;
-
 namespace svt { class PopupWindowControllerImpl; }
+
+
 enum class WindowHitTest {
     NONE        = 0x0000,
     Inside      = 0x0001,
@@ -462,6 +463,16 @@ enum class WindowHitTest {
 };
 namespace o3tl {
     template<> struct typed_flags<WindowHitTest> : is_typed_flags<WindowHitTest, 0x0003> {};
+};
+
+
+enum class WindowExtendedStyle {
+    NONE        = 0x0000,
+    Document    = 0x0001,
+    DocModified = 0x0002,
+};
+namespace o3tl {
+    template<> struct typed_flags<WindowExtendedStyle> : is_typed_flags<WindowExtendedStyle, 0x0003> {};
 };
 
 namespace vcl {
@@ -826,8 +837,8 @@ public:
     void                                SetStyle( WinBits nStyle );
     WinBits                             GetStyle() const;
     WinBits                             GetPrevStyle() const;
-    void                                SetExtendedStyle( WinBits nExtendedStyle );
-    WinBits                             GetExtendedStyle() const;
+    void                                SetExtendedStyle( WindowExtendedStyle nExtendedStyle );
+    WindowExtendedStyle                 GetExtendedStyle() const;
     void                                SetType( WindowType nType );
     WindowType                          GetType() const;
     bool                                IsSystemWindow() const;

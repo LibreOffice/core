@@ -642,7 +642,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mpPaintRegion                       = nullptr;                      // Paint-ClipRegion
     mnStyle                             = 0;                         // style (init in ImplInitWindow)
     mnPrevStyle                         = 0;                         // prevstyle (set in SetStyle)
-    mnExtendedStyle                     = 0;                         // extended style (init in ImplInitWindow)
+    mnExtendedStyle                     = WindowExtendedStyle::NONE; // extended style (init in ImplInitWindow)
     mnType                              = nType;                     // type
     mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags fuer GetFocus()-Aufruf
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
@@ -1981,7 +1981,7 @@ void Window::SetStyle( WinBits nStyle )
     }
 }
 
-void Window::SetExtendedStyle( WinBits nExtendedStyle )
+void Window::SetExtendedStyle( WindowExtendedStyle nExtendedStyle )
 {
 
     if ( mpWindowImpl->mnExtendedStyle != nExtendedStyle )
@@ -1992,9 +1992,9 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
         if( pWindow->mpWindowImpl->mbFrame )
         {
             SalExtStyle nExt = 0;
-            if( (nExtendedStyle & WB_EXT_DOCUMENT) )
+            if( nExtendedStyle & WindowExtendedStyle::Document )
                 nExt |= SAL_FRAME_EXT_STYLE_DOCUMENT;
-            if( (nExtendedStyle & WB_EXT_DOCMODIFIED) )
+            if( nExtendedStyle & WindowExtendedStyle::DocModified )
                 nExt |= SAL_FRAME_EXT_STYLE_DOCMODIFIED;
 
             pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
