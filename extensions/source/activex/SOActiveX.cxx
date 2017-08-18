@@ -158,7 +158,7 @@ CSOActiveX::CSOActiveX()
 , mbReadyForActivation( FALSE )
 , mbDrawLocked( FALSE )
 {
-    CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
+    CLSID const clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
     HRESULT hr = CoCreateInstance( clsFactory, nullptr, CLSCTX_ALL, __uuidof(IDispatch), reinterpret_cast<void**>(&mpDispFactory));
     if( !SUCCEEDED( hr ) )
         OutputError_Impl( nullptr, hr );
