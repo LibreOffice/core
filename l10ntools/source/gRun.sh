@@ -202,213 +202,53 @@ ${MYCMD} --base reportbuilder/java/org/libreoffice/report/function/metadata --fi
 
 # .src files
 
-${MYCMD} --files accessibility/source/helper/accessiblestrings.src
+${MYCMD} --base basctl/source/basicide --files moduldlg.src
 
-${MYCMD} --files avmedia/source/framework/mediacontrol.src
+${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.src
 
-${MYCMD} --files avmedia/source/viewer/mediawindow.src
+${MYCMD} --base connectivity/source/resource --files conn_log_res.src
 
-${MYCMD} --base basctl/source/basicide --files basicprint.src basidesh.src macrodlg.src moduldlg.src objdlg.src
+${MYCMD} --base cui/source/customize --files acccfg.src
 
-${MYCMD} --files basctl/source/dlged/dlgresid.src
+${MYCMD} --base cui/source/dialogs --files multipat.src svuidlg.src
 
-${MYCMD} --files basic/source/classes/sb.src
+${MYCMD} --base cui/source/options --files optgdlg.src personalization.src
 
-${MYCMD} --files basic/source/sbx/format.src
+${MYCMD} --base cui/source/tabpages --files align.src page.src paragrph.src
 
-${MYCMD} --base chart2/source/controller/dialogs --files Bitmaps.src Strings.src Strings_ChartTypes.src Strings_Scale.src Strings_Statistic.src
+${MYCMD} --base desktop/source/deployment/gui --files dp_gui_backend.src dp_gui_dialog2.src
 
-${MYCMD} --base connectivity/source/resource --files conn_error_message.src conn_log_res.src conn_shared_res.src
+${MYCMD} --base extensions/source/bibliography --files toolbar.src
 
-${MYCMD} --base cui/source/customize --files acccfg.src cfg.src macropg.src
-
-${MYCMD} --base cui/source/dialogs --files fmsearch.src gallery.src hyperdlg.src multipat.src passwdomdlg.src scriptdlg.src svuidlg.src
-
-${MYCMD} --base cui/source/options --files connpooloptions.src dbregister.src doclinkdialog.src optchart.src optcolor.src optdict.src optfltr.src optgdlg.src optinet2.src optjava.src optlingu.src optpath.src personalization.src treeopt.src
-
-${MYCMD} --base cui/source/tabpages --files align.src border.src frmdirlbox.src page.src paragrph.src strings.src
-
-${MYCMD} --files dbaccess/source/core/resource/strings.src
-
-${MYCMD} --files dbaccess/source/ext/macromigration/macromigration.src
-
-${MYCMD} --files dbaccess/source/sdbtools/resource/sdbt_strings.src
-
-${MYCMD} --files dbaccess/source/ui/app/app.src
-
-${MYCMD} --base dbaccess/source/ui/browser --files sbabrw.src sbagrid.src
-
-${MYCMD} --base dbaccess/source/ui/control --files TableGrantCtrl.src tabletree.src undosqledit.src
-
-${MYCMD} --base dbaccess/source/ui/dlg --files AutoControls.src ConnectionPage.src dbadmin.src dbadmin2.src dbadminsetup.src directsql.src indexdialog.src paramdialog.src sqlmessage.src UserAdmin.src
-
-${MYCMD} --base dbaccess/source/ui/misc --files dbumiscres.src WizardPages.src
-
-${MYCMD} --base dbaccess/source/ui/querydesign --files query.src querydlg.src
-
-${MYCMD} --files dbaccess/source/ui/relationdesign/relation.src
-
-${MYCMD} --files dbaccess/source/ui/tabledesign/table.src
-
-${MYCMD} --base dbaccess/source/ui/uno --files copytablewizard.src
-
-${MYCMD} --files desktop/source/app/desktop.src
-
-${MYCMD} --base desktop/source/deployment/gui --files dp_gui_backend.src dp_gui_dialog.src dp_gui_dialog2.src dp_gui_updatedialog.src dp_gui_updateinstalldialog.src dp_gui_versionboxes.src
-
-${MYCMD} --files desktop/source/deployment/manager/dp_manager.src
-
-${MYCMD} --files desktop/source/deployment/misc/dp_misc.src
-
-${MYCMD} --files desktop/source/deployment/registry/component/dp_component.src
-
-${MYCMD} --files desktop/source/deployment/registry/configuration/dp_configuration.src
-
-${MYCMD} --files desktop/source/deployment/registry/dp_registry.src
-
-${MYCMD} --files desktop/source/deployment/registry/help/dp_help.src
-
-${MYCMD} --files desktop/source/deployment/registry/package/dp_package.src
-
-${MYCMD} --files desktop/source/deployment/registry/script/dp_script.src
-
-${MYCMD} --files desktop/source/deployment/registry/sfwk/dp_sfwk.src
-
-${MYCMD} --files desktop/source/deployment/unopkg/unopkg.src
-
-${MYCMD} --files editeng/source/accessibility/accessibility.src
-
-${MYCMD} --files editeng/source/editeng/editeng.src
-
-${MYCMD} --base editeng/source/items --files page.src svxitems.src
-
-${MYCMD} --files editeng/source/misc/lingu.src
-
-${MYCMD} --files editeng/source/outliner/outliner.src
-
-${MYCMD} --files extensions/source/abpilot/abspilot.src
-
-${MYCMD} --base extensions/source/bibliography --files bib.src sections.src toolbar.src
-
-${MYCMD} --base extensions/source/dbpilots --files commonpagesdbp.src dbpilots.src gridpages.src groupboxpages.src listcombopages.src
-
-${MYCMD} --base extensions/source/propctrlr --files formlinkdialog.src pcrmiscres.src propres.src selectlabeldialog.src
-
-${MYCMD} --files extensions/source/scanner/strings.src
-
-${MYCMD} --files filter/source/graphicfilter/eps/epsstr.src
-
-${MYCMD} --base filter/source/pdf --files impdialog.src pdf.src
-
-${MYCMD} --files filter/source/t602/t602filter.src
-
-${MYCMD} --files filter/source/xsltdialog/xmlfilterdialogstrings.src
-
-${MYCMD} --base forms/source/resource --files strings.src xforms.src
-
-${MYCMD} --files formula/source/core/resource/core_resource.src
-
-${MYCMD} --base formula/source/ui/dlg --files formdlgs.src parawin.src
-
-${MYCMD} --base fpicker/source/office --files iodlg.src OfficeFilePicker.src
-
-${MYCMD} --files framework/source/classes/resource.src
-
-${MYCMD} --files reportdesign/source/core/resource/strings.src
-
-${MYCMD} --base reportdesign/source/ui/dlg --files CondFormat.src GroupsSorting.src Navigator.src PageNumber.src
-
-${MYCMD} --files reportdesign/source/ui/inspection/inspection.src
-
-${MYCMD} --files reportdesign/source/ui/report/report.src
-
-${MYCMD} --files sc/source/core/src/compiler.src
-
-${MYCMD} --files sc/source/ui/cctrl/checklistmenu.src
-
-${MYCMD} --base sc/source/ui/dbgui --files outline.src pvfundlg.src
+${MYCMD} --base formula/source/ui/dlg --files parawin.src
 
 ${MYCMD} --files sc/source/ui/formdlg/dwfunctr.src
 
-${MYCMD} --base sc/source/ui/miscdlgs --files acredlin.src conflictsdlg.src retypepassdlg.src
-
-${MYCMD} --files sc/source/ui/navipi/navipi.src
-
 ${MYCMD} --base sc/source/ui/sidebar --files CellAppearancePropertyPanel.src NumberFormatPropertyPanel.src
 
-${MYCMD} --base sc/source/ui/src --files condformatdlg.src globstr.src iconsets.src sc.src scerrors.src scfuncs.src scstring.src scwarngs.src toolbox.src
+${MYCMD} --base sc/source/ui/src --files condformatdlg.src iconsets.src scwarngs.src
 
-${MYCMD} --files sc/source/ui/StatisticsDialogs/StatisticsDialogs.src
+${MYCMD} --base scaddins/source/analysis --files analysis_deffuncnames.src
 
-${MYCMD} --files sc/source/ui/styleui/scstyles.src
-
-${MYCMD} --base scaddins/source/analysis --files analysis.src analysis_deffuncnames.src analysis_funcnames.src
-
-${MYCMD} --files scaddins/source/datefunc/datefunc.src
-
-${MYCMD} --files scaddins/source/pricing/pricing.src
-
-${MYCMD} --files sccomp/source/solver/solver.src
-
-${MYCMD} --files sd/source/core/glob.src
-
-${MYCMD} --files sd/source/ui/accessibility/accessibility.src
-
-${MYCMD} --files sd/source/ui/animations/CustomAnimation.src
-
-${MYCMD} --files sd/source/ui/annotations/annotations.src
-
-${MYCMD} --base sd/source/ui/app --files popup.src res_bmp.src sdstring.src strings.src toolbox.src
+${MYCMD} --base sd/source/ui/app --files popup.src res_bmp.src
 
 ${MYCMD} --files sd/source/ui/dlg/navigatr.src
 
 ${MYCMD} --files sd/source/ui/slideshow/slideshow.src
 
-${MYCMD} --files sd/source/ui/view/DocumentRenderer.src
+${MYCMD} --base sfx2/source/bastyp --files bastyp.src
 
-${MYCMD} --base sfx2/source/appl --files app.src newhelp.src sfx.src
+${MYCMD} --base sfx2/source/dialog --files templdlg.src titledockwin.src
 
-${MYCMD} --base sfx2/source/bastyp --files bastyp.src fltfnc.src
+${MYCMD} --base sfx2/source/doc --files graphhelp.src
 
-${MYCMD} --files sfx2/source/control/templateview.src
+${MYCMD} --base svtools/source/misc --files ehdl.src
 
-${MYCMD} --base sfx2/source/dialog --files dialog.src dinfdlg.src filedlghelper.src newstyle.src recfloat.src taskpane.src templdlg.src titledockwin.src versdlg.src
-
-${MYCMD} --base sfx2/source/doc --files doc.src doctempl.src graphhelp.src templatelocnames.src
-
-${MYCMD} --files sfx2/source/sidebar/Sidebar.src
-
-${MYCMD} --files sfx2/source/view/view.src
-
-${MYCMD} --base starmath/source --files commands.src smres.src symbol.src
-
-${MYCMD} --files svl/source/misc/mediatyp.src
-
-${MYCMD} --base svtools/source/contnr --files fileview.src templwin.src
-
-${MYCMD} --base svtools/source/control --files calendar.src ctrlbox.src ctrltool.src filectrl.src ruler.src
-
-${MYCMD} --base svtools/source/dialogs --files addresstemplate.src filedlg2.src formats.src so3res.src wizardmachine.src
-
-${MYCMD} --files svtools/source/java/javaerror.src
-
-${MYCMD} --base svtools/source/misc --files ehdl.src imagemgr.src langtab.src svtools.src undo.src
-
-${MYCMD} --files svx/source/accessibility/accessibility.src
-
-${MYCMD} --files svx/source/core/graphichelper.src
-
-${MYCMD} --base svx/source/dialog --files bmpmask.src compressgraphicdialog.src dlgctrl.src docrecovery.src frmsel.src imapdlg.src langbox.src language.src passwd.src prtqry.src ruler.src sdstring.src srchdlg.src svxbmpnumvalueset.src swframeposstrings.src txenctab.src ucsubset.src
-
-${MYCMD} --base svx/source/engine3d --files float3d.src string3d.src
+${MYCMD} --base svx/source/dialog --files imapdlg.src langbox.src srchdlg.src
 
 ${MYCMD} --files svx/source/fmcomp/gridctrl.src
 
-${MYCMD} --base svx/source/form --files datanavi.src filtnav.src fmexpl.src fmstring.src
-
-${MYCMD} --base svx/source/gallery2 --files gallery.src galtheme.src
-
-${MYCMD} --base svx/source/items --files svxerr.src svxitems.src
+${MYCMD} --base svx/source/form --files filtnav.src fmexpl.src
 
 ${MYCMD} --files svx/source/sidebar/area/AreaPropertyPanel.src
 
@@ -420,87 +260,17 @@ ${MYCMD} --files svx/source/sidebar/text/TextPropertyPanel.src
 
 ${MYCMD} --files svx/source/src/errtxt.src
 
-${MYCMD} --files svx/source/stbctrls/stbctrls.src
+${MYCMD} --base sw/source/ui/app --files mn.src
 
-${MYCMD} --files svx/source/svdraw/svdstr.src
-
-${MYCMD} --files svx/source/table/table.src
-
-${MYCMD} --base svx/source/tbxctrls --files colrctrl.src extrusioncontrols.src fontworkgallery.src grafctrl.src lboxctrl.src tbcontrl.src tbunosearchcontrollers.src
-
-${MYCMD} --base svx/source/toolbars --files extrusionbar.src fontworkbar.src
-
-${MYCMD} --files sw/source/core/layout/pagefrm.src
-
-${MYCMD} --files sw/source/core/undo/undo.src
-
-${MYCMD} --files sw/source/core/unocore/unocore.src
-
-${MYCMD} --base sw/source/ui/app --files app.src error.src mn.src
-
-${MYCMD} --files sw/source/ui/chrdlg/chrdlg.src
-
-${MYCMD} --base sw/source/ui/config --files optdlg.src optload.src
-
-${MYCMD} --base sw/source/ui/dbui --files dbui.src mailmergewizard.src mmaddressblockpage.src selectdbtabledialog.src
-
-${MYCMD} --files sw/source/ui/dialog/dialog.src
-
-${MYCMD} --files sw/source/ui/dochdl/dochdl.src
-
-${MYCMD} --base sw/source/ui/docvw --files access.src annotation.src
-
-${MYCMD} --base sw/source/ui/envelp --files envelp.src envprt.src label.src labfmt.src
-
-${MYCMD} --files sw/source/ui/fldui/fldui.src
-
-${MYCMD} --files sw/source/ui/frmdlg/frmui.src
-
-${MYCMD} --files sw/source/ui/globdoc/globdoc.src
-
-${MYCMD} --base sw/source/ui/index --files cnttab.src idxmrk.src
-
-${MYCMD} --base sw/source/ui/misc --files glossary.src swruler.src
-
-${MYCMD} --files sw/source/ui/shells/shells.src
-
-${MYCMD} --files sw/source/ui/sidebar/PagePropertyPanel.src
-
-${MYCMD} --base sw/source/ui/utlui --files poolfmt.src utlui.src
-
-${MYCMD} --files sw/source/ui/web/web.src
-
-${MYCMD} --files sw/source/uibase/dbui/mailmergechildwindow.src
-
-${MYCMD} --files sw/source/uibase/dialog/regionsw.src
-
-${MYCMD} --files sw/source/uibase/docvw/docvw.src
-
-${MYCMD} --files sw/source/uibase/lingu/olmenu.src
+${MYCMD} --base sw/source/ui/envelp --files envprt.src
 
 ${MYCMD} --files sw/source/uibase/misc/redlndlg.src
 
-${MYCMD} --base sw/source/uibase/ribbar --files inputwin.src workctrl.src
-
-${MYCMD} --files sw/source/uibase/uiview/view.src
-
-${MYCMD} --base sw/source/uibase/utlui --files attrdesc.src initui.src navipi.src statusbar.src unotools.src
-
-${MYCMD} --files sw/source/uibase/wrtsh/wrtsh.src
-
-${MYCMD} --base uui/source --files alreadyopen.src filechanged.src ids.src lockfailed.src lockcorrupt.src nameclashdlg.src openlocked.src passworddlg.src passworderrs.src trylater.src
-
 ${MYCMD} --files wizards/source/euro/euro.src
-
-${MYCMD} --files wizards/source/formwizard/dbwizres.src
 
 ${MYCMD} --files wizards/source/importwizard/importwi.src
 
 ${MYCMD} --files wizards/source/template/template.src
-
-${MYCMD} --files xmlsecurity/source/component/warnbox.src
-
-${MYCMD} --base xmlsecurity/source/dialogs --files certificateviewer.src digitalsignaturesdialog.src
 
 
 # .xcu files
