@@ -30,8 +30,10 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <ftninfo.hxx>
+#include <drawdoc.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svx/svdpage.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -944,6 +946,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf111964, "tdf111964.docx")
     // Unicode spaces that are not XML whitespace must not be trimmed
     const sal_Unicode sWSReference [] { 0x2002, 0x2002, 0x2002, 0x2002, 0x2002, 0 };
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", sWSReference);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWatermarkLayer, "watermark-layer.docx")
+{
+    // Watermark was not visible if page background was set.
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SdrPage* pPage = pTextDoc->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+
+    CPPUNIT_ASSERT(pObject);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(1), pObject->GetLayer().get());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
