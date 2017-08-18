@@ -57,6 +57,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
     mbFullDrag          = true;
+    mbScrollTypeSet     = false;
 
     mpLinkedField       = nullptr;
 
@@ -627,7 +628,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( ImplIsPageUp( rMousePos ) )
         {
-            if( GetStyle() & WB_SLIDERSET )
+            if( mbScrollTypeSet )
                 meScrollType = ScrollType::Set;
             else
             {
@@ -637,7 +638,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( ImplIsPageDown( rMousePos ) )
         {
-            if( GetStyle() & WB_SLIDERSET )
+            if( mbScrollTypeSet )
                 meScrollType = ScrollType::Set;
             else
             {

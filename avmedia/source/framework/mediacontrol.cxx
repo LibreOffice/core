@@ -46,9 +46,11 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     meControlStyle( eControlStyle )
 {
     mpPlayToolBox =  VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
-    mpTimeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET) ;
+    mpTimeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_3DLOOK) ;
+    mpTimeSlider->SetScrollTypeSet(true);
     mpMuteToolBox = VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
-    mpVolumeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_SLIDERSET) ;
+    mpVolumeSlider = VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG) ;
+    mpVolumeSlider->SetScrollTypeSet(true);
     mpZoomToolBox = VclPtr<ToolBox>::Create(this, WB_3DLOOK) ;
     mpZoomListBox = VclPtr<ListBox>::Create( mpZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ;
     mpTimeEdit = VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ;
