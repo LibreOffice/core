@@ -145,6 +145,7 @@ public:
     VclPtr<SvtUpButton_Impl>               _pBtnUp;
     VclPtr<PushButton>                     _pBtnNewFolder;
     VclPtr<CheckBox>                       _pCbPassword;
+    VclPtr<CheckBox>                       _pCbGPGEncrypt;
     VclPtr<SvtURLBox>                      _pEdCurrentPath;
     VclPtr<CheckBox>                       _pCbAutoExtension;
     VclPtr<CheckBox>                       _pCbOptions;
