@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c61d1abf",
+        "filename": "external/libxmlsec/ExternalProject_xmlsec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001521
+      },
+      "writtenOn": "2017-08-18T13:55:33Z",
+      "side": 1,
+      "message": "Looks like because of this closing literal(\u0027\"\u0027) which wasn\u0027t previously there, the Desktop build failed. If I don\u0027t add this, Android build won\u0027t go through because LDFLAGS are never closed.",
+      "revId": "defaee6bf8158b26e42364302891dacfbf142d3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
