@@ -58,7 +58,6 @@ WinBits
 WB_BORDER                   We draw a border around the window.
 WB_TABSTOP                  Keyboard control is possible. We get the focus, when
                             the user clicks in the Control.
-WB_QUICKHELPSHOWSDATEINFO   Show DateInfo as BallonHelp even if QuickInfo is enabled
 WB_BOLDTEXT                 We format by bold texts and DIB_BOLD is evaluated by
                             AddDateInfo()
 WB_FRAMEINFO                We format in a way, so that FrameInfo can be displayed
@@ -131,7 +130,6 @@ calls or by ending a selection.
 
 *************************************************************************/
 
-#define WB_QUICKHELPSHOWSDATEINFO   ((WinBits)0x00004000)
 #define WB_BOLDTEXT                 ((WinBits)0x00008000)
 #define WB_FRAMEINFO                ((WinBits)0x00010000)
 #define WB_WEEKNUMBER               ((WinBits)0x00020000)
