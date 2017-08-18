@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <string.h>
+#include "poolio.hxx"
 
 #include <sal/log.hxx>
 #include <tools/solar.h>
 #include <svl/itempool.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include "poolio.hxx"
+
 #include <algorithm>
 #include <memory>
 
@@ -117,27 +116,5 @@ bool SfxItemPool::CheckItemInPool(const SfxPoolItem *pItem) const
     SAL_WARN( "svl.items", "Item not in the pool, with ID/pos " << pItem->Which());
     return false;
 }
-
-OUString readByteString(SvStream& rStream)
-{
-    return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
-}
-
-void writeByteString(SvStream & rStream, const OUString& rString)
-{
-    rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
-}
-
-OUString readUnicodeString(SvStream & rStream, bool bUnicode)
-{
-    return rStream.ReadUniOrByteString(bUnicode ? RTL_TEXTENCODING_UCS2 :
-                                      rStream.GetStreamCharSet());
-}
-
-void writeUnicodeString(SvStream & rStream, const OUString& rString)
-{
-    rStream.WriteUniOrByteString(rString, RTL_TEXTENCODING_UCS2);
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

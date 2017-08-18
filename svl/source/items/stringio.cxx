@@ -17,32 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
-#define INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
+#include "stringio.hxx"
 
-#include <rtl/ustring.hxx>
-
-class SvStream;
-
-/** Read in a Unicode string from a streamed byte string representation.
-
-    @param rStream  Some (input) stream.  Its Stream/TargetCharSets must
-    be set to correct values!
-
-    @return  On success, returns the reconstructed Unicode string.
- */
-OUString readByteString(SvStream & rStream);
-
-/** Write a byte string representation of a Unicode string into a stream.
-
-    @param rStream  Some (output) stream.  Its Stream/TargetCharSets must
-    be set to correct values!
-
-    @param rString  Some Unicode string.
- */
-void writeByteString(SvStream & rStream, const OUString& rString);
+#include <tools/stream.hxx>
 
 
-#endif // INCLUDED_SVL_SOURCE_INC_STRINGIO_HXX
+OUString readByteString(SvStream& rStream)
+{
+    return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
+}
+
+void writeByteString(SvStream & rStream, const OUString& rString)
+{
+    rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
