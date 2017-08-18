@@ -2185,6 +2185,14 @@ void DomainMapper_Impl::PopShapeContext()
             {
             }
         }
+        // Move Watermark upper to be visible if page background is set
+        uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
+        uno::Reference<container::XNamed> xNamed( xShape, uno::UNO_QUERY );
+        if ( xNamed.is() && xNamed->getName().match( "PowerPlusWaterMarkObject" ) )
+        {
+            uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
+            xShapePropertySet->setPropertyValue( "LayerID", uno::makeAny( sal_Int16(1) ) );
+        }
         m_aAnchoredStack.pop();
     }
     m_bFrameBtLr = false;

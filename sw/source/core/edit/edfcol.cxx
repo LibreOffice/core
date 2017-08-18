@@ -474,6 +474,7 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
         xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
         xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
+        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_LAYERID, uno::makeAny(sal_Int16(1)));
 
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
         xTextRange->setString(rWatermark.GetText());
