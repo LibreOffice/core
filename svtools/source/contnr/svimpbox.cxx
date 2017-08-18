@@ -55,7 +55,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     , m_pStringSorter(nullptr)
     , aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
     , aOutputSize(0, 0)
-    , nExtendedWinBits(0)
+    , mbNoAutoCurEntry(false)
     , aSelEng(pLBView, nullptr)
     , nNextVerVisSize(0)
 {
@@ -244,9 +244,9 @@ void SvImpLBox::SetStyle( WinBits i_nWinStyle )
         aSelEng.AddAlways( true );
 }
 
-void SvImpLBox::SetExtendedWindowBits( ExtendedWinBits _nBits )
+void SvImpLBox::SetNoAutoCurEntry( bool b )
 {
-    nExtendedWinBits = _nBits;
+    mbNoAutoCurEntry = b;
 }
 
 // don't touch the model any more
@@ -924,7 +924,7 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     rRenderContext.SetClipRegion(aClipRegion);
 
-    if (!pCursor && ((nExtendedWinBits & EWB_NO_AUTO_CURENTRY) == 0))
+    if (!pCursor && !mbNoAutoCurEntry)
     {
         // do not select if multiselection or explicit set
         bool bNotSelect = (aSelEng.GetSelectionMode() == SelectionMode::Multiple ) || ((m_nStyle & WB_NOINITIALSELECTION) == WB_NOINITIALSELECTION);

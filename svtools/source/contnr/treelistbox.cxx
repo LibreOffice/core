@@ -1429,9 +1429,9 @@ void SvTreeListBox::dispose()
     Control::dispose();
 }
 
-void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
+void SvTreeListBox::SetNoAutoCurEntry( bool b )
 {
-    pImpl->SetExtendedWindowBits( _nBits );
+    pImpl->SetNoAutoCurEntry( b );
 }
 
 void SvTreeListBox::SetModel( SvTreeList* pNewModel )

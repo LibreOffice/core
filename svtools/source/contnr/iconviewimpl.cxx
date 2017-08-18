@@ -413,7 +413,7 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     vcl::Region aClipRegion(GetClipRegionRect());
 
-    if (!pCursor && ((nExtendedWinBits & EWB_NO_AUTO_CURENTRY) == 0))
+    if (!pCursor && !mbNoAutoCurEntry)
     {
         // do not select if multiselection or explicit set
         bool bNotSelect = (aSelEng.GetSelectionMode() == SelectionMode::Multiple ) || ((m_nStyle & WB_NOINITIALSELECTION) == WB_NOINITIALSELECTION);

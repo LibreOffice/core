@@ -78,7 +78,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
 {
     SetSpaceBetweenEntries(SPACEBETWEENENTRIES);
     SetSelectionMode( SelectionMode::NONE );
-    SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
+    SetNoAutoCurEntry( true );
     SetNodeDefaultImages( );
     EnableEntryMnemonics();
 }
