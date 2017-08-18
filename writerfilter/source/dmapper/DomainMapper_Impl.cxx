@@ -89,7 +89,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 
-
+#include <docsh.hxx>
 
 
 
@@ -4752,6 +4752,21 @@ void DomainMapper_Impl::PopFieldContext()
                                 OUString sDisplayName("Index Link");
                                 xCrsrProperties->setPropertyValue("VisitedCharStyleName",uno::makeAny(sDisplayName));
                                 xCrsrProperties->setPropertyValue("UnvisitedCharStyleName",uno::makeAny(sDisplayName));
+                            }
+                            else
+                            {
+                                // tdf#43017: TODO: Generate new style name, or it will be created
+                                // automatically? Depends on later UNO calls
+                                OUString sStyleName = "Hyperlink";
+                                // TODO: Desired call is to call this method:
+                                // draft: we have no DocShell and here goes call to private method
+                                // Exact call should be done via SwDocShell::ExecStyleSheet( SfxRequest& rReq )
+                                // SwDocShell * pDocShell = m_xTextDocument->GetDocShell();
+                                // pDocShell->MakeByExample(sDisplayName, SfxStyleFamily::Char, SFXSTYLEBIT_ALL, nullptr);
+
+                                // And here we are setting style for our range
+                                xCrsrProperties->setPropertyValue("VisitedCharStyleName", uno::makeAny(sStyleName));
+                                xCrsrProperties->setPropertyValue("UnvisitedCharStyleName", uno::makeAny(sStyleName));
                             }
                         }
                         else if(m_bStartGenericField)
