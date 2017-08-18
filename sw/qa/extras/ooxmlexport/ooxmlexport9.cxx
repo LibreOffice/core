@@ -59,7 +59,7 @@ public:
     }
 };
 
-DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
+/*DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -1072,6 +1072,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
     expectedFieldName += bookmarkName;
     expectedFieldName += " \\h ";
     CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
+}*/
+
+DECLARE_OOXMLEXPORT_TEST(testTdf43017, "tdf43017.docx")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    uno::Reference<text::XTextRange> xText = getRun(xParagraph, 2, "kick the bucket");
+
+    // Ensure that hyperlink text color is not blue (0x0000ff), but default (-1)
+    CPPUNIT_ASSERT_MESSAGE("Hyperlink color should be not blue!",
+        sal_Int32(0x0000ff) != getProperty<sal_Int32>(xText, "CharColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
