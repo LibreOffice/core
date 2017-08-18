@@ -158,8 +158,6 @@ public:
     virtual void        Clone(SvLBoxItem* pSource) = 0;
 };
 
-#define WB_FORCE_SELECTION          ((WinBits)0x8000)
-
 enum class DragDropMode
 {
     NONE            = 0x0000,
