@@ -16,6 +16,24 @@
       "revId": "defaee6bf8158b26e42364302891dacfbf142d3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06364203",
+        "filename": "external/libxmlsec/ExternalProject_xmlsec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-08-18T16:22:19Z",
+      "side": 1,
+      "message": "i think the \" is already there, between \\\\ and \\$$ ... this is a quoting nightmare anyway... \n\nthe problem is that the \" is only in the LINUX/FREEBSD branch; try to put a \" between the ,, of the $(if i.e. the \"then-branch\", that should fix it",
+      "parentUuid": "1a430d35_c61d1abf",
+      "revId": "defaee6bf8158b26e42364302891dacfbf142d3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
