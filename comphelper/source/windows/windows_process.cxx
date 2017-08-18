@@ -6,6 +6,7 @@
 #include <shellapi.h>
 
 #include <cstddef>
+#include <cstring>
 #include <cwchar>
 
 // Needed for CreateEnvironmentBlock
@@ -189,10 +190,12 @@ WinLaunchChild(const wchar_t *exePath,
         return FALSE;
     }
 
-    STARTUPINFOW si = {0};
+    STARTUPINFOW si;
+    std::memset(&si, 0, sizeof si);
     si.cb = sizeof(STARTUPINFOW);
     si.lpDesktop = const_cast<LPWSTR>(L"winsta0\\Default");
-    PROCESS_INFORMATION pi = {0};
+    PROCESS_INFORMATION pi;
+    std::memset(&pi, 0, sizeof pi);
 
     if (userToken == nullptr)
     {
