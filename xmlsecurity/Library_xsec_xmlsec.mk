@@ -126,20 +126,11 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_NSS \
 ))
 
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/openssl/.libs/libxmlsec1-openssl.a \
-	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
-))
-else
-
 ifeq ($(SYSTEM_XMLSEC),)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
-endif
-
 endif
 
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\

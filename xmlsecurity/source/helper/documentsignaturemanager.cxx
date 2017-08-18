@@ -64,14 +64,14 @@ bool DocumentSignatureManager::init()
     initXmlSec();
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
     mxGpgSEInitializer.set(new SEInitializerGpg());
 #endif
 
     if (mxSEInitializer.is())
         mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
     if (mxGpgSEInitializer.is())
         mxGpgSecurityContext = mxGpgSEInitializer->createSecurityContext(OUString());
 
