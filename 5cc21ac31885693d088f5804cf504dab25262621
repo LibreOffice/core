@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_06bf22d1",
+        "filename": "include/tools/line.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-08-18T12:20:54Z",
+      "side": 1,
+      "message": "looks unrelated",
+      "revId": "5cc21ac31885693d088f5804cf504dab25262621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
