@@ -58,14 +58,9 @@ WinBits
 WB_BORDER                   We draw a border around the window.
 WB_TABSTOP                  Keyboard control is possible. We get the focus, when
                             the user clicks in the Control.
-WB_BOLDTEXT                 We format by bold texts and DIB_BOLD is evaluated by
-                            AddDateInfo()
-WB_FRAMEINFO                We format in a way, so that FrameInfo can be displayed
-                            and the FrameColor is evaluated by AddDateInfo()
 WB_RANGESELECT              The user can select multiple days, which need to be
                             consecutive
 WB_MULTISELECT              The user can select multiple days
-WB_WEEKNUMBER               We also display the weekdays
 
 --------------------------------------------------------------------------
 
@@ -130,9 +125,6 @@ calls or by ending a selection.
 
 *************************************************************************/
 
-#define WB_BOLDTEXT                 ((WinBits)0x00008000)
-#define WB_FRAMEINFO                ((WinBits)0x00010000)
-#define WB_WEEKNUMBER               ((WinBits)0x00020000)
 // Needs to be in agreement with the WinBits in the TabBar or
 // we move it to \vcl\inc\wintypes.hxx
 #ifndef WB_RANGESELECT
@@ -184,7 +176,6 @@ private:
     long            mnLines;
     long            mnDayWidth;
     long            mnDayHeight;
-    long            mnWeekWidth;
     WinBits         mnWinStyle;
     sal_Int16       mnFirstYear;
     sal_Int16       mnLastYear;

@@ -42,7 +42,6 @@
 #define DAY_OFFY                        2
 #define MONTH_BORDERX                   4
 #define MONTH_OFFY                      3
-#define WEEKNUMBER_OFFX                 4
 #define WEEKDAY_OFFY                    3
 #define TITLE_OFFY                      3
 #define TITLE_BORDERY                   2
@@ -319,35 +318,12 @@ void Calendar::ImplFormat()
 
         vcl::Font aOldFont = GetFont();
 
-        // Wochenanzeige beruecksichtigen
-        if ( mnWinStyle & WB_WEEKNUMBER )
-        {
-            vcl::Font aTempFont = aOldFont;
-            ImplGetWeekFont( aTempFont );
-            SetFont( aTempFont );
-            mnWeekWidth = GetTextWidth( a99Text )+WEEKNUMBER_OFFX;
-            SetFont( aOldFont );
-        }
-        else
-            mnWeekWidth = 0;
-
-        if ( mnWinStyle & WB_BOLDTEXT )
-        {
-            vcl::Font aFont = aOldFont;
-            if ( aFont.GetWeight() < WEIGHT_BOLD )
-                aFont.SetWeight( WEIGHT_BOLD );
-            else
-                aFont.SetWeight( WEIGHT_NORMAL );
-            SetFont( aFont );
-        }
-
         long n99TextWidth = GetTextWidth( a99Text );
         long nTextHeight = GetTextHeight();
 
         // calculate width and x-position
         mnDayWidth      = n99TextWidth+DAY_OFFX;
         mnMonthWidth    = mnDayWidth*7;
-        mnMonthWidth   += mnWeekWidth;
         mnMonthWidth   += MONTH_BORDERX*2;
         mnMonthPerLine  = aOutSize.Width() / mnMonthWidth;
         if ( !mnMonthPerLine )
@@ -356,7 +332,6 @@ void Calendar::ImplFormat()
         mnMonthWidth   += nOver;
         mnDaysOffX      = MONTH_BORDERX;
         mnDaysOffX     += nOver/2;
-        mnDaysOffX     += mnWeekWidth;
 
         // calculate height and y-position
         mnDayHeight     = nTextHeight + DAY_OFFY;
@@ -380,9 +355,6 @@ void Calendar::ImplFormat()
         maNextRect.Right()  = maNextRect.Left()+nSpinSize;
         maNextRect.Bottom() = maNextRect.Top()+nSpinSize;
 
-        if ( mnWinStyle & WB_BOLDTEXT )
-            SetFont( aOldFont );
-
         // Calculate DayOfWeekText (gets displayed in a narrow font)
         maDayOfWeekText.clear();
         long nStartOffX = 0;
@@ -393,8 +365,6 @@ void Calendar::ImplFormat()
             OUString aDayOfWeek( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::DAY, nDay, 2));
             long nOffX = (mnDayWidth-GetTextWidth( aDayOfWeek ))/2;
-            if ( mnWinStyle & WB_BOLDTEXT )
-                nOffX++;
             if ( !nDayOfWeek )
                 nStartOffX = nOffX;
             else
@@ -862,39 +832,8 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             nDeltaY = nDayY + mnDayHeight;
             rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
             Point aStartPos(nDayX, nDeltaY);
-            if (mnWinStyle & WB_WEEKNUMBER)
-                aStartPos.X() -= WEEKNUMBER_OFFX - 2;
             rRenderContext.DrawLine(aStartPos, Point(nDayX + (7 * mnDayWidth), nDeltaY));
             rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, &(mnDayOfWeekAry[1]));
-
-            // display weeknumbers
-            if (mnWinStyle & WB_WEEKNUMBER)
-            {
-                nDayX = nX + mnDaysOffX;
-                nDayY = nY + mnWeekDayOffY;
-                nDeltaY = nDayY + mnDayHeight;
-                long nMonthHeight = mnDayHeight * 6;
-                rRenderContext.DrawLine(Point(nDayX - WEEKNUMBER_OFFX + 2, nDeltaY),
-                                        Point(nDayX - WEEKNUMBER_OFFX + 2, nDeltaY + nMonthHeight));
-                vcl::Font aOldFont = rRenderContext.GetFont();
-                vcl::Font aTempFont = aOldFont;
-                ImplGetWeekFont(aTempFont);
-                rRenderContext.SetFont(aTempFont);
-                nDayX -= mnWeekWidth;
-                nDayY = nY + mnDaysOffY;
-                maCalendarWrapper.setGregorianDateTime(aDate);
-                for (sal_uInt16 nWeekCount = 0; nWeekCount < 6; ++nWeekCount)
-                {
-                    sal_Int32 nWeek = maCalendarWrapper.getValue(i18n::CalendarFieldIndex::WEEK_OF_YEAR);
-                    OUString aWeekText(OUString::number(nWeek));
-                    long nOffX = (mnWeekWidth - WEEKNUMBER_OFFX) - rRenderContext.GetTextWidth(aWeekText);
-                    long nOffY = (mnDayHeight - GetTextHeight()) / 2;
-                    rRenderContext.DrawText(Point(nDayX + nOffX, nDayY + nOffY), aWeekText);
-                    nDayY += mnDayHeight;
-                    maCalendarWrapper.addValue(i18n::CalendarFieldIndex::DAY_OF_MONTH, 7);
-                }
-                rRenderContext.SetFont(aOldFont);
-            }
 
             // display days
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
@@ -1899,37 +1838,11 @@ Size Calendar::CalcWindowSizePixel() const
     OUString  a99Text("99");
     vcl::Font aOldFont = GetFont();
 
-    // take display of week into account
-    long nWeekWidth;
-    if ( mnWinStyle & WB_WEEKNUMBER )
-    {
-        vcl::Font aTempFont = aOldFont;
-        ImplGetWeekFont( aTempFont );
-        const_cast<Calendar*>(this)->SetFont( aTempFont );
-        nWeekWidth = GetTextWidth( a99Text )+WEEKNUMBER_OFFX;
-        const_cast<Calendar*>(this)->SetFont( aOldFont );
-    }
-    else
-        nWeekWidth = 0;
-
-    if ( mnWinStyle & WB_BOLDTEXT )
-    {
-        vcl::Font aFont = aOldFont;
-        if ( aFont.GetWeight() < WEIGHT_BOLD )
-            aFont.SetWeight( WEIGHT_BOLD );
-        else
-            aFont.SetWeight( WEIGHT_NORMAL );
-        const_cast<Calendar*>(this)->SetFont( aFont );
-    }
-
     Size    aSize;
     long    n99TextWidth = GetTextWidth( a99Text );
     long    nTextHeight = GetTextHeight();
 
-    if ( mnWinStyle & WB_BOLDTEXT )
-        const_cast<Calendar*>(this)->SetFont( aOldFont );
-
-    aSize.Width()  += ((n99TextWidth+DAY_OFFX)*7) + nWeekWidth;
+    aSize.Width()  += ((n99TextWidth+DAY_OFFX)*7);
     aSize.Width()  += MONTH_BORDERX*2;
 
     aSize.Height()  = nTextHeight + TITLE_OFFY + (TITLE_BORDERY*2);
