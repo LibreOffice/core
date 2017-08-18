@@ -58,8 +58,6 @@ Warning           ||   ||      |
 #define ERRCODE_DYNAMIC_COUNT            31UL
 #define ERRCODE_DYNAMIC_MASK             (31UL << ERRCODE_DYNAMIC_SHIFT)
 
-/** we get included in contexts that don't have access to config_typesizes.h or C++11 */
-
 class SAL_WARN_UNUSED ErrCode final
 {
 public:
