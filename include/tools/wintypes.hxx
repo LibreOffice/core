@@ -265,7 +265,6 @@ WinBits const WB_QUICK_SEARCH =         SAL_CONST_INT64(0x010000000000);
 // For FileOpen Dialog
 WinBits const WB_PATH =                 0x00100000;
 WinBits const WB_OPEN =                 0x00200000;
-WinBits const WB_SAVEAS =               0x00400000;
 
 
 
