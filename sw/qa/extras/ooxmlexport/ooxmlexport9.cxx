@@ -30,8 +30,10 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <ftninfo.hxx>
+#include <drawdoc.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svx/svdpage.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -991,6 +993,18 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end
     // Check anchor type
     xPropertySet2.set(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testWatermarkLayer, "watermark-layer.docx")
+{
+    // Watermark was not visible if page background was set.
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SdrPage* pPage = pTextDoc->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+
+    CPPUNIT_ASSERT(pObject);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(1), pObject->GetLayer().get());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
