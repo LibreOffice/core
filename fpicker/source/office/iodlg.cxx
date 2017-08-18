@@ -555,6 +555,7 @@ void SvtFileDialog::Init_Impl
     get(pImpl->_pBtnConnectToServer, "connect_to_server");
     get(pImpl->_pBtnNewFolder, "new_folder");
     get(pImpl->_pCbPassword, "password");
+    get(pImpl->_pCbGPGEncrypt, "gpgencrypt");
     get(pImpl->_pCbAutoExtension, "extension");
     get(pImpl->_pFtFileVersion, "shared_label");
     get(pImpl->_pLbFileVersion, "shared");
@@ -637,6 +638,11 @@ void SvtFileDialog::Init_Impl
         pImpl->_pCbPassword->SetText( FpsResId( STR_SVT_FILEPICKER_PASSWORD ) );
         pImpl->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         pImpl->_pCbPassword->Show();
+    }
+    if ( nStyle & PickerFlags::Password )
+    {
+        pImpl->_pCbGPGEncrypt->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
+        pImpl->_pCbGPGEncrypt->Show();
     }
 
     // set the ini file for extracting the size
@@ -1529,6 +1535,8 @@ IMPL_LINK( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
         nId = CHECKBOX_READONLY;
     else if ( pCheckBox == pImpl->_pCbPassword )
         nId = CHECKBOX_PASSWORD;
+    else if ( pCheckBox == pImpl->_pCbGPGEncrypt )
+        nId = CHECKBOX_GPGENCRYPTION;
     else if ( pCheckBox == _pCbLinkBox )
         nId = CHECKBOX_LINK;
     else if ( pCheckBox == _pCbPreviewBox )
@@ -2316,6 +2324,10 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl )
 
         case CHECKBOX_PASSWORD:
             pReturn = pImpl->_pCbPassword;
+            break;
+
+        case CHECKBOX_GPGENCRYPTION:
+            pReturn = pImpl->_pCbGPGEncrypt;
             break;
 
         case CHECKBOX_FILTEROPTIONS:
