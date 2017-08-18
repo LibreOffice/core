@@ -1166,7 +1166,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
         if( !bIsInTempPath )
         {
             wchar_t sPath[MAX_PATH+1];
-            HRESULT hRes = SHGetFolderPathW( NULL, CSIDL_INTERNET_CACHE, NULL, SHGFP_TYPE_CURRENT, sPath );
+            HRESULT hRes = SHGetFolderPathW( nullptr, CSIDL_INTERNET_CACHE, nullptr, SHGFP_TYPE_CURRENT, sPath );
             if( SUCCEEDED(hRes) )
             {
                 OUString sTempINetFiles;
