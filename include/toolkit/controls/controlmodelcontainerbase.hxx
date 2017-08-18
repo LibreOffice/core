@@ -114,7 +114,7 @@ public:
     void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
     void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
-    // css::container::XElementAcces
+    // css::container::XElementAccess
     css::uno::Type SAL_CALL getElementType(  ) override;
     sal_Bool SAL_CALL hasElements(  ) override;
 
