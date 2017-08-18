@@ -156,6 +156,25 @@ public:
     }
 
     /**
+     * Renders a dialog with give dialog id and writes the width and height of the rendered dialog
+     *
+     * Client must truncate pBuffer according to the nWidth and nHeight returned after the call.
+     *
+     * @param pDialogId Unique dialog id to be painted
+     * @param pBuffer Buffer with enough memory allocated to render any dialog
+     * @param nWidth output parameter returning the width of the rendered dialog.
+     * @param nHeight output parameter returning the height of the rendered dialog
+     */
+    void paintDialog(const char* pDialogId,
+                     unsigned char* pBuffer,
+                     int& nWidth,
+                     int& nHeight)
+    {
+        return mpDoc->pClass->paintDialog(mpDoc, pDialogId, pBuffer,
+                                          &nWidth, &nHeight);
+    }
+
+    /**
      * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
      *
      * @return an element of the LibreOfficeKitTileMode enum.
@@ -233,6 +252,22 @@ public:
     void postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
     {
         mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount, nButtons, nModifier);
+    }
+
+    /**
+     * Posts a mouse event to the dialog with given id.
+     *
+     * @param aDialogId Dialog id where mouse event is to be posted
+     * @param nType Event type, like down, move or up.
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     * @param nCount number of clicks: 1 for single click, 2 for double click
+     * @param nButtons: which mouse buttons: 1 for left, 2 for middle, 4 right
+     * @param nModifier: which keyboard modifier: (see include/vcl/vclenum.hxx for possible values)
+     */
+    void postDialogMouseEvent(const char* pDialogId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+    {
+        mpDoc->pClass->postDialogMouseEvent(mpDoc, pDialogId, nType, nX, nY, nCount, nButtons, nModifier);
     }
 
     /**
