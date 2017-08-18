@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_069ac214",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-08-18T14:55:59Z",
+      "side": 1,
+      "message": "This is also useless, background tab page do it by iteself.",
+      "range": {
+        "startLine": 403,
+        "startChar": 0,
+        "endLine": 403,
+        "endChar": 113
+      },
+      "revId": "c4858e34b72d3b3cff5466fca7b81a8686028796",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
