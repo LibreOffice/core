@@ -52,6 +52,7 @@
 #include <txatbase.hxx>
 #include <UndoRedline.hxx>
 #include <undobj.hxx>
+#include <UndoBookmark.hxx>
 #include <UndoDelete.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoOverwrite.hxx>
@@ -73,6 +74,7 @@
 #include <svx/svdouno.hxx>
 #include <tools/globname.hxx>
 #include <editeng/formatbreakitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <memory>
 
@@ -3556,6 +3558,36 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         SwUndoRedlineDelete* pUndo = nullptr;
         RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
+
+        auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
+        std::vector<std::unique_ptr<SwUndo>> MarkUndos;
+        for (auto iter = rDMA.getAnnotationMarksBegin();
+                  iter != rDMA.getAnnotationMarksEnd(); )
+        {
+            // tdf#111524 remove annotation marks that have their field
+            // characters deleted
+            SwPosition const& rEndPos((**iter).GetMarkEnd());
+            if (*rPam.Start() < rEndPos && rEndPos <= *rPam.End())
+            {
+                if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+                {
+                    MarkUndos.emplace_back(o3tl::make_unique<SwUndoDeleteBookmark>(**iter));
+                }
+                // iter is into annotation mark vector so must be dereferenced!
+                rDMA.deleteMark(&**iter);
+                // this invalidates iter, have to start over...
+                iter = rDMA.getAnnotationMarksBegin();
+            }
+            else
+            {   // marks are sorted by start
+                if (*rPam.End() < (**iter).GetMarkStart())
+                {
+                    break;
+                }
+                ++iter;
+            }
+        }
+
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
 
@@ -3564,10 +3596,13 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
             //JP 06.01.98: MUSS noch optimiert werden!!!
             m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
                 RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
-
             pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
             const SwRewriter aRewriter = pUndo->GetRewriter();
             m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
+            for (auto& it : MarkUndos)
+            {
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+            }
             m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
 
