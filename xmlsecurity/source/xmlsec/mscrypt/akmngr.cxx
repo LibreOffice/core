@@ -37,39 +37,39 @@
  */
 xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate()
 {
-    xmlSecKeysMngrPtr        keyMngr = NULL ;
-    xmlSecKeyStorePtr        keyStore = NULL ;
+    xmlSecKeysMngrPtr        keyMngr = nullptr ;
+    xmlSecKeyStorePtr        keyStore = nullptr ;
 
     keyStore = xmlSecKeyStoreCreate(xmlSecMSCryptoKeysStoreId) ;
-    if (keyStore == NULL)
+    if (keyStore == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
-                    NULL,
+                    nullptr,
                     "xmlSecKeyStoreCreate",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
-        return NULL ;
+        return nullptr ;
     }
 
     /*-
      * At present, MS Crypto engine do not provide a way to setup a key store.
      */
-    if (keyStore != NULL)
+    if (keyStore != nullptr)
     {
         /*TODO: binding key store.*/
     }
 
     keyMngr = xmlSecKeysMngrCreate() ;
-    if (keyMngr == NULL)
+    if (keyMngr == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
-                    NULL,
+                    nullptr,
                     "xmlSecKeysMngrCreate",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
 
         xmlSecKeyStoreDestroy(keyStore) ;
-        return NULL ;
+        return nullptr ;
     }
 
     /*-
@@ -86,7 +86,7 @@ xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate()
 
         xmlSecKeyStoreDestroy(keyStore) ;
         xmlSecKeysMngrDestroy(keyMngr) ;
-        return NULL ;
+        return nullptr ;
     }
 
     /*-
@@ -95,13 +95,13 @@ xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate()
     if (xmlSecMSCryptoKeysMngrInit(keyMngr) < 0)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
-                    NULL,
+                    nullptr,
                     "xmlSecMSCryptoKeysMngrInit",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
 
         xmlSecKeysMngrDestroy(keyMngr) ;
-        return NULL ;
+        return nullptr ;
     }
 
     /*-
@@ -127,14 +127,14 @@ xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
 {
     xmlSecKeyDataStorePtr x509Store ;
 
-    xmlSecAssert2(mngr != NULL, -1) ;
-    xmlSecAssert2(keyStore != NULL, -1) ;
+    xmlSecAssert2(mngr != nullptr, -1) ;
+    xmlSecAssert2(keyStore != nullptr, -1) ;
 
     x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
-    if (x509Store == NULL)
+    if (x509Store == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
-                    NULL,
+                    nullptr,
                     "xmlSecKeysMngrGetDataStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
@@ -162,14 +162,14 @@ xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore(
 {
     xmlSecKeyDataStorePtr x509Store ;
 
-    xmlSecAssert2(mngr != NULL, -1) ;
-    xmlSecAssert2(trustedStore != NULL, -1) ;
+    xmlSecAssert2(mngr != nullptr, -1) ;
+    xmlSecAssert2(trustedStore != nullptr, -1) ;
 
     x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
-    if (x509Store == NULL)
+    if (x509Store == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
-                    NULL,
+                    nullptr,
                     "xmlSecKeysMngrGetDataStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
@@ -197,14 +197,14 @@ xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore(
 {
     xmlSecKeyDataStorePtr x509Store ;
 
-    xmlSecAssert2(mngr != NULL, -1) ;
-    xmlSecAssert2(untrustedStore != NULL, -1) ;
+    xmlSecAssert2(mngr != nullptr, -1) ;
+    xmlSecAssert2(untrustedStore != nullptr, -1) ;
 
     x509Store = xmlSecKeysMngrGetDataStore(mngr, xmlSecMSCryptoX509StoreId) ;
-    if (x509Store == NULL)
+    if (x509Store == nullptr)
     {
         xmlSecError(XMLSEC_ERRORS_HERE,
-                    NULL,
+                    nullptr,
                     "xmlSecKeysMngrGetDataStore",
                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
                     XMLSEC_ERRORS_NO_MESSAGE) ;
