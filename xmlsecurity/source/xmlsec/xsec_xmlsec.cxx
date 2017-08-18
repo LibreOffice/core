@@ -27,7 +27,7 @@
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xsec_xmlsec.hxx"
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
 # include "gpg/xmlsignature_gpgimpl.hxx"
 #endif
 
@@ -44,7 +44,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
     Reference< XInterface > xFactory ;
 
     if( pImplName != nullptr ) {
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
         if( XMLSignature_GpgImpl::impl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = XMLSignature_GpgImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;

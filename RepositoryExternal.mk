@@ -3268,12 +3268,6 @@ endif # USING_X11
 
 gb_ExternalProject__use_nss3:=
 
-ifeq ($(OS),ANDROID)
-
-gb_LinkTarget__use_nss3:=
-gb_LinkTarget__use_plc4:=
-
-else
 
 ifneq ($(SYSTEM_NSS),)
 
@@ -3368,8 +3362,6 @@ $(call gb_ExternalProject_use_package,$(1),nss)
 endef
 
 endif # SYSTEM_NSS
-
-endif # DESKTOP
 
 ifeq ($(ENABLE_BREAKPAD),TRUE)
 
