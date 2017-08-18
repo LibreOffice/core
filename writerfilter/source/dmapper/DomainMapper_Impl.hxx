@@ -137,19 +137,21 @@ public:
  * --------------------------------------------------*/
 class FieldContext
 {
-    bool                                                                            m_bFieldCommandCompleted;
+    bool m_bFieldCommandCompleted;
     css::uno::Reference<css::text::XTextRange> m_xStartRange;
 
-    OUString                                                                 m_sCommand;
+    OUString m_sCommand;
     OUString m_sResult;
+    boost::optional<FieldId> m_eFieldId;
     bool m_bFieldLocked;
 
     css::uno::Reference<css::text::XTextField> m_xTextField;
-    css::uno::Reference<css::text::XFormField>  m_xFormField;
+    css::uno::Reference<css::text::XFormField> m_xFormField;
     css::uno::Reference<css::beans::XPropertySet> m_xTOC;
     css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
     css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
     OUString                                                                 m_sHyperlinkURL;
+    OUString                                                                        m_sHyperlinkStyle;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
     /// (Character) properties of the field itself.
@@ -163,6 +165,9 @@ public:
 
     void                    AppendCommand(const OUString& rPart);
     const OUString&  GetCommand() const {return m_sCommand; }
+
+    void SetFieldId(FieldId eFieldId ) { m_eFieldId = eFieldId; }
+    boost::optional<FieldId> GetFieldId() const { return m_eFieldId; }
 
     void AppendResult(OUString const& rResult) { m_sResult += rResult; }
     const OUString&  GetResult() const { return m_sResult; }
@@ -188,6 +193,8 @@ public:
 
     void    SetHyperlinkURL( const OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
+    void  SetHyperlinkStyle(const OUString& rStyle) { m_sHyperlinkStyle = rStyle; }
+    const OUString& GetHyperlinkStyle() { return m_sHyperlinkStyle; }
 
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     const FFDataHandler::Pointer_t& getFFDataHandler() const { return m_pFFDataHandler; }
@@ -204,7 +211,7 @@ struct TextAppendContext
     css::uno::Reference<css::text::XTextAppend> xTextAppend;
     css::uno::Reference<css::text::XTextRange> xInsertPosition;
     css::uno::Reference<css::text::XParagraphCursor> xCursor;
-    ParagraphPropertiesPtr                                                        pLastParagraphProperties;
+    ParagraphPropertiesPtr pLastParagraphProperties;
 
     TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
         : xTextAppend(xAppend)
@@ -678,6 +685,8 @@ public:
 
     void PopPageHeaderFooter();
     bool IsInHeaderFooter() const { return m_bInHeaderFooterImport; }
+
+    bool IsInTOC() const { return m_bStartTOC; }
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
