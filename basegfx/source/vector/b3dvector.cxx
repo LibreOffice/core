@@ -81,7 +81,7 @@ namespace basegfx
         if(!fTools::equal(rVecA.getX() * rVecB.getZ(), rVecA.getZ() * rVecB.getX()))
             return false;
 
-        return (fTools::equal(rVecA.getY() * rVecB.getZ(), rVecA.getZ() * rVecB.getY()));
+        return fTools::equal(rVecA.getY() * rVecB.getZ(), rVecA.getZ() * rVecB.getY());
     }
 
 } // end of namespace basegfx
