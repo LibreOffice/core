@@ -27,6 +27,7 @@
 #include <osl/interlck.h>
 #include <osl/process.h>
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 
 #include <cassert>
 #include <string.h>
