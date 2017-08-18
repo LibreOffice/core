@@ -1165,16 +1165,16 @@ void DrawViewShell::ResetActualLayer()
                     {
                         pLayerBar->InsertPage(nLayerPos+1, aName);
 
-                        TabBarPageBits nBits = 0;
+                        bool bDisplayNameBlue = false;
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
                         if (pPV && !pPV->IsLayerVisible(aName))
                         {
                             // invisible layers are displayed differently
-                            nBits = TPB_DISPLAY_NAME_BLUE;
+                            bDisplayNameBlue = true;
                         }
 
-                        pLayerBar->SetPageBits(nLayerPos+1, nBits);
+                        pLayerBar->SetPageDisplayNameBlue(nLayerPos+1, bDisplayNameBlue);
                     }
                 }
                 else
@@ -1184,15 +1184,15 @@ void DrawViewShell::ResetActualLayer()
                     {
                         pLayerBar->InsertPage(nLayerPos+1, aName);
 
-                        TabBarPageBits nBits = 0;
+                        bool bDisplayNameBlue = false;
 
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
                             // invisible layers are displayed differently
-                            nBits = TPB_DISPLAY_NAME_BLUE;
+                            bDisplayNameBlue = true;
                         }
 
-                        pLayerBar->SetPageBits(nLayerPos+1, nBits);
+                        pLayerBar->SetPageDisplayNameBlue(nLayerPos+1, bDisplayNameBlue);
                     }
                 }
             }

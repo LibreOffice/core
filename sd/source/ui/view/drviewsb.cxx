@@ -188,15 +188,15 @@ void DrawViewShell::ModifyLayer (
 
         GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
 
-        TabBarPageBits nBits = 0;
+        bool bDisplayNameBlue = false;
 
         if (!bIsVisible)
         {
             // invisible layers are presented different
-            nBits = TPB_DISPLAY_NAME_BLUE;
+            bDisplayNameBlue = true;
         }
 
-        GetLayerTabControl()->SetPageBits(nCurPage, nBits);
+        GetLayerTabControl()->SetPageDisplayNameBlue(nCurPage, bDisplayNameBlue);
 
         GetViewFrame()->GetDispatcher()->Execute(
             SID_SWITCHLAYER,

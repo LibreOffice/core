@@ -267,10 +267,6 @@ class Button;
 #define WB_INSERTTAB        ((WinBits)0x40000000)
 #define WB_STDTABBAR        WB_BORDER
 
-typedef sal_uInt16 TabBarPageBits;
-
-#define TPB_DISPLAY_NAME_BLUE      ((TabBarPageBits)0x0001)
-
 // - TabBar-Types - used in TabBar::AllowRenaming
 
 enum TabBarAllowRenamingReturnCode {
@@ -388,7 +384,7 @@ public:
     virtual void    Mirror();
 
     void            InsertPage( sal_uInt16 nPageId, const OUString& rText,
-                                TabBarPageBits nBits = 0,
+                                bool bDisplayNameBlue = false,
                                 sal_uInt16 nPos = TabBar::APPEND );
     void            RemovePage( sal_uInt16 nPageId );
     void            MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos );
@@ -400,8 +396,8 @@ public:
 
     bool            IsPageEnabled( sal_uInt16 nPageId ) const;
 
-    void            SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits );
-    TabBarPageBits  GetPageBits( sal_uInt16 nPageId ) const;
+    void            SetPageDisplayNameBlue( sal_uInt16 nPageId, bool bDisplayNameBlue );
+    bool            IsPageDisplayNameBlue( sal_uInt16 nPageId ) const;
 
     sal_uInt16      GetPageCount() const;
     sal_uInt16      GetPageId( sal_uInt16 nPos ) const;

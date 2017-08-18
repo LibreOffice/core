@@ -197,7 +197,7 @@ public:
 struct ImplTabBarItem
 {
     sal_uInt16 mnId;
-    TabBarPageBits mnBits;
+    bool mbDisplayNameBlue;
     OUString maText;
     OUString maHelpText;
     tools::Rectangle maRect;
@@ -208,9 +208,9 @@ struct ImplTabBarItem
     Color maTabBgColor;
     Color maTabTextColor;
 
-    ImplTabBarItem(sal_uInt16 nItemId, const OUString& rText, TabBarPageBits nPageBits)
+    ImplTabBarItem(sal_uInt16 nItemId, const OUString& rText, bool bDisplayNameBlue)
         : mnId(nItemId)
-        , mnBits(nPageBits)
+        , mbDisplayNameBlue(bDisplayNameBlue)
         , maText(rText)
         , mnWidth(0)
         , mbShort(false)
@@ -1173,7 +1173,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             bool bSelected = pItem->IsSelected(pCurItem);
             // We disable custom background color in high contrast mode.
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
-            bool bSpecialTab = (pItem->mnBits & TPB_DISPLAY_NAME_BLUE);
+            bool bSpecialTab = pItem->mbDisplayNameBlue;
             OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth) : pItem->maText;
 
             aDrawer.setRect(aRect);
@@ -1594,15 +1594,14 @@ void TabBar::AddTabClick()
 }
 
 void TabBar::InsertPage(sal_uInt16 nPageId, const OUString& rText,
-                        TabBarPageBits nBits, sal_uInt16 nPos)
+                        bool bDisplayNameBlue, sal_uInt16 nPos)
 {
     DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
     DBG_ASSERT( GetPagePos( nPageId ) == PAGE_NOT_FOUND,
                 "TabBar::InsertPage(): PageId already exists" );
-    DBG_ASSERT( nBits <= TPB_DISPLAY_NAME_BLUE, "TabBar::InsertPage(): nBits is wrong" );
 
     // create PageItem and insert in the item list
-    ImplTabBarItem* pItem = new ImplTabBarItem( nPageId, rText, nBits );
+    ImplTabBarItem* pItem = new ImplTabBarItem( nPageId, rText, bDisplayNameBlue );
     if (nPos < mpImpl->mpItemList.size())
     {
         ImplTabBarList::iterator it = mpImpl->mpItemList.begin();
@@ -1753,7 +1752,7 @@ bool TabBar::IsPageEnabled(sal_uInt16 nPageId) const
     return nPos != PAGE_NOT_FOUND;
 }
 
-void TabBar::SetPageBits(sal_uInt16 nPageId, TabBarPageBits nBits)
+void TabBar::SetPageDisplayNameBlue(sal_uInt16 nPageId, bool bDisplayNameBlue)
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
 
@@ -1761,9 +1760,9 @@ void TabBar::SetPageBits(sal_uInt16 nPageId, TabBarPageBits nBits)
     {
         ImplTabBarItem* pItem = mpImpl->mpItemList[nPos];
 
-        if (pItem->mnBits != nBits)
+        if (pItem->mbDisplayNameBlue != bDisplayNameBlue)
         {
-            pItem->mnBits = nBits;
+            pItem->mbDisplayNameBlue = bDisplayNameBlue;
 
             // redraw bar
             if (IsReallyVisible() && IsUpdateMode())
@@ -1772,14 +1771,14 @@ void TabBar::SetPageBits(sal_uInt16 nPageId, TabBarPageBits nBits)
     }
 }
 
-TabBarPageBits TabBar::GetPageBits(sal_uInt16 nPageId) const
+bool TabBar::IsPageDisplayNameBlue(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
 
     if (nPos != PAGE_NOT_FOUND)
-        return mpImpl->mpItemList[nPos]->mnBits;
+        return mpImpl->mpItemList[nPos]->mbDisplayNameBlue;
     else
-        return 0;
+        return false;
 }
 
 sal_uInt16 TabBar::GetPageCount() const
@@ -2078,7 +2077,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
             aForegroundColor = aFaceTextColor;
             aBackgroundColor = aFaceColor;
         }
-        if (GetPageBits( mnEditId ) & TPB_DISPLAY_NAME_BLUE)
+        if (IsPageDisplayNameBlue( mnEditId ))
         {
             aForegroundColor = Color(COL_LIGHTBLUE);
         }
