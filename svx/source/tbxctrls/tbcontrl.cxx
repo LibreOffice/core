@@ -2807,7 +2807,6 @@ void SvxColorToolBoxControl::EnsurePaletteManager()
 
 SvxColorToolBoxControl::~SvxColorToolBoxControl()
 {
-    m_xPaletteManager.reset(nullptr);
 }
 
 void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction)
