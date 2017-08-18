@@ -79,7 +79,7 @@ $(eval $(call gb_Library_use_system_win32_libs,xmlsecurity,\
     crypt32 \
 ))
 else
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE))$(filter ANDROID,$(OS)))
 $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSEC_CRYPTO_NSS \
 ))

@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,svl))
 
 $(eval $(call gb_Library_use_externals,svl,\
     boost_headers \
-    $(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
+    $(if $(filter LINUX MACOSX ANDROID %BSD SOLARIS,$(OS)), \
         curl) \
     icu_headers \
     icuuc \
@@ -103,7 +103,7 @@ $(eval $(call gb_Library_use_system_win32_libs,svl,\
     crypt32 \
 ))
 else
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE))$(filter ANDROID,$(OS)))
 $(eval $(call gb_Library_add_defs,svl,\
     -DSVL_CRYPTO_NSS \
 ))
