@@ -8190,9 +8190,11 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCo
     m_pSerializer->endElementNS( XML_w, XML_cols );
 }
 
-void DocxAttributeOutput::FormatKeep( const SvxFormatKeepItem& )
+void DocxAttributeOutput::FormatKeep( const SvxFormatKeepItem& rItem )
 {
-    m_pSerializer->singleElementNS( XML_w, XML_keepNext, FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_keepNext,
+            FSNS( XML_w, XML_val ), OString::boolean( rItem.GetValue() ),
+            FSEND );
 }
 
 void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
