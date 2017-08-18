@@ -652,16 +652,6 @@ bool l10nMem::convFilterWarning(const string& sSourceFile,
                 return true;
         }
     }
-    if (sSourceFile == "source/dialog/sdstring.src") {
-        if (sKey == "RID_SVXSTR_LIGHTGREY.String.Text" ||
-            sKey == "RID_SVXSTR_LIGHTBLUE.String.Text" ||
-            sKey == "RID_SVXSTR_LIGHTGREEN.String.Text" ||
-            sKey == "RID_SVXSTR_LIGHTCYAN.String.Text" ||
-            sKey == "RID_SVXSTR_LIGHTRED.String.Text" ||
-            sKey == "RID_SVXSTR_LIGHTMAGENTA.String.Text" ||
-            sKey == "RID_SVXSTR_COLOR_SUN.String.Text")
-            return true;
-    }
     if (sSourceFile == "source/svdraw/svdstr.src" && sKey == "SIP_XA_FORMTXTSTDFORM.String.Text")
         return true;
     return false;
