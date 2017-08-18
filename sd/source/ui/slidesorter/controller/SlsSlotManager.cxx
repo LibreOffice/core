@@ -241,7 +241,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_RENAMEPAGE:
         case SID_RENAME_MASTER_PAGE:
-            RenameSlide ();
+            RenameSlide (rRequest);
             rRequest.Done ();
             break;
 
@@ -851,7 +851,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     }
 }
 
-void SlotManager::RenameSlide()
+void SlotManager::RenameSlide(SfxRequest& rRequest)
 {
     View* pDrView = &mrSlideSorter.GetView();
 
@@ -868,7 +868,14 @@ void SlotManager::RenameSlide()
         pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
     if (pSelectedPage != nullptr)
     {
-        OUString aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
+        // tdf#107183 Set different dialog titles when renaming
+        // master slides or normal ones
+        OUString aTitle;
+        if( rRequest.GetSlot() == SID_RENAME_MASTER_PAGE )
+            aTitle = SdResId( STR_TITLE_RENAMEMASTER );
+        else
+            aTitle = SdResId( STR_TITLE_RENAMESLIDE );
+
         OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
         OUString aPageName = pSelectedPage->GetName();
 
