@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_835b0454",
+        "filename": "svx/source/tbxctrls/PaletteManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-18T06:54:32Z",
+      "side": 1,
+      "message": "the compiler will do this automatically",
+      "revId": "222def87ce7ce1d09fb522df1ef489af405bb61d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a3580058",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2814,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-18T06:54:32Z",
+      "side": 1,
+      "message": "the compiler will do this automatically",
+      "revId": "222def87ce7ce1d09fb522df1ef489af405bb61d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
