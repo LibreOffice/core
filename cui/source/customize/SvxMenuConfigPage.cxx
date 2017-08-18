@@ -126,7 +126,7 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
 
     m_pAddCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, AddCommandHdl ) );
-    //m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
+    m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -297,10 +297,14 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, Button *, void )
     AddFunction();
 }
 
-/*IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, Button *, void )
 {
-    //TODO:Implement
-}*/
+    DeleteSelectedContent();
+    if ( GetSaveInData()->IsModified() )
+    {
+        UpdateButtonStates();
+    }
+}
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
     const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,

@@ -136,7 +136,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pMoveUpButton->Enable();
 
     m_pAddCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, AddCommandHdl ) );
-    //m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, RemoveCommandHdl ) );
+    m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, RemoveCommandHdl ) );
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
@@ -329,10 +329,10 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandHdl, Button *, void )
     AddFunction();
 }
 
-/*IMPL_LINK_NOARG( SvxToolbarConfigPage, RemoveCommandHdl, Button *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, RemoveCommandHdl, Button *, void )
 {
-    //TODO:Implement
-}*/
+    DeleteSelectedContent();
+}
 
 
 void SvxToolbarConfigPage::UpdateButtonStates()
