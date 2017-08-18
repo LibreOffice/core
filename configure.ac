@@ -8816,7 +8816,7 @@ AC_SUBST(SYSTEM_OPENLDAP)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
+if test $_os != iOS -a "$enable_fuzzers" != "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"

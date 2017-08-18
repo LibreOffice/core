@@ -110,7 +110,7 @@ void XSecController::addSignature()
 
 void XSecController::switchGpgSignature()
 {
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX) && !defined(WNT) && !defined(ANDROID)
     // swap signature verifier for the Gpg one
     m_xXMLSignature.set(new XMLSignature_GpgImpl());
     if (!m_vInternalSignatureInformations.empty())
