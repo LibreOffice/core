@@ -1024,7 +1024,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift() && !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) )
                 bRet = !ImplCallCommand( pChild, CommandEventId::ContextMenu );
             else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) ||
-                // #101999# no active help when focus in toolbox, simulate BallonHelp instead
+                // #101999# no active help when focus in toolbox, simulate BalloonHelp instead
                 ( (nCode == KEY_F1) && aKeyCode.IsShift() && bToolboxFocus ) )
             {
                 // TipHelp via Keyboard (Shift-F2 or Ctrl-F1)
