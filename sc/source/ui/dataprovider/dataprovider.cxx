@@ -263,6 +263,7 @@ std::vector<OUString> DataProviderFactory::getDataProviders()
 {
     std::vector<OUString> aDataProviders;
     aDataProviders.push_back("org.libreoffice.calc.csv");
+    aDataProviders.push_back("org.libreoffice.calc.html");
 
     return aDataProviders;
 }
