@@ -33,7 +33,6 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <svl/szitem.hxx>
 #include <svl/undo.hxx>
 
 #include <sfx2/sfxsids.hrc>
