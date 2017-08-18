@@ -1,0 +1,197 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4673eab1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "The convention is to use tdf#... for bug numbers in commit messages, which automatically creates links in gerrit and commit notifications in bugzilla, so tdf#97706 here.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c65fda0c",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "This is wrong for ODFF names, it should be \"COM.MICROSOFT.CLEAN\" instead.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e69a16c5",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "This is wrong for OOXML names. The Excel compatible function name should be CLEAN, and other functions be prefixed with \"_xlfn.\", otherwise Excel will refuse to load things (example for a LibreOffice ODFF compliant function would be \"_xlfn.ORG.LIBREOFFICE.CLEAN\" so it\u0027s clear to a user where the function originated that Excel can\u0027t calculate).",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06a002f4",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "This should be \"CLEAN_EXCEL\" instead.\n\nAvoid the \u0027.\u0027 dot separator in this case, which groups semantically but we already use the \"_EXCEL*\" suffix with underscore in scaddins/* so the user is used to that for these cases.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_26a5fe03",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "This should be \"CLEAN_EXCEL\" instead.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_46aa0ad6",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "This should be \"CLEAN_EXCEL\" instead.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_66af06e4",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2343,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "This should be \"CLEAN_EXCEL\" instead.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6668e6bb",
+        "filename": "include/formula/opcode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "The naming *OOXML is unfortunate, because actually it is about the MS-Excel behaviour, not the file format specification. So rather SC_OPCODE_CLEAN_MS and ocClean_MS like other functions use.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06872262",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "Well, for new function names use the English name instead of copying the German one.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_267c1e72",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3568,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "Rather\n\n \"Removes nonprintable characters from text, for MS-Excel interoperability.\"\n\nUsers don\u0027t know anything about OOXML, and actually OOXML just describes what Excel did already for years.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_46812a4a",
+        "filename": "sc/qa/unit/data/functions/text/fods/clean.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-18T10:30:56Z",
+      "side": 1,
+      "message": "For new functions please create a new test document instead of modifying an existing one.",
+      "revId": "a85e44640794164d60aa5c7138e1181bde8359ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
