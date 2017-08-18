@@ -266,10 +266,6 @@ include/editeng/flditem.hxx:72
     void SvxFieldItem::SvxFieldItem(class SvxFieldData *,const unsigned short)
     const unsigned short nId
     Which()
-include/editeng/fwdtitem.hxx:38
-    void SvxFontWidthItem::SvxFontWidthItem(const unsigned short,const unsigned short,const unsigned short)
-    const unsigned short nId
-    Which()
 include/editeng/rsiditem.hxx:23
     void SvxRsidItem::SvxRsidItem(class SvStream &,unsigned short)
     unsigned short nId
