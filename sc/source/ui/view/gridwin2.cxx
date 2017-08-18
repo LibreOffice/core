@@ -600,7 +600,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
 
 bool ScGridWindow::UpdateVisibleRange()
 {
-    ScDocument& rDoc = pViewData->GetDocShell()->GetDocument();
+    ScDocument& rDoc = *pViewData->GetDocument();
 
     SCCOL nPosX = 0;
     SCROW nPosY = 0;
