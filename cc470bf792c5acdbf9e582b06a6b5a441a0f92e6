@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_43491c8b",
+        "filename": "connectivity/source/drivers/macab/MacabRecord.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-18T06:53:31Z",
+      "side": 1,
+      "message": "I think it would be clearer to inline the\n   CFRelease(fields[i]-\u003evalue)\nhere",
+      "revId": "cc470bf792c5acdbf9e582b06a6b5a441a0f92e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
