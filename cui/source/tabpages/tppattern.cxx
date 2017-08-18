@@ -408,7 +408,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
                 pEntry.reset(new XBitmapEntry(dynamic_cast<const XFillBitmapItem*>(pPoolItem)->GetGraphicObject(), aName));
             }
             else
-                assert("SvxPatternTabPage::ClickAddHdl_Impl(), XBitmapEntry* pEntry == nullptr ?");
+                assert(!"SvxPatternTabPage::ClickAddHdl_Impl(), XBitmapEntry* pEntry == nullptr ?");
         }
 
         if( pEntry )

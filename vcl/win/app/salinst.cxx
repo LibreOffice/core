@@ -722,7 +722,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
             while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
-                assert( "Multiple timer messages in queue" );
+                assert(! "Multiple timer messages in queue" );
             GetSalData()->mbOnIdleRunScheduler = false;
             EmitTimerCallback();
             break;

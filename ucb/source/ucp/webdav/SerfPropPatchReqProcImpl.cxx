@@ -167,7 +167,7 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
     }
     else
     {
-        assert("Headers Bucket missing");
+        assert(!"Headers Bucket missing");
     }
 
     return req_bkt;

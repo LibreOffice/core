@@ -194,7 +194,7 @@ void XPropertyList::Insert(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
 {
     if (!pEntry)
     {
-        assert("empty XPropertyEntry not allowed in XPropertyList");
+        assert(!"empty XPropertyEntry not allowed in XPropertyList");
         return;
     }
 
@@ -209,12 +209,12 @@ void XPropertyList::Replace(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
 {
     if (!pEntry)
     {
-        assert("empty XPropertyEntry not allowed in XPropertyList");
+        assert(!"empty XPropertyEntry not allowed in XPropertyList");
         return;
     }
     if (!isValidIdx(nIndex))
     {
-        assert("trying to replace invalid entry in XPropertyList");
+        assert(!"trying to replace invalid entry in XPropertyList");
         return;
     }
 
@@ -225,7 +225,7 @@ void XPropertyList::Remove(long nIndex)
 {
     if (!isValidIdx(nIndex))
     {
-        assert("trying to remove invalid entry in XPropertyList");
+        assert(!"trying to remove invalid entry in XPropertyList");
         return;
     }
 

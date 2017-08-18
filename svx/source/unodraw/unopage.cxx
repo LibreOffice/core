@@ -75,7 +75,7 @@ SvxDrawPage::~SvxDrawPage() throw()
 {
     if( !mrBHelper.bDisposed )
     {
-        assert("SvxDrawPage must be disposed!");
+        assert(!"SvxDrawPage must be disposed!");
         acquire();
         dispose();
     }
