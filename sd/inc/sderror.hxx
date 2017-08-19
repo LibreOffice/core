@@ -23,11 +23,11 @@
 #include <vcl/errcode.hxx>
 
 // Import errors
-#define ERR_FORMAT_ROWCOL               ErrCode(ERRCODE_AREA_SD | ERRCODE_CLASS_READ | 1)
-#define ERR_FORMAT_FILE_ROWCOL          ErrCode(ERRCODE_AREA_SD | ERRCODE_CLASS_READ | 2)
+#define ERR_FORMAT_ROWCOL               ErrCode(ErrCodeArea::Sd, ERRCODE_CLASS_READ | 1)
+#define ERR_FORMAT_FILE_ROWCOL          ErrCode(ErrCodeArea::Sd, ERRCODE_CLASS_READ | 2)
 
 // Warnings
-#define WARN_FORMAT_FILE_ROWCOL         ErrCode(ERRCODE_AREA_SD | ERRCODE_WARNING_MASK | ERRCODE_CLASS_READ | 100)
+#define WARN_FORMAT_FILE_ROWCOL         ErrCode(ErrCodeArea::Sd, ERRCODE_WARNING_MASK | ERRCODE_CLASS_READ | 100)
 
 #endif
 

@@ -52,7 +52,7 @@ private:
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
-    SfxErrorHandler(const ErrMsgCode* pIds, ErrCode lStart, ErrCode lEnd, const std::locale& rResLocale = SvtResLocale());
+    SfxErrorHandler(const ErrMsgCode* pIds, ErrCodeArea lStart, ErrCodeArea lEnd, const std::locale& rResLocale = SvtResLocale());
     virtual ~SfxErrorHandler() override;
 
 protected:
@@ -60,8 +60,8 @@ protected:
 
 private:
 
-    ErrCode              lStart;
-    ErrCode              lEnd;
+    ErrCodeArea          lStart;
+    ErrCodeArea          lEnd;
     const ErrMsgCode*    pIds;
     const std::locale&   rResLocale;
 
