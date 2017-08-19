@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1112fa62",
+        "filename": "sd/source/ui/dlg/TemplateScanner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-19T19:47:38Z",
+      "side": 1,
+      "message": "doesnt there need to be a \n   mpTemplateDirectory.clear();\nhere?",
+      "revId": "c06e310209066536973118fb92ffc8c0f67e04f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3117f652",
+        "filename": "sd/source/ui/inc/TemplateScanner.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-19T19:47:38Z",
+      "side": 1,
+      "message": "thuis should probably be renamed now?",
+      "revId": "c06e310209066536973118fb92ffc8c0f67e04f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
