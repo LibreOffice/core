@@ -1427,6 +1427,7 @@ int Desktop::Main()
             osl::DirectoryItem::get(Updater::getUpdateFileURL(), aUpdateFile);
 
             const char* pUpdaterTestUpdate = std::getenv("LIBO_UPDATER_TEST_UPDATE");
+            const char* pForcedUpdateCheck = std::getenv("LIBO_UPDATER_TEST_UPDATE_CHECK");
             if (pUpdaterTestUpdate || aUpdateFile.is())
             {
                 OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
@@ -1446,7 +1447,7 @@ int Desktop::Main()
                 if (bSuccess)
                     return EXIT_SUCCESS;
             }
-            else if (isTimeForUpdateCheck())
+            else if (isTimeForUpdateCheck() || pForcedUpdateCheck)
             {
                 sal_uInt64 nNow = tools::Time::GetSystemTicks();
                 Updater::log("Update Check Time: " + OUString::number(nNow));

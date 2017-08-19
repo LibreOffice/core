@@ -678,6 +678,13 @@ void update_checker()
 
     OUString aProductName = utl::ConfigManager::getProductName();
     OUString aBuildID = Updater::getBuildID();
+
+    static const char* pBuildIdEnv = std::getenv("LIBO_UPDATER_BUILD");
+    if (pBuildIdEnv)
+    {
+        aBuildID = OUString::createFromAscii(pBuildIdEnv);
+    }
+
     OUString aBuildTarget = "${_OS}_${_ARCH}";
     rtl::Bootstrap::expandMacros(aBuildTarget);
     OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
