@@ -15,6 +15,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 
 #include "address.hxx"
 #include "datamapper.hxx"
@@ -34,12 +35,15 @@ class DataProviderDlg : public ModalDialog
     VclPtr<SvtURLBox>      m_pCbUrl;
     VclPtr<PushButton>     m_pBtnBrowse;
     VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<ComboBox>       m_pCBData;
+    VclPtr<ListBox>        m_pCBData;
+    VclPtr<ListBox>        m_pCBProvider;
+    VclPtr<Edit>           m_pEdID;
 
     DECL_LINK(UpdateClickHdl, Button*, void);
     DECL_LINK(UpdateComboBoxHdl, ComboBox&, void);
     DECL_LINK(BrowseHdl, Button*, void);
     DECL_LINK(EditHdl, Edit&, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
     void UpdateEnable();
 
