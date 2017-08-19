@@ -55,37 +55,6 @@ public:
     OUString msPath;
 };
 
-/** Functor that compares two TemplateEntries based on their titles
-*/
-class TemplateEntryCompare
-{
-public:
-    TemplateEntryCompare();
-    bool operator()(TemplateEntry const * pA, TemplateEntry const * pB) const;
-
-private:
-    std::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
-};
-
-/** Representation of a template or layout folder.
-*/
-class TemplateDir
-{
-public:
-    TemplateDir()
-        :   maEntries(),
-            mbSortingEnabled(false), mpEntryCompare(nullptr) {}
-
-    ::std::vector<TemplateEntry*> maEntries;
-
-    void EnableSorting(bool bSortingEnabled);
-    void InsertEntry(TemplateEntry* pNewEntry);
-
-private:
-    bool mbSortingEnabled;
-    std::unique_ptr<TemplateEntryCompare> mpEntryCompare;
-};
-
 /** This class scans the template folders for impress templates.  There are
     two ways to use this class.
     1. The old and deprecated way is to call Scan() to scan all templates
@@ -119,12 +88,12 @@ public:
     virtual bool HasNextStep() override;
 
     /** Return the TemplateDir object that was last added to
-        mpTemplateDirectory.
+        mpTemplateEntries.
         @return
             <nullptr/> is returned either before the template scanning is
             started or after it has ended.
     */
-    const TemplateEntry* GetLastAddedEntry() const { return mpLastAddedEntry;}
+    const TemplateEntry* GetLastAddedEntry() const { return mpTemplateEntries.empty()?nullptr:mpTemplateEntries.back();}
 
 private:
     /** The current state determines which step will be executed next by
@@ -143,17 +112,12 @@ private:
     State meState;
 
     ::ucbhelper::Content maFolderContent;
-    TemplateDir* mpTemplateDirectory;
+    ::std::vector<TemplateEntry*> mpTemplateEntries;
 
     /** The data structure that is to be filled with information about the
         template files.
     */
-    std::vector<TemplateDir*> maFolderList;
-
-    /** This member points into the maFolderList to the member that was most
-        recently added.
-    */
-    TemplateEntry* mpLastAddedEntry;
+    std::vector< ::std::vector<TemplateEntry*> > maFolderList;
 
     /** The folders that are collected by GatherFolderList().
     */
