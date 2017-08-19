@@ -40,7 +40,7 @@ using namespace com::sun::star::util;
 
 namespace {
 
-void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length)
+void manageDuplicateHeaders(std::vector<std::unique_ptr<macabfield>>& _headerNames, const sal_Int32 _length)
 {
     /* If we have two cases of, say, phone: home, this makes it:
      * phone: home (1)
@@ -53,7 +53,7 @@ void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length)
         count = 1;
         for( j = i-1; j >= 0; j--)
         {
-            if(CFEqual(_headerNames[i]->value, _headerNames[j]->value))
+            if(CFEqual(_headerNames[i]->getValue(), _headerNames[j]->getValue()))
             {
                 count++;
             }
@@ -63,10 +63,9 @@ void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length)
         if(count != 1)
         {
             // There is probably a better way to do this...
-            OUString newName = CFStringToOUString(static_cast<CFStringRef>(_headerNames[i]->value));
-            CFRelease(_headerNames[i]->value);
+            OUString newName = CFStringToOUString(static_cast<CFStringRef>(_headerNames[i]->getValue()));
             newName += " (" + OUString::number(count) + ")";
-            _headerNames[i]->value = OUStringToCFString(newName);
+            _headerNames[i]->setValue( OUStringToCFString(newName) );
         }
     }
 }
@@ -545,7 +544,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, co
  */
 MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propertyType, const CFTypeRef _propertyValue, const CFStringRef _propertyName) const
 {
-    macabfield **headerNames = nullptr;
+    std::vector<std::unique_ptr<macabfield>> headerNames;
     sal_Int32 length = 0;
 
     switch(_propertyType)
@@ -556,10 +555,8 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
         case kABIntegerProperty:
         case kABDateProperty:
             length = 1;
-            headerNames = new macabfield *[1];
-            headerNames[0] = new macabfield;
-            headerNames[0]->value = _propertyName;
-            headerNames[0]->type = _propertyType;
+            headerNames.resize(1);
+            headerNames[0].reset( new macabfield( _propertyName, _propertyType) );
             break;
 
         /* Multi-scalars */
@@ -583,7 +580,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType(static_cast<ABMutableMultiValueRef>(const_cast<void *>(_propertyValue))) - 0x100);
 
             length = multiLength;
-            headerNames = new macabfield *[multiLength];
+            headerNames.resize(multiLength);
             multiPropertyString = CFStringToOUString(_propertyName);
 
             /* Go through each element, and - since each element is a scalar -
@@ -597,9 +594,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 CFRelease(multiLabel);
                 CFRelease(localizedMultiLabel);
                 headerNameString = multiPropertyString + ": " + fixLabel(multiLabelString);
-                headerNames[i] = new macabfield;
-                headerNames[i]->value = OUStringToCFString(headerNameString);
-                headerNames[i]->type = multiType;
+                headerNames[i].reset( new macabfield( OUStringToCFString(headerNameString), multiType) );
             }
             }
             break;
@@ -674,7 +669,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                  * the MacabHeader we return).
                  */
                 length = multiLengthSecondLevel;
-                headerNames = new macabfield *[multiLengthSecondLevel];
+                headerNames.resize(multiLengthSecondLevel);
 
                 for(i = 0, j = 0, k = 0; i < multiLengthSecondLevel; i++,k++)
                 {
@@ -749,7 +744,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
              * headerNames array, which (at the end of this method) is used
              * to create the MacabHeader that is returned.
              */
-            headerNames = new macabfield *[length];
+            headerNames.resize(length);
             for(i = 0, j = 0, k = 0; i < length; i++,k++)
             {
                 while(dictHeaders[j]->getSize() == k)
@@ -810,7 +805,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     arrHeaders.push_back(std::move(hdr));
                 }
 
-                headerNames = new macabfield *[length];
+                headerNames.resize(length);
                 for(i = 0, j = 0, k = 0; i < length; i++,k++)
                 {
                     while(arrHeaders[j]->getSize() == k)
@@ -839,9 +834,6 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
     {
         manageDuplicateHeaders(headerNames, length);
         MacabHeader *headerResult = new MacabHeader(length, headerNames);
-        for(sal_Int32 i = 0; i < length; ++i)
-            delete headerNames[i];
-        delete [] headerNames;
         return headerResult;
     }
     else

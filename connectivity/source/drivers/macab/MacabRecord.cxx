@@ -34,34 +34,48 @@ using namespace com::sun::star::util;
 using namespace ::dbtools;
 
 
+macabfield::macabfield(macabfield const & other)
+{
+    value = other.value;
+    type = other.type;
+    CFRetain(value);
+}
+
+macabfield::macabfield(macabfield && other)
+{
+    value = other.value;
+    type = other.type;
+    other.value = nullptr;
+}
+
+void macabfield::setValue(CFTypeRef v)
+{
+    if (value)
+        CFRelease(value);
+    value = v;
+}
+
+macabfield::~macabfield()
+{
+    if (value)
+        CFRelease(value);
+}
+
 MacabRecord::MacabRecord()
 {
     size = 0;
-    fields = nullptr;
 }
 
 
 MacabRecord::MacabRecord(const sal_Int32 _size)
 {
     size = _size;
-    fields = o3tl::make_unique<macabfield *[]>(size);
-    sal_Int32 i;
-    for(i = 0; i < size; i++)
-        fields[i] = nullptr;
+    fields.resize(size);
 }
 
 
 MacabRecord::~MacabRecord()
 {
-    if(size > 0)
-    {
-        int i;
-        for(i = 0; i < size; i++)
-        {
-            delete fields[i];
-            fields[i] = nullptr;
-        }
-    }
 }
 
 
@@ -69,13 +83,9 @@ void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const 
 {
     if(_column < size)
     {
-        if(fields[_column] == nullptr)
-            fields[_column] = new macabfield;
-
-        fields[_column]->value = _value;
-        if (fields[_column]->value)
-            CFRetain(fields[_column]->value);
-        fields[_column]->type = _type;
+        if (_value)
+            CFRetain(_value);
+        fields[_column].reset( new macabfield(_value, _type) );
     }
 }
 
@@ -85,7 +95,7 @@ bool MacabRecord::contains (const macabfield *_field) const
     if(_field == nullptr)
         return false;
     else
-        return contains(_field->value);
+        return contains(_field->getValue());
 }
 
 
@@ -96,7 +106,7 @@ bool MacabRecord::contains (const CFTypeRef _value) const
     {
         if(fields[i] != nullptr)
         {
-            if(CFEqual(fields[i]->value, _value))
+            if(CFEqual(fields[i]->getValue(), _value))
             {
                 return true;
             }
@@ -113,7 +123,7 @@ sal_Int32 MacabRecord::getSize() const
 }
 
 
-macabfield *MacabRecord::copy(const sal_Int32 i) const
+std::unique_ptr<macabfield> MacabRecord::copy(const sal_Int32 i) const
 {
     /* Note: copy(i) creates a new macabfield identical to that at
      * location i, whereas get(i) returns a pointer to the macabfield
@@ -121,12 +131,7 @@ macabfield *MacabRecord::copy(const sal_Int32 i) const
      */
     if(i < size)
     {
-        macabfield *_copy = new macabfield;
-        _copy->type = fields[i]->type;
-        _copy->value = fields[i]->value;
-        if (_copy->value)
-            CFRetain(_copy->value);
-        return _copy;
+        return std::unique_ptr<macabfield>(new macabfield(*fields[i]));
     }
 
     return nullptr;
@@ -141,25 +146,11 @@ macabfield *MacabRecord::get(const sal_Int32 i) const
      */
     if(i < size)
     {
-        return fields[i];
+        return fields[i].get();
     }
 
     return nullptr;
 }
-
-
-void MacabRecord::releaseFields()
-{
-    /* This method is, at the moment, only used in MacabHeader.cxx, but
-     * the idea is simple: if you are not destroying this object but want
-     * to clear it of its macabfields, you should release each field's
-     * value.
-     */
-    sal_Int32 i;
-    for(i = 0; i < size; i++)
-        CFRelease(fields[i]->value);
-}
-
 
 sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield *_field2)
 {
@@ -189,23 +180,23 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
     {
         case kABStringProperty:
             result = CFStringCompare(
-                static_cast<CFStringRef>(_field1->value),
-                static_cast<CFStringRef>(_field2->value),
+                static_cast<CFStringRef>(_field1->getValue()),
+                static_cast<CFStringRef>(_field2->getValue()),
                 kCFCompareLocalized); // Specifies that the comparison should take into account differences related to locale, such as the thousands separator character.
             break;
 
         case kABDateProperty:
             result = CFDateCompare(
-                static_cast<CFDateRef>(_field1->value),
-                static_cast<CFDateRef>(_field2->value),
+                static_cast<CFDateRef>(_field1->getValue()),
+                static_cast<CFDateRef>(_field2->getValue()),
                 nullptr); // NULL = unused variable
             break;
 
         case kABIntegerProperty:
         case kABRealProperty:
             result = CFNumberCompare(
-                static_cast<CFNumberRef>(_field1->value),
-                static_cast<CFNumberRef>(_field2->value),
+                static_cast<CFNumberRef>(_field1->getValue()),
+                static_cast<CFNumberRef>(_field2->getValue()),
                 nullptr); // NULL = unused variable
         break;
 
@@ -222,15 +213,13 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
  * between an OUString and a macabfield (for use when creating and handling
  * SQL statement).
  */
-macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const ABPropertyType _abType)
+std::unique_ptr<macabfield> MacabRecord::createMacabField(const OUString& _newFieldString, const ABPropertyType _abType)
 {
-    macabfield *newField = nullptr;
+    std::unique_ptr<macabfield> newField;
     switch(_abType)
     {
         case kABStringProperty:
-            newField = new macabfield;
-            newField->value = OUStringToCFString(_newFieldString);
-            newField->type = _abType;
+            newField.reset( new macabfield( OUStringToCFString(_newFieldString), _abType) );
             break;
         case kABDateProperty:
             {
@@ -244,9 +233,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
                 {
                     double nTime = DBTypeConversion::toDouble(aDateTime, DBTypeConversion::getStandardDate());
                     nTime -= kCFAbsoluteTimeIntervalSince1970;
-                    newField = new macabfield;
-                    newField->value = CFDateCreate(nullptr, (CFAbsoluteTime) nTime);
-                    newField->type = _abType;
+                    newField.reset( new macabfield( CFDateCreate(nullptr, (CFAbsoluteTime) nTime), _abType) );
                 }
             }
             break;
@@ -255,9 +242,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
             {
                 sal_Int64 nVal = _newFieldString.toInt64();
 
-                newField = new macabfield;
-                newField->value = CFNumberCreate(nullptr,kCFNumberLongType, &nVal);
-                newField->type = _abType;
+                newField.reset( new macabfield( CFNumberCreate(nullptr,kCFNumberLongType, &nVal), _abType) );
             }
             // bad format...
             catch(...)
@@ -269,9 +254,7 @@ macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const
             {
                 double nVal = _newFieldString.toDouble();
 
-                newField = new macabfield;
-                newField->value = CFNumberCreate(nullptr,kCFNumberDoubleType, &nVal);
-                newField->type = _abType;
+                newField.reset( new macabfield( CFNumberCreate(nullptr,kCFNumberDoubleType, &nVal), _abType) );
             }
             // bad format...
             catch(...)
@@ -300,30 +283,30 @@ OUString MacabRecord::fieldToString(const macabfield *_aField)
     switch(_aField->type)
     {
         case kABStringProperty:
-            fieldString = CFStringToOUString(static_cast<CFStringRef>(_aField->value));
+            fieldString = CFStringToOUString(static_cast<CFStringRef>(_aField->getValue()));
             break;
         case kABDateProperty:
             {
-                DateTime aTime = CFDateToDateTime(static_cast<CFDateRef>(_aField->value));
+                DateTime aTime = CFDateToDateTime(static_cast<CFDateRef>(_aField->getValue()));
                 fieldString = DBTypeConversion::toDateTimeString(aTime);
             }
             break;
         case kABIntegerProperty:
             {
-                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(_aField->value) );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(_aField->getValue()) );
                 sal_Int64 nVal;
                 // Should we check for the wrong type here, e.g., a float?
-                bool m_bSuccess = !CFNumberGetValue(static_cast<CFNumberRef>(_aField->value), numberType, &nVal);
+                bool m_bSuccess = !CFNumberGetValue(static_cast<CFNumberRef>(_aField->getValue()), numberType, &nVal);
                 if(m_bSuccess)
                     fieldString = OUString::number(nVal);
             }
             break;
         case kABRealProperty:
             {
-                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(_aField->value) );
+                CFNumberType numberType = CFNumberGetType( static_cast<CFNumberRef>(_aField->getValue()) );
                 double nVal;
                 // Should we check for the wrong type here, e.g., an int?
-                bool m_bSuccess = !CFNumberGetValue(static_cast<CFNumberRef>(_aField->value), numberType, &nVal);
+                bool m_bSuccess = !CFNumberGetValue(static_cast<CFNumberRef>(_aField->getValue()), numberType, &nVal);
                 if(m_bSuccess)
                     fieldString = OUString::number(nVal);
             }
