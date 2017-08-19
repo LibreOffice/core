@@ -161,7 +161,7 @@ private:
     DECL_LINK( ScrollLeftRightHdl, ScrollBar*, void );
     DECL_LINK( EndScrollHdl, ScrollBar*, void );
 
-    void                SetNodeBmpYOffset( const Image& );
+    void                SetNodeBmpWidth( const Image& );
     void                SetNodeBmpTabDistance();
 
     // Selection-Engine
@@ -346,13 +346,13 @@ inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
 inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg )
 {
     implGetImageLocation( ImageType::NodeExpanded ) = rImg;
-    SetNodeBmpYOffset( rImg );
+    SetNodeBmpWidth( rImg );
 }
 
 inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
     implGetImageLocation( ImageType::NodeCollapsed ) = rImg;
-    SetNodeBmpYOffset( rImg );
+    SetNodeBmpWidth( rImg );
 }
 
 inline const Image& SvImpLBox::GetDontKnowNodeBmp( )
