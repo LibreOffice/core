@@ -1329,15 +1329,17 @@
 			<xsl:when test="$iOutlineLevel &lt; $outlineLevel">
 
 			<!-- Write preceding heading numbers -->
-				<xsl:call-template name="writeNumber">
-					<xsl:with-param name="numberDigit">
-						<xsl:call-template name="calc-heading-digit">
-							<xsl:with-param name="value" select="0"/>
-							<xsl:with-param name="currentoutlineLevel" select="$iOutlineLevel"/>
-						</xsl:call-template>
-					</xsl:with-param>
-					<xsl:with-param name="numberFormat" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = ($outlineLevel)]/@style:num-format"/>
-				</xsl:call-template>
+				<xsl:if test="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = ($iOutlineLevel)]/@style:num-format != ''">
+					<xsl:call-template name="writeNumber">
+						<xsl:with-param name="numberDigit">
+							<xsl:call-template name="calc-heading-digit">
+								<xsl:with-param name="value" select="0"/>
+								<xsl:with-param name="currentoutlineLevel" select="$iOutlineLevel"/>
+							</xsl:call-template>
+						</xsl:with-param>
+						<xsl:with-param name="numberFormat" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = ($outlineLevel)]/@style:num-format"/>
+					</xsl:call-template>
+				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = ($iOutlineLevel + 1)]/@text:start-value">
 						<xsl:call-template name="calc-heading-number">
