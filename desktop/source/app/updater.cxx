@@ -48,6 +48,18 @@ namespace {
 
 class error_updater : public std::exception
 {
+    OString maStr;
+public:
+
+    error_updater(const OString& rStr):
+        maStr(rStr)
+    {
+    }
+
+    virtual const char* what() const override
+    {
+        return maStr.getStr();
+    }
 };
 
 #ifdef UNX
@@ -576,13 +588,13 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     if (http_code != 200)
     {
         SAL_WARN("desktop.updater", "download did not succeed. Error code: " << http_code);
-        throw error_updater();
+        throw error_updater("download did not succeed");
     }
 
     if (cc != CURLE_OK)
     {
         SAL_WARN("desktop.updater", "curl error: " << cc);
-        throw error_updater();
+        throw error_updater("curl error");
     }
 
     if (bFile)
@@ -591,34 +603,36 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     return response_body;
 }
 
-void handle_file_error(osl::FileBase::RC eError)
+void handle_file_error(osl::FileBase::RC eError, const OUString& rMsg)
 {
     switch (eError)
     {
         case osl::FileBase::E_None:
         break;
         default:
-            SAL_WARN("desktop.updater", "file error code: " << eError);
-            throw error_updater();
+            SAL_WARN("desktop.updater", "file error code: " << eError << ", " << rMsg);
+            throw error_updater(OUStringToOString(rMsg, RTL_TEXTENCODING_UTF8));
     }
 }
 
 void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash, const OUString& aFileName)
 {
+    Updater::log("Download File: " + rURL + "; FileName: " + aFileName);
     OString aURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
     OUString aHash;
     std::string temp_file = download_content(aURL, true, aHash);
     if (temp_file.empty())
-        throw error_updater();
+        throw error_updater("empty temp file string");
 
     OUString aTempFile = OUString::fromUtf8(temp_file.c_str());
+    Updater::log("TempFile: " + aTempFile);
     osl::File aDownloadedFile(aTempFile);
     osl::FileBase::RC eError = aDownloadedFile.open(1);
-    handle_file_error(eError);
+    handle_file_error(eError, "Could not open the download file: " + aTempFile);
 
     sal_uInt64 nSize = 0;
     eError = aDownloadedFile.getSize(nSize);
-    handle_file_error(eError);
+    handle_file_error(eError, "Could not get the file size of the downloaded file: " + aTempFile);
     if (nSize != nFileSize)
     {
         SAL_WARN("desktop.updater", "File sizes don't match. File might be corrupted.");
@@ -636,8 +650,9 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
     osl::Directory::create(aPatchDirURL);
 
     OUString aDestFile = aPatchDirURL + aFileName;
+    Updater::log("Destination File: " + aDestFile);
     eError = osl::File::move(aTempFile, aDestFile);
-    handle_file_error(eError);
+    handle_file_error(eError, "Could not move the file from the Temp directory to the user config: TempFile: " + aTempFile + "; DestFile: " + aDestFile);
 }
 
 }
@@ -718,10 +733,10 @@ void update_checker()
         SAL_WARN("desktop.updater", "invalid update information");
         Updater::log(OString("warning: invalid update info"));
     }
-    catch (const error_updater&)
+    catch (const error_updater& e)
     {
-        SAL_WARN("desktop.updater", "error during the update check");
-        Updater::log(OString("warning: error by the updater"));
+        SAL_WARN("desktop.updater", "error during the update check: " << e.what());
+        Updater::log(OString("warning: error by the updater") + e.what());
     }
     catch (const invalid_size& e)
     {
