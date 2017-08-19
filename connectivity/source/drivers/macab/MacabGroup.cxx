@@ -70,9 +70,9 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
                 for(j = 0; j < nAllRecordsSize; j++)
                 {
                     xRecordField = _allRecords->getField(j,CFStringToOUString(kABUIDProperty));
-                    if(xRecordField != nullptr && xRecordField->value != nullptr)
+                    if(xRecordField != nullptr && xRecordField->getValue() != nullptr)
                     {
-                        if(CFEqual(xRecordField->value, sGroupMemberUID))
+                        if(CFEqual(xRecordField->getValue(), sGroupMemberUID))
                         {
                             /* Found the matching UID! Insert into the group... */
                             insertRecord(_allRecords->getRecord(j));

@@ -27,11 +27,9 @@ namespace connectivity
     namespace macab
     {
         class MacabHeader: public MacabRecord{
-            protected:
-                macabfield **sortRecord(sal_Int32 _start, sal_Int32 _length);
             public:
                 MacabHeader();
-                MacabHeader(const sal_Int32 _size, macabfield **_fields);
+                MacabHeader(const sal_Int32 _size, std::vector<std::unique_ptr<macabfield>> const & _fields);
                 virtual ~MacabHeader() override;
                 void operator+= (const MacabHeader *r);
                 OUString getString(const sal_Int32 i) const;
