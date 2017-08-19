@@ -96,7 +96,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     if( nNewSize == nSize )
         return;
 
-    PolyFlags*  pOldFlagAry  = pFlagAry.get();
+    PolyFlags*  pOldFlagAry  = pFlagAry.release();
     sal_uInt16  nOldSize     = nSize;
 
     CheckPointDelete();
