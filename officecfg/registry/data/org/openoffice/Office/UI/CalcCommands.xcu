@@ -1590,6 +1590,11 @@
           <value xml:lang="en-US">Data Provider...</value>
         </prop>
       </node>
+      <node oor:name=".uno:DataProviderRefresh" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Refresh Data Provider</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ManageXMLSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~XML Source...</value>
