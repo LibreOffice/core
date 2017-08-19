@@ -162,7 +162,7 @@
                               <object class="GtkLabel" id="label_db">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Database Range:</property>
+                                <property name="label" translatable="yes" context="datastreams|label_db">Database Range:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
