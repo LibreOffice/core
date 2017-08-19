@@ -45,9 +45,6 @@
 
 #include <memory>
 
-#define DESCRIPTION_1 1
-#define TITLE 3
-
 #define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"
 
 
@@ -158,12 +155,10 @@ executeUnknownAuthDialog(
         std::locale aResLocale(Translate::Create("uui"));
         ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
-        if (aErrorResource.getString(ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, aMessage))
-        {
-            aMessage = UUIInteractionHelper::replaceMessageWithArguments(
+        aMessage = Translate::get(STR_UUI_UNKNOWNAUTH_UNTRUSTED, aResLocale);
+        aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
-            xDialog->setDescriptionText( aMessage );
-        }
+        xDialog->setDescriptionText( aMessage );
 
         return static_cast<bool>(xDialog->Execute());
     }
@@ -173,12 +168,16 @@ executeUnknownAuthDialog(
     }
 }
 
+enum class SslWarnType {
+    DOMAINMISMATCH, EXPIRED, INVALID
+};
+
 bool
 executeSSLWarnDialog(
     vcl::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
-    sal_Int32 failure,
+    SslWarnType failure,
     const OUString & hostName )
 {
     try
@@ -188,18 +187,23 @@ executeSSLWarnDialog(
         ScopedVclPtrInstance< SSLWarnDialog > xDialog(pParent, rXCert, xContext);
 
         // Get correct resource string
-        OUString aMessage_1;
         std::vector< OUString > aArguments_1;
+        char const * pMessageKey = nullptr;
+        char const * pTitleKey = nullptr;
 
         switch( failure )
         {
-            case SSLWARN_TYPE_DOMAINMISMATCH:
+            case SslWarnType::DOMAINMISMATCH:
+                pMessageKey = STR_UUI_SSLWARN_DOMAINMISMATCH;
+                pTitleKey = STR_UUI_SSLWARN_DOMAINMISMATCH_TITLE;
                 aArguments_1.push_back( hostName );
                 aArguments_1.push_back(
                     getContentPart( rXCert->getSubjectName()) );
                 aArguments_1.push_back( hostName );
                 break;
-            case SSLWARN_TYPE_EXPIRED:
+            case SslWarnType::EXPIRED:
+                pMessageKey = STR_UUI_SSLWARN_EXPIRED;
+                pTitleKey = STR_UUI_SSLWARN_EXPIRED_TITLE;
                 aArguments_1.push_back(
                     getContentPart( rXCert->getSubjectName()) );
                 aArguments_1.push_back(
@@ -209,28 +213,22 @@ executeSSLWarnDialog(
                     getLocalizedDatTimeStr( xContext,
                                             rXCert->getNotValidAfter() ) );
                 break;
-            case SSLWARN_TYPE_INVALID:
+            case SslWarnType::INVALID:
+                pMessageKey = STR_UUI_SSLWARN_INVALID;
+                pTitleKey = STR_UUI_SSLWARN_INVALID_TITLE;
                 break;
+            default: assert(false);
         }
 
         std::locale aResLocale(Translate::Create("uui"));
-        ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
-        if (aErrorResource.getString(
-                ErrCode(ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1),
-                aMessage_1))
-        {
-            aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
+        OUString aMessage_1 = Translate::get(pMessageKey, aResLocale);
+        aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage_1, aArguments_1 );
-            xDialog->setDescription1Text( aMessage_1 );
-        }
+        xDialog->setDescription1Text( aMessage_1 );
 
-        OUString aTitle;
-        if (aErrorResource.getString(
-            ErrCode(ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE), aTitle))
-        {
-            xDialog->SetText(aTitle);
-        }
+        OUString aTitle = Translate::get(pTitleKey, aResLocale);
+        xDialog->SetText(aTitle);
 
         return static_cast<bool>(xDialog->Execute());
     }
@@ -307,7 +305,7 @@ handleCertificateValidationRequest_(
         trustCert = executeSSLWarnDialog( pParent,
                                           xContext,
                                           rRequest.Certificate,
-                                          SSLWARN_TYPE_DOMAINMISMATCH,
+                                          SslWarnType::DOMAINMISMATCH,
                                           rRequest.HostName );
     }
 
@@ -320,7 +318,7 @@ handleCertificateValidationRequest_(
         trustCert = executeSSLWarnDialog( pParent,
                                           xContext,
                                           rRequest.Certificate,
-                                          SSLWARN_TYPE_EXPIRED,
+                                          SslWarnType::EXPIRED,
                                           rRequest.HostName );
     }
 
@@ -337,7 +335,7 @@ handleCertificateValidationRequest_(
         trustCert = executeSSLWarnDialog( pParent,
                                           xContext,
                                           rRequest.Certificate,
-                                          SSLWARN_TYPE_INVALID,
+                                          SslWarnType::INVALID,
                                           rRequest.HostName );
     }
 
