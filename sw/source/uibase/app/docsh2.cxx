@@ -188,7 +188,7 @@ void SwDocShell::ToggleLayoutMode(SwView* pView)
 
     pView->RecheckBrowseMode();
 
-    pView->SetNewWindowAllowed(!rViewOptions.getBrowseMode());
+    pView->SetNewWindowAllowed(rViewOptions.getBrowseMode());
 }
 
 // update text fields on document properties changes
