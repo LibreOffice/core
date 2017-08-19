@@ -405,6 +405,7 @@ namespace svt
                 {
                     case CHECKBOX_AUTOEXTENSION:
                     case CHECKBOX_PASSWORD:
+                    case CHECKBOX_GPGENCRYPTION:
                     case CHECKBOX_FILTEROPTIONS:
                     case CHECKBOX_READONLY:
                     case CHECKBOX_LINK:
