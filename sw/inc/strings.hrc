@@ -262,7 +262,6 @@
 // Statusbar-titles
 #define STR_STATSTR_W4WREAD                     NC_("STR_STATSTR_W4WREAD", "Importing document...")
 #define STR_STATSTR_W4WWRITE                    NC_("STR_STATSTR_W4WWRITE", "Exporting document...")
-#define STR_STATSTR_SWGREAD                     NC_("STR_STATSTR_SWGREAD", "Loading document...")
 #define STR_STATSTR_SWGWRITE                    NC_("STR_STATSTR_SWGWRITE", "Saving document...")
 #define STR_STATSTR_REFORMAT                    NC_("STR_STATSTR_REFORMAT", "Repagination...")
 #define STR_STATSTR_AUTOFORMAT                  NC_("STR_STATSTR_AUTOFORMAT", "Formatting document automatically...")
