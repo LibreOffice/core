@@ -2129,15 +2129,6 @@ void SvTreeListBox::SetDragDropMode( DragDropMode nDDMode )
     pImpl->SetDragDropMode( nDDMode );
 }
 
-short SvTreeListBox::GetHeightOffset(const Image& rBmp, Size& aSizeLogic )
-{
-    short nOffset = 0;
-    aSizeLogic = rBmp.GetSizePixel();
-    if( GetEntryHeight() > aSizeLogic.Height() )
-        nOffset = ( GetEntryHeight() - (short)aSizeLogic.Height()) / 2;
-    return nOffset;
-}
-
 void SvTreeListBox::SetEntryHeight( SvTreeListEntry const * pEntry )
 {
     short nHeightMax=0;
@@ -2181,8 +2172,7 @@ void SvTreeListBox::SetEntryWidth( short nWidth )
 
 void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
 {
-    Size aSize;
-    GetHeightOffset( rBmp, aSize );
+    const Size aSize( rBmp.GetSizePixel() );
     if( aSize.Height() > nEntryHeight )
     {
         nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;

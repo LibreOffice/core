@@ -526,8 +526,6 @@ public:
 protected:
     using SvListView::SelectAll;
 
-    SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
-
     SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry const * pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
     SVT_DLLPRIVATE void         AdjustEntryHeight();
