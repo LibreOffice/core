@@ -30,6 +30,8 @@
 #include "drawdoc.hxx"
 #include "Outliner.hxx"
 #include <unotools/streamwrap.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
 
 #include "DrawDocShell.hxx"
@@ -524,7 +526,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if(mxStatusIndicator.is())
         {
             sal_Int32 nProgressRange(1000000);
-            OUString aMsg(SdResId(STR_LOAD_DOC));
+            OUString aMsg(SvxResId(RID_SVXSTR_DOC_LOAD));
             mxStatusIndicator->start(aMsg, nProgressRange);
 
             // set ProgressRange

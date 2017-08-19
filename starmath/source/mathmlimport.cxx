@@ -54,13 +54,14 @@ one go*/
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 
 #include <memory>
 
 #include "mathmlattr.hxx"
 #include "mathmlimport.hxx"
 #include "register.hxx"
-#include <strings.hrc>
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>
@@ -161,7 +162,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
     sal_Int32 nProgressRange(nSteps);
     if (xStatusIndicator.is())
     {
-        xStatusIndicator->start(SmResId(STR_STATSTR_READING), nProgressRange);
+        xStatusIndicator->start(SvxResId(RID_SVXSTR_DOC_LOAD), nProgressRange);
     }
 
     nSteps=0;

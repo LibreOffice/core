@@ -308,7 +308,6 @@
 #define STR_ALIGN_RIGHT                     NC_("STR_ALIGN_RIGHT", "right" )
 #define STR_CMDBOXWINDOW                    NC_("STR_CMDBOXWINDOW", "Commands" )
 #define RID_DOCUMENTSTR                     NC_("RID_DOCUMENTSTR", "Formula" )
-#define STR_STATSTR_READING                 NC_("STR_STATSTR_READING", "Loading document..." )
 #define STR_STATSTR_WRITING                 NC_("STR_STATSTR_WRITING", "Saving document..." )
 #define STR_MATH_DOCUMENT_FULLTYPE_CURRENT  NC_("STR_MATH_DOCUMENT_FULLTYPE_CURRENT", "%PRODUCTNAME %PRODUCTVERSION Formula")
 #define RID_ERR_IDENT                       NC_("RID_ERR_IDENT", "ERROR : " )

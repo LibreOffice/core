@@ -40,6 +40,8 @@
 #include <svtools/sfxecode.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/streamwrap.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -59,7 +61,6 @@
 #include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
-#include <strings.hrc>
 
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
@@ -633,7 +634,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     sal_Int32 nProgressRange(1000000);
     if (xStatusIndicator.is())
     {
-        xStatusIndicator->start(SwResId(STR_STATSTR_SWGREAD), nProgressRange);
+        xStatusIndicator->start(SvxResId(RID_SVXSTR_DOC_LOAD), nProgressRange);
     }
     uno::Any aProgRange;
     aProgRange <<= nProgressRange;

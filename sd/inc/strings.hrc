@@ -334,7 +334,6 @@
 #define STR_PSEUDOSHEET_BACKGROUND                      NC_("STR_PSEUDOSHEET_BACKGROUND", "Background" )
 #define STR_PSEUDOSHEET_NOTES                           NC_("STR_PSEUDOSHEET_NOTES", "Notes" )
 #define STR_POWERPOINT_IMPORT                           NC_("STR_POWERPOINT_IMPORT", "PowerPoint Import")
-#define STR_LOAD_DOC                                    NC_("STR_LOAD_DOC", "Load Document" )
 #define STR_SAVE_DOC                                    NC_("STR_SAVE_DOC", "Save Document" )
 #define STR_POOLSHEET_BANDED_CELL                       NC_("STR_POOLSHEET_BANDED_CELL", "Banding cell" )
 #define STR_POOLSHEET_HEADER                            NC_("STR_POOLSHEET_HEADER", "Header" )

@@ -26,6 +26,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/streamwrap.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/frame.hxx>
@@ -342,7 +344,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     if (xStatusIndicator.is())
     {
         sal_Int32 nProgressRange(1000000);
-        xStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), nProgressRange);
+        xStatusIndicator->start(SvxResId(RID_SVXSTR_DOC_LOAD), nProgressRange);
         xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
     }
 
