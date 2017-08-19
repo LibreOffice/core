@@ -875,7 +875,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
                 ++aField, ++nPosition)
         {
 
-            sName = CFStringToOUString(static_cast<CFStringRef>((*aField)->value));
+            sName = CFStringToOUString(static_cast<CFStringRef>((*aField)->getValue()));
             if (match(columnNamePattern, sName, '\0'))
             {
                 aRow[4] = new ORowSetValueDecorator(sName);

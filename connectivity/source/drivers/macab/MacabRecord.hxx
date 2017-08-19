@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <vector>
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -41,18 +42,26 @@ namespace connectivity
          * something to hold both a CFTypeRef (a CoreFoundation object) and
          * its Address Book type.
          */
-        struct macabfield
+        class macabfield
         {
             CFTypeRef value;
+        public:
             ABPropertyType type;
+            // this expects the new value to already have been retained
+            macabfield( CFTypeRef v, ABPropertyType t) : value(v), type(t) {}
+            macabfield( macabfield const & );
+            macabfield( macabfield && );
+            macabfield& operator=( macabfield const & ) = delete;
+            ~macabfield();
+            CFTypeRef const & getValue() const { return value; }
+            // this expects the new value to already have been retained
+            void setValue(CFTypeRef v);
         };
 
         class MacabRecord{
             protected:
                 sal_Int32 size;
-                std::unique_ptr<macabfield *[]> fields;
-            protected:
-                void releaseFields();
+                std::vector<std::unique_ptr<macabfield>> fields;
             public:
                 MacabRecord();
                 explicit MacabRecord(const sal_Int32 _size);
@@ -61,11 +70,11 @@ namespace connectivity
                 bool contains(const macabfield *_field) const;
                 bool contains(const CFTypeRef _value) const;
                 sal_Int32 getSize() const;
-                macabfield *copy(const sal_Int32 i) const;
+                std::unique_ptr<macabfield> copy(const sal_Int32 i) const;
                 macabfield *get(const sal_Int32 i) const;
 
                 static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
-                static macabfield *createMacabField(const OUString& _newFieldString, const ABPropertyType _abtype);
+                static std::unique_ptr<macabfield> createMacabField(const OUString& _newFieldString, const ABPropertyType _abtype);
                 static OUString fieldToString(const macabfield *_aField);
 
         };
