@@ -169,6 +169,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
     // Get names/values for new menu.
     // 4 subkeys for every item!
     bool bDefaultFound = false;
+    sal_Int32 nDestStep    = 0;
     for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
     {
         SvtCompatibilityEntry aItem;
@@ -176,7 +177,10 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
         aItem.setValue<OUString>( SvtCompatibilityEntry::Index::Name, lNodes[ nItem ] );
 
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
-            aItem.setValue( SvtCompatibilityEntry::Index(i), lValues[ i - 1 ] );
+        {
+            aItem.setValue( SvtCompatibilityEntry::Index(i), lValues[ nDestStep ] );
+            nDestStep++;
+        }
 
         m_aOptions.push_back( aItem );
 
