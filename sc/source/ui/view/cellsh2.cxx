@@ -55,6 +55,7 @@
 #include "validat.hxx"
 #include "validate.hxx"
 #include "scresid.hxx"
+#include "datamapper.hxx"
 
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
@@ -788,6 +789,16 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             }
         }
         break;
+        case SID_DATA_PROVIDER_REFRESH:
+        {
+            ScDocument* pDoc = GetViewData()->GetDocument();
+            auto& rDataMapper = pDoc->GetExternalDataMapper();
+            for (auto& rDataSource : rDataMapper.getDataSources())
+            {
+                rDataSource.refresh(pDoc, false);
+            }
+        }
+        break;
         case SID_MANAGE_XML_SOURCE:
             ExecuteXMLSourceDialog();
         break;
@@ -1195,6 +1206,14 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 }
                 break;
             case SID_DATA_PROVIDER:
+            break;
+            case SID_DATA_PROVIDER_REFRESH:
+            {
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                auto& rDataMapper = pDoc->GetExternalDataMapper();
+                if (rDataMapper.getDataSources().empty())
+                    rSet.DisableItem(nWhich);
+            }
             break;
             case SID_DATA_STREAMS:
             case SID_DATA_STREAMS_PLAY:
