@@ -80,7 +80,7 @@ bool MacabConditionNull::eval(const MacabRecord *aRecord) const
 
     if(aValue == nullptr)
         return true;
-    else if(aValue->value == nullptr)
+    else if(aValue->getValue() == nullptr)
         return true;
     else
         return false;
@@ -97,7 +97,7 @@ bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
 
     if(aValue == nullptr)
         return false;
-    else if(aValue->value == nullptr)
+    else if(aValue->getValue() == nullptr)
         return false;
     else
         return true;
@@ -121,14 +121,13 @@ bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
     if(aValue == nullptr)
         return false;
 
-    macabfield *aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
+    std::unique_ptr<macabfield> aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
 
     if(aValue2 == nullptr)
         return false;
 
-    sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2);
+    sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2.get());
 
-    delete aValue2;
     return nReturn == 0;
 }
 
@@ -144,14 +143,13 @@ bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
     if(aValue == nullptr)
         return false;
 
-    macabfield *aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
+    std::unique_ptr<macabfield> aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
 
     if(aValue2 == nullptr)
         return false;
 
-    sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2);
+    sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2.get());
 
-    delete aValue2;
     return nReturn != 0;
 }
 
