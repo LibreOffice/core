@@ -33,37 +33,17 @@ using namespace com::sun::star::util;
 using namespace ::dbtools;
 
 
-MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
+MacabHeader::MacabHeader(const sal_Int32 _size, std::vector<std::unique_ptr<macabfield>> const & _fields)
 {
-    sal_Int32 i;
     size = _size;
-    fields = o3tl::make_unique<macabfield *[]>(size);
-    for(i = 0; i < size; i++)
-    {
-        if(_fields[i] == nullptr)
-        {
-            fields[i] = nullptr;
-        }
-        else
-        {
-            /* The constructor duplicates the macabfields it gets because they
-             * are either deleted later or used for other purposes.
-             */
-            fields[i] = new macabfield;
-            fields[i]->type = _fields[i]->type;
-            fields[i]->value = _fields[i]->value;
-            if (fields[i]->value)
-                CFRetain(fields[i]->value);
-        }
-    }
-
+    for (auto const & i : _fields)
+        fields.emplace_back(new macabfield(*i));
 }
 
 
 MacabHeader::MacabHeader()
 {
     size = 0;
-    fields = nullptr;
 }
 
 
@@ -78,64 +58,10 @@ void MacabHeader::operator+= (const MacabHeader *r)
      * added to the end of it.
      */
     sal_Int32 rSize = r->getSize();
-    if(rSize != 0) // If the new header does actually have fields
+    for(sal_Int32 i = 0; i < rSize; i++)
     {
-        /* If our header is currently empty, just copy all of the fields from
-         * the new header to this one.
-         */
-        if(size == 0)
-        {
-            sal_Int32 i;
-            size = rSize;
-            fields = o3tl::make_unique<macabfield *[]>(size);
-            for(i = 0; i < size; i++)
-            {
-                fields[i] = r->copy(i);
-            }
-        }
-
-        /* Otherwise, only add the duplicates. We do this with a two-pass
-         * approach. First, find out how many fields to add, then reallocate
-         * the size of the fields array and add the old ones at the end.
-         * (More precisely, we create a _new_ fields array with the new length
-         * allocated to it, then get all of the fields from the current
-         * fields array to it, then copy the non-duplicates from the new
-         * header to the end.)
-         */
-        else
-        {
-            sal_Int32 i;
-            sal_Int32 numToAdd = 0, numAdded = 0;
-            macabfield **newFields;
-            for( i = 0; i < rSize; i++)
-            {
-                if(!contains(r->get(i)))
-                {
-                    numToAdd++;
-                }
-            }
-
-            newFields = new macabfield *[size+numToAdd];
-            for(i = 0; i < size; i++)
-            {
-                newFields[i] = copy(i);
-            }
-
-            for( i = 0; i < rSize; i++)
-            {
-                if(!contains(r->get(i)))
-                {
-                    newFields[size+numAdded] = r->copy(i);
-                    numAdded++;
-                    if(numAdded == numToAdd)
-                        break;
-                }
-            }
-
-            releaseFields();
-            size += numAdded;
-            fields.reset(newFields);
-        }
+        if(!contains(r->get(i)))
+            fields.emplace_back(new macabfield(*r->get(i)));
     }
 }
 
@@ -146,11 +72,11 @@ OUString MacabHeader::getString(const sal_Int32 i) const
 
     if(i < size)
     {
-        if(fields[i] == nullptr || fields[i]->value == nullptr || CFGetTypeID(fields[i]->value) != CFStringGetTypeID())
+        if(fields[i] == nullptr || fields[i]->getValue() == nullptr || CFGetTypeID(fields[i]->getValue()) != CFStringGetTypeID())
             return OUString();
         try
         {
-            nRet = CFStringToOUString(static_cast<CFStringRef>(fields[i]->value));
+            nRet = CFStringToOUString(static_cast<CFStringRef>(fields[i]->getValue()));
         }
         catch(...){ }
     }
@@ -161,81 +87,11 @@ OUString MacabHeader::getString(const sal_Int32 i) const
 
 void MacabHeader::sortRecord()
 {
-    sortRecord(0,size);
-}
-
-
-macabfield **MacabHeader::sortRecord(const sal_Int32 _start, const sal_Int32 _length)
-{
-    /* Sort using mergesort. Because it uses mergesort, it is recursive and
-     * not in place (so it creates a new array at every step of the
-     * recursion), so if you prefer to use a different sort, please feel
-     * free to implement it.
-     */
-    macabfield** sorted = new macabfield *[_length];
-    if(_length <= 2)
-    {
-        if(_length == 2)
+    std::sort(fields.begin(), fields.end(),
+        [](std::unique_ptr<macabfield> const & a, std::unique_ptr<macabfield> const & b) -> bool
         {
-            if(compareFields(fields[_start], fields[_start+1]) > 0)
-            {
-                sorted[0] = get(_start+1);
-                sorted[1] = get(_start);
-            }
-            else
-            {
-                sorted[0] = get(_start);
-                sorted[1] = get(_start+1);
-            }
-        }
-        else if(_length == 1)
-        {
-            sorted[0] = get(_start);
-        }
-    }
-    else
-    {
-        sal_Int32 halfLength = floor(_length/2);
-        sal_Int32 fp = 0, lp = 0;
-        sal_Int32 i;
-        macabfield **firstHalf = sortRecord(_start, halfLength);
-        macabfield **lastHalf = sortRecord(_start+halfLength, _length-halfLength);
-
-        for(i = 0; i < _length; i++)
-        {
-            if(compareFields(firstHalf[fp],lastHalf[lp]) < 0)
-            {
-                sorted[i] = firstHalf[fp++];
-                if(fp == halfLength)
-                {
-                    for( i++; i < _length; i++)
-                    {
-                        sorted[i] = lastHalf[lp++];
-                    }
-                    break;
-                }
-            }
-            else
-            {
-                sorted[i] = lastHalf[lp++];
-                if(lp == _length - halfLength)
-                {
-                    for( i++; i < _length; i++)
-                    {
-                        sorted[i] = firstHalf[fp++];
-                    }
-                    break;
-                }
-            }
-        }
-        if(_length == size)
-        {
-            fields.reset(sorted);
-        }
-        delete firstHalf;
-        delete lastHalf;
-    }
-    return sorted;
+            return compareFields(a.get(), b.get()) < 0;
+        });
 }
 
 sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield *_field2)
@@ -256,8 +112,8 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
         return -1;
 
     CFComparisonResult result = CFStringCompare(
-        static_cast<CFStringRef>(_field1->value),
-        static_cast<CFStringRef>(_field2->value),
+        static_cast<CFStringRef>(_field1->getValue()),
+        static_cast<CFStringRef>(_field2->getValue()),
         0); // 0 = no options (like ignore case)
 
     return (sal_Int32) result;
