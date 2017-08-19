@@ -1457,8 +1457,8 @@ long SvImpLBox::GetEntryLine( SvTreeListEntry* pEntry ) const
 
 void SvImpLBox::SetEntryHeight()
 {
-    SetNodeBmpYOffset( GetExpandedNodeBmp() );
-    SetNodeBmpYOffset( GetCollapsedNodeBmp() );
+    SetNodeBmpWidth( GetExpandedNodeBmp() );
+    SetNodeBmpWidth( GetCollapsedNodeBmp() );
     if(!pView->HasViewData()) // are we within the Clear?
     {
         Size aSize = pView->Control::GetOutputSizePixel();
@@ -1565,7 +1565,7 @@ void SvImpLBox::CollapsingEntry( SvTreeListEntry* pEntry )
 }
 
 
-void SvImpLBox::SetNodeBmpYOffset( const Image& rBmp )
+void SvImpLBox::SetNodeBmpWidth( const Image& rBmp )
 {
     const Size aSize( rBmp.GetSizePixel() );
     nNodeBmpWidth = aSize.Width();
