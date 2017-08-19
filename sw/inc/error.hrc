@@ -24,8 +24,8 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-#define ERR_CODE( class, err )  ErrCode(class | (sal_uInt32(err) - ERRCODE_AREA_SW))
-#define WARN_CODE( class, err ) ErrCode(class | (sal_uInt32(err) - (ERRCODE_AREA_SW | ERRCODE_WARNING_MASK)))
+#define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class | sal_uInt32(err))
+#define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class | sal_uInt32(err))
 
 const ErrMsgCode RID_SW_ERRHDL[] =
 {

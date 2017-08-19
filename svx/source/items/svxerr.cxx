@@ -25,7 +25,7 @@
 
 SvxErrorHandler::SvxErrorHandler() :
   SfxErrorHandler(
-      getRID_SVXERRCODE(), ErrCode(ERRCODE_AREA_SVX), ErrCode(ERRCODE_AREA_SVX_END), SvxResLocale())
+      getRID_SVXERRCODE(), ErrCodeArea::Svx, ErrCodeArea::Svx, SvxResLocale())
 {
 }
 

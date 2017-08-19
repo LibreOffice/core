@@ -172,8 +172,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     SetName( "StarWriter" );
     SvxErrorHandler::ensure();
     m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
-                                     ErrCode(ERRCODE_AREA_SW),
-                                     ErrCode(ERRCODE_AREA_SW_END),
+                                     ErrCodeArea::Sw,
+                                     ErrCodeArea::Sw,
                                      GetResLocale() );
 
     m_pModuleConfig = new SwModuleOptions;

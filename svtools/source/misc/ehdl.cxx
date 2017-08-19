@@ -139,7 +139,7 @@ static DialogMask aWndFunc(
     return nRet;
 }
 
-SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCode lStartP, ErrCode lEndP, const std::locale& rLocale)
+SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCodeArea lStartP, ErrCodeArea lEndP, const std::locale& rLocale)
     : lStart(lStartP), lEnd(lEndP), pIds(pIdPs), rResLocale(rLocale)
 {
     ErrorRegistry::RegisterDisplay(&aWndFunc);
@@ -159,7 +159,7 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
 
 {
     ErrCode nErrCode(sal_uInt32(pErr->GetErrorCode()) & ERRCODE_ERROR_MASK);
-    if( nErrCode>=lEnd || nErrCode<=lStart )
+    if( pErr->GetErrorCode().GetArea() > lEnd || pErr->GetErrorCode().GetArea() <= lStart )
         return false;
     if(GetErrorString(nErrCode, rStr))
     {

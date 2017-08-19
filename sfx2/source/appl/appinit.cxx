@@ -207,13 +207,13 @@ void SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
-        getRID_ERRHDL(), ErrCode(ERRCODE_AREA_IO), ErrCode(ERRCODE_AREA_SVX));
+        getRID_ERRHDL(), ErrCodeArea::Io, ErrCodeArea::Vcl);
 
     pImpl->m_pSoErrorHdl = new SfxErrorHandler(
-        getRID_SO_ERROR_HANDLER(), ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), SvtResLocale());
+        getRID_SO_ERROR_HANDLER(), ErrCodeArea::So, ErrCodeArea::So, SvtResLocale());
 #if HAVE_FEATURE_SCRIPTING
     pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
-        getRID_BASIC_START(), ErrCode(ERRCODE_AREA_SBX), ErrCode(ERRCODE_AREA_SBX_END), BasResLocale());
+        getRID_BASIC_START(), ErrCodeArea::Sbx, ErrCodeArea::Sbx, BasResLocale());
 #endif
 
     if (!utl::ConfigManager::IsAvoidConfig())

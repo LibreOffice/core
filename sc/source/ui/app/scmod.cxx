@@ -180,8 +180,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     // Between OfficeApplication::Init and ScGlobal::Init
     SvxErrorHandler::ensure();
     pErrorHdl    = new SfxErrorHandler(RID_ERRHDLSC,
-                                       ErrCode(ERRCODE_AREA_SC),
-                                       ErrCode(ERRCODE_AREA_APP2-1),
+                                       ErrCodeArea::Sc,
+                                       ErrCodeArea::Sc,
                                        GetResLocale());
 
     aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );

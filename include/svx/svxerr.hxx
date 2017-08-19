@@ -21,49 +21,26 @@
 
 #include <vcl/errcode.hxx>
 
-// define ----------------------------------------------------------------
-
-#define ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS   ErrCode(1UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_NOTEXISTS)
-
-#define ERRCODE_SVX_LINGU_LINGUNOTEXISTS       ErrCode(3UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_LINGU_HYPHENNOTEXISTS      ErrCode(4UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_LINGU_DICT_NOTREADABLE     ErrCode(5UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_READ )
-#define ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE    ErrCode(6UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_WRITE )
-
-#define ERRCODE_SVX_GRAPHIC_NOTREADABLE        ErrCode(7UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_READ )
-
-#define ERRCODE_SVX_LINGU_NOLANGUAGE           ErrCode(9UL | ERRCODE_AREA_SVX | \
-                                                ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_FORMS_NOIOSERVICES         ErrCode(10UL | ERRCODE_AREA_SVX )
-#define ERRCODE_SVX_FORMS_READWRITEFAILED      ErrCode(11UL | ERRCODE_AREA_SVX )
-
-#define ERRCODE_SVX_BULLETITEM_NOBULLET        ErrCode(12UL | ERRCODE_AREA_SVX )
-
-#define ERRCODE_SVX_MODIFIED_VBASIC_STORAGE    ErrCode(13UL | ERRCODE_AREA_SVX     \
-                                                     | ERRCODE_WARNING_MASK \
-                                                     | ERRCODE_CLASS_WRITE )
-
-#define ERRCODE_SVX_VBASIC_STORAGE_EXIST       ErrCode(14UL | ERRCODE_AREA_SVX     \
-                                                     | ERRCODE_WARNING_MASK \
-                                                     | ERRCODE_CLASS_WRITE )
-
+#define ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS  ErrCode( ErrCodeArea::Svx,  1UL | ERRCODE_CLASS_NOTEXISTS)
+#define ERRCODE_SVX_LINGU_LINGUNOTEXISTS      ErrCode( ErrCodeArea::Svx,  3UL | ERRCODE_CLASS_NOTEXISTS )
+#define ERRCODE_SVX_LINGU_HYPHENNOTEXISTS     ErrCode( ErrCodeArea::Svx,  4UL | ERRCODE_CLASS_NOTEXISTS )
+#define ERRCODE_SVX_LINGU_DICT_NOTREADABLE    ErrCode( ErrCodeArea::Svx,  5UL | ERRCODE_CLASS_READ )
+#define ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE   ErrCode( ErrCodeArea::Svx,  6UL | ERRCODE_CLASS_WRITE )
+#define ERRCODE_SVX_GRAPHIC_NOTREADABLE       ErrCode( ErrCodeArea::Svx,  7UL | ERRCODE_CLASS_READ )
+#define ERRCODE_SVX_LINGU_NOLANGUAGE          ErrCode( ErrCodeArea::Svx,  9UL | ERRCODE_CLASS_NOTEXISTS )
+#define ERRCODE_SVX_FORMS_NOIOSERVICES        ErrCode( ErrCodeArea::Svx, 10UL )
+#define ERRCODE_SVX_FORMS_READWRITEFAILED     ErrCode( ErrCodeArea::Svx, 11UL )
+#define ERRCODE_SVX_BULLETITEM_NOBULLET       ErrCode( ErrCodeArea::Svx, 12UL )
+#define ERRCODE_SVX_MODIFIED_VBASIC_STORAGE   ErrCode( ErrCodeArea::Svx, 13UL | ERRCODE_CLASS_WRITE | ERRCODE_WARNING_MASK )
+#define ERRCODE_SVX_VBASIC_STORAGE_EXIST      ErrCode( ErrCodeArea::Svx, 14UL | ERRCODE_CLASS_WRITE | ERRCODE_WARNING_MASK )
 /** Error message: "Wrong password." */
-#define ERRCODE_SVX_WRONGPASS               ErrCode(15UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_NONE)
-
+#define ERRCODE_SVX_WRONGPASS                 ErrCode( ErrCodeArea::Svx, 15UL | ERRCODE_CLASS_NONE)
 /** Error message: "Read error. Unsupported encryption method." */
-#define ERRCODE_SVX_READ_FILTER_CRYPT       ErrCode(16UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_READ)
-
+#define ERRCODE_SVX_READ_FILTER_CRYPT         ErrCode( ErrCodeArea::Svx, 16UL | ERRCODE_CLASS_READ)
 /** Error message: "Read error. Passwort encrypted Powerpoint documents..." */
-#define ERRCODE_SVX_READ_FILTER_PPOINT      ErrCode(17UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_READ)
-
+#define ERRCODE_SVX_READ_FILTER_PPOINT        ErrCode( ErrCodeArea::Svx, 17UL | ERRCODE_CLASS_READ)
 /** Error message: "Warning. Passwort protection is not supported when..." */
-#define ERRCODE_SVX_EXPORT_FILTER_CRYPT      ErrCode(18UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_EXPORT | ERRCODE_WARNING_MASK)
+#define ERRCODE_SVX_EXPORT_FILTER_CRYPT       ErrCode( ErrCodeArea::Svx, 18UL | ERRCODE_CLASS_EXPORT | ERRCODE_WARNING_MASK)
 
 
 // both codes will be used twice : with ERRCODE_CLASS_READ- and ERRCODE_CLASS_WRITE-bits
