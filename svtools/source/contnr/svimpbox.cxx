@@ -1567,8 +1567,7 @@ void SvImpLBox::CollapsingEntry( SvTreeListEntry* pEntry )
 
 void SvImpLBox::SetNodeBmpYOffset( const Image& rBmp )
 {
-    Size aSize;
-    pView->GetHeightOffset( rBmp, aSize );
+    const Size aSize( rBmp.GetSizePixel() );
     nNodeBmpWidth = aSize.Width();
 }
 
