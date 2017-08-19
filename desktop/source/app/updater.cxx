@@ -651,6 +651,7 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
 
     OUString aDestFile = aPatchDirURL + aFileName;
     Updater::log("Destination File: " + aDestFile);
+    aDownloadedFile.close();
     eError = osl::File::move(aTempFile, aDestFile);
     handle_file_error(eError, "Could not move the file from the Temp directory to the user config: TempFile: " + aTempFile + "; DestFile: " + aDestFile);
 }
