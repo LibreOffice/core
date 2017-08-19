@@ -116,6 +116,8 @@ def main():
     update_dir = updater_path.get_update_dir()
 
     current_build_path = add_single_dir(current_build_path)
+    if sys.platform == "cygwin":
+        current_build_path = add_single_dir(current_build_path)
 
     config = parse_config(update_config)
 
