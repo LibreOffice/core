@@ -246,8 +246,6 @@ include/sax/fshelper.hxx:206
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
 include/sax/fshelper.hxx:209
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
-include/svtools/treelistbox.hxx:536
-    short SvTreeListBox::GetHeightOffset(const class Image &,class Size &)
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xsheetannotation.hxx:36
