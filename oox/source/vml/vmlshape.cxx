@@ -616,6 +616,8 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, 
     else // static (is the default) means anchored inline
     {
         rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
+        // Use top orientation, this one seems similar to what MSO uses as inline
+        rPropSet.setAnyProperty(PROP_VertOrient, makeAny(text::VertOrientation::TOP));
     }
     lcl_setSurround( rPropSet, rTypeModel, rGraphicHelper );
 }
