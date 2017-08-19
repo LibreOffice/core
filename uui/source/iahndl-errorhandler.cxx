@@ -159,13 +159,10 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             = { getRID_ERRHDL(),
                 getRID_SVXERRCODE(),
                 RID_UUI_ERRHDL };
-        ErrCode nErrorId(sal_uInt32(nErrorCode) & ~ERRCODE_WARNING_MASK);
-        Source eSource = nErrorId < ErrCode(ERRCODE_AREA_SVX) ?
-            SOURCE_DEFAULT :
-            nErrorId >= ErrCode(ERRCODE_AREA_SVX)
-            && nErrorId <= ErrCode(ERRCODE_AREA_SVX_END) ?
-            SOURCE_SVX :
-            SOURCE_UUI;
+        ErrCodeArea nErrorArea = nErrorCode.GetArea();
+        Source eSource =
+            nErrorArea < ErrCodeArea::Svx ? SOURCE_DEFAULT
+                : nErrorArea == ErrCodeArea::Svx ? SOURCE_SVX : SOURCE_UUI;
 
         std::locale aResLocale = Translate::Create(aManager[eSource]);
         ErrorResource aErrorResource(aId[eSource], aResLocale);
