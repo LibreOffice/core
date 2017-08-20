@@ -236,7 +236,7 @@ struct SwHTMLFormatInfo
     {}
 
     // ctor for creating of the format information
-    SwHTMLFormatInfo( const SwFormat *pFormat, SwDoc *pDoc, SwDoc *pTemlate,
+    SwHTMLFormatInfo( const SwFormat *pFormat, SwDoc *pDoc, SwDoc *pTemplate,
                    bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
                    sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT );
     ~SwHTMLFormatInfo();
