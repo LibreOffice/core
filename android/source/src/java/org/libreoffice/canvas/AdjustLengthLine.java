@@ -14,7 +14,8 @@ import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.overlay.CalcHeadersView;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
-import static org.libreoffice.overlay.CalcHeadersView.addProperty;
+import static org.libreoffice.SearchController.addProperty;
+import static org.libreoffice.UnitConverter.pixelToTwip;
 
 public class AdjustLengthLine extends CommonCanvasElement {
 
@@ -97,9 +98,5 @@ public class AdjustLengthLine extends CommonCanvasElement {
         mScreenPosition = new PointF(position.right, position.bottom);
         mStartScreenPosition = new PointF(position.left, position.top);
         mIndex = 1 + mCalcHeadersView.getIndexFromPointOfTouch(new PointF(position.centerX(), position.centerY()));
-    }
-
-    private static float pixelToTwip(float input, float dpi) {
-        return (input / dpi) * 1440.0f;
     }
 }

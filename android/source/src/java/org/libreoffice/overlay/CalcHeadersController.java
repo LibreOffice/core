@@ -25,6 +25,8 @@ import org.mozilla.gecko.gfx.LayerView;
 
 import java.util.ArrayList;
 
+import static org.libreoffice.UnitConverter.twipToPixel;
+
 public class CalcHeadersController {
     private static final String LOGTAG = CalcHeadersController.class.getSimpleName();
 
@@ -196,10 +198,6 @@ public class CalcHeadersController {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private float twipToPixel(float input, float dpi) {
-        return input / 1440.0f * dpi;
     }
 
     public void showHeaderSelection(RectF cellCursorRect) {
