@@ -75,7 +75,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bSetPageID=false;
 
-    if (rMEvt.IsLeft() && !rMEvt.IsMod1() && !rMEvt.IsMod2())
+    if (rMEvt.IsLeft() && !rMEvt.IsMod2())
     {
         Point aPosPixel = rMEvt.GetPosPixel();
         sal_uInt16 aLayerId = GetPageId( PixelToLogic(aPosPixel) );
@@ -87,15 +87,81 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
 
             bSetPageID=true;
         }
-        else if (rMEvt.IsShift())
+        else if (rMEvt.IsMod1() || rMEvt.IsShift())
         {
-            // Toggle between layer visible / hidden
+            // keyboard Shortcuts to change layer attributes
+
             OUString aName(GetPageText(aLayerId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
-            bool bVisible = pPV->IsLayerVisible(aName);
-            pPV->SetLayerVisible(aName, !bVisible);
+
+            // Save old state
+
+            bool bOldPrintable = pPV->IsLayerPrintable(aName);
+            bool bOldVisible = pPV->IsLayerVisible(aName);
+            bool bOldLocked = pPV->IsLayerLocked(aName);
+
+            bool bNewPrintable = bOldPrintable;
+            bool bNewVisible = bOldVisible;
+            bool bNewLocked = bOldLocked;
+
+            if (rMEvt.IsMod1() && rMEvt.IsShift())
+            {
+                // Shift+Ctrl: Toggle between layer printable / not printable
+                bNewPrintable = !bOldPrintable;
+                pPV->SetLayerPrintable(aName, bNewPrintable);
+            }
+            else if (rMEvt.IsShift())
+            {
+                // Shift: Toggle between layer visible / hidden
+                bNewVisible = !bOldVisible;
+                pPV->SetLayerVisible(aName, bNewVisible);
+            }
+            else // if (rMEvt.IsMod1())
+            {
+                // Ctrl: Toggle between layer locked / unlocked
+                bNewLocked = !bOldLocked;
+                pPV->SetLayerLocked(aName, bNewLocked);
+            }
+
             pDrViewSh->ResetActualLayer();
-            pDrViewSh->GetView()->GetDoc().SetChanged();
+
+            // Add Undo action
+
+            ::sd::View* pView = pDrViewSh->GetView();
+            DrawView* pDrView = dynamic_cast<DrawView*>(pView);
+
+            SdDrawDocument& rDoc = pView->GetDoc();
+            SdrLayer* pLayer = rDoc.GetLayerAdmin().GetLayer(aName);
+
+            if (pLayer)
+            {
+                assert (pDrView && "Change layer attribute undo action is only working with a SdDrawView");
+                if(pDrView)
+                {
+                    ::svl::IUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
+                    SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
+                        &rDoc,
+                        pLayer,
+                        aName,
+                        pLayer->GetTitle(),
+                        pLayer->GetDescription(),
+                        bOldVisible,
+                        bOldLocked,
+                        bOldPrintable,
+                        aName,
+                        pLayer->GetTitle(),
+                        pLayer->GetDescription(),
+                        bNewVisible,
+                        bNewLocked,
+                        bNewPrintable
+                        );
+                    pManager->AddUndoAction(pAction);
+                }
+            }
+
+            // Mark document changed
+
+            pView->GetDoc().SetChanged();
         }
     }
 
@@ -249,8 +315,7 @@ void LayerTabBar::EndRenaming()
         if (pLayer)
         {
             OUString aNewName( GetEditText() );
-
-            DBG_ASSERT( pDrView, "Rename layer undo action is only working with a SdDrawView" );
+            assert (pDrView && "Rename layer undo action is only working with a SdDrawView");
             if( pDrView )
             {
                 ::svl::IUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();

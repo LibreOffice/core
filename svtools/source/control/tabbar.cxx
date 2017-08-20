@@ -1173,7 +1173,6 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             bool bSelected = pItem->IsSelected(pCurItem);
             // We disable custom background color in high contrast mode.
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
-            bool bSpecialTab = (pItem->mnBits & TPB_DISPLAY_NAME_BLUE);
             OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth) : pItem->maText;
 
             aDrawer.setRect(aRect);
@@ -1198,9 +1197,24 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             else
                 rRenderContext.SetTextColor(aFaceTextColor);
 
-            // This tab is "special", and a special tab needs a blue text.
-            if (bSpecialTab)
+            // Special display of tab name depending on page bits
+
+            if (pItem->mnBits & TPB_DISPLAY_NAME_BLUE)
+            {
                 rRenderContext.SetTextColor(Color(COL_LIGHTBLUE));
+            }
+            if (pItem->mnBits & TPB_DISPLAY_NAME_ITALIC)
+            {
+                vcl::Font aSpecialFont = rRenderContext.GetFont();
+                aSpecialFont.SetItalic(FontItalic::ITALIC_NORMAL);
+                rRenderContext.SetFont(aSpecialFont);
+            }
+            if (pItem->mnBits & TPB_DISPLAY_NAME_UNDERLINE)
+            {
+                vcl::Font aSpecialFont = rRenderContext.GetFont();
+                aSpecialFont.SetUnderline(LINESTYLE_SINGLE);
+                rRenderContext.SetFont(aSpecialFont);
+            }
 
             aDrawer.drawText(aText);
 
@@ -1596,10 +1610,10 @@ void TabBar::AddTabClick()
 void TabBar::InsertPage(sal_uInt16 nPageId, const OUString& rText,
                         TabBarPageBits nBits, sal_uInt16 nPos)
 {
-    DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
-    DBG_ASSERT( GetPagePos( nPageId ) == PAGE_NOT_FOUND,
-                "TabBar::InsertPage(): PageId already exists" );
-    DBG_ASSERT( nBits <= TPB_DISPLAY_NAME_BLUE, "TabBar::InsertPage(): nBits is wrong" );
+    DBG_ASSERT(nPageId, "TabBar::InsertPage(): PageId == 0");
+    DBG_ASSERT(GetPagePos( nPageId ) == PAGE_NOT_FOUND,
+                "TabBar::InsertPage(): PageId already exists");
+    assert ((nBits <= TPB_DISPLAY_NAME_ALLFLAGS) && "TabBar::InsertPage(): Invalid flag set in in nBits");
 
     // create PageItem and insert in the item list
     ImplTabBarItem* pItem = new ImplTabBarItem( nPageId, rText, nBits );
