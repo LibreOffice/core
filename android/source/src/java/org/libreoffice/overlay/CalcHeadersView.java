@@ -24,6 +24,8 @@ import org.mozilla.gecko.gfx.LayerView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static org.libreoffice.SearchController.addProperty;
+
 public class CalcHeadersView extends View {
     private static final String LOGTAG = CalcHeadersView.class.getSimpleName();
 
@@ -185,13 +187,6 @@ public class CalcHeadersView extends View {
 
     public boolean pendingRowOrColumnSelectionToShowUp() {
         return mPendingRowOrColumnSelectionToShowUp;
-    }
-
-    public static void addProperty(JSONObject json, String parentValue, String type, String value) throws JSONException {
-        JSONObject child = new JSONObject();
-        child.put("type", type);
-        child.put("value", value);
-        json.put(parentValue, child);
     }
 
     public void setHeaders(ArrayList<String> labels, ArrayList<Float> dimens) {

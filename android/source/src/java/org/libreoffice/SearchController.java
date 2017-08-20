@@ -7,7 +7,7 @@ import android.widget.ImageButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class SearchController implements View.OnClickListener {
+public class SearchController implements View.OnClickListener {
     private LibreOfficeMainActivity mActivity;
 
     private enum SearchDirection {
@@ -38,7 +38,7 @@ class SearchController implements View.OnClickListener {
         }
     }
 
-    private void addProperty(JSONObject json, String parentValue, String type, String value) throws JSONException {
+    public static void addProperty(JSONObject json, String parentValue, String type, String value) throws JSONException {
         JSONObject child = new JSONObject();
         child.put("type", type);
         child.put("value", value);
