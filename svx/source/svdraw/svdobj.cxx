@@ -98,9 +98,7 @@
 #include <sxlogitm.hxx>
 #include <sxmovitm.hxx>
 #include <sxoneitm.hxx>
-#include <sxonitm.hxx>
 #include <sxopitm.hxx>
-#include <sxraitm.hxx>
 #include <sxreoitm.hxx>
 #include <sxrooitm.hxx>
 #include <sxsaitm.hxx>
@@ -2135,7 +2133,7 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr) const
     lcl_SetItem(rAttr,false,SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, IsResizeProtect()));
     lcl_SetItem(rAttr,false,SdrObjPrintableItem(IsPrintable()));
     lcl_SetItem(rAttr,false,SdrObjVisibleItem(IsVisible()));
-    lcl_SetItem(rAttr,false,makeSdrRotateAngleItem(GetRotateAngle()));
+    lcl_SetItem(rAttr,false,SdrAngleItem(SDRATTR_ROTATEANGLE, GetRotateAngle()));
     lcl_SetItem(rAttr,false,SdrShearAngleItem(GetShearAngle()));
     lcl_SetItem(rAttr,false,SdrOneSizeWidthItem(rSnap.GetWidth()-1));
     lcl_SetItem(rAttr,false,SdrOneSizeHeightItem(rSnap.GetHeight()-1));
@@ -2151,7 +2149,7 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr) const
 
     if (!aName.isEmpty())
     {
-        lcl_SetItem(rAttr, false, makeSdrObjectNameItem(aName));
+        lcl_SetItem(rAttr, false, SfxStringItem(SDRATTR_OBJECTNAME, aName));
     }
 
     lcl_SetItem(rAttr,false,SdrLayerIdItem(GetLayer()));
