@@ -3425,13 +3425,39 @@
         <info>
           <desc>List of Favorite characters</desc>
         </info>
-        <value/>
+          <value>
+          <it>₠</it>
+          <it>¥</it>
+          <it>£</it>
+          <it>₪</it>
+          <it>Φ</it>
+          <it>Σ</it>
+          <it>Ψ</it>
+          <it>Ω</it>
+          <it>∞</it>
+          <it>😃</it>
+          <it>†</it>
+          <it>‡</it>
+        </value>
       </prop>
       <prop oor:name="FavoriteCharacterFontList" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>List of Favorite character font</desc>
         </info>
-        <value/>
+        <value>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+          <it>Liberation Serif</it>
+        </value>
       </prop>
     </group>
     <group oor:name="Help">
