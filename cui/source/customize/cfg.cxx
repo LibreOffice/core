@@ -924,8 +924,24 @@ void ContextMenuSaveInData::Reset()
         {
             GetConfigManager()->removeSettings( pEntry->GetCommand() );
         }
-        catch ( const css::uno::Exception& )
-        {}
+        catch ( const css::uno::Exception& e )
+        {
+            SAL_WARN("cui.customize", "Exception caught while resetting context menus: " << e.Message);
+        }
+    }
+    PersistChanges( GetConfigManager() );
+    m_pRootEntry.reset();
+}
+
+void ContextMenuSaveInData::ResetContextMenu( SvxConfigEntry* pEntry )
+{
+    try
+    {
+        GetConfigManager()->removeSettings( pEntry->GetCommand() );
+    }
+    catch ( const css::uno::Exception& e )
+    {
+        SAL_WARN("cui.customize", "Exception caught while resetting context menu: " << e.Message);
     }
     PersistChanges( GetConfigManager() );
     m_pRootEntry.reset();
@@ -1145,6 +1161,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
     get(m_pInsertBtn, "insert");
+    get(m_pResetBtn, "resetbtn");
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
     get(m_pEntries, "entries");
@@ -1180,6 +1197,7 @@ void SvxConfigPage::dispose()
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
     m_pInsertBtn.clear();
+    m_pResetBtn.clear();
     m_pDescriptionField.clear();
 
     m_pContentsListBox.disposeAndClear();
