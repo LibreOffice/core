@@ -265,7 +265,7 @@ public:
         ,nVertRelation( text::RelOrientation::FRAME )
         ,nWrap(text::WrapTextMode_NONE)
         ,bLayoutInCell(false)
-        ,bOpaque( true )
+        ,bOpaque( !rDMapper.IsInHeaderFooter() )
         ,bContour(false)
         ,bContourOutside(true)
         ,nLeftMargin(319)
@@ -839,8 +839,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
                         m_pImpl->applyMargins(xShapeProps);
-                        bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter();
-                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(bOpaque));
+                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_pImpl->bOpaque));
                         xShapeProps->setPropertyValue("Surround", uno::makeAny((sal_Int32)m_pImpl->nWrap));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
@@ -1256,11 +1255,9 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 
                 m_pImpl->applyPosition(xGraphicObjectProperties);
                 m_pImpl->applyRelativePosition(xGraphicObjectProperties);
-                bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
-                if( !bOpaque )
+                if( !m_pImpl->bOpaque )
                 {
-                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ),
-                        uno::makeAny(bOpaque));
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny(m_pImpl->bOpaque));
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::makeAny((sal_Int32)m_pImpl->nWrap));
