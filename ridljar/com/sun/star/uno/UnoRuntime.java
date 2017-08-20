@@ -23,6 +23,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
+import java.util.WeakHashMap;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.lib.util.WeakMap;
 
@@ -104,7 +106,16 @@ public class UnoRuntime {
         if (object instanceof IQueryInterface) {
             oid = ((IQueryInterface) object).getOid();
         }
-        return oid == null ? object.hashCode() + oidSuffix : oid;
+        if (oid == null) {
+            synchronized (oidMap) {
+                 oid = oidMap.get(object);
+                 if (oid == null) {
+                     oid = UUID.randomUUID().toString() + oidSuffix;
+                     oidMap.put(object, oid);
+                 }
+            }
+        }
+        return oid;
     }
 
     /**
@@ -673,6 +684,7 @@ public class UnoRuntime {
         private final IBridge bridge;
     }
 
+    private static final WeakHashMap<Object,String> oidMap = new WeakHashMap<Object,String>();
     private static final String uniqueKeyHostPrefix
     = Integer.toString(new Object().hashCode(), 16) + ":";
     private static final Object uniqueKeyLock = new Object();
