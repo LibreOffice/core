@@ -389,7 +389,17 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     catch( uno::Exception& )
                     {
                     }
+                }
 
+                // if gpg -> force AES
+                if ( true )
+                {
+                    aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
+                    aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                    aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
+                }
+                else if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
+                {
                     if ( !bUseSHA1InODF12 && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
                     {
                         aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;

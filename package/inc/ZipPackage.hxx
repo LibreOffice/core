@@ -73,6 +73,7 @@ protected:
 
     css::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
     css::uno::Sequence< sal_Int8 > m_aEncryptionKey;
+    css::uno::Sequence< css::beans::NamedValue > m_aGpgProps;
 
     FolderHash        m_aRecent;
     OUString   m_aURL;

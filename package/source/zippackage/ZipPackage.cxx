@@ -1197,7 +1197,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            uno::Sequence < PropertyValue > aPropSeq( PKG_SIZE_NOENCR_MNFST );
+            static bool bGpgEncrypt = true;
+            uno::Sequence < PropertyValue > aPropSeq(
+                bGpgEncrypt ? PKG_SIZE_ENCR_MNFST : PKG_SIZE_GPG_ENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
             aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
             aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
@@ -1205,6 +1207,14 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             aPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
             aPropSeq [PKG_MNFST_FULLPATH].Value <<= OUString("/");
 
+            if( bGpgEncrypt )
+            {
+                for ( sal_Int32 nInd = 0; nInd < m_aGpgProps.getLength(); nInd++ )
+                {
+                    aPropSeq[PKG_MNFST_KEYID+nInd].Name = m_aGpgProps[nInd].Name;
+                    aPropSeq[PKG_MNFST_KEYID+nInd].Value = m_aGpgProps[nInd].Value;
+                }
+            }
             aManList.push_back( aPropSeq );
         }
 
@@ -1739,6 +1749,17 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
             }
         }
+    }
+    else if ( aPropertyName == ENCRYPTION_GPG_PROPERTIES )
+    {
+        uno::Sequence< beans::NamedValue > aGpgProps;
+        if ( m_pZipFile || !( aValue >>= aGpgProps ) || aGpgProps.getLength() == 0 )
+        {
+            // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
+            throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
+        }
+
+        m_aGpgProps = aGpgProps;
     }
     else
         throw UnknownPropertyException(THROW_WHERE );

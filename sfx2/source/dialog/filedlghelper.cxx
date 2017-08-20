@@ -1512,8 +1512,9 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
             }
             catch( const IllegalArgumentException& ){}
         }
+
         // check, whether or not we have to display a key selection box
-        else if ( pCurrentFilter && mbHasPassword && mbIsGpgEnabled && xCtrlAccess.is() )
+        if ( pCurrentFilter && mbHasPassword && mbIsGpgEnabled && xCtrlAccess.is() )
         {
             try
             {
@@ -1523,11 +1524,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 {
                     // ask for a key
                     OUString aDocName(rpURLList[0]);
-                    // ErrCode errCode = RequestKey(pCurrentFilter, aDocName, rpSet);
-                    //if (errCode != ERRCODE_NONE)
-                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( keyId ) ) ) );
-
-                    return ERRCODE_IO_NOTSUPPORTED; //errCode;
+                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData(aDocName) ) ) );
                 }
             }
             catch( const IllegalArgumentException& ){}
