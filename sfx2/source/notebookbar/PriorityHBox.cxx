@@ -107,10 +107,11 @@ public:
             pChild++;
         }
 
+        auto pChildR = m_aSortedChilds.rbegin();
         // Show higher priority controls if we already have enough space
-        while (pChild != m_aSortedChilds.end())
+        while (pChildR != m_aSortedChilds.rend())
         {
-            DropdownBox* pBox = static_cast<DropdownBox*>(*pChild);
+            DropdownBox* pBox = static_cast<DropdownBox*>(*pChildR);
 
             nCurrentWidth -= pBox->GetOutputWidthPixel() + get_spacing();
             pBox->ShowContent();
@@ -122,7 +123,7 @@ public:
                 break;
             }
 
-            pChild++;
+            pChildR++;
         }
 
         VclHBox::Resize();
