@@ -687,7 +687,7 @@ void update_checker()
 
     OUString aBuildTarget = "${_OS}_${_ARCH}";
     rtl::Bootstrap::expandMacros(aBuildTarget);
-    OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
+    OUString aChannel = Updater::getUpdateChannel();
     static const char* pUpdateChannelEnv = std::getenv("LIBO_UPDATER_CHANNEL");
     if (pUpdateChannelEnv)
     {
@@ -833,6 +833,14 @@ OUString Updater::getBuildID()
     rtl::Bootstrap::expandMacros(aBuildID);
 
     return aBuildID;
+}
+
+OUString Updater::getUpdateChannel()
+{
+    OUString aUpdateChannel("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateChannel}");
+    rtl::Bootstrap::expandMacros(aUpdateChannel);
+
+    return aUpdateChannel;
 }
 
 void Updater::removeUpdateFiles()
