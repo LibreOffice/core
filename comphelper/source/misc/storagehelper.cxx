@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
@@ -43,6 +44,7 @@
 #include <rtl/random.h>
 #include <osl/time.h>
 #include <osl/diagnose.h>
+#include <sax/tools/converter.hxx>
 
 #include <ucbhelper/content.hxx>
 
@@ -50,6 +52,15 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequence.hxx>
+
+#if GPGME_HAVE_GPGME
+# include <gpgme.h>
+# include <context.h>
+# include <encryptionresult.h>
+# include <key.h>
+# include <data.h>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -194,11 +205,21 @@ void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
             const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    uno::Reference< embed::XEncryptionProtectedSource2 > xEncrSet( xStorage, uno::UNO_QUERY );
+    uno::Reference< embed::XEncryptionProtectedStorage > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
         throw io::IOException(); // TODO
 
-    xEncrSet->setEncryptionData( aEncryptionData );
+    if ( aEncryptionData.getLength() == 2 &&
+         aEncryptionData[0].Name == "GpgInfos" &&
+         aEncryptionData[1].Name == "EncryptionKey" )
+    {
+        xEncrSet->setGpgProperties(
+            aEncryptionData[0].Value.get< uno::Sequence< uno::Sequence< beans::NamedValue > > >() );
+        xEncrSet->setEncryptionData(
+            aEncryptionData[1].Value.get< uno::Sequence< beans::NamedValue > >() );
+    }
+    else
+        xEncrSet->setEncryptionData( aEncryptionData );
 }
 
 
@@ -409,6 +430,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
 uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData()
 {
+#if GPGME_HAVE_GPGME
     // generate session key
     // --------------------
 
@@ -425,34 +447,95 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     rtl_random_destroyPool(aRandomPool);
 
     uno::Sequence< beans::NamedValue > aContainer(2);
-    uno::Sequence< beans::NamedValue > aGpgEncryptionData(3);
+    std::vector< uno::Sequence< beans::NamedValue > > aGpgEncryptions;
+    uno::Sequence< beans::NamedValue > aGpgEncryptionEntry(3);
     uno::Sequence< beans::NamedValue > aEncryptionData(1);
 
-    // TODO fire certificate chooser dialog
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         security::DocumentDigitalSignatures::createWithVersion(
             comphelper::getProcessComponentContext(), "1.2" ) );
 
-    // The user may provide a description while choosing a certificate.
-    OUString aDescription;
-    uno::Reference< security::XCertificate > xSignCertificate=
-        xSigner->chooseEncryptionCertificate(aDescription);
+    // fire up certificate chooser dialog - user can multi-select!
+    uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
+        xSigner->chooseEncryptionCertificate();
 
-    uno::Sequence < sal_Int8 > aKeyID;
-    if (xSignCertificate.is())
+    // generate one encrypted key entry for each recipient
+    // ---------------------------------------------------
+
+    std::unique_ptr<GpgME::Context> ctx;
+    GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
+    if (err)
+        throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
+    if (ctx == nullptr)
+        throw uno::RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+    ctx->setArmor(false);
+
+    // TODO: add self-encryption key from user config
+    const uno::Reference< security::XCertificate >* pCerts=xSignCertificates.getConstArray();
+    for (sal_uInt32 i = 0, nNum = xSignCertificates.getLength(); i < nNum; i++, pCerts++)
     {
-        aKeyID = xSignCertificate->getSHA1Thumbprint();
+        uno::Sequence < sal_Int8 > aKeyID;
+        if (pCerts->is())
+            aKeyID = (*pCerts)->getSHA256Thumbprint();
+
+        std::vector<GpgME::Key> keys;
+        keys.push_back(
+            ctx->key(
+                reinterpret_cast<const char*>(aKeyID.getConstArray()),
+                err, true));
+
+        // ctx is setup now, let's encrypt the lot!
+        GpgME::Data plain(
+            reinterpret_cast<const char*>(aVector.getConstArray()),
+            aVector.getLength(), false);
+        GpgME::Data cipher;
+
+        GpgME::EncryptionResult crypt_res = ctx->encrypt(
+            keys, plain,
+            cipher, GpgME::Context::NoCompress);
+
+        off_t result = cipher.seek(0,SEEK_SET);
+        (void) result;
+        assert(result == 0);
+        int len=0, curr=0; char buf;
+        while( (curr=cipher.read(&buf, 1)) )
+            len += curr;
+
+        if(crypt_res.error() || !len)
+            throw uno::RuntimeException("The GpgME library failed to encrypt.");
+
+        uno::Sequence < sal_Int8 > aCipherValue(len);
+        result = cipher.seek(0,SEEK_SET);
+        assert(result == 0);
+        if( cipher.read(aCipherValue.getArray(), len) != len )
+            throw uno::RuntimeException("The GpgME library failed to read the encrypted value.");
+
+        SAL_INFO("comphelper.crypto", "Generated gpg crypto of length: " << len);
+
+        aGpgEncryptionEntry[0].Name = "KeyId";
+        aGpgEncryptionEntry[0].Value <<= aKeyID;
+        aGpgEncryptionEntry[1].Name = "KeyPacket";
+        aGpgEncryptionEntry[1].Value <<= aKeyID;
+        aGpgEncryptionEntry[2].Name = "CipherValue";
+        aGpgEncryptionEntry[2].Value <<= aCipherValue;
+
+        aGpgEncryptions.push_back(aGpgEncryptionEntry);
     }
 
-    aGpgEncryptionData[0].Name = "KeyId";
-    aGpgEncryptionData[0].Value <<= aKeyID;
+    aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
+    aEncryptionData[0].Value <<= aVector;
 
     aContainer[0].Name = "GpgInfos";
-    aContainer[0].Value <<= aGpgEncryptionData;
+    aContainer[0].Value <<= comphelper::containerToSequence(aGpgEncryptions);
     aContainer[1].Name = "EncryptionKey";
     aContainer[1].Value <<= aEncryptionData;
 
     return aContainer;
+#else
+    return uno::Sequence< beans::NamedValue >();
+#endif
 }
 
 bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
