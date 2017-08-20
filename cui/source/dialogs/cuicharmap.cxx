@@ -1127,7 +1127,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
 // class SvxShowText =====================================================
 
 SvxShowText::SvxShowText(vcl::Window* pParent)
-    : Control(pParent)
+    : Control(pParent, WB_BORDER)
     , mnY(0)
     , mbCenter(false)
 {}
