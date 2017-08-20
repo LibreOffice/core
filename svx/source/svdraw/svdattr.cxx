@@ -86,7 +86,6 @@
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
 #include <sxoneitm.hxx>
-#include <sxonitm.hxx>
 #include <sxopitm.hxx>
 #include <sxraitm.hxx>
 #include <sxreaitm.hxx>
