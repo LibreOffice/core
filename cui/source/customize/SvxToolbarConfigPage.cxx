@@ -138,6 +138,13 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pAddCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, AddCommandHdl ) );
     m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxToolbarConfigPage, RemoveCommandHdl ) );
 
+    m_pInsertBtn->SetSelectHdl(
+        LINK( this, SvxToolbarConfigPage, InsertHdl ) );
+    // "Insert Submenu" is irrelevant to the toolbars
+    PopupMenu* pPopup = m_pInsertBtn->GetPopupMenu();
+    pPopup->EnableItem(OString( "insertsubmenu"), false );
+    pPopup->RemoveDisabledEntries();
+
     // default toolbar to select is standardbar unless a different one
     // has been passed in
     m_aURLToSelect = ITEM_TOOLBAR_URL;
@@ -334,6 +341,36 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandHdl, Button *, void )
 IMPL_LINK_NOARG( SvxToolbarConfigPage, RemoveCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
+}
+
+IMPL_LINK( SvxToolbarConfigPage, InsertHdl, MenuButton *, pButton, void )
+{
+    OString sIdent = pButton->GetCurItemIdent();
+
+    if (sIdent == "insertseparator")
+    {
+        // Get the currently selected toolbar
+        SvxConfigEntry* pToolbar = GetTopLevelSelection();
+
+        SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
+        pNewEntryData->SetUserDefined();
+
+        SvTreeListEntry* pNewLBEntry = InsertEntry( pNewEntryData );
+
+        m_pContentsListBox->SetCheckButtonInvisible( pNewLBEntry );
+        m_pContentsListBox->SetCheckButtonState(
+            pNewLBEntry, SvButtonState::Tristate );
+
+        static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
+
+        UpdateButtonStates();
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        return;
+    }
 }
 
 

@@ -149,7 +149,7 @@
                         <property name="hexpand">True</property>
                         <property name="layout_style">start</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="insert:insertmenu">
                             <property name="label" translatable="yes">Insert</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -554,6 +554,26 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
+    </child>
+  </object>
+  <object class="GtkMenu" id="insertmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="insertseparator">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Insert Separator</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="insertsubmenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Insert Submenu</property>
+        <property name="use_underline">True</property>
+      </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1"/>
