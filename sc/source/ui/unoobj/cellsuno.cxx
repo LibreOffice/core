@@ -6801,7 +6801,7 @@ uno::Reference<table::XTableCharts> SAL_CALL ScTableSheetObj::getCharts()
     if ( pDocSh )
         return new ScChartsObj( pDocSh, GetTab_Impl() );
 
-    OSL_FAIL("no Dokument");
+    OSL_FAIL("no document");
     return nullptr;
 }
 
@@ -6812,7 +6812,7 @@ uno::Reference<table::XTablePivotCharts> SAL_CALL ScTableSheetObj::getPivotChart
     if (pDocSh)
         return new sc::TablePivotCharts(pDocSh, GetTab_Impl());
 
-    OSL_FAIL("no Document");
+    OSL_FAIL("no document");
     return nullptr;
 }
 
@@ -6823,7 +6823,7 @@ uno::Reference<sheet::XDataPilotTables> SAL_CALL ScTableSheetObj::getDataPilotTa
     if ( pDocSh )
         return new ScDataPilotTablesObj( pDocSh, GetTab_Impl() );
 
-    OSL_FAIL("no Dokument");
+    OSL_FAIL("no document");
     return nullptr;
 }
 
@@ -6835,7 +6835,7 @@ uno::Reference<sheet::XScenarios> SAL_CALL ScTableSheetObj::getScenarios()
     if ( pDocSh )
         return new ScScenariosObj( pDocSh, GetTab_Impl() );
 
-    OSL_FAIL("no Dokument");
+    OSL_FAIL("no document");
     return nullptr;
 }
 
@@ -6847,7 +6847,7 @@ uno::Reference<sheet::XSheetAnnotations> SAL_CALL ScTableSheetObj::getAnnotation
     if ( pDocSh )
         return new ScAnnotationsObj( pDocSh, GetTab_Impl() );
 
-    OSL_FAIL("no Dokument");
+    OSL_FAIL("no document");
     return nullptr;
 }
 

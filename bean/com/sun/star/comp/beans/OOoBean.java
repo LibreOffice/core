@@ -629,7 +629,7 @@ public class OOoBean
                             if ( aFrame != null && xOldController != null )
                                 if (!xOldController.suspend(true))
                                     throw new com.sun.star.util.CloseVetoException(
-                                            "Dokument is still being used and cannot be closed.", this);
+                                            "Document is still being used and cannot be closed.", this);
 
                         }
                         catch (java.lang.IllegalStateException exp)
