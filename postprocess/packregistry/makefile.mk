@@ -352,7 +352,8 @@ MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/hsqldb.xcu \
-    $(MY_MOD)/DataAccess/jdbc.xcu
+    $(MY_MOD)/DataAccess/jdbc.xcu \
+    $(MY_MOD)/DataAccess/sdbc_postgresql.xcu
 .END
 
 .IF "$(SYSTEM_LIBTEXTCAT_DATA)" != ""

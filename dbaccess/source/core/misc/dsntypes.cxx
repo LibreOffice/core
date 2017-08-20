@@ -414,15 +414,16 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     };
     KnownPrefix aKnowPrefixes[] =
     {
-        KnownPrefix( "sdbc:calc:",          DST_CALC,               false ),
-        KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
-        KnownPrefix( "sdbc:adabas:",        DST_ADABAS,             false ),
-        KnownPrefix( "sdbc:odbc:",          DST_ODBC,               false ),
-        KnownPrefix( "sdbc:dbase:",         DST_DBASE,              false ),
-        KnownPrefix( "sdbc:mysql:odbc:",    DST_MYSQL_ODBC,         false ),
-        KnownPrefix( "sdbc:mysql:jdbc:",    DST_MYSQL_JDBC,         false ),
-        KnownPrefix( "sdbc:mysql:mysqlc:",  DST_MYSQL_NATIVE,       false ),
-        KnownPrefix( "sdbc:mysqlc:",        DST_MYSQL_NATIVE_DIRECT,false ),
+        KnownPrefix( "sdbc:calc:",           DST_CALC,               false ),
+        KnownPrefix( "sdbc:flat:",           DST_FLAT,               false ),
+        KnownPrefix( "sdbc:adabas:",         DST_ADABAS,             false ),
+        KnownPrefix( "sdbc:odbc:",           DST_ODBC,               false ),
+        KnownPrefix( "sdbc:dbase:",          DST_DBASE,              false ),
+        KnownPrefix( "sdbc:mysql:odbc:",     DST_MYSQL_ODBC,         false ),
+        KnownPrefix( "sdbc:mysql:jdbc:",     DST_MYSQL_JDBC,         false ),
+        KnownPrefix( "sdbc:mysql:mysqlc:",   DST_MYSQL_NATIVE,       false ),
+        KnownPrefix( "sdbc:mysqlc:",         DST_MYSQL_NATIVE_DIRECT,false ),
+        KnownPrefix( "sdbc:postgresql:jdbc:",DST_POSTGRESQL_JDBC,    false ),
 
         KnownPrefix( "sdbc:address:mozilla:",           DST_MOZILLA,            true ),
         KnownPrefix( "sdbc:address:thunderbird:",       DST_THUNDERBIRD,        true ),

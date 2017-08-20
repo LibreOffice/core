@@ -285,6 +285,7 @@ my_components += \
     component/wizards/com/sun/star/wizards/form/form \
     hsqldb \
     jdbc \
+    postgresql \
     component/wizards/com/sun/star/wizards/letter/letter \
     component/wizards/com/sun/star/wizards/query/query \
     component/wizards/com/sun/star/wizards/report/report \

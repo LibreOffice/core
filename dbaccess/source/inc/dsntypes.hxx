@@ -67,6 +67,7 @@ enum DATASOURCE_TYPE
      DST_EMBEDDED_HSQLDB    = 23,
     DST_MYSQL_NATIVE        = 24,
     DST_MYSQL_NATIVE_DIRECT = 25,
+    DST_POSTGRESQL_JDBC     = 26,
 
     DST_USERDEFINE1,    /// first user defined driver
     DST_USERDEFINE2,

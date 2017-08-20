@@ -21,13 +21,30 @@
 
 
 
-#.INCLUDE : target.mk
-.INCLUDE : ant.mk
+PRJ=..$/..
+PRJNAME=connectivity
+TARGET=sdbc_postgresql
 
-COMPONENT_CONFIG_SCHEMA*=$(TARGET).xcs
+# --- Settings -----------------------------------------------------
 
-ALLTAR: "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(COMPONENT_CONFIG_SCHEMA)"
-"$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(COMPONENT_CONFIG_SCHEMA)" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Drivers.xcs
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+.INCLUDE : $(PRJ)$/makefile.pmk
+.INCLUDE : $(PRJ)$/version.mk
+
+.IF defined(debug) || defined(DEBUG)
+ANTDEBUG=true
+.ELSE
+ANTDEBUG=off
+.ENDIF
+
+ANT_FLAGS+=-Dantdebug=$(ANTDEBUG)
+
+# --- Targets ------------------------------------------------------
+.INCLUDE :  $(PRJ)$/target.pmk
+
+ALLTAR: ANTBUILD $(MISC)/postgresql.component
+
+$(MISC)/postgresql.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        postgresql.component
+    $(XSLTPROC) --nonet --stringparam uri '$(COMPONENTPREFIX_URE_JAVA)sdbc_postgresql.jar' \
+        -o $@ $(SOLARENV)/bin/createcomponent.xslt postgresql.component
 

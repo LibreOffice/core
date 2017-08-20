@@ -21,6 +21,7 @@
 ..\source\drivers\mysql\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\sdbc_hsqldb\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\class\sdbc_postgresql\*.jar %_DEST%\bin%_EXT%\*.jar
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
@@ -46,4 +47,5 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\DataAccess
 ..\%__SRC%\misc\macab1.component %_DEST%\xml%_EXT%\macab1.component
 ..\%__SRC%\misc\mysql.component %_DEST%\xml%_EXT%\mysql.component
 ..\%__SRC%\misc\odbc.component %_DEST%\xml%_EXT%\odbc.component
+..\%__SRC%\misc\postgresql.component %_DEST%\xml%_EXT%\postgresql.component
 ..\%__SRC%\misc\sdbc2.component %_DEST%\xml%_EXT%\sdbc2.component

@@ -37,7 +37,7 @@ ANT_BUILDFILE=build.xml
 
 TAR!:=$(GNUTAR)
 
-.IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
+.IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=commons-lang3-3.3-src
@@ -70,7 +70,7 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 
-.IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
+.IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 .ENDIF
 
