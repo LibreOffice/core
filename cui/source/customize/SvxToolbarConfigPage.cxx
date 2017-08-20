@@ -140,6 +140,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     m_pInsertBtn->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, InsertHdl ) );
+    m_pResetBtn->SetClickHdl(
+        LINK( this, SvxToolbarConfigPage, ResetToolbarHdl ) );
+
     // "Insert Submenu" is irrelevant to the toolbars
     PopupMenu* pPopup = m_pInsertBtn->GetPopupMenu();
     pPopup->EnableItem(OString( "insertsubmenu"), false );
@@ -373,6 +376,26 @@ IMPL_LINK( SvxToolbarConfigPage, InsertHdl, MenuButton *, pButton, void )
     }
 }
 
+IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetToolbarHdl, Button *, void )
+{
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+
+    SvxConfigEntry* pToolbar =
+        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
+
+    ScopedVclPtrInstance<MessageDialog> qbox(this,
+        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VclButtonsType::YesNo);
+
+    if ( qbox->Execute() == RET_YES )
+    {
+        ToolbarSaveInData* pSaveInData =
+            static_cast<ToolbarSaveInData*>(GetSaveInData());
+
+        pSaveInData->RestoreToolbar( pToolbar );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
+    }
+}
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
