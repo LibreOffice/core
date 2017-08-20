@@ -130,6 +130,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pInsertBtn->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, InsertHdl ) );
+    m_pResetBtn->SetClickHdl(
+        LINK( this, SvxMenuConfigPage, ResetMenuHdl ) );
+
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -357,6 +360,34 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
     if ( GetSaveInData()->IsModified() )
     {
         UpdateButtonStates();
+    }
+}
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
+{
+    SvxConfigEntry* pMenuData = GetTopLevelSelection();
+
+    ScopedVclPtrInstance<MessageDialog> qbox(this,
+        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU), VclMessageType::Question, VclButtonsType::YesNo);
+
+    // Resetting individual top-level menus is not possible at the moment.
+    // So we are resetting only if it is a context menu
+    if (!m_bIsMenuBar && qbox->Execute() == RET_YES)
+    {
+        sal_Int32 nPos = m_pTopLevelListBox->GetSelectEntryPos();
+        ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());
+
+        pSaveInData->ResetContextMenu(pMenuData);
+
+        // ensure that the UI is cleared before populating it
+        m_pTopLevelListBox->Clear();
+        m_pContentsListBox->Clear();
+
+        ReloadTopLevelListBox();
+
+        // Reselect the resetted menu
+        m_pTopLevelListBox->SelectEntryPos(nPos);
+        m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
     }
 }
 

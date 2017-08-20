@@ -241,6 +241,8 @@ public:
     bool HasURL( const OUString& rURL ) override;
     void Reset() override;
     bool Apply() override;
+
+    void ResetContextMenu( SvxConfigEntry* pEntry );
 };
 
 class SvxConfigEntry
@@ -404,6 +406,8 @@ protected:
     VclPtr<ListBox>                            m_pSaveInListBox;
 
     VclPtr<MenuButton>                         m_pInsertBtn;
+    // Used to reset the selected toolbar/menu/context menu
+    VclPtr<PushButton>                         m_pResetBtn;
 
     // Middle buttons
     VclPtr<PushButton>                         m_pAddCommandButton;
