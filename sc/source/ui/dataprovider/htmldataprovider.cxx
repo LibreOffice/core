@@ -249,6 +249,37 @@ void HTMLDataProvider::Import()
     }
 }
 
+std::map<OUString, OUString> HTMLDataProvider::getDataSourcesForURL(const OUString& /*rURL*/)
+{
+    std::map<OUString, OUString> aMap;
+
+    OStringBuffer aBuffer(64000);
+    std::unique_ptr<SvStream> pStream = DataProvider::FetchStreamFromURL(maURL, aBuffer);
+
+    if (aBuffer.isEmpty())
+        return std::map<OUString, OUString>();
+
+    htmlDocPtr pHtmlPtr = htmlParseDoc(reinterpret_cast<xmlChar*>(const_cast<char*>(aBuffer.getStr())), nullptr);
+
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pHtmlPtr);
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST("//table"), pXmlXpathCtx);
+    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+
+    for (int i = 0; i < pXmlNodes->nodeNr; ++i)
+    {
+        xmlChar* pVal = xmlGetProp(pXmlNodes->nodeTab[i], BAD_CAST("id"));
+
+        if (pVal)
+        {
+            OUString aID = OStringToOUString(toString(pVal), RTL_TEXTENCODING_UTF8);
+            aMap.insert(std::pair<OUString, OUString>(aID, "//table[@id=\""+ aID + "\""));
+            xmlFree(pVal);
+        }
+    }
+
+    return aMap;
+}
+
 IMPL_LINK_NOARG(HTMLDataProvider, ImportFinishedHdl, Timer*, void)
 {
     mpDBDataManager->WriteToDoc(*mpDoc);

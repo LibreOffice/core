@@ -29,6 +29,7 @@
 
 #include <queue>
 #include <vector>
+#include <map>
 
 #include "officecfg/Office/Calc.hxx"
 
@@ -95,6 +96,8 @@ public:
     virtual void Import() = 0;
 
     virtual const OUString& GetURL() const = 0;
+
+    virtual std::map<OUString, OUString> getDataSourcesForURL(const OUString& rURL);
 
     static std::unique_ptr<SvStream> FetchStreamFromURL(const OUString&, OStringBuffer& rBuffer);
 
