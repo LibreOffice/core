@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
@@ -38,6 +39,8 @@
 #include <vector>
 
 #include <rtl/digest.h>
+#include <rtl/random.h>
+#include <osl/time.h>
 #include <osl/diagnose.h>
 
 #include <ucbhelper/content.hxx>
@@ -190,11 +193,21 @@ void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
             const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    uno::Reference< embed::XEncryptionProtectedSource2 > xEncrSet( xStorage, uno::UNO_QUERY );
+    uno::Reference< embed::XEncryptionProtectedStorage > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
         throw io::IOException(); // TODO
 
-    xEncrSet->setEncryptionData( aEncryptionData );
+    if ( aEncryptionData.getLength() == 2 &&
+         aEncryptionData[0].Name == "GpgInfos" &&
+         aEncryptionData[1].Name == "EncryptionKey" )
+    {
+        xEncrSet->setGpgProperties(
+            aEncryptionData[0].Value.get< uno::Sequence< beans::NamedValue > >() );
+        xEncrSet->setEncryptionData(
+            aEncryptionData[1].Value.get< uno::Sequence< beans::NamedValue > >() );
+    }
+    else
+        xEncrSet->setEncryptionData( aEncryptionData );
 }
 
 
@@ -403,6 +416,32 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
     return aEncryptionData;
 }
 
+uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData( const OUString& aDocName )
+{
+    // generate session key
+    // --------------------
+
+    // Get a random number generator and seed it with current timestamp
+    TimeValue aTime;
+    osl_getSystemTime( &aTime );
+    rtlRandomPool aRandomPool = rtl_random_createPool();
+    rtl_random_addBytes(aRandomPool, &aTime, 8);
+
+    // get 16 random chars out of it
+    uno::Sequence < sal_Int8 > aVector(16);
+    rtl_random_getBytes( aRandomPool, aVector.getArray(), aVector.getLength() );
+
+    rtl_random_destroyPool(aRandomPool);
+
+    uno::Sequence< beans::NamedValue > aContainer(2);
+
+    aContainer[0].Name = "GpgInfos";
+    aContainer[1].Name = "EncryptionKey";
+
+    (void)aDocName;
+
+    return aContainer;
+}
 
 bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
 {

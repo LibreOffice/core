@@ -84,6 +84,11 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
     /** allows to get the encryption algorithms of the object.
      */
     sequence< ::com::sun::star::beans::NamedValue > getEncryptionAlgorithms();
+
+    /** set OpenPGP-specific encryption properties
+     */
+    void setGpgProperties( [in] sequence< ::com::sun::star::beans::NamedValue > aProps )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 

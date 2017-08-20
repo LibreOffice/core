@@ -172,6 +172,10 @@ public:
         CreatePackageEncryptionData(
             const OUString& aPassword );
 
+    static css::uno::Sequence< css::beans::NamedValue >
+        CreateGpgPackageEncryptionData(
+            const OUString& aDocName );
+
     static bool IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed );
     static bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed );
 
