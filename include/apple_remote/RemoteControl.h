@@ -38,7 +38,7 @@
 // notification names that are being used to signal that an application wants to
 // have access to the remote control device or if the application has finished
 // using the remote control device
-extern NSString* REQUEST_FOR_REMOTE_CONTROL_NOTIFCATION;
+extern NSString* REQUEST_FOR_REMOTE_CONTROL_NOTIFICATION;
 extern NSString* FINISHED_USING_REMOTE_CONTROL_NOTIFICATION;
 
 // keys used in user objects for distributed notifications
@@ -106,7 +106,7 @@ SAL_DLLPUBLIC_EXPORT @interface RemoteControl : NSObject {
 - (BOOL) sendsEventForButtonIdentifier: (RemoteControlEventIdentifier) identifier;
 
 // sending of notifications between applications
-+ (void) sendFinishedNotifcationForAppIdentifier: (NSString*) identifier;
++ (void) sendFinishedNotificationForAppIdentifier: (NSString*) identifier;
 + (void) sendRequestForRemoteControlNotification;
 
 // name of the device
