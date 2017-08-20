@@ -99,7 +99,7 @@ public class _XTypeDetection extends MultiMethodTest {
         result &= ok;
         log.println("deep detection should detect a calc and has detected '"+ type +"': " + ok);
 
-        log.println("test dokument with bookmark: " + bookmarkURL);
+        log.println("test document with bookmark: " + bookmarkURL);
         mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
         mediaDescr[0][0].Name = "URL";
