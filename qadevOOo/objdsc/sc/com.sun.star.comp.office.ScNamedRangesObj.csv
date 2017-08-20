@@ -5,8 +5,4 @@
 "ScNamedRangesObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScNamedRangesObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScNamedRangesObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScNamedRangesObj";"com::sun::star::sheet::XNamedRanges";"addNewByName()"
-"ScNamedRangesObj";"com::sun::star::sheet::XNamedRanges";"addNewFromTitles()"
-"ScNamedRangesObj";"com::sun::star::sheet::XNamedRanges";"removeByName()"
-"ScNamedRangesObj";"com::sun::star::sheet::XNamedRanges";"outputList()"
 "ScNamedRangesObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
