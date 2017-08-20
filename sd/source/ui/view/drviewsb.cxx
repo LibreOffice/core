@@ -188,13 +188,24 @@ void DrawViewShell::ModifyLayer (
 
         GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
 
+        // Set page bits for modified tab name display
+
         TabBarPageBits nBits = 0;
 
         if (!bIsVisible)
         {
-            // invisible layers are presented different
             nBits = TPB_DISPLAY_NAME_BLUE;
         }
+        if (bIsLocked)
+        {
+            nBits |= TPB_DISPLAY_NAME_ITALIC;
+        }
+        if (!bIsPrintable)
+        {
+            nBits |= TPB_DISPLAY_NAME_UNDERLINE;
+        }
+
+        // Save the bits
 
         GetLayerTabControl()->SetPageBits(nCurPage, nBits);
 
