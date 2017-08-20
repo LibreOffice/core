@@ -467,7 +467,7 @@ namespace pcr
         // stop listening
         stopContainerWindowListening();
 
-        // outtahere
+        // outta here
         return true;
     }
 

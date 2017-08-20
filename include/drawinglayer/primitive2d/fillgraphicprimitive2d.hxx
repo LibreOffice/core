@@ -42,7 +42,7 @@ namespace drawinglayer
             is tiled or not.
 
             Renderers should handle this primitive; it has a geometrically correct
-            decomposition, but on pixel oututs the areas where the tiled pieces are
+            decomposition, but on pixel outputs the areas where the tiled pieces are
             aligned tend to show up (one overlapping or empty pixel)
          */
         class DRAWINGLAYER_DLLPUBLIC FillGraphicPrimitive2D : public BufferedDecompositionPrimitive2D

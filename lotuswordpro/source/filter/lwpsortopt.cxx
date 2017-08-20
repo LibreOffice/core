@@ -72,7 +72,7 @@ LwpSortOption::LwpSortOption(LwpObjectStream* pStrm)
     Read(pStrm);
 }
 /**
- * @descr       Read sort option in VO_DOCUMNET from object stream
+ * @descr       Read sort option in VO_DOCUMENT from object stream
  **/
 void LwpSortOption::Read(LwpObjectStream *pStrm)
 {
