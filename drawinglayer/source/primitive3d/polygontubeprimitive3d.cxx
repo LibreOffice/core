@@ -82,16 +82,16 @@ namespace drawinglayer
                             basegfx::B3DPolygon aNewPolygon;
 
                             aNewPolygon.append(aNextLeft);
-                            aNewPolygon.setNormal(0L, basegfx::B3DVector(aNextLeft - aLeft));
+                            aNewPolygon.setNormal(0, basegfx::B3DVector(aNextLeft - aLeft));
 
                             aNewPolygon.append(aLastLeft);
-                            aNewPolygon.setNormal(1L, basegfx::B3DVector(aLastLeft - aLeft));
+                            aNewPolygon.setNormal(1, basegfx::B3DVector(aLastLeft - aLeft));
 
                             aNewPolygon.append(aLastRight);
-                            aNewPolygon.setNormal(2L, basegfx::B3DVector(aLastRight - aRight));
+                            aNewPolygon.setNormal(2, basegfx::B3DVector(aLastRight - aRight));
 
                             aNewPolygon.append(aNextRight);
-                            aNewPolygon.setNormal(3L, basegfx::B3DVector(aNextRight - aRight));
+                            aNewPolygon.setNormal(3, basegfx::B3DVector(aNextRight - aRight));
 
                             aNewPolygon.setClosed(true);
 
@@ -163,13 +163,13 @@ namespace drawinglayer
                             basegfx::B3DPolygon aNewPolygon;
 
                             aNewPolygon.append(aLast);
-                            aNewPolygon.setNormal(0L, basegfx::B3DVector(aLast - aNull));
+                            aNewPolygon.setNormal(0, basegfx::B3DVector(aLast - aNull));
 
                             aNewPolygon.append(aNext);
-                            aNewPolygon.setNormal(1L, basegfx::B3DVector(aNext - aNull));
+                            aNewPolygon.setNormal(1, basegfx::B3DVector(aNext - aNull));
 
                             aNewPolygon.append(aNull);
-                            aNewPolygon.setNormal(2L, basegfx::B3DVector(-1.0, 0.0, 0.0));
+                            aNewPolygon.setNormal(2, basegfx::B3DVector(-1.0, 0.0, 0.0));
 
                             aNewPolygon.setClosed(true);
 

@@ -175,7 +175,7 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                 {
                     // generate a new format if necessary
                     Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
-                    OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, false, false, (sal_Int16)_nScale, 1);
+                    OUString sNewFormat = xFormats->generateFormat( 0, _rLocale, false, false, (sal_Int16)_nScale, 1);
 
                     // and add it to the formatter if necessary
                     nFormat = xFormats->queryKey(sNewFormat, _rLocale, false);
