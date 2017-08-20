@@ -139,7 +139,7 @@ namespace drawinglayer
             }
 
             //Resolves: tdf#105998 if we are a hairline along the very right/bottom edge
-            //of the canvas then distory the polygon inwards one pixel right/bottom so that
+            //of the canvas then destroy the polygon inwards one pixel right/bottom so that
             //the hairline falls inside the paintable area and becomes visible
             Size aSize = mpOutputDevice->GetOutputSize();
             basegfx::B2DRange aRange = aLocalPolygon.getB2DRange();

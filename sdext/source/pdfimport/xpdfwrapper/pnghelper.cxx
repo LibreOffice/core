@@ -95,7 +95,7 @@ sal_uInt32 PngHelper::deflateBuffer( const Output_t* i_pBuf, size_t i_nLen, Outp
         if( deflate( &aStream, Z_FINISH ) == Z_STREAM_ERROR )
         {
             deflateEnd( &aStream );
-            // scrao the data of this broken stream
+            // scrap the data of this broken stream
             o_rOut.resize( nOrigSize );
             return 0;
         }
