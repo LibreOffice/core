@@ -614,7 +614,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XLabelRange \
     qadevOOo/tests/java/ifc/sheet/_XLabelRanges \
     qadevOOo/tests/java/ifc/sheet/_XMultipleOperation \
-    qadevOOo/tests/java/ifc/sheet/_XNamedRange \
     qadevOOo/tests/java/ifc/sheet/_XNamedRanges \
     qadevOOo/tests/java/ifc/sheet/_XPrintAreas \
     qadevOOo/tests/java/ifc/sheet/_XRangeSelection \
