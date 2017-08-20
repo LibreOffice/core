@@ -84,6 +84,37 @@ interface XEncryptionProtectedStorage: XEncryptionProtectedSource2
     /** allows to get the encryption algorithms of the object.
      */
     sequence< ::com::sun::star::beans::NamedValue > getEncryptionAlgorithms();
+
+    /** set OpenPGP-specific encryption properties
+
+        <p>
+        When provided, switch ODF package encryption to OpenPGP.
+        </p>
+        <p>
+        For each recipient, add one sequence of named values, each of
+        the same structure. The following values could be part of that
+        provided sequence:
+        </p>
+        <dl>
+            <dt>KeyId</dt>
+            <dd>
+                    specifies OpenPGP key ID or fingerprint of the public
+                    key used to encrypt this session key against
+            </dd>
+            <dt>KeyPacket</dt>
+            <dd>
+                    (optional) public key packet of the key used to encrypt
+            </dd>
+            <dt>CipherValue</dt>
+            <dd>
+                    OpenPGP-encrypted session key for this recipient
+            </dd>
+        </dl>
+
+        @since LibreOffice 6.0
+     */
+    void setGpgProperties( [in] sequence< sequence< ::com::sun::star::beans::NamedValue > > aProps )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 

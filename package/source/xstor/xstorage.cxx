@@ -4205,6 +4205,66 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
     }
 }
 
+void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< beans::NamedValue > >& aProps )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+
+    if ( !m_pImpl )
+    {
+        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
+        throw lang::DisposedException( THROW_WHERE );
+    }
+
+    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+        throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
+
+    if ( !aProps.getLength() )
+        throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
+
+    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
+    if ( m_pData->m_bIsRoot )
+    {
+        try {
+            m_pImpl->ReadContents();
+        }
+        catch ( const uno::RuntimeException& aRuntimeException )
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+            throw;
+        }
+        catch ( const uno::Exception& aException )
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
+                                                aCaught );
+        }
+
+        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+        try
+        {
+            xPackPropSet->setPropertyValue( ENCRYPTION_GPG_PROPERTIES,
+                                            uno::makeAny( aProps ) );
+        }
+        catch ( const uno::RuntimeException& aRuntimeException )
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+            throw;
+        }
+        catch( const uno::Exception& aException )
+        {
+            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+
+            uno::Any aCaught( ::cppu::getCaughtException() );
+            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                                static_cast< OWeakObject* >( this ),
+                                                aCaught );
+        }
+    }
+}
+
 uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 {
     ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );

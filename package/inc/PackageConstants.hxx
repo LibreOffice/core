@@ -51,6 +51,7 @@ const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 #define ENCRYPTION_KEY_PROPERTY "EncryptionKey"
 #define STORAGE_ENCRYPTION_KEYS_PROPERTY "StorageEncryptionKeys"
 #define ENCRYPTION_ALGORITHMS_PROPERTY "EncryptionAlgorithms"
+#define ENCRYPTION_GPG_PROPERTIES "EncryptionGpGProperties"
 #define HAS_ENCRYPTED_ENTRIES_PROPERTY "HasEncryptedEntries"
 #define HAS_NONENCRYPTED_ENTRIES_PROPERTY "HasNonEncryptedEntries"
 #define IS_INCONSISTENT_PROPERTY "IsInconsistent"
