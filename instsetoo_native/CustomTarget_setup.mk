@@ -156,6 +156,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'BuildVersion=$(BUILD_VER_STRING)' \
 		&& echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' \
 		&& echo 'ExtensionUpdateURL=http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update' \
+		&& echo 'UpdateChannel=$(shell cd $(SRCDIR) && bin/update/get_update_channel.py $(UPDATE_CONFIG))' \
 		&& echo 'ReferenceOOoMajorMinor=4.1' \
 		&& echo 'UpdateID=$(PRODUCTNAME)_$(LIBO_VERSION_MAJOR)_en-US' \
 		&& echo 'UpdateURL=$(if $(ENABLE_ONLINE_UPDATE),http://update.libreoffice.org/check.php$(if $(filter-out WNT,$(OS)),?pkgfmt=$(PKGFORMAT)))' \

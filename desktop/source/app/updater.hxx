@@ -29,6 +29,7 @@ public:
     static OUString getInstallationPath();
 
     static OUString getBuildID();
+    static OUString getUpdateChannel();
 
     static void log(const OUString& rMessage);
     static void log(const OString& rMessage);
