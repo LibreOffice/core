@@ -60,6 +60,8 @@ private:
     DECL_LINK( AddCommandHdl, Button *, void );
     DECL_LINK( RemoveCommandHdl, Button *, void );
 
+    DECL_LINK( InsertHdl, MenuButton *, void );
+
     void            UpdateButtonStates() override;
     short           QueryReset() override;
     void            Init() override;

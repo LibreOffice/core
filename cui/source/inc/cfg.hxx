@@ -403,7 +403,7 @@ protected:
 
     VclPtr<ListBox>                            m_pSaveInListBox;
 
-    VclPtr<SvxScriptSelectorDialog>            m_pSelectorDlg;
+    VclPtr<MenuButton>                         m_pInsertBtn;
 
     // Middle buttons
     VclPtr<PushButton>                         m_pAddCommandButton;
