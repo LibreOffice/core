@@ -284,23 +284,29 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             const sal_Int32 nStartAngle = maMap.count(XML_stAng) ? maMap.find(XML_stAng)->second : 0;
             const sal_Int32 nSpanAngle = maMap.count(XML_spanAng) ? maMap.find(XML_spanAng)->second : 360;
+            const sal_Int32 nRotationPath = maMap.count(XML_rotPath) ? maMap.find(XML_rotPath)->second : XML_none;
             const sal_Int32 nShapes = rShape->getChildren().size();
             const awt::Size aCenter(rShape->getSize().Width / 2, rShape->getSize().Height / 2);
             const awt::Size aChildSize(rShape->getSize().Width / 5, rShape->getSize().Height / 5);
-            const sal_Int32 r = std::min(
+            const sal_Int32 nRadius = std::min(
                 (rShape->getSize().Width - aChildSize.Width) / 2,
                 (rShape->getSize().Height - aChildSize.Height) / 2);
 
             sal_Int32 idx = 0;
             for (auto & aCurrShape : rShape->getChildren())
             {
+                const double fAngle = (double)idx*nSpanAngle/nShapes + nStartAngle;
                 const awt::Point aCurrPos(
-                    aCenter.Width + r*sin( (double(idx)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ) - aChildSize.Width/2,
-                    aCenter.Height - r*cos( (double(idx)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ) - aChildSize.Height/2);
+                    aCenter.Width + nRadius*sin(fAngle*F_PI180) - aChildSize.Width/2,
+                    aCenter.Height - nRadius*cos(fAngle*F_PI180) - aChildSize.Height/2);
 
                 aCurrShape->setPosition(aCurrPos);
                 aCurrShape->setSize(aChildSize);
                 aCurrShape->setChildSize(aChildSize);
+
+                if (nRotationPath == XML_alongPath)
+                    aCurrShape->setRotation(fAngle * PER_DEGREE);
+
                 idx++;
             }
             break;
@@ -413,6 +419,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             {
                 break;
             }
+
+            if (rShape->getRotation())
+                pTextBody->getTextProperties().moRotation = -rShape->getRotation();
 
             // text centered vertically by default
             pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;

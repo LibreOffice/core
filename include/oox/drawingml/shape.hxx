@@ -136,6 +136,8 @@ public:
     const css::awt::Size&           getSize() const { return maSize; }
 
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
+    sal_Int32                       getRotation() const { return mnRotation; }
+    void                            setDiagramRotation( sal_Int32 nRotation ) { mnDiagramRotation = nRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
     void                            applyParentTextFlipV(bool bTextFlipV) { mbInheritedTextFlipV = bTextFlipV; }
     void                            addChild( const ShapePtr& rChildPtr ) { maChildren.push_back( rChildPtr ); }
@@ -312,6 +314,7 @@ private:
     ChartShapeInfoRef   mxChartShapeInfo;   ///< Additional data for chart shapes.
 
     sal_Int32                       mnRotation;
+    sal_Int32                       mnDiagramRotation; // rotates shape prior to sizing, does not affect text rotation
     bool                            mbFlipH;
     bool                            mbFlipV;
     bool                            mbInheritedTextFlipV; // Used by group shapes only

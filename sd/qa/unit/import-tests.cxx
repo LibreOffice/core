@@ -166,6 +166,7 @@ public:
     void testSmartArtChildren();
     void testSmartArtText();
     void testSmartArtCnt();
+    void testSmartArtRotation();
     void testTdf109223();
     void testTdf109187();
 
@@ -242,6 +243,7 @@ public:
     CPPUNIT_TEST(testSmartArtChildren);
     CPPUNIT_TEST(testSmartArtText);
     CPPUNIT_TEST(testSmartArtCnt);
+    CPPUNIT_TEST(testSmartArtRotation);
     CPPUNIT_TEST(testTdf109223);
     CPPUNIT_TEST(testTdf109187);
 
@@ -2330,6 +2332,23 @@ void SdImportTest::testSmartArtCnt()
             nCorrect++;
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nCorrect);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testSmartArtRotation()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rotation.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+
+    uno::Reference<beans::XPropertySet> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape0->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+    uno::Reference<beans::XPropertySet> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24000), xShape1->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+    uno::Reference<beans::XPropertySet> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
 
     xDocShRef->DoClose();
 }

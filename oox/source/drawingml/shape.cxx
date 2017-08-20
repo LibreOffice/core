@@ -113,6 +113,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mnSubType( 0 )
 , meFrameType( FRAMETYPE_GENERIC )
 , mnRotation( 0 )
+, mnDiagramRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
 , mbInheritedTextFlipV(false)
@@ -156,6 +157,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , maPosition( pSourceShape->maPosition )
 , meFrameType( pSourceShape->meFrameType )
 , mnRotation( pSourceShape->mnRotation )
+, mnDiagramRotation( pSourceShape->mnDiagramRotation )
 , mbFlipH( pSourceShape->mbFlipH )
 , mbFlipV( pSourceShape->mbFlipV )
 , mbInheritedTextFlipV(pSourceShape->mbInheritedTextFlipV)
@@ -473,6 +475,14 @@ Reference< XShape > const & Shape::createAndInsert(
             mbFlipV );
 
     basegfx::B2DHomMatrix aTransformation;
+
+    if (bUseRotationTransform && mnDiagramRotation != 0)
+    {
+        // rotate diagram's shape around object's center before sizing
+        aTransformation.translate(-0.5, -0.5);
+        aTransformation.rotate(F_PI180 * (mnDiagramRotation / 60000.0));
+        aTransformation.translate(0.5, 0.5);
+    }
 
     if( maSize.Width != 1 || maSize.Height != 1)
     {
@@ -1085,6 +1095,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
                 if(mbInheritedTextFlipV)
                     nTextRotateAngle -= 180 * 60000;
+                nTextRotateAngle -= mnDiagramRotation;
                 /* OOX measures text rotation clockwise in 1/60000th degrees,
                    relative to the containing shape. setTextRotateAngle wants
                    degrees anticlockwise. */
