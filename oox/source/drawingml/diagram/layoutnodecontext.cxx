@@ -263,6 +263,8 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
             pShape.reset( new Shape("com.sun.star.drawing.GroupShape") );
         }
 
+        pShape->setDiagramRotation(rAttribs.getInteger(XML_rot, 0) * PER_DEGREE);
+
         ShapeAtomPtr pAtom( new ShapeAtom(mpNode->getLayoutNode(), pShape) );
         mpNode->addChild( pAtom );
         return new ShapeContext( *this, ShapePtr(), pShape );
