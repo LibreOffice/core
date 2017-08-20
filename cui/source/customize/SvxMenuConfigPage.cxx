@@ -127,6 +127,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pAddCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, AddCommandHdl ) );
     m_pRemoveCommandButton->SetClickHdl( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
+
+    m_pInsertBtn->SetSelectHdl(
+        LINK( this, SvxMenuConfigPage, InsertHdl ) );
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -302,6 +305,55 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, Button *, void )
 IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
+    if ( GetSaveInData()->IsModified() )
+    {
+        UpdateButtonStates();
+    }
+}
+
+IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
+{
+    OString sIdent = pButton->GetCurItemIdent();
+
+    if (sIdent == "insertseparator")
+    {
+        SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
+        pNewEntryData->SetUserDefined();
+        InsertEntry( pNewEntryData );
+    }
+    else if (sIdent == "insertsubmenu")
+    {
+        OUString aNewName;
+        OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
+
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
+        pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_ADD_SUBMENU ) );
+
+        if ( pNameDialog->Execute() == RET_OK )
+        {
+            pNameDialog->GetName(aNewName);
+
+            SvxConfigEntry* pNewEntryData =
+                new SvxConfigEntry( aNewName, aNewName, true );
+            pNewEntryData->SetName( aNewName );
+            pNewEntryData->SetUserDefined();
+
+            InsertEntry( pNewEntryData );
+
+            ReloadTopLevelListBox();
+
+            GetSaveInData()->SetModified();
+        }
+
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        return;
+    }
+
     if ( GetSaveInData()->IsModified() )
     {
         UpdateButtonStates();

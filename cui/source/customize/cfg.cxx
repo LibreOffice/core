@@ -1130,7 +1130,6 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)
     , m_pContentsListBox(nullptr)
-    , m_pSelectorDlg(nullptr)
 {
     get(m_pSearchEdit, "searchEntry");
     get(m_pCommandCategoryListBox, "commandcategorylist");
@@ -1144,6 +1143,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
+    get(m_pInsertBtn, "insert");
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
     get(m_pEntries, "entries");
@@ -1178,9 +1178,9 @@ void SvxConfigPage::dispose()
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
+    m_pInsertBtn.clear();
     m_pDescriptionField.clear();
 
-    m_pSelectorDlg.disposeAndClear();
     m_pContentsListBox.disposeAndClear();
     SfxTabPage::dispose();
 }
