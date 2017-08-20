@@ -52,6 +52,13 @@ Setting page bits modify the display attributes of the tab name
 TPB_DISPLAY_NAME_BLUE
                 - Display tab name in light blue, used in draw for
                   invisible layers and in calc for scenario pages
+TPB_DISPLAY_NAME_ITALIC
+                - Display tab name italic, used in draw for
+                  locked layers
+TPB_DISPLAY_NAME_UNDERLINE
+                - Display tab name underlined, used in draw for
+                  non-printable layers
+
 
 Handlers
 -------
@@ -267,9 +274,17 @@ class Button;
 #define WB_INSERTTAB        ((WinBits)0x40000000)
 #define WB_STDTABBAR        WB_BORDER
 
+// Page bits
+
 typedef sal_uInt16 TabBarPageBits;
 
 #define TPB_DISPLAY_NAME_BLUE      ((TabBarPageBits)0x0001)
+#define TPB_DISPLAY_NAME_ITALIC    ((TabBarPageBits)0x0002)
+#define TPB_DISPLAY_NAME_UNDERLINE ((TabBarPageBits)0x0004)
+
+    // interface checks only, do not use in regular control flow
+
+#define TPB_DISPLAY_NAME_ALLFLAGS  ((TabBarPageBits)(TPB_DISPLAY_NAME_BLUE | TPB_DISPLAY_NAME_ITALIC | TPB_DISPLAY_NAME_UNDERLINE))
 
 // - TabBar-Types - used in TabBar::AllowRenaming
 
