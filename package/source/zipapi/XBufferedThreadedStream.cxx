@@ -76,6 +76,7 @@ XBufferedThreadedStream::~XBufferedThreadedStream()
 void XBufferedThreadedStream::produce()
 {
     Buffer pProducedBuffer;
+    sal_Int64 nTotalBytesRead(0);
     std::unique_lock<std::mutex> aGuard( maBufferProtector );
     do
     {
@@ -86,7 +87,7 @@ void XBufferedThreadedStream::produce()
         }
 
         aGuard.unlock();
-        mxSrcStream->readBytes( pProducedBuffer, nBufferSize );
+        nTotalBytesRead += mxSrcStream->readBytes( pProducedBuffer, nBufferSize );
 
         aGuard.lock();
         maPendingBuffers.push( pProducedBuffer );
@@ -95,7 +96,7 @@ void XBufferedThreadedStream::produce()
         if (!mbTerminateThread)
             maBufferProduceResume.wait( aGuard, [&]{return canProduce(); } );
 
-    } while( !mbTerminateThread && hasBytes() );
+    } while( !mbTerminateThread && nTotalBytesRead < mnStreamSize );
 }
 
 /**
