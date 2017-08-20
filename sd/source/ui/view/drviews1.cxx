@@ -1165,14 +1165,28 @@ void DrawViewShell::ResetActualLayer()
                     {
                         pLayerBar->InsertPage(nLayerPos+1, aName);
 
+                        // Set page bits for modified tab name display
+
                         TabBarPageBits nBits = 0;
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                        if (pPV && !pPV->IsLayerVisible(aName))
+                        if (pPV)
                         {
-                            // invisible layers are displayed differently
-                            nBits = TPB_DISPLAY_NAME_BLUE;
+                            if (!pPV->IsLayerVisible(aName))
+                            {
+                                nBits |= TPB_DISPLAY_NAME_BLUE;
+                            }
+                            if (pPV->IsLayerLocked(aName))
+                            {
+                                nBits |= TPB_DISPLAY_NAME_ITALIC;
+                            }
+                            if (!pPV->IsLayerPrintable(aName))
+                            {
+                                nBits |= TPB_DISPLAY_NAME_UNDERLINE;
+                            }
                         }
+
+                        // Save the bits
 
                         pLayerBar->SetPageBits(nLayerPos+1, nBits);
                     }
@@ -1180,17 +1194,28 @@ void DrawViewShell::ResetActualLayer()
                 else
                 {
                     // don't show masterpage layer onto the page
-                    if ( aName != aBackgroundObjLayer )
+                    if (aName != aBackgroundObjLayer)
                     {
                         pLayerBar->InsertPage(nLayerPos+1, aName);
+
+                        // Set page bits for modified tab name display
 
                         TabBarPageBits nBits = 0;
 
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
-                            // invisible layers are displayed differently
                             nBits = TPB_DISPLAY_NAME_BLUE;
                         }
+                        if (mpDrawView->GetSdrPageView()->IsLayerLocked(aName))
+                        {
+                            nBits |= TPB_DISPLAY_NAME_ITALIC;
+                        }
+                        if (!mpDrawView->GetSdrPageView()->IsLayerPrintable(aName))
+                        {
+                            nBits |= TPB_DISPLAY_NAME_UNDERLINE;
+                        }
+
+                        // Save the bits
 
                         pLayerBar->SetPageBits(nLayerPos+1, nBits);
                     }
