@@ -1195,7 +1195,9 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            uno::Sequence < PropertyValue > aPropSeq( PKG_SIZE_NOENCR_MNFST );
+            bool bIsGpgEncrypt = m_aGpgProps.hasElements();
+            uno::Sequence < PropertyValue > aPropSeq(
+                bIsGpgEncrypt ? PKG_SIZE_ENCR_MNFST : PKG_SIZE_GPG_ENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
             aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_xRootFolder->GetMediaType();
             aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
@@ -1203,6 +1205,14 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             aPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
             aPropSeq [PKG_MNFST_FULLPATH].Value <<= OUString("/");
 
+            if( bIsGpgEncrypt )
+            {
+                for ( sal_Int32 nInd = 0; nInd < m_aGpgProps.getLength(); nInd++ )
+                {
+                    aPropSeq[PKG_MNFST_KEYID+nInd].Name = m_aGpgProps[nInd].Name;
+                    aPropSeq[PKG_MNFST_KEYID+nInd].Value = m_aGpgProps[nInd].Value;
+                }
+            }
             aManList.push_back( aPropSeq );
         }
 
@@ -1737,6 +1747,23 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
             }
         }
+    }
+    else if ( aPropertyName == ENCRYPTION_GPG_PROPERTIES )
+    {
+        uno::Sequence< beans::NamedValue > aGpgProps;
+        if ( m_pZipFile || !( aValue >>= aGpgProps ) || aGpgProps.getLength() == 0 )
+        {
+            // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
+            throw IllegalArgumentException(THROW_WHERE "unexpected Gpg properties are provided.", uno::Reference< uno::XInterface >(), 2 );
+        }
+
+        m_aGpgProps = aGpgProps;
+
+        // override algorithm defaults (which are some legacy ODF
+        // defaults) with reasonable values
+        m_nStartKeyGenerationID = 0; // this is unused for PGP
+        m_nCommonEncryptionID = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+        m_nChecksumDigestID = xml::crypto::DigestID::SHA512_1K;
     }
     else
         throw UnknownPropertyException(THROW_WHERE );
