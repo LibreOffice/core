@@ -212,6 +212,11 @@ public:
 
     virtual ~MenuSaveInData() override;
 
+    /**
+        Resets the selected menu to its default state
+    */
+    void RestoreMenu( SvxConfigEntry* pMenu );
+
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries() override;
     void                SetEntries( SvxEntries* ) override;
@@ -404,6 +409,8 @@ protected:
     VclPtr<ListBox>                            m_pSaveInListBox;
 
     VclPtr<MenuButton>                         m_pInsertBtn;
+    // Used to reset the selected toolbar/menu/context menu
+    VclPtr<PushButton>                         m_pResetBtn;
 
     // Middle buttons
     VclPtr<PushButton>                         m_pAddCommandButton;

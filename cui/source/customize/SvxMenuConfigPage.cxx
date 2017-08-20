@@ -130,6 +130,9 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pInsertBtn->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, InsertHdl ) );
+    m_pResetBtn->SetClickHdl(
+        LINK( this, SvxMenuConfigPage, ResetMenuHdl ) );
+
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -357,6 +360,28 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
     if ( GetSaveInData()->IsModified() )
     {
         UpdateButtonStates();
+    }
+}
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
+{
+    SvxConfigEntry* pMenuData = GetTopLevelSelection();
+
+    ScopedVclPtrInstance<MessageDialog> qbox(this,
+        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU), VclMessageType::Question, VclButtonsType::YesNo);
+
+    if (qbox->Execute() == RET_YES)
+    {
+        //TODO: Implement
+        MenuSaveInData* pSaveInData =
+            static_cast<MenuSaveInData*>(GetSaveInData());
+
+        pSaveInData->RestoreMenu( pMenuData );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
+
+        //ReloadTopLevelListBox();
+        //GetSaveInData()->SetModified();
     }
 }
 
