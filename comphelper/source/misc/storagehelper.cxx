@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
@@ -43,6 +44,7 @@
 #include <rtl/random.h>
 #include <osl/time.h>
 #include <osl/diagnose.h>
+#include <sax/tools/converter.hxx>
 
 #include <ucbhelper/content.hxx>
 
@@ -50,6 +52,11 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
+
+#include <gpgme.h>
+#include <context.h>
+#include <key.h>
+#include <data.h>
 
 using namespace ::com::sun::star;
 
@@ -194,11 +201,21 @@ void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
             const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    uno::Reference< embed::XEncryptionProtectedSource2 > xEncrSet( xStorage, uno::UNO_QUERY );
+    uno::Reference< embed::XEncryptionProtectedStorage > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
         throw io::IOException(); // TODO
 
-    xEncrSet->setEncryptionData( aEncryptionData );
+    if ( aEncryptionData.getLength() == 2 &&
+         aEncryptionData[0].Name == "GpgInfos" &&
+         aEncryptionData[1].Name == "EncryptionKey" )
+    {
+        xEncrSet->setGpgProperties(
+            aEncryptionData[0].Value.get< uno::Sequence< beans::NamedValue > >() );
+        xEncrSet->setEncryptionData(
+            aEncryptionData[1].Value.get< uno::Sequence< beans::NamedValue > >() );
+    }
+    else
+        xEncrSet->setEncryptionData( aEncryptionData );
 }
 
 

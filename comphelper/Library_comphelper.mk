@@ -37,6 +37,7 @@ $(eval $(call gb_Library_add_defs,comphelper,\
 ))
 
 $(eval $(call gb_Library_use_externals,comphelper,\
+	gpgmepp \
     boost_headers \
     icuuc \
     icu_headers \
@@ -62,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     cppuhelper \
     sal \
     salhelper \
+	sax \
     ucbhelper \
 	i18nlangtag \
 ))
