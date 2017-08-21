@@ -2079,14 +2079,14 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
     const sal_Int32 nInitSize = pDest->m_Text.getLength();
 
-    pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
-                        m_Text.copy(nTextStartIdx, nLen));
-    m_Text = m_Text.replaceAt(nTextStartIdx, nLen, "");
-    if (GetSpaceLeft() < 0)
+    if (pDest->GetSpaceLeft() < nLen)
     {   // FIXME: could only happen when called from SwRangeRedline::Show.
         // unfortunately can't really do anything here to handle that...
         abort();
     }
+    pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
+                        m_Text.copy(nTextStartIdx, nLen));
+    m_Text = m_Text.replaceAt(nTextStartIdx, nLen, "");
     nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
     if (!nLen)                 // String didn't grow?
         return;
