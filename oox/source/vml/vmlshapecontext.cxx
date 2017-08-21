@@ -291,6 +291,15 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, Shape
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
             mrTypeModel.moShapeType = mrTypeModel.maShapeName.copy(sShapeTypePrefix.getLength()).toInt32();
         }
+        else
+        {
+            OUString sType = rAttribs.getXString(XML_type, OUString());
+            if (sType.startsWith(sShapeTypePrefix))
+            {
+                mrTypeModel.maShapeId = sType;
+                mrTypeModel.moShapeType = sType.copy(sShapeTypePrefix.getLength()).toInt32();
+            }
+        }
     }
 
     // coordinate system position/size, CSS style
