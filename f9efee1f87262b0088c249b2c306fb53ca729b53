@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9777ba01",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 3496,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-08-21T16:27:03Z",
+      "side": 1,
+      "message": "instead of two string-lists (char, font) that need to be kept in sync (I assume), it might be better to have a set whose elements are each a group of char and font props",
+      "revId": "f9efee1f87262b0088c249b2c306fb53ca729b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
