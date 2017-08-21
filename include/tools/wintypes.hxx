@@ -219,7 +219,6 @@ WinBits const WB_DOCKBORDER =           0x00001000;
 
 // Window-Bits for SplitWindow
 WinBits const WB_NOSPLITDRAW =          0x01000000;
-WinBits const WB_FLATSPLITDRAW =        0x02000000;
 
 // Window-Bits for MessageBoxen
 WinBits const WB_OK =                   0x00100000;
