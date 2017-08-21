@@ -432,7 +432,6 @@ Reference< XInterface > SAL_CALL proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
 {
     Reference< XInterface > xRet;
-    {
     static osl::Mutex s_mutex;
     // note: don't use ::osl::Mutex::getGlobalMutex() here, it deadlocks
     //       with getImplHelperInitMutex()
@@ -444,7 +443,6 @@ Reference< XInterface > SAL_CALL proxyfac_create(
     {
         xRet = static_cast< ::cppu::OWeakObject * >(new FactoryImpl);
         rwInstance = xRet;
-    }
     }
     return xRet;
 }
