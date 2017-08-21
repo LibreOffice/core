@@ -168,20 +168,30 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     if (pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) != SfxItemState::SET)
         return;
 
-
+    sal_Int32 nIndex = 0;
+    OUString sOption;
     OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
-    if (sFilterOptions == "SkipImages")
+
+    do
     {
-        mbSkipImages = true;
+        sOption = sFilterOptions.getToken(0, ';', nIndex);
+        if (!sOption.isEmpty())
+        {
+            if (sOption == "SkipImages")
+            {
+                mbSkipImages = true;
+            }
+            else if (sOption == "SkipHeaderFooter")
+            {
+                mbSkipHeaderFooter = true;
+            }
+            else if (sOption == "EmbedImages" )
+            {
+                mbEmbedImages = true;
+            }
+        }
     }
-    else if (sFilterOptions == "SkipHeaderFooter")
-    {
-        mbSkipHeaderFooter = true;
-    }
-    else if (sFilterOptions == "EmbedImages" )
-    {
-        mbEmbedImages = true;
-    }
+    while (nIndex >= 0);
 }
 
 ErrCode SwHTMLWriter::WriteStream()
