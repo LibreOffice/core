@@ -100,7 +100,6 @@
 #define SID_ATTR_CHAR_TWO_LINES                         ( SID_SVX_START + 897 )
 #define SID_ATTR_CHAR_CJK_RUBY                          ( SID_SVX_START + 898 )
 #define SID_ATTR_CHAR_EMPHASISMARK                      ( SID_SVX_START + 899 )
-#define SID_ATTR_CHAR_SCRIPTTYPE                        ( SID_SVX_START + 900 )
 #define SID_ATTR_PARA_SCRIPTSPACE                       ( SID_SVX_START + 901 )
 #define SID_ATTR_PARA_HANGPUNCTUATION                   ( SID_SVX_START + 902 )
 #define SID_ATTR_PARA_FORBIDDEN_RULES                   ( SID_SVX_START + 903 )
