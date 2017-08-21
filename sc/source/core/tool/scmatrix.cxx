@@ -1266,24 +1266,25 @@ template<typename Type>
 class WalkAndMatchElements
 {
     Type maMatchValue;
-    MatrixImplType::size_pair_type maSize;
-    size_t mnCol1;
-    size_t mnCol2;
+    const size_t mnStartIndex;
+    const size_t mnStopIndex;
     size_t mnResult;
     size_t mnIndex;
 
 public:
     WalkAndMatchElements(Type aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2) :
         maMatchValue(aMatchValue),
-        maSize(aSize),
-        mnCol1(nCol1),
-        mnCol2(nCol2),
+        mnStartIndex( nCol1 * aSize.row ),
+        mnStopIndex( (nCol2 + 1) * aSize.row ),
         mnResult(ResultNotSet),
         mnIndex(0) {}
 
     size_t getMatching() const { return mnResult; }
 
-    size_t getRemainingCount() const { return ((mnCol2 + 1) * maSize.row) - mnIndex; }
+    size_t getRemainingCount() const
+    {
+        return mnIndex < mnStopIndex ? mnStopIndex - mnIndex : 0;
+    }
 
     size_t compare(const MatrixImplType::element_block_node_type& node) const;
 
@@ -1294,7 +1295,7 @@ public:
             return;
 
         // limit lookup to the requested columns
-        if ((mnCol1 * maSize.row) <= mnIndex && getRemainingCount() > 0)
+        if (mnStartIndex <= mnIndex && getRemainingCount() > 0)
         {
             mnResult = compare(node);
         }
