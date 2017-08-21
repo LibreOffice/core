@@ -40,6 +40,14 @@ $(eval $(call gb_Executable_add_libs,updater,\
 	Crypt32.lib \
 ))
 
+$(eval $(call gb_Executable_set_targettype_gui,updater,YES))
+
+$(eval $(call gb_Executable_add_nativeres,updater,updaterres))
+
+$(eval $(call gb_Executable_add_ldflags,updater,\
+	/ENTRY:wmainCRTStartup \
+))
+
 $(eval $(call gb_Executable_add_defs,updater,\
 	-DVERIFY_MAR_SIGNATURE \
 	-DUNICODE \
@@ -79,7 +87,5 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 		onlineupdate/source/update/updater/progressui_win \
 		onlineupdate/source/update/updater/win_dirent )\
 ))
-
-$(eval $(call gb_Executable_add_nativeres,updater,updaterres))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
