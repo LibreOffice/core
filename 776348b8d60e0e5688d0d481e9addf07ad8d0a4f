@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_377366b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-08-21T06:41:08Z",
+      "side": 1,
+      "message": "Here the convention is to mark Bugzilla bugs with “tdf#” in commit messages. This is because the project uses several bug trackers. In this case it would be “tdf#84237”. Also, a brief description of the change would be very appreciated for those who follow the Git repo :)",
+      "revId": "776348b8d60e0e5688d0d481e9addf07ad8d0a4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
