@@ -59,6 +59,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_d7a062a8",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-21T11:53:30Z",
+      "side": 1,
+      "message": "After my analysis, even if format is DATE, MS Excel expects full format of DATE, including TIME. The fomat should be created according to ISO 8601 standard (including \"T\")\n\nIf there is no TIME specified, then it should be filled with zeros. For example:\n \u003cd v\u003d\"2014-12-31T00:00:00\"/\u003e\n\nIt means that following line will be incorrect for MS Excel:\n  \u003cd v\u003d\"2014-12-31\"/\u003e\n\nThe example of file which contains DATE (without TIME), is in attachment:\nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d113150\n\nDo you have other idea how I could force to export DATE in full ISO 8601 format (eg. \"2014-12-31T00:00:00\")?",
+      "parentUuid": "1a430d35_9dfc4140",
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_794b2a5a",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 1
@@ -116,6 +134,24 @@
       "writtenOn": "2017-08-15T06:10:16Z",
       "side": 1,
       "message": "else if (isContainsDate) { /* add minDate and maxDate */ }",
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_37b0c6f4",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-21T11:53:30Z",
+      "side": 1,
+      "message": "minDate and maxDate is not mandatory, and it is not needed to fix import issue. I will add it in next commit.",
+      "parentUuid": "1a430d35_f96d5acd",
       "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
