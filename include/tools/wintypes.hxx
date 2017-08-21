@@ -213,7 +213,6 @@ WinBits const WB_SCALE =                0x08000000;
 // Window-Bits for ToolBox
 WinBits const WB_LINESPACING =          0x01000000;
 WinBits const WB_SCROLL =               0x02000000;
-WinBits const WB_FORCETABCYCLE =        0x04000000;
 
 // Window-Bits for DockingWindows
 WinBits const WB_DOCKBORDER =           0x00001000;
