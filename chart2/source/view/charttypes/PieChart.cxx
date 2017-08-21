@@ -280,14 +280,23 @@ void PieChart::createTextLabelShape(
     ///the label position is allowed; the `createTextLabelShape` treats the
     ///`AVOID_OVERLAP` as if it was of `CENTER` type;
 
+    double nVal = rSeries.getYValue(nPointIndex);
     //AVOID_OVERLAP is in fact "Best fit" in the UI.
     bool bMovementAllowed = ( nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP );
     if( bMovementAllowed )
+    {
         // Use center for "Best fit" for now. In the future we
         // may want to implement a real best fit algorithm.
         // But center is good enough, and close to what Excel
         // does.
-        nLabelPlacement = css::chart::DataLabelPlacement::CENTER;
+
+        // Place the label outside if the sector is too small
+        // The threshold is set to 2%, but can be improved by making it a function of
+        // label width and radius too ?
+        double fFrac = fabs( nVal / rParam.mfLogicYSum );
+        nLabelPlacement = ( fFrac <= 0.02 ) ? css::chart::DataLabelPlacement::OUTSIDE :
+            css::chart::DataLabelPlacement::CENTER;
+    }
 
     ///for `OUTSIDE` (`INSIDE`) label placements an offset of 150 (-150), in the
     ///radius direction, is added to the final screen position of the label
@@ -346,7 +355,6 @@ void PieChart::createTextLabelShape(
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
     ///the text shape for the label is created
-    double nVal = rSeries.getYValue(nPointIndex);
     aPieLabelInfo.xTextShape = createDataLabel(
         xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
         aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
