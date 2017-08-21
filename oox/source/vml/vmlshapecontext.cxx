@@ -273,6 +273,8 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, Shape
     ShapeContextBase( rParent ),
     mrTypeModel( rShapeType.getTypeModel() )
 {
+    static const OUString sShapeTypePrefix = "shapetype_";
+
     // shape identifier and shape name
     bool bHasOspid = rAttribs.hasAttribute( O_TOKEN( spid ) );
     mrTypeModel.maShapeId = rAttribs.getXString( bHasOspid ? O_TOKEN( spid ) : XML_id, OUString() );
@@ -285,12 +287,18 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, Shape
     {
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
         // get ShapeType and ShapeId from name for compatibility
-        static const OUString sShapeTypePrefix = "shapetype_";
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
         {
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
             mrTypeModel.moShapeType = mrTypeModel.maShapeName.copy(sShapeTypePrefix.getLength()).toInt32();
         }
+    }
+
+    if( !mrTypeModel.moShapeType.has() )
+    {
+        OUString sType = rAttribs.getXString(XML_type, OUString());
+        if( sType.startsWith( sShapeTypePrefix ) )
+            mrTypeModel.moShapeType = sType.copy(sShapeTypePrefix.getLength()).toInt32();
     }
 
     // coordinate system position/size, CSS style
