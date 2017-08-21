@@ -3962,7 +3962,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
                     pParent->GetChildCount() != 1);
                 bool bNoTabCycling = bOldSchoolContainer || isContainerWindow(pParent);
 
-                if( bNoTabCycling &&  ! (GetStyle() & WB_FORCETABCYCLE) )
+                if( bNoTabCycling )
                     return DockingWindow::EventNotify( rNEvt );
                 else if( ImplChangeHighlightUpDn( aKeyCode.IsShift() , bNoTabCycling ) )
                     return false;
