@@ -35,6 +35,8 @@
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
+#include "com/sun/star/security/DocumentDigitalSignatures.hpp"
+#include "com/sun/star/security/XCertificate.hpp"
 
 #include <vector>
 
@@ -42,6 +44,7 @@
 #include <rtl/random.h>
 #include <osl/time.h>
 #include <osl/diagnose.h>
+#include <sax/tools/converter.hxx>
 
 #include <ucbhelper/content.hxx>
 
@@ -434,6 +437,29 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     rtl_random_destroyPool(aRandomPool);
 
     uno::Sequence< beans::NamedValue > aContainer(2);
+    uno::Sequence< beans::NamedValue > aGpgEncryptionData(3);
+    uno::Sequence< beans::NamedValue > aEncryptionData(1);
+
+    // TODO fire certificate chooser dialog
+    uno::Reference< security::XDocumentDigitalSignatures > xSigner(
+        security::DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), "1.2" ) );
+
+    // The use may provide a description while choosing a certificate.
+    OUString aDescription;
+    uno::Reference< security::XCertificate > xSignCertificate=
+        xSigner->chooseCertificate(aDescription);
+
+    uno::Sequence < sal_Int8 > aKeyID;
+    if (xSignCertificate.is())
+    {
+        aKeyID = xSignCertificate->getSHA1Thumbprint();
+    }
+
+    
+    // TODO perhaps rename that one - bit misleading name ...
+    aGpgEncryptionData[0].Name = "KeyId";
+    aGpgEncryptionData[0].Value <<= aKeyID;
 
     aContainer[0].Name = "GpgInfos";
     aContainer[1].Name = "EncryptionKey";

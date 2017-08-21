@@ -209,61 +209,15 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     }
     xHandler->startElement( sManifestElement, xRootAttrList );
 
-    for (sal_uInt32 i = 0 ; i < nManLength ; i++)
+    if (nManLength > 0)
     {
-        ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
-        const beans::PropertyValue *pValue = pSequence[i].getConstArray();
+        const beans::PropertyValue *pValue = pSequence[0].getConstArray();
         OUString aString;
-        const uno::Any *pVector = nullptr, *pSalt = nullptr,
-            *pIterationCount = nullptr, *pDigest = nullptr,
-            *pDigestAlg = nullptr, *pEncryptAlg = nullptr,
-            *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr,
-            *pPgpKeyIDProperty = nullptr, *pPgpKeyPacketProperty = nullptr,
+        const uno::Any *pPgpKeyIDProperty = nullptr, *pPgpKeyPacketProperty = nullptr,
             *pCipherValueProperty = nullptr;
-        for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
+        for (sal_uInt32 j = 0, nNum = pSequence[0].getLength(); j < nNum; j++, pValue++)
         {
-            if (pValue->Name == sMediaTypeProperty )
-            {
-                pValue->Value >>= aString;
-                pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
-            }
-            else if (pValue->Name == sVersionProperty )
-            {
-                pValue->Value >>= aString;
-                // the version is stored only if it is not empty
-                if ( bAcceptNonemptyVersion && !aString.isEmpty() )
-                    pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
-            }
-            else if (pValue->Name == sFullPathProperty )
-            {
-                pValue->Value >>= aString;
-                pAttrList->AddAttribute ( sFullPathAttribute, sCdataAttribute, aString );
-            }
-            else if (pValue->Name == sSizeProperty )
-            {
-                sal_Int64 nSize = 0;
-                pValue->Value >>= nSize;
-                OUStringBuffer aBuffer;
-                aBuffer.append ( nSize );
-                pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
-            }
-            else if (pValue->Name == sInitialisationVectorProperty )
-                pVector = &pValue->Value;
-            else if (pValue->Name == sSaltProperty )
-                pSalt = &pValue->Value;
-            else if (pValue->Name == sIterationCountProperty )
-                pIterationCount = &pValue->Value;
-            else if (pValue->Name == sDigestProperty )
-                pDigest = &pValue->Value;
-            else if (pValue->Name == sDigestAlgProperty )
-                pDigestAlg = &pValue->Value;
-            else if (pValue->Name == sEncryptionAlgProperty )
-                pEncryptAlg = &pValue->Value;
-            else if (pValue->Name == sStartKeyAlgProperty )
-                pStartKeyAlg = &pValue->Value;
-            else if (pValue->Name == sDerivedKeySizeProperty )
-                pDerivedKeySize = &pValue->Value;
-            else if (pValue->Name == sPgpKeyIDProperty )
+            if (pValue->Name == sPgpKeyIDProperty )
                 pPgpKeyIDProperty = &pValue->Value;
             else if (pValue->Name == sPgpKeyPacketProperty )
                 pPgpKeyPacketProperty = &pValue->Value;
@@ -271,9 +225,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 pCipherValueProperty = &pValue->Value;
         }
 
-        xHandler->ignorableWhitespace ( sWhiteSpace );
-        uno::Reference < xml::sax::XAttributeList > xAttrList ( pAttrList );
-        xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pPgpKeyIDProperty && pPgpKeyPacketProperty && pCipherValueProperty )
         {
             // TODO make this work for multiple recipients
@@ -343,6 +294,65 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             xHandler->endElement( sKeyInfoElement );
             xHandler->ignorableWhitespace ( sWhiteSpace );
         }
+    }
+
+    for (sal_uInt32 i = 0 ; i < nManLength ; i++)
+    {
+        ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
+        const beans::PropertyValue *pValue = pSequence[i].getConstArray();
+        OUString aString;
+        const uno::Any *pVector = nullptr, *pSalt = nullptr,
+            *pIterationCount = nullptr, *pDigest = nullptr,
+            *pDigestAlg = nullptr, *pEncryptAlg = nullptr,
+            *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
+        for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
+        {
+            if (pValue->Name == sMediaTypeProperty )
+            {
+                pValue->Value >>= aString;
+                pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
+            }
+            else if (pValue->Name == sVersionProperty )
+            {
+                pValue->Value >>= aString;
+                // the version is stored only if it is not empty
+                if ( bAcceptNonemptyVersion && !aString.isEmpty() )
+                    pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
+            }
+            else if (pValue->Name == sFullPathProperty )
+            {
+                pValue->Value >>= aString;
+                pAttrList->AddAttribute ( sFullPathAttribute, sCdataAttribute, aString );
+            }
+            else if (pValue->Name == sSizeProperty )
+            {
+                sal_Int64 nSize = 0;
+                pValue->Value >>= nSize;
+                OUStringBuffer aBuffer;
+                aBuffer.append ( nSize );
+                pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
+            }
+            else if (pValue->Name == sInitialisationVectorProperty )
+                pVector = &pValue->Value;
+            else if (pValue->Name == sSaltProperty )
+                pSalt = &pValue->Value;
+            else if (pValue->Name == sIterationCountProperty )
+                pIterationCount = &pValue->Value;
+            else if (pValue->Name == sDigestProperty )
+                pDigest = &pValue->Value;
+            else if (pValue->Name == sDigestAlgProperty )
+                pDigestAlg = &pValue->Value;
+            else if (pValue->Name == sEncryptionAlgProperty )
+                pEncryptAlg = &pValue->Value;
+            else if (pValue->Name == sStartKeyAlgProperty )
+                pStartKeyAlg = &pValue->Value;
+            else if (pValue->Name == sDerivedKeySizeProperty )
+                pDerivedKeySize = &pValue->Value;
+        }
+
+        xHandler->ignorableWhitespace ( sWhiteSpace );
+        uno::Reference < xml::sax::XAttributeList > xAttrList ( pAttrList );
+        xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pVector && pSalt && pIterationCount && pDigest && pDigestAlg && pEncryptAlg && pStartKeyAlg && pDerivedKeySize )
         {
             // ==== Encryption Data
