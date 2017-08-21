@@ -2094,7 +2094,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     if (bUpdate)
     {
         // Update all SwIndex
-        pDest->Update( rDestStart, nLen, false, true);
+        pDest->Update( rDestStart, nLen, false, false/*??? why was it true*/);
     }
 
     CHECK_SWPHINTS(pDest);
