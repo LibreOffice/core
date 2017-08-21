@@ -177,7 +177,6 @@ WinBits const WB_POPUP =                SAL_CONST_INT64(0x20000000);
 
 WinBits const WB_HSCROLL =              WB_HORZ;
 WinBits const WB_VSCROLL =              WB_VERT;
-WinBits const WB_TOPIMAGE =             WB_TOP;
 
 // Window-Bits for PushButtons
 WinBits const WB_DEFBUTTON =            0x10000000;
