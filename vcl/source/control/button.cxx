@@ -3026,7 +3026,6 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     pDev->Push( PushFlags::CLIPREGION | PushFlags::LINECOLOR );
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
-    long nLineY = rPos.Y() + (rSize.Height()-1)/2;
     if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
          ( HasImage() && !  (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
     {
@@ -3049,7 +3048,6 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         }
 
         ImplDrawAlignedImage( pDev, aPos, aSize, 1, nDrawFlags, nTextStyle );
-        nLineY = aPos.Y() + aSize.Height()/2;
 
         rMouseRect          = tools::Rectangle( aPos, aSize );
         rMouseRect.Left()   = rPos.X();
@@ -3094,24 +3092,6 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         rMouseRect          = rStateRect;
 
         ImplSetFocusRect( rStateRect );
-    }
-
-    const int nLineSpace = 4;
-    if( (GetStyle() & WB_CBLINESTYLE) != 0 &&
-        rMouseRect.Right()-1-nLineSpace < rPos.X()+rSize.Width() )
-    {
-        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-        if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
-            SetLineColor( Color( COL_BLACK ) );
-        else
-            SetLineColor( rStyleSettings.GetShadowColor() );
-        long nLineX = rMouseRect.Right()+nLineSpace;
-        DrawLine( Point( nLineX, nLineY ), Point( rPos.X() + rSize.Width()-1, nLineY ) );
-        if ( !(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
-        {
-            SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( Point( nLineX, nLineY+1 ), Point( rPos.X() + rSize.Width()-1, nLineY+1 ) );
-        }
     }
 
     pDev->Pop();
