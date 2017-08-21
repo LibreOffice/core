@@ -485,59 +485,7 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | AntialiasingFlags::PixelSnapHairline);
                     }
 
-                    const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
-
-                    if( !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
-                    {
-                        // use new Metafile decomposition
-                        process(rCandidate);
-                    }
-                    else
-                    {
-#ifdef DBG_UTIL
-                        // switch to test EMFPlus-enhanced MetafileDecomposition, don't do
-                        // this by default in debug mode
-                        static bool bTestEMFPDecomposition(false);
-
-                        // switch to show the new visualization color changed behind
-                        // the original output vor visual testing, also not by default in debug mode
-                        static bool bUseChangedColorObject(false);
-
-                        if (bTestEMFPDecomposition)
-                        {
-                            if (bUseChangedColorObject)
-                            {
-                                primitive2d::Primitive2DContainer aDecomposition;
-                                rMetafilePrimitive.get2DDecomposition(aDecomposition, getViewInformation2D());
-                                primitive2d::BasePrimitive2D* pBasePrimitive = nullptr;
-                                const primitive2d::Primitive2DReference aPrimitiveR(
-                                    pBasePrimitive = new primitive2d::ModifiedColorPrimitive2D(
-                                        aDecomposition,
-                                        basegfx::BColorModifierSharedPtr(
-                                            new basegfx::BColorModifier_RGBLuminanceContrast(
-                                                0.5, // red
-                                                -0.5, // green
-                                                -0.5, // blue
-                                                0.0, // luminance
-                                                0.0)))); // contrast
-                                processBasePrimitive2D(*pBasePrimitive);
-                                RenderMetafilePrimitive2D(rMetafilePrimitive);
-                            }
-                            else
-                            {
-                                process(rCandidate);
-                            }
-                        }
-                        else
-                        {
-                            // direct draw of MetaFile
-                            RenderMetafilePrimitive2D(rMetafilePrimitive);
-                        }
-#else // DBG_UTIL
-                        // direct draw of MetaFile
-                        RenderMetafilePrimitive2D(rMetafilePrimitive);
-#endif // DBG_UTIL
-                    }
+                    process(rCandidate);
 
                     if(bForceLineSnap)
                     {
