@@ -209,9 +209,7 @@ WinBits const WB_IGNORETAB =            0x20000000;
 WinBits const WB_SIMPLEMODE =           0x20000000;
 
 // Window-Bits for FixedBitmap
-WinBits const WB_FAST =                 0x04000000;
 WinBits const WB_SCALE =                0x08000000;
-WinBits const WB_TOPLEFTVISIBLE =       0x10000000;
 
 // Window-Bits for ToolBox
 WinBits const WB_LINESPACING =          0x01000000;

@@ -66,14 +66,6 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     else
         nY = (rWinSize.Height()-rObjSize.Height())/2;
 
-    if ( nStyle & WB_TOPLEFTVISIBLE )
-    {
-        if ( nX < 0 )
-            nX = 0;
-        if ( nY < 0 )
-            nY = 0;
-    }
-
     Point aPos( nX+rPos.X(), nY+rPos.Y() );
     return aPos;
 }
