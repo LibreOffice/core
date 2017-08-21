@@ -289,9 +289,9 @@ void SfxInfoBarWindow::Resize()
         nX -= nButtonGap;
     }
 
-    m_pImage->SetPosSizePixel(Point(4,4), Size(32, 32));
+    m_pImage->SetPosSizePixel(Point(4,4), Size(32* fScaleFactor, 32* fScaleFactor));
 
-    Point aMessagePosition(32 + 10 * fScaleFactor, 10 * fScaleFactor);
+    Point aMessagePosition(32 * fScaleFactor + 10 * fScaleFactor, 10 * fScaleFactor);
     Size aMessageSize(nX - 20 * fScaleFactor, 20 * fScaleFactor);
 
     m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
