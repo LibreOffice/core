@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -77,6 +79,26 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         if ( !xInputStream.is() )
             return sal_False;
 
+        bool bIsNewDoc = true;
+        uno::Reference<text::XTextRange> xInsertTextRange;
+        try
+        {
+            utl::MediaDescriptor aMediaDesc(aDescriptor);
+            bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault("InsertMode", false);
+            xInsertTextRange = aMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>());
+        }
+        catch (const io::WrongFormatException& e)
+        {
+            // cannot throw WrongFormatException directly :(
+            throw lang::WrappedTargetRuntimeException("",
+                static_cast<OWeakObject*>(this), uno::makeAny(e));
+        }
+        catch (const uno::Exception& e)
+        {
+            SAL_INFO("writerfilter", "Exception caught: " << e.Message);
+        }
+
+
 #ifdef DEBUG_WRITERFILTER
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
@@ -90,7 +112,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::DOCUMENT_OOXML;
         writerfilter::Stream::Pointer_t pStream(
-            writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>()));
+            writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, xInsertTextRange, bIsNewDoc)
+        );
         //create the tokenizer and domain mapper
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
