@@ -71,13 +71,13 @@ CurThreadData::~CurThreadData()
 bool CurThreadData::setData(void *pData)
 {
     OSL_ENSURE( m_hKey, "No thread key!" );
-    return (osl_setThreadKeyData(m_hKey, pData));
+    return osl_setThreadKeyData(m_hKey, pData);
 }
 
 void *CurThreadData::getData()
 {
     OSL_ENSURE( m_hKey, "No thread key!" );
-    return (osl_getThreadKeyData(m_hKey));
+    return osl_getThreadKeyData(m_hKey);
 }
 
 void o2u_attachCurrentThread()
