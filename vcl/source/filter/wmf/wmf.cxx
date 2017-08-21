@@ -25,12 +25,25 @@
 
 bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 {
-    // Use new method to import Metafile. First, read binary data to mem array
-    const sal_uInt32 nStreamLength(rStream.Seek(STREAM_SEEK_TO_END));
+    // tdf#111484 Use new method to import Metafile. Take curent StreamPos
+    // into account (used by SwWW8ImplReader::ReadGrafFile and by
+    // SwWw6ReadMetaStream, so do *not* ignore. OTOH XclImpDrawing::ReadWmf
+    // is nice enough to copy to an own MemStream to avoid that indirect
+    // parameter passing...)
+    const sal_uInt32 nStreamStart(rStream.Tell());
+    const sal_uInt32 nStreamEnd(rStream.Seek(STREAM_SEEK_TO_END));
+
+    if (nStreamStart >= nStreamEnd)
+    {
+        return false;
+    }
+
+    // Read binary data to mem array
+    const sal_uInt32 nStreamLength(nStreamEnd - nStreamStart);
     VectorGraphicDataArray aNewData(nStreamLength);
-    rStream.Seek(0);
+    rStream.Seek(nStreamStart);
     rStream.ReadBytes(aNewData.begin(), nStreamLength);
-    rStream.Seek(0);
+    rStream.Seek(nStreamStart);
 
     if (rStream.good())
     {
