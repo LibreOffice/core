@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_17266a68",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-08-21T10:09:50Z",
+      "side": 1,
+      "message": "But that\u0027s already the default specified in Common.xcs, right?  Any reason to redundantly set it again here?",
+      "revId": "3e493d337819204ca9c7302efbd7b34c282956a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
