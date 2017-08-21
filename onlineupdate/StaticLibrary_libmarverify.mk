@@ -19,7 +19,7 @@ $(eval $(call gb_StaticLibrary_add_defs,libmarverify,\
 	-DUNICODE \
 ))
 else
-$(eval $(call gb_StaticLibrary_add_defs,libmar,\
+$(eval $(call gb_StaticLibrary_add_defs,libmarverify,\
 	-DMAR_NSS \
 ))
 
