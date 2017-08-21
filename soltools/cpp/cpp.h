@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define INS         32768   /* input buffer                             */
+#define INS         327680  /* input buffer                             */
 #define OBS         8092    /* output buffer                            */
 #define NARG        32      /* Max number arguments to a macro          */
 #define NINCLUDE    48      /* Max number of include directories (-I)   */
