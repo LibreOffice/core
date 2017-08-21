@@ -211,18 +211,18 @@ namespace desktop
                             SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
                         }
                     }
+
+                    freopen("CON", "r", stdin);
+                    freopen("CON", "w", stdout);
+                    freopen("CON", "w", stderr);
+
+                    std::ios::sync_with_stdio(true);
+
+                    // In case we use parent's console, emit an empty string
+                    // to avoid output on a line with command prompt
+                    if (mConsoleMode == attached)
+                        fprintf(stdout, "\n");
                 }
-
-                freopen("CON", "r", stdin);
-                freopen("CON", "w", stdout);
-                freopen("CON", "w", stderr);
-
-                std::ios::sync_with_stdio(true);
-
-                // In case we use parent's console, emit an empty string
-                // to avoid output on a line with command prompt
-                if (mConsoleMode == attached)
-                    fprintf(stdout, "\n");
             }
 
             ~lcl_Console()
