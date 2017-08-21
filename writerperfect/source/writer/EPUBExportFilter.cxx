@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "config_libepubgen.h"
+
 #include "EPUBExportFilter.hxx"
 
 #include <libepubgen/EPUBTextGenerator.h>
@@ -36,7 +38,11 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
-    libepubgen::EPUBTextGenerator aGenerator(&aPackage, libepubgen::EPUB_SPLIT_METHOD_HEADING, /*version=*/30);
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage, libepubgen::EPUB_SPLIT_METHOD_HEADING
+#if defined(LIBEPUBGEN_VERSION_SUPPORT)
+                                             , /*version=*/30
+#endif
+                                            );
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
 
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);

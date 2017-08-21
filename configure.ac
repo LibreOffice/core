@@ -7724,6 +7724,24 @@ libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${
 libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.1])
 
 libo_CHECK_SYSTEM_MODULE([libepubgen],[EPUBGEN],[libepubgen-0.0])
+AS_IF([test "$SYSTEM_EPUBGEN" = "TRUE"], [
+    AC_MSG_CHECKING([whether libepubgen supports setting EPUB version])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+            #include <libepubgen/libepubgen.h>
+        ], [
+            const libepubgen::EPUBTextGenerator generator(nullptr, EPUB_SPLIT_METHOD_NONE, 30);
+        ])],
+        [
+            AC_MSG_RESULT([yes])
+            AC_DEFINE([LIBEPUBGEN_VERSION_SUPPORT])
+        ],
+        [
+            AC_MSG_RESULT([no])
+        ]
+    )
+], [
+    AC_DEFINE([LIBEPUBGEN_VERSION_SUPPORT])
+])
 
 AS_IF([test "$COM" = "MSC"],
       [libwpd_libdir="${WORKDIR}/LinkTarget/Library"],
@@ -12414,6 +12432,7 @@ AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
+AC_CONFIG_HEADERS([config_host/config_libepubgen.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
