@@ -2248,10 +2248,28 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         return nullptr;
     }
 
-    OString aUsedMimeType;
-    OString aRet = pDoc->getTextSelection(pMimeType, aUsedMimeType);
-    if (aUsedMimeType.isEmpty())
-        aRet = pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    OString aRet, aUsedMimeType;
+
+    if (!strcmp(pMimeType, "all"))
+    {
+        boost::property_tree::ptree aTree, aItem0, aItem1;
+        aItem0.put("mimetype", "text/plain");
+        aItem0.put("data", pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType));
+        aTree.add_child("0", aItem0);
+        aItem1.put("mimetype", "text/html");
+        aItem1.put("data", pDoc->getTextSelection("text/html", aUsedMimeType));
+        aTree.add_child("1", aItem1);
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        aRet = aStream.str().c_str();
+    }
+    else
+    {
+        aRet = pDoc->getTextSelection(pMimeType, aUsedMimeType);
+        if (aUsedMimeType.isEmpty())
+            aRet = pDoc->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    }
 
     char* pMemory = static_cast<char*>(malloc(aRet.getLength() + 1));
     strcpy(pMemory, aRet.getStr());

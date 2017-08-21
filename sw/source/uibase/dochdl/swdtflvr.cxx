@@ -711,7 +711,17 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
-        GetHTMLWriter( aEmptyOUStr, OUString(), xWrt );
+        {
+            GetHTMLWriter( aEmptyOUStr, OUString(), xWrt );
+            if ( xWrt.Is() )
+            {
+                SfxItemSet* pSet = new SfxItemSet( m_pWrtShell->GetAttrPool(), SID_FILE_FILTEROPTIONS, SID_FILE_FILTEROPTIONS );
+                pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, "SkipHeaderFooter;EmbedImages") );
+                // SfxMedium deallocate memory SfxItemSet
+                SfxMedium aMedium( OUString(), StreamMode::STD_READ, nullptr, pSet );
+                xWrt->SetupFilterOptions(aMedium);
+            }
+        }
         break;
 
     case SWTRANSFER_OBJECTTYPE_RTF:
