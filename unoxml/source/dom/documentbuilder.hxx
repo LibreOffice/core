@@ -123,6 +123,17 @@ namespace DOM
         the XML document to be parsed.
         */
         virtual void SAL_CALL setErrorHandler(const css::uno::Reference< css::xml::sax::XErrorHandler >& eh) override;
+
+        /*
+        Get the ErrorHandler to be used to report errors present in
+        the XML document to be parsed.
+        */
+
+        const css::uno::Reference< css::xml::sax::XErrorHandler >& getErrorHandler()
+        {
+            return m_xErrorHandler;
+        }
+
     };
 }
 
