@@ -382,30 +382,6 @@ bool SdOptionsContents::WriteData( Any* pValues ) const
 
     return true;
 }
-
-/*************************************************************************
-|*
-|* SdOptionsContentsItem
-|*
-\************************************************************************/
-
-SdOptionsContentsItem::SdOptionsContentsItem()
-:   SfxPoolItem         ( ATTR_OPTIONS_CONTENTS )
-,   maOptionsContents   ( false, false )
-{
-}
-
-SfxPoolItem* SdOptionsContentsItem::Clone( SfxItemPool* ) const
-{
-    return new SdOptionsContentsItem( *this );
-}
-
-bool SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-    return maOptionsContents == static_cast<const SdOptionsContentsItem&>(rAttr).maOptionsContents;
-}
-
 /*************************************************************************
 |*
 |* SdOptionsMisc
