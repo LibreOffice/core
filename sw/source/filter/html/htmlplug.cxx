@@ -1314,7 +1314,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                                      XOutFlags::UseNativeIfPossible) );
         if( nErr )              // error, don't write anything
         {
-            rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
+            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
             return rWrt;
         }
         aGraphicURL = URIHelper::SmartRel2Abs(

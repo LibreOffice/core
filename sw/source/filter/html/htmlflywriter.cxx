@@ -1370,7 +1370,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
             aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
         }
         else
-            rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
+            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
     }
     else
     {
@@ -1439,7 +1439,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
             {
                 if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
                 {
-                    rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
+                    rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
                 }
             }
         }
@@ -1732,7 +1732,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
                                        XOutFlags::UseNativeIfPossible) ) != ERRCODE_NONE )
         {
             // empty or incorrect, because there is nothing to output
-            rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
+            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
             return rWrt;
         }
 
@@ -1801,7 +1801,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                     "JPG", nFlags, &aMM100Size );
             if( nErr )
             {
-                rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
+                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
                 return rWrt;
             }
             aGraphicURL = URIHelper::SmartRel2Abs(

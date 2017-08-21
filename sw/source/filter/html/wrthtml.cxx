@@ -1223,7 +1223,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
         {
             if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
             {
-                m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
+                m_nWarn = WARN_SWG_POOR_LOAD;
             }
             Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
             Strm().WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_data ":" );
