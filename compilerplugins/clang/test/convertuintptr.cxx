@@ -12,8 +12,8 @@
 int main()
 {
     sal_uIntPtr x = 1;
-    sal_uInt32 y = x; // expected-error {{cast from 'sal_uIntPtr' (aka 'unsigned long') to 'sal_uInt32' (aka 'unsigned int') [loplugin:convertuintptr]}}
-    y = x; // expected-error {{cast from 'sal_uIntPtr' (aka 'unsigned long') to 'sal_uInt32' (aka 'unsigned int') [loplugin:convertuintptr]}}
+    sal_uInt32 y = x; // expected-error-re {{cast from 'sal_uIntPtr' (aka 'unsigned {{.+}}') to 'sal_uInt32' (aka 'unsigned {{.+}}') [loplugin:convertuintptr]}}
+    y = x; // expected-error-re {{cast from 'sal_uIntPtr' (aka 'unsigned {{.+}}') to 'sal_uInt32' (aka 'unsigned {{.+}}') [loplugin:convertuintptr]}}
     (void)y;
 }
 

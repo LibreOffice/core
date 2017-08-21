@@ -17,10 +17,10 @@ int main()
     (void)tmp;
     tmp = x + y; // expected-error {{rather replace 'long' with 'int' [loplugin:droplong]}}
 
-    sal_uLong tmp1 = x + y; // expected-error {{rather replace 'sal_uLong' (aka 'unsigned long') with 'int' [loplugin:droplong]}}
+    sal_uLong tmp1 = x + y; // expected-error-re {{rather replace 'sal_uLong' (aka 'unsigned {{.+}}') with 'int' [loplugin:droplong]}}
     (void)tmp1;
 
-    int tmp2 = (sal_uLong)1; // expected-error {{sal_uLong cast from 'sal_uLong' (aka 'unsigned long') [loplugin:droplong]}}
+    int tmp2 = (sal_uLong)1; // expected-error-re {{sal_uLong cast from 'sal_uLong' (aka 'unsigned {{.+}}') [loplugin:droplong]}}
     tmp2 = (long)1; // expected-error {{long cast from 'long' [loplugin:droplong]}}
 }
 
