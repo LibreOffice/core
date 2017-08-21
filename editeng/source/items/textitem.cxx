@@ -2913,19 +2913,6 @@ bool SvxCharReliefItem::QueryValue( css::uno::Any& rVal,
 }
 
 /*************************************************************************
-|*    class SvxScriptTypeItemItem
-*************************************************************************/
-
-SvxScriptTypeItem::SvxScriptTypeItem( SvtScriptType nType )
-    : SfxUInt16Item( SID_ATTR_CHAR_SCRIPTTYPE, static_cast<sal_uInt16>(nType) )
-{
-}
-SfxPoolItem* SvxScriptTypeItem::Clone( SfxItemPool * ) const
-{
-    return new SvxScriptTypeItem( static_cast<SvtScriptType>(GetValue()) );
-}
-
-/*************************************************************************
 |*    class SvxScriptSetItem
 *************************************************************************/
 
@@ -2938,7 +2925,6 @@ SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
     GetItemSet().MergeRange( nLatin, nLatin );
     GetItemSet().MergeRange( nAsian, nAsian );
     GetItemSet().MergeRange( nComplex, nComplex );
-    GetItemSet().MergeRange( SID_ATTR_CHAR_SCRIPTTYPE, SID_ATTR_CHAR_SCRIPTTYPE );
 }
 
 SfxPoolItem* SvxScriptSetItem::Clone( SfxItemPool * ) const

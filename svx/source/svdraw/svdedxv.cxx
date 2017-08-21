@@ -2027,14 +2027,10 @@ bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
         // add object attributes
         rTargetSet.Put( mxTextEditObj->GetMergedItemSet() );
 
-        if( mxTextEditObj->GetOutlinerParaObject() )
-            rTargetSet.Put( SvxScriptTypeItem( mxTextEditObj->GetOutlinerParaObject()->GetTextObject().GetScriptType() ) );
-
         if(pTextEditOutlinerView)
         {
             // FALSE= regard InvalidItems as "holes," not as Default
             rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), false);
-            rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
         }
 
         if(GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
