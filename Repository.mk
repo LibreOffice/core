@@ -56,6 +56,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	sp2bv \
 	svg2odf \
 	svidl \
+	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
+		$(if $(filter WNT,$(OS)), \
+			test_updater_dialog \
+	)) \
 	treex \
 	ulfex \
 	unoidl-read \
