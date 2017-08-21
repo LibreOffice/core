@@ -37,6 +37,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -61,16 +62,20 @@ static const char validTestFile[] =
  </office:document-content> \
 ";
 
-// generates a warning: unsupported xml version, unknown xml:space
+// generates a warning: unknown xml:space
 // value
 static const char warningTestFile[] =
-"<?xml version=\"47-11.0\" encoding=\"UTF-8\"?> \
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
  <office:document-content \
    xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" \
-   xml:space=\"blafasl\" \
+   xml:space=\"blah\" \
+   xmlns:xlink=\"http://www.w3.org/1999/xlink\" \
    office:version=\"1.0\"> \
    <office:scripts/> \
-   <office:automatic-styles/> \
+   <xlink:test/> \
+   <office:automatic-styles teststyle=\"test\"/> \
+   <moretest/> \
+    some text \303\266\303\244\303\274 \
  </office:document-content> \
 ";
 
@@ -85,19 +90,17 @@ static const char errorTestFile[] =
  </office:document-content> \
 ";
 
-// plain empty
-static const char fatalTestFile[] = "";
-
 struct ErrorHandler
     : public ::cppu::WeakImplHelper< xml::sax::XErrorHandler >
 {
     sal_uInt32 mnErrCount;
-    sal_uInt32 mnFatalCount;
+//    sal_uInt32 mnFatalCount;  // No fatal error counter, as lib2xml doesn't distinguish between error and fatal error
+                                // (see See xmlFatalErrMsg from lib2xml/parse.c and __xmlRaiseError from lib2xml/error.c)
     sal_uInt32 mnWarnCount;
 
-    bool noErrors() const { return !mnErrCount && !mnFatalCount && !mnWarnCount; }
+    bool noErrors() const { return !mnErrCount /*&& !mnFatalCount*/ && !mnWarnCount; }
 
-    ErrorHandler() : mnErrCount(0), mnFatalCount(0), mnWarnCount(0)
+    ErrorHandler() : mnErrCount(0), /*mnFatalCount(0),*/ mnWarnCount(0)
     {}
 
     virtual void SAL_CALL error( const uno::Any& ) override
@@ -105,9 +108,11 @@ struct ErrorHandler
         ++mnErrCount;
     }
 
+    // Just implement FatalError function as it is in XErrorHandler
+    // This function is never used, as lib2xml doesn't distinguish between error and fatalerror and calls error functions in both cases
     virtual void SAL_CALL fatalError( const uno::Any& ) override
     {
-        ++mnFatalCount;
+        //++mnFatalCount;
     }
 
     virtual void SAL_CALL warning( const uno::Any& ) override
@@ -195,7 +200,6 @@ struct BasicTest : public test::BootstrapFixture
     rtl::Reference<SequenceInputStream> mxValidInStream;
     rtl::Reference<SequenceInputStream> mxWarningInStream;
     rtl::Reference<SequenceInputStream> mxErrorInStream;
-    rtl::Reference<SequenceInputStream> mxFatalInStream;
 
     virtual void setUp() override
     {
@@ -207,58 +211,70 @@ struct BasicTest : public test::BootstrapFixture
         mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
         mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), SAL_N_ELEMENTS(warningTestFile))) );
         mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), SAL_N_ELEMENTS(errorTestFile))) );
-        mxFatalInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(fatalTestFile), SAL_N_ELEMENTS(fatalTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
     }
 
     void validInputTest()
     {
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #1",
-                                mxDomBuilder->parse(
-                                    uno::Reference<io::XInputStream>(
-                                        mxValidInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file resulted in parse errors",
-                                mxErrHandler->noErrors() );
+        try
+        {
+            CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #1",
+                mxDomBuilder->parse(
+                    uno::Reference<io::XInputStream>(
+                        mxValidInStream.get())).is());
+            CPPUNIT_ASSERT_MESSAGE("Valid input file resulted in parse errors",
+                mxErrHandler->noErrors());
+        }
+        catch (const css::xml::sax::SAXParseException&)
+        {
+            CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument (exception thrown)", false);
+        }
     }
-/*
+
     void warningInputTest()
     {
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #2",
-                                mxDomBuilder->parse(
-                                    uno::Reference<io::XInputStream>(
-                                        mxWarningInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "No parse warnings in unclean input file",
-                                mxErrHandler->mnWarnCount && !mxErrHandler->mnErrCount && !mxErrHandler->mnFatalCount );
+        try
+        {
+            // We DONT expect exeption here, as mxWarningInStream is valid XML Doc
+            CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #2",
+                mxDomBuilder->parse(
+                    uno::Reference<io::XInputStream>(
+                        mxWarningInStream.get())).is());
+        }
+        catch (const css::xml::sax::SAXParseException& )
+        {
+            CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #2 (exception thrown)", false);
+        }
+        CPPUNIT_ASSERT_MESSAGE("No parse warnings in unclean input file",
+            mxErrHandler->mnWarnCount && !mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
     }
 
     void errorInputTest()
     {
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument #3",
-                                mxDomBuilder->parse(
-                                    uno::Reference<io::XInputStream>(
-                                        mxErrorInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "No parse errors in unclean input file",
-                                !mxErrHandler->mnWarnCount && mxErrHandler->mnErrCount && !mxErrHandler->mnFatalCount );
+        try
+        {
+            // We expect exeption here, as mxErrorInStream is invalid XML Doc
+            CPPUNIT_ASSERT_MESSAGE("Invalid input file result in XDocument #2!",
+                !mxDomBuilder->parse(
+                    uno::Reference<io::XInputStream>(
+                        mxErrorInStream.get())).is());
+            CPPUNIT_ASSERT_MESSAGE("No exception is thrown in unclean input file", false);
+        }
+        catch (const css::xml::sax::SAXParseException&)
+        {
+            // It's OK to catch an exeption here as we parse incorrect XML file
+        }
+        CPPUNIT_ASSERT_MESSAGE("No parse errors in unclean input file",
+            !mxErrHandler->mnWarnCount && mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
     }
 
-    void fatalInputTest()
-    {
-        CPPUNIT_ASSERT_MESSAGE( "Broken input file resulted in XDocument",
-                                !mxDomBuilder->parse(
-                                    uno::Reference<io::XInputStream>(
-                                        mxFatalInStream.get())).is() );
-        CPPUNIT_ASSERT_MESSAGE( "No fatal parse errors in unclean input file",
-                                !mxErrHandler->mnWarnCount && !mxErrHandler->mnErrCount && mxErrHandler->mnFatalCount );
-    };
-*/
-    // Change the following lines only, if you add, remove or rename
+        // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
     CPPUNIT_TEST_SUITE(BasicTest);
     CPPUNIT_TEST(validInputTest);
-    //CPPUNIT_TEST(warningInputTest);
-    //CPPUNIT_TEST(errorInputTest);
-    //CPPUNIT_TEST(fatalInputTest);
+    CPPUNIT_TEST(warningInputTest);
+    CPPUNIT_TEST(errorInputTest);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -294,29 +310,36 @@ struct SerializerTest : public test::BootstrapFixture
 
     void serializerTest ()
     {
-        uno::Reference< xml::dom::XDocument > xDoc=
-            mxDomBuilder->parse(
-                uno::Reference<io::XInputStream>(
-                    mxInStream.get()));
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file did not result in XDocument",
-                                xDoc.is() );
-        CPPUNIT_ASSERT_MESSAGE( "Valid input file resulted in parse errors",
-                                mxErrHandler->noErrors() );
+        try
+        {
+            uno::Reference< xml::dom::XDocument > xDoc =
+                mxDomBuilder->parse(
+                    uno::Reference<io::XInputStream>(
+                        mxInStream.get()));
+            CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument",
+                xDoc.is());
+            CPPUNIT_ASSERT_MESSAGE("Valid input file resulted in parse errors",
+                mxErrHandler->noErrors());
 
-        uno::Reference< xml::sax::XSAXSerializable > xSaxSerializer(
-            xDoc, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( "XSAXSerializable not supported",
-                                xSaxSerializer.is() );
+            uno::Reference< xml::sax::XSAXSerializable > xSaxSerializer(
+                xDoc, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE("XSAXSerializable not supported",
+                xSaxSerializer.is());
 
-        uno::Reference< xml::sax::XFastSAXSerializable > xFastSaxSerializer(
-            xDoc, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( "XFastSAXSerializable not supported",
-                                xSaxSerializer.is() );
+            uno::Reference< xml::sax::XFastSAXSerializable > xFastSaxSerializer(
+                xDoc, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE("XFastSAXSerializable not supported",
+                xSaxSerializer.is());
 
-        xFastSaxSerializer->fastSerialize( mxHandler.get(),
-                                           mxTokHandler.get(),
-                                           uno::Sequence< beans::StringPair >(),
-                                           maRegisteredNamespaces );
+            xFastSaxSerializer->fastSerialize(mxHandler.get(),
+                mxTokHandler.get(),
+                uno::Sequence< beans::StringPair >(),
+                maRegisteredNamespaces);
+        }
+        catch (const css::xml::sax::SAXParseException&)
+        {
+            CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument (exception thrown)", false);
+        }
     }
 
     // Change the following lines only, if you add, remove or rename
