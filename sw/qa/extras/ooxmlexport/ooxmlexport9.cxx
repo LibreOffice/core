@@ -655,6 +655,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xCell3, "BackColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
+{
+    uno::Reference<drawing::XShape> xShape1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
+    xShape1.is();
+
+    uno::Reference<drawing::XShape> xShape2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY);
+    xShape2.is();
+
+    CPPUNIT_ASSERT_EQUAL(xPropertySet1->getPropertyValue("TextAutoGrowHeight"), xPropertySet2->getPropertyValue("TextAutoGrowHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
