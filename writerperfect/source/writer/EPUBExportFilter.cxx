@@ -39,7 +39,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
     libepubgen::EPUBTextGenerator aGenerator(&aPackage, libepubgen::EPUB_SPLIT_METHOD_HEADING
-#if defined(LIBEPUBGEN_VERSION_SUPPORT)
+#if LIBEPUBGEN_VERSION_SUPPORT
                                              , /*version=*/30
 #endif
                                             );
