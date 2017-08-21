@@ -176,19 +176,6 @@ public:
     bool    operator==( const SdOptionsContents& rOpt ) const;
 };
 
-class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
-{
-public:
-
-                            SdOptionsContentsItem();
-
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-private:
-    SdOptionsContents       maOptionsContents;
-};
-
 class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
