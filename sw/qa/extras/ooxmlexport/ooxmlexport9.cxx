@@ -917,6 +917,19 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
         getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shape", "id"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
+{
+    uno::Reference<drawing::XShape> xShape1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
+    xShape1.is();
+
+    uno::Reference<drawing::XShape> xShape2(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY);
+    xShape2.is();
+
+    CPPUNIT_ASSERT_EQUAL(xPropertySet1->getPropertyValue("TextAutoGrowHeight"), xPropertySet2->getPropertyValue("TextAutoGrowHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
