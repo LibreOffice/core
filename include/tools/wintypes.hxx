@@ -193,7 +193,6 @@ WinBits const WB_EXTRAOFFSET =          0x02000000;
 WinBits const WB_NOMULTILINE =          0x10000000;
 
 // Window-Bits for CheckBox
-WinBits const WB_CBLINESTYLE =          SAL_CONST_INT64(0x2000000000);
 WinBits const WB_EARLYTOGGLE =          SAL_CONST_INT64(0x4000000000);
 
 // Window-Bits for Edit
