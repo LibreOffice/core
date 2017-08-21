@@ -38,7 +38,6 @@
 
 #include <sfx2/request.hxx>
 
-#include <editeng/scripttypeitem.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -2519,15 +2518,11 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
 
         if( mpView->IsTextEdit() )
         {
-            if( mxTableObj->GetOutlinerParaObject() )
-                rTargetSet.Put( SvxScriptTypeItem( mxTableObj->GetOutlinerParaObject()->GetTextObject().GetScriptType() ) );
-
             OutlinerView* pTextEditOutlinerView = mpView->GetTextEditOutlinerView();
             if(pTextEditOutlinerView)
             {
                 // FALSE= consider InvalidItems not as the default, but as "holes"
                 rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), false);
-                rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ) );
             }
         }
 
