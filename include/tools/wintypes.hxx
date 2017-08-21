@@ -241,7 +241,6 @@ WinBits const WB_STDFLOATWIN =          WB_SIZEMOVE | WB_CLOSEABLE | WB_ROLLABLE
 WinBits const WB_STDDIALOG =            WB_MOVEABLE | WB_CLOSEABLE;
 WinBits const WB_STDMODELESS =          WB_STDDIALOG;
 WinBits const WB_STDMODAL =             WB_STDDIALOG;
-WinBits const WB_STDTABDIALOG =         WB_STDDIALOG;
 WinBits const WB_STDTABCONTROL =        0;
 WinBits const WB_STDPOPUP =             WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL;
 
