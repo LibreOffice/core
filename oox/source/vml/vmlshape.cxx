@@ -283,6 +283,14 @@ void ShapeBase::finalizeFragmentImport()
             aType = aType.copy(1);
         if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType ) )
             maTypeModel.assignUsed( pShapeType->getTypeModel() );
+        else {
+            // Temporary fix, shapetype not found if referenced from different substream
+            // FIXME: extend scope of ShapeContainer to store all shapetypes from the document
+            const OUString sShapeTypePrefix = "shapetype_";
+            if (aType.startsWith(sShapeTypePrefix)) {
+                maTypeModel.moShapeType = aType.copy(sShapeTypePrefix.getLength()).toInt32();
+            }
+        }
     }
 }
 
