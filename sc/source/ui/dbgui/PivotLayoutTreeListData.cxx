@@ -20,8 +20,7 @@
 #include "globstr.hrc"
 
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListData,
-                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN |
-                         WB_FORCE_MAKEVISIBLE)
+                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN)
 
 namespace
 {
@@ -67,7 +66,9 @@ OUString lclCreateDataItemName(const PivotFunc nFunctionMask, const OUString& rN
 
 ScPivotLayoutTreeListData::ScPivotLayoutTreeListData(vcl::Window* pParent, WinBits nBits) :
     ScPivotLayoutTreeListBase(pParent, nBits, DATA_LIST)
-{}
+{
+    SetForceMakeVisible(true);
+}
 
 ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
 {}

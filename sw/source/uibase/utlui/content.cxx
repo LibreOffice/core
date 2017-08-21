@@ -879,7 +879,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     m_aUpdTimer.SetTimeout(1000);
     Clear();
     EnableContextMenuHandling();
-    SetStyle( GetStyle() | WB_QUICK_SEARCH );
+    SetQuickSearch(true);
 }
 
 SwContentTree::~SwContentTree()

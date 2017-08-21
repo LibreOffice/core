@@ -337,6 +337,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbContextBmpExpanded(false),
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
+    mbQuickSearch(false),
     eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
     mbCenterAndClipText(false)
@@ -1033,7 +1034,7 @@ bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
         )
         return true;
 
-    if ( ( GetStyle() & WB_QUICK_SEARCH ) != 0 )
+    if (mbQuickSearch)
     {
         mpImpl->m_bDoingQuickSelection = true;
         const bool bHandled = mpImpl->m_aQuickSelectionEngine.HandleKeyEvent( _rKEvt );
@@ -3231,6 +3232,11 @@ void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
 
     mbAlternatingRowColors = bEnable;
     pImpl->UpdateAll(true);
+}
+
+void SvTreeListBox::SetForceMakeVisible( bool bEnable )
+{
+    pImpl->SetForceMakeVisible(bEnable);
 }
 
 SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX,SvLBoxTab** ppTab)

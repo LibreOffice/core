@@ -759,7 +759,9 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     pTreeLB->SetHelpId( HID_OFADLG_TREELISTBOX );
     pTreeLB->SetStyle( pTreeLB->GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
-                           WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
+                           WB_CLIPCHILDREN | WB_HSCROLL );
+    pTreeLB->SetForceMakeVisible(true);
+    pTreeLB->SetQuickSearch(true);
     pTreeLB->SetSpaceBetweenEntries( 0 );
     pTreeLB->SetSelectionMode( SelectionMode::Single );
     pTreeLB->SetSublistOpenWithLeftRight();
