@@ -1295,15 +1295,18 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
 
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
-        throw IllegalArgumentException();
+        throw IllegalArgumentException( "The ResourceURL is not valid or "
+                                        "describes an unknown type.", nullptr, 0 );
     else if ( m_bReadOnly )
-        throw IllegalAccessException();
+        throw IllegalAccessException( "The configuration manager is read-only.", nullptr, 0 );
     else
     {
         SolarMutexClearableGuard aGuard;
 
         if ( m_bDisposed )
-            throw DisposedException();
+            throw DisposedException( "The configuration manager has been disposed, "
+                                     "and can't uphold its method specification anymore.",
+                                     nullptr, 0 );
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
         if ( pDataSettings )
@@ -1363,7 +1366,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
             }
         }
         else
-            throw NoSuchElementException();
+            throw NoSuchElementException( "The settings data cannot be found.", nullptr, 0 );
     }
 }
 
