@@ -110,7 +110,9 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbUseFormerTextWrapping             = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTextWrapping );
         mbConsiderWrapOnObjPos              = aOptions.GetDefault( SvtCompatibilityEntry::Index::ConsiderWrappingStyle );
         mbDoNotJustifyLinesWithManualBreak  = !aOptions.GetDefault( SvtCompatibilityEntry::Index::ExpandWordSpace );
+        mbProtectForm                       = aOptions.GetDefault( SvtCompatibilityEntry::Index::ProtectForm );
         mbMsWordCompTrailingBlanks          = aOptions.GetDefault( SvtCompatibilityEntry::Index::MsWordTrailingBlanks );
+        mbSubtractFlys                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys );
     }
     else
     {
@@ -125,7 +127,9 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbUseFormerTextWrapping             = false;
         mbConsiderWrapOnObjPos              = false;
         mbDoNotJustifyLinesWithManualBreak  = true;
+        mbProtectForm                       = false;
         mbMsWordCompTrailingBlanks          = false;
+        mbSubtractFlys                      = false;
     }
 
     // COMPATIBILITY FLAGS END
