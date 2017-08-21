@@ -1009,7 +1009,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
     }
 }
 
-static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet, bool bRows, bool bFlat, bool bDown = true)
+static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet, bool bRows, bool bDown)
 {
     if (pSet->mpItems.empty())
         return;
@@ -1034,31 +1034,23 @@ static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet
                 nTop    = rItems[i]->mnLeft;
                 nBottom = rItems[i]->mnLeft+rItems[i]->mnWidth-1;
 
-                if (bFlat)
-                    nPos--;
-
                 if (bDown || (nItemSplitSize >= nSplitSize))
                 {
                     rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
                     rRenderContext.DrawLine(Point(nTop, nPos + 1), Point(nBottom, nPos + 1));
                 }
                 nPos += nSplitSize-2;
-                if (bFlat)
-                    nPos+=2;
                 if ((!bDown && (nItemSplitSize >= 2)) ||
                     (bDown  && (nItemSplitSize >= nSplitSize - 1)))
                 {
                     rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
                     rRenderContext.DrawLine(Point(nTop, nPos), Point(nBottom, nPos));
                 }
-                if (!bFlat)
+                nPos++;
+                if (!bDown || (nItemSplitSize >= nSplitSize))
                 {
-                    nPos++;
-                    if (!bDown || (nItemSplitSize >= nSplitSize))
-                    {
-                        rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
-                        rRenderContext.DrawLine(Point(nTop, nPos), Point(nBottom, nPos));
-                    }
+                    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                    rRenderContext.DrawLine(Point(nTop, nPos), Point(nBottom, nPos));
                 }
             }
             else
@@ -1066,30 +1058,23 @@ static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet
                 nTop    = rItems[i]->mnTop;
                 nBottom = rItems[i]->mnTop+pSet->mpItems[i]->mnHeight-1;
 
-                if (bFlat)
-                    nPos--;
                 if (bDown || (nItemSplitSize >= nSplitSize))
                 {
                     rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
                     rRenderContext.DrawLine(Point(nPos + 1, nTop), Point(nPos+1, nBottom));
                 }
                 nPos += pSet->mnSplitSize - 2;
-                if (bFlat)
-                    nPos += 2;
                 if ((!bDown && (nItemSplitSize >= 2)) ||
                     (bDown  && (nItemSplitSize >= nSplitSize - 1)))
                 {
                     rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
                     rRenderContext.DrawLine(Point(nPos, nTop), Point(nPos, nBottom));
                 }
-                if( !bFlat )
+                nPos++;
+                if (!bDown || (nItemSplitSize >= nSplitSize))
                 {
-                    nPos++;
-                    if (!bDown || (nItemSplitSize >= nSplitSize))
-                    {
-                        rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
-                        rRenderContext.DrawLine(Point(nPos, nTop), Point(nPos, nBottom));
-                    }
+                    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                    rRenderContext.DrawLine(Point(nPos, nTop), Point(nPos, nBottom));
                 }
             }
         }
@@ -1099,7 +1084,7 @@ static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet
     {
         if (rItems[i]->mpSet && rItems[i]->mnWidth && rItems[i]->mnHeight)
         {
-            ImplDrawSplit(rRenderContext, rItems[i]->mpSet, !(rItems[i]->mnBits & SplitWindowItemFlags::ColSet), bFlat);
+            ImplDrawSplit(rRenderContext, rItems[i]->mpSet, !(rItems[i]->mnBits & SplitWindowItemFlags::ColSet), true/*bDown*/);
         }
     }
 }
@@ -2302,8 +2287,7 @@ void SplitWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     // draw splitter
     if (!(mnWinStyle & WB_NOSPLITDRAW))
     {
-        bool bFlat = (GetStyle() & WB_FLATSPLITDRAW) == WB_FLATSPLITDRAW;
-        ImplDrawSplit(rRenderContext, mpMainSet, mbHorz, bFlat, !mbBottomRight);
+        ImplDrawSplit(rRenderContext, mpMainSet, mbHorz, !mbBottomRight);
     }
 }
 
