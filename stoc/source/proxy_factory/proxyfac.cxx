@@ -433,7 +433,10 @@ Reference< XInterface > SAL_CALL proxyfac_create(
 {
     Reference< XInterface > xRet;
     {
-    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+    static osl::Mutex s_mutex;
+    // note: don't use ::osl::Mutex::getGlobalMutex() here, it deadlocks
+    //       with getImplHelperInitMutex()
+    ::osl::MutexGuard guard(s_mutex);
     static WeakReference < XInterface > rwInstance;
     xRet = rwInstance;
 
