@@ -578,7 +578,7 @@ void ScT();
 void ScValue();
 void ScNumberValue();
 void ScClean();
-void ScClean_OOXML();
+void ScClean_MS();
 void ScChar();
 void ScJis();
 void ScAsc();
