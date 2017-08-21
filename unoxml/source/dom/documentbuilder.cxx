@@ -269,19 +269,50 @@ namespace DOM
     // default warning handler does not trigger assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
+        xmlParserCtxtPtr const pctx = static_cast<xmlParserCtxtPtr>(ctx);
+
         SAL_INFO(
             "unoxml",
             "libxml2 warning: "
-                << make_error_message(static_cast<xmlParserCtxtPtr>(ctx)));
+            << make_error_message(pctx));
+
+        CDocumentBuilder * const pDocBuilder = static_cast<CDocumentBuilder*>(pctx->_private);
+
+        if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
+        {
+            // Prepare SAXParseException to be passed to custom XErrorHandler::warning function
+            css::xml::sax::SAXParseException saxex;
+            saxex.Message = make_error_message(pctx);
+            saxex.LineNumber = static_cast<sal_Int32>(pctx->lastError.line);
+            saxex.ColumnNumber = static_cast<sal_Int32>(pctx->lastError.int2);
+
+            // Call custom warning function
+            pDocBuilder->getErrorHandler()->warning(::css::uno::Any(saxex));
+        }
     }
 
     // default error handler triggers assertion
     static void error_func(void * ctx, const char * /*msg*/, ...)
     {
+        xmlParserCtxtPtr const pctx = static_cast<xmlParserCtxtPtr>(ctx);
         SAL_WARN(
             "unoxml",
             "libxml2 error: "
-                << make_error_message(static_cast<xmlParserCtxtPtr>(ctx)));
+                << make_error_message(pctx));
+
+        CDocumentBuilder * const pDocBuilder = static_cast<CDocumentBuilder*>(pctx->_private);
+
+        if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
+        {
+            // Prepare SAXParseException to be passed to custom XErrorHandler::error function
+            css::xml::sax::SAXParseException saxex;
+            saxex.Message = make_error_message(pctx);
+            saxex.LineNumber = static_cast<sal_Int32>(pctx->lastError.line);
+            saxex.ColumnNumber = static_cast<sal_Int32>(pctx->lastError.int2);
+
+            // Call custom warning function
+            pDocBuilder->getErrorHandler()->error(::css::uno::Any(saxex));
+        }
     }
 
     } // extern "C"
