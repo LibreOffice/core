@@ -3562,12 +3562,12 @@ const char* SC_OPCODE_CLEAN_ARY[] =
     NC_("SC_OPCODE_CLEAN", "The text from which nonprintable characters are to be removed.")
 };
 
-// -=*# Resource for function CLEAN_OOXML #*=-
-const char* SC_OPCODE_CLEAN_OOXML_ARY[] =
+// -=*# Resource for function CLEAN_MS #*=-
+const char* SC_OPCODE_CLEAN_MS_ARY[] =
 {
-    NC_("SC_OPCODE_CLEAN_OOXML", "Removes all nonprintable characters from text according to OOXML standard."),
-    NC_("SC_OPCODE_CLEAN_OOXML", "text"),
-    NC_("SC_OPCODE_CLEAN_OOXML", "The text from which nonprintable characters are to be removed.")
+    NC_("SC_OPCODE_CLEAN_MS", "Removes nonprintable characters from text, for MS-Excel interoperability."),
+    NC_("SC_OPCODE_CLEAN_MS", "text"),
+    NC_("SC_OPCODE_CLEAN_MS", "The text from which nonprintable characters are to be removed.")
 };
 
 // -=*# Resource for function CONCATENATE #*=-

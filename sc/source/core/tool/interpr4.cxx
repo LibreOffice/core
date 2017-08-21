@@ -4123,7 +4123,7 @@ StackVar ScInterpreter::Interpret()
                 case ocLen              : ScLen();                      break;
                 case ocT                : ScT();                        break;
                 case ocClean            : ScClean();                    break;
-                case ocClean_OOXML      : ScClean_OOXML();              break;
+                case ocClean_MS         : ScClean_MS();                 break;
                 case ocValue            : ScValue();                    break;
                 case ocNumberValue      : ScNumberValue();              break;
                 case ocChar             : ScChar();                     break;

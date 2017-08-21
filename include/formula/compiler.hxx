@@ -205,7 +205,7 @@
 #define SC_OPCODE_ERROR_TYPE_ODF    175
 #define SC_OPCODE_ENCODEURL         176
 #define SC_OPCODE_ISOWEEKNUM        177
-#define SC_OPCODE_CLEAN_OOXML       178
+#define SC_OPCODE_CLEAN_MS          178
 #define SC_OPCODE_STOP_1_PAR        179
 
 /*** Functions with more than one parameters ***/

@@ -2614,7 +2614,7 @@ void Test::testFunctionLists()
         "BASE",
         "CHAR",
         "CLEAN",
-        "CLEAN.OOXML",
+        "CLEAN_EXCEL",
         "CODE",
         "CONCAT",
         "CONCATENATE",
