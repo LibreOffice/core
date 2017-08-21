@@ -22,21 +22,12 @@
 
 #include <vcl/errcode.hxx>
 
-#define ERROR_SD_BASE           (ERRCODE_AREA_SD)
-#define ERROR_SD_READ_BASE      (ERROR_SD_BASE | ERRCODE_CLASS_READ)
-#define ERROR_SD_WRITE_BASE     (ERROR_SD_BASE | ERRCODE_CLASS_WRITE)
-
-#define WARN_SD_BASE            (ERRCODE_AREA_SD | ERRCODE_WARNING_MASK)
-#define WARN_SD_READ_BASE       (WARN_SD_BASE | ERRCODE_CLASS_READ )
-#define WARN_SD_WRITE_BASE      (WARN_SD_BASE | ERRCODE_CLASS_WRITE )
-
 // Import errors
-#define ERR_FORMAT_ROWCOL               ErrCode(ERROR_SD_READ_BASE | 1)
-#define ERR_FORMAT_FILE_ROWCOL          ErrCode(ERROR_SD_READ_BASE | 2)
+#define ERR_FORMAT_ROWCOL               ErrCode(ERRCODE_AREA_SD | ERRCODE_CLASS_READ | 1)
+#define ERR_FORMAT_FILE_ROWCOL          ErrCode(ERRCODE_AREA_SD | ERRCODE_CLASS_READ | 2)
 
-// ----- Warnings ---------------------------
-
-#define WARN_FORMAT_FILE_ROWCOL         ErrCode(WARN_SD_READ_BASE | 100)
+// Warnings
+#define WARN_FORMAT_FILE_ROWCOL         ErrCode(ERRCODE_AREA_SD | ERRCODE_WARNING_MASK | ERRCODE_CLASS_READ | 100)
 
 #endif
 
