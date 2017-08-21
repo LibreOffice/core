@@ -1092,6 +1092,9 @@ DECLARE_OOXMLIMPORT_TEST(testTdf60351, "tdf60351.docx")
     // Get the first image in the document and check its contour polygon.
     // It should contain 6 points. Check their coordinates.
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    // test for TODO: if paragraph's background becomes bottommost [better yet: wraps around shape], then remove this hack
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("HACK ALERT: Shape is in foreground", true, getProperty<bool>(xPropertySet, "Opaque"));
+
     css::drawing::PointSequenceSequence aPolyPolygon;
     xPropertySet->getPropertyValue("ContourPolyPolygon") >>= aPolyPolygon;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPolyPolygon.getLength());
