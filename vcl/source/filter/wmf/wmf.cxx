@@ -25,7 +25,7 @@
 
 bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 {
-    // tdf#111484 Use new method to import Metafile. Take curent StreamPos
+    // tdf#111484 Use new method to import Metafile. Take current StreamPos
     // into account (used by SwWW8ImplReader::ReadGrafFile and by
     // SwWw6ReadMetaStream, so do *not* ignore. OTOH XclImpDrawing::ReadWmf
     // is nice enough to copy to an own MemStream to avoid that indirect
