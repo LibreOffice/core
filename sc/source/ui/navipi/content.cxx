@@ -124,13 +124,14 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 //          ScContentTree
 
 ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg)
-    : SvTreeListBox(pParent, WB_BORDER | WB_QUICK_SEARCH)
+    : SvTreeListBox(pParent, WB_BORDER)
     , pParentWindow(pNavigatorDlg)
     , nRootType(ScContentId::ROOT)
     , bHiddenDoc(false)
     , pHiddenDocument(nullptr)
     , bisInNavigatoeDlg(false)
 {
+    SetQuickSearch(true);
     for (sal_uInt16 i = 0; i <= (int)ScContentId::LAST; ++i)
         pPosList[pTypeList[i]] = i;         // inverse for searching
 

@@ -68,8 +68,8 @@ OWizNameMatching::OWizNameMatching(vcl::Window* pParent)
     m_pCTRL_RIGHT->SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
     m_pCTRL_RIGHT->EnableCheckButton( nullptr );
 
-    m_pCTRL_LEFT->SetStyle( m_pCTRL_LEFT->GetStyle() | WB_FORCE_MAKEVISIBLE );
-    m_pCTRL_RIGHT->SetStyle( m_pCTRL_RIGHT->GetStyle() | WB_FORCE_MAKEVISIBLE );
+    m_pCTRL_LEFT->SetForceMakeVisible( true );
+    m_pCTRL_RIGHT->SetForceMakeVisible( true );
 
     m_sSourceText = m_pTABLE_LEFT->GetText() + "\n";
     m_sDestText   = m_pTABLE_RIGHT->GetText() + "\n";

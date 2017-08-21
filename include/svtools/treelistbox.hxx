@@ -229,6 +229,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     bool mbContextBmpExpanded;
     bool mbAlternatingRowColors;
     bool mbUpdateAlternatingRows;
+    bool mbQuickSearch;     // Enables type-ahead search in the check list box.
 
     SvTreeListEntry*    pHdlEntry;
 
@@ -537,8 +538,6 @@ protected:
     SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab );
     SVT_DLLPRIVATE void         ImplInitStyle();
 
-protected:
-
     void            SetupDragOrigin();
     void            EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
                         const Selection& );
@@ -765,6 +764,11 @@ public:
     virtual Size    GetOptimalSize() const override;
 
     void            SetAlternatingRowColors( const bool bEnable );
+
+    // Enables type-ahead search in the check list box.
+    void            SetQuickSearch(bool bEnable) { mbQuickSearch = bEnable; }
+
+    void            SetForceMakeVisible(bool bEnable);
 
     virtual FactoryFunction GetUITestFactory() const override;
 };

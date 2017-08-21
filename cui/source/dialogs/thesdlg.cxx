@@ -167,7 +167,8 @@ ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(vcl::Window* pParent)
     : SvxCheckListBox(pParent)
     , m_pDialog(nullptr)
 {
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL );
+    SetForceMakeVisible(true);
     SetHighlightRange();
 }
 

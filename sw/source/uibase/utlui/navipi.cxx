@@ -682,7 +682,8 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
     m_aContentTree->SetStyle(m_aContentTree->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
-                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+                             WB_CLIPCHILDREN|WB_HSCROLL );
+    m_aContentTree->SetForceMakeVisible(true);
     m_aContentTree->SetSpaceBetweenEntries(3);
     m_aContentTree->SetSelectionMode(SelectionMode::Single);
     m_aContentTree->SetDragDropMode(DragDropMode::CTRL_MOVE |

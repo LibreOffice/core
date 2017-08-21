@@ -1862,11 +1862,12 @@ void ScSearchEdit::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ScCheckListMenuWindow::setHasDates(bool bHasDates)
 {
-    // WB_QUICK_SEARCH Enables type-ahead search in the check list box.
+    // Enables type-ahead search in the check list box.
+    maChecks->SetQuickSearch(true);
     if (bHasDates)
-        maChecks->SetStyle(WB_QUICK_SEARCH | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT);
+        maChecks->SetStyle(WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT);
     else
-        maChecks->SetStyle(WB_QUICK_SEARCH | WB_HASBUTTONS);
+        maChecks->SetStyle(WB_HASBUTTONS);
 }
 
 void ScCheckListMenuWindow::initMembers()

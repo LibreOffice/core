@@ -129,7 +129,8 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
 
     m_pBtnEdit->SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
-    m_pLbSettings->SetStyle( m_pLbSettings->GetStyle()|WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
+    m_pLbSettings->SetStyle( m_pLbSettings->GetStyle()|WB_CLIPCHILDREN );
+    m_pLbSettings->SetForceMakeVisible(true);
     m_pLbSettings->SetHighlightRange();
 
     m_pLbSettings->SetSelectHdl( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );

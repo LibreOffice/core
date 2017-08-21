@@ -136,8 +136,8 @@ private:
     bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
     bool                bContextMenuHandling : 1;
     bool                bIsCellFocusEnabled : 1;
-
     bool                bAreChildrenTransient;
+    bool                mbForceMakeVisible;
 
     Point               aEditClickPos;
     Idle                aEditIdle;
@@ -336,6 +336,7 @@ public:
     sal_uInt16          GetCurrentTabPos() const { return nCurTabPos; }
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
+    void                SetForceMakeVisible(bool bEnable) { mbForceMakeVisible = bEnable; }
 };
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )

@@ -19,12 +19,13 @@
 #include "scabstdlg.hxx"
 
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeList,
-                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN |
-                         WB_FORCE_MAKEVISIBLE)
+                         WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN)
 
 ScPivotLayoutTreeList::ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits) :
     ScPivotLayoutTreeListBase(pParent, nBits)
-{}
+{
+    SetForceMakeVisible(true);
+}
 
 ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
 {}

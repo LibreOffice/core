@@ -52,6 +52,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     , aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
     , aFctSet(this, pLBView)
     , bAreChildrenTransient(true)
+    , mbForceMakeVisible (false)
     , m_pStringSorter(nullptr)
     , aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
     , aOutputSize(0, 0)
@@ -954,7 +955,7 @@ void SvImpLBox::MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop )
     if( bInView && (!bMoveToTop || pStartEntry == pEntry) )
         return;  // is already visible
 
-    if( pStartEntry || (m_nStyle & WB_FORCE_MAKEVISIBLE) )
+    if( pStartEntry || mbForceMakeVisible )
         nFlags &= (~LBoxFlags::Filling);
     if( !bInView )
     {
@@ -999,7 +1000,7 @@ void SvImpLBox::ScrollToAbsPos( long nPos )
     if( !pEntry || pEntry == pStartEntry )
         return;
 
-    if( pStartEntry || (m_nStyle & WB_FORCE_MAKEVISIBLE) )
+    if( pStartEntry || mbForceMakeVisible )
         nFlags &= (~LBoxFlags::Filling);
 
     if( pView->IsEntryVisible(pEntry) )

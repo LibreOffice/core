@@ -642,7 +642,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , xModuleManager(frame::ModuleManager::create(::comphelper::getProcessComponentContext()))
     , m_pDeletionWatcher(nullptr)
 
-    , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
+    , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT) )
     , aPreviewCheckbox( VclPtr<CheckBox>::Create( pW, WB_VCENTER ))
     , aFilterLb( VclPtr<ListBox>::Create(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
 
@@ -667,6 +667,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , m_bWantHierarchical(false)
     , bBindingUpdate(true)
 {
+    aFmtLb->SetQuickSearch(true);
     aFmtLb->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
     aFmtLb->SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb->SetHelpId( HID_TEMPLATE_FILTER );
@@ -1593,10 +1594,10 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
             aFmtLb->Hide();
 
             pTreeBox = VclPtr<StyleTreeListBox_Impl>::Create(
-
                     this, WB_HASBUTTONS | WB_HASLINES |
                     WB_BORDER | WB_TABSTOP | WB_HASLINESATROOT |
-                    WB_HASBUTTONSATROOT | WB_HIDESELECTION | WB_QUICK_SEARCH );
+                    WB_HASBUTTONSATROOT | WB_HIDESELECTION );
+            pTreeBox->SetQuickSearch(true);
             pTreeBox->SetFont( aFmtLb->GetFont() );
 
             pTreeBox->SetPosSizePixel(aFmtLb->GetPosPixel(), aFmtLb->GetSizePixel());

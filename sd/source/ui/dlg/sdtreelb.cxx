@@ -210,8 +210,8 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                            WB_HASBUTTONS | // WB_HASLINESATROOT |
                            WB_HSCROLL |
-                           WB_HASBUTTONSATROOT |
-                           WB_QUICK_SEARCH /* i31275 */ );
+                           WB_HASBUTTONSATROOT );
+    SetQuickSearch(true); /* i31275 */;
     SetNodeBitmaps(Image(BitmapEx(BMP_EXPAND)), Image(BitmapEx(BMP_COLLAPSE)));
 
     SetDragDropMode(

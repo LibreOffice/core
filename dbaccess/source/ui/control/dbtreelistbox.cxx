@@ -77,7 +77,7 @@ void DBTreeListBox::init()
 
     EnableContextMenuHandling();
 
-    SetStyle( GetStyle() | WB_QUICK_SEARCH );
+    SetQuickSearch( true );
 }
 
 DBTreeListBox::~DBTreeListBox()
