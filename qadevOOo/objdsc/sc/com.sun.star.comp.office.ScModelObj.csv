@@ -14,7 +14,6 @@
 "ScModelObj";"com::sun::star::lang::XComponent";"dispose()"
 "ScModelObj";"com::sun::star::lang::XComponent";"addEventListener()"
 "ScModelObj";"com::sun::star::lang::XComponent";"removeEventListener()"
-"ScModelObj";"com::sun::star::sheet::XSpreadsheetDocument";"getSheets()"
 "ScModelObj";"com::sun::star::util::XProtectable";"protect()"
 "ScModelObj";"com::sun::star::util::XProtectable";"unprotect()"
 "ScModelObj";"com::sun::star::util::XProtectable";"isProtected()"
