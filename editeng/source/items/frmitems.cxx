@@ -2038,7 +2038,7 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
                            SvxBoxItemLine::RIGHT, SvxBoxItemLine::BOTTOM };
 
     sal_Int8 cLine;
-    while( true )
+    while (rStrm.good())
     {
         rStrm.ReadSChar( cLine );
 
