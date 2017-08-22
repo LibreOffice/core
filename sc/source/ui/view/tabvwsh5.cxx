@@ -226,11 +226,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (!bRefMode)
                         StopRefMode();
                     else
-                    {
                         GetSelEngine()->Reset();
-                        GetFunctionSet().SetAnchorFlag(true);
-                        //  AnchorFlag, so immediately Control can appended
-                    }
                 }
                 break;
 
