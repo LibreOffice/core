@@ -55,6 +55,9 @@ private:
     DECL_LINK( SelectToolbarEntry, SvTreeListBox*, void );
     DECL_LINK( MoveHdl, Button *, void );
 
+    DECL_LINK( AddToolbarHdl, Button *, void );
+    DECL_LINK( RemoveToolbarHdl, Button *, void );
+
     DECL_LINK( SelectCategory, ListBox&, void );
 
     DECL_LINK( AddCommandHdl, Button *, void );

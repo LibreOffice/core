@@ -54,6 +54,9 @@ private:
     DECL_LINK( SelectMenu, ListBox&, void );
     DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
 
+    DECL_LINK( AddMenuHdl, Button *, void );
+    DECL_LINK( RemoveMenuHdl, Button *, void );
+
     DECL_LINK( SelectCategory, ListBox&, void );
 
     DECL_LINK( AddCommandHdl, Button *, void );
