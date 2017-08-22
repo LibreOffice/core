@@ -127,6 +127,8 @@ private:
         SECKEYPrivateKey* getPriKey( unsigned int position ) ;
 
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override ;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
+        { return css::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& issuerName, const css::uno::Sequence< sal_Int8 >& serialNumber ) override ;
 
