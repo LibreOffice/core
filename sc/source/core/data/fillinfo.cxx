@@ -49,7 +49,7 @@
 // Similar as in output.cxx
 
 static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
-                            ScDocument* pDoc, RowInfo* pRowInfo,
+                            const ScDocument* pDoc, RowInfo* pRowInfo,
                             SCCOL nX1, SCROW nY1, SCTAB nTab,
                             SCCOL& rStartX, SCROW& rStartY, SCCOL& rEndX, SCROW& rEndY )
 {
@@ -184,7 +184,7 @@ public:
     }
 };
 
-bool isRotateItemUsed(ScDocumentPool *pPool)
+bool isRotateItemUsed(const ScDocumentPool *pPool)
 {
     sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
     for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
@@ -198,7 +198,7 @@ bool isRotateItemUsed(ScDocumentPool *pPool)
     return false;
 }
 
-void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
+void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
         double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& rYExtra, SCSIZE& rArrRow, SCROW& rRow2)
 {
     sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
@@ -267,7 +267,7 @@ void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax,
     }
 }
 
-void initColWidths(RowInfo* pRowInfo, ScDocument* pDoc, double fColScale, SCTAB nTab, SCCOL nCol2, SCCOL nRotMax)
+void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, SCTAB nTab, SCCOL nCol2, SCCOL nRotMax)
 {
     for (SCCOL nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)    // Add remaining widths
     {

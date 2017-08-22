@@ -943,7 +943,7 @@ ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType ) const
     return pOutput->GetOutputRange(nType);
 }
 
-static bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static bool lcl_HasButton( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasPivotButton();
 }
@@ -3401,7 +3401,7 @@ public:
 
 }
 
-const char* ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
+const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
 {
     if (!pDPObj)
         return STR_ERR_DATAPILOTSOURCE;
@@ -3465,7 +3465,7 @@ const char* ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*
     return nullptr;
 }
 
-bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
+bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
 {
     if (!pDPObj)
         return false;
@@ -3764,7 +3764,7 @@ OUString ScDPCollection::CreateNewName() const
     return OUString();                    // should not happen
 }
 
-void ScDPCollection::FreeTable(ScDPObject* pDPObject)
+void ScDPCollection::FreeTable(const ScDPObject* pDPObject)
 {
     const ScRange& rOutRange = pDPObject->GetOutRange();
     const ScAddress& s = rOutRange.aStart;

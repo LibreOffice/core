@@ -80,7 +80,7 @@ void ScFormatEntry::endRendering()
 {
 }
 
-static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
+static bool lcl_HasRelRef( ScDocument* pDoc, const ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
     {
@@ -145,7 +145,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
 
 namespace {
 
-void start_listen_to(ScFormulaListener& rListener, ScTokenArray* pTokens, const ScRangeList& rRangeList)
+void start_listen_to(ScFormulaListener& rListener, const ScTokenArray* pTokens, const ScRangeList& rRangeList)
 {
     size_t n = rRangeList.size();
     for (size_t i = 0; i < n; ++i)

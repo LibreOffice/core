@@ -93,7 +93,7 @@ private:
     ScDocument* mpDoc;
     std::function<void()> maCallbackFunction;
 
-    void startListening(ScTokenArray* pTokens, const ScRange& rPos);
+    void startListening(const ScTokenArray* pTokens, const ScRange& rPos);
 
 public:
     explicit ScFormulaListener(ScFormulaCell* pCell);
@@ -104,7 +104,7 @@ public:
 
     bool NeedsRepaint() const;
 
-    void addTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
+    void addTokenArray(const ScTokenArray* pTokens, const ScRange& rRange);
     void stopListening();
     void setCallback(const std::function<void()>& aCallbackFunction);
 };

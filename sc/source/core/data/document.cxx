@@ -1955,7 +1955,7 @@ void ScDocument::DeleteAreaTab( const ScRange& rRange, InsertDeleteFlags nDelFla
                        nTab, nDelFlag );
 }
 
-void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
+void ScDocument::InitUndoSelected( const ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 bool bColInfo, bool bRowInfo )
 {
     if (bIsUndo)
@@ -1987,7 +1987,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
     }
 }
 
-void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
+void ScDocument::InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo, bool bRowInfo )
 {
     if (!bIsUndo)
@@ -2435,7 +2435,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
     copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedGlobalNames);
 }
 
-ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc) :
+ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, const ScDocument* pSrcDoc) :
         mpDoc(pDoc)
 {
     mpDoc->MergeNumberFormatter(pSrcDoc);
@@ -2518,7 +2518,7 @@ const ScTable* ScDocument::FetchTable( SCTAB nTab ) const
     return maTabs[nTab];
 }
 
-void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
+void ScDocument::MergeNumberFormatter(const ScDocument* pSrcDoc)
 {
     SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
     SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();

@@ -105,7 +105,7 @@ private:
                                 SCCOL nDx,SCROW nDy, bool bUpdateNoteCaptionPos );
 
     void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
-    void            ResizeLastRectFromAnchor( SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero = true );
+    void            ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero = true );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const OUString& rName );
@@ -161,11 +161,11 @@ public:
 
     /** Returns the rectangle for the passed cell address in 1/100 mm.
         @param bMergedCell  True = regards merged cells. False = use single column/row size. */
-    static tools::Rectangle GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell );
+    static tools::Rectangle GetCellRect( const ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell );
 
                     //  GetVisibleName: name for navigator etc: GetPersistName or GetName
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
-    static OUString GetVisibleName( SdrObject* pObj );
+    static OUString GetVisibleName( const SdrObject* pObj );
 
     SdrObject*      GetNamedObject( const OUString& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const;
                     // if pnCounter != NULL, the search for a name starts with this index + 1,
@@ -178,9 +178,9 @@ public:
     static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     static void             SetVisualCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     // Updates rAnchor based on position of rObj
-    static void             GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true, bool bHiddenAsZero = true );
+    static void             GetCellAnchorFromPosition( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true, bool bHiddenAsZero = true );
     static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
-    static void             UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
+    static void             UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
     static ScAnchorType     GetAnchorType( const SdrObject& );
 
     // positions for detektive lines
@@ -199,7 +199,7 @@ public:
     static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );
 
     // Image-Map
-    static ScIMapInfo* GetIMapInfo( SdrObject* pObj );
+    static ScIMapInfo* GetIMapInfo( const SdrObject* pObj );
 
     static IMapObject* GetHitIMapObject( SdrObject* pObject,
                             const Point& rWinPoint, const vcl::Window& rCmpWnd );

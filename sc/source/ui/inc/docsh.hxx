@@ -451,7 +451,7 @@ public:
 //#i97876# Spreadsheet data changes are not notified
 namespace HelperNotifyChanges
 {
-    inline ScModelObj* getMustPropagateChangesModel(ScDocShell &rDocShell)
+    inline ScModelObj* getMustPropagateChangesModel(const ScDocShell &rDocShell)
     {
         ScModelObj* pModelObj = ScModelObj::getImplementation(rDocShell.GetModel());
         if (pModelObj && pModelObj->HasChangesListeners())
@@ -467,7 +467,7 @@ namespace HelperNotifyChanges
         rModelObj.NotifyChanges(rType, rChangeRanges, rProperties);
     }
 
-    inline void NotifyIfChangesListeners(ScDocShell &rDocShell, const ScRange &rRange,
+    inline void NotifyIfChangesListeners(const ScDocShell &rDocShell, const ScRange &rRange,
         const OUString &rType = OUString("cell-change"))
     {
         if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))

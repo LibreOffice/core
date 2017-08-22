@@ -363,8 +363,8 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
-    const char* ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
-    bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    const char* ReloadCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    bool ReloadGroupsInCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
     SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;
 
     SC_DLLPUBLIC size_t GetCount() const;
@@ -388,7 +388,7 @@ public:
      */
     OUString CreateNewName() const;
 
-    void FreeTable(ScDPObject* pDPObj);
+    void FreeTable(const ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool HasTable(const ScDPObject* pDPObj) const;
 
