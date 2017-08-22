@@ -633,7 +633,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetFilterDescriptor \
     qadevOOo/tests/java/ifc/sheet/_XSheetLinkable \
     qadevOOo/tests/java/ifc/sheet/_XSheetOperation \
-    qadevOOo/tests/java/ifc/sheet/_XSheetOutline \
     qadevOOo/tests/java/ifc/sheet/_XSheetPageBreak \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheet \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetDocument \
