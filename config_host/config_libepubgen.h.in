@@ -11,6 +11,6 @@
  */
 
 // Defined if libepubgen supports setting EPUB version (devel. only)
-#undef LIBEPUBGEN_VERSION_SUPPORT
+#define LIBEPUBGEN_VERSION_SUPPORT 0
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
