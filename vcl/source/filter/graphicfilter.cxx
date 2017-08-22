@@ -1554,8 +1554,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     }
     else
     {
-        if( pContext && !bDummyContext )
-            aFilterName = pContext->GetUpperFilterName();
+        aFilterName = pContext->GetUpperFilterName();
 
         nStreamBegin = 0;
         nStatus = ERRCODE_NONE;
