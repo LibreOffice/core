@@ -377,11 +377,24 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
         }
         else
         {
-            if( rDataSeries.shouldLabelNumberFormatKeyBeDetectedFromYAxis() && m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
+            // tdf#111936: Should not consider Y axis format if it is a percent stacked chart type
+            if(!m_bIsPercentStacked && rDataSeries.shouldLabelNumberFormatKeyBeDetectedFromYAxis()
+               && m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
                 nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
             else
                 nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
+
+            if (m_bIsPercentStacked)
+            {
+                OUString nPropName = OUString(CHART_UNONAME_NUMFMT);
+                uno::Reference< beans::XPropertySet > xPointProp(rDataSeries.getPropertiesOfPoint(nPointIndex));
+                if (xPointProp.is())
+                {
+                    xPointProp->setPropertyValue(nPropName, uno::Any(nNumberFormatKey));
+                }
+            }
         }
+
         if(nNumberFormatKey<0)
             nNumberFormatKey=0;
 
@@ -1625,6 +1638,12 @@ void VSeriesPlotter::setColorScheme( const uno::Reference< XColorScheme >& xColo
 void VSeriesPlotter::setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider )
 {
     m_pExplicitCategoriesProvider = pExplicitCategoriesProvider;
+}
+
+
+void VSeriesPlotter::setIsPercentStacked(bool aIsPercentStacked)
+{
+    m_bIsPercentStacked = aIsPercentStacked;
 }
 
 sal_Int32 VDataSeriesGroup::getPointCount() const

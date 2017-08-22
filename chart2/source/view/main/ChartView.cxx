@@ -337,7 +337,7 @@ public:
      */
     void setScalesFromCooSysToPlotter();
 
-    void setNumberFormatsFromAxes();
+    void setNumberFormatsFromAxes(bool aIsPercentStacked);
     drawing::Direction3D getPreferredAspectRatio();
 
     SeriesPlottersType& getSeriesPlotterList() { return m_aSeriesPlotterList; }
@@ -618,7 +618,6 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             }
         }
     }
-
     //transport seriesnames to the coordinatesystems if needed
     if( !m_aSeriesPlotterList.empty() )
     {
@@ -743,7 +742,7 @@ void SeriesPlotterContainer::setScalesFromCooSysToPlotter()
     }
 }
 
-void SeriesPlotterContainer::setNumberFormatsFromAxes()
+void SeriesPlotterContainer::setNumberFormatsFromAxes(bool aIsPercentStacked)
 {
     //set numberformats to plotter to enable them to display the data labels in the numberformat of the axis
     for( std::unique_ptr<VSeriesPlotter>& aPlotter : m_aSeriesPlotterList )
@@ -768,6 +767,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                             sal_Int32 nNumberFormatKey(0);
                             if( xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey )
                             {
+                                pSeriesPlotter->setIsPercentStacked(aIsPercentStacked);
                                 aAxesNumberFormats.setFormat( nNumberFormatKey, nDimensionIndex, nAxisIndex );
                             }
                             else if( nDimensionIndex==0 )
@@ -1604,12 +1604,27 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace);
     }
 
+    Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
+    bool bIsPercentStacked = false;
+    bool bFound = false;
+    bool bAmbiguous = false;
+    if (xCooSysContainer.is())
+    {
+        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList(xCooSysContainer->getCoordinateSystems());
+        if (aCooSysList.hasElements())
+        {
+            auto aStackMode = DiagramHelper::getStackModeFromChartType(xChartType, bFound, bAmbiguous, aCooSysList[0]);
+            bIsPercentStacked = aStackMode == StackMode::YStackedPercent;
+        }
+    }
+
     // - prepare list of all axis and how they are used
     Date aNullDate = NumberFormatterWrapper( xNumberFormatsSupplier ).getNullDate();
     rParam.mpSeriesPlotterContainer->initAxisUsageList(aNullDate);
     rParam.mpSeriesPlotterContainer->doAutoScaling( mrChartModel );
     rParam.mpSeriesPlotterContainer->setScalesFromCooSysToPlotter();
-    rParam.mpSeriesPlotterContainer->setNumberFormatsFromAxes();
+    rParam.mpSeriesPlotterContainer->setNumberFormatsFromAxes(bIsPercentStacked);
 
     //create shapes
 
