@@ -400,6 +400,17 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
                 break;
 
+            const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
+            sal_Int32 nIncX = 1;
+            sal_Int32 nIncY = 1;
+            switch (nDir)
+            {
+                case XML_tL: nIncX =  1; nIncY =  1; break;
+                case XML_tR: nIncX = -1; nIncY =  1; break;
+                case XML_bL: nIncX =  1; nIncY = -1; break;
+                case XML_bR: nIncX = -1; nIncY = -1; break;
+            }
+
             // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
             double fSpace = 0.3;
@@ -420,8 +431,13 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
             const awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
 
-            awt::Point aStartPos = rShape->getChildren().front()->getPosition();
-            awt::Point aCurrPos = aStartPos;
+            awt::Point aCurrPos(0, 0);
+            if (nIncX == -1)
+                aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
+            if (nIncY == -1)
+                aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
+
+            sal_Int32 nStartX = aCurrPos.X;
             sal_Int32 nColIdx = 0;
 
             for (auto & aCurrShape : rShape->getChildren())
@@ -429,11 +445,11 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrShape->setPosition(aCurrPos);
                 aCurrShape->setSize(aChildSize);
                 aCurrShape->setChildSize(aChildSize);
-                aCurrPos.X += aChildSize.Width + fSpace*aChildSize.Width;
+                aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
                 if (++nColIdx == nCol)
                 {
-                    aStartPos.Y += aChildSize.Height + fSpace*aChildSize.Height;
-                    aCurrPos = aStartPos;
+                    aCurrPos.X = nStartX;
+                    aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
                     nColIdx = 0;
                 }
             }
