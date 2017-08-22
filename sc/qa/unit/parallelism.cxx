@@ -78,12 +78,6 @@ void ScParallelismTest::setUp()
 
 void ScParallelismTest::tearDown()
 {
-    if(m_xDocShell.is())
-    {
-        m_xDocShell->DoClose();
-        m_xDocShell.clear();
-    }
-
     test::BootstrapFixture::tearDown();
 }
 
