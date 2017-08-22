@@ -49,6 +49,12 @@ struct UserData
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
 };
 
+enum class UserAction
+{
+    Sign,
+    Encrypt
+};
+
 class CertificateChooser : public ModalDialog
 {
 private:
@@ -56,12 +62,16 @@ private:
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
 
+    VclPtr<FixedText>      m_pFTSign;
+    VclPtr<FixedText>      m_pFTEncrypt;
+
     VclPtr<SvSimpleTable>   m_pCertLB;
     VclPtr<PushButton>      m_pViewBtn;
     VclPtr<OKButton>        m_pOKBtn;
     VclPtr<Edit> m_pDescriptionED;
 
     bool                    mbInitialized;
+    UserAction              meAction;
 
     DECL_LINK(ViewButtonHdl, Button*, void);
     DECL_LINK(CertificateHighlightHdl, SvTreeListBox*, void );
@@ -75,7 +85,8 @@ private:
 public:
     CertificateChooser(vcl::Window* pParent,
                        css::uno::Reference< css::uno::XComponentContext> const & rxCtx,
-                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts);
+                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
+                       UserAction eAction);
     virtual ~CertificateChooser() override;
     virtual void dispose() override;
 
