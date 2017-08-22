@@ -1650,10 +1650,8 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
 
 void ScTable::GetUnprotectedCells( ScRangeList& rRangeList ) const
 {
-    for (SCCOL nCol = 0; nCol < MAXCOL; ++nCol)
-    {
-        aCol[nCol].GetUnprotectedCells(0, MAXROW, rRangeList);
-    }
+    for (auto pCol : aCol)
+        pCol->GetUnprotectedCells(0, MAXROW, rRangeList);
 }
 
 bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
@@ -2109,8 +2107,9 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
     SCROW nY1 = pRowInfo[0].nRowNo;
     SCROW nY2 = pRowInfo[nArrCount-1].nRowNo;
 
-    for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
+    for (ScColumn* pCol : GetColumnsRange(0, MAXCOL))
     {
+        SCCOL nCol = pCol->GetCol();
         if (!ColHidden(nCol))
         {
             SCSIZE nArrY = 0;
