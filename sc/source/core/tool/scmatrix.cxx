@@ -1277,7 +1277,10 @@ public:
         mnStartIndex( nCol1 * aSize.row ),
         mnStopIndex( (nCol2 + 1) * aSize.row ),
         mnResult(ResultNotSet),
-        mnIndex(0) {}
+        mnIndex(0)
+    {
+        assert( nCol1 < aSize.column && nCol2 < aSize.column);
+    }
 
     size_t getMatching() const { return mnResult; }
 
