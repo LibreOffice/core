@@ -68,6 +68,8 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLText
     , m_aShapeTypeWritten( ESCHER_ShpInst_COUNT )
     , m_bSkipwzName( false )
     , m_bUseHashMarkForType( false )
+    , m_bOverrideShapeIdGeneration( false )
+    , m_nShapeIDCounter( 0 )
 {
     mnGroupLevel = 1;
 }
@@ -206,6 +208,18 @@ bool VMLExport::IsWaterMarkShape(const OUString& rStr)
      if (rStr.isEmpty() )  return false;
 
      return rStr.match("PowerPlusWaterMarkObject") || rStr.match("WordPictureWatermark");
+}
+
+void VMLExport::OverrideShapeIDGen(bool bOverrideShapeIdGen, const OString sShapeIDPrefix)
+{
+    m_bOverrideShapeIdGeneration = bOverrideShapeIdGen;
+    if(bOverrideShapeIdGen)
+    {
+        assert(!sShapeIDPrefix.isEmpty());
+        m_sShapeIDPrefix = sShapeIDPrefix;
+    }
+    else
+        m_sShapeIDPrefix.clear();
 }
 
 static void impl_AddArrowHead( sax_fastparser::FastAttributeList *pAttrList, sal_Int32 nElement, sal_uInt32 nValue )
@@ -884,7 +898,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
 OString VMLExport::ShapeIdString( sal_uInt32 nId )
 {
-    return "shape_" + OString::number( nId );
+    if(m_bOverrideShapeIdGeneration)
+        return m_sShapeIDPrefix + OString::number( nId );
+    else
+        return "shape_" + OString::number( nId );
 }
 
 void VMLExport::AddFlipXY( )
@@ -1023,6 +1040,14 @@ OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
     }
 
     return aResult;
+}
+
+sal_uInt32 VMLExport::GenerateShapeId()
+{
+    if(!m_bOverrideShapeIdGeneration)
+        return EscherEx::GenerateShapeId();
+    else
+        return m_nShapeIDCounter++;
 }
 
 sal_Int32 VMLExport::StartShape()

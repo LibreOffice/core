@@ -86,7 +86,6 @@ public:
     }
 };
 
-#if !defined _WIN32
 class FailTest : public Test
 {
 public:
@@ -118,15 +117,13 @@ public:
         finish();
     }
 };
-#endif
+
 
 DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 {
     OUString URL = getProperty<OUString>(getShape(1), "HyperLinkURL");
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.libreoffice.org/"), URL);
 }
-
-#if !defined(_WIN32)
 
 DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", nullptr, FailTest)
 {
@@ -391,6 +388,7 @@ DECLARE_OOXMLIMPORT_TEST(testN775899, "n775899.docx")
 DECLARE_OOXMLIMPORT_TEST(testN777345, "n777345.docx")
 {
 #if !defined(MACOSX)
+#if !defined(_WIN32)
     // The problem was that v:imagedata inside v:rect was ignored.
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
@@ -398,6 +396,7 @@ DECLARE_OOXMLIMPORT_TEST(testN777345, "n777345.docx")
     // If this changes later, feel free to update it, but make sure it's not
     // the checksum of a white/transparent placeholder rectangle.
     CPPUNIT_ASSERT_EQUAL(BitmapChecksum(SAL_CONST_UINT64(18203404956065762943)), aGraphic.GetChecksum());
+#endif
 #endif
 }
 
@@ -553,7 +552,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-5741), xShape->getPosition().Y);
 
 #if ! TEST_FONTS_MISSING
     xShape.set(xGroupShape->getByIndex(4), uno::UNO_QUERY);
@@ -1061,8 +1060,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf49073, "tdf49073.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_LEFT)   ,getProperty<sal_Int16>(getParagraph(5)->getStart(),"RubyAdjust"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_RIGHT)  ,getProperty<sal_Int16>(getParagraph(6)->getStart(),"RubyAdjust"));
 }
-
-#endif
 
 DECLARE_OOXMLIMPORT_TEST(testTdf85232, "tdf85232.docx")
 {

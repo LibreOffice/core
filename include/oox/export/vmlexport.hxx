@@ -111,6 +111,17 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Use '#' mark for type attribute (check Type Attribute of VML shape in OOXML documentation)
     bool m_bUseHashMarkForType;
 
+    /** There is a shapeid generation mechanism in EscherEx, but it does not seem to work
+    *   so override the existing behavior to get actually unique ids.
+    */
+    bool m_bOverrideShapeIdGeneration;
+
+    /// Prefix for overriden shape id generation (used if m_bOverrideShapeIdGeneration is true)
+    OString m_sShapeIDPrefix;
+
+    /// Counter for generating shape ids (used if m_bOverrideShapeIdGeneration is true)
+    sal_uInt64 m_nShapeIDCounter;
+
 public:
                         VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr);
     virtual             ~VMLExport() override;
@@ -130,8 +141,9 @@ public:
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
 
-    void    SetSkipwzName() { m_bSkipwzName = true; }
-    void    SetHashMarkForType() { m_bUseHashMarkForType = true; }
+    void    SetSkipwzName(bool bSkipwzName) { m_bSkipwzName = bSkipwzName; }
+    void    SetHashMarkForType(bool bUseHashMarkForType) { m_bUseHashMarkForType = bUseHashMarkForType; }
+    void    OverrideShapeIDGen(bool bOverrideShapeIdGeneration, const OString sShapeIDPrefix = OString());
 protected:
     /// Add an attribute to the generated <v:shape/> element.
     ///
@@ -141,6 +153,9 @@ protected:
 
     using EscherEx::StartShape;
     using EscherEx::EndShape;
+
+    /// Override shape ID generation when m_bOverrideShapeIdGeneration is set to true
+    virtual sal_uInt32   GenerateShapeId() override;
 
     /// Start the shape for which we just collected the information.
     ///
@@ -165,7 +180,7 @@ private:
 
 private:
     /// Create an OString representing the id from a numerical id.
-    static OString ShapeIdString( sal_uInt32 nId );
+    OString ShapeIdString( sal_uInt32 nId );
 
     /// Add flip X and\or flip Y
     void AddFlipXY( );
