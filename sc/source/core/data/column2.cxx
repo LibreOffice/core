@@ -2930,6 +2930,29 @@ void ScColumn::CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread,
     }
 }
 
+void ScColumn::HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen )
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    sc::CellStoreType::iterator it = aPos.first;
+    if (it->type != sc::element_type_formula)
+        // This is not a formula block.
+        return;
+
+    size_t nBlockLen = it->size - aPos.second;
+    if (nBlockLen < nLen)
+        // Length is longer than the length of formula cells. Not good.
+        return;
+
+    sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
+    std::advance(itCell, aPos.second);
+
+    for (size_t i = 0; i < nLen; ++i, ++itCell)
+    {
+        ScFormulaCell& rCell = **itCell;
+        rCell.HandleStuffAfterParallelCalculation();
+    }
+}
+
 void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
 {
     ApplyAttr(nRow, SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
