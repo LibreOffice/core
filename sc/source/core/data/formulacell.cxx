@@ -1724,7 +1724,24 @@ void ScFormulaCell::Interpret()
 #endif
 }
 
-void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUpdateProgress )
+namespace {
+class StackCleaner
+{
+    ScDocument*     pDoc;
+    ScInterpreter*  pInt;
+    public:
+    StackCleaner( ScDocument* pD, ScInterpreter* pI )
+        : pDoc(pD), pInt(pI)
+        {}
+    ~StackCleaner()
+    {
+        delete pInt;
+        pDoc->DecInterpretLevel();
+    }
+};
+}
+
+void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bSingleThreaded )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
@@ -1751,20 +1768,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUp
 
     if( pCode->GetCodeLen() && pDocument )
     {
-        class StackCleaner
-        {
-            ScDocument*     pDoc;
-            ScInterpreter*  pInt;
-            public:
-            StackCleaner( ScDocument* pD, ScInterpreter* pI )
-                : pDoc(pD), pInt(pI)
-                {}
-            ~StackCleaner()
-            {
-                delete pInt;
-                pDoc->DecInterpretLevel();
-            }
-        };
         pDocument->IncInterpretLevel();
         ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
         StackCleaner aStackCleaner( pDocument, pInterpreter);
@@ -2085,7 +2088,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUp
             // a changed result must still reset the stream flag
             pDocument->SetStreamValid(aPos.Tab(), false, true);
         }
-        if ( !pCode->IsRecalcModeAlways() )
+        if ( bSingleThreaded && !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
         //  FORCED cells also immediately tested for validity (start macro possibly)
@@ -2104,7 +2107,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUp
         }
 
         // Reschedule slows the whole thing down considerably, thus only execute on percent change
-        if (bUpdateProgress)
+        if (bSingleThreaded)
         {
             ScProgress *pProgress = ScProgress::GetInterpretProgress();
             if (pProgress && pProgress->Enabled())
@@ -2112,13 +2115,59 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUp
                 pProgress->SetStateCountDownOnPercent(
                     pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
             }
+
+            switch (pInterpreter->GetVolatileType())
+            {
+                case ScInterpreter::VOLATILE:
+                    // Volatile via built-in volatile functions.  No actions needed.
+                break;
+                case ScInterpreter::VOLATILE_MACRO:
+                    // The formula contains a volatile macro.
+                    pCode->SetExclusiveRecalcModeAlways();
+                    pDocument->PutInFormulaTree(this);
+                    StartListeningTo(pDocument);
+                break;
+                case ScInterpreter::NOT_VOLATILE:
+                    if (pCode->IsRecalcModeAlways())
+                    {
+                        // The formula was previously volatile, but no more.
+                        EndListeningTo(pDocument);
+                        pCode->SetExclusiveRecalcModeNormal();
+                    }
+                    else
+                    {
+                        // non-volatile formula.  End listening to the area in case
+                        // it's listening due to macro module change.
+                        pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
+                    }
+                    pDocument->RemoveFromFormulaTree(this);
+                break;
+                default:
+                    ;
+            }
         }
+    }
+    else
+    {
+        // Cells with compiler errors should not be marked dirty forever
+        OSL_ENSURE( pCode->GetCodeError() != FormulaError::NONE, "no RPN code and no errors ?!?!" );
+        ResetDirty();
+    }
+}
+
+void ScFormulaCell::HandleStuffAfterParallelCalculation()
+{
+    if( pCode->GetCodeLen() && pDocument )
+    {
+        if ( !pCode->IsRecalcModeAlways() )
+            pDocument->RemoveFromFormulaTree( this );
+
+        pDocument->IncInterpretLevel();
+        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
+        StackCleaner aStackCleaner( pDocument, pInterpreter);
 
         switch (pInterpreter->GetVolatileType())
         {
-            case ScInterpreter::VOLATILE:
-                // Volatile via built-in volatile functions.  No actions needed.
-            break;
             case ScInterpreter::VOLATILE_MACRO:
                 // The formula contains a volatile macro.
                 pCode->SetExclusiveRecalcModeAlways();
@@ -2143,12 +2192,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bUp
             default:
                 ;
         }
-    }
-    else
-    {
-        // Cells with compiler errors should not be marked dirty forever
-        OSL_ENSURE( pCode->GetCodeError() != FormulaError::NONE, "no RPN code and no errors ?!?!" );
-        ResetDirty();
     }
 }
 
@@ -4255,26 +4298,32 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
-        ScMutationGuard aGuard(pDocument, ScMutationGuardFlags::CORE);
+        {
+            ScMutationGuard aGuard(pDocument, ScMutationGuardFlags::CORE);
 
-        // Start nThreadCount new threads
-        std::vector<int> vResult(nThreadCount);
-        std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
-        for (int i = 0; i < nThreadCount; ++i)
-        {
-            rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, mxGroup->mpTopCell->aPos, mxGroup->mnLength, vResult));
-        }
-        SAL_INFO("sc.threaded", "Joining threads");
-        rThreadPool.waitUntilDone(aTag);
-        SAL_INFO("sc.threaded", "Done");
-        for (int i = 0; i < nThreadCount; ++i)
-        {
-            if (!vResult[i])
+            // Start nThreadCount new threads
+            std::vector<int> vResult(nThreadCount);
+            std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+            for (int i = 0; i < nThreadCount; ++i)
             {
-                SAL_INFO("sc.threaded", "Thread " << i << " failed");
-                result = false;
+                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, mxGroup->mpTopCell->aPos, mxGroup->mnLength, vResult));
+            }
+
+            SAL_INFO("sc.threaded", "Joining threads");
+            rThreadPool.waitUntilDone(aTag);
+            SAL_INFO("sc.threaded", "Done");
+
+            for (int i = 0; i < nThreadCount; ++i)
+            {
+                if (!vResult[i])
+                {
+                    SAL_INFO("sc.threaded", "Thread " << i << " failed");
+                    result = false;
+                }
             }
         }
+
+        pDocument->HandleStuffAfterParallelCalculation(mxGroup->mpTopCell->aPos, mxGroup->mnLength);
 
         return result;
     }
