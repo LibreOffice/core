@@ -11,6 +11,8 @@
 
 #include "EPUBExportFilter.hxx"
 
+#include "config_libepubgen.h"
+
 #include <libepubgen/EPUBTextGenerator.h>
 
 #include <com/sun/star/lang/XInitialization.hpp>
