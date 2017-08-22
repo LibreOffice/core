@@ -67,6 +67,10 @@ public:
         const OUString& asciiCertificate ) override;
 
     GpgME::Context& getGpgContext() { return *m_ctx.get(); }
+    virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override;
+
+private:
+    css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > getCertificatesImpl( bool bPrivateOnly );
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX

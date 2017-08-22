@@ -99,6 +99,13 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
      */
     string getSecurityEnvironmentInformation ( );
 
+    /**
+     * List all certificates, private (as returned by getPersonalCertificates) as well as those of other people/orgas
+     *
+     * @since LibreOffice 6.0
+     */
+    sequence< com::sun::star::security::XCertificate > getAllCertificates() raises( com::sun::star::uno::SecurityException ) ;
+
 } ;
 
 } ; } ; } ; } ; } ;
