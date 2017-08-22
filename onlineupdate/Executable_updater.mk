@@ -80,7 +80,6 @@ $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/updater/archivereader \
 	onlineupdate/source/update/updater/bspatch \
 	onlineupdate/source/update/updater/progressui_gtk \
-	onlineupdate/source/update/updater/progressui_null \
 	onlineupdate/source/update/updater/updater \
 	$(if $(filter WNT,$(OS)),\
 		onlineupdate/source/update/updater/loaddlls \

@@ -1,5 +1,10 @@
 #include "progressui.h"
+
+#if defined(_WIN32)
 #include "progressui_win.cxx"
+#else
+#include "progressui_gtk.cxx"
+#endif
 
 #include <thread>
 #include <chrono>
@@ -15,7 +20,7 @@ void func()
     QuitProgressUI();
 }
 
-int wmain(int argc, wchar_t** argv)
+int NS_main(int argc, NS_tchar** argv)
 {
     InitProgressUI(&argc, &argv);
     std::thread a(func);

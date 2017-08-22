@@ -11,6 +11,7 @@
 #include "progressui.h"
 #include "readstrings.h"
 #include "errors.h"
+#include <string.h>
 
 #define TIMER_INTERVAL 100
 
@@ -76,7 +77,10 @@ ShowProgressUI()
 
     StringTable strings;
     if (ReadStrings(ini_path, &strings) != OK)
-        return -1;
+    {
+        strcpy(strings.title, "LibreOffice Updater");
+        strcpy(strings.info, "This program is updating your LibreOffice installation.");
+    }
 
     sWin = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     if (!sWin)
