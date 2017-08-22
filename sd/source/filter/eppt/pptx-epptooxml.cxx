@@ -1241,6 +1241,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
             break;
         case EffectNodeType::MAIN_SEQUENCE:
             pNodeType = "mainSeq";
+            pDuration = "indefinite";
             break;
         case EffectNodeType::ON_CLICK:
             pNodeType = "clickEffect";
@@ -1314,7 +1315,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart(const FSHelperPtr& pFS
         switch (nFill)
         {
         case AnimationFill::FREEZE:
-            pFill = "freeze";
+            pFill = "hold";
             break;
         case AnimationFill::HOLD:
             pFill = "hold";
