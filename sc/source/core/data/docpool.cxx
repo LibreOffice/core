@@ -354,7 +354,7 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
     return rNew;
 }
 
-void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
+void ScDocumentPool::StyleDeleted( const ScStyleSheet* pStyle )
 {
     sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)

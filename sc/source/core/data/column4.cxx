@@ -641,7 +641,7 @@ class NoteCaptionCreator
 public:
     NoteCaptionCreator( SCTAB nTab, SCCOL nCol ) : maPos(nCol,0,nTab) {}
 
-    void operator() ( size_t nRow, ScPostIt* p )
+    void operator() ( size_t nRow, const ScPostIt* p )
     {
         maPos.SetRow(nRow);
         p->GetOrCreateCaption(maPos);

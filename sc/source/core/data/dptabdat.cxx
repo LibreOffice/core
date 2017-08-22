@@ -42,7 +42,7 @@ ScDPTableData::CalcInfo::CalcInfo() :
 {
 }
 
-ScDPTableData::ScDPTableData(ScDocument* pDoc) :
+ScDPTableData::ScDPTableData(const ScDocument* pDoc) :
     mpDoc(pDoc)
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid

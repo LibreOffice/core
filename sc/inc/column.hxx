@@ -171,7 +171,7 @@ friend class sc::CellStoreEvent;
     bool ParseString(
         ScCellValue& rCell,
         SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
-        ScSetStringParam* pParam );
+        const ScSetStringParam* pParam );
 
 public:
 
@@ -296,7 +296,7 @@ public:
     ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
     void UpdateSelectionFunction(
-        const ScRangeList& rRanges, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows );
+        const ScRangeList& rRanges, ScFunctionData& rData, const ScFlatBoolRowSegments& rHiddenRows );
 
     void CopyToColumn(
         sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,

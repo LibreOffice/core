@@ -880,7 +880,7 @@ public:
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool                               IsInExternalReferenceMarking() const;
     void                               MarkUsedExternalReferences();
-    bool                               MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos );
+    bool                               MarkUsedExternalReferences( const ScTokenArray& rArr, const ScAddress& rPos );
 
     /** Returns the pool containing external formula parsers. Creates the pool
         on first call. */
@@ -1210,7 +1210,7 @@ public:
     SfxItemSet*          GetPreviewFont() { return pPreviewFont; }
     SfxItemSet*          GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
     const ScMarkData&    GetPreviewSelection() const { return maPreviewSelection; }
-    void                 SetPreviewSelection( ScMarkData& rSel );
+    void                 SetPreviewSelection( const ScMarkData& rSel );
     ScStyleSheet*        GetPreviewCellStyle() { return pPreviewCellStyle; }
     ScStyleSheet*        GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void                 SetPreviewCellStyle( ScStyleSheet* pStyle ) { pPreviewCellStyle = pStyle; }
@@ -1509,11 +1509,11 @@ public:
 
     void            TransliterateText( const ScMarkData& rMultiMark, TransliterationFlags nType );
 
-    SC_DLLPUBLIC void           InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
+    SC_DLLPUBLIC void           InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo = false, bool bRowInfo = false );
     void            AddUndoTab( SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo = false, bool bRowInfo = false );
-    SC_DLLPUBLIC void           InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
+    SC_DLLPUBLIC void           InitUndoSelected( const ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 bool bColInfo = false, bool bRowInfo = false );
 
                     //  don't use anymore:
@@ -1868,7 +1868,7 @@ public:
     void                         UpdStlShtPtrsFrmNms();
     void                         StylesToNames();
 
-    SC_DLLPUBLIC void            CopyStdStylesFrom( ScDocument* pSrcDoc );
+    SC_DLLPUBLIC void            CopyStdStylesFrom( const ScDocument* pSrcDoc );
 
     sal_uLong                    GetSrcVersion() const   { return nSrcVer; }
 
@@ -1929,7 +1929,7 @@ public:
 
     void            ReplaceStyle( const SvxSearchItem& rSearchItem,
                                   SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                  ScMarkData& rMark);
+                                  const ScMarkData& rMark);
 
     void            InvalidateTextWidth( const OUString& rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
@@ -2039,7 +2039,7 @@ private:
     void                FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW nOtherEndRow,
                                         bool bColumns,
                                         ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
-                                        SCCOLROW nEndCol, SCCOLROW* pTranslate,
+                                        SCCOLROW nEndCol, const SCCOLROW* pTranslate,
                                         ScProgress* pProgress, sal_uLong nProAdd );
 
     DECL_LINK(TrackTimeHdl, Timer *, void);
@@ -2104,8 +2104,8 @@ public:
     bool                IsTrackFormulasPending() const { return mbTrackFormulasPending; }
     void                FinalTrackFormulas( SfxHintId nHintId );
     bool                IsFinalTrackFormulas() const { return mbFinalTrackFormulas; }
-    bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
-    bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;
+    bool                IsInFormulaTree( const ScFormulaCell* pCell ) const;
+    bool                IsInFormulaTrack( const ScFormulaCell* pCell ) const;
     HardRecalcState     GetHardRecalcState() { return eHardRecalcState; }
     void                SetHardRecalcState( HardRecalcState eVal ) { eHardRecalcState = eVal; }
     void                StartAllListeners();
@@ -2236,7 +2236,7 @@ public:
 
     void              InvalidateStyleSheetUsage() { bStyleSheetUsageInvalid = true; }
     void SC_DLLPUBLIC GetSortParam( ScSortParam& rParam, SCTAB nTab );
-    void SC_DLLPUBLIC SetSortParam( ScSortParam& rParam, SCTAB nTab );
+    void SC_DLLPUBLIC SetSortParam( const ScSortParam& rParam, SCTAB nTab );
 
     void SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
@@ -2331,7 +2331,7 @@ private:
     class NumFmtMergeHandler
     {
     public:
-        explicit NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc);
+        explicit NumFmtMergeHandler(ScDocument* pDoc, const ScDocument* pSrcDoc);
         ~NumFmtMergeHandler();
 
     private:
@@ -2342,7 +2342,7 @@ private:
     ScTable* FetchTable( SCTAB nTab );
     const ScTable* FetchTable( SCTAB nTab ) const;
 
-    void    MergeNumberFormatter(ScDocument* pSrcDoc);
+    void    MergeNumberFormatter(const ScDocument* pSrcDoc);
 
     void    ImplCreateOptions(); // Suggestion: switch to on-demand?
     void    ImplDeleteOptions();
@@ -2373,7 +2373,7 @@ private:
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     void   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
 
-    void SharePooledResources( ScDocument* pSrcDoc );
+    void SharePooledResources( const ScDocument* pSrcDoc );
 
     void EndListeningIntersectedGroup(
         sc::EndListeningContext& rCxt, const ScAddress& rPos, std::vector<ScAddress>* pGroupPos );

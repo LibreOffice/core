@@ -471,7 +471,7 @@ bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager
 
 }
 
-bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos )
+bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScAddress& rPos )
 {
     if (!rArr.GetLen())
         return false;
@@ -534,7 +534,7 @@ bool ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
 
 void ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               SCCOL nCol, SCROW nRow, SCTAB nTab,
-                              ScMarkData& rMark)
+                              const ScMarkData& rMark)
 {
     if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, true/*bIsUndoP*/);
@@ -1007,7 +1007,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
 
 void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW nOtherEndRow,
                             bool bColumns, ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
-                            SCCOLROW nEndCol, SCCOLROW* pTranslate, ScProgress* pProgress, sal_uLong nProAdd )
+                            SCCOLROW nEndCol, const SCCOLROW* pTranslate, ScProgress* pProgress, sal_uLong nProAdd )
 {
     //  bColumns=true: rows are columns and vice versa
 

@@ -96,7 +96,7 @@ public:
 
     ScDPTableData(const ScDPTableData&) = delete;
     const ScDPTableData& operator=(const ScDPTableData&) = delete;
-    ScDPTableData(ScDocument* pDoc);
+    ScDPTableData(const ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
     OUString GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;

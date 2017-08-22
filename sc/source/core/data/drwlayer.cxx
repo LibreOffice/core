@@ -611,7 +611,7 @@ namespace
         return aRect;
     }
 
-    Point lcl_calcAvailableDiff(ScDocument &rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const Point &aWantedDiff)
+    Point lcl_calcAvailableDiff(const ScDocument &rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const Point &aWantedDiff)
     {
         Point aAvailableDiff(aWantedDiff);
         long nHeight = static_cast<long>(rDoc.GetRowHeight( nRow, nTab ) * HMM_PER_TWIPS);
@@ -631,7 +631,7 @@ namespace
             static_cast<long>(aRange.getMaxX()), static_cast<long>(aRange.getMaxY()));
     }
 }
-void ScDrawLayer::ResizeLastRectFromAnchor( SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero )
+void ScDrawLayer::ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero )
 {
     rData.maLastRect = ( bUseLogicRect ? pObj->GetLogicRect() : pObj->GetSnapRect() );
     SCCOL nCol1 = rData.maStart.Col();
@@ -1697,7 +1697,7 @@ void ScDrawLayer::MirrorRectRTL( tools::Rectangle& rRect )
     rRect.Right() = -nTemp;
 }
 
-tools::Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell )
+tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell )
 {
     tools::Rectangle aCellRect;
     OSL_ENSURE( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ), "ScDrawLayer::GetCellRect - invalid cell address" );
@@ -1738,7 +1738,7 @@ tools::Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rP
     return aCellRect;
 }
 
-OUString ScDrawLayer::GetVisibleName( SdrObject* pObj )
+OUString ScDrawLayer::GetVisibleName( const SdrObject* pObj )
 {
     OUString aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
@@ -1749,19 +1749,19 @@ OUString ScDrawLayer::GetVisibleName( SdrObject* pObj )
         //  in the Navigator at all.
 
         if ( aName.isEmpty() )
-            aName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
+            aName = static_cast<const SdrOle2Obj*>(pObj)->GetPersistName();
     }
     return aName;
 }
 
-inline bool IsNamedObject( SdrObject* pObj, const OUString& rName )
+inline bool IsNamedObject( const SdrObject* pObj, const OUString& rName )
 {
     //  sal_True if rName is the object's Name or PersistName
     //  (used to find a named object)
 
     return ( pObj->GetName() == rName ||
             ( pObj->GetObjIdentifier() == OBJ_OLE2 &&
-              static_cast<SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
+              static_cast<const SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }
 
 SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
@@ -1908,7 +1908,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     }
 }
 
-void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect, bool bHiddenAsZero )
+void ScDrawLayer::GetCellAnchorFromPosition( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect, bool bHiddenAsZero )
 {
     tools::Rectangle aObjRect( bUseLogicRect ? rObj.GetLogicRect() : rObj.GetSnapRect() );
     ScRange aRange = rDoc.GetRange( nTab, aObjRect, bHiddenAsZero );
@@ -1935,7 +1935,7 @@ void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAn
 
 }
 
-void ScDrawLayer::UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
+void ScDrawLayer::UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect )
 {
     tools::Rectangle aObjRect(bUseLogicRect ? rObj.GetLogicRect() : rObj.GetSnapRect());
     ScRange aRange = rDoc.GetRange( nTab, aObjRect );
@@ -2031,7 +2031,7 @@ ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
     return (pData && pData->meType == ScDrawObjData::CellNote) ? pData : nullptr;
 }
 
-ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )
+ScIMapInfo* ScDrawLayer::GetIMapInfo( const SdrObject* pObj )
 {
     return static_cast<ScIMapInfo*>(GetFirstUserDataOfType(pObj, SC_UD_IMAPDATA));
 }

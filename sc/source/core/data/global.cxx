@@ -502,7 +502,7 @@ void ScGlobal::SetClipDocName( const OUString& rNew )
     *pStrClipDocName = rNew;
 }
 
-void ScGlobal::InitTextHeight(SfxItemPool* pPool)
+void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
 {
     if (!pPool)
     {
@@ -953,7 +953,7 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( SvtScriptType nScriptType, sal_uInt16 n
     return nWhich;
 }
 
-void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
+void ScGlobal::AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatter )
 {
     OSL_ENSURE( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SfxItemState::DEFAULT,
         "ScGlobal::AddLanguage - language already added");

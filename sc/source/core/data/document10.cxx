@@ -334,7 +334,7 @@ void ScDocument::CompileHybridFormula()
     }
 }
 
-void ScDocument::SharePooledResources( ScDocument* pSrcDoc )
+void ScDocument::SharePooledResources( const ScDocument* pSrcDoc )
 {
     xPoolHelper = pSrcDoc->xPoolHelper;
     mpCellStringPool = pSrcDoc->mpCellStringPool;

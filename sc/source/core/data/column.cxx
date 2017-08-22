@@ -3350,7 +3350,7 @@ public:
     RemoveEmptyBroadcasterHandler( ScDocument& rDoc, SCCOL nCol, SCTAB nTab ) :
         maSet(false), mrDoc(rDoc), mnCol(nCol), mnTab(nTab) {}
 
-    void operator() ( size_t nRow, SvtBroadcaster* pBroadcaster )
+    void operator() ( size_t nRow, const SvtBroadcaster* pBroadcaster )
     {
         if (!pBroadcaster->HasListeners())
             maSet.set(mnTab, mnCol, nRow, true);

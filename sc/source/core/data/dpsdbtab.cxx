@@ -62,7 +62,7 @@ const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pD
 }
 
 ScDatabaseDPData::ScDatabaseDPData(
-    ScDocument* pDoc, const ScDPCache& rCache) :
+    const ScDocument* pDoc, const ScDPCache& rCache) :
     ScDPTableData(pDoc),
     aCacheTable(rCache)
 {

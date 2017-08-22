@@ -36,7 +36,7 @@ ScFormulaListener::ScFormulaListener(ScDocument* pDoc):
 {
 }
 
-void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange)
+void ScFormulaListener::startListening(const ScTokenArray* pArr, const ScRange& rRange)
 {
     if (!pArr || mpDoc->IsClipOrUndo())
         return;
@@ -88,7 +88,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
     }
 }
 
-void ScFormulaListener::addTokenArray(ScTokenArray* pArray, const ScRange& rRange)
+void ScFormulaListener::addTokenArray(const ScTokenArray* pArray, const ScRange& rRange)
 {
     startListening(pArray, rRange);
 }
@@ -231,7 +231,7 @@ void ScColorScaleEntry::SetValue(double nValue)
     mpCell.reset();
 }
 
-void ScColorScaleEntry::UpdateReference( sc::RefUpdateContext& rCxt )
+void ScColorScaleEntry::UpdateReference( const sc::RefUpdateContext& rCxt )
 {
     if (!mpCell)
         return;
@@ -499,7 +499,7 @@ double GetPercentile( const std::vector<double>& rArray, double fPercentile )
 
 }
 
-double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleEntries::const_iterator& itr) const
+double ScColorScaleFormat::CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& itr) const
 {
     switch((*itr)->GetType())
     {
@@ -1109,7 +1109,7 @@ double ScIconSetFormat::GetMaxValue() const
     }
 }
 
-double ScIconSetFormat::CalcValue(double nMin, double nMax, ScIconSetFormat::const_iterator& itr) const
+double ScIconSetFormat::CalcValue(double nMin, double nMax, const ScIconSetFormat::const_iterator& itr) const
 {
     switch ((*itr)->GetType())
     {
