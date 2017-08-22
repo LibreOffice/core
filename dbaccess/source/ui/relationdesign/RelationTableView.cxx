@@ -323,7 +323,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, DBA_RES( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
+    ScopedVclPtrInstance< OSQLWarningBox > aDlg( this, DBA_RES( STR_QUERY_REL_DELETE_WINDOW ), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes );
     if ( m_bInRemove || aDlg->Execute() == RET_YES )
     {
         m_pView->getController().ClearUndoManager();
@@ -341,7 +341,7 @@ void ORelationTableView::lookForUiActivities()
     {
         OUString sTitle(DBA_RES(STR_RELATIONDESIGN));
         sTitle = sTitle.copy(3);
-        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,DBA_RES(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg(this,DBA_RES(STR_QUERY_REL_EDIT_RELATION),OUString(),MessBoxStyle::NONE);
         aDlg->SetText(sTitle);
         aDlg->RemoveButton(aDlg->GetButtonId(0));
         aDlg->AddButton( DBA_RES(STR_QUERY_REL_EDIT), RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus);

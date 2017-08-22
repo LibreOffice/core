@@ -3186,7 +3186,7 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SfxEventHintId::PrepareCloseDoc:
                 {
-                    ScopedVclPtrInstance<WarningBox> aBox( ScDocShell::GetActiveDialogParent(), WinBits( WB_OK ),
+                    ScopedVclPtrInstance<WarningBox> aBox( ScDocShell::GetActiveDialogParent(), MessBoxStyle::Ok,
                                         ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) );
                     aBox->Execute();
                 }

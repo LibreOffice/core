@@ -1073,7 +1073,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
             ScopedVclPtrInstance<QueryBox> aBox( GetViewData().GetDialogParent(),
-                            WinBits(WB_YES_NO | WB_DEF_NO), aMessage );
+                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo, aMessage );
             if ( aBox->Execute() != RET_YES )
             {
                 return false;

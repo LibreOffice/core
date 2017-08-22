@@ -4143,7 +4143,7 @@ void AutoRecovery::impl_showFullDiscError()
         sBackupPath = sBackupURL;
 
     ScopedVclPtrInstance<ErrorBox> dlgError(
-        nullptr, WB_OK,
+        nullptr, MessBoxStyle::Ok,
         sMsg.replaceAll("%PATH", sBackupPath));
     dlgError->SetButtonText(dlgError->GetButtonId(0), sBtn);
     dlgError->Execute();

@@ -911,7 +911,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     if (xConfigItem->GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(xConfigItem->GetMailAddress()) )
     {
-        ScopedVclPtrInstance< QueryBox > aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
+        ScopedVclPtrInstance< QueryBox > aQuery(pButton, MessBoxStyle::YesNoCancel, m_sConfigureMail);
         sal_uInt16 nRet = aQuery->Execute();
         if (RET_YES == nRet )
         {

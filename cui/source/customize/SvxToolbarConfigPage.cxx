@@ -707,7 +707,7 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
-    ScopedVclPtrInstance< QueryBox > qbox( this, WB_YES_NO, label );
+    ScopedVclPtrInstance< QueryBox > qbox( this, MessBoxStyle::YesNo, label );
 
     return qbox->Execute();
 }

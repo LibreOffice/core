@@ -27,7 +27,7 @@
 #include <memory>
 
 #define ERRORBOX(s) ScopedVclPtrInstance<MessageDialog>(this, s)->Execute()
-#define QUERYBOX(m) ScopedVclPtrInstance<QueryBox>(this,WinBits(WB_YES_NO|WB_DEF_YES),m)->Execute()
+#define QUERYBOX(m) ScopedVclPtrInstance<QueryBox>(this, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, m)->Execute()
 
 const sal_uLong nEntryDataCol = 0;
 const sal_uLong nEntryDataRow = 1;

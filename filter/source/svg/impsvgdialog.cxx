@@ -38,7 +38,7 @@ ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
     maCBTinyProfile( VclPtr<CheckBox>::Create(this) ),
     maCBEmbedFonts( VclPtr<CheckBox>::Create(this) ),
     maCBUseNativeDecoration( VclPtr<CheckBox>::Create(this) ),
-    maBTOK( VclPtr<OKButton>::Create(this, WB_DEF_OK) ),
+    maBTOK( VclPtr<OKButton>::Create(this, 0) ),
     maBTCancel( VclPtr<CancelButton>::Create(this) ),
     maBTHelp( VclPtr<HelpButton>::Create(this) ),
     maConfigItem( SVG_EXPORTFILTER_CONFIGPATH, &rFilterData ),

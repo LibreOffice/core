@@ -3181,7 +3181,7 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
 IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
 {
     OUString message = CuiResId( RID_SVXSTR_DELETE_ICON_CONFIRM );
-    if (ScopedVclPtrInstance<WarningBox>(this, WinBits(WB_OK_CANCEL), message)->Execute() == RET_OK)
+    if (ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::OkCancel, message)->Execute() == RET_OK)
     {
         ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
 
@@ -3467,7 +3467,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
-MessBox( pWindow, WB_DEF_YES, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+MessBox( pWindow, MessBoxStyle::DefaultYes, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 
 {
     SetImage( WarningBox::GetStandardImage() );
@@ -3481,7 +3481,7 @@ MessBox( pWindow, WB_DEF_YES, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiR
 
 SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage )
-    : MessBox( pWindow, WB_YES_NO_CANCEL, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+    : MessBox( pWindow, MessBoxStyle::YesNoCancel, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ));

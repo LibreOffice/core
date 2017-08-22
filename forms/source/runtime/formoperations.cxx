@@ -434,7 +434,7 @@ namespace frm
             if(needConfirmation)
             {
                 // TODO: shouldn't this be done with an interaction handler?
-                ScopedVclPtrInstance< QueryBox > aQuery( nullptr, WB_YES_NO_CANCEL | WB_DEF_YES, FRM_RES_STRING( RID_STR_QUERY_SAVE_MODIFIED_ROW ) );
+                ScopedVclPtrInstance< QueryBox > aQuery( nullptr, MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes, FRM_RES_STRING( RID_STR_QUERY_SAVE_MODIFIED_ROW ) );
                 switch ( aQuery->Execute() )
                 {
                 case RET_NO:

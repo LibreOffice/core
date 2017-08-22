@@ -1283,7 +1283,7 @@ public:
                 {
                     ScopedVclPtrInstance<WarningBox> aWarnBox(
                         pViewShell->GetActiveWindow(),
-                        (WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
+                        MessBoxStyle::OkCancel | MessBoxStyle::DefaultCancel,
                         SdResId(STR_WARN_PRINTFORMAT_FAILURE));
                     if (aWarnBox->Execute() != RET_OK)
                         return;

@@ -479,7 +479,7 @@ bool EditorWindow::ImpCanModify()
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stopped
-        if (ScopedVclPtrInstance<QueryBox>(nullptr, WB_OK_CANCEL, IDEResId(RID_STR_WILLSTOPPRG))->Execute() == RET_OK)
+        if (ScopedVclPtrInstance<QueryBox>(nullptr, MessBoxStyle::OkCancel, IDEResId(RID_STR_WILLSTOPPRG))->Execute() == RET_OK)
         {
             rModulWindow.GetBasicStatus().bIsRunning = false;
             StopBasic();

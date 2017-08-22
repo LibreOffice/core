@@ -109,7 +109,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
-        ScopedVclPtrInstance< WarningBox > aWarning(this, WB_OK, SdResId(STR_PHOTO_ALBUM_EMPTY_WARNING));
+        ScopedVclPtrInstance< WarningBox > aWarning(this, MessBoxStyle::Ok, SdResId(STR_PHOTO_ALBUM_EMPTY_WARNING));
         aWarning->Execute();
     }
     else

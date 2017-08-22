@@ -994,11 +994,11 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     if (rParam.bReplace)
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
-            bOk = ( ScopedVclPtrInstance<MessBox>( ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                // "StarCalc" "Delete Data?"
-                ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) )->Execute()
-                == RET_YES );
+            bOk = ScopedVclPtrInstance<MessBox>( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
+                        // "StarCalc" "Delete Data?"
+                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
+                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) )->Execute()
+                   == RET_YES;
         }
 
     if (bOk)
@@ -1282,7 +1282,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         // OutRange of pOldObj (pDestObj) is still old area
         if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
-            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                              ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
             if (aBox->Execute() == RET_NO)
             {
@@ -1334,7 +1334,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
         if (pModel && !aListOfObjects.empty())
         {
             ScopedVclPtrInstance<QueryBox> aBox(
-                    ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                    ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                     ScGlobal::GetRscString(STR_PIVOT_REMOVE_PIVOTCHART));
             if (aBox->Execute() == RET_NO)
             {
@@ -1478,7 +1478,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
         if (!bEmpty)
         {
             ScopedVclPtrInstance<QueryBox> aBox(
-                ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                 ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY));
 
             if (aBox->Execute() == RET_NO)
@@ -1551,7 +1551,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
-            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScopedVclPtrInstance<QueryBox> aBox( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                                  ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
             if (aBox->Execute() == RET_NO)
             {

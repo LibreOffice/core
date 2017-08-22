@@ -647,7 +647,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance< QueryBox > aQuery( this, WB_YES_NO|WB_DEF_NO, m_sPasswordStoringDeactivateStr );
+            ScopedVclPtrInstance< QueryBox > aQuery( this, MessBoxStyle::YesNo|MessBoxStyle::DefaultNo, m_sPasswordStoringDeactivateStr );
             sal_uInt16 nRet = aQuery->Execute();
 
             if( RET_YES == nRet )

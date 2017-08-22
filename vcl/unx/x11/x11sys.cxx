@@ -92,7 +92,7 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
     if( pSVData->mpIntroWindow )
         pSVData->mpIntroWindow->Hide();
 
-    ScopedVclPtrInstance<WarningBox> aWarn(nullptr, WB_STDWORK, rMessage);
+    ScopedVclPtrInstance<WarningBox> aWarn(nullptr, MessBoxStyle::NONE, WB_STDWORK, rMessage);
     aWarn->SetText( rTitle );
     aWarn->Clear();
 

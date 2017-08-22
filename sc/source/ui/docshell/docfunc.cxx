@@ -5064,7 +5064,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         aMessage += aTemplate.getToken( 1, '#' );
 
                         short nResult = ScopedVclPtrInstance<QueryBox>( ScDocShell::GetActiveDialogParent(),
-                                                    WinBits(WB_YES_NO_CANCEL | WB_DEF_YES),
+                                                    MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes,
                                                     aMessage )->Execute();
                         if ( nResult == RET_YES )
                         {

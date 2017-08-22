@@ -124,7 +124,7 @@ namespace svx
         {
             if ( ::utl::UCBContentHelper::Exists( sURL ) )
             {
-                ScopedVclPtrInstance< QueryBox > aBox( m_rLocationInput.GetSystemWindow(), WB_YES_NO, SvxResId(RID_STR_ALREADYEXISTOVERWRITE) );
+                ScopedVclPtrInstance< QueryBox > aBox( m_rLocationInput.GetSystemWindow(), MessBoxStyle::YesNo, SvxResId(RID_STR_ALREADYEXISTOVERWRITE) );
                 if ( aBox->Execute() != RET_YES )
                     return false;
             }

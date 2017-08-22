@@ -472,7 +472,7 @@ namespace dbaui
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = false;
-            ScopedVclPtrInstance< QueryBox > aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
+            ScopedVclPtrInstance< QueryBox > aQuery(GetParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, sQuery);
             sal_Int32 nQueryResult = aQuery->Execute();
             m_bUserGrabFocus = true;
 
@@ -489,7 +489,7 @@ namespace dbaui
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = false;
-                            ScopedVclPtrInstance< QueryBox > aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
+                            ScopedVclPtrInstance< QueryBox > aWhatToDo(GetParent(), MessBoxStyle::RetryCancel | MessBoxStyle::DefaultRetry, sQuery);
                             nQueryResult = aWhatToDo->Execute();
                             m_bUserGrabFocus = true;
 

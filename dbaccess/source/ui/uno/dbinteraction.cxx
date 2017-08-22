@@ -162,22 +162,22 @@ namespace dbaui
         sal_Int32 nRetryPos = getContinuation(RETRY, _rContinuations);
 
         // determine the style of the dialog, dependent on the present continuation types
-        WinBits nDialogStyle = 0;
+        MessBoxStyle nDialogStyle = MessBoxStyle::NONE;
         bool bHaveCancel = nAbortPos != -1;
         // "approve" means "Yes", "disapprove" means "No"
         // VCL only supports having both (which makes sense ...)
         if ( ( nApprovePos != -1 ) || ( nDisapprovePos != -1 ) )
-            nDialogStyle = ( bHaveCancel ? WB_YES_NO_CANCEL : WB_YES_NO ) | WB_DEF_YES;
+            nDialogStyle = ( bHaveCancel ? MessBoxStyle::YesNoCancel : MessBoxStyle::YesNo ) | MessBoxStyle::DefaultYes;
         else
         {
             // if there's no yes/no, then use a default OK button
-            nDialogStyle = ( bHaveCancel ? WB_OK_CANCEL : WB_OK ) | WB_DEF_OK;
+            nDialogStyle = ( bHaveCancel ? MessBoxStyle::OkCancel : MessBoxStyle::Ok ) | MessBoxStyle::DefaultOk;
         }
 
         // If there's a "Retry" continuation, have a "Retry" button
         if ( nRetryPos != -1 )
         {
-            nDialogStyle = WB_RETRY_CANCEL | WB_DEF_RETRY;
+            nDialogStyle = MessBoxStyle::RetryCancel | MessBoxStyle::DefaultRetry;
         }
 
         // execute the dialog

@@ -390,17 +390,17 @@ bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
     //TODO: ErrorBox / WarningBox / InfoBox ?
     //TODO: (with InfoBox always OK-Button only)
 
-    WinBits nStyle = 0;
+    MessBoxStyle nStyle = MessBoxStyle::NONE;
     switch (eErrorStyle)
     {
         case SC_VALERR_STOP:
-            nStyle = WB_OK | WB_DEF_OK;
+            nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk;
             break;
         case SC_VALERR_WARNING:
-            nStyle = WB_OK_CANCEL | WB_DEF_CANCEL;
+            nStyle = MessBoxStyle::OkCancel | MessBoxStyle::DefaultCancel;
             break;
         case SC_VALERR_INFO:
-            nStyle = WB_OK_CANCEL | WB_DEF_OK;
+            nStyle = MessBoxStyle::OkCancel | MessBoxStyle::DefaultOk;
             break;
         default:
         {

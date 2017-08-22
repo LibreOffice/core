@@ -485,7 +485,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
         // Here could a  re-installation be offered
         OUString aText( SfxResId(STR_FILTER_NOT_INSTALLED) );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
-        ScopedVclPtrInstance< QueryBox > aQuery(nullptr, WB_YES_NO | WB_DEF_YES, aText);
+        ScopedVclPtrInstance< QueryBox > aQuery(nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aText);
         short nRet = aQuery->Execute();
         if ( nRet == RET_YES )
         {

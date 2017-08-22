@@ -4243,14 +4243,14 @@ void SbRtl_SavePicture(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
 {
-    static const WinBits nStyleMap[] =
+    static const MessBoxStyle nStyleMap[] =
     {
-        WB_OK,              // MB_OK
-        WB_OK_CANCEL,       // MB_OKCANCEL
-        WB_ABORT_RETRY_IGNORE,    // MB_ABORTRETRYIGNORE
-        WB_YES_NO_CANCEL,   // MB_YESNOCANCEL
-        WB_YES_NO,          // MB_YESNO
-        WB_RETRY_CANCEL     // MB_RETRYCANCEL
+        MessBoxStyle::Ok,                // MB_OK
+        MessBoxStyle::OkCancel,          // MB_OKCANCEL
+        MessBoxStyle::AbortRetryIgnore,  // MB_ABORTRETRYIGNORE
+        MessBoxStyle::YesNoCancel,       // MB_YESNOCANCEL
+        MessBoxStyle::YesNo,             // MB_YESNO
+        MessBoxStyle::RetryCancel        // MB_RETRYCANCEL
     };
     static const sal_Int16 nButtonMap[] =
     {
@@ -4268,7 +4268,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    WinBits nWinBits;
+    MessBoxStyle nWinBits;
     WinBits nType = 0; // MB_OK
     if( nArgCount >= 3 )
         nType = (WinBits)rPar.Get(2)->GetInteger();
@@ -4280,37 +4280,36 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     }
     nWinBits = nStyleMap[ nStyle ];
 
-    WinBits nWinDefBits;
-    nWinDefBits = (WB_DEF_OK | WB_DEF_RETRY | WB_DEF_YES);
+    MessBoxStyle nWinDefBits = MessBoxStyle::DefaultOk | MessBoxStyle::DefaultRetry | MessBoxStyle::DefaultYes;
     if( nType & 256 )
     {
         if( nStyle == 5 )
         {
-            nWinDefBits = WB_DEF_CANCEL;
+            nWinDefBits = MessBoxStyle::DefaultCancel;
         }
         else if( nStyle == 2 )
         {
-            nWinDefBits = WB_DEF_RETRY;
+            nWinDefBits = MessBoxStyle::DefaultRetry;
         }
         else
         {
-            nWinDefBits = (WB_DEF_CANCEL | WB_DEF_RETRY | WB_DEF_NO);
+            nWinDefBits = (MessBoxStyle::DefaultCancel | MessBoxStyle::DefaultRetry | MessBoxStyle::DefaultNo);
         }
     }
     else if( nType & 512 )
     {
         if( nStyle == 2)
         {
-            nWinDefBits = WB_DEF_IGNORE;
+            nWinDefBits = MessBoxStyle::DefaultIgnore;
         }
         else
         {
-            nWinDefBits = WB_DEF_CANCEL;
+            nWinDefBits = MessBoxStyle::DefaultCancel;
         }
     }
     else if( nStyle == 2)
     {
-        nWinDefBits = WB_DEF_CANCEL;
+        nWinDefBits = MessBoxStyle::DefaultCancel;
     }
     nWinBits |= nWinDefBits;
 

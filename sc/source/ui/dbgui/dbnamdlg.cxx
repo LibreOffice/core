@@ -523,7 +523,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, Button*, void)
         aBuf.append(aStrDelMsg.getToken(0, '#'));
         aBuf.append(aStrEntry);
         aBuf.append(aStrDelMsg.getToken(1, '#'));
-        ScopedVclPtrInstance< QueryBox > aBox(this, WinBits(WB_YES_NO|WB_DEF_YES), aBuf.makeStringAndClear());
+        ScopedVclPtrInstance< QueryBox > aBox(this, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, aBuf.makeStringAndClear());
 
         if (RET_YES == aBox->Execute())
         {

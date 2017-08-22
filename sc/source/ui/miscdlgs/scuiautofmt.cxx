@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, Button*, void)
                       + aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
-             ScopedVclPtrInstance<QueryBox>( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg )->Execute() )
+             ScopedVclPtrInstance<QueryBox>( this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMsg )->Execute() )
         {
             m_pLbFormat->RemoveEntry( nIndex );
             m_pLbFormat->SelectEntryPos( nIndex-1 );

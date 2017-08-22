@@ -176,7 +176,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
         {
             if ( xNameContainer->hasByName(sName) )
             {
-                ScopedVclPtrInstance< QueryBox > aBox(this, WB_YES_NO, DBA_RES(STR_ALREADYEXISTOVERWRITE));
+                ScopedVclPtrInstance< QueryBox > aBox(this, MessBoxStyle::YesNo, DBA_RES(STR_ALREADYEXISTOVERWRITE));
                 if ( aBox->Execute() != RET_YES )
                     return;
             }
