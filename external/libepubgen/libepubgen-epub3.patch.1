@@ -1634,3 +1634,95 @@ index 5206b37..a39f266 100644
 -- 
 2.12.3
 
+From 1376b91046ad50f3a443b6fd4887252c1922870c Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 22 Aug 2017 16:23:55 +0200
+Subject: [PATCH] EPUBHTMLGenerator: fix validation problem with non-page
+ anchored images
+
+In most cases (except for at-page anchored images) there is a paragraph
+already opened, and writing <p> inside <span> results in a validation
+error.
+
+So just write <p> in case we're not in paragraph already.
+---
+ src/lib/EPUBHTMLGenerator.cpp | 35 +++++++++++++++++++++++++++++------
+ 1 file changed, 29 insertions(+), 6 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 40c507e..019404f 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -360,6 +360,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_stylesheetPath(stylesheetPath)
+     , m_actualPage(0)
+     , m_ignore(false)
++    , m_frameAnchorTypes()
+     , m_actualSink()
+     , m_sinkStack()
+   {
+@@ -446,6 +447,8 @@ struct EPUBHTMLGeneratorImpl
+   int m_actualPage;
+   bool m_ignore;
+ 
++  std::stack<std::string> m_frameAnchorTypes;
++
+ protected:
+   std::unique_ptr<TextZoneSink> m_actualSink;
+   std::stack<std::unique_ptr<TextZoneSink>> m_sinkStack;
+@@ -846,8 +849,32 @@ void EPUBHTMLGenerator::closeTable()
+   m_impl->m_tableManager.closeTable();
+ }
+ 
+-void EPUBHTMLGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
+-void EPUBHTMLGenerator::closeFrame() {}
++void EPUBHTMLGenerator::openFrame(const RVNGPropertyList &propList)
++{
++  librevenge::RVNGPropertyList::Iter i(propList);
++  std::string anchorType;
++  for (i.rewind(); i.next();)
++  {
++    if (std::string("text:anchor-type") == i.key())
++      anchorType = i()->getStr().cstr();
++  }
++
++  if (anchorType == "page")
++    // Other anchor types are already inside a paragraph.
++    m_impl->output().openElement("p", RVNGPropertyList());
++  m_impl->m_frameAnchorTypes.push(anchorType);
++}
++
++void EPUBHTMLGenerator::closeFrame()
++{
++  if (m_impl->m_frameAnchorTypes.empty())
++    return;
++
++  if (m_impl->m_frameAnchorTypes.top() == "page")
++    m_impl->output().closeElement("p");
++
++  m_impl->m_frameAnchorTypes.pop();
++}
+ 
+ void EPUBHTMLGenerator::openGroup(const librevenge::RVNGPropertyList & /* propList */) {}
+ void EPUBHTMLGenerator::closeGroup() {}
+@@ -862,8 +889,6 @@ void EPUBHTMLGenerator::drawConnector(const librevenge::RVNGPropertyList & /* pr
+ 
+ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+ {
+-  m_impl->output().openElement("p", RVNGPropertyList());
+-
+   const EPUBPath &path = m_impl->m_imageManager.insert(
+                            RVNGBinaryData(propList["office:binary-data"]->getStr()),
+                            propList["librevenge:mime-type"]->getStr());
+@@ -873,8 +898,6 @@ void EPUBHTMLGenerator::insertBinaryObject(const RVNGPropertyList &propList)
+   // FIXME: use alternative repr. if available
+   attrs.insert("alt", path.str().c_str());
+   m_impl->output().insertEmptyElement("img", attrs);
+-
+-  m_impl->output().closeElement("p");
+ }
+ 
+ void EPUBHTMLGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
+-- 
+2.12.3
+
