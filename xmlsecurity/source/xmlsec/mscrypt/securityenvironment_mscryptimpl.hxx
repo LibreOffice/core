@@ -84,6 +84,8 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XSecurityEnvironment
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
+        { return css::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
