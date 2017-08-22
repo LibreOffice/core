@@ -865,6 +865,10 @@ void SdOOXMLExportTest2::testTdf100387()
     xDocShRef->DoClose();
     xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
 
+    assertXPath(pXmlDocRels, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn", "dur", "indefinite");
+    assertXPath(pXmlDocRels, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[1]/p:cTn", "fill", "hold");
+    assertXPath(pXmlDocRels, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[1]/p:cTn/p:childTnLst/p:par/p:cTn", "fill", "hold");
+
     assertXPath(pXmlDocRels, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[1]"
                              "/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt/p:txEl/p:pRg", "st", "0");
     assertXPath(pXmlDocRels, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[1]"
