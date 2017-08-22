@@ -39,12 +39,16 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     void testWorking();
+    void TestDrawString();
+    void TestDrawLine();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
 
 public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testWorking);
+    CPPUNIT_TEST(TestDrawString);
+    CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -86,6 +90,44 @@ void Test::testWorking()
     Primitive2DSequence aSequenceRect = parseEmf("/emfio/qa/cppunit/emf/data/fdo79679-2.emf");
     CPPUNIT_ASSERT_EQUAL(1, (int) aSequenceRect.getLength());
     checkRectPrimitive(aSequenceRect);
+}
+
+void Test::TestDrawString()
+{
+    // This unit checks for a correct import of an EMF+ file with only one DrawString Record
+    // Since the text is undecorated the optimal choice is a simpletextportion primitive
+
+    // first, get the sequence of primitives and dump it
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawString.emf");
+    CPPUNIT_ASSERT_EQUAL(1, (int) aSequence.getLength());
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    // check correct import of the DrawString: height, position, text, color and font
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "height", "276");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "x", "25");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "y", "323");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "text", "TEST");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/textsimpleportion", "familyname", "CALIBRI");
+}
+
+void Test::TestDrawLine()
+{
+    // This unit checks for a correct import of an EMF+ file with only one DrawLine Record
+    // The line is colored and has a specified width, therefore a polypolygonstroke primitive is the optimal choice
+
+    // first, get the sequence of primitives and dump it
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
+    CPPUNIT_ASSERT_EQUAL(1, (int) aSequence.getLength());
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    // check correct import of the DrawLine: color and width of the line
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygonstroke/line", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygonstroke/line", "width", "33");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
