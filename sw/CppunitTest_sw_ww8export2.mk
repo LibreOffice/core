@@ -52,6 +52,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8export2,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    embeddedobj/util/embobj \
+    emfio/emfio \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \
     forms/util/frm \

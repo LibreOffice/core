@@ -16,6 +16,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
@@ -227,6 +229,43 @@ DECLARE_WW8EXPORT_TEST(testTdf111480, "tdf111480.doc")
 
     CPPUNIT_ASSERT(xText->getSize().Height > 11000);
     CPPUNIT_ASSERT(xText->getSize().Width  > 11000);
+}
+
+DECLARE_WW8EXPORT_TEST( testActiveXCheckbox, "checkbox_control.odt" )
+{
+    // First check box anchored as a floating object
+    uno::Reference<drawing::XControlShape> xControlShape;
+    if(!mbExported)
+        xControlShape.set(getShape(1), uno::UNO_QUERY);
+    else
+        xControlShape.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControlShape.is());
+
+    // Check whether we have the right control
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Floating Checkbox"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+
+    // Second check box anchored inline / as character
+    if(!mbExported)
+        xControlShape.set(getShape(2), uno::UNO_QUERY);
+    else
+        xControlShape.set(getShape(1), uno::UNO_QUERY);
+
+    // Check whether we have the right control
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+    xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Inline Checkbox"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
