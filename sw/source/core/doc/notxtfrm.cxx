@@ -1027,23 +1027,45 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 
         if(!bDone && pOLENd)
         {
-            Point aPosition(aAlignedGrfArea.Pos());
-            Size aSize(aAlignedGrfArea.SSize());
-
+            // SwOLENode does not have a known GraphicObject, need to
+            // work with Graphic instead
             const Graphic* pGraphic = pOLENd->GetGraphic();
+
             if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
             {
-                pGraphic->Draw( pOut, aPosition, aSize );
+                GraphicObject aTempGraphicObject(*pGraphic);
+                GraphicAttr aGrfAttr;
+
+                paintGraphicUsingPrimitivesHelper(
+                    *pOut,
+                    aTempGraphicObject,
+                    aGrfAttr,
+                    aAlignedGrfArea);
 
                 // shade the representation if the object is activated outplace
                 uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
                 if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
                 {
-                    ::svt::EmbeddedObjectRef::DrawShading( tools::Rectangle( aPosition, aSize ), pOut );
+                    const Point aPosition(aAlignedGrfArea.Pos());
+                    const Size aSize(aAlignedGrfArea.SSize());
+
+                    ::svt::EmbeddedObjectRef::DrawShading(
+                        tools::Rectangle(
+                            aPosition,
+                            aSize),
+                        pOut);
                 }
             }
             else
-                ::svt::EmbeddedObjectRef::DrawPaintReplacement( tools::Rectangle( aPosition, aSize ), pOLENd->GetOLEObj().GetCurrentPersistName(), pOut );
+            {
+                const Point aPosition(aAlignedGrfArea.Pos());
+                const Size aSize(aAlignedGrfArea.SSize());
+
+                ::svt::EmbeddedObjectRef::DrawPaintReplacement(
+                    tools::Rectangle(aPosition, aSize),
+                    pOLENd->GetOLEObj().GetCurrentPersistName(),
+                    pOut);
+            }
 
             sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
             if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr && (
