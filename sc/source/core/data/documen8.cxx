@@ -294,7 +294,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
     }
 }
 
-void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
+void ScDocument::CopyStdStylesFrom( const ScDocument* pSrcDoc )
 {
     // number format exchange list has to be handled here, too
     NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);

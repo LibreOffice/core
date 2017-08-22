@@ -65,7 +65,7 @@ public:
     void SetFormula(const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
-    void UpdateReference( sc::RefUpdateContext& rCxt );
+    void UpdateReference( const sc::RefUpdateContext& rCxt );
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
@@ -258,7 +258,7 @@ private:
     double GetMaxValue() const;
 
     void calcMinMax(double& nMin, double& nMax) const;
-    double CalcValue(double nMin, double nMax, ScColorScaleEntries::const_iterator& rItr) const;
+    double CalcValue(double nMin, double nMax, const ScColorScaleEntries::const_iterator& rItr) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
@@ -400,7 +400,7 @@ private:
 
     double GetMinValue() const;
     double GetMaxValue() const;
-    double CalcValue(double nMin, double nMax, ScIconSetFormat::const_iterator& itr) const;
+    double CalcValue(double nMin, double nMax, const ScIconSetFormat::const_iterator& itr) const;
 
     std::unique_ptr<ScIconSetFormatData> mpFormatData;
 };

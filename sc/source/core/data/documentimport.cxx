@@ -173,7 +173,7 @@ void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uI
     mpImpl->mrDoc.pDocOptions->SetDate(nDay, nMonth, nYear);
 }
 
-void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr, ScSetStringParam* pStringParam)
+void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr, const ScSetStringParam* pStringParam)
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
     if (!pTab)

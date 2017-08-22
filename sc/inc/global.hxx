@@ -572,7 +572,7 @@ public:
     /// Open the specified URL.
     static void                 OpenURL(const OUString& rURL, const OUString& rTarget);
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
-                                                SfxObjectShell* pShell );
+                                                const SfxObjectShell* pShell );
     SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,
                                                 const OUString& rTabName );
     SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, short nType );
@@ -593,7 +593,7 @@ public:
     static void             InitAddIns();
     static void             Clear();                    // at the end of the program
 
-    static void             InitTextHeight(SfxItemPool* pPool);
+    static void             InitTextHeight(const SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
     static SvxBrushItem*    GetButtonBrushItem();
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
@@ -682,7 +682,7 @@ public:
 
     /** Adds a language item to the item set, if the number format item contains
         a language that differs from its parent's language. */
-    SC_DLLPUBLIC static void             AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter );
+    SC_DLLPUBLIC static void             AddLanguage( SfxItemSet& rSet, const SvNumberFormatter& rFormatter );
 
     /** Obtain the ordinal suffix for a number according to the system locale */
     static OUString         GetOrdinalSuffix( sal_Int32 nNumber);

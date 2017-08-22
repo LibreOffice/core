@@ -348,7 +348,7 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
     }
 }
 
-bool ScDocument::IsInFormulaTree( ScFormulaCell* pCell ) const
+bool ScDocument::IsInFormulaTree( const ScFormulaCell* pCell ) const
 {
     return pCell->GetPrevious() || pFormulaTree == pCell;
 }
@@ -528,7 +528,7 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     }
 }
 
-bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
+bool ScDocument::IsInFormulaTrack( const ScFormulaCell* pCell ) const
 {
     return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }

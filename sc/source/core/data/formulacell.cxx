@@ -2942,7 +2942,7 @@ namespace {
  * Check if we need to re-compile column or row names.
  */
 bool checkCompileColRowName(
-    const sc::RefUpdateContext& rCxt, ScDocument& rDoc, ScTokenArray& rCode,
+    const sc::RefUpdateContext& rCxt, ScDocument& rDoc, const ScTokenArray& rCode,
     const ScAddress& aOldPos, const ScAddress& aPos, bool bValChanged)
 {
     switch (rCxt.meMode)
@@ -3023,7 +3023,7 @@ bool checkCompileColRowName(
 }
 
 void setOldCodeToUndo(
-    ScDocument* pUndoDoc, const ScAddress& aUndoPos, ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
+    ScDocument* pUndoDoc, const ScAddress& aUndoPos, const ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
 {
     // Copy the cell to aUndoPos, which is its current position in the document,
     // so this works when UpdateReference is called before moving the cells
@@ -3704,7 +3704,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
 }
 
 // See also ScDocument::FindRangeNamesReferencingSheet()
-static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc,
+static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, const ScTokenArray* pCode, const ScDocument* pDoc,
         int nRecursion)
 {
     FormulaTokenArrayPlainIterator aIter(*pCode);
@@ -3823,7 +3823,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
     pCode = mxGroup->mpCode;
 }
 
-ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
+ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( const ScFormulaCell& rOther ) const
 {
     // no Matrix formulae yet.
     if ( GetMatrixFlag() != ScMatrixMode::NONE )

@@ -86,7 +86,7 @@ struct ScDPOutLevelData
     bool                                mbDataLayout:1;
     bool                                mbPageDim:1;
 
-    ScDPOutLevelData(long nDim, long nHier, long nLevel, long nDimPos, sal_uInt32 nSrcNumFmt, uno::Sequence<sheet::MemberResult>  &aResult,
+    ScDPOutLevelData(long nDim, long nHier, long nLevel, long nDimPos, sal_uInt32 nSrcNumFmt, const uno::Sequence<sheet::MemberResult>  &aResult,
                        const OUString &aName, const OUString &aCaption, double fValue, bool bHasHiddenMember, bool bDataLayout, bool bPageDim) :
         mnDim(nDim), mnHier(nHier), mnLevel(nLevel), mnDimPos(nDimPos), mnSrcNumFmt(nSrcNumFmt), maResult(aResult),
         maName(aName), maCaption(aCaption), mfValue(fValue), mbHasHiddenMember(bHasHiddenMember), mbDataLayout(bDataLayout),

@@ -1071,7 +1071,7 @@ void ScDPSource::FillMemberResults()
     }
 }
 
-const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( ScDPLevel* pLevel )
+const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const ScDPLevel* pLevel )
 {
     FillMemberResults();
 

@@ -2086,7 +2086,7 @@ void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
     rParam = mSheetSortParams[ nTab ];
 }
 
-void ScDocument::SetSortParam( ScSortParam& rParam, SCTAB nTab )
+void ScDocument::SetSortParam( const ScSortParam& rParam, SCTAB nTab )
 {
     mSheetSortParams[ nTab ] = rParam;
 }

@@ -176,7 +176,7 @@ public:
     long                    GetSourceDim(long nDim);
 
     const css::uno::Sequence<css::sheet::MemberResult>*
-                            GetMemberResults( ScDPLevel* pLevel );
+                            GetMemberResults( const ScDPLevel* pLevel );
 
     ScDPDimensions*         GetDimensionsObject();
 

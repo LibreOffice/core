@@ -410,7 +410,7 @@ public:
     const ScFormulaCellGroupRef& GetCellGroup() const { return mxGroup;}
     void SetCellGroup( const ScFormulaCellGroupRef &xRef );
 
-    CompareState CompareByTokenArray( ScFormulaCell& rOther ) const;
+    CompareState CompareByTokenArray( const ScFormulaCell& rOther ) const;
 
     bool InterpretFormulaGroup();
     bool InterpretInvariantFormulaGroup();
