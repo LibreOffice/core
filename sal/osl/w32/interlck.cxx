@@ -23,12 +23,12 @@
 
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    return (InterlockedIncrement(pCount));
+    return InterlockedIncrement(pCount);
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    return (InterlockedDecrement(pCount));
+    return InterlockedDecrement(pCount);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

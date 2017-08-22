@@ -231,7 +231,7 @@ bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf )
 bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf )
 {
     OUString clipFormatName = getClipboardFormatName( cf );
-    return ( clipFormatName.equalsIgnoreAsciiCase( HTML_FORMAT_NAME_SOFFICE ) );
+    return clipFormatName.equalsIgnoreAsciiCase( HTML_FORMAT_NAME_SOFFICE );
 }
 
 OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat )
