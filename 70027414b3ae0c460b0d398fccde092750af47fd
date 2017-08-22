@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_72f5fc81",
+        "filename": "external/libxmlsec/ExternalProject_xmlsec.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-22T13:51:42Z",
+      "side": 0,
+      "message": "Please be more verbose in the commit message. This looks OK, but it\u0027s very non-trivial to understand why it\u0027s OK. See below.",
+      "revId": "70027414b3ae0c460b0d398fccde092750af47fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_92f26899",
+        "filename": "external/libxmlsec/ExternalProject_xmlsec.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-22T13:51:42Z",
+      "side": 0,
+      "message": "You change \"non-Android or DISABLE_OPENSSL\" to Android, while I think you should just remove the condition around --without-openssl. We want to make sure that on the desktop Linux/macOS case --without-openssl is still used, it\u0027s just that now you do the same for Android as well.",
+      "revId": "70027414b3ae0c460b0d398fccde092750af47fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
