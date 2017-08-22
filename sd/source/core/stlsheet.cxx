@@ -218,9 +218,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
-                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
-
-                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_WORDWRAP,
+                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_WORDWRAP,
 
                                         SDRATTR_EDGE_FIRST,             SDRATTR_MEASURE_LAST,
 
@@ -245,9 +243,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
-                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
-
-                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
+                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_XMLATTRIBUTES,
                                         SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_WORDWRAP,
 
                                         SDRATTR_TABLE_FIRST,            SDRATTR_TABLE_LAST,
