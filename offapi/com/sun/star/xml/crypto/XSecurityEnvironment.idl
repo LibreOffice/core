@@ -98,6 +98,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
      * Get the Environment detail information
      */
     string getSecurityEnvironmentInformation ( );
+    sequence< com::sun::star::security::XCertificate > getAllCertificates() raises( com::sun::star::uno::SecurityException ) ;
 
 } ;
 
