@@ -635,7 +635,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetOperation \
     qadevOOo/tests/java/ifc/sheet/_XSheetPageBreak \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheet \
-    qadevOOo/tests/java/ifc/sheet/_XSpreadsheetDocument \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/sheet/_XSubTotalCalculatable \
     qadevOOo/tests/java/ifc/sheet/_XSubTotalDescriptor \
