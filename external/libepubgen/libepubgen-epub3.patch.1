@@ -1528,3 +1528,109 @@ index b1e33f8..5206b37 100644
 -- 
 2.12.3
 
+From a4e85e191813e7c8f4e6b5bcf2458504f9d06aeb Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 22 Aug 2017 12:05:28 +0200
+Subject: [PATCH] EPUB_SPLIT_METHOD_HEADING: fix unexpected first chapter name
+
+If the structure of the document is like this:
+
+ Heading 2
+Heading 1
+ Heading 2
+Heading 1
+ Heading 2
+
+Then this resulted in 3 chapters: Section 1, Heading 1 and Heading 1.
+The first one is unexpected; so in case we don't have a heading 1
+paragraph for the first section, then fall back to any other heading.
+---
+ src/lib/EPUBHTMLManager.cpp   | 8 ++++++++
+ src/lib/EPUBHTMLManager.h     | 3 +++
+ src/lib/EPUBSplitGuard.cpp    | 5 ++++-
+ src/lib/EPUBSplitGuard.h      | 2 +-
+ src/lib/EPUBTextGenerator.cpp | 2 +-
+ 5 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLManager.cpp b/src/lib/EPUBHTMLManager.cpp
+index 5141f31..7753160 100644
+--- a/src/lib/EPUBHTMLManager.cpp
++++ b/src/lib/EPUBHTMLManager.cpp
+@@ -134,6 +134,14 @@ void EPUBHTMLManager::insertHeadingText(const std::string &text)
+   m_paths.back().appendTitle(text);
+ }
+ 
++bool EPUBHTMLManager::hasHeadingText() const
++{
++  if (m_paths.empty())
++    return false;
++
++  return !m_paths.back().getTitle().empty();
++}
++
+ }
+ 
+ /* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+diff --git a/src/lib/EPUBHTMLManager.h b/src/lib/EPUBHTMLManager.h
+index 6b480c4..158b466 100644
+--- a/src/lib/EPUBHTMLManager.h
++++ b/src/lib/EPUBHTMLManager.h
+@@ -51,6 +51,9 @@ public:
+   /// Appends text to the title of the current heading.
+   void insertHeadingText(const std::string &text);
+ 
++  /// If the current heading has a title.
++  bool hasHeadingText() const;
++
+ private:
+   EPUBManifest &m_manifest;
+   std::vector<EPUBPath> m_paths;
+diff --git a/src/lib/EPUBSplitGuard.cpp b/src/lib/EPUBSplitGuard.cpp
+index 25eae87..890500b 100644
+--- a/src/lib/EPUBSplitGuard.cpp
++++ b/src/lib/EPUBSplitGuard.cpp
+@@ -65,11 +65,14 @@ bool EPUBSplitGuard::splitOnHeading(const unsigned level) const
+   return canSplit(EPUB_SPLIT_METHOD_HEADING) && (m_headingLevel >= level);
+ }
+ 
+-bool EPUBSplitGuard::inHeading() const
++bool EPUBSplitGuard::inHeading(bool any) const
+ {
+   if (!m_currentHeadingLevel)
+     return false;
+ 
++  if (any)
++    return true;
++
+   return m_headingLevel >= m_currentHeadingLevel;
+ }
+ 
+diff --git a/src/lib/EPUBSplitGuard.h b/src/lib/EPUBSplitGuard.h
+index 7bc53ce..1a74079 100644
+--- a/src/lib/EPUBSplitGuard.h
++++ b/src/lib/EPUBSplitGuard.h
+@@ -30,7 +30,7 @@ public:
+ 
+   bool splitOnPageBreak() const;
+   bool splitOnHeading(unsigned level) const;
+-  bool inHeading() const;
++  bool inHeading(bool any) const;
+   bool splitOnSize() const;
+ 
+   void onSplit();
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 5206b37..a39f266 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -367,7 +367,7 @@ void EPUBTextGenerator::insertText(const librevenge::RVNGString &text)
+   if (m_impl->m_inHeader || m_impl->m_inFooter)
+     m_impl->m_currentHeaderOrFooter->addInsertText(text);
+ 
+-  if (m_impl->getSplitGuard().inHeading())
++  if (m_impl->getSplitGuard().inHeading(!m_impl->getHtmlManager().hasHeadingText()))
+     m_impl->getHtmlManager().insertHeadingText(text.cstr());
+ 
+   m_impl->getSplitGuard().incrementSize(text.len());
+-- 
+2.12.3
+
