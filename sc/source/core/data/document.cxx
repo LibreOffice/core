@@ -2518,6 +2518,17 @@ const ScTable* ScDocument::FetchTable( SCTAB nTab ) const
     return maTabs[nTab];
 }
 
+ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const
+{
+    if (!TableExists(nTab))
+    {
+        std::vector<ScColumn*> aEmptyVector;
+        return ScColumnsRange(aEmptyVector.begin(), aEmptyVector.end());
+    }
+
+    return maTabs[nTab]->GetColumnsRange(nColBegin, nColEnd);
+}
+
 void ScDocument::MergeNumberFormatter(const ScDocument* pSrcDoc)
 {
     SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
@@ -6580,8 +6591,9 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        for (const ScColumn* pCol : GetColumnsRange(nTab, 0, MAXCOL))
         {
+            SCCOL nCol = pCol->GetCol();
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
                 continue;
@@ -6607,8 +6619,9 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 
 ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
 {
-    for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+    for (const ScColumn * pCol : GetColumnsRange(nTab, 0, MAXCOL))
     {
+        SCCOL nCol = pCol->GetCol();
         size_t nColNoteCount = GetNoteCount(nTab, nCol);
         if (!nColNoteCount)
             continue;

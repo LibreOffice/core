@@ -1849,15 +1849,16 @@ public:
         SCCOL nStartCol = mrParam.nCol1;
         SCCOL nEndCol = mrParam.nCol2;
 
-        for (SCCOL i = 0; i <= MAXCOL; ++i)
+        for (const ScColumn* pCol : mrTab.GetColumnsRange(0, nStartCol - 1))
         {
-            if (nStartCol <= i && i <= nEndCol)
-                continue;
-
-            if (mrTab.HasData(i, nRow))
+            if (mrTab.HasData(pCol->GetCol(), nRow))
                 return true;
         }
-
+        for (const ScColumn* pCol : mrTab.GetColumnsRange(nEndCol + 1, MAXCOL))
+        {
+            if (mrTab.HasData(pCol->GetCol(), nRow))
+                return true;
+        }
         return false;
     }
 };
