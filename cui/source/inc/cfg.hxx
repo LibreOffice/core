@@ -396,6 +396,9 @@ protected:
     // Right side of the dialog where the contents of the selected
     // menu or toolbar are displayed
     VclPtr<ListBox>                            m_pTopLevelListBox;
+    // Used to add and remove toolbars/menus
+    VclPtr<PushButton>                         m_pPlusBtn;
+    VclPtr<PushButton>                         m_pMinusBtn;
     VclPtr<VclFrame>                           m_pContents;
     VclPtr<VclContainer>                       m_pEntries;
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
