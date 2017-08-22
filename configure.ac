@@ -8251,10 +8251,14 @@ internal)
     # when MSVC 2013 support was dropped.
     if test "$COM" = "MSC" -a "$VCVER" = "120"; then
         PYTHON_VERSION_MINOR=3
+        PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.5
     else
         PYTHON_VERSION_MINOR=5
+        PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.4
     fi
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.0
+    if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
+        AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
+    fi
     AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
