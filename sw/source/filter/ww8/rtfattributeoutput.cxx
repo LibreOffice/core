@@ -1967,7 +1967,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         m_aRun->append(OUStringToOString(FieldString(ww::eFORMCHECKBOX), m_rExport.m_eCurrentEncoding));
                         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "1"); // 1 = checkbox
-                        // checkbox size in half points, this seems to be always 20, see WW8Export::DoCheckBox()
+                        // checkbox size in half points, this seems to be always 20
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHPS "20");
 
                         OUString aStr;

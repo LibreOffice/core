@@ -384,12 +384,6 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat)
         return true;
     }
 
-    if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
-    {
-        DoCheckBox(xPropSet);
-        return true;
-    }
-
     return false;
 }
 
@@ -486,69 +480,6 @@ void WW8Export::DoComboBox(const OUString &rName,
     }
 
     aFFData.Write(pDataStrm);
-}
-
-void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> const & xPropSet)
-{
-    uno::Reference<beans::XPropertySetInfo> xPropSetInfo =
-        xPropSet->getPropertySetInfo();
-
-    OutputField(nullptr, ww::eFORMCHECKBOX, FieldString(ww::eFORMCHECKBOX),
-        FieldFlags::Start | FieldFlags::CmdStart);
-    // write the reference to the "picture" structure
-    sal_uLong nDataStt = pDataStrm->Tell();
-    m_pChpPlc->AppendFkpEntry( Strm().Tell() );
-
-    WriteChar( 0x01 );
-    static sal_uInt8 aArr1[] = {
-        0x03, 0x6a, 0,0,0,0,    // sprmCPicLocation
-
-        0x06, 0x08, 0x01,       // sprmCFData
-        0x55, 0x08, 0x01,       // sprmCFSpec
-        0x02, 0x08, 0x01        // sprmCFFieldVanish
-    };
-    sal_uInt8* pDataAdr = aArr1 + 2;
-    Set_UInt32( pDataAdr, nDataStt );
-
-    m_pChpPlc->AppendFkpEntry(Strm().Tell(),
-                sizeof( aArr1 ), aArr1 );
-
-    ::sw::WW8FFData aFFData;
-
-    aFFData.setType(1);
-    aFFData.setCheckboxHeight(0x14);
-
-    sal_Int16 nTemp = 0;
-    xPropSet->getPropertyValue("DefaultState") >>= nTemp;
-    aFFData.setDefaultResult(nTemp);
-
-    xPropSet->getPropertyValue("State") >>= nTemp;
-    aFFData.setResult(nTemp);
-
-    OUString aStr;
-    static const char sName[] = "Name";
-    if (xPropSetInfo->hasPropertyByName(sName))
-    {
-        xPropSet->getPropertyValue(sName) >>= aStr;
-        aFFData.setName(aStr);
-    }
-
-    static const char sHelpText[] = "HelpText";
-    if (xPropSetInfo->hasPropertyByName(sHelpText))
-    {
-        xPropSet->getPropertyValue(sHelpText) >>= aStr;
-        aFFData.setHelp(aStr);
-    }
-    static const char sHelpF1Text[] = "HelpF1Text";
-    if (xPropSetInfo->hasPropertyByName(sHelpF1Text))
-    {
-        xPropSet->getPropertyValue(sHelpF1Text) >>= aStr;
-        aFFData.setStatus(aStr);
-    }
-
-    aFFData.Write(pDataStrm);
-
-    OutputField(nullptr, ww::eFORMCHECKBOX, OUString(), FieldFlags::Close);
 }
 
 void WW8Export::DoFormText(const SwInputField * pField)
