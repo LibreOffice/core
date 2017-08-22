@@ -182,7 +182,10 @@ void CertificateChooser::ImplInitialize()
         uno::Sequence< uno::Reference< security::XCertificate > > xCerts;
         try
         {
-            xCerts = secEnvironment->getPersonalCertificates();
+            if ( meAction == UserAction::Sign )
+                xCerts = secEnvironment->getPersonalCertificates();
+            else
+                xCerts = secEnvironment->getAllCertificates();
         }
         catch (security::NoPasswordException&)
         {

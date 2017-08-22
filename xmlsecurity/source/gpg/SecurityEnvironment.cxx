@@ -64,14 +64,14 @@ OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
     return OUString();
 }
 
-Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertificates()
+Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesImpl( bool bPrivateOnly )
 {
     CertificateImpl* xCert;
     std::list< GpgME::Key > keyList;
     std::list< CertificateImpl* > certsList;
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
-    GpgME::Error err = m_ctx->startKeyListing("", true);
+    GpgME::Error err = m_ctx->startKeyListing("", bPrivateOnly );
     while (!err) {
         GpgME::Key k = m_ctx->nextKey(err);
         if (err)
@@ -97,6 +97,16 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
     }
 
     return xCertificateSequence;
+}
+
+Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertificates()
+{
+    return getCertificatesImpl( true );
+}
+
+Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getAllCertificates()
+{
+    return getCertificatesImpl( false );
 }
 
 Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& keyId, const Sequence< sal_Int8 >& /*serialNumber*/ )
