@@ -2346,6 +2346,13 @@ void ScTable::CalculateInColumnInThread( SCCOL nCol, SCROW nRow, size_t nLen, un
     aCol[nCol].CalculateInThread( nRow, nLen, nThisThread, nThreadsTotal );
 }
 
+void ScTable::HandleStuffAfterParallelCalculation( SCCOL nCol, SCROW nRow, size_t nLen)
+{
+    assert(ValidCol(nCol));
+
+    aCol[nCol].HandleStuffAfterParallelCalculation( nRow, nLen );
+}
+
 #if DUMP_COLUMN_STORAGE
 void ScTable::DumpColumnStorage( SCCOL nCol ) const
 {

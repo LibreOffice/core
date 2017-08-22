@@ -436,6 +436,15 @@ void ScDocument::CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLe
     pTab->CalculateInColumnInThread(rTopPos.Col(), rTopPos.Row(), nLen, nThisThread, nThreadsTotal);
 }
 
+void ScDocument::HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen )
+{
+    ScTable* pTab = FetchTable(rTopPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->HandleStuffAfterParallelCalculation(rTopPos.Col(), rTopPos.Row(), nLen);
+}
+
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
                                       bool bNumFormatChanged )
 {
