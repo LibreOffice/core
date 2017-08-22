@@ -72,6 +72,7 @@ gb_CppunitTest_RUNTIMEDEPS += \
 	$(call gb_Library_get_target,localedata_es) \
 	$(call gb_Library_get_target,localedata_euro) \
 	$(call gb_Library_get_target,localedata_others) \
+	$(call gb_Package_get_target,test_unittest) \
 
 define gb_CppunitTest__make_args
 $(HEADLESS) \
@@ -115,7 +116,7 @@ else
 	        $(if $(gb_CppunitTest_vcl_hide_windows),export VCL_HIDE_WINDOWS=1 && ) \
 	        $(if $(gb_CppunitTest_vcl_show_windows),unset VCL_HIDE_WINDOWS && ) \
 		mkdir -p $(dir $@) && \
-		rm -fr $@.user && mkdir $@.user && \
+		rm -fr $@.user && cp -r $(WORKDIR)/unittest $@.user && \
 		$(if $(gb_CppunitTest__use_confpreinit), \
 		    $(INSTDIR)/program/lokconf_init $(call gb_CppunitTest__make_args) &&) \
 		$(if $(gb_CppunitTest__interactive),, \
