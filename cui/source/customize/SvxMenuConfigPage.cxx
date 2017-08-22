@@ -119,6 +119,11 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pContentsListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
 
+    m_pPlusBtn->SetClickHdl(
+        LINK( this, SvxMenuConfigPage, AddMenuHdl ) );
+    m_pMinusBtn->SetClickHdl(
+        LINK( this, SvxMenuConfigPage, RemoveMenuHdl ) );
+
     m_pCommandCategoryListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectCategory ) );
 
@@ -132,6 +137,13 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         LINK( this, SvxMenuConfigPage, InsertHdl ) );
     m_pResetBtn->SetClickHdl(
         LINK( this, SvxMenuConfigPage, ResetMenuHdl ) );
+
+    if ( !bIsMenuBar )
+    {
+        // Context menus cannot be added/removed
+        m_pPlusBtn->Hide();
+        m_pMinusBtn->Hide();
+    }
 
 }
 
@@ -280,6 +292,9 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
 
     if ( pMenuData )
     {
+        // Built-in menus cannot be deleted
+        m_pMinusBtn->Enable( pMenuData->IsDeletable() );
+
         SvxEntries* pEntries = pMenuData->GetEntries();
         SvxEntries::const_iterator iter = pEntries->begin();
 
@@ -291,6 +306,24 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     }
 
     UpdateButtonStates();
+}
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddMenuHdl, Button *, void )
+{
+    VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
+        nullptr, GetSaveInData()->GetEntries(), nullptr, true );
+
+    if ( pDialog->Execute() == RET_OK )
+    {
+        GetSaveInData()->SetEntries( pDialog->GetEntries() );
+        ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
+        GetSaveInData()->SetModified();
+    }
+}
+
+IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveMenuHdl, Button *, void )
+{
+    DeleteSelectedTopLevel();
 }
 
 IMPL_LINK_NOARG( SvxMenuConfigPage, SelectCategory, ListBox&, void )
