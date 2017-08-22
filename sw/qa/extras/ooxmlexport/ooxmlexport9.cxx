@@ -23,6 +23,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -853,6 +854,67 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
     // Check anchor type
     uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
+{
+    // First check box aligned as a floating object
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControlShape.is());
+
+    // Check whether we have the right control
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Floating Check Box"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+
+    // Also check positin and size
+    uno::Reference<drawing::XShape> xShape(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4470), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1427), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5126), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2341), xShape->getPosition().Y);
+
+    // Second check box aligned inline / as character
+    xControlShape.set(getShape(2), uno::UNO_QUERY);
+
+    // Check whether we have the right control
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+    xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Inline Check Box"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(text::VertOrientation::TOP),getProperty<sal_Int32>(xPropertySet2,"VertOrient"));
+
+    // Also check positin and size
+    xShape.set(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4410), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1083), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1085), xShape->getPosition().Y);
+
+    // Also check the specific OOXML elements
+    xmlDocPtr pXmlDoc = parseExport();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // For inline controls use w:object as parent element and pictureFrame shapetype
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shapetype", "spt", "75");
+    // For floating controls use w:pict as parent element and hostControl shapetype
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shapetype", "spt", "201");
+
+     // Have different shape ids
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "id") !=
+        getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shape", "id"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
