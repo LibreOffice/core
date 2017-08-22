@@ -1849,8 +1849,9 @@ public:
         SCCOL nStartCol = mrParam.nCol1;
         SCCOL nEndCol = mrParam.nCol2;
 
-        for (SCCOL i = 0; i <= MAXCOL; ++i)
+        for (const ScColumn* pCol : mrTab.GetColumnsRange(0, MAXCOL))
         {
+            SCCOL i = pCol->GetCol();
             if (nStartCol <= i && i <= nEndCol)
                 continue;
 

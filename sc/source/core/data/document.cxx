@@ -2518,6 +2518,17 @@ const ScTable* ScDocument::FetchTable( SCTAB nTab ) const
     return maTabs[nTab];
 }
 
+ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const
+{
+    if (!TableExists(nTab))
+    {
+        std::vector<ScColumn*> aEmptyVector;
+        return ScColumnsRange(aEmptyVector.begin(), aEmptyVector.end());
+    }
+
+    return maTabs[nTab]->GetColumnsRange(nColBegin, nColEnd);
+}
+
 void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 {
     SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
@@ -4557,8 +4568,9 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
     {
         CRFlags nStartFlags = maTabs[nTab]->GetColFlags(nStart);
         sal_uInt16 nStartWidth = maTabs[nTab]->GetOriginalWidth(nStart);
-        for (SCCOL nCol = nStart + 1; nCol <= MAXCOL; nCol++)
+        for (const ScColumn* pCol : GetColumnsRange(nTab, nStart + 1, MAXCOL))
         {
+            SCCOL nCol = pCol->GetCol();
             if (((nStartFlags & CRFlags::ManualBreak) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::ManualBreak)) ||
                 (nStartWidth != maTabs[nTab]->GetOriginalWidth(nCol)) ||
                 ((nStartFlags & CRFlags::Hidden) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::Hidden)) )
@@ -6580,8 +6592,12 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        ScTable const * pTable = FetchTable(nTab);
+        if (!pTable)
+            continue;
+        for (const ScColumn* pCol : GetColumnsRange(nTab, 0, MAXCOL))
         {
+            SCCOL nCol = pCol->GetCol();
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
                 continue;
@@ -6607,8 +6623,9 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 
 ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
 {
-    for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+    for (ScColumn const * pCol : GetColumnsRange(nTab, 0, MAXCOL))
     {
+        SCCOL nCol = pCol->GetCol();
         size_t nColNoteCount = GetNoteCount(nTab, nCol);
         if (!nColNoteCount)
             continue;
