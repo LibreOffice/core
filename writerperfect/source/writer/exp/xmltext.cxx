@@ -10,6 +10,7 @@
 #include "xmltext.hxx"
 
 #include "txtparai.hxx"
+#include "xmltbli.hxx"
 
 using namespace com::sun::star;
 
@@ -27,6 +28,8 @@ XMLImportContext *XMLBodyContentContext::CreateChildContext(const OUString &rNam
 {
     if (rName == "text:p" || rName == "text:h")
         return new XMLParaContext(mrImport);
+    if (rName == "table:table")
+        return new XMLTableContext(mrImport);
     return nullptr;
 }
 
