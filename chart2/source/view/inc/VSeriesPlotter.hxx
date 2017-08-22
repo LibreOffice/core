@@ -239,12 +239,15 @@ public:
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
+    void setIsPercentStacked(bool aIsPercentStacked);
+
     //get series names for the z axis labels
     css::uno::Sequence< OUString > getSeriesNames() const;
 
     void setPageReferenceSize( const css::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
+
     bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
 
     //return the depth for a logic 1
@@ -403,6 +406,7 @@ protected:
 
     std::unique_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
     AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead
+    bool m_bIsPercentStacked; // If true, chart type is Percent Stacked
 
     css::uno::Reference< css::chart2::XColorScheme >    m_xColorScheme;
 
