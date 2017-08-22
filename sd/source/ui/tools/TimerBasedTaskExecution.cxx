@@ -26,25 +26,13 @@
 
 namespace sd { namespace tools {
 
-/** Used by the shared_ptr instead of the private destructor.
-*/
-class TimerBasedTaskExecution::Deleter
-{
-public:
-    void operator() (TimerBasedTaskExecution* pObject)
-    {
-        delete pObject;
-    }
-};
-
 std::shared_ptr<TimerBasedTaskExecution> TimerBasedTaskExecution::Create (
     const std::shared_ptr<AsynchronousTask>& rpTask,
     sal_uInt32 nMillisecondsBetweenSteps,
     sal_uInt32 nMaxTimePerStep)
 {
     std::shared_ptr<TimerBasedTaskExecution> pExecution(
-        new TimerBasedTaskExecution(rpTask,nMillisecondsBetweenSteps,nMaxTimePerStep),
-        Deleter());
+        new TimerBasedTaskExecution(rpTask,nMillisecondsBetweenSteps,nMaxTimePerStep));
     // Let the new object have a shared_ptr to itself, so that it can
     // release itself when the AsynchronousTask has been executed
     // completely.

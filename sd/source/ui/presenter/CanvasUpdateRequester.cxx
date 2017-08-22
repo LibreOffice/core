@@ -28,14 +28,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== CanvasUpdateRequester::Deleter ========================================
-
-class CanvasUpdateRequester::Deleter
-{
-public:
-    void operator() (CanvasUpdateRequester* pObject) { delete pObject; }
-};
-
 //===== CanvasUpdateRequester =================================================
 
 std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
@@ -62,7 +54,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
             else
             {
                 std::shared_ptr<CanvasUpdateRequester> const pNew(
-                        new CanvasUpdateRequester(rxSharedCanvas), Deleter());
+                        new CanvasUpdateRequester(rxSharedCanvas));
                 it->second = pNew;
                 return pNew;
             }
@@ -75,7 +67,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
 
     // No requester for the given canvas found.  Create a new one.
     std::shared_ptr<CanvasUpdateRequester> pRequester (
-        new CanvasUpdateRequester(rxSharedCanvas), Deleter());
+        new CanvasUpdateRequester(rxSharedCanvas));
     s_RequesterMap.push_back(std::make_pair(rxSharedCanvas, pRequester));
     return pRequester;
 }

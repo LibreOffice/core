@@ -302,17 +302,6 @@ private:
     ::std::shared_ptr<FrameworkHelper> mpHelper;
 };
 
-//----- FrameworkHelper::Deleter ----------------------------------------------
-
-class FrameworkHelper::Deleter
-{
-public:
-    void operator()(FrameworkHelper* pObject)
-    {
-        delete pObject;
-    }
-};
-
 //----- FrameworkHelper -------------------------------------------------------
 
 std::unique_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
@@ -331,9 +320,7 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
         ::osl::MutexGuard aGuard (aMutexFunctor());
         if (iHelper == maInstanceMap.end())
         {
-            pHelper = ::std::shared_ptr<FrameworkHelper>(
-                new FrameworkHelper(rBase),
-                FrameworkHelper::Deleter());
+            pHelper = ::std::shared_ptr<FrameworkHelper>(new FrameworkHelper(rBase));
             pHelper->Initialize();
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             maInstanceMap[&rBase] = pHelper;

@@ -320,7 +320,6 @@ private:
     FrameworkHelper (ViewShellBase& rBase);
     FrameworkHelper (const FrameworkHelper& rHelper) = delete;
     virtual ~FrameworkHelper() override;
-    class Deleter; friend class Deleter;
     FrameworkHelper& operator= (const FrameworkHelper& rHelper) = delete;
 
     void Initialize();

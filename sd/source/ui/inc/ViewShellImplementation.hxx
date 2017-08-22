@@ -87,9 +87,6 @@ public:
         std::shared_ptr<ToolBarManagerLock> mpSelf;
         ToolBarManagerLock (const std::shared_ptr<sd::ToolBarManager>& rpManager);
         ~ToolBarManagerLock();
-
-        class Deleter;
-        friend class Deleter;
     };
     // The member is not a unqiue_ptr because it takes over its own life time
     // control.

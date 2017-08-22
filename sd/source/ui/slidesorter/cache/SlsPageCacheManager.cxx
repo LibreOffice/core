@@ -151,12 +151,6 @@ public:
     std::pair<iterator,bool> emplace(Args&&... args) { return maMap.emplace(std::forward<Args>(args)...); }
 };
 
-class PageCacheManager::Deleter
-{
-public:
-    void operator() (PageCacheManager* pObject) { delete pObject; }
-};
-
 //===== PageCacheManager ====================================================
 
 std::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
@@ -171,8 +165,7 @@ std::shared_ptr<PageCacheManager> PageCacheManager::Instance()
     if (pInstance.get() == nullptr)
     {
         pInstance = std::shared_ptr<PageCacheManager>(
-            new PageCacheManager(),
-            PageCacheManager::Deleter());
+            new PageCacheManager());
         mpInstance = pInstance;
     }
 

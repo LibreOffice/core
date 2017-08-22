@@ -321,17 +321,12 @@ SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog()
 
 //===== ToolBarManagerLock ====================================================
 
-class ViewShell::Implementation::ToolBarManagerLock::Deleter { public:
-    void operator() (ToolBarManagerLock* pObject) { delete pObject; }
-};
-
 std::shared_ptr<ViewShell::Implementation::ToolBarManagerLock>
     ViewShell::Implementation::ToolBarManagerLock::Create (
         const std::shared_ptr<ToolBarManager>& rpManager)
 {
     std::shared_ptr<ToolBarManagerLock> pLock (
-        new ViewShell::Implementation::ToolBarManagerLock(rpManager),
-        ViewShell::Implementation::ToolBarManagerLock::Deleter());
+        new ViewShell::Implementation::ToolBarManagerLock(rpManager));
     pLock->mpSelf = pLock;
     return pLock;
 }

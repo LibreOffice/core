@@ -79,9 +79,6 @@ private:
         sal_uInt32 nMaxTimePerStep);
     ~TimerBasedTaskExecution();
 
-    class Deleter;
-    friend class Deleter;
-
     DECL_LINK(TimerCallback, Timer *, void);
 };
 

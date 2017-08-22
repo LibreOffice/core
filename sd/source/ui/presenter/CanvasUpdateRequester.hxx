@@ -52,7 +52,6 @@ public:
 private:
     explicit CanvasUpdateRequester (const css::uno::Reference<css::rendering::XSpriteCanvas>& rxCanvas);
     ~CanvasUpdateRequester();
-    class Deleter; friend class Deleter;
 
     /// keep instance alive waiting for event dispatch
     std::shared_ptr<CanvasUpdateRequester> m_pThis;

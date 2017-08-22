@@ -127,9 +127,6 @@ private:
     PageCacheManager();
     ~PageCacheManager();
 
-    class Deleter;
-    friend class Deleter;
-
     std::shared_ptr<Cache> GetRecentlyUsedCache(
         const DocumentKey& pDocument,
         const Size& rSize);

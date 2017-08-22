@@ -121,11 +121,6 @@ private:
     Implementation();
     virtual ~Implementation() override;
 
-    class Deleter { public:
-        void operator() (Implementation* pObject) { delete pObject; }
-    };
-    friend class Deleter;
-
     enum InitializationState { NOT_INITIALIZED, INITIALIZING, INITIALIZED } meInitializationState;
 
     std::unique_ptr<MasterPageContainerQueue> mpRequestQueue;
@@ -189,8 +184,7 @@ std::shared_ptr<MasterPageContainer::Implementation>
         {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             pInstance = std::shared_ptr<MasterPageContainer::Implementation>(
-                new MasterPageContainer::Implementation(),
-                MasterPageContainer::Implementation::Deleter());
+                new MasterPageContainer::Implementation());
             SdGlobalResourceContainer::Instance().AddResource(pInstance);
             Implementation::mpInstance = pInstance;
         }
