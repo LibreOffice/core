@@ -2037,7 +2037,7 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
     SvxBoxItemLine aLineMap[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                            SvxBoxItemLine::RIGHT, SvxBoxItemLine::BOTTOM };
 
-    sal_Int8 cLine;
+    sal_Int8 cLine(0);
     while (rStrm.good())
     {
         rStrm.ReadSChar( cLine );
