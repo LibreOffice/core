@@ -268,16 +268,6 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     return true;
 }
 
-SwBackgroundDestinationItem::SwBackgroundDestinationItem(sal_uInt16  _nWhich, sal_uInt16 nValue) :
-    SfxUInt16Item(_nWhich, nValue)
-{
-}
-
-SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) const
-{
-    return new SwBackgroundDestinationItem(Which(), GetValue());
-}
-
 SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
     SfxPoolItem( nId ),
     m_pPaM(pPaM)
