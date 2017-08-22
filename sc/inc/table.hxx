@@ -998,6 +998,7 @@ public:
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
     void CalculateInColumnInThread( SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    void HandleStuffAfterParallelCalculation( SCCOL nCol, SCROW nRow, size_t nLen);
 
     /**
      * Either start all formula cells as listeners unconditionally, or start

@@ -2024,6 +2024,7 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
     void CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    void HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen );
 
     /**
      * Transfer a series of contiguous cell values from specified position to

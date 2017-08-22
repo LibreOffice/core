@@ -150,7 +150,9 @@ public:
                         SCITP_FROM_ITERATION,
                         SCITP_CLOSE_ITERATION_CIRCLE
                     };
-    void            InterpretTail( ScInterpretTailParameter, bool bUpdateProgress );
+    void            InterpretTail( ScInterpretTailParameter, bool bSingleThreaded );
+
+    void            HandleStuffAfterParallelCalculation();
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
 
