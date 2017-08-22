@@ -128,6 +128,11 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pCommandCategoryListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectCategory ) );
 
+    m_pPlusBtn->SetClickHdl(
+        LINK( this, SvxToolbarConfigPage, AddToolbarHdl ) );
+    m_pMinusBtn->SetClickHdl(
+        LINK( this, SvxToolbarConfigPage, RemoveToolbarHdl ) );
+
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     // Always enable Up and Down buttons
@@ -329,6 +334,79 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
     UpdateButtonStates();
 }
 
+IMPL_LINK_NOARG( SvxToolbarConfigPage, AddToolbarHdl, Button *, void )
+{
+    OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
+
+    OUString aNewName =
+        SvxConfigPageHelper::generateCustomName( prefix, GetSaveInData()->GetEntries() );
+
+    OUString aNewURL =
+        SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
+
+    VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
+
+    // Reflect the actual m_pSaveInListBox into the new toolbar dialog
+    for ( sal_Int32 i = 0; i < m_pSaveInListBox->GetEntryCount(); ++i )
+    {
+        SaveInData* pData =
+            static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
+
+        const sal_Int32 nInsertPos =
+            pNameDialog->m_pSaveInListBox->InsertEntry( m_pSaveInListBox->GetEntry( i ) );
+
+        pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
+    }
+
+    pNameDialog->m_pSaveInListBox->SelectEntryPos(
+        m_pSaveInListBox->GetSelectEntryPos() );
+
+    if ( pNameDialog->Execute() == RET_OK )
+    {
+        aNewName = pNameDialog->GetName();
+
+        // Where to save the new toolbar? (i.e. Modulewise or documentwise)
+        sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
+
+        ToolbarSaveInData* pData =
+            static_cast<ToolbarSaveInData*>(
+                pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ) );
+
+        if ( GetSaveInData() != pData )
+        {
+            m_pSaveInListBox->SelectEntryPos( nInsertPos );
+            m_pSaveInListBox->GetSelectHdl().Call(*m_pSaveInListBox);
+        }
+
+        SvxConfigEntry* pToolbar =
+            new SvxConfigEntry( aNewName, aNewURL, true );
+
+        pToolbar->SetUserDefined();
+        pToolbar->SetMain();
+
+        pData->CreateToolbar( pToolbar );
+
+        nInsertPos = m_pTopLevelListBox->InsertEntry( pToolbar->GetName() );
+        m_pTopLevelListBox->SetEntryData( nInsertPos, pToolbar );
+        m_pTopLevelListBox->SelectEntryPos( nInsertPos );
+        m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
+
+        pData->SetModified();
+    }
+}
+
+IMPL_LINK_NOARG( SvxToolbarConfigPage, RemoveToolbarHdl, Button *, void )
+{
+    SvxConfigEntry* pToolbar = GetTopLevelSelection();
+
+    if ( pToolbar && pToolbar->IsDeletable() )
+    {
+        DeleteSelectedTopLevel();
+        UpdateButtonStates();
+    }
+
+}
+
 IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectCategory, ListBox&, void )
 {
     OUString aSearchTerm( m_pSearchEdit->GetText() );
@@ -436,7 +514,19 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     if ( pToolbar == nullptr )
     {
         //TODO: Disable related buttons
+        m_pPlusBtn->Enable( false );
+        m_pMinusBtn->Enable( false );
+        m_pInsertBtn->Enable( false );
+        m_pResetBtn->Enable( false );
+
         return;
+    }
+    else
+    {
+        m_pPlusBtn->Enable();
+        m_pMinusBtn->Enable( pToolbar->IsDeletable() );
+        m_pInsertBtn->Enable();
+        m_pResetBtn->Enable();
     }
 
     SvxEntries* pEntries = pToolbar->GetEntries();

@@ -47,6 +47,11 @@ public:
         SvxEntries* entries,
         sal_Int32 suffix = 1 );
     static sal_uInt32   generateRandomValue();
+    /**
+        Generates a custom resource URL for a new toolbar.
+        Typically something like: private:resource/toolbar/custom_toolbar_########
+        The last 8 letters are randomly generated alphanumeric characters.
+    */
     static OUString     generateCustomURL( SvxEntries* entries );
 
     static OUString GetModuleName( const OUString& aModuleId );
