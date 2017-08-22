@@ -872,7 +872,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
     uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 
-    // Also check positin and size
+    // Also check position and size
     uno::Reference<drawing::XShape> xShape(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4470), xShape->getSize().Width);
@@ -894,7 +894,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(text::VertOrientation::TOP),getProperty<sal_Int32>(xPropertySet2,"VertOrient"));
 
-    // Also check positin and size
+    // Also check position and size
     xShape.set(xControlShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4410), xShape->getSize().Width);

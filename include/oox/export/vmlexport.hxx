@@ -116,7 +116,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     */
     bool m_bOverrideShapeIdGeneration;
 
-    /// Prefix for overriden shape id generation (used if m_bOverrideShapeIdGeneration is true)
+    /// Prefix for overridden shape id generation (used if m_bOverrideShapeIdGeneration is true)
     OString m_sShapeIDPrefix;
 
     /// Counter for generating shape ids (used if m_bOverrideShapeIdGeneration is true)
