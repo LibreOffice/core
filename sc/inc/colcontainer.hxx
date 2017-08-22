@@ -72,6 +72,9 @@ public:
         assert(aCols.size() > 0);
         return *aCols.back();
     }
+
+    ScColumnVector::const_iterator begin() const { return aCols.begin(); }
+    ScColumnVector::const_iterator end() const { return aCols.end(); }
 };
 
 

@@ -1167,6 +1167,8 @@ private:
 
     SCCOL       FindNextVisibleCol(SCCOL nCol, bool bRight) const;
 
+    ScColContainer const & GetColContainer() const { return aCol; }
+
     // Clipboard transpose for notes
     void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2);
 

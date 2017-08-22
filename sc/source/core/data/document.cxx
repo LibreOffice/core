@@ -6580,8 +6580,13 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        ScTable const * pTable = FetchTable(nTab);
+        if (!pTable)
+            continue;
+        ScColContainer const & rColContainer = pTable->GetColContainer();
+        for (ScColumn const * pCol : rColContainer)
         {
+            SCCOL nCol = pCol->GetCol();
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
                 continue;
