@@ -30,10 +30,6 @@ test::BootstrapFixtureBase::~BootstrapFixtureBase()
 
 void test::BootstrapFixtureBase::setUp()
 {
-    // set UserInstallation to user profile dir in test/user-template
-    OUString sUserInstallURL = m_directories.getURLFromWorkdir("/unittest");
-    rtl::Bootstrap::set("UserInstallation", sUserInstallURL);
-
     m_xContext = comphelper::getProcessComponentContext();
     m_xFactory = m_xContext->getServiceManager();
     m_xSFactory.set(m_xFactory, uno::UNO_QUERY_THROW);
