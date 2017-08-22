@@ -34,13 +34,13 @@ class SW_DLLPUBLIC SwOLEObj
 {
     friend class SwOLENode;
 
-    const SwOLENode* pOLENd;
-    SwOLEListener_Impl* pListener;
+    const SwOLENode* m_pOLENode;
+    SwOLEListener_Impl* m_pListener;
 
     /** Either ref or name are known. If only name is known, ref is obtained
        on demand by GetOleRef() from Sfx. */
-    svt::EmbeddedObjectRef xOLERef;
-    OUString aName;
+    svt::EmbeddedObjectRef m_xOLERef;
+    OUString m_aName;
 
     // eventually buffered data if it is a chart OLE
     drawinglayer::primitive2d::Primitive2DContainer     m_aPrimitive2DSequence;
@@ -65,7 +65,7 @@ public:
 
     const css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
-    const OUString& GetCurrentPersistName() const { return aName; }
+    const OUString& GetCurrentPersistName() const { return m_aName; }
     OUString GetStyleString();
     bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
 

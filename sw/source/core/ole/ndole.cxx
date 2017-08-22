@@ -238,7 +238,7 @@ SwOLENode::~SwOLENode()
 const Graphic* SwOLENode::GetGraphic()
 {
     if ( maOLEObj.GetOleRef().is() )
-        return maOLEObj.xOLERef.GetGraphic();
+        return maOLEObj.m_xOLERef.GetGraphic();
     return nullptr;
 }
 
@@ -255,7 +255,7 @@ SwContentNode *SwOLENode::SplitContentNode( const SwPosition & )
 bool SwOLENode::RestorePersistentData()
 {
     OSL_ENSURE( maOLEObj.GetOleRef().is(), "No object to restore!" );
-    if ( maOLEObj.xOLERef.is() )
+    if ( maOLEObj.m_xOLERef.is() )
     {
         // If a SvPersist instance already exists, we use it
         SfxObjectShell* p = GetDoc()->GetPersist();
@@ -268,13 +268,13 @@ bool SwOLENode::RestorePersistentData()
             p->DoInitNew();
         }
 
-        uno::Reference < container::XChild > xChild( maOLEObj.xOLERef.GetObject(), uno::UNO_QUERY );
+        uno::Reference < container::XChild > xChild( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY );
         if ( xChild.is() )
             xChild->setParent( p->GetModel() );
 
-        OSL_ENSURE( !maOLEObj.aName.isEmpty(), "No object name!" );
+        OSL_ENSURE( !maOLEObj.m_aName.isEmpty(), "No object name!" );
         OUString aObjName;
-        if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( maOLEObj.xOLERef.GetObject(), aObjName ) )
+        if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( maOLEObj.m_xOLERef.GetObject(), aObjName ) )
         {
             if ( xChild.is() )
                 xChild->setParent( nullptr );
@@ -282,8 +282,8 @@ bool SwOLENode::RestorePersistentData()
         }
         else
         {
-            maOLEObj.aName = aObjName;
-            maOLEObj.xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
+            maOLEObj.m_aName = aObjName;
+            maOLEObj.m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
             CheckFileLink_Impl();
         }
     }
@@ -296,9 +296,9 @@ bool SwOLENode::RestorePersistentData()
  */
 bool SwOLENode::SavePersistentData()
 {
-    if( maOLEObj.xOLERef.is() )
+    if( maOLEObj.m_xOLERef.is() )
     {
-        comphelper::EmbeddedObjectContainer* pCnt = maOLEObj.xOLERef.GetContainer();
+        comphelper::EmbeddedObjectContainer* pCnt = maOLEObj.m_xOLERef.GetContainer();
 
 #if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = GetDoc()->GetPersist();
@@ -310,9 +310,9 @@ bool SwOLENode::SavePersistentData()
         }
 #endif
 
-        if ( pCnt && pCnt->HasEmbeddedObject( maOLEObj.aName ) )
+        if ( pCnt && pCnt->HasEmbeddedObject( maOLEObj.m_aName ) )
         {
-            uno::Reference < container::XChild > xChild( maOLEObj.xOLERef.GetObject(), uno::UNO_QUERY );
+            uno::Reference < container::XChild > xChild( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY );
             if ( xChild.is() )
                 xChild->setParent( nullptr );
 
@@ -344,15 +344,15 @@ bool SwOLENode::SavePersistentData()
                 }
             }
 
-            pCnt->RemoveEmbeddedObject( maOLEObj.aName, bKeepObjectToTempStorage );
+            pCnt->RemoveEmbeddedObject( maOLEObj.m_aName, bKeepObjectToTempStorage );
 
             // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
             // by different name, in future it might makes sense that the name is transported here.
-            maOLEObj.xOLERef.AssignToContainer( nullptr, maOLEObj.aName );
+            maOLEObj.m_xOLERef.AssignToContainer( nullptr, maOLEObj.m_aName );
             try
             {
                 // "unload" object
-                maOLEObj.xOLERef->changeState( embed::EmbedStates::LOADED );
+                maOLEObj.m_xOLERef->changeState( embed::EmbedStates::LOADED );
             }
             catch (const uno::Exception&)
             {
@@ -434,7 +434,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     pPersistShell->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
         pSrc->GetEmbeddedObjectContainer(),
-        pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( maOLEObj.aName ),
+        pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( maOLEObj.m_aName ),
         aNewName,
         pSrc->getDocumentBaseURL(),
         pPersistShell->getDocumentBaseURL());
@@ -491,12 +491,12 @@ bool SwOLENode::IsInGlobalDocSection() const
 
 bool SwOLENode::IsOLEObjectDeleted() const
 {
-    if( maOLEObj.xOLERef.is() )
+    if( maOLEObj.m_xOLERef.is() )
     {
         SfxObjectShell* p = GetDoc()->GetPersist();
         if( p ) // Must be there
         {
-            return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( maOLEObj.aName );
+            return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( maOLEObj.m_aName );
         }
     }
     return false;
@@ -504,8 +504,8 @@ bool SwOLENode::IsOLEObjectDeleted() const
 
 void SwOLENode::GetNewReplacement()
 {
-    if ( maOLEObj.xOLERef.is() )
-        maOLEObj.xOLERef.UpdateReplacement();
+    if ( maOLEObj.m_xOLERef.is() )
+        maOLEObj.m_xOLERef.UpdateReplacement();
 }
 
 bool SwOLENode::UpdateLinkURL_Impl()
@@ -518,10 +518,10 @@ bool SwOLENode::UpdateLinkURL_Impl()
         sfx2::LinkManager::GetDisplayNames( mpObjectLink, nullptr, &aNewLinkURL );
         if ( !aNewLinkURL.equalsIgnoreAsciiCase( maLinkURL ) )
         {
-            if ( !maOLEObj.xOLERef.is() )
+            if ( !maOLEObj.m_xOLERef.is() )
                 maOLEObj.GetOleRef();
 
-            uno::Reference< embed::XEmbeddedObject > xObj = maOLEObj.xOLERef.GetObject();
+            uno::Reference< embed::XEmbeddedObject > xObj = maOLEObj.m_xOLERef.GetObject();
             uno::Reference< embed::XCommonEmbedPersist > xPersObj( xObj, uno::UNO_QUERY );
             OSL_ENSURE( xPersObj.is(), "The object must exist!" );
             if ( xPersObj.is() )
@@ -593,11 +593,11 @@ void SwOLENode::DisconnectFileLink_Impl()
 
 void SwOLENode::CheckFileLink_Impl()
 {
-    if ( maOLEObj.xOLERef.GetObject().is() && !mpObjectLink )
+    if ( maOLEObj.m_xOLERef.GetObject().is() && !mpObjectLink )
     {
         try
         {
-            uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.xOLERef.GetObject(), uno::UNO_QUERY_THROW );
+            uno::Reference< embed::XLinkageSupport > xLinkSupport( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY_THROW );
             if ( xLinkSupport->isLink() )
             {
                 const OUString aLinkURL = xLinkSupport->getLinkURL();
@@ -732,32 +732,32 @@ private:
 //////////////////////////////////////////////////////////////////////////////
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
-    pOLENd( nullptr ),
-    pListener( nullptr ),
-    xOLERef( xObj ),
+    m_pOLENode( nullptr ),
+    m_pListener( nullptr ),
+    m_xOLERef( xObj ),
     m_aPrimitive2DSequence(),
     m_aRange(),
     m_pDeflateData(nullptr)
 {
-    xOLERef.Lock();
+    m_xOLERef.Lock();
     if ( xObj.is() )
     {
-        pListener = new SwOLEListener_Impl( this );
-        pListener->acquire();
-        xObj->addStateChangeListener( pListener );
+        m_pListener = new SwOLEListener_Impl( this );
+        m_pListener->acquire();
+        xObj->addStateChangeListener( m_pListener );
     }
 }
 
 SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
-    pOLENd( nullptr ),
-    pListener( nullptr ),
-    aName( rString ),
+    m_pOLENode( nullptr ),
+    m_pListener( nullptr ),
+    m_aName( rString ),
     m_aPrimitive2DSequence(),
     m_aRange(),
     m_pDeflateData(nullptr)
 {
-    xOLERef.Lock();
-    xOLERef.SetViewAspect( nAspect );
+    m_xOLERef.Lock();
+    m_xOLERef.SetViewAspect( nAspect );
 }
 
 SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
@@ -770,20 +770,20 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
         m_pDeflateData = nullptr;
     }
 
-    if( pListener )
+    if( m_pListener )
     {
-        if ( xOLERef.is() )
-            xOLERef->removeStateChangeListener( pListener );
-        pListener->Release();
+        if ( m_xOLERef.is() )
+            m_xOLERef->removeStateChangeListener( m_pListener );
+        m_pListener->Release();
     }
 
-    if( pOLENd && !pOLENd->GetDoc()->IsInDtor() )
+    if( m_pOLENode && !m_pOLENode->GetDoc()->IsInDtor() )
     {
         // if the model is not currently in destruction it means that this object should be removed from the model
-        comphelper::EmbeddedObjectContainer* pCnt = xOLERef.GetContainer();
+        comphelper::EmbeddedObjectContainer* pCnt = m_xOLERef.GetContainer();
 
 #if OSL_DEBUG_LEVEL > 0
-        SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
+        SfxObjectShell* p = m_pOLENode->GetDoc()->GetPersist();
         OSL_ENSURE( p, "No document!" );
         if( p )
         {
@@ -792,24 +792,24 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
         }
 #endif
 
-        if ( pCnt && pCnt->HasEmbeddedObject( aName ) )
+        if ( pCnt && pCnt->HasEmbeddedObject( m_aName ) )
         {
-            uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
+            uno::Reference < container::XChild > xChild( m_xOLERef.GetObject(), uno::UNO_QUERY );
             if ( xChild.is() )
                 xChild->setParent( nullptr );
 
             // not already removed by deleting the object
-            xOLERef.AssignToContainer( nullptr, aName );
+            m_xOLERef.AssignToContainer( nullptr, m_aName );
 
             // unlock object so that object can be closed in RemoveEmbeddedObject
             // successful closing of the object will automatically clear the reference then
-            xOLERef.Lock(false);
+            m_xOLERef.Lock(false);
 
             // Always remove object from container it is connected to
             try
             {
                 // remove object from container but don't close it
-                pCnt->RemoveEmbeddedObject( aName );
+                pCnt->RemoveEmbeddedObject( m_aName );
             }
             catch ( uno::Exception& )
             {
@@ -818,16 +818,16 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
 
     }
 
-    if ( xOLERef.is() )
+    if ( m_xOLERef.is() )
         // in case the object wasn't closed: release it
         // in case the object was not in the container: it's still locked, try to close
-        xOLERef.Clear();
+        m_xOLERef.Clear();
 }
 
 void SwOLEObj::SetNode( SwOLENode* pNode )
 {
-    pOLENd = pNode;
-    if ( aName.isEmpty() )
+    m_pOLENode = pNode;
+    if ( m_aName.isEmpty() )
     {
         SwDoc* pDoc = pNode->GetDoc();
 
@@ -843,54 +843,54 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         }
 
         OUString aObjName;
-        uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
+        uno::Reference < container::XChild > xChild( m_xOLERef.GetObject(), uno::UNO_QUERY );
         if ( xChild.is() && xChild->getParent() != p->GetModel() )
             // it is possible that the parent was set already
             xChild->setParent( p->GetModel() );
-        if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( xOLERef.GetObject(), aObjName ) )
+        if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( m_xOLERef.GetObject(), aObjName ) )
         {
             OSL_FAIL( "InsertObject failed" );
         if ( xChild.is() )
             xChild->setParent( nullptr );
         }
         else
-            xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
+            m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
 
-        const_cast<SwOLENode*>(pOLENd)->CheckFileLink_Impl(); // for this notification nonconst access is required
+        const_cast<SwOLENode*>(m_pOLENode)->CheckFileLink_Impl(); // for this notification nonconst access is required
 
-        aName = aObjName;
+        m_aName = aObjName;
     }
 }
 
 OUString SwOLEObj::GetStyleString()
 {
     OUString strStyle;
-    if (xOLERef.is() && xOLERef.IsChart())
-        strStyle = xOLERef.GetChartType();
+    if (m_xOLERef.is() && m_xOLERef.IsChart())
+        strStyle = m_xOLERef.GetChartType();
     return strStyle;
 }
 
 bool SwOLEObj::IsOleRef() const
 {
-    return xOLERef.is();
+    return m_xOLERef.is();
 }
 
 const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
 {
-    if( !xOLERef.is() )
+    if( !m_xOLERef.is() )
     {
-        SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
+        SfxObjectShell* p = m_pOLENode->GetDoc()->GetPersist();
         assert(p && "No SvPersist present");
 
         OUString sDocumentBaseURL = p->getDocumentBaseURL();
-        uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject(aName, &sDocumentBaseURL);
-        OSL_ENSURE( !xOLERef.is(), "Calling GetOleRef() recursively is not permitted" );
+        uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject(m_aName, &sDocumentBaseURL);
+        OSL_ENSURE( !m_xOLERef.is(), "Calling GetOleRef() recursively is not permitted" );
 
         if ( !xObj.is() )
         {
             // We could not load this part (probably broken)
             tools::Rectangle aArea;
-            SwFrame *pFrame = pOLENd->getLayoutFrame(nullptr);
+            SwFrame *pFrame = m_pOLENode->getLayoutFrame(nullptr);
             if ( pFrame )
             {
                 Size aSz( pFrame->Frame().SSize() );
@@ -908,16 +908,16 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         }
         // else
         {
-            xOLERef.Assign( xObj, xOLERef.GetViewAspect() );
-            xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aName );
-            pListener = new SwOLEListener_Impl( this );
-            pListener->acquire();
-            xObj->addStateChangeListener( pListener );
+            m_xOLERef.Assign( xObj, m_xOLERef.GetViewAspect() );
+            m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), m_aName );
+            m_pListener = new SwOLEListener_Impl( this );
+            m_pListener->acquire();
+            xObj->addStateChangeListener( m_pListener );
         }
 
-        const_cast<SwOLENode*>(pOLENd)->CheckFileLink_Impl(); // for this notification nonconst access is required
+        const_cast<SwOLENode*>(m_pOLENode)->CheckFileLink_Impl(); // for this notification nonconst access is required
     }
-    else if ( xOLERef->getCurrentState() == embed::EmbedStates::RUNNING )
+    else if ( m_xOLERef->getCurrentState() == embed::EmbedStates::RUNNING )
     {
         // move object to first position in cache
         if (!g_pOLELRU_Cache)
@@ -925,22 +925,22 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         g_pOLELRU_Cache->InsertObj( *this );
     }
 
-    return xOLERef.GetObject();
+    return m_xOLERef.GetObject();
 }
 
 svt::EmbeddedObjectRef& SwOLEObj::GetObject()
 {
     GetOleRef();
-    return xOLERef;
+    return m_xOLERef;
 }
 
 bool SwOLEObj::UnloadObject()
 {
     bool bRet = true;
-    if ( pOLENd )
+    if ( m_pOLENode )
     {
-        const SwDoc* pDoc = pOLENd->GetDoc();
-        bRet = UnloadObject( xOLERef.GetObject(), pDoc, xOLERef.GetViewAspect() );
+        const SwDoc* pDoc = m_pOLENode->GetDoc();
+        bRet = UnloadObject( m_xOLERef.GetObject(), pDoc, m_xOLERef.GetViewAspect() );
     }
 
     return bRet;
@@ -1030,9 +1030,9 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
         }
     }
 
-    if(m_aPrimitive2DSequence.empty() && m_aRange.isEmpty() && xOLERef.is() && xOLERef.IsChart())
+    if(m_aPrimitive2DSequence.empty() && m_aRange.isEmpty() && m_xOLERef.is() && m_xOLERef.IsChart())
     {
-        const uno::Reference< frame::XModel > aXModel(xOLERef->getComponent(), uno::UNO_QUERY);
+        const uno::Reference< frame::XModel > aXModel(m_xOLERef->getComponent(), uno::UNO_QUERY);
 
         if(aXModel.is())
         {
