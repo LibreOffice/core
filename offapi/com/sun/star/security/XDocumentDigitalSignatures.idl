@@ -134,6 +134,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
          @since LibreOffice 5.3
      */
     com::sun::star::security::XCertificate chooseCertificate( [out] string Description );
+    com::sun::star::security::XCertificate chooseSigningCertificate( [out] string Description );
+    com::sun::star::security::XCertificate chooseEncryptionCertificate( [out] string Description );
 
 } ;
 

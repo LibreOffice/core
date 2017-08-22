@@ -405,7 +405,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.mxStore, m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts );
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts, UserAction::Sign );
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;
