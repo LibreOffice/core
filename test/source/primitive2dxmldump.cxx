@@ -26,6 +26,9 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -190,6 +193,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 {
                     rWriter.attribute("height", aScale.getY());
                 }
+                rWriter.attribute("x", aTranslate.getX());
+                rWriter.attribute("y", aTranslate.getY());
                 rWriter.attribute("text", rTextSimplePortionPrimitive2D.getText());
                 rWriter.attribute("fontcolor", convertColorToString(rTextSimplePortionPrimitive2D.getFontColor()));
 
@@ -242,6 +247,19 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
                 rWriter.endElement();
             }
+            break;
+
+            case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D:
+            {
+                const MetafilePrimitive2D& rMetafilePrimitive2D = dynamic_cast<const MetafilePrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("metafile");
+                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+                // since the graphic is not rendered in a document, we do not need a concrete view information
+                rMetafilePrimitive2D.get2DDecomposition(aPrimitiveContainer, drawinglayer::geometry::ViewInformation2D());
+                decomposeAndWrite(aPrimitiveContainer,rWriter);
+                rWriter.endElement();
+            }
+
             break;
 
             default:
