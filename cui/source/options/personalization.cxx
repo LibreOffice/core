@@ -705,7 +705,7 @@ void SearchAndParseThread::execute()
                     sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
-                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
+                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError);
                     aBox->Execute();
                     return;
                 }
@@ -717,7 +717,7 @@ void SearchAndParseThread::execute()
                 sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                 sError = sError.replaceAll("%1", m_aURL);
                 m_pPersonaDialog->SetProgress( OUString() );
-                ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError );
+                ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError );
                 aBox->Execute();
                 return;
             }
@@ -757,7 +757,7 @@ void SearchAndParseThread::execute()
                     sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
-                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
+                    ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError);
                     aBox->Execute();
                     return;
                 }
@@ -840,7 +840,7 @@ void SearchAndParseThread::execute()
             sError = CuiResId( RID_SVXSTR_SEARCHERROR );
             sError = sError.replaceAll("%1", m_aURL);
             m_pPersonaDialog->SetProgress( OUString() );
-            ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
+            ScopedVclPtrInstance< ErrorBox > aBox( nullptr, MessBoxStyle::Ok, sError);
             aBox->Execute();
             return;
         }

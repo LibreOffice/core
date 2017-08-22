@@ -183,7 +183,7 @@ void ScScenarioListBox::EditScenario()
 void ScScenarioListBox::DeleteScenario()
 {
     if( GetSelectEntryCount() > 0 )
-        if( ScopedVclPtrInstance<QueryBox>( nullptr, WinBits( WB_YES_NO | WB_DEF_YES ), ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) )->Execute() == RET_YES )
+        if( ScopedVclPtrInstance<QueryBox>( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) )->Execute() == RET_YES )
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );
 }
 

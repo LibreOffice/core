@@ -208,7 +208,7 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
         (rLayerAdmin.GetLayer( aNewName ) && aLayerName != aNewName) )
     {
         // Name already exists
-        ScopedVclPtrInstance<WarningBox> aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
+        ScopedVclPtrInstance<WarningBox> aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), MessBoxStyle::Ok,
                                 SdResId( STR_WARN_NAME_DUPLICATE ) );
         aWarningBox->Execute();
         bOK = false;

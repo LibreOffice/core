@@ -1211,7 +1211,7 @@ sal_Int32 askForUserAction(vcl::Window* _pParent, const char* pTitle, const char
     SolarMutexGuard aGuard;
     OUString aMsg = DBA_RES(pText);
     aMsg = aMsg.replaceFirst("%1", _sName);
-    ScopedVclPtrInstance<OSQLMessageBox> aAsk(_pParent, DBA_RES(pTitle), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+    ScopedVclPtrInstance<OSQLMessageBox> aAsk(_pParent, DBA_RES(pTitle), aMsg,MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,OSQLMessageBox::Query);
     if ( _bAll )
     {
         aAsk->AddButton(DBA_RES(STR_BUTTON_TEXT_ALL), RET_ALL);

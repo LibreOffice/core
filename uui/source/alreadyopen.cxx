@@ -22,7 +22,7 @@
 #include <unotools/resmgr.hxx>
 
 AlreadyOpenQueryBox::AlreadyOpenQueryBox( vcl::Window* pParent, const std::locale& rLocale, const OUString& aMessage, bool bIsStoring ) :
-    MessBox(pParent, 0,
+    MessBox(pParent, MessBoxStyle::NONE,
             Translate::get(STR_ALREADYOPEN_TITLE, rLocale),
             aMessage )
 {

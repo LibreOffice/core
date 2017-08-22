@@ -614,7 +614,7 @@ bool ScaleTabPage::ShowWarning(const char* pResIdMessage, Control* pControl /* =
     if (pResIdMessage == nullptr)
         return false;
 
-    ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ), SchResId(pResIdMessage))->Execute();
+    ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok, SchResId(pResIdMessage))->Execute();
     if( pControl )
     {
         pControl->GrabFocus();

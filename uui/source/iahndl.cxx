@@ -961,7 +961,7 @@ executeMessageBox(
     vcl::Window * pParent,
     OUString const & rTitle,
     OUString const & rMessage,
-    WinBits nButtonMask )
+    MessBoxStyle nButtonMask )
 {
     SolarMutexGuard aGuard;
 
@@ -1110,7 +1110,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             aTitle += aErrTitle;
 
             executeMessageBox(
-                getParentProperty(), aTitle, aErrorString, WB_OK );
+                getParentProperty(), aTitle, aErrorString, MessBoxStyle::Ok );
         }
         else
             ErrorHandler::HandleError(nErrorCode);
@@ -1208,14 +1208,14 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         return;
     }
 
-    WinBits nButtonMask;
+    MessBoxStyle nButtonMask;
     if( xApprove.is() && xDisapprove.is() )
     {
-        nButtonMask = WB_YES_NO | WB_DEF_YES;
+        nButtonMask = MessBoxStyle::YesNo | MessBoxStyle::DefaultYes;
     }
     else if ( xAbort.is() )
     {
-        nButtonMask = WB_OK;
+        nButtonMask = MessBoxStyle::Ok;
     }
     else
         return;

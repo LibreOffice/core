@@ -328,7 +328,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                         ::sd::Window* pWindow = GetActiveWindow();
                         ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
                     }
-                    else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), WB_YES_NO,
+                    else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), MessBoxStyle::YesNo,
                                       SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       )->Execute() == RET_YES )
                     {
@@ -365,7 +365,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                         ::sd::Window* pWindow = GetActiveWindow();
                         ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
                     }
-                    else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), WB_YES_NO,
+                    else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), MessBoxStyle::YesNo,
                                       SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       )->Execute() == RET_YES )
                     {

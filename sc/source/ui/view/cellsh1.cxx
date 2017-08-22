@@ -2010,7 +2010,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     // or should create a new overlapping conditional format
                     if(!bCondFormatDlg && bContainsExistingCondFormat)
                     {
-                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                        ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
                         bool bEditExisting = aBox->Execute() == RET_YES;
                         if(bEditExisting)
@@ -2952,7 +2952,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                         //  confirm selection if it contains SubTotal cells
 
                         ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(),
-                                        WinBits(WB_YES_NO | WB_DEF_YES),
+                                        MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                         ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
                         if (aBox->Execute() == RET_NO)
                             bOK = false;

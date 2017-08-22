@@ -263,7 +263,7 @@ namespace dbaui
                     eImage = OSQLMessageBox::Error;
                     aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
                 }
-                ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, sTitle, aMessage, WB_OK, eImage );
+                ScopedVclPtrInstance< OSQLMessageBox > aMsg( this, sTitle, aMessage, MessBoxStyle::Ok, eImage );
                 aMsg->Execute();
             }
             if ( !bSuccess )

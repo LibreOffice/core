@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 
 LockFailedQueryBox::LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale)
-    : MessBox(pParent, 0, Translate::get(STR_LOCKFAILED_TITLE, rResLocale), OUString())
+    : MessBox(pParent, MessBoxStyle::NONE, Translate::get(STR_LOCKFAILED_TITLE, rResLocale), OUString())
 {
     SetImage( ErrorBox::GetStandardImage() );
 

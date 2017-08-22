@@ -557,7 +557,7 @@ using namespace ::com::sun::star;
 #endif
         const char *pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        ScopedVclPtrInstance<OSQLMessageBox> aMsg(this, DBA_RES(pMessage), OUString(), WB_OK | WB_DEF_OK, mt);
+        ScopedVclPtrInstance<OSQLMessageBox> aMsg(this, DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg->Execute();
     }
 

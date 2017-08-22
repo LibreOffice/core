@@ -154,8 +154,7 @@ bool PowerPointImport::importDocument()
         aWarning += SvxResId(RID_SVXSTR_WARN_MISSING_SMARTART);
 
         // Show it.
-        WinBits eBits = WB_OK | WB_DEF_OK;
-        ScopedVclPtrInstance<WarningBox> pBox(nullptr, eBits, aWarning);
+        ScopedVclPtrInstance<WarningBox> pBox(nullptr, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, aWarning);
         pBox->Execute();
     }
 

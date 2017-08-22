@@ -207,8 +207,10 @@ protected:
 
     virtual void SAL_CALL disposing() override;
 
-    static vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent, WinBits nWinBits );
-    css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor, WinBits nWinBits );
+    static vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent,
+                             WinBits nWinBits, MessBoxStyle nMessBoxStyle );
+    css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
+                             WinBits nForceWinBits, MessBoxStyle nForceMessBoxStyle );
 
 public:
 
@@ -312,9 +314,10 @@ public:
 
 };
 
-WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, WindowType nCompType )
+std::pair<WinBits,MessBoxStyle> ImplGetWinBits( sal_uInt32 nComponentAttribs, WindowType nCompType )
 {
     WinBits nWinBits = 0;
+    MessBoxStyle nStyle = MessBoxStyle::NONE;
 
     bool bMessBox = false;
     if ( ( nCompType == WindowType::INFOBOX ) ||
@@ -377,29 +380,29 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, WindowType nCompType )
     if( nComponentAttribs & css::awt::VclWindowPeerAttribute::NOLABEL ) //added for issue79712
         nWinBits |= WB_NOLABEL;
 
-    // These bits are not uniqe
+    // These bits are not unique
     if ( bMessBox )
     {
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::OK )
-            nWinBits |= WB_OK;
+            nStyle |= MessBoxStyle::Ok;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::OK_CANCEL )
-            nWinBits |= WB_OK_CANCEL;
+            nStyle |= MessBoxStyle::OkCancel;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::YES_NO )
-            nWinBits |= WB_YES_NO;
+            nStyle |= MessBoxStyle::YesNo;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::YES_NO_CANCEL )
-            nWinBits |= WB_YES_NO_CANCEL;
+            nStyle |= MessBoxStyle::YesNoCancel;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::RETRY_CANCEL )
-            nWinBits |= WB_RETRY_CANCEL;
+            nStyle |= MessBoxStyle::RetryCancel;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_OK )
-            nWinBits |= WB_DEF_OK;
+            nStyle |= MessBoxStyle::DefaultOk;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_CANCEL )
-            nWinBits |= WB_DEF_CANCEL;
+            nStyle |= MessBoxStyle::DefaultCancel;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_RETRY )
-            nWinBits |= WB_DEF_RETRY;
+            nStyle |= MessBoxStyle::DefaultRetry;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_YES )
-            nWinBits |= WB_DEF_YES;
+            nStyle |= MessBoxStyle::DefaultYes;
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_NO )
-            nWinBits |= WB_DEF_NO;
+            nStyle |= MessBoxStyle::DefaultNo;
     }
     if ( nCompType == WindowType::MULTILINEEDIT || nCompType == WindowType::DIALOG || nCompType == WindowType::GROUPBOX )
     {
@@ -424,7 +427,7 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, WindowType nCompType )
         }
     }
 
-    return nWinBits;
+    return { nWinBits, nStyle };
 }
 
 struct ComponentInfo
@@ -761,7 +764,7 @@ css::awt::Rectangle VCLXToolkit::getWorkArea(  )
 
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor )
 {
-    return ImplCreateWindow( rDescriptor, WinBits(0) );
+    return ImplCreateWindow( rDescriptor, WinBits(0), MessBoxStyle::NONE );
 }
 
 css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height )
@@ -791,7 +794,7 @@ css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
 
 vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
-    vcl::Window* pParent, WinBits nWinBits )
+    vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )
 {
     OUString aServiceName( rDescriptor.WindowServiceName );
     aServiceName = aServiceName.toAsciiLowerCase();
@@ -881,7 +884,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXEdit;
             break;
             case WindowType::ERRORBOX:
-                pNewWindow = VclPtr<ErrorBox>::Create( pParent, nWinBits, OUString() );
+                pNewWindow = VclPtr<ErrorBox>::Create( pParent, nMessBoxStyle, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WindowType::FIXEDBITMAP:
@@ -942,7 +945,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXButton;
             break;
             case WindowType::MESSBOX:
-                pNewWindow = VclPtr<MessBox>::Create( pParent, nWinBits, OUString(), OUString() );
+                pNewWindow = VclPtr<MessBox>::Create( pParent, nMessBoxStyle, nWinBits, OUString(), OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WindowType::METRICBOX:
@@ -1006,7 +1009,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXButton;
             break;
             case WindowType::QUERYBOX:
-                pNewWindow = VclPtr<QueryBox>::Create( pParent, nWinBits, OUString() );
+                pNewWindow = VclPtr<QueryBox>::Create( pParent, nMessBoxStyle, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WindowType::RADIOBUTTON:
@@ -1082,7 +1085,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<TriStateBox>::Create( pParent, nWinBits );
             break;
             case WindowType::WARNINGBOX:
-                pNewWindow = VclPtr<WarningBox>::Create( pParent, nWinBits, OUString() );
+                pNewWindow = VclPtr<WarningBox>::Create( pParent, nMessBoxStyle, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WindowType::WORKWINDOW:
@@ -1213,7 +1216,7 @@ extern "C" vcl::Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const css
 
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
-    WinBits nForceWinBits )
+    WinBits nForceWinBits, MessBoxStyle nForceMessBoxStyle )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1232,9 +1235,11 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
     }
-    WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
+    std::pair<WinBits, MessBoxStyle> aPair = ImplGetWinBits( rDescriptor.WindowAttributes,
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
+    WinBits nWinBits = aPair.first;
     nWinBits |= nForceWinBits;
+    aPair.second |= nForceMessBoxStyle;
 
     VCLXWindow* pNewComp = nullptr;
 
@@ -1268,7 +1273,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     // if SvTools could not provide a window, create it ourself
     if ( !pNewWindow )
-        pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
+        pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits, aPair.second );
 
     DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
     SAL_INFO_IF( !pNewComp, "toolkit", "createWindow: No special Interface!" );
@@ -1448,11 +1453,11 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
 
     // No more bits for VclWindowPeerAttribute possible. Mapping must be
     // done explicitly using VCL methods
-    WinBits nAddWinBits( 0 );
+    MessBoxStyle nAddWinBits = MessBoxStyle::NONE;
     if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_ABORT_IGNORE_RETRY )
-        nAddWinBits |= WB_ABORT_RETRY_IGNORE;
+        nAddWinBits |= MessBoxStyle::AbortRetryIgnore;
     if ( sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_IGNORE )
-        nAddWinBits |= WB_DEF_IGNORE;
+        nAddWinBits |= MessBoxStyle::DefaultIgnore;
 
     rtl::OUString aType;
     lcl_convertMessageBoxType( aType, eType );
@@ -1463,7 +1468,7 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
     aDescriptor.Parent            = aParent;
     aDescriptor.WindowAttributes  = nWindowAttributes;
     css::uno::Reference< css::awt::XMessageBox > xMsgBox(
-        ImplCreateWindow( aDescriptor, nAddWinBits ), css::uno::UNO_QUERY );
+        ImplCreateWindow( aDescriptor, 0, nAddWinBits ), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, css::uno::UNO_QUERY );
     if ( xMsgBox.is() && xWindow.is() )
     {

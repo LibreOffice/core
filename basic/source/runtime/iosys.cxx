@@ -722,9 +722,9 @@ void SbiIoSystem::Shutdown()
     {
 #if defined __GNUC__
         vcl::Window* pParent = Application::GetDefDialogParent();
-        ScopedVclPtrInstance<MessBox>( pParent, WinBits( WB_OK ), OUString(), aOut )->Execute();
+        ScopedVclPtrInstance<MessBox>( pParent, MessBoxStyle::Ok, OUString(), aOut )->Execute();
 #else
-        ScopedVclPtrInstance<MessBox>( Application::GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut )->Execute();
+        ScopedVclPtrInstance<MessBox>( Application::GetDefDialogParent(), MessBoxStyle::Ok, OUString(), aOut )->Execute();
 #endif
     }
     aOut.clear();
@@ -869,7 +869,7 @@ void SbiIoSystem::WriteCon(const OUString& rText)
             SolarMutexGuard aSolarGuard;
             if( !ScopedVclPtrInstance<MessBox>(
                         Application::GetDefDialogParent(),
-                        WinBits( WB_OK_CANCEL | WB_DEF_OK ),
+                        MessBoxStyle::OkCancel | MessBoxStyle::DefaultOk,
                         OUString(), s)->Execute() )
             {
                 nError = ERRCODE_BASIC_USER_ABORT;

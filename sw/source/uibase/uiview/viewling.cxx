@@ -417,7 +417,7 @@ void SwView::HyphenateDocument()
     // do not hyphenate if interactive hyphenation is active elsewhere
     if (SwEditShell::HasHyphIter())
     {
-        ScopedVclPtrInstance<MessBox>( nullptr, WB_OK, SwResId( STR_HYPH_TITLE ),
+        ScopedVclPtrInstance<MessBox>( nullptr, MessBoxStyle::Ok, SwResId( STR_HYPH_TITLE ),
                                        SwResId( STR_MULT_INTERACT_HYPH_WARN ) )->Execute();
         return;
     }

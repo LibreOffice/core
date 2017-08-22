@@ -465,7 +465,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             pBMPage->GetLowerBorder()   != pRefPage->GetLowerBorder())
         {
             OUString aStr(SdResId(STR_SCALE_OBJECTS));
-            sal_uInt16 nBut = ScopedVclPtrInstance<QueryBox>(nullptr, WB_YES_NO_CANCEL, aStr)->Execute();
+            sal_uInt16 nBut = ScopedVclPtrInstance<QueryBox>(nullptr, MessBoxStyle::YesNoCancel, aStr)->Execute();
 
             bScaleObjects = nBut == RET_YES;
             bContinue     = nBut != RET_CANCEL;

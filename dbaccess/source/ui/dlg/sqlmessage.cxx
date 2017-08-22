@@ -523,32 +523,32 @@ void OSQLMessageBox::impl_positionControls()
     SetPageSizePixel( aDialogSize );
 }
 
-void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
+void OSQLMessageBox::impl_createStandardButtons( MessBoxStyle _nStyle )
 {
-    if ( _nStyle & WB_YES_NO_CANCEL )
+    if ( _nStyle & MessBoxStyle::YesNoCancel )
     {
-        lcl_addButton( *this, StandardButtonType::Yes,    ( _nStyle & WB_DEF_YES ) != 0 );
-        lcl_addButton( *this, StandardButtonType::No,     ( _nStyle & WB_DEF_NO ) != 0 );
-        lcl_addButton( *this, StandardButtonType::Cancel, ( _nStyle & WB_DEF_CANCEL ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Yes,    bool(_nStyle & MessBoxStyle::DefaultYes) );
+        lcl_addButton( *this, StandardButtonType::No,     bool( _nStyle & MessBoxStyle::DefaultNo ) );
+        lcl_addButton( *this, StandardButtonType::Cancel, bool( _nStyle & MessBoxStyle::DefaultCancel ) );
     }
-    else if ( _nStyle & WB_OK_CANCEL )
+    else if ( _nStyle & MessBoxStyle::OkCancel )
     {
-        lcl_addButton( *this, StandardButtonType::OK,     ( _nStyle & WB_DEF_OK ) != 0 );
-        lcl_addButton( *this, StandardButtonType::Cancel, ( _nStyle & WB_DEF_CANCEL ) != 0 );
+        lcl_addButton( *this, StandardButtonType::OK,     bool( _nStyle & MessBoxStyle::DefaultOk ) );
+        lcl_addButton( *this, StandardButtonType::Cancel, bool( _nStyle & MessBoxStyle::DefaultCancel ) );
     }
-    else if ( _nStyle & WB_YES_NO )
+    else if ( _nStyle & MessBoxStyle::YesNo )
     {
-        lcl_addButton( *this, StandardButtonType::Yes,    ( _nStyle & WB_DEF_YES ) != 0 );
-        lcl_addButton( *this, StandardButtonType::No,     ( _nStyle & WB_DEF_NO ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Yes,    bool( _nStyle & MessBoxStyle::DefaultYes ) );
+        lcl_addButton( *this, StandardButtonType::No,     bool( _nStyle & MessBoxStyle::DefaultNo ) );
     }
-    else if ( _nStyle & WB_RETRY_CANCEL )
+    else if ( _nStyle & MessBoxStyle::RetryCancel )
     {
-        lcl_addButton( *this, StandardButtonType::Retry,  ( _nStyle & WB_DEF_RETRY ) != 0 );
-        lcl_addButton( *this, StandardButtonType::Cancel, ( _nStyle & WB_DEF_CANCEL ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Retry,  bool( _nStyle & MessBoxStyle::DefaultRetry ) );
+        lcl_addButton( *this, StandardButtonType::Cancel, bool( _nStyle & MessBoxStyle::DefaultCancel ) );
     }
     else
     {
-        OSL_ENSURE( WB_OK & _nStyle, "OSQLMessageBox::impl_createStandardButtons: unsupported dialog style requested!" );
+        OSL_ENSURE( MessBoxStyle::Ok & _nStyle, "OSQLMessageBox::impl_createStandardButtons: unsupported dialog style requested!" );
         AddButton( StandardButtonType::OK, RET_OK, ButtonDialogFlags::Default | ButtonDialogFlags::Focus );
     }
 
@@ -598,7 +598,7 @@ void OSQLMessageBox::impl_addDetailsButton()
     }
 }
 
-void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
+void OSQLMessageBox::Construct( MessBoxStyle _nStyle, MessageType _eImage )
 {
     SetText( utl::ConfigManager::getProductName() + " Base" );
 
@@ -641,7 +641,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
     impl_addDetailsButton();
 }
 
-OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
+OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _rException, MessBoxStyle _nStyle, const OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
     ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
@@ -652,7 +652,7 @@ OSQLMessageBox::OSQLMessageBox(vcl::Window* _pParent, const SQLExceptionInfo& _r
     Construct( _nStyle, AUTO );
 }
 
-OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, WinBits _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
+OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, const OUString& _rMessage, MessBoxStyle _nStyle, MessageType _eType, const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( VclPtr<FixedImage>::Create(this) )
     ,m_aTitle( VclPtr<FixedText>::Create(this, WB_WORDBREAK | WB_LEFT) )
@@ -689,7 +689,7 @@ IMPL_LINK_NOARG( OSQLMessageBox, ButtonClickHdl, Button *, void )
 }
 
 // OSQLWarningBox
-OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
+OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage, MessBoxStyle _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
     :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
@@ -697,7 +697,7 @@ OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage
 
 // OSQLErrorBox
 OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage )
-    :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_ERROR ), _rMessage, WB_OK | WB_DEF_OK, OSQLMessageBox::Error, nullptr )
+    :OSQLMessageBox( _pParent, DBA_RES( STR_EXCEPTION_ERROR ), _rMessage, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, OSQLMessageBox::Error, nullptr )
 {
 }
 

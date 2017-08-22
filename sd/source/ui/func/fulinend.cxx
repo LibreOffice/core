@@ -137,7 +137,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 }
                 else
                 {
-                    ScopedVclPtrInstance<WarningBox> aWarningBox( mpWindow, WinBits( WB_OK ),
+                    ScopedVclPtrInstance<WarningBox> aWarningBox( mpWindow, MessBoxStyle::Ok,
                             SdResId( STR_WARN_NAME_DUPLICATE ) );
                     aWarningBox->Execute();
                 }

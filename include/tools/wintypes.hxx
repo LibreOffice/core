@@ -220,20 +220,6 @@ WinBits const WB_DOCKBORDER =           0x00001000;
 // Window-Bits for SplitWindow
 WinBits const WB_NOSPLITDRAW =          0x01000000;
 
-// Window-Bits for MessageBoxen
-WinBits const WB_OK =                   0x00100000;
-WinBits const WB_OK_CANCEL =            0x00200000;
-WinBits const WB_YES_NO =               0x00400000;
-WinBits const WB_YES_NO_CANCEL =        0x00800000;
-WinBits const WB_RETRY_CANCEL =         0x01000000;
-WinBits const WB_DEF_OK =               0x02000000;
-WinBits const WB_DEF_CANCEL =           0x04000000;
-WinBits const WB_DEF_RETRY =            0x08000000;
-WinBits const WB_DEF_YES =              SAL_CONST_INT64(0x10000000);
-WinBits const WB_DEF_NO =               SAL_CONST_INT64(0x20000000);
-WinBits const WB_ABORT_RETRY_IGNORE =   SAL_CONST_INT64(0x1000000000);
-WinBits const WB_DEF_IGNORE =           SAL_CONST_INT64(0x2000000000);
-
 // Standard-WinBits
 WinBits const WB_STDWORK =              WB_SIZEMOVE | WB_CLOSEABLE;
 WinBits const WB_STDDOCKWIN =           WB_DOCKABLE | WB_MOVEABLE | WB_CLOSEABLE;

@@ -1204,7 +1204,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                     ScopedVclPtrInstance< ScConflictsDlg > aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
                     if ( aDlg->Execute() == RET_CANCEL )
                     {
-                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                             ScGlobal::GetRscString( STR_DOC_WILLNOTBESAVED ) );
                         if ( aBox->Execute() == RET_YES )
                         {

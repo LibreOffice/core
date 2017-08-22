@@ -22,7 +22,7 @@
 #include <unotools/resmgr.hxx>
 
 OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage ) :
-    MessBox(pParent, 0,
+    MessBox(pParent, MessBoxStyle::NONE,
             Translate::get(STR_OPENLOCKED_TITLE, rResLocale),
             aMessage )
 {

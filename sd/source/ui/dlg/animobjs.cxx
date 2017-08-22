@@ -439,7 +439,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, Button*, pBtn, void )
     }
     else // delete everything
     {
-        ScopedVclPtrInstance< WarningBox > aWarnBox( this, WB_YES_NO, SdResId( STR_ASK_DELETE_ALL_PICTURES ) );
+        ScopedVclPtrInstance< WarningBox > aWarnBox( this, MessBoxStyle::YesNo, SdResId( STR_ASK_DELETE_ALL_PICTURES ) );
         short nReturn = aWarnBox->Execute();
 
         if( nReturn == RET_YES )

@@ -131,7 +131,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
     Edit::MouseButtonDown( rMEvt );
 
     if( m_bShowWarningBox )
-        ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ),
+        ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
                    SchResId(STR_INVALID_NUMBER))->Execute();
 }
 
@@ -752,13 +752,13 @@ void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 
 void DataBrowser::ShowWarningBox()
 {
-    ScopedVclPtrInstance<WarningBox>(this, WinBits( WB_OK ),
+    ScopedVclPtrInstance<WarningBox>(this, MessBoxStyle::Ok,
                                      SchResId(STR_INVALID_NUMBER))->Execute();
 }
 
 bool DataBrowser::ShowQueryBox()
 {
-    ScopedVclPtrInstance<QueryBox> pQueryBox(this, WB_YES_NO, SchResId(STR_DATA_EDITOR_INCORRECT_INPUT));
+    ScopedVclPtrInstance<QueryBox> pQueryBox(this, MessBoxStyle::YesNo, SchResId(STR_DATA_EDITOR_INCORRECT_INPUT));
 
     return pQueryBox->Execute() == RET_YES;
 }

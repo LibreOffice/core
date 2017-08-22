@@ -48,39 +48,38 @@ static void ImplInitMsgBoxImageList()
 
 void MessBox::ImplInitButtons()
 {
-    WinBits nStyle = GetStyle();
     ButtonDialogFlags nOKFlags = ButtonDialogFlags::OK;
     ButtonDialogFlags nCancelFlags = ButtonDialogFlags::Cancel;
     ButtonDialogFlags nRetryFlags = ButtonDialogFlags::NONE;
     ButtonDialogFlags nYesFlags = ButtonDialogFlags::NONE;
     ButtonDialogFlags nNoFlags = ButtonDialogFlags::NONE;
 
-    if ( nStyle & WB_OK_CANCEL )
+    if ( mnMessBoxStyle & MessBoxStyle::OkCancel )
     {
-        if ( nStyle & WB_DEF_CANCEL )
+        if ( mnMessBoxStyle & MessBoxStyle::DefaultCancel )
             nCancelFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
-        else // WB_DEF_OK
+        else // MessBoxStyle::DefaultOk
             nOKFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::OK, RET_OK, nOKFlags );
         AddButton( StandardButtonType::Cancel, RET_CANCEL, nCancelFlags );
     }
-    else if ( nStyle & WB_YES_NO )
+    else if ( mnMessBoxStyle & MessBoxStyle::YesNo )
     {
-        if ( nStyle & WB_DEF_YES )
+        if ( mnMessBoxStyle & MessBoxStyle::DefaultYes )
             nYesFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
-        else // WB_DEF_NO
+        else // MessBoxStyle::DefaultNo
             nNoFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         nNoFlags |= ButtonDialogFlags::Cancel;
 
         AddButton( StandardButtonType::Yes, RET_YES, nYesFlags );
         AddButton( StandardButtonType::No, RET_NO, nNoFlags );
     }
-    else if ( nStyle & WB_YES_NO_CANCEL )
+    else if ( mnMessBoxStyle & MessBoxStyle::YesNoCancel )
     {
-        if ( nStyle & WB_DEF_YES )
+        if ( mnMessBoxStyle & MessBoxStyle::DefaultYes )
             nYesFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
-        else if ( nStyle & WB_DEF_NO )
+        else if ( mnMessBoxStyle & MessBoxStyle::DefaultNo )
             nNoFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
         else
             nCancelFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
@@ -89,33 +88,33 @@ void MessBox::ImplInitButtons()
         AddButton( StandardButtonType::No, RET_NO, nNoFlags );
         AddButton( StandardButtonType::Cancel, RET_CANCEL, nCancelFlags );
     }
-    else if ( nStyle & WB_RETRY_CANCEL )
+    else if ( mnMessBoxStyle & MessBoxStyle::RetryCancel )
     {
-        if ( nStyle & WB_DEF_CANCEL )
+        if ( mnMessBoxStyle & MessBoxStyle::DefaultCancel )
             nCancelFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
-        else // WB_DEF_RETRY
+        else // MessBoxStyle::DefaultRetry
             nRetryFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::Retry, RET_RETRY, nRetryFlags );
         AddButton( StandardButtonType::Cancel, RET_CANCEL, nCancelFlags );
     }
-    else if ( nStyle & WB_ABORT_RETRY_IGNORE )
+    else if ( mnMessBoxStyle & MessBoxStyle::AbortRetryIgnore )
     {
         ButtonDialogFlags nAbortFlags = ButtonDialogFlags::NONE;
         ButtonDialogFlags nIgnoreFlags = ButtonDialogFlags::NONE;
 
-        if ( nStyle & WB_DEF_CANCEL )
+        if ( mnMessBoxStyle & MessBoxStyle::DefaultCancel )
             nAbortFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
-        else if ( nStyle & WB_DEF_RETRY )
+        else if ( mnMessBoxStyle & MessBoxStyle::DefaultRetry )
             nRetryFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
-        else if ( nStyle & WB_DEF_IGNORE )
+        else if ( mnMessBoxStyle & MessBoxStyle::DefaultIgnore )
             nIgnoreFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
         AddButton( StandardButtonType::Abort, RET_CANCEL, nAbortFlags );
         AddButton( StandardButtonType::Retry, RET_RETRY, nRetryFlags );
         AddButton( StandardButtonType::Ignore, RET_IGNORE, nIgnoreFlags );
     }
-    else if ( nStyle & WB_OK )
+    else if ( mnMessBoxStyle & MessBoxStyle::Ok )
     {
         nOKFlags |= ButtonDialogFlags::Default | ButtonDialogFlags::Focus;
 
@@ -123,14 +122,21 @@ void MessBox::ImplInitButtons()
     }
 }
 
-MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
+MessBox::MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle,
+                  const OUString& rTitle, const OUString& rMessage ) :
+    MessBox(pParent, nMessBoxStyle, 0, rTitle, rMessage)
+{
+}
+
+MessBox::MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits nWinBits,
                   const OUString& rTitle, const OUString& rMessage ) :
     ButtonDialog( WindowType::MESSBOX ),
     mbHelpBtn( false ),
     mbCheck( false ),
+    mnMessBoxStyle( nMessBoxStyle ),
     maMessText( rMessage )
 {
-    ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
+    ImplInit( pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();
 
     if ( !rTitle.isEmpty() )
@@ -367,7 +373,7 @@ Size MessBox::GetOptimalSize() const
 }
 
 InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
+    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -376,7 +382,7 @@ InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
     SetImage( InfoBox::GetStandardImage() );
 }
 
-InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
+InfoBox::InfoBox( vcl::Window* pParent, MessBoxStyle nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
@@ -397,9 +403,15 @@ OUString InfoBox::GetStandardText()
     return VclResId(SV_MSGBOX_INFO);
 }
 
-WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
+WarningBox::WarningBox( vcl::Window* pParent, MessBoxStyle nStyle,
                         const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
+    WarningBox( pParent, nStyle, 0, rMessage )
+{
+}
+
+WarningBox::WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits,
+                        const OUString& rMessage ) :
+    MessBox( pParent, nStyle, nWinBits, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -425,7 +437,7 @@ OUString WarningBox::GetStandardText()
 }
 
 ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
+    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -434,9 +446,15 @@ ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
     SetImage( ErrorBox::GetStandardImage() );
 }
 
-ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
+ErrorBox::ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle,
                     const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
+       ErrorBox(pParent, nStyle, 0, rMessage )
+{
+}
+
+ErrorBox::ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits,
+                    const OUString& rMessage ) :
+    MessBox( pParent, nStyle, nWinBits, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -465,8 +483,13 @@ OUString ErrorBox::GetStandardText()
     return VclResId(SV_MSGBOX_ERROR);
 }
 
-QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
+QueryBox::QueryBox( vcl::Window* pParent, MessBoxStyle nStyle, const OUString& rMessage ) :
+    QueryBox( pParent, nStyle, 0, rMessage )
+{
+}
+
+QueryBox::QueryBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits nWinBits, const OUString& rMessage ) :
+    MessBox( pParent, nStyle, nWinBits, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )

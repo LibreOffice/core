@@ -26,7 +26,7 @@
 #include "helpids.h"
 
 ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
-    WarningBox( pParent, WB_YES_NO | WB_DEF_YES, ScResId( STR_REPLCELLSWARN ) )
+    WarningBox( pParent, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, ScResId( STR_REPLCELLSWARN ) )
 {
     // By default, the check box is ON, and the user needs to un-check it to
     // disable all future warnings.

@@ -624,7 +624,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         // Hard warning as there is potential of data loss on deletion
                         bDoIt = ( RET_YES ==
                                 ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
-                                            WinBits( WB_YES_NO | WB_DEF_NO ),
+                                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
                                             ScGlobal::GetRscString(STR_QUERY_PIVOTTABLE_DELTAB))->Execute() );
                     }
                     else
@@ -632,7 +632,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         // no parameter given, ask for confirmation
                         bDoIt = ( RET_YES ==
                                 ScopedVclPtrInstance<QueryBox>( GetDialogParent(),
-                                            WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                             ScGlobal::GetRscString(STR_QUERY_DELTAB))->Execute() );
                     }
                 }

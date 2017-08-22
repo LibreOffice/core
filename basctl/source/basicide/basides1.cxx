@@ -100,7 +100,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                         nActModWindows++;
                 }
 
-                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && ScopedVclPtrInstance<QueryBox>(pCurWin, WB_YES_NO|WB_DEF_YES, IDEResId(RID_STR_SEARCHALLMODULES))->Execute() == RET_YES ) )
+                if ( nActModWindows <= 1 || ( !rSearchItem.GetSelection() && ScopedVclPtrInstance<QueryBox>(pCurWin, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, IDEResId(RID_STR_SEARCHALLMODULES))->Execute() == RET_YES ) )
                 {
                     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
                     {
@@ -139,7 +139,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             SfxViewFrame* pViewFrame = GetViewFrame();
                             SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : nullptr;
                             vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : nullptr;
-                            ScopedVclPtrInstance< QueryBox > aQuery(pParent, WB_YES_NO|WB_DEF_YES, IDEResId(RID_STR_SEARCHFROMSTART));
+                            ScopedVclPtrInstance< QueryBox > aQuery(pParent, MessBoxStyle::YesNo|MessBoxStyle::DefaultYes, IDEResId(RID_STR_SEARCHFROMSTART));
                             if ( aQuery->Execute() == RET_YES )
                             {
                                 it = aWindowTable.begin();

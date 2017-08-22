@@ -24,10 +24,32 @@
 #include <vcl/btndlg.hxx>
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class VclMultiLineEdit;
 class FixedImage;
 class CheckBox;
+
+// Window-Bits for MessageBoxen
+enum class MessBoxStyle {
+    NONE              = 0x0000,
+    Ok                = 0x0001,
+    OkCancel          = 0x0002,
+    YesNo             = 0x0004,
+    YesNoCancel       = 0x0008,
+    RetryCancel       = 0x0010,
+    DefaultOk         = 0x0020,
+    DefaultCancel     = 0x0040,
+    DefaultRetry      = 0x0080,
+    DefaultYes        = 0x0100,
+    DefaultNo         = 0x0200,
+    AbortRetryIgnore  = 0x1000,
+    DefaultIgnore     = 0x2000,
+};
+namespace o3tl {
+    template<> struct typed_flags<MessBoxStyle> : is_typed_flags<MessBoxStyle, 0x3fff> {};
+}
+
 
 class VCL_DLLPUBLIC MessBox : public ButtonDialog
 {
@@ -36,6 +58,7 @@ class VCL_DLLPUBLIC MessBox : public ButtonDialog
     Image                      maImage;
     bool                       mbHelpBtn;
     bool                       mbCheck;
+    MessBoxStyle               mnMessBoxStyle;
 
 protected:
     OUString                   maMessText;
@@ -46,7 +69,9 @@ protected:
     SAL_DLLPRIVATE void ImplPosControls();
 
 public:
-                        MessBox( vcl::Window* pParent, WinBits nStyle,
+                        MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle,
+                                 const OUString& rTitle, const OUString& rMessage );
+                        MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits n,
                                  const OUString& rTitle, const OUString& rMessage );
     virtual             ~MessBox() override;
     virtual void        dispose() override;
@@ -63,13 +88,16 @@ public:
     bool                GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize() const override;
+
+    void                SetMessBoxStyle(MessBoxStyle n) { mnMessBoxStyle = n; }
+    MessBoxStyle        GetMessBoxStyle() { return mnMessBoxStyle; }
 };
 
 class VCL_DLLPUBLIC InfoBox : public MessBox
 {
 public:
                         InfoBox( vcl::Window* pParent, const OUString& rMessage );
-                        InfoBox( vcl::Window* pParent, WinBits nStyle,
+                        InfoBox( vcl::Window* pParent, MessBoxStyle nStyle,
                                 const OUString& rMessage );
 
     static Image        GetStandardImage();
@@ -79,7 +107,9 @@ public:
 class VCL_DLLPUBLIC WarningBox : public MessBox
 {
 public:
-                        WarningBox( vcl::Window* pParent, WinBits nStyle,
+                        WarningBox( vcl::Window* pParent, MessBoxStyle nStyle,
+                                    const OUString& rMessage );
+                        WarningBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
                                     const OUString& rMessage );
 
     void                SetDefaultCheckBoxText();
@@ -92,7 +122,9 @@ class VCL_DLLPUBLIC ErrorBox : public MessBox
 {
 public:
                         ErrorBox( vcl::Window* pParent, const OUString& rMessage );
-                        ErrorBox( vcl::Window* pParent, WinBits nStyle,
+                        ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle,
+                                  const OUString& rMessage );
+                        ErrorBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
                                   const OUString& rMessage );
 
     static Image        GetStandardImage();
@@ -102,7 +134,9 @@ public:
 class VCL_DLLPUBLIC QueryBox : public MessBox
 {
 public:
-                        QueryBox( vcl::Window* pParent, WinBits nStyle,
+                        QueryBox( vcl::Window* pParent, MessBoxStyle nStyle,
+                                  const OUString& rMessage );
+                        QueryBox( vcl::Window* pParent, MessBoxStyle nStyle, WinBits n,
                                   const OUString& rMessage );
 
     void                SetDefaultCheckBoxText();

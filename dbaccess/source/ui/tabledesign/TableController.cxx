@@ -403,7 +403,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     {
         OUString sText( DBA_RES( STR_NAME_ALREADY_EXISTS ) );
         sText = sText.replaceFirst( "#" , m_sName);
-        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getView(), DBA_RES( STR_ERROR_DURING_CREATION ), sText, WB_OK, OSQLMessageBox::Error );
+        ScopedVclPtrInstance< OSQLMessageBox > aDlg( getView(), DBA_RES( STR_ERROR_DURING_CREATION ), sText, MessBoxStyle::Ok, OSQLMessageBox::Error );
 
         aDlg->Execute();
         bError = true;
@@ -933,7 +933,7 @@ bool OTableController::checkColumns(bool _bNew)
     {
         OUString sTitle(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
         OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
-        ScopedVclPtrInstance< OSQLMessageBox > aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+        ScopedVclPtrInstance< OSQLMessageBox > aBox(getView(), sTitle,sMsg, MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes);
 
         switch ( aBox->Execute() )
         {
@@ -1065,7 +1065,7 @@ void OTableController::alterColumns()
                         aMessage = aMessage.replaceFirst( "$column$", pField->GetName() );
 
                         SQLExceptionInfo aError( ::cppu::getCaughtException() );
-                        ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
+                        ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes , &aError );
                         bNotOk = aMsg->Execute() == RET_YES;
                     }
                     else
@@ -1122,7 +1122,7 @@ void OTableController::alterColumns()
                 {
                     OUString aMessage(DBA_RES(STR_TABLEDESIGN_ALTER_ERROR));
                     aMessage = aMessage.replaceFirst("$column$",pField->GetName());
-                    ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES, &aError);
+                    ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, &aError);
                     if ( aMsg->Execute() != RET_YES )
                     {
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
@@ -1189,7 +1189,7 @@ void OTableController::alterColumns()
                     OUString aMsgT(DBA_RES(STR_TBL_COLUMN_IS_KEYCOLUMN));
                     aMsgT = aMsgT.replaceFirst("$column$",*pIter);
                     OUString aTitle(DBA_RES(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
-                    ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
+                    ScopedVclPtrInstance< OSQLMessageBox > aMsg(getView(),aTitle,aMsgT,MessBoxStyle::YesNo| MessBoxStyle::DefaultYes);
                     if(aMsg->Execute() == RET_YES)
                     {
                         xKeyColumns = nullptr;

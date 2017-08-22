@@ -146,7 +146,7 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo()
 VclPtr<Dialog> OSQLMessageDialog::createDialog(vcl::Window* _pParent)
 {
     if ( m_aException.hasValue() )
-        return VclPtr<OSQLMessageBox>::Create( _pParent, SQLExceptionInfo( m_aException ), WB_OK | WB_DEF_OK, m_sHelpURL );
+        return VclPtr<OSQLMessageBox>::Create( _pParent, SQLExceptionInfo( m_aException ), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL );
 
     OSL_FAIL("OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
     return VclPtr<OSQLMessageBox>::Create(_pParent, SQLException());

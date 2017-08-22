@@ -1510,7 +1510,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
             {
                 OUString aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
-                ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
+                ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, MessBoxStyle::RetryCancel, WB_3DLOOK, aStrWarning );
                 aWarningBox->SetModalInputMode (true);
                 bQuitLoop = aWarningBox->Execute() != RET_RETRY;
 

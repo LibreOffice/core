@@ -422,7 +422,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
         if( !xLink.is() )
             return;
 
-        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, aStrCloselinkmsg );
+        ScopedVclPtrInstance< QueryBox > aBox( this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aStrCloselinkmsg );
 
         if( RET_YES == aBox->Execute() )
         {
@@ -453,7 +453,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     }
     else
     {
-        ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, aStrCloselinkmsgMulti );
+        ScopedVclPtrInstance< QueryBox > aBox( this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aStrCloselinkmsgMulti );
 
         if( RET_YES == aBox->Execute() )
         {

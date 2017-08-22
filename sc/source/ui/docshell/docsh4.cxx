@@ -220,7 +220,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     aMessage += sTarget;
                     aMessage += aTemplate.getToken( 1, '#' );
 
-                    ScopedVclPtrInstance< QueryBox > aBox( nullptr, WinBits(WB_YES_NO | WB_DEF_YES), aMessage );
+                    ScopedVclPtrInstance< QueryBox > aBox( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMessage );
                     bDo = ( aBox->Execute() == RET_YES );
                 }
 
@@ -439,7 +439,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if(nSet==LM_ON_DEMAND)
                 {
-                    ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                    ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                              ScGlobal::GetRscString(STR_RELOAD_TABLES) );
 
                     nDlgRet=aBox->Execute();
@@ -490,7 +490,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     OSL_ENSURE(pViewSh,"SID_REIMPORT_AFTER_LOAD: no View");
                     if (pViewSh && pDBColl)
                     {
-                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                        ScopedVclPtrInstance<QueryBox> aBox( GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                                 ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
                         if (aBox->Execute() == RET_YES)
                         {
@@ -583,7 +583,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         // no dialog on playing the macro
                         ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(),
-                            WinBits(WB_YES_NO | WB_DEF_NO),
+                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         bDo = ( aBox->Execute() == RET_YES );
                     }
@@ -648,7 +648,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( nSlot == SID_DOCUMENT_COMPARE )
                     {   //! old changes trace will be lost
                         ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(),
-                            WinBits(WB_YES_NO | WB_DEF_NO),
+                            MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         if( aBox->Execute() == RET_YES )
                             bDo = ExecuteChangeProtectionDialog( true );
@@ -940,7 +940,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             {
                                 ScopedVclPtrInstance<QueryBox> aBox(
                                     GetActiveDialogParent(),
-                                    WinBits( WB_YES_NO | WB_DEF_YES ),
+                                    MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                     ScGlobal::GetRscString( STR_DOC_WILLBESAVED ) );
                                 if ( aBox->Execute() == RET_NO )
                                 {
@@ -1029,14 +1029,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
                                         aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                        ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage );
+                                        ScopedVclPtrInstance< WarningBox > aBox( GetActiveDialogParent(), MessBoxStyle::Ok, aMessage );
                                         aBox->Execute();
                                     }
                                     else
                                     {
                                         ScopedVclPtrInstance<WarningBox> aBox(
                                             GetActiveDialogParent(),
-                                            WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                             ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) );
                                         if ( aBox->Execute() == RET_YES )
                                         {
@@ -1070,7 +1070,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 else
                                 {
                                     xCloseable->close( true );
-                                    ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                    ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(), MessBoxStyle::Ok,
                                         ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
                                     aBox->Execute();
                                 }

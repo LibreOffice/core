@@ -941,7 +941,7 @@ void OQueryController::impl_initialize()
                 OUString aTitle(DBA_RES(STR_QUERYDESIGN_NO_VIEW_SUPPORT));
                 OUString aMessage(DBA_RES(STR_QUERYDESIGN_NO_VIEW_ASK));
                 ODataView* pWindow = getView();
-                ScopedVclPtrInstance< OSQLMessageBox > aDlg( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query );
+                ScopedVclPtrInstance< OSQLMessageBox > aDlg( pWindow, aTitle, aMessage, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, OSQLMessageBox::Query );
                 bClose = aDlg->Execute() == RET_NO;
             }
             if ( bClose )
@@ -1738,7 +1738,7 @@ short OQueryController::saveModified()
         )
     {
         OUString sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
-        ScopedVclPtrInstance< QueryBox > aQry( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText );
+        ScopedVclPtrInstance< QueryBox > aQry( getView(), MessBoxStyle::YesNoCancel | MessBoxStyle::DefaultYes, sMessageText );
 
         nRet = aQry->Execute();
         if  (   ( nRet == RET_YES )

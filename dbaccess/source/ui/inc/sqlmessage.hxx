@@ -23,6 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/btndlg.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <connectivity/dbexception.hxx>
 
@@ -72,7 +73,7 @@ public:
     OSQLMessageBox(
         vcl::Window* _pParent,
         const dbtools::SQLExceptionInfo& _rException,
-        WinBits _nStyle = WB_OK | WB_DEF_OK,
+        MessBoxStyle _nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
         const OUString& _rHelpURL = OUString()
     );
 
@@ -85,7 +86,7 @@ public:
     OSQLMessageBox(vcl::Window* pParent,
                 const OUString& rTitle,
                 const OUString& rMessage,
-                WinBits nStyle = WB_OK | WB_DEF_OK,
+                MessBoxStyle nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
                 MessageType _eType = Info,
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 
@@ -93,13 +94,13 @@ public:
     virtual void dispose() override;
 
 private:
-    void Construct( WinBits nStyle, MessageType eImage );
+    void Construct( MessBoxStyle nStyle, MessageType eImage );
 
     DECL_LINK(ButtonClickHdl, Button*, void );
 
 private:
     void    impl_positionControls();
-    void    impl_createStandardButtons( WinBits _nStyle );
+    void    impl_createStandardButtons( MessBoxStyle _nStyle );
     void    impl_addDetailsButton();
 };
 
@@ -109,7 +110,7 @@ class OSQLWarningBox : public OSQLMessageBox
 public:
     OSQLWarningBox( vcl::Window* _pParent,
                     const OUString& _rMessage,
-                    WinBits _nStyle = WB_OK | WB_DEF_OK,
+                    MessBoxStyle _nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
                     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 };
 

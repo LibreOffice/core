@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, Button*, void)
     aMessage += m_pLbFormat->GetSelectEntry();
     aMessage += "\n";
 
-    VclPtrInstance<MessBox> pBox( this, WinBits( WB_OK_CANCEL ),
+    VclPtrInstance<MessBox> pBox( this, MessBoxStyle::OkCancel,
                                   aStrDelTitle, aMessage );
 
     if ( pBox->Execute() == RET_OK )

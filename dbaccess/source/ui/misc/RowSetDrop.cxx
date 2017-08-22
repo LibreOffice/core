@@ -239,7 +239,7 @@ bool ORowSetImportExport::insertNewRow()
         if(!m_bAlreadyAsked)
         {
             OUString sAskIfContinue = DBA_RES(STR_ERROR_OCCURRED_WHILE_COPYING);
-            ScopedVclPtrInstance< OSQLWarningBox > aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
+            ScopedVclPtrInstance< OSQLWarningBox > aDlg( m_pParent, sAskIfContinue, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes );
             if(aDlg->Execute() == RET_YES)
                 m_bAlreadyAsked = true;
             else

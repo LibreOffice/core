@@ -48,7 +48,7 @@ executeErrorDialog(
     task::InteractionClassification eClassification,
     OUString const & rContext,
     OUString const & rMessage,
-    WinBits nButtonMask)
+    MessBoxStyle nButtonMask)
 {
     SolarMutexGuard aGuard;
 
@@ -76,9 +76,9 @@ executeErrorDialog(
             break;
 
         case task::InteractionClassification_INFO:
-#           define WB_DEF_BUTTONS (WB_DEF_OK | WB_DEF_CANCEL | WB_DEF_RETRY)
+#           define WB_DEF_BUTTONS (MessBoxStyle::DefaultOk | MessBoxStyle::DefaultCancel | MessBoxStyle::DefaultRetry)
             //(want to ignore any default button settings)...
-            if ((nButtonMask & WB_DEF_BUTTONS) == WB_DEF_OK)
+            if ((nButtonMask & WB_DEF_BUTTONS) == MessBoxStyle::DefaultOk)
                 xBox.reset(VclPtr<InfoBox>::Create(pParent,
                                        aText.makeStringAndClear()));
             else
@@ -214,30 +214,30 @@ UUIInteractionHelper::handleErrorHandlerRequest(
         // Finally, it seems to be better to leave default button
         // determination to VCL (the favouring of CANCEL as default button
         // seems to not always be what the user wants)...
-        WinBits const aButtonMask[16]
-            = { 0,
-                WB_OK /*| WB_DEF_OK*/, // Abort
-                0,
-                WB_RETRY_CANCEL /*| WB_DEF_CANCEL*/, // Retry, Abort
-                0,
-                0,
-                0,
-                0,
-                WB_OK /*| WB_DEF_OK*/, // Approve
-                WB_OK_CANCEL /*| WB_DEF_CANCEL*/, // Approve, Abort
-                0,
-                0,
-                WB_YES_NO /*| WB_DEF_NO*/, // Approve, Disapprove
-                WB_YES_NO_CANCEL /*| WB_DEF_CANCEL*/,
+        MessBoxStyle const aButtonMask[16]
+            = { MessBoxStyle::NONE,
+                MessBoxStyle::Ok /*| MessBoxStyle::DefaultOk*/, // Abort
+                MessBoxStyle::NONE,
+                MessBoxStyle::RetryCancel /*| MessBoxStyle::DefaultCancel*/, // Retry, Abort
+                MessBoxStyle::NONE,
+                MessBoxStyle::NONE,
+                MessBoxStyle::NONE,
+                MessBoxStyle::NONE,
+                MessBoxStyle::Ok /*| MessBoxStyle::DefaultOk*/, // Approve
+                MessBoxStyle::OkCancel /*| MessBoxStyle::DefaultCancel*/, // Approve, Abort
+                MessBoxStyle::NONE,
+                MessBoxStyle::NONE,
+                MessBoxStyle::YesNo /*| MessBoxStyle::DefaultNo*/, // Approve, Disapprove
+                MessBoxStyle::YesNoCancel /*| MessBoxStyle::DefaultCancel*/,
                 // Approve, Disapprove, Abort
-                0,
-                0 };
+                MessBoxStyle::NONE,
+                MessBoxStyle::NONE };
 
-        WinBits nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
+        MessBoxStyle nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
                                           | (xDisapprove.is() ? 4 : 0)
                                           | (xRetry.is() ? 2 : 0)
                                           | (xAbort.is() ? 1 : 0)];
-        if (nButtonMask == 0)
+        if (nButtonMask == MessBoxStyle::NONE)
             return;
 
         //TODO! remove this backwards compatibility?

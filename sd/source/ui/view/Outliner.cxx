@@ -1246,7 +1246,7 @@ bool SdOutliner::ShowWrapArroundDialog()
 
     // Pop up question box that asks the user whether to wrap around.
     // The dialog is made modal with respect to the whole application.
-    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, WB_YES_NO | WB_DEF_YES, SdResId(pStringId));
+    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, SdResId(pStringId));
     aQuestionBox->SetImage(QueryBox::GetStandardImage());
     sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
 

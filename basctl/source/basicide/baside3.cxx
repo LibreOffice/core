@@ -787,7 +787,7 @@ public:
 
 NameClashQueryBox::NameClashQueryBox( vcl::Window* pParent,
     const OUString& rTitle, const OUString& rMessage )
-        : MessBox( pParent, 0, rTitle, rMessage )
+        : MessBox( pParent, MessBoxStyle::NONE, rTitle, rMessage )
 {
     if ( !rTitle.isEmpty() )
         SetText( rTitle );
@@ -812,7 +812,7 @@ public:
 
 LanguageMismatchQueryBox::LanguageMismatchQueryBox( vcl::Window* pParent,
     const OUString& rTitle, const OUString& rMessage )
-        : MessBox( pParent, 0, rTitle, rMessage )
+        : MessBox( pParent, MessBoxStyle::NONE, rTitle, rMessage )
 {
     if ( !rTitle.isEmpty() )
         SetText( rTitle );

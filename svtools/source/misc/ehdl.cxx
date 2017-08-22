@@ -52,34 +52,34 @@ static DialogMask aWndFunc(
     SolarMutexGuard aGuard;
 
     // determine necessary WinBits from the flags
-    WinBits eBits=0;
+    MessBoxStyle eBits = MessBoxStyle::NONE;
     if ( (nFlags & (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry)) == (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry))
-        eBits = WB_RETRY_CANCEL;
+        eBits = MessBoxStyle::RetryCancel;
     else if ( (nFlags & DialogMask::ButtonsOkCancel) == DialogMask::ButtonsOkCancel )
-        eBits = WB_OK_CANCEL;
+        eBits = MessBoxStyle::OkCancel;
     else if ( (nFlags & DialogMask::ButtonsOk) == DialogMask::ButtonsOk )
-        eBits = WB_OK;
+        eBits = MessBoxStyle::Ok;
     else if ( (nFlags & DialogMask::ButtonsYesNoCancel) == DialogMask::ButtonsYesNoCancel )
-        eBits = WB_YES_NO_CANCEL;
+        eBits = MessBoxStyle::YesNoCancel;
     else if ( (nFlags & DialogMask::ButtonsYesNo) == DialogMask::ButtonsYesNo )
-        eBits = WB_YES_NO;
+        eBits = MessBoxStyle::YesNo;
 
     switch(nFlags & DialogMask(0x0f00))
     {
       case DialogMask::ButtonDefaultsOk:
-            eBits |= WB_DEF_OK;
+            eBits |= MessBoxStyle::DefaultOk;
             break;
 
       case DialogMask::ButtonDefaultsCancel:
-            eBits |= WB_DEF_CANCEL;
+            eBits |= MessBoxStyle::DefaultCancel;
             break;
 
       case DialogMask::ButtonDefaultsYes:
-            eBits |= WB_DEF_YES;
+            eBits |= MessBoxStyle::DefaultYes;
             break;
 
       case DialogMask::ButtonDefaultsNo:
-            eBits |= WB_DEF_NO;
+            eBits |= MessBoxStyle::DefaultNo;
             break;
       default: break;
     }

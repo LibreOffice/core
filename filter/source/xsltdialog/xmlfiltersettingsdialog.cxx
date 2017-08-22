@@ -775,7 +775,7 @@ void XMLFilterSettingsDialog::onDelete()
         OUString aMessage(XsltResId(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( "%s", pInfo->maFilterName );
 
-        ScopedVclPtrInstance< WarningBox > aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES), aMessage );
+        ScopedVclPtrInstance< WarningBox > aWarnBox(this, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, aMessage );
         if( aWarnBox->Execute() == RET_YES )
         {
             try

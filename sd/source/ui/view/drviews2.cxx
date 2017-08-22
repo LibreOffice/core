@@ -1432,7 +1432,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             // name already exists
                             ScopedVclPtrInstance<WarningBox> aWarningBox (
                                 GetParentWindow(),
-                                WinBits( WB_OK ),
+                                MessBoxStyle::Ok,
                                 SdResId(STR_WARN_NAME_DUPLICATE));
                             aWarningBox->Execute();
                         }
@@ -1601,7 +1601,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             // name already exists
                             ScopedVclPtrInstance<WarningBox> aWarningBox (
                                 GetParentWindow(),
-                                WinBits( WB_OK ),
+                                MessBoxStyle::Ok,
                                 SdResId(STR_WARN_NAME_DUPLICATE));
                             aWarningBox->Execute();
                         }

@@ -614,7 +614,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
                           + aStrQueryRemove.getToken( 1, '#' );
 
             if ( RET_YES == ScopedVclPtrInstance<QueryBox>( this,
-                                      WinBits( WB_YES_NO | WB_DEF_YES ),
+                                      MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
                                       aMsg
                                      )->Execute() )
             {

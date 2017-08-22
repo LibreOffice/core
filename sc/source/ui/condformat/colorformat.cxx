@@ -256,7 +256,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
     if(bWarn)
     {
         //show warning message and don't close
-        ScopedVclPtrInstance< WarningBox > aWarn(this, WB_OK, maStrWarnSameValue );
+        ScopedVclPtrInstance< WarningBox > aWarn(this, MessBoxStyle::Ok, maStrWarnSameValue );
         aWarn->Execute();
     }
     else

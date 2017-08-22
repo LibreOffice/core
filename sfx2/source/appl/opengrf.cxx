@@ -152,7 +152,7 @@ ErrCode SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                ScopedVclPtrInstance< WarningBox > aWarningBox(nullptr, WB_3DLOOK | WB_RETRY_CANCEL, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ));
+                ScopedVclPtrInstance< WarningBox > aWarningBox(nullptr, MessBoxStyle::RetryCancel, WB_3DLOOK, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ));
                 bQuitLoop = aWarningBox->Execute() != RET_RETRY;
             }
             else
