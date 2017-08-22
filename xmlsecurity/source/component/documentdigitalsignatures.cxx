@@ -445,7 +445,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     return bFound;
 }
 
-Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateImpl(OUString& rDescription, UserAction eAction)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
@@ -455,7 +455,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
         xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts);
+    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts, eAction);
 
     if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(nullptr);
@@ -469,6 +469,20 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
     return xCert;
 }
 
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
+{
+    return chooseCertificateImpl( rDescription, UserAction::Sign );
+}
+
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
+{
+    return chooseCertificateImpl( rDescription, UserAction::Sign );
+}
+
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseEncryptionCertificate(OUString& rDescription)
+{
+    return chooseCertificateImpl( rDescription, UserAction::Encrypt );
+}
 
 sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location )
 {
