@@ -436,7 +436,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
     // The use may provide a description while choosing a certificate.
     OUString aDescription;
     uno::Reference< security::XCertificate > xSignCertificate=
-        xSigner->chooseCertificate(aDescription);
+        xSigner->chooseEncryptionCertificate(aDescription);
 
     uno::Sequence < sal_Int8 > aKeyID;
     if (xSignCertificate.is())

@@ -182,6 +182,17 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="selectcertificatedialog|STR_ENCIPHER_ONLY">Only for encipherment</property>
                   </object>
+                  <!-- different prefix, STR_ is (mis)used in the code to map certificate usage flags to strings -->
+                  <object class="GtkLabel" id="str_sign">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|str_sign">Sign</property>
+                  </object>
+                  <object class="GtkLabel" id="str_encrypt">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="selectcertificatedialog|str_encrypt">Encrypt</property>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -190,16 +201,29 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
+              <object class="GtkLabel" id="sign">
+                <property name="visible">False</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="ypad">1</property>
-                <property name="label" translatable="yes" context="selectcertificatedialog|label1">Select the certificate you want to use for signing:</property>
+                <property name="label" translatable="yes" context="selectcertificatedialog|sign">Select the certificate you want to use for signing:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="encrypt">
+                <property name="visible">False</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="ypad">1</property>
+                <property name="label" translatable="yes" context="selectcertificatedialog|encrypt">Select the certificate you want to use for encryption:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
             <child>

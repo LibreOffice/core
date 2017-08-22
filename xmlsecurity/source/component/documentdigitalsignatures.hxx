@@ -27,6 +27,7 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <certificatechooser.hxx>
 #include <documentsignaturehelper.hxx>
 
 namespace com { namespace  sun { namespace star {
@@ -60,6 +61,8 @@ private:
     void ImplViewSignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const css::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly );
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::security::DocumentSignatureInformation > ImplVerifySignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode );
+
+    css::uno::Reference< css::security::XCertificate > chooseCertificateImpl(OUString& rDescription, UserAction eAction);
 
 public:
     explicit DocumentDigitalSignatures( const css::uno::Reference< css::uno::XComponentContext>& rxCtx );
@@ -101,6 +104,8 @@ public:
     void SAL_CALL addLocationToTrustedSources( const OUString& Location ) override;
 
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate(OUString& rDescription) override;
+    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseSigningCertificate(OUString& rDescription) override;
+    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseEncryptionCertificate(OUString& rDescription) override;
 };
 
 /// @throws css::uno::Exception

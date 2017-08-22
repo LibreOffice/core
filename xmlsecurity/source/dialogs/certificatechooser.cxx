@@ -36,10 +36,14 @@ using namespace css;
 
 CertificateChooser::CertificateChooser(vcl::Window* _pParent,
                                        uno::Reference<uno::XComponentContext> const & _rxCtx,
-                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts)
+                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts,
+                                       UserAction eAction)
     : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui"),
-    mvUserData()
+    mvUserData(),
+    meAction( eAction )
 {
+    get(m_pFTSign, "sign");
+    get(m_pFTEncrypt, "encrypt");
     get(m_pOKBtn, "ok");
     get(m_pViewBtn, "viewcert");
     get(m_pDescriptionED, "description");
@@ -76,6 +80,8 @@ CertificateChooser::~CertificateChooser()
 
 void CertificateChooser::dispose()
 {
+    m_pFTSign.clear();
+    m_pFTEncrypt.clear();
     m_pCertLB.disposeAndClear();
     m_pViewBtn.clear();
     m_pOKBtn.clear();
@@ -150,6 +156,20 @@ void CertificateChooser::ImplInitialize()
 {
     if ( mbInitialized )
         return;
+
+    switch (meAction)
+    {
+        case UserAction::Sign:
+            m_pFTSign->Show();
+            m_pOKBtn->SetText( get<FixedText>("str_sign")->GetText() );
+            break;
+
+        case UserAction::Encrypt:
+            m_pFTEncrypt->Show();
+            m_pOKBtn->SetText( get<FixedText>("str_encrypt")->GetText() );
+            break;
+
+    }
 
     for (auto &secContext : mxSecurityContexts)
     {
