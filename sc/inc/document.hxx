@@ -198,6 +198,7 @@ class SvtBroadcaster;
 enum class ScDBDataPortion;
 enum class ScSheetEventId;
 class BitmapEx;
+class ScColumnsRange;
 
 namespace sc {
 
@@ -2320,6 +2321,8 @@ public:
     void                ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
     void                SwapNonEmpty( sc::TableValues& rValues );
     void                finalizeOutlineImport();
+
+    ScColumnsRange       GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 
 private:
 

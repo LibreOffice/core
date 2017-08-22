@@ -1681,14 +1681,14 @@ void ScTable::UpdateReference(
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc )
 {
-    for ( SCCOL i=0; i<=MAXCOL; i++ )
-        aCol[i].UpdateTranspose( rSource, rDest, pUndoDoc );
+    for (ScColumn* pCol : GetColumnsRange(0, MAXCOL))
+        pCol->UpdateTranspose( rSource, rDest, pUndoDoc );
 }
 
 void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    for ( SCCOL i=0; i<=MAXCOL; i++ )
-        aCol[i].UpdateGrow( rArea, nGrowX, nGrowY );
+    for (ScColumn* pCol : GetColumnsRange(0, MAXCOL))
+        pCol->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
 void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
@@ -2381,6 +2381,11 @@ ScConditionalFormatList* ScTable::GetCondFormList()
 const ScConditionalFormatList* ScTable::GetCondFormList() const
 {
     return mpCondFormatList.get();
+}
+
+ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
+{
+    return ScColumnsRange(aCol.begin() + nColBegin, aCol.begin() + nColEnd + 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
