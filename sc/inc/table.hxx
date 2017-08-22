@@ -1024,6 +1024,8 @@ public:
     */
     static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
 
+    ScColContainer const & GetColContainer() const { return aCol; }
+
 private:
 
     void FillFormulaVertical(

@@ -2321,6 +2321,8 @@ public:
     void                SwapNonEmpty( sc::TableValues& rValues );
     void                finalizeOutlineImport();
 
+    ScTable* FetchTable( SCTAB nTab );
+
 private:
 
     /**
@@ -2339,7 +2341,6 @@ private:
     };
 
     bool TableExists( SCTAB nTab ) const;
-    ScTable* FetchTable( SCTAB nTab );
     const ScTable* FetchTable( SCTAB nTab ) const;
 
     void    MergeNumberFormatter(ScDocument* pSrcDoc);

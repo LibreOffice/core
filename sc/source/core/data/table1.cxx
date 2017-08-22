@@ -1681,14 +1681,14 @@ void ScTable::UpdateReference(
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc )
 {
-    for ( SCCOL i=0; i<=MAXCOL; i++ )
-        aCol[i].UpdateTranspose( rSource, rDest, pUndoDoc );
+    for ( auto pCol : GetColContainer() )
+        pCol->UpdateTranspose( rSource, rDest, pUndoDoc );
 }
 
 void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    for ( SCCOL i=0; i<=MAXCOL; i++ )
-        aCol[i].UpdateGrow( rArea, nGrowX, nGrowY );
+    for ( auto pCol : GetColContainer() )
+        pCol->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
 void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )

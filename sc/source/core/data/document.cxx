@@ -4557,8 +4557,10 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
     {
         CRFlags nStartFlags = maTabs[nTab]->GetColFlags(nStart);
         sal_uInt16 nStartWidth = maTabs[nTab]->GetOriginalWidth(nStart);
-        for (SCCOL nCol = nStart + 1; nCol <= MAXCOL; nCol++)
+        ScTable const * pTable = FetchTable(nTab);
+        for (auto it = pTable->GetColContainer().begin() + nStart + 1; it != pTable->GetColContainer().end(); ++it)
         {
+            SCCOL nCol = (*it)->GetCol();
             if (((nStartFlags & CRFlags::ManualBreak) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::ManualBreak)) ||
                 (nStartWidth != maTabs[nTab]->GetOriginalWidth(nCol)) ||
                 ((nStartFlags & CRFlags::Hidden) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::Hidden)) )
@@ -6580,8 +6582,12 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        ScTable const * pTable = FetchTable(nTab);
+        if (!pTable)
+            continue;
+        for (ScColumn const * pCol : pTable->GetColContainer())
         {
+            SCCOL nCol = pCol->GetCol();
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
                 continue;
@@ -6607,25 +6613,28 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 
 ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
 {
-    for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
-    {
-        size_t nColNoteCount = GetNoteCount(nTab, nCol);
-        if (!nColNoteCount)
-            continue;
-
-        if (nIndex >= nColNoteCount)
+    ScTable const * pTable = FetchTable(nTab);
+    if (pTable)
+        for (ScColumn const * pCol : pTable->GetColContainer())
         {
-            nIndex -= nColNoteCount;
-            continue;
+            SCCOL nCol = pCol->GetCol();
+            size_t nColNoteCount = GetNoteCount(nTab, nCol);
+            if (!nColNoteCount)
+                continue;
+
+            if (nIndex >= nColNoteCount)
+            {
+                nIndex -= nColNoteCount;
+                continue;
+            }
+
+            SCROW nRow = GetNotePosition(nTab, nCol, nIndex);
+            if (nRow >= 0)
+                return ScAddress(nCol, nRow, nTab);
+
+            OSL_FAIL("note not found");
+            return ScAddress::INITIALIZE_INVALID;
         }
-
-        SCROW nRow = GetNotePosition(nTab, nCol, nIndex);
-        if (nRow >= 0)
-            return ScAddress(nCol, nRow, nTab);
-
-        OSL_FAIL("note not found");
-        return ScAddress::INITIALIZE_INVALID;
-    }
 
     OSL_FAIL("note not found");
     return ScAddress::INITIALIZE_INVALID;
