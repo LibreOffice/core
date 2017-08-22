@@ -70,6 +70,7 @@
 #include "postit.hxx"
 #include "attrib.hxx"
 #include "charthelper.hxx"
+#include "table.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/field.hxx>
@@ -1064,17 +1065,36 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             nStartX = HmmToTwips( nStartX );
             nEndX = HmmToTwips( nEndX );
             long nWidth;
-            SCCOL i;
 
             nWidth = 0;
-            for (i=0; i<=MAXCOL && nWidth<=nStartX; i++)
-                nWidth += pDoc->GetColWidth(i,nTab);
-            rRange.aStart.SetCol( i>0 ? (i-1) : 0 );
+            rRange.aStart.SetCol( 0 );
+            if (nWidth <= nStartX)
+            {
+                for (const ScColumn* pCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL))
+                {
+                    nWidth += pDoc->GetColWidth(pCol->GetCol(),nTab);
+                    if (nWidth > nStartX)
+                    {
+                        rRange.aStart.SetCol( pCol->GetCol() );
+                        break;
+                    }
+                }
+            }
 
             nWidth = 0;
-            for (i=0; i<=MAXCOL && nWidth<=nEndX; i++)          //TODO: start at Start
-                nWidth += pDoc->GetColWidth(i,nTab);
-            rRange.aEnd.SetCol( i>0 ? (i-1) : 0 );
+            rRange.aEnd.SetCol( 0 );
+            if (nWidth <= nEndX)
+            {
+                for (const ScColumn* pCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL)) //TODO: start at Start
+                {
+                    nWidth += pDoc->GetColWidth(pCol->GetCol(),nTab);
+                    if (nWidth > nEndX)
+                    {
+                        rRange.aEnd.SetCol( pCol->GetCol() );
+                        break;
+                    }
+                }
+            }
         }
 
         if (bSetVer)

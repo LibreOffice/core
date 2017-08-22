@@ -117,6 +117,17 @@ class ScDBData;
 class ScDocumentImport;
 class ScHint;
 
+class ScColumnsRange final
+{
+    typedef std::vector<ScColumn*>::const_iterator const_iterator;
+    const const_iterator maBegin;
+    const const_iterator maEnd;
+public:
+    ScColumnsRange(const_iterator nBegin, const_iterator nEnd) : maBegin(nBegin), maEnd(nEnd) {}
+    const const_iterator & begin() { return maBegin; }
+    const const_iterator & end() { return maEnd; }
+};
+
 class ScTable
 {
 private:
@@ -1023,6 +1034,8 @@ public:
         what it is depends on various settings in rSearchItem.
     */
     static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
+
+    ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
 
 private:
 
