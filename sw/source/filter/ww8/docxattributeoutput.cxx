@@ -4819,8 +4819,9 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
     std::pair<OString,OString> sRelIdAndName = m_rExport.WriteActiveXObject(xShape, xControlModel);
 
     // VML shape definition
-    m_rExport.VMLExporter().SetSkipwzName();
-    m_rExport.VMLExporter().SetHashMarkForType();
+    m_rExport.VMLExporter().SetSkipwzName(true);
+    m_rExport.VMLExporter().SetHashMarkForType(true);
+    m_rExport.VMLExporter().OverrideShapeIDGen(true, "control_shape_");
     OString sShapeId;
     if(bAnchoredInline)
     {
@@ -4835,6 +4836,10 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
             rHoriOri.GetRelationOrient(),
             rVertOri.GetRelationOrient(), true);
     }
+    // Restore default values
+    m_rExport.VMLExporter().SetSkipwzName(false);
+    m_rExport.VMLExporter().SetHashMarkForType(false);
+    m_rExport.VMLExporter().OverrideShapeIDGen(false);
 
     // control
     m_pSerializer->singleElementNS(XML_w, XML_control,
