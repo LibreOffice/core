@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UIITEMS_HXX
 
 #include <memory>
-#include <svl/intitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include "cmdid.h"
 #include "pagedesc.hxx"
@@ -86,14 +86,6 @@ public:
 
     const SwNumRule* GetNumRule() const         { return pRule.get(); }
           SwNumRule* GetNumRule()               { return pRule.get(); }
-};
-
-class SwBackgroundDestinationItem : public SfxUInt16Item
-{
-public:
-    SwBackgroundDestinationItem(sal_uInt16  nWhich, sal_uInt16 nValue);
-
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
 class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem

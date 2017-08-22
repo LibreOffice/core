@@ -154,7 +154,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put( aULSpace );
 
     const sal_uInt16  nBackgroundDestination = rSh.GetViewOptions()->GetTableDest();
-    rSet.Put(SwBackgroundDestinationItem(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
+    rSet.Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
     SvxBrushItem aBrush( RES_BACKGROUND );
     if(rSh.GetRowBackground(aBrush))
     {
