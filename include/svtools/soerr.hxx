@@ -28,8 +28,6 @@
 #define SO_WRN(x) ErrCode(ErrCodeArea::So, ERRCODE_CLASS_SO | ERRCODE_WARNING_MASK | x)
 
 #define ERRCODE_SO_GENERALERROR             SO_ERR(1)
-#define ERRCODE_SO_FALSE                    SO_WRN(23)
-#define ERRCODE_SO_PENDING                  SO_ERR(25)
 #define ERRCODE_SO_CANNOT_DOVERB_NOW        SO_WRN(28)
 #define ERRCODE_SO_NOVERBS                  SO_ERR(30)
 #define ERRCODE_SO_NOTIMPL                  SO_ERR(33)

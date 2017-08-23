@@ -112,7 +112,6 @@ const ErrMsgCode RID_ERRHDL[] =
     { NC_("RID_ERRHDL", "The contents could not be created.") , ErrCode(ERRCODE_SFX_CANTCREATECONTENT) },
     { NC_("RID_ERRHDL", "The file name is too long for the target file system.") , ErrCode(ERRCODE_IO_NAMETOOLONG) },
     { NC_("RID_ERRHDL", "The input syntax is invalid.") , ErrCode(ERRCODE_SFX_INVALIDSYNTAX) },
-    { NC_("RID_ERRHDL", "The input syntax is invalid.") , ErrCode(ERRCODE_SFX_CANTCREATEFOLDER) },
     { NC_("RID_ERRHDL", "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format."), ErrCode(ERRCODE_IO_NOTSTORABLEINBINARYFORMAT) },
     { NC_("RID_ERRHDL", "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document."), ErrCode(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED) },
     { NC_("RID_ERRHDL", "Could not create backup copy.") , ErrCode(ERRCODE_SFX_CANTCREATEBACKUP) },
@@ -134,10 +133,6 @@ const ErrMsgCode RID_SO_ERROR_HANDLER[] =
 {
     { NC_("RID_ERRHDL", "General OLE error."),
       ErrCode(sal_uInt32(ERRCODE_SO_GENERALERROR) & S_MAX) },
-    { NC_("RID_ERRHDL", "False."),
-      ErrCode(sal_uInt32(ERRCODE_SO_FALSE) & S_MAX) },
-    { NC_("RID_ERRHDL", "Data not available at this time."),
-      ErrCode(sal_uInt32(ERRCODE_SO_PENDING) & S_MAX) },
     { NC_("RID_ERRHDL", "The action cannot be executed in the object's current state."),
       ErrCode(sal_uInt32(ERRCODE_SO_CANNOT_DOVERB_NOW) & S_MAX) },
     { NC_("RID_ERRHDL", "The object does not support any actions."),
