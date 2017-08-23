@@ -49,11 +49,6 @@ BreakIterator_Unicode::BreakIterator_Unicode()
 
 BreakIterator_Unicode::~BreakIterator_Unicode()
 {
-    delete character.aBreakIterator;
-    delete sentence.aBreakIterator;
-    delete line.aBreakIterator;
-    for (BI_Data & word : words)
-        delete word.aBreakIterator;
 }
 
 /*
@@ -107,10 +102,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
         rLocale.Language != icuBI->maLocale.Language ||
         rLocale.Country  != icuBI->maLocale.Country  ||
         rLocale.Variant  != icuBI->maLocale.Variant) {
-        if (icuBI->aBreakIterator) {
-            delete icuBI->aBreakIterator;
-            icuBI->aBreakIterator=nullptr;
-        }
+        icuBI->aBreakIterator.reset();
         if (rule) {
             uno::Sequence< OUString > breakRules = LocaleDataImpl::get()->getBreakIteratorRules(rLocale);
 
@@ -160,7 +152,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
                     case LOAD_LINE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_LINE); break;
                 }
 #endif
-                icuBI->aBreakIterator = rbi;
+                icuBI->aBreakIterator.reset( rbi );
             }
         }
 
@@ -170,16 +162,16 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
             status = U_ZERO_ERROR;
             switch (rBreakType) {
                 case LOAD_CHARACTER_BREAKITERATOR:
-                    icuBI->aBreakIterator =  icu::BreakIterator::createCharacterInstance(icuLocale, status);
+                    icuBI->aBreakIterator.reset( icu::BreakIterator::createCharacterInstance(icuLocale, status) );
                     break;
                 case LOAD_WORD_BREAKITERATOR:
-                    icuBI->aBreakIterator =  icu::BreakIterator::createWordInstance(icuLocale, status);
+                    icuBI->aBreakIterator.reset( icu::BreakIterator::createWordInstance(icuLocale, status) );
                     break;
                 case LOAD_SENTENCE_BREAKITERATOR:
-                    icuBI->aBreakIterator = icu::BreakIterator::createSentenceInstance(icuLocale, status);
+                    icuBI->aBreakIterator.reset( icu::BreakIterator::createSentenceInstance(icuLocale, status) );
                     break;
                 case LOAD_LINE_BREAKITERATOR:
-                    icuBI->aBreakIterator = icu::BreakIterator::createLineInstance(icuLocale, status);
+                    icuBI->aBreakIterator.reset( icu::BreakIterator::createLineInstance(icuLocale, status) );
                     break;
             }
             if ( !U_SUCCESS(status) ) {
