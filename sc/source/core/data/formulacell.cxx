@@ -1526,10 +1526,10 @@ void ScFormulaCell::Interpret()
         bool bGroupInterpreted = InterpretFormulaGroup();
         aDC.leaveGroup();
         if (!bGroupInterpreted)
-            InterpretTail( SCITP_NORMAL, true);
+            InterpretTail( SCITP_NORMAL);
 #else
         if (!InterpretFormulaGroup())
-            InterpretTail( SCITP_NORMAL, true);
+            InterpretTail( SCITP_NORMAL);
 #endif
     }
 
@@ -1592,7 +1592,7 @@ void ScFormulaCell::Interpret()
                     bResumeIteration = false;
                     // Close circle once.
                     rRecursionHelper.GetList().back().pCell->InterpretTail(
-                            SCITP_CLOSE_ITERATION_CIRCLE, true);
+                            SCITP_CLOSE_ITERATION_CIRCLE);
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
                     // Mark all cells being in iteration.
@@ -1621,7 +1621,7 @@ void ScFormulaCell::Interpret()
                                 pIterCell->GetSeenInIteration())
                         {
                             (*aIter).aPreviousResult = pIterCell->aResult;
-                            pIterCell->InterpretTail( SCITP_FROM_ITERATION, true);
+                            pIterCell->InterpretTail( SCITP_FROM_ITERATION);
                         }
                         rDone = rDone && !pIterCell->IsDirtyOrInTableOpDirty();
                     }
@@ -1691,7 +1691,7 @@ void ScFormulaCell::Interpret()
                         ScFormulaCell* pCell = (*aIter).pCell;
                         if (pCell->IsDirtyOrInTableOpDirty())
                         {
-                            pCell->InterpretTail( SCITP_NORMAL, true);
+                            pCell->InterpretTail( SCITP_NORMAL);
                             if (!pCell->IsDirtyOrInTableOpDirty() && !pCell->IsIterCell())
                                 pCell->bRunning = (*aIter).bOldRunning;
                         }
@@ -1741,8 +1741,9 @@ class StackCleaner
 };
 }
 
-void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam, bool bSingleThreaded )
+void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
+    bool bSingleThreaded = (osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier());
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
     if( !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
