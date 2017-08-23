@@ -45,8 +45,8 @@ public:
 
     ~SdCustomShow();
 
-    // @@@ copy ctor, but no copy assignment? @@@
-    SdCustomShow( const SdCustomShow& rShow );
+    SdCustomShow( const SdCustomShow& rShow ) = delete;
+    void operator=( const SdCustomShow& rShow ) = delete;
 
     /** Provides a direct access to the collection of the SdPage objects. */
     PageVec& PagesVector() { return maPages;}

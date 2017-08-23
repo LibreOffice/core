@@ -39,17 +39,6 @@ SdCustomShow::SdCustomShow()
 {
 }
 
-/*************************************************************************
-|*
-|* Copy-Ctor
-|*
-\************************************************************************/
-SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
-    : maPages(rShow.maPages)
-{
-    aName = rShow.GetName();
-}
-
 SdCustomShow::SdCustomShow(css::uno::Reference< css::uno::XInterface > const & xShow )
   : maPages(),
   mxUnoCustomShow( xShow )
