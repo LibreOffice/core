@@ -564,6 +564,16 @@ DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
     // LO crashed while export because of chararacter background color handling
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf111964, "tdf111964.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Unicode spaces that are not XML whitespace must not be trimmed
+    const sal_Unicode sWSReference [] { 0x2002, 0x2002, 0x2002, 0x2002, 0x2002, 0 };
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", sWSReference);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
