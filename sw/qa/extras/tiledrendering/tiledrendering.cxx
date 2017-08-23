@@ -35,7 +35,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <vcl/scheduler.hxx>
 
-static const char* const DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
+static char const DATA_DIRECTORY[] = "/sw/qa/extras/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {

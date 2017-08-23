@@ -36,7 +36,7 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
     Reference<XComponent> mxComponent;
     OUString              maFilterOptions;
 
-    void load(const char* pDir, const char* pName)
+    void load(const OUString& pDir, const char* pName)
     {
         if (mxComponent.is())
             mxComponent->dispose();

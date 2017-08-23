@@ -37,7 +37,7 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"));
     }
 
-    void load(const char* pDir, const char* pName)
+    void load(const OUString& pDir, const char* pName)
     {
         return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
     }

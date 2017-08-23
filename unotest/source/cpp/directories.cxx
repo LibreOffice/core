@@ -41,19 +41,9 @@ test::Directories::Directories() {
     m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);
 }
 
-OUString test::Directories::getURLFromSrc( const char *pPath )
-{
-    return m_aSrcRootURL + OUString::createFromAscii( pPath );
-}
-
 OUString test::Directories::getURLFromSrc( const OUString& rPath )
 {
     return m_aSrcRootURL + rPath;
-}
-
-OUString test::Directories::getPathFromSrc( const char *pPath )
-{
-    return m_aSrcRootPath + OUString::createFromAscii( pPath );
 }
 
 OUString test::Directories::getPathFromSrc(const OUString& rPath)
@@ -61,14 +51,14 @@ OUString test::Directories::getPathFromSrc(const OUString& rPath)
     return m_aSrcRootPath + rPath;;
 }
 
-OUString test::Directories::getURLFromWorkdir( const char *pPath )
+OUString test::Directories::getURLFromWorkdir( const OUString& rPath )
 {
-    return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
+    return m_aWorkdirRootURL + rPath;
 }
 
-OUString test::Directories::getPathFromWorkdir( const char *pPath )
+OUString test::Directories::getPathFromWorkdir( const OUString& rPath )
 {
-    return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
+    return m_aWorkdirRootPath + rPath;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
