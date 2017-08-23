@@ -36,7 +36,7 @@ using namespace css;
 using namespace css::uno;
 
 ScreenshotTest::ScreenshotTest()
-:   m_aScreenshotDirectory("/screenshots/"),
+:   m_aScreenshotDirectory("screenshots"),
     maKnownDialogs()
 {
     SvtSysLocaleOptions localeOptions;
@@ -80,7 +80,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
             osl::FileBase::E_None, e);
     }
 
-    OUString aFullPath = m_directories.getPathFromWorkdir(OUStringToOString(aDirname + "/" + aBasename + ".png",RTL_TEXTENCODING_UTF8).getStr());
+    OUString aFullPath = m_directories.getPathFromWorkdir(OUStringToOString("/" + aDirname + "/" + aBasename + ".png",RTL_TEXTENCODING_UTF8).getStr());
     SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open <" + aFullPath + ">: " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
 
