@@ -21,7 +21,6 @@
 #include "oox/helper/attributelist.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -35,7 +34,7 @@ ConstraintListContext::ConstraintListContext( ContextHandler2Helper const & rPar
     : ContextHandler2( rParent )
     , mpNode( pNode )
 {
-    OSL_ENSURE( pNode, "Node must NOT be NULL" );
+    assert( pNode && "Node must NOT be NULL" );
 }
 
 ConstraintListContext::~ConstraintListContext()
