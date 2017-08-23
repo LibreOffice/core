@@ -166,6 +166,8 @@ public:
     void testSmartArtChildren();
     void testSmartArtText();
     void testSmartArtCnt();
+    void testSmartArtDir();
+    void testSmartArtMaxDepth();
     void testSmartArtRotation();
     void testTdf109223();
     void testTdf109187();
@@ -243,6 +245,8 @@ public:
     CPPUNIT_TEST(testSmartArtChildren);
     CPPUNIT_TEST(testSmartArtText);
     CPPUNIT_TEST(testSmartArtCnt);
+    CPPUNIT_TEST(testSmartArtDir);
+    CPPUNIT_TEST(testSmartArtMaxDepth);
     CPPUNIT_TEST(testSmartArtRotation);
     CPPUNIT_TEST(testTdf109223);
     CPPUNIT_TEST(testTdf109187);
@@ -2332,6 +2336,33 @@ void SdImportTest::testSmartArtCnt()
             nCorrect++;
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nCorrect);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testSmartArtDir()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-dir.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup->getCount());
+
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xShape0->getPosition().X > xShape1->getPosition().X);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testSmartArtMaxDepth()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-maxdepth.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup->getCount());
+
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("first"), xText0->getString());
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("second"), xText1->getString());
 
     xDocShRef->DoClose();
 }

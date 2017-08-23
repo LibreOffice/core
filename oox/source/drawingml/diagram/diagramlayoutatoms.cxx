@@ -29,7 +29,6 @@
 #include "drawingml/textparagraph.hxx"
 #include "drawingml/textrun.hxx"
 #include "drawingml/customshapeproperties.hxx"
-#include "layoutnodecontext.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -63,17 +62,17 @@ ConditionAttr::ConditionAttr()
     : mnFunc( 0 )
     , mnArg( 0 )
     , mnOp( 0 )
+    , mnVal( 0 )
 {
-
 }
 
 void ConditionAttr::loadFromXAttr( const Reference< XFastAttributeList >& xAttr )
 {
     mnFunc = xAttr->getOptionalValueToken( XML_func, 0 );
-    // mnArg will be -1 for "none" or any other unknown value
-    mnArg = LayoutNodeContext::tagToVarIdx( xAttr->getOptionalValueToken( XML_arg, XML_none ) );
+    mnArg = xAttr->getOptionalValueToken( XML_arg, XML_none );
     mnOp = xAttr->getOptionalValueToken( XML_op, 0 );
     msVal = xAttr->getOptionalValue( XML_val );
+    mnVal = xAttr->getOptionalValueToken( XML_val, 0 );
 }
 
 void LayoutAtom::dump(int level)
@@ -123,15 +122,36 @@ bool ConditionAtom::compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int
     }
 }
 
-sal_Int32 ConditionAtom::getNodeCount() const
+bool ConditionAtom::compareResult(sal_Int32 nOperator, const OUString& sFirst, const OUString& sSecond)
 {
-    sal_Int32 nCount = 0;
+    switch (nOperator)
+    {
+    case XML_equ: return sFirst == sSecond;
+    case XML_neq: return sFirst != sSecond;
+    default:
+        SAL_WARN("oox.drawingml", "unsupported operator: " << nOperator);
+        return false;
+    }
+}
+
+const dgm::Point* ConditionAtom::getPresNode() const
+{
     const DiagramData::PointsNameMap& rPoints = mrLayoutNode.getDiagram().getData()->getPointsPresNameMap();
     DiagramData::PointsNameMap::const_iterator aDataNode = rPoints.find(mrLayoutNode.getName());
     if (aDataNode != rPoints.end())
     {
-        SAL_WARN_IF(aDataNode->second.size() > 1, "oox.drawingml", "multiple nodes found; calculating cnt for first one");
-        const dgm::Point* pPoint = aDataNode->second.front();
+        SAL_WARN_IF(aDataNode->second.size() > 1, "oox.drawingml", "multiple nodes found; taking first one");
+        return aDataNode->second.front();
+    }
+    return nullptr;
+}
+
+sal_Int32 ConditionAtom::getNodeCount() const
+{
+    sal_Int32 nCount = 0;
+    const dgm::Point* pPoint = getPresNode();
+    if (pPoint)
+    {
         OUString sNodeId = "";
 
         for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
@@ -150,15 +170,31 @@ sal_Int32 ConditionAtom::getNodeCount() const
 
 const std::vector<LayoutAtomPtr>& ConditionAtom::getChildren() const
 {
-    bool bDecisionVar=true;
-    // HACK
-    if( maCond.mnFunc == XML_var && maCond.mnArg == XML_dir && maCond.mnOp == XML_equ && maCond.msVal != "norm" )
-        bDecisionVar=false;
+    bool bDecisionVar = true;
+    switch (maCond.mnFunc)
+    {
+    case XML_var:
+    {
+        const dgm::Point* pPoint = getPresNode();
+        if (pPoint && maCond.mnArg == XML_dir)
+            bDecisionVar = compareResult(maCond.mnOp, pPoint->mnDirection, maCond.mnVal);
+        break;
+    }
 
-    if (maCond.mnFunc == XML_cnt)
+    case XML_cnt:
         bDecisionVar = compareResult(maCond.mnOp, getNodeCount(), maCond.msVal.toInt32());
+        break;
 
-    if( bDecisionVar )
+    case XML_maxDepth:
+        bDecisionVar = compareResult(maCond.mnOp, mrLayoutNode.getDiagram().getData()->getMaxDepth(), maCond.msVal.toInt32());
+        break;
+
+    default:
+        SAL_WARN("oox.drawingml", "unknown function " << maCond.mnFunc);
+        break;
+    }
+
+    if (bDecisionVar)
         return mpChildNodes;
     else
         return mpElseChildNodes;
@@ -337,7 +373,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (nIncY)
                 aChildSize.Height /= (nCount + (nCount-1)*fSpace);
 
-            awt::Point aCurrPos = rShape->getChildren().front()->getPosition();
+            awt::Point aCurrPos(0, 0);
+            if (nIncX == -1)
+                aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
+            if (nIncY == -1)
+                aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
+
             for (auto & aCurrShape : rShape->getChildren())
             {
                 aCurrShape->setPosition(aCurrPos);
