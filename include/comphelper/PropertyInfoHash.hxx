@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <unordered_map>
+#include <memory>
 
 namespace comphelper
 {
@@ -47,7 +48,7 @@ typedef std::unordered_map < OUString,
                         ::comphelper::PropertyInfo const *,
                         OUStringHash > PropertyInfoHash;
 typedef std::unordered_map < OUString,
-                        ::comphelper::PropertyData*,
+                        std::unique_ptr<::comphelper::PropertyData>,
                         OUStringHash > PropertyDataHash;
 #endif
 

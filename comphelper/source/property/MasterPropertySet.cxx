@@ -23,7 +23,7 @@
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <comphelper/solarmutex.hxx>
-
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <vector>
@@ -68,8 +68,6 @@ MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, 
 MasterPropertySet::~MasterPropertySet()
     throw()
 {
-    for( auto& rSlave : maSlaveMap )
-        delete rSlave.second;
 }
 
 // XPropertySet
@@ -81,7 +79,7 @@ Reference< XPropertySetInfo > SAL_CALL MasterPropertySet::getPropertySetInfo(  )
 void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
     throw()
 {
-    maSlaveMap [ ++mnLastId ] = new SlaveData ( pNewSet );
+    maSlaveMap [ ++mnLastId ] = o3tl::make_unique<SlaveData>( pNewSet );
     mxInfo->add ( pNewSet->mxInfo->maMap, mnLastId );
 }
 
@@ -211,7 +209,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
                 _setSingleValue( *((*aIter).second->mpInfo), *pAny );
             else
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ].get();
                 if (!pSlave->IsInit())
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -273,7 +271,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
                 _getSingleValue( *((*aIter).second->mpInfo), *pAny );
             else
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ].get();
                 if (!pSlave->IsInit())
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -356,7 +354,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
             // 0 means it's one of ours !
             if ( (*aIter).second->mnMapId != 0 )
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ].get();
                 if (!pSlave->IsInit())
                 {
                     pSlave->SetInit ( true );

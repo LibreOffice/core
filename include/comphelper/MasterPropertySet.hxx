@@ -19,6 +19,7 @@
 
 #ifndef INCLUDED_COMPHELPER_MASTERPROPERTYSET_HXX
 #define INCLUDED_COMPHELPER_MASTERPROPERTYSET_HXX
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -27,6 +28,7 @@
 #include <comphelper/solarmutex.hxx>
 #include <rtl/ref.hxx>
 #include <map>
+#include <memory>
 
 namespace comphelper
 {
@@ -63,7 +65,7 @@ namespace comphelper
     protected:
         SolarMutex* mpMutex;
         sal_uInt8 mnLastId;
-        std::map< sal_uInt8, comphelper::SlaveData* >  maSlaveMap;
+        std::map< sal_uInt8, std::unique_ptr<comphelper::SlaveData> >  maSlaveMap;
         rtl::Reference< MasterPropertySetInfo >        mxInfo;
 
         /// @throws css::beans::UnknownPropertyException
@@ -105,6 +107,9 @@ namespace comphelper
             throw();
         void registerSlave ( ChainablePropertySet *pNewSet )
             throw();
+
+        MasterPropertySet& operator=( MasterPropertySet const & ) = delete; // MSVC2015 workaround
+        MasterPropertySet( MasterPropertySet const & ) = delete; // MSVC2015 workaround
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

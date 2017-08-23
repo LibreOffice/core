@@ -19,6 +19,7 @@
 
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 using ::comphelper::PropertyInfo;
 using ::comphelper::MasterPropertySetInfo;
@@ -35,15 +36,13 @@ MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
         SAL_WARN_IF(
             maMap.find(pMap->maName) != maMap.end(),
             "comphelper", "Duplicate property name \"" << pMap->maName << "\"");
-        maMap[pMap->maName] = new PropertyData ( 0, pMap );
+        maMap[pMap->maName] = o3tl::make_unique<PropertyData>( 0, pMap );
     }
 }
 
 MasterPropertySetInfo::~MasterPropertySetInfo()
     throw()
 {
-    for( auto& rObj : maMap )
-        delete rObj.second;
 }
 
 void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
@@ -56,7 +55,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
         SAL_WARN_IF(
             maMap.find(rObj.first) != maMap.end(),
             "comphelper", "Duplicate property name \"" << rObj.first << "\"");
-        maMap[rObj.first] = new PropertyData ( nMapId, rObj.second );
+        maMap[rObj.first] = o3tl::make_unique<PropertyData>( nMapId, rObj.second );
     }
 }
 
