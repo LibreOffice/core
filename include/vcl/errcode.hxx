@@ -116,7 +116,7 @@ public:
         return m_value & ERRCODE_CLASS_MASK;
     }
 
-    sal_uInt16 GetRest() const {
+    constexpr sal_uInt16 GetRest() const {
         return m_value & ERRCODE_RES_MASK;
     }
 
