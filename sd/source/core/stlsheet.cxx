@@ -264,25 +264,16 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         {
             if (!pSet)
             {
-                sal_uInt16 const nWhichPairTable[] {
-                                             XATTR_LINE_FIRST,              XATTR_LINE_LAST,
-                                             XATTR_FILL_FIRST,              XATTR_FILL_LAST,
-
-                                             SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
-                                             SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_CONTOURFRAME,
-
-                                             SDRATTR_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,
-
-                                             SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
-                                             SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,
-
-                                             EE_PARA_START,                 EE_CHAR_END,
-
-                                             SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
-                                             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                                             0, 0 };
-
-                pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);
+                pSet = new SfxItemSet(
+                    GetPool().GetPool(),
+                    svl::Items<
+                        XATTR_LINE_FIRST, XATTR_LINE_LAST,
+                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
+                        SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
+                        SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
+                        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                        EE_PARA_START, EE_CHAR_END>{});
                 bMySet = true;
             }
 
