@@ -107,7 +107,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bCallParaInsertedOrDeleted(false),
     bFirstWordCapitalization(true),
     mbLastTryMerge(false),
-    mbReplaceLeadingSingleQuotationMark(true)
+    mbReplaceLeadingSingleQuotationMark(true),
+    mbNbspRunNext(false)
 {
     pEditEngine         = pEE;
     pRefDev             = nullptr;
@@ -2571,7 +2572,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         // FIXME: this _must_ be called with reference to the actual node text!
         OUString const& rNodeString(pNode->GetString());
         pAutoCorrect->DoAutoCorrect(
-            aAuto, rNodeString, nIndex, c, !bOverwrite, pFrameWin );
+            aAuto, rNodeString, nIndex, c, !bOverwrite, mbNbspRunNext, pFrameWin );
         aSel.Max().SetIndex( aAuto.GetCursor() );
 
         // #i78661 since the SvxAutoCorrect object used here is

@@ -296,7 +296,6 @@ SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
     : sShareAutoCorrFile( rShareAutocorrFile )
     , sUserAutoCorrFile( rUserAutocorrFile )
-    , bRunNext( false )
     , eCharClassLang( LANGUAGE_DONTKNOW )
     , nFlags(SvxAutoCorrect::GetDefaultFlags())
     , cStartDQuote( 0 )
@@ -312,7 +311,6 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     : sShareAutoCorrFile( rCpy.sShareAutoCorrFile )
     , sUserAutoCorrFile( rCpy.sUserAutoCorrFile )
     , aSwFlags( rCpy.aSwFlags )
-    , bRunNext( false )
     , eCharClassLang(rCpy.eCharClassLang)
     , nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad))
     , cStartDQuote( rCpy.cStartDQuote )
@@ -630,7 +628,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
 bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 sal_Int32 nEndPos,
-                                LanguageType eLang )
+                                LanguageType eLang, bool& io_bNbspRunNext )
 {
     bool bRet = false;
 
@@ -689,11 +687,11 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
                     // Add the non-breaking space at the end pos
                     if ( bHasSpace )
                         rDoc.Insert( nPos, OUString(cNonBreakingSpace) );
-                    bRunNext = true;
+                    io_bNbspRunNext = true;
                     bRet = true;
                 }
                 else if ( chars.indexOf( cPrevChar ) != -1 )
-                    bRunNext = true;
+                    io_bNbspRunNext = true;
             }
         }
         else if ( cChar == '/' && nEndPos > 1 && rTxt.getLength() > (nEndPos - 1) )
@@ -1234,10 +1232,10 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
 
 void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
-                                    bool bInsert, vcl::Window const * pFrameWin )
+                                    bool bInsert, bool& io_bNbspRunNext, vcl::Window const * pFrameWin )
 {
-    bool bIsNextRun = bRunNext;
-    bRunNext = false;  // if it was set, then it has to be turned off
+    bool bIsNextRun = io_bNbspRunNext;
+    io_bNbspRunNext = false;  // if it was set, then it has to be turned off
 
     do{                                 // only for middle check loop !!
         if( cChar )
@@ -1276,7 +1274,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if ( IsAutoCorrFlag( AddNonBrkSpace ) )
             {
                 if ( NeedsHardspaceAutocorr( cChar ) &&
-                    FnAddNonBrkSpace( rDoc, rTxt, nInsPos, rDoc.GetLanguage( nInsPos ) ) )
+                    FnAddNonBrkSpace( rDoc, rTxt, nInsPos, rDoc.GetLanguage( nInsPos ), io_bNbspRunNext ) )
                 {
                     ;
                 }
