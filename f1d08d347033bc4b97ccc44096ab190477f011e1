@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_661461f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-23T07:56:39Z",
+      "side": 1,
+      "message": "Remove -\u003e disable\n\nAlso, could you mention that this was already the case in the past, just previously the whole Library_xmlsecurity wasn\u0027t built, while now only the gpg part is not built? Just to make it clear you\u0027re enabling more features here, not disabling them.",
+      "revId": "f1d08d347033bc4b97ccc44096ab190477f011e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06055dc1",
+        "filename": "android/Bootstrap/Makefile.shared",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-23T07:56:39Z",
+      "side": 1,
+      "message": "Why touching these lines? Sounds like you wanted to add the $(NSSLIBS) line, and accidentally you also did whitespace changes. Please only add the new line.",
+      "revId": "f1d08d347033bc4b97ccc44096ab190477f011e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
