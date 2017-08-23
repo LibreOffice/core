@@ -3932,7 +3932,7 @@ void ScFiltersTest::testTdf97598XLSX()
 #ifdef UNX
 void ScFiltersTest::testUnicodeFileNameGnumeric()
 {
-    // Mapping the LO-interal URL
+    // Mapping the LO-internal URL
     // <file:///.../sc/qa/unit/data/gnumeric/t%C3%A4%C3%9Ft.gnumeric> to the
     // repo's file sc/qa/unit/data/gnumeric/t\303\244\303\237t.gnumeric only
     // works when the system encoding is UTF-8:
