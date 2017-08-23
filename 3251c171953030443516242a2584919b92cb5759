@@ -16,6 +16,24 @@
       "revId": "3251c171953030443516242a2584919b92cb5759",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a6a00992",
+        "filename": "cui/source/customize/SvxMenuConfigPage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-08-23T10:08:05Z",
+      "side": 1,
+      "message": "Indeed, it is. Sorry about that, and thanks for spotting it! :)",
+      "parentUuid": "1a430d35_46820502",
+      "revId": "3251c171953030443516242a2584919b92cb5759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
