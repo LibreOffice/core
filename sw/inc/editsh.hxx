@@ -942,6 +942,8 @@ public:
      character attribute dialog. */
     sal_uInt16 GetScalingOfSelectedText() const;
 
+    bool IsNbspRunNext() const { return m_bNbspRunNext; }
+
     /// Ctor/Dtor.
     SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt );
 
@@ -952,6 +954,16 @@ public:
 private:
     SwEditShell(const SwEditShell &) = delete;
     const SwEditShell &operator=(const SwEditShell &) = delete;
+
+    /* TODO: this flag may have to be invalidated / reset to false at various
+     * places if it was true and the edit cursor position changes. It's somehow
+     * overkill though because it can only be true if a NO-BREAK SPACE was
+     * inserted by the last DoAutoCorrect() call (in French language), any
+     * subsequent call will reset it anyway and just if the cursor is
+     * positioned behind "x :" and the next character inserted is not a space
+     * the existing nb-space will be removed. Bear this in mind if that problem
+     * arises. */
+    bool m_bNbspRunNext;    ///< NO-BREAK SPACE state flag passed to and maintained by SvxAutoCorrect::DoAutoCorrect()
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const

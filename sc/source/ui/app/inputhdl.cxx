@@ -2184,6 +2184,14 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
     return bNewTable;
 }
 
+void ScInputHandler::MergeLanguageAttributes( ScEditEngineDefaulter& rDestEngine ) const
+{
+    const SfxItemSet& rSrcSet = mpEditEngine->GetDefaults();
+    rDestEngine.SetDefaultItem( rSrcSet.Get( EE_CHAR_LANGUAGE ));
+    rDestEngine.SetDefaultItem( rSrcSet.Get( EE_CHAR_LANGUAGE_CJK ));
+    rDestEngine.SetDefaultItem( rSrcSet.Get( EE_CHAR_LANGUAGE_CTL ));
+}
+
 static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
 {
     OSL_ENSURE( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );

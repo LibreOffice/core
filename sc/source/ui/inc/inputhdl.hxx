@@ -180,6 +180,7 @@ public:
     const ScAddress& GetCursorPos() const   { return aCursorPos; }
 
     bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
+    void            MergeLanguageAttributes( ScEditEngineDefaulter& rDestEngine ) const;
 
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
     void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );

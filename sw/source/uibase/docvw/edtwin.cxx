@@ -2429,8 +2429,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
 
                 const bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                const bool bRunNext = pACorr != nullptr && pACorr->HasRunNext();
-                if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
+                if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || rSh.IsNbspRunNext() ) &&
                         pACfg->IsAutoFormatByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                         ( '*' == aCh || '_' == aCh ) ) ||
@@ -2442,7 +2441,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( '\"' != aCh && '\'' != aCh )        // only call when "*_"!
                         rSh.UpdateAttr();
                 }
-                else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
+                else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || rSh.IsNbspRunNext() ) &&
                         pACfg->IsAutoFormatByInput() &&
                     pACorr->IsAutoCorrFlag( CapitalStartSentence | CapitalStartWord |
                                             ChgOrdinalNumber | AddNonBrkSpace |

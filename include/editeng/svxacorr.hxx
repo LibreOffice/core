@@ -236,8 +236,6 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     std::map<LanguageTag, sal_Int64> aLastFileTable;
     std::unique_ptr<CharClass> pCharClass;
 
-    bool bRunNext;
-
     LanguageType eCharClassLang;
 
     long nFlags;
@@ -274,13 +272,19 @@ public:
     SvxAutoCorrect( const SvxAutoCorrect& );
     virtual ~SvxAutoCorrect();
 
-    // Execute an AutoCorrect.
-    // Returns what has been executed, according to the above flags
+    /** Execute an AutoCorrect.
+        Returns what has been executed, according to the above auto correct flags.
+        @param  io_bNbspRunNext
+                Remembers if a NO-BREAK SPACE was added (eg. in "fr" language)
+                (set to <TRUE/>) at the last character input that may have to
+                be removed again depending on what character is following.
+     */
     // FIXME: this has the horrible flaw that the rTxt must be a reference
     // to the actual SwTxtNode/EditNode string because it inserts the character
     // in rDoc and expects that to side-effect rTxt
     void DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                           sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, vcl::Window* pFrameWin = nullptr );
+                           sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, bool& io_bNbspRunNext,
+                           vcl::Window* pFrameWin = nullptr );
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
@@ -383,7 +387,7 @@ public:
                                 LanguageType eLang );
     bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nEndPos,
-                                LanguageType eLang );
+                                LanguageType eLang, bool& io_bNbspRunNext );
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
@@ -395,8 +399,6 @@ public:
     bool FnCorrectCapsLock( SvxAutoCorrDoc&, const OUString&,
                             sal_Int32 nSttPos, sal_Int32 nEndPos,
                             LanguageType eLang );
-
-    bool                HasRunNext() { return bRunNext; }
 
     static long         GetDefaultFlags();
 
