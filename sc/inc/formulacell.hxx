@@ -150,7 +150,7 @@ public:
                         SCITP_FROM_ITERATION,
                         SCITP_CLOSE_ITERATION_CIRCLE
                     };
-    void            InterpretTail( ScInterpretTailParameter, bool bSingleThreaded );
+    void            InterpretTail( ScInterpretTailParameter );
 
     void            HandleStuffAfterParallelCalculation();
 
