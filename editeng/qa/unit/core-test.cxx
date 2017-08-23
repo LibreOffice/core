@@ -353,9 +353,10 @@ void Test::testAutocorrect()
         OUString sInput("TEst-TEst");
         sal_Unicode const cNextChar(' ');
         OUString const sExpected("Test-Test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -364,9 +365,10 @@ void Test::testAutocorrect()
         OUString sInput("TEst/TEst");
         sal_Unicode const cNextChar(' ');
         OUString const sExpected("Test/Test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -376,9 +378,10 @@ void Test::testAutocorrect()
         OUString sInput("*foo");
         sal_Unicode const cNextChar('*');
         OUString const sExpected("foo");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }
@@ -387,9 +390,10 @@ void Test::testAutocorrect()
         OUString sInput("Test. test");
         sal_Unicode const cNextChar(' ');
         OUString const sExpected("Test. Test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -399,9 +403,10 @@ void Test::testAutocorrect()
         OUString sInput("Test. \x01 test");
         sal_Unicode const cNextChar(' ');
         OUString const sExpected("Test. \x01 test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -412,10 +417,11 @@ void Test::testAutocorrect()
         sal_Unicode const cNextChar('"');
         const sal_Unicode EXPECTED[] = { 'T', 0x01, 0x0201d };
         OUString sExpected(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.SetAutoCorrFlag(ChgQuotes, true);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
         fprintf(stderr, "text is %x\n", aFoo.getResult()[aFoo.getResult().getLength() - 1]);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
