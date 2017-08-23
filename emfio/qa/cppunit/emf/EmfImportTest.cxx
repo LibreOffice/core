@@ -40,7 +40,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
 
     void testWorking();
 
-    Primitive2DSequence parseEmf(const char* aSource);
+    Primitive2DSequence parseEmf(const OUString& aSource);
 
 public:
     CPPUNIT_TEST_SUITE(Test);
@@ -48,7 +48,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-Primitive2DSequence Test::parseEmf(const char* aSource)
+Primitive2DSequence Test::parseEmf(const OUString& aSource)
 {
     const Reference<XEmfParser> xEmfParser = EmfTools::create(m_xContext);
 

@@ -23,7 +23,7 @@ using namespace com::sun::star;
 
 namespace
 {
-const char* const DATA_DIRECTORY = "/xmlsecurity/qa/unit/pdfsigning/data/";
+char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/pdfsigning/data/";
 }
 
 /// Testsuite for the PDF signing feature.

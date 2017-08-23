@@ -771,10 +771,10 @@ void Test::testSkipImages()
             uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
                     { "FilterOptions", uno::Any(OUString::createFromAscii(aFilterNames[nFilter][1])) }
             }));
-            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
+            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(OUString::createFromAscii(aFilterNames[nFilter][0])), "com.sun.star.text.TextDocument", args);
             sFailedMessage = sFailedMessage + " - " + aFilterNames[nFilter][1];
         } else
-            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument");
+            mxComponent = loadFromDesktop(m_directories.getURLFromSrc(OUString::createFromAscii(aFilterNames[nFilter][0])), "com.sun.star.text.TextDocument");
 
         // Check shapes (images, textboxes, custom shapes)
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

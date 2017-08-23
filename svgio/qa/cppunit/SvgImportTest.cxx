@@ -63,7 +63,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf99994();
     void testTdf101237();
 
-    Primitive2DSequence parseSvg(const char* aSource);
+    Primitive2DSequence parseSvg(const OUString& aSource);
 
 public:
     CPPUNIT_TEST_SUITE(Test);
@@ -94,7 +94,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-Primitive2DSequence Test::parseSvg(const char* aSource)
+Primitive2DSequence Test::parseSvg(const OUString& aSource)
 {
     const Reference<XSvgParser> xSvgParser = SvgTools::create(m_xContext);
 

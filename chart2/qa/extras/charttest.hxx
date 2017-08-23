@@ -76,10 +76,10 @@ public:
     void load( const OUString& rDir, const OUString& rFileName );
     std::shared_ptr<utl::TempFile> save( const OUString& rFileName );
     std::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
-    uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
+    uno::Sequence < OUString > getImpressChartColumnDescriptions( const OUString& pDir, const char* pName );
     OUString getFileExtension( const OUString& rFileName );
 
-    uno::Reference< chart::XChartDocument > getChartDocFromImpress( const char* pDir, const char* pName );
+    uno::Reference< chart::XChartDocument > getChartDocFromImpress( const OUString& pDir, const char* pName );
 
     uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
 
@@ -497,7 +497,7 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
     return aRet;
 }
 
-uno::Reference< chart::XChartDocument > ChartTest::getChartDocFromImpress( const char* pDir, const char* pName )
+uno::Reference< chart::XChartDocument > ChartTest::getChartDocFromImpress( const OUString& pDir, const char* pName )
 {
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Draw.PresentationDocument");
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(mxComponent, uno::UNO_QUERY_THROW );
@@ -562,7 +562,7 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int3
     return xChartDoc;
 }
 
-uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const char* pDir, const char* pName )
+uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const OUString& pDir, const char* pName )
 {
     uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromImpress( pDir, pName );
     uno::Reference< chart::XChartDataArray > xChartData ( xChartDoc->getData(), uno::UNO_QUERY_THROW);
