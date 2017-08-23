@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_sc \
 	Library_scd \
 	Library_scfilt \
+	Executable_tabview \
 	$(call gb_Helper_optional,DESKTOP,Library_scui) \
 	$(call gb_Helper_optional,OPENCL,Package_opencl) \
 	Package_res_xml \
