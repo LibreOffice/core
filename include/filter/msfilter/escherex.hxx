@@ -1048,7 +1048,8 @@ public:
 
     /** Creates and returns a new shape identifier, updates the internal shape
         counters and registers the identifier in the DGG cluster table. */
-    inline sal_uInt32   GenerateShapeId() { return mxGlobal->GenerateShapeId( mnCurrentDg, mbEscherSpgr ); }
+    virtual sal_uInt32   GenerateShapeId() { return mxGlobal->GenerateShapeId( mnCurrentDg, mbEscherSpgr ); }
+
 
     /** Returns the graphic provider from the global object that has been
         passed to the constructor.

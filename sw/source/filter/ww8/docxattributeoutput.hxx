@@ -417,6 +417,9 @@ private:
     bool PostponeOLE( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
 
+    void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, const Point& rNdTopLeft, bool bInsideRun);
+    bool ExportAsActiveXControl(const SdrObject* pObject) const;
+
     /// checks whether the current component is a diagram
     static bool IsDiagram (const SdrObject* sdrObject);
 
@@ -697,6 +700,7 @@ private:
     void WritePostponedGraphic();
     void WritePostponedMath(const SwOLENode* pObject);
     void WritePostponedFormControl(const SdrObject* pObject);
+    void WritePostponedActiveXControl(bool bInsideRun);
     void WritePostponedDiagram();
     void WritePostponedChart();
     void WritePostponedOLE();
@@ -875,6 +879,7 @@ private:
     const SdrObject* m_postponedChart;
     Size m_postponedChartSize;
     std::vector<const SdrObject*> m_aPostponedFormControls;
+    std::vector<PostponedDrawing> m_aPostponedActiveXControls;
     const SwField* pendingPlaceholder;
     /// Maps postit fields to ID's, used in commentRangeStart/End, commentReference and comment.xml.
     std::vector< std::pair<const SwPostItField*, sal_Int32> > m_postitFields;

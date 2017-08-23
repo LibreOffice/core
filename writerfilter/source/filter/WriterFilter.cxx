@@ -225,10 +225,6 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         aGrabBagProperties["OOXCustomXml"] = uno::makeAny(pDocument->getCustomXmlDomList());
         aGrabBagProperties["OOXCustomXmlProps"] = uno::makeAny(pDocument->getCustomXmlDomPropsList());
 
-        // Adding the saved ActiveX DOM
-        aGrabBagProperties["OOXActiveX"] = uno::makeAny(pDocument->getActiveXDomList());
-        aGrabBagProperties["OOXActiveXBin"] = uno::makeAny(pDocument->getActiveXBinList());
-
         // Adding the saved Glossary Documnet DOM to the document's grab bag
         aGrabBagProperties["OOXGlossary"] = uno::makeAny(pDocument->getGlossaryDocDom());
         aGrabBagProperties["OOXGlossaryDom"] = uno::makeAny(pDocument->getGlossaryDomList());
