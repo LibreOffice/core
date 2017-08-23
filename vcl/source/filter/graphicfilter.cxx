@@ -2449,8 +2449,6 @@ ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilt
             aReturnString="version error";
     else if (nRes == ERRCODE_GRFILTER_FILTERERROR)
             aReturnString="filter error";
-    else if (nRes == ERRCODE_GRFILTER_ABORT)
-            aReturnString="import aborted";
     else if (nRes == ERRCODE_GRFILTER_TOOBIG)
             aReturnString="graphic is too big";
 
