@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xusedareacursor.hxx>
+#include <test/sheet/xuniquecellformatrangessupplier.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -20,9 +21,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 4
+#define NUMBER_OF_TESTS 5
 
-class ScCellCursorObj : public CalcUnoApiTest, private apitest::XCellSeries, public apitest::XUsedAreaCursor
+class ScCellCursorObj : public CalcUnoApiTest, private apitest::XCellSeries, public apitest::XUsedAreaCursor, public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
     ScCellCursorObj();
@@ -41,6 +42,9 @@ public:
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XUniqueCellFormatRangesSupplier
+    CPPUNIT_TEST(testGetUniqueCellFormatRanges);
 
     CPPUNIT_TEST_SUITE_END();
 

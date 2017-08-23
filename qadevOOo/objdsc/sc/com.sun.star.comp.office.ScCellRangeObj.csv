@@ -133,7 +133,6 @@
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryColumnDifferences()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryRowDifferences()"
 "ScCellRangeObj";"com::sun::star::sheet::XCellRangesQuery";"queryIntersection()"
-"ScCellRangeObj";"com::sun::star::sheet::XUniqueCellFormatRangesSupplier";"getUniqueCellFormatRanges()"
 "ScCellRangeObj";"com::sun::star::table::XCellRange";"getCellByPosition()"
 "ScCellRangeObj";"com::sun::star::table::XCellRange";"getCellRangeByPosition()"
 "ScCellRangeObj";"com::sun::star::table::XCellRange";"getCellRangeByName()"
