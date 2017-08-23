@@ -80,7 +80,7 @@ public:
         maEntries()
     {
         SetTimeout(1000);
-        Stop();
+        SetStatic();
     }
 
     ~GdiPlusBuffer() override

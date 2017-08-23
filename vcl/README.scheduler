@@ -172,6 +172,13 @@ Since the Scheduler is always handled by the system message queue, there is
 really no more reasoning to stop after 100 events to prevent LO Scheduler
 starvation.
 
+== Drop static inherited or composed Task objects ==
+
+The sequence of destruction of static objects is not defined. So a static Task
+can not be guaranteed to happen before the Scheduler. When dynamic unloading
+is involved, this becomes an even worse problem. This way we could drop the
+mbStatic workaround from the Task class.
+
 == Run the LO application in its own thread ==
 
 This would probably get rid of most of the MacOS and Windows implementation

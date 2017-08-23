@@ -112,6 +112,7 @@ OLEObjCache::OLEObjCache()
     pTimer = new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" );
     pTimer->SetInvokeHandler( LINK(this, OLEObjCache, UnloadCheckHdl) );
     pTimer->SetTimeout(20000);
+    pTimer->SetStatic();
 }
 
 OLEObjCache::~OLEObjCache()

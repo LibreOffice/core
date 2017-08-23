@@ -47,6 +47,7 @@ class VCL_DLLPUBLIC Task
     const sal_Char    *mpDebugName;     ///< Useful for debugging
     TaskPriority       mePriority;      ///< Task priority
     bool               mbActive;        ///< Currently in the scheduler
+    bool               mbStatic;        ///< Is a static object
 
 protected:
     static void StartTimer( sal_uInt64 nMS );
@@ -88,6 +89,15 @@ public:
     void            Stop();
 
     bool            IsActive() const { return mbActive; }
+
+    /**
+     * This function must be called for static tasks, so the Task destructor
+     * ignores the SchedulerMutex, as it may not be available anymore.
+     * The cleanup is still correct, as it has already happened in
+     * DeInitScheduler call well before the static destructor calls.
+     */
+    void            SetStatic() { mbStatic = true; }
+    bool            IsStatic() const { return mbStatic; }
 };
 
 #endif // INCLUDED_VCL_TASK_HXX

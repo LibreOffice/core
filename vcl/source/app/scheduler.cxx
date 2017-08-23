@@ -160,6 +160,7 @@ void Scheduler::ImplDeInitScheduler()
                 pTask->mbActive = false;
             }
             pTask->mpSchedulerData = nullptr;
+            pTask->SetStatic();
         }
         ImplSchedulerData* pDeleteSchedulerData = pSchedulerData;
         pSchedulerData = pSchedulerData->mpNext;
@@ -548,6 +549,7 @@ Task::Task( const sal_Char *pDebugName )
     , mpDebugName( pDebugName )
     , mePriority( TaskPriority::DEFAULT )
     , mbActive( false )
+    , mbStatic( false )
 {
 }
 
@@ -556,6 +558,7 @@ Task::Task( const Task& rTask )
     , mpDebugName( rTask.mpDebugName )
     , mePriority( rTask.mePriority )
     , mbActive( false )
+    , mbStatic( false )
 {
     if ( rTask.IsActive() )
         Start();
@@ -563,9 +566,14 @@ Task::Task( const Task& rTask )
 
 Task::~Task() COVERITY_NOEXCEPT_FALSE
 {
-    SchedulerGuard aSchedulerGuard;
-    if ( mpSchedulerData )
-        mpSchedulerData->mpTask = nullptr;
+    if ( !IsStatic() )
+    {
+        SchedulerGuard aSchedulerGuard;
+        if ( mpSchedulerData )
+            mpSchedulerData->mpTask = nullptr;
+    }
+    else
+        assert( nullptr == mpSchedulerData );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
