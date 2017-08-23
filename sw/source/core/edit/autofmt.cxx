@@ -1832,6 +1832,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
     sal_Int32 nSttPos, nLastBlank = nPos;
     bool bFirst = m_aFlags.bCapitalStartSentence, bFirstSent = bFirst;
     sal_Unicode cChar = 0;
+    bool bNbspRunNext = false;
 
     CharClass& rAppCC = GetAppCharClass();
 
@@ -1985,7 +1986,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                                            : LANGUAGE_SYSTEM;
 
                     SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang ) )
+                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang, bNbspRunNext ) )
                         --nPos;
                 }
                 break;
@@ -2042,7 +2043,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             if ( m_aFlags.bAddNonBrkSpace )
             {
                 SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang );
+                pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang, bNbspRunNext );
             }
 
             if( ( m_aFlags.bChgOrdinalNumber &&

@@ -1270,10 +1270,9 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
                     // Autocorrection?
-                    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
-                          pAutoCorrect->HasRunNext() ) )
+                          pImpEditEngine->IsNbspRunNext() ) )
                     {
                         aCurSel = pImpEditEngine->AutoCorrect(
                             aCurSel, nCharCode, !pEditView->IsInsertMode(), pFrameWin );

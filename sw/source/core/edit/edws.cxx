@@ -35,12 +35,13 @@
 
 // masqueraded copy constructor
 SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
-    : SwCursorShell( rEdSH, pWindow )
+    : SwCursorShell( rEdSH, pWindow ),
+    m_bNbspRunNext(false)   // TODO: would copying that make sense? only if editing continues
 {
 }
 
 SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
-    : SwCursorShell( rDoc, pWindow, pOptions )
+    : SwCursorShell( rDoc, pWindow, pOptions ), m_bNbspRunNext(false)
 {
     if (0 < officecfg::Office::Common::Undo::Steps::get())
     {
@@ -257,7 +258,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     OUString const& rNodeText(pTNd->GetText());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rNodeText, pCursor->GetPoint()->nContent.GetIndex(),
-                    cChar, bInsert, GetWin() );
+                    cChar, bInsert, m_bNbspRunNext, GetWin() );
     if( cChar )
         SaveTableBoxContent( pCursor->GetPoint() );
     EndAllAction();

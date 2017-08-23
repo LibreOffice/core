@@ -520,6 +520,8 @@ private:
     bool            mbLastTryMerge:1;
     bool            mbReplaceLeadingSingleQuotationMark:1;
 
+    bool            mbNbspRunNext;  // can't be a bitfield as it is passed as bool&
+
 
     // Methods...
 
@@ -1037,6 +1039,10 @@ public:
         mark (apostrophe) or not (default is on) */
     void            SetReplaceLeadingSingleQuotationMark( bool bReplace ) { mbReplaceLeadingSingleQuotationMark = bReplace; }
     bool            IsReplaceLeadingSingleQuotationMark() const { return mbReplaceLeadingSingleQuotationMark; }
+
+    /** Whether last AutoCorrect inserted a NO-BREAK SPACE that may need to be removed again. */
+    bool            IsNbspRunNext() const { return mbNbspRunNext; }
+
     void Dispose();
 };
 

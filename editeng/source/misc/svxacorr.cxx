@@ -203,6 +203,16 @@ static const LanguageTag& GetAppLang()
 {
     return Application::GetSettings().GetLanguageTag();
 }
+
+/// Never use an unresolved LANGUAGE_SYSTEM.
+static LanguageType GetDocLanguage( const SvxAutoCorrDoc& rDoc, sal_Int32 nPos )
+{
+    LanguageType eLang = rDoc.GetLanguage( nPos );
+    if (eLang == LANGUAGE_SYSTEM)
+        eLang = GetAppLang().getLanguageType();     // the current work locale
+    return eLang;
+}
+
 static LocaleDataWrapper& GetLocaleDataWrapper( LanguageType nLang )
 {
     static LocaleDataWrapper aLclDtWrp( GetAppLang() );
@@ -296,7 +306,6 @@ SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
     : sShareAutoCorrFile( rShareAutocorrFile )
     , sUserAutoCorrFile( rUserAutocorrFile )
-    , bRunNext( false )
     , eCharClassLang( LANGUAGE_DONTKNOW )
     , nFlags(SvxAutoCorrect::GetDefaultFlags())
     , cStartDQuote( 0 )
@@ -312,7 +321,6 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     : sShareAutoCorrFile( rCpy.sShareAutoCorrFile )
     , sUserAutoCorrFile( rCpy.sUserAutoCorrFile )
     , aSwFlags( rCpy.aSwFlags )
-    , bRunNext( false )
     , eCharClassLang(rCpy.eCharClassLang)
     , nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad))
     , cStartDQuote( rCpy.cStartDQuote )
@@ -630,7 +638,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
 bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 sal_Int32 nEndPos,
-                                LanguageType eLang )
+                                LanguageType eLang, bool& io_bNbspRunNext )
 {
     bool bRet = false;
 
@@ -689,11 +697,11 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
                     // Add the non-breaking space at the end pos
                     if ( bHasSpace )
                         rDoc.Insert( nPos, OUString(cNonBreakingSpace) );
-                    bRunNext = true;
+                    io_bNbspRunNext = true;
                     bRet = true;
                 }
                 else if ( chars.indexOf( cPrevChar ) != -1 )
-                    bRunNext = true;
+                    io_bNbspRunNext = true;
             }
         }
         else if ( cChar == '/' && nEndPos > 1 && rTxt.getLength() > (nEndPos - 1) )
@@ -1167,7 +1175,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                     sal_Unicode cInsChar, bool bSttQuote,
                                     bool bIns )
 {
-    LanguageType eLang = rDoc.GetLanguage( nInsPos );
+    const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     OUString sChg( cInsChar );
@@ -1180,8 +1188,6 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
     if( '\"' == cInsChar )
     {
-        if( LANGUAGE_SYSTEM == eLang )
-            eLang = GetAppLang().getLanguageType();
         if( eLang.anyOf(
             LANGUAGE_FRENCH,
             LANGUAGE_FRENCH_BELGIAN,
@@ -1207,15 +1213,13 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                                 sal_Unicode cInsChar, bool bSttQuote )
 {
-    LanguageType eLang = rDoc.GetLanguage( nInsPos );
+    const LanguageType eLang = GetDocLanguage( rDoc, nInsPos );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
     OUString sRet = OUString(cRet);
 
     if( '\"' == cInsChar )
     {
-        if( LANGUAGE_SYSTEM == eLang )
-            eLang = GetAppLang().getLanguageType();
         if( eLang.anyOf(
              LANGUAGE_FRENCH,
              LANGUAGE_FRENCH_BELGIAN,
@@ -1234,10 +1238,10 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
 
 void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
-                                    bool bInsert, vcl::Window* pFrameWin )
+                                    bool bInsert, bool& io_bNbspRunNext, vcl::Window* pFrameWin )
 {
-    bool bIsNextRun = bRunNext;
-    bRunNext = false;  // if it was set, then it has to be turned off
+    bool bIsNextRun = io_bNbspRunNext;
+    io_bNbspRunNext = false;  // if it was set, then it has to be turned off
 
     do{                                 // only for middle check loop !!
         if( cChar )
@@ -1276,7 +1280,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if ( IsAutoCorrFlag( AddNonBrkSpace ) )
             {
                 if ( NeedsHardspaceAutocorr( cChar ) &&
-                    FnAddNonBrkSpace( rDoc, rTxt, nInsPos, rDoc.GetLanguage( nInsPos ) ) )
+                    FnAddNonBrkSpace( rDoc, rTxt, nInsPos, GetDocLanguage( rDoc, nInsPos ), io_bNbspRunNext ) )
                 {
                     ;
                 }
@@ -1333,9 +1337,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         if( !nPos && !IsWordDelim( rTxt[ 0 ]))
             --nCapLttrPos;          // begin of paragraph and no blank
 
-        LanguageType eLang = rDoc.GetLanguage( nCapLttrPos );
-        if( LANGUAGE_SYSTEM == eLang )
-            eLang = MsLangId::getSystemLanguage();
+        const LanguageType eLang = GetDocLanguage( rDoc, nCapLttrPos );
         CharClass& rCC = GetCharClass( eLang );
 
         // no symbol characters
@@ -1546,9 +1548,7 @@ bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
     if( 3 > nEnde - nCapLttrPos )
         return false;
 
-    LanguageType eLang = rDoc.GetLanguage( nCapLttrPos );
-    if( LANGUAGE_SYSTEM == eLang )
-        eLang = MsLangId::getSystemLanguage();
+    const LanguageType eLang = GetDocLanguage( rDoc, nCapLttrPos );
 
     SvxAutoCorrect* pThis = const_cast<SvxAutoCorrect*>(this);
     CharClass& rCC = pThis->GetCharClass( eLang );

@@ -334,9 +334,10 @@ void Test::testAutocorrect()
         OUString sInput("TEst-TEst");
         sal_Unicode cNextChar(' ');
         OUString sExpected("Test-Test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -345,9 +346,10 @@ void Test::testAutocorrect()
         OUString sInput("TEst/TEst");
         sal_Unicode cNextChar(' ');
         OUString sExpected("Test/Test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -357,9 +359,10 @@ void Test::testAutocorrect()
         OUString sInput("*foo");
         sal_Unicode cNextChar('*');
         OUString sExpected("foo");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }
@@ -368,9 +371,10 @@ void Test::testAutocorrect()
         OUString sInput("Test. test");
         sal_Unicode cNextChar(' ');
         OUString sExpected("Test. Test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
@@ -379,9 +383,10 @@ void Test::testAutocorrect()
         OUString sInput("Test. \x01 test");
         sal_Unicode cNextChar(' ');
         OUString sExpected("Test. \x01 test ");
+        bool bNbspRunNext = false;
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true, bNbspRunNext);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
