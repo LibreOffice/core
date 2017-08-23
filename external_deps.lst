@@ -145,7 +145,7 @@ if (SYSTEM_JPEG != YES)
     URL1 = http://www.ijg.org/files/jpegsrc.v8d.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
-if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
+if (SOLAR_JAVA==TRUE)
     MD5 = 4c8c505cc3cba4c467c479e3e0f09ba4
     name = commons-lang3-3.3-src.tar.gz
     URL1 = http://archive.apache.org/dist/commons/lang/source/$(name)
