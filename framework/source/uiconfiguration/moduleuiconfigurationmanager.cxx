@@ -58,6 +58,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <memory>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -84,8 +85,6 @@ public:
     ModuleUIConfigurationManager(
             const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
             const css::uno::Sequence< css::uno::Any >& aArguments);
-
-    virtual ~ModuleUIConfigurationManager() override;
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -201,7 +200,7 @@ private:
     void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType const & rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
     UIElementTypesVector                                      m_aUIElements[LAYER_COUNT];
-    PresetHandler*                                            m_pStorageHandler[css::ui::UIElementType::COUNT];
+    std::unique_ptr<PresetHandler>                            m_pStorageHandler[css::ui::UIElementType::COUNT];
     css::uno::Reference< css::embed::XStorage >               m_xDefaultConfigStorage;
     css::uno::Reference< css::embed::XStorage >               m_xUserConfigStorage;
     bool                                                      m_bReadOnly;
@@ -854,9 +853,6 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     , m_xContext( xContext )
     , m_aListenerContainer( m_mutex )
 {
-    for (PresetHandler* & i : m_pStorageHandler)
-        i = nullptr;
-
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
     m_aUIElements[LAYER_DEFAULT].resize( css::ui::UIElementType::COUNT );
@@ -888,7 +884,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
 
         if ( !aResourceType.isEmpty() )
         {
-            m_pStorageHandler[i] = new PresetHandler( m_xContext );
+            m_pStorageHandler[i].reset( new PresetHandler( m_xContext ) );
             m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,
                                                      aResourceType, // this path won't be used later... see next lines!
                                                      m_aModuleShortName,
@@ -914,12 +910,6 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     }
 
     impl_Initialize();
-}
-
-ModuleUIConfigurationManager::~ModuleUIConfigurationManager()
-{
-    for (PresetHandler* i : m_pStorageHandler)
-        delete i;
 }
 
 // XComponent
