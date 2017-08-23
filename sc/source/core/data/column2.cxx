@@ -2926,7 +2926,7 @@ void ScColumn::CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread,
             continue;
 
         ScFormulaCell& rCell = **itCell;
-        rCell.InterpretTail(ScFormulaCell::SCITP_NORMAL, false);
+        rCell.InterpretTail(ScFormulaCell::SCITP_NORMAL);
     }
 }
 
