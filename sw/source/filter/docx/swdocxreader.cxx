@@ -39,6 +39,21 @@
 #include <unotxdoc.hxx>
 #include <unotools/streamwrap.hxx>
 
+
+// from rtf/swparrtf.cxx
+#include <shellio.hxx>
+#include <ndtxt.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <swdll.hxx>
+#include <swerror.h>
+
+#include <unotextrange.hxx>
+
+#include <unotools/streamwrap.hxx>
+
+
 #define AUTOTEXT_GALLERY "autoTxt"
 
 using namespace css;
@@ -48,9 +63,120 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOCX()
     return new SwDOCXReader;
 }
 
-ErrCode SwDOCXReader::Read( SwDoc& /* rDoc */, const OUString& /* rBaseURL */, SwPaM& /* rPaM */, const OUString& /* FileName */ )
+ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& rPam, const OUString& /* FileName */ )
 {
-    return ERR_SWG_READ_ERROR;
+    // return ERR_SWG_READ_ERROR;
+    if (!pMedium->GetInStream())
+        return ERR_SWG_READ_ERROR;
+
+    // We want to work in an empty paragraph.
+    // Step 1: XTextRange will be updated when content is inserted, so we know
+    // the end position.
+    const uno::Reference<text::XTextRange> xInsertPosition = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
+    std::shared_ptr<SwNodeIndex> pSttNdIdx(new SwNodeIndex(rDoc.GetNodes()));
+    const SwPosition* pPos = rPam.GetPoint();
+
+    // Step 2: Split once and remember the node that has been split.
+    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
+    *pSttNdIdx = pPos->nNode.GetIndex() - 1;
+
+    // Step 3: Split again.
+    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
+    std::shared_ptr<SwNodeIndex> pSttNdIdx2(new SwNodeIndex(rDoc.GetNodes()));
+    *pSttNdIdx2 = pPos->nNode.GetIndex();
+
+    // Step 4: Insert all content into the new node
+    rPam.Move(fnMoveBackward);
+    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
+
+    SwDocShell* pDocShell(rDoc.GetDocShell());
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> xDstDoc(pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xDstDoc);
+
+    const uno::Reference<text::XTextRange> xInsertTextRange =
+        SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+
+    // mb
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(pStrm ? *pStrm : *pMedium->GetInStream()));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    {
+        // { "InputStream", uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(*pStrm))) },
+        { "InputStream", uno::Any(xStream) },
+        { "InsertMode", uno::Any(true) },
+        { "TextInsertModeRange", uno::Any(xInsertTextRange) }
+    }));
+    ErrCode ret = ERRCODE_NONE;
+    try
+    {
+        xFilter->filter(aDescriptor);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("sw.rtf", "SwRTFReader::Read(): exception: " << e.Message);
+        ret = ERR_SWG_READ_ERROR;
+    }
+
+    // Clean up the fake paragraphs.
+    SwUnoInternalPaM aPam(rDoc);
+    ::sw::XTextRangeToSwPaM(aPam, xInsertPosition);
+    if (pSttNdIdx->GetIndex())
+    {
+        // If we are in insert mode, join the split node that is in front
+        // of the new content with the first new node. Or in other words:
+        // Revert the first split node.
+        SwTextNode* pTextNode = pSttNdIdx->GetNode().GetTextNode();
+        SwNodeIndex aNxtIdx(*pSttNdIdx);
+        if (pTextNode && pTextNode->CanJoinNext(&aNxtIdx) && pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
+        {
+            // If the PaM points to the first new node, move the PaM to the
+            // end of the previous node.
+            if (aPam.GetPoint()->nNode == aNxtIdx)
+            {
+                aPam.GetPoint()->nNode = *pSttNdIdx;
+                aPam.GetPoint()->nContent.Assign(pTextNode, pTextNode->GetText().getLength());
+            }
+            // If the first new node isn't empty, convert  the node's text
+            // attributes into hints. Otherwise, set the new node's
+            // paragraph style at the previous (empty) node.
+            SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+            if (pTextNode->GetText().getLength())
+                pDelNd->FormatToTextAttr(pTextNode);
+            else
+                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+            pTextNode->JoinNext();
+        }
+    }
+
+    if (pSttNdIdx2->GetIndex())
+    {
+        // If we are in insert mode, join the split node that is after
+        // the new content with the last new node. Or in other words:
+        // Revert the second split node.
+        SwTextNode* pTextNode = pSttNdIdx2->GetNode().GetTextNode();
+        SwNodeIndex aPrevIdx(*pSttNdIdx2);
+        if (pTextNode && pTextNode->CanJoinPrev(&aPrevIdx) && pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
+        {
+            // If the last new node isn't empty, convert  the node's text
+            // attributes into hints. Otherwise, set the new node's
+            // paragraph style at the next (empty) node.
+            SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode();
+            if (pTextNode->GetText().getLength())
+                pDelNd->FormatToTextAttr(pTextNode);
+            else
+                pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+            pTextNode->JoinPrev();
+        }
+    }
+
+    return ret;
+
 }
 
 int SwDOCXReader::GetReaderType()
