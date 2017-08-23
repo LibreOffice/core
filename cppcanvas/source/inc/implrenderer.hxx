@@ -33,8 +33,9 @@
 
 #include <osl/endian.h>
 
-#include <vector>
 #include <map>
+#include <memory>
+#include <vector>
 
 class GDIMetaFile;
 class VirtualDevice;
@@ -294,7 +295,7 @@ static float GetSwapFloat( SvStream& rSt )
             /* EMF+ */
             XForm           aBaseTransform;
             XForm           aWorldTransform;
-            EMFPObject*     aObjects [256];
+            std::unique_ptr<EMFPObject> aObjects [256];
             float           fPageScale;
             sal_Int32       nOriginX;
             sal_Int32       nOriginY;

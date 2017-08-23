@@ -321,7 +321,7 @@ namespace cppcanvas
             } else {
                 rState.isFillColorSet = true;
                 // extract UseBrush
-                EMFPBrush* brush = static_cast<EMFPBrush*>( aObjects [brushIndexOrColor & 0xff] );
+                EMFPBrush* brush = static_cast<EMFPBrush*>( aObjects [brushIndexOrColor & 0xff].get() );
                 SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << (brush ? brush->GetType() : -1) << ")");
 
                 // give up in case something wrong happened
@@ -612,7 +612,7 @@ namespace cppcanvas
         void ImplRenderer::EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex)
         {
-            EMFPPen* pen = static_cast<EMFPPen*>( aObjects [penIndex & 0xff] );
+            EMFPPen* pen = static_cast<EMFPPen*>( aObjects [penIndex & 0xff].get() );
 
             SAL_WARN_IF( !pen, "cppcanvas.emf", "emf+ missing pen" );
 
@@ -702,28 +702,27 @@ namespace cppcanvas
 
             index = flags & 0xff;
             if (aObjects [index] != nullptr) {
-                delete aObjects [index];
-                aObjects [index] = nullptr;
+                aObjects [index].reset();
             }
 
             switch (flags & 0x7f00) {
             case EmfPlusObjectTypeBrush:
                 {
-                    EMFPBrush *brush;
-                    aObjects [index] = brush = new EMFPBrush ();
+                    std::unique_ptr<EMFPBrush> brush(new EMFPBrush());
                     brush->Read (rObjectStream, *this);
+                    aObjects [index] = std::move(brush);
 
                     break;
                 }
             case EmfPlusObjectTypePen:
                 {
-                    EMFPPen *pen;
-                    aObjects [index] = pen = new EMFPPen ();
+                    std::unique_ptr<EMFPPen> pen(new EMFPPen ());
                     pen->Read (rObjectStream, *this);
+                    aObjects [index] = std::move(pen);
 
                     break;
                 }
-            case EmfPlusObjectTypePath:
+            case EmfPlusObjectTypePath: {
                 sal_uInt32 header, pathFlags;
                 sal_Int32 points;
 
@@ -732,48 +731,47 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\tpath");
                 SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
-                EMFPPath *path;
-                aObjects [index] = path = new EMFPPath (points);
+                std::unique_ptr<EMFPPath> path(new EMFPPath (points));
                 path->Read (rObjectStream, pathFlags, *this);
+                aObjects [index] = std::move(path);
 
                 break;
+            }
             case EmfPlusObjectTypeRegion: {
-                EMFPRegion *region;
-
-                aObjects [index] = region = new EMFPRegion ();
+                std::unique_ptr<EMFPRegion> region(new EMFPRegion ());
                 region->Read (rObjectStream);
-
+                aObjects [index] = std::move(region);
                 break;
             }
             case EmfPlusObjectTypeImage:
                 {
-                    EMFPImage *image;
-                    aObjects [index] = image = new EMFPImage;
+                    std::unique_ptr<EMFPImage> image(new EMFPImage);
                     image->type = 0;
                     image->width = 0;
                     image->height = 0;
                     image->stride = 0;
                     image->pixelFormat = 0;
                     image->Read (rObjectStream, dataSize, bUseWholeStream);
+                    aObjects [index] = std::move(image);
 
                     break;
                 }
             case EmfPlusObjectTypeFont:
                 {
-                    EMFPFont *font;
-                    aObjects [index] = font = new EMFPFont;
+                    std::unique_ptr<EMFPFont> font(new EMFPFont);
                     font->emSize = 0;
                     font->sizeUnit = 0;
                     font->fontFlags = 0;
                     font->Read (rObjectStream);
+                    aObjects [index] = std::move(font);
 
                     break;
                 }
             case EmfPlusObjectTypeStringFormat:
                 {
-                    EMFPStringFormat *stringFormat;
-                    aObjects [index] = stringFormat = new EMFPStringFormat();
+                    std::unique_ptr<EMFPStringFormat> stringFormat(new EMFPStringFormat());
                     stringFormat->Read (rObjectStream);
+                    aObjects [index] = std::move(stringFormat);
                     break;
                 }
             case EmfPlusObjectTypeImageAttributes:
@@ -794,7 +792,7 @@ namespace cppcanvas
 
         double ImplRenderer::setFont (css::rendering::FontRequest& aFontRequest, sal_uInt8 fontObjectId, const ActionFactoryParameters& rParms, OutDevState& rState)
         {
-            EMFPFont *font = static_cast< EMFPFont* >( aObjects[ fontObjectId ] );
+            EMFPFont *font = static_cast< EMFPFont* >( aObjects[ fontObjectId ].get() );
 
             aFontRequest.FontDescription.FamilyName = font->family;
             double cellSize = font->emSize;
@@ -996,7 +994,7 @@ namespace cppcanvas
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
-                            EMFPPlusFillPolygon( static_cast<EMFPPath*>( aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            EMFPPlusFillPolygon( static_cast<EMFPPath*>( aObjects [index].get())->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                         }
                         break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -1120,7 +1118,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
                             SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
 
-                            EMFPPath* path = static_cast<EMFPPath*>( aObjects [flags & 0xff] );
+                            EMFPPath* path = static_cast<EMFPPath*>( aObjects [flags & 0xff].get() );
                             SAL_WARN_IF( !path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path" );
 
                             EMFPPlusDrawPolygon (path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
@@ -1185,7 +1183,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
                             if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
-                                EMFPImage& image = *static_cast<EMFPImage *>( aObjects [flags & 0xff]);
+                                EMFPImage& image = *static_cast<EMFPImage *>( aObjects [flags & 0xff].get());
                                 float sx, sy, sw, sh;
                                 sal_Int32 aCount;
 
@@ -1281,7 +1279,7 @@ namespace cppcanvas
 
                                 OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
-                                EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >( aObjects[ formatId & 0xff ] );
+                                EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >( aObjects[ formatId & 0xff ].get() );
                                 css::rendering::FontRequest aFontRequest;
                                 if (stringFormat)
                                 {
@@ -1538,7 +1536,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ SetClipPath combine mode: " << combineMode);
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath in slot: " << (flags & 0xff));
 
-                            EMFPPath& path = *static_cast<EMFPPath*>( aObjects [flags & 0xff] );
+                            EMFPPath& path = *static_cast<EMFPPath*>( aObjects [flags & 0xff].get() );
                             ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
 
                             clipPoly.transform (rState.mapModeTransform);
@@ -1563,7 +1561,7 @@ namespace cppcanvas
 
                         SAL_INFO("cppcanvas.emf", "EMF+ SetClipRegion");
                         SAL_INFO("cppcanvas.emf", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
-                        EMFPRegion *region = static_cast<EMFPRegion*>(aObjects [flags & 0xff]);
+                        EMFPRegion *region = static_cast<EMFPRegion*>(aObjects [flags & 0xff].get());
 
                         // reset clip
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
