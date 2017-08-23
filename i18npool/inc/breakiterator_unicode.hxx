@@ -22,6 +22,7 @@
 #include <breakiteratorImpl.hxx>
 
 #include <unicode/brkiter.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -74,10 +75,10 @@ protected:
     {
         OUString            aICUText;
         UText*              ut;
-        icu::BreakIterator* aBreakIterator;
+        std::unique_ptr<icu::BreakIterator> aBreakIterator;
         css::lang::Locale   maLocale;
 
-        BI_Data() : ut(nullptr), aBreakIterator(nullptr)
+        BI_Data() : ut(nullptr)
         {
         }
         ~BI_Data()

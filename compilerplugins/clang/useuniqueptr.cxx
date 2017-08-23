@@ -38,6 +38,8 @@ public:
     bool VisitCompoundStmt(const CompoundStmt* );
 private:
     void CheckForSingleUnconditionalDelete(const CXXDestructorDecl*, const CompoundStmt* );
+    void CheckForForLoopDelete(const CXXDestructorDecl*, const CompoundStmt* );
+    void CheckForRangedLoopDelete(const CXXDestructorDecl*, const CompoundStmt* );
     void CheckForDeleteOfPOD(const CompoundStmt* );
 };
 
@@ -52,8 +54,13 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
     if (!compoundStmt)
         return true;
 
-    CheckForSingleUnconditionalDelete(destructorDecl, compoundStmt);
-    CheckForDeleteOfPOD(compoundStmt);
+    if (compoundStmt->size() > 0)
+    {
+        CheckForSingleUnconditionalDelete(destructorDecl, compoundStmt);
+        CheckForDeleteOfPOD(compoundStmt);
+        CheckForForLoopDelete(destructorDecl, compoundStmt);
+        CheckForRangedLoopDelete(destructorDecl, compoundStmt);
+    }
 
     return true;
 }
@@ -78,9 +85,15 @@ void UseUniquePtr::CheckForSingleUnconditionalDelete(const CXXDestructorDecl* de
                 deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_front());
         }
     } else {
-        return;
+        // look for the following pattern:
+        // delete m_pbar;
+        // m_pbar = nullptr;
+        if (auto binaryOp = dyn_cast<BinaryOperator>(compoundStmt->body_back())) {
+            if (binaryOp->getOpcode() == BO_Assign)
+                deleteExpr = dyn_cast<CXXDeleteExpr>(*(++compoundStmt->body_rbegin()));
+        }
     }
-    if (deleteExpr == nullptr)
+    if (!deleteExpr)
         return;
 
     const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
@@ -143,6 +156,116 @@ void UseUniquePtr::CheckForSingleUnconditionalDelete(const CXXDestructorDecl* de
         "member is here",
         pFieldDecl->getLocStart())
         << pFieldDecl->getSourceRange();
+}
+
+void UseUniquePtr::CheckForForLoopDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
+{
+    auto forStmt = dyn_cast<ForStmt>(compoundStmt->body_back());
+    if (!forStmt)
+        return;
+    auto deleteExpr = dyn_cast<CXXDeleteExpr>(forStmt->getBody());
+    if (!deleteExpr)
+        return;
+
+    const MemberExpr* memberExpr = nullptr;
+    const Expr* subExpr = deleteExpr->getArgument();
+    for (;;)
+    {
+        subExpr = subExpr->IgnoreImpCasts();
+        if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
+            break;
+        else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(subExpr))
+            subExpr = arraySubscriptExpr->getBase();
+        else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
+        {
+            if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
+            {
+                memberExpr = dyn_cast<MemberExpr>(cxxOperatorCallExpr->getArg(0));
+                break;
+            }
+            return;
+        }
+        else
+            return;
+    }
+
+    // ignore union games
+    const FieldDecl* fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+    if (!fieldDecl)
+        return;
+    TagDecl const * td = dyn_cast<TagDecl>(fieldDecl->getDeclContext());
+    if (td->isUnion())
+        return;
+
+    // ignore calling delete on someone else's field
+    if (fieldDecl->getParent() != destructorDecl->getParent() )
+        return;
+
+    if (ignoreLocation(fieldDecl))
+        return;
+    // to ignore things like the CPPUNIT macros
+    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+    if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
+        return;
+
+    report(
+        DiagnosticsEngine::Warning,
+        "rather manage with std::some_container<std::unique_ptr<T>>",
+        deleteExpr->getLocStart())
+        << deleteExpr->getSourceRange();
+    report(
+        DiagnosticsEngine::Note,
+        "member is here",
+        fieldDecl->getLocStart())
+        << fieldDecl->getSourceRange();
+}
+
+void UseUniquePtr::CheckForRangedLoopDelete(const CXXDestructorDecl* destructorDecl, const CompoundStmt* compoundStmt)
+{
+    auto cxxForRangeStmt = dyn_cast<CXXForRangeStmt>(compoundStmt->body_back());
+    if (!cxxForRangeStmt)
+        return;
+    auto deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
+    if (!deleteExpr)
+        return;
+    auto memberExpr = dyn_cast<MemberExpr>(cxxForRangeStmt->getRangeInit());
+    if (!memberExpr)
+        return;
+    auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+    if (!fieldDecl)
+        return;
+
+    // ignore union games
+    TagDecl const * td = dyn_cast<TagDecl>(fieldDecl->getDeclContext());
+    if (td->isUnion())
+        return;
+
+    // ignore calling delete on someone else's field
+    if (fieldDecl->getParent() != destructorDecl->getParent() )
+        return;
+
+    if (ignoreLocation(fieldDecl))
+        return;
+
+    // to ignore things like the CPPUNIT macros
+    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
+    if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
+        return;
+    // ignore std::map and std::unordered_map, MSVC 2015 has problems with mixing these with std::unique_ptr
+    auto tc = loplugin::TypeCheck(fieldDecl->getType());
+    if (tc.Class("map").StdNamespace() || tc.Class("unordered_map").StdNamespace())
+        return;
+
+    report(
+        DiagnosticsEngine::Warning,
+        "rather manage with std::some_container<std::unique_ptr<T>>",
+        deleteExpr->getLocStart())
+        << deleteExpr->getSourceRange();
+    report(
+        DiagnosticsEngine::Note,
+        "member is here",
+        fieldDecl->getLocStart())
+        << fieldDecl->getSourceRange();
 }
 
 bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
@@ -255,7 +378,7 @@ void UseUniquePtr::CheckForDeleteOfPOD(const CompoundStmt* compoundStmt)
 
 
 
-loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr");
+loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", false);
 
 }
 
