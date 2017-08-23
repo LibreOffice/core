@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_065e3de9",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-23T07:36:55Z",
+      "side": 1,
+      "message": "You just can avoid using the ScDPCache::GetFormattedString in xepivotxml.cxx:342, and create a dedicated function for that there. (Possibly using a dedicated formatter there that would generate correct format with T.) This also avoids the need to replace space with T later.",
+      "parentUuid": "1a430d35_d7a062a8",
+      "revId": "7e0f30182c399bb6a2eadbe43342ca431ef08ba4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_794b2a5a",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 1
