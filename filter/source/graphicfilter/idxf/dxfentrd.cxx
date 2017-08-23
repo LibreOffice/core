@@ -562,8 +562,6 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
 
 DXFBoundaryPathData::~DXFBoundaryPathData()
 {
-    for (auto i: aEdges)
-        delete i;
 }
 
 bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
@@ -619,10 +617,10 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             sal_Int32 nEdgeType = rDGR.GetI();
             switch( nEdgeType )
             {
-                case 1 : aEdges.push_back( new DXFEdgeTypeLine() ); break;
-                case 2 : aEdges.push_back( new DXFEdgeTypeCircularArc() ); break;
-                case 3 : aEdges.push_back( new DXFEdgeTypeEllipticalArc() ); break;
-                case 4 : aEdges.push_back( new DXFEdgeTypeSpline() ); break;
+                case 1 : aEdges.emplace_back( new DXFEdgeTypeLine() ); break;
+                case 2 : aEdges.emplace_back( new DXFEdgeTypeCircularArc() ); break;
+                case 3 : aEdges.emplace_back( new DXFEdgeTypeEllipticalArc() ); break;
+                case 4 : aEdges.emplace_back( new DXFEdgeTypeSpline() ); break;
             }
         }
         else if ( aEdges.size() )

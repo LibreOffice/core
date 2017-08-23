@@ -412,7 +412,7 @@ struct DXFBoundaryPathData
     sal_Int32           nPointIndex;
 
     std::unique_ptr<DXFVector[]> pP;
-    std::deque<DXFEdgeType*> aEdges;
+    std::deque<std::unique_ptr<DXFEdgeType>> aEdges;
 
     DXFBoundaryPathData();
     ~DXFBoundaryPathData();

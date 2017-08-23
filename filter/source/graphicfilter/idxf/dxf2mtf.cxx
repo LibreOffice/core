@@ -574,7 +574,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
             {
                 for ( std::deque<DXFEdgeType*>::size_type i = 0; i < rPathData.aEdges.size(); i++ )
                 {
-                    const DXFEdgeType* pEdge = rPathData.aEdges[ i ];
+                    const DXFEdgeType* pEdge = rPathData.aEdges[ i ].get();
                     switch( pEdge->nEdgeType )
                     {
                         case 1 :
