@@ -192,9 +192,6 @@ ODatabaseDocument::~ODatabaseDocument()
         acquire();
         dispose();
     }
-
-    delete m_pEventContainer;
-    m_pEventContainer = nullptr;
 }
 
 Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType )
@@ -2003,7 +2000,7 @@ Reference< provider::XScriptProvider > SAL_CALL ODatabaseDocument::getScriptProv
 Reference< XNameReplace > SAL_CALL ODatabaseDocument::getEvents(  )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
-    return m_pEventContainer;
+    return m_pEventContainer.get();
 }
 
 Reference< XInterface > ODatabaseDocument::getThis() const

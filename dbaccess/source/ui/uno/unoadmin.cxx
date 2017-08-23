@@ -45,11 +45,9 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XC
     ,m_pDatasourceItems(nullptr)
     ,m_pItemPool(nullptr)
     ,m_pItemPoolDefaults(nullptr)
-    ,m_pCollection(nullptr)
 {
-
-    m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
-    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
+    m_pCollection.reset( new ::dbaccess::ODsnTypeCollection(_rxORB) );
+    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection.get());
 }
 
 ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
@@ -63,10 +61,6 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
             ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
         }
     }
-
-    delete m_pCollection;
-    m_pCollection = nullptr;
-
 }
 
 void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)

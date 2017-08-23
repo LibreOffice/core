@@ -42,7 +42,7 @@ protected:
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
     std::vector<SfxPoolItem*>*
                             m_pItemPoolDefaults;    // pool defaults
-    ::dbaccess::ODsnTypeCollection*
+    std::unique_ptr<::dbaccess::ODsnTypeCollection>
                             m_pCollection;          // datasource type collection
 
     css::uno::Any           m_aInitialSelection;
