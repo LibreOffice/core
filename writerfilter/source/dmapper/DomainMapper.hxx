@@ -110,6 +110,7 @@ public:
     bool IsInHeaderFooter() const;
     bool IsInTable() const;
     bool IsStyleSheetImport() const;
+    bool HasPageBackground() const;
     /**
      @see DomainMapper_Impl::processDeferredCharacterProperties()
     */
