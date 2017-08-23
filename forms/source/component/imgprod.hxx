@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XImageProducer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/weak.hxx>
+#include <memory>
 #include <vector>
 
 
@@ -47,8 +48,10 @@ private:
 
     OUString        maURL;
     ConsumerList_t  maConsList;
-    Graphic*        mpGraphic;
-    SvStream*       mpStm;
+    std::unique_ptr<Graphic>
+                    mpGraphic;
+    std::unique_ptr<SvStream>
+                    mpStm;
     sal_uInt32      mnTransIndex;
     bool            mbConsInit;
     Link<Graphic*,void> maDoneHdl;
