@@ -60,6 +60,7 @@ struct ConditionAttr
     sal_Int32 mnArg;
     sal_Int32 mnOp;
     OUString msVal;
+    sal_Int32 mnVal;
 };
 
 struct Constraint
@@ -181,9 +182,12 @@ public:
         { mbElse=true; }
     virtual void addChild( const LayoutAtomPtr & pNode ) override;
     virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
-    static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    sal_Int32 getNodeCount() const;
 private:
+    static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
+    static bool compareResult(sal_Int32 nOperator, const OUString& sFirst, const OUString& sSecond);
+    const dgm::Point* getPresNode() const;
+    sal_Int32 getNodeCount() const;
+
     bool          mbElse;
     IteratorAttr  maIter;
     ConditionAttr maCond;
