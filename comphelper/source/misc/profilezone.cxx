@@ -46,6 +46,8 @@ long long addRecording(const char * aProfileId, long long aCreateTime)
         TimeValue systemTime;
         osl_getSystemTime( &systemTime );
         long long aTime = (long long) systemTime.Seconds * 1000000 + systemTime.Nanosec/1000;
+        if (!aProfileId)
+            aProfileId = "(null)";
         OUString aString(aProfileId, strlen(aProfileId), RTL_TEXTENCODING_UTF8);
         g_aRecording.push_back(
             OUString::number(osl_getThreadIdentifier(nullptr)) + " " +
