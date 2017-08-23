@@ -73,7 +73,7 @@ void LocaleNode::printR () const {
 }
 
 void LocaleNode::addChild ( LocaleNode * node) {
-    children.push_back(node);
+    children.emplace_back(node);
     node->parent = this;
 }
 
@@ -99,8 +99,6 @@ const LocaleNode * LocaleNode::findNode ( const sal_Char *name) const {
 
 LocaleNode::~LocaleNode()
 {
-    for (size_t i=0; i < children.size(); ++i)
-        delete children[i];
 }
 
 LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
