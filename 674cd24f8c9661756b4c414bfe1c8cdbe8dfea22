@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_29a06af4",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-23T17:18:46Z",
+      "side": 1,
+      "message": "Given the specifics of this function, I\u0027d simply skip the nDim, and used double val instead of rItem. Why do we need more checks here? You pass the double value and tell to format using specific fixed format. If some error happens (no formatter, e.g.), then simply return empty string.\n\nBetter would be to make it static, but it requires mpDoc to get formatter. Maybe erAck could advise how to better do that (without adding new format index)?",
+      "range": {
+        "startLine": 1293,
+        "startChar": 44,
+        "endLine": 1293,
+        "endChar": 80
+      },
+      "revId": "674cd24f8c9661756b4c414bfe1c8cdbe8dfea22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
