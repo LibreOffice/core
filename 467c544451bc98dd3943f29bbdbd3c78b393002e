@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_06b63ddc",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-23T10:14:08Z",
+      "side": 1,
+      "message": "Did you consider calling sw::DocumentDrawModelManager::GetHeavenId() here, instead of hardcoding \"1\" here?",
+      "revId": "467c544451bc98dd3943f29bbdbd3c78b393002e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
