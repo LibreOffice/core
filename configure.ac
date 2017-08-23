@@ -4443,6 +4443,7 @@ if test "$cross_compiling" = "yes"; then
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
+        download.lst \
         config_host.mk.in \
         config_host_lang.mk.in \
         Makefile.in \
