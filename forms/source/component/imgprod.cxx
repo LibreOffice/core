@@ -161,16 +161,11 @@ ImageProducer::ImageProducer()
     , mnTransIndex(0)
     , mbConsInit(false)
 {
-    mpGraphic = new Graphic;
+    mpGraphic.reset( new Graphic );
 }
 
 ImageProducer::~ImageProducer()
 {
-    delete mpGraphic;
-    mpGraphic = nullptr;
-
-    delete mpStm;
-    mpStm = nullptr;
 }
 
 
@@ -206,19 +201,18 @@ void ImageProducer::SetImage( const OUString& rPath )
     maURL = rPath;
     mpGraphic->Clear();
     mbConsInit = false;
-    delete mpStm;
+    mpStm.reset();
 
     if ( ::svt::GraphicAccess::isSupportedURL( maURL ) )
     {
-        mpStm = ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessComponentContext(), maURL );
+        mpStm.reset( ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessComponentContext(), maURL ) );
     }
     else if( !maURL.isEmpty() )
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, StreamMode::STD_READ );
-        mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, true ) ) : nullptr;
+        if (pIStm)
+            mpStm.reset( new SvStream( new ImgProdLockBytes( pIStm, true ) ) );
     }
-    else
-        mpStm = nullptr;
 }
 
 
@@ -228,8 +222,7 @@ void ImageProducer::SetImage( SvStream& rStm )
     mpGraphic->Clear();
     mbConsInit = false;
 
-    delete mpStm;
-    mpStm = new SvStream( new ImgProdLockBytes( &rStm, false ) );
+    mpStm.reset( new SvStream( new ImgProdLockBytes( &rStm, false ) ) );
 }
 
 
@@ -238,12 +231,10 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const
     maURL.clear();
     mpGraphic->Clear();
     mbConsInit = false;
-    delete mpStm;
+    mpStm.reset();
 
     if( rInputStmRef.is() )
-        mpStm = new SvStream( new ImgProdLockBytes( rInputStmRef ) );
-    else
-        mpStm = nullptr;
+        mpStm.reset( new SvStream( new ImgProdLockBytes( rInputStmRef ) ) );
 }
 
 
@@ -268,7 +259,7 @@ void ImageProducer::startProduction()
             if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetContext() )
             {
                 if ( ImplImportGraphic( *mpGraphic ) )
-                    maDoneHdl.Call( mpGraphic );
+                    maDoneHdl.Call( mpGraphic.get() );
             }
 
             if( mpGraphic->GetType() != GraphicType::NONE )
