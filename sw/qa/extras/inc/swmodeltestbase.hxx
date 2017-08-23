@@ -142,7 +142,7 @@ protected:
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
     xmlBufferPtr mpXmlBuffer;
-    const char* mpTestDocumentPath;
+    const OUString mpTestDocumentPath;
     const char* mpFilter;
 
     sal_uInt32 mnStartTime;
@@ -183,7 +183,7 @@ public:
         maFilterOptions = rFilterOptions;
     }
 
-    SwModelTestBase(const char* pTestDocumentPath = "", const char* pFilter = "")
+    SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const char* pFilter = "")
         : mpXmlBuffer(nullptr)
         , mpTestDocumentPath(pTestDocumentPath)
         , mpFilter(pFilter)
@@ -614,7 +614,7 @@ protected:
         std::cout << "File tested,Execution Time (ms)" << std::endl;
     }
 
-    void load(const char* pDir, const char* pName, const char* pPassword = nullptr)
+    void load(const OUString& pDir, const char* pName, const char* pPassword = nullptr)
     {
         return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName, pPassword);
     }

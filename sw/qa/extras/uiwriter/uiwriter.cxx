@@ -111,7 +111,7 @@
 #include <sfx2/watermarkitem.hxx>
 #include <fmthdft.hxx>
 
-static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
+static char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/";
 
 class SwUiWriterTest : public SwModelTestBase
 {

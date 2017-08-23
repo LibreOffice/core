@@ -52,7 +52,7 @@
 
 using namespace css;
 
-static const char* const DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
+static char const DATA_DIRECTORY[] = "/sd/qa/unit/tiledrendering/data/";
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {

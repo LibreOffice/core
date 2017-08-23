@@ -54,7 +54,7 @@ void ScreenshotTest::setUp()
     mxDesktop = css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
     CPPUNIT_ASSERT_MESSAGE("no desktop!", mxDesktop.is());
 
-    osl::Directory::create( m_directories.getURLFromWorkdir( OUStringToOString(m_aScreenshotDirectory, RTL_TEXTENCODING_UTF8).getStr())) ;
+    osl::Directory::create( m_directories.getURLFromWorkdir( m_aScreenshotDirectory)) ;
 
     // initialize maKnownDialogs
     if (maKnownDialogs.empty())
@@ -70,8 +70,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
     aDirname = m_aScreenshotDirectory + "/" + aDirname +
                ( (maCurrentLanguage == "en-US") ? OUString() : "/" + maCurrentLanguage );
 
-    auto const path = m_directories.getURLFromWorkdir(
-        OUStringToOString(aDirname, RTL_TEXTENCODING_UTF8).getStr());
+    auto const path = m_directories.getURLFromWorkdir(aDirname);
     auto const e = osl::Directory::createPath(path);
     if (e != osl::FileBase::E_EXIST) {
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -80,7 +79,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
             osl::FileBase::E_None, e);
     }
 
-    OUString aFullPath = m_directories.getPathFromWorkdir(OUStringToOString("/" + aDirname + "/" + aBasename + ".png",RTL_TEXTENCODING_UTF8).getStr());
+    OUString aFullPath = m_directories.getPathFromWorkdir("/" + aDirname + "/" + aBasename + ".png");
     SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open <" + aFullPath + ">: " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
 

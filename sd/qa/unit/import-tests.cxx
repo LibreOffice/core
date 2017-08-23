@@ -1370,7 +1370,7 @@ void SdImportTest::testTdf93124()
 
 void SdImportTest::testTdf99729()
 {
-    const char* filenames[] = { "/sd/qa/unit/data/odp/tdf99729-new.odp", "/sd/qa/unit/data/odp/tdf99729-legacy.odp" };
+    const OUString filenames[] = { "/sd/qa/unit/data/odp/tdf99729-new.odp", "/sd/qa/unit/data/odp/tdf99729-legacy.odp" };
     int nonwhitecounts[] = { 0, 0 };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
     {
