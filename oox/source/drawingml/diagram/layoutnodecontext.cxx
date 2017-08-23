@@ -27,7 +27,6 @@
 #include "constraintlistcontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -174,7 +173,7 @@ LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,
     : ContextHandler2( rParent )
     , mpNode( pAtom )
 {
-    OSL_ENSURE( pAtom, "Node must NOT be NULL" );
+    assert( pAtom && "Node must NOT be NULL" );
     mpNode->setName( rAttribs.getString( XML_name ).get() );
 }
 

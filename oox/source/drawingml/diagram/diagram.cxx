@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 #include <editeng/unoprnms.hxx>
 #include "drawingml/textbody.hxx"
 #include "drawingml/textparagraph.hxx"
@@ -205,7 +204,7 @@ void Diagram::build(  )
         const bool bInserted1=getData()->getPointNameMap().insert(
             std::make_pair(aCurrPoint->msModelId,&(*aCurrPoint))).second;
 
-        OSL_ENSURE(bInserted1,"Diagram::build(): non-unique point model id");
+        SAL_WARN_IF(!bInserted1, "oox.drawingml", "Diagram::build(): non-unique point model id");
 
         if( !aCurrPoint->msPresentationLayoutName.isEmpty() )
         {
@@ -273,7 +272,7 @@ void Diagram::build(  )
         const bool bInserted1=getData()->getConnectionNameMap().insert(
             std::make_pair(aCurrCxn->msModelId,&(*aCurrCxn))).second;
 
-        OSL_ENSURE(bInserted1,"Diagram::build(): non-unique connection model id");
+        SAL_WARN_IF(!bInserted1, "oox.drawingml", "Diagram::build(): non-unique connection model id");
 
         if( aCurrCxn->mnType == XML_presOf )
         {

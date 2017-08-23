@@ -24,7 +24,6 @@
 #include "drawingml/textbodycontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -289,7 +288,7 @@ public:
         : ContextHandler2( rParent )
         , mpDataModel( pModel )
         {
-            OSL_ENSURE( pModel, "the data model MUST NOT be NULL" );
+            assert( pModel && "the data model MUST NOT be NULL" );
         }
 
     virtual ContextHandlerRef
@@ -326,7 +325,7 @@ DataModelContext::DataModelContext( ContextHandler2Helper const & rParent,
     : ContextHandler2( rParent )
     , mpDataModel( pDataModel )
 {
-    OSL_ENSURE( pDataModel, "Data Model must not be NULL" );
+    assert( pDataModel && "Data Model must not be NULL" );
 }
 
 DataModelContext::~DataModelContext()
