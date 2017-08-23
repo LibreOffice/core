@@ -57,7 +57,7 @@ enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
 class ScFieldEditEngine;
 
-class ScOutputData
+class SC_DLLPUBLIC ScOutputData
 {
 friend class ScDrawStringsVars;
 friend class ScGridWindow;

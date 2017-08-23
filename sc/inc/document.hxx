@@ -1875,7 +1875,7 @@ public:
     void                         SetSrcCharSet( rtl_TextEncoding eNew )   { eSrcSet = eNew; }
     void                         UpdateFontCharSet();
 
-    void                         FillInfo( ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1,
+    SC_DLLPUBLIC void            FillInfo( ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1,
                                            SCCOL nCol2, SCROW nRow2, SCTAB nTab, double fColScale,
                                            double fRowScale, bool bPageMode, bool bFormulaMode,
                                            const ScMarkData* pMarkData = nullptr );

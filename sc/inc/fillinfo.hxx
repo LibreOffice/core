@@ -188,7 +188,7 @@ struct RowInfo
     bool                bChanged:1;           // TRUE, if not tested
 };
 
-struct ScTableInfo
+struct SC_DLLPUBLIC ScTableInfo
 {
     svx::frame::Array   maArray;
     std::unique_ptr<RowInfo[]>
