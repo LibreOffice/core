@@ -764,8 +764,8 @@ SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
         {
             for (SCCOL i = nCol+1; i <= MAXCOL; ++i)
             {
-                if (!ColHidden(nCol))
-                    return nCol - 1;
+                if (!ColHidden(i))
+                    return i - 1;
             }
         }
     }
