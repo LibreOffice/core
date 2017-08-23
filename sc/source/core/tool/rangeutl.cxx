@@ -451,11 +451,11 @@ bool ScRangeStringConverter::GetAddressFromString(
     GetTokenByOffset( sToken, rAddressStr, nOffset, cSeparator, cQuote );
     if( nOffset >= 0 )
     {
-        if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
+        if ((rAddress.Parse( sToken, pDocument, eConv ) & ScRefFlags::VALID) == ScRefFlags::VALID)
             return true;
         ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
         if (eConv != eConvUI)
-            return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
+            return ((rAddress.Parse(sToken, pDocument, eConvUI) & ScRefFlags::VALID) == ScRefFlags::VALID);
     }
     return false;
 }
@@ -481,11 +481,11 @@ bool ScRangeStringConverter::GetRangeFromString(
         {
             if ( aUIString[0] == '.' )
                 aUIString = aUIString.copy( 1 );
-            bResult = (rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & ScRefFlags::VALID) ==
+            bResult = (rRange.aStart.Parse( aUIString, pDocument, eConv) & ScRefFlags::VALID) ==
                                                                                                      ScRefFlags::VALID;
             ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
             if (!bResult && eConv != eConvUI)
-                bResult = (rRange.aStart.Parse(aUIString, const_cast<ScDocument*>(pDocument), eConvUI) & ScRefFlags::VALID) ==
+                bResult = (rRange.aStart.Parse(aUIString, pDocument, eConvUI) & ScRefFlags::VALID) ==
                                                                                                          ScRefFlags::VALID;
             rRange.aEnd = rRange.aStart;
         }
@@ -501,26 +501,26 @@ bool ScRangeStringConverter::GetRangeFromString(
                     aUIString[ nIndex + 1 ] == '.' )
                 aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
-            bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & ScRefFlags::VALID) ==
+            bResult = ((rRange.Parse(aUIString, pDocument, eConv) & ScRefFlags::VALID) ==
                                                                                               ScRefFlags::VALID);
 
             // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
-                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument), eConv)
+                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), pDocument, eConv)
                                & ScRefFlags::VALID) == ScRefFlags::VALID)
                           &&
-                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument), eConv)
+                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), pDocument, eConv)
                                & ScRefFlags::VALID) == ScRefFlags::VALID);
 
                 ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
-                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument), eConvUI)
+                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), pDocument, eConvUI)
                                    & ScRefFlags::VALID) == ScRefFlags::VALID)
                               &&
-                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument), eConvUI)
+                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), pDocument, eConvUI)
                                    & ScRefFlags::VALID) == ScRefFlags::VALID);
                 }
             }

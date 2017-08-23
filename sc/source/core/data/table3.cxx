@@ -414,7 +414,7 @@ public:
 namespace {
 
 void initDataRows(
-    ScSortInfoArray& rArray, ScTable& rTab, ScColContainer& rCols,
+    ScSortInfoArray& rArray, const ScTable& rTab, ScColContainer& rCols,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     bool bPattern, bool bHiddenFiltered )
 {
@@ -696,7 +696,7 @@ class FormulaGroupPosCollector
 public:
     explicit FormulaGroupPosCollector( sc::RefQueryFormulaGroup& rQuery ) : mrQuery(rQuery) {}
 
-    void operator() ( SvtListener* p )
+    void operator() ( const SvtListener* p )
     {
         p->Query(mrQuery);
     }
@@ -902,7 +902,7 @@ public:
 }
 
 void ScTable::SortReorderByColumn(
-    ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress )
+    const ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress )
 {
     SCCOLROW nStart = pArray->GetStart();
     SCCOLROW nLast = pArray->GetLast();
@@ -2322,7 +2322,7 @@ public:
 
     bool isQueryByString(
         const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        SCCOL nCol, SCROW nRow, ScRefCellValue& rCell)
+        SCCOL nCol, SCROW nRow, const ScRefCellValue& rCell)
     {
         if (isTextMatchOp(rEntry))
             return true;
@@ -2654,7 +2654,7 @@ public:
 }
 
 bool ScTable::ValidQuery(
-    SCROW nRow, const ScQueryParam& rParam, ScRefCellValue* pCell, bool* pbTestEqualCondition)
+    SCROW nRow, const ScQueryParam& rParam, const ScRefCellValue* pCell, bool* pbTestEqualCondition)
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
@@ -2958,7 +2958,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 
 }
 
-SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
+SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
     typedef std::unordered_set<OUString, OUStringHash> StrSetType;

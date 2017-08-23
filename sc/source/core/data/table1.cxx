@@ -60,7 +60,7 @@ using ::std::vector;
 namespace {
 
 ScProgress* GetProgressBar(
-    SCSIZE nCount, SCSIZE nTotalCount, ScProgress* pOuterProgress, ScDocument* pDoc)
+    SCSIZE nCount, SCSIZE nTotalCount, ScProgress* pOuterProgress, const ScDocument* pDoc)
 {
     if (nTotalCount < 1000)
     {

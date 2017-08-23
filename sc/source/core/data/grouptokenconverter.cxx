@@ -92,7 +92,7 @@ ScGroupTokenConverter::ScGroupTokenConverter(
 {
 }
 
-bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::GroupScope& rScope )
+bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogger::GroupScope& rScope )
 {
 #if 0
     { // debug to start with:

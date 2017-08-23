@@ -833,7 +833,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, valid references for the last common state
-    pSourceTrack->MergePrepare( const_cast<ScChangeAction*>(pFirstMergeAction), bShared );
+    pSourceTrack->MergePrepare( pFirstMergeAction, bShared );
 
     //  adjust MergeChangeData to all yet following actions in this document
     //  -> references valid for this document

@@ -4853,7 +4853,7 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
 
 // Wrap-adjust relative references of a RangeName to current position,
 // don't call for other token arrays!
-void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+void ScCompiler::MoveRelWrap( const ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                               SCCOL nMaxCol, SCROW nMaxRow )
 {
     for ( auto t: rArr.References() )

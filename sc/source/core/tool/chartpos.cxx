@@ -26,7 +26,7 @@
 
 namespace
 {
-    bool lcl_hasValueDataButNoDates( ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
+    bool lcl_hasValueDataButNoDates( const ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         bool bReturn = false;
         if (pDocument->HasValueData( nCol, nRow, nTab ))

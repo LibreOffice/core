@@ -769,7 +769,7 @@ void ScOutlineArray::RemoveAll()
     nDepth = 0;
 }
 
-void ScOutlineArray::finalizeImport(ScTable& rTable)
+void ScOutlineArray::finalizeImport(const ScTable& rTable)
 {
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;

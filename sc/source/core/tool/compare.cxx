@@ -32,7 +32,7 @@ Compare::Cell::Cell() :
 Compare::Compare() :
     meOp(SC_EQUAL), mbIgnoreCase(true) {}
 
-CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp ) :
+CompareOptions::CompareOptions( const ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp ) :
     aQueryEntry(rEntry),
     eSearchType(eSrchTyp),
     bMatchWholeCell(pDoc->GetDocOptions().IsMatchWholeCell())

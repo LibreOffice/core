@@ -250,7 +250,7 @@ protected:
     virtual ~ScChangeAction();
 
     OUString GetRefString(
-        const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D = false) const;
+        const ScBigRange& rRange, const ScDocument* pDoc, bool bFlag3D = false) const;
 
     void SetActionNumber( sal_uLong n ) { nAction = n; }
     void SetRejectAction( sal_uLong n ) { nRejectAction = n; }
@@ -723,11 +723,11 @@ public:
         const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
         const OUString& aUser, const DateTime& aDateTime,
         const OUString &sComment, const ScCellValue& rOldCell,
-        ScDocument* pDoc, const OUString& sOldValue ); // to use for XML Import
+        const ScDocument* pDoc, const OUString& sOldValue ); // to use for XML Import
 
     ScChangeActionContent(
         const sal_uLong nActionNumber, const ScCellValue& rNewCell,
-        const ScBigRange& aBigRange, ScDocument* pDoc,
+        const ScBigRange& aBigRange, const ScDocument* pDoc,
         const OUString& sNewValue ); // to use for XML Import of Generated Actions
 
     virtual ~ScChangeActionContent() override;
@@ -754,12 +754,12 @@ public:
     // Used in import filter AppendContentOnTheFly,
     void SetOldNewCells(
         const ScCellValue& rOldCell, sal_uLong nOldFormat,
-        const ScCellValue& rNewCell, sal_uLong nNewFormat, ScDocument* pDoc );
+        const ScCellValue& rNewCell, sal_uLong nNewFormat, const ScDocument* pDoc );
 
     // Use this only in the XML import,
     // takes ownership of cell.
     void SetNewCell(
-        const ScCellValue& rCell, ScDocument* pDoc, const OUString& rFormatted );
+        const ScCellValue& rCell, const ScDocument* pDoc, const OUString& rFormatted );
 
                         // These functions should be protected but for
                         // the XML import they are public.
@@ -956,7 +956,7 @@ class ScChangeTrack : public utl::ConfigurationListener
 
                                 // Content on top an Position
     ScChangeActionContent*  SearchContentAt( const ScBigAddress&,
-                                    ScChangeAction* pButNotThis ) const;
+                                    const ScChangeAction* pButNotThis ) const;
     void                DeleteGeneratedDelContent(
                                     ScChangeActionContent* );
 
@@ -965,7 +965,7 @@ class ScChangeTrack : public utl::ConfigurationListener
 
     void                DeleteCellEntries(
                                     ScChangeActionCellListEntry*&,
-                                    ScChangeAction* pDeletor );
+                                    const ScChangeAction* pDeletor );
 
                                 // Reject action and all dependent actions,
                                 // Table stems from previous GetDependents,
@@ -1045,7 +1045,7 @@ public:
                         // after new value was set in the document,
                         // old value from RefDoc/UndoDoc
     void                AppendContent( const ScAddress& rPos,
-                            ScDocument* pRefDoc );
+                            const ScDocument* pRefDoc );
                         // after new values were set in the document,
                         // old values from RefDoc/UndoDoc
     void                AppendContentRange( const ScRange& rRange,
@@ -1110,7 +1110,7 @@ public:
                         // adjust references for MergeDocument
                         //! may only be used in a temporary opened document.
                         //! the Track (?) is unclean afterwards
-    void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared );
+    void                MergePrepare( const ScChangeAction* pFirstMerge, bool bShared );
     void                MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool bShared );
     static bool MergeIgnore( const ScChangeAction&, sal_uLong nFirstMerge );
 

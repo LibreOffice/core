@@ -214,7 +214,7 @@ static bool lcl_ScRange_External_TabSpan(
                             const OUString & rExternDocName,
                             const OUString & rStartTabName,
                             const OUString & rEndTabName,
-                            ScDocument* pDoc )
+                            const ScDocument* pDoc )
 {
     if (rExternDocName.isEmpty())
         return !pExtInfo || !pExtInfo->mbExternal;
@@ -745,7 +745,7 @@ static inline const sal_Unicode* lcl_r1c1_get_row(
 
 static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
                                              const sal_Unicode* p,
-                                             ScDocument* pDoc,
+                                             const ScDocument* pDoc,
                                              const ScAddress::Details& rDetails,
                                              bool bOnlyAcceptSingle,
                                              ScAddress::ExternalInfo* pExtInfo,
@@ -967,7 +967,7 @@ static bool isValidSingleton( ScRefFlags nFlags, ScRefFlags nFlags2 )
 
 static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
                                            const sal_Unicode* p,
-                                           ScDocument* pDoc,
+                                           const ScDocument* pDoc,
                                            bool bOnlyAcceptSingle,
                                            ScAddress::ExternalInfo* pExtInfo,
                                            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
@@ -1130,7 +1130,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
                     used in conjunction with pExtInfo to determine the tab span
                     of a 3D reference.
  */
-static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
+static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocument* pDoc, ScAddress& rAddr,
                                            ScRefFlags& rRawRes,
                                            ScAddress::ExternalInfo* pExtInfo,
                                            ScRange* pRange,
@@ -1443,7 +1443,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
     return nRes;
 }
 
-static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
+static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, const ScDocument* pDoc, ScAddress& rAddr,
                                         const ScAddress::Details& rDetails,
                                         ScAddress::ExternalInfo* pExtInfo,
                                         const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
@@ -1530,7 +1530,7 @@ bool ConvertDoubleRef( ScDocument* pDoc, const OUString& rRefString, SCTAB nDefT
     return bRet;
 }
 
-ScRefFlags ScAddress::Parse( const OUString& r, ScDocument* pDoc,
+ScRefFlags ScAddress::Parse( const OUString& r, const ScDocument* pDoc,
                              const Details& rDetails,
                              ExternalInfo* pExtInfo,
                              const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
@@ -1604,7 +1604,7 @@ void ScRange::ExtendTo( const ScRange& rRange )
 
 static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
                                          const OUString& r,
-                                         ScDocument* pDoc,
+                                         const ScDocument* pDoc,
                                          ScAddress::ExternalInfo* pExtInfo,
                                          const OUString* pErrRef )
 {
@@ -1724,7 +1724,7 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
     return nRes1;
 }
 
-ScRefFlags ScRange::Parse( const OUString& rString, ScDocument* pDoc,
+ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument* pDoc,
                            const ScAddress::Details& rDetails,
                            ScAddress::ExternalInfo* pExtInfo,
                            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
@@ -2296,7 +2296,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
     return r.makeStringAndClear();
 }
 
-bool ScAddress::Move( SCCOL dx, SCROW dy, SCTAB dz, ScAddress& rErrorPos, ScDocument* pDoc )
+bool ScAddress::Move( SCCOL dx, SCROW dy, SCTAB dz, ScAddress& rErrorPos, const ScDocument* pDoc )
 {
     SCTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB;
     dx = Col() + dx;
@@ -2342,7 +2342,7 @@ bool ScAddress::Move( SCCOL dx, SCROW dy, SCTAB dz, ScAddress& rErrorPos, ScDocu
     return bValid;
 }
 
-bool ScRange::Move( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange, ScDocument* pDoc )
+bool ScRange::Move( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange, const ScDocument* pDoc )
 {
     if (dy && aStart.Row() == 0 && aEnd.Row() == MAXROW)
         dy = 0;     // Entire column not to be moved.
@@ -2445,7 +2445,7 @@ OUString ScAddress::GetColRowString() const
     return aString.makeStringAndClear();
 }
 
-OUString ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
+OUString ScRefAddress::GetRefString( const ScDocument* pDoc, SCTAB nActTab,
                                    const ScAddress::Details& rDetails ) const
 {
     if ( !pDoc )

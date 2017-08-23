@@ -46,7 +46,7 @@
 #define HFDIST_CM   142
 
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
-                            ScStyleSheetPool&   rPoolP,
+                            const ScStyleSheetPool& rPoolP,
                             SfxStyleFamily      eFamily,
                             sal_uInt16          nMaskP )
 

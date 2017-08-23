@@ -85,7 +85,7 @@ public:
     /** Static helper function to fill a font object from the passed item set. */
     static void             GetFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         ScAutoFontColorMode eAutoMode,
-                                        OutputDevice* pOutDev = nullptr,
+                                        const OutputDevice* pOutDev = nullptr,
                                         const Fraction* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
                                         SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
@@ -94,11 +94,12 @@ public:
     static ScDxfFont        GetDxfFont(const SfxItemSet& rSet, SvtScriptType nScript);
     /** Fills a font object from the own item set. */
     void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
-                                        OutputDevice* pOutDev = nullptr,
-                                        const Fraction* pScale = nullptr,
-                                        const SfxItemSet* pCondSet = nullptr,
-                                        SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
-                                        const Color* pTextConfigColor = nullptr ) const;
+                                     const OutputDevice* pOutDev = nullptr,
+                                     const Fraction* pScale = nullptr,
+                                     const SfxItemSet* pCondSet = nullptr,
+                                     SvtScriptType nScript = SvtScriptType::NONE,
+                                     const Color* pBackConfigColor = nullptr,
+                                     const Color* pTextConfigColor = nullptr ) const;
 
     /** Converts all Calc items contained in rSrcSet to edit engine items and puts them into rEditSet. */
     static void             FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet = nullptr );
@@ -117,7 +118,7 @@ public:
     void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
     const OUString*         GetStyleName() const;
-    void                    UpdateStyleSheet(ScDocument* pDoc);
+    void                    UpdateStyleSheet(const ScDocument* pDoc);
     void                    StyleToName();
 
     bool                    IsVisible() const;

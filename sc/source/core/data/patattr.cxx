@@ -203,7 +203,7 @@ sal_uInt16& nFontId, sal_uInt16& nHeightId, sal_uInt16& nWeightId, sal_uInt16& n
 
 void ScPatternAttr::GetFont(
         vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
-        OutputDevice* pOutDev, const Fraction* pScale,
+        const OutputDevice* pOutDev, const Fraction* pScale,
         const SfxItemSet* pCondSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
@@ -445,7 +445,7 @@ void ScPatternAttr::GetFont(
 
 void ScPatternAttr::GetFont(
         vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
-        OutputDevice* pOutDev, const Fraction* pScale,
+        const OutputDevice* pOutDev, const Fraction* pScale,
         const SfxItemSet* pCondSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor ) const
 {
@@ -1195,7 +1195,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
     }
 }
 
-void ScPatternAttr::UpdateStyleSheet(ScDocument* pDoc)
+void ScPatternAttr::UpdateStyleSheet(const ScDocument* pDoc)
 {
     if (pName)
     {

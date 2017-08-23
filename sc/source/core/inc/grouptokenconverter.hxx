@@ -32,7 +32,7 @@ class SC_DLLPUBLIC ScGroupTokenConverter
 public:
     ScGroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos);
 
-    bool convert( ScTokenArray& rCode, sc::FormulaLogger::GroupScope& rScope );
+    bool convert( const ScTokenArray& rCode, sc::FormulaLogger::GroupScope& rScope );
 };
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX

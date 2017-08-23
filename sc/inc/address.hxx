@@ -317,7 +317,7 @@ public:
                 resulting reference is fully valid or not.
      */
     SC_DLLPUBLIC ScRefFlags Parse(
-                    const OUString&, ScDocument* = nullptr,
+                    const OUString&, const ScDocument* = nullptr,
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
@@ -340,7 +340,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
-            ScAddress& rErrorPos, ScDocument* pDocument = nullptr );
+            ScAddress& rErrorPos, const ScDocument* pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
     inline bool operator!=( const ScAddress& rAddress ) const;
@@ -537,7 +537,7 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    SC_DLLPUBLIC ScRefFlags Parse( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScRefFlags Parse( const OUString&, const ScDocument* = nullptr,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                    ScAddress::ExternalInfo* pExtInfo = nullptr,
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
@@ -615,7 +615,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
-            ScRange& rErrorRange, ScDocument* pDocument = nullptr );
+            ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
@@ -850,7 +850,7 @@ public:
 
     inline bool operator == ( const ScRefAddress& r ) const;
 
-    OUString  GetRefString( ScDocument* pDocument, SCTAB nActTab,
+    OUString  GetRefString( const ScDocument* pDocument, SCTAB nActTab,
                             const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 };
 

@@ -29,7 +29,7 @@ class ScDocument;
 class SC_DLLPUBLIC ScStyleSheetPool : public SfxStyleSheetPool
 {
 public:
-                        ScStyleSheetPool( SfxItemPool&  rPool,
+                        ScStyleSheetPool( const SfxItemPool& rPool,
                                           ScDocument*   pDocument );
 
     void                SetDocument( ScDocument* pDocument );
