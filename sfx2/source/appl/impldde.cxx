@@ -295,14 +295,8 @@ bool SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
 }
 
 bool SvDDEObject::IsPending() const
-/*  [Description]
-
+/*
     The method determines whether the data-object can be read from a DDE.
-
-    Returned is the following:
-        ERRCODE_NONE                    if it has been completely read
-        ERRCODE_SO_PENDING              if it has not been completely read
-        ERRCODE_SO_FALSE                otherwise
 */
 {
     return bWaitForData;

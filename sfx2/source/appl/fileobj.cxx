@@ -514,14 +514,8 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
     aEndEditLink.Call( sFile );
 }
 
-/*  [Description]
-
+/*
     The method determines whether the data-object can be read from a DDE.
-
-    The following can be returned:
-        ERRCODE_NONE                    if it has been completely read
-        ERRCODE_SO_PENDING              if it has not been completely read
-        ERRCODE_SO_FALSE                otherwise
 */
 bool SvFileObject::IsPending() const
 {
