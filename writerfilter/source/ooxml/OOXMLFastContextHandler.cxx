@@ -620,6 +620,32 @@ void OOXMLFastContextHandler::endTxbxContent()
     mpParserState->endTxbxContent();
 }
 
+namespace {
+// XML schema defines white space as one of four characters:
+// #x9 (tab), #xA (line feed), #xD (carriage return), and #x20 (space)
+bool IsXMLWhitespace(sal_Unicode cChar)
+{
+    return cChar == 0x9 || cChar == 0xA || cChar == 0xD || cChar == 0x20;
+}
+
+OUString TrimXMLWhitespace(const OUString & sText)
+{
+    sal_Int32 nTrimmedStart = 0;
+    const sal_Int32 nLen = sText.getLength();
+    sal_Int32 nTrimmedEnd = nLen - 1;
+    while (nTrimmedStart < nLen && IsXMLWhitespace(sText[nTrimmedStart]))
+        ++nTrimmedStart;
+    while (nTrimmedStart <= nTrimmedEnd && IsXMLWhitespace(sText[nTrimmedEnd]))
+        --nTrimmedEnd;
+    if ((nTrimmedStart == 0) && (nTrimmedEnd == nLen - 1))
+        return sText;
+    else if (nTrimmedStart > nTrimmedEnd)
+        return OUString();
+    else
+        return sText.copy(nTrimmedStart, nTrimmedEnd-nTrimmedStart+1);
+}
+}
+
 void OOXMLFastContextHandler::text(const OUString & sText)
 {
     if (isForwardEvents())
@@ -631,7 +657,7 @@ void OOXMLFastContextHandler::text(const OUString & sText)
         // tabs are converted to spaces
         if (!IsPreserveSpace())
         {
-            sNormalizedText = sNormalizedText.trim().replaceAll("\t", " ");
+            sNormalizedText = TrimXMLWhitespace(sNormalizedText).replaceAll("\t", " ");
         }
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                         (sNormalizedText.getStr()),
