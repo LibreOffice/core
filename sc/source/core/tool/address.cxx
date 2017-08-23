@@ -1482,7 +1482,7 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, const ScDocument* 
     }
 }
 
-bool ConvertSingleRef( ScDocument* pDoc, const OUString& rRefString,
+bool ConvertSingleRef( const ScDocument* pDoc, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
@@ -1504,7 +1504,7 @@ bool ConvertSingleRef( ScDocument* pDoc, const OUString& rRefString,
     return bRet;
 }
 
-bool ConvertDoubleRef( ScDocument* pDoc, const OUString& rRefString, SCTAB nDefTab,
+bool ConvertDoubleRef( const ScDocument* pDoc, const OUString& rRefString, SCTAB nDefTab,
                        ScRefAddress& rStartRefAddress, ScRefAddress& rEndRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo /* = NULL */ )
@@ -1757,7 +1757,7 @@ ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument* pDoc,
 }
 
 // Accept a full range, or an address
-ScRefFlags ScRange::ParseAny( const OUString& rString, ScDocument* pDoc,
+ScRefFlags ScRange::ParseAny( const OUString& rString, const ScDocument* pDoc,
                               const ScAddress::Details& rDetails )
 {
     ScRefFlags nRet = Parse( rString, pDoc, rDetails );

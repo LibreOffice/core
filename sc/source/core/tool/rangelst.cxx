@@ -144,7 +144,7 @@ ScRangeList::~ScRangeList()
     RemoveAll();
 }
 
-ScRefFlags ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc,
+ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
                            formula::FormulaGrammar::AddressConvention eConv,
                            SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
@@ -356,7 +356,7 @@ bool ScRangeList::operator!=( const ScRangeList& r ) const
 
 bool ScRangeList::UpdateReference(
     UpdateRefMode eUpdateRefMode,
-    ScDocument* pDoc,
+    const ScDocument* pDoc,
     const ScRange& rWhere,
     SCCOL nDx,
     SCROW nDy,
@@ -1222,7 +1222,7 @@ void ScRangePairList::Remove(size_t nPos)
     maPairs.erase(itr);
 }
 
-void ScRangePairList::Remove( ScRangePair* Adr)
+void ScRangePairList::Remove( const ScRangePair* Adr)
 {
     if (Adr == nullptr)
         return;
@@ -1255,7 +1255,7 @@ size_t ScRangePairList::size() const
 }
 
 void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                    ScDocument* pDoc, const ScRange& rWhere,
+                                    const ScDocument* pDoc, const ScRange& rWhere,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     if ( !maPairs.empty() )

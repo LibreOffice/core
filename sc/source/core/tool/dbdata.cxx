@@ -567,7 +567,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 
 }
 
-void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz)
@@ -618,7 +618,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
     //TODO: check if something was deleted/inserted with-in the range !!!
 }
 
-void ScDBData::ExtendDataArea(ScDocument* pDoc)
+void ScDBData::ExtendDataArea(const ScDocument* pDoc)
 {
     // Extend the DB area to include data rows immediately below.
     SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;

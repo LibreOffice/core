@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 
 bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
                             ScArea&         rArea,
-                            ScDocument*     pDoc,
+                            const ScDocument* pDoc,
                             SCTAB           nTab,
                             ScAddress::Details const & rDetails )
 {
@@ -86,7 +86,7 @@ void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
 }
 
 bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
-                                ScDocument*     pDoc,
+                                const ScDocument* pDoc,
                                 ScArea***       pppAreas,
                                 sal_uInt16*         pAreaCount,
                                 bool            /* bAcceptCellRef */,
@@ -173,7 +173,7 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
 }
 
 bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
-                             ScDocument*    pDoc,
+                             const ScDocument* pDoc,
                              SCTAB          nTab,
                              OUString*      pCompleteStr,
                              ScRefAddress*  pStartPos,
@@ -212,7 +212,7 @@ bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
 }
 
 bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
-                            ScDocument*     pDoc,
+                            const ScDocument* pDoc,
                             SCTAB           nTab,
                             OUString*       pCompleteStr,
                             ScRefAddress*   pPosTripel,
@@ -238,7 +238,7 @@ bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
 
 bool ScRangeUtil::MakeRangeFromName (
     const OUString& rName,
-    ScDocument*     pDoc,
+    const ScDocument* pDoc,
     SCTAB           nCurTab,
     ScRange&        rRange,
     RutlNameScope   eScope,
@@ -709,7 +709,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
 }
 
 static void lcl_appendCellAddress(
-    OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell,
+    OUStringBuffer& rBuf, const ScDocument* pDoc, const ScAddress& rCell,
     const ScAddress::ExternalInfo& rExtInfo)
 {
     if (rExtInfo.mbExternal)
@@ -739,7 +739,7 @@ static void lcl_appendCellAddress(
 }
 
 static void lcl_appendCellRangeAddress(
-    OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell1, const ScAddress& rCell2,
+    OUStringBuffer& rBuf, const ScDocument* pDoc, const ScAddress& rCell1, const ScAddress& rCell2,
     const ScAddress::ExternalInfo& rExtInfo1, const ScAddress::ExternalInfo& rExtInfo2)
 {
     if (rExtInfo1.mbExternal)
@@ -786,7 +786,7 @@ static void lcl_appendCellRangeAddress(
     }
 }
 
-void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, ScDocument* pDoc )
+void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, const ScDocument* pDoc )
 {
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode cSepNew = ScCompiler::GetNativeSymbolChar(ocSep);
@@ -958,7 +958,7 @@ bool ScArea::operator==( const ScArea& r ) const
             && (nRowEnd     == r.nRowEnd) );
 }
 
-ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
+ScAreaNameIterator::ScAreaNameIterator( const ScDocument* pDoc ) :
     pRangeName(pDoc->GetRangeName()),
     pDBCollection(pDoc->GetDBCollection()),
     bFirstPass(true)

@@ -1021,7 +1021,7 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
         bDisplayedAsString == static_cast< const ScEmptyCellToken & >(r).IsDisplayedAsString();
 }
 
-ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL ) :
     FormulaToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
@@ -1063,7 +1063,7 @@ void ScMatrixCellResultToken::Assign( const ScMatrixCellResultToken & r )
 }
 
 ScMatrixFormulaCellToken::ScMatrixFormulaCellToken(
-    SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
+    SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL ) :
     ScMatrixCellResultToken(pMat, pUL), nRows(nR), nCols(nC)
 {
     CloneUpperLeftIfNecessary();
@@ -4240,7 +4240,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
 
 namespace {
 
-bool adjustTabOnMove( ScAddress& rPos, sc::RefUpdateMoveTabContext& rCxt )
+bool adjustTabOnMove( ScAddress& rPos, const sc::RefUpdateMoveTabContext& rCxt )
 {
     SCTAB nNewTab = rCxt.getNewTab(rPos.Tab());
     if (nNewTab == rPos.Tab())
@@ -4252,7 +4252,7 @@ bool adjustTabOnMove( ScAddress& rPos, sc::RefUpdateMoveTabContext& rCxt )
 
 }
 
-sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos )
+sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( const sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos )
 {
     sc::RefUpdateResult aRes;
     if (rCxt.mnOldPos == rCxt.mnNewPos)
@@ -4773,7 +4773,7 @@ void ScTokenArray::CheckExpandReferenceBounds(
 
 namespace {
 
-void appendDouble( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, double fVal )
+void appendDouble( const sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, double fVal )
 {
     if (rCxt.mxOpCodeMap->isEnglish())
     {

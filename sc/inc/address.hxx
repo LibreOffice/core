@@ -543,7 +543,7 @@ public:
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                    const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument*,
+    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, const ScDocument*,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
@@ -907,12 +907,12 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
     }
 }
 
-bool ConvertSingleRef( ScDocument* pDocument, const OUString& rRefString,
+bool ConvertSingleRef( const ScDocument* pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo = nullptr );
 
-bool ConvertDoubleRef( ScDocument* pDocument, const OUString& rRefString,
+bool ConvertDoubleRef( const ScDocument* pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rStartRefAddress,
                        ScRefAddress& rEndRefAddress,
                        const ScAddress::Details& rDetails,

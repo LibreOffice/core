@@ -55,7 +55,7 @@ class ScChangeTrackingExportHelper
     void WriteGenerated(const ScChangeAction* pDependAction);
     void WriteDeleted(const ScChangeAction* pDependAction);
     void WriteDepending(const ScChangeAction* pDependAction);
-    void WriteDependings(ScChangeAction* pAction);
+    void WriteDependings(const ScChangeAction* pAction);
 
     void WriteEmptyCell();
     void SetValueAttributes(const double& fValue, const OUString& sValue);
@@ -75,7 +75,7 @@ class ScChangeTrackingExportHelper
     void WriteRejection(ScChangeAction* pAction);
 
     void CollectCellAutoStyles(const ScCellValue& rCell);
-    void CollectActionAutoStyles(ScChangeAction* pAction);
+    void CollectActionAutoStyles(const ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
 public:
     explicit ScChangeTrackingExportHelper(ScXMLExport& rExport);

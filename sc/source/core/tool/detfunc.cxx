@@ -126,7 +126,7 @@ ColorData ScDetectiveFunc::nErrorColor = 0;
 ColorData ScDetectiveFunc::nCommentColor = 0;
 bool ScDetectiveFunc::bColorsInitialized = false;
 
-static bool lcl_HasThickLine( SdrObject& rObj )
+static bool lcl_HasThickLine( const SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
 
@@ -420,7 +420,7 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
     return bFound;
 }
 
-bool ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )
+bool ScDetectiveFunc::IsNonAlienArrow( const SdrObject* pObject )
 {
     if ( pObject->GetLayer()==SC_LAYER_INTERN &&
             pObject->IsPolyObj() && pObject->GetPointCount()==2 )
@@ -1512,7 +1512,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
     }
 }
 
-void ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
+void ScDetectiveFunc::FindFrameForObject( const SdrObject* pObject, ScRange& rRange )
 {
     //  find the rectangle for an arrow (always the object directly before the arrow)
     //  rRange must be initialized to the source cell of the arrow (start of area)

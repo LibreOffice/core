@@ -1674,7 +1674,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
     return aRet;
 }
 
-void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr)
+void ScInterpreter::QueryMatrixType(const ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr)
 {
     if (xMat)
     {
@@ -3098,7 +3098,7 @@ void ScInterpreter::ScMissing()
 
 #if HAVE_FEATURE_SCRIPTING
 
-static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
+static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, const ScDocument* pDok )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
@@ -3132,7 +3132,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     return uno::makeAny( xIf );
 }
 
-static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
+static bool lcl_setVBARange( const ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
 {
     bool bOk = false;
     try

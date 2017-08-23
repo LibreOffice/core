@@ -125,7 +125,7 @@ public:
     /// Does not change the name, but sets maNewName for formula update after dialog.
     void            SetNewName( const OUString& rNewName )  { maNewName = rNewName; }
     ScTokenArray*   GetCode()                       { return pCode.get(); }
-    SC_DLLPUBLIC void   SetCode( ScTokenArray& );
+    SC_DLLPUBLIC void   SetCode( const ScTokenArray& );
     const ScTokenArray* GetCode() const             { return pCode.get(); }
     SC_DLLPUBLIC FormulaError GetErrCode() const;
     bool            HasReferences() const;
@@ -162,7 +162,7 @@ public:
 
     static void     MakeValidName( OUString& rName );
 
-    SC_DLLPUBLIC static IsNameValidType     IsNameValid( const OUString& rName, ScDocument* pDoc );
+    SC_DLLPUBLIC static IsNameValidType     IsNameValid( const OUString& rName, const ScDocument* pDoc );
 
     SCROW GetMaxRow() const;
     SCCOL GetMaxCol() const;

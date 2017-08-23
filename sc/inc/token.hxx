@@ -312,7 +312,7 @@ protected:
     ScConstMatrixRef xMatrix;
     formula::FormulaConstTokenRef     xUpperLeft;
 public:
-    ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
@@ -338,7 +338,7 @@ private:
             SCROW               nRows;
             SCCOL               nCols;
 public:
-    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR );
     ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r );
     virtual ~ScMatrixFormulaCellToken() override;

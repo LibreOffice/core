@@ -44,7 +44,7 @@ class ScRefUpdate
 public:
 
     static ScRefUpdateRes Update
-        ( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+        ( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                             SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                             SCCOL nDx, SCROW nDy, SCTAB nDz,
@@ -56,13 +56,13 @@ public:
                                 sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
                                 ScBigRange& rWhat );
 
-    static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
+    static void MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
     static ScRefUpdateRes UpdateTranspose(
-        ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
+        const ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
 
-    static void DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab, ScDocument* pDoc,
+    static void DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab, const ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
 
     static ScRefUpdateRes UpdateGrow(

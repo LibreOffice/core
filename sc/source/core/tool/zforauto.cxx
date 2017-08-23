@@ -63,7 +63,7 @@ void ScNumFormatAbbrev::Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) 
 }
 
 void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,
-                                       SvNumberFormatter& rFormatter)
+                                       const SvNumberFormatter& rFormatter)
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
     if (pFormat)
