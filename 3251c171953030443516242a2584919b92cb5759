@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_46820502",
+        "filename": "cui/source/customize/SvxMenuConfigPage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-08-23T09:33:41Z",
+      "side": 1,
+      "message": "Correct me if I\u0027m wrong, but isn\u0027t (bIsContextMenu \u003d\u003d !m_bIsMenuBar ) ?",
+      "revId": "3251c171953030443516242a2584919b92cb5759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
