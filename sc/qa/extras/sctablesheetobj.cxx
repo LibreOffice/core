@@ -8,10 +8,11 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xprintareas.hxx>
+#include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
-#include <test/sheet/xprintareas.hxx>
-#include <test/sheet/xcellseries.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -22,9 +23,9 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 9
+#define NUMBER_OF_TESTS 10
 
-class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable, public apitest::XReplaceable, public apitest::XPrintAreas, public apitest::XCellSeries
+class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable, public apitest::XReplaceable, public apitest::XPrintAreas, public apitest::XCellSeries, public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
     ScTableSheetObj();
@@ -35,17 +36,27 @@ public:
     virtual uno::Reference< uno::XInterface > init() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
+
+    // XSearchable
     CPPUNIT_TEST(testFindAll);
     CPPUNIT_TEST(testFindNext);
     CPPUNIT_TEST(testFindFirst);
+
+    // XReplaceable
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
+
     // XPrintAreas
     CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
     CPPUNIT_TEST(testSetAndGetPrintTitleRows);
+
     // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XUniqueCellFormatRangesSupplier
+    CPPUNIT_TEST(testGetUniqueCellFormatRanges);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:

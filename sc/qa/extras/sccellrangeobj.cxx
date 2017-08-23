@@ -8,12 +8,13 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/cellproperties.hxx>
+#include <test/sheet/xcellrangedata.hxx>
+#include <test/sheet/xcellrangesquery.hxx>
+#include <test/sheet/xcellseries.hxx>
+#include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
-#include <test/sheet/xcellrangedata.hxx>
-#include <test/sheet/xcellseries.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -27,11 +28,11 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 17
+#define NUMBER_OF_TESTS 18
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::XCellRangesQuery, public apitest::CellProperties,
                         public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData,
-                        public apitest::XCellSeries
+                        public apitest::XCellSeries, public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
     ScCellRangeObj();
@@ -42,26 +43,43 @@ public:
     virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
     void testSortOOB();
 
-
     CPPUNIT_TEST_SUITE(ScCellRangeObj);
+
+    // XCellRangesQuery
     CPPUNIT_TEST(testQueryColumnDifference);
     CPPUNIT_TEST(testQueryContentDifference);
     CPPUNIT_TEST(testQueryEmptyCells);
+
     //CPPUNIT_TEST(testQueryFormulaCells);
     CPPUNIT_TEST(testQueryIntersection);
     CPPUNIT_TEST(testQueryRowDifference);
     CPPUNIT_TEST(testQueryVisibleCells);
+
+    // CellProperties
     CPPUNIT_TEST(testVertJustify);
     CPPUNIT_TEST(testRotateReference);
+
+    // XSearchable
     CPPUNIT_TEST(testFindAll);
     CPPUNIT_TEST(testFindFirst);
+
+    // XReplaceable
     CPPUNIT_TEST(testReplaceAll);
     CPPUNIT_TEST(testCreateReplaceDescriptor);
+
+    // XCellRangeData
     CPPUNIT_TEST(testGetDataArray);
     CPPUNIT_TEST(testSetDataArray);
+
     CPPUNIT_TEST(testSortOOB);
+
+    // XCellSeries
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
+
+    // XUniqueCellFormatRangesSupplier
+    CPPUNIT_TEST(testGetUniqueCellFormatRanges);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
