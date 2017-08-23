@@ -605,7 +605,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_pos, pIntValue);
         auto pValue = std::make_shared<RTFValue>(m_aStates.top().aTabAttributes);
-        putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_ooxml::LN_CT_Tabs_tab, pValue);
+        if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+            putNestedSprm(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_ooxml::LN_CT_Tabs_tab, pValue);
+        else
+            putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_ooxml::LN_CT_Tabs_tab, pValue);
         m_aStates.top().aTabAttributes.clear();
     }
     break;
