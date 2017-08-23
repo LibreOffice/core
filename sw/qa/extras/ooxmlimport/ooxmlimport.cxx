@@ -60,7 +60,9 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <test/mtfxmldump.hxx>
 
 class Test : public SwModelTestBase
@@ -1587,6 +1589,33 @@ DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
     uno::Reference<text::XText> cellA2(getCell(outerTable, "A2"), uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextContent> innerTable = getParagraphOrTable(1, cellA2);
     getCell(innerTable, "A1", "[outer:A2]\n[inner:A1]");
+}
+
+DECLARE_OOXMLIMPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
+{
+    uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xControlShape.is() );
+
+    // Check control type
+    uno::Reference<beans::XPropertySet> xPropertySet( xControlShape->getControl(), uno::UNO_QUERY );
+    uno::Reference<lang::XServiceInfo> xServiceInfo( xPropertySet, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL( true, bool( xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox" ) ) );
+
+    // Check custom label
+    CPPUNIT_ASSERT_EQUAL( OUString( "Custom Caption" ), getProperty<OUString>(xPropertySet, "Label") );
+
+    // Check background color (highlight system color)
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x316AC5 ), getProperty<sal_Int32>(xPropertySet, "BackgroundColor") );
+
+    // Check Text color (active border system color)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), getProperty<sal_Int32>(xPropertySet, "TextColor"));
+
+    // Check state of the checkbox
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPropertySet, "State"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT

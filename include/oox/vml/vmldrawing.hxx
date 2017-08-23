@@ -81,6 +81,7 @@ struct OOX_DLLPUBLIC ControlInfo
     OUString     maShapeId;          ///< Shape identifier for shape lookup.
     OUString     maFragmentPath;     ///< Path to the fragment describing the form control properties.
     OUString     maName;             ///< Programmatical name of the form control.
+    bool         mbTextContentShape; ///< Whether this control shape will be imported to Writer or not (has AnchorType poperty or not).
 
     explicit            ControlInfo();
 
