@@ -555,7 +555,7 @@ namespace {
 class ScStringTokenIterator
 {
 public:
-    explicit             ScStringTokenIterator( ScTokenArray& rTokArr ) :
+    explicit             ScStringTokenIterator( const ScTokenArray& rTokArr ) :
         maIter( rTokArr ), mbSkipEmpty( true ), mbOk( true ) {}
 
     /** Returns the string of the first string token or NULL on error or empty token array. */
@@ -601,7 +601,7 @@ rtl_uString* ScStringTokenIterator::Next()
 }
 
 /** Returns the number format of the passed cell, or the standard format. */
-sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
+sal_uLong lclGetCellFormat( const ScDocument& rDoc, const ScAddress& rPos )
 {
     const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() );
     if( !pPattern )

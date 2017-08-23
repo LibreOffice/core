@@ -500,7 +500,7 @@ void ScChangeAction::GetDescription(
 }
 
 OUString ScChangeAction::GetRefString(
-    const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D ) const
+    const ScBigRange& rRange, const ScDocument* pDoc, bool bFlag3D ) const
 {
     OUStringBuffer aBuf;
     ScRefFlags nFlags = ( rRange.IsValid( pDoc ) ? ScRefFlags::VALID : ScRefFlags::ZERO );
@@ -1299,7 +1299,7 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
             const ScBigRange& aBigRangeP, const OUString& aUserP,
             const DateTime& aDateTimeP, const OUString& sComment,
-            const ScCellValue& rOldCell, ScDocument* pDoc, const OUString& sOldValue ) :
+            const ScCellValue& rOldCell, const ScDocument* pDoc, const OUString& sOldValue ) :
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     maOldCell(rOldCell),
     maOldValue(sOldValue),
@@ -1317,7 +1317,7 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             const ScCellValue& rNewCell, const ScBigRange& aBigRangeP,
-            ScDocument* pDoc, const OUString& sNewValue ) :
+            const ScDocument* pDoc, const OUString& sNewValue ) :
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber),
     maNewCell(rNewCell),
     maNewValue(sNewValue),
@@ -1392,7 +1392,7 @@ void ScChangeActionContent::SetNewValue( const ScCellValue& rCell, ScDocument* p
 
 void ScChangeActionContent::SetOldNewCells(
     const ScCellValue& rOldCell, sal_uLong nOldFormat, const ScCellValue& rNewCell,
-    sal_uLong nNewFormat, ScDocument* pDoc )
+    sal_uLong nNewFormat, const ScDocument* pDoc )
 {
     maOldCell = rOldCell;
     maNewCell = rNewCell;
@@ -1401,7 +1401,7 @@ void ScChangeActionContent::SetOldNewCells(
 }
 
 void ScChangeActionContent::SetNewCell(
-    const ScCellValue& rCell, ScDocument* pDoc, const OUString& rFormatted )
+    const ScCellValue& rCell, const ScDocument* pDoc, const OUString& rFormatted )
 {
     maNewCell = rCell;
     SetCell(maNewValue, maNewCell, 0, pDoc);
@@ -2661,7 +2661,7 @@ void ScChangeTrack::AppendContent(
 }
 
 void ScChangeTrack::AppendContent( const ScAddress& rPos,
-        ScDocument* pRefDoc )
+        const ScDocument* pRefDoc )
 {
     OUString aOldValue;
     ScCellValue aOldCell;
@@ -2846,7 +2846,7 @@ void ScChangeTrack::AppendInsert( const ScRange& rRange, bool bEndOfList )
 }
 
 void ScChangeTrack::DeleteCellEntries( ScChangeActionCellListEntry*& pCellList,
-        ScChangeAction* pDeletor )
+        const ScChangeAction* pDeletor )
 {
     ScChangeActionCellListEntry* pE = pCellList;
     while ( pE )
@@ -2900,7 +2900,7 @@ void ScChangeTrack::DeleteGeneratedDelContent( ScChangeActionContent* pContent )
 }
 
 ScChangeActionContent* ScChangeTrack::SearchContentAt(
-        const ScBigAddress& rPos, ScChangeAction* pButNotThis ) const
+        const ScBigAddress& rPos, const ScChangeAction* pButNotThis ) const
 {
     SCSIZE nSlot = ComputeContentSlot( rPos.Row() );
     for ( ScChangeActionContent* p = ppContentSlots[nSlot]; p;
@@ -3227,7 +3227,7 @@ bool ScChangeTrack::MergeIgnore( const ScChangeAction& rAction, sal_uLong nFirst
     return false; // Everything else
 }
 
-void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge, bool bShared )
+void ScChangeTrack::MergePrepare( const ScChangeAction* pFirstMerge, bool bShared )
 {
     SetMergeState( SC_CTMS_PREPARE );
     sal_uLong nFirstMerge = pFirstMerge->GetActionNumber();
@@ -4712,7 +4712,7 @@ void ScChangeTrack::MergeActionState( ScChangeAction* pAct, const ScChangeAction
 }
 
 /// Get info about a single ScChangeAction element.
-static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, ScChangeAction* pAction, boost::property_tree::ptree& rRedlines)
+static void lcl_getTrackedChange(ScDocument* pDoc, int nIndex, const ScChangeAction* pAction, boost::property_tree::ptree& rRedlines)
 {
     if (pAction->GetType() == SC_CAT_CONTENT)
     {

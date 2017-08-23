@@ -162,7 +162,7 @@ public:
     /** Create a new caption. The caption will not be inserted into the document. */
     explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bTailFront );
     /** Manipulate an existing caption. */
-    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr& xCaption );
+    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption );
 
     /** Returns the drawing layer page of the sheet contained in maPos. */
     SdrPage*            GetDrawPage();
@@ -208,7 +208,7 @@ ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, boo
     CreateCaption( true/*bShown*/, bTailFront );
 }
 
-ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr& xCaption ) :
+ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption ) :
     mrDoc( rDoc ),
     maPos( rPos ),
     mxCaption( xCaption )
@@ -401,7 +401,7 @@ public:
     /** Create a new caption object and inserts it into the document. */
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData );
     /** Manipulate an existing caption. */
-    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr& xCaption, bool bShown );
+    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption, bool bShown );
 };
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
@@ -425,7 +425,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
     }
 }
 
-ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr& xCaption, bool bShown ) :
+ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption, bool bShown ) :
     ScCaptionCreator( rDoc, rPos, xCaption )
 {
     SdrPage* pDrawPage = GetDrawPage();

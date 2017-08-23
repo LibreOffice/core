@@ -40,16 +40,16 @@ public:
     static sal_uInt16 DoUpdateAllCharts( ScDocument* pDoc );
     static void AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
     static void UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const SCTAB nDestTab );
-    static css::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( SdrObject* pObject );
+    static css::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( const SdrObject* pObject );
     static void GetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             std::vector< OUString >& rRanges );
     static void SetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             const css::uno::Sequence< OUString >& rRanges );
 
-    static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrObject* pObject );
-    static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrPage* pPage );
-    static void GetChartNames( ::std::vector< OUString >& rChartNames, SdrPage* pPage );
-    static void CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
+    static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument* pDocument, SdrObject* pObject );
+    static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, const SdrPage* pPage );
+    static void GetChartNames( ::std::vector< OUString >& rChartNames, const SdrPage* pPage );
+    static void CreateProtectedChartListenersAndNotify( ScDocument* pDoc, const SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
         const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc = true );
 };
 

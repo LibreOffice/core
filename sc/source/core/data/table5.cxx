@@ -617,7 +617,7 @@ void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
     }
 }
 
-void ScTable::CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
+void ScTable::CopyColHidden(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
 {
     SCCOL nCol = nStartCol;
     while (nCol <= nEndCol)
@@ -632,7 +632,7 @@ void ScTable::CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
     }
 }
 
-void ScTable::CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
+void ScTable::CopyRowHidden(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
 {
     SCROW nRow = nStartRow;
     while (nRow <= nEndRow)
@@ -646,7 +646,7 @@ void ScTable::CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
     }
 }
 
-void ScTable::CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset)
+void ScTable::CopyRowHeight(const ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset)
 {
     SCROW nRow = nStartRow;
     ScFlatUInt16RowSegments::RangeData aSrcData;
@@ -830,7 +830,7 @@ bool ScTable::HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const
     return false;
 }
 
-void ScTable::CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
+void ScTable::CopyColFiltered(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
 {
     SCCOL nCol = nStartCol;
     while (nCol <= nEndCol)
@@ -845,7 +845,7 @@ void ScTable::CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
     }
 }
 
-void ScTable::CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
+void ScTable::CopyRowFiltered(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
 {
     SCROW nRow = nStartRow;
     while (nRow <= nEndRow)
@@ -949,7 +949,7 @@ bool ScTable::IsManualRowHeight(SCROW nRow) const
 
 namespace {
 
-void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& rRowSegments,
+void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, const ScFlatBoolRowSegments& rRowSegments,
     CRFlags* pColFlags, ScBitMaskCompressedArray< SCROW, CRFlags>* pRowFlags, const CRFlags nFlagMask)
 {
     using ::sal::static_int_cast;

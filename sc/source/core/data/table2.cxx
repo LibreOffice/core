@@ -3671,7 +3671,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
     }
 }
 
-bool ScTable::RefVisible(ScFormulaCell* pCell)
+bool ScTable::RefVisible(const ScFormulaCell* pCell)
 {
     ScRange aRef;
 

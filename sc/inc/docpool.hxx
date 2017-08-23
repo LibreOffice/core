@@ -44,7 +44,7 @@ public:
     virtual const SfxPoolItem&  Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 ) override;
 
     void StyleDeleted( const ScStyleSheet* pStyle );      // delete templates(?) in organizer
-    void CellStyleCreated( const OUString& rName, ScDocument* pDoc );
+    void CellStyleCreated( const OUString& rName, const ScDocument* pDoc );
     virtual bool GetPresentation( const SfxPoolItem&  rItem,
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,

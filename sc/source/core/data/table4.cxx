@@ -473,7 +473,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 }
 
 void ScTable::FillFormula(
-    ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast )
+    const ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast )
 {
 
     pDocument->SetNoListening( true );  // still the wrong reference
@@ -1165,7 +1165,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
 
 namespace {
 
-bool HiddenRowColumn(ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOLROW& rLastPos)
+bool HiddenRowColumn(const ScTable* pTable, SCCOLROW nRowColumn, bool bVertical, SCCOLROW& rLastPos)
 {
     bool bHidden = false;
     if(bVertical)
@@ -1252,7 +1252,7 @@ void ScTable::FillFormulaVertical(
 }
 
 void ScTable::FillSeriesSimple(
-    ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
+    const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
     SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
 {
     bool bHidden = false;

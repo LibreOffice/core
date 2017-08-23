@@ -136,7 +136,7 @@ public:
     bool ManualAction(
         SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, const ScTable& rTable, bool bCol);
 
-    void finalizeImport(ScTable& rTable);
+    void finalizeImport(const ScTable& rTable);
 
     void RemoveAll();
 };

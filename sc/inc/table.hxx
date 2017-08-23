@@ -852,9 +852,9 @@ public:
     bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = nullptr, SCCOL* pLastCol = nullptr) const;
     bool        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
     void        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
-    void        CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
-    void        CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
-    void        CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset);
+    void        CopyColHidden(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
+    void        CopyRowHidden(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
+    void        CopyRowHeight(const ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset);
     SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
@@ -865,8 +865,8 @@ public:
     bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
     bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = nullptr, SCCOL* pLastCol = nullptr) const;
     bool        HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
-    void        CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
-    void        CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
+    void        CopyColFiltered(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
+    void        CopyRowFiltered(const ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
     void        SetRowFiltered(SCROW nStartRow, SCROW nEndRow, bool bFiltered);
     void        SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, bool bFiltered);
     SCROW       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
@@ -890,10 +890,10 @@ public:
     void Reorder( const sc::ReorderParam& rParam );
 
     bool ValidQuery(
-        SCROW nRow, const ScQueryParam& rQueryParam, ScRefCellValue* pCell = nullptr,
+        SCROW nRow, const ScQueryParam& rQueryParam, const ScRefCellValue* pCell = nullptr,
         bool* pbTestEqualCondition = nullptr);
     void        TopTenQuery( ScQueryParam& );
-    SCSIZE      Query(ScQueryParam& rQueryParam, bool bKeepSub);
+    SCSIZE      Query(const ScQueryParam& rQueryParam, bool bKeepSub);
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
     void GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
@@ -1032,7 +1032,7 @@ private:
         ScProgress* pProgress, sal_uLong& rProgress );
 
     void FillSeriesSimple(
-        ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
+        const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
         SCCOLROW& rCol, SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
 
     void FillAutoSimple(
@@ -1110,7 +1110,7 @@ private:
         const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
         bool bKeepQuery, bool bUpdateRefs );
     void        QuickSort( ScSortInfoArray*, SCCOLROW nLo, SCCOLROW nHi);
-    void SortReorderByColumn( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
+    void SortReorderByColumn( const ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
 
     void SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
     void SortReorderByRowRefUpdate( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
@@ -1119,13 +1119,13 @@ private:
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     void        GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr);
 
-    bool        RefVisible(ScFormulaCell* pCell);
+    bool        RefVisible(const ScFormulaCell* pCell);
 
     bool        IsEmptyLine(SCROW nRow, SCCOL nStartCol, SCCOL nEndCol) const;
 
     void        IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillDateCmd eCmd);
     void FillFormula(
-        ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast );
+        const ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast );
     void        UpdateInsertTabAbs(SCTAB nNewPos);
     bool        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const;

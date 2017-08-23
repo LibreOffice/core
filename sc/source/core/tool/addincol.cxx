@@ -957,7 +957,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     }
 }
 
-static void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
+static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
     const OUString& aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
 
@@ -1352,7 +1352,7 @@ void ScUnoAddInCall::SetCaller( const uno::Reference<uno::XInterface>& rInterfac
     xCaller = rInterface;
 }
 
-void ScUnoAddInCall::SetCallerFromObjectShell( SfxObjectShell* pObjSh )
+void ScUnoAddInCall::SetCallerFromObjectShell( const SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {

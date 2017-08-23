@@ -55,7 +55,7 @@ struct CompareOptions
     utl::SearchParam::SearchType    eSearchType;
     bool                            bMatchWholeCell;
 
-    CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp );
+    CompareOptions( const ScDocument* pDoc, const ScQueryEntry& rEntry, utl::SearchParam::SearchType eSrchTyp );
 private:
     CompareOptions( const CompareOptions & ) = delete;
     CompareOptions& operator=( const CompareOptions & ) = delete;

@@ -206,7 +206,7 @@ public:
 
     bool                NeedsCaller() const;
     void                SetCaller( const css::uno::Reference<css::uno::XInterface>& rInterface );
-    void                SetCallerFromObjectShell( SfxObjectShell* pSh );
+    void                SetCallerFromObjectShell( const SfxObjectShell* pSh );
 
     bool                ValidParamCount() { return bValidCount;}
     ScAddInArgumentType GetArgType( long nPos );
