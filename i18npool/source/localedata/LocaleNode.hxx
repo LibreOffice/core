@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 #include <vector>
+#include <memory>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -85,7 +86,7 @@ class LocaleNode
     OUString aValue;
     Attr aAttribs;
     LocaleNode * parent;
-    std::vector<LocaleNode*> children;
+    std::vector<std::unique_ptr<LocaleNode>> children;
 
 protected:
     mutable int nError;
@@ -97,7 +98,7 @@ public:
     const OUString& getValue() const { return aValue; };
     const Attr& getAttr() const { return aAttribs; };
     sal_Int32 getNumberOfChildren () const { return sal_Int32(children.size()); };
-    LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx] ; };
+    LocaleNode * getChildAt (sal_Int32 idx) const { return children[idx].get(); };
     const LocaleNode * findNode ( const sal_Char *name) const;
     void print () const;
     void printR () const;
