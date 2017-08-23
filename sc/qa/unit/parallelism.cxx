@@ -60,7 +60,7 @@ private:
 };
 
 ScParallelismTest::ScParallelismTest()
-      : ScBootstrapFixture( "/sc/qa/unit/data" )
+      : ScBootstrapFixture( "sc/qa/unit/data" )
 {
 }
 

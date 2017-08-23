@@ -124,7 +124,7 @@ void ScDataTransformationTest::testColumnMerge()
 }
 
 ScDataTransformationTest::ScDataTransformationTest() :
-    ScBootstrapFixture( "/sc/qa/unit/data/dataprovider" ),
+    ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
     m_pDoc(nullptr)
 {
 }

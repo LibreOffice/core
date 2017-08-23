@@ -3343,7 +3343,7 @@ void ScExportTest::testSwappedOutImageExport()
 }
 
 ScExportTest::ScExportTest()
-      : ScBootstrapFixture("/sc/qa/unit/data")
+      : ScBootstrapFixture("sc/qa/unit/data")
 {
 }
 

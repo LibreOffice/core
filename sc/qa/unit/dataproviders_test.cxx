@@ -138,7 +138,7 @@ void ScDataProvidersTest::testHTMLImport()
 }
 
 ScDataProvidersTest::ScDataProvidersTest() :
-    ScBootstrapFixture( "/sc/qa/unit/data/dataprovider" ),
+    ScBootstrapFixture( "sc/qa/unit/data/dataprovider" ),
     m_pDoc(nullptr)
 {
 }

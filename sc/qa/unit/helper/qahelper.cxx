@@ -16,6 +16,7 @@
 #include "formulacell.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <tools/urlobj.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <formula/errorcodes.hxx>
@@ -631,11 +632,14 @@ OUString EnsureSeparator(const OUStringBuffer& rFilePath)
 void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    OUStringBuffer aBuffer( m_directories.getSrcRootURL() );
-    aBuffer.append(EnsureSeparator(aBuffer)).append(m_aBaseString);
-    aBuffer.append(EnsureSeparator(aBuffer)).append(aFileExtension);
-    aBuffer.append(EnsureSeparator(aBuffer)).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
+    // m_aBaseString and aFileBase may contain multiple segments, so use
+    // GetNewAbsURL instead of insertName for them:
+    INetURLObject url(m_directories.getSrcRootURL());
+    url.setFinalSlash();
+    url.GetNewAbsURL(m_aBaseString, &url);
+    url.insertName(aFileExtension, true);
+    url.GetNewAbsURL(aFileBase + aFileExtension, &url);
+    rFilePath = url.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
 void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)

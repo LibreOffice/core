@@ -283,7 +283,7 @@ void ScFiltersTest::testTdf104310()
 }
 
 ScFiltersTest::ScFiltersTest()
-      : ScBootstrapFixture( "/sc/qa/unit/data" )
+      : ScBootstrapFixture( "sc/qa/unit/data" )
 {
 }
 

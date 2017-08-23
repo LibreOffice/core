@@ -4727,7 +4727,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevPA1()
 }
 
 ScOpenCLTest::ScOpenCLTest()
-      : ScBootstrapFixture( "/sc/qa/unit/data" )
+      : ScBootstrapFixture( "sc/qa/unit/data" )
 {
 }
 

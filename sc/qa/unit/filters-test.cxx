@@ -761,7 +761,7 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
 }
 
 ScFiltersTest::ScFiltersTest()
-    : ScBootstrapFixture( "/sc/qa/unit/data" )
+    : ScBootstrapFixture( "sc/qa/unit/data" )
     , mbUpdateReferenceOnSort(false)
 {
 }

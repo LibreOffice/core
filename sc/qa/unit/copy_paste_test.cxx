@@ -226,7 +226,7 @@ void ScCopyPasteTest::testTdf84411()
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
-      : ScBootstrapFixture( "/sc/qa/unit/data" )
+      : ScBootstrapFixture( "sc/qa/unit/data" )
 {
 }
 
