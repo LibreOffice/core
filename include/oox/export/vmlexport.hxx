@@ -82,6 +82,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
 
     /// Anchoring.
     sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
+    bool m_bInline; // css::text::TextContentAnchorType_AS_CHARACTER
 
     /// Parent position.
     const Point* m_pNdTopLeft;
@@ -101,11 +102,31 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Remember style, the most important shape attribute ;-)
     OStringBuffer *m_pShapeStyle;
 
+    /// Remember the generated shape id.
+    OString m_sShapeId;
+
     /// Remember which shape types we had already written.
     bool *m_pShapeTypeWritten;
 
+    /// It seems useless to write out an XML_ID attribute next to XML_id which defines the actual shape id
+    bool m_bSkipwzName;
+
+    /// Use '#' mark for type attribute (check Type Attribute of VML shape in OOXML documentation)
+    bool m_bUseHashMarkForType;
+
+    /** There is a shapeid generation mechanism in EscherEx, but it does not seem to work
+    *   so override the existing behavior to get actually unique ids.
+    */
+    bool m_bOverrideShapeIdGeneration;
+
+    /// Prefix for overriden shape id generation (used if m_bOverrideShapeIdGeneration is true)
+    OString m_sShapeIDPrefix;
+
+    /// Counter for generating shape ids (used if m_bOverrideShapeIdGeneration is true)
+    sal_uInt64 m_nShapeIDCounter;
+
 public:
-                        VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr );
+                        VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr);
     virtual             ~VMLExport() override;
 
     const ::sax_fastparser::FSHelperPtr&
@@ -116,11 +137,16 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    void AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
+    OString AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const Point* pNdTopLeft = nullptr, const bool bOOxmlExport = false );
+    OString AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport = false );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
     static bool IsWaterMarkShape(const OUString& rStr);
+
+    void    SetSkipwzName(bool bSkipwzName) { m_bSkipwzName = bSkipwzName; }
+    void    SetHashMarkForType(bool bUseHashMarkForType) { m_bUseHashMarkForType = bUseHashMarkForType; }
+    void    OverrideShapeIDGen(bool bOverrideShapeIdGeneration, const OString sShapeIDPrefix = OString());
 protected:
     /// Add an attribute to the generated <v:shape/> element.
     ///
@@ -130,6 +156,9 @@ protected:
 
     using EscherEx::StartShape;
     using EscherEx::EndShape;
+
+    /// Override shape ID generation when m_bOverrideShapeIdGeneration is set to true
+    virtual sal_uInt32   GenerateShapeId() override;
 
     /// Start the shape for which we just collected the information.
     ///
@@ -154,7 +183,7 @@ private:
 
 private:
     /// Create an OString representing the id from a numerical id.
-    static OString ShapeIdString( sal_uInt32 nId );
+    OString ShapeIdString( sal_uInt32 nId );
 
     /// Add flip X and\or flip Y
     void AddFlipXY( );

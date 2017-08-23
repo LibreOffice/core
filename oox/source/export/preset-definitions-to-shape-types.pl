@@ -287,7 +287,7 @@ my %shapes_ids = (
     198 => 'actionButtonDocument',
     199 => 'actionButtonSound',
     200 => 'actionButtonMovie',
-    201 => 'hostControl', # should not be used
+    201 => 'hostControl',
     202 => 'textBox'
 );
 # An error occurred, we have to ignore this shape

@@ -10,7 +10,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -21,9 +20,12 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -400,6 +402,129 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
     xShape2.is();
 
     CPPUNIT_ASSERT_EQUAL(xPropertySet1->getPropertyValue("TextAutoGrowHeight"), xPropertySet2->getPropertyValue("TextAutoGrowHeight"));
+}
+
+DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
+{
+    uno::Reference<drawing::XControlShape> xControlShape( getShape(1), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xControlShape.is() );
+
+    // Check control type
+    uno::Reference<beans::XPropertySet> xPropertySet( xControlShape->getControl(), uno::UNO_QUERY );
+    uno::Reference<lang::XServiceInfo> xServiceInfo( xPropertySet, uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL( true, bool( xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox" ) ) );
+
+    // Check custom label
+    CPPUNIT_ASSERT_EQUAL( OUString( "Custom Caption" ), getProperty<OUString>(xPropertySet, "Label") );
+
+    // Check background color (highlight system color)
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x316AC5 ), getProperty<sal_Int32>(xPropertySet, "BackgroundColor") );
+
+    // Check Text color (active border system color)
+    if(!mbExported) // Bug: text color is not exported
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), getProperty<sal_Int32>(xPropertySet, "TextColor"));
+
+    // Check state of the checkbox
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPropertySet, "State"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
+{
+    // First check box aligned as a floating object
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControlShape.is());
+
+    // Check whether we have the right control
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Floating Check Box"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+
+    // Also check positin and size
+    uno::Reference<drawing::XShape> xShape(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4470), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1427), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5126), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2341), xShape->getPosition().Y);
+
+    // Second check box aligned inline / as character
+    xControlShape.set(getShape(2), uno::UNO_QUERY);
+
+    // Check whether we have the right control
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+    xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Inline Check Box"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(text::VertOrientation::TOP),getProperty<sal_Int32>(xPropertySet2,"VertOrient"));
+
+    // Also check positin and size
+    xShape.set(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4410), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1083), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1085), xShape->getPosition().Y);
+
+    // Also check the specific OOXML elements
+    xmlDocPtr pXmlDoc = parseExport();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // For inline controls use w:object as parent element and pictureFrame shapetype
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shapetype", "spt", "75");
+    // For floating controls use w:pict as parent element and hostControl shapetype
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shapetype", "spt", "201");
+
+     // Have different shape ids
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "id") !=
+        getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:pict/v:shape", "id"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end.odt")
+{
+    // Two issues were here:
+    //  1) second shape was not export (it is anchored to the end of the run)
+    //  2) inline property was inherited to the second shape by mistake
+
+    // First checkbox is the inlined one
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControlShape.is());
+
+    // Check whether we have the right control
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService( "com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Inline Checkbox"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    uno::Reference<beans::XPropertySet> xPropertySet2(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
+
+    // Second check box anchored to character
+    xControlShape.set(getShape(2), uno::UNO_QUERY);
+
+    // Check whether we have the right control
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+    xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Floating Checkbox"), getProperty<OUString>(xPropertySet, "Label"));
+
+    // Check anchor type
+    xPropertySet2.set(xControlShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
