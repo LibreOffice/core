@@ -3939,8 +3939,7 @@ void ScFiltersTest::testUnicodeFileNameGnumeric()
     if (osl_getThreadTextEncoding() != RTL_TEXTENCODING_UTF8) {
         return;
     }
-    OString aFileNamePrefix= "t" + OString(RTL_CONSTASCII_STRINGPARAM("\u00e4\u00df")) + "t.";
-    ScDocShellRef xDocSh = loadDoc(OStringToOUString(aFileNamePrefix, RTL_TEXTENCODING_UTF8), FORMAT_GNUMERIC);
+    ScDocShellRef xDocSh = loadDoc(u"t\u00E4\u00DFt.", FORMAT_GNUMERIC);
     CPPUNIT_ASSERT(xDocSh.is());
 
     xDocSh->DoClose();
