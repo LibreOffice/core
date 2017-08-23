@@ -26,6 +26,7 @@
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <editeng/svxenum.hxx>
 
 namespace sc {
     struct SpellCheckContext;
