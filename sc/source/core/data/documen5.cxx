@@ -250,7 +250,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUStr
     }
     return xReturn;
 }
-void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRangesVector, ScDocument* pSheetNameDoc )
+void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRangesVector, const ScDocument* pSheetNameDoc )
 {
     rRangesVector.clear();
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );

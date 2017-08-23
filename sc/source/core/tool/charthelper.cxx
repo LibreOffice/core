@@ -119,7 +119,7 @@ sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
     return lcl_DoUpdateCharts( ScAddress(), pDoc, true );
 }
 
-void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
+void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( const ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
 {
     if( !pSrcDoc || !pDestDoc )
         return;
@@ -337,7 +337,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
     }
 }
 
-void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, const SdrPage* pPage )
+void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument* pDocument, const SdrPage* pPage )
 {
     if ( pDocument && pPage )
     {

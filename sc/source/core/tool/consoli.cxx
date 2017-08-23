@@ -192,7 +192,7 @@ void ScConsData::SetFlags( ScSubTotalFunc eFunc, bool bColName, bool bRowName, b
     eFunction = eFunc;
 }
 
-void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
+void ScConsData::AddFields( const ScDocument* pSrcDoc, SCTAB nTab,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ++nDataCount;

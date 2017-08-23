@@ -114,7 +114,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
     sal_uInt16      FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uInt16 nLevel, sal_uInt16 nDeleteLevel );
 
-    void        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
+    void        FindFrameForObject( const SdrObject* pObject, ScRange& rRange );
 
     void        Modified();
 
@@ -137,7 +137,7 @@ public:
     static void UpdateAllComments( ScDocument& rDoc );        ///< on all tables
     void        UpdateAllArrowColors();     ///< on all tables
 
-    static bool IsNonAlienArrow( SdrObject* pObject );
+    static bool IsNonAlienArrow( const SdrObject* pObject );
 
     ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
                                 ScAddress& rPosition, ScRange& rSource, bool& rRedLine );

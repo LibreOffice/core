@@ -182,7 +182,7 @@ void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependA
         true, true);
 }
 
-void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
+void ScChangeTrackingExportHelper::WriteDependings(const ScChangeAction* pAction)
 {
     if (pAction->HasDependent())
     {
@@ -616,18 +616,18 @@ void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCel
         rExport.GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
 }
 
-void ScChangeTrackingExportHelper::CollectActionAutoStyles(ScChangeAction* pAction)
+void ScChangeTrackingExportHelper::CollectActionAutoStyles(const ScChangeAction* pAction)
 {
     if (pAction->GetType() != SC_CAT_CONTENT)
         return;
 
     if (pChangeTrack->IsGenerated(pAction->GetActionNumber()))
-        CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetNewCell());
+        CollectCellAutoStyles(static_cast<const ScChangeActionContent*>(pAction)->GetNewCell());
     else
     {
-        CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetOldCell());
-        if (static_cast<ScChangeActionContent*>(pAction)->IsTopContent() && pAction->IsDeletedIn())
-            CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetNewCell());
+        CollectCellAutoStyles(static_cast<const ScChangeActionContent*>(pAction)->GetOldCell());
+        if (static_cast<const ScChangeActionContent*>(pAction)->IsTopContent() && pAction->IsDeletedIn())
+            CollectCellAutoStyles(static_cast<const ScChangeActionContent*>(pAction)->GetNewCell());
     }
 }
 

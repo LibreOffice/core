@@ -43,9 +43,9 @@ class SC_DLLPUBLIC ScRangeUtil
 public:
                 ScRangeUtil()  {}
 
-    static bool MakeArea        ( const OUString&     rAreaStr,
+    static bool MakeArea        ( const OUString&   rAreaStr,
                                   ScArea&           rArea,
-                                  ScDocument*       pDoc,
+                                  const ScDocument* pDoc,
                                   SCTAB         nTab,
                                   ScAddress::Details const & rDetails );
 
@@ -53,14 +53,14 @@ public:
                                   OUString&           thePosStr );
 
     static bool IsAbsTabArea    ( const OUString&   rAreaStr,
-                                  ScDocument*       pDoc,
+                                  const ScDocument* pDoc,
                                   ScArea***         pppAreas,
                                   sal_uInt16*       pAreaCount  = nullptr,
                                   bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool IsAbsArea       ( const OUString& rAreaStr,
-                                  ScDocument*   pDoc,
+                                  const ScDocument* pDoc,
                                   SCTAB     nTab,
                                   OUString*     pCompleteStr,
                                   ScRefAddress* pStartPos    = nullptr,
@@ -68,14 +68,14 @@ public:
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool IsAbsPos        ( const OUString& rPosStr,
-                                  ScDocument*   pDoc,
+                                  const ScDocument* pDoc,
                                   SCTAB     nTab,
                                   OUString*       pCompleteStr,
                                   ScRefAddress* pPosTripel   = nullptr,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
 
     static bool MakeRangeFromName( const OUString& rName,
-                                    ScDocument*     pDoc,
+                                    const ScDocument* pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
                                   RutlNameScope eScope=RUTL_NAMES,
@@ -221,7 +221,7 @@ public:
     static void         GetStringFromXMLRangeString(
                             OUString& rString,
                             const OUString& rXMLRange,
-                            ScDocument* pDoc );
+                            const ScDocument* pDoc );
 
 /// String to RangeData core
     static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc);
@@ -263,7 +263,7 @@ private:
     bool            bFirstPass;
 
 public:
-            ScAreaNameIterator( ScDocument* pDoc );
+            ScAreaNameIterator( const ScDocument* pDoc );
 
     bool Next( OUString& rName, ScRange& rRange );
     bool WasDBName() const { return !bFirstPass; }

@@ -50,8 +50,7 @@ struct ScOrcusXMLTreeParam
      */
     UserDataStoreType m_UserDataStore;
 
-    static SC_DLLPUBLIC EntryData* getUserData(SvTreeListEntry& rEntry);
-    static SC_DLLPUBLIC const EntryData* getUserData(const SvTreeListEntry& rEntry);
+    static SC_DLLPUBLIC EntryData* getUserData(const SvTreeListEntry& rEntry);
 };
 
 struct ScOrcusImportXMLParam

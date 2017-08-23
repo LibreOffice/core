@@ -468,7 +468,7 @@ void ScRangeData::MakeValidName( OUString& rName )
     }
 }
 
-ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
+ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, const ScDocument* pDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
@@ -616,7 +616,7 @@ void ScRangeData::ValidateTabRefs()
     }
 }
 
-void ScRangeData::SetCode( ScTokenArray& rArr )
+void ScRangeData::SetCode( const ScTokenArray& rArr )
 {
     pCode.reset(new ScTokenArray( rArr ));
     pCode->SetFromRangeName(true);

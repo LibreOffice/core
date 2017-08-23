@@ -44,7 +44,7 @@ bool            ScProgress::bAllowInterpretProgress = true;
 ScDocument*     ScProgress::pInterpretDoc;
 bool            ScProgress::bIdleWasEnabled = false;
 
-static bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
+static bool lcl_IsHiddenDocument( const SfxObjectShell* pObjSh )
 {
     if (pObjSh)
     {
@@ -61,7 +61,7 @@ static bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
     return false;
 }
 
-static bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
+static bool lcl_HasControllersLocked( const SfxObjectShell& rObjSh )
 {
     uno::Reference<frame::XModel> xModel( rObjSh.GetBaseModel() );
     if (xModel.is())

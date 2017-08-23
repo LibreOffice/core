@@ -186,7 +186,7 @@ static bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
     return bCut;
 }
 
-ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                         SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                         SCCOL nDx, SCROW nDy, SCTAB nDz,
@@ -460,7 +460,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     return eRet;
 }
 
-void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
+void ScRefUpdate::MoveRelWrap( const ScDocument* pDoc, const ScAddress& rPos,
                                SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef )
 {
     ScRange aAbsRange = rRef.toAbs(rPos);
@@ -507,7 +507,7 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
-                        ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
+                        const ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
 {
     SCTAB nDz = rDest.Tab() - rSource.aStart.Tab();
     if (nDz)
@@ -531,7 +531,7 @@ void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
 }
 
 ScRefUpdateRes ScRefUpdate::UpdateTranspose(
-    ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
+    const ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
     if (rRef.aStart.Col() >= rSource.aStart.Col() && rRef.aEnd.Col() <= rSource.aEnd.Col() &&
