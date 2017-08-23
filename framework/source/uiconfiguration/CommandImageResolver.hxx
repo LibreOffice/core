@@ -18,6 +18,7 @@
 
 #include "ImageList.hxx"
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -33,7 +34,7 @@ private:
     std::vector<OUString> m_aImageCommandNameVector;
     std::vector<OUString> m_aImageNameVector;
 
-    o3tl::enumarray<ImageType, ImageList*> m_pImageList;
+    o3tl::enumarray<ImageType, std::unique_ptr<ImageList>> m_pImageList;
     OUString m_sIconTheme;
 
     ImageList* getImageList(ImageType nImageType);

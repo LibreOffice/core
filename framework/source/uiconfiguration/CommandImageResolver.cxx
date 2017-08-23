@@ -64,14 +64,10 @@ OUString lclConvertToCanonicalName(const OUString& rFileName)
 
 CommandImageResolver::CommandImageResolver()
 {
-    for (ImageList*& rp : m_pImageList)
-        rp = nullptr;
 }
 
 CommandImageResolver::~CommandImageResolver()
 {
-    for (ImageList* p : m_pImageList)
-        delete p;
 }
 
 bool CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence)
@@ -129,20 +125,17 @@ ImageList* CommandImageResolver::getImageList(ImageType nImageType)
     if (sIconTheme != m_sIconTheme)
     {
         m_sIconTheme = sIconTheme;
-        for (ImageList*& rp : m_pImageList)
-        {
-            delete rp;
-            rp = nullptr;
-        }
+        for (auto& rp : m_pImageList)
+            rp.reset();
     }
 
     if (!m_pImageList[nImageType])
     {
         OUString sIconPath = OUString::createFromAscii(ImageType_Prefixes[nImageType]);
-        m_pImageList[nImageType] = new ImageList(m_aImageNameVector, sIconPath);
+        m_pImageList[nImageType].reset( new ImageList(m_aImageNameVector, sIconPath) );
     }
 
-    return m_pImageList[nImageType];
+    return m_pImageList[nImageType].get();
 }
 
 Image CommandImageResolver::getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL)
