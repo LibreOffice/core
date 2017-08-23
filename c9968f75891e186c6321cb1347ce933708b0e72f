@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c61a7517",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4561,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-23T08:52:33Z",
+      "side": 1,
+      "message": "Here iterating only the allocated columns doesn\u0027t work, the original code returns the next \"unallocated\" column if all allocated columns are identical in the flags compared and the unallocated column is not.",
+      "revId": "c9968f75891e186c6321cb1347ce933708b0e72f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06d39d39",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6617,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-23T08:52:33Z",
+      "side": 1,
+      "message": "Nitpick: please use block braces for such nested if/for to clarify, so\n\n if (pTable)\n {\n     for (...)\n     {\n         ...\n     }\n }",
+      "revId": "c9968f75891e186c6321cb1347ce933708b0e72f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

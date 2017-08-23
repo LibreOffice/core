@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a6e4890d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-23T08:52:33Z",
+      "side": 0,
+      "message": "Oops, this should be nCol \u003c\u003d MAXCOL anyway..",
+      "range": {
+        "startLine": 1653,
+        "startChar": 25,
+        "endLine": 1653,
+        "endChar": 38
+      },
+      "revId": "d092521b2595963dcf0928f5fee7ed1903ff4aef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_662b8131",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-23T08:52:33Z",
+      "side": 0,
+      "message": "Side note: seeing this, it should actually be two loops iterating [0,nStartCol) and [nEndCol+1,MAXCOL] instead of iterating but skipping the gap.",
+      "revId": "d092521b2595963dcf0928f5fee7ed1903ff4aef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
