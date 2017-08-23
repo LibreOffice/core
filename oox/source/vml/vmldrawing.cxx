@@ -79,6 +79,7 @@ void OleObjectInfo::setShapeId( sal_Int32 nShapeId )
 }
 
 ControlInfo::ControlInfo()
+    : mbTextContentShape(false)
 {
 }
 

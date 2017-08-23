@@ -83,7 +83,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
     sw/util/swd \
     sw/util/msword \
     sfx2/util/sfx \
-	starmath/util/sm \
+    sot/util/sot \
+    starmath/util/sm \
     svl/source/fsstor/fsstorage \
     svl/util/svl \
     svtools/util/svt \
