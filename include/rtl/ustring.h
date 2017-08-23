@@ -2023,7 +2023,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newToAsciiUpperCase(
     string.
 
     The new string results from removing all characters with values less than
-    or equal to 32 (the space character) form both ends of str.
+    or equal to 32 (the space character), and also Unicode General Punctuation
+    area Space and some Control characters, form both ends of str (see
+    rtl_ImplIsWhitespace).
 
     This function cannot be used for language-specific conversion.  The new
     string does not necessarily have a reference count of 1 (in cases where
