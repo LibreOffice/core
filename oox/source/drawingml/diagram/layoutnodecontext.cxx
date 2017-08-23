@@ -160,12 +160,7 @@ public:
 
     virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs ) override
         {
-            sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getBaseToken( aElement ) );
-            if( nIdx != -1 )
-            {
-                mVariables[ nIdx ] <<= rAttribs.getString( XML_val ).get();
-            }
-
+            mVariables[ getBaseToken(aElement) ] = rAttribs.getString( XML_val ).get();
             return this;
         }
 private:
@@ -185,48 +180,6 @@ LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,
 
 LayoutNodeContext::~LayoutNodeContext()
 {
-}
-
-/** convert the XML tag to a variable index in the array
- * @param aTag the tag, without namespace
- * @return the variable index. -1 is an error
- */
-sal_Int32 LayoutNodeContext::tagToVarIdx( sal_Int32 aTag )
-{
-    sal_Int32 nIdx = -1;
-    switch( aTag )
-    {
-    case DGM_TOKEN( animLvl ):
-        nIdx = LayoutNode::VAR_animLvl;
-        break;
-    case DGM_TOKEN( animOne ):
-        nIdx = LayoutNode::VAR_animOne;
-        break;
-    case DGM_TOKEN( bulletEnabled ):
-        nIdx = LayoutNode::VAR_bulletEnabled;
-        break;
-    case DGM_TOKEN( chMax ):
-        nIdx = LayoutNode::VAR_chMax;
-        break;
-    case DGM_TOKEN( chPref ):
-        nIdx = LayoutNode::VAR_chPref;
-        break;
-    case DGM_TOKEN( dir ):
-        nIdx = LayoutNode::VAR_dir;
-        break;
-    case DGM_TOKEN( hierBranch ):
-        nIdx = LayoutNode::VAR_hierBranch;
-        break;
-    case DGM_TOKEN( orgChart ):
-        nIdx = LayoutNode::VAR_orgChart;
-        break;
-    case DGM_TOKEN( resizeHandles ):
-        nIdx = LayoutNode::VAR_resizeHandles;
-        break;
-    default:
-        break;
-    }
-    return nIdx;
 }
 
 ContextHandlerRef

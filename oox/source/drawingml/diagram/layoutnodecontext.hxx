@@ -33,8 +33,6 @@ public:
     virtual ~LayoutNodeContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
-
-    static ::sal_Int32 tagToVarIdx( ::sal_Int32 aTag );
 private:
     LayoutAtomPtr mpNode;
 };
