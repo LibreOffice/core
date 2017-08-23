@@ -1320,6 +1320,8 @@ void DocxAttributeOutput::EndRun()
         WritePostponedFormControl(*it);
     m_aPostponedFormControls.clear();
 
+    WritePostponedActiveXControl(false);
+
     WritePendingPlaceholder();
 
     m_pRedlineData = nullptr;
@@ -2045,7 +2047,7 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
     WritePostponedOLE();
 
-    WritePostponedActiveXControl();
+    WritePostponedActiveXControl(true);
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
@@ -4785,18 +4787,18 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
     }
 }
 
-void DocxAttributeOutput::WritePostponedActiveXControl()
+void DocxAttributeOutput::WritePostponedActiveXControl(bool bInsideRun)
 {
     for( std::vector<PostponedDrawing>::const_iterator it = m_aPostponedActiveXControls.begin();
          it != m_aPostponedActiveXControls.end(); ++it )
     {
-        WriteActiveXControl(it->object, *(it->frame));
+        WriteActiveXControl(it->object, *(it->frame), bInsideRun);
     }
     m_aPostponedActiveXControls.clear();
 }
 
 
-void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat)
+void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, bool bInsideRun)
 {
     SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(dynamic_cast< const SdrUnoObj*>(pObject));
     if (!pFormObj)
@@ -4807,6 +4809,11 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
         return;
 
     const bool bAnchoredInline = rFrameFormat.GetAnchor().GetAnchorId() == static_cast<RndStdIds>(css::text::TextContentAnchorType_AS_CHARACTER);
+
+    if(!bInsideRun)
+    {
+        m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+    }
 
     // w:pict for floating embedded control and w:object for inline embedded control
     if(bAnchoredInline)
@@ -4852,6 +4859,11 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
         m_pSerializer->endElementNS(XML_w, XML_object);
     else
         m_pSerializer->endElementNS(XML_w, XML_pict);
+
+    if(!bInsideRun)
+    {
+        m_pSerializer->endElementNS(XML_w, XML_r);
+    }
 }
 
 bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const

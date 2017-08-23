@@ -1311,6 +1311,7 @@ OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int
     m_eVOri = eVOri;
     m_eHRel = eHRel;
     m_eVRel = eVRel;
+    m_bInline = false;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;
 }
@@ -1318,6 +1319,10 @@ OString VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int
 OString VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport )
 {
     m_pSdrObject = &rObj;
+    m_eHOri = -1;
+    m_eVOri = -1;
+    m_eHRel = -1;
+    m_eVRel = -1;
     m_bInline = true;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;

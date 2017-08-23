@@ -417,7 +417,7 @@ private:
     bool PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
 
-    void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat);
+    void WriteActiveXControl(const SdrObject* pObject, const SwFrameFormat& rFrameFormat, bool bInsideRun);
     bool ExportAsActiveXControl(const SdrObject* pObject) const;
 
     /// checks whether the current component is a diagram
@@ -700,7 +700,7 @@ private:
     void WritePostponedGraphic();
     void WritePostponedMath(const SwOLENode* pObject);
     void WritePostponedFormControl(const SdrObject* pObject);
-    void WritePostponedActiveXControl();
+    void WritePostponedActiveXControl(bool bInsideRun);
     void WritePostponedDiagram();
     void WritePostponedChart();
     void WritePostponedOLE();
