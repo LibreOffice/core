@@ -51,6 +51,7 @@
 #include <rtl/ref.hxx>
 
 #include <list>
+#include <vector>
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -114,12 +115,12 @@ struct StorageHolder_Impl
 class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
-    typedef std::list<StorageHolder_Impl> StorageHoldersType;
+    typedef std::vector<StorageHolder_Impl> StorageHoldersType;
 
     rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
 
     OStorage*                   m_pAntiImpl;         // only valid if external references exists
-    StorageHoldersType          m_aReadOnlyWrapList; // only valid if readonly external reference exists
+    StorageHoldersType          m_aReadOnlyWrapVector; // only valid if readonly external reference exists
 
     sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
     bool                        m_bIsModified;  // only modified elements will be sent to the original content

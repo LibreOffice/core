@@ -69,7 +69,7 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-typedef ::std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
+typedef ::std::vector< uno::WeakReference< lang::XComponent > > WeakComponentVector;
 
 struct StorInternalData_Impl
 {
@@ -82,7 +82,7 @@ struct StorInternalData_Impl
 
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
 
-    WeakComponentList m_aOpenSubComponentsList;
+    WeakComponentVector m_aOpenSubComponentsVector;
 
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
@@ -300,10 +300,10 @@ OStorage_Impl::~OStorage_Impl()
             }
             m_pAntiImpl = nullptr;
         }
-        else if ( !m_aReadOnlyWrapList.empty() )
+        else if ( !m_aReadOnlyWrapVector.empty() )
         {
-            for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapList.begin();
-                  pStorageIter != m_aReadOnlyWrapList.end(); ++pStorageIter )
+            for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapVector.begin();
+                  pStorageIter != m_aReadOnlyWrapVector.end(); ++pStorageIter )
             {
                 uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
                 if ( xTmp.is() )
@@ -315,7 +315,7 @@ OStorage_Impl::~OStorage_Impl()
                     }
             }
 
-            m_aReadOnlyWrapList.clear();
+            m_aReadOnlyWrapVector.clear();
         }
 
         m_pParent = nullptr;
@@ -375,13 +375,13 @@ void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
 {
     // Weak reference is used inside the holder so the refcount must not be zero at this point
     OSL_ENSURE( aStorage.GetRefCount_Impl(), "There must be a reference alive to use this method!" );
-    m_aReadOnlyWrapList.push_back( StorageHolder_Impl( &aStorage ) );
+    m_aReadOnlyWrapVector.push_back( StorageHolder_Impl( &aStorage ) );
 }
 
 void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 {
-    for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapList.begin();
-      pStorageIter != m_aReadOnlyWrapList.end();)
+    for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapVector.begin();
+      pStorageIter != m_aReadOnlyWrapVector.end();)
     {
         uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
         if ( !xTmp.is() || pStorageIter->m_pPointer == &aStorage )
@@ -393,9 +393,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
                 SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
             }
 
-            StorageHoldersType::iterator pIterToDelete( pStorageIter );
-            ++pStorageIter;
-            m_aReadOnlyWrapList.erase( pIterToDelete );
+            pStorageIter = m_aReadOnlyWrapVector.erase(pStorageIter);
         }
         else
             ++pStorageIter;
@@ -1522,7 +1520,7 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     if ( !pElement )
         return;
 
-    if ( (pElement->m_xStorage && ( pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapList.empty() ))
+    if ( (pElement->m_xStorage && ( pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty() ))
       || (pElement->m_xStream && ( pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsList.empty() )) )
         throw io::IOException( THROW_WHERE ); // TODO: Access denied
 
@@ -1842,19 +1840,19 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
 
     if ( m_pData->m_bReadOnlyWrap )
     {
-        OSL_ENSURE( !m_pData->m_aOpenSubComponentsList.size() || m_pData->m_pSubElDispListener.get(),
+        OSL_ENSURE( !m_pData->m_aOpenSubComponentsVector.size() || m_pData->m_pSubElDispListener.get(),
                     "If any subelements are open the listener must exist!" );
 
         if (m_pData->m_pSubElDispListener.get())
         {
             m_pData->m_pSubElDispListener->OwnerIsDisposed();
 
-            // iterate through m_pData->m_aOpenSubComponentsList
+            // iterate through m_pData->m_aOpenSubComponentsVector
             // deregister m_pData->m_pSubElDispListener and dispose all of them
-            if ( !m_pData->m_aOpenSubComponentsList.empty() )
+            if ( !m_pData->m_aOpenSubComponentsVector.empty() )
             {
-                for ( WeakComponentList::iterator pCompIter = m_pData->m_aOpenSubComponentsList.begin();
-                      pCompIter != m_pData->m_aOpenSubComponentsList.end(); ++pCompIter )
+                for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
+                      pCompIter != m_pData->m_aOpenSubComponentsVector.end(); ++pCompIter )
                 {
                     uno::Reference< lang::XComponent > xTmp = (*pCompIter);
                     if ( xTmp.is() )
@@ -1871,7 +1869,7 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
                     }
                 }
 
-                m_pData->m_aOpenSubComponentsList.clear();
+                m_pData->m_aOpenSubComponentsVector.clear();
             }
         }
 
@@ -1904,17 +1902,15 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     // this method must not contain any locking
     // the locking is done in the listener
 
-    if ( !m_pData->m_aOpenSubComponentsList.empty() )
+    if ( !m_pData->m_aOpenSubComponentsVector.empty() )
     {
-        for ( WeakComponentList::iterator pCompIter = m_pData->m_aOpenSubComponentsList.begin();
-              pCompIter != m_pData->m_aOpenSubComponentsList.end(); )
+        for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
+              pCompIter != m_pData->m_aOpenSubComponentsVector.end(); )
         {
             uno::Reference< lang::XComponent > xTmp = (*pCompIter);
             if ( !xTmp.is() || xTmp == xChild )
             {
-                WeakComponentList::iterator pIterToRemove = pCompIter;
-                ++pCompIter;
-                m_pData->m_aOpenSubComponentsList.erase( pIterToRemove );
+                pCompIter = m_pData->m_aOpenSubComponentsVector.erase(pCompIter);
             }
             else
                 ++pCompIter;
@@ -2052,7 +2048,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
     xComponent->addEventListener( uno::Reference< lang::XEventListener >(
         static_cast< ::cppu::OWeakObject* >(m_pData->m_pSubElDispListener.get()), uno::UNO_QUERY));
 
-    m_pData->m_aOpenSubComponentsList.push_back( xComponent );
+    m_pData->m_aOpenSubComponentsVector.push_back( xComponent );
 }
 
 //  XInterface
@@ -2396,7 +2392,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             {
                 throw io::IOException( THROW_WHERE ); // TODO: access_denied
             }
-            else if ( !pElement->m_xStorage->m_aReadOnlyWrapList.empty()
+            else if ( !pElement->m_xStorage->m_aReadOnlyWrapVector.empty()
                     && ( nStorageMode & embed::ElementModes::WRITE ) )
             {
                 throw io::IOException( THROW_WHERE ); // TODO: access_denied
@@ -3639,7 +3635,7 @@ void SAL_CALL OStorage::revert()
           pElementIter != m_pImpl->m_aChildrenList.end(); ++pElementIter )
     {
         if ( ((*pElementIter)->m_xStorage
-                && ( (*pElementIter)->m_xStorage->m_pAntiImpl || !(*pElementIter)->m_xStorage->m_aReadOnlyWrapList.empty() ))
+                && ( (*pElementIter)->m_xStorage->m_pAntiImpl || !(*pElementIter)->m_xStorage->m_aReadOnlyWrapVector.empty() ))
           || ((*pElementIter)->m_xStream
                   && ( (*pElementIter)->m_xStream->m_pAntiImpl || !(*pElementIter)->m_xStream->m_aInputStreamsList.empty()) ) )
             throw io::IOException( THROW_WHERE ); // TODO: access denied
