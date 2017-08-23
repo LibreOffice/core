@@ -4254,7 +4254,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
         // Then do the threaded calculation
 
-        bool result = true;
         class Executor : public comphelper::ThreadTask
         {
         private:
@@ -4263,7 +4262,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
             ScDocument* mpDocument;
             const ScAddress& mrTopPos;
             SCROW mnLength;
-            std::vector<int>& mrResult;
 
         public:
             Executor(std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
@@ -4271,24 +4269,19 @@ bool ScFormulaCell::InterpretFormulaGroup()
                      unsigned nThreadsTotal,
                      ScDocument* pDocument,
                      const ScAddress& rTopPos,
-                     SCROW nLength,
-                     std::vector<int>& rResult) :
+                     SCROW nLength) :
                 comphelper::ThreadTask(rTag),
                 mnThisThread(nThisThread),
                 mnThreadsTotal(nThreadsTotal),
                 mpDocument(pDocument),
                 mrTopPos(rTopPos),
-                mnLength(nLength),
-                mrResult(rResult)
+                mnLength(nLength)
             {
             }
 
             virtual void doWork() override
             {
                 mpDocument->CalculateInColumnInThread(mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
-                // FIXME: How to determine whether it "worked" or not? Does it even have a  meaning? Just
-                // drop this as YAGNI?
-                mrResult[mnThisThread] = static_cast<int>(true);
             }
 
         };
@@ -4302,30 +4295,20 @@ bool ScFormulaCell::InterpretFormulaGroup()
             ScMutationGuard aGuard(pDocument, ScMutationGuardFlags::CORE);
 
             // Start nThreadCount new threads
-            std::vector<int> vResult(nThreadCount);
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
             for (int i = 0; i < nThreadCount; ++i)
             {
-                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, mxGroup->mpTopCell->aPos, mxGroup->mnLength, vResult));
+                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");
             rThreadPool.waitUntilDone(aTag);
             SAL_INFO("sc.threaded", "Done");
-
-            for (int i = 0; i < nThreadCount; ++i)
-            {
-                if (!vResult[i])
-                {
-                    SAL_INFO("sc.threaded", "Thread " << i << " failed");
-                    result = false;
-                }
-            }
         }
 
         pDocument->HandleStuffAfterParallelCalculation(mxGroup->mpTopCell->aPos, mxGroup->mnLength);
 
-        return result;
+        return true;
     }
 
     switch (pCode->GetVectorState())
