@@ -20,17 +20,13 @@
 #define INCLUDED_SVX_SVXERR_HXX
 
 #include <vcl/errcode.hxx>
+#include <svtools/ehdl.hxx>
+#include <svx/svxdllapi.h>
 
-#define ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS  ErrCode( ErrCodeArea::Svx,  1UL | ERRCODE_CLASS_NOTEXISTS)
 #define ERRCODE_SVX_LINGU_LINGUNOTEXISTS      ErrCode( ErrCodeArea::Svx,  3UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_LINGU_HYPHENNOTEXISTS     ErrCode( ErrCodeArea::Svx,  4UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_LINGU_DICT_NOTREADABLE    ErrCode( ErrCodeArea::Svx,  5UL | ERRCODE_CLASS_READ )
 #define ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE   ErrCode( ErrCodeArea::Svx,  6UL | ERRCODE_CLASS_WRITE )
 #define ERRCODE_SVX_GRAPHIC_NOTREADABLE       ErrCode( ErrCodeArea::Svx,  7UL | ERRCODE_CLASS_READ )
 #define ERRCODE_SVX_LINGU_NOLANGUAGE          ErrCode( ErrCodeArea::Svx,  9UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_FORMS_NOIOSERVICES        ErrCode( ErrCodeArea::Svx, 10UL )
-#define ERRCODE_SVX_FORMS_READWRITEFAILED     ErrCode( ErrCodeArea::Svx, 11UL )
-#define ERRCODE_SVX_BULLETITEM_NOBULLET       ErrCode( ErrCodeArea::Svx, 12UL )
 #define ERRCODE_SVX_MODIFIED_VBASIC_STORAGE   ErrCode( ErrCodeArea::Svx, 13UL | ERRCODE_CLASS_WRITE | ERRCODE_WARNING_MASK )
 #define ERRCODE_SVX_VBASIC_STORAGE_EXIST      ErrCode( ErrCodeArea::Svx, 14UL | ERRCODE_CLASS_WRITE | ERRCODE_WARNING_MASK )
 /** Error message: "Wrong password." */
@@ -50,11 +46,6 @@
 #define ERRCTX_SVX_LINGU_DICTIONARY             4
 #define ERRCTX_SVX_BACKGROUND                   5
 #define ERRCTX_SVX_IMPORT_GRAPHIC               6
-
-// class SvxErrorHandler -------------------------------------------------
-
-#include <svtools/ehdl.hxx>
-#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC SvxErrorHandler : private SfxErrorHandler
 {
