@@ -38,7 +38,7 @@
 #include <tools/ref.hxx>
 #include <unotxdoc.hxx>
 #include <unotools/streamwrap.hxx>
-
+#include <unotextrange.hxx>
 #define AUTOTEXT_GALLERY "autoTxt"
 
 using namespace css;
@@ -48,9 +48,46 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOCX()
     return new SwDOCXReader;
 }
 
-ErrCode SwDOCXReader::Read( SwDoc& /* rDoc */, const OUString& /* rBaseURL */, SwPaM& /* rPaM */, const OUString& /* FileName */ )
+ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& rPam, const OUString& /* FileName */ )
 {
-    return ERR_SWG_READ_ERROR;
+    if (!pMedium->GetInStream())
+        return ERR_SWG_READ_ERROR;
+
+    // We want to work in an empty paragraph.
+    std::shared_ptr<SwNodeIndex> pSttNdIdx(new SwNodeIndex(rDoc.GetNodes()));
+    const SwPosition* pPos = rPam.GetPoint();
+    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
+    rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.WriterFilter"), uno::UNO_QUERY_THROW);
+
+    SwDocShell* pDocShell(rDoc.GetDocShell());
+    uno::Reference<lang::XComponent> xDstDoc(pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xDstDoc);
+
+    const uno::Reference<text::XTextRange> xInsertTextRange = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pMedium->GetInStream()));
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(xStream) },
+        { "InsertMode", uno::Any(true) },
+        { "TextInsertModeRange", uno::Any(xInsertTextRange) }
+    }));
+
+    ErrCode ret = ERRCODE_NONE;
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    try
+    {
+        xFilter->filter(aDescriptor);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("sw.docx", "SwDOCXReader::Read(): exception: " << e.Message);
+        ret = ERR_SWG_READ_ERROR;
+    }
+    return ret;
 }
 
 int SwDOCXReader::GetReaderType()
