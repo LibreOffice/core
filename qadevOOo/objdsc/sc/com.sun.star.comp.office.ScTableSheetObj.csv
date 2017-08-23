@@ -164,7 +164,6 @@
 "ScTableSheetObj";"com::sun::star::sheet::XScenario";"setScenarioComment()"
 "ScTableSheetObj";"com::sun::star::sheet::XScenario";"addRanges()"
 "ScTableSheetObj";"com::sun::star::sheet::XScenario";"apply()"
-"ScTableSheetObj";"com::sun::star::sheet::XUniqueCellFormatRangesSupplier";"getUniqueCellFormatRanges()"
 "ScTableSheetObj";"com::sun::star::table::XCellRange";"getCellByPosition()"
 "ScTableSheetObj";"com::sun::star::table::XCellRange";"getCellRangeByPosition()"
 "ScTableSheetObj";"com::sun::star::table::XCellRange";"getCellRangeByName()"
