@@ -235,6 +235,25 @@ DECLARE_RTFIMPORT_TEST(testFdo45187, "fdo45187.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xTextRangeCompare->compareRegionStarts(xAnchor0, xAnchor1));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf108943, "tdf108943.rtf")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    sal_Int32 nListtabStopPosition = 0;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "ListtabStopPosition")
+            nListtabStopPosition = rProp.Value.get<sal_Int32>();
+    }
+    // This was 0, \tx was handled in paragraphs only (and not in list definitions).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), nListtabStopPosition);
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo46662, "fdo46662.rtf")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum3"), uno::UNO_QUERY);
