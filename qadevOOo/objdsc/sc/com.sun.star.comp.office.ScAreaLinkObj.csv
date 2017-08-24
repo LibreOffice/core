@@ -1,8 +1,3 @@
-"ScAreaLinkObj";"com::sun::star::sheet::CellAreaLink";"Url"
-"ScAreaLinkObj";"com::sun::star::sheet::CellAreaLink";"Filter"
-"ScAreaLinkObj";"com::sun::star::sheet::CellAreaLink";"FilterOptions"
-"ScAreaLinkObj";"com::sun::star::sheet::CellAreaLink";"RefreshDelay"
-"ScAreaLinkObj";"com::sun::star::sheet::CellAreaLink";"RefreshPeriod#optional"
 "ScAreaLinkObj";"com::sun::star::util::XRefreshable";"refresh()"
 "ScAreaLinkObj";"com::sun::star::util::XRefreshable";"addRefreshListener()"
 "ScAreaLinkObj";"com::sun::star::util::XRefreshable";"removeRefreshListener()"

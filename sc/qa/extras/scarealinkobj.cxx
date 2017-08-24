@@ -8,6 +8,8 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+
+#include <test/sheet/cellarealink.hxx>
 #include <test/sheet/xarealink.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -25,9 +27,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 4
+#define NUMBER_OF_TESTS 9
 
-class ScAreaLink : public CalcUnoApiTest, public apitest::XAreaLink
+class ScAreaLink : public CalcUnoApiTest, public apitest::CellAreaLink, public apitest::XAreaLink
 {
 public:
     ScAreaLink();
@@ -37,6 +39,13 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScAreaLink);
+
+    // CellAreaLink
+    CPPUNIT_TEST(testUrl);
+    CPPUNIT_TEST(testFilter);
+    CPPUNIT_TEST(testFilterOptions);
+    CPPUNIT_TEST(testRefreshDelay);
+    CPPUNIT_TEST(testRefreshPeriod);
 
     // XAreaLink
     CPPUNIT_TEST(testGetDestArea);
