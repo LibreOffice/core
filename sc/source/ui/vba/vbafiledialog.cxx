@@ -43,7 +43,18 @@ ScVbaFileDialog::getInitialFileName() { return uno::makeAny( m_sInitialFileName 
 
 void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
 {
-    rName >>= m_sInitialFileName;
+    OUString sDefaultPath;
+    OUString sDefaultURL;
+
+    if( rName >>= sDefaultPath )
+    {
+        sal_Int32 eSuccess = osl::FileBase::getFileURLFromSystemPath(
+                sDefaultPath, sDefaultURL ) ;
+        if( eSuccess == osl::FileBase::RC::E_INVAL )
+            m_sInitialFileName = sDefaultPath; // the user may gave it in URL form
+        else
+            m_sInitialFileName = sDefaultURL;
+    }
 }
 
 css::uno::Any ScVbaFileDialog::getTitle() { return uno::makeAny( m_sTitle ); }
@@ -78,9 +89,10 @@ sal_Int32 ScVbaFileDialog::Show()
                         ui::dialogs::FilePicker::createWithMode(
                                 mxContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
-                // TODO set initial directory
+                if( !m_sInitialFileName.isEmpty() )
+                    xFilePicker->setDisplayDirectory( m_sInitialFileName );
 
-                if( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
+                if( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
                 {
                     nRet = 0; // cancel pressed
                     break;
@@ -100,9 +112,10 @@ sal_Int32 ScVbaFileDialog::Show()
                 uno::Reference< ui::dialogs::XFolderPicker2 > xFolderPicker =
                         ui::dialogs::FolderPicker::create(mxContext);
 
-                // TODO set initial directory
+                if( !m_sInitialFileName.isEmpty() )
+                    xFolderPicker->setDisplayDirectory( m_sInitialFileName );
 
-                if( xFolderPicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
+                if( xFolderPicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
                 {
                     nRet = 0; // cancel pressed
                     break;
