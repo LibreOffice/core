@@ -159,7 +159,7 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
 
 {
     ErrCode nErrCode(sal_uInt32(pErr->GetErrorCode()) & ERRCODE_ERROR_MASK);
-    if( pErr->GetErrorCode().GetArea() > lEnd || pErr->GetErrorCode().GetArea() <= lStart )
+    if (pErr->GetErrorCode().GetArea() < lStart || lEnd < pErr->GetErrorCode().GetArea())
         return false;
     if(GetErrorString(nErrCode, rStr))
     {
