@@ -374,7 +374,7 @@ handle_r1c1:
                 if (!nCount)
                 {
                     mpEditEngine->SetUpdateMode( false );
-                    pRangeFindList = new ScRangeFindList( pDocSh->GetTitle() );
+                    pRangeFindList.reset(new ScRangeFindList( pDocSh->GetTitle() ));
                 }
 
                 ColorData nColorData = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, nStart, nPos ) );
@@ -486,7 +486,7 @@ void ScInputHandler::DeleteRangeFinder()
         ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
         pRangeFindList->SetHidden(true);
         pDocSh->Broadcast( SfxHint( SfxHintId::ScShowRangeFinder ) );  // Steal
-        DELETEZ(pRangeFindList);
+        pRangeFindList.reset();
     }
 }
 
@@ -647,7 +647,7 @@ ScInputHandler::ScInputHandler()
 
     //  Bindings (only still used for Invalidate) are retrieved if needed on demand
 
-    pDelayTimer = new Timer( "ScInputHandlerDelay timer" );
+    pDelayTimer.reset( new Timer( "ScInputHandlerDelay timer" ) );
     pDelayTimer->SetTimeout( 500 ); // 500 ms delay
     pDelayTimer->SetInvokeHandler( LINK( this, ScInputHandler, DelayTimer ) );
 }
@@ -664,15 +664,6 @@ ScInputHandler::~ScInputHandler()
 
     if ( pInputWin && pInputWin->GetInputHandler() == this )
         pInputWin->SetInputHandler( nullptr );
-
-    delete pRangeFindList;     pRangeFindList = nullptr;
-    delete pEditDefaults;      pEditDefaults = nullptr;
-    mpEditEngine.reset();
-    delete pLastState;         pLastState = nullptr;
-    delete pDelayTimer;        pDelayTimer = nullptr;
-    delete pColumnData;        pColumnData = nullptr;
-    delete pFormulaData;       pFormulaData = nullptr;
-    delete pFormulaDataPara;   pFormulaDataPara = nullptr;
 }
 
 void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
@@ -733,7 +724,7 @@ void ScInputHandler::ImplCreateEditEngine()
         mpEditEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( mpEditEngine->GetWordDelimiters() ) );
         UpdateRefDevice();      // also sets MapMode
         mpEditEngine->SetPaperSize( Size( 1000000, 1000000 ) );
-        pEditDefaults = new SfxItemSet( mpEditEngine->GetEmptyItemSet() );
+        pEditDefaults.reset( new SfxItemSet( mpEditEngine->GetEmptyItemSet() ) );
 
         mpEditEngine->SetControlWord( mpEditEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
         mpEditEngine->SetReplaceLeadingSingleQuotationMark( false );
@@ -823,13 +814,13 @@ void ScInputHandler::GetFormulaData()
             pFormulaData->clear();
         else
         {
-            pFormulaData = new ScTypedCaseStrSet;
+            pFormulaData.reset( new ScTypedCaseStrSet );
         }
 
         if( pFormulaDataPara )
             pFormulaDataPara->clear();
         else
-            pFormulaDataPara = new ScTypedCaseStrSet;
+            pFormulaDataPara.reset( new ScTypedCaseStrSet );
 
         const OUString aParenthesesReplacement( cParenthesesReplacement);
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
@@ -1621,7 +1612,7 @@ void ScInputHandler::GetColData()
         if ( pColumnData )
             pColumnData->clear();
         else
-            pColumnData = new ScTypedCaseStrSet;
+            pColumnData.reset( new ScTypedCaseStrSet );
 
         std::vector<ScTypedStrData> aEntries;
         rDoc.GetDataEntries(
@@ -1831,8 +1822,7 @@ void ScInputHandler::ViewShellGone(const ScTabViewShell* pViewSh) // Executed sy
 {
     if ( pViewSh == pActiveViewSh )
     {
-        delete pLastState;
-        pLastState = nullptr;
+        pLastState.reset();
         pLastPattern = nullptr;
     }
 
@@ -1936,7 +1926,7 @@ void ScInputHandler::ForgetLastPattern()
     if ( !pLastState && pActiveViewSh )
         pActiveViewSh->UpdateInputHandler( true ); // Get status again
     else
-        NotifyChange( pLastState, true );
+        NotifyChange( pLastState.get(), true );
 }
 
 void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
@@ -2115,7 +2105,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 //! EditEngine changes) implemented as a SetParaAttribs.
                 //! Any problems?
 
-                pPattern->FillEditItemSet( pEditDefaults );
+                pPattern->FillEditItemSet( pEditDefaults.get() );
                 mpEditEngine->SetDefaults( *pEditDefaults );
                 pLastPattern = pPattern;
                 bLastIsSymbol = pPattern->IsSymbolFont();
@@ -2912,8 +2902,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             rBindings.Execute( nId, aArgs );
         }
 
-        delete pLastState; // pLastState still contains the old text
-        pLastState = nullptr;
+        pLastState.reset(); // pLastState still contains the old text
     }
     else
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
@@ -2978,7 +2967,7 @@ void ScInputHandler::CancelHandler()
     if ( !pLastState && pExecuteSh )
         pExecuteSh->UpdateInputHandler( true );  // Update status again
     else
-        NotifyChange( pLastState, true );
+        NotifyChange( pLastState.get(), true );
 
     nFormSelStart = nFormSelEnd = 0;
     aFormText.clear();
@@ -3571,7 +3560,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     if (bInEnterHandler)
         return;
 
-    bool bRepeat = (pState == pLastState);
+    bool bRepeat = (pState == pLastState.get());
     if (!bRepeat && pState && pLastState)
         bRepeat = (*pState == *pLastState);
     if (bRepeat && !bForce)
@@ -3592,10 +3581,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
     ImplCreateEditEngine();
 
-    if ( pState != pLastState )
+    if ( pState != pLastState.get() )
     {
-        delete pLastState;
-        pLastState = pState ? new ScInputHdlState( *pState ) : nullptr;
+        pLastState.reset( pState ? new ScInputHdlState( *pState ) : nullptr);
     }
 
     if ( pState && pActiveViewSh )

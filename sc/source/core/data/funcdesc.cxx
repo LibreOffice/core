@@ -1071,7 +1071,7 @@ ScFunctionMgr::ScFunctionMgr() :
     OSL_ENSURE( pFuncList, "Functionlist not found." );
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
-    aCatLists[0] = new ::std::vector<const ScFuncDesc*>;
+    aCatLists[0].reset( new ::std::vector<const ScFuncDesc*> );
     aCatLists[0]->reserve(pFuncList->GetCount());
 
     // Retrieve all functions, store in cumulative ("All") category, and count
@@ -1090,7 +1090,7 @@ ScFunctionMgr::ScFunctionMgr() :
     // Allocate correct amount of space for categories
     for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
     {
-        aCatLists[i] = new ::std::vector<const ScFuncDesc*>;
+        aCatLists[i].reset( new ::std::vector<const ScFuncDesc*> );
         aCatLists[i]->reserve(catCount[i]);
     }
 
@@ -1108,8 +1108,6 @@ ScFunctionMgr::ScFunctionMgr() :
 
 ScFunctionMgr::~ScFunctionMgr()
 {
-    for (std::vector<const ScFuncDesc*> * pCatList : aCatLists)
-        delete pCatList;
 }
 
 
@@ -1163,7 +1161,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     if ( nCategory < (MAX_FUNCCAT-1) )
     {
         if (m_aCategories.find(nCategory) == m_aCategories.end())
-            m_aCategories[nCategory].reset(new ScFunctionCategory(aCatLists[nCategory+1],nCategory)); // aCatLists[0] is "all"
+            m_aCategories[nCategory].reset(new ScFunctionCategory(aCatLists[nCategory+1].get(),nCategory)); // aCatLists[0] is "all"
         return m_aCategories[nCategory].get();
     }
     return nullptr;
