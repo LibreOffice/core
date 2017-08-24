@@ -1139,10 +1139,13 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
     rRenderContext.SetFont(maFont);
 
     Color aTextCol = rRenderContext.GetTextColor();
+    Color aFillCol = rRenderContext.GetFillColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Color aWindowTextColor(rStyleSettings.GetDialogTextColor());
+    const Color aWindowColor(rStyleSettings.GetWindowColor());
     rRenderContext.SetTextColor(aWindowTextColor);
+    rRenderContext.SetFillColor(aWindowColor);
 
     const OUString aText = GetText();
     const Size aSize(GetOutputSizePixel());
@@ -1211,8 +1214,10 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         }
     }
 
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetOutputSizePixel().Height())));
     rRenderContext.DrawText(aPoint, aText);
     rRenderContext.SetTextColor(aTextCol);
+    rRenderContext.SetFillColor(aFillCol);
     if (bShrankFont)
         rRenderContext.SetFont(aOrigFont);
 }
