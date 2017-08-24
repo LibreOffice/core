@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/container/xnamecontainer \
 	test/source/container/xnamereplace \
 	test/source/container/xnamed \
+	test/source/sheet/cellarealink \
 	test/source/sheet/cellproperties \
 	test/source/sheet/datapilotfield \
 	test/source/sheet/xarealink \
