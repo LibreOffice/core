@@ -94,6 +94,7 @@ public:
     ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );
 
     void test();
+    void testTdf111876();
     void testPasswordExportODS();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
@@ -206,6 +207,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
@@ -393,6 +395,23 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf111876()
+ {
+    // After save link's target was transformed into incorrect relative path
+
+    ScDocShellRef xShell = loadDoc("tdf111876.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "../xls/bug-fixes.xls");
+
     xDocSh->DoClose();
 }
 
