@@ -155,8 +155,6 @@ public:
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style&              MirrorSelf();
-    /** Returns this style mirrored, if it is a double frame style, otherwise a simple copy. */
-    Style               Mirror() const;
 
     /** return the Cell using this style (if set) */
     const Cell* GetUsingCell() const { return mpUsingCell; }
@@ -185,7 +183,6 @@ bool operator==( const Style& rL, const Style& rR );
 SVX_DLLPUBLIC bool operator<( const Style& rL, const Style& rR );
 
 inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
-inline bool operator<=( const Style& rL, const Style& rR ) { return !(rR < rL); }
 
 
 /** Extends the Style struct with an angle for diagonal frame borders.
@@ -198,18 +195,10 @@ class SAL_WARN_UNUSED DiagStyle : public Style
 {
 public:
     /** Constructs an invisible diagonal frame style. */
-    explicit     DiagStyle() : mfAngle( 0.0 ) {}
+    explicit     DiagStyle() {}
     /** Constructs a diagonal frame style passed style and angle. */
-    explicit     DiagStyle( const Style& rStyle, double fAngle ) :
-                            Style( rStyle ), mfAngle( fAngle ) {}
-
-    double       GetAngle() const { return mfAngle; }
-
-    /** Returns this style mirrored, if it is a double frame style, otherwise a simple copy. */
-    DiagStyle    Mirror() const { return DiagStyle( Style::Mirror(), mfAngle ); }
-
-private:
-    double              mfAngle;    /// Angle between this and hor. or vert. border.
+    explicit     DiagStyle( const Style& rStyle, double /*fAngle*/ ) :
+                            Style( rStyle ) {}
 };
 
 
@@ -223,33 +212,6 @@ private:
     passed sizes may be negative, calculation is done with absolute values.
  */
 SVX_DLLPUBLIC double GetHorDiagAngle( long nWidth, long nHeight );
-
-/** Returns the angle between horizontal border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    horizontal borders, and is therefore in the range [0,PI/2] (inclusive).
- */
-inline double GetHorDiagAngle( const tools::Rectangle& rRect )
-{ return GetHorDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
-
-
-/** Returns the angle between vertical border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    vertical borders, and is therefore in the range [0,PI/2] (inclusive). The
-    passed sizes may be negative, calculation is done with absolute values.
- */
-inline double GetVerDiagAngle( long nWidth, long nHeight )
-{ return GetHorDiagAngle( nHeight, nWidth ); }
-
-/** Returns the angle between vertical border of a rectangle and its diagonal.
-
-    The returned values represents the inner angle between the diagonals and
-    vertical borders, and is therefore in the range [0,PI/2] (inclusive).
- */
-inline double GetVerDiagAngle( const tools::Rectangle& rRect )
-{ return GetVerDiagAngle( rRect.GetWidth(), rRect.GetHeight() ); }
-
 
 /** Returns an X coordinate for a diagonal frame border in the specified height.
 

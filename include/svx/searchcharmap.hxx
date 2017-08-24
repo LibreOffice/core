@@ -72,7 +72,6 @@ public:
     virtual int                         LastInView() const override;
     virtual void                        SelectIndex( int index, bool bFocus = false ) override;
     void                                AppendCharToList(sal_UCS4 cChar);
-    void                                AppendCharList(std::vector<sal_UCS4> cCharList);
     void                                ClearPreviousData();
 
     virtual sal_Int32                   getMaxCharCount() const override;

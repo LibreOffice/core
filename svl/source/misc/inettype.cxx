@@ -45,54 +45,21 @@ struct TypeIDMapEntry
     OUString m_aPresentation;
 };
 
-struct TypeNameMapEntry
-{
-    OUString m_aExtension;
-    INetContentType m_eTypeID;
-
-    TypeNameMapEntry(INetContentType const eTypeID, OUString const*const pExtension)
-        : m_aExtension((pExtension) ? *pExtension : OUString())
-        , m_eTypeID(eTypeID)
-    {}
-};
-
-struct ExtensionMapEntry
-{
-    INetContentType m_eTypeID;
-
-    explicit ExtensionMapEntry(INetContentType const eTypeID)
-        : m_eTypeID(eTypeID) {}
-};
-
 class Registration
 {
-    typedef std::map<OUString, TypeNameMapEntry>  TypeNameMap;
-    typedef std::map<OUString, ExtensionMapEntry> ExtensionMap;
     typedef std::map<INetContentType, TypeIDMapEntry*>   TypeIDMap;
 
     TypeIDMap    m_aTypeIDMap;    // map ContentType to TypeID
-    TypeNameMap  m_aTypeNameMap;  // map TypeName to TypeID, Extension
-    ExtensionMap m_aExtensionMap; // map Extension to TypeID
-    sal_uInt32 m_nNextDynamicID;
 
 public:
-    Registration(): m_nNextDynamicID(CONTENT_TYPE_LAST + 1) {}
+    Registration() {}
 
     ~Registration();
 public:
-    static inline TypeIDMapEntry * getEntry(INetContentType eTypeID);
-
-    static TypeNameMapEntry * getExtensionEntry(OUString const & rTypeName);
-
-    static INetContentType RegisterContentType(OUString const & rTypeName,
-                                               OUString const & rPresentation,
-                                               OUString const * pExtension);
 
     static INetContentType GetContentType(OUString const & rTypeName);
 
     static OUString GetContentType(INetContentType eTypeID);
-
-    static OUString GetPresentation(INetContentType eTypeID);
 
     static INetContentType GetContentType4Extension(OUString const & rExtension);
 
@@ -102,18 +69,6 @@ namespace
 {
     struct theRegistration
         : public rtl::Static< Registration, theRegistration > {};
-}
-
-// static
-inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
-{
-    Registration &rRegistration = theRegistration::get();
-
-    TypeIDMap::const_iterator it = rRegistration.m_aTypeIDMap.find( eTypeID );
-    if( it != rRegistration.m_aTypeIDMap.end() )
-        return it->second;
-    else
-        return nullptr;
 }
 
 MediaTypeEntry const * seekEntry(OUString const & rTypeName,
@@ -210,103 +165,6 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_X_VRML, CONTENT_TYPE_X_VRML }
 };
 
-/** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
- */
-const char* aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
-    = { STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
-        STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_APP_OCTSTREAM
-        STR_SVT_MIMETYPE_APP_PDF, // CONTENT_TYPE_APP_PDF
-        STR_SVT_MIMETYPE_APP_RTF, // CONTENT_TYPE_APP_RTF
-        STR_SVT_MIMETYPE_APP_MSWORD, // CONTENT_TYPE_APP_MSWORD
-        STR_SVT_MIMETYPE_APP_MSWORD, // CONTENT_TYPE_APP_MSWORD_TEMPL //TODO: new presentation string?
-        STR_SVT_MIMETYPE_APP_STARCALC, // CONTENT_TYPE_APP_STARCALC
-        STR_SVT_MIMETYPE_APP_STARCHART, // CONTENT_TYPE_APP_STARCHART
-        STR_SVT_MIMETYPE_APP_STARDRAW, // CONTENT_TYPE_APP_STARDRAW
-        STR_SVT_MIMETYPE_APP_STARHELP, // CONTENT_TYPE_APP_STARHELP
-        STR_SVT_MIMETYPE_APP_STARIMAGE, // CONTENT_TYPE_APP_STARIMAGE
-        STR_SVT_MIMETYPE_APP_STARIMPRESS, // CONTENT_TYPE_APP_STARIMPRESS
-        STR_SVT_MIMETYPE_APP_STARMATH, // CONTENT_TYPE_APP_STARMATH
-        STR_SVT_MIMETYPE_APP_STARWRITER, // CONTENT_TYPE_APP_STARWRITER
-        STR_SVT_MIMETYPE_APP_ZIP, // CONTENT_TYPE_APP_ZIP
-        STR_SVT_MIMETYPE_AUDIO_AIFF, // CONTENT_TYPE_AUDIO_AIFF
-        STR_SVT_MIMETYPE_AUDIO_BASIC, // CONTENT_TYPE_AUDIO_BASIC
-        STR_SVT_MIMETYPE_AUDIO_MIDI, // CONTENT_TYPE_AUDIO_MIDI
-        STR_SVT_MIMETYPE_AUDIO_VORBIS, // CONTENT_TYPE_AUDIO_VORBIS
-        STR_SVT_MIMETYPE_AUDIO_WAV, // CONTENT_TYPE_AUDIO_WAV
-        STR_SVT_MIMETYPE_AUDIO_WEBM, // CONTENT_TYPE_AUDIO_WEBM
-        STR_SVT_MIMETYPE_IMAGE_GIF, // CONTENT_TYPE_IMAGE_GIF
-        STR_SVT_MIMETYPE_IMAGE_JPEG, // CONTENT_TYPE_IMAGE_JPEG
-        STR_SVT_MIMETYPE_IMAGE_PCX, // CONTENT_TYPE_IMAGE_PCX
-        STR_SVT_MIMETYPE_IMAGE_PNG, // CONTENT_TYPE_IMAGE_PNG
-        STR_SVT_MIMETYPE_IMAGE_TIFF, // CONTENT_TYPE_IMAGE_TIFF
-        STR_SVT_MIMETYPE_IMAGE_BMP, // CONTENT_TYPE_IMAGE_BMP
-        STR_SVT_MIMETYPE_TEXT_HTML, // CONTENT_TYPE_TEXT_HTML
-        STR_SVT_MIMETYPE_TEXT_PLAIN, // CONTENT_TYPE_TEXT_PLAIN
-        STR_SVT_MIMETYPE_TEXT_URL, // CONTENT_TYPE_TEXT_URL
-        STR_SVT_MIMETYPE_TEXT_VCARD, // CONTENT_TYPE_TEXT_VCARD
-        STR_SVT_MIMETYPE_VIDEO_MSVIDEO, // CONTENT_TYPE_VIDEO_MSVIDEO
-        STR_SVT_MIMETYPE_VIDEO_THEORA, // CONTENT_TYPE_VIDEO_THEORA
-        STR_SVT_MIMETYPE_VIDEO_VDO, // CONTENT_TYPE_VIDEO_VDO
-        STR_SVT_MIMETYPE_VIDEO_WEBM, // CONTENT_TYPE_VIDEO_WEBM
-        STR_SVT_MIMETYPE_CNT_FSYSBOX, // CONTENT_TYPE_X_CNT_FSYSBOX
-        STR_SVT_MIMETYPE_CNT_FSYSFLD, // CONTENT_TYPE_X_CNT_FSYSFOLDER
-        STR_SVT_MIMETYPE_X_STARMAIL, // CONTENT_TYPE_X_STARMAIL
-        STR_SVT_MIMETYPE_X_VRML, // CONTENT_TYPE_X_VRML
-        STR_SVT_MIMETYPE_APP_GAL, // CONTENT_TYPE_APP_GALLERY
-        STR_SVT_MIMETYPE_APP_GAL_THEME, // CONTENT_TYPE_APP_GALLERY_THEME
-        STR_SVT_MIMETYPE_APP_STARW_GLOB, // CONTENT_TYPE_APP_STARWRITER_GLOB
-        STR_SVT_MIMETYPE_APP_SDM, // CONTENT_TYPE_APP_STARMAIL_SDM
-        STR_SVT_MIMETYPE_APP_SMD, // CONTENT_TYPE_APP_STARMAIL_SMD
-        STR_SVT_MIMETYPE_APP_STARCALC, // CONTENT_TYPE_APP_VND_CALC
-        STR_SVT_MIMETYPE_APP_STARCHART, // CONTENT_TYPE_APP_VND_CHART
-        STR_SVT_MIMETYPE_APP_STARDRAW, // CONTENT_TYPE_APP_VND_DRAW
-        STR_SVT_MIMETYPE_APP_STARIMAGE, // CONTENT_TYPE_APP_VND_IMAGE
-        STR_SVT_MIMETYPE_APP_STARIMPRESS, // CONTENT_TYPE_APP_VND_IMPRESS
-        STR_SVT_MIMETYPE_X_STARMAIL, // CONTENT_TYPE_APP_VND_MAIL
-        STR_SVT_MIMETYPE_APP_STARMATH, // CONTENT_TYPE_APP_VND_MATH
-        STR_SVT_MIMETYPE_APP_STARWRITER, // CONTENT_TYPE_APP_VND_WRITER
-        STR_SVT_MIMETYPE_APP_STARW_GLOB, // CONTENT_TYPE_APP_VND_WRITER_GLOBAL
-        STR_SVT_MIMETYPE_APP_STARW_WEB, // CONTENT_TYPE_APP_VND_WRITER_WEB
-        STR_SVT_MIMETYPE_FRAMESET, // CONTENT_TYPE_APP_FRAMESET
-        STR_SVT_MIMETYPE_MACRO, // CONTENT_TYPE_APP_MACRO
-        STR_SVT_MIMETYPE_CNT_SFSYSFOLDER,
-            // CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER
-        STR_SVT_MIMETYPE_APP_TEMPLATE, // CONTENT_TYPE_APP_VND_TEMPLATE
-        STR_SVT_MIMETYPE_IMAGE_GENERIC, // CONTENT_TYPE_IMAGE_GENERIC
-        STR_SVT_MIMETYPE_X_STARMAIL, // CONTENT_TYPE_APP_VND_NEWS
-        STR_SVT_MIMETYPE_X_STARMAIL, // CONTENT_TYPE_APP_VND_OUTTRAY
-        STR_SVT_MIMETYPE_APP_MSEXCEL, // CONTENT_TYPE_APP_MSEXCEL
-        STR_SVT_MIMETYPE_APP_MSEXCEL_TEMPL, // CONTENT_TYPE_APP_MSEXCEL_TEMPL
-        STR_SVT_MIMETYPE_APP_MSPPOINT, // CONTENT_TYPE_APP_MSPPOINT
-        STR_SVT_MIMETYPE_APP_MSPPOINT, // CONTENT_TYPE_APP_MSPPOINT_TEMPL //@todo new presentation string?
-        STR_SVT_MIMETYPE_TEXT_VCALENDAR, // CONTENT_TYPE_TEXT_VCALENDAR
-        STR_SVT_MIMETYPE_TEXT_ICALENDAR, // CONTENT_TYPE_TEXT_ICALENDAR
-        STR_SVT_MIMETYPE_TEXT_XMLICALENDAR, // CONTENT_TYPE_TEXT_XMLICALENDAR
-        STR_SVT_MIMETYPE_TEXT_CDE_CALENDAR_APP,
-            // CONTENT_TYPE_APP_CDE_CALENDAR_APP
-        STR_SVT_MIMETYPE_INET_MSG_RFC822, // CONTENT_TYPE_INET_MESSAGE_RFC822
-        STR_SVT_MIMETYPE_INET_MULTI_ALTERNATIVE,
-            // CONTENT_TYPE_INET_MULTIPART_ALTERNATIVE
-        STR_SVT_MIMETYPE_INET_MULTI_DIGEST,
-            // CONTENT_TYPE_INET_MULTIPART_DIGEST
-        STR_SVT_MIMETYPE_INET_MULTI_PARALLEL,
-            // CONTENT_TYPE_INET_MULTIPART_PARALLEL
-        STR_SVT_MIMETYPE_INET_MULTI_RELATED,
-            // CONTENT_TYPE_INET_MULTIPART_RELATED
-        STR_SVT_MIMETYPE_INET_MULTI_MIXED,
-            // CONTENT_TYPE_INET_MULTIPART_MIXED
-        STR_SVT_MIMETYPE_APP_IMPRESSPACKED,
-            // CONTENT_TYPE_APP_VND_IMPRESSPACKED
-        STR_SVT_MIMETYPE_APP_JAR, // CONTENT_TYPE_APP_JAR
-        STR_SVT_MIMETYPE_APP_SXWRITER, // CONTENT_TYPE_APP_VND_SUN_XML_WRITER
-        STR_SVT_MIMETYPE_APP_SXCALC, // CONTENT_TYPE_APP_VND_SUN_XML_CALC
-        STR_SVT_MIMETYPE_APP_SXIMPRESS, // CONTENT_TYPE_APP_VND_SUN_XML_IMPRESS
-        STR_SVT_MIMETYPE_APP_SXDRAW, // CONTENT_TYPE_APP_VND_SUN_XML_DRAW
-        STR_SVT_MIMETYPE_APP_SXCHART, // CONTENT_TYPE_APP_VND_SUN_XML_CHART
-        STR_SVT_MIMETYPE_APP_SXMATH, // CONTENT_TYPE_APP_VND_SUN_XML_MATH
-        STR_SVT_MIMETYPE_APP_SXGLOBAL, // CONTENT_TYPE_APP_VND_SUN_XML_WRITER_GLOBAL
-        STR_SVT_MIMETYPE_APP_SXIPACKED, // CONTENT_TYPE_APP_VND_SUN_XML_IMPRESSPACKED
- };
 
 /** A mapping from extensions to type IDs.  Sorted by extension.
  */
@@ -405,55 +263,9 @@ Registration::~Registration()
 }
 
 // static
-TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
+INetContentType Registration::GetContentType(OUString const &)
 {
-    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
-    Registration &rRegistration = theRegistration::get();
-    TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
-    if (it != rRegistration.m_aTypeNameMap.end())
-        return & it->second;
-    return nullptr;
-}
-
-// static
-INetContentType Registration::RegisterContentType(OUString const & rTypeName,
-                                                  OUString const & rPresentation,
-                                                  OUString const * pExtension)
-{
-    Registration &rRegistration = theRegistration::get();
-
-    DBG_ASSERT(GetContentType(rTypeName) == CONTENT_TYPE_UNKNOWN,
-               "Registration::RegisterContentType(): Already registered");
-
-    INetContentType eTypeID = INetContentType(rRegistration.m_nNextDynamicID++);
-    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
-
-    TypeIDMapEntry * pTypeIDMapEntry = new TypeIDMapEntry;
-    pTypeIDMapEntry->m_aTypeName = aTheTypeName;
-    pTypeIDMapEntry->m_aPresentation = rPresentation;
-    rRegistration.m_aTypeIDMap.insert( ::std::make_pair( eTypeID, pTypeIDMapEntry ) );
-
-    rRegistration.m_aTypeNameMap.insert(std::make_pair(aTheTypeName,
-                TypeNameMapEntry(eTypeID, pExtension)));
-
-    if (pExtension)
-    {
-        rRegistration.m_aExtensionMap.insert(std::make_pair(*pExtension, ExtensionMapEntry(eTypeID)));
-    }
-
-    return eTypeID;
-}
-
-// static
-INetContentType Registration::GetContentType(OUString const & rTypeName)
-{
-    Registration &rRegistration = theRegistration::get();
-
-    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
-    TypeNameMap::const_iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
-    return it != rRegistration.m_aTypeNameMap.end()
-        ? it->second.m_eTypeID
-        : CONTENT_TYPE_UNKNOWN;
+    return CONTENT_TYPE_UNKNOWN;
 }
 
 // static
@@ -468,26 +280,9 @@ OUString Registration::GetContentType(INetContentType eTypeID)
 }
 
 // static
-OUString Registration::GetPresentation(INetContentType eTypeID)
+INetContentType Registration::GetContentType4Extension(OUString const & )
 {
-    Registration &rRegistration = theRegistration::get();
-
-    TypeIDMap::const_iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
-    if( pEntry != rRegistration.m_aTypeIDMap.end() )
-        return pEntry->second->m_aPresentation;
-    else
-        return  OUString();
-}
-
-// static
-INetContentType Registration::GetContentType4Extension(OUString const & rExtension)
-{
-    Registration &rRegistration = theRegistration::get();
-
-    ExtensionMap::const_iterator it = rRegistration.m_aExtensionMap.find(rExtension);
-    return it != rRegistration.m_aExtensionMap.end()
-        ? it->second.m_eTypeID
-        : CONTENT_TYPE_UNKNOWN;
+    return CONTENT_TYPE_UNKNOWN;
 }
 
 
@@ -526,33 +321,6 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
     return nullptr;
 }
 
-}
-
-//static
-INetContentType INetContentTypes::RegisterContentType(OUString const & rTypeName,
-                                                      OUString const & rPresentation,
-                                                      OUString const * pExtension)
-{
-    INetContentType eTypeID = GetContentType(rTypeName);
-    if (eTypeID == CONTENT_TYPE_UNKNOWN)
-        eTypeID = Registration::RegisterContentType(rTypeName, rPresentation,
-                                                    pExtension);
-    else if (eTypeID > CONTENT_TYPE_LAST)
-    {
-        TypeIDMapEntry * pTypeEntry = Registration::getEntry(eTypeID);
-        if (pTypeEntry)
-        {
-            if (!rPresentation.isEmpty())
-                pTypeEntry->m_aPresentation = rPresentation;
-        }
-        if (pExtension)
-        {
-            TypeNameMapEntry * pEntry = Registration::getExtensionEntry(rTypeName);
-            if (pEntry)
-                pEntry->m_aExtension = *pExtension;
-        }
-    }
-    return eTypeID;
 }
 
 // static
@@ -597,23 +365,6 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
         return OUString(CONTENT_TYPE_STR_APP_OCTSTREAM);
     }
     return aTypeName;
-}
-
-//static
-OUString INetContentTypes::GetPresentation(INetContentType eTypeID)
-{
-    const char* pResID = nullptr;
-    if (eTypeID <= CONTENT_TYPE_LAST)
-        pResID = aStaticResourceIDMap[eTypeID];
-    else
-    {
-        OUString aPresentation = Registration::GetPresentation(eTypeID);
-        if (aPresentation.isEmpty())
-            pResID = STR_SVT_MIMETYPE_APP_OCTSTREAM;
-        else
-            return aPresentation;
-    }
-    return SvlResId(pResID);
 }
 
 //static

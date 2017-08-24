@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_PSTM_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/unqidx.hxx>
 #include <tools/ref.hxx>
 #include <tools/stream.hxx>
 #include <map>

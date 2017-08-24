@@ -48,8 +48,6 @@
 #define SPIN_OFFX                       4
 #define SPIN_OFFY                       TITLE_BORDERY
 
-#define WEEKNUMBER_HEIGHT               85
-
 #define CALENDAR_HITTEST_DAY            ((sal_uInt16)0x0001)
 #define CALENDAR_HITTEST_MONTHTITLE     ((sal_uInt16)0x0004)
 #define CALENDAR_HITTEST_PREV           ((sal_uInt16)0x0008)
@@ -68,11 +66,6 @@ static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, bool 
 }
 
 
-
-inline void ImplCalendarClearSelectDate( IntDateSet* pTable )
-{
-    pTable->clear();
-}
 
 void Calendar::ImplInit( WinBits nWinStyle )
 {
@@ -217,16 +210,6 @@ DayOfWeek Calendar::ImplGetWeekStart() const
             eDay = SUNDAY;
     }
     return eDay;
-}
-
-void Calendar::ImplGetWeekFont( vcl::Font& rFont )
-{
-    // weeknumber is displayed in WEEKNUMBER_HEIGHT%-Fontheight
-    Size aFontSize = rFont.GetFontSize();
-    aFontSize.Height() *= WEEKNUMBER_HEIGHT;
-    aFontSize.Height() /= 100;
-    rFont.SetFontSize( aFontSize );
-    rFont.SetWeight( WEIGHT_NORMAL );
 }
 
 void Calendar::ImplFormat()
@@ -1363,38 +1346,6 @@ void Calendar::DataChanged( const DataChangedEvent& rDCEvt )
 void Calendar::Select()
 {
     maSelectHdl.Call( this );
-}
-
-void Calendar::SelectDate( const Date& rDate, bool bSelect )
-{
-    if ( !rDate.IsValidAndGregorian() )
-        return;
-
-    std::unique_ptr<IntDateSet> pOldSel;
-
-    pOldSel.reset(new IntDateSet( *mpSelectTable ));
-
-    ImplCalendarSelectDate( mpSelectTable, rDate, bSelect );
-
-    if ( pOldSel )
-        ImplUpdateSelection( pOldSel.get() );
-}
-
-void Calendar::SetNoSelection()
-{
-    std::unique_ptr<IntDateSet> pOldSel;
-
-    pOldSel.reset(new IntDateSet( *mpSelectTable ));
-
-    ImplCalendarClearSelectDate( mpSelectTable );
-
-    if ( pOldSel )
-        ImplUpdateSelection( pOldSel.get() );
-}
-
-bool Calendar::IsDateSelected( const Date& rDate ) const
-{
-    return mpSelectTable->find( rDate.GetDate() ) != mpSelectTable->end();
 }
 
 Date Calendar::GetFirstSelectedDate() const

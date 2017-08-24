@@ -95,29 +95,6 @@ TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPo
     return nullptr;
 }
 
-const TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos, sal_Int32 nMaxPos ) const
-{
-    SAL_WARN_IF( !nWhich, "vcl", "FindNextAttrib: Which?" );
-    for (std::vector<std::unique_ptr<TextCharAttrib> >::const_iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
-    {
-        if ( ( (*it)->GetStart() >= nFromPos ) &&
-             ( (*it)->GetEnd() <= nMaxPos ) &&
-             ( (*it)->Which() == nWhich ) )
-            return it->get();
-    }
-    return nullptr;
-}
-
-bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
-{
-    for (std::vector<std::unique_ptr<TextCharAttrib> >::const_reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
-    {
-        if ( (*it)->Which() == nWhich )
-            return true;
-    }
-    return false;
-}
-
 bool TextCharAttribList::HasBoundingAttrib( sal_Int32 nBound )
 {
     for (std::vector<std::unique_ptr<TextCharAttrib> >::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)

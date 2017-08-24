@@ -153,11 +153,6 @@ SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
 {
 }
 
-SfxMetricItem::SfxMetricItem(sal_uInt16 which, SvStream & rStream):
-    SfxInt32Item(which, rStream)
-{
-}
-
 SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
     SfxInt32Item(rItem)
 {

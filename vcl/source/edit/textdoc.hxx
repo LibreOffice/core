@@ -54,9 +54,7 @@ public:
     bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
 
     TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
-    const TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos, sal_Int32 nMaxPos ) const;
     TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
-    bool            HasAttrib( sal_uInt16 nWhich ) const;
     bool            HasBoundingAttrib( sal_Int32 nBound );
 };
 

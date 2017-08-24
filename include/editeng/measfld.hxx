@@ -41,7 +41,6 @@ class EDITENG_DLLPUBLIC SdrMeasureField: public SvxFieldData {
     SdrMeasureFieldKind eMeasureFieldKind;
 public:
     SV_DECL_PERSIST1(SdrMeasureField, css::text::textfield::Type::MEASURE)
-    SdrMeasureField(): eMeasureFieldKind(SDRMEASUREFIELD_VALUE) {}
     SdrMeasureField(SdrMeasureFieldKind eNewKind): eMeasureFieldKind(eNewKind) {}
     virtual ~SdrMeasureField() override;
     virtual SvxFieldData* Clone() const override;

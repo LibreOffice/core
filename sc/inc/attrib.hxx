@@ -245,9 +245,6 @@ public:
     void SetLeftArea( const EditTextObject& rNew );
     void SetCenterArea( const EditTextObject& rNew );
     void SetRightArea( const EditTextObject& rNew );
-
-    // Set method with pointer assignment, nArea see defines above
-    void SetArea( EditTextObject *pNew, int nArea );
 };
 
 // page format item: contents of header and footer

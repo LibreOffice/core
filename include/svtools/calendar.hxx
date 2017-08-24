@@ -186,7 +186,6 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    SVT_DLLPRIVATE static void  ImplGetWeekFont( vcl::Font& rFont );
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
@@ -234,9 +233,6 @@ public:
 
     void            Select();
 
-    void            SelectDate( const Date& rDate, bool bSelect = true );
-    void            SetNoSelection();
-    bool            IsDateSelected( const Date& rDate ) const;
     Date            GetFirstSelectedDate() const;
     void            EnableCallEverySelect() { mbAllSel = true; }
 

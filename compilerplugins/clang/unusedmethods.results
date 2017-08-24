@@ -22,14 +22,32 @@ desktop/inc/lib/init.hxx:45
     _Bool desktop::CallbackFlushHandler::isEventLatchOn() const
 desktop/inc/lib/init.hxx:47
     _Bool desktop::CallbackFlushHandler::isPartTilePainting() const
-drawinglayer/source/tools/emfpbrush.hxx:123
-    unsigned int emfplushelper::EMFPBrush::GetType() const
 drawinglayer/source/tools/emfpcustomlinecap.hxx:37
     void emfplushelper::EMFPCustomLineCap::SetAttributes(struct com::sun::star::rendering::StrokeAttributes &)
-drawinglayer/source/tools/emfppen.hxx:62
-    void emfplushelper::EMFPPen::SetStrokeWidth(struct com::sun::star::rendering::StrokeAttributes &,struct emfplushelper::EmfPlusHelperData &,const class basegfx::B2DHomMatrix &)
+drawinglayer/source/tools/emfpfont.hxx:38
+    _Bool emfplushelper::EMFPFont::Underline()
+drawinglayer/source/tools/emfpfont.hxx:39
+    _Bool emfplushelper::EMFPFont::Strikeout()
 drawinglayer/source/tools/emfppen.hxx:64
+    void emfplushelper::EMFPPen::SetStrokeWidth(struct com::sun::star::rendering::StrokeAttributes &,struct emfplushelper::EmfPlusHelperData &,const class basegfx::B2DHomMatrix &)
+drawinglayer/source/tools/emfppen.hxx:66
     void emfplushelper::EMFPPen::SetStrokeAttributes(struct com::sun::star::rendering::StrokeAttributes &)
+drawinglayer/source/tools/emfpstringformat.hxx:51
+    _Bool emfplushelper::EMFPStringFormat::NoFitBlackBox()
+drawinglayer/source/tools/emfpstringformat.hxx:52
+    _Bool emfplushelper::EMFPStringFormat::DisplayFormatControl()
+drawinglayer/source/tools/emfpstringformat.hxx:53
+    _Bool emfplushelper::EMFPStringFormat::NoFontFallback()
+drawinglayer/source/tools/emfpstringformat.hxx:54
+    _Bool emfplushelper::EMFPStringFormat::MeasureTrailingSpaces()
+drawinglayer/source/tools/emfpstringformat.hxx:55
+    _Bool emfplushelper::EMFPStringFormat::NoWrap()
+drawinglayer/source/tools/emfpstringformat.hxx:56
+    _Bool emfplushelper::EMFPStringFormat::LineLimit()
+drawinglayer/source/tools/emfpstringformat.hxx:57
+    _Bool emfplushelper::EMFPStringFormat::NoClip()
+drawinglayer/source/tools/emfpstringformat.hxx:58
+    _Bool emfplushelper::EMFPStringFormat::BypassGDI()
 include/basegfx/pixel/bpixel.hxx:57
      basegfx::BPixel::BPixel(unsigned char,unsigned char,unsigned char,unsigned char)
 include/basegfx/polygon/b3dpolypolygon.hxx:109
@@ -128,10 +146,6 @@ include/desktop/crashreport.hxx:50
     void CrashReporter::storeExceptionHandler(class google_breakpad::ExceptionHandler *)
 include/desktop/crashreport.hxx:54
     void CrashReporter::updateMinidumpLocation()
-include/editeng/svxrtf.hxx:255
-    struct com::sun::star::util::DateTime SvxRTFParser::GetDateTimeStamp()
-include/editeng/svxrtf.hxx:256
-    class rtl::OUString & SvxRTFParser::GetTextToEndGroup(class rtl::OUString &)
 include/filter/msfilter/mstoolbar.hxx:98
      Indent::Indent(_Bool)
 include/i18nlangtag/languagetag.hxx:257
@@ -192,10 +206,6 @@ include/o3tl/typed_flags_set.hxx:348
     typename typed_flags<type-parameter-?-?>::Self operator^=(type-parameter-?-? &,typename typed_flags<type-parameter-?-?>::Wrap)
 include/o3tl/vector_pool.hxx:83
      o3tl::detail::struct_from_value::type::type()
-include/oox/core/binarycodec.hxx:119
-    _Bool oox::core::BinaryCodec_XOR::skip(int)
-include/oox/core/binarycodec.hxx:230
-    _Bool oox::core::BinaryCodec_RCF::decode(unsigned char *,const unsigned char *,int)
 include/oox/helper/containerhelper.hxx:99
      oox::Matrix::Matrix<Type>(typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type,typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type,typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::const_reference)
 include/oox/helper/containerhelper.hxx:117
@@ -214,14 +224,12 @@ include/oox/helper/propertymap.hxx:114
     void oox::PropertyMap::dumpData(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &)
 include/opencl/OpenCLZone.hxx:42
     _Bool OpenCLZone::isInInitialTest()
+include/sfx2/lokcharthelper.hxx:41
+    void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
-include/svl/itempool.hxx:210
+include/svl/itempool.hxx:181
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
-include/svl/macitem.hxx:97
-    class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const enum SvMacroItemId, class SvxMacro> >, class std::__debug::map<enum SvMacroItemId, class SvxMacro, struct std::less<enum SvMacroItemId>, class std::allocator<struct std::pair<const enum SvMacroItemId, class SvxMacro> > > > SvxMacroTableDtor::begin() const
-include/svl/macitem.hxx:99
-    class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const enum SvMacroItemId, class SvxMacro> >, class std::__debug::map<enum SvMacroItemId, class SvxMacro, struct std::less<enum SvMacroItemId>, class std::allocator<struct std::pair<const enum SvMacroItemId, class SvxMacro> > > > SvxMacroTableDtor::end() const
 include/tools/bigint.hxx:94
      BigInt::BigInt(unsigned short)
 include/tools/bigint.hxx:103
@@ -250,10 +258,6 @@ include/tools/datetime.hxx:93
     class DateTime operator-(const class DateTime &,const class tools::Time &)
 include/tools/fract.hxx:74
     _Bool operator>=(const class Fraction &,const class Fraction &)
-include/tools/unqidx.hxx:44
-    void * UniqueIndexImpl::Remove(struct o3tl::strong_int<unsigned int, struct UniqueIndexImpl::IndexTagType>)
-include/tools/unqidx.hxx:47
-    struct o3tl::strong_int<unsigned int, struct UniqueIndexImpl::IndexTagType> UniqueIndexImpl::GetIndexOf(const void *) const
 include/unotest/assertion_traits.hxx:25
     _Bool CppUnit::assertion_traits::equal(signed char,signed char)
 include/unotest/assertion_traits.hxx:27
@@ -266,10 +270,8 @@ include/vcl/opengl/OpenGLContext.hxx:99
     void OpenGLContext::UseNoProgram()
 include/vcl/opengl/OpenGLHelper.hxx:93
     void OpenGLHelper::debugMsgStreamWarn(const class std::basic_ostringstream<char> &)
-include/vcl/pdfwriter.hxx:566
+include/vcl/pdfwriter.hxx:565
      vcl::PDFWriter::PDFSignContext::PDFSignContext(class rtl::OStringBuffer &)
-include/vcl/pdfwriter.hxx:1235
-    _Bool vcl::PDFWriter::Sign(struct vcl::PDFWriter::PDFSignContext &)
 include/vcl/svapp.hxx:168
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
 include/vcl/syswin.hxx:193
@@ -292,20 +294,22 @@ sc/inc/columniterator.hxx:74
     int sc::ColumnIterator::getType() const
 sc/inc/compressedarray.hxx:158
      ScBitMaskCompressedArray::ScBitMaskCompressedArray<A, D>(type-parameter-?-?,const type-parameter-?-? *,unsigned long)
+sc/inc/datamapper.hxx:79
+    void sc::ExternalDataSource::setUpdateFrequency(double)
 sc/inc/dpfilteredcache.hxx:144
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:443
     void ScFormulaCell::Dump() const
 sc/inc/formulagroup.hxx:140
     void sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
+sc/inc/formulagroup.hxx:141
+    void sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly()
 sc/inc/postit.hxx:47
      ScCaptionPtr::ScCaptionPtr(class SdrCaptionObj *)
 sc/inc/scdll.hxx:42
      ScDLL::ScDLL()
 sc/inc/table.hxx:293
     _Bool ScTable::IsColRowTabValid(short,int,short) const
-sc/inc/userdat.hxx:57
-     ScIMapInfo::ScIMapInfo()
 sc/inc/userlist.hxx:86
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > *, class std::__cxx1998::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > >, class std::__debug::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > > ScUserList::begin() const
 sc/qa/unit/helper/qahelper.hxx:201
@@ -356,28 +360,24 @@ sc/source/core/opencl/opbase.hxx:121
     void sc::opencl::DynamicKernelArgument::GenStringDeclRef(class std::basic_stringstream<char> &) const
 sc/source/filter/inc/tokstack.hxx:216
     _Bool TokenPool::GrowTripel(unsigned short)
-sc/source/ui/inc/dataprovider.hxx:115
+sc/source/ui/inc/dataprovider.hxx:72
+    _Bool sc::CSVFetchThread::IsRequestedTerminate()
+sc/source/ui/inc/dataprovider.hxx:73
     void sc::CSVFetchThread::Terminate()
-sc/source/ui/inc/dataprovider.hxx:117
-    void sc::CSVFetchThread::EmptyLineQueue(class std::queue<class std::__debug::vector<struct sc::Line, class std::allocator<struct sc::Line> > *, class std::__debug::deque<class std::__debug::vector<struct sc::Line, class std::allocator<struct sc::Line> > *, class std::allocator<class std::__debug::vector<struct sc::Line, class std::allocator<struct sc::Line> > *> > > &)
-sc/source/ui/inc/dataprovider.hxx:134
-    class ScRange sc::DataProvider::GetRange() const
-sc/source/ui/inc/dataprovider.hxx:135
+sc/source/ui/inc/dataprovider.hxx:74
+    void sc::CSVFetchThread::EndThread()
+sc/source/ui/inc/dataprovider.hxx:98
     const class rtl::OUString & sc::DataProvider::GetURL() const
-sc/source/ui/inc/dataprovider.hxx:159
-    struct sc::Line sc::CSVDataProvider::GetLine()
-sc/source/ui/inc/dataprovider.hxx:183
-    void sc::ScDBDataManager::SetDatabase(class ScDBData *)
-sc/source/ui/inc/dataprovider.hxx:188
-    class ScRange & sc::ScDBDataManager::GetSourceRange()
+sc/source/ui/inc/dataprovider.hxx:100
+    class std::__debug::map<class rtl::OUString, class rtl::OUString, struct std::less<class rtl::OUString>, class std::allocator<struct std::pair<const class rtl::OUString, class rtl::OUString> > > sc::DataProvider::getDataSourcesForURL(const class rtl::OUString &)
+sc/source/ui/inc/dataprovider.hxx:151
+    void sc::ScDBDataManager::AddDataTransformation(class std::shared_ptr<class sc::DataTransformation>)
+sc/source/ui/inc/datatransformation.hxx:75
+     sc::SortTransformation::SortTransformation(const struct ScSortParam &)
 sc/source/ui/inc/impex.hxx:92
      ScImportExport::ScImportExport(class ScDocument *,const class rtl::OUString &)
 sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:69
     void ScRandomNumberGeneratorDialog::GenerateNumbers(type-parameter-?-? &,const char *,const class boost::optional<signed char>)
-sc/source/ui/inc/undobase.hxx:118
-    void ScMultiBlockUndo::AdjustHeight()
-sd/inc/imapinfo.hxx:34
-     SdIMapInfo::SdIMapInfo()
 sd/inc/sddll.hxx:50
      SdDLL::SdDLL()
 sd/source/filter/ppt/pptinanimations.hxx:109
@@ -422,8 +422,6 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double)
 slideshow/source/inc/shapeattributelayer.hxx:391
     void slideshow::internal::ShapeAttributeLayer::setCharRotationAngle(const double &)
-starmath/inc/smmod.hxx:56
-     SmLocalizedSymbolData::SmLocalizedSymbolData()
 sw/inc/dbgoutsw.hxx:53
     const char * dbg_out(const void *)
 sw/inc/dbgoutsw.hxx:55
@@ -455,7 +453,7 @@ sw/inc/dbgoutsw.hxx:69
 sw/inc/dbgoutsw.hxx:70
     const char * dbg_out(const class SwUndo &)
 sw/inc/dbgoutsw.hxx:71
-    const char * dbg_out(class SwOutlineNodes &)
+    const char * dbg_out(const class SwOutlineNodes &)
 sw/inc/dbgoutsw.hxx:72
     const char * dbg_out(const class SwNumRule &)
 sw/inc/dbgoutsw.hxx:73
@@ -496,13 +494,13 @@ sw/inc/pagedesc.hxx:427
     class SwPageDesc *const & SwPageDescs::back() const
 sw/inc/ring.hxx:204
      sw::RingIterator::RingIterator<value_type>()
-sw/inc/swatrset.hxx:236
+sw/inc/swatrset.hxx:227
     const class SvxNoHyphenItem & SwAttrSet::GetNoHyphenHere(_Bool) const
 sw/inc/swrect.hxx:105
     class SvStream & WriteSwRect(class SvStream &,const class SwRect &)
 sw/qa/extras/inc/swmodeltestbase.hxx:523
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:5067
+sw/qa/extras/uiwriter/uiwriter.cxx:5181
     int main()
 sw/source/core/inc/frame.hxx:1184
     class Size SwRectFnSet::GetSize(const class SwRect &) const
@@ -552,7 +550,7 @@ vcl/inc/salmenu.hxx:46
      SalMenuButtonItem::SalMenuButtonItem()
 vcl/inc/salwtype.hxx:114
      SalMenuEvent::SalMenuEvent()
-vcl/inc/schedulerimpl.hxx:35
+vcl/inc/schedulerimpl.hxx:37
     const char * ImplSchedulerData::GetDebugName() const
 vcl/inc/unx/glyphcache.hxx:71
     void GlyphCache::ClearFontOptions()
@@ -586,9 +584,9 @@ workdir/LexTarget/l10ntools/source/cfglex.cxx:3736
     void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:730
     void YYWarning()
-writerfilter/source/ooxml/OOXMLPropertySet.hxx:160
-    class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:161
+    class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
+writerfilter/source/ooxml/OOXMLPropertySet.hxx:162
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::end() const
 xmlsecurity/source/gpg/XMLEncryption.hxx:27
      XMLEncryptionGpg::XMLEncryptionGpg()

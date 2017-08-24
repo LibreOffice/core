@@ -1017,17 +1017,6 @@ const TextCharAttrib* TextEngine::FindCharAttrib( const TextPaM& rPaM, sal_uInt1
     return pAttr;
 }
 
-bool TextEngine::HasAttrib( sal_uInt16 nWhich ) const
-{
-    bool bAttr = false;
-    for ( auto n = mpDoc->GetNodes().size(); --n && !bAttr; )
-    {
-        TextNode* pNode = mpDoc->GetNodes()[ n ];
-        bAttr = pNode->GetCharAttribs().HasAttrib( nWhich );
-    }
-    return bAttr;
-}
-
 TextPaM TextEngine::GetPaM( const Point& rDocPos )
 {
     SAL_WARN_IF( !GetUpdateMode(), "vcl", "GetPaM: GetUpdateMode()" );

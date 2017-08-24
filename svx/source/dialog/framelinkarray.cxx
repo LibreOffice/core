@@ -739,18 +739,6 @@ bool Array::IsMerged( size_t nCol, size_t nRow ) const
     return CELL( nCol, nRow ).IsMerged();
 }
 
-bool Array::IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOverlappedLeft" );
-    return mxImpl->IsMergedOverlappedLeft( nCol, nRow );
-}
-
-bool Array::IsMergedOverlappedRight( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOverlappedRight" );
-    return mxImpl->IsMergedOverlappedRight( nCol, nRow );
-}
-
 void Array::GetMergedOrigin( size_t& rnFirstCol, size_t& rnFirstRow, size_t nCol, size_t nRow ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetMergedOrigin" );

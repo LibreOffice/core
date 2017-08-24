@@ -213,63 +213,6 @@ bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColo
     return bRet;
 }
 
-GraphicObject XFillBitmapItem::makeGraphicObject(SvStream& rIn, sal_uInt16 nVer) const
-{
-    if (!IsIndex())
-    {
-        if(0 == nVer)
-        {
-            // work with the old bitmap
-            Bitmap aBmp;
-
-            ReadDIB(aBmp, rIn, true);
-            return Graphic(aBmp);
-        }
-        else if(1 == nVer)
-        {
-            sal_Int16 iTmp;
-
-            rIn.ReadInt16( iTmp ); // former XBitmapStyle
-            rIn.ReadInt16( iTmp ); // XBitmapType
-
-            if(XBitmapType::Import == (XBitmapType)iTmp)
-            {
-                Bitmap aBmp;
-
-                ReadDIB(aBmp, rIn, true);
-                return Graphic(aBmp);
-            }
-            else if(XBitmapType::N8x8 == (XBitmapType)iTmp)
-            {
-                sal_uInt16 aArray[64];
-
-                for(sal_uInt16 & i : aArray)
-                {
-                    rIn.ReadUInt16( i );
-                }
-
-                Color aColorPix;
-                Color aColorBack;
-
-                ReadColor( rIn, aColorPix );
-                ReadColor( rIn, aColorBack );
-
-                const Bitmap aBitmap(createHistorical8x8FromArray(aArray, aColorPix, aColorBack));
-
-                return Graphic(aBitmap);
-            }
-        }
-        else if(2 == nVer)
-        {
-            BitmapEx aBmpEx;
-
-            ReadDIBBitmapEx(aBmpEx, rIn);
-            return Graphic(aBmpEx);
-        }
-    }
-    return GraphicObject();
-}
-
 XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
     : NameOrIndex(XATTR_FILLBITMAP, -1)
     , maGraphicObject(rGraphicObject)

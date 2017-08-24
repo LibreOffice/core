@@ -195,19 +195,6 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
     return 0;
 }
 
-void CalendarWrapper::addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount )
-{
-    try
-    {
-        if ( xC.is() )
-            xC->addValue( nFieldIndex, nAmount );
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "addValue: Exception caught " << e.Message );
-    }
-}
-
 sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
 {
     try
