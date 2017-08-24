@@ -247,8 +247,6 @@ SalData::SalData()
     mpDitherDiff = nullptr;     // Dither mapping table
     mpDitherLow = nullptr;      // Dither mapping table
     mpDitherHigh = nullptr;     // Dither mapping table
-    mnTimerId = nullptr;        // windows timer id
-    mbOnIdleRunScheduler = false; // if yield is idle, run the scheduler
     mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
     mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
     mpMouseLeaveTimer = nullptr; // Timer for MouseLeave Test
@@ -490,7 +488,8 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
-    SalData *const pSalData = GetSalData();
+    ImplSVData *const pSVData = ImplGetSVData();
+    WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
 
     int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
     do
@@ -506,7 +505,7 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
             // busy loop to catch the 0ms timeout
             // We don't need to busy loop, if we wait anyway.
             // Even if we didn't process the event directly, report it.
-            if ( pSalData->mbOnIdleRunScheduler && !bWait )
+            if ( pTimer && pTimer->WantBusyLoop() && !bWait )
             {
                 SwitchToThread();
                 nMaxEvents++;
@@ -516,7 +515,7 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     } while( --nMaxEvents && bOneEvent );
 
     // Also check that we don't wait when application already has quit
-    if ( bWait && !bWasMsg && !ImplGetSVData()->maAppData.mbAppQuit )
+    if ( bWait && !bWasMsg && !pSVData->maAppData.mbAppQuit )
     {
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {
@@ -582,17 +581,17 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             break;
         case SAL_MSG_STARTTIMER:
         {
-            sal_uLong nTime = GetTickCount();
-            if ( nTime < (sal_uLong) lParam )
-                nTime = (sal_uLong) lParam - nTime;
+            sal_uInt64 nTime = tools::Time::GetSystemTicks();
+            if ( nTime < (sal_uInt64) lParam )
+                nTime = (sal_uInt64) lParam - nTime;
             else
                 nTime = 0;
-            ImplSalStartTimer( nTime );
+            static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStart( nTime );
             rDef = FALSE;
             break;
         }
         case SAL_MSG_STOPTIMER:
-            ImplSalStopTimer();
+            static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStop();
             break;
         case SAL_MSG_CREATEFRAME:
             nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpFirstInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
@@ -639,14 +638,22 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             rDef = FALSE;
             break;
         case SAL_MSG_TIMER_CALLBACK:
+        {
+            WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+            assert( pTimer != nullptr );
             MSG aMsg;
+            bool bValidMSG = pTimer->IsValidWPARAM( wParam );
             // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
-            while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
+            while ( PeekMessageW(&aMsg, GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
-                SAL_WARN("vcl", "Multiple timer messages in queue");
-            GetSalData()->mbOnIdleRunScheduler = false;
-            EmitTimerCallback();
+            {
+                assert( !bValidMSG && "Unexpected non-last valid message" );
+                bValidMSG = pTimer->IsValidWPARAM( aMsg.wParam );
+            }
+            if ( bValidMSG )
+                pTimer->ImplEmitTimerCallback();
             break;
+        }
     }
 
     return nRet;

@@ -24,16 +24,39 @@
 
 class WinSalTimer : public SalTimer
 {
+    HANDLE       m_nTimerId;          ///< Windows timer id
+    sal_uInt32   m_nTimerStartTicks;  ///< system ticks at timer start % SAL_MAX_UINT32
+    bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
+
 public:
-    WinSalTimer() {}
+    WinSalTimer();
     virtual ~WinSalTimer() override;
 
     virtual void Start(sal_uIntPtr nMS) override;
     virtual void Stop() override;
+
+    inline bool IsValidWPARAM( WPARAM wParam ) const;
+
+    inline bool PollForMessage() const;
+
+    // The Impl functions are just public to be called from the static
+    // SalComWndProc on main thread redirect! Otherwise they would be private.
+    // They must be called from the main application thread only!
+
+    void ImplStart( sal_uIntPtr nMS );
+    void ImplStop();
+    void ImplEmitTimerCallback();
 };
 
-void ImplSalStartTimer( sal_uIntPtr nMS );
-void ImplSalStopTimer();
+inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
+{
+    return aWPARAM == m_nTimerStartTicks;
+}
+
+inline bool WinSalTimer::PollForMessage() const
+{
+    return m_bPollForMessage;
+}
 
 #endif
 
