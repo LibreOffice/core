@@ -158,8 +158,6 @@ FormCache::FormCache( ScDocument* pDoc1 )
 
 FormCache::~FormCache()
 {
-    for(FormIdent & rIdent : aIdents)
-        delete rIdent.GetAttr();
 }
 
 SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )

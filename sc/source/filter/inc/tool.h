@@ -48,7 +48,7 @@ class FormIdent
 {
 private:
     StampTyp        nStamp;         // ID key
-    SfxUInt32Item*  pAttr;          // associated attribute
+    std::unique_ptr<SfxUInt32Item> pAttr;          // associated attribute
 public:
                     FormIdent( void )
                     {
@@ -59,7 +59,7 @@ public:
                     FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt, SfxUInt32Item& rAttr )
                     {
                         nStamp = MAKE_STAMP( nFormat, nSt );
-                        pAttr = &rAttr;
+                        pAttr.reset(&rAttr);
                     }
 
     StampTyp        GetStamp( void ) const
@@ -69,7 +69,7 @@ public:
 
     SfxUInt32Item*  GetAttr( void )
                     {
-                        return pAttr;
+                        return pAttr.get();
                     }
 
     void            SetStamp( sal_uInt8 nFormat, sal_uInt8 nSt )

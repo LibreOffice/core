@@ -500,13 +500,13 @@ typedef std::vector<ScDPDataMember*> ScDPDataMembers;
 class ScDPResultDimension
 {
 public:
-    typedef std::vector<ScDPResultMember*>     MemberArray;
+    typedef std::vector<std::unique_ptr<ScDPResultMember>> MemberArray;
     typedef std::map<SCROW, ScDPResultMember*> MemberHash;
 private:
     const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
-    OUString           aDimensionName;     //! or ptr to IntDimension?
+    OUString                aDimensionName;     //! or ptr to IntDimension?
     long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
     bool                    bIsDataLayout:1;      //! or ptr to IntDimension?
