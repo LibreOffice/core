@@ -206,11 +206,6 @@ Style& Style::MirrorSelf()
     return *this;
 }
 
-Style Style::Mirror() const
-{
-    return Style( *this ).MirrorSelf();
-}
-
 bool operator==( const Style& rL, const Style& rR )
 {
     return (rL.Prim() == rR.Prim()) && (rL.Dist() == rR.Dist()) && (rL.Secn() == rR.Secn()) &&

@@ -821,13 +821,6 @@ OUString SvxExtFileField::GetFormatted() const
 SV_IMPL_PERSIST1( SvxAuthorField );
 
 
-SvxAuthorField::SvxAuthorField()
-{
-    eType = SVXAUTHORTYPE_VAR;
-    eFormat = SVXAUTHORFORMAT_FULLNAME;
-}
-
-
 SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
                                 const OUString& rLastName,
                                 const OUString& rShortName,

@@ -463,10 +463,4 @@ void SvxSearchCharSet::AppendCharToList(sal_UCS4 sChar)
     m_aItemList.insert(std::make_pair(nCount++, sChar));
 }
 
-void SvxSearchCharSet::AppendCharList(std::vector<sal_UCS4> sList)
-{
-    for (auto& it : sList)
-        AppendCharToList(it);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

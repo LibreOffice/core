@@ -345,7 +345,6 @@ private:
 
 public:
     SV_DECL_PERSIST1( SvxAuthorField, css::text::textfield::Type::AUTHOR )
-                            SvxAuthorField();
                             SvxAuthorField(
                                 const OUString& rFirstName,
                                 const OUString& rLastName,

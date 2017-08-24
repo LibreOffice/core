@@ -227,12 +227,6 @@ public:
     /** Returns true, if the cell (nCol,nRow) is part of a merged range. */
     bool                IsMerged( size_t nCol, size_t nRow ) const;
 
-    /** Returns true, if the left border of the cell (nCol,nRow) is overlapped by a merged range. */
-    bool                IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const;
-
-    /** Returns true, if the right border of the cell (nCol,nRow) is overlapped by a merged range. */
-    bool                IsMergedOverlappedRight( size_t nCol, size_t nRow ) const;
-
     /** Returns the address of the top-left cell of the merged range that contains (nCol,nRow). */
     void                GetMergedOrigin( size_t& rnFirstCol, size_t& rnFirstRow, size_t nCol, size_t nRow ) const;
 

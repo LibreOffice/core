@@ -648,18 +648,6 @@ void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
     pRightArea = rNew.Clone();
 }
 
-void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
-{
-    switch ( nArea )
-    {
-        case SC_HF_LEFTAREA:    delete pLeftArea;   pLeftArea   = pNew; break;
-        case SC_HF_CENTERAREA:  delete pCenterArea; pCenterArea = pNew; break;
-        case SC_HF_RIGHTAREA:   delete pRightArea;  pRightArea  = pNew; break;
-        default:
-            OSL_FAIL( "New Area?" );
-    }
-}
-
 /**
  * ScViewObjectModeItem - Display Mode of View Objects
  */

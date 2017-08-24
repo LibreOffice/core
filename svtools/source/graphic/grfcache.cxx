@@ -1017,30 +1017,6 @@ void GraphicCache::SetMaxDisplayCacheSize( sal_uLong nNewCacheSize )
         ImplFreeDisplayCacheSpace( GetUsedDisplayCacheSize() - GetMaxDisplayCacheSize() );
 }
 
-void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize )
-{
-    const bool bDestroy = nNewMaxObjSize < mnMaxObjDisplaySize;
-
-    mnMaxObjDisplaySize = std::min( nNewMaxObjSize, mnMaxDisplaySize );
-
-    if( bDestroy )
-    {
-        GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
-        while( it != maDisplayCache.end() )
-        {
-            GraphicDisplayCacheEntry* pCacheObj = *it;
-            if( pCacheObj->GetCacheSize() > mnMaxObjDisplaySize )
-            {
-                mnUsedDisplaySize -= pCacheObj->GetCacheSize();
-                it = maDisplayCache.erase( it );
-                delete pCacheObj;
-            }
-            else
-                ++it;
-        }
-    }
-}
-
 void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )

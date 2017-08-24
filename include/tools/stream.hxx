@@ -196,9 +196,6 @@ protected:
     std::size_t     CryptAndWriteBuffer( const void* pStart, std::size_t nLen );
     bool            EncryptBuffer( void* pStart, std::size_t nLen );
 
-    void            SyncSvStream( std::size_t nNewStreamPos ); ///< SvStream <- Medium
-    void            SyncSysStream(); ///< SvStream -> Medium
-
 public:
                     SvStream();
                     SvStream( SvLockBytes *pLockBytes);

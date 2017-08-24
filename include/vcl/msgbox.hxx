@@ -88,9 +88,6 @@ public:
     bool                GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize() const override;
-
-    void                SetMessBoxStyle(MessBoxStyle n) { mnMessBoxStyle = n; }
-    MessBoxStyle        GetMessBoxStyle() { return mnMessBoxStyle; }
 };
 
 class VCL_DLLPUBLIC InfoBox : public MessBox

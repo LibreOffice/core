@@ -93,11 +93,6 @@ public:
 
     static sal_uInt16 GetVersion() { return SVX_MACROTBL_AKTVERSION; }
 
-    SvxMacroTable::iterator begin() { return aSvxMacroTable.begin(); }
-    SvxMacroTable::const_iterator begin() const { return aSvxMacroTable.begin(); }
-    SvxMacroTable::iterator end() { return aSvxMacroTable.end(); }
-    SvxMacroTable::const_iterator end () const { return aSvxMacroTable.end(); }
-    SvxMacroTable::size_type size() const { return aSvxMacroTable.size(); }
     bool empty() const { return aSvxMacroTable.empty(); }
 
     // returns NULL if no entry exists, or a pointer to the internal value

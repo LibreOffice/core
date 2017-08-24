@@ -244,9 +244,6 @@ private:
     /// Write customXml/item[n].xml and customXml/itemProps[n].xml
     void WriteCustomXml();
 
-    /// Write word/activeX/activeX[n].xml
-    void WriteActiveX();
-
     /// Write word/embeddings/Worksheet[n].xlsx
     void WriteEmbeddings();
 

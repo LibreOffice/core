@@ -217,15 +217,9 @@ enum INetContentType
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:
-    static INetContentType RegisterContentType(OUString const & rTypeName,
-                                               OUString const & rPresentation,
-                                               OUString const * pExtension = nullptr);
-
     static INetContentType GetContentType(OUString const & rTypeName);
 
     static OUString GetContentType(INetContentType eTypeID);
-
-    static OUString GetPresentation(INetContentType eTypeID);
 
     static INetContentType GetContentType4Extension(OUString const & rExtension);
 

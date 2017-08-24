@@ -70,7 +70,6 @@ public:
     void setValue( sal_Int16 nFieldIndex, sal_Int16 nValue );
     bool isValid() const;
     sal_Int16 getValue( sal_Int16 nFieldIndex ) const;
-    void addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount );
     sal_Int16 getFirstDayOfWeek() const;
     sal_Int16 getNumberOfMonthsInYear() const;
     sal_Int16 getNumberOfDaysInWeek() const;

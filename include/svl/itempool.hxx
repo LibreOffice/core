@@ -83,7 +83,6 @@ protected:
     static inline void              ClearRefCount(SfxPoolItem& rItem);
     static inline void              AddRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
     static inline sal_uInt32        ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
-    static inline void              SetKind( SfxPoolItem& rItem, SfxItemKind nRef );
 
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
@@ -204,11 +203,6 @@ inline void SfxItemPool::AddRef(const SfxPoolItem& rItem, sal_uInt32 n)
 inline sal_uInt32 SfxItemPool::ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n)
 {
     return rItem.ReleaseRef(n);
-}
-
-inline void SfxItemPool::SetKind( SfxPoolItem& rItem, SfxItemKind nRef )
-{
-    rItem.SetKind( nRef );
 }
 
 #endif

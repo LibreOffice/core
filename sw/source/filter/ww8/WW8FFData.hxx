@@ -73,11 +73,7 @@ public:
 
     void setResult(sal_uInt8 nResult) { mnResult = nResult; }
 
-    void setCheckboxHeight(sal_uInt16 nCheckboxHeight) { mnCheckboxHeight = nCheckboxHeight; }
-
     void setName(const OUString & rName) { msName = rName; }
-
-    void setDefaultResult(sal_uInt16 nDefault) { mnDefault = nDefault; }
 
     void setHelp(const OUString & rHelp);
 

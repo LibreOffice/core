@@ -172,13 +172,12 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE bool     IsFlipVert() { return bFlipV; };
         SAL_DLLPRIVATE bool     IsFlipHorz() { return bFlipH; };
         SAL_DLLPRIVATE sal_Int32 GetRotateAngle() { return nRotateAngle; };
-        bool                    IsPostRotate() const;
 
         SdrObject*              CreateLineGeometry();
         SdrObject*              CreateObject( bool bLineGeometryNeededOnly );
         void                    ApplyGluePoints( SdrObject* pObj );
-        tools::Rectangle               GetTextRect() const;
-        const tools::Rectangle&        GetLogicRect() const { return aLogicRect; }
+        tools::Rectangle        GetTextRect() const;
+        const tools::Rectangle& GetLogicRect() const { return aLogicRect; }
 
         sal_uInt32              GetHdlCount() const;
         bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;

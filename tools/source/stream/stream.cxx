@@ -1537,18 +1537,6 @@ void SvStream::SetCryptMaskKey(const OString& rCryptMaskKey)
         m_aCryptMaskKey.getLength(), GetVersion());
 }
 
-void SvStream::SyncSvStream( std::size_t nNewStreamPos )
-{
-    ClearBuffer();
-    SvStream::m_nBufFilePos = nNewStreamPos;
-}
-
-void SvStream::SyncSysStream()
-{
-    Flush();
-    SeekPos( Tell() );
-}
-
 bool SvStream::SetStreamSize(sal_uInt64 const nSize)
 {
 #ifdef DBG_UTIL

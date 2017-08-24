@@ -773,7 +773,6 @@ public:
     void            SetMargin2() { SetMargin2( 0, RulerMarginStyle::Invisible ); }
     void            SetMargin2( long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
     long            GetMargin2() const;
-    long            GetPageWidth() const;
 
     void            SetLeftFrameMargin( long nPos );
     void            SetRightFrameMargin( long nPos );

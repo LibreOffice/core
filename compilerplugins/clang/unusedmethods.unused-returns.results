@@ -28,7 +28,7 @@ chart2/source/view/main/OpenGLRender.hxx:104
     int OpenGLRender::RenderSymbol2DShape(float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:121
     int OpenGLRender::Create2DCircle(int)
-connectivity/source/drivers/evoab2/NResultSet.hxx:125
+connectivity/source/drivers/evoab2/NResultSet.hxx:123
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> connectivity::evoab::OEvoabResultSet::operator*()
 connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:51
     class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
@@ -40,7 +40,9 @@ connectivity/source/inc/OColumn.hxx:133
     const class rtl::OUString & connectivity::OColumn::getCatalogName() const
 connectivity/source/inc/odbc/OConnection.hxx:82
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
-dbaccess/source/ui/browser/genericcontroller.cxx:1266
+cppcanvas/source/inc/canvasgraphichelper.hxx:59
+    const class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> & cppcanvas::internal::CanvasGraphicHelper::getGraphicDevice() const
+dbaccess/source/ui/browser/genericcontroller.cxx:1258
     const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
 i18nlangtag/source/languagetag/languagetag.cxx:275
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
@@ -140,7 +142,7 @@ include/comphelper/unique_disposing_ptr.hxx:45
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/connectivity/FValue.hxx:327
     unsigned short connectivity::ORowSetValue::operator unsigned short() const
-include/editeng/editview.hxx:191
+include/editeng/editview.hxx:219
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:63
     struct _LibreOfficeKitDocument * lok::Document::get()
@@ -246,6 +248,12 @@ include/sax/fshelper.hxx:206
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
 include/sax/fshelper.hxx:209
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+include/svl/macitem.hxx:92
+    class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
+include/svl/poolitem.hxx:171
+    class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
+include/svx/framelink.hxx:157
+    class svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xsheetannotation.hxx:36
@@ -254,6 +262,8 @@ include/test/sheet/xspreadsheets2.hxx:40
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
 include/test/sheet/xstyleloader.hxx:27
     class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XStyleLoader::getTargetComponent()
+include/test/sheet/xusedareacursor.hxx:25
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XUsedAreaCursor::init()
 include/tools/bigint.hxx:114
     unsigned short BigInt::operator unsigned short() const
 include/tools/bigint.hxx:115
@@ -266,7 +276,7 @@ include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:259
+include/vcl/graphicfilter.hxx:258
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/menu.hxx:460
     unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
@@ -280,9 +290,9 @@ sc/source/core/opencl/formulagroupcl.cxx:968
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
 sc/source/core/opencl/formulagroupcl.cxx:1413
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
-sc/source/core/tool/scmatrix.cxx:2213
+sc/source/core/tool/scmatrix.cxx:2217
     type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3179
+sc/source/core/tool/scmatrix.cxx:3183
     const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
 sc/source/ui/vba/vbaformat.hxx:69
     class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
@@ -316,7 +326,7 @@ sc/source/ui/vba/vbaformat.hxx:145
     class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:126
+sd/source/filter/eppt/pptx-epptooxml.cxx:131
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/inc/OutlineViewShell.hxx:114
     class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
@@ -328,7 +338,7 @@ sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
 sw/inc/editsh.hxx:617
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
-sw/source/uibase/inc/fldmgr.hxx:114
+sw/source/uibase/inc/fldmgr.hxx:113
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 vcl/inc/PhysicalFontFace.hxx:79
     int PhysicalFontFace::GetWidth() const
