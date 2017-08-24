@@ -2042,7 +2042,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
         }
 
         ScopedVclPtrInstance<MessBox> aBox( GetViewData().GetDialogParent(),
-                        MessBoxStyle::YesNo | MessBoxStyle::DefaultNo,
+                        MessBoxStyle::YesNo | MessBoxStyle::DefaultNo, 0,
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ), aMsgStr );
         sal_uInt16 nRetVal = aBox->Execute();
 
