@@ -1060,6 +1060,9 @@ bool XclExpXmlStream::exportDocument()
     aData.maMaxPos.SetRow( ::std::min( aData.maScMaxPos.Row(), aData.maXclMaxPos.Row() ) );
     aData.maMaxPos.SetTab( ::std::min( aData.maScMaxPos.Tab(), aData.maXclMaxPos.Tab() ) );
     aData.mpCompileFormulaCxt.reset( new sc::CompileFormulaContext(&rDoc) );
+    // set target path to get correct relative links to target document, not source
+    aData.maBasePath = getFileUrl();
+    aData.maBasePath = aData.maBasePath.copy(0, aData.maBasePath.lastIndexOf('/')) + "/";
 
     XclExpRoot aRoot( aData );
 
