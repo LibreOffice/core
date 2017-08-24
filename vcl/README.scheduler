@@ -129,6 +129,13 @@ Therefore the current solution always starts a (threaded) timer even for the
 instant Idles and syncs to this timer message in the main dispatch loop.
 Using SwitchToThread(), this seem to work reasonably well.
 
+An additional workaround is implemented for the delayed queuing of posted
+messages, where PeekMessage in WinSalTimer::Stop() won't be able remove the
+just posted timer callback message. We handle this by adding a timestamp to
+the timer callback message, which is checked before starting the Scheduler.
+This way we can end with multiple timer callback message in the queue, which
+we were asserting.
+
 == KDE implementation details ==
 
 This implementation also works as intended. But there is a different Yield
@@ -190,3 +197,11 @@ and can process system events.
 
 That's just a theory - it definitely needs more analysis before even attending
 an implementation.
+
+== Re-evaluate the MacOS ImplNSAppPostEvent ==
+
+Probably a solution comparable to the Windows backends delayed PostMessage
+workaround using a validation timestamp is better then the current peek,
+remove, re-postEvent, which has to run in the main thread.
+
+Originally I didn't evaluate, if the event is actually lost or just delayed.
