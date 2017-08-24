@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_9c651ae3",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T08:00:33Z",
+      "side": 1,
+      "message": "Yes, I see. Just expand your comment to reflect that, please",
+      "parentUuid": "1a430d35_fc253eae",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 303,
+        "endChar": 147
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_0931ee0b",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 5
