@@ -44,9 +44,9 @@ SmartTagHandler::SmartTagHandler(uno::Reference<uno::XComponentContext> xCompone
 
 SmartTagHandler::~SmartTagHandler() = default;
 
-void SmartTagHandler::lcl_attribute(Id nName, Value& rValue)
+void SmartTagHandler::lcl_attribute(Id nId, Value& rValue)
 {
-    switch (nName)
+    switch (nId)
     {
     case NS_ooxml::LN_CT_Attr_name:
         m_aAttributes.emplace_back(rValue.getString(), OUString());
@@ -56,7 +56,7 @@ void SmartTagHandler::lcl_attribute(Id nName, Value& rValue)
             m_aAttributes.back().second = rValue.getString();
         break;
     default:
-        SAL_WARN("writerfilter", "SmartTagHandler::lcl_attribute: unhandled attribute " << nName << " (string value: '"<<rValue.getString()<<"')");
+        SAL_WARN("writerfilter", "SmartTagHandler::lcl_attribute: unhandled attribute " << nId << " (string value: '"<<rValue.getString()<<"')");
         break;
     }
 }

@@ -314,12 +314,12 @@ private:
      Open a cell at current level.
      */
 
-    void openCell(const css::uno::Reference<css::text::XTextRange>& handle, const TablePropertyMapPtr& pProps);
+    void openCell(const css::uno::Reference<css::text::XTextRange>& rHandle, const TablePropertyMapPtr& pProps);
 
     /**
      Close a cell at current level.
      */
-    void closeCell(const css::uno::Reference<css::text::XTextRange>& handle);
+    void closeCell(const css::uno::Reference<css::text::XTextRange>& rHandle);
 
     /**
      Ensure a cell is open at the current level.

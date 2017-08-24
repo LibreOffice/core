@@ -23,11 +23,11 @@ LatentStyleHandler::LatentStyleHandler() :
 
 LatentStyleHandler::~LatentStyleHandler() = default;
 
-void LatentStyleHandler::lcl_attribute(Id rName, Value& rVal)
+void LatentStyleHandler::lcl_attribute(Id nId, Value& rVal)
 {
     beans::PropertyValue aValue;
     bool bFound = true;
-    switch (rName)
+    switch (nId)
     {
     case NS_ooxml::LN_CT_LsdException_name:
         aValue.Name = "name";
