@@ -2355,215 +2355,211 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 sal_uInt32 nPlacementId = pPlaceHolder->nPlacementId;
                 PptPlaceholder nPlaceholderId = pPlaceHolder->nPlaceholderId;
-
-                if ( eAktPageKind == PPT_SLIDEPAGE )
+                PresObjKind ePresObjKind = PRESOBJ_NONE;
+                bool    bEmptyPresObj = true;
+                bool    bVertical = false;
+                if ( ( pTextObj->GetShapeType() == mso_sptRectangle ) || ( pTextObj->GetShapeType() == mso_sptTextBox ) )
                 {
-                    PresObjKind ePresObjKind = PRESOBJ_NONE;
-                    bool    bEmptyPresObj = true;
-                    bool    bVertical = false;
-                    if ( ( pTextObj->GetShapeType() == mso_sptRectangle ) || ( pTextObj->GetShapeType() == mso_sptTextBox ) )
+                    //if a placeholder with some custom attribute,the pTextObj will keep those attr,whose text size is zero,
+                    //so sdPage should renew a PresObj to process placeholder.
+                    bEmptyPresObj = ( pTextObj->Count() == 0 ) || ( pTextObj->Count() == 1 && pTextObj->First()->GetTextSize() == 0 );
+                    switch ( nPlaceholderId )
                     {
-                        //if a placeholder with some custom attribute,the pTextObj will keep those attr,whose text size is zero,
-                        //so sdPage should renew a PresObj to process placeholder.
-                        bEmptyPresObj = ( pTextObj->Count() == 0 ) || ( pTextObj->Count() == 1 && pTextObj->First()->GetTextSize() == 0 );
+                        case PptPlaceholder::NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
+                        case PptPlaceholder::VERTICALTEXTTITLE :
+                            bVertical = true;
+                            SAL_FALLTHROUGH;
+                        case PptPlaceholder::TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
+                        case PptPlaceholder::VERTICALTEXTBODY :
+                            bVertical = true;
+                            SAL_FALLTHROUGH;
+                        case PptPlaceholder::BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
+                        case PptPlaceholder::CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
+                        case PptPlaceholder::SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE
+
+                        default :
+                        {
+                            if ( pTextObj->Count() == 0 )
+                            {
+                                switch ( nPlaceholderId )
+                                {
+                                    case PptPlaceholder::MEDIACLIP :
+                                    case PptPlaceholder::OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
+                                    case PptPlaceholder::GRAPH : ePresObjKind = PRESOBJ_CHART; break;
+                                    case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_TABLE; break;
+                                    case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
+                                    case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
+                                    default: break;
+                                }
+                            }
+                        };
+                    }
+                }
+                else if ( pTextObj->GetShapeType() == mso_sptPictureFrame )
+                {
+                    if ( !pTextObj->Count() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
+                    {
+                        bEmptyPresObj = false;
                         switch ( nPlaceholderId )
                         {
-                            case PptPlaceholder::NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
-                            case PptPlaceholder::VERTICALTEXTTITLE :
-                                bVertical = true;
-                                SAL_FALLTHROUGH;
-                            case PptPlaceholder::TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
-                            case PptPlaceholder::VERTICALTEXTBODY :
-                                bVertical = true;
-                                SAL_FALLTHROUGH;
-                            case PptPlaceholder::BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
-                            case PptPlaceholder::CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
-                            case PptPlaceholder::SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE
-
-                            default :
-                            {
-                                if ( pTextObj->Count() == 0 )
-                                {
-                                    switch ( nPlaceholderId )
-                                    {
-                                        case PptPlaceholder::MEDIACLIP :
-                                        case PptPlaceholder::OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
-                                        case PptPlaceholder::GRAPH : ePresObjKind = PRESOBJ_CHART; break;
-                                        case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_TABLE; break;
-                                        case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
-                                        case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
-                                        default: break;
-                                    }
-                                }
-                            };
+                            case PptPlaceholder::MEDIACLIP :
+                            case PptPlaceholder::OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
+                            case PptPlaceholder::GRAPH : ePresObjKind = PRESOBJ_CHART; break;
+                            case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_CALC; break;
+                            case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
+                            case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
+                            default: break;
                         }
                     }
-                    else if ( pTextObj->GetShapeType() == mso_sptPictureFrame )
+                }
+                if ( ePresObjKind != PRESOBJ_NONE )
+                {
+                    if ( !bEmptyPresObj )
                     {
-                        if ( !pTextObj->Count() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
-                        {
-                            bEmptyPresObj = false;
-                            switch ( nPlaceholderId )
-                            {
-                                case PptPlaceholder::MEDIACLIP :
-                                case PptPlaceholder::OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
-                                case PptPlaceholder::GRAPH : ePresObjKind = PRESOBJ_CHART; break;
-                                case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_CALC; break;
-                                case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
-                                case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
-                                default: break;
-                            }
-                        }
+                        pPage->InsertPresObj( pRet, ePresObjKind );
                     }
-                    if ( ePresObjKind != PRESOBJ_NONE )
+                    else
                     {
-                        if ( !bEmptyPresObj )
-                        {
-                            pPage->InsertPresObj( pRet, ePresObjKind );
-                        }
-                        else
-                        {
-                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect() );
-                            pPresObj->SetUserCall( pPage );
+                        SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect() );
+                        pPresObj->SetUserCall( pPage );
 
-                            SfxItemSet aSet( pSdrModel->GetItemPool() );
-                            ApplyAttributes( rStCtrl, aSet );
-                            pPresObj->SetLogicRect(pText->GetLogicRect());
-                            ApplyTextAnchorAttributes( *pTextObj, aSet );
-                            //set custom font attribute of the placeholder
-                            if ( pTextObj->Count() == 1 )
+                        SfxItemSet aSet( pSdrModel->GetItemPool() );
+                        ApplyAttributes( rStCtrl, aSet );
+                        pPresObj->SetLogicRect(pText->GetLogicRect());
+                        ApplyTextAnchorAttributes( *pTextObj, aSet );
+                        //set custom font attribute of the placeholder
+                        if ( pTextObj->Count() == 1 )
+                        {
+                            PPTParagraphObj* pPara = pTextObj->First();
+                            if ( pPara && pPara->GetTextSize() == 0 )
                             {
-                                PPTParagraphObj* pPara = pTextObj->First();
-                                if ( pPara && pPara->GetTextSize() == 0 )
+                                if ( PPTPortionObj * pPor = pPara->First() )
                                 {
-                                    if ( PPTPortionObj * pPor = pPara->First() )
-                                    {
-                                        pPor->ApplyTo(aSet, const_cast<SdrPowerPointImport&>(static_cast<SdrPowerPointImport const &>(*this)), pTextObj->GetDestinationInstance());
-                                    }
+                                    pPor->ApplyTo(aSet, const_cast<SdrPowerPointImport&>(static_cast<SdrPowerPointImport const &>(*this)), pTextObj->GetDestinationInstance());
                                 }
                             }
-                            pPresObj->SetMergedItemSet(aSet);
+                        }
+                        pPresObj->SetMergedItemSet(aSet);
 
-                            if ((eAktPageKind != PPT_NOTEPAGE) && (nPlacementId != 0xffffffff) && pPage->TRG_HasMasterPage())
+                        if ((eAktPageKind != PPT_NOTEPAGE) && (nPlacementId != 0xffffffff) && pPage->TRG_HasMasterPage())
+                        {
+                            SdrObject* pTitleObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
+                            SdrObject* pOutlineObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
+
+                            ::tools::Rectangle aTitleRect;
+                            ::tools::Rectangle aOutlineRect;
+                            Size      aOutlineSize;
+
+                            if ( pTitleObj )
+                                aTitleRect = pTitleObj->GetLogicRect();
+                            if ( pOutlineObj )
                             {
-                                SdrObject* pTitleObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
-                                SdrObject* pOutlineObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
+                                aOutlineRect = pOutlineObj->GetLogicRect();
+                                aOutlineSize = aOutlineRect.GetSize();
+                            }
+                            ::tools::Rectangle aLogicRect( pPresObj->GetLogicRect() );
+                            Size      aLogicSize( aLogicRect.GetSize() );
 
-                                ::tools::Rectangle aTitleRect;
-                                ::tools::Rectangle aOutlineRect;
-                                Size      aOutlineSize;
-
-                                if ( pTitleObj )
-                                    aTitleRect = pTitleObj->GetLogicRect();
-                                if ( pOutlineObj )
+                            switch ( nPlacementId )
+                            {
+                                case 0 :            // position in title area
                                 {
-                                    aOutlineRect = pOutlineObj->GetLogicRect();
-                                    aOutlineSize = aOutlineRect.GetSize();
+                                    if ( aLogicRect != aTitleRect )
+                                        pPresObj->SetUserCall( nullptr );
                                 }
-                                ::tools::Rectangle aLogicRect( pPresObj->GetLogicRect() );
-                                Size      aLogicSize( aLogicRect.GetSize() );
+                                break;
 
-                                switch ( nPlacementId )
+                                case 1:
                                 {
-                                    case 0 :            // position in title area
-                                    {
-                                        if ( aLogicRect != aTitleRect )
+                                    if ( pSlideLayout->eLayout == PptSlideLayout::TITLEANDBODYSLIDE )
+                                    {   // position in outline area
+                                        if ( aLogicRect != aOutlineRect )
                                             pPresObj->SetUserCall( nullptr );
                                     }
-                                    break;
-
-                                    case 1:
-                                    {
-                                        if ( pSlideLayout->eLayout == PptSlideLayout::TITLEANDBODYSLIDE )
-                                        {   // position in outline area
-                                            if ( aLogicRect != aOutlineRect )
-                                                pPresObj->SetUserCall( nullptr );
-                                        }
-                                        else if ( pSlideLayout->eLayout == PptSlideLayout::TWOCOLUMNSANDTITLE )
-                                        {   // position in outline area left
-                                            if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
-                                                    (double)aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
-                                                    (double)aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
-                                            {
-                                                pPresObj->SetUserCall(nullptr);
-                                            }
-                                        }
-                                        else if ( pSlideLayout->eLayout == PptSlideLayout::TWOROWSANDTITLE )
-                                        {   // position in outline area top
-                                            if (std::abs(aLogicRect.Left()  - aOutlineRect.Left())  > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE)
-                                            {
-                                                pPresObj->SetUserCall( nullptr );
-                                            }
-                                        }
-                                        else if (std::abs(aLogicRect.Left() - aOutlineRect.Left()) > MAX_USER_MOVE ||
-                                                 std::abs(aLogicRect.Top()  - aOutlineRect.Top())  > MAX_USER_MOVE)
-                                        {   // position in outline area top left
-                                            pPresObj->SetUserCall( nullptr );
-                                        }
-                                    }
-                                    break;
-
-                                    case 2:
-                                    {
-                                        if ( pSlideLayout->eLayout == PptSlideLayout::TWOCOLUMNSANDTITLE )
-                                        {   // position in outline area right
-                                            if (std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
+                                    else if ( pSlideLayout->eLayout == PptSlideLayout::TWOCOLUMNSANDTITLE )
+                                    {   // position in outline area left
+                                        if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
                                                 (double)aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
                                                 (double)aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
-                                            {
-                                                pPresObj->SetUserCall( nullptr );
-                                            }
-                                        }
-                                        else if ( pSlideLayout->eLayout == PptSlideLayout::TWOROWSANDTITLE )
-                                        {   // position in outline area bottom
-                                            if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
-                                                std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE)
-                                            {
-                                                pPresObj->SetUserCall( nullptr );
-                                            }
-                                        }
-                                        else if (std::abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE ||
-                                                 std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE)
-                                        {   // position in outline area top right
+                                        {
                                             pPresObj->SetUserCall(nullptr);
                                         }
                                     }
-                                    break;
-
-                                    case 3:
-                                    {   // position in outline area bottom left
-                                        if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
-                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
+                                    else if ( pSlideLayout->eLayout == PptSlideLayout::TWOROWSANDTITLE )
+                                    {   // position in outline area top
+                                        if (std::abs(aLogicRect.Left()  - aOutlineRect.Left())  > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE)
                                         {
                                             pPresObj->SetUserCall( nullptr );
                                         }
                                     }
-                                    break;
+                                    else if (std::abs(aLogicRect.Left() - aOutlineRect.Left()) > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Top()  - aOutlineRect.Top())  > MAX_USER_MOVE)
+                                    {   // position in outline area top left
+                                        pPresObj->SetUserCall( nullptr );
+                                    }
+                                }
+                                break;
 
-                                    case 4:
-                                    {   // position in outline area bottom right
-                                        if (std::abs(aLogicRect.Right() - aOutlineRect.Right())   > MAX_USER_MOVE ||
-                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
+                                case 2:
+                                {
+                                    if ( pSlideLayout->eLayout == PptSlideLayout::TWOCOLUMNSANDTITLE )
+                                    {   // position in outline area right
+                                        if (std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
+                                            (double)aLogicSize.Width()  / aOutlineSize.Width()   < 0.48          ||
+                                            (double)aLogicSize.Width()  / aOutlineSize.Width()   > 0.5)
                                         {
-                                            pObj->SetUserCall( nullptr );
+                                            pPresObj->SetUserCall( nullptr );
                                         }
                                     }
-                                    break;
+                                    else if ( pSlideLayout->eLayout == PptSlideLayout::TWOROWSANDTITLE )
+                                    {   // position in outline area bottom
+                                        if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
+                                            std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE)
+                                        {
+                                            pPresObj->SetUserCall( nullptr );
+                                        }
+                                    }
+                                    else if (std::abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE ||
+                                                std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE)
+                                    {   // position in outline area top right
+                                        pPresObj->SetUserCall(nullptr);
+                                    }
                                 }
+                                break;
+
+                                case 3:
+                                {   // position in outline area bottom left
+                                    if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
+                                        std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
+                                    {
+                                        pPresObj->SetUserCall( nullptr );
+                                    }
+                                }
+                                break;
+
+                                case 4:
+                                {   // position in outline area bottom right
+                                    if (std::abs(aLogicRect.Right() - aOutlineRect.Right())   > MAX_USER_MOVE ||
+                                        std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
+                                    {
+                                        pObj->SetUserCall( nullptr );
+                                    }
+                                }
+                                break;
                             }
-                            pRet = nullptr;    // return zero cause this obj was already inserted by CreatePresObj
                         }
+                        pRet = nullptr;    // return zero cause this obj was already inserted by CreatePresObj
                     }
-                    else if ( !pTextObj->Count() )
-                        pRet = nullptr;
                 }
+                else if ( !pTextObj->Count() )
+                    pRet = nullptr;
             }
         }
     }
