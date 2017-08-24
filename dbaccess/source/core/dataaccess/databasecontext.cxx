@@ -423,9 +423,6 @@ void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseMo
 
 void ODatabaseContext::registerObject(const OUString& _rName, const Reference< XInterface > & _rxObject)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
-
     if ( _rName.isEmpty() )
         throw IllegalArgumentException( OUString(), *this, 1 );
 
@@ -438,9 +435,14 @@ void ODatabaseContext::registerObject(const OUString& _rName, const Reference< X
     if ( sURL.isEmpty() )
         throw IllegalArgumentException( DBA_RES( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
 
-    registerDatabaseLocation( _rName, sURL );
+    { // avoid deadlocks: lock m_aMutex after checking arguments
+        MutexGuard aGuard(m_aMutex);
+        ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    ODatabaseSource::setName( xDocDataSource, _rName, ODatabaseSource::DBContextAccess() );
+        registerDatabaseLocation( _rName, sURL );
+
+        ODatabaseSource::setName( xDocDataSource, _rName, ODatabaseSource::DBContextAccess() );
+    }
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
