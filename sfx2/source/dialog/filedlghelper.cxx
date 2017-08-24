@@ -1523,11 +1523,8 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 {
                     // ask for a key
                     OUString aDocName(rpURLList[0]);
-                    // ErrCode errCode = RequestKey(pCurrentFilter, aDocName, rpSet);
-                    //if (errCode != ERRCODE_NONE)
-                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aDocName ) ) ) );
 
-                    return ERRCODE_IO_NOTSUPPORTED; //errCode;
+                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData( aDocName ) ) ) );
                 }
             }
             catch( const IllegalArgumentException& ){}
