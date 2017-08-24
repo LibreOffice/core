@@ -76,6 +76,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <vcl/virdev.hxx>
+#include <tools/urlobj.hxx>
 
 namespace oox {
 namespace xls {
@@ -961,7 +962,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
 {
     OUStringBuffer aUrlBuffer;
     if( !rHyperlink.maTarget.isEmpty() )
-        aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( rHyperlink.maTarget ) );
+        aUrlBuffer.append( rHyperlink.maTarget );
     if( !rHyperlink.maLocation.isEmpty() )
         aUrlBuffer.append( '#' ).append( rHyperlink.maLocation );
     OUString aUrl = aUrlBuffer.makeStringAndClear();
@@ -994,10 +995,24 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
     return aUrl;
 }
 
+SvxURLType lcl_detectURLType( const OUString& rUrl )
+{
+    INetURLObject aUrl(rUrl);
+
+    bool bWasAbsolute;
+    aUrl.smartRel2Abs(rUrl, bWasAbsolute);
+
+    if( bWasAbsolute )
+        return SVXURLTYPE_ABSOLUTE;
+    else
+        return SVXURLTYPE_RELATIVE;
+}
+
 void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUString& rUrl )
 {
     ScDocumentImport& rDoc = getDocImport();
     ScRefCellValue aCell(rDoc.getDoc(), rAddress);
+    const OUString rAbsoluteUrl = getBaseFilter().getAbsoluteUrl(rUrl);
 
     if (aCell.meType == CELLTYPE_STRING || aCell.meType == CELLTYPE_EDIT)
     {
@@ -1005,7 +1020,8 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
         ScFieldEditEngine& rEE = rDoc.getDoc().GetEditEngine();
         rEE.Clear();
 
-        SvxURLField aURLField(rUrl, aStr, SVXURLFORMAT_REPR);
+        SvxURLField aURLField(rAbsoluteUrl, aStr, SVXURLFORMAT_REPR);
+        aURLField.SetType(lcl_detectURLType(rUrl));
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         rEE.QuickInsertField(aURLItem, ESelection());
 
@@ -1023,7 +1039,7 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
         // we should handle *all* imported hyperlinks as below ( e.g. as cell
         // attribute ) for better interoperability.
 
-        SfxStringItem aItem(ATTR_HYPERLINK, rUrl);
+        SfxStringItem aItem(ATTR_HYPERLINK, rAbsoluteUrl);
         rDoc.getDoc().ApplyAttr(rAddress.Col(), rAddress.Row(), rAddress.Tab(), aItem);
     }
 }

@@ -424,13 +424,15 @@ SV_IMPL_PERSIST1( SvxURLField );
 SvxURLField::SvxURLField()
 {
     eFormat = SVXURLFORMAT_URL;
+    eType = SVXURLTYPE_NOT_SET;
 }
 
 
-SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt )
+SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt, SvxURLType eURLType )
     : aURL( rURL ), aRepresentation( rRepres )
 {
     eFormat = eFmt;
+    eType = eURLType;
 }
 
 

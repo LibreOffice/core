@@ -1731,6 +1731,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             appendUCS4(aSynAbsURIRef, nUTF32, eEscapeType, false/*bOctets*/, ePart,
                        eCharset, true);
         }
+        rWasAbsolute = true;
     }
     else if (eState == STATE_REL_PATH)
     {

@@ -135,10 +135,16 @@ enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT = 0,    // Set as in App
                         SVXURLFORMAT_REPR           // Constitute representation
                     };
 
+enum SvxURLType     {   SVXURLTYPE_NOT_SET = 0,  // use current settings
+                        SVXURLTYPE_RELATIVE,     // save link as relative path
+                        SVXURLTYPE_ABSOLUTE      // save link as absolute path
+                    };
+
 class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData
 {
 private:
     SvxURLFormat            eFormat;
+    SvxURLType              eType;              // what will be saved
     OUString                aURL;               // URL-Address
     OUString                aRepresentation;    // What is shown
     OUString                aTargetFrame;       // In what Frame
@@ -147,7 +153,9 @@ public:
     SV_DECL_PERSIST1( SvxURLField, css::text::textfield::Type::URL )
 
                             SvxURLField();
-                            SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt = SVXURLFORMAT_URL );
+                            SvxURLField( const OUString& rURL, const OUString& rRepres,
+                                SvxURLFormat eFmt = SVXURLFORMAT_URL,
+                                SvxURLType eURLType = SVXURLTYPE_NOT_SET );
 
     const OUString&         GetURL() const { return aURL; }
     void                    SetURL( const OUString& rURL ) { aURL = rURL; }
@@ -160,6 +168,9 @@ public:
 
     SvxURLFormat            GetFormat() const { return eFormat; }
     void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
+
+    SvxURLType              GetType() const { return eType; }
+    void                    SetType(SvxURLType eURLType) { eType = eURLType; }
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;

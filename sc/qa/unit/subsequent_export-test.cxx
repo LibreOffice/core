@@ -95,6 +95,7 @@ public:
 
     void test();
     void testTdf111876();
+    void testTdf111957();
     void testPasswordExportODS();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
@@ -208,6 +209,7 @@ public:
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testTdf111876);
+    CPPUNIT_TEST(testTdf111957);
     CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
@@ -414,6 +416,23 @@ void ScExportTest::testTdf111876()
 
     // Document is saved to the temporary directory, relative path should be different than original one
     CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf111957()
+{
+    // Test if link is saved as absolute if was loaded as absolute path
+
+    ScDocShellRef xShell = loadDoc("tdf111957.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "file:///F:\\lode\\dev\\core\\sc\\qa\\unit\\data\\xls\\bug-fixes.xls");
 
     xDocSh->DoClose();
 }
