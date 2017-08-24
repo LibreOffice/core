@@ -340,7 +340,7 @@ void ScDBFunc::ToggleAutoFilter()
         {
             if (!bHeader)
             {
-                if ( ScopedVclPtrInstance<MessBox>( GetViewData().GetDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
+                if ( ScopedVclPtrInstance<MessBox>( GetViewData().GetDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
                         ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // header from first row?
                     )->Execute() == RET_YES )

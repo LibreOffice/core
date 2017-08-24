@@ -408,7 +408,7 @@ bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
         }
     }
 
-    ScopedVclPtrInstance< MessBox > aBox( pParent, nStyle, aTitle, aMessage );
+    ScopedVclPtrInstance< MessBox > aBox( pParent, nStyle, 0, aTitle, aMessage );
     sal_uInt16 nRet = aBox->Execute();
 
     return ( eErrorStyle == SC_VALERR_STOP || nRet == RET_CANCEL );

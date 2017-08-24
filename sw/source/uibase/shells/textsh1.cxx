@@ -251,7 +251,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 
 static short lcl_AskRedlineFlags(vcl::Window *pWin)
 {
-    ScopedVclPtrInstance<MessBox> aQBox( pWin, MessBoxStyle::NONE,
+    ScopedVclPtrInstance<MessBox> aQBox( pWin, MessBoxStyle::NONE, 0,
                     SwResId( STR_REDLINE_TITLE ),
                     SwResId( STR_REDLINE_MSG ) );
     aQBox->SetImage( QueryBox::GetStandardImage() );

@@ -3467,7 +3467,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
-MessBox( pWindow, MessBoxStyle::DefaultYes, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+MessBox( pWindow, MessBoxStyle::DefaultYes, 0, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 
 {
     SetImage( WarningBox::GetStandardImage() );
@@ -3481,7 +3481,7 @@ MessBox( pWindow, MessBoxStyle::DefaultYes, CuiResId( RID_SVXSTR_REPLACE_ICON_CO
 
 SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage )
-    : MessBox( pWindow, MessBoxStyle::YesNoCancel, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+    : MessBox( pWindow, MessBoxStyle::YesNoCancel, 0, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ));

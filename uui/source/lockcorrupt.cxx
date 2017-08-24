@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 
 LockCorruptQueryBox::LockCorruptQueryBox(vcl::Window* pParent, const std::locale& rResLocale)
-    : MessBox(pParent, MessBoxStyle::NONE, Translate::get(STR_LOCKCORRUPT_TITLE, rResLocale), OUString())
+    : MessBox(pParent, MessBoxStyle::NONE, 0, Translate::get(STR_LOCKCORRUPT_TITLE, rResLocale), OUString())
 {
     SetImage( ErrorBox::GetStandardImage() );
 
