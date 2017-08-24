@@ -701,23 +701,34 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         }
 
         // Dump field items.
-        css::uno::Sequence<OUString> aMemberNames;
+        std::vector<ScDPLabelData::Member> aMembers;
         {
             // We need to get the members in actual order, getting which requires non-const reference here
             auto& dpo = const_cast<ScDPObject&>(rDPObj);
-            dpo.GetMemberNames(i, aMemberNames);
+            dpo.GetMembers(i, dpo.GetUsedHierarchy(i), aMembers);
         }
 
         const ScDPCache::ScDPItemDataVec& rCacheFieldItems = rCache.GetDimMemberValues(i);
-        std::vector<size_t> aMemberSequence;
-        for (const OUString& sMemberName : aMemberNames)
+        const auto iCacheFieldItems_begin = rCacheFieldItems.begin(), iCacheFieldItems_end = rCacheFieldItems.end();
+        // The pair contains the member index in cache and if it is hidden
+        std::vector< std::pair<size_t, bool> > aMemberSequence;
+        std::set<size_t> aUsedCachePositions;
+        for (const auto & rMember : aMembers)
         {
-            auto it = std::find_if(rCacheFieldItems.begin(), rCacheFieldItems.end(),
-                [&sMemberName](const ScDPItemData& arg) -> bool { return arg.GetString() == sMemberName; });
-            if (it != rCacheFieldItems.end())
+            auto it = std::find_if(iCacheFieldItems_begin, iCacheFieldItems_end,
+                [&rMember](const ScDPItemData& arg) -> bool { return arg.GetString() == rMember.maName; });
+            if (it != iCacheFieldItems_end)
             {
-                aMemberSequence.push_back(it - rCacheFieldItems.begin());
+                size_t nCachePos = it - iCacheFieldItems_begin;
+                aMemberSequence.push_back(std::make_pair(nCachePos, !rMember.mbVisible));
+                aUsedCachePositions.insert(nCachePos);
             }
+        }
+        // Now add all remaining cache items as hidden
+        for (size_t nItem = 0; nItem < rCacheFieldItems.size(); ++nItem)
+        {
+            if (aUsedCachePositions.find(nItem) == aUsedCachePositions.end())
+                aMemberSequence.push_back(std::make_pair(nItem, true));
         }
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
@@ -726,14 +737,20 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         long nSubTotalCount = pDim->GetSubTotalsCount();
         std::vector<OString> aSubtotalSequence;
+        bool bHasDefaultSubtotal = false;
         for (long nSubTotal = 0; nSubTotal < nSubTotalCount; ++nSubTotal)
         {
             ScGeneralFunction eFunc = pDim->GetSubTotalFunc(nSubTotal);
             aSubtotalSequence.push_back(GetSubtotalFuncName(eFunc));
             sal_Int32 nAttToken = GetSubtotalAttrToken(eFunc);
-            if (!pAttList->hasAttribute(nAttToken))
+            if (nAttToken == XML_defaultSubtotal)
+                bHasDefaultSubtotal = true;
+            else if (!pAttList->hasAttribute(nAttToken))
                 pAttList->add(nAttToken, ToPsz10(true));
         }
+        // XML_defaultSubtotal is true by default; only write it if it's false
+        if (!bHasDefaultSubtotal)
+            pAttList->add(XML_defaultSubtotal, ToPsz10(false));
 
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
         pPivotStrm->startElement(XML_pivotField, xAttributeList);
@@ -742,11 +759,14 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             XML_count, OString::number(static_cast<long>(aMemberSequence.size() + aSubtotalSequence.size())),
             FSEND);
 
-        for (size_t nMember : aMemberSequence)
+        for (const auto & nMember : aMemberSequence)
         {
-            pPivotStrm->singleElement(XML_item,
-                XML_x, OString::number(static_cast<long>(nMember)),
-                FSEND);
+            auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+            if (nMember.second)
+                pItemAttList->add(XML_h, ToPsz10(true));
+            pItemAttList->add(XML_x, OString::number(static_cast<long>(nMember.first)));
+            sax_fastparser::XFastAttributeListRef xItemAttributeList(pItemAttList);
+            pPivotStrm->singleElement(XML_item, xItemAttributeList);
         }
 
         for (const OString& sSubtotal : aSubtotalSequence)

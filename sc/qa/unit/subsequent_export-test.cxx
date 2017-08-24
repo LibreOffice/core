@@ -115,6 +115,7 @@ public:
     void testCellNoteExportXLS();
     void testFormatExportODS();
 
+    void testPivotTableExportXLSX();
     void testPivotExportXLSX();
     void testCommentExportXLSX();
 #if HAVE_MORE_FONTS
@@ -227,6 +228,7 @@ public:
     CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
 
+    CPPUNIT_TEST(testPivotTableExportXLSX);
     CPPUNIT_TEST(testPivotExportXLSX);
     CPPUNIT_TEST(testCommentExportXLSX);
 #if HAVE_MORE_FONTS
@@ -561,6 +563,22 @@ void ScExportTest::testFormatExportODS()
     testFormats(this, &rDoc, FORMAT_ODS);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableExportXLSX()
+{
+    // tdf#89139: pivot table definition needs to list items, including hidden
+
+    ScDocShellRef xShell = loadDoc("tdf89139_pivot_table.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items", "count", "4");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item", 4);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item[3]", "h", "1");
 }
 
 void ScExportTest::testPivotExportXLSX()
