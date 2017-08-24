@@ -1726,3 +1726,80 @@ index 40c507e..019404f 100644
 -- 
 2.12.3
 
+From 89ae3e392890b9360d271f1c1796cb27e36be26f Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 24 Aug 2017 17:11:17 +0200
+Subject: [PATCH] EPUBTextGenerator: empty mime type is the same as no mime
+ type
+
+epubcheck says:
+
+	ERROR(RSC-005): image.epub/OEBPS/content.opf(11,69): Error while parsing file: value of attribute "media-type" is invalid; must be a string matching the regular expression "[a-zA-Z0-9!#$&+\-\^_]+/[a-zA-Z0-9!#$&+\-\^_]+.*"
+---
+ src/lib/EPUBTextGenerator.cpp      |  2 +-
+ src/test/EPUBTextGeneratorTest.cpp | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index a39f266..0f7f1e0 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -614,7 +614,7 @@ void EPUBTextGenerator::insertBinaryObject(const librevenge::RVNGPropertyList &p
+       newPropList.insert(iter.key(), iter()->clone());
+   }
+ 
+-  if (!mimetype || !data)
++  if (!mimetype || mimetype->getStr().empty() || !data)
+   {
+     EPUBGEN_DEBUG_MSG(("invalid binary object dropped"));
+     return;
+-- 
+2.12.3
+
+From 28e5e30c20aba54dff6505df4c03d6a3da0ee0f3 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 24 Aug 2017 17:41:49 +0200
+Subject: [PATCH] EPUBHTMLGenerator: sanitize URLs a bit in openLink()
+
+epubcheck warns on this:
+
+	WARNING(RSC-023): large.epub/OEBPS/sections/section0018.xhtml(2,5171): The URL 'https:///www.fsf.org' is missing 1 slash(es) '/' after the protocol 'https:'
+---
+ configure.ac                       |  1 +
+ src/lib/EPUBHTMLGenerator.cpp      | 12 +++++++++++-
+ src/test/EPUBTextGeneratorTest.cpp | 40 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 019404f..aa09332 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -12,6 +12,8 @@
+ #include <stack>
+ #include <string>
+ 
++#include <boost/algorithm/string/replace.hpp>
++
+ #include "EPUBHTMLGenerator.h"
+ #include "EPUBImageManager.h"
+ #include "EPUBListStyleManager.h"
+@@ -625,7 +627,15 @@ void EPUBHTMLGenerator::openLink(const RVNGPropertyList &propList)
+   }
+   RVNGPropertyList attrs;
+   if (propList["xlink:href"])
+-    attrs.insert("href", propList["xlink:href"]->getStr().cstr());
++  {
++    std::string href(propList["xlink:href"]->getStr().cstr());
++
++    // Basic URL sanitization.
++    boost::replace_all(href, "http:///", "http://");
++    boost::replace_all(href, "https:///", "https://");
++
++    attrs.insert("href", href.c_str());
++  }
+   m_impl->output(false).openElement("a", attrs);
+ }
+ 
+-- 
+2.12.3
+
