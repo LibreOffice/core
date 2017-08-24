@@ -572,7 +572,7 @@ void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
     mbToken = true;
 }
 
-void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
+void ScFormulaResult::SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL )
 {
     ResetToDefaults();
     if (mbToken && mpToken)

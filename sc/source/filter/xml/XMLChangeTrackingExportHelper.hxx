@@ -67,12 +67,12 @@ class ScChangeTrackingExportHelper
 
     void WriteContentChange(ScChangeAction* pAction);
     void AddInsertionAttributes(const ScChangeAction* pAction);
-    void WriteInsertion(ScChangeAction* pAction);
+    void WriteInsertion(const ScChangeAction* pAction);
     void AddDeletionAttributes(const ScChangeActionDel* pAction);
     void WriteCutOffs(const ScChangeActionDel* pAction);
     void WriteDeletion(ScChangeAction* pAction);
     void WriteMovement(ScChangeAction* pAction);
-    void WriteRejection(ScChangeAction* pAction);
+    void WriteRejection(const ScChangeAction* pAction);
 
     void CollectCellAutoStyles(const ScCellValue& rCell);
     void CollectActionAutoStyles(const ScChangeAction* pAction);

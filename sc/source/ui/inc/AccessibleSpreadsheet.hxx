@@ -244,7 +244,7 @@ private:
     typedef std::map<ScMyAddress,css::uno::Reference< css::accessibility::XAccessible > >
         MAP_ADDR_XACC;
     MAP_ADDR_XACC m_mapSelectionSend;
-    void RemoveSelection(ScMarkData &refScMarkData);
+    void RemoveSelection(const ScMarkData &refScMarkData);
     void CommitFocusCell(const ScAddress &aNewCell);
 public:
     void FireFirstCellFocus();
@@ -283,7 +283,7 @@ public:
     bool IsScAddrFormulaSel (const ScAddress &addr) const;
     bool IsFormulaMode();
     ScMyAddress CalcScAddressFromRangeList(ScRangeList *pMarkedRanges,sal_Int32 nSelectedChildIndex);
-    static bool CalcScRangeDifferenceMax(ScRange *pSrc,ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
+    static bool CalcScRangeDifferenceMax(const ScRange *pSrc, const ScRange *pDest,int nMax,VEC_MYADDR &vecRet,int &nSize);
     static bool CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScRangeList *pDest,int nMax,VEC_MYADDR &vecRet);
 };
 

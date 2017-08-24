@@ -77,7 +77,7 @@ public:
     void                                SetRowStyle(const OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
-    static bool                         IsOLE(css::uno::Reference< css::drawing::XShape >& rShape)
+    static bool                         IsOLE(const css::uno::Reference< css::drawing::XShape >& rShape)
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     const ScAddress&                    GetCurrentCellPos() const { return maCurrentCellPos; };
@@ -95,7 +95,7 @@ public:
                                         GetCurrentXShapes();
     bool                                HasDrawPage();
     bool                                HasXShapes();
-    void                                AddOLE(css::uno::Reference <css::drawing::XShape>& rShape,
+    void                                AddOLE(const css::uno::Reference <css::drawing::XShape>& rShape,
                                                const OUString &rRangeList);
 
     void                                AddMatrixRange( const SCCOL nStartColumn,

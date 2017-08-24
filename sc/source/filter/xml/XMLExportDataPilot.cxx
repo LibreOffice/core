@@ -267,7 +267,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
     }
 }
 
-void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteFieldReference(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldReference* pRef = pDim->GetReferenceValue();
     if (pRef)
@@ -334,7 +334,7 @@ void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
     rExport.CheckAttrList();
 }
 
-void ScXMLExportDataPilot::WriteSortInfo(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteSortInfo(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldSortInfo* pSortInfo = pDim->GetSortInfo();
     if (pSortInfo)
@@ -368,7 +368,7 @@ void ScXMLExportDataPilot::WriteSortInfo(ScDPSaveDimension* pDim)
     }
 }
 
-void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteAutoShowInfo(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldAutoShowInfo* pAutoInfo = pDim->GetAutoShowInfo();
     if (pAutoInfo)
@@ -399,7 +399,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
     }
 }
 
-void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteLayoutInfo(const ScDPSaveDimension* pDim)
 {
     const sheet::DataPilotFieldLayoutInfo* pLayoutInfo = pDim->GetLayoutInfo();
     if (pLayoutInfo)
@@ -428,7 +428,7 @@ void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
     }
 }
 
-void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
 {
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
     const OUString* pLayoutName = nullptr;
@@ -453,7 +453,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
     }
 }
 
-void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteMembers(const ScDPSaveDimension* pDim)
 {
     const ScDPSaveDimension::MemberList &rMembers = pDim->GetMembers();
     if (!rMembers.empty())
@@ -483,7 +483,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
     }
 }
 
-void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
+void ScXMLExportDataPilot::WriteLevels(const ScDPSaveDimension* pDim)
 {
     // #i114202# GetShowEmpty is only valid if HasShowEmpty is true.
     if (pDim->HasShowEmpty())
@@ -628,7 +628,7 @@ void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNu
     }
 }
 
-void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
+void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
 {
     const ScDPSaveGroupDimension* pGroupDim = nullptr;
     const ScDPSaveNumGroupDimension* pNumGroupDim = nullptr;
@@ -670,7 +670,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
     }
 }
 
-void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
+void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
 {
     OUString aSrcDimName = ScDPUtil::getSourceDimensionName(pDim->GetName());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcDimName);
@@ -713,7 +713,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
         WriteGroupDimElements(pDim, pDimData);
 }
 
-void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
+void ScXMLExportDataPilot::WriteDimensions(const ScDPSaveData* pDPSave)
 {
     const ScDPSaveData::DimsType& rDimensions = pDPSave->GetDimensions();
     for (auto const& iter : rDimensions)

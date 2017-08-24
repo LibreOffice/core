@@ -74,7 +74,7 @@ using namespace com::sun::star;
 #define SCTRANS_TYPE_EMBOBJ             SotClipboardFormatId::PRIVATE
 #define SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT
 
-void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
+void ScTransferObj::GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
     SCCOL nMaxCol = 0;
     SCROW nMaxRow = 0;

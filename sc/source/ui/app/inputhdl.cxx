@@ -490,7 +490,7 @@ void ScInputHandler::DeleteRangeFinder()
     }
 }
 
-inline OUString GetEditText(EditEngine* pEng)
+inline OUString GetEditText(const EditEngine* pEng)
 {
     return ScEditUtil::GetSpaceDelimitedString(*pEng);
 }
@@ -1827,7 +1827,7 @@ void ScInputHandler::UpdateParenthesis()
     bParenthesisShown = bFound;
 }
 
-void ScInputHandler::ViewShellGone(ScTabViewShell* pViewSh) // Executed synchronously!
+void ScInputHandler::ViewShellGone(const ScTabViewShell* pViewSh) // Executed synchronously!
 {
     if ( pViewSh == pActiveViewSh )
     {
@@ -2215,7 +2215,7 @@ static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
         pEditView->SetSelection( rSel );
 }
 
-void ScInputHandler::SyncViews( EditView* pSourceView )
+void ScInputHandler::SyncViews( const EditView* pSourceView )
 {
     if (pSourceView)
     {
@@ -2978,7 +2978,7 @@ void ScInputHandler::CancelHandler()
     bInOwnChange = false;
 }
 
-bool ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
+bool ScInputHandler::IsModalMode( const SfxObjectShell* pDocSh )
 {
     // References to unnamed document; that doesn't work
     return bFormulaMode && pRefViewSh
@@ -3014,7 +3014,7 @@ void ScInputHandler::AddRefEntry()
     DataChanged();
 }
 
-void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
 {
     HideTip();
 
@@ -3801,7 +3801,7 @@ IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
     }
 }
 
-void ScInputHandler::InputSelection( EditView* pView )
+void ScInputHandler::InputSelection( const EditView* pView )
 {
     SyncViews( pView );
     ShowTipCursor();
@@ -3811,7 +3811,7 @@ void ScInputHandler::InputSelection( EditView* pView )
     ResetAutoPar();
 }
 
-void ScInputHandler::InputChanged( EditView* pView, bool bFromNotify )
+void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )
 {
     UpdateActiveView();
 

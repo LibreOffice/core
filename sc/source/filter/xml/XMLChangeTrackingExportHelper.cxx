@@ -464,7 +464,7 @@ void ScChangeTrackingExportHelper::AddInsertionAttributes(const ScChangeAction* 
     }
 }
 
-void ScChangeTrackingExportHelper::WriteInsertion(ScChangeAction* pAction)
+void ScChangeTrackingExportHelper::WriteInsertion(const ScChangeAction* pAction)
 {
     AddInsertionAttributes(pAction);
     SvXMLElementExport aElemChange(rExport, XML_NAMESPACE_TABLE, XML_INSERTION, true, true);
@@ -593,7 +593,7 @@ void ScChangeTrackingExportHelper::WriteMovement(ScChangeAction* pAction)
     WriteDependings(pAction);
 }
 
-void ScChangeTrackingExportHelper::WriteRejection(ScChangeAction* pAction)
+void ScChangeTrackingExportHelper::WriteRejection(const ScChangeAction* pAction)
 {
     SvXMLElementExport aElemChange(rExport, XML_NAMESPACE_TABLE, XML_REJECTION, true, true);
     WriteChangeInfo(pAction);

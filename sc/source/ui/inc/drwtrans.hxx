@@ -83,7 +83,7 @@ public:
     SdrModel*           GetModel()  { return pModel; }
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
-    void                SetDragSource( ScDrawView* pView );
+    void                SetDragSource( const ScDrawView* pView );
     void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
     void                SetDragSourceFlags( ScDragSrc nFlags );
     void                SetDragWasInternal();

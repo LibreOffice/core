@@ -143,7 +143,7 @@ void ScCondFrmtEntry::Deselect()
 
 namespace {
 
-void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
+void FillStyleListBox( const ScDocument* pDoc, ListBox& rLbStyle )
 {
     rLbStyle.SetSeparatorPos(0);
     std::set<OUString> aStyleNames;
@@ -475,7 +475,7 @@ void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 namespace {
 
-void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPreview )
+void StyleSelect( ListBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& rWdPreview )
 {
     if(rLbStyle.GetSelectEntryPos() == 0)
     {
@@ -645,7 +645,7 @@ void ScFormulaFrmtEntry::SetInactive()
 
 namespace {
 
-OUString convertNumberToString(double nVal, ScDocument* pDoc)
+OUString convertNumberToString(double nVal, const ScDocument* pDoc)
 {
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
     OUString aText;
@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl, ListBox&, void )
 
 namespace {
 
-void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ScDocument* pDoc )
+void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, const ScDocument* pDoc )
 {
     rLbType.SelectEntryPos(rEntry.GetType());
     switch(rEntry.GetType())

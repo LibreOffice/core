@@ -40,7 +40,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
 }
 
 ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uInt32 nFormat,
-                                     SvNumberFormatter& rFormatter)
+                                     const SvNumberFormatter& rFormatter)
 {
     PutFormatIndex(nFormat, rFormatter);
 }

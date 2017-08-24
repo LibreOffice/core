@@ -48,8 +48,8 @@ public:
     explicit ScMyOLEFixer(ScXMLImport& rImport);
     ~ScMyOLEFixer();
 
-    static bool IsOLE(css::uno::Reference< css::drawing::XShape >& rShape);
-    void    AddOLE(css::uno::Reference <css::drawing::XShape>& rShape,
+    static bool IsOLE(const css::uno::Reference< css::drawing::XShape >& rShape);
+    void    AddOLE(const css::uno::Reference <css::drawing::XShape>& rShape,
                    const OUString &rRangeList);
     void    FixupOLEs();
 };

@@ -50,7 +50,7 @@ public:
     static rtl::Reference<ScAccessibleCell> create(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
-        ScAddress& rCellAddress,
+        const ScAddress& rCellAddress,
         sal_Int32 nIndex,
         ScSplitPos eSplitPos,
         ScAccessibleDocument* pAccDoc);
@@ -59,7 +59,7 @@ private:
     ScAccessibleCell(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
-        ScAddress& rCellAddress,
+        const ScAddress& rCellAddress,
         sal_Int32 nIndex,
         ScSplitPos eSplitPos,
         ScAccessibleDocument* pAccDoc);

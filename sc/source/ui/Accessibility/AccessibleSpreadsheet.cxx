@@ -129,7 +129,7 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
     return ScMyAddress(0,0,maActiveCell.Tab());
 }
 
-bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(ScRange *pSrc, ScRange *pDest, int nMax, VEC_MYADDR &vecRet, int &nSize)
+bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange *pSrc, const ScRange *pDest, int nMax, VEC_MYADDR &vecRet, int &nSize)
 {
     //Src Must be :Src > Dest
     if (pDest->In(*pSrc))
@@ -713,7 +713,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     ScAccessibleTableBase::Notify(rBC, rHint);
 }
 
-void ScAccessibleSpreadsheet::RemoveSelection(ScMarkData &refScMarkData)
+void ScAccessibleSpreadsheet::RemoveSelection(const ScMarkData &refScMarkData)
 {
     AccessibleEventObject aEvent;
     aEvent.Source = uno::Reference< XAccessible >(this);

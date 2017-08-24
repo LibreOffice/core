@@ -68,7 +68,7 @@ public:
     void UpdateReference( const sc::RefUpdateContext& rCxt );
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
+    void UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt );
 
     const ScTokenArray* GetFormula() const;
     OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;

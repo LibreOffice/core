@@ -213,7 +213,7 @@ struct DeselectShape
 struct SelectShape
 {
     uno::Reference < drawing::XShapes > xShapes;
-    explicit SelectShape(uno::Reference<drawing::XShapes>& xTemp) : xShapes(xTemp) {}
+    explicit SelectShape(const uno::Reference<drawing::XShapes>& xTemp) : xShapes(xTemp) {}
     void operator() (const ScAccessibleShapeData* pAccShapeData) const
     {
         if (pAccShapeData && pAccShapeData->bSelectable)
