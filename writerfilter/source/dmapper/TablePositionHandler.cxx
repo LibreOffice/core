@@ -30,9 +30,9 @@ TablePositionHandler::TablePositionHandler() :
 
 TablePositionHandler::~TablePositionHandler() = default;
 
-void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
+void TablePositionHandler::lcl_attribute(Id nId, Value& rVal)
 {
-    switch (rName)
+    switch (nId)
     {
     case NS_ooxml::LN_CT_TblPPr_vertAnchor:
         m_aVertAnchor = rVal.getString();

@@ -768,7 +768,7 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     }
 }
 
-void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
+void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& rShape)
 {
     SvMemoryStream aStream;
     SvStream* pStream = nullptr;
@@ -858,7 +858,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     }
 
     // Wrap it in an XShape.
-    uno::Reference<drawing::XShape> xShape(i_xShape);
+    uno::Reference<drawing::XShape> xShape(rShape);
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);

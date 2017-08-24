@@ -73,10 +73,10 @@ RTFSdrImport::~RTFSdrImport()
         m_aParents.pop();
 }
 
-void RTFSdrImport::createShape(const OUString& aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
+void RTFSdrImport::createShape(const OUString& rService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     if (m_rImport.getModelFactory().is())
-        xShape.set(m_rImport.getModelFactory()->createInstance(aStr), uno::UNO_QUERY);
+        xShape.set(m_rImport.getModelFactory()->createInstance(rService), uno::UNO_QUERY);
     xPropertySet.set(xShape, uno::UNO_QUERY);
 }
 

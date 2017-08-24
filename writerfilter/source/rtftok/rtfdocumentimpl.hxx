@@ -396,7 +396,7 @@ public:
     ~RTFDocumentImpl() override;
 
     // RTFDocument
-    void resolve(Stream& rHandler) override;
+    void resolve(Stream& rMapper) override;
 
     // RTFListener
     RTFError dispatchDestination(RTFKeyword nKeyword) override;
@@ -428,7 +428,7 @@ public:
     bool isInBackground();
     void setDestinationText(OUString const& rString);
     /// Resolve a picture: If not inline, then anchored.
-    void resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& xShape);
+    void resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& rShape);
 
     /// If this is the first run of the document, starts the initial paragraph.
     void checkFirstRun();

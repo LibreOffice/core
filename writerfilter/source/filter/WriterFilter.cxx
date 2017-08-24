@@ -123,7 +123,7 @@ private:
 
 };
 
-sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor)
+sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescriptor)
 {
     if (m_xSrcDoc.is())
     {
@@ -147,11 +147,11 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         if (!xExprtr.is() || !xFltr.is())
             return false;
         xExprtr->setSourceDocument(m_xSrcDoc);
-        return xFltr->filter(aDescriptor);
+        return xFltr->filter(rDescriptor);
     }
     else if (m_xDstDoc.is())
     {
-        utl::MediaDescriptor aMediaDesc(aDescriptor);
+        utl::MediaDescriptor aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
         bool bSkipImages = aMediaDesc.getUnpackedValueOrDefault("FilterOptions", OUString()) == "SkipImages";
 
@@ -176,7 +176,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         //create the tokenizer and domain mapper
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
-        writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator, bSkipImages, aDescriptor));
+        writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator, bSkipImages, rDescriptor));
 
         uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
         pDocument->setModel(xModel);

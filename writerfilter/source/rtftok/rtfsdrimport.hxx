@@ -25,7 +25,7 @@ namespace rtftok
 class RTFSdrImport final
 {
 public:
-    RTFSdrImport(RTFDocumentImpl& rImport, css::uno::Reference<css::lang::XComponent> const& xDstDoc);
+    RTFSdrImport(RTFDocumentImpl& rDocument, css::uno::Reference<css::lang::XComponent> const& xDstDoc);
     ~RTFSdrImport();
 
     enum ShapeOrPict { SHAPE, PICT };
@@ -57,7 +57,7 @@ public:
         return m_bFakePict;
     }
 private:
-    void createShape(const OUString& aService, css::uno::Reference<css::drawing::XShape>& xShape, css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    void createShape(const OUString& rService, css::uno::Reference<css::drawing::XShape>& xShape, css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
     void applyProperty(css::uno::Reference<css::drawing::XShape> const& xShape, const OUString& aKey, const OUString& aValue);
     int initShape(css::uno::Reference<css::drawing::XShape>& o_xShape,
                   css::uno::Reference<css::beans::XPropertySet>& o_xPropSet,

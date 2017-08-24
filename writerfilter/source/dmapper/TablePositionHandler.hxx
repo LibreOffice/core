@@ -34,7 +34,7 @@ class TablePositionHandler
     sal_Int32 m_nBottomFromText = 0;
 
     // Properties
-    void lcl_attribute(Id Name, Value& val) override;
+    void lcl_attribute(Id nId, Value& rVal) override;
     void lcl_sprm(Sprm& sprm) override;
 
 public:
