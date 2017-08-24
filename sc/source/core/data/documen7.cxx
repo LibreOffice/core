@@ -559,7 +559,8 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
     if (!pBASM)
         return;
 
-    if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() && nHintId == SfxHintId::ScDataChanged)
+    if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() &&
+            (nHintId == SfxHintId::ScDataChanged || nHintId == SfxHintId::ScHiddenRowsChanged))
     {
         SetTrackFormulasPending();
         return;
