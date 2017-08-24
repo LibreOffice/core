@@ -179,7 +179,6 @@ class OLEObjCache
     size_t         nSize;
     AutoTimer*          pTimer;
 
-    void UnloadOnDemand();
     static bool UnloadObj( SdrOle2Obj* pObj );
     DECL_LINK( UnloadCheckHdl, Timer*, void );
 

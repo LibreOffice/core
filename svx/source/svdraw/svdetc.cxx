@@ -112,8 +112,6 @@ OLEObjCache::OLEObjCache()
     pTimer = new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" );
     pTimer->SetInvokeHandler( LINK(this, OLEObjCache, UnloadCheckHdl) );
     pTimer->SetTimeout(20000);
-    pTimer->Invoke();
-    pTimer->Start();
 }
 
 OLEObjCache::~OLEObjCache()
@@ -122,7 +120,7 @@ OLEObjCache::~OLEObjCache()
     delete pTimer;
 }
 
-void OLEObjCache::UnloadOnDemand()
+IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
 {
     if (nSize >= maObjs.size())
         return;
@@ -190,11 +188,12 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
     // insert object into first position
     maObjs.insert(maObjs.begin(), pObj);
 
-    if ( !bFound )
-    {
-        // a new object was inserted, recalculate the cache
-        UnloadOnDemand();
-    }
+    // if a new object was inserted, recalculate the cache
+    if (!bFound)
+        pTimer->Invoke();
+
+    if (!bFound || !pTimer->IsActive())
+        pTimer->Start();
 }
 
 void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
@@ -202,6 +201,8 @@ void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
     std::vector<SdrOle2Obj*>::iterator it = std::find(maObjs.begin(), maObjs.end(), pObj);
     if (it != maObjs.end())
         maObjs.erase(it);
+    if (maObjs.empty())
+        pTimer->Stop();
 }
 
 size_t OLEObjCache::size() const
@@ -242,12 +243,6 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 
     return bUnloaded;
 }
-
-IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
-{
-    UnloadOnDemand();
-}
-
 
 bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 {
