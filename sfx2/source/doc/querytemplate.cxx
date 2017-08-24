@@ -28,7 +28,7 @@ namespace sfx2
 {
 
 QueryTemplateBox::QueryTemplateBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox ( pParent, MessBoxStyle::NONE, Application::GetDisplayName(), rMessage )
+    MessBox ( pParent, MessBoxStyle::NONE, 0, Application::GetDisplayName(), rMessage )
 {
     SetImage( QueryBox::GetStandardImage() );
     SetHelpId( HID_QUERY_LOAD_TEMPLATE );

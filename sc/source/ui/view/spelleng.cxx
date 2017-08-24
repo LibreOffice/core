@@ -306,7 +306,7 @@ bool ScSpellingEngine::ShowTableWrapDialog()
 {
     vcl::Window* pParent = GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
-    ScopedVclPtrInstance<MessBox> aMsgBox( pParent, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
+    ScopedVclPtrInstance<MessBox> aMsgBox( pParent, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
         ScGlobal::GetRscString( STR_SPELLING_BEGIN_TAB) );
     return aMsgBox->Execute() == RET_YES;

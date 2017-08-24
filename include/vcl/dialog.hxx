@@ -34,7 +34,17 @@ class VclButtonBox;
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
 public:
-    enum class InitFlag { Default, NoParent };
+    enum class InitFlag
+    {
+        /** Use given parent or get a default one using GetDefaultParent(...) */
+        Default,
+
+        /** Suppress Parent so that Parent is not blocked (kind of modal mode) */
+        NoParent,
+
+        /** Suppress Parent (no modal, see above) and additionally center on default parent */
+        NoParentCentered
+    };
 
 private:
     VclPtr<Dialog>  mpPrevExecuteDlg;
@@ -84,6 +94,9 @@ public:
     virtual         ~Dialog() override;
     virtual void    dispose() override;
 
+    // get the default parent for a dialog as is done in standard initialization
+    static vcl::Window* GetDefaultParent(WinBits nStyle);
+
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -130,6 +143,7 @@ public:
 
     void            EndDialog( long nResult = 0 );
     static void     EndAllDialogs( vcl::Window const * pParent );
+    static bool     AreDialogsOpen();
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;

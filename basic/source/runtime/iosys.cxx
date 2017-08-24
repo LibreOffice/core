@@ -722,9 +722,9 @@ void SbiIoSystem::Shutdown()
     {
 #if defined __GNUC__
         vcl::Window* pParent = Application::GetDefDialogParent();
-        ScopedVclPtrInstance<MessBox>( pParent, MessBoxStyle::Ok, OUString(), aOut )->Execute();
+        ScopedVclPtrInstance<MessBox>( pParent, MessBoxStyle::Ok, 0, OUString(), aOut )->Execute();
 #else
-        ScopedVclPtrInstance<MessBox>( Application::GetDefDialogParent(), MessBoxStyle::Ok, OUString(), aOut )->Execute();
+        ScopedVclPtrInstance<MessBox>( Application::GetDefDialogParent(), MessBoxStyle::Ok, 0, OUString(), aOut )->Execute();
 #endif
     }
     aOut.clear();
@@ -870,7 +870,7 @@ void SbiIoSystem::WriteCon(const OUString& rText)
             if( !ScopedVclPtrInstance<MessBox>(
                         Application::GetDefDialogParent(),
                         MessBoxStyle::OkCancel | MessBoxStyle::DefaultOk,
-                        OUString(), s)->Execute() )
+                        0, OUString(), s)->Execute() )
             {
                 nError = ERRCODE_BASIC_USER_ABORT;
             }

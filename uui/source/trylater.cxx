@@ -22,7 +22,7 @@
 #include "trylater.hxx"
 
 TryLaterQueryBox::TryLaterQueryBox(vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage)
-    : MessBox(pParent, MessBoxStyle::NONE, Translate::get(STR_TRYLATER_TITLE, rResLocale), aMessage)
+    : MessBox(pParent, MessBoxStyle::NONE, 0, Translate::get(STR_TRYLATER_TITLE, rResLocale), aMessage)
 {
     SetImage( QueryBox::GetStandardImage() );
 

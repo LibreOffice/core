@@ -22,7 +22,7 @@
 #include "filechanged.hxx"
 
 FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, const std::locale& rLocale ) :
-    MessBox(pParent, MessBoxStyle::NONE,
+    MessBox(pParent, MessBoxStyle::NONE, 0,
             Translate::get(STR_FILECHANGED_TITLE, rLocale),
             OUString() )
 {

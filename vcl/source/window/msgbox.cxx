@@ -122,21 +122,15 @@ void MessBox::ImplInitButtons()
     }
 }
 
-MessBox::MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle,
-                  const OUString& rTitle, const OUString& rMessage ) :
-    MessBox(pParent, nMessBoxStyle, 0, rTitle, rMessage)
-{
-}
-
 MessBox::MessBox( vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits nWinBits,
-                  const OUString& rTitle, const OUString& rMessage ) :
+                  const OUString& rTitle, const OUString& rMessage, Dialog::InitFlag eInitFlag) :
     ButtonDialog( WindowType::MESSBOX ),
     mbHelpBtn( false ),
     mbCheck( false ),
     mnMessBoxStyle( nMessBoxStyle ),
     maMessText( rMessage )
 {
-    ImplInit( pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
+    ImplInit( pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER, eInitFlag);
     ImplInitButtons();
 
     if ( !rTitle.isEmpty() )
@@ -373,7 +367,7 @@ Size MessBox::GetOptimalSize() const
 }
 
 InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, OUString(), rMessage )
+    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, 0, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -383,7 +377,7 @@ InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
 }
 
 InfoBox::InfoBox( vcl::Window* pParent, MessBoxStyle nStyle, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
+    MessBox( pParent, nStyle, 0, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -437,7 +431,7 @@ OUString WarningBox::GetStandardText()
 }
 
 ErrorBox::ErrorBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, OUString(), rMessage )
+    MessBox( pParent, MessBoxStyle::Ok | MessBoxStyle::DefaultOk, 0, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
