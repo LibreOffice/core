@@ -104,24 +104,17 @@ public:
             case DGM_TOKEN( if ):
             {
                 // CT_When
-                mpConditionNode.reset( new ConditionAtom(mpNode->getLayoutNode(), rAttribs.getFastAttributeList()) );
-                mpNode->addChild( mpConditionNode );
-                return new IfContext( *this, rAttribs, mpConditionNode );
+                ConditionAtomPtr pNode( new ConditionAtom(mpNode->getLayoutNode(), false, rAttribs.getFastAttributeList()) );
+                mpNode->addChild( pNode );
+                return new IfContext( *this, rAttribs, pNode );
             }
             case DGM_TOKEN( else ):
+            {
                 // CT_Otherwise
-                if( mpConditionNode )
-                {
-                    mpConditionNode->readElseBranch();
-                    ContextHandlerRef xRet = new IfContext( *this, rAttribs, mpConditionNode );
-                    mpConditionNode.reset();
-                    return xRet;
-                }
-                else
-                {
-                    SAL_WARN("oox",  "ignoring second else clause" );
-                }
-                break;
+                ConditionAtomPtr pNode( new ConditionAtom(mpNode->getLayoutNode(), true, rAttribs.getFastAttributeList()) );
+                mpNode->addChild( pNode );
+                return new IfContext( *this, rAttribs, pNode );
+            }
             default:
                 break;
             }
@@ -131,7 +124,6 @@ public:
 private:
     OUString msName;
     LayoutAtomPtr mpNode;
-    ConditionAtomPtr mpConditionNode;
 };
 
 class ForEachContext
