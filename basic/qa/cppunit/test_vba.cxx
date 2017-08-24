@@ -137,6 +137,11 @@ void VBATest::testMiscVBAFunctions()
         "typename.vb",
         "ubound.vb",
         "ucase.vb",
+        "val.vb",
+        "vartype.vb",
+        "weekday.vb",
+        "weekdayname.vb",
+        "year.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
