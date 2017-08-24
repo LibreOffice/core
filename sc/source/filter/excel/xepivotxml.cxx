@@ -441,6 +441,47 @@ struct DataField
     DataField( long nPos, const ScDPSaveDimension* pDim ) : mnPos(nPos), mpDim(pDim) {}
 };
 
+/** Returns a OOXML subtotal function name string. See ECMA-376-1:2016 18.18.43 */
+OString GetSubtotalFuncName(sal_uInt16 eFunc)
+{
+    switch (eFunc)
+    {
+    case sheet::GeneralFunction_SUM:       return "sum";
+    case sheet::GeneralFunction_COUNT:     return "count";
+    case sheet::GeneralFunction_AVERAGE:   return "avg";
+    case sheet::GeneralFunction_MAX:       return "max";
+    case sheet::GeneralFunction_MIN:       return "min";
+    case sheet::GeneralFunction_PRODUCT:   return "product";
+    case sheet::GeneralFunction_COUNTNUMS: return "countA";
+    case sheet::GeneralFunction_STDEV:     return "stdDev";
+    case sheet::GeneralFunction_STDEVP:    return "stdDevP";
+    case sheet::GeneralFunction_VAR:       return "var";
+    case sheet::GeneralFunction_VARP:      return "varP";
+    default:;
+    }
+    return "default";
+}
+
+sal_Int32 GetSubtotalAttrToken(sal_uInt16 eFunc)
+{
+    switch (eFunc)
+    {
+    case sheet::GeneralFunction_SUM:       return XML_sumSubtotal;
+    case sheet::GeneralFunction_COUNT:     return XML_countSubtotal;
+    case sheet::GeneralFunction_AVERAGE:   return XML_avgSubtotal;
+    case sheet::GeneralFunction_MAX:       return XML_maxSubtotal;
+    case sheet::GeneralFunction_MIN:       return XML_minSubtotal;
+    case sheet::GeneralFunction_PRODUCT:   return XML_productSubtotal;
+    case sheet::GeneralFunction_COUNTNUMS: return XML_countASubtotal;
+    case sheet::GeneralFunction_STDEV:     return XML_stdDevSubtotal;
+    case sheet::GeneralFunction_STDEVP:    return XML_stdDevPSubtotal;
+    case sheet::GeneralFunction_VAR:       return XML_varSubtotal;
+    case sheet::GeneralFunction_VARP:      return XML_varPSubtotal;
+    default:;
+    }
+    return XML_defaultSubtotal;
+}
+
 }
 
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
@@ -528,18 +569,18 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
         XML_name, XclXmlUtils::ToOString(rDPObj.GetName()).getStr(),
         XML_cacheId, OString::number(nCacheId).getStr(),
-        XML_applyNumberFormats, BS(false),
-        XML_applyBorderFormats, BS(false),
-        XML_applyFontFormats, BS(false),
-        XML_applyPatternFormats, BS(false),
-        XML_applyAlignmentFormats, BS(false),
-        XML_applyWidthHeightFormats, BS(false),
+        XML_applyNumberFormats, XclXmlUtils::ToPsz10(false),
+        XML_applyBorderFormats, XclXmlUtils::ToPsz10(false),
+        XML_applyFontFormats, XclXmlUtils::ToPsz10(false),
+        XML_applyPatternFormats, XclXmlUtils::ToPsz10(false),
+        XML_applyAlignmentFormats, XclXmlUtils::ToPsz10(false),
+        XML_applyWidthHeightFormats, XclXmlUtils::ToPsz10(false),
         XML_dataCaption, "Values",
-        XML_useAutoFormatting, BS(false),
-        XML_itemPrintTitles, BS(true),
-        XML_indent, BS(false),
-        XML_outline, BS(true),
-        XML_outlineData, BS(true),
+        XML_useAutoFormatting, XclXmlUtils::ToPsz10(false),
+        XML_itemPrintTitles, XclXmlUtils::ToPsz10(true),
+        XML_indent, XclXmlUtils::ToPsz10(false),
+        XML_outline, XclXmlUtils::ToPsz10(true),
+        XML_outlineData, XclXmlUtils::ToPsz10(true),
         FSEND);
 
     // NB: Excel's range does not include page field area (if any).
@@ -582,12 +623,13 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_count, OString::number(static_cast<long>(aCachedDims.size())).getStr(),
         FSEND);
 
-    for (const ScDPSaveDimension* pDim : aCachedDims)
+    for (size_t i = 0; i < nFieldCount; ++i)
     {
+        const ScDPSaveDimension* pDim = aCachedDims[i];
         if (!pDim)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_showAll, BS(false),
+                XML_showAll, XclXmlUtils::ToPsz10(false),
                 FSEND);
             continue;
         }
@@ -598,7 +640,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (eOrient == sheet::DataPilotFieldOrientation_HIDDEN)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_showAll, BS(false),
+                XML_showAll, XclXmlUtils::ToPsz10(false),
                 FSEND);
             continue;
         }
@@ -606,20 +648,90 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_dataField, BS(true),
-                XML_showAll, BS(false),
+                XML_dataField, XclXmlUtils::ToPsz10(true),
+                XML_showAll, XclXmlUtils::ToPsz10(false),
                 FSEND);
 
             continue;
         }
 
-        pPivotStrm->startElement(XML_pivotField,
-            XML_axis, toOOXMLAxisType(eOrient),
-            XML_showAll, BS(false),
+        // Dump field items.
+        std::vector<ScDPLabelData::Member> aMembers;
+        {
+            // We need to get the members in actual order, getting which requires non-const reference here
+            auto& dpo = const_cast<ScDPObject&>(rDPObj);
+            dpo.GetMembers(i, dpo.GetUsedHierarchy(i), aMembers);
+        }
+
+        const ScDPCache::ScDPItemDataVec& rCacheFieldItems = rCache.GetDimMemberValues(i);
+        const auto iCacheFieldItems_begin = rCacheFieldItems.begin(), iCacheFieldItems_end = rCacheFieldItems.end();
+        // The pair contains the member index in cache and if it is hidden
+        std::vector< std::pair<size_t, bool> > aMemberSequence;
+        std::set<size_t> aUsedCachePositions;
+        for (const auto & rMember : aMembers)
+        {
+            auto it = std::find_if(iCacheFieldItems_begin, iCacheFieldItems_end,
+                [&rMember](const ScDPItemData& arg) -> bool { return arg.GetString() == rMember.maName; });
+            if (it != iCacheFieldItems_end)
+            {
+                size_t nCachePos = it - iCacheFieldItems_begin;
+                aMemberSequence.push_back(std::make_pair(nCachePos, !rMember.mbVisible));
+                aUsedCachePositions.insert(nCachePos);
+            }
+        }
+        // Now add all remaining cache items as hidden
+        for (size_t nItem = 0; nItem < rCacheFieldItems.size(); ++nItem)
+        {
+            if (aUsedCachePositions.find(nItem) == aUsedCachePositions.end())
+                aMemberSequence.push_back(std::make_pair(nItem, true));
+        }
+
+        auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+        pAttList->add(XML_axis, toOOXMLAxisType(eOrient));
+        pAttList->add(XML_showAll, XclXmlUtils::ToPsz10(false));
+
+        long nSubTotalCount = pDim->GetSubTotalsCount();
+        std::vector<OString> aSubtotalSequence;
+        bool bHasDefaultSubtotal = false;
+        for (long nSubTotal = 0; nSubTotal < nSubTotalCount; ++nSubTotal)
+        {
+            sal_uInt16 eFunc = pDim->GetSubTotalFunc(nSubTotal);
+            aSubtotalSequence.push_back(GetSubtotalFuncName(eFunc));
+            sal_Int32 nAttToken = GetSubtotalAttrToken(eFunc);
+            if (nAttToken == XML_defaultSubtotal)
+                bHasDefaultSubtotal = true;
+            else if (!pAttList->hasAttribute(nAttToken))
+                pAttList->add(nAttToken, XclXmlUtils::ToPsz10(true));
+        }
+        // XML_defaultSubtotal is true by default; only write it if it's false
+        if (!bHasDefaultSubtotal)
+            pAttList->add(XML_defaultSubtotal, XclXmlUtils::ToPsz10(false));
+
+        sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
+        pPivotStrm->startElement(XML_pivotField, xAttributeList);
+
+        pPivotStrm->startElement(XML_items,
+            XML_count, OString::number(static_cast<long>(aMemberSequence.size() + aSubtotalSequence.size())),
             FSEND);
 
-        // TODO : Dump field items.
+        for (const auto & nMember : aMemberSequence)
+        {
+            auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+            if (nMember.second)
+                pItemAttList->add(XML_h, XclXmlUtils::ToPsz10(true));
+            pItemAttList->add(XML_x, OString::number(static_cast<long>(nMember.first)));
+            sax_fastparser::XFastAttributeListRef xItemAttributeList(pItemAttList);
+            pPivotStrm->singleElement(XML_item, xItemAttributeList);
+        }
 
+        for (const OString& sSubtotal : aSubtotalSequence)
+        {
+            pPivotStrm->singleElement(XML_item,
+                XML_t, sSubtotal,
+                FSEND);
+        }
+
+        pPivotStrm->endElement(XML_items);
         pPivotStrm->endElement(XML_pivotField);
     }
 

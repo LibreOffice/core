@@ -110,6 +110,9 @@ public:
     void testCellNoteExportXLS();
     void testFormatExportODS();
 
+    void testPivotTableExportXLSX();
+    void testPivotExportXLSX();
+    void testCommentExportXLSX();
     void testCustomColumnWidthExportXLSX();
     void testXfDefaultValuesXLSX();
     void testColumnWidthResaveXLSX();
@@ -199,6 +202,9 @@ public:
     CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
 
+    CPPUNIT_TEST(testPivotTableExportXLSX);
+    CPPUNIT_TEST(testPivotExportXLSX);
+    CPPUNIT_TEST(testCommentExportXLSX);
     CPPUNIT_TEST(testCustomColumnWidthExportXLSX);
     CPPUNIT_TEST(testXfDefaultValuesXLSX);
     CPPUNIT_TEST(testColumnWidthResaveXLSX);
@@ -481,6 +487,98 @@ void ScExportTest::testFormatExportODS()
     testFormats(this, &rDoc, FORMAT_ODS);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableExportXLSX()
+{
+    // tdf#89139: pivot table definition needs to list items, including hidden
+
+    ScDocShellRef xShell = loadDoc("tdf89139_pivot_table.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items", "count", "4");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item", 4);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[3]/x:items/x:item[3]", "h", "1");
+}
+
+void ScExportTest::testPivotExportXLSX()
+{
+    //tdf#89139 FILESAVE  xlsx pivot table corrupted after save with LO and re-open with MS Office
+    ScDocShellRef xShell = loadDoc("pivot.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 5);
+
+    // Four strings and one empty field
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]", "name", "imieinazwisko");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsBlank", "1");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsMixedTypes");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsSemiMixedTypes");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsString");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsNumber");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "containsInteger");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "minValue");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "maxValue");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "count", "5");
+
+    // Two integers and one empty field
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "wartosc");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsBlank", "1");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsMixedTypes");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsSemiMixedTypes");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsString", "0");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsNumber", "1");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsInteger", "1");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "minValue", "111");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "maxValue", "222");
+
+    // Five integers
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]", "name", "druga wartosc");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsBlank");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsMixedTypes");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsSemiMixedTypes", "0");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsString", "0");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsNumber", "1");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "containsInteger", "1");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "minValue", "1111");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "maxValue", "5555");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems", "count");
+
+    // Three integers and one string
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name", "trzecia wartosc");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsBlank");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsMixedTypes", "1");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsSemiMixedTypes");
+    assertXPathNoAttribute(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsString");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsNumber", "1");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "containsInteger", "1");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "minValue", "1234");
+    assertXPath(pSheet, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:sharedItems", "maxValue", "5678");
+}
+
+void ScExportTest::testCommentExportXLSX()
+{
+    //tdf#104729 FILESAVE OpenOffice do not save author of the comment during export to .xlsx
+    ScDocShellRef xShell = loadDoc("comment.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/comments1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:comments/x:authors/x:author[1]", "BAKO");
+    assertXPath(pSheet, "/x:comments/x:authors/x:author", 1);
+
+    assertXPath(pSheet, "/x:comments/x:commentList/x:comment/x:text/x:r/x:t", "Komentarz");
+
 }
 
 void ScExportTest::testCustomColumnWidthExportXLSX()
