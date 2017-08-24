@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_89b07e8d",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T05:58:29Z",
+      "side": 1,
+      "message": "Well, as this message is only shown on failed check, it should either state the failed state (like \"HACK ALERT: Shape is in background!\"), or explicitly tell about \"desired\" state (like \"HACK ALERT: Shape expected to be in foreground\").",
+      "range": {
+        "startLine": 1099,
+        "startChar": 58,
+        "endLine": 1099,
+        "endChar": 68
+      },
+      "revId": "7e4a052eb07be46d99ed869439efe74a24946146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
