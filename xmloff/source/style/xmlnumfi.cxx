@@ -1659,6 +1659,11 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     {
         SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>( static_cast<const SvXMLNumFormatContext *>(pStyles->FindStyleChildContext(
             XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName)));
+        if (this == pStyle)
+        {
+            SAL_INFO("xmloff.style", "invalid style:map references containing style");
+            pStyle = nullptr;
+        }
         if (pStyle)
         {
             if (pStyle->PrivateGetKey() > -1)     // don't reset pStyle's bRemoveAfterUse flag
