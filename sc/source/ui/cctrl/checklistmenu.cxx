@@ -482,7 +482,7 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
     fireMenuHighlightedEvent();
 }
 
-void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
+void ScMenuFloatingWindow::handleMenuTimeout(const SubMenuItemData* pTimer)
 {
     if (pTimer == &maOpenTimer)
     {
@@ -750,7 +750,7 @@ size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
     return MENU_NOT_SELECTED;
 }
 
-size_t ScMenuFloatingWindow::getSubMenuPos(ScMenuFloatingWindow* pSubMenu)
+size_t ScMenuFloatingWindow::getSubMenuPos(const ScMenuFloatingWindow* pSubMenu)
 {
     size_t n = maMenuItems.size();
     for (size_t i = 0; i < n; ++i)
@@ -1359,7 +1359,7 @@ void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.DrawRect(tools::Rectangle(aPos,aSize));
 }
 
-void ScCheckListMenuWindow::updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx )
+void ScCheckListMenuWindow::updateMemberParents( const SvTreeListEntry* pLeaf, size_t nIdx )
 {
 
     if ( !maMembers[nIdx].mbDate || maMembers[nIdx].meDatePartType != ScCheckListMember::DAY )

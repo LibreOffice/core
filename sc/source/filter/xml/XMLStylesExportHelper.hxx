@@ -83,7 +83,7 @@ public:
     void                   AddValidation(const css::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
     static OUString        GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
-    static OUString        GetBaseCellAddress(ScDocument* pDoc, const ScAddress& aCell);
+    static OUString        GetBaseCellAddress(const ScDocument* pDoc, const ScAddress& aCell);
     static void            WriteMessage(ScXMLExport& rExport,
                                     const OUString& sTitle, const OUString& sMessage,
                                     const bool bShowMessage, const bool bIsHelpMessage);

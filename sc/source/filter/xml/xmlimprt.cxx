@@ -1409,7 +1409,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
     return false;
 }
 
-void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
+void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rProperties,
                           sal_Int32& rNumberFormat,
                           const sal_Int16 nCellType,
                           const OUString& rCurrency)

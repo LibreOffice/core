@@ -1119,8 +1119,8 @@ struct ScPagePreviewCountData
     long nForeShapes;
     long nControls;
 
-    ScPagePreviewCountData( const ScPreviewLocationData& rData, vcl::Window* pSizeWindow,
-        ScNotesChildren* pNotesChildren, ScShapeChildren* pShapeChildren );
+    ScPagePreviewCountData( const ScPreviewLocationData& rData, const vcl::Window* pSizeWindow,
+        const ScNotesChildren* pNotesChildren, const ScShapeChildren* pShapeChildren );
 
     long GetTotal() const
     {
@@ -1129,8 +1129,8 @@ struct ScPagePreviewCountData
 };
 
 ScPagePreviewCountData::ScPagePreviewCountData( const ScPreviewLocationData& rData,
-                                vcl::Window* pSizeWindow, ScNotesChildren* pNotesChildren,
-                                ScShapeChildren* pShapeChildren) :
+                                const vcl::Window* pSizeWindow, const ScNotesChildren* pNotesChildren,
+                                const ScShapeChildren* pShapeChildren) :
     nBackShapes( 0 ),
     nHeaders( 0 ),
     nTables( 0 ),

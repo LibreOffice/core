@@ -635,7 +635,7 @@ static void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB
     }
 }
 
-void ScDrawTransferObj::SetDragSource( ScDrawView* pView )
+void ScDrawTransferObj::SetDragSource( const ScDrawView* pView )
 {
     DELETEZ( pDragSourceView );
     pDragSourceView = new SdrView( pView->GetModel() );

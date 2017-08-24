@@ -257,7 +257,7 @@ bool ScMyTables::HasXShapes()
     return !((maCurrentCellPos.Tab() != nCurrentXShapes) || !xShapes.is());
 }
 
-void ScMyTables::AddOLE(uno::Reference <drawing::XShape>& rShape,
+void ScMyTables::AddOLE(const uno::Reference <drawing::XShape>& rShape,
       const OUString &rRangeList)
 {
       aFixupOLEs.AddOLE(rShape, rRangeList);

@@ -143,7 +143,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 
 //  class ScInputWindow
 
-static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* pBind )
+static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, const SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = nullptr;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -157,7 +157,7 @@ static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBin
     return VclPtr<ScInputBarGroup>::Create( pParent, pViewSh );
 }
 
-ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
+ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
         aWndPos         ( VclPtr<ScPosWnd>::Create(this) ),

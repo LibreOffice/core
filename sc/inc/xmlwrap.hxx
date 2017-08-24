@@ -69,19 +69,19 @@ class ScXMLImportWrapper
     css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator();
 
     ErrCode ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
-        css::uno::Reference<css::frame::XModel>& xModel,
-        css::uno::Reference<css::xml::sax::XParser>& xParser,
+        const css::uno::Reference<css::frame::XModel>& xModel,
+        const css::uno::Reference<css::xml::sax::XParser>& xParser,
         css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName, const OUString& sOldDocName,
-        css::uno::Sequence<css::uno::Any>& aArgs,
+        const css::uno::Sequence<css::uno::Any>& aArgs,
         bool bMustBeSuccessfull);
 
     bool ExportToComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
-        css::uno::Reference<css::frame::XModel>& xModel,
-        css::uno::Reference<css::xml::sax::XWriter>& xWriter,
-        css::uno::Sequence<css::beans::PropertyValue>& aDescriptor,
+        const css::uno::Reference<css::frame::XModel>& xModel,
+        const css::uno::Reference<css::xml::sax::XWriter>& xWriter,
+        const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor,
         const OUString& sName, const OUString& sMediaType, const OUString& sComponentName,
-        css::uno::Sequence<css::uno::Any>& aArgs,
+        const css::uno::Sequence<css::uno::Any>& aArgs,
         ScMySharedData*& pSharedData);
 
 public:

@@ -47,20 +47,20 @@ class ScXMLExportDataPilot
             utl::SearchParam::SearchType eSearchType);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
 
-    void WriteFieldReference(ScDPSaveDimension* pDim);
-    void WriteSortInfo(ScDPSaveDimension* pDim);
-    void WriteAutoShowInfo(ScDPSaveDimension* pDim);
-    void WriteLayoutInfo(ScDPSaveDimension* pDim);
-    void WriteSubTotals(ScDPSaveDimension* pDim);
-    void WriteMembers(ScDPSaveDimension* pDim);
-    void WriteLevels(ScDPSaveDimension* pDim);
+    void WriteFieldReference(const ScDPSaveDimension* pDim);
+    void WriteSortInfo(const ScDPSaveDimension* pDim);
+    void WriteAutoShowInfo(const ScDPSaveDimension* pDim);
+    void WriteLayoutInfo(const ScDPSaveDimension* pDim);
+    void WriteSubTotals(const ScDPSaveDimension* pDim);
+    void WriteMembers(const ScDPSaveDimension* pDim);
+    void WriteLevels(const ScDPSaveDimension* pDim);
     void WriteDatePart(sal_Int32 nPart);
     void WriteNumGroupInfo(const ScDPNumGroupInfo& pGroupInfo);
     void WriteGroupDimAttributes(const ScDPSaveGroupDimension* pGroupDim);
-    void WriteGroupDimElements(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
+    void WriteGroupDimElements(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim);
-    void WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
-    void WriteDimensions(ScDPSaveData* pDPSave);
+    void WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
+    void WriteDimensions(const ScDPSaveData* pDPSave);
 
     void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal);
 

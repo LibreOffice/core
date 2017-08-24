@@ -100,10 +100,10 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 }
 
 ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XComponentContext>& xContext,
-    uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XParser>& xParser,
+    const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XParser>& xParser,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
-    const OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
+    const OUString& sOldDocName, const uno::Sequence<uno::Any>& aArgs,
     bool bMustBeSuccessfull)
 {
     uno::Reference < io::XStream > xDocStream;
@@ -586,7 +586,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
 }
 
-static bool lcl_HasValidStream(ScDocument& rDoc)
+static bool lcl_HasValidStream(const ScDocument& rDoc)
 {
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh->IsDocShared() )
@@ -606,10 +606,10 @@ static bool lcl_HasValidStream(ScDocument& rDoc)
 }
 
 bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentContext>& xContext,
-    uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XWriter>& xWriter,
-    uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
+    const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XWriter>& xWriter,
+    const uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
-    uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
+    const uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
     bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;

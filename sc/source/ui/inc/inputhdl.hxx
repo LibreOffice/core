@@ -122,7 +122,7 @@ private:
 
 private:
     void            UpdateActiveView();
-    void            SyncViews( EditView* pSourceView = nullptr );
+    void            SyncViews( const EditView* pSourceView = nullptr );
     /**
      * @param cTyped typed character. If 0, look at existing document content
      *               for text or number.
@@ -184,7 +184,7 @@ public:
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
     void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
     void            CancelHandler();
-    void            SetReference( const ScRange& rRef, ScDocument* pDoc );
+    void            SetReference( const ScRange& rRef, const ScDocument* pDoc );
     void            AddRefEntry();
 
     void            InputCommand( const CommandEvent& rCEvt );
@@ -192,10 +192,10 @@ public:
     void            InsertFunction( const OUString& rFuncName, bool bAddPar = true );
     void            ClearText();
 
-    void            InputSelection( EditView* pView );
-    void            InputChanged( EditView* pView, bool bFromNotify );
+    void            InputSelection( const EditView* pView );
+    void            InputChanged( const EditView* pView, bool bFromNotify );
 
-    void            ViewShellGone(ScTabViewShell* pViewSh);
+    void            ViewShellGone(const ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
 
     void            NotifyChange( const ScInputHdlState* pState, bool bForce = false,
@@ -249,7 +249,7 @@ public:
     bool            IsInEnterHandler() const                { return bInEnterHandler; }
     bool            IsInOwnChange() const                   { return bInOwnChange; }
 
-    bool            IsModalMode( SfxObjectShell* pDocSh );
+    bool            IsModalMode( const SfxObjectShell* pDocSh );
 
     void            ForgetLastPattern();
 

@@ -1174,7 +1174,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
 
 namespace {
 
-bool isEmptyOrNote( ScDocument* pDoc, const ScAddress& rCurrentPos )
+bool isEmptyOrNote( const ScDocument* pDoc, const ScAddress& rCurrentPos )
 {
     CellType eType = pDoc->GetCellType(rCurrentPos);
     return (eType == CELLTYPE_NONE);

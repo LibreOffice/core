@@ -106,13 +106,13 @@ protected:
 
 private:
     struct SubMenuItemData;
-    void handleMenuTimeout(SubMenuItemData* pTimer);
+    void handleMenuTimeout(const SubMenuItemData* pTimer);
 
     void resizeToFitMenuItems();
     void highlightMenuItem(vcl::RenderContext& rRenderContext, size_t nPos, bool bSelected);
 
     size_t getEnclosingMenuItem(const Point& rPos) const;
-    size_t getSubMenuPos(ScMenuFloatingWindow* pSubMenu);
+    size_t getSubMenuPos(const ScMenuFloatingWindow* pSubMenu);
 
     /**
      * Fire a menu highlight event since the accessibility framework needs
@@ -405,7 +405,7 @@ private:
     void packWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
-    void updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx );
+    void updateMemberParents( const SvTreeListEntry* pLeaf, size_t nIdx );
 
     DECL_LINK( ButtonHdl, Button*, void );
     DECL_LINK( TriStateHdl, Button*, void );

@@ -281,7 +281,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
     return sCondition;
 }
 
-OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const ScAddress& aCell)
+OUString ScMyValidationsContainer::GetBaseCellAddress(const ScDocument* pDoc, const ScAddress& aCell)
 {
     OUString sAddress;
     ScRangeStringConverter::GetStringFromAddress( sAddress, aCell, pDoc, ::formula::FormulaGrammar::CONV_OOO );

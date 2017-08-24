@@ -283,7 +283,7 @@ public:
     void            UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
     void            UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    void            UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
+    void            UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse );
     void            FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes) const;
@@ -373,7 +373,7 @@ public:
 
     OUString GetHybridFormula() const;
 
-    void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
+    void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
 
     /** For import only: set a double result.
         Use this instead of SetHybridDouble() if there is no (temporary)

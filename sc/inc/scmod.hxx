@@ -202,14 +202,14 @@ public:
     bool                InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit = false );
     SC_DLLPUBLIC void   InputEnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
     void                InputCancelHandler();
-    void                InputSelection( EditView* pView );
-    void                InputChanged( EditView* pView );
+    void                InputSelection( const EditView* pView );
+    void                InputChanged( const EditView* pView );
     ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = nullptr, bool bUseRef = true );
 
     void                SetRefInputHdl( ScInputHandler* pNew );
     ScInputHandler*     GetRefInputHdl() { return pRefInputHandler;}
 
-    void                ViewShellGone(ScTabViewShell* pViewSh);
+    void                ViewShellGone(const ScTabViewShell* pViewSh);
     void                ViewShellChanged(bool bStopEditing = true);
     // communication with function-autopilot
     void                InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd );
