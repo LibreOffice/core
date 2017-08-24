@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e955821d",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T06:38:58Z",
+      "side": 1,
+      "message": "And still I\u0027m not sure that this is OK here. IMO, the function doesn\u0027t relate to ScDPCache. Rather, I\u0027d move it to xepivotxml.cxx, and used the GetDoc() available in XclExpXmlPivotCaches to get the formatter.",
+      "range": {
+        "startLine": 1293,
+        "startChar": 0,
+        "endLine": 1306,
+        "endChar": 1
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a95b7a53",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T06:38:58Z",
+      "side": 1,
+      "message": "please move this below, to the part where number\u0027s min/max are added, to avoid the mix like\n\ncontainsDate\u003d\"1\" minDate\u003d\"1903-08-24T07:40:48\" maxDate\u003d\"2024-05-23T07:12:00\" containsBlank\u003d\"1\"\n\nwhere \"containsFoo\" is interspersed with \"(min|max)Date\"",
+      "range": {
+        "startLine": 293,
+        "startChar": 8,
+        "endLine": 297,
+        "endChar": 9
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_895ebe43",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T06:38:58Z",
+      "side": 1,
+      "message": "typo: double u in Nuumbers",
+      "range": {
+        "startLine": 303,
+        "startChar": 57,
+        "endLine": 303,
+        "endChar": 58
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2936aa03",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T06:38:58Z",
+      "side": 1,
+      "message": "You write about omitting (min|max)Value from output if field contains both dates and numbers; but actually you also disable containsNumber and containsInteger doing this. Is that OK?",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 303,
+        "endChar": 147
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0931ee0b",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T06:38:58Z",
+      "side": 1,
+      "message": "This comment should be moved to GetISO8601FormattedDate, otherwise it is unclear why you mention it here, but not for lines 295-296. Or remove it totally.",
+      "range": {
+        "startLine": 349,
+        "startChar": 28,
+        "endLine": 351,
+        "endChar": 121
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

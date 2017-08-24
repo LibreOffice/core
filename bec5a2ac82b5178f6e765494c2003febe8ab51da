@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6949928b",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-24T06:38:58Z",
+      "side": 0,
+      "message": "You decided to always list all items. I\u0027m not sure about implications, but at least get rid of the bListItems variable in this case (under your comment on line 265; also move the comment to the place where we actually list the values). It\u0027s not required to provide \"template\" variables for later patches.",
+      "range": {
+        "startLine": 304,
+        "startChar": 12,
+        "endLine": 312,
+        "endChar": 31
+      },
+      "revId": "bec5a2ac82b5178f6e765494c2003febe8ab51da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
