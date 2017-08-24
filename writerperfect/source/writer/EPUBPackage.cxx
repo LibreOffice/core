@@ -13,6 +13,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -39,6 +40,10 @@ EPUBPackage::EPUBPackage(const uno::Reference<uno::XComponentContext> &xContext,
     mxOutputStream->writeBytes(aData);
     uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
     xTransactedObject->commit();
+
+    // MIME type must be uncompressed.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxOutputStream, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("Compressed", uno::makeAny(false));
     mxOutputStream.clear();
 }
 
