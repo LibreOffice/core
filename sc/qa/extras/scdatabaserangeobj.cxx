@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/databaserange.hxx>
 #include <test/sheet/xdatabaserange.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -20,9 +21,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 6
+#define NUMBER_OF_TESTS 17
 
-class ScDatabaseRangeObj : public CalcUnoApiTest, public apitest::XDatabaseRange
+class ScDatabaseRangeObj : public CalcUnoApiTest, public apitest::DatabaseRange, public apitest::XDatabaseRange
 {
 public:
     virtual void setUp() override;
@@ -33,12 +34,28 @@ public:
     ScDatabaseRangeObj();
 
     CPPUNIT_TEST_SUITE(ScDatabaseRangeObj);
+
+    // XDatabaseRange
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGetSortDescriptor);
     CPPUNIT_TEST(testGetSubtotalDescriptor);
     CPPUNIT_TEST(testGetImportDescriptor);
     CPPUNIT_TEST(testGetFilterDescriptor);
     CPPUNIT_TEST(testRefresh);
+
+    // DatabaseRange
+    CPPUNIT_TEST(testMoveCells);
+    CPPUNIT_TEST(testKeepFormats);
+    CPPUNIT_TEST(testStripData);
+    CPPUNIT_TEST(testAutoFilter);
+    CPPUNIT_TEST(testUseFilterCriteriaSource);
+    CPPUNIT_TEST(testFilterCriteriaSource);
+    CPPUNIT_TEST(testRefreshPeriod);
+    CPPUNIT_TEST(testFromSelection);
+    CPPUNIT_TEST(testTokenIndex);
+    CPPUNIT_TEST(testTotalsRow);
+    CPPUNIT_TEST(testContainsHeader);
+
     CPPUNIT_TEST_SUITE_END();
 private:
     static sal_Int32 nTest;
@@ -72,6 +89,7 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBN
 void ScDatabaseRangeObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 
