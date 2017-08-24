@@ -28,6 +28,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <map>
+#include <memory>
 
 #define MAX_FUNCCAT 12  /* maximum number of categories for functions */
 #define LRU_MAX 10 /* maximal number of last recently used functions */
@@ -393,7 +394,7 @@ public:
 
 private:
     ScFunctionList* pFuncList; /**< list of all calc functions */
-    std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
+    std::unique_ptr<std::vector<const ScFuncDesc*>> aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
     mutable std::map< sal_uInt32, std::shared_ptr<ScFunctionCategory> > m_aCategories; /**< map of category pos to IFunctionCategory */
     mutable std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */
     mutable std::vector<const ScFuncDesc*>::iterator pCurCatListEnd; /**< end of current category */

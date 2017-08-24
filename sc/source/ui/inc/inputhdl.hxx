@@ -60,9 +60,9 @@ private:
     EditView*               pTableView;                 // associated active EditView
     EditView*               pTopView;                   // EditView in the input row
 
-    ScTypedCaseStrSet* pColumnData;
-    ScTypedCaseStrSet* pFormulaData;
-    ScTypedCaseStrSet* pFormulaDataPara;
+    std::unique_ptr<ScTypedCaseStrSet> pColumnData;
+    std::unique_ptr<ScTypedCaseStrSet> pFormulaData;
+    std::unique_ptr<ScTypedCaseStrSet> pFormulaDataPara;
     ScTypedCaseStrSet::const_iterator miAutoPosColumn;
     ScTypedCaseStrSet::const_iterator miAutoPosFormula;
 
@@ -109,12 +109,15 @@ private:
     ScTabViewShell*         pActiveViewSh;
 
     const ScPatternAttr*    pLastPattern;
-    SfxItemSet*             pEditDefaults;
+    std::unique_ptr<SfxItemSet>
+                            pEditDefaults;
 
-    ScInputHdlState*        pLastState;
+    std::unique_ptr<ScInputHdlState>
+                            pLastState;
     Timer*                  pDelayTimer;
 
-    ScRangeFindList*        pRangeFindList;
+    std::unique_ptr<ScRangeFindList>
+                            pRangeFindList;
 
     static bool             bAutoComplete;              // from app options
     static bool             bOptLoaded;
@@ -231,7 +234,7 @@ public:
 
     void            ShowRefFrame();
 
-    ScRangeFindList* GetRangeFindList()     { return pRangeFindList; }
+    ScRangeFindList* GetRangeFindList()     { return pRangeFindList.get(); }
 
     void            UpdateRange( sal_uInt16 nIndex, const ScRange& rNew );
 
