@@ -63,14 +63,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
-ifeq ($(TLS),NSS)
-$(eval $(call gb_Library_use_externals,vcl,\
-	$(if $(filter-out IOS WNT,$(OS)), \
-		nss3 \
-		plc4) \
-))
-endif
-
 $(eval $(call gb_Library_use_libraries,vcl,\
     $(call gb_Helper_optional,BREAKPAD, \
 		crashreport) \
