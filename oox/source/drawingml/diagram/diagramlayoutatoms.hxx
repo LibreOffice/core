@@ -176,21 +176,17 @@ class ConditionAtom
     : public LayoutAtom
 {
 public:
-    explicit ConditionAtom(const LayoutNode& rLayoutNode, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ConditionAtom(const LayoutNode& rLayoutNode, bool isElse, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
-    void readElseBranch()
-        { mbElse=true; }
-    virtual void addChild( const LayoutAtomPtr & pNode ) override;
-    virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
+    bool getDecision() const;
 private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
     const dgm::Point* getPresNode() const;
     sal_Int32 getNodeCount() const;
 
-    bool          mbElse;
+    bool          mIsElse;
     IteratorAttr  maIter;
     ConditionAttr maCond;
-    std::vector< LayoutAtomPtr > mpElseChildNodes;
 };
 
 typedef std::shared_ptr< ConditionAtom > ConditionAtomPtr;
@@ -202,6 +198,9 @@ class ChooseAtom
 public:
     ChooseAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode) {}
     virtual void accept( LayoutAtomVisitor& ) override;
+    virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
+private:
+    const std::vector<LayoutAtomPtr> maEmptyChildren;
 };
 
 class LayoutNode

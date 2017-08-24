@@ -98,9 +98,20 @@ void ChooseAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-ConditionAtom::ConditionAtom(const LayoutNode& rLayoutNode, const Reference< XFastAttributeList >& xAttributes) :
+const std::vector<LayoutAtomPtr>& ChooseAtom::getChildren() const
+{
+    for (const auto& pChild : mpChildNodes)
+    {
+        const ConditionAtomPtr pCond = std::dynamic_pointer_cast<ConditionAtom>(pChild);
+        if (pCond && pCond->getDecision())
+            return pCond->getChildren();
+    }
+    return maEmptyChildren;
+}
+
+ConditionAtom::ConditionAtom(const LayoutNode& rLayoutNode, bool isElse, const Reference< XFastAttributeList >& xAttributes) :
     LayoutAtom(rLayoutNode),
-    mbElse( false )
+    mIsElse(isElse)
 {
     maIter.loadFromXAttr( xAttributes );
     maCond.loadFromXAttr( xAttributes );
@@ -156,49 +167,38 @@ sal_Int32 ConditionAtom::getNodeCount() const
     return nCount;
 }
 
-const std::vector<LayoutAtomPtr>& ConditionAtom::getChildren() const
+bool ConditionAtom::getDecision() const
 {
-    bool bDecisionVar = true;
+    if (mIsElse)
+        return true;
+
     switch (maCond.mnFunc)
     {
     case XML_var:
     {
         const dgm::Point* pPoint = getPresNode();
         if (pPoint && maCond.mnArg == XML_dir)
-            bDecisionVar = compareResult(maCond.mnOp, pPoint->mnDirection, maCond.mnVal);
+            return compareResult(maCond.mnOp, pPoint->mnDirection, maCond.mnVal);
         break;
     }
 
     case XML_cnt:
-        bDecisionVar = compareResult(maCond.mnOp, getNodeCount(), maCond.msVal.toInt32());
-        break;
+        return compareResult(maCond.mnOp, getNodeCount(), maCond.msVal.toInt32());
 
     case XML_maxDepth:
-        bDecisionVar = compareResult(maCond.mnOp, mrLayoutNode.getDiagram().getData()->getMaxDepth(), maCond.msVal.toInt32());
-        break;
+        return compareResult(maCond.mnOp, mrLayoutNode.getDiagram().getData()->getMaxDepth(), maCond.msVal.toInt32());
 
     default:
         SAL_WARN("oox.drawingml", "unknown function " << maCond.mnFunc);
         break;
     }
 
-    if (bDecisionVar)
-        return mpChildNodes;
-    else
-        return mpElseChildNodes;
+    return true;
 }
 
 void ConditionAtom::accept( LayoutAtomVisitor& rVisitor )
 {
     rVisitor.visit(*this);
-}
-
-void ConditionAtom::addChild( const LayoutAtomPtr & pNode )
-{
-    if( mbElse )
-        mpElseChildNodes.push_back( pNode );
-    else
-        mpChildNodes.push_back( pNode );
 }
 
 void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
