@@ -40,6 +40,7 @@
 #include "globalnames.hxx"
 #include "scmod.hxx"
 #include "printopt.hxx"
+#include "bcaslot.hxx"
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
@@ -593,9 +594,17 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     {
         if (IsStreamValid())
             SetStreamValid(false);
-        for (SCCOL i = 0; i < aCol.size(); i++)
-        {
-            aCol[i].BroadcastRows(nStartRow, nEndRow, SfxHintId::ScHiddenRowsChanged);
+
+        {   // Scoped bulk broadcast.
+            // Only subtotal formula cells will accept the notification of
+            // SfxHintId::ScHiddenRowsChanged, leaving the bulk will track
+            // those and broadcast SfxHintId::ScDataChanged to notify all
+            // dependents.
+            ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SfxHintId::ScDataChanged);
+            for (SCCOL i = 0; i < aCol.size(); i++)
+            {
+                aCol[i].BroadcastRows(nStartRow, nEndRow, SfxHintId::ScHiddenRowsChanged);
+            }
         }
     }
 
