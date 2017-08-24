@@ -563,7 +563,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sdb/_XSingleSelectQueryAnalyzer \
     qadevOOo/tests/java/ifc/sdb/_XSingleSelectQueryComposer \
     qadevOOo/tests/java/ifc/sdb/_XSQLErrorBroadcaster \
-    qadevOOo/tests/java/ifc/sheet/_CellAreaLink \
     qadevOOo/tests/java/ifc/sheet/_DatabaseImportDescriptor \
     qadevOOo/tests/java/ifc/sheet/_DatabaseRange \
     qadevOOo/tests/java/ifc/sheet/_DataPilotItem \
