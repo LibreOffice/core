@@ -23,7 +23,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="stop">
-                <property name="label" translatable="yes" context="mmsendmails|stop">_Stop</property>
+                <property name="label" translatable="yes" context="mmsendmails|stop">_Pause</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -38,7 +38,7 @@
             </child>
             <child>
               <object class="GtkButton" id="close">
-                <property name="label">gtk-close</property>
+                <property name="label">gtk-cancel</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
