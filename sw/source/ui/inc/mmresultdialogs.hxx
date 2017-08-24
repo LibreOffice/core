@@ -162,7 +162,7 @@ struct SwMailDescriptor
 };
 struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
-class SwSendMailDialog : public ModelessDialog //SfxModalDialog
+class SwSendMailDialog : public Dialog
 {
     VclPtr<FixedText>               m_pTransferStatus;
     VclPtr<FixedText>               m_pPaused;
@@ -189,6 +189,7 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 
     SwSendMailDialog_Impl*  m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;
+    sal_Int32               m_nExpectedCount;
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
@@ -202,8 +203,6 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     void        SendMails();
     void        UpdateTransferStatus();
 
-    virtual void        StateChanged( StateChangedType nStateChange ) override;
-
 public:
     SwSendMailDialog( vcl::Window* pParent, SwMailMergeConfigItem& );
     virtual ~SwSendMailDialog() override;
@@ -211,7 +210,7 @@ public:
 
     void                AddDocument( SwMailDescriptor const & rDesc );
     void                EnableDestruction() {m_bDestructionEnabled = true;}
-    void                ShowDialog();
+    void                ShowDialog(sal_Int32 nExpectedCount);
 
     void                DocumentSent( css::uno::Reference< css::mail::XMailMessage> const & xMessage,
                                         bool bResult,
