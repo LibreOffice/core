@@ -1474,9 +1474,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     OUString                       aExternalFilterName;
     sal_uLong                      nStreamBegin;
     ErrCode                        nStatus;
-    std::shared_ptr<GraphicReader> pContext = rGraphic.GetContext();
     GfxLinkType                    eLinkType = GfxLinkType::NONE;
-    bool                           bDummyContext = rGraphic.IsDummyContext();
     const bool                     bLinkSet = rGraphic.IsLink();
     std::unique_ptr<FilterConfigItem> pFilterConfigItem;
 
@@ -1521,6 +1519,8 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
     }
 
+    std::shared_ptr<GraphicReader> pContext = rGraphic.GetContext();
+    bool  bDummyContext = rGraphic.IsDummyContext();
     if( !pContext || bDummyContext )
     {
         if( bDummyContext )
@@ -1565,9 +1565,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     {
         if( aFilterName.equalsIgnoreAsciiCase( IMP_GIF )  )
         {
-            if( rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext( false );
-
             if( !ImportGIF( rIStream, rGraphic ) )
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             else
@@ -1575,9 +1572,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_PNG ) )
         {
-            if( rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext( false );
-
             vcl::PNGReader aPNGReader( rIStream );
 
             // ignore animation for previews and set preview size
@@ -1633,9 +1627,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_JPEG ) )
         {
-            if( rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext( false );
-
             // set LOGSIZE flag always, if not explicitly disabled
             // (see #90508 and #106763)
             if( !( nImportFlags & GraphicFilterImportFlags::DontSetLogsizeForJpeg ) )
@@ -1657,9 +1648,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVG ) )
         {
-            if( rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext( false );
-
             const sal_uInt32 nStreamPosition(rIStream.Tell());
             const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
 
@@ -1727,17 +1715,11 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_XBM ) )
         {
-            if( rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext( false );
-
             if( !ImportXBM( rIStream, rGraphic ) )
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_XPM ) )
         {
-            if( rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext( false );
-
             if( !ImportXPM( rIStream, rGraphic ) )
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
@@ -1774,8 +1756,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             // use new UNO API service, do not directly import but create a
             // Graphic that contains the original data and decomposes to
             // primitives on demand
-            if (rGraphic.IsDummyContext())
-                rGraphic.SetDummyContext(false);
 
             const sal_uInt32 nStreamPosition(rIStream.Tell());
             const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
