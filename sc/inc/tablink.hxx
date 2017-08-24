@@ -96,7 +96,7 @@ public:
      */
     static SfxMedium*   CreateMedium( const OUString& rFileName, std::shared_ptr<const SfxFilter> const & pFilter, const OUString& rOptions );
 
-    static OUString     GetOptions( SfxMedium& rMedium );
+    static OUString     GetOptions( const SfxMedium& rMedium );
 
     /** Returns the filter name and options from a file name.
         @param bWithContent

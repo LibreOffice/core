@@ -65,7 +65,7 @@ public:
     bool DoImportUno( const ScAddress& rPos,
                       const css::uno::Sequence<css::beans::PropertyValue>& aArgs );
 
-    static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
+    static void     ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame );
 
     SC_DLLPUBLIC bool Sort(
         SCTAB nTab, const ScSortParam& rSortParam, bool bRecord, bool bPaint, bool bApi );
@@ -96,7 +96,7 @@ public:
      * Reload the referenced pivot cache, and refresh all pivot tables that
      * reference the cache.
      */
-    void RefreshPivotTables(ScDPObject* pDPObj, bool bApi);
+    void RefreshPivotTables(const ScDPObject* pDPObj, bool bApi);
 
     /**
      * Refresh the group dimensions of all pivot tables referencing the same

@@ -42,7 +42,7 @@ private:
     bool            bAddUndo;
     bool            bInCreate;
     bool            bDoInsert;      // is set to FALSE for first update
-    static bool FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUString& rAreaName );
+    static bool FindExtRange( ScRange& rRange, const ScDocument* pSrcDoc, const OUString& rAreaName );
 
 public:
     ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,

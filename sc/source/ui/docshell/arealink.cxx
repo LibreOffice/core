@@ -194,7 +194,7 @@ bool ScAreaLink::IsEqual( const OUString& rFile, const OUString& rFilter, const 
 }
 
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
-bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUString& rAreaName )
+bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument* pSrcDoc, const OUString& rAreaName )
 {
     bool bFound = false;
     OUString aUpperName = ScGlobal::pCharClass->uppercase(rAreaName);

@@ -2997,7 +2997,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     return true;
 }
 
-uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, OUString& sCodeName )
+uno::Reference< uno::XInterface > GetDocModuleObject( const SfxObjectShell& rDocSh, const OUString& sCodeName )
 {
     uno::Reference< lang::XMultiServiceFactory> xSF(rDocSh.GetModel(), uno::UNO_QUERY);
     uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
@@ -3011,7 +3011,7 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, OU
 
 }
 
-static script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, OUString& sModule )
+static script::ModuleInfo lcl_InitModuleInfo( const SfxObjectShell& rDocSh, const OUString& sModule )
 {
     script::ModuleInfo sModuleInfo;
     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;

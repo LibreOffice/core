@@ -139,7 +139,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
     rSet.Put(aHLinkItem);
 }
 
-void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
+void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -622,7 +622,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bo
     return true;   // name is valid
 }
 
-void ScDrawShell::ExecFormText(SfxRequest& rReq)
+void ScDrawShell::ExecFormText(const SfxRequest& rReq)
 {
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
@@ -638,7 +638,7 @@ void ScDrawShell::ExecFormText(SfxRequest& rReq)
     }
 }
 
-void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
+void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 {
     ScViewFunc* pView = pViewData->GetView();
     if ( pView->HasPaintBrush() )

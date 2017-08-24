@@ -451,7 +451,7 @@ void ScConditionFrmtEntry::SetInactive()
 
 namespace {
 
-void UpdateStyleList(ListBox& rLbStyle, ScDocument* pDoc)
+void UpdateStyleList(ListBox& rLbStyle, const ScDocument* pDoc)
 {
     OUString aSelectedStyle = rLbStyle.GetSelectEntry();
     for(sal_Int32 i = rLbStyle.GetEntryCount(); i >= 1; --i)
@@ -653,7 +653,7 @@ OUString convertNumberToString(double nVal, const ScDocument* pDoc)
     return aText;
 }
 
-void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, SvxColorListBox& rLbCol, ScDocument* pDoc )
+void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, SvxColorListBox& rLbCol, const ScDocument* pDoc )
 {
     // entry Automatic is not available for color scales
     sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());

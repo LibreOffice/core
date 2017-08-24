@@ -2951,7 +2951,7 @@ ScFormatSaveData* ScDocShell::GetFormatSaveData()
 
 namespace {
 
-void removeKeysIfExists(Reference<ui::XAcceleratorConfiguration>& xScAccel, const vector<const awt::KeyEvent*>& rKeys)
+void removeKeysIfExists(const Reference<ui::XAcceleratorConfiguration>& xScAccel, const vector<const awt::KeyEvent*>& rKeys)
 {
     vector<const awt::KeyEvent*>::const_iterator itr = rKeys.begin(), itrEnd = rKeys.end();
     for (; itr != itrEnd; ++itr)

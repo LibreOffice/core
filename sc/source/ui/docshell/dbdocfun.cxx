@@ -1580,7 +1580,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     return true;
 }
 
-void ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
+void ScDBDocFunc::RefreshPivotTables(const ScDPObject* pDPObj, bool bApi)
 {
     ScDPCollection* pDPs = rDocShell.GetDocument().GetDPCollection();
     if (!pDPs)

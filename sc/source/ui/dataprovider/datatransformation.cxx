@@ -17,7 +17,7 @@ DataTransformation::~DataTransformation()
 {
 }
 
-SCROW DataTransformation::getLastRow(ScDocument& rDoc, SCCOL nCol)
+SCROW DataTransformation::getLastRow(const ScDocument& rDoc, SCCOL nCol)
 {
     SCROW nStartRow = 0;
     SCROW nEndRow = MAXROW;

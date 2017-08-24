@@ -46,7 +46,7 @@ inline long Diff( const Point& rP1, const Point& rP2 )
     return nX+nY;
 }
 
-bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
+bool FuSelection::TestDetective( const SdrPageView* pPV, const Point& rPos )
 {
     if (!pPV)
         return false;

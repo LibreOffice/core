@@ -85,7 +85,7 @@ public:
     const OUString& getID() const;
     double getUpdateFrequency() const;
     OUString getDBName() const;
-    void setDBData(ScDBData* pDBData);
+    void setDBData(const ScDBData* pDBData);
 
     void refresh(ScDocument* pDoc, bool bDeterministic = false);
 };

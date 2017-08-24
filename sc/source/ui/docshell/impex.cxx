@@ -929,8 +929,8 @@ static bool lcl_PutString(
     ScDocumentImport& rDocImport, bool bUseDocImport,
     SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rStr, sal_uInt8 nColFormat,
     SvNumberFormatter* pFormatter, bool bDetectNumFormat,
-    ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
-    ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
+    const ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
+    const ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
     ScDocument* pDoc = &rDocImport.getDoc();
     bool bMultiLine = false;

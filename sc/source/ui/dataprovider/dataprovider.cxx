@@ -99,7 +99,7 @@ OUString ExternalDataSource::getDBName() const
     return OUString();
 }
 
-void ExternalDataSource::setDBData(ScDBData* pDBData)
+void ExternalDataSource::setDBData(const ScDBData* pDBData)
 {
     if (!mpDBDataManager)
     {

@@ -1511,7 +1511,7 @@ void ScExternalRefLink::SetDoReferesh(bool b)
     mbDoRefresh = b;
 }
 
-static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRefCellValue& rCell )
+static FormulaToken* convertToToken( ScDocument* pHostDoc, const ScDocument* pSrcDoc, ScRefCellValue& rCell )
 {
     if (rCell.hasEmptyValue())
     {
@@ -1555,7 +1555,7 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, 
 }
 
 static std::unique_ptr<ScTokenArray> convertToTokenArray(
-    ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
+    ScDocument* pHostDoc, const ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1701,7 +1701,7 @@ ScExternalRefManager::LinkListener::~LinkListener()
 {
 }
 
-ScExternalRefManager::ApiGuard::ApiGuard(ScDocument* pDoc) :
+ScExternalRefManager::ApiGuard::ApiGuard(const ScDocument* pDoc) :
     mpMgr(pDoc->GetExternalRefManager()),
     mbOldInteractionEnabled(mpMgr->mbUserInteractionEnabled)
 {
@@ -2080,7 +2080,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
 
 namespace {
 
-bool hasRangeName(ScDocument& rDoc, const OUString& rName)
+bool hasRangeName(const ScDocument& rDoc, const OUString& rName)
 {
     ScRangeName* pExtNames = rDoc.GetRangeName();
     OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
@@ -2149,7 +2149,7 @@ void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
 namespace {
 
 void insertRefCellByIterator(
-    ScExternalRefManager::RefCellMap::iterator& itr, ScFormulaCell* pCell)
+    const ScExternalRefManager::RefCellMap::iterator& itr, ScFormulaCell* pCell)
 {
     if (pCell)
     {
@@ -2262,7 +2262,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSrcDoc(
-    ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
+    const ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
     vector<ScExternalRefCache::SingleRangeData>& rCacheData)
 {
     ScExternalRefCache::TokenArrayRef pArray;
@@ -2306,7 +2306,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSrcDoc(
-    sal_uInt16 nFileId, ScDocument* pSrcDoc, OUString& rName)
+    sal_uInt16 nFileId, const ScDocument* pSrcDoc, OUString& rName)
 {
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
     OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);

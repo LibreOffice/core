@@ -43,7 +43,7 @@
 
 // base class for draw module specific functions
 FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, SfxRequest& rReq) :
+               SdrModel* pDoc, const SfxRequest& rReq) :
     FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
     aNewPointer ( PointerStyle::Arrow ),
     aOldPointer ( PointerStyle::Arrow )
@@ -622,7 +622,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 }
 
 // toggle mouse-pointer
-static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, vcl::Window* pWindow )
+static bool lcl_UrlHit( const SdrView* pView, const Point& rPosPixel, const vcl::Window* pWindow )
 {
     SdrViewEvent aVEvt;
     MouseEvent aMEvt( rPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );

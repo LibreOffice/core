@@ -90,7 +90,7 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const OUString& rFileName, const OUString& rFilterName, bool bAsLink, bool bApi,
-                        ScTabViewShell* pViewSh, vcl::Window* pWindow, SdrView* pView )
+                        ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView )
 {
     ScDrawView* pDrawView = pViewSh->GetScDrawView();
 
@@ -174,7 +174,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 }
 
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
-                      ScTabViewShell* pViewSh, vcl::Window* pWindow, SdrView* pView,
+                      ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView,
                       const Size& rPrefSize, bool const bLink )
 {
     SdrPageView*    pPV  = pView->GetSdrPageView();
@@ -293,7 +293,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                               vcl::Window*           pWin,
                               ScDrawView*       pViewP,
                               SdrModel*         pDoc,
-                              SfxRequest&       rReq ) :
+                              const SfxRequest& rReq ) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     OUString     aURL;

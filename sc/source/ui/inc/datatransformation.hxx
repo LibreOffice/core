@@ -23,7 +23,7 @@ class SC_DLLPUBLIC DataTransformation
 {
 protected:
 
-    static SCROW getLastRow(ScDocument& rDoc, SCCOL nCol);
+    static SCROW getLastRow(const ScDocument& rDoc, SCCOL nCol);
 
 public:
     virtual ~DataTransformation();
