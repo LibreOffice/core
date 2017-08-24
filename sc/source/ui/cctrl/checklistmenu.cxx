@@ -781,7 +781,7 @@ void ScMenuFloatingWindow::fireMenuHighlightedEvent()
     FireVclEvent(aEvent);
 }
 
-void ScMenuFloatingWindow::setSubMenuFocused(ScMenuFloatingWindow* pSubMenu)
+void ScMenuFloatingWindow::setSubMenuFocused(const ScMenuFloatingWindow* pSubMenu)
 {
     maCloseTimer.reset();
     size_t nMenuPos = getSubMenuPos(pSubMenu);

@@ -227,7 +227,7 @@ public:
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
-    void            ExecutePageStyle ( SfxViewShell& rCaller, SfxRequest& rReq, SCTAB nCurTab );
+    void            ExecutePageStyle ( const SfxViewShell& rCaller, SfxRequest& rReq, SCTAB nCurTab );
     void            GetStatePageStyle( SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );

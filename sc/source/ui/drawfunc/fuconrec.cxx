@@ -58,7 +58,7 @@ FuConstRectangle::~FuConstRectangle()
 
 namespace {
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel* pDoc)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel* pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList = pDoc->GetLineEndList();
@@ -214,7 +214,7 @@ void FuConstRectangle::Activate()
     FuConstruct::Activate();
 }
 
-void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt16 nSlotId)
+void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject* pObj, sal_uInt16 nSlotId)
 {
     SdrModel *pDoc = pObj->GetModel();
 

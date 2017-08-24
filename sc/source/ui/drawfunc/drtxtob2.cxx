@@ -181,7 +181,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
     }
 }
 
-void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
+void ScDrawTextObjectBar::ExecFormText(const SfxRequest& rReq)
 {
     ScTabView*          pTabView    = pViewData->GetView();
     ScDrawView*         pDrView     = pTabView->GetScDrawView();

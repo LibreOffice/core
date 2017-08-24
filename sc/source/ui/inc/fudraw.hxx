@@ -32,7 +32,7 @@ class FuDraw : public FuPoor
 
  public:
     FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+           SdrModel* pDoc, const SfxRequest& rReq);
     virtual ~FuDraw() override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;

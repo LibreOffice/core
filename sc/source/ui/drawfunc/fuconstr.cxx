@@ -37,7 +37,7 @@
 #define SC_MAXDRAGMOVE  3
 
 FuConstruct::FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                   SdrModel* pDoc, SfxRequest& rReq) :
+                   SdrModel* pDoc, const SfxRequest& rReq) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }

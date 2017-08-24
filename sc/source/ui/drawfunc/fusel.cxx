@@ -58,7 +58,7 @@
 using namespace com::sun::star;
 
 FuSelection::FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-               SdrModel* pDoc, SfxRequest& rReq ) :
+               SdrModel* pDoc, const SfxRequest& rReq ) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }

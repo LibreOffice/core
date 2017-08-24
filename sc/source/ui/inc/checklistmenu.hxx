@@ -125,7 +125,7 @@ private:
      * close timer is not active, and the correct menu item associated with
      * the submenu is highlighted.
      */
-    void setSubMenuFocused(ScMenuFloatingWindow* pSubMenu);
+    void setSubMenuFocused(const ScMenuFloatingWindow* pSubMenu);
 
     /**
      * When a menu item of an invisible submenu is selected, we need to make

@@ -34,7 +34,7 @@ ScItemValue::ScItemValue(OUString const & aName, SCCOL nColumn, PivotFunc nFunct
     mpOriginalItemValue(this)
 {}
 
-ScItemValue::ScItemValue(ScItemValue* pInputItemValue) :
+ScItemValue::ScItemValue(const ScItemValue* pInputItemValue) :
     maName(pInputItemValue->maName),
     maFunctionData(pInputItemValue->maFunctionData),
     mpOriginalItemValue(this)
@@ -46,7 +46,7 @@ ScItemValue::~ScItemValue()
 namespace
 {
 
-ScRange lclGetRangeForNamedRange(OUString const & aName, ScDocument* pDocument)
+ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument* pDocument)
 {
     ScRange aInvalidRange(ScAddress::INITIALIZE_INVALID);
     ScRangeName* pRangeName = pDocument->GetRangeName();
@@ -387,7 +387,7 @@ bool ScPivotLayoutDialog::IsRefInputMode() const
     return mbDialogLostFocus;
 }
 
-void ScPivotLayoutDialog::ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType)
+void ScPivotLayoutDialog::ItemInserted(const ScItemValue* pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType)
 {
     if (pItemValue == nullptr)
         return;
@@ -570,7 +570,7 @@ void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
                                    &aColFieldVector, &aRowFieldVector, &aPageFieldVector);
 }
 
-void ScPivotLayoutDialog::ApplyLabelData(ScDPSaveData& rSaveData)
+void ScPivotLayoutDialog::ApplyLabelData(const ScDPSaveData& rSaveData)
 {
     ScDPLabelDataVector& rLabelDataVector = GetLabelDataVector();
 
@@ -728,7 +728,7 @@ void ScPivotLayoutDialog::ToggleDestination()
     mpDestinationEdit->Enable(bSelection);
 }
 
-ScPivotLayoutTreeListBase* ScPivotLayoutDialog::FindListBoxFor(SvTreeListEntry *pEntry)
+ScPivotLayoutTreeListBase* ScPivotLayoutDialog::FindListBoxFor(const SvTreeListEntry *pEntry)
 {
     if (mpListBoxPage->HasEntry(pEntry))
         return mpListBoxPage.get();

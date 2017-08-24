@@ -416,7 +416,7 @@ IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 
 // === ScDocumentLoader ==================================================
 
-OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
+OUString ScDocumentLoader::GetOptions( const SfxMedium& rMedium )
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem* pItem;

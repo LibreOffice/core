@@ -729,7 +729,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 }
 
 FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-           SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL):
+           SdrModel* pDoc, const SfxRequest& rReq, const OUString& rURL):
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     uno::Reference< io::XInputStream > xStorage = comphelper::OStorageHelper::GetInputStreamFromURL(

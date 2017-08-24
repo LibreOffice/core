@@ -1183,7 +1183,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
 }
 
-void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )
+void ScDrawTextObjectBar::ExecuteTrans( const SfxRequest& rReq )
 {
     TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
     if ( nType != TransliterationFlags::NONE )
