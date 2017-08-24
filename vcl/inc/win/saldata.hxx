@@ -80,8 +80,6 @@ public:
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    HANDLE                  mnTimerId;              ///< Windows timer id
-    bool                    mbOnIdleRunScheduler;   ///< Run yield until the scheduler processed the idle
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
@@ -168,8 +166,6 @@ sal_uLong ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( sal_uLong nCount );
 
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-
-void EmitTimerCallback();
 
 void SalTestMouseLeave();
 void ImplWriteLastError(DWORD lastError, const char *szApiCall);
