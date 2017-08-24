@@ -117,7 +117,8 @@ public:
         @param bEncoded if true return an IURI encoded name, not a DOS name. */
     static OUString     BuildFileName(
                             sal_uInt16& rnLevel, bool& rbRel,
-                            const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded );
+                            const OUString& rUrl, const XclExpRoot& rRoot,
+                            bool bEncoded, SvxURLType eType = SVXURLTYPE_NOT_SET );
 private:
 
     /** Writes the body of the HLINK record. */

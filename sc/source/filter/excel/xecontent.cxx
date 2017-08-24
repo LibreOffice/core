@@ -329,6 +329,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 {
     const OUString& rUrl = rUrlField.GetURL();
     const OUString& rRepr = rUrlField.GetRepresentation();
+    const SvxURLType eType = rUrlField.GetType();
     INetURLObject aUrlObj( rUrl );
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
     bool bWithRepr = !rRepr.isEmpty();
@@ -353,7 +354,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         bool bRel;
         /* TODO: should we differentiate between BIFF and OOXML and write IURI
          * encoded for OOXML? */
-        OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot, false ) );
+        OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot, false, eType ) );
 
         if( eProtocol == INetProtocol::Smb )
         {
@@ -457,12 +458,18 @@ XclExpHyperlink::~XclExpHyperlink()
 }
 
 OUString XclExpHyperlink::BuildFileName(
-        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded )
+        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded, SvxURLType eType )
 {
     INetURLObject aURLObject( rUrl );
     OUString aDosName( bEncoded ? aURLObject.GetURLPath() : aURLObject.getFSysPath( FSysStyle::Dos ) );
     rnLevel = 0;
-    rbRel = rRoot.IsRelUrl();
+    rbRel = rRoot.IsRelUrl(); // get current settings
+
+    // if eType is set override current settings
+    if( eType == SVXURLTYPE_ABSOLUTE )
+        rbRel = false;
+    else if( eType == SVXURLTYPE_RELATIVE )
+        rbRel = true;
 
     if( rbRel )
     {
