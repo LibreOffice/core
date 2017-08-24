@@ -34,10 +34,14 @@
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <vector>
 
 #include <rtl/digest.h>
+#include <rtl/random.h>
+#include <osl/time.h>
 #include <osl/diagnose.h>
 
 #include <ucbhelper/content.hxx>
@@ -403,6 +407,53 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
     return aEncryptionData;
 }
 
+uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionData()
+{
+    // generate session key
+    // --------------------
+
+    // Get a random number generator and seed it with current timestamp
+    TimeValue aTime;
+    osl_getSystemTime( &aTime );
+    rtlRandomPool aRandomPool = rtl_random_createPool();
+    rtl_random_addBytes(aRandomPool, &aTime, 8);
+
+    // get 16 random chars out of it
+    uno::Sequence < sal_Int8 > aVector(16);
+    rtl_random_getBytes( aRandomPool, aVector.getArray(), aVector.getLength() );
+
+    rtl_random_destroyPool(aRandomPool);
+
+    uno::Sequence< beans::NamedValue > aContainer(2);
+    uno::Sequence< beans::NamedValue > aGpgEncryptionData(3);
+    uno::Sequence< beans::NamedValue > aEncryptionData(1);
+
+    // TODO fire certificate chooser dialog
+    uno::Reference< security::XDocumentDigitalSignatures > xSigner(
+        security::DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), "1.2" ) );
+
+    // The use may provide a description while choosing a certificate.
+    OUString aDescription;
+    uno::Reference< security::XCertificate > xSignCertificate=
+        xSigner->chooseCertificate(aDescription);
+
+    uno::Sequence < sal_Int8 > aKeyID;
+    if (xSignCertificate.is())
+    {
+        aKeyID = xSignCertificate->getSHA1Thumbprint();
+    }
+
+    aGpgEncryptionData[0].Name = "KeyId";
+    aGpgEncryptionData[0].Value <<= aKeyID;
+
+    aContainer[0].Name = "GpgInfos";
+    aContainer[0].Value <<= aGpgEncryptionData;
+    aContainer[1].Name = "EncryptionKey";
+    aContainer[1].Value <<= aEncryptionData;
+
+    return aContainer;
+}
 
 bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
 {
