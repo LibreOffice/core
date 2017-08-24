@@ -241,7 +241,7 @@ SwSendWarningBox_Impl::SwSendWarningBox_Impl(vcl::Window* pParent, const OUStrin
 #define ITEMID_STATUS   2
 
 SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& rConfigItem) :
-    ModelessDialog /*SfxModalDialog*/(pParent, "SendMailsDialog", "modules/swriter/ui/mmsendmails.ui"),
+    Dialog(pParent, "SendMailsDialog", "modules/swriter/ui/mmsendmails.ui"),
     m_pTransferStatus(get<FixedText>("transferstatus")),
     m_pPaused(get<FixedText>("paused")),
     m_pProgressBar(get<ProgressBar>("progress")),
@@ -257,9 +257,10 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_sCompleted(   SwResId(ST_COMPLETED )),
     m_sFailed(      SwResId(ST_FAILED     )),
     m_bCancel(false),
-    m_bDesctructionEnabled(false),
+    m_bDestructionEnabled(false),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
+    m_nExpectedCount(0),
     m_nSendCount(0),
     m_nErrorCount(0)
 {
@@ -290,6 +291,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_pStatus->SetTabs(&nTabs[0], MapUnit::MapPixel);
     m_pStatus->SetSpaceBetweenEntries(3);
 
+    m_pPaused->Show(false);
     UpdateTransferStatus();
 }
 
@@ -331,7 +333,8 @@ void SwSendMailDialog::dispose()
     m_pStatusHB.clear();
     m_pStop.clear();
     m_pClose.clear();
-    ModelessDialog::dispose();
+
+    Dialog::dispose();
 }
 
 void SwSendMailDialog::AddDocument( SwMailDescriptor const & rDesc )
@@ -367,7 +370,15 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
 
 IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl, Button*, void)
 {
-    ModelessDialog::Show( false );
+    Dialog::Show( false );
+
+    if ( m_bDestructionEnabled )
+        disposeOnce();
+    else
+    {
+        m_pImpl->aRemoveIdle.SetInvokeHandler( LINK( this, SwSendMailDialog, RemoveThis ) );
+        m_pImpl->aRemoveIdle.Start();
+    }
 }
 
 IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, pDialog, void )
@@ -385,7 +396,7 @@ IMPL_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer, void )
             m_pImpl->xMailDispatcher->shutdown();
     }
 
-    if( m_bDesctructionEnabled &&
+    if( m_bDestructionEnabled &&
             (!m_pImpl->xMailDispatcher.is() ||
                     !m_pImpl->xMailDispatcher->isRunning()))
     {
@@ -513,22 +524,12 @@ void  SwSendMailDialog::IterateMails()
     UpdateTransferStatus();
 }
 
-void SwSendMailDialog::ShowDialog()
+void SwSendMailDialog::ShowDialog(sal_Int32 nExpectedCount)
 {
     Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                       StartSendMails ), this, true );
-    ModelessDialog::Show();
-}
-
-void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
-{
-    ModelessDialog::StateChanged( nStateChange );
-    if(StateChangedType::Visible == nStateChange && !IsVisible())
-    {
-        m_pImpl->aRemoveIdle.SetInvokeHandler( LINK( this, SwSendMailDialog,
-                                                    RemoveThis ) );
-        m_pImpl->aRemoveIdle.Start();
-    }
+    m_nExpectedCount = nExpectedCount > 0 ? nExpectedCount : 1;
+    Dialog::Show();
 }
 
 void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const & xMessage,
@@ -566,21 +567,26 @@ void SwSendMailDialog::UpdateTransferStatus()
 {
     OUString sStatus( m_sTransferStatus );
     sStatus = sStatus.replaceFirst("%1", OUString::number(m_nSendCount) );
-    sStatus = sStatus.replaceFirst("%2", OUString::number(m_pImpl->aDescriptors.size()));
+    sStatus = sStatus.replaceFirst("%2", OUString::number(m_nExpectedCount));
     m_pTransferStatus->SetText(sStatus);
 
     sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
     m_pErrorStatus->SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())
-        m_pProgressBar->SetValue((sal_uInt16)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
+        m_pProgressBar->SetValue(static_cast<sal_uInt16>(m_nSendCount * 100 / m_nExpectedCount));
     else
         m_pProgressBar->SetValue(0);
 }
 
 void SwSendMailDialog::AllMailsSent()
 {
-    m_pStop->Enable(false);
+    // Leave open if some kind of error occurred
+    if ( m_nSendCount == m_nExpectedCount )
+    {
+        m_pStop->Enable( false );
+        Dialog::Show( false );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
