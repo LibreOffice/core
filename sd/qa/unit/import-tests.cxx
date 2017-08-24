@@ -147,6 +147,7 @@ public:
     void testTdf89064();
     void testTdf108925();
     void testTdf109223();
+    void testTdf108926();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -214,6 +215,7 @@ public:
     CPPUNIT_TEST(testTdf89064);
     CPPUNIT_TEST(testTdf108925);
     CPPUNIT_TEST(testTdf109223);
+    CPPUNIT_TEST(testTdf108926);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2200,6 +2202,23 @@ void SdImportTest::testTdf109223()
     }
 
     CPPUNIT_ASSERT_EQUAL(true, bAttributeFound);
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf108926()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf108926.ppt"), PPT);
+    uno::Reference< presentation::XPresentationPage > xPage (getPage(0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xNotesPage->getCount());
+
+    // Second object should be imported as an empty presentation shape
+    uno::Reference< beans::XPropertySet > xPresentationShape(xNotesPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPresentationShape.is());
+    bool bIsEmptyPresObject = false;
+    xPresentationShape->getPropertyValue( "IsEmptyPresentationObject" )  >>= bIsEmptyPresObject;
+    CPPUNIT_ASSERT(bIsEmptyPresObject);
+
     xDocShRef->DoClose();
 }
 
