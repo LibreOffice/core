@@ -998,11 +998,33 @@ executeMessageBox(
     vcl::Window * pParent,
     OUString const & rTitle,
     OUString const & rMessage,
-    WinBits nButtonMask )
+    WinBits nButtonMask,
+    Dialog::InitFlag eInitFlag)
 {
     SolarMutexGuard aGuard;
+    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage, eInitFlag);
 
-    ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage);
+    if (Dialog::InitFlag::NoParentCentered == eInitFlag)
+    {
+        vcl::Window* pDefaultParent = Dialog::GetDefaultParent(nButtonMask);
+
+        if (pDefaultParent)
+        {
+            // need to 'Show' to have the following tasks do someting, does
+            // not work without and may even stumble on nullptrs/errors
+            xBox->Show();
+
+            // center on parent window
+            const Point aP(pDefaultParent->GetPosPixel());
+            const Size aS(pDefaultParent->GetSizePixel());
+            const Size aMySize(xBox->GetSizePixel());
+
+            xBox->SetPosPixel(
+                Point(
+                    aP.X() + ((aS.Width() - aMySize.Width()) >> 1),
+                    aP.Y() + ((aS.Height() - aMySize.Height()) >> 1)));
+        }
+    }
 
     sal_uInt16 aResult = xBox->Execute();
     switch( aResult )
@@ -1154,7 +1176,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             aTitle += aErrTitle;
 
             executeMessageBox(
-                getParentProperty(), aTitle, aErrorString, WB_OK );
+                getParentProperty(), aTitle, aErrorString, WB_OK, Dialog::InitFlag::NoParentCentered);
         }
         else
             ErrorHandler::HandleError(nErrorCode);
@@ -1278,7 +1300,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         utl::ConfigManager::getProductVersion() );
 
     switch (
-        executeMessageBox( getParentProperty(), title, aMessage, nButtonMask ) )
+        executeMessageBox( getParentProperty(), title, aMessage, nButtonMask, Dialog::InitFlag::NoParentCentered) )
     {
     case ERRCODE_BUTTON_OK:
         OSL_ENSURE( xAbort.is(), "unexpected situation" );

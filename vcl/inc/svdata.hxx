@@ -147,6 +147,7 @@ struct ImplSVAppData
     bool                    mbInAppMain = false;            // is Application::Main() on stack
     bool                    mbInAppExecute = false;         // is Application::Execute() on stack
     bool                    mbAppQuit = false;              // is Application::Quit() called
+    bool                    mbShutdownDelayed = false;
     bool                    mbSettingsInit = false;         // true: Settings are initialized
     Application::DialogCancelMode meDialogCancel; // true: All Dialog::Execute() calls will be terminated immediately with return false
 

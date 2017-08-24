@@ -365,6 +365,36 @@ void Dialog::ImplInitDialogData()
     mpDialogImpl            = new DialogImpl;
 }
 
+vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
+{
+    vcl::Window* pParent = Application::GetDefDialogParent();
+    if (!pParent && !(nStyle & WB_SYSTEMWINDOW))
+        pParent = ImplGetSVData()->maWinData.mpAppWin;
+
+    // If Parent is disabled, then we search for a modal dialog
+    // in this frame
+    if (pParent && (!pParent->IsInputEnabled() || pParent->IsInModalMode()))
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        Dialog*     pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
+        while (pExeDlg)
+        {
+            // only if visible and enabled
+            if (pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(pExeDlg, true) &&
+                pExeDlg->IsReallyVisible() &&
+                pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode())
+            {
+                pParent = pExeDlg;
+                break;
+            }
+
+            pExeDlg = pExeDlg->mpPrevExecuteDlg;
+        }
+    }
+
+    return pParent;
+}
+
 void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
 {
     SystemWindowFlags nSysWinMode = Application::GetSystemWindowMode();
@@ -376,34 +406,13 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
     // Now, all Dialogs are per default system windows !!!
     nStyle |= WB_SYSTEMWINDOW;
 
-    if (eFlag == InitFlag::NoParent)
+    if (InitFlag::NoParent == eFlag || InitFlag::NoParentCentered == eFlag)
+    {
         pParent = nullptr;
+    }
     else if (!pParent) // parent is NULL: get the default Dialog parent
     {
-        pParent = Application::GetDefDialogParent();
-        if ( !pParent && !(nStyle & WB_SYSTEMWINDOW) )
-            pParent = ImplGetSVData()->maWinData.mpAppWin;
-
-        // If Parent is disabled, then we search for a modal dialog
-        // in this frame
-        if ( pParent && (!pParent->IsInputEnabled() || pParent->IsInModalMode()) )
-        {
-            ImplSVData* pSVData = ImplGetSVData();
-            Dialog*     pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
-            while ( pExeDlg )
-            {
-                // only if visible and enabled
-                if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, true ) &&
-                     pExeDlg->IsReallyVisible() &&
-                     pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode() )
-                {
-                    pParent = pExeDlg;
-                    break;
-                }
-
-                pExeDlg = pExeDlg->mpPrevExecuteDlg;
-            }
-        }
+        pParent = Dialog::GetDefaultParent(nStyle);
     }
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
@@ -998,6 +1007,14 @@ void Dialog::EndAllDialogs( vcl::Window* pParent )
         }
         pModDialog = pTempModDialog;
     }
+}
+
+bool Dialog::AreDialogsOpen()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    Dialog* pModDialog = pSVData->maWinData.mpLastExecuteDlg;
+
+    return (nullptr != pModDialog);
 }
 
 void Dialog::SetModalInputMode( bool bModal )

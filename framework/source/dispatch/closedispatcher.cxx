@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/dialog.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -360,6 +361,14 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
                     bTerminateApp = true;
             }
         }
+    }
+
+    // if we still have dialogs open, temporary suppress termination
+    if (bTerminateApp && Dialog::AreDialogsOpen())
+    {
+        Application::SetShutdownDelayed();
+        bCloseFrame = true;
+        bTerminateApp = false;
     }
 
     // Do it now ...
