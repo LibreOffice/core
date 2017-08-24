@@ -90,6 +90,7 @@ public:
 
     void test();
     void testPasswordExport();
+    void testTdf111876();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testColorScaleExportODS();
@@ -195,6 +196,7 @@ public:
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testPasswordExport);
+    CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testColorScaleExportODS);
@@ -375,6 +377,26 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf111876()
+ {
+    // DOcument with relative path hyperlink
+
+    ScDocShellRef xShell = loadDoc("tdf111876.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    OUString sTarget = getXPath(pDoc, "/r:Relationships/r:Relationship", "Target");
+
+    // Document is saved to the temporary directory, relative path should be different than original one
+    CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
+
     xDocSh->DoClose();
 }
 
