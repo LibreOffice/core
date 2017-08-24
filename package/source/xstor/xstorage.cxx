@@ -321,11 +321,11 @@ OStorage_Impl::~OStorage_Impl()
         m_pParent = nullptr;
     }
 
-    std::for_each(m_aChildrenList.begin(), m_aChildrenList.end(), std::default_delete<SotElement_Impl>());
-    m_aChildrenList.clear();
+    std::for_each(m_aChildrenVector.begin(), m_aChildrenVector.end(), std::default_delete<SotElement_Impl>());
+    m_aChildrenVector.clear();
 
-    std::for_each(m_aDeletedList.begin(), m_aDeletedList.end(), std::default_delete<SotElement_Impl>());
-    m_aDeletedList.clear();
+    std::for_each(m_aDeletedVector.begin(), m_aDeletedVector.end(), std::default_delete<SotElement_Impl>());
+    m_aDeletedVector.clear();
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML && m_pRelStorElement )
     {
@@ -482,12 +482,12 @@ void OStorage_Impl::OpenOwnPackage()
         throw embed::InvalidStorageException( THROW_WHERE );
 }
 
-SotElementList_Impl& OStorage_Impl::GetChildrenList()
+SotElementVector_Impl& OStorage_Impl::GetChildrenVector()
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
     ReadContents();
-    return m_aChildrenList;
+    return m_aChildrenVector;
 }
 
 void OStorage_Impl::GetStorageProperties()
@@ -609,7 +609,7 @@ void OStorage_Impl::ReadContents()
                     pNewElement->m_bIsRemoved = true;
                 }
 
-                m_aChildrenList.push_back( pNewElement );
+                m_aChildrenVector.push_back( pNewElement );
             }
         }
         catch( const container::NoSuchElementException& rNoSuchElementException )
@@ -649,8 +649,8 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( THROW_WHERE );
 
-    for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); ++pElementIter )
+    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
+          pElementIter != m_aChildrenVector.end(); ++pElementIter )
     {
         if ( !(*pElementIter)->m_bIsRemoved )
             CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName, bDirect );
@@ -1003,8 +1003,8 @@ void OStorage_Impl::Commit()
         xNewPackageFolder = m_xPackageFolder;
 
     // remove replaced removed elements
-    for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
-          pDeletedIter != m_aDeletedList.end();
+    for ( SotElementVector_Impl::iterator pDeletedIter = m_aDeletedVector.begin();
+          pDeletedIter != m_aDeletedVector.end();
           ++pDeletedIter )
     {
 
@@ -1017,11 +1017,11 @@ void OStorage_Impl::Commit()
         delete *pDeletedIter;
         *pDeletedIter = nullptr;
     }
-    m_aDeletedList.clear();
+    m_aDeletedVector.clear();
 
     // remove removed elements
-    SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-    while (  pElementIter != m_aChildrenList.end() )
+    SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
+    while (  pElementIter != m_aChildrenVector.end() )
     {
         // renamed and inserted elements must be really inserted to package later
         // since thay can conflict with removed elements
@@ -1035,19 +1035,15 @@ void OStorage_Impl::Commit()
             if ( m_bCommited || m_bIsRoot )
                 xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
 
-            SotElement_Impl* pToDelete = *pElementIter;
-
-            ++pElementIter; // to let the iterator be valid it should be increased before removing
-
-            m_aChildrenList.remove( pToDelete );
-            delete pToDelete;
+            delete *pElementIter;
+            pElementIter = m_aChildrenVector.erase(pElementIter);
         }
         else
             ++pElementIter;
     }
 
     // there should be no more deleted elements
-    for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); ++pElementIter )
+    for ( pElementIter = m_aChildrenVector.begin(); pElementIter != m_aChildrenVector.end(); ++pElementIter )
     {
         // if it is a 'duplicate commit' inserted elements must be really inserted to package later
         // since thay can conflict with renamed elements
@@ -1120,7 +1116,7 @@ void OStorage_Impl::Commit()
         }
     }
 
-    for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); ++pElementIter )
+    for ( pElementIter = m_aChildrenVector.begin(); pElementIter != m_aChildrenVector.end(); ++pElementIter )
     {
         // now inserted elements can be inserted to the package
         if ( (*pElementIter)->m_bIsInserted )
@@ -1215,17 +1211,13 @@ void OStorage_Impl::Revert()
     // all the children must be removed
     // they will be created later on demand
 
-    SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-    while (  pElementIter != m_aChildrenList.end() )
+    SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
+    while (  pElementIter != m_aChildrenVector.end() )
     {
         if ( (*pElementIter)->m_bIsInserted )
         {
-            SotElement_Impl* pToDelete = *pElementIter;
-
-            ++pElementIter; // to let the iterator be valid it should be increased before removing
-
-            m_aChildrenList.remove( pToDelete );
-            delete pToDelete;
+            delete *pElementIter;
+            pElementIter = m_aChildrenVector.erase(pElementIter);
         }
         else
         {
@@ -1239,18 +1231,18 @@ void OStorage_Impl::Revert()
     }
 
     // return replaced removed elements
-    for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
-          pDeletedIter != m_aDeletedList.end();
+    for ( SotElementVector_Impl::iterator pDeletedIter = m_aDeletedVector.begin();
+          pDeletedIter != m_aDeletedVector.end();
           ++pDeletedIter )
     {
-        m_aChildrenList.push_back( *pDeletedIter );
+        m_aChildrenVector.push_back( *pDeletedIter );
 
         ClearElement( *pDeletedIter );
 
         (*pDeletedIter)->m_aName = (*pDeletedIter)->m_aOriginalName;
         (*pDeletedIter)->m_bIsRemoved = false;
     }
-    m_aDeletedList.clear();
+    m_aDeletedVector.clear();
 
     m_bControlMediaType = false;
     m_bControlVersion = false;
@@ -1297,8 +1289,8 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
 
     ReadContents();
 
-    for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); ++pElementIter )
+    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
+          pElementIter != m_aChildrenVector.end(); ++pElementIter )
     {
         if ( (*pElementIter)->m_aName == rName && !(*pElementIter)->m_bIsRemoved )
             return *pElementIter;
@@ -1332,7 +1324,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
     SotElement_Impl* pNewElement = InsertElement( aName, false );
     pNewElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, bEncr, m_nStorageType, true));
 
-    m_aChildrenList.push_back( pNewElement );
+    m_aChildrenVector.push_back( pNewElement );
     m_bIsModified = true;
     m_bBroadcastModified = true;
 
@@ -1371,7 +1363,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
     // the stream is inserted and must be treated as a committed one
     pNewElement->m_xStream->SetToBeCommited();
 
-    m_aChildrenList.push_back( pNewElement );
+    m_aChildrenVector.push_back( pNewElement );
     m_bIsModified = true;
     m_bBroadcastModified = true;
 }
@@ -1405,7 +1397,7 @@ SotElement_Impl* OStorage_Impl::InsertStorage( const OUString& aName, sal_Int32 
 
     pNewElement->m_xStorage.reset(CreateNewStorageImpl(nStorageMode));
 
-    m_aChildrenList.push_back( pNewElement );
+    m_aChildrenVector.push_back( pNewElement );
 
     return pNewElement;
 }
@@ -1418,8 +1410,8 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
 
     SotElement_Impl* pDeletedElm = nullptr;
 
-    for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); ++pElementIter )
+    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
+          pElementIter != m_aChildrenVector.end(); ++pElementIter )
     {
         if ( (*pElementIter)->m_aName == aName )
         {
@@ -1440,8 +1432,10 @@ SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, bool bIsSt
         else
             OpenSubStream( pDeletedElm );
 
-        m_aChildrenList.remove( pDeletedElm );  // correct usage of list ???
-        m_aDeletedList.push_back( pDeletedElm );
+        m_aChildrenVector.erase(
+            std::remove(m_aChildrenVector.begin(), m_aChildrenVector.end(), pDeletedElm),
+            m_aChildrenVector.end());
+        m_aDeletedVector.push_back( pDeletedElm );
     }
 
     // create new element
@@ -1498,12 +1492,12 @@ uno::Sequence< OUString > OStorage_Impl::GetElementNames()
 
     ReadContents();
 
-    sal_uInt32 nSize = m_aChildrenList.size();
+    sal_uInt32 nSize = m_aChildrenVector.size();
     uno::Sequence< OUString > aElementNames( nSize );
 
     sal_uInt32 nInd = 0;
-    for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); ++pElementIter )
+    for ( SotElementVector_Impl::iterator pElementIter = m_aChildrenVector.begin();
+          pElementIter != m_aChildrenVector.end(); ++pElementIter )
     {
         if ( !(*pElementIter)->m_bIsRemoved )
             aElementNames[nInd++] = (*pElementIter)->m_aName;
@@ -1526,8 +1520,8 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
 
     if ( pElement->m_bIsInserted )
     {
-        m_aChildrenList.remove( pElement );
-        delete pElement; // ???
+        delete pElement;
+        m_aChildrenVector.erase(std::remove(m_aChildrenVector.begin(), m_aChildrenVector.end(), pElement), m_aChildrenVector.end());
     }
     else
     {
@@ -2406,8 +2400,8 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
                 if ( nStorageMode & embed::ElementModes::TRUNCATE )
                 {
-                    for ( SotElementList_Impl::iterator pElementIter = pElement->m_xStorage->m_aChildrenList.begin();
-                           pElementIter != pElement->m_xStorage->m_aChildrenList.end(); )
+                    for ( SotElementVector_Impl::iterator pElementIter = pElement->m_xStorage->m_aChildrenVector.begin();
+                           pElementIter != pElement->m_xStorage->m_aChildrenVector.end(); )
                     {
                         SotElement_Impl* pElementToDel = (*pElementIter);
                         ++pElementIter;
@@ -3631,8 +3625,8 @@ void SAL_CALL OStorage::revert()
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    for ( SotElementList_Impl::iterator pElementIter = m_pImpl->m_aChildrenList.begin();
-          pElementIter != m_pImpl->m_aChildrenList.end(); ++pElementIter )
+    for ( SotElementVector_Impl::iterator pElementIter = m_pImpl->m_aChildrenVector.begin();
+          pElementIter != m_pImpl->m_aChildrenVector.end(); ++pElementIter )
     {
         if ( ((*pElementIter)->m_xStorage
                 && ( (*pElementIter)->m_xStorage->m_pAntiImpl || !(*pElementIter)->m_xStorage->m_aReadOnlyWrapVector.empty() ))
@@ -3936,7 +3930,7 @@ sal_Bool SAL_CALL OStorage::hasElements()
 
     try
     {
-        return ( m_pImpl->GetChildrenList().size() != 0 );
+        return ( m_pImpl->GetChildrenVector().size() != 0 );
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {

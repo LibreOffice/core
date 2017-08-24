@@ -92,7 +92,7 @@ public:
     SotElement_Impl(const OUString& rName, bool bStor, bool bNew);
 };
 
-typedef ::std::list< SotElement_Impl* > SotElementList_Impl;
+typedef ::std::vector< SotElement_Impl* > SotElementVector_Impl;
 
 // Main storage implementation
 
@@ -138,8 +138,8 @@ struct OStorage_Impl
         return m_nModifiedListenerCount > 0 && m_pAntiImpl != nullptr;
     }
 
-    SotElementList_Impl                         m_aChildrenList;
-    SotElementList_Impl                         m_aDeletedList;
+    SotElementVector_Impl                         m_aChildrenVector;
+    SotElementVector_Impl                         m_aDeletedVector;
 
     css::uno::Reference< css::container::XNameContainer > m_xPackageFolder;
 
@@ -204,7 +204,7 @@ struct OStorage_Impl
     void ReadContents();
     void ReadRelInfoIfNecessary();
 
-    SotElementList_Impl& GetChildrenList();
+    SotElementVector_Impl& GetChildrenVector();
     void GetStorageProperties();
 
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
