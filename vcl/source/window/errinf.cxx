@@ -148,7 +148,7 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
     }
 
     OUString aErr;
-    if (ErrorHandler::GetErrorString(nErrCodeId, aErr))
+    if (ErrorStringFactory::CreateString(pInfo, aErr))
     {
         if(!rData.pDsp)
         {
