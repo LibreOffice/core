@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_bc1d7668",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-24T07:57:58Z",
+      "side": 1,
+      "message": "Sure, I will move it down. \nI would like to keep order of MS Excel, which is in that case:\n\u003csharedItems containsDate\u003d\"1\" containsString\u003d\"0\" containsBlank\u003d\"1\" containsMixedTypes\u003d\"1\" minDate\u003d\"1900-01-03T22:26:04\" maxDate\u003d\"1900-01-07T14:02:04\" /\u003e\nI will add some unit tests for that case.",
+      "parentUuid": "1a430d35_a95b7a53",
+      "range": {
+        "startLine": 293,
+        "startChar": 8,
+        "endLine": 297,
+        "endChar": 9
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_895ebe43",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 5
@@ -82,6 +106,30 @@
       "writtenOn": "2017-08-24T06:38:58Z",
       "side": 1,
       "message": "You write about omitting (min|max)Value from output if field contains both dates and numbers; but actually you also disable containsNumber and containsInteger doing this. Is that OK?",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 303,
+        "endChar": 147
+      },
+      "revId": "d377f6da96c6f5146ad962a1e3276e0554332ecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fc253eae",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-24T07:57:58Z",
+      "side": 1,
+      "message": "Yes. I checked that in case mixed dates and numbers.\nThere is no \" containsNumber\" and \"containsInteger\".\nIf all fields are dates, then it is adding: \"containsNonDate\u003d0\"\n\nTo proof that I added one date into  column of integers in MS Excel.\nLine in XML was changed from:\n\u003ccacheField name\u003d\"all fields are integers\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsSemiMixedTypes\u003d\"0\" containsString\u003d\"0\" containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"1111\" maxValue\u003d\"5555\" /\u003e\n        \u003c/cacheField\u003e\n\nto \n\u003ccacheField name\u003d\"all fields are integers\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsSemiMixedTypes\u003d\"0\" containsDate\u003d\"1\" containsString\u003d\"0\" containsMixedTypes\u003d\"1\" minDate\u003d\"1900-01-03T22:26:04\" maxDate\u003d\"1900-01-07T14:02:04\" /\u003e\n        \u003c/cacheField\u003e\n\nAs you can see, after adding one cell with Date, \"containsNumber\u003d\"1\" containsInteger\u003d\"1\" minValue\u003d\"1111\" maxValue\u003d\"5555\"\" are not addded.",
+      "parentUuid": "1a430d35_2936aa03",
       "range": {
         "startLine": 303,
         "startChar": 8,
