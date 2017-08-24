@@ -152,7 +152,7 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
     }
 
     OUString aErr;
-    if (ErrorHandler::GetErrorString(nErrCodeId, aErr))
+    if (ErrorStringFactory::CreateString(pInfo, aErr))
     {
         if(!rData.pDsp)
         {
