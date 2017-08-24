@@ -95,7 +95,7 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
     if (bListeningAlready && !bPreventDuplicates)
     {
         auto f = mpImpl->maCallStacks.find( &rBroadcaster );
-        SAL_INFO("svl", "previous StartListening call came from: " << sal_backtrace_to_string(f->second.get()));
+        SAL_WARN("svl", "previous StartListening call came from: " << sal_backtrace_to_string(f->second.get()));
     }
 #endif
     assert(!(bListeningAlready && !bPreventDuplicates) && "duplicate listener, try building with DBG_UTIL to find the other insert site.");
