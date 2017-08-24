@@ -1804,8 +1804,13 @@ void SwXStyle::SetPropertyValue<RES_PAGEDESC>(const SfxItemPropertySimpleEntry& 
     }
 }
 template<>
-void SwXStyle::SetPropertyValue<RES_TEXT_VERT_ADJUST>(const SfxItemPropertySimpleEntry&, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+void SwXStyle::SetPropertyValue<RES_TEXT_VERT_ADJUST>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
+    if(m_rEntry.m_eFamily != SfxStyleFamily::Page)
+    {
+        SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
+        return;
+    }
     if(!m_pDoc || !rValue.has<drawing::TextVerticalAdjust>() || !o_rStyleBase.GetOldPageDesc())
         return;
     SwPageDesc* pPageDesc = m_pDoc->FindPageDesc(o_rStyleBase.GetOldPageDesc()->GetName());
