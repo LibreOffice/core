@@ -31,31 +31,29 @@ static void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 // deletion of timer (which is extremely likely, given that
 // INVALID_HANDLE_VALUE waits for the callback to run on the main thread),
 // this must run on the main thread too
-void ImplSalStopTimer()
+void WinSalTimer::ImplStop()
 {
     SalData *const pSalData = GetSalData();
-    assert( !pSalData->mpFirstInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
+    const WinSalInstance *pInst = pSalData->mpFirstInstance;
+    assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
-    HANDLE hTimer = pSalData->mnTimerId;
-    if (hTimer)
-    {
-        pSalData->mnTimerId = nullptr;
-        DeleteTimerQueueTimer(nullptr, hTimer, INVALID_HANDLE_VALUE);
-    }
+    const HANDLE hTimer = m_nTimerId;
+    if ( nullptr == hTimer )
+        return;
 
-    // remove all pending SAL_MSG_TIMER_CALLBACK messages
-    // we always have to do this, since ImplSalStartTimer with 0ms just queues
-    // a new SAL_MSG_TIMER_CALLBACK message
+    m_nTimerId = nullptr;
+    m_nTimerStartTicks = 0;
+    DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
+    m_bPollForMessage = false;
+
+    // remove as many pending SAL_MSG_TIMER_CALLBACK messages as possible
     // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
     MSG aMsg;
-    int nMsgCount = 0;
-    while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
-                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
-        nMsgCount++;
-    assert( nMsgCount <= 1 );
+    while ( PeekMessageW(&aMsg, pInst->mhComWnd, SAL_MSG_TIMER_CALLBACK,
+                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) );
 }
 
-void ImplSalStartTimer( sal_uLong nMS )
+void WinSalTimer::ImplStart( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
     assert( !pSalData->mpFirstInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
@@ -65,15 +63,24 @@ void ImplSalStartTimer( sal_uLong nMS )
         nMS = SAL_MAX_UINT32;
 
     // cannot change a one-shot timer, so delete it and create a new one
-    ImplSalStopTimer();
+    ImplStop();
 
-    // keep the scheduler running, if a 0ms timer / Idle is scheduled
-    pSalData->mbOnIdleRunScheduler = ( 0 == nMS );
+    // keep the yield running, if a 0ms Idle is scheduled
+    m_bPollForMessage = ( 0 == nMS );
+    m_nTimerStartTicks = tools::Time::GetMonotonicTicks() % SAL_MAX_UINT32;
     // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
     // to be 0 and should not hurt; also see
     // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
-    CreateTimerQueueTimer(&pSalData->mnTimerId, nullptr, SalTimerProc, nullptr,
+    CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc,
+                          (void*) m_nTimerStartTicks,
                           nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
+}
+
+WinSalTimer::WinSalTimer()
+    : m_nTimerId( nullptr )
+    , m_nTimerStartTicks( 0 )
+    , m_bPollForMessage( false )
+{
 }
 
 WinSalTimer::~WinSalTimer()
@@ -83,28 +90,28 @@ WinSalTimer::~WinSalTimer()
 
 void WinSalTimer::Start( sal_uLong nMS )
 {
-    SalData* pSalData = GetSalData();
-    if ( pSalData->mpFirstInstance && pSalData->mnAppThreadId != GetCurrentThreadId() )
+    WinSalInstance *pInst = GetSalData()->mpFirstInstance;
+    if ( pInst && !pInst->IsMainThread() )
     {
-        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
-            SAL_MSG_STARTTIMER, 0, (LPARAM)GetTickCount() + nMS);
+        BOOL const ret = PostMessageW(pInst->mhComWnd,
+            SAL_MSG_STARTTIMER, 0, (LPARAM) tools::Time::GetSystemTicks() + nMS);
         SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
-        ImplSalStartTimer( nMS );
+        ImplStart( nMS );
 }
 
 void WinSalTimer::Stop()
 {
-    SalData* pSalData = GetSalData();
-    if ( pSalData->mpFirstInstance && pSalData->mnAppThreadId != GetCurrentThreadId() )
+    WinSalInstance *pInst = GetSalData()->mpFirstInstance;
+    if ( pInst && !pInst->IsMainThread() )
     {
-        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
+        BOOL const ret = PostMessageW(pInst->mhComWnd,
             SAL_MSG_STOPTIMER, 0, 0);
         SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
-        ImplSalStopTimer();
+        ImplStop();
 }
 
 /** This gets invoked from a Timer Queue thread.
@@ -112,20 +119,18 @@ void WinSalTimer::Stop()
 Don't acquire the SolarMutex to avoid deadlocks, just wake up the main thread
 at better resolution than 10ms.
 */
-static void CALLBACK SalTimerProc(PVOID, BOOLEAN)
+static void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
 {
     __try
     {
-        SalData* pSalData = GetSalData();
-
         // always post message when the timer fires, we will remove the ones
         // that happened during execution of the callback later directly from
         // the message queue
-        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
-                                      SAL_MSG_TIMER_CALLBACK, 0, 0);
+        BOOL const ret = PostMessageW(GetSalData()->mpFirstInstance->mhComWnd,
+                                      SAL_MSG_TIMER_CALLBACK, (WPARAM) data, 0);
 #if OSL_DEBUG_LEVEL > 0
         if (0 == ret) // SEH prevents using SAL_WARN here?
-            fputs("ERROR: PostMessage() failed!", stderr);
+            fputs("ERROR: PostMessage() failed!\n", stderr);
 #endif
     }
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
@@ -133,22 +138,14 @@ static void CALLBACK SalTimerProc(PVOID, BOOLEAN)
     }
 }
 
-/** Called in the main thread.
-
-We assured that by posting the message from the SalTimeProc only, the real
-call then happens when the main thread gets SAL_MSG_TIMER_CALLBACK.
-*/
-void EmitTimerCallback()
+void WinSalTimer::ImplEmitTimerCallback()
 {
     // Test for MouseLeave
     SalTestMouseLeave();
 
-    ImplSVData *pSVData = ImplGetSVData();
-    if ( ! pSVData->maSchedCtx.mpSalTimer )
-        return;
-
+    m_bPollForMessage = false;
     ImplSalYieldMutexAcquireWithWait();
-    pSVData->maSchedCtx.mpSalTimer->CallCallback();
+    CallCallback();
     ImplSalYieldMutexRelease();
 }
 
