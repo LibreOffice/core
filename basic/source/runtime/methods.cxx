@@ -4345,7 +4345,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
         pBox.reset(VclPtr<InfoBox>::Create( pParent, nWinBits, aMsg ));
         break;
     default:
-        pBox.reset(VclPtr<MessBox>::Create( pParent, nWinBits, aTitle, aMsg ));
+        pBox.reset(VclPtr<MessBox>::Create( pParent, nWinBits, 0, aTitle, aMsg ));
     }
     pBox->SetText( aTitle );
     short nRet = pBox->Execute();

@@ -23,7 +23,7 @@
 #include <svx/dialmgr.hxx>
 
 SvxPrtQryBox::SvxPrtQryBox(vcl::Window* pParent) :
-    MessBox(pParent, MessBoxStyle::NONE,
+    MessBox(pParent, MessBoxStyle::NONE, 0,
             SvxResId(RID_SVXSTR_QRY_PRINT_TITLE),
             SvxResId(RID_SVXSTR_QRY_PRINT_MSG))
 {

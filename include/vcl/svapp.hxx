@@ -1387,6 +1387,12 @@ public:
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
+    // for delayed shutdown: set using SetShutdownDelayed, then
+    // trigger using TriggerShutdownDelayed which may actually shutdown
+    // when SetShutdownDelayed is set
+    static void SetShutdownDelayed();
+    static void TriggerShutdownDelayed();
+
 private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };

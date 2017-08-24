@@ -994,7 +994,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     if (rParam.bReplace)
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
-            bOk = ScopedVclPtrInstance<MessBox>( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes,
+            bOk = ScopedVclPtrInstance<MessBox>( ScDocShell::GetActiveDialogParent(), MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, 0,
                         // "StarCalc" "Delete Data?"
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
                         ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) )->Execute()
