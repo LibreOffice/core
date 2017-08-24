@@ -758,6 +758,12 @@ DECLARE_ODFEXPORT_TEST(testTextFrameVertAdjust, "textframe-vertadjust.odt")
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf111891_frameVertStyle, "tdf111891_frameVertStyle.odt")
+{
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_BOTTOM, getProperty<drawing::TextVerticalAdjust>(xFrame, "TextVerticalAdjust"));
+}
+
 DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
