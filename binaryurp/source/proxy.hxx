@@ -22,13 +22,15 @@
 
 #include "sal/config.h"
 
-#include "osl/interlck.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "typelib/typedescription.h"
 #include "typelib/typedescription.hxx"
 #include "uno/any2.h"
 #include "uno/dispatcher.h"
+
+#include <atomic>
+#include <cstddef>
 
 namespace binaryurp { class Bridge; }
 namespace com { namespace sun { namespace star { namespace uno {
@@ -78,7 +80,7 @@ private:
     rtl::Reference< Bridge > bridge_;
     OUString oid_;
     com::sun::star::uno::TypeDescription type_;
-    oslInterlockedCount references_;
+    std::atomic<std::size_t> references_;
 };
 
 }
