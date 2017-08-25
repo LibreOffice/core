@@ -380,7 +380,6 @@ private:
     SaveInData*                         pCurrentSaveInData;
 
     DECL_LINK(  SelectSaveInLocation, ListBox&, void );
-    DECL_LINK( AsyncInfoMsg, void*, void );
     DECL_LINK( SearchUpdateHdl, Edit&, void );
 
 protected:
