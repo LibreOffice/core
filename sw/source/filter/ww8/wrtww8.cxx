@@ -2218,13 +2218,31 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
          text::RelOrientation::FRAME == rVert.GetRelationOrient())
         )
     {
+        const bool bIsRTL = m_rWW8Export.TrueFrameDirection(*pFormat) == SvxFrameDirection::Horizontal_RL_TB;
         sal_Int16 eHOri = rHori.GetHoriOrient();
         switch (eHOri)
         {
             case text::HoriOrientation::CENTER:
+                m_rWW8Export.InsUInt16( NS_sprm::sprmTJc ); //logical orientation required for MSO
+                m_rWW8Export.InsUInt16( 1 );
+                m_rWW8Export.InsUInt16( NS_sprm::sprmTJc90 ); //physical orientation required for LO
+                m_rWW8Export.InsUInt16( 1 );
+                break;
             case text::HoriOrientation::RIGHT:
-                m_rWW8Export.InsUInt16( NS_sprm::sprmTJc90 );
-                m_rWW8Export.InsUInt16( text::HoriOrientation::RIGHT == eHOri ? 2 : 1 );
+                m_rWW8Export.InsUInt16( NS_sprm::sprmTJc90 ); //required for LO
+                m_rWW8Export.InsUInt16( 2 );
+                if ( !bIsRTL )
+                {
+                    m_rWW8Export.InsUInt16( NS_sprm::sprmTJc ); //required for MSO
+                    m_rWW8Export.InsUInt16( 2 );
+                }
+                break;
+            case text::HoriOrientation::LEFT:
+                if ( bIsRTL )
+                {
+                    m_rWW8Export.InsUInt16( NS_sprm::sprmTJc ); //required for MSO
+                    m_rWW8Export.InsUInt16( 2 );
+                }
                 break;
             default:
                 break;
