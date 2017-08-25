@@ -153,7 +153,7 @@ bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
-                                        std::vector<OUString>& newNameList) :
+                                        const std::vector<OUString>& newNameList) :
     ScSimpleUndo( pNewDocShell ),
     pDrawUndo( nullptr ),
     aNameList( newNameList ),
@@ -284,7 +284,7 @@ void ScUndoDeleteTab::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-static SCTAB lcl_GetVisibleTabBefore( ScDocument& rDoc, SCTAB nTab )
+static SCTAB lcl_GetVisibleTabBefore( const ScDocument& rDoc, SCTAB nTab )
 {
     while ( nTab > 0 && !rDoc.IsVisible( nTab ) )
         --nTab;

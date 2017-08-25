@@ -27,7 +27,7 @@
 #include <svx/sxciaitm.hxx>
 
 FuConstArc::FuConstArc( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                   SdrModel* pDoc, SfxRequest& rReq )
+                   SdrModel* pDoc, const SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {
 }

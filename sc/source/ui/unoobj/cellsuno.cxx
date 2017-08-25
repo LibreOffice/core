@@ -2132,7 +2132,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangesBase::getPropertySe
 }
 
 static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rValue,
-                            ScPatternAttr& rPattern, ScDocument &rDoc,
+                            ScPatternAttr& rPattern, const ScDocument &rDoc,
                             sal_uInt16& rFirstItemId, sal_uInt16& rSecondItemId )
 {
     rFirstItemId = rEntry.nWID;
@@ -4700,7 +4700,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
             SCPARAPROPERTIES_SERVICE};
 }
 
-uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument* pDoc, const ScRange& rR )
+uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( const ScDocument* pDoc, const ScRange& rR )
 {
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
     if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )

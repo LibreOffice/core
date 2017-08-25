@@ -53,7 +53,7 @@ class ScFormulaDlg : public formula::FormulaDlg,
 
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                        vcl::Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
+                        vcl::Window* pParent, const ScViewData* pViewData, const formula::IFunctionManager* _pFunctionMgr);
                     virtual ~ScFormulaDlg() override;
     virtual void dispose() override;
 
@@ -105,8 +105,8 @@ protected:
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 
-    static bool  IsInputHdl(ScInputHandler* pHdl);
-    static ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell, ScTabViewShell** ppViewSh);
+    static bool  IsInputHdl(const ScInputHandler* pHdl);
+    static ScInputHandler* GetNextInputHandler(const ScDocShell* pDocShell, ScTabViewShell** ppViewSh);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX

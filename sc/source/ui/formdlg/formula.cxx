@@ -63,7 +63,7 @@ using namespace com::sun::star;
 //      init/ shared functions for dialog
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                                    vcl::Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
+                                    vcl::Window* pParent, const ScViewData* pViewData, const formula::IFunctionManager* _pFunctionMgr )
     : formula::FormulaDlg( pB, pCW, pParent, _pFunctionMgr,this)
     , m_aHelper(this,pB)
 {
@@ -259,7 +259,7 @@ void ScFormulaDlg::dispose()
     formula::FormulaDlg::dispose();
 }
 
-bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
+bool ScFormulaDlg::IsInputHdl(const ScInputHandler* pHdl)
 {
     bool bAlive = false;
 
@@ -277,7 +277,7 @@ bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 
 }
 
-ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell, ScTabViewShell** ppViewSh)
+ScInputHandler* ScFormulaDlg::GetNextInputHandler(const ScDocShell* pDocShell, ScTabViewShell** ppViewSh)
 {
     ScInputHandler* pHdl=nullptr;
 

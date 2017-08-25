@@ -78,7 +78,7 @@ public:
 
     void                ShowSimpleReference(const OUString& rStr);
     void                ShowFormulaReference(const OUString& rStr);
-    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
+    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc );
     void                Init();
 
     void                ShowReference(const OUString& rStr);
@@ -131,7 +131,7 @@ protected:
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     virtual void        RefInputDone( bool bForced = false ) override;
 
-    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
+    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc );
 
 public:
                         ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef );

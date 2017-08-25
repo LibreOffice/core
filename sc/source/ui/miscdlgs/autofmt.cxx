@@ -423,7 +423,7 @@ void ScAutoFmtPreview::Init()
     CalcLineMap();
 }
 
-void ScAutoFmtPreview::DetectRTL(ScViewData *pViewData)
+void ScAutoFmtPreview::DetectRTL(const ScViewData *pViewData)
 {
     SCTAB nCurrentTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();

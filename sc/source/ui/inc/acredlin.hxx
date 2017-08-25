@@ -143,15 +143,15 @@ protected:
 
     bool            InsertChildren( ScChangeActionMap* pActionMap, SvTreeListEntry* pParent );
 
-    void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction);
+    void            AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction);
 
     void            RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction);
-    void            UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);
+    void            UpdateEntrys(const ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);
 
     void            UpdateView();
     void            ClearView();
 
-    bool            Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
+    bool            Expand(const ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
                            SvTreeListEntry* pEntry, bool bFilter = false);
 
 public:

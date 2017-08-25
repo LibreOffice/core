@@ -153,7 +153,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
     }
 }
 
-bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )
+bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc )
 {
     bool bError = false;
     rRanges.RemoveAll();
@@ -422,7 +422,7 @@ typedef std::set<VclPtr<vcl::Window> > winset;
 
 namespace
 {
-    void hideUnless(vcl::Window *pTop, const winset& rVisibleWidgets,
+    void hideUnless(const vcl::Window *pTop, const winset& rVisibleWidgets,
         std::vector<VclPtr<vcl::Window> > &rWasVisibleWidgets)
     {
         for (vcl::Window* pChild = pTop->GetWindow(GetWindowType::FirstChild); pChild;
@@ -942,7 +942,7 @@ IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl, Timer *, void)
     }
 }
 
-bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )
+bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument* pDoc )
 {
     return m_aHelper.ParseWithNames( rRanges, rStr, pDoc );
 }

@@ -44,7 +44,7 @@ private:
     AnovaFactor meFactor;
 
     static void RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput,
-                   FormulaTemplate& aTemplate, OUString& sFormula,
+                   FormulaTemplate& aTemplate, const OUString& sFormula,
                    GroupedBy aGroupedBy, ScRange* pResultRange);
 
     void AnovaSingleFactor(AddressWalkerWriter& output, FormulaTemplate& aTemplate);

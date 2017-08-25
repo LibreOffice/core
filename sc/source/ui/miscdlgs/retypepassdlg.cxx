@@ -222,7 +222,7 @@ void ScRetypePassDlg::SetTableData(size_t nRowPos, SCTAB nTab)
     }
 }
 
-static bool lcl_IsInGoodStatus(ScPassHashProtectable* pProtected, ScPasswordHash eDesiredHash)
+static bool lcl_IsInGoodStatus(const ScPassHashProtectable* pProtected, ScPasswordHash eDesiredHash)
 {
     if (!pProtected || !pProtected->isProtected())
         // Not protected.

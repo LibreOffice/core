@@ -44,7 +44,7 @@ class SC_DLLPUBLIC ScAutoFmtPreview : public vcl::Window
 {
 public:
     ScAutoFmtPreview(vcl::Window* pParent);
-    void DetectRTL(ScViewData *pViewData);
+    void DetectRTL(const ScViewData *pViewData);
     virtual ~ScAutoFmtPreview() override;
     virtual void dispose() override;
 

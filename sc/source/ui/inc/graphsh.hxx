@@ -49,7 +49,7 @@ public:
     void    Execute(SfxRequest& rReq);
     void    GetAttrState(SfxItemSet &rSet);
 
-    void    ExecuteFilter(SfxRequest& rReq);
+    void    ExecuteFilter(const SfxRequest& rReq);
     void    GetFilterState(SfxItemSet &rSet);
 
     void    ExecuteExternalEdit(SfxRequest& rReq);

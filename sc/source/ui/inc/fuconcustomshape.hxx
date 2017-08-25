@@ -30,7 +30,7 @@ class FuConstCustomShape : public FuConstruct
 
 public:
     FuConstCustomShape(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                       SdrModel* pDoc, SfxRequest& rReq);
+                       SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstCustomShape() override;
                                        // Mouse- & Key-Events

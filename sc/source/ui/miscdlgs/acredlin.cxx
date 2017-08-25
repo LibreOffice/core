@@ -1272,7 +1272,7 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
 }
 
 bool ScAcceptChgDlg::Expand(
-    ScChangeTrack* pChanges, const ScChangeAction* pScChangeAction,
+    const ScChangeTrack* pChanges, const ScChangeAction* pScChangeAction,
     SvTreeListEntry* pEntry, bool bFilter)
 {
     bool bTheTestFlag = true;
@@ -1373,7 +1373,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
     return true;
 }
 
-void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction,
+void ScAcceptChgDlg::AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStartAction,
                                    sal_uLong nEndAction)
 {
     if(pChanges!=nullptr)
@@ -1493,7 +1493,7 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
 
 }
 
-void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction)
+void ScAcceptChgDlg::UpdateEntrys(const ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction)
 {
     pTheView->SetUpdateMode(false);
 

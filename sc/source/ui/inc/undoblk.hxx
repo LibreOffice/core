@@ -651,7 +651,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    void DoChange(ScDocument* pDoc);
+    void DoChange(const ScDocument* pDoc);
     std::unique_ptr<ScDocument> mpUndoDoc;
     std::unique_ptr<ScDocument> mpRedoDoc;
     SCTAB mnTab;

@@ -27,7 +27,7 @@ class FuConstRectangle : public FuConstruct
 {
  public:
     FuConstRectangle(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                   SdrModel* pDoc, SfxRequest& rReq);
+                   SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstRectangle() override;
                                        // Mouse- & Key-Events

@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
     }
 }
 
-void ScConflictsDlg::SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction )
+void ScConflictsDlg::SetConflictAction( const SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction )
 {
     RedlinData* pUserData = static_cast< RedlinData* >( pRootEntry ? pRootEntry->GetUserData() : nullptr );
     ScConflictsListEntry* pConflictEntry = static_cast< ScConflictsListEntry* >( pUserData ? pUserData->pData : nullptr );

@@ -42,7 +42,7 @@ public:
     ScMediaShell(ScViewData* pData);
     virtual ~ScMediaShell() override;
 
-    void ExecuteMedia(SfxRequest& rReq);
+    void ExecuteMedia(const SfxRequest& rReq);
     void GetMediaState(SfxItemSet &rSet);
 };
 

@@ -60,8 +60,8 @@ static const char strWildcardRange[] = "%RANGE%";
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,
-            const OUString&     aWildcard,  ScDocument*     pDocument,
-            ScAddress::Details& aAddressDetails)
+            const OUString&     aWildcard,  const ScDocument*     pDocument,
+            const ScAddress::Details& aAddressDetails)
 {
     OUString aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
@@ -75,7 +75,7 @@ OUString lclCreateMultiParameterFormula(
     return aResult;
 }
 
-void lclMakeSubRangesList(ScRangeList& rRangeList, ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)
+void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)
 {
     std::unique_ptr<DataRangeIterator> pIterator;
     if (aGroupedBy == ScStatisticsInputOutputDialog::BY_COLUMN)
@@ -162,7 +162,7 @@ void ScAnalysisOfVarianceDialog::FactorChanged()
 }
 
 void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,
-                                           OUString& sFormula, GroupedBy aGroupedBy, ScRange* pResultRange)
+                                           const OUString& sFormula, GroupedBy aGroupedBy, ScRange* pResultRange)
 {
     if (pResultRange != nullptr)
         pResultRange->aStart = aOutput.current();

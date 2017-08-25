@@ -240,7 +240,7 @@ void ScNameDlg::SetActive()
     RefInputDone();
 }
 
-void ScNameDlg::UpdateChecks(ScRangeData* pData)
+void ScNameDlg::UpdateChecks(const ScRangeData* pData)
 {
     // remove handlers, we only want the handlers to process
     // user input and not when we are syncing the controls  with our internal

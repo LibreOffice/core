@@ -75,7 +75,7 @@ protected:
 
 public:
     ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                    ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
+                    const ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
     virtual ~ScNameDefDlg() override;
