@@ -26,6 +26,7 @@ $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $saloptions $omnicppoption
       --regex-UNOIDL="/^[ \t]*(published)?[ \t]*singleton[ \t]+([a-zA-Z0-9_]+)[ \t]*(:[^:]|\{|$)/\2/g,singleton/" \
       --regex-UNOIDL="/^[ \t]*(published)?[ \t]*struct[ \t]+([a-zA-Z0-9_]+)[ \t]*(:[^:]|\{|\<|$)/\2/s,struct/" \
       --regex-UNOIDL="/^[ \t]*(published)?[ \t]*enum[ \t]+([a-zA-Z0-9_]+)[ \t]*(\{|$)/\2/e,enum/" \
+      --regex-UNOIDL="/^[ \t]*(published)?[ \t]*exception[ \t]+([a-zA-Z0-9_]+)[ \t]*(:[^:]|\{|$)/\2/x,exception/" \
       --regex-UNOIDL="/^[ \t]*([a-zA-Z0-9_]+)[ \t]+([a-zA-Z0-9_]+);/\2/m,member/" \
       -R --exclude=instdir --exclude=instdir_for_build --exclude=workdir --exclude=workdir_for_build \
       --exclude=external --totals=yes ${SRCDIR:-*}
