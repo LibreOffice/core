@@ -1764,7 +1764,7 @@ void Test::testSharedFormulaUpdateOnReplacement()
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     aMark.SetMultiMarkArea(aUndoRange);
-    std::unique_ptr<ScDocument> pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
     ScUndoDeleteContents aUndo(&getDocShell(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);

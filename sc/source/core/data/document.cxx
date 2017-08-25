@@ -3232,7 +3232,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCROW nStartRow = rSrcArea.aStart.Row();
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
-        std::unique_ptr<ScDocument> pMixDoc;
+        ScDocumentUniquePtr pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
@@ -3289,7 +3289,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
-        std::unique_ptr<ScDocument> pMixDoc;
+        ScDocumentUniquePtr pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();

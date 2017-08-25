@@ -32,6 +32,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/deleter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
@@ -1187,7 +1188,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             bool bPasteSelection, RndStdIds nAnchorType )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
-    std::unique_ptr<SwTrnsfrActionAndUndo> pAction;
+    std::unique_ptr<SwTrnsfrActionAndUndo, o3tl::default_delete<SwTrnsfrActionAndUndo>> pAction;
     SwModule* pMod = SW_MOD();
 
     bool bRet = false;

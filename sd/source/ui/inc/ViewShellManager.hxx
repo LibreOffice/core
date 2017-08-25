@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLMANAGER_HXX
 
 #include "ShellFactory.hxx"
+#include <o3tl/deleter.hxx>
 #include <memory>
 
 class FmFormShell;
@@ -182,7 +183,7 @@ public:
 
 private:
     class Implementation;
-    ::std::unique_ptr<ViewShellManager::Implementation> mpImpl;
+    std::unique_ptr<ViewShellManager::Implementation, o3tl::default_delete<ViewShellManager::Implementation>> mpImpl;
     bool mbValid;
 
     void LockUpdate();

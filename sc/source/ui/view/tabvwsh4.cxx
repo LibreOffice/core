@@ -1498,8 +1498,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
     // use the InputHandler of the App).
     // As an intermediate solution each View gets its own InputHandler,
     // which only yields problems if two Views are in one task window.
-
-    mpInputHandler = o3tl::make_unique<ScInputHandler>();
+    mpInputHandler.reset(new ScInputHandler);
 
     // old version:
     //  if ( !GetViewFrame()->ISA(SfxTopViewFrame) )        // OLE or Plug-In
