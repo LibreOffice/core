@@ -208,7 +208,7 @@ sal_uInt16 MSWordStyles::BuildGetSlot( const SwFormat& rFormat )
 
 sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
 {
-    sal_uInt16 nRet = ww::stiUser;    // User-Style als default
+    sal_uInt16 nRet = ww::stiUser;    // user style as default
     sal_uInt16 nPoolId = rFormat.GetPoolFormatId();
     if( nPoolId == RES_POOLCOLL_STANDARD )
         nRet = 0;
@@ -1163,7 +1163,7 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
     while( 6 > nEmptyStt++ )
         pTextPos->Append( nCpStt );
 
-    // gleich die Flags am Dop setzen
+    // set the flags at the Dop right away
     WW8Dop& rDop = *rWrt.pDop;
     // Footnote Info
     switch( rInfo.eNum )
@@ -1885,7 +1885,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
         sal_uLong nStart = aIdx.GetIndex();
         sal_uLong nEnd = aEnd.GetIndex();
 
-        // Bereich also gueltiger Node
+        // range, i.e. valid node
         if ( nStart < nEnd )
         {
             bool bOldKF = m_bOutKF;

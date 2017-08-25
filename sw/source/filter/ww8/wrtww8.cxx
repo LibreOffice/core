@@ -2813,7 +2813,7 @@ void WW8Export::WriteMainText()
                     // therefore pFib->ccpText may get updated as well
     // save the StyleId of the last paragraph. Because WW97 take the style
     // from the last CR, that will be written after footer/Header/footnotes/
-    // annotation usw.
+    // annotation etc.
     const SwTextNode* pLastNd = m_pCurPam->GetMark()->nNode.GetNode().GetTextNode();
     if( pLastNd )
         m_nLastFormatId = GetId( static_cast<SwTextFormatColl&>(pLastNd->GetAnyFormatColl()) );
@@ -2983,7 +2983,7 @@ void WW8Export::StoreDoc1()
     }
     delete[] pLastSprms;
 
-    pSepx->Finish( Fc2Cp( Strm().Tell() ));// Text + Footnote + HdFt als Section-Ende
+    pSepx->Finish( Fc2Cp( Strm().Tell() ));// Text + Footnote + HdFt as section end
     m_pMagicTable->Finish( Fc2Cp( Strm().Tell() ),0);
 
     pFib->m_fcMac = Strm().Tell();        // End of all texts

@@ -428,7 +428,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL );
     }
 
-    // Undo-Klammerung hier beenden
+    // end the Undo bracketing here
     pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSSECTION, nullptr );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;

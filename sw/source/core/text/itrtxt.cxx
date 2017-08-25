@@ -198,7 +198,7 @@ void SwTextIter::CharToLine(const sal_Int32 nChar)
         ;
 }
 
-// 1170: beruecksichtigt Mehrdeutigkeiten:
+// 1170: takes into account ambiguities:
 const SwLineLayout *SwTextCursor::CharCursorToLine( const sal_Int32 nPosition )
 {
     CharToLine( nPosition );

@@ -82,7 +82,7 @@
 #include <vector>
 
 // Properties of the javavm can be put
-// as a komma separated list in this
+// as a comma separated list in this
 // environment variable
 #ifdef UNIX
 #define TIMEZONE "MEZ"

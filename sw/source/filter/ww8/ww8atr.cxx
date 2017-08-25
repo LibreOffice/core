@@ -3341,7 +3341,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
  */
 sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
 {
-    OSL_ENSURE( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
+    OSL_ENSURE( nChar, "replaced with 0 crashes WW97/95" );
 
     bool bReplaced = false;
     SvStream& rStrm = Strm();

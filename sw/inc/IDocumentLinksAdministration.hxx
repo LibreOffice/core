@@ -48,7 +48,7 @@ using rtl::OUString;
     */
     virtual void UpdateLinks() = 0;
 
-    /** SS fuers Linken von Dokumentteilen  / ?? for linking of parts of documents.
+    /** for linking of parts of documents.
     */
     virtual bool GetData(const OUString& rItem, const OUString& rMimeType, css::uno::Any& rValue) const = 0;
 

@@ -217,7 +217,7 @@ void SwInputWindow::ShowWin()
         OSL_ENSURE(pMgr == nullptr, "FieldManager not deleted");
         pMgr = new SwFieldMgr;
 
-        // Formular should always begin with "=" , so set here
+        // Form should always begin with "=" , so set here
         OUString sEdit('=');
         if( pMgr->GetCurField() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
@@ -338,7 +338,7 @@ void  SwInputWindow::ApplyFormula()
     CleanupUglyHackWithUndo();
     pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
-    // Formular should always begin with "=", so remove it here again
+    // Form should always begin with "=", so remove it here again
     OUString sEdit(comphelper::string::strip(aEdit->GetText(), ' '));
     if( !sEdit.isEmpty() && '=' == sEdit[0] )
         sEdit = sEdit.copy( 1 );

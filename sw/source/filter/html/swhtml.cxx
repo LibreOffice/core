@@ -127,7 +127,7 @@
 using editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-// <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
+// <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> etc.
 HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    SvxAdjust::Left     },

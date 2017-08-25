@@ -321,7 +321,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     if ( !bFull )
     {
         Width( aGuess.BreakWidth() );
-        // Vorsicht !
+        // Caution!
         if( !InExpGrp() || InFieldGrp() )
             SetLen( rInf.GetLen() );
 

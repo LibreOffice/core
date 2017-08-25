@@ -1639,7 +1639,7 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         // There was a comment here that claimed that the following assertion
         // shouldn't exist as it's triggered by "Trennung ueber Sonderbereiche",
-        // whatever that means.
+        // (hyphenation across special sections?), whatever that means.
         OSL_ENSURE( pFrame, "!SwTextNode::Hyphenate: can't find any frame" );
         return false;
     }

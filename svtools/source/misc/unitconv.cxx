@@ -289,7 +289,7 @@ long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
         default: ;//prevent warning
     }
 
-    // ggf. aufrunden
+    // round up if necessary
     if ( MapUnit::MapTwip != eUnit )
     {
         long nTmp = nRet % 10;
