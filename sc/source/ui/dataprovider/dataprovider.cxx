@@ -57,10 +57,11 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
 }
 
 ExternalDataSource::ExternalDataSource(const OUString& rURL,
-        const OUString& rProvider, ScDocument* pDoc):
-    maURL(rURL),
-    maProvider(rProvider),
-    mpDoc(pDoc)
+        const OUString& rProvider, ScDocument* pDoc)
+    : maURL(rURL)
+    , maProvider(rProvider)
+    , mnUpdateFrequency(0.0)
+    , mpDoc(pDoc)
 {
 }
 
