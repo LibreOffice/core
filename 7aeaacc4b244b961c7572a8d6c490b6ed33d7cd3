@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7f54e053",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-25T07:53:21Z",
+      "side": 1,
+      "message": "Just do\n  pElementIter \u003d m_aChildrenVector.erase(pElementIter)",
+      "revId": "7aeaacc4b244b961c7572a8d6c490b6ed33d7cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9f518c65",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-25T07:53:21Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "7aeaacc4b244b961c7572a8d6c490b6ed33d7cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_bf4e48bf",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-25T07:53:21Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "7aeaacc4b244b961c7572a8d6c490b6ed33d7cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_df4b14af",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-25T07:53:21Z",
+      "side": 1,
+      "message": "the standard idiom here is:\n  m_aChildrenVector.erase(::std::remove(m_aChildrenVector.begin(), m_aChildrenVector.end(), pElement), m_aChildrenVector.end());",
+      "revId": "7aeaacc4b244b961c7572a8d6c490b6ed33d7cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
