@@ -41,6 +41,7 @@ public:
     void testVba();
     void testMSP();
     void testPasswordProtectedStarBasic();
+    void testRowColumn();
 #endif
     CPPUNIT_TEST_SUITE(ScMacrosTest);
 #if !defined(MACOSX)
@@ -50,6 +51,7 @@ public:
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
+    CPPUNIT_TEST(testRowColumn);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -342,6 +344,44 @@ void ScMacrosTest::testVba()
                 osl::File::remove( sFileUrl );
         }
     }
+}
+
+void ScMacrosTest::testRowColumn()
+{
+    const OUString aFileNameBase("StarBasic.ods");
+    OUString aFileName;
+    createFileURL(aFileNameBase, aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
+
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.Macro_RowHeight?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    sal_uInt16 nHeight = rDoc.GetRowHeight(0, 0) * HMM_PER_TWIPS;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.Macro_ColumnWidth?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+    sal_uInt16 nWidth  = rDoc.GetColWidth(0, 0) * HMM_PER_TWIPS;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
+
+    pDocSh->DoClose();
 }
 
 #endif

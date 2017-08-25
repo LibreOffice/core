@@ -541,13 +541,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pRow;
                 const SfxPoolItem* pHeight;
+                sal_uInt16 nHeight;
 
-                if ( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pRow ) &&
-                                 pReqArgs->HasItem( FN_PARAM_2, &pHeight ) )
+                if ( pReqArgs && pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) &&
+                                 pReqArgs->HasItem( FN_PARAM_1, &pRow ) )
                 {
                     std::vector<sc::ColRowSpan> aRanges;
                     SCCOLROW nRow = static_cast<const SfxInt32Item*>(pRow)->GetValue() - 1;
-                    sal_uInt16 nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
+                    nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
                     ScMarkData& rMark = GetViewData()->GetMarkData();
 
                     if ( rMark.IsRowMarked( static_cast<SCROW>(nRow) ) )
@@ -559,15 +560,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aRanges.push_back(sc::ColRowSpan(nRow, nRow));
                     }
 
-                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, nHeight);
+                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, HMMToTwips(nHeight));
                 }
-                else if ( pReqArgs )
+                else if ( pReqArgs && pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) )
                 {
-                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_ROW_HEIGHT ));
+                    nHeight = static_cast<const SfxUInt16Item*>(pHeight)->GetValue();
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT,
-                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
+                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(nHeight) ) );
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
@@ -646,13 +647,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pColumn;
                 const SfxPoolItem* pWidth;
+                sal_uInt16 nWidth;
 
-                if ( pReqArgs && pReqArgs->HasItem( FN_PARAM_1, &pColumn ) &&
-                                 pReqArgs->HasItem( FN_PARAM_2, &pWidth ) )
+                if ( pReqArgs && pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) &&
+                                 pReqArgs->HasItem( FN_PARAM_1, &pColumn ) )
                 {
                     std::vector<sc::ColRowSpan> aRanges;
                     SCCOLROW nColumn = static_cast<const SfxUInt16Item*>(pColumn)->GetValue() - 1;
-                    sal_uInt16 nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
+                    nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
                     ScMarkData& rMark = GetViewData()->GetMarkData();
 
                     if ( rMark.IsColumnMarked( static_cast<SCCOL>(nColumn) ) )
@@ -664,15 +666,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aRanges.push_back(sc::ColRowSpan(nColumn, nColumn));
                     }
 
-                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, nWidth);
+                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, HMMToTwips(nWidth));
                 }
-                else if ( pReqArgs )
+                else if ( pReqArgs && pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) )
                 {
-                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_COL_WIDTH ));
+                    nWidth = static_cast<const SfxUInt16Item*>(pWidth)->GetValue();
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT,
-                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
+                                    sal::static_int_cast<sal_uInt16>( HMMToTwips(nWidth) ) );
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
