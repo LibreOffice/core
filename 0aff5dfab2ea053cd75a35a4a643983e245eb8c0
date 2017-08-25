@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3f125863",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T11:14:08Z",
+      "side": 1,
+      "message": "If you do this then you will have to increment all index values in i18npool/source/localedata/data/*.xml for FormatCode elements where formatindex\u003d\"60\" (or consecutively greater). See also i18npool/source/localedata/data/locale.dtd the description for ELEMENT FormatCode. Best then to start those at 70 to have some room again in case some other fixed (not locale dependent) format(s) will be added here.\n\nSorry for hassle, these things are twisted.\n\nI\u0027ll add a check to debug builds to detect this and bail out.\n\nIf that all sounds too much (likely ;-), then use (exactly made for this purpose) sax::Converter::convertDateTime() from include/sax/tools/converter.hxx in XclExpXmlPivotCaches::GetISO8601FormattedDate()",
+      "revId": "0aff5dfab2ea053cd75a35a4a643983e245eb8c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fafe1e04",
+        "filename": "sc/inc/dpitemdata.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T11:14:08Z",
+      "side": 1,
+      "message": "Changing this, enum Type should be changed to class enum Type derived from sal_uInt8, to not waste memory, as otherwise compilers tend to make an enum int width. Probably that was the reason that sal_uInt8 was used in this mass object.",
+      "revId": "0aff5dfab2ea053cd75a35a4a643983e245eb8c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1a04ca13",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T11:14:08Z",
+      "side": 1,
+      "message": "Nitpick: rather prefer f... prefix for double (\"f\"loat), so fDateTime",
+      "range": {
+        "startLine": 177,
+        "startChar": 62,
+        "endLine": 177,
+        "endChar": 71
+      },
+      "revId": "0aff5dfab2ea053cd75a35a4a643983e245eb8c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
