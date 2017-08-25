@@ -418,10 +418,72 @@ namespace emfplushelper
                                                                 transformedPenWidth,
                                                                 lineJoin,
                                                                 lineCap);
-            mrTargetHolders.Current().append(
-                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                    polygon,
-                    lineAttribute));
+
+            if (pen->penDataFlags & 0x00000020 and pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predifined line style
+            {
+                // taken from the old cppcanvas implementation
+                const std::vector<double> dash = { 3, 3 };
+                const std::vector<double> dot = { 1, 3 };
+                const std::vector<double> dashdot = { 3, 3, 1, 3 };
+                const std::vector<double> dashdotdot = { 3, 3, 1, 3, 1, 3 };
+
+                drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
+
+                switch (pen->dashStyle)
+                {
+                    case EmfPlusLineStyleSolid: // do nothing special
+                        mrTargetHolders.Current().append(
+                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                                polygon,
+                                lineAttribute));
+                        break;
+                    case EmfPlusLineStyleDash:
+                        aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dash);
+                        break;
+                    case EmfPlusLineStyleDot:
+                        aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dot);
+                        break;
+                    case EmfPlusLineStyleDashDot:
+                        aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dashdot);
+                        break;
+                    case EmfPlusLineStyleDashDotDot:
+                        aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dashdotdot);
+                        break;
+
+                    mrTargetHolders.Current().append(
+                        new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                            polygon,
+                            lineAttribute,
+                            aStrokeAttribute));
+                }
+            }
+            else if (pen->penDataFlags & 0x00000100) // pen has a custom dash line
+            {
+                // StrokeAttribute needs a double vector while the pen provides a float vector
+                std::vector<double> aPattern(pen->dashPattern.size());
+                for (size_t i=0; i<aPattern.size(); i++)
+                {
+                    aPattern[i] = 0.5 * MapSize(double(pen->dashPattern[i]),0).getX();
+                    // here, this is just a guess
+                    // without transform it es way too small
+                    // with 1 * MapSize(...) it es too large
+                    // with 0.5 * MapSize is looks like in MSO
+                }
+                drawinglayer::attribute::StrokeAttribute strokeAttribute(aPattern);
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        polygon,
+                        lineAttribute,
+                        strokeAttribute));
+
+            }
+            else // no further line decoration, so use simple primitive
+            {
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        polygon,
+                        lineAttribute));
+            }
 
             mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
             mrPropertyHolders.Current().setLineColorActive(true);

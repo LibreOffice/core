@@ -60,13 +60,6 @@ namespace emfplushelper
         PenDataCustomEndCap     = 0x00001000
     };
 
-    const sal_Int32 EmfPlusLineStyleSolid = 0x00000000;
-    const sal_Int32 EmfPlusLineStyleDash = 0x00000001;
-    const sal_Int32 EmfPlusLineStyleDot = 0x00000002;
-    const sal_Int32 EmfPlusLineStyleDashDot = 0x00000003;
-    const sal_Int32 EmfPlusLineStyleDashDotDot = 0x00000004;
-    const sal_Int32 EmfPlusLineStyleCustom = 0x00000005;
-
     EMFPPen::EMFPPen()
         : EMFPBrush()
         , penDataFlags(0)

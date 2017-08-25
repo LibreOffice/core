@@ -34,6 +34,13 @@ namespace emfplushelper
     const sal_uInt32 EmfPlusLineJoinTypeRound = 0x00000002;
     const sal_uInt32 EmfPlusLineJoinTypeMiterClipped = 0x00000003;
 
+    const sal_Int32 EmfPlusLineStyleSolid = 0x00000000;
+    const sal_Int32 EmfPlusLineStyleDash = 0x00000001;
+    const sal_Int32 EmfPlusLineStyleDot = 0x00000002;
+    const sal_Int32 EmfPlusLineStyleDashDot = 0x00000003;
+    const sal_Int32 EmfPlusLineStyleDashDotDot = 0x00000004;
+    const sal_Int32 EmfPlusLineStyleCustom = 0x00000005;
+
     struct EMFPCustomLineCap;
 
     struct EMFPPen : public EMFPBrush
