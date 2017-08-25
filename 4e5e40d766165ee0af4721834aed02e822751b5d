@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3a57c603",
+        "filename": "include/editeng/flditem.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-25T12:11:08Z",
+      "side": 1,
+      "message": "Can\u0027t we use enum class here, and skip the SVXURLTYPE_ prefix?\n\nAlso, can we move it somewhere, to avoid the need to include the editeng header to other files?",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 5
+      },
+      "revId": "4e5e40d766165ee0af4721834aed02e822751b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
