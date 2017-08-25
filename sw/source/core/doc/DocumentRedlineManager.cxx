@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -730,7 +729,8 @@ Behaviour of Delete-Redline:
                                           other Insert is overlapped by
                                           the Delete
 */
-bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
+IDocumentRedlineAccess::AppendResult
+DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCallDelete)
 {
     bool bMerged = false;
     CHECK_REDLINE( *this )
@@ -792,7 +792,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
             ( pNewRedl->GetContentIdx() == nullptr ) )
         {   // Do not insert empty redlines
             delete pNewRedl;
-            return false;
+            return AppendResult::IGNORED;
         }
         bool bCompress = false;
         SwRedlineTable::size_type n = 0;
@@ -1706,7 +1706,9 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
     }
     CHECK_REDLINE( *this )
 
-    return ( nullptr != pNewRedl ) || bMerged;
+    return (nullptr != pNewRedl)
+        ? AppendResult::APPENDED
+        : ((bMerged) ? AppendResult::MERGED : AppendResult::IGNORED);
 }
 
 bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl, bool )

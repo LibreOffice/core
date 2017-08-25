@@ -1267,9 +1267,9 @@ void makeRedline( SwPaM const & rPaM,
     pRedline->SetExtraData( pRedlineExtraData );
 
     pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
-    bool bRet = pRedlineAccess->AppendRedline( pRedline, false );
+    auto const result(pRedlineAccess->AppendRedline(pRedline, false));
     pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
-    if( !bRet )
+    if (IDocumentRedlineAccess::AppendResult::IGNORED == result)
         throw lang::IllegalArgumentException();
 }
 

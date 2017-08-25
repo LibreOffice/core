@@ -159,15 +159,23 @@ public:
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
 
+    enum class AppendResult { IGNORED, MERGED, APPENDED };
     /** Append a new redline
 
-        @param pPtr
+        @param pNewRedl redline to insert
 
         @param bCallDelete
+            if set, then for a new DELETE redline that is inserted so that it
+            overlaps an existing INSERT redline with the same author, the
+            overlapping range is deleted, i.e. the new DELETE removes
+            existing INSERT for that range
 
         @returns
+            APPENDED if pNewRedl is still alive and was appended
+            MERGED if pNewRedl was deleted but has been merged with existing one
+            IGNORED if pNewRedl was deleted and ignored/invalid
     */
-    virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
+    virtual AppendResult AppendRedline(/*[in]*/SwRangeRedline* pNewRedl, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete) = 0;
     virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete) = 0;

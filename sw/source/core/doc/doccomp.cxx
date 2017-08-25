@@ -1751,7 +1751,9 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         }
 
         do {
-            if( rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true) &&
+            if (IDocumentRedlineAccess::AppendResult::APPENDED ==
+                    rDoc.getIDocumentRedlineAccess().AppendRedline(
+                        new SwRangeRedline(aRedlnData, *pTmp), true) &&
                 rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, true ));
@@ -2034,7 +2036,8 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
             ? new SwUndoCompDoc( *pDestRedl ) : nullptr;
 
         // now modify doc: append redline, undo (and count)
-        bool bRedlineAccepted = pDoc->getIDocumentRedlineAccess().AppendRedline( pDestRedl, true );
+        IDocumentRedlineAccess::AppendResult const result(
+            pDoc->getIDocumentRedlineAccess().AppendRedline(pDestRedl, true));
         if( pUndo )
         {
             pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
@@ -2043,7 +2046,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
         // if AppendRedline has deleted our redline, we may not keep a
         // reference to it
-        if( ! bRedlineAccepted )
+        if (IDocumentRedlineAccess::AppendResult::APPENDED != result)
             pDestRedl = nullptr;
     }
     return nIns;

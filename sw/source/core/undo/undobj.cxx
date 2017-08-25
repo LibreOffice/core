@@ -1372,9 +1372,9 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
     if (rDoc.GetDocShell() && (!pRedl->GetComment().isEmpty()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint());
 
-    bool const bSuccess = rDoc.getIDocumentRedlineAccess().AppendRedline( pRedl, true );
-    assert(bSuccess); // SwRedlineSaveData::RedlineToDoc: insert redline failed
-    (void) bSuccess; // unused in non-debug
+    auto const result(rDoc.getIDocumentRedlineAccess().AppendRedline(pRedl, true));
+    assert(result != IDocumentRedlineAccess::AppendResult::IGNORED); // SwRedlineSaveData::RedlineToDoc: insert redline failed
+    (void) result; // unused in non-debug
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
