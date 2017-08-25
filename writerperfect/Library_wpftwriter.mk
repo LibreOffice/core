@@ -78,6 +78,8 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/exp/XMLBase64ImportContext \
 	writerperfect/source/writer/exp/XMLTextFrameContext \
 	writerperfect/source/writer/exp/txtparai \
+	writerperfect/source/writer/exp/txtstyli \
+	writerperfect/source/writer/exp/xmlfmt \
 	writerperfect/source/writer/exp/xmlictxt \
 	writerperfect/source/writer/exp/xmlimp \
 	writerperfect/source/writer/exp/xmlmetai \

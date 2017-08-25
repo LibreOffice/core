@@ -9,6 +9,7 @@
 
 #include "xmlimp.hxx"
 
+#include "xmlfmt.hxx"
 #include "xmlictxt.hxx"
 #include "xmlmetai.hxx"
 #include "xmltext.hxx"
@@ -61,6 +62,8 @@ XMLImportContext *XMLOfficeDocContext::CreateChildContext(const OUString &rName,
         return new XMLBodyContext(mrImport);
     else if (rName == "office:meta")
         return new XMLMetaDocumentContext(mrImport);
+    else if (rName == "office:automatic-styles")
+        return new XMLAutomaticStylesContext(mrImport);
     return nullptr;
 }
 
@@ -79,6 +82,11 @@ XMLImportContext *XMLImport::CreateContext(const OUString &rName, const css::uno
 librevenge::RVNGTextInterface &XMLImport::GetGenerator() const
 {
     return mrGenerator;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticStyles()
+{
+    return maAutomaticStyles;
 }
 
 void XMLImport::startDocument()
