@@ -424,6 +424,7 @@ protected:
     SvxConfigPage( vcl::Window*, const SfxItemSet& );
 
     DECL_LINK( MoveHdl, Button *, void );
+    DECL_LINK( SelectFunctionHdl, SvTreeListBox *, void );
 
     virtual SaveInData* CreateSaveInData(
         const css::uno::Reference< css::ui::XUIConfigurationManager >&,
