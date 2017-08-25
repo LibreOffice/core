@@ -359,6 +359,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104713_undefinedStyles, "tdf104713_undefinedStyl
     // Normal paragraph style was not defined, so don't replace conflicting styles
     uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(xStyle, "ParaBottomMargin"));
+
+    // tdf108765: once importing is finished, use default values for any styles not yet defined.
+    xStyle.set( getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyle, "CharHeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDrawingmlFlipv, "drawingml-flipv.docx")

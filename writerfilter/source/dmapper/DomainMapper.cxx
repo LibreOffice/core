@@ -206,6 +206,9 @@ DomainMapper::~DomainMapper()
         // Apply the document settings after everything else
         m_pImpl->GetSettingsTable()->ApplyProperties( m_pImpl->GetTextDocument( ) );
 
+        // now that importing is finished, re-enable default styles for any that were never defined/imported.
+        m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(false));
+
         // Grab-bag handling
         comphelper::SequenceAsHashMap aProperties;
         // Add the saved w:themeFontLang setting
