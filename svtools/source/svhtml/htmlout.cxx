@@ -560,10 +560,10 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
 }
 
 SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
-{                                                  // in einen Stream aus
+{                                                  // out into a stream
     sal_Char aNToABuf[] = "0000000000000000";
 
-    DBG_ASSERT( nLen < sizeof(aNToABuf), "zu viele Stellen" );
+    DBG_ASSERT( nLen < sizeof(aNToABuf), "too many places" );
     if( nLen>=sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 

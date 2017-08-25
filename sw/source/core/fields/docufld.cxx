@@ -272,7 +272,7 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_FORMAT:
         rAny >>= nSet;
 
-        // TODO: woher kommen die defines?
+        // TODO: where do the defines come from?
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
         else {

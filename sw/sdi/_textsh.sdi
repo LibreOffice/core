@@ -708,7 +708,7 @@ interface BaseText
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-     //Parameter kann noch nicht aufgezeichnet werden
+     // parameter can not be recorded yet
     FN_NUM_NUMBERING_ON // status(final|play)
     [
         ExecMethod = ExecEnterNum ;

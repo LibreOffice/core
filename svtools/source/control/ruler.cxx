@@ -145,7 +145,7 @@ static RulerTabData ruler_tab =
 
 void Ruler::ImplInit( WinBits nWinBits )
 {
-    // Default WinBits setzen
+    // Set default WinBits
     if ( !(nWinBits & WB_VERT) )
     {
         nWinBits |= WB_HORZ;
@@ -2086,7 +2086,7 @@ void Ruler::Resize()
             Invalidate(InvalidateFlags::NoErase);
         else if ( mpData->bAutoPageWidth )
         {
-            // only at AutoPageWidth muss we redraw
+            // only at AutoPageWidth do we need to redraw
             tools::Rectangle aRect;
 
             if ( mnWinStyle & WB_HORZ )

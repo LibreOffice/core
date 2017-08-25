@@ -635,7 +635,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 {
     if(m_pCLNrEdt->HasChildPathFocus())
         m_pCLNrEdt->GetDownHdl().Call(*m_pCLNrEdt);
-    // set in ItemSet setzen
+    // set in ItemSet;
     // the current settings are already present
 
     const SfxPoolItem* pOldItem;

@@ -175,7 +175,7 @@ void SwPaintQueue::Remove( SwViewShell const *pSh )
 
 void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
 {
-    OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
+    OSL_ENSURE( !pSh->GetWin(), "Print with window?" );
     pSh->maVisArea = rRect;
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );

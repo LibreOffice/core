@@ -319,7 +319,7 @@ void SwFltControlStack::StealAttr(const SwNodeIndex& rNode)
         SwFltStackEntry& rEntry = *m_Entries[nCnt];
         if (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == rNode.GetIndex())
         {
-            DeleteAndDestroy(nCnt);     // loesche aus dem Stack
+            DeleteAndDestroy(nCnt);     // delete from the stack
         }
     }
 }

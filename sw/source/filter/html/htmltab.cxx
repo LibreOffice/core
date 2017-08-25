@@ -2088,7 +2088,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
 inline void HTMLTable::CloseSection( bool bHead )
 {
     // Close the preceding sections if there's already a row
-    OSL_ENSURE( m_nCurrentRow<=m_nRows, "ungeultige aktuelle Zeile" );
+    OSL_ENSURE( m_nCurrentRow<=m_nRows, "invalid current row" );
     if( m_nCurrentRow>0 && m_nCurrentRow<=m_nRows )
         (*m_pRows)[m_nCurrentRow-1]->SetEndOfGroup();
     if( bHead )

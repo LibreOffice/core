@@ -3116,11 +3116,11 @@ const Color SwFEShell::GetShapeBackgrd() const
                 // determine page frame of the frame the shape is anchored.
                 const SwFrame* pAnchorFrame =
                         static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrame( pSdrObj );
-                OSL_ENSURE( pAnchorFrame, "inconsistent modell - no anchor at shape!");
+                OSL_ENSURE( pAnchorFrame, "inconsistent model - no anchor at shape!");
                 if ( pAnchorFrame )
                 {
                     const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
-                    OSL_ENSURE( pPageFrame, "inconsistent modell - no page!");
+                    OSL_ENSURE( pPageFrame, "inconsistent model - no page!");
                     if ( pPageFrame )
                     {
                         aRetColor = pPageFrame->GetDrawBackgrdColor();
@@ -3164,11 +3164,11 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
                 // determine page frame of the frame the shape is anchored.
                 const SwFrame* pAnchorFrame =
                         static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrame( pSdrObj );
-                OSL_ENSURE( pAnchorFrame, "inconsistent modell - no anchor at shape!");
+                OSL_ENSURE( pAnchorFrame, "inconsistent model - no anchor at shape!");
                 if ( pAnchorFrame )
                 {
                     const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
-                    OSL_ENSURE( pPageFrame, "inconsistent modell - no page!");
+                    OSL_ENSURE( pPageFrame, "inconsistent model - no page!");
                     if ( pPageFrame )
                     {
                         bRet = pPageFrame->IsRightToLeft();
