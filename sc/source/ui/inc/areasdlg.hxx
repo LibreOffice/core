@@ -70,7 +70,7 @@ private:
     void Impl_Reset();
     bool Impl_CheckRefStrings();
     void Impl_FillLists();
-    bool Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
+    bool Impl_GetItem( const Edit* pEd, SfxStringItem& rItem );
 
     // Handler:
     DECL_LINK( Impl_SelectHdl, ListBox&, void );

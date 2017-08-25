@@ -49,7 +49,7 @@ using std::shared_ptr;
 
 namespace HelperNotifyChanges
 {
-    void NotifyIfChangesListeners(ScDocShell& rDocShell, const ScAddress &rPos,
+    void NotifyIfChangesListeners(const ScDocShell& rDocShell, const ScAddress &rPos,
         const ScUndoEnterData::ValuesType &rOldValues)
     {
         if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))

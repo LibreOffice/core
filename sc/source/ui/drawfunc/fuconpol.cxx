@@ -28,7 +28,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 
 FuConstPolygon::FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                   SdrModel* pDoc, SfxRequest& rReq)
+                   SdrModel* pDoc, const SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }

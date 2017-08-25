@@ -55,8 +55,8 @@ enum {
 
 // global functions (->at the end of the file):
 
-static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
-static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr );
+static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc, bool bIsRow, ScRange* pRange );
+static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument* pDoc, bool bIsRow, OUString& rStr );
 
 #if 0
 // this method is useful when debugging address flags.
@@ -312,7 +312,7 @@ void ScPrintAreasDlg::Impl_Reset()
     pEdRepeatCol->SaveValue();
 }
 
-bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
+bool ScPrintAreasDlg::Impl_GetItem( const Edit* pEd, SfxStringItem& rItem )
 {
     OUString  aRangeStr = pEd->GetText();
     bool bDataChanged = pEd->IsValueChangedFromSaved();
@@ -714,7 +714,7 @@ static bool lcl_CheckRepeatOne( const OUString& rStr, formula::FormulaGrammar::A
     return false;
 }
 
-static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
+static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument* pDoc, bool bIsRow, ScRange* pRange )
 {
     // Row: [valid row] rsep [valid row]
     // Col: [valid col] rsep [valid col]
@@ -799,7 +799,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
     return true;
 }
 
-static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
+static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument* pDoc, bool bIsRow, OUString& rStr )
 {
     rStr.clear();
     if (!pRange)

@@ -102,7 +102,7 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
         SvxGraphicFilter::DisableGraphicFilterSlots( rSet );
 }
 
-void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
+void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();

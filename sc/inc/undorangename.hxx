@@ -48,7 +48,7 @@ class ScUndoAddRangeData : public ScSimpleUndo
 {
 public:
     // nTab = -1 for global range names
-    ScUndoAddRangeData(ScDocShell* pDocSh, ScRangeData* pRangeData, SCTAB nTab);
+    ScUndoAddRangeData(ScDocShell* pDocSh, const ScRangeData* pRangeData, SCTAB nTab);
 
     virtual ~ScUndoAddRangeData() override;
 

@@ -66,7 +66,7 @@ private:
 
 public:
     ScRangeManagerTable(SvSimpleTableContainer& rParent,
-        std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
+        const std::map<OUString, std::unique_ptr<ScRangeName>>& rTabRangeNames,
         const ScAddress& rPos);
     virtual ~ScRangeManagerTable() override;
     virtual void dispose() override;

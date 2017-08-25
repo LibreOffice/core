@@ -102,7 +102,7 @@ static void lcl_UpdateHyphenator( Outliner& rOutliner, const SdrObject* pObj )
 }
 
 FuText::FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                   SdrModel* pDoc, SfxRequest& rReq) :
+                   SdrModel* pDoc, const SfxRequest& rReq) :
     FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }

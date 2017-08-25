@@ -31,7 +31,7 @@ class FuText : public FuConstruct
 {
 public:
     FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                   SdrModel* pDoc, SfxRequest& rReq);
+                   SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuText() override;
 

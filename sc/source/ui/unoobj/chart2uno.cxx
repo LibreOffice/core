@@ -128,7 +128,7 @@ OUString lcl_createTableNumberList( const ::std::list< SCTAB > & rTableList )
     return aBuffer.makeStringAndClear();
 }
 
-uno::Reference< frame::XModel > lcl_GetXModel( ScDocument * pDoc )
+uno::Reference< frame::XModel > lcl_GetXModel( const ScDocument * pDoc )
 {
     uno::Reference< frame::XModel > xModel;
     SfxObjectShell * pObjSh( pDoc ? pDoc->GetDocumentShell() : nullptr );
@@ -1361,7 +1361,7 @@ class ShrinkRefTokenToDataRange
     ScDocument* mpDoc;
 public:
     explicit ShrinkRefTokenToDataRange(ScDocument* pDoc) : mpDoc(pDoc) {}
-    void operator() (ScTokenRef& rRef)
+    void operator() (const ScTokenRef& rRef)
     {
         if (ScRefTokenHelper::isExternalRef(rRef))
             return;
@@ -1641,8 +1641,8 @@ public:
     void initRangeAnalyzer( const vector<ScTokenRef>& rTokens );
     void analyzeRange( sal_Int32& rnDataInRows, sal_Int32& rnDataInCols,
             bool& rbRowSourceAmbiguous ) const;
-    bool inSameSingleRow( RangeAnalyzer& rOther );
-    bool inSameSingleColumn( RangeAnalyzer& rOther );
+    bool inSameSingleRow( const RangeAnalyzer& rOther );
+    bool inSameSingleColumn( const RangeAnalyzer& rOther );
     SCROW getRowCount() { return mnRowCount; }
     SCCOL getColumnCount() { return mnColumnCount; }
 
@@ -1744,13 +1744,13 @@ void RangeAnalyzer::analyzeRange( sal_Int32& rnDataInRows,
         rbRowSourceAmbiguous = true;
 }
 
-bool RangeAnalyzer::inSameSingleRow( RangeAnalyzer& rOther )
+bool RangeAnalyzer::inSameSingleRow( const RangeAnalyzer& rOther )
 {
     return mnStartRow==rOther.mnStartRow &&
         mnRowCount==1 && rOther.mnRowCount==1;
 }
 
-bool RangeAnalyzer::inSameSingleColumn( RangeAnalyzer& rOther )
+bool RangeAnalyzer::inSameSingleColumn( const RangeAnalyzer& rOther )
 {
     return mnStartColumn==rOther.mnStartColumn &&
         mnColumnCount==1 && rOther.mnColumnCount==1;
@@ -3173,7 +3173,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
 
 namespace {
 
-sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
+sal_uLong getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
 {
     sal_uLong nFormat = pDoc->GetNumberFormat(rPos); // original format from cell.
     return nFormat;

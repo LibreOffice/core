@@ -1571,7 +1571,7 @@ void ScUndoConditionalFormatList::Redo()
     DoChange(mpRedoDoc.get());
 }
 
-void ScUndoConditionalFormatList::DoChange(ScDocument* pSrcDoc)
+void ScUndoConditionalFormatList::DoChange(const ScDocument* pSrcDoc)
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 

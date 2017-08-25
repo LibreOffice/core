@@ -31,13 +31,13 @@ class ScUndoUtil
 {
 public:
     /**  Mark Block (invisible - has to be repainted) */
-    static void MarkSimpleBlock( ScDocShell* pDocShell,
+    static void MarkSimpleBlock( const ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ );
-    static void MarkSimpleBlock( ScDocShell* pDocShell,
+    static void MarkSimpleBlock( const ScDocShell* pDocShell,
                                 const ScAddress& rBlockStart,
                                 const ScAddress& rBlockEnd );
-    static void MarkSimpleBlock( ScDocShell* pDocShell,
+    static void MarkSimpleBlock( const ScDocShell* pDocShell,
                                 const ScRange& rRange );
 
     static void PaintMore( ScDocShell* pDocShell,
@@ -45,7 +45,7 @@ public:
 
     /** Search for Data base range in Document ("untitled" or by region)
         create new if not found */
-    static ScDBData* GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
+    static ScDBData* GetOldDBData( const ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 };
 

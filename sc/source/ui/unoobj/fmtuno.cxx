@@ -138,7 +138,7 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 }
 
 ScTableConditionalFormat::ScTableConditionalFormat(
-        ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
+        const ScDocument* pDoc, sal_uLong nKey, SCTAB nTab, FormulaGrammar::Grammar eGrammar)
 {
     //  read the entry from the document...
 
@@ -575,7 +575,7 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName 
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SfxStyleFamily::Para );
 }
 
-ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
+ScTableValidationObj::ScTableValidationObj(const ScDocument* pDoc, sal_uLong nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {

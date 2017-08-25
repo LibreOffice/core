@@ -79,7 +79,7 @@ private:
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 public:
                             ScTableConditionalFormat() = delete;
-                            ScTableConditionalFormat(ScDocument* pDoc, sal_uLong nKey,
+                            ScTableConditionalFormat(const ScDocument* pDoc, sal_uLong nKey,
                                     SCTAB nTab, formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat() override;
 
@@ -193,7 +193,7 @@ private:
 public:
 
                             ScTableValidationObj() = delete;
-                            ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
+                            ScTableValidationObj(const ScDocument* pDoc, sal_uLong nKey,
                                                 const formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj() override;
 

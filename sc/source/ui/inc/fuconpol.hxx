@@ -27,7 +27,7 @@ class FuConstPolygon : public FuConstruct
 {
  public:
     FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                   SdrModel* pDoc, SfxRequest& rReq);
+                   SdrModel* pDoc, const SfxRequest& rReq);
 
     virtual ~FuConstPolygon() override;
                                        // Mouse- & Key-Events

@@ -77,7 +77,7 @@ void ScUndoAllRangeNames::DoChange(const std::map<OUString, std::unique_ptr<ScRa
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScAreasChanged));
 }
 
-ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, ScRangeData* pRangeData, SCTAB nTab) :
+ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, const ScRangeData* pRangeData, SCTAB nTab) :
     ScSimpleUndo(pDocSh),
     mpRangeData(new ScRangeData(*pRangeData)),
     mnTab(nTab)

@@ -28,7 +28,7 @@
 #include "global.hxx"
 #include "markdata.hxx"
 
-void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ )
 {
@@ -51,7 +51,7 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
     }
 }
 
-void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
                                 const ScAddress& rBlockStart,
                                 const ScAddress& rBlockEnd )
 {
@@ -59,14 +59,14 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 rBlockEnd.Col(), rBlockEnd.Row(), rBlockEnd.Tab() );
 }
 
-void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
                                 const ScRange& rRange )
 {
     MarkSimpleBlock( pDocShell, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                                 rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab()   );
 }
 
-ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
+ScDBData* ScUndoUtil::GetOldDBData( const ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ScDBData* pRet = pDoc->GetDBAtArea( nTab, nCol1, nRow1, nCol2, nRow2 );

@@ -37,7 +37,7 @@
 
 using namespace com::sun::star;
 
-FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, SfxRequest& rReq )
+FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, const SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();

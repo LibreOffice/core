@@ -23,7 +23,7 @@
 #include "drawview.hxx"
 
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                   SdrModel* pDoc, SfxRequest& rReq)
+                   SdrModel* pDoc, const SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
     , nInventor(SdrInventor::Unknown)
     , nIdentifier(0)
