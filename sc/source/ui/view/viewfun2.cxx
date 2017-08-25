@@ -798,7 +798,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     ScAddress aPos( nCol, nRow, nTab );
 
-    std::unique_ptr<ScDocument> pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
+    ScDocumentUniquePtr pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
     pInsDoc->ResetClip( pDoc, nTab );
 
     if (aNewStr[0] == '=')                      // Formula ?
@@ -1746,7 +1746,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     //!     account for bAttrib during Undo !!!
 
-    std::unique_ptr<ScDocument> pUndoDoc;
+    ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScMarkData> pUndoMark;
     OUString aUndoStr;
     if (bAddUndo)

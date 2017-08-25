@@ -48,6 +48,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 
 #include <list>
@@ -86,7 +87,7 @@ struct SotElement_Impl
     bool                    m_bIsStorage;
 
     std::unique_ptr<OStorage_Impl> m_xStorage;
-    std::unique_ptr<OWriteStream_Impl> m_xStream;
+    std::unique_ptr<OWriteStream_Impl, o3tl::default_delete<OWriteStream_Impl>> m_xStream;
 
 public:
     SotElement_Impl(const OUString& rName, bool bStor, bool bNew);

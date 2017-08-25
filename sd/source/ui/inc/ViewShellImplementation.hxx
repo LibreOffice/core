@@ -23,7 +23,7 @@
 #include "ViewShell.hxx"
 #include "ViewShellManager.hxx"
 #include "ToolBarManager.hxx"
-
+#include <o3tl/deleter.hxx>
 #include <memory>
 
 class SvxIMapDlg;
@@ -73,7 +73,7 @@ public:
         void Release (bool bForce = false);
         DECL_LINK(TimeoutCallback, Timer *, void);
     private:
-        ::std::unique_ptr<ToolBarManager::UpdateLock> mpLock;
+        ::std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock>> mpLock;
         /** The timer is used both as a safe guard to unlock the update lock
             when Release() is not called explicitly.  It is also used to
             defer the release of the lock to a time when the UI is not

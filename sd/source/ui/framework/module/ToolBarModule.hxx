@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <o3tl/deleter.hxx>
 #include <memory>
 
 namespace sd {
@@ -71,7 +72,7 @@ private:
     css::uno::Reference<
         css::drawing::framework::XConfigurationController> mxConfigurationController;
     ViewShellBase* mpBase;
-    std::unique_ptr<ToolBarManager::UpdateLock> mpToolBarManagerLock;
+    std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock>> mpToolBarManagerLock;
     bool mbMainViewSwitchUpdatePending;
 
     void HandleUpdateStart();

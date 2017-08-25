@@ -22,7 +22,7 @@
 #include <ddelink.hxx>
 #include <strings.hrc>
 #include <scresid.hxx>
-
+#include <o3tl/deleter.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/layout.hxx>
 
@@ -33,7 +33,7 @@ namespace sc {
 struct DocumentLinkManagerImpl
 {
     SfxObjectShell* mpShell;
-    std::unique_ptr<DataStream> mpDataStream;
+    std::unique_ptr<DataStream, o3tl::default_delete<DataStream>> mpDataStream;
     std::unique_ptr<sfx2::LinkManager> mpLinkManager;
 
     DocumentLinkManagerImpl(const DocumentLinkManagerImpl&) = delete;

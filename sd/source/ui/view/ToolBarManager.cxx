@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 #include <osl/mutex.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/enumrange.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
@@ -316,7 +317,7 @@ private:
     */
     ::std::unique_ptr<LayouterLock> mpSynchronousLayouterLock;
     ::std::unique_ptr<LayouterLock> mpAsynchronousLayouterLock;
-    ::std::unique_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
+    ::std::unique_ptr<ViewShellManager::UpdateLock, o3tl::default_delete<ViewShellManager::UpdateLock>> mpViewShellManagerLock;
     ImplSVEvent * mnPendingUpdateCall;
     ImplSVEvent * mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
