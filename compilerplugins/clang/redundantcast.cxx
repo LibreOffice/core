@@ -439,6 +439,20 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     {
         return true;
     }
+    // Suppress warnings from static_cast<bool> in C++ definition of assert in
+    // <https://sourceware.org/git/?p=glibc.git;a=commit;
+    // h=b5889d25e9bf944a89fdd7bcabf3b6c6f6bb6f7c> "assert: Support types
+    // without operator== (int) [BZ #21972]":
+    if (t1->isBooleanType() && t2->isBooleanType()) {
+        auto loc = expr->getLocStart();
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)
+            && (Lexer::getImmediateMacroName(
+                    loc, compiler.getSourceManager(), compiler.getLangOpts())
+                == "assert"))
+        {
+            return true;
+        }
+    }
     report(
         DiagnosticsEngine::Warning,
         ("static_cast from %0 %1 to %2 %3 is redundant%select{| or should be"
