@@ -1177,6 +1177,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pSearchEdit->SetUpdateDataHdl ( LINK( this, SvxConfigPage, SearchUpdateHdl ));
     m_pSearchEdit->EnableUpdateData();
+
+    m_pFunctions->SetSelectHdl(
+        LINK( this, SvxConfigPage, SelectFunctionHdl ) );
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1762,6 +1765,29 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
 IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
+}
+
+IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
+{
+    // GetScriptURL() returns a non-empty string if a
+    // valid command is selected on the left box
+    bool bIsValidCommand = !GetScriptURL().isEmpty();
+
+    // Enable/disable Add and Remove buttons depending on current selection
+    if (bIsValidCommand)
+    {
+        m_pAddCommandButton->Enable();
+        m_pRemoveCommandButton->Enable();
+
+        m_pDescriptionField->SetText( m_pFunctions->GetHelpText() );
+    }
+    else
+    {
+        m_pAddCommandButton->Disable();
+        m_pRemoveCommandButton->Disable();
+
+        m_pDescriptionField->SetText("");
+    }
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SearchUpdateHdl, Edit&, void)
