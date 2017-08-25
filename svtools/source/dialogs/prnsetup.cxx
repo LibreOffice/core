@@ -195,7 +195,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     if ( nStatus & PrintQueueFlags::PowerSave )
         aStr = ImplPrnDlgAddResString( aStr, STR_SVT_PRNDLG_POWER_SAVE );
 
-    // Anzahl Jobs
+    // Number of jobs
     sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {

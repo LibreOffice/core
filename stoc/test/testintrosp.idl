@@ -81,7 +81,7 @@ interface XIntroTest: com::sun::star::uno::XInterface
     [attribute] com::sun::star::beans::PropertyValue    SecondStruct;
 
 
-    /** Ausgabe-Methode
+    /** output method
     */
     void writeln( [in] string Text );
 
@@ -91,7 +91,7 @@ interface XIntroTest: com::sun::star::uno::XInterface
     long getDroenk();
 
 
-    /** Weitere Introspection-Test-Objekt holen
+    /** get further introspection test objects
     */
     XIntroTest getIntroTest();
     //com::sun::star::beans::XIntroTest getIntroTest();

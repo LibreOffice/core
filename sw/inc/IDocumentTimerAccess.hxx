@@ -27,7 +27,7 @@ class IDocumentTimerAccess
 {
 public:
     /**
-    Set modus to 'start'.
+    Set mode to 'start'.
     */
     virtual void StartIdling() = 0;
 

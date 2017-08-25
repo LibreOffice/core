@@ -597,7 +597,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
         case '\\':
             if( '>'==cBreak )
             {
-                // Innerhalb von Tags kennzeichnen
+                // mark within tags
                 sTmpBuffer.append( '\\' );
                 if( MAX_LEN == sTmpBuffer.getLength() )
                     aToken += sTmpBuffer.makeStringAndClear();
@@ -635,7 +635,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>'==cBreak )
                 sTmpBuffer.appendUtf32( nNextCh );
             else
-                bContinue = false;      // break, String zusammen
+                bContinue = false;      // break, string is together
             break;
 
         case '\f':

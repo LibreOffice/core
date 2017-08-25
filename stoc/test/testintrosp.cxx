@@ -859,7 +859,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
     // XExactName
     Reference< XExactName > xExactName( xAccess, UNO_QUERY );
-    OSL_ENSURE( xExactName.is(), "Introspection unterstuetzt kein ExactName" );
+    OSL_ENSURE( xExactName.is(), "Introspection doesn't support ExactName" );
 
     // loop over all concept combinations
     for( sal_Int32 nConcepts = 0 ; nConcepts < 16 ; nConcepts++ )

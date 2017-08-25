@@ -649,7 +649,7 @@ void SwXMLImport::startDocument()
     // We need a draw model to be able to set the z order
     pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
 
-    // SJ: #i49801# locking the modell to disable repaints
+    // SJ: #i49801# locking the model to disable repaints
     SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock(true);

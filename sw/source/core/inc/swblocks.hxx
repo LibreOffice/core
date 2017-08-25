@@ -26,7 +26,7 @@ class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
 
-// Name eines Textblocks:
+// Name of a text block:
 
 class SwBlockName
 {

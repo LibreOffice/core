@@ -152,7 +152,7 @@ interface BaseTextSelection
 
     FN_FRAME_TO_ANCHOR // status()
     [
-        /*OS: Datentypen unvertraeglich ?? */
+        /*OS: data types incompatible?? */
         ExecMethod = Execute ;
         StateMethod = NoState ;
     ]
@@ -331,13 +331,13 @@ interface BaseTextSelection
     [
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
-        FastCall = TRUE; // fuer Macroausfuehrung!
+        FastCall = TRUE; // for macro execution!
     ]
     SID_STYLE_APPLY // status(fina|play)
     [
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
-        FastCall = TRUE;// fuer Macroausfuehrung!
+        FastCall = TRUE;// for macro execution!
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -383,7 +383,7 @@ interface BaseTextSelection
         StateMethod = StateStyle ;
     ]
 
-     //OS: Selection.Escape gibt es zusaetzlich zu Window.Escape
+     //OS: Selection.Escape exists additionally to Window.Escape
 
     FN_ESCAPE // status(final|play|rec)
     [
@@ -403,7 +403,7 @@ interface BaseTextSelection
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-// Methode fuer Rahmen und Objekte
+// Method for frames and objects
     FN_TOOL_ANCHOR
     [
         StateMethod = GetState ;

@@ -510,7 +510,7 @@ void SwFlyFrameAttrMgr::DelAttr( sal_uInt16 nId )
 
 void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
-    OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
+    OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Which border to set?" );
 
     SvxLRSpaceItem aTmp( static_cast<const SvxLRSpaceItem&>(m_aSet.Get( RES_LR_SPACE )) );
     if( LONG_MAX != nLeft )
@@ -522,7 +522,7 @@ void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
 
 void SwFlyFrameAttrMgr::SetULSpace( long nTop, long nBottom )
 {
-    OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
+    OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Which border to set?" );
 
     SvxULSpaceItem aTmp( static_cast<const SvxULSpaceItem&>(m_aSet.Get( RES_UL_SPACE )) );
     if( LONG_MAX != nTop )

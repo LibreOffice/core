@@ -2163,7 +2163,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
         bool bSplitted = false;
         while( !bSplitted )
         {
-            OSL_ENSURE( nCol < nRightCol, "Zu weit gelaufen" );
+            OSL_ENSURE( nCol < nRightCol, "Ran too far" );
 
             // Can be split after current HTML table column?
             // If yes, can the created region still be split to
@@ -2291,7 +2291,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                         OSL_ENSURE( !bHoriSplitMayContinue,
                                 "bHoriSplitMayContinue==true" );
                         OSL_ENSURE( bHoriSplitPossible || nSplitCol == nRightCol,
-                                "bHoriSplitPossible-Flag sollte gesetzt sein" );
+                                "bHoriSplitPossible flag should be set" );
 
                         nSplitCol = nCol + 1;
                     }
@@ -2377,7 +2377,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
         {
             // All column that have absolute widths get relative widths;
             // these widths relate to each over like the original absolute
-            // widths. The smallest column gets a width that hat the same
+            // widths. The smallest column gets a width that has the same
             // value as the smallest column that has an relative width
             // already.
             if( 0 == nMinRelColWidth )

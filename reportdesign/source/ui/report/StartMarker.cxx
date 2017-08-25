@@ -270,7 +270,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
     if( !m_aText->GetText().isEmpty())
     {
-        // Hilfe anzeigen
+        // show help
         tools::Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();

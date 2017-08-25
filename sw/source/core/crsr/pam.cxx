@@ -538,7 +538,7 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
     return 0;
 }
 
-// Formular view - See also SwCursorShell::IsCursorReadonly()
+// form view - see also SwCursorShell::IsCursorReadonly()
 static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
 {
     const SwFrame* pRet = nullptr;

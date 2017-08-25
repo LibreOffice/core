@@ -217,7 +217,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
     m_bReadonly = false;
     m_bSelectionInReadonly = false;
-    // #114856# Formular view
+    // #114856# Form view
     mbFormView       = rVOpt.mbFormView;
     m_nZoom           = rVOpt.m_nZoom       ;
     m_aSnapSize       = rVOpt.m_aSnapSize   ;
@@ -258,7 +258,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
-    // #114856# Formular view
+    // #114856# Form view
     mbFormView       = rVOpt.mbFormView   ;
     m_nZoom           = rVOpt.m_nZoom       ;
     m_aSnapSize       = rVOpt.m_aSnapSize   ;
