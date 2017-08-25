@@ -1658,9 +1658,9 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
 
             if ( pCurEntry->GetCommand() == pNewEntryData->GetCommand() )
             {
-                // asynchronous error message, because of MsgBoxes
-                PostUserEvent(
-                    LINK( this, SvxConfigPage, AsyncInfoMsg ), nullptr, true );
+                ScopedVclPtrInstance<MessageDialog>(this,
+                    CuiResId( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
+                    VclMessageType::Info)->Execute();
                 delete pNewEntryData;
                 return nullptr;
             }
@@ -1769,14 +1769,6 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     }
 
     return pNewEntry;
-}
-
-IMPL_LINK_NOARG( SvxConfigPage, AsyncInfoMsg, void*, void )
-{
-    // Asynchronous msg because of D&D
-    ScopedVclPtrInstance<MessageDialog>(this,
-        CuiResId( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
-        VclMessageType::Info)->Execute();
 }
 
 IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton, void )
