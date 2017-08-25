@@ -4130,7 +4130,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // Heuristic: Certain old low-end OpenCL implementations don't
     // work for us with too large group lengths. 1000 was determined
     // empirically to be a good compromise.
-    if (opencl::gpuEnv.mbNeedsTDRAvoidance)
+    if (openclwrapper::gpuEnv.mbNeedsTDRAvoidance)
         nMaxGroupLength = 1000;
 #endif
 
