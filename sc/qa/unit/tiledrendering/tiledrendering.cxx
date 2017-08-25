@@ -642,29 +642,26 @@ void ScTiledRenderingTest::testColRowResize()
     pViewShell->registerLibreOfficeKitViewCallback(&ScTiledRenderingTest::callback, this);
 
     ScDocument& rDoc = pDocSh->GetDocument();
-    // Col 3, Tab 0
-    int nOldWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
 
+    // Col 3, Tab 0
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-            { "Column", uno::Any(sal_Int16(3)) },
-            { "Width", uno::Any(sal_uInt16(nOldWidth + 100)) }
+            { "ColumnWidth", uno::Any(sal_uInt16(4000)) }, // 4cm
+            { "Column", uno::Any(sal_Int16(3)) }
         }));
     comphelper::dispatchCommand(".uno:ColumnWidth", aArgs);
 
-    int nNewWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
-    CPPUNIT_ASSERT(nNewWidth > nOldWidth);
+    sal_uInt16 nWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
 
     // Row 5, Tab 0
-    int nOldHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
-
     uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+            { "RowHeight", uno::Any(sal_uInt16(2000)) },
             { "Row", uno::Any(sal_Int16(5)) },
-            { "Height", uno::Any(sal_uInt16(nOldHeight + 100)) }
         }));
     comphelper::dispatchCommand(".uno:RowHeight", aArgs2);
 
-    int nNewHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
-    CPPUNIT_ASSERT(nNewHeight > nOldHeight);
+    sal_uInt16 nHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
