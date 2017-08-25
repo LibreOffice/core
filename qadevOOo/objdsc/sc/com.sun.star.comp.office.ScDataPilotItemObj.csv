@@ -1,5 +1,3 @@
-"ScDataPilotItemObj";"com::sun::star::sheet::DataPilotItem";"ShowDetail"
-"ScDataPilotItemObj";"com::sun::star::sheet::DataPilotItem";"IsHidden"
 "ScDataPilotItemObj";"com::sun::star::container::XNamed";"getName()"
 "ScDataPilotItemObj";"com::sun::star::container::XNamed";"setName()"
 "ScDataPilotItemObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
