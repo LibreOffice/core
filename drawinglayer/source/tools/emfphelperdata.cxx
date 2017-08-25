@@ -418,10 +418,34 @@ namespace emfplushelper
                                                                 transformedPenWidth,
                                                                 lineJoin,
                                                                 lineCap);
-            mrTargetHolders.Current().append(
-                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                    polygon,
-                    lineAttribute));
+
+            if (pen->penDataFlags & 0x00000100) // pen has a custom dash line
+            {
+                // StrokeAttribute needs a double vector while the pen provides a double vector
+                std::vector<double> aPattern(pen->dashPattern.size());
+                for (size_t i=0; i<aPattern.size(); i++)
+                {
+                    aPattern[i] = 0.5 * MapSize(double(pen->dashPattern[i]),0).getX();
+                    // here, this is just a guess
+                    // without transform it es way too small
+                    // with 1 * MapSize(...) it es too large
+                    // with 0.5 * MapSize is looks like in MSO
+                }
+                drawinglayer::attribute::StrokeAttribute strokeAttribute(aPattern);
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        polygon,
+                        lineAttribute,
+                        strokeAttribute));
+
+            }
+            else // no further line decoration, so use simple primitive
+            {
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        polygon,
+                        lineAttribute));
+            }
 
             mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
             mrPropertyHolders.Current().setLineColorActive(true);
