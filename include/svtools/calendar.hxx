@@ -127,7 +127,6 @@ class SVT_DLLPUBLIC Calendar : public Control
 private:
     IntDateSet*     mpSelectTable;
     IntDateSet*     mpOldSelectTable;
-    IntDateSet*     mpRestoreSelectTable;
     OUString        maDayTexts[31];
     OUString        maDayText;
     OUString        maWeekText;
@@ -166,13 +165,11 @@ private:
                     mbFormat:1,
                     mbDrag:1,
                     mbSelection:1,
-                    mbUnSel:1,
                     mbMenuDown:1,
                     mbSpinDown:1,
                     mbPrevIn:1,
                     mbNextIn:1,
                     mbTravelSelect:1,
-                    mbSelLeft:1,
                     mbAllSel:1,
                     mbDropPos:1;
     Link<Calendar*,void>   maSelectHdl;

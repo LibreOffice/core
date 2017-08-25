@@ -195,7 +195,6 @@ private:
     bool                    bOwnerOfPool:1;
     bool                    bVertical:1;
     bool                    bIsTopToBottomVert : 1;
-    bool                    bStoreUnicodeStrings:1;
 
     bool ImpChangeStyleSheets( const OUString& rOldName, SfxStyleFamily eOldFamily,
                                const OUString& rNewName, SfxStyleFamily eNewFamily );

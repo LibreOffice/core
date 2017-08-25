@@ -540,7 +540,6 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
 
     bVertical = false;
     bIsTopToBottomVert = false;
-    bStoreUnicodeStrings = false;
     nScriptType = SvtScriptType::NONE;
 }
 
@@ -555,7 +554,6 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
     bIsTopToBottomVert = r.bIsTopToBottomVert;
     nScriptType = r.nScriptType;
     pPortionInfo = nullptr;    // Do not copy PortionInfo
-    bStoreUnicodeStrings = false;
 
     if ( !r.bOwnerOfPool )
     {

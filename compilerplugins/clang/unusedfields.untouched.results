@@ -36,38 +36,22 @@ cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
     AlignSize_Impl nInt16 sal_Int16
-dbaccess/source/sdbtools/connection/objectnames.cxx:73
-    sdbtools::PlainExistenceCheck m_aContext const Reference<class com::sun::star::uno::XComponentContext>
-dbaccess/source/sdbtools/connection/objectnames.cxx:114
-    sdbtools::TableValidityCheck m_aContext const Reference<class com::sun::star::uno::XComponentContext>
-dbaccess/source/sdbtools/connection/objectnames.cxx:153
-    sdbtools::QueryValidityCheck m_aContext const Reference<class com::sun::star::uno::XComponentContext>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 emfio/source/emfuno/xemfparser.cxx:59
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
-filter/source/graphicfilter/icgm/cgm.hxx:138
-    CGM mpGDIMetaFile class GDIMetaFile *
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
-    XMLFilterListBox m_aEnsureResLocale class EnsureResLocale
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
-    XMLFilterSettingsDialog maEnsureResLocale class EnsureResLocale
 include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/editeng/svxrtf.hxx:196
-    SvxRTFParser m_xDocProps css::uno::Reference<css::document::XDocumentProperties>
 include/editeng/unotext.hxx:608
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/sfx2/charwin.hxx:52
-    SvxCharView maInsertCharHdl Link<class SvxCharView *, void>
 include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
@@ -76,23 +60,23 @@ include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
-include/vcl/pdfwriter.hxx:550
+include/vcl/pdfwriter.hxx:549
     vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
-include/vcl/pdfwriter.hxx:552
+include/vcl/pdfwriter.hxx:551
     vcl::PDFWriter::PDFSignContext m_nDerEncoded sal_Int32
-include/vcl/pdfwriter.hxx:554
+include/vcl/pdfwriter.hxx:553
     vcl::PDFWriter::PDFSignContext m_pByteRange1 void *
-include/vcl/pdfwriter.hxx:556
+include/vcl/pdfwriter.hxx:555
     vcl::PDFWriter::PDFSignContext m_nByteRange1 sal_Int32
-include/vcl/pdfwriter.hxx:558
+include/vcl/pdfwriter.hxx:557
     vcl::PDFWriter::PDFSignContext m_pByteRange2 void *
-include/vcl/pdfwriter.hxx:560
+include/vcl/pdfwriter.hxx:559
     vcl::PDFWriter::PDFSignContext m_nByteRange2 sal_Int32
-include/vcl/pdfwriter.hxx:561
+include/vcl/pdfwriter.hxx:560
     vcl::PDFWriter::PDFSignContext m_aSignTSA class rtl::OUString
-include/vcl/pdfwriter.hxx:562
+include/vcl/pdfwriter.hxx:561
     vcl::PDFWriter::PDFSignContext m_aSignPassword class rtl::OUString
-include/vcl/pdfwriter.hxx:564
+include/vcl/pdfwriter.hxx:563
     vcl::PDFWriter::PDFSignContext m_rCMSHexBuffer class rtl::OStringBuffer &
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
@@ -148,8 +132,8 @@ sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/dataprovider.hxx:47
-    sc::ExternalDataMapper maDocument class ScDocument
+sc/source/ui/inc/dataproviderdlg.hxx:50
+    sc::DataProviderDlg mpDataSource std::shared_ptr<ExternalDataSource>
 sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
@@ -170,7 +154,7 @@ sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-starmath/inc/smmod.hxx:70
+starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
@@ -180,10 +164,12 @@ svl/source/crypto/cryptosign.cxx:121
     (anonymous namespace)::(anonymous) critical SECItem
 svl/source/crypto/cryptosign.cxx:122
     (anonymous namespace)::(anonymous) extnValue SECItem
-svl/source/crypto/cryptosign.cxx:277
+svl/source/crypto/cryptosign.cxx:280
     (anonymous namespace)::(anonymous) statusString SECItem
-svl/source/crypto/cryptosign.cxx:278
+svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
+svl/source/misc/inettype.cxx:45
+    (anonymous namespace)::TypeIDMapEntry m_aPresentation class rtl::OUString
 svtools/source/svhtml/htmlkywd.cxx:558
     HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560

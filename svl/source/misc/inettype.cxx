@@ -42,7 +42,6 @@ struct MediaTypeEntry
 struct TypeIDMapEntry
 {
     OUString m_aTypeName;
-    OUString m_aPresentation;
 };
 
 class Registration

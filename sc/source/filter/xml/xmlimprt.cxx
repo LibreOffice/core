@@ -718,57 +718,13 @@ ScXMLImport::ScXMLImport(
     pDocElemTokenMap( nullptr ),
     pContentValidationElemTokenMap( nullptr ),
     pContentValidationMessageElemTokenMap( nullptr ),
-    pCondFormatsTokenMap( nullptr ),
-    pCondFormatTokenMap( nullptr ),
-    pCondFormatAttrMap( nullptr ),
-    pCondDateAttrMap( nullptr ),
-    pConditionAttrMap( nullptr ),
-    pColorScaleTokenMap( nullptr ),
-    pColorScaleEntryAttrTokenMap( nullptr ),
-    pDataBarTokenMap( nullptr ),
-    pDataBarAttrMap( nullptr ),
-    pFormattingEntryAttrMap( nullptr ),
     pTableElemTokenMap( nullptr ),
     pTableRowsElemTokenMap( nullptr ),
-    pTableAttrTokenMap( nullptr ),
     pTableRowElemTokenMap( nullptr ),
     pTableRowAttrTokenMap( nullptr ),
     pTableRowCellElemTokenMap( nullptr ),
     pTableRowCellAttrTokenMap( nullptr ),
     pTableAnnotationAttrTokenMap( nullptr ),
-    pDetectiveElemTokenMap( nullptr ),
-    pDetectiveHighlightedAttrTokenMap( nullptr ),
-    pDetectiveOperationAttrTokenMap( nullptr ),
-    pTableCellRangeSourceAttrTokenMap( nullptr ),
-    pDatabaseRangeSourceSQLAttrTokenMap( nullptr ),
-    pDatabaseRangeSourceTableAttrTokenMap( nullptr ),
-    pDatabaseRangeSourceQueryAttrTokenMap( nullptr ),
-    pFilterElemTokenMap( nullptr ),
-    pFilterAttrTokenMap( nullptr ),
-    pFilterConditionElemTokenMap( nullptr ),
-    pFilterConditionAttrTokenMap( nullptr ),
-    pFilterSetItemAttrTokenMap( nullptr ),
-    pSortElemTokenMap( nullptr ),
-    pSortSortByAttrTokenMap( nullptr ),
-    pDataPilotTablesElemTokenMap( nullptr ),
-    pDataPilotTableAttrTokenMap( nullptr ),
-    pDataPilotTableElemTokenMap( nullptr ),
-    pDataPilotTableSourceServiceAttrTokenMap( nullptr ),
-    pDataPilotTableSourceCellRangeElemTokenMap( nullptr ),
-    pDataPilotTableSourceCellRangeAttrTokenMap( nullptr ),
-    pDataPilotFieldAttrTokenMap( nullptr ),
-    pDataPilotFieldElemTokenMap( nullptr ),
-    pDataPilotLevelAttrTokenMap( nullptr ),
-    pDataPilotLevelElemTokenMap( nullptr ),
-    pDataPilotSubTotalsElemTokenMap( nullptr ),
-    pDataPilotSubTotalAttrTokenMap( nullptr ),
-    pDataPilotMembersElemTokenMap( nullptr ),
-    pDataPilotMemberAttrTokenMap( nullptr ),
-    pCellTextParaElemTokenMap(nullptr),
-    pCellTextSpanElemTokenMap(nullptr),
-    pCellTextSpanAttrTokenMap(nullptr),
-    pCellTextURLAttrTokenMap(nullptr),
-    pCellTextSAttrTokenMap(nullptr),
     mpPostProcessData(nullptr),
     aTables(*this),
     m_pMyNamedExpressions(nullptr),
@@ -811,57 +767,13 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDocElemTokenMap;
     delete pContentValidationElemTokenMap;
     delete pContentValidationMessageElemTokenMap;
-    delete pCondFormatsTokenMap;
-    delete pCondFormatTokenMap;
-    delete pCondFormatAttrMap;
-    delete pCondDateAttrMap;
-    delete pConditionAttrMap;
-    delete pColorScaleTokenMap;
-    delete pColorScaleEntryAttrTokenMap;
-    delete pDataBarTokenMap;
-    delete pDataBarAttrMap;
-    delete pFormattingEntryAttrMap;
     delete pTableElemTokenMap;
     delete pTableRowsElemTokenMap;
-    delete pTableAttrTokenMap;
     delete pTableRowElemTokenMap;
     delete pTableRowAttrTokenMap;
     delete pTableRowCellElemTokenMap;
     delete pTableRowCellAttrTokenMap;
     delete pTableAnnotationAttrTokenMap;
-    delete pDetectiveElemTokenMap;
-    delete pDetectiveHighlightedAttrTokenMap;
-    delete pDetectiveOperationAttrTokenMap;
-    delete pTableCellRangeSourceAttrTokenMap;
-    delete pDatabaseRangeSourceSQLAttrTokenMap;
-    delete pDatabaseRangeSourceTableAttrTokenMap;
-    delete pDatabaseRangeSourceQueryAttrTokenMap;
-    delete pFilterElemTokenMap;
-    delete pFilterAttrTokenMap;
-    delete pFilterConditionElemTokenMap;
-    delete pFilterConditionAttrTokenMap;
-    delete pFilterSetItemAttrTokenMap;
-    delete pSortElemTokenMap;
-    delete pSortSortByAttrTokenMap;
-    delete pDataPilotTablesElemTokenMap;
-    delete pDataPilotTableAttrTokenMap;
-    delete pDataPilotTableElemTokenMap;
-    delete pDataPilotTableSourceServiceAttrTokenMap;
-    delete pDataPilotTableSourceCellRangeAttrTokenMap;
-    delete pDataPilotTableSourceCellRangeElemTokenMap;
-    delete pDataPilotFieldAttrTokenMap;
-    delete pDataPilotFieldElemTokenMap;
-    delete pDataPilotLevelAttrTokenMap;
-    delete pDataPilotLevelElemTokenMap;
-    delete pDataPilotSubTotalsElemTokenMap;
-    delete pDataPilotSubTotalAttrTokenMap;
-    delete pDataPilotMembersElemTokenMap;
-    delete pDataPilotMemberAttrTokenMap;
-    delete pCellTextParaElemTokenMap;
-    delete pCellTextSpanElemTokenMap;
-    delete pCellTextSpanAttrTokenMap;
-    delete pCellTextURLAttrTokenMap;
-    delete pCellTextSAttrTokenMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;
