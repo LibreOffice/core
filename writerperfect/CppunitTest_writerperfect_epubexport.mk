@@ -28,7 +28,9 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_epubexport, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,writerperfect_epubexport,\
+    epubgen \
     libxml2 \
+    revenge \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,writerperfect_epubexport,boost_headers))

@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <libepubgen/libepubgen.h>
+
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -34,20 +36,26 @@ class EPUBExportTest : public test::BootstrapFixture, public unotest::MacrosTest
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
+    xmlDocPtr mpXmlDoc = nullptr;
+    uno::Reference<packages::zip::XZipFileAccess2> mxZipFile;
 
 public:
     void setUp() override;
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx) override;
     void createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData);
+    /// Returns an XML representation of the stream named rName in the exported package.
+    xmlDocPtr parseExport(const OUString &rName);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
+    void testPageBreakSplit();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
     CPPUNIT_TEST(testMimetype);
     CPPUNIT_TEST(testEPUB2);
+    CPPUNIT_TEST(testPageBreakSplit);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -63,6 +71,12 @@ void EPUBExportTest::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
+
+    if (mpXmlDoc)
+    {
+        xmlFreeDoc(mpXmlDoc);
+        mpXmlDoc = nullptr;
+    }
 
     test::BootstrapFixture::tearDown();
 }
@@ -85,6 +99,14 @@ void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans:
     aMediaDescriptor["FilterName"] <<= OUString("EPUB");
     aMediaDescriptor["FilterData"] <<= rFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mxZipFile = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
+}
+
+xmlDocPtr EPUBExportTest::parseExport(const OUString &rName)
+{
+    uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
+    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    return parseXmlStream(pStream.get());
 }
 
 void EPUBExportTest::testOutlineLevel()
@@ -92,11 +114,10 @@ void EPUBExportTest::testOutlineLevel()
     createDoc("outline-level.fodt", {});
 
     // Make sure that the output is split into two.
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
-    CPPUNIT_ASSERT(xNameAccess->hasByName("OEBPS/sections/section0001.xhtml"));
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0001.xhtml"));
     // This failed, output was a single section.
-    CPPUNIT_ASSERT(xNameAccess->hasByName("OEBPS/sections/section0002.xhtml"));
-    CPPUNIT_ASSERT(!xNameAccess->hasByName("OEBPS/sections/section0003.xhtml"));
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0002.xhtml"));
+    CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
 }
 
 void EPUBExportTest::testMimetype()
@@ -113,6 +134,10 @@ void EPUBExportTest::testMimetype()
     OString aActual(static_cast<const char *>(aMemoryStream.GetBuffer()) + 38, aExpected.getLength());
     // This failed: actual data was some garbage, not the uncompressed mime type.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+    // Default is EPUB3.
+    assertXPath(mpXmlDoc, "/opf:package", "version", "3.0");
 }
 
 void EPUBExportTest::testEPUB2()
@@ -124,13 +149,25 @@ void EPUBExportTest::testEPUB2()
     }));
     createDoc("hello.fodt", aFilterData);
 
-    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, maTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("OEBPS/content.opf"), uno::UNO_QUERY);
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
-    xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
+    mpXmlDoc = parseExport("OEBPS/content.opf");
     // This was 3.0, EPUBVersion filter option was ignored and we always emitted EPUB3.
-    assertXPath(pXmlDoc, "/opf:package", "version", "2.0");
-    xmlFreeDoc(pXmlDoc);
+    assertXPath(mpXmlDoc, "/opf:package", "version", "2.0");
+}
+
+void EPUBExportTest::testPageBreakSplit()
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request split on page break (instead of on heading).
+        {"EPUBSplitMethod", uno::makeAny(static_cast<sal_Int32>(libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK))}
+    }));
+    createDoc("2pages.fodt", aFilterData);
+
+    // Make sure that the output is split into two.
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0001.xhtml"));
+    // This failed, output was a single section.
+    CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0002.xhtml"));
+    CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
