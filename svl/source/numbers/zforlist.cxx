@@ -1823,6 +1823,13 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
                                                     sal_uInt32 nPos, bool bAfterChangingSystemCL,
                                                     sal_Int16 nOrgIndex )
 {
+    SAL_WARN_IF( NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS <= rCode.Index && rCode.Index < NF_INDEX_TABLE_ENTRIES,
+            "svl.numbers", "i18npool locale '" << maLanguageTag.getBcp47() <<
+            "' uses reserved formatIndex value " << rCode.Index << ", next free: " << NF_INDEX_TABLE_ENTRIES <<
+            "  Please see description in include/svl/zforlist.hxx at end of enum NfIndexTableOffset");
+    assert( (rCode.Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS || NF_INDEX_TABLE_ENTRIES <= rCode.Index) &&
+            "reserved formatIndex, see warning above");
+
     OUString aCodeStr( rCode.Code );
     if ( rCode.Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
             rCode.Usage == css::i18n::KNumberFormatUsage::CURRENCY &&

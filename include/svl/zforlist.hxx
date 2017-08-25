@@ -182,7 +182,19 @@ enum NfIndexTableOffset
 
     NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO (with blank instead of T)
 
-    NF_INDEX_TABLE_ENTRIES                  // == 59, reserved up to 59 to not use in i18npool locale data.
+    // XXX When adding values here, follow the comment above about
+    // svx/source/items/numfmtsh.cxx
+
+    NF_INDEX_TABLE_ENTRIES                  // == 58, reserved up to #59 to not be used in i18npool locale data.
+
+    // XXX Adding values above may increment the reserved area that can't be
+    // used by i18npool's locale data FormatCode definitions, see the
+    // description at i18npool/source/localedata/data/locale.dtd for ELEMENT
+    // FormatCode what the current convention's value is. In that case, the
+    // used formatIndex values in i18npool/source/localedata/data/*.xml will
+    // have to be adjusted.
+    // Overlapping the area will bail out with a check in
+    // SvNumberFormatter::ImpInsertFormat() in debug builds.
 };
 
 
