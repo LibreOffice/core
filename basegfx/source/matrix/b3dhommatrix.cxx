@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <hommatrixtemplate.hxx>
 #include <basegfx/vector/b3dvector.hxx>
@@ -30,11 +29,8 @@ namespace basegfx
     {
     };
 
-    namespace { struct IdentityMatrix : public rtl::Static< B3DHomMatrix::ImplType,
-                                                            IdentityMatrix > {}; }
-
-    B3DHomMatrix::B3DHomMatrix() :
-        mpImpl( IdentityMatrix::get() ) // use common identity matrix
+    B3DHomMatrix::B3DHomMatrix()
+        : mpImpl() // identity
     {
     }
 
@@ -81,15 +77,12 @@ namespace basegfx
 
     bool B3DHomMatrix::isIdentity() const
     {
-        if(mpImpl.same_object(IdentityMatrix::get()))
-            return true;
-
         return mpImpl->isIdentity();
     }
 
     void B3DHomMatrix::identity()
     {
-        mpImpl = IdentityMatrix::get();
+        *mpImpl = Impl3DHomMatrix();
     }
 
     bool B3DHomMatrix::invert()
