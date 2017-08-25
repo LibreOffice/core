@@ -34,13 +34,30 @@ EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> 
 
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
+    sal_Int32 nVersion = 30;
+    uno::Sequence<beans::PropertyValue> aFilterData;
+    for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
+    {
+        if (rDescriptor[i].Name == "FilterData")
+        {
+            rDescriptor[i].Value >>= aFilterData;
+            break;
+        }
+    }
+
+    for (sal_Int32 i = 0; i < aFilterData.getLength(); ++i)
+    {
+        if (aFilterData[i].Name == "EPUBVersion")
+            aFilterData[i].Value >>= nVersion;
+    }
+
     // Build the export filter chain: the package has direct access to the ZIP
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
     libepubgen::EPUBTextGenerator aGenerator(&aPackage, libepubgen::EPUB_SPLIT_METHOD_HEADING
 #if LIBEPUBGEN_VERSION_SUPPORT
-                                             , /*version=*/30
+                                             , nVersion
 #endif
                                             );
     uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport(aGenerator));
