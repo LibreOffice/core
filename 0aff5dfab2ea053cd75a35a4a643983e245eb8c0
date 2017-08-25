@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_dab6c23c",
+        "filename": "sc/inc/dpitemdata.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T12:28:22Z",
+      "side": 1,
+      "message": "Also notice what https://ci.libreoffice.org/job/lo_gerrit/17349/Config\u003dlinux_clang_dbgutil_64/console lists for this Jenkins build, the static_cast are now superfluous.",
+      "parentUuid": "1a430d35_fafe1e04",
+      "revId": "0aff5dfab2ea053cd75a35a4a643983e245eb8c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_1a04ca13",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 6
