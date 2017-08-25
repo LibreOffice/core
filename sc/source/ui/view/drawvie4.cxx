@@ -199,7 +199,7 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
 }
 
 // Get all cell ranges that are referenced by the selected chart objects.
-void getOleSourceRanges(const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle, std::vector<ScRange>* pRanges = nullptr, ScDocument* pDoc = nullptr )
+void getOleSourceRanges(const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle, std::vector<ScRange>* pRanges = nullptr, const ScDocument* pDoc = nullptr )
 {
     bool bCalcSourceRanges = pRanges && pDoc;
     std::vector<OUString> aRangeReps;

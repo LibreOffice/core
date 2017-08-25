@@ -310,7 +310,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxViewShell::Notify( rBC, rHint );
 }
 
-SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData )
+SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, const ScViewData* pViewData )
 {
 
     // construct NumberInfo item

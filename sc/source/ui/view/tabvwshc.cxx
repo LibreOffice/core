@@ -121,7 +121,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialog* pDialog)
 
 VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                                 SfxBindings* pB, SfxChildWindow* pCW,
-                                SfxChildWinInfo* pInfo,
+                                const SfxChildWinInfo* pInfo,
                                 vcl::Window* pParent, sal_uInt16 nSlotId )
 {
     // only open dialog when called through ScModule::SetRefDialog,

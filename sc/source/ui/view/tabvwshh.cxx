@@ -40,7 +40,7 @@
 
 using namespace com::sun::star;
 
-void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
+void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
 {
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -130,7 +130,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     }
 }
 
-static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! member of ScDrawView?
+static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( const SdrView* pDrView )       //! member of ScDrawView?
 {
     uno::Reference < embed::XEmbeddedObject > xRet;
     if (pDrView)

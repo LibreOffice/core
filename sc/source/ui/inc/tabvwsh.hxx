@@ -254,9 +254,9 @@ public:
     void            ExecDrawIns(SfxRequest& rReq);
     void            GetDrawState(SfxItemSet &rSet);
     void            GetDrawInsState(SfxItemSet &rSet);
-    void            ExecGallery(SfxRequest& rReq);
+    void            ExecGallery(const SfxRequest& rReq);
 
-    void            ExecChildWin(SfxRequest& rReq);
+    void            ExecChildWin(const SfxRequest& rReq);
 
     void            ExecImageMap( SfxRequest& rReq );
     void            GetImageMapState( SfxItemSet& rSet );
@@ -268,10 +268,10 @@ public:
     void            ExecuteUndo(SfxRequest& rReq);
     void            GetUndoState(SfxItemSet &rSet);
 
-    void            ExecuteObject(SfxRequest& rReq);
+    void            ExecuteObject(const SfxRequest& rReq);
     void            GetObjectState(SfxItemSet &rSet);
 
-    void            ExecDrawOpt(SfxRequest& rReq);
+    void            ExecDrawOpt(const SfxRequest& rReq);
     void            GetDrawOptState(SfxItemSet &rSet);
 
     void            UpdateDrawShell();
@@ -321,14 +321,14 @@ public:
     virtual bool            HasPrintOptionsPage() const override;
     virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) override;
 
-    void            ConnectObject( SdrOle2Obj* pObj );
+    void            ConnectObject( const SdrOle2Obj* pObj );
     void            ActivateObject( SdrOle2Obj* pObj, long nVerb );
 
     void            DeactivateOle();
 
     static ScTabViewShell* GetActiveViewShell();
     VclPtr<SfxModelessDialog> CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
-                                               SfxChildWinInfo* pInfo,
+                                               const SfxChildWinInfo* pInfo,
                                                vcl::Window* pParent, sal_uInt16 nSlotId );
 
     void            UpdateOleZoom();
@@ -348,7 +348,7 @@ public:
 
     void    ForceMove()     { Move(); }
 
-    static SvxNumberInfoItem* MakeNumberInfoItem( ScDocument* pDoc, ScViewData* pViewData );
+    static SvxNumberInfoItem* MakeNumberInfoItem( ScDocument* pDoc, const ScViewData* pViewData );
 
     static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
@@ -372,7 +372,7 @@ public:
     using ScTabView::ShowCursor;
 
     bool IsActive() const { return bIsActive; }
-    OUString GetFormula(ScAddress& rAddress);
+    OUString GetFormula(const ScAddress& rAddress);
     bool    UseSubTotal(ScRangeList* pRangeList);
     const   OUString DoAutoSum(bool& rRangeFinder, bool& rSubTotal);
 

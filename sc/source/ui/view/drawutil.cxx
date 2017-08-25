@@ -24,9 +24,9 @@
 #include "global.hxx"
 #include "viewdata.hxx"
 
-void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
+void ScDrawUtil::CalcScale( const ScDocument* pDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                            OutputDevice* pDev,
+                            const OutputDevice* pDev,
                             const Fraction& rZoomX, const Fraction& rZoomY,
                             double nPPTX, double nPPTY,
                             Fraction& rScaleX, Fraction& rScaleY )

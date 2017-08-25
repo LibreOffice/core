@@ -42,7 +42,7 @@
 
 class SvxIMapDlg;
 
-void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
+void ScTabViewShell::ExecChildWin(const SfxRequest& rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
     switch(nSlot)
@@ -60,7 +60,7 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
     }
 }
 
-void ScTabViewShell::ExecGallery( SfxRequest& rReq )
+void ScTabViewShell::ExecGallery( const SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 

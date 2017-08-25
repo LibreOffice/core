@@ -62,7 +62,7 @@ ScAuditingShell::~ScAuditingShell()
 {
 }
 
-void ScAuditingShell::Execute( SfxRequest& rReq )
+void ScAuditingShell::Execute( const SfxRequest& rReq )
 {
     SfxBindings& rBindings = pViewData->GetBindings();
     sal_uInt16 nSlot = rReq.GetSlot();

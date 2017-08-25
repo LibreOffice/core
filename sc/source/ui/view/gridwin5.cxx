@@ -438,7 +438,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         Window::RequestHelp( rHEvt );
 }
 
-bool ScGridWindow::IsMyModel(SdrEditView* pSdrView)
+bool ScGridWindow::IsMyModel(const SdrEditView* pSdrView)
 {
     return pSdrView &&
             pSdrView->GetModel() == pViewData->GetDocument()->GetDrawLayer();

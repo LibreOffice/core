@@ -44,7 +44,7 @@ public:
     ScAuditingShell(ScViewData* pData);
     virtual ~ScAuditingShell() override;
 
-    void Execute(SfxRequest& rReq);
+    void Execute(const SfxRequest& rReq);
     void GetState(SfxItemSet& rSet);
 };
 

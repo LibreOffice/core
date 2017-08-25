@@ -28,7 +28,7 @@ namespace
 {
 
 /// Paste only if SfxClassificationHelper recommends so.
-bool lcl_checkClassification(ScDocument* pSourceDoc, ScDocument* pDestinationDoc)
+bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument* pDestinationDoc)
 {
     if (!pSourceDoc || !pDestinationDoc)
         return true;

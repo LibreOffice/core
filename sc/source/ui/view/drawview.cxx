@@ -787,7 +787,7 @@ bool ScDrawView::SelectObject( const OUString& rName )
 }
 
 //If  object  is marked , return true , else return false .
-bool ScDrawView::GetObjectIsMarked(  SdrObject* pObject  )
+bool ScDrawView::GetObjectIsMarked(  const SdrObject* pObject  )
 {
     bool bisMarked = false;
     if (pObject )

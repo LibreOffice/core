@@ -32,7 +32,7 @@ namespace tools {
 namespace {
 
 uno::Reference<chart2::data::XPivotTableDataProvider>
-getPivotTableDataProvider(SdrOle2Obj* pOleObject)
+getPivotTableDataProvider(const SdrOle2Obj* pOleObject)
 {
     uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
 
@@ -49,7 +49,7 @@ getPivotTableDataProvider(SdrOle2Obj* pOleObject)
     return xPivotTableDataProvider;
 }
 
-OUString getAssociatedPivotTableName(SdrOle2Obj* pOleObject)
+OUString getAssociatedPivotTableName(const SdrOle2Obj* pOleObject)
 {
     OUString aPivotTableName;
     uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;

@@ -41,7 +41,7 @@ public:
     ScPivotShell(ScTabViewShell* pView);
     virtual ~ScPivotShell() override;
 
-    void Execute(SfxRequest& rReq);
+    void Execute(const SfxRequest& rReq);
     void GetState(SfxItemSet& rSet);
 
 private:

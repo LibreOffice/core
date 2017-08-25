@@ -1203,7 +1203,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
     return aStrSelection;
 }
 
-void ScEditShell::ExecuteUndo(SfxRequest& rReq)
+void ScEditShell::ExecuteUndo(const SfxRequest& rReq)
 {
     //  Undo must be handled here because it's called for both EditViews
 
@@ -1283,7 +1283,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
     }
 }
 
-void ScEditShell::ExecuteTrans( SfxRequest& rReq )
+void ScEditShell::ExecuteTrans( const SfxRequest& rReq )
 {
     TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
     if ( nType != TransliterationFlags::NONE )

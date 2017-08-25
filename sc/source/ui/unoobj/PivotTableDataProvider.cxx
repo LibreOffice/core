@@ -66,7 +66,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
     return aDataProviderPropertyMap_Impl;
 }
 
-uno::Reference<frame::XModel> lcl_GetXModel(ScDocument * pDoc)
+uno::Reference<frame::XModel> lcl_GetXModel(const ScDocument * pDoc)
 {
     uno::Reference<frame::XModel> xModel;
     SfxObjectShell* pObjSh(pDoc ? pDoc->GetDocumentShell() : nullptr);

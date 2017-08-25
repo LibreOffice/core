@@ -350,7 +350,7 @@ static bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
     return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(aPos) && aPos == rRange.aStart);
 }
 
-static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, ScViewData* pViewData )
+static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScViewData* pViewData )
 {
     if (!pView || !pViewData)
         return;
@@ -3284,7 +3284,7 @@ bool ScGridWindow::DropScroll( const Point& rMousePos )
     return false;
 }
 
-static bool lcl_TestScenarioRedliningDrop( ScDocument* pDoc, const ScRange& aDragRange)
+static bool lcl_TestScenarioRedliningDrop( const ScDocument* pDoc, const ScRange& aDragRange)
 {
     //  Test, if a scenario is affected by a drop when turing on RedLining,
     bool bReturn = false;
@@ -5564,7 +5564,7 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     return aRect.toString();
 }
 
-void ScGridWindow::updateLibreOfficeKitCellCursor(SfxViewShell* pOtherShell) const
+void ScGridWindow::updateLibreOfficeKitCellCursor(const SfxViewShell* pOtherShell) const
 {
     OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
@@ -5697,7 +5697,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
  *
  * @param pLogicRects - if not 0, then don't invoke the callback, just collect the rectangles in the pointed vector.
  */
-static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects = nullptr)
+static void updateLibreOfficeKitSelection(const ScViewData* pViewData, const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects = nullptr)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;

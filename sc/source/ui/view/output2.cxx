@@ -827,7 +827,7 @@ double ScOutputData::GetStretch()
 
 //  output strings
 
-static void lcl_DoHyperlinkResult( OutputDevice* pDev, const tools::Rectangle& rRect, ScRefCellValue& rCell )
+static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectangle& rRect, ScRefCellValue& rCell )
 {
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
@@ -879,7 +879,7 @@ static void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
     // function is called with update mode set to FALSE
 }
 
-void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, ScRefCellValue& rCell )
+void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue& rCell )
 {
     Color aColor;
     switch (rCell.meType)
@@ -1050,7 +1050,7 @@ inline bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
 }
 
 static inline void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDoc,
-        ScFormulaCell* pFCell )
+        const ScFormulaCell* pFCell )
 {
     if ( !bProgress && pFCell->GetDirty() )
     {
@@ -2347,7 +2347,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
 {}
 
 bool ScOutputData::DrawEditParam::readCellContent(
-    ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields)
+    const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields)
 {
     if (maCell.meType == CELLTYPE_EDIT)
     {
@@ -2544,7 +2544,7 @@ bool ScOutputData::DrawEditParam::isVerticallyOriented() const
 }
 
 void ScOutputData::DrawEditParam::calcStartPosForVertical(
-    Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, OutputDevice* pRefDevice)
+    Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, const OutputDevice* pRefDevice)
 {
     OSL_ENSURE(isVerticallyOriented(), "Use this only for vertically oriented cell!");
 
@@ -2713,7 +2713,7 @@ void ScOutputData::DrawEditParam::adjustForRTL()
     }
 }
 
-void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev)
+void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, const OutputDevice* pDev)
 {
     // PDF: whole-cell hyperlink from formula?
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );

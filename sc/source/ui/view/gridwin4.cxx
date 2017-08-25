@@ -253,7 +253,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
     }
 }
 
-static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
+static void lcl_DrawHighlight( ScOutputData& rOutputData, const ScViewData* pViewData,
                         const std::vector<ScHighlightEntry>& rHighlightRanges )
 {
     SCTAB nTab = pViewData->GetTabNo();
@@ -1055,7 +1055,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
 namespace {
     // Find the row/col just -before- the nPosition in pixels and its offset
-    inline void mapConservativeToRowCol(ScDocument *pDoc,
+    inline void mapConservativeToRowCol(const ScDocument *pDoc,
                                         sal_Int32  *nIndex,
                                         sal_Int32  *nOffset,
                                         sal_Int32  *nOrigin,

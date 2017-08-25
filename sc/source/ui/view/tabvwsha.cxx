@@ -750,7 +750,7 @@ void ScTabViewShell::GetSaveState( SfxItemSet& rSet )
     }
 }
 
-void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
+void ScTabViewShell::ExecDrawOpt( const SfxRequest& rReq )
 {
     ScViewOptions aViewOptions = GetViewData().GetOptions();
     ScGridOptions aGridOptions = aViewOptions.GetGridOptions();

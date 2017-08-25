@@ -138,7 +138,7 @@ public:
     css::uno::Reference< css::datatransfer::XTransferable > CopyToTransferable();
 
     SdrObject*  GetObjectByName(const OUString& rName);
-    bool        GetObjectIsMarked(  SdrObject * pObject );
+    bool        GetObjectIsMarked( const SdrObject * pObject );
     void        SelectCurrentViewObject( const OUString& rName );
 
     // #i123922# helper which checks if a Graphic may be applied to an existing

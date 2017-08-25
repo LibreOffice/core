@@ -812,7 +812,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
     return false;
 }
 
-static bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+static bool lcl_SelHasAttrib( const ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         const ScMarkData& rTabSelection, HasAttrFlags nMask )
 {
     ScMarkData::const_iterator itr = rTabSelection.begin(), itrEnd = rTabSelection.end();

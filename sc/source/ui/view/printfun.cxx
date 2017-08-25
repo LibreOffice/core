@@ -382,7 +382,7 @@ void ScPrintFunc::SetDrawView( FmFormView* pNew )
     pDrawView = pNew;
 }
 
-static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
+static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 {
     for (SCSIZE nArrY=1; nArrY+1<rTabInfo.mnArrCount; nArrY++)
     {
@@ -1099,7 +1099,7 @@ static void lcl_DrawGraphic( const Graphic &rGraphic, vcl::RenderContext *pOut,
         pOut->Pop();
 }
 
-static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOut, OutputDevice* pRefDev,
+static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOut, const OutputDevice* pRefDev,
                         const tools::Rectangle &rOrg, const tools::Rectangle &rOut,
                         OUString const & referer )
 {
@@ -2943,7 +2943,7 @@ void ScPrintFunc::ResetBreaks( SCTAB nTab )         // Set Breaks correctly for 
     pDoc->UpdatePageBreaks( nTab );
 }
 
-static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowEntry,
+static void lcl_SetHidden( const ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowEntry,
                     SCCOL nStartCol, const std::vector< SCCOL >& rPageEndX )
 {
     size_t nPagesX   = rPageRowEntry.GetPagesX();

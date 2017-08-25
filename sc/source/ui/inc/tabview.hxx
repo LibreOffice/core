@@ -226,7 +226,7 @@ private:
     void            UpdateVarZoom();
 
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL );
-    static long     GetScrollBarPos( ScrollBar& rScroll );
+    static long     GetScrollBarPos( const ScrollBar& rScroll );
 
     void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                            SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode);
@@ -244,7 +244,7 @@ private:
      *
      **/
 
-    void            PaintRangeFinderEntry (ScRangeFindData* pData, SCTAB nTab);
+    void            PaintRangeFinderEntry (const ScRangeFindData* pData, SCTAB nTab);
 
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = nullptr,
@@ -366,7 +366,7 @@ public:
     ScGridWindow*   GetActiveWin();
     vcl::Window*         GetWindowByPos( ScSplitPos ePos ) { return pGridWin[ePos]; }
 
-    ScSplitPos      FindWindow( vcl::Window* pWindow ) const;
+    ScSplitPos      FindWindow( const vcl::Window* pWindow ) const;
 
     void            SetActivePointer( const Pointer& rPointer );
 
@@ -451,7 +451,7 @@ public:
 
     bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
-    void            ScrollToObject( SdrObject* pDrawObj );
+    void            ScrollToObject( const SdrObject* pDrawObj );
     void            MakeVisible( const tools::Rectangle& rHMMRect );
 
                                     // Drawing
