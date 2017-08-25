@@ -2410,13 +2410,6 @@ void WW8TabDesc::CalcDefaults()
             nMinCols = pR->nSwCols;
     }
 
-    /*
-    #i9718#
-    Find the largest of the borders on cells that adjoin top bottom and remove
-    the val from the top and put in on the bottom cell. I can't seem to make
-    disjoint upper and lowers to see what happens there.
-    */
-
     if ((m_nMinLeft && !m_bIsBiDi && text::HoriOrientation::LEFT == m_eOri) ||
         (m_nMinLeft != -108 && m_bIsBiDi && text::HoriOrientation::RIGHT == m_eOri)) // Word sets the first nCenter value to -108 when no indent is used
         m_eOri = text::HoriOrientation::LEFT_AND_WIDTH; //  absolutely positioned
