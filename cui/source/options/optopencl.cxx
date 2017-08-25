@@ -54,7 +54,7 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->Enable(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
 
-    bool bCLUsed = opencl::GPUEnv::isOpenCLEnabled();
+    bool bCLUsed = openclwrapper::GPUEnv::isOpenCLEnabled();
     mpOclUsed->Show(bCLUsed);
     mpOclNotUsed->Show(!bCLUsed);
 }

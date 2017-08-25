@@ -40,8 +40,6 @@
 
 #define STRINGIFY(...) #__VA_ARGS__"\n"
 
-namespace opencl {
-
 namespace {
 
 void DS_CHECK_STATUS(cl_int status, char const * name) {
@@ -669,8 +667,6 @@ ds_device const & getDeviceSelection(
         }
     }
     return selectedDevice;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

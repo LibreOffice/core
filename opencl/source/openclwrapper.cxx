@@ -61,15 +61,19 @@ if( status != CL_SUCCESS )  \
 
 using namespace std;
 
-namespace opencl {
+namespace {
+
+bool bIsInited = false;
+
+}
+
+namespace openclwrapper {
 
 GPUEnv gpuEnv;
 sal_uInt64 kernelFailures = 0;
 
 namespace
 {
-
-bool bIsInited = false;
 
 OString generateMD5(const void* pData, size_t length)
 {
@@ -319,38 +323,6 @@ bool initOpenCLAttr( OpenCLEnv * env )
 
     return false;
 }
-
-}
-
-void releaseOpenCLEnv( GPUEnv *gpuInfo )
-{
-    OpenCLZone zone;
-
-    if ( !bIsInited )
-    {
-        return;
-    }
-
-    for (_cl_command_queue* & i : gpuEnv.mpCmdQueue)
-    {
-        if (i)
-        {
-            clReleaseCommandQueue(i);
-            i = nullptr;
-        }
-    }
-    gpuEnv.mnCmdQueuePos = 0;
-
-    if ( gpuEnv.mpContext )
-    {
-        clReleaseContext( gpuEnv.mpContext );
-        gpuEnv.mpContext = nullptr;
-    }
-    bIsInited = false;
-    gpuInfo->mnIsUserCreated = 0;
-}
-
-namespace {
 
 bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
 {
@@ -956,6 +928,34 @@ bool GPUEnv::isOpenCLEnabled()
     return gpuEnv.mpDevID && gpuEnv.mpContext;
 }
 
+}
+
+void releaseOpenCLEnv( openclwrapper::GPUEnv *gpuInfo )
+{
+    OpenCLZone zone;
+
+    if ( !bIsInited )
+    {
+        return;
+    }
+
+    for (_cl_command_queue* & i : openclwrapper::gpuEnv.mpCmdQueue)
+    {
+        if (i)
+        {
+            clReleaseCommandQueue(i);
+            i = nullptr;
+        }
+    }
+    openclwrapper::gpuEnv.mnCmdQueuePos = 0;
+
+    if ( openclwrapper::gpuEnv.mpContext )
+    {
+        clReleaseContext( openclwrapper::gpuEnv.mpContext );
+        openclwrapper::gpuEnv.mpContext = nullptr;
+    }
+    bIsInited = false;
+    gpuInfo->mnIsUserCreated = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 
 #include <cstdio>
 
-namespace opencl
+namespace openclwrapper
 {
 
 struct KernelEnv

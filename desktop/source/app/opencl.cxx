@@ -49,7 +49,7 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
     bool bSuccess = false;
     css::uno::Reference< css::lang::XComponent > xComponent;
 
-    sal_uInt64 nKernelFailures = opencl::kernelFailures;
+    sal_uInt64 nKernelFailures = openclwrapper::kernelFailures;
 
     SAL_INFO("opencl", "Starting CL test spreadsheet");
 
@@ -99,12 +99,12 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
         SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e.Message);
     }
 
-    if (nKernelFailures != opencl::kernelFailures)
+    if (nKernelFailures != openclwrapper::kernelFailures)
     {
         // tdf#100883 - defeat SEH exception handling fallbacks.
         SAL_WARN("opencl", "OpenCL kernels failed to compile, "
                  "or took SEH exceptions "
-                 << nKernelFailures << " != " << opencl::kernelFailures);
+                 << nKernelFailures << " != " << openclwrapper::kernelFailures);
         bSuccess = false;
     }
 
@@ -119,7 +119,7 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
 
 void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
 {
-    if (!opencl::canUseOpenCL() || Application::IsSafeModeEnabled())
+    if (!openclwrapper::canUseOpenCL() || Application::IsSafeModeEnabled())
         return;
 
     SAL_INFO("opencl", "Initiating test of OpenCL device");
@@ -128,7 +128,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
 
     OUString aDevice = officecfg::Office::Calc::Formula::Calculation::OpenCLDevice::get();
     OUString aSelectedCLDeviceVersionID;
-    if (!opencl::switchOpenCLDevice(
+    if (!openclwrapper::switchOpenCLDevice(
             &aDevice,
             officecfg::Office::Calc::Formula::Calculation::OpenCLAutoSelect::get(),
             false /* bForceEvaluation */,

@@ -297,7 +297,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
     const std::vector<OpenCLPlatformInfo>& rPlatformsFromWrapper =
-        ::opencl::fillOpenCLInfo();
+        openclwrapper::fillOpenCLInfo();
 
     rPlatforms.assign(rPlatformsFromWrapper.begin(), rPlatformsFromWrapper.end());
 }
@@ -328,7 +328,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     }
 
     OUString aSelectedCLDeviceVersionID;
-    bool bSuccess = ::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation, aSelectedCLDeviceVersionID);
+    bool bSuccess = openclwrapper::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation, aSelectedCLDeviceVersionID);
 
     if (!bSuccess)
         return false;
@@ -350,7 +350,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     size_t aDeviceId = static_cast<size_t>(-1);
     size_t aPlatformId = static_cast<size_t>(-1);
 
-    ::opencl::getOpenCLDeviceInfo(aDeviceId, aPlatformId);
+    openclwrapper::getOpenCLDeviceInfo(aDeviceId, aPlatformId);
     rDeviceId = aDeviceId;
     rPlatformId = aPlatformId;
 }

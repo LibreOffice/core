@@ -26,7 +26,7 @@ OpenCLError::OpenCLError( const std::string& function, cl_int error, const std::
     // CLInterpreterContext::launchKernel() where OpenCLError is
     // caught already uses SAL_WARN() to display it.
 
-    // SAL_INFO("sc.opencl", "OpenCL error: " << ::opencl::errorString(mError));
+    // SAL_INFO("sc.opencl", "OpenCL error: " << openclwrapper::errorString(mError));
 }
 
 Unhandled::Unhandled( const std::string& fn, int ln ) :
@@ -109,7 +109,7 @@ VectorRef::~VectorRef()
     {
         cl_int err;
         err = clReleaseMemObject(mpClmem);
-        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
     }
 }
 

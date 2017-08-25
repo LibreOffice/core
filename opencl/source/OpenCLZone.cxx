@@ -44,7 +44,7 @@ void OpenCLZone::hardDisable()
         css::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, css::uno::UNO_QUERY_THROW);
         xFlushable->flush();
 
-        releaseOpenCLEnv(&opencl::gpuEnv);
+        releaseOpenCLEnv(&openclwrapper::gpuEnv);
     }
 }
 

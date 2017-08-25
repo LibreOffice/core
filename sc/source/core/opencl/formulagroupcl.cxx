@@ -164,8 +164,8 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
         throw Unhandled(__FILE__, __LINE__);
     }
 
-    ::opencl::KernelEnv kEnv;
-    ::opencl::setKernelEnv(&kEnv);
+    openclwrapper::KernelEnv kEnv;
+    openclwrapper::setKernelEnv(&kEnv);
     cl_int err;
     if (pHostBuffer)
     {
@@ -201,7 +201,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             pNanBuffer, 0, nullptr, nullptr);
         // FIXME: Is it intentional to not throw an OpenCLError even if the clEnqueueUnmapMemObject() fails?
         if (CL_SUCCESS != err)
-            SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
+            SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << openclwrapper::errorString(err));
     }
 
     SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
@@ -758,8 +758,8 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
 {
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
 
-    ::opencl::KernelEnv kEnv;
-    ::opencl::setKernelEnv(&kEnv);
+    openclwrapper::KernelEnv kEnv;
+    openclwrapper::setKernelEnv(&kEnv);
     cl_int err;
     formula::VectorRefArray vRef;
     size_t nStrings = 0;
@@ -1438,8 +1438,8 @@ public:
     {
         assert(Base::mpClmem == nullptr);
 
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
+        openclwrapper::KernelEnv kEnv;
+        openclwrapper::setKernelEnv(&kEnv);
         cl_int err;
         size_t nInput = mpDVR->GetArrayLength();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
@@ -1578,11 +1578,11 @@ public:
             err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem2, resbuf, 0, nullptr, nullptr);
             // FIXME: Is it intentional to not throw an OpenCLError even if the clEnqueueUnmapMemObject() fails?
             if (CL_SUCCESS != err)
-                SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
+                SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << openclwrapper::errorString(err));
             if (mpClmem2)
             {
                 err = clReleaseMemObject(mpClmem2);
-                SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
+                SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
                 mpClmem2 = nullptr;
             }
             mpClmem2 = clCreateBuffer(kEnv.mpkContext,
@@ -1605,7 +1605,7 @@ public:
         {
             cl_int err;
             err = clReleaseMemObject(mpClmem2);
-            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
             mpClmem2 = nullptr;
         }
     }
@@ -2225,8 +2225,8 @@ public:
         }
         if (dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
         {
-            ::opencl::KernelEnv kEnv;
-            ::opencl::setKernelEnv(&kEnv);
+            openclwrapper::KernelEnv kEnv;
+            openclwrapper::setKernelEnv(&kEnv);
             cl_int err;
             cl_mem pClmem2;
 
@@ -2286,8 +2286,8 @@ public:
         }
         if (OpSumIfs* OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
-            ::opencl::KernelEnv kEnv;
-            ::opencl::setKernelEnv(&kEnv);
+            openclwrapper::KernelEnv kEnv;
+            openclwrapper::setKernelEnv(&kEnv);
             cl_int err;
             DynamicKernelArgument* Arg = mvSubArguments[0].get();
             DynamicKernelSlidingArgument<VectorRef>* slidingArgPtr =
@@ -2365,7 +2365,7 @@ public:
 
                 SAL_INFO("sc.opencl", "Relasing kernel " << redKernel);
                 err = clReleaseKernel(redKernel);
-                SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << ::opencl::errorString(err));
+                SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << openclwrapper::errorString(err));
 
                 // Pass mpClmem2 to the "real" kernel
                 SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
@@ -2482,7 +2482,7 @@ public:
         {
             cl_int err;
             err = clReleaseMemObject(mpClmem2);
-            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
             mpClmem2 = nullptr;
         }
     }
@@ -3681,13 +3681,13 @@ DynamicKernel::~DynamicKernel()
     if (mpResClmem)
     {
         err = clReleaseMemObject(mpResClmem);
-        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << openclwrapper::errorString(err));
     }
     if (mpKernel)
     {
         SAL_INFO("sc.opencl", "Releasing kernel " << mpKernel);
         err = clReleaseKernel(mpKernel);
-        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << ::opencl::errorString(err));
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << openclwrapper::errorString(err));
     }
     // mpProgram is not going to be released here -- it's cached.
 }
@@ -3698,13 +3698,13 @@ void DynamicKernel::CodeGen()
     const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mCalcConfig, mpRoot, new OpNop(mnResultSize), mnResultSize);
 
     std::stringstream decl;
-    if (::opencl::gpuEnv.mnKhrFp64Flag)
+    if (openclwrapper::gpuEnv.mnKhrFp64Flag)
     {
         decl << "#if __OPENCL_VERSION__ < 120\n";
         decl << "#pragma OPENCL EXTENSION cl_khr_fp64: enable\n";
         decl << "#endif\n";
     }
-    else if (::opencl::gpuEnv.mnAmdFp64Flag)
+    else if (openclwrapper::gpuEnv.mnAmdFp64Flag)
     {
         decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
     }
@@ -3768,8 +3768,8 @@ void DynamicKernel::CreateKernel()
     std::string kname = "DynamicKernel" + mKernelSignature;
     // Compile kernel here!!!
 
-    ::opencl::KernelEnv kEnv;
-    ::opencl::setKernelEnv(&kEnv);
+    openclwrapper::KernelEnv kEnv;
+    openclwrapper::setKernelEnv(&kEnv);
     const char* src = mFullProgramSrc.c_str();
     static std::string lastOneKernelHash;
     static std::string lastSecondKernelHash;
@@ -3791,14 +3791,14 @@ void DynamicKernel::CreateKernel()
         {
             SAL_INFO("sc.opencl", "Releasing program " << lastSecondProgram);
             err = clReleaseProgram(lastSecondProgram);
-            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseProgram failed: " << ::opencl::errorString(err));
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseProgram failed: " << openclwrapper::errorString(err));
             lastSecondProgram = nullptr;
         }
-        if (::opencl::buildProgramFromBinary("",
-                &::opencl::gpuEnv, KernelHash.c_str(), 0))
+        if (openclwrapper::buildProgramFromBinary("",
+                &openclwrapper::gpuEnv, KernelHash.c_str(), 0))
         {
-            mpProgram = ::opencl::gpuEnv.mpArryPrograms[0];
-            ::opencl::gpuEnv.mpArryPrograms[0] = nullptr;
+            mpProgram = openclwrapper::gpuEnv.mpArryPrograms[0];
+            openclwrapper::gpuEnv.mpArryPrograms[0] = nullptr;
         }
         else
         {
@@ -3809,7 +3809,7 @@ void DynamicKernel::CreateKernel()
             SAL_INFO("sc.opencl", "Created program " << mpProgram);
 
             err = clBuildProgram(mpProgram, 1,
-                &::opencl::gpuEnv.mpDevID, "", nullptr, nullptr);
+                &openclwrapper::gpuEnv.mpDevID, "", nullptr, nullptr);
             if (err != CL_SUCCESS)
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -3817,36 +3817,36 @@ void DynamicKernel::CreateKernel()
                 {
                     cl_build_status stat;
                     cl_int e = clGetProgramBuildInfo(
-                        mpProgram, ::opencl::gpuEnv.mpDevID,
+                        mpProgram, openclwrapper::gpuEnv.mpDevID,
                         CL_PROGRAM_BUILD_STATUS, sizeof(cl_build_status),
                         &stat, nullptr);
                     SAL_WARN_IF(
                         e != CL_SUCCESS, "sc.opencl",
                         "after CL_BUILD_PROGRAM_FAILURE,"
                         " clGetProgramBuildInfo(CL_PROGRAM_BUILD_STATUS)"
-                        " fails with " << ::opencl::errorString(e));
+                        " fails with " << openclwrapper::errorString(e));
                     if (e == CL_SUCCESS)
                     {
                         size_t n;
                         e = clGetProgramBuildInfo(
-                            mpProgram, ::opencl::gpuEnv.mpDevID,
+                            mpProgram, openclwrapper::gpuEnv.mpDevID,
                             CL_PROGRAM_BUILD_LOG, 0, nullptr, &n);
                         SAL_WARN_IF(
                             e != CL_SUCCESS || n == 0, "sc.opencl",
                             "after CL_BUILD_PROGRAM_FAILURE,"
                             " clGetProgramBuildInfo(CL_PROGRAM_BUILD_LOG)"
-                            " fails with " << ::opencl::errorString(e) << ", n=" << n);
+                            " fails with " << openclwrapper::errorString(e) << ", n=" << n);
                         if (e == CL_SUCCESS && n != 0)
                         {
                             std::vector<char> log(n);
                             e = clGetProgramBuildInfo(
-                                mpProgram, ::opencl::gpuEnv.mpDevID,
+                                mpProgram, openclwrapper::gpuEnv.mpDevID,
                                 CL_PROGRAM_BUILD_LOG, n, &log[0], nullptr);
                             SAL_WARN_IF(
                                 e != CL_SUCCESS || n == 0, "sc.opencl",
                                 "after CL_BUILD_PROGRAM_FAILURE,"
                                 " clGetProgramBuildInfo("
-                                "CL_PROGRAM_BUILD_LOG) fails with " << ::opencl::errorString(e));
+                                "CL_PROGRAM_BUILD_LOG) fails with " << openclwrapper::errorString(e));
                             if (e == CL_SUCCESS)
                                 SAL_WARN(
                                     "sc.opencl",
@@ -3861,7 +3861,7 @@ void DynamicKernel::CreateKernel()
             SAL_INFO("sc.opencl", "Built program " << mpProgram);
 
             // Generate binary out of compiled kernel.
-            ::opencl::generatBinFromKernelSource(mpProgram,
+            openclwrapper::generatBinFromKernelSource(mpProgram,
                 (mKernelSignature + GetMD5()).c_str());
         }
         lastSecondKernelHash = lastOneKernelHash;
@@ -3877,8 +3877,8 @@ void DynamicKernel::CreateKernel()
 
 void DynamicKernel::Launch( size_t nr )
 {
-    ::opencl::KernelEnv kEnv;
-    ::opencl::setKernelEnv(&kEnv);
+    openclwrapper::KernelEnv kEnv;
+    openclwrapper::setKernelEnv(&kEnv);
     cl_int err;
     // The results
     mpResClmem = clCreateBuffer(kEnv.mpkContext,
@@ -3998,12 +3998,12 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     {
         // I think OpenCLError exceptions are actually exceptional (unexpected), so do use SAL_WARN
         // here.
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << openclwrapper::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
 
         // OpenCLError used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
         delete pDynamicKernel;
-        ::opencl::kernelFailures++;
+        openclwrapper::kernelFailures++;
         return nullptr;
     }
     catch (const Unhandled& uh)
@@ -4013,7 +4013,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         // Unhandled used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
         delete pDynamicKernel;
-        ::opencl::kernelFailures++;
+        openclwrapper::kernelFailures++;
         return nullptr;
     }
     catch (...)
@@ -4021,7 +4021,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         // FIXME: Do we really want to catch random exceptions here?
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
         // FIXME: Not deleting pDynamicKernel here!?, is that intentional?
-        ::opencl::kernelFailures++;
+        openclwrapper::kernelFailures++;
         return nullptr;
     }
     return pDynamicKernel;
@@ -4053,8 +4053,8 @@ public:
         // Map results back
         mpCLResBuf = mpKernel->GetResultBuffer();
 
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
+        openclwrapper::KernelEnv kEnv;
+        openclwrapper::setKernelEnv(&kEnv);
 
         cl_int err;
         mpResBuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
@@ -4065,7 +4065,7 @@ public:
 
         if (err != CL_SUCCESS)
         {
-            SAL_WARN("sc.opencl", "clEnqueueMapBuffer failed:: " << ::opencl::errorString(err));
+            SAL_WARN("sc.opencl", "clEnqueueMapBuffer failed:: " << openclwrapper::errorString(err));
             mpResBuf = nullptr;
             return;
         }
@@ -4078,15 +4078,15 @@ public:
 
         rDoc.SetFormulaResults(rTopPos, mpResBuf, mnGroupLength);
 
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
+        openclwrapper::KernelEnv kEnv;
+        openclwrapper::setKernelEnv(&kEnv);
 
         cl_int err;
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, nullptr, nullptr);
 
         if (err != CL_SUCCESS)
         {
-            SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
+            SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << openclwrapper::errorString(err));
             return false;
         }
 
@@ -4130,25 +4130,25 @@ public:
         catch (const UnhandledToken& ut)
         {
             SAL_INFO("sc.opencl", "Dynamic formula compiler: UnhandledToken: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
-            ::opencl::kernelFailures++;
+            openclwrapper::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (const OpenCLError& oce)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
-            ::opencl::kernelFailures++;
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << openclwrapper::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
+            openclwrapper::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (const Unhandled& uh)
         {
             SAL_INFO("sc.opencl", "Dynamic formula compiler: Unhandled at " << uh.mFile << ":" << uh.mLineNumber);
-            ::opencl::kernelFailures++;
+            openclwrapper::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (...)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
-            ::opencl::kernelFailures++;
+            openclwrapper::kernelFailures++;
             return CLInterpreterResult();
         }
 
@@ -4177,12 +4177,12 @@ void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCo
 
 bool waitForResults()
 {
-    ::opencl::KernelEnv kEnv;
-    ::opencl::setKernelEnv(&kEnv);
+    openclwrapper::KernelEnv kEnv;
+    openclwrapper::setKernelEnv(&kEnv);
 
     cl_int err = clFinish(kEnv.mpkCmdQueue);
     if (err != CL_SUCCESS)
-        SAL_WARN("sc.opencl", "clFinish failed: " << ::opencl::errorString(err));
+        SAL_WARN("sc.opencl", "clFinish failed: " << openclwrapper::errorString(err));
 
     return err == CL_SUCCESS;
 }
