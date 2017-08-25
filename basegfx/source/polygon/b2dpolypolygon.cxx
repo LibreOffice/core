@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <rtl/instance.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <functional>
@@ -170,11 +169,9 @@ public:
 
 namespace basegfx
 {
-    namespace { struct DefaultPolyPolygon: public rtl::Static<B2DPolyPolygon::ImplType,
-                                                              DefaultPolyPolygon> {}; }
 
-    B2DPolyPolygon::B2DPolyPolygon() :
-        mpPolyPolygon(DefaultPolyPolygon::get())
+    B2DPolyPolygon::B2DPolyPolygon()
+        : mpPolyPolygon()
     {
     }
 
@@ -325,7 +322,7 @@ namespace basegfx
 
     void B2DPolyPolygon::clear()
     {
-        mpPolyPolygon = DefaultPolyPolygon::get();
+        *mpPolyPolygon = ImplB2DPolyPolygon();
     }
 
     bool B2DPolyPolygon::isClosed() const
