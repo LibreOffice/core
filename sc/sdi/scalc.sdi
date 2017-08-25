@@ -630,8 +630,8 @@ SfxInt16Item Column SID_RANGE_COL
 ]
 
 
-SfxVoidItem ColumnWidth FID_COL_WIDTH
-(SfxUInt16Item Column FN_PARAM_1,SfxUInt16Item Width FN_PARAM_2)
+SfxUInt16Item ColumnWidth FID_COL_WIDTH
+(SfxUInt16Item ColumnWidth FID_COL_WIDTH,SfxUInt16Item Column FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -4202,8 +4202,8 @@ SfxInt32Item Row SID_RANGE_ROW
 ]
 
 
-SfxVoidItem RowHeight FID_ROW_HEIGHT
-(SfxInt32Item Row FN_PARAM_1,SfxUInt16Item Height FN_PARAM_2)
+SfxUInt16Item RowHeight FID_ROW_HEIGHT
+(SfxUInt16Item RowHeight FID_ROW_HEIGHT,SfxInt32Item Row FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
