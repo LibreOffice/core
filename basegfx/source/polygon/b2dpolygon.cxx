@@ -23,7 +23,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
-#include <rtl/instance.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <algorithm>
 #include <memory>
@@ -632,7 +631,24 @@ public:
         }
     }
 
-    ImplB2DPolygon& operator=( const ImplB2DPolygon& ) = delete;
+    ImplB2DPolygon& operator=(const ImplB2DPolygon& rOther)
+    {
+        if (this != &rOther)
+        {
+            mpControlVector.reset();
+            mpBufferedData.reset();
+            maPoints = rOther.maPoints;
+            mbIsClosed = rOther.mbIsClosed;
+            if (rOther.mpControlVector && rOther.mpControlVector->isUsed())
+            {
+                mpControlVector.reset( new ControlVectorArray2D(*rOther.mpControlVector) );
+
+                if(!mpControlVector->isUsed())
+                    mpControlVector.reset();
+            }
+        }
+        return *this;
+    }
 
     sal_uInt32 count() const
     {
@@ -1091,17 +1107,12 @@ public:
 
 namespace basegfx
 {
-    namespace
-    {
-        struct DefaultPolygon: public rtl::Static<B2DPolygon::ImplType, DefaultPolygon> {};
-    }
-
     B2DPolygon::B2DPolygon()
-    :   mpPolygon(DefaultPolygon::get())
+        : mpPolygon()
     {}
 
     B2DPolygon::B2DPolygon(std::initializer_list<basegfx::B2DPoint> aPoints)
-        : mpPolygon(DefaultPolygon::get())
+        : mpPolygon()
     {
         for (const basegfx::B2DPoint& rPoint : aPoints)
         {
@@ -1432,7 +1443,7 @@ namespace basegfx
 
     void B2DPolygon::clear()
     {
-        mpPolygon = DefaultPolygon::get();
+        *mpPolygon = ImplB2DPolygon();
     }
 
     bool B2DPolygon::isClosed() const
