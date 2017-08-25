@@ -103,6 +103,7 @@ public:
     void testPptmVBAStream();
     void testTdf111518();
     void testTdf100387();
+    void testRotateFlip();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -133,6 +134,7 @@ public:
     CPPUNIT_TEST(testPptmVBAStream);
     CPPUNIT_TEST(testTdf111518);
     CPPUNIT_TEST(testTdf100387);
+    CPPUNIT_TEST(testRotateFlip);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -942,6 +944,51 @@ void SdOOXMLExportTest2::testTdf100387()
                              "/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt/p:txEl/p:pRg", "st", "2");
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[3]"
                              "/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt/p:txEl/p:pRg", "end", "2");
+}
+
+void SdOOXMLExportTest2::testRotateFlip()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/rotate_flip.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    const OUString data[][4] =
+    {// flipH flipV     x          y
+        { "0", "1", "1170000", "1035720" },
+        { "1", "1", "7108560", "1036440" },
+        { "1", "0", "4140000", "1036440" }
+    };
+
+    const OUString points[][2] = { {"221", "293"},     {"506", "12" },     {"367", "0"  },     {"29",  "406"},     {"431", "347"},    {"145", "645"},
+                                   {"99",  "520"},     {"0",   "861"},     {"326", "765"},     {"209", "711"},     {"640", "233"},    {"640", "233"} };
+
+    for (size_t nShapeIndex = 0; nShapeIndex < SAL_N_ELEMENTS(data); nShapeIndex++)
+    {
+        size_t nDataIndex = 0;
+
+        const OString sSpPr = "/p:sld/p:cSld/p:spTree/p:sp[" + OString::number(nShapeIndex + 1) + "]/p:spPr";
+        const OString sXfrm = sSpPr + "/a:xfrm";
+        if(data[nShapeIndex][nDataIndex++] == "1")
+            assertXPath(pXmlDocContent, sXfrm, "flipH", "1");
+        if(data[nShapeIndex][nDataIndex++] == "1")
+            assertXPath(pXmlDocContent, sXfrm, "flipV", "1");
+        assertXPath(pXmlDocContent, sXfrm, "rot", "20400000");
+        const OString sOff = sXfrm + "/a:off";
+        assertXPath(pXmlDocContent, sOff, "x", data[nShapeIndex][nDataIndex++]);
+        assertXPath(pXmlDocContent, sOff, "y", data[nShapeIndex][nDataIndex++]);
+        const OString sExt = sXfrm + "/a:ext";
+        assertXPath(pXmlDocContent, sExt, "cx", "1800000");
+        assertXPath(pXmlDocContent, sExt, "cy", "3600000");
+
+        for (size_t nPointIndex = 0; nPointIndex < SAL_N_ELEMENTS(points); nPointIndex++)
+        {
+            const OString sPt = sSpPr + "/a:custGeom/a:pathLst/a:path/a:lnTo[" + OString::number(nPointIndex + 1) + "]/a:pt";
+            assertXPath(pXmlDocContent, sPt, "x", points[nPointIndex][0]);
+            assertXPath(pXmlDocContent, sPt, "y", points[nPointIndex][1]);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
