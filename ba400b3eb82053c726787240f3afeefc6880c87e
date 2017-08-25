@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_daaa4270",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-25T16:59:34Z",
+      "side": 1,
+      "message": "pen provides a float vector?",
+      "revId": "ba400b3eb82053c726787240f3afeefc6880c87e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
