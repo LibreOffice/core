@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLIMP_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLIMP_HXX
 
-#include <memory>
+#include <map>
 #include <stack>
 
 #include <librevenge/librevenge.h>
@@ -35,6 +35,7 @@ class XMLImport : public cppu::WeakImplHelper
 {
     librevenge::RVNGTextInterface &mrGenerator;
     std::stack< rtl::Reference<XMLImportContext> > maContexts;
+    std::map<OUString, librevenge::RVNGPropertyList> maAutomaticStyles;
 
 public:
     XMLImport(librevenge::RVNGTextInterface &rGenerator);
@@ -42,6 +43,7 @@ public:
     XMLImportContext *CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
     librevenge::RVNGTextInterface &GetGenerator() const;
+    std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticStyles();
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

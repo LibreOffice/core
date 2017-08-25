@@ -124,10 +124,23 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
-        if (rAttributeName != "text:style-name")
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
+        if (rAttributeName == "text:style-name")
+        {
+            // Reference to an automatic style, try to look it up.
+            auto itStyle = mrImport.GetAutomaticStyles().find(rAttributeValue);
+            if (itStyle == mrImport.GetAutomaticStyles().end())
+                continue;
+
+            // Apply properties directly, librevenge has no notion of automatic styles.
+            librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+            for (itProp.rewind(); itProp.next();)
+                aPropertyList.insert(itProp.key(), itProp());
+        }
+        else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
