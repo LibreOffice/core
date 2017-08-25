@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ba901697",
+        "filename": "formula/inc/core_resource.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T12:57:37Z",
+      "side": 1,
+      "message": "This should be vice versa. If we introduce clean_ms for Excel interoperability then when reading/writing .xlsx it should be\n\n { \"_xlfn.ORG.LIBREOFFICE.CLEAN\", SC_OPCODE_CLEAN },\n { \"CLEAN\", SC_OPCODE_CLEAN_MS },",
+      "revId": "8e87794d03a9d51ff3602a3ef65346cc68b7392f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_facffeb0",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T12:57:37Z",
+      "side": 1,
+      "message": "Btw, these two 2do comments can be removed. The definition of Unicode characters in Cc category is only in the byte range.",
+      "revId": "8e87794d03a9d51ff3602a3ef65346cc68b7392f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
