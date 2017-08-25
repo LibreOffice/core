@@ -58,6 +58,7 @@
 #include "app.hrc"
 #include "sdresid.hxx"
 #include "strings.hrc"
+#include <o3tl/deleter.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
@@ -303,7 +304,7 @@ protected:
     virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor) override;
 
 private:
-    std::unique_ptr<DragAndDropContext> mpDragAndDropContext;
+    std::unique_ptr<DragAndDropContext, o3tl::default_delete<DragAndDropContext>> mpDragAndDropContext;
 };
 
 //===== SelectionFunction =====================================================

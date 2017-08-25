@@ -1339,7 +1339,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
     if (pBorderData)
     {
-        std::unique_ptr<ScDocument> pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentUniquePtr pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
         pBorderDoc->InitUndo( pDoc, 0,0, true,true );
         if (pBorderData)
             pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );

@@ -60,7 +60,7 @@ private:
     SCCOLROW        nStart;
     SCCOLROW        nEnd;
     SCTAB           nTab;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     bool            bColumns;
     sal_uInt16      nLevel;
@@ -113,7 +113,7 @@ private:
     SCCOLROW        nStart;
     SCCOLROW        nEnd;
     SCTAB           nTab;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
     bool            bColumns;
     sal_uInt16      nLevel;
@@ -138,7 +138,7 @@ public:
 private:
     ScAddress       aBlockStart;
     ScAddress       aBlockEnd;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
     bool            bShow;
 };
@@ -161,7 +161,7 @@ public:
 private:
     ScAddress       aBlockStart;
     ScAddress       aBlockEnd;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
 };
 
@@ -183,7 +183,7 @@ public:
 private:
     ScAddress       aBlockStart;
     ScAddress       aBlockEnd;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
 };
 
@@ -206,7 +206,7 @@ private:
     SCTAB           nTab;
     ScSubTotalParam aParam;                         // The original passed parameter
     SCROW           nNewEndRow;                     // Size of result
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
     std::unique_ptr<ScRangeName> xUndoRange;
     std::unique_ptr<ScDBCollection> xUndoDB;
@@ -232,7 +232,7 @@ private:
     SdrUndoAction*  pDrawUndo;
     SCTAB           nTab;
     ScQueryParam    aQueryParam;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScDBCollection> xUndoDB;                // due to source and target range
     ScRange         aOldDest;
     ScRange         aAdvSource;
@@ -302,8 +302,8 @@ private:
     ScImportParam   aImportParam;
     SCCOL           nEndCol;
     SCROW           nEndRow;
-    std::unique_ptr<ScDocument> xUndoDoc;
-    std::unique_ptr<ScDocument> xRedoDoc;
+    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr xRedoDoc;
     std::unique_ptr<ScDBData> xUndoDBData;
     std::unique_ptr<ScDBData> xRedoDBData;
     SCCOL           nFormulaCols;
@@ -332,7 +332,7 @@ private:
     ScAddress       aBlockEnd;
     SCROW           nNewEndRow;
     ScAddress       aCursorPos;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
     std::unique_ptr<ScRangeName> xUndoRange;
     std::unique_ptr<ScDBCollection> xUndoDB;
@@ -357,8 +357,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument> xOldUndoDoc;
-    std::unique_ptr<ScDocument> xNewUndoDoc;
+    ScDocumentUniquePtr xOldUndoDoc;
+    ScDocumentUniquePtr xNewUndoDoc;
     std::unique_ptr<ScDPObject> xOldDPObject;
     std::unique_ptr<ScDPObject> xNewDPObject;
     bool            bAllowMove;
@@ -382,7 +382,7 @@ public:
 
 private:
     ScArea              aDestArea;
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     ScConsolidateParam  aParam;
     bool                bInsRef;
     SCSIZE              nInsertCount;
@@ -440,8 +440,8 @@ public:
 
 private:
     std::unique_ptr<ScMarkData> mxMarkData;
-    std::unique_ptr<ScDocument> xUndoDoc;
-    std::unique_ptr<ScDocument> xRedoDoc;
+    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr xRedoDoc;
     std::unique_ptr<ScRefUndoData> xRefUndoData;
     std::unique_ptr<ScRefUndoData> xRefRedoData;
     sal_uLong       nStartChangeAction;
