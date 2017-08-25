@@ -25,6 +25,7 @@
 
 #include <formula/formuladllapi.h>
 #include <formula/IFunctionDescription.hxx>
+#include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sfx2/basedlgs.hxx>
@@ -69,7 +70,7 @@ public:
     virtual void dispose() override;
 
 private:
-    ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
+    std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;
 
 protected:
 
@@ -99,7 +100,7 @@ public:
     virtual ~FormulaDlg() override;
     virtual void dispose() override;
 private:
-    ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
+    std::unique_ptr<FormulaDlg_Impl, o3tl::default_delete<FormulaDlg_Impl>> m_pImpl;
 
     DECL_LINK( UpdateFocusHdl, Timer*, void );
 protected:
