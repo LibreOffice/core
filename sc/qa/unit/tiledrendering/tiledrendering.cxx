@@ -639,29 +639,26 @@ void ScTiledRenderingTest::testColRowResize()
 
     uno::Sequence<beans::PropertyValue> aArgs(2);
     ScDocument& rDoc = pDocSh->GetDocument();
-    // Col 3, Tab 0
-    int nOldWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
 
-    aArgs[0].Name = OUString::fromUtf8("Column");
-    aArgs[0].Value <<= static_cast<sal_Int16>(3);
-    aArgs[1].Name = OUString::fromUtf8("Width");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(nOldWidth + 100);
+    // Col 3, Tab 0
+    aArgs[0].Name = OUString::fromUtf8("ColumnWidth");
+    aArgs[0].Value <<= static_cast<sal_uInt16>(4000); // 4cm
+    aArgs[1].Name = OUString::fromUtf8("Column");
+    aArgs[1].Value <<= static_cast<sal_Int16>(3);
     comphelper::dispatchCommand(".uno:ColumnWidth", aArgs);
 
-    int nNewWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
-    CPPUNIT_ASSERT(nNewWidth > nOldWidth);
+    sal_uInt16 nWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
 
     // Row 5, Tab 0
-    int nOldHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
-
-    aArgs[0].Name = OUString::fromUtf8("Row");
-    aArgs[0].Value <<= static_cast<sal_Int16>(5);
-    aArgs[1].Name = OUString::fromUtf8("Height");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(nOldHeight + 100);
+    aArgs[0].Name = OUString::fromUtf8("RowHeight");
+    aArgs[0].Value <<= static_cast<sal_uInt16>(2000); // 2cm
+    aArgs[1].Name = OUString::fromUtf8("Row");
+    aArgs[1].Value <<= static_cast<sal_Int16>(5);
     comphelper::dispatchCommand(".uno:RowHeight", aArgs);
 
-    int nNewHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
-    CPPUNIT_ASSERT(nNewHeight > nOldHeight);
+    sal_uInt16 nHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

@@ -79,6 +79,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     filter/source/storagefilterdetect/storagefd \
     forms/util/frm \
     framework/util/fwk \
+    framework/util/fwl \
     i18npool/source/search/i18nsearch \
     i18npool/util/i18npool \
     linguistic/source/lng \
