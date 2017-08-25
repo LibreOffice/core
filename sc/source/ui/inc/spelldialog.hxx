@@ -22,13 +22,13 @@
 
 #include <memory>
 #include <svx/SpellDialogChildWindow.hxx>
+#include "document.hxx"
 
 class ScConversionEngineBase;
 class ScSelectionState;
 class ScTabViewShell;
 class ScViewData;
 class ScRangeList;
-class ScDocShell;
 class ScDocument;
 
 /** Specialized spell check dialog child window for Calc.
@@ -73,12 +73,11 @@ private:
 
 private:
     typedef ::std::unique_ptr< ScConversionEngineBase >   ScConvEnginePtr;
-    typedef ::std::unique_ptr< ScDocument >               ScDocumentPtr;
     typedef ::std::unique_ptr< ScSelectionState >         ScSelectionStatePtr;
 
     ScConvEnginePtr     mxEngine;
-    ScDocumentPtr       mxUndoDoc;
-    ScDocumentPtr       mxRedoDoc;
+    ScDocumentUniquePtr mxUndoDoc;
+    ScDocumentUniquePtr mxRedoDoc;
     ScSelectionStatePtr mxOldSel;           /// For cursor position in selection
     tools::SvRef< ScRangeList >
                         mxOldRangeList;     /// Original selection range for comparison.

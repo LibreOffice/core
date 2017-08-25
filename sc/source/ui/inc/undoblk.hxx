@@ -153,7 +153,7 @@ public:
 
 private:
     ScMarkData          aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                         pUndoDoc;
     ScRange             aExtendedRange;
     sal_uLong           nStartChangeAction;
@@ -254,7 +254,7 @@ public:
                     ScUndoDeleteContents( ScDocShell* pNewDocShell,
                                           const ScMarkData& rMark,
                                           const ScRange& rRange,
-                                          std::unique_ptr<ScDocument>&& pNewUndoDoc, bool bNewMulti,
+                                          ScDocumentUniquePtr&& pNewUndoDoc, bool bNewMulti,
                                           InsertDeleteFlags nNewFlags, bool bObjects );
     virtual         ~ScUndoDeleteContents() override;
 
@@ -272,7 +272,7 @@ private:
 
     ScRange         aRange;
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument> pUndoDoc; // Block mark and deleted data
+    ScDocumentUniquePtr pUndoDoc; // Block mark and deleted data
     SdrUndoAction*  pDrawUndo;      // Deleted objects
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
@@ -304,7 +304,7 @@ public:
 private:
     ScRange         aRange;
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;       // Block mark and deleted data
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
@@ -413,7 +413,7 @@ public:
 private:
     ScRange         aSource;
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     FillDir         eFillDir;
     FillCmd         eFillCmd;
@@ -444,7 +444,7 @@ public:
 private:
     ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
-    std::unique_ptr<ScDocument> mxUndoDoc;              // when data is merged
+    ScDocumentUniquePtr mxUndoDoc;              // when data is merged
     SdrUndoAction*  mpDrawUndo;
 
     void            DoChange( bool bUndo ) const;
@@ -467,7 +467,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;       // deleted data
     ScMarkData      aMarkData;
     bool            bSize;
@@ -526,7 +526,7 @@ public:
 
 private:
     ScRange         aRange;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;       // Deleted data
     ScRefAddress    theFormulaCell;
     ScRefAddress    theFormulaEnd;
@@ -609,8 +609,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument> xUndoDoc;
-    std::unique_ptr<ScDocument> xRedoDoc;
+    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr xRedoDoc;
 
     void            DoChange( ScDocument* pSrcDoc ) const;
 };
@@ -631,8 +631,8 @@ public:
 
 private:
     void DoChange(ScDocument* pDoc);
-    std::unique_ptr<ScDocument> mpUndoDoc;
-    std::unique_ptr<ScDocument> mpRedoDoc;
+    ScDocumentUniquePtr mpUndoDoc;
+    ScDocumentUniquePtr mpRedoDoc;
     ScRange maRange;
 };
 
@@ -652,8 +652,8 @@ public:
 
 private:
     void DoChange(const ScDocument* pDoc);
-    std::unique_ptr<ScDocument> mpUndoDoc;
-    std::unique_ptr<ScDocument> mpRedoDoc;
+    ScDocumentUniquePtr mpUndoDoc;
+    ScDocumentUniquePtr mpRedoDoc;
     SCTAB mnTab;
 };
 
@@ -674,7 +674,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     ScRange         aRange;
     ScMarkData      aMarkData;
@@ -700,7 +700,7 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     OUString        aStyleName;
     ScRange         aRange;
@@ -722,8 +722,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument> xUndoDoc;
-    std::unique_ptr<ScDocument> xRedoDoc;
+    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr xRedoDoc;
 };
 
 class ScUndoEnterMatrix: public ScBlockUndo
@@ -743,7 +743,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     OUString        aFormula;
     sal_uLong       nStartChangeAction;
@@ -837,8 +837,8 @@ private:
     OUString        aNewOpt;
     OUString        aNewArea;
     ScRange         aNewRange;
-    std::unique_ptr<ScDocument> xUndoDoc;
-    std::unique_ptr<ScDocument> xRedoDoc;
+    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr xRedoDoc;
     sal_uLong       nOldRefresh;
     sal_uLong       nNewRefresh;
     bool            bWithInsert;
@@ -862,7 +862,7 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     bool            bIsIncrement;
 };
@@ -883,7 +883,7 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     TransliterationFlags
                     nTransliterationType;
@@ -905,7 +905,7 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
     std::unique_ptr<sal_uInt16[]>
                     pWhich;
@@ -927,7 +927,7 @@ public:
 
 private:
     SCTAB           nTab;
-    std::unique_ptr<ScDocument>
+    ScDocumentUniquePtr
                     pUndoDoc;
 };
 
@@ -956,7 +956,7 @@ private:
     void            SetCurTab();
 
     std::vector<ScCellMergeOption> maOptions;
-    std::unique_ptr<ScDocument>    pUndoDoc;
+    ScDocumentUniquePtr    pUndoDoc;
 };
 
 class ScUndoBorder: public ScBlockUndo
@@ -976,7 +976,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::unique_ptr<ScDocument> xUndoDoc;
+    ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScRangeList> xRanges;
     std::unique_ptr<SvxBoxItem> xOuter;
     std::unique_ptr<SvxBoxInfoItem> xInner;

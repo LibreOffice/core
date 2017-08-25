@@ -24,7 +24,7 @@ private:
     ScDocument* mpDocument;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
-    std::unique_ptr<ScDocument> mpDoc;
+    ScDocumentUniquePtr mpDoc;
 
 public:
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_LIST_HXX
 #define INCLUDED_SW_INC_LIST_HXX
 
+#include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
 
@@ -58,7 +59,7 @@ class SwList
         SwList( const SwList& ) = delete;
         SwList& operator=( const SwList& ) = delete;
 
-        std::unique_ptr<SwListImpl> mpListImpl;
+        std::unique_ptr<SwListImpl, o3tl::default_delete<SwListImpl>> mpListImpl;
 };
 #endif // INCLUDED_SW_INC_LIST_HXX
 
