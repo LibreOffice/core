@@ -140,7 +140,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     ScMarkData aSrcMark;
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
-                    std::unique_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+                    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;

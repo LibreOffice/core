@@ -27,6 +27,7 @@
 #include <tools/contnr.hxx>
 #include <vcl/image.hxx>
 #include <vcl/seleng.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class Point;
@@ -189,7 +190,7 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
     friend class SvxIconChoiceCtrl_Impl;
 
     Link<SvtIconChoiceCtrl*,void>  _aClickIconHdl;
-    std::unique_ptr<SvxIconChoiceCtrl_Impl>        _pImpl;
+    std::unique_ptr<SvxIconChoiceCtrl_Impl, o3tl::default_delete<SvxIconChoiceCtrl_Impl>> _pImpl;
 
 protected:
 

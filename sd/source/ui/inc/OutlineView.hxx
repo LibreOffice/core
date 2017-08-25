@@ -23,6 +23,7 @@
 #include <memory>
 #include <vcl/image.hxx>
 #include <editeng/lrspitem.hxx>
+#include <o3tl/deleter.hxx>
 #include "View.hxx"
 
 class SdPage;
@@ -204,7 +205,7 @@ private:
     DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, void);
 
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
-    std::unique_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;
+    std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> maDragAndDropModelGuard;
 
     vcl::Font maPageNumberFont;
     vcl::Font maBulletFont;

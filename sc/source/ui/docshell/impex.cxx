@@ -2152,7 +2152,7 @@ bool ScImportExport::Doc2Dif( SvStream& rStrm )
 bool ScImportExport::Dif2Doc( SvStream& rStrm )
 {
     SCTAB nTab = aRange.aStart.Tab();
-    std::unique_ptr<ScDocument> pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
+    ScDocumentUniquePtr pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used

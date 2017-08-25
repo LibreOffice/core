@@ -32,7 +32,7 @@
 #include <tools/multisel.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/make_unique.hxx>
+#include <o3tl/deleter.hxx>
 
 #include "preview.hxx"
 #include "prevwsh.hxx"
@@ -392,11 +392,11 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     {
         ScPrintOptions aOptions = pScMod->GetPrintOptions();
 
-        std::unique_ptr<ScPrintFunc> pPrintFunc;
+        std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)
-            pPrintFunc = o3tl::make_unique<ScPrintFunc>( this, pDocShell, aState, &aOptions );
+            pPrintFunc.reset(new ScPrintFunc(this, pDocShell, aState, &aOptions));
         else
-            pPrintFunc = o3tl::make_unique<ScPrintFunc>( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions );
+            pPrintFunc.reset(new ScPrintFunc(this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions));
 
         pPrintFunc->SetOffset(aOffset);
         pPrintFunc->SetManualZoom(nZoom);

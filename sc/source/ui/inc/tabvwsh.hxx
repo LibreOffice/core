@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 
 #include <formula/errorcodes.hxx>
+#include <o3tl/deleter.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewsh.hxx>
@@ -115,7 +116,7 @@ private:
 
     FmFormShell*            pFormShell;
 
-    std::unique_ptr<ScInputHandler> mpInputHandler;              // for OLE input cell
+    std::unique_ptr<ScInputHandler, o3tl::default_delete<ScInputHandler>> mpInputHandler;              // for OLE input cell
 
     ::editeng::SvxBorderLine*           pCurFrameLine;
 

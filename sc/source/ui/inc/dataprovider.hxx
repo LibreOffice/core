@@ -110,7 +110,7 @@ class CSVDataProvider : public DataProvider
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocument* mpDocument;
     ScDBDataManager* mpDBDataManager;
-    std::unique_ptr<ScDocument> mpDoc;
+    ScDocumentUniquePtr mpDoc;
     Idle maIdle;
 
     void Refresh();

@@ -26,8 +26,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
+#include "document.hxx"
 
-class ScDocument;
 class ScDocOptions;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL
@@ -37,7 +37,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL
 class ScTempDocCache
 {
 private:
-    std::unique_ptr<ScDocument> xDoc;
+    ScDocumentUniquePtr xDoc;
     bool            bInUse;
 
 public:

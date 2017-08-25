@@ -27,7 +27,7 @@ private:
     ScDBDataManager* mpDBDataManager;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
-    std::unique_ptr<ScDocument> mpDoc;
+    ScDocumentUniquePtr mpDoc;
     Idle maIdle;
 
 public:

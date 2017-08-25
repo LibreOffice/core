@@ -2003,7 +2003,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     SCTAB nNewTab = GetViewData().GetTabNo();
 
-    std::unique_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentUniquePtr pInsDoc(new ScDocument(SCDOCMODE_CLIP));
     pInsDoc->ResetClip( pDoc, nNewTab );
     for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {

@@ -1394,7 +1394,7 @@ void ScUndoDragDrop::Redo()
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    std::unique_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
     EnableDrawAdjust( &rDoc, false );                //! include in ScBlockUndo?
 
