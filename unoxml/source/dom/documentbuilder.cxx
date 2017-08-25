@@ -292,7 +292,7 @@ namespace DOM
                 pDocBuilder->getErrorHandler()->warning(::css::uno::Any(saxex));
             }
         }
-        catch (const css::uno::RuntimeException &e)
+        catch (const css::uno::Exception &e)
         {
             // Protect lib2xml from UNO Exception
             SAL_WARN("unoxml",
@@ -326,7 +326,7 @@ namespace DOM
                 pDocBuilder->getErrorHandler()->error(::css::uno::Any(saxex));
             }
         }
-        catch (const css::uno::RuntimeException &e)
+        catch (const css::uno::Exception &e)
         {
             // Protect lib2xml from UNO Exception
             SAL_WARN("unoxml",
