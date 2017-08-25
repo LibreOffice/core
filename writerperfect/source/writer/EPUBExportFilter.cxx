@@ -12,6 +12,7 @@
 #include "config_libepubgen.h"
 
 #include <libepubgen/EPUBTextGenerator.h>
+#include <libepubgen/libepubgen-decls.h>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -35,6 +36,7 @@ EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> 
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
     sal_Int32 nVersion = 30;
+    sal_Int32 nSplitMethod = libepubgen::EPUB_SPLIT_METHOD_HEADING;
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
     {
@@ -49,13 +51,15 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     {
         if (aFilterData[i].Name == "EPUBVersion")
             aFilterData[i].Value >>= nVersion;
+        else if (aFilterData[i].Name == "EPUBSplitMethod")
+            aFilterData[i].Value >>= nSplitMethod;
     }
 
     // Build the export filter chain: the package has direct access to the ZIP
     // file, the flat ODF filter has access to the doc model, everything else
     // is in-between.
     EPUBPackage aPackage(mxContext, rDescriptor);
-    libepubgen::EPUBTextGenerator aGenerator(&aPackage, libepubgen::EPUB_SPLIT_METHOD_HEADING
+    libepubgen::EPUBTextGenerator aGenerator(&aPackage, static_cast<libepubgen::EPUBSplitMethod>(nSplitMethod)
 #if LIBEPUBGEN_VERSION_SUPPORT
                                              , nVersion
 #endif
