@@ -74,7 +74,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 // #i66550 HLINK_FOR_SHAPES
-ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, bool bCreate = false )
+ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( const ScShapeObj* pShape, bool bCreate = false )
 {
         if( pShape )
             if( SdrObject* pObj = pShape->GetSdrObject() )
@@ -244,7 +244,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
     return mxPropSetInfo;
 }
 
-static bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
+static bool lcl_GetPageNum( const SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 {
     sal_uInt16 nCount = rModel.GetPageCount();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -257,7 +257,7 @@ static bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
     return false;
 }
 
-static bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
+static bool lcl_GetCaptionPoint( const uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
 {
     bool bReturn = false;
     OUString sType(xShape->getShapeType());
@@ -274,7 +274,7 @@ static bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt:
     return bReturn;
 }
 
-static ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab,
+static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShape, const ScDocument* pDoc, SCTAB nTab,
                           awt::Point& rUnoPoint, awt::Size& rUnoSize, awt::Point& rCaptionPoint )
 {
     ScRange aReturn;
@@ -308,7 +308,7 @@ static ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScD
     return aReturn;
 }
 
-static awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab, ScRange& rRange,
+static awt::Point lcl_GetRelativePos( const uno::Reference< drawing::XShape >& xShape, const ScDocument* pDoc, SCTAB nTab, ScRange& rRange,
                               awt::Size& rUnoSize, awt::Point& rCaptionPoint)
 {
     awt::Point aUnoPoint;

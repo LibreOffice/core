@@ -71,7 +71,7 @@ ScPivotShell::~ScPivotShell()
 {
 }
 
-void ScPivotShell::Execute( SfxRequest& rReq )
+void ScPivotShell::Execute( const SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
     {

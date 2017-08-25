@@ -69,7 +69,7 @@
 
 #define SC_PREVIEW_SHADOWSIZE   2
 
-static long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, std::vector<long>& nPages )
+static long lcl_GetDisplayStart( SCTAB nTab, const ScDocument* pDoc, std::vector<long>& nPages )
 {
     long nDisplayStart = 0;
     for (SCTAB i=0; i<nTab; i++)
@@ -791,7 +791,7 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
     return nPage;
 }
 
-static Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
+static Size lcl_GetDocPageSize( const ScDocument* pDoc, SCTAB nTab )
 {
     OUString aName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();

@@ -71,7 +71,7 @@ SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 
 namespace
 {
-    ScTabViewShell* lcl_GetTabViewShell( SfxBindings* pBindings );
+    ScTabViewShell* lcl_GetTabViewShell( const SfxBindings* pBindings );
 }
 
 #define IMPL_CHILD_CTOR(Class,sid) \
@@ -265,7 +265,7 @@ IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 
 namespace
 {
-    ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings )
+    ScTabViewShell * lcl_GetTabViewShell( const SfxBindings *pBindings )
     {
         if( pBindings )
             if( SfxDispatcher* pDisp = pBindings ->GetDispatcher() )
@@ -279,7 +279,7 @@ namespace
 
 ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParentP,
                                              sal_uInt16             nId,
-                                             SfxBindings*       p,
+                                             const SfxBindings*     p,
                                              SAL_UNUSED_PARAMETER SfxChildWinInfo* /*pInfo*/ )
                                              : SfxChildWindow(pParentP, nId),
                                              m_bVisibleLock( false ),

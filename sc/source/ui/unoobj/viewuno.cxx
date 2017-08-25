@@ -633,7 +633,7 @@ static bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
     return false;
 }
 
-static void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* pSelObj )
+static void lcl_ShowObject( ScTabViewShell& rViewSh, const ScDrawView& rDrawView, const SdrObject* pSelObj )
 {
     bool bFound = false;
     SCTAB nObjectTab = 0;

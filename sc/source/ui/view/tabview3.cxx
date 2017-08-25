@@ -2352,7 +2352,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     // is set (width or height changed).
 }
 
-void ScTabView::PaintRangeFinderEntry (ScRangeFindData* pData, const SCTAB nTab)
+void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB nTab)
 {
     ScRange aRef = pData->aRef;
     aRef.PutInOrder();                 // PutInOrder for the queries below

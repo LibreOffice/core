@@ -108,7 +108,7 @@ private:
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
-        bool readCellContent(ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
+        bool readCellContent(const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
         void setPatternToEngine(bool bUseStyleColor);
         void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
         void calcPaperSize(Size& rPaperSize, const tools::Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
@@ -131,12 +131,12 @@ private:
          *                    finished, this parameter will store the new
          *                    position.
          */
-        void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, OutputDevice* pRefDevice);
+        void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, const OutputDevice* pRefDevice);
 
         void setAlignmentToEngine();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
         void adjustForRTL();
-        void adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev);
+        void adjustForHyperlinkInPDF(Point aURLStart, const OutputDevice* pDev);
     };
 
     VclPtr<OutputDevice> mpDev;        // Device
@@ -227,7 +227,7 @@ private:
                                     bool& rLeftClip, bool& rRightClip );
 
     void SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell );
-    void SetEditSyntaxColor( EditEngine& rEngine, ScRefCellValue& rCell );
+    void SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue& rCell );
 
     double          GetStretch();
 

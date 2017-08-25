@@ -922,7 +922,7 @@ void ScTabView::ActiveGrabFocus()
         pGridWin[ePos]->GrabFocus();
 }
 
-ScSplitPos ScTabView::FindWindow( vcl::Window* pWindow ) const
+ScSplitPos ScTabView::FindWindow( const vcl::Window* pWindow ) const
 {
     ScSplitPos eVal = SC_SPLIT_BOTTOMLEFT;      // Default
     for (sal_uInt16 i=0; i<4; i++)
@@ -1343,7 +1343,7 @@ void ScTabView::ScrollLines( long nDeltaX, long nDeltaY )
 namespace
 {
 
-SCROW lcl_LastVisible( ScViewData& rViewData )
+SCROW lcl_LastVisible( const ScViewData& rViewData )
 {
     // If many rows are hidden at end of the document (what kind of idiot does that?),
     // then there should not be a switch to wide row headers because of this

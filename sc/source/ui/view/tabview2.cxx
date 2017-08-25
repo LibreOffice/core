@@ -49,7 +49,7 @@
 
 namespace {
 
-bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
+bool isCellQualified(const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
 {
     bool bCellProtected = pDoc->HasAttrib(
         nCol, nRow, nTab, nCol, nRow, nTab, HasAttrFlags::Protected);
@@ -64,7 +64,7 @@ bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool 
 }
 
 void moveCursorByProtRule(
-    SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY, SCTAB nTab, ScDocument* pDoc)
+    SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY, SCTAB nTab, const ScDocument* pDoc)
 {
     bool bSelectLocked = true;
     bool bSelectUnlocked = true;
@@ -187,7 +187,7 @@ bool checkBoundary(SCCOL& rCol, SCROW& rRow)
 
 void moveCursorByMergedCell(
     SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY, SCTAB nTab,
-    ScDocument* pDoc, const ScViewData& rViewData)
+    const ScDocument* pDoc, const ScViewData& rViewData)
 {
     SCCOL nOrigX = rViewData.GetCurX();
     SCROW nOrigY = rViewData.GetCurY();
@@ -1121,7 +1121,7 @@ void ScTabView::DeselectAllTables()
 }
 
 static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
-                        long nWindowX, long nWindowY, ScDocument* pDoc, SCTAB nTab,
+                        long nWindowX, long nWindowY, const ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )
 {

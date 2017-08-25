@@ -149,12 +149,12 @@ public:
     static sal_Int32        GetEnumFromAny( const css::uno::Any& aAny );
 
     static void             SetOptionalPropertyValue(
-        css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const sal_Char* pPropName, const css::uno::Any& rVal );
 
     template<typename ValueType>
     static void             SetOptionalPropertyValue(
-        css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const sal_Char* pPropName, const ValueType& rVal )
     {
         css::uno::Any any;

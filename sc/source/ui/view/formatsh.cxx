@@ -2640,7 +2640,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
     }
 }
 
-void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
+void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     pTabViewShell->HideListBox();               // Autofilter-DropDown-Listbox
@@ -2753,7 +2753,7 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     }
 }
 
-void ScFormatShell::ExecFormatPaintbrush( SfxRequest& rReq )
+void ScFormatShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 {
     ScViewFunc* pView = pViewData->GetView();
     if ( pView->HasPaintBrush() )

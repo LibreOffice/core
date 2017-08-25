@@ -29,9 +29,9 @@ class ScDocument;
 class ScDrawUtil
 {
 public:
-    static void CalcScale( ScDocument* pDoc, SCTAB nTab,
+    static void CalcScale( const ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        OutputDevice* pDev, const Fraction& rZoomX, const Fraction& rZoomY,
+                        const OutputDevice* pDev, const Fraction& rZoomX, const Fraction& rZoomY,
                         double nPPTX, double nPPTY,
                         Fraction& rScaleX, Fraction& rScaleY );
 };

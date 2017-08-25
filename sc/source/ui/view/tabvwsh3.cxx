@@ -86,7 +86,7 @@ namespace
     };
 
     ScRefFlagsAndType lcl_ParseRangeOrAddress(ScRange& rScRange, ScAddress& rScAddress,
-                                              const OUString& aAddress, ScDocument* pDoc)
+                                              const OUString& aAddress, const ScDocument* pDoc)
     {
         ScRefFlagsAndType aRet;
 

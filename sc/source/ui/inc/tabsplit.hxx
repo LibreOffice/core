@@ -35,7 +35,7 @@ protected:
 
 public:
                     ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle,
-                                    ScViewData* pData );
+                                    const ScViewData* pData );
                     virtual ~ScTabSplitter() override;
 
     void            SetFixed(bool bSet);

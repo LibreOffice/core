@@ -88,7 +88,7 @@ public:
 
     void        ExecuteEdit( SfxRequest& rReq );
     void        ExecuteTrans( SfxRequest& rReq );
-    void                ExecuteRotateTrans( SfxRequest& rReq );
+    void        ExecuteRotateTrans( const SfxRequest& rReq );
 
     void        GetBlockState( SfxItemSet& rSet );
     void        GetCellState( SfxItemSet& rSet );

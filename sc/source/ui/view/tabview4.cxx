@@ -340,7 +340,7 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
     rScroll.EnableRTL( bLayoutRTL );
 }
 
-long ScTabView::GetScrollBarPos( ScrollBar& rScroll )
+long ScTabView::GetScrollBarPos( const ScrollBar& rScroll )
 {
     return rScroll.GetThumbPos();
 }

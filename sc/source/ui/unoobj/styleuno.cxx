@@ -388,7 +388,7 @@ SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.styl
 
 #define SC_PAPERBIN_DEFAULTNAME     "[From printer settings]"
 
-static bool lcl_AnyTabProtected( ScDocument& rDoc )
+static bool lcl_AnyTabProtected( const ScDocument& rDoc )
 {
     SCTAB nTabCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)

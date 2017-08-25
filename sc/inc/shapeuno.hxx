@@ -64,7 +64,7 @@ class ScShapeObj    :public ScShapeObj_Base
                     ,public ScShapeObj_ChildBase
 {
 private:
-    friend ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, bool bCreate );
+    friend ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( const ScShapeObj* pShape, bool bCreate );
     css::uno::Reference< css::uno::XAggregation >              mxShapeAgg;
     // cached pointers to avoid repeated queryAggregation calls:
     css::beans::XPropertySet*                                  pShapePropertySet;

@@ -183,7 +183,7 @@ class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
     bool    m_bFreeWindowLock:1;
     VclPtr<vcl::Window> m_pSavedWndParent;
 public:
-    ScValidityRefChildWin( vcl::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
+    ScValidityRefChildWin( vcl::Window*, sal_uInt16, const SfxBindings*, SfxChildWinInfo* );
     SFX_DECL_CHILDWINDOW_WITHID(ScValidityRefChildWin);
     virtual ~ScValidityRefChildWin() override;
     bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }

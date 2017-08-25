@@ -63,10 +63,10 @@ public:
     void        ExecuteStyle( SfxRequest& rReq );
     void        GetStyleState( SfxItemSet& rSet );
 
-    void        ExecuteTextDirection( SfxRequest& rReq );
+    void        ExecuteTextDirection( const SfxRequest& rReq );
     void        GetTextDirectionState( SfxItemSet& rSet );
 
-    void        ExecFormatPaintbrush( SfxRequest& rReq );
+    void        ExecFormatPaintbrush( const SfxRequest& rReq );
     void        StateFormatPaintbrush( SfxItemSet& rSet );
 
 private:

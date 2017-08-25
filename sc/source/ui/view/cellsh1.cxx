@@ -2762,7 +2762,7 @@ void ScCellShell::ExecuteTrans( SfxRequest& rReq )
     }
 }
 
-void ScCellShell::ExecuteRotateTrans( SfxRequest& rReq )
+void ScCellShell::ExecuteRotateTrans( const SfxRequest& rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
         GetViewData()->GetView()->TransliterateText( m_aRotateCase.getNextMode() );
