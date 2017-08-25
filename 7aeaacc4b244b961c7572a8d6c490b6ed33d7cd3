@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_dff9544f",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-25T08:31:26Z",
+      "side": 1,
+      "message": "how can something _erase_ pDeleteElem?\npDeletedElem is a pointer, not a vector.\n\nif you mean \"wouldn\u0027t it _delete_ pDeleteElem?\", then the answer is \"no\" because this is a vector of raw pointer, not a vector of struct or a vector or std::unique_ptr",
+      "parentUuid": "1a430d35_9fffcc33",
+      "revId": "7aeaacc4b244b961c7572a8d6c490b6ed33d7cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_df4b14af",
         "filename": "package/source/xstor/xstorage.cxx",
         "patchSetId": 2
