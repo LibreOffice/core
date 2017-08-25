@@ -2031,10 +2031,12 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         OUStringBuffer aBuffer;
         comphelper::Base64::encode(aBuffer, aDerCert);
         rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
+        rInformation.ouSubject = OUString(pCertificate->subjectName, PL_strlen(pCertificate->subjectName), RTL_TEXTENCODING_UTF8);
     }
 
     PRTime nSigningTime;
-    // This may fail, in which case the date should be taken from the dictionary's "M" key.
+    // This may fail, in which case the date should be taken from the PDF's dictionary's "M" key,
+    // so not critical for PDF at least.
     if (NSS_CMSSignerInfo_GetSigningTime(pCMSSignerInfo, &nSigningTime) == SECSuccess)
     {
         // First convert the UTC UNIX timestamp to a tools::DateTime.
@@ -2044,6 +2046,20 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         // Then convert to a local UNO DateTime.
         aDateTime.ConvertToLocalTime();
         rInformation.stDateTime = aDateTime.GetUNODateTime();
+        if (rInformation.ouDateTime.isEmpty())
+        {
+            OUStringBuffer rBuffer;
+            rBuffer.append((sal_Int32) aDateTime.GetYear());
+            rBuffer.append('-');
+            if (aDateTime.GetMonth() < 10)
+                rBuffer.append('0');
+            rBuffer.append((sal_Int32) aDateTime.GetMonth());
+            rBuffer.append('-');
+            if (aDateTime.GetDay() < 10)
+                rBuffer.append('0');
+            rBuffer.append((sal_Int32) aDateTime.GetDay());
+            rInformation.ouDateTime = rBuffer.makeStringAndClear();
+        }
     }
 
     // Check if we have a signing certificate attribute.
