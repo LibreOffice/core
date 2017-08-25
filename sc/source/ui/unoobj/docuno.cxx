@@ -2031,7 +2031,7 @@ void SAL_CALL ScModelObj::calculate()
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ::comphelper::ProfileZone aZone("calculate");
+        comphelper::ProfileZone aZone("calculate");
         pDocShell->DoRecalc(true);
     }
     else
@@ -2045,7 +2045,7 @@ void SAL_CALL ScModelObj::calculateAll()
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ::comphelper::ProfileZone aZone("calculateAll");
+        comphelper::ProfileZone aZone("calculateAll");
         pDocShell->DoHardRecalc();
     }
     else

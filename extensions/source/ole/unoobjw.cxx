@@ -786,7 +786,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                                               EXCEPINFO * pexcepinfo,
                                                unsigned int * puArgErr )
 {
-    ::comphelper::ProfileZone aZone("COM Bridge");
+    comphelper::ProfileZone aZone("COM Bridge");
     HRESULT ret = S_OK;
 
     try

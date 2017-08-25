@@ -962,7 +962,7 @@ void SAL_CALL
 SwXTextCursor::gotoStart(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("gotoStart");
+    comphelper::ProfileZone aZone("gotoStart");
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
@@ -1019,7 +1019,7 @@ void SAL_CALL
 SwXTextCursor::gotoEnd(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("gotoEnd");
+    comphelper::ProfileZone aZone("gotoEnd");
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 

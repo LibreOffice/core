@@ -1898,7 +1898,7 @@ void SAL_CALL VCLXToolkit::reschedule()
 void SAL_CALL VCLXToolkit::processEventsToIdle()
 {
     SolarMutexGuard aSolarGuard;
-    ::comphelper::ProfileZone aZone("processEvents");
+    comphelper::ProfileZone aZone("processEvents");
     Scheduler::ProcessEventsToIdle();
 }
 

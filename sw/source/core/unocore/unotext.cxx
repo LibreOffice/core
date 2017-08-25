@@ -284,7 +284,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     const OUString& rString, sal_Bool bAbsorb)
 {
     SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("SwXText::insertString");
+    comphelper::ProfileZone aZone("SwXText::insertString");
 
     if (!xTextRange.is())
     {
@@ -501,7 +501,7 @@ SwXText::insertTextContent(
         sal_Bool bAbsorb)
 {
     SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("SwXText::insertTextContent");
+    comphelper::ProfileZone aZone("SwXText::insertTextContent");
 
     if (!xRange.is())
     {
@@ -851,7 +851,7 @@ uno::Reference< text::XText > SAL_CALL
 SwXText::getText()
 {
     SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("SwXText::getText");
+    comphelper::ProfileZone aZone("SwXText::getText");
 
     const uno::Reference< text::XText > xRet(this);
     return xRet;

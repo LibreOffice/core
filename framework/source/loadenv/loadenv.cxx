@@ -144,7 +144,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                                                            const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
 {
     css::uno::Reference< css::lang::XComponent > xComponent;
-    ::comphelper::ProfileZone aZone("loadComponentFromURL");
+    comphelper::ProfileZone aZone("loadComponentFromURL");
 
     try
     {

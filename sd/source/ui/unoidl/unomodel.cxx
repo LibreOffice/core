@@ -2919,7 +2919,7 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasElements()
 uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
 {
     ::SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("insertNewByIndex");
+    comphelper::ProfileZone aZone("insertNewByIndex");
 
     if( nullptr == mpModel )
         throw lang::DisposedException();
@@ -3074,7 +3074,7 @@ sal_Int32 SAL_CALL SdMasterPagesAccess::getCount()
 uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
 {
     ::SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("SdMasterPagesAccess::getByIndex");
+    comphelper::ProfileZone aZone("SdMasterPagesAccess::getByIndex");
 
     if( nullptr == mpModel )
         throw lang::DisposedException();

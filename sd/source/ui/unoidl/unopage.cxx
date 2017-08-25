@@ -2360,7 +2360,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
 void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& xMasterPage )
 {
     ::SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("setMasterPage");
+    comphelper::ProfileZone aZone("setMasterPage");
 
     throwIfDisposed();
 

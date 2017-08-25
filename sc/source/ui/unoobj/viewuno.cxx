@@ -1073,7 +1073,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
 void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveSheet )
 {
     SolarMutexGuard aGuard;
-    ::comphelper::ProfileZone aZone("setActiveSheet");
+    comphelper::ProfileZone aZone("setActiveSheet");
 
     ScTabViewShell* pViewSh = GetViewShell();
     if ( pViewSh && xActiveSheet.is() )

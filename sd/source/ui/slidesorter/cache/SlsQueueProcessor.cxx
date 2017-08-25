@@ -130,7 +130,7 @@ void QueueProcessor::ProcessRequests()
             Start(mrQueue.GetFrontPriorityClass());
         else
         {
-            ::comphelper::ProfileZone aZone("QueueProcessor finished processing all elements");
+            comphelper::ProfileZone aZone("QueueProcessor finished processing all elements");
         }
     }
 }

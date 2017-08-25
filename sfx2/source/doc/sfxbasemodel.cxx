@@ -1572,7 +1572,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
 void SAL_CALL SfxBaseModel::store()
 {
-    ::comphelper::ProfileZone aZone("store");
+    comphelper::ProfileZone aZone("store");
     storeSelf( Sequence< beans::PropertyValue >() );
 }
 
@@ -1584,7 +1584,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
                                         const   Sequence< beans::PropertyValue >&  rArgs   )
 {
     SfxModelGuard aGuard( *this );
-    ::comphelper::ProfileZone aZone("storeAs");
+    comphelper::ProfileZone aZone("storeAs");
 
     if ( m_pData->m_pObjectShell.is() )
     {
@@ -1624,7 +1624,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
                                         const   Sequence< beans::PropertyValue >&  rArgs   )
 {
     SfxModelGuard aGuard( *this );
-    ::comphelper::ProfileZone aZone("storeToURL");
+    comphelper::ProfileZone aZone("storeToURL");
 
     if ( m_pData->m_pObjectShell.is() )
     {

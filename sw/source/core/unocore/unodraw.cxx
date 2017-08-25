@@ -2339,7 +2339,7 @@ awt::Size SAL_CALL SwXShape::getSize()
 
 void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
 {
-    ::comphelper::ProfileZone aZone("SwXShape::setSize");
+    comphelper::ProfileZone aZone("SwXShape::setSize");
 
     if ( mxShape.is() )
     {
