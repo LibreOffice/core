@@ -30,7 +30,7 @@ SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 {
     sal_Char aNToABuf[] = "0000000000000000";
 
-    DBG_ASSERT( nLen < sizeof(aNToABuf), "zu viele Stellen" );
+    DBG_ASSERT( nLen < sizeof(aNToABuf), "too many places" );
     if( nLen >= sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 

@@ -2449,7 +2449,7 @@ void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAcce
         mpAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
         mpAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
 
-        // Formular view
+        // Form view
         // Always set this option, not only if document is read-only:
         mpOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }

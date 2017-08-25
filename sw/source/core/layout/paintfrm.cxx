@@ -7467,7 +7467,7 @@ bool SwFrame::GetBackgroundBrush(
                 rBack.GetGraphicPos() == GPOS_NONE &&
                 !pOpt->IsPagePreview() &&
                 !pOpt->IsReadonly() &&
-                // #114856# Formular view
+                // #114856# Form view
                 !pOpt->IsFormView() &&
                 SwViewOption::IsIndexShadings() &&
                 !pOpt->IsPDFExport() &&

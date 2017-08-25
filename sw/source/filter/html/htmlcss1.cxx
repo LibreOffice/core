@@ -1980,7 +1980,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
             else
             {
                 eHoriOri = text::HoriOrientation::LEFT;
-                eHoriRel = text::RelOrientation::FRAME;   // wird noch umgeschossen
+                eHoriRel = text::RelOrientation::FRAME;   // to be changed later
             }
         }
     }

@@ -1003,7 +1003,7 @@ bool SwXText::Impl::CheckForOwnMember(
     const SwNode& rSrcNode = rPaM.GetNode();
     const SwStartNode* pTmp = rSrcNode.FindSttNodeByType(eSearchNodeType);
 
-    //SectionNodes ueberspringen
+    // skip SectionNodes
     while(pTmp && pTmp->IsSectionNode())
     {
         pTmp = pTmp->StartOfSectionNode();

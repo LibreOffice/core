@@ -851,7 +851,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = 5;
-    aExc.Message          = "dum dum dum ich tanz im kreis herum...";
+    aExc.Message          = "dum dum dum I dance around the circle...";
     aExc.Context          = *this;
     throw aExc;
 }
@@ -859,7 +859,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 sal_Int32 Test_Impl::getRuntimeException() throw(css::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = "dum dum dum ich tanz im kreis herum...";
+    aExc.Message          = "dum dum dum I dance around the circle...";
     aExc.Context          = *this;
     throw aExc;
 }
@@ -867,7 +867,7 @@ sal_Int32 Test_Impl::getRuntimeException() throw(css::uno::RuntimeException)
 void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(css::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = "dum dum dum ich tanz im kreis herum...";
+    aExc.Message          = "dum dum dum I dance around the circle...";
     aExc.Context          = *this;
     throw aExc;
 }
@@ -891,7 +891,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             catch (const IllegalArgumentException &aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
-                             aExc.Message == "dum dum dum ich tanz im kreis herum...",
+                             aExc.Message == "dum dum dum I dance around the circle...",
                              "### unexpected exception content!" );
 
                 Reference<XLanguageBindingTest > xLBT2(
@@ -906,7 +906,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            OSL_ENSURE( rExc.Message == "dum dum dum ich tanz im kreis herum...",
+            OSL_ENSURE( rExc.Message == "dum dum dum I dance around the circle...",
                         "### unexpected exception content!" );
 
             Reference<XLanguageBindingTest > xLBT2(
@@ -921,9 +921,9 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     }
     catch (const Exception & aExc)
     {
-        OSL_ENSURE( aExc.Message == "dum dum dum ich tanz im kreis herum...",
+        OSL_ENSURE( aExc.Message == "dum dum dum I dance around the circle...",
                      "### unexpected exception content!" );
-        return aExc.Message == "dum dum dum ich tanz im kreis herum...";
+        return aExc.Message == "dum dum dum I dance around the circle...";
     }
     return sal_False;
 }

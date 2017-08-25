@@ -219,7 +219,7 @@ class SwHTMLTableLayout
     SvxAdjust m_eTableAdjust;             ///< Alignment of table.
 
     bool m_bColsOption : 1;           ///< Table has a COLS-option.
-    bool m_bColTags : 1;              ///< Tabelle has COL/COLGRP-tags.
+    bool m_bColTags : 1;              ///< Table has COL/COLGRP tags.
     bool m_bPrcWidthOption : 1;       ///< Width is given in percent.
     bool m_bUseRelWidth : 1;          ///< SwTable gets relative width.
 

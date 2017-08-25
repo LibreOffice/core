@@ -18,8 +18,7 @@
 
 interface WebSelection : BaseTextSelection
 {
-    // hier kommt nur dann etwas hinein, wenn es im
-    // kompletten StarWriter nicht benoetigt wird
+    // here something is placed only if it's not needed in the entire StarWriter
 }
 
 shell SwWebBaseShell

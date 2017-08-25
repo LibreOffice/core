@@ -286,7 +286,7 @@ sal_uLong SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
         rDst.insert(itDstPos, std::move(pOriginal));
     }
 
-    // move parent umsetzen (do this only now, because we need the parent for
+    // move parent (do this only now, because we need the parent for
     // deleting the old child list!)
     pSrcEntry->pParent = pTargetParent;
 

@@ -647,14 +647,14 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     if( bNewFrames && pSctNd )
                         pSctNd->DelFrames();
 
-                    RemoveNode( aRg.aEnd.GetIndex(), 1, false ); // EndNode loeschen
+                    RemoveNode( aRg.aEnd.GetIndex(), 1, false ); // delete EndNode
                     sal_uLong nSttPos = pSttNd->GetIndex();
 
                     // this StartNode will be removed later
                     SwStartNode* pTmpSttNd = new SwStartNode( *this, nSttPos+1 );
                     pTmpSttNd->m_pStartOfSection = pSttNd->m_pStartOfSection;
 
-                    RemoveNode( nSttPos, 1, false ); // SttNode loeschen
+                    RemoveNode( nSttPos, 1, false ); // delete SttNode
 
                     pSttNd->m_pStartOfSection = aIdx.GetNode().m_pStartOfSection;
                     rNodes.InsertNode( pSttNd, aIdx  );
@@ -964,7 +964,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     // For other nodes, create a new start node.
     SwNode * pAktNode = &pRange->aStart.GetNode();
     SwNodeIndex aIdx( *pAktNode->StartOfSectionNode() );
-    if( pAktNode->IsStartNode() )       // selbst StartNode
+    if( pAktNode->IsStartNode() )       // is StartNode itself
     {
         SwEndNode* pEndNd = pRange->aEnd.GetNode().GetEndNode();
         if (pEndNd && pAktNode == pEndNd->m_pStartOfSection)

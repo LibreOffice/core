@@ -1690,7 +1690,7 @@ SwTableBox::~SwTableBox()
 SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
 {
     // We might need to create a new format here, because the box must be
-    // added to the format solely if pFormat has a value or formular.
+    // added to the format solely if pFormat has a value or form.
     if( SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE, false ) ||
         SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA, false ) )
     {

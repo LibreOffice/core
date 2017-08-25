@@ -484,7 +484,7 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
 }
 
 /**
- * We assume hat the font height doesn't change and that at first there
+ * We assume that the font height doesn't change and that at first there
  * are at least as many lines, as the DropCap-setting claims
  */
 void SwTextFormatter::GuessDropHeight( const sal_uInt16 nLines )
