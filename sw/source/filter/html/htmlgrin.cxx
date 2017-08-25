@@ -491,7 +491,7 @@ IMAGE_SETEVENT:
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
-    // Umrandung setzen
+    // set the border
     long nHBorderWidth = 0, nVBorderWidth = 0;
     if( nBorder )
     {
@@ -1167,7 +1167,7 @@ ANCHOR_SETEVENT:
         }
     }
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::ANCHOR_ON );
 
     bool bEnAnchor = false, bFootnoteAnchor = false, bFootnoteEnSymbol = false;

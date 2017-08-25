@@ -1189,7 +1189,7 @@ private:
      */
     std::unique_ptr<ImportProgress> m_xProgress;
 
-    SwMSConvertControls *m_pFormImpl; // Control-Implementierung
+    SwMSConvertControls *m_pFormImpl; // implementation of control
 
     SwFlyFrameFormat* m_pFlyFormatOfJustInsertedGraphic;
     SwFrameFormat* m_pFormatOfJustInsertedApo;

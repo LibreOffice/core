@@ -217,7 +217,7 @@ enum PrepareHint
     PREP_FOLLOW_FOLLOWS,    // Follow is now possibly adjacent.
     PREP_ADJUST_FRM,        // Adjust size via grow/shrink without formatting.
     PREP_FLY_CHGD,          // A FlyFrame has changed its size.
-    PREP_FLY_ATTR_CHG,      // A FlyFrame hat has changed its attributes
+    PREP_FLY_ATTR_CHG,      // A FlyFrame has changed its attributes
                             // (e. g. wrap).
     PREP_FLY_ARRIVE,        // A FlyFrame now overlaps range.
     PREP_FLY_LEAVE,         // A FlyFrame has left range.

@@ -241,7 +241,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher(const WW8Fib& rFib)
     // WW7- Sprms
     static const SprmInfoRow aSprms[] =
     {
-        {  0, { 0, L_FIX} }, // "Default-sprm",  wird uebersprungen
+        {  0, { 0, L_FIX} }, // "Default-sprm", is skipped
         {  2, { 2, L_FIX} }, // "sprmPIstd",  pap.istd (style code)
         {  3, { 3, L_VAR} }, // "sprmPIstdPermute pap.istd permutation
         {  4, { 1, L_FIX} }, // "sprmPIncLv1" pap.istddifference
@@ -441,7 +441,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
     //WW8+ Sprms
     static const SprmInfoRow aSprms[] =
     {
-        {     0, { 0, L_FIX} }, // "Default-sprm"/ wird uebersprungen
+        {     0, { 0, L_FIX} }, // "Default-sprm"/ is skipped
         {0x4600, { 2, L_FIX} }, // "sprmPIstd" pap.istd;istd (style code);short;
         {0xC601, { 0, L_VAR} }, // "sprmPIstdPermute" pap.istd;permutation vector
         {0x2602, { 1, L_FIX} }, // "sprmPIncLvl" pap.istd, pap.lvl;difference
@@ -6694,7 +6694,7 @@ WW8_STD* WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString)
                     }
                     break;
                 default:
-                    OSL_ENSURE(false, "Es wurde vergessen, nVersion zu kodieren!");
+                    OSL_ENSURE(false, "It was forgotten to code nVersion!");
                     break;
             }
             if (nLenStringBytes > rSkip)

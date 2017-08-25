@@ -305,7 +305,6 @@ public:
 
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.
-    // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
     // bToTop = true -> up to base line, false-> else only line of box.
     static SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
                             SwSelBoxes& rBoxes, bool bToTop = true );

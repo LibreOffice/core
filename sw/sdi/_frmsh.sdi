@@ -108,7 +108,7 @@ interface BaseTextFrame
 
     FN_FRAME_TO_ANCHOR  // status()
     [
-        /*OS: Datentypen unvertraeglich ?? */
+        /*OS: data types incompatible?? */
         ExecMethod = Execute ;
         StateMethod = NoState ;
     ]
@@ -364,8 +364,8 @@ interface BaseTextFrame
                 DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
         ]
 
-// Abfragefunktionen fuer ImageMaps
-// Slots ohne Export
+// Query functions for ImageMaps
+// Slots without export
 
     FN_INSERT_FRAME
     [

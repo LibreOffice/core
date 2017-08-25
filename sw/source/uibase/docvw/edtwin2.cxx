@@ -458,7 +458,7 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         // fully resides inside?
         if( rRect.IsInside( aRect ) )
         {
-            // dann aufheben
+            // then cancel
             delete m_pShadCursor;
             m_pShadCursor = nullptr;
         }

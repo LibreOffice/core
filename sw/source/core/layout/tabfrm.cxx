@@ -4179,7 +4179,7 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         if ( HasFixSize() )
         {
             const SwFormatFrameSize &rFrameSize = GetFormat()->GetFrameSize();
-            OSL_ENSURE( rFrameSize.GetSize().Height() > 0, "Hat ihn" );
+            OSL_ENSURE( rFrameSize.GetSize().Height() > 0, "Has it" );
         }
 #endif
         const SwTwips nDiff = aRectFnSet.GetHeight(Frame()) -

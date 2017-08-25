@@ -626,7 +626,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
             bool bDelText = true;
             if( !pCursor->IsMultiSelection() )
             {
-                // einfach Selection -> Text ueberpruefen
+                // simple selection -> check the text
                 const OUString sText(comphelper::string::stripEnd(GetSelText(), ' '));
                 if( sText == rStr )
                     bDelText = bInsText = false;

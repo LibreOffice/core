@@ -869,7 +869,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         return 0;
 
     sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : static_cast<sal_uInt16>(eMax);
-    sal_uInt16 nI = n / 32;                     // # des sal_uInt32
+    sal_uInt16 nI = n / 32;                     // # of sal_uInt32
     sal_uInt32 nMask = 1 << ( n % 32 );          // Mask for bits
 
     if (SAL_N_ELEMENTS(m_nFieldTagAlways) <= nI)
@@ -1365,7 +1365,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 // "AUTONR"
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
 {
-    if( !m_pNumFieldType ){     // 1. Mal
+    if( !m_pNumFieldType ){     // 1st time
         SwSetExpFieldType aT( &m_rDoc, "AutoNr", nsSwGetSetExpType::GSE_SEQ );
         m_pNumFieldType = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aT );
     }
