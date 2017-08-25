@@ -22,7 +22,9 @@
 
 #include "sal/config.h"
 
-#include "osl/interlck.h"
+#include <atomic>
+#include <cstddef>
+
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "typelib/typedescription.h"
@@ -78,7 +80,7 @@ private:
     rtl::Reference< Bridge > bridge_;
     OUString oid_;
     com::sun::star::uno::TypeDescription type_;
-    oslInterlockedCount references_;
+    std::atomic<std::size_t> references_;
 };
 
 }
