@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_9a3efab6",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-25T12:03:23Z",
+      "side": 1,
+      "message": "Or, actually we still have 2 free values, the number in the comment is wrong. Still, using sax::Converter::convertDateTime() may be better suited and has less overhead during export.",
+      "parentUuid": "1a430d35_3f125863",
+      "revId": "0aff5dfab2ea053cd75a35a4a643983e245eb8c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_fafe1e04",
         "filename": "sc/inc/dpitemdata.hxx",
         "patchSetId": 6
