@@ -1157,7 +1157,7 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
     return true;
 }
 
-void createUndoDoc(std::unique_ptr<ScDocument>& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
+void createUndoDoc(ScDocumentUniquePtr& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
 {
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
@@ -1241,8 +1241,8 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if (!isEditable(rDocShell, aRanges, bApi))
         return false;
 
-    std::unique_ptr<ScDocument> pOldUndoDoc;
-    std::unique_ptr<ScDocument> pNewUndoDoc;
+    ScDocumentUniquePtr pOldUndoDoc;
+    ScDocumentUniquePtr pNewUndoDoc;
 
     ScDPObject aUndoDPObj(*pOldObj); // for undo or revert on failure
 
@@ -1352,7 +1352,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
         }
     }
 
-    std::unique_ptr<ScDocument> pOldUndoDoc;
+    ScDocumentUniquePtr pOldUndoDoc;
     std::unique_ptr<ScDPObject> pUndoDPObj;
 
     if (bRecord)
@@ -1403,7 +1403,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
         return false;
 
-    std::unique_ptr<ScDocument> pNewUndoDoc;
+    ScDocumentUniquePtr pNewUndoDoc;
 
     ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -1516,8 +1516,8 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
         return false;
 
-    std::unique_ptr<ScDocument> pOldUndoDoc;
-    std::unique_ptr<ScDocument> pNewUndoDoc;
+    ScDocumentUniquePtr pOldUndoDoc;
+    ScDocumentUniquePtr pNewUndoDoc;
 
     ScDPObject aUndoDPObj(rDPObj); // For undo or revert on failure.
 

@@ -29,6 +29,7 @@
 #include "View.hxx"
 #include <sfx2/viewfrm.hxx>
 #include "pres.hxx"
+#include <o3tl/deleter.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/region.hxx>
@@ -224,7 +225,7 @@ private:
     std::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     vcl::Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
-    std::unique_ptr<ToolTip> mpToolTip;
+    std::unique_ptr<ToolTip, o3tl::default_delete<ToolTip>> mpToolTip;
     bool mbIsRearrangePending;
     ::std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;
 

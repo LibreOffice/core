@@ -583,7 +583,7 @@ bool ScDocFunc::DeleteContents(
     ScMarkData aMultiMark = rMark;
     aMultiMark.SetMarking(false);       // for MarkToMulti
 
-    std::unique_ptr<ScDocument> pUndoDoc;
+    ScDocumentUniquePtr pUndoDoc;
     bool bMulti = aMultiMark.IsMultiMarked();
     aMultiMark.MarkToMulti();
     aMultiMark.GetMultiMarkArea( aMarkRange );
@@ -688,7 +688,7 @@ bool ScDocFunc::DeleteCell(
     // To keep track of all non-empty cells within the deleted area.
     std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
 
-    std::unique_ptr<ScDocument> pUndoDoc;
+    ScDocumentUniquePtr pUndoDoc;
     if (bRecord)
     {
         pUndoDoc = sc::DocFuncUtil::createDeleteContentsUndoDoc(rDoc, rMark, rPos, nFlags, false);
@@ -2737,7 +2737,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     SCTAB nDestEndTab = nDestTab+nSrcTabCount-1;
     SCTAB nTab;
 
-    std::unique_ptr<ScDocument> pClipDoc = o3tl::make_unique<ScDocument>(SCDOCMODE_CLIP);
+    ScDocumentUniquePtr pClipDoc(new ScDocument(SCDOCMODE_CLIP));
 
     ScMarkData aSourceMark;
     for (nTab=nStartTab; nTab<=nEndTab; nTab++)

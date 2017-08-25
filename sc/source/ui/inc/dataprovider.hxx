@@ -109,7 +109,7 @@ class CSVDataProvider : public DataProvider
 {
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocument* mpDocument;
-    std::unique_ptr<ScDocument> mpDoc;
+    ScDocumentUniquePtr mpDoc;
 
     void Refresh();
 

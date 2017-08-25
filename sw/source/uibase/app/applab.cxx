@@ -24,6 +24,7 @@
 #include <hintids.hxx>
 
 #include <comphelper/string.hxx>
+#include <o3tl/deleter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
@@ -156,7 +157,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DB-Manager
-    std::unique_ptr<SwDBManager> pDBManager(new SwDBManager(nullptr));
+    std::unique_ptr<SwDBManager, o3tl::default_delete<SwDBManager>> pDBManager(new SwDBManager(nullptr));
 #endif
 
     // Read SwLabItem from Config

@@ -36,6 +36,7 @@
 #include "typedstrdata.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
+#include <o3tl/deleter.hxx>
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include <svl/zforlist.hxx>
@@ -2385,6 +2386,8 @@ private:
     void EndListeningGroups( const std::vector<ScAddress>& rPosArray );
     void SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray );
 };
+
+typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;
 
 #endif
 
