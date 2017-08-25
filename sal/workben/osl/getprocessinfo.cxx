@@ -32,7 +32,7 @@ SAL_IMPLEMENT_MAIN()
     osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER | osl_Process_CPUTIMES | osl_Process_HEAPUSAGE, &info);
 
     fprintf(stdout, "    Process ID: %d\n", info.Ident);
-    fprintf(stdout, "    Heap usage: %d%\n", info.HeapUsage);
+    fprintf(stdout, "    Heap usage: %d\n", info.HeapUsage);
 
     return 0;
 }

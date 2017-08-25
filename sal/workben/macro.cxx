@@ -72,13 +72,9 @@ SAL_IMPLEMENT_MAIN()
     fprintf(stdout, "\n    #define foo Example string \"foo\"\n");
     fprintf(stdout, "    SAL_STRINGIFY(foo): %s\n", SAL_STRINGIFY(foo));
 
-#define foo2 Example string \"foo\"
-    fprintf(stdout, "\n    #define foo Example string \\\"foo\\\"\n");
-    fprintf(stdout, "    SAL_STRINGIFY(foo2): %s\n", SAL_STRINGIFY(foo2));
-
-#define foo3 2
-    fprintf(stdout, "\n    #define foo3 2\n");
-    fprintf(stdout, "    SAL_STRINGIFY(foo3): %s\n", SAL_STRINGIFY(foo3));
+#define foo2 2
+    fprintf(stdout, "\n    #define foo2 2\n");
+    fprintf(stdout, "    SAL_STRINGIFY(foo3): %s\n", SAL_STRINGIFY(foo2));
 
     return 0;
 }

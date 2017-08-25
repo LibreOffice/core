@@ -89,6 +89,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     executeprocess \
     terminateprocess \
     setgetenv \
+    signal \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
