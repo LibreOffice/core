@@ -93,6 +93,11 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 	@true
 else
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
+ifeq (MACOSX,$(OS))
+	$(eval ODK_BUILD_SHELL := $(shell $(gb_MKTEMP)))
+	cp /bin/sh "$(ODK_BUILD_SHELL)"
+	chmod 0700 "$(ODK_BUILD_SHELL)"
+endif
 	(saved_library_path=$${$(gb_Helper_LIBRARY_PATH_VAR)} && . $< \
         $(if $(filter MACOSX,$(OS)),, \
             && $(gb_Helper_LIBRARY_PATH_VAR)=$$saved_library_path) \
@@ -100,11 +105,16 @@ else
             UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,odk/build-examples)/user) \
         $(foreach my_dir,$(my_example_dirs), \
             && (cd $(INSTDIR)/$(SDKDIRNAME)/examples/$(my_dir) \
-                && printf 'yes\n' | LC_ALL=C make))) \
+                && printf 'yes\n' | LC_ALL=C make \
+                    $(if $(filter MACOSX,$(OS)), SHELL=$(ODK_BUILD_SHELL), )))) \
             >$(call gb_CustomTarget_get_workdir,odk/build-examples)/log 2>&1 \
         || (RET=$$? \
+            $(if $(filter MACOSX,$(OS)), && rm -f $(ODK_BUILD_SHELL) , ) \
             && cat $(call gb_CustomTarget_get_workdir,odk/build-examples)/log \
             && exit $$RET)
+ifeq (MACOSX,$(OS))
+	-rm -f $(ODK_BUILD_SHELL)
+endif
 endif
 
 $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv: \
