@@ -144,6 +144,11 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         m_pPlusBtn->Hide();
         m_pMinusBtn->Hide();
     }
+    else
+    {
+        // TODO: Remove this when it is possible to reset menubar menus individually
+        m_pResetBtn->Disable();
+    }
 
 }
 
@@ -189,7 +194,6 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
 
 void SvxMenuConfigPage::UpdateButtonStates()
 {
-
     // Disable Up and Down buttons depending on current selection
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
 
@@ -197,8 +201,6 @@ void SvxMenuConfigPage::UpdateButtonStates()
     {
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
-
-        m_pDescriptionField->SetText("");
 
         return;
     }
@@ -208,18 +210,6 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     m_pMoveUpButton->Enable( selection != first );
     m_pMoveDownButton->Enable( selection != last );
-
-    SvxConfigEntry* pEntryData =
-        static_cast<SvxConfigEntry*>(selection->GetUserData());
-
-    if ( pEntryData->IsSeparator() )
-    {
-        m_pDescriptionField->SetText("");
-    }
-    else
-    {
-        m_pDescriptionField->SetText(pEntryData->GetHelpText());
-    }
 }
 
 void SvxMenuConfigPage::DeleteSelectedTopLevel()
