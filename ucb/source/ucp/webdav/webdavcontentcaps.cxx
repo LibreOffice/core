@@ -63,7 +63,7 @@ bool ContentProvider::getProperty(
             // Mandatory UCB properties.
             m_pProps->insert(
                 beans::Property(
-                    OUString( "ContentType" ),
+                    "ContentType",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
@@ -71,7 +71,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "IsDocument" ),
+                    "IsDocument",
                     -1,
                     cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
@@ -79,7 +79,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "IsFolder" ),
+                    "IsFolder",
                     -1,
                     cppu::UnoType<bool>::get(),
                     beans::PropertyAttribute::BOUND
@@ -87,7 +87,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "Title" ),
+                    "Title",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND ) );
@@ -96,7 +96,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "DateCreated" ),
+                    "DateCreated",
                     -1,
                     cppu::UnoType<util::DateTime>::get(),
                     beans::PropertyAttribute::BOUND
@@ -104,7 +104,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "DateModified" ),
+                    "DateModified",
                     -1,
                     cppu::UnoType<util::DateTime>::get(),
                     beans::PropertyAttribute::BOUND
@@ -112,7 +112,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "MediaType" ),
+                    "MediaType",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
@@ -120,7 +120,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "Size" ),
+                    "Size",
                     -1,
                     cppu::UnoType<sal_Int64>::get(),
                     beans::PropertyAttribute::BOUND
@@ -128,7 +128,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString( "BaseURI" ),
+                    "BaseURI",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND
@@ -136,8 +136,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    OUString(
-                        "CreatableContentsInfo" ),
+                    "CreatableContentsInfo",
                     -1,
                     cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                     beans::PropertyAttribute::BOUND
@@ -495,22 +494,22 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     aCmdInfo[ 0 ] =
             ucb::CommandInfo(
-                OUString( "getCommandInfo" ),
+                "getCommandInfo",
                 -1,
                 cppu::UnoType<void>::get() );
     aCmdInfo[ 1 ] =
             ucb::CommandInfo(
-                OUString( "getPropertySetInfo" ),
+                "getPropertySetInfo",
                 -1,
                 cppu::UnoType<void>::get() );
     aCmdInfo[ 2 ] =
             ucb::CommandInfo(
-                OUString( "getPropertyValues" ),
+                "getPropertyValues",
                 -1,
                 cppu::UnoType<uno::Sequence< beans::Property >>::get());
     aCmdInfo[ 3 ] =
             ucb::CommandInfo(
-                OUString( "setPropertyValues" ),
+                "setPropertyValues",
                 -1,
                 cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get());
 
@@ -520,17 +519,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     aCmdInfo[ 4 ] =
             ucb::CommandInfo(
-                OUString( "delete" ),
+                "delete",
                 -1,
                 cppu::UnoType<bool>::get() );
     aCmdInfo[ 5 ] =
             ucb::CommandInfo(
-                OUString( "insert" ),
+                "insert",
                 -1,
                 cppu::UnoType<ucb::InsertCommandArgument>::get() );
     aCmdInfo[ 6 ] =
             ucb::CommandInfo(
-                OUString( "open" ),
+                "open",
                 -1,
                 cppu::UnoType<ucb::OpenCommandArgument2>::get() );
 
@@ -540,17 +539,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     aCmdInfo[ 7 ] =
             ucb::CommandInfo(
-                OUString( "post" ),
+                "post",
                 -1,
                 cppu::UnoType<ucb::PostCommandArgument2>::get() );
     aCmdInfo[ 8 ] =
             ucb::CommandInfo(
-                OUString( "addProperty" ),
+                "addProperty",
                 -1,
                 cppu::UnoType<ucb::PropertyCommandArgument>::get() );
     aCmdInfo[ 9 ] =
             ucb::CommandInfo(
-                OUString( "removeProperty" ),
+                "removeProperty",
                 -1,
                 cppu::UnoType<rtl::OUString>::get() );
 
@@ -582,14 +581,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                OUString( "transfer" ),
+                "transfer",
                 -1,
                 cppu::UnoType<ucb::TransferInfo>::get() );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                OUString(
-                    "createNewContent" ),
+                "createNewContent",
                 -1,
                 cppu::UnoType<ucb::ContentInfo>::get() );
         nPos++;
@@ -603,13 +601,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     {
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                OUString( "lock" ),
+                "lock",
                 -1,
                 cppu::UnoType<void>::get() );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                OUString( "unlock" ),
+                "unlock",
                 -1,
                 cppu::UnoType<void>::get() );
         nPos++;

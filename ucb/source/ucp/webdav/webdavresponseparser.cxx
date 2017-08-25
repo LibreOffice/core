@@ -168,7 +168,6 @@ namespace
 
     public:
         WebDAVContext(WebDAVContext* pParent, const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs);
-        ~WebDAVContext();
 
         WebDAVContext* getParent() const { return mpParent; }
         OUString& getWhiteSpace() { return maWhiteSpace; }
@@ -268,10 +267,6 @@ namespace
         // evaluate enums for namespace and name
         maWebDAVNamespace = StrToWebDAVNamespace(maNamespace);
         maWebDAVName = StrToWebDAVName(maName);
-    }
-
-    WebDAVContext::~WebDAVContext()
-    {
     }
 } // end of anonymous namespace
 

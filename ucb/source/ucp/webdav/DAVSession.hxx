@@ -44,7 +44,7 @@ class DAVAuthListener;
 class DAVSession
 {
 public:
-    inline void acquire()
+    void acquire()
     {
         osl_incrementInterlockedCount( &m_nRefCount );
     }
