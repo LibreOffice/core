@@ -184,7 +184,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
         Frame().Height( 0 );
         long nWidth = pSh->VisArea().Width();
         if ( !nWidth )
-            nWidth = 5000;     //aendert sich sowieso
+            nWidth = 5000;     // changes anyway
         Frame().Width ( nWidth );
     }
     else
@@ -1333,7 +1333,7 @@ SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 SwTwips SwRootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool )
 {
     OSL_ENSURE( nDist >= 0, "nDist < 0." );
-    OSL_ENSURE( nDist <= Frame().Height(), "nDist > als aktuelle Groesse." );
+    OSL_ENSURE( nDist <= Frame().Height(), "nDist greater than current size." );
 
     if ( !bTst )
         Frame().SSize().Height() -= nDist;

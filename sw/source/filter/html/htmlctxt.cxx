@@ -324,7 +324,7 @@ void SwHTMLParser::EndContext( HTMLAttrContext *pContext )
         {
             HTMLAttrContext *pCntxt = PopContext();
             OSL_ENSURE( pCntxt != pContext,
-                    "Kontext noch im Stack" );
+                    "Context still on the stack" );
             if( pCntxt == pContext )
                 break;
 

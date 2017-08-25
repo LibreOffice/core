@@ -1205,7 +1205,7 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
         }
         break;
 
-    case nsRedlineType_t::REDLINE_DELETE:           // Inhalt wurde eingefuegt
+    case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
         bIsVisible = true;
         if( 1 <= nLoop )
             MoveFromSection(nMyPos);

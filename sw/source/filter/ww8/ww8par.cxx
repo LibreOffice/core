@@ -4239,7 +4239,7 @@ void SwWW8ImplReader::DeleteStack(SwFltControlStack* pStck)
     }
     else
     {
-        OSL_ENSURE( false, "WW-Stack bereits geloescht" );
+        OSL_ENSURE( false, "WW stack already deleted" );
     }
 }
 

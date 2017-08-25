@@ -449,7 +449,7 @@ void SmFontSizeDialog::dispose()
 
 void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 {
-    //! aufpassen: richtig runden!
+    //! watch out: round properly!
     m_pBaseSize->SetValue( SmRoundFraction(
         Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ) );
 

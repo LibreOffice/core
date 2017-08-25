@@ -379,7 +379,7 @@ struct WW8LSTInfo   // sorted by nIdLst (in WW8 used list-Id)
     WW8aIdSty   aIdSty;          // Style Id's for each level
     WW8aCFormat    aCharFormat;        // Character Style Pointer
 
-    SwNumRule*  pNumRule;        // Pointer to list-template in im Writer
+    SwNumRule*  pNumRule;        // Pointer to list-template in Writer
     sal_uInt32      nIdLst;          // WW8Id of this list
     bool bSimpleList:1;// Flag, if this NumRule only uses one Level
     bool bUsedInDoc :1;// Flag, if this NumRule is used in the Doc,

@@ -2429,7 +2429,7 @@ bool SwCursorShell::IsOverReadOnlyPos( const Point& rPt ) const
     Point aPt( rPt );
     SwPaM aPam( *m_pCurrentCursor->GetPoint() );
     GetLayout()->GetCursorOfst( aPam.GetPoint(), aPt );
-    // Formular view
+    // form view
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
 }
 

@@ -856,7 +856,7 @@ SwField* SwCursorShell::GetCurField( const bool bIncludeInputFieldAtStart ) cons
     if ( pCurField != nullptr
          && SwFieldIds::Table == pCurField->GetTyp()->Which() )
     {
-        // TabellenFormel ? wandel internen in externen Namen um
+        // table formula? convert internal name into external
         const SwTableNode* pTableNd = IsCursorInTable();
         static_cast<SwTableField*>(pCurField)->PtrToBoxNm( pTableNd ? &pTableNd->GetTable() : nullptr );
     }
@@ -1255,7 +1255,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             // create from internal (for CORE) the external
                             // (for UI) formula
                             const SwTableNode* pTableNd = pTextNd->FindTableNode();
-                            if( pTableNd )        // steht in einer Tabelle
+                            if( pTableNd )        // is in a table
                                 const_cast<SwTableField*>(static_cast<const SwTableField*>(pField))->PtrToBoxNm( &pTableNd->GetTable() );
                         }
                     }

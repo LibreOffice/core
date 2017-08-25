@@ -2188,7 +2188,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
             }
             else
             {
-                // Einfuegen
+                // insert
                 SwDDEField aSwDDEField( pDDETyp );
                 rWrtShell.Insert( aSwDDEField );
             }

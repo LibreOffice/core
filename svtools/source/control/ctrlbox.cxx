@@ -429,7 +429,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     aSize.Width() -= 6;
     aSize.Height() = aTxtSize.Height();
 
-    // SourceUnit nach Twips
+    // SourceUnit to Twips
     if ( eSourceUnit == FUNIT_POINT )
     {
         nLine1      /= 5;
@@ -437,7 +437,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         nDistance   /= 5;
     }
 
-    // Linien malen
+    // Paint the lines
     aSize = aVirDev->PixelToLogic( aSize );
     long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
     sal_uInt32 n1 = nLine1;

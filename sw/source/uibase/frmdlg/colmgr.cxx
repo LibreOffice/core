@@ -55,7 +55,7 @@ sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
         nRet = GetCount() > 1 ? aFormatCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
-        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "column overindexed" );
         const SwColumns& rCols = aFormatCol.GetColumns();
         nRet = rCols[nPos].GetRight() + rCols[nPos + 1].GetLeft();
     }
@@ -68,7 +68,7 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
         aFormatCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
-        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "column overindexed" );
         SwColumns& rCols = aFormatCol.GetColumns();
         sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
         rCols[nPos].SetRight(nGutterWidth2);
@@ -90,13 +90,13 @@ void SwColMgr::SetLineHeightPercent(short nPercent)
 // column width
 sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 {
-    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
+    OSL_ENSURE(nIdx < GetCount(), "Column array overindexed.");
     return aFormatCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
 void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 {
-    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
+    OSL_ENSURE(nIdx < GetCount(), "Column array overindexed.");
     aFormatCol.GetColumns()[nIdx].SetWishWidth(nWd);
 
 }

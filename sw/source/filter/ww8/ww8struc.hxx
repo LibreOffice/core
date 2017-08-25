@@ -216,7 +216,7 @@ static_assert(sizeof (WW8_FFN_BASE) == 6, "this has to match the msword size");
 */
 struct WW8_FFN : public WW8_FFN_BASE
 {
-    // ab Ver8 als Unicode
+    // from Ver8 on as Unicode
     OUString sFontname;// 0x6 or 0x40 resp. from Ver8 on zero terminated string that
                                         // records name of font.
                                         // Maximal size of szFfn is 65 characters.

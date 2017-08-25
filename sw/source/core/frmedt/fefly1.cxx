@@ -237,7 +237,7 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
     SwViewShellImp *pImpl = Imp();
     if( GetWin() )
     {
-        OSL_ENSURE( rFrame.IsFlyFrame(), "SelectFlyFrame will einen Fly" );
+        OSL_ENSURE( rFrame.IsFlyFrame(), "SelectFlyFrame wants a Fly" );
 
        // nothing to be done if the Fly already was selected
         if (GetSelectedFlyFrame() == &rFrame)

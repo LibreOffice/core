@@ -1715,7 +1715,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
     {
         const SwLayoutFrame *pTmpLeaf = rpEnd;
         pTmpLeaf = pTmpLeaf->GetPrevLayoutLeaf();
-        while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->Frame()) < nEX )//erstmal die Zeile ueberspr.
+        while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->Frame()) < nEX ) // skip the line for now
             pTmpLeaf = pTmpLeaf->GetPrevLayoutLeaf();
         while ( pTmpLeaf && aRectFnSet.GetLeft(pTmpLeaf->Frame()) > nEX )
             pTmpLeaf = pTmpLeaf->GetPrevLayoutLeaf();

@@ -59,7 +59,7 @@ SW_DLLPUBLIC void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
  * Collects the uppermost or lowermost Lines of a Box from a Line in an array.
  * We also store their positions.
  *
- * @see implementation in im ndtbl.cxx
+ * @see implementation in ndtbl.cxx
  */
 class SwCollectTableLineBoxes
 {

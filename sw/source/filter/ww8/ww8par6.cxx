@@ -1430,7 +1430,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
 
     for( int i = 0; i < 4; ++i )
     {
-        // ungueltige Borders ausfiltern
+        // filter out the invalid borders
         const WW8_BRCVer9& rB = pbrc[ aIdArr[ i ].first ];
         if( !rB.isNil() && rB.brcType() )
         {
