@@ -659,7 +659,7 @@ sub replace_setup_variables
     my $updatechannel = "";
     if ( $ENV{'UPDATE_CONFIG'} && $ENV{'UPDATE_CONFIG'} ne "")
     {
-        open(CONFIG, $ENV{'UPDATE_CONFIG'});
+        open(CONFIG, glob($ENV{'UPDATE_CONFIG'}));
         while (<CONFIG>)
         {
             chomp;
