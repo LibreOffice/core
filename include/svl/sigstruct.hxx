@@ -114,6 +114,9 @@ struct SignatureInformation
     /// For PDF: the byte range doesn't cover the whole document.
     bool bPartialDocumentSignature;
 
+    /// The certificate owner (aka subject).
+    OUString ouSubject;
+
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
