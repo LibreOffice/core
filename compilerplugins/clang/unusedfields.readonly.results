@@ -80,7 +80,7 @@ connectivity/source/drivers/evoab2/EApi.h:130
     (anonymous) code char *
 connectivity/source/drivers/evoab2/EApi.h:131
     (anonymous) country char *
-connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.hxx:85
+connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.hxx:83
     connectivity::mozab::ProfileAccess m_ProductProfileList class connectivity::mozab::ProductStruct [4]
 connectivity/source/inc/dbase/DIndexIter.hxx:36
     connectivity::dbase::OIndexIterator m_pOperator file::OBoolOperator *
@@ -108,8 +108,6 @@ connectivity/source/inc/OTypeInfo.hxx:36
     connectivity::OTypeInfo nMaximumScale sal_Int16
 connectivity/source/inc/writer/WTable.hxx:70
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-connectivity/source/inc/writer/WTable.hxx:71
-    connectivity::writer::OWriterTable m_nStartRow sal_Int32
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:34
     Mapping m_from uno::Environment
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:35
@@ -176,7 +174,7 @@ cui/source/inc/autocdlg.hxx:229
     StringChangeList aNewEntries DoubleStringArray
 cui/source/inc/autocdlg.hxx:230
     StringChangeList aDeletedEntries DoubleStringArray
-cui/source/inc/cuicharmap.hxx:83
+cui/source/inc/cuicharmap.hxx:86
     SvxCharacterMap m_pFavCharView VclPtr<class SvxCharView> [16]
 cui/source/inc/numpages.hxx:167
     SvxNumPickTabPage aNumSettingsArrays SvxNumSettingsArr_Impl [16]
@@ -190,11 +188,11 @@ cui/source/options/personalization.hxx:85
     SelectPersonaDialog m_vResultList VclPtr<class PushButton> [9]
 cui/source/options/personalization.hxx:86
     SelectPersonaDialog m_vSearchSuggestions VclPtr<class PushButton> [6]
-dbaccess/source/core/api/RowSetBase.hxx:99
+dbaccess/source/core/api/RowSetBase.hxx:98
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
 dbaccess/source/core/dataaccess/documentcontainer.cxx:65
     dbaccess::LocalNameApproval m_aErrors ::connectivity::SQLError
-dbaccess/source/core/inc/ContentHelper.hxx:111
+dbaccess/source/core/inc/ContentHelper.hxx:110
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
 dbaccess/source/ui/inc/charsetlistbox.hxx:42
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
@@ -224,8 +222,6 @@ extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
 filter/source/graphicfilter/eps/eps.cxx:113
     PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
-filter/source/graphicfilter/icgm/cgm.hxx:138
-    CGM mpGDIMetaFile class GDIMetaFile *
 filter/source/graphicfilter/icgm/chart.hxx:44
     DataNode nBoxX1 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:45
@@ -238,11 +234,7 @@ filter/source/graphicfilter/idxf/dxfreprd.hxx:76
     DXFRepresentation aPalette class DXFPalette
 filter/source/graphicfilter/itga/itga.cxx:51
     TGAFileFooter nSignature sal_uInt32 [4]
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
-    XMLFilterListBox m_aEnsureResLocale class EnsureResLocale
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
-    XMLFilterSettingsDialog maEnsureResLocale class EnsureResLocale
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:153
+filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:143
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:81
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
@@ -272,13 +264,13 @@ include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/brushitem.hxx:52
     SvxBrushItem maSecOptions class SvtSecurityOptions
-include/filter/msfilter/svdfppt.hxx:691
+include/filter/msfilter/svdfppt.hxx:690
     PPTExtParaSheet aExtParaLevel struct PPTExtParaLevel [5]
-include/filter/msfilter/svdfppt.hxx:865
+include/filter/msfilter/svdfppt.hxx:864
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:866
+include/filter/msfilter/svdfppt.hxx:865
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:867
+include/filter/msfilter/svdfppt.hxx:866
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -298,8 +290,6 @@ include/registry/refltype.hxx:69
     RTUik m_Data5 sal_uInt32
 include/sfx2/charmapcontrol.hxx:43
     SfxCharmapCtrl m_pFavCharView VclPtr<class SvxCharView> [16]
-include/sfx2/charwin.hxx:52
-    SvxCharView maInsertCharHdl Link<class SvxCharView *, void>
 include/sfx2/msg.hxx:105
     SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:106
@@ -338,21 +328,21 @@ include/vcl/filter/pdfdocument.hxx:173
     vcl::filter::PDFNameElement m_nLength sal_uInt64
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/pdfwriter.hxx:550
+include/vcl/pdfwriter.hxx:549
     vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
-include/vcl/pdfwriter.hxx:552
+include/vcl/pdfwriter.hxx:551
     vcl::PDFWriter::PDFSignContext m_nDerEncoded sal_Int32
-include/vcl/pdfwriter.hxx:554
+include/vcl/pdfwriter.hxx:553
     vcl::PDFWriter::PDFSignContext m_pByteRange1 void *
-include/vcl/pdfwriter.hxx:556
+include/vcl/pdfwriter.hxx:555
     vcl::PDFWriter::PDFSignContext m_nByteRange1 sal_Int32
-include/vcl/pdfwriter.hxx:558
+include/vcl/pdfwriter.hxx:557
     vcl::PDFWriter::PDFSignContext m_pByteRange2 void *
-include/vcl/pdfwriter.hxx:560
+include/vcl/pdfwriter.hxx:559
     vcl::PDFWriter::PDFSignContext m_nByteRange2 sal_Int32
-include/vcl/pdfwriter.hxx:561
+include/vcl/pdfwriter.hxx:560
     vcl::PDFWriter::PDFSignContext m_aSignTSA class rtl::OUString
-include/vcl/pdfwriter.hxx:562
+include/vcl/pdfwriter.hxx:561
     vcl::PDFWriter::PDFSignContext m_aSignPassword class rtl::OUString
 include/xmloff/nmspmap.hxx:70
     SvXMLNamespaceMap sEmpty const class rtl::OUString
@@ -428,9 +418,9 @@ sal/rtl/uuid.cxx:64
     UUID clock_seq_low sal_uInt8
 sal/rtl/uuid.cxx:65
     UUID node sal_uInt8 [6]
-sc/inc/attrib.hxx:216
+sc/inc/attrib.hxx:214
     ScTableListItem nCount sal_uInt16
-sc/inc/clipparam.hxx:41
+sc/inc/clipparam.hxx:44
     ScClipParam maProtectedChartRangesVector ScRangeListVector
 sc/inc/compare.hxx:44
     sc::Compare maCells struct sc::Compare::Cell [2]
@@ -440,6 +430,8 @@ sc/inc/compiler.hxx:128
     ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo3/sc/inc/compiler.hxx:125:9)
 sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) pMat class ScMatrix *
+sc/inc/datamapper.hxx:65
+    sc::ExternalDataSource mnUpdateFrequency double
 sc/inc/dpresfilter.hxx:64
     ScDPResultTree::DimensionNode maChildMembersValueNames ScDPResultTree::MembersType
 sc/inc/dpresfilter.hxx:65
@@ -450,14 +442,12 @@ sc/inc/formulagroup.hxx:42
     sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
-sc/source/core/inc/interpre.hxx:89
+sc/inc/reordermap.hxx:21
+    sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
+sc/source/core/inc/interpre.hxx:104
     ScTokenStack pPointer const formula::FormulaToken *[512]
 sc/source/filter/inc/autofilterbuffer.hxx:178
     oox::xls::FilterColumn mxSettings std::shared_ptr<FilterSettingsBase>
-sc/source/filter/inc/biffcodec.hxx:71
-    oox::xls::BiffDecoder_XOR mnKey sal_uInt16
-sc/source/filter/inc/biffcodec.hxx:72
-    oox::xls::BiffDecoder_XOR mnHash sal_uInt16
 sc/source/filter/inc/htmlpars.hxx:534
     ScHTMLTable maCumSizes ScHTMLTable::ScSizeVec [2]
 sc/source/filter/inc/qproform.hxx:57
@@ -470,70 +460,100 @@ sc/source/filter/inc/stylesbuffer.hxx:677
     oox::xls::Dxf mxProtection std::shared_ptr<Protection>
 sc/source/filter/inc/xltracer.hxx:82
     XclTracer mbEnabled _Bool
-sc/source/filter/xml/xmlimprt.hxx:836
-    ScXMLImport pBodyElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:837
-    ScXMLImport pContentValidationsElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:839
-    ScXMLImport pContentValidationAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:841
-    ScXMLImport pContentValidationHelpMessageAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:842
-    ScXMLImport pContentValidationErrorMessageAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:843
-    ScXMLImport pContentValidationErrorMacroAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:855
-    ScXMLImport pLabelRangesElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:856
-    ScXMLImport pLabelRangeAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:858
-    ScXMLImport pTableProtectionElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:860
-    ScXMLImport pTableColsElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:861
-    ScXMLImport pTableScenarioAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:862
+sc/source/filter/xml/xmlimprt.hxx:604
+    ScXMLImport pCondFormatsTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:605
+    ScXMLImport pCondFormatTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:606
+    ScXMLImport pCondFormatAttrMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:607
+    ScXMLImport pCondDateAttrMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:608
+    ScXMLImport pConditionAttrMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:609
+    ScXMLImport pColorScaleTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:610
+    ScXMLImport pColorScaleEntryAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:611
+    ScXMLImport pDataBarTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:612
+    ScXMLImport pDataBarAttrMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:613
+    ScXMLImport pFormattingEntryAttrMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:616
     ScXMLImport pTableAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:863
-    ScXMLImport pTableColAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:873
-    ScXMLImport pNamedExpressionsElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:874
-    ScXMLImport pNamedRangeAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:875
-    ScXMLImport pNamedExpressionAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:876
-    ScXMLImport pDatabaseRangesElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:877
-    ScXMLImport pDatabaseRangeElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:878
-    ScXMLImport pDatabaseRangeAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:888
-    ScXMLImport pSortAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:890
-    ScXMLImport pDatabaseRangeSubTotalRulesElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:891
-    ScXMLImport pDatabaseRangeSubTotalRulesAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:892
-    ScXMLImport pSubTotalRulesSortGroupsAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:893
-    ScXMLImport pSubTotalRulesSubTotalRuleElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:894
-    ScXMLImport pSubTotalRulesSubTotalRuleAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:895
-    ScXMLImport pSubTotalRuleSubTotalFieldAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:911
-    ScXMLImport pConsolidationAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:917
-    ScXMLImport pDataStreamAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:622
+    ScXMLImport pDetectiveElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:623
+    ScXMLImport pDetectiveHighlightedAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:624
+    ScXMLImport pDetectiveOperationAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:625
+    ScXMLImport pTableCellRangeSourceAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:626
+    ScXMLImport pDatabaseRangeSourceSQLAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:627
+    ScXMLImport pDatabaseRangeSourceTableAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:628
+    ScXMLImport pDatabaseRangeSourceQueryAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:629
+    ScXMLImport pFilterElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:630
+    ScXMLImport pFilterAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:631
+    ScXMLImport pFilterConditionElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:632
+    ScXMLImport pFilterConditionAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:633
+    ScXMLImport pFilterSetItemAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:634
+    ScXMLImport pSortElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:635
+    ScXMLImport pSortSortByAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:636
+    ScXMLImport pDataPilotTablesElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:637
+    ScXMLImport pDataPilotTableAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:638
+    ScXMLImport pDataPilotTableElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:639
+    ScXMLImport pDataPilotTableSourceServiceAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:640
+    ScXMLImport pDataPilotTableSourceCellRangeElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:641
+    ScXMLImport pDataPilotTableSourceCellRangeAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:642
+    ScXMLImport pDataPilotFieldAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:643
+    ScXMLImport pDataPilotFieldElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:644
+    ScXMLImport pDataPilotLevelAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:645
+    ScXMLImport pDataPilotLevelElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:646
+    ScXMLImport pDataPilotSubTotalsElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:647
+    ScXMLImport pDataPilotSubTotalAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:648
+    ScXMLImport pDataPilotMembersElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:649
+    ScXMLImport pDataPilotMemberAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:650
+    ScXMLImport pCellTextParaElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:651
+    ScXMLImport pCellTextSpanElemTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:652
+    ScXMLImport pCellTextSpanAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:653
+    ScXMLImport pCellTextURLAttrTokenMap class SvXMLTokenMap *
+sc/source/filter/xml/xmlimprt.hxx:654
+    ScXMLImport pCellTextSAttrTokenMap class SvXMLTokenMap *
 sc/source/ui/inc/csvruler.hxx:35
     ScCsvRuler maBackgrDev ScopedVclPtrInstance<class VirtualDevice>
 sc/source/ui/inc/csvruler.hxx:36
     ScCsvRuler maRulerDev ScopedVclPtrInstance<class VirtualDevice>
-sc/source/ui/inc/dataprovider.hxx:47
-    sc::ExternalDataMapper maDocument class ScDocument
-sc/source/ui/inc/dataprovider.hxx:149
-    sc::CSVDataProvider mbImportUnderway _Bool
+sc/source/ui/inc/dataproviderdlg.hxx:50
+    sc::DataProviderDlg mpDataSource std::shared_ptr<ExternalDataSource>
 scripting/source/stringresource/stringresource.hxx:74
     stringresource::LocaleItem m_aIdToIndexMap stringresource::IdToIndexMap
 sd/inc/sdmod.hxx:117
@@ -570,15 +590,15 @@ sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/doc/sfxbasemodel.cxx:189
     IMPL_SfxBaseModel_DataContainer m_xStarBasicAccess Reference<script::XStarBasicAccess>
-sfx2/source/inc/appdata.hxx:103
+sfx2/source/inc/appdata.hxx:99
     SfxAppData_Impl nDocModalMode sal_uInt16
 slideshow/source/engine/slideshowimpl.cxx:154
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
-sot/source/sdstor/ucbstorage.cxx:421
+sot/source/sdstor/ucbstorage.cxx:416
     UCBStorageStream_Impl m_aKey class rtl::OString
-starmath/inc/smmod.hxx:70
+starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
-starmath/source/view.cxx:865
+starmath/source/view.cxx:856
     SmViewShell_Impl aOpts class SvtMiscOptions
 svl/source/crypto/cryptosign.cxx:120
     (anonymous namespace)::(anonymous) extnID SECItem
@@ -586,12 +606,14 @@ svl/source/crypto/cryptosign.cxx:121
     (anonymous namespace)::(anonymous) critical SECItem
 svl/source/crypto/cryptosign.cxx:122
     (anonymous namespace)::(anonymous) extnValue SECItem
-svl/source/crypto/cryptosign.cxx:277
+svl/source/crypto/cryptosign.cxx:280
     (anonymous namespace)::(anonymous) statusString SECItem
-svl/source/crypto/cryptosign.cxx:278
+svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
-svl/source/crypto/cryptosign.cxx:297
+svl/source/crypto/cryptosign.cxx:300
     (anonymous namespace)::(anonymous) timeStampToken SECItem
+svl/source/misc/inettype.cxx:45
+    (anonymous namespace)::TypeIDMapEntry m_aPresentation class rtl::OUString
 svl/source/misc/strmadpt.cxx:55
     SvDataPipe_Impl::Page m_aBuffer sal_Int8 [1]
 svl/source/uno/pathservice.cxx:36
@@ -612,8 +634,6 @@ svtools/source/dialogs/insdlg.cxx:52
     OleObjectDescriptor dwFullUserTypeName sal_uInt32
 svtools/source/dialogs/insdlg.cxx:53
     OleObjectDescriptor dwSrcOfCopy sal_uInt32
-svtools/source/inc/svimpbox.hxx:121
-    SvImpLBox m_aNodeAndEntryImages class Image [5]
 svtools/source/table/gridtablerenderer.cxx:70
     svt::table::CachedSortIndicator m_sortAscending class BitmapEx
 svtools/source/table/gridtablerenderer.cxx:71
@@ -636,18 +656,14 @@ sw/inc/acmplwrd.hxx:43
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/calc.hxx:162
     SwCalc m_aSysLocale class SvtSysLocale
-sw/inc/dbmgr.hxx:253
-    SwDBManager bMergeLock _Bool
-sw/inc/doc.hxx:365
-    SwDoc mbXMLExport _Bool
 sw/inc/hints.hxx:195
     SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:142
     SwReader pStg tools::SvRef<SotStorage>
-sw/inc/shellio.hxx:489
-    SwWriter pStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:73
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
+sw/source/core/access/accfrmobjmap.hxx:100
+    SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/doc/swstylemanager.cxx:59
     SwStyleManager aAutoCharPool class StylePool
 sw/source/core/doc/swstylemanager.cxx:60
@@ -659,31 +675,17 @@ sw/source/filter/inc/rtf.hxx:32
 sw/source/ui/dbui/dbinsdlg.cxx:117
     DB_Column::(anonymous) pText class rtl::OUString *
 sw/source/ui/dbui/dbinsdlg.cxx:119
-    DB_Column::(anonymous) nFormat sal_uLong
-sw/source/ui/dbui/mmoutputtypepage.cxx:101
-    SwSendMailDialog_Impl xConnectedMailService uno::Reference<mail::XMailService>
+    DB_Column::(anonymous) nFormat sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:103
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:105
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:107
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
-sw/source/uibase/inc/dbtree.hxx:33
-    SwDBTreeList sDefDBName class rtl::OUString
-sw/source/uibase/inc/fldmgr.hxx:99
-    SwFieldMgr pMacroItem const class SvxMacroItem *
-sw/source/uibase/inc/numfmtlb.hxx:34
-    NumFormatListBox pVw class SwView *
-sw/source/uibase/inc/numfmtlb.hxx:35
-    NumFormatListBox pOwnFormatter class SvNumberFormatter *
-sw/source/uibase/inc/swuipardlg.hxx:35
-    SwParaDlg m_nParaBckGrnd sal_uInt16
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-sw/source/uibase/sidebar/ThemePanel.cxx:55
-    (anonymous namespace)::ColorVariable maColor class Color
 toolkit/source/awt/stylesettings.cxx:90
     toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
 ucb/source/ucp/gio/gio_mount.hxx:46

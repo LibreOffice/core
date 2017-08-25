@@ -177,7 +177,6 @@ SfxItemPool::SfxItemPool
 {
     pImpl->eDefMetric = MapUnit::MapTwip;
     pImpl->nInitRefCount = 1;
-    pImpl->bInSetItem = false;
 
     if ( pDefaults )
         SetDefaults(pDefaults);
@@ -203,7 +202,6 @@ SfxItemPool::SfxItemPool
 {
     pImpl->eDefMetric = rPool.pImpl->eDefMetric;
     pImpl->nInitRefCount = 1;
-    pImpl->bInSetItem = false;
 
     // Take over static Defaults
     if ( bCloneStaticDefaults )

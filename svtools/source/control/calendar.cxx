@@ -71,7 +71,6 @@ void Calendar::ImplInit( WinBits nWinStyle )
 {
     mpSelectTable           = new IntDateSet;
     mpOldSelectTable        = nullptr;
-    mpRestoreSelectTable    = nullptr;
     mpStandardColor         = nullptr;
     mpSaturdayColor         = nullptr;
     mpSundayColor           = nullptr;
@@ -83,13 +82,11 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbFormat                = true;
     mbDrag                  = false;
     mbSelection             = false;
-    mbUnSel                 = false;
     mbMenuDown              = false;
     mbSpinDown              = false;
     mbPrevIn                = false;
     mbNextIn                = false;
     mbTravelSelect          = false;
-    mbSelLeft               = false;
     mbAllSel                = false;
     mbDropPos               = false;
 
@@ -173,7 +170,6 @@ void Calendar::dispose()
 
     delete mpSelectTable;
     delete mpOldSelectTable;
-    delete mpRestoreSelectTable;
     Control::dispose();
 }
 
@@ -859,10 +855,6 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
         --aTempDate;
 
-    if ( aTempDate < maCurDate )
-        mbSelLeft = true;
-    else
-        mbSelLeft = false;
     if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
         aTempDate = maOldCurDate;
     if ( !bMove )
@@ -1009,7 +1001,6 @@ void Calendar::ImplEndTracking( bool bCancel )
 
     mbDrag              = false;
     mbSelection         = false;
-    mbUnSel             = false;
     mbSpinDown          = false;
     mbPrevIn            = false;
     mbNextIn            = false;
@@ -1060,8 +1051,6 @@ void Calendar::ImplEndTracking( bool bCancel )
 
         delete mpOldSelectTable;
         mpOldSelectTable = nullptr;
-        delete mpRestoreSelectTable;
-        mpRestoreSelectTable = nullptr;
     }
 }
 
