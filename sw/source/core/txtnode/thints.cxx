@@ -76,6 +76,9 @@
 #include <map>
 #include <memory>
 
+#include <docsh.hxx>
+#include <rdfhelper.hxx>
+
 #ifdef DBG_UTIL
 #define CHECK           Check(true);
 #define CHECK_NOTMERGED Check(false);
@@ -1191,7 +1194,22 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
 
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
+        {
+            auto pTextMeta = static_txtattr_cast<SwTextMeta*>(pAttr);
+            SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(pTextMeta->GetAttr()) );
+            if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
+            {
+                if (SwDocShell* pDocSh = pDoc->GetDocShell())
+                {
+                    static const OUString metaNS("urn:bails");
+                    const css::uno::Reference<css::rdf::XResource> xSubject(pMeta->MakeUnoObject(), uno::UNO_QUERY);
+                    uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
+                    SwRDFHelper::clearStatements(xModel, metaNS, xSubject);
+                }
+            }
+
             static_txtattr_cast<SwTextMeta*>(pAttr)->ChgTextNode(nullptr);
+        }
             break;
 
         default:
