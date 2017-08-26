@@ -374,6 +374,9 @@ public:
     /// Sign the paragraph at the cursor.
     void SignParagraph(SwPaM* pPaM);
 
+    /// Validate paragraph signatures, if any, at the cursor.
+    void ValidateParagraphSignatures(bool updateDontRemove);
+
     void Insert2(SwField const &, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
