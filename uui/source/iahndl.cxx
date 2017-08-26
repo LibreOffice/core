@@ -975,7 +975,7 @@ executeMessageBox(
 
         if (pDefaultParent)
         {
-            // need to 'Show' to have the following tasks do someting, does
+            // need to 'Show' to have the following tasks do something, does
             // not work without and may even stumble on nullptrs/errors
             xBox->Show();
 
