@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_targets,sal,\
     Executable_terminateprocess \
     Executable_setgetenv \
     Executable_signal \
+    Executable_monitor \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\

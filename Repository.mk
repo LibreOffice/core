@@ -90,6 +90,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     terminateprocess \
     setgetenv \
     signal \
+    monitor \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
