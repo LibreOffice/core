@@ -50,6 +50,10 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
     {
         GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
     }
+
+    // Update the paragraph signatures.
+    // Since this ctor is called only on creating/loading the doc, we validate once only.
+    ValidateParagraphSignatures(true);
 }
 
 SwEditShell::~SwEditShell() // USED
