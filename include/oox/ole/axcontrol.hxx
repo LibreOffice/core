@@ -616,6 +616,7 @@ public:
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm ) override;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const override;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv ) override;
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      ///< Binary picture stream.

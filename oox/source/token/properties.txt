@@ -208,6 +208,7 @@ GraphicSize
 GraphicURL
 GridColor
 GroupInfo
+GroupName
 HScroll
 Handles
 HasAutoShowInfo
