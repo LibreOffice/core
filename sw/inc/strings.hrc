@@ -1337,6 +1337,13 @@
 #define STR_MENU_UP                             NC_("STR_MENU_UP", "~Upwards")
 #define STR_MENU_DOWN                           NC_("STR_MENU_DOWN", "Do~wnwards")
 
+/*--------------------------------------------------------------------
+    Description: Paragraph Signature
+ --------------------------------------------------------------------*/
+#define STR_VALID                               NC_("STR_VALID", "Valid")
+#define STR_INVALID                             NC_("STR_INVALID", "Invalid")
+#define STR_SIGNED_BY                           NC_("STR_SIGNED_BY", "Signed-by")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

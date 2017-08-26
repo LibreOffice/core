@@ -32,12 +32,18 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/rdf/XMetadatable.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/string.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -64,7 +70,11 @@
 #include <sfx2/watermarkitem.hxx>
 #include <DocumentDrawModelManager.hxx>
 
+#include <unoparagraph.hxx>
+#include <unotextrange.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <modeltoviewhelper.hxx>
+#include <strings.hrc>
 
 #define WATERMARK_NAME "PowerPlusWaterMarkObject"
 
@@ -169,6 +179,103 @@ uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XTex
     return uno::Reference<drawing::XShape>();
 }
 
+/// Extract the text of the paragraph without any of the fields.
+/// TODO: Consider moving to SwTextNode, or extend ModelToViewHelper.
+OString lcl_getParagraphBodyText(const uno::Reference<text::XTextContent>& xText)
+{
+    OUStringBuffer strBuf;
+    uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xText, uno::UNO_QUERY);
+    if (!xTextPortionEnumerationAccess.is())
+        return OString();
+
+    uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+    while (xTextPortions->hasMoreElements())
+    {
+        uno::Any elem = xTextPortions->nextElement();
+
+        //TODO: Consider including hidden and conditional texts/portions.
+        OUString aTextPortionType;
+        uno::Reference<beans::XPropertySet> xPropertySet(elem, uno::UNO_QUERY);
+        xPropertySet->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+        if (aTextPortionType == "Text")
+        {
+            uno::Reference<text::XTextRange> xTextRange(elem, uno::UNO_QUERY);
+            if (xTextRange.is())
+                strBuf.append(xTextRange->getString());
+        }
+    }
+
+    // Cleanup the dummy characters added by fields (which we exclude).
+    comphelper::string::remove(strBuf, CH_TXT_ATR_INPUTFIELDSTART);
+    comphelper::string::remove(strBuf, CH_TXT_ATR_INPUTFIELDEND);
+    comphelper::string::remove(strBuf, CH_TXTATR_BREAKWORD);
+
+    return strBuf.makeStringAndClear().trim().toUtf8();
+}
+
+/// Validate and return validation result and signature field display text.
+std::pair<bool, OUString>
+lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
+                                    const uno::Reference<css::text::XTextField>& xField,
+                                    const OString& utf8Text)
+{
+    static const OUString metaNS("urn:bails");
+
+    OUString msg = "Invalid Signature";
+    bool valid = false;
+
+    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, metaNS, xSubject);
+    const auto it = aStatements.find("loext:signature:signature");
+    if (it != aStatements.end())
+    {
+        const sal_Char* pData = utf8Text.getStr();
+        const std::vector<unsigned char> data(pData, pData + utf8Text.getLength());
+
+        OString encSignature;
+        if (it->second.convertToString(&encSignature, RTL_TEXTENCODING_UTF8, 0))
+        {
+            const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(encSignature));
+            SignatureInformation aInfo(0);
+            valid = svl::crypto::Signing::Verify(data, true, sig, aInfo);
+            valid = valid && aInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+
+            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", " + aInfo.ouDateTime + ": ";
+            if (valid)
+                msg += SwResId(STR_VALID);
+            else
+                msg += SwResId(STR_INVALID);
+        }
+    }
+
+    return std::make_pair(valid, msg);
+}
+
+/// Updates the signature field text if changed and returns true only iff updated.
+bool lcl_UpdateParagraphSignatureField(const uno::Reference<frame::XModel>& xModel,
+                                       const uno::Reference<css::text::XTextField>& xField,
+                                       const OString& utf8Text)
+{
+    const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text);
+    uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
+    const OUString curText = xText->getString();
+    if (curText != res.second)
+    {
+        xText->setString(res.second);
+        return true;
+    }
+
+    return false;
+}
+
+void lcl_RemoveParagraphSignatureField(const uno::Reference<css::text::XTextField>& xField)
+{
+    uno::Reference<css::text::XTextContent> xFieldTextContent(xField, uno::UNO_QUERY);
+    uno::Reference<css::text::XTextRange> xParagraph(xFieldTextContent->getAnchor());
+    uno::Reference<css::text::XText> xParagraphText(xParagraph->getText(), uno::UNO_QUERY);
+    xParagraphText->removeTextContent(xFieldTextContent);
+}
+
 } // anonymous namespace
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
@@ -216,7 +323,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
-        OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
+        const OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
         if (bHeaderIsNeeded || bWatermarkIsNeeded || bHadWatermark)
@@ -572,67 +679,119 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
 {
     if (!pPaM)
         return;
-
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)
         return;
-    SwWrtShell* pCurShell = pDocShell->GetWrtShell();
-    if (!pCurShell)
+    const SwPosition* pPosStart = pPaM->Start();
+    if (!pPosStart)
+        return;
+    SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
+    if (!pNode)
         return;
 
+    // 1. Get the text (without fields).
+    const uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    const OString utf8Text = lcl_getParagraphBodyText(xParent);
+    if (utf8Text.isEmpty())
+        return;
+
+    // 2. Get certificate and SignatureInformation (needed to show signer name).
+    //FIXME: Temporary until the Paragraph Signing Dialog is available.
+    uno::Reference<uno::XComponentContext> xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
+    if (!aCertificates.hasElements())
+        return;
+
+    uno::Reference<security::XCertificate> xCert = aCertificates[0];
+    if (!xCert.is())
+        return;
+
+    // 3. Sign it.
+    svl::crypto::Signing signing(xCert);
+    signing.AddDataRange(utf8Text.getStr(), utf8Text.getLength());
+    OStringBuffer sigBuf;
+    if (!signing.Sign(sigBuf))
+        return;
+
+    const OString signature = sigBuf.makeStringAndClear();
+
+    // 4. Add metadata
+    static const OUString metaNS("urn:bails");
+    static const OUString metaFile("bails.rdf");
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+    uno::Reference<css::text::XTextField> xField(xMultiServiceFactory->createInstance("com.sun.star.text.textfield.MetadataField"), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xContent->attach(xParent->getAnchor()->getEnd());
+
+    uno::Reference<rdf::XResource> xRes(xField, uno::UNO_QUERY);
+    const OUString name = "loext:signature:signature";
+    SwRDFHelper::addStatement(xModel, metaNS, metaFile, xRes, name, OStringToOUString(signature, RTL_TEXTENCODING_UTF8, 0));
+
+    const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text);
+    uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
+    xText->setString(res.second);
+}
+
+void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
+{
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell || m_bIsValidatingParagraphSignature)
+        return;
+
+    SwPaM* pPaM = GetCursor();
     const SwPosition* pPosStart = pPaM->Start();
     SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
-    if (pNode)
+    if (!pNode)
+        return;
+
+    const uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+
+    // 1. Get the text (without fields).
+    const OString utf8Text = lcl_getParagraphBodyText(xParent);
+    if (utf8Text.isEmpty())
+        return;
+
+    // 2. For each signature field, update it.
+    uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParent, uno::UNO_QUERY);
+    if (!xTextPortionEnumerationAccess.is())
+        return;
+
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+    m_bIsValidatingParagraphSignature = true;
+    comphelper::ScopeGuard const g([this] () {
+            m_bIsValidatingParagraphSignature = false;
+        });
+
+    while (xTextPortions->hasMoreElements())
     {
-        // 1. Get the text (without fields).
-        const OUString text = pNode->GetText();
-        if (text.isEmpty())
-            return;
+        uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+        OUString aTextPortionType;
+        xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+        if (aTextPortionType != UNO_NAME_TEXT_FIELD)
+            continue;
 
-        // 2. Get certificate and SignatureInformation (needed to show signer name).
-        //FIXME: Temporary until the Paragraph Signing Dialog is available.
-        uno::Reference<uno::XComponentContext> xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
-        uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
-        uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
-        uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
-        uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
-        if (!aCertificates.hasElements())
-            return;
+        uno::Reference<lang::XServiceInfo> xTextField;
+        xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xTextField;
+        if (!xTextField->supportsService("com.sun.star.text.textfield.MetadataField"))
+            continue;
 
-        SignatureInformation aInfo(0);
-        uno::Reference<security::XCertificate> xCert = aCertificates[0];
-        if (!xCert.is())
-            return;
+        uno::Reference<text::XTextField> xContent(xTextField, uno::UNO_QUERY);
 
-        // 3. Sign it.
-        svl::crypto::Signing signing(xCert);
-        signing.AddDataRange(text.getStr(), text.getLength());
-        OStringBuffer sigBuf;
-        if (!signing.Sign(sigBuf))
-            return;
+        const bool isUndoEnabled = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+        if (updateDontRemove)
+            lcl_UpdateParagraphSignatureField(xModel, xContent, utf8Text);
+        else if (!lcl_MakeParagraphSignatureFieldText(xModel, xContent, utf8Text).first)
+            lcl_RemoveParagraphSignatureField(xContent);
 
-        const OString signature = sigBuf.makeStringAndClear();
-        const auto pData = reinterpret_cast<const unsigned char*>(text.getStr());
-        const std::vector<unsigned char> data(pData, pData + text.getLength());
-        const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(signature));
-        if (!svl::crypto::Signing::Verify(data, true, sig, aInfo))
-            return;
-
-        // 4. Add metadata
-        static const OUString metaNS("urn:bails");
-        static const OUString metaFile("bails.rdf");
-
-        std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements(metaNS, *pNode);
-        OUString name = "loext:signature:index";
-        const OUString indexOld = aStatements[name];
-
-        // Update the index
-        const OUString index = OUString::number(indexOld.isEmpty() ? 1 : (indexOld.toInt32() + 1));
-        SwRDFHelper::updateTextNodeStatement(metaNS, metaFile, *pNode, name, indexOld, index);
-
-        // Add the signature
-        name = "loext:signature:signature" + index;
-        SwRDFHelper::addTextNodeStatement(metaNS, metaFile, *pNode, name, OStringToOUString(signature, RTL_TEXTENCODING_UTF8, 0));
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
     }
 }
 
