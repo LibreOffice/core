@@ -112,6 +112,8 @@ cmd/sc_insertspreadsheet.png cmd/sc_togglesheetgrid.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
 cmd/sc_showtrackedchanges.png cmd/sc_addwatch.png
 cmd/lc_showtrackedchanges.png cmd/lc_addwatch.png
+cmd/sc_tracechangemode.png cmd/sc_trackchanges.png
+cmd/lc_tracechangemode.png cmd/lc_trackchanges.png
 
 # Zoom
 cmd/lc_previewzoom.png cmd/lc_zoomprevious.png
@@ -556,10 +558,13 @@ cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
 
 # calc menu entries
+cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
+cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
+cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
 
 # Shapes
