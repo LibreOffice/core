@@ -1540,7 +1540,7 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // accelerator
     aWriter.skipProperty(); // undefined
     aWriter.writeBoolProperty(true); // must be 1 for morph
-    if ( ( mnDisplayStyle == AX_DISPLAYSTYLE_CHECKBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_OPTBUTTON ) )
+    if ( mnDisplayStyle == AX_DISPLAYSTYLE_OPTBUTTON )
         aWriter.writeStringProperty( maGroupName );
     else
         aWriter.skipProperty(); //maGroupName
@@ -1552,7 +1552,16 @@ void AxMorphDataModelBase::convertProperties( PropertyMap& rPropMap, const Contr
 {
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
     rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
+    if ( mnDisplayStyle == AX_DISPLAYSTYLE_OPTBUTTON )
+        rPropMap.setProperty( PROP_GroupName, maGroupName );
     AxFontDataModel::convertProperties( rPropMap, rConv );
+}
+
+void AxMorphDataModelBase::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    if ( mnDisplayStyle == AX_DISPLAYSTYLE_OPTBUTTON )
+        rPropSet.getProperty( maGroupName, PROP_GroupName );
+    AxFontDataModel::convertFromProperties( rPropSet, rConv );
 }
 
 AxToggleButtonModel::AxToggleButtonModel()

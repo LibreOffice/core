@@ -1007,6 +1007,23 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkLayer, "watermark-layer.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(1), pObject->GetLayer().get());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_group.docx")
+{
+    // Optionbutton groups were not handled
+    // The two optionbutton should have the same group name
+    const OUString sGroupName = "GroupX";
+
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControlShape.is());
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sGroupName, getProperty<OUString>(xPropertySet, "GroupName"));
+
+    xControlShape.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControlShape.is());
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sGroupName, getProperty<OUString>(xPropertySet, "GroupName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
