@@ -250,6 +250,11 @@ private:
                long nEngineHeight, bool bWrapFields);
 
 public:
+    /**
+     * @param nNewScrX: X-Offset in the output device for the table
+     * @param nNewScrY: Y-Offset in the output device for the table
+     *
+     */
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                                     ScTableInfo& rTabInfo, ScDocument* pNewDoc,
                                     SCTAB nNewTab, long nNewScrX, long nNewScrY,
