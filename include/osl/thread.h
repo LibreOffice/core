@@ -66,6 +66,10 @@ typedef void* oslThreadKey;
     its void* parameter the value supplied by pThreadData.
     Once the OS-structures are initialized,the thread starts
     running.
+
+    @param pWorker      Thread worker function
+    @param pThreadData  Thread local data
+
     @return 0 if creation failed, otherwise a handle to the thread
 */
 SAL_DLLPUBLIC oslThread SAL_CALL osl_createThread(oslWorkerFunction pWorker, void* pThreadData);
@@ -75,12 +79,19 @@ SAL_DLLPUBLIC oslThread SAL_CALL osl_createThread(oslWorkerFunction pWorker, voi
     its void* parameter the value supplied by pThreadData.
     The thread will be created, but it won't start running.
     To wake-up the thread, use resume().
+
+    @param pWorker      Thread worker function
+    @param pThreadData  Thread local data
+
     @return 0 if creation failed, otherwise a handle to the thread
 */
 SAL_DLLPUBLIC oslThread SAL_CALL osl_createSuspendedThread(oslWorkerFunction pWorker, void* pThreadData);
 
 /** Get the identifier for the specified thread or if parameter
     Thread is NULL of the current active thread.
+
+    @param Thread       Handle to thread for the thread ID
+
     @return identifier of the thread
 */
 SAL_DLLPUBLIC oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread);
@@ -89,48 +100,67 @@ SAL_DLLPUBLIC oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thr
     If Thread is NULL, the function won't do anything.
     Note that we do not interfere with the actual running of
     the thread, we just free up the memory needed by the handle.
+
+    @param Thread       Handle to thread to release
 */
 SAL_DLLPUBLIC void SAL_CALL osl_destroyThread(oslThread Thread);
 
 /** Wake-up a thread that was suspended with suspend() or
     createSuspended(). The oslThread must be valid!
+
+    @param Thread       Handle to thread to resume
 */
 SAL_DLLPUBLIC void SAL_CALL osl_resumeThread(oslThread Thread);
 
 /** Suspend the execution of the thread. If you want the thread
     to continue, call resume(). The oslThread must be valid!
+
+    @param Thread       Handle to thread to suspend
 */
 SAL_DLLPUBLIC void SAL_CALL osl_suspendThread(oslThread Thread);
 
 /** Changes the threads priority.
     The oslThread must be valid!
+
+    @param Thread       Handle to thread to which to change priority
+    @param Priority     Thread priority
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setThreadPriority(oslThread Thread, oslThreadPriority Priority);
 
 /** Retrieves the threads priority.
     Returns oslThreadPriorityUnknown for invalid Thread-argument or
-    terminated thread. (I.e.: The oslThread might be invalid.)
+    terminated thread. (i.e. the oslThread might be invalid.)
+
+    @param Thread       Handle to thread for which the priority is retrieved
 */
 SAL_DLLPUBLIC oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread);
 
 /** Returns True if the thread was created and has not terminated yet.
     Note that according to this definition a "running" thread might be
     suspended! Also returns False is Thread is NULL.
+
+    @param Thread       Handle to thread
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
 
 /** Blocks the calling thread until Thread has terminated.
     Returns immediately if Thread is NULL.
+
+    @param Thread       Handle to thread to join
 */
 SAL_DLLPUBLIC void SAL_CALL osl_joinWithThread(oslThread Thread);
 
 /** Suspends the execution of the calling thread for at least the given
     time.
+
+    @param pDelay       Timeout value to wait
 */
 SAL_DLLPUBLIC void SAL_CALL osl_waitThread(const TimeValue* pDelay);
 
 /** The requested thread will get terminate the next time
     scheduleThread() is called.
+
+    @param Thread       Handle to thread to terminate
 */
 SAL_DLLPUBLIC void SAL_CALL osl_terminateThread(oslThread Thread);
 
@@ -160,6 +190,8 @@ SAL_DLLPUBLIC void SAL_CALL osl_yieldThread(void);
 
     @param name  the name of the thread; must not be null; on Linux, only the
     first 16 characters are used
+
+    @param name     Thread name
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setThreadName(char const * name);
 
