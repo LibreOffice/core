@@ -164,11 +164,13 @@ SAL_DLLPUBLIC void SAL_CALL osl_waitThread(const TimeValue* pDelay);
 */
 SAL_DLLPUBLIC void SAL_CALL osl_terminateThread(oslThread Thread);
 
-/** Offers the rest of the threads time-slice to the OS.
-    scheduleThread() should be called in the working loop
+/** Schedules in thread to wait till after time slice of specified
+    thread. scheduleThread() should be called in the working loop
     of the thread, so any other thread could also get the
     processor. Returns False if the thread should terminate, so
     the thread could free any allocated resources.
+
+    @param Thread       Handle to thread to schedule in after
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread);
 
