@@ -374,6 +374,9 @@ public:
     /// Sign the paragraph at the cursor.
     void SignParagraph(SwPaM* pPaM);
 
+    /// Validate paragraph signatures, if any, at the cursor.
+    void ValidateParagraphSignatures(bool updateDontRemove);
+
     void Insert2(SwField const &, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
@@ -969,6 +972,7 @@ private:
      * the existing nb-space will be removed. Bear this in mind if that problem
      * arises. */
     bool m_bNbspRunNext;    ///< NO-BREAK SPACE state flag passed to and maintained by SvxAutoCorrect::DoAutoCorrect()
+    bool m_bIsValidatingParagraphSignature; ///< Prevent nested calls of ValidateParagraphSignatures.
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const

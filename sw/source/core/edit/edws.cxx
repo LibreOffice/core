@@ -35,13 +35,16 @@
 
 // masqueraded copy constructor
 SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
-    : SwCursorShell( rEdSH, pWindow ),
-    m_bNbspRunNext(false)   // TODO: would copying that make sense? only if editing continues
+    : SwCursorShell( rEdSH, pWindow )
+    , m_bNbspRunNext(false)   // TODO: would copying that make sense? only if editing continues
+    , m_bIsValidatingParagraphSignature(false)
 {
 }
 
 SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
-    : SwCursorShell( rDoc, pWindow, pOptions ), m_bNbspRunNext(false)
+    : SwCursorShell( rDoc, pWindow, pOptions )
+    , m_bNbspRunNext(false)
+    , m_bIsValidatingParagraphSignature(false)
 {
     if (0 < officecfg::Office::Common::Undo::Steps::get())
     {
