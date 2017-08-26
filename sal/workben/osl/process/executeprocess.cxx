@@ -47,8 +47,8 @@ SAL_IMPLEMENT_MAIN()
     pustrExePath = pTempExePath;
 
 #if defined(_WIN32)
-#  define BATCHFILE "\\..\\sal\\workben\\osl\\batch.bat"
-#  define BATCHFILE_LENGTH 35
+#  define BATCHFILE "\\..\\..\\..\\sal\\workben\\osl\\batch.bat"
+#  define BATCHFILE_LENGTH 42
 #else
 #  define BATCHFILE "/../../../sal/workben/osl/batch.sh"
 #  define BATCHFILE_LENGTH 34

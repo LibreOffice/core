@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_libraries,processcmdlineargs,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,processcmdlineargs,\
-    sal/workben/osl/processcmdlineargs \
+    sal/workben/osl/process/processcmdlineargs \
 ))
 
 $(call gb_Executable_get_clean_target,processcmdlineargs) :

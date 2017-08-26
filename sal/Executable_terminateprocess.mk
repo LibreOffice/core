@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_libraries,terminateprocess,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,terminateprocess,\
-    sal/workben/osl/terminateprocess \
+    sal/workben/osl/process/terminateprocess \
 ))
 
 $(call gb_Executable_get_clean_target,terminateprocess) :

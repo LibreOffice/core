@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_libraries,monitor,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,monitor,\
-    sal/workben/osl/monitor \
+    sal/workben/osl/thread/monitor \
 ))
 
 $(call gb_Executable_get_clean_target,monitor) :

@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_libraries,processworkdir,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,processworkdir,\
-    sal/workben/osl/processworkdir \
+    sal/workben/osl/process/processworkdir \
 ))
 
 $(call gb_Executable_get_clean_target,processworkdir) :

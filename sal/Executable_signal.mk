@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_libraries,signal,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,signal,\
-    sal/workben/osl/signal \
+    sal/workben/osl/signal/signal \
 ))
 
 $(call gb_Executable_get_clean_target,signal) :
