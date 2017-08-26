@@ -1104,14 +1104,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (!pPaM)
                 pPaM = rWrtSh.GetCursor();
 
-            rWrtSh.StartUndo(SwUndoId::PARA_SIGN_ADD);
-            rWrtSh.StartAction();
+            // rWrtSh.StartUndo(SwUndoId::PARA_SIGN_ADD);
+            // rWrtSh.StartAction();
+            // const bool isUndoEnabled = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+            // GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
 
             rWrtSh.SignParagraph(pPaM);
 
-            rWrtSh.EndAction();
+            // GetDoc()->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
 
-            rWrtSh.EndUndo(SwUndoId::PARA_SIGN_ADD);
+            // rWrtSh.EndAction();
+            // rWrtSh.EndUndo(SwUndoId::PARA_SIGN_ADD);
         }
         break;
         case FN_NUM_CONTINUE:
