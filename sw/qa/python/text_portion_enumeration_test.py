@@ -634,6 +634,33 @@ class RangeInserter(Inserter):
         elif nodetype == "MetadataField":
             meta = node
             return self.insertmetafield(xParaCursor, meta.xmlid)
+        elif nodetype == "Bookmark":
+            bkmk = node
+            if bkmk.ispoint:
+                raise RuntimeError("range only")
+            self.insertbookmark(xParaCursor, bkmk.name, bkmk.xmlid)
+        elif nodetype == "ReferenceMark":
+            mark = node
+            if mark.ispoint:
+                raise RuntimeError("range only")
+            self.insertreferencemark(xParaCursor, mark.name)
+        elif nodetype == "DocumentIndexMark":
+            mark = node
+            if mark.ispoint:
+                raise RuntimeError("range only")
+            self.insertdocumentindexmark(xParaCursor, mark.name)
+        elif nodetype == "TextField":
+            field = node
+            self.inserttextfield(self.xCursor, field.content)
+        elif nodetype == "Footnote":
+            note = node
+            self.insertfootnote(self.xCursor, note.label)
+        elif nodetype == "Frame":
+            frame = node
+            self.insertframe(xParaCursor, frame.name, frame.anchor)
+        elif nodetype == "ControlCharacter":
+            cchar = node
+            self.insertcontrolcharacter(self.xCursor, cchar.char)
         elif nodetype == "SoftPageBreak":
             raise RuntimeError("sorry, cannot test SoftPageBreak")
         else:
@@ -2128,6 +2155,753 @@ class TextPortionEnumerationTest(unittest.TestCase):
                         .appendchild(TextNode("56")))))
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
+
+    def test_range2(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        met1 = MetaNode(self.mkid("id"))
+        inserter.insertrange(Range(1, 8, met1))
+        met2 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(3-1, 8-1, met2))
+        inserter.insertrange(Range(3, 8, met2))
+        met3 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(5-2, 8-2, met3))
+        inserter.insertrange(Range(5, 8, met3))
+        root = TreeNode()
+        root.appendchild(TextNode("1"))
+        root.appendchild(met1.dup()
+                .appendchild(TextNode("2"))
+                .appendchild(met2.dup()
+                    .appendchild(TextNode("3"))
+                    .appendchild(met3.dup()
+                        .appendchild(TextNode("456")))
+                    .appendchild(TextNode("7")))
+                .appendchild(TextNode("8")))
+        root.appendchild(TextNode("9"))
+        self.dotest(root, False)
+        ## split ruby at every meta start!
+        rby4 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(0, 7-3, rby4))
+        inserter.insertrange(Range(0, 7, rby4))
+        root = TreeNode()
+        root.appendchild(rby4.dup()
+                .appendchild(TextNode("1")))
+        root.appendchild(met1.dup()
+                .appendchild(rby4.dup()
+                    .appendchild(TextNode("2")))
+                .appendchild(met2.dup()
+                    .appendchild(rby4.dup()
+                        .appendchild(TextNode("3")))
+                    .appendchild(met3.dup()
+                        .appendchild(rby4.dup()
+                            .appendchild(TextNode("4")))
+                        .appendchild(TextNode("56")))
+                    .appendchild(TextNode("7")))
+                .appendchild(TextNode("8")))
+        root.appendchild(TextNode("9"))
+        self.dotest(root, False)
+        ## split ruby at every meta end!
+        rby5 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(8-3, 12-3, rby5))
+        inserter.insertrange(Range(8, 12, rby5))
+        root = TreeNode()
+        root.appendchild(rby4.dup()
+                .appendchild(TextNode("1")))
+        root.appendchild(met1.dup()
+                .appendchild(rby4.dup()
+                    .appendchild(TextNode("2")))
+                .appendchild(met2.dup()
+                    .appendchild(rby4.dup()
+                        .appendchild(TextNode("3")))
+                    .appendchild(met3.dup()
+                        .appendchild(rby4.dup()
+                            .appendchild(TextNode("4")))
+                        .appendchild(TextNode("5"))
+                        .appendchild(rby5.dup()
+                            .appendchild(TextNode("6"))))
+                    .appendchild(rby5.dup()
+                        .appendchild(TextNode("7"))))
+                .appendchild(rby5.dup()
+                    .appendchild(TextNode("8"))))
+        root.appendchild(rby5.dup()
+                .appendchild(TextNode("9")))
+        self.dotest(root, False)
+
+    def test_range3(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        rby1 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(0, 9, rby1))
+        met2 = MetaNode(self.mkid("id"))
+        inserter.insertrange(Range(2, 7, met2))
+        root = TreeNode()
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("12"))
+                .appendchild(met2.dup()
+                    .appendchild(TextNode("34567")))
+                .appendchild(TextNode("89")))
+        self.dotest(root, False)
+        ## overwrite outer ruby, split remains at inner meta!
+        rby3 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(5-1, 6-1, rby3))
+        inserter.insertrange(Range(5, 6, rby3))
+        root = TreeNode()
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("12")))
+        root.appendchild(met2.dup()
+                .appendchild(rby1.dup()
+                    .appendchild(TextNode("34")))
+                .appendchild(rby3.dup()
+                    .appendchild(TextNode("5")))
+                .appendchild(rby1.dup()
+                    .appendchild(TextNode("67"))))
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("89")))
+        self.dotest(root, False)
+
+    def test_range4(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        rby1 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(0, 9, rby1))
+        met2 = MetaNode(self.mkid("id"))
+        inserter.insertrange(Range(1, 8, met2))
+        met3 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(3-1, 8-1, met3))
+        inserter.insertrange(Range(3, 8, met3))
+        met4 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(5-2, 8-2, met4))
+        inserter.insertrange(Range(5, 8, met4))
+        root = TreeNode()
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("1"))
+                .appendchild(met2.dup()
+                    .appendchild(TextNode("2"))
+                    .appendchild(met3.dup()
+                        .appendchild(TextNode("3"))
+                        .appendchild(met4.dup()
+                            .appendchild(TextNode("456")))
+                        .appendchild(TextNode("7")))
+                    .appendchild(TextNode("8")))
+                .appendchild(TextNode("9")))
+        self.dotest(root, False)
+        ## overwrite outer ruby, split remains at every inner meta!
+        rby5 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(7-3, 8-3, rby5))
+        inserter.insertrange(Range(7, 8, rby5))
+        root = TreeNode()
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("1")))
+        root.appendchild(met2.dup()
+                .appendchild(rby1.dup()
+                    .appendchild(TextNode("2")))
+                .appendchild(met3.dup()
+                    .appendchild(rby1.dup()
+                        .appendchild(TextNode("3")))
+                    .appendchild(met4.dup()
+                        .appendchild(rby1.dup()
+                            .appendchild(TextNode("4")))
+                        .appendchild(rby5.dup()
+                            .appendchild(TextNode("5")))
+                        .appendchild(rby1.dup()
+                            .appendchild(TextNode("6"))))
+                    .appendchild(rby1.dup()
+                        .appendchild(TextNode("7"))))
+                .appendchild(rby1.dup()
+                    .appendchild(TextNode("8"))))
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("9")))
+        self.dotest(root, False)
+
+    def test_range5(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        rby1 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(0, 9, rby1))
+        met2 = MetaNode(self.mkid("id"))
+        inserter.insertrange(Range(1, 3, met2))
+        met3 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(5-1, 6-1, met3))
+        inserter.insertrange(Range(5, 6, met3))
+        met4 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(8-2, 10-2, met4))
+        inserter.insertrange(Range(8, 10, met4))
+        root = TreeNode()
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("1"))
+                .appendchild(met2.dup().appendchild(TextNode("23")))
+                .appendchild(TextNode("4"))
+                .appendchild(met3.dup().appendchild(TextNode("5")))
+                .appendchild(TextNode("6"))
+                .appendchild(met4.dup().appendchild(TextNode("78")))
+                .appendchild(TextNode("9")))
+        self.dotest(root, False)
+        ## overwrite outer ruby, but split at inner metas!
+        rby5 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(3-1, 10-3, rby5))
+        inserter.insertrange(Range(3, 10, rby5))
+        root = TreeNode()
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("1")))
+        root.appendchild(met2.dup()
+                .appendchild(rby1.dup()
+                    .appendchild(TextNode("2")))
+                .appendchild(rby5.dup()
+                    .appendchild(TextNode("3"))))
+        root.appendchild(rby5.dup()
+                .appendchild(TextNode("4"))
+                .appendchild(met3.dup()
+                    .appendchild(TextNode("5")))
+                .appendchild(TextNode("6")))
+        root.appendchild(met4.dup()
+                .appendchild(rby5.dup()
+                    .appendchild(TextNode("7")))
+                .appendchild(rby1.dup()
+                    .appendchild(TextNode("8"))))
+        root.appendchild(rby1.dup()
+                .appendchild(TextNode("9")))
+        self.dotest(root, False)
+
+    def test_range6(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        met1 = MetaNode(self.mkid("id"))
+        inserter.insertrange(Range(1, 5, met1))
+        met2 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(3-1, 6-1, met2))
+        inserter.insertrange(Range(3, 6, met2))
+        met3 = MetaNode(self.mkid("id"))
+        # inserter.insertrange(Range(5-2, 7-2, met3))
+        inserter.insertrange(Range(5, 7, met3))
+        root = TreeNode()
+        root.appendchild(TextNode("1"))
+        root.appendchild(met1.dup()
+                .appendchild(TextNode("2"))
+                .appendchild(met2.dup()
+                    .appendchild(TextNode("3"))
+                    .appendchild(met3.dup()
+                        .appendchild(TextNode("45")))))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+        ## split at 3 metas, all at same position
+        rby4 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(7-3, 10-3, rby4))
+        inserter.insertrange(Range(7, 10, rby4))
+        root = TreeNode()
+        root.appendchild(TextNode("1"))
+        root.appendchild(met1.dup()
+                .appendchild(TextNode("2"))
+                .appendchild(met2.dup()
+                    .appendchild(TextNode("3"))
+                    .appendchild(met3.dup()
+                        .appendchild(TextNode("4"))
+                        .appendchild(rby4.dup()
+                            .appendchild(TextNode("5"))))))
+        root.appendchild(rby4.dup()
+                .appendchild(TextNode("67")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+
+    def test_range7(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        url1 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(1, 5, url1))
+        met2 = MetaNode(self.mkid("id"))
+        inserter.insertrange(Range(3, 5, met2))
+        root = TreeNode()
+        root.appendchild(TextNode("1"))
+        root.appendchild(url1.dup()
+                .appendchild(TextNode("23")))
+        root.appendchild(met2.dup()
+                .appendchild(url1.dup()
+                    .appendchild(TextNode("45"))))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+        ## this should result in not splitting the hyperlink, but due to API
+        ## we can't tell :(
+        rby3 = RubyNode(self.mkname("ruby"))
+        # inserter.insertrange(Range(5-1, 8-1, rby3))
+        inserter.insertrange(Range(5, 8, rby3))
+        root = TreeNode()
+        root.appendchild(TextNode("1"))
+        root.appendchild(url1.dup()
+                .appendchild(TextNode("23")))
+        root.appendchild(met2.dup()
+                .appendchild(url1.dup()
+                    .appendchild(TextNode("4")))
+                .appendchild(rby3.dup()
+                    .appendchild(url1.dup()
+                        .appendchild(TextNode("5")))))
+        root.appendchild(rby3.dup()
+                .appendchild(TextNode("67")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+
+    # TODO: test partial selection, test UNDO/REDO
+
+    ##i109601# NestedTextContent and XChild
+    def test_meta_xchild(self):
+        xDoc = self.__class__.xDoc
+        id1 = StringPair("content.xml", self.mkname("id"))
+        id2 = StringPair("content.xml", self.mkname("id"))
+        id3 = StringPair("content.xml", self.mkname("id"))
+        id4 = StringPair("content.xml", self.mkname("id"))
+        id5 = StringPair("content.xml", self.mkname("id"))
+        id6 = StringPair("content.xml", self.mkname("id"))
+        meta1 = MetaNode(id1)
+        meta2 = MetaNode(id2)
+        meta3 = MetaFieldNode(id3)
+        meta4 = MetaNode(id4)
+        meta5 = MetaNode(id5)
+        meta6 = MetaFieldNode(id6)
+        root = TreeNode()
+        root.appendchild(meta1.dup()
+                .appendchild(TextNode("1")))
+        root.appendchild(TextNode("2"))
+        root.appendchild(meta2.dup()
+                .appendchild(meta3.dup()
+                    .appendchild(TextNode("34"))
+                    .appendchild(meta4.dup()
+                        .appendchild(TextNode("56")))
+                    .appendchild(meta5.dup())
+                    .appendchild(TextNode("7"))))
+        root.appendchild(TextNode("8"))
+        root.appendchild(meta6.dup()
+                .appendchild(TextNode("9")))
+
+        inserter = RangeInserter(xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        xMeta1 = inserter.insertrange(Range(0, 1, meta1))
+        xMeta2 = inserter.insertrange(Range(3, 8, meta2))
+        xMeta3 = inserter.insertrange(Range(4, 9, meta3))
+        xMeta4 = inserter.insertrange(Range(7, 9, meta4))
+        xMeta5 = inserter.insertrange(Range(10, 10, meta5))
+        xMeta6 = inserter.insertrange(Range(13, 14, meta6))
+
+        self.dotest(root, False)
+
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.gotoNextParagraph(False) # second paragraph
+        #  X12XX34X56X78X9
+        #  1  23  4  5  6
+        #   1       452  6
+        #             3
+        nestedTextContent = (
+            None,
+            id1,
+            id1,
+            None,
+            id2,
+            id3,
+            id3,
+            id3,
+            id4,
+            id4,
+            id4,
+            id5,
+            id3,
+            None,
+            id6,
+            id6)
+        for i, ntc in enumerate(nestedTextContent):
+            oNTC = xDocTextCursor.NestedTextContent
+            if ntc is None:
+                self.assertIsNone(oNTC,
+                            "unexpected NestedTextContent at: {}".format(i))
+            else:
+                xmlid = oNTC.MetadataReference
+                self.assertTrue(MetaNode.eq(ntc, xmlid),
+                            "wrong NestedTextContent at: {}".format(i))
+            xDocTextCursor.goRight(1, False)
+
+        try:
+            xMeta1.setParent(xMeta4)
+            fail("setParent(): allowed?")
+        except NoSupportException:
+            pass
+        self.assertIsNone(xMeta1.getParent(), "getParent(): not None")
+        self.assertIsNone(xMeta2.getParent(), "getParent(): not None")
+        self.assertIsNone(xMeta6.getParent(), "getParent(): not None")
+
+        xParent3 = xMeta3.getParent()
+        self.assertIsNotNone(xParent3, "getParent(): None")
+        xmlid = xParent3.MetadataReference
+        self.assertTrue(MetaNode.eq(xmlid, id2), "getParent(): wrong")
+
+        xParent4 = xMeta4.getParent()
+        self.assertIsNotNone(xParent4, "getParent(): None")
+        xmlid = xParent4.MetadataReference
+        self. assertTrue(MetaNode.eq(xmlid, id3), "getParent(): wrong")
+
+        xParent5 = xMeta5.getParent()
+        self.assertIsNotNone(xParent5, "getParent(): None")
+        xmlid = xParent5.MetadataReference
+        self.assertTrue(MetaNode.eq(xmlid, id3), "getParent(): wrong")
+
+    # test SwXMeta XText interface
+    def test_meta_xtext(self):
+        xDoc = self.__class__.xDoc
+        inserter = RangeInserter(xDoc)
+        text = TextNode("12AB6789")
+        inserter.insertrange(Range(0, 0, text))
+        meta = MetaNode(self.mkid("id"))
+        xMeta = inserter.makemeta()
+
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.goRight(3, False)
+        xDocTextCursor.goRight(2, True)
+        xDocText.insertTextContent(xDocTextCursor, xMeta, True)
+
+        xMeta.MetadataReference = meta.xmlid
+        xParentText = xMeta.getText()
+        self.assertIsNotNone(xParentText, "getText(): no parent")
+
+        xStart = xMeta.getStart()
+        self.assertIsNotNone(xStart, "getStart(): no start")
+
+        xEnd = xMeta.getEnd()
+        self.assertIsNotNone(xEnd, "getEnd(): no end")
+
+        xMeta.setString("45")
+
+        string = xMeta.getString()
+        self.assertEqual("45", string, "getString(): invalid string returned")
+
+        xTextCursor = xMeta.createTextCursor()
+        self.assertIsNotNone(xTextCursor, "createTextCursor(): failed")
+
+        try:
+            xMeta.createTextCursorByRange(None)
+            fail("createTextCursorByRange(): None allowed?")
+        except RuntimeException:
+            pass
+
+        xTextCursorStart = xMeta.createTextCursorByRange(xStart)
+        self.assertIsNotNone(xTextCursorStart,
+                    "createTextCursorByRange(): failed for start")
+
+        xTextCursorEnd = xMeta.createTextCursorByRange(xEnd)
+        self.assertIsNotNone(xTextCursorEnd,
+                             "createTextCursorByRange(): failed for end")
+
+        ## move outside meta
+        xDocTextCursor.gotoStart(False)
+
+        try:
+            xMeta.insertString(None, "foo", False)
+            fail("insertString(): None allowed?")
+        except RuntimeException:
+            pass
+
+        try:
+            xMeta.insertString(xDocTextCursor, "foo", False)
+            fail("insertString(): cursor outside allowed?")
+        except RuntimeException:
+            pass
+
+        xStart = xMeta.getStart()
+        xMeta.insertString(xStart, "A", False)
+        string = xMeta.getString()
+        self.assertEqual("A45", string, "getString(): invalid string returned")
+
+        xMeta.insertString(xEnd, "B", False)
+        string = xMeta.getString()
+        self.assertEqual("A45B", string, "getString(): invalid string returned")
+
+        try:
+            xMeta.insertControlCharacter(None, HARD_HYPHEN, False)
+            fail("insertControlCharacter(): None allowed?")
+        except IllegalArgumentException:
+            pass
+
+        xStart = xMeta.getStart()
+        try:
+            xMeta.insertControlCharacter(xDocTextCursor, HARD_HYPHEN, False)
+            fail("insertControlCharacter(): cursor outside allowed?")
+        except IllegalArgumentException:
+            pass
+
+        xMeta.insertControlCharacter(xStart, HARD_HYPHEN, False)
+        string = xMeta.getString()
+        self.assertEqual('\u2011' + 'A45B', string,
+                                "getString(): invalid string returned")
+
+        xMeta.insertControlCharacter(xEnd, HARD_HYPHEN, False)
+        string = xMeta.getString()
+        self.assertEqual('\u2011' + 'A45B' + '\u2011', string,
+                                "getString(): invalid string returned")
+
+        xMeta.setString("45")
+        try:
+            xMeta.insertTextContent(None, xMeta, False)
+            fail("insertTextContent(): None range allowed?")
+        except IllegalArgumentException:
+            pass
+
+        try:
+            xMeta.insertTextContent(xStart, None, False)
+            fail("insertTextContent(): None content allowed?")
+        except IllegalArgumentException:
+            pass
+
+        try:
+            xMeta.insertTextContent(xDocTextCursor, xMeta, False)
+            fail("insertTextContent(): cursor outside allowed?")
+        except IllegalArgumentException:
+            pass
+
+        field1 = TextFieldNode("f1")
+        field2 = TextFieldNode("f2")
+        xField1 = inserter.maketextfield(field1.content)
+        xField2 = inserter.maketextfield(field2.content)
+
+        xStart = xMeta.getStart()
+        xMeta.insertTextContent(xStart, xField1, False)
+
+        root = TreeNode()
+        root.appendchild(TextNode("12"))
+        root.appendchild(meta.dup()
+                .appendchild(field1.dup())
+                .appendchild(TextNode("45")))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+
+        xMeta.insertTextContent(xEnd, xField2, False)
+
+        root = TreeNode()
+        root.appendchild(TextNode("12"))
+        root.appendchild(meta.dup()
+                .appendchild(field1.dup())
+                .appendchild(TextNode("45"))
+                .appendchild(field2.dup()))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+
+        try:
+            xMeta.removeTextContent(None)
+            fail("removeTextContent(): None content allowed?")
+        except RuntimeException:
+            pass
+
+        xMeta.removeTextContent(xField1)
+
+        xAnchor = xMeta.getAnchor()
+        self.assertIsNotNone(xAnchor, "getAnchor(): None")
+
+        ## evil test case: insert ruby around meta
+        ruby = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(2, 6, ruby))
+
+        ## prevent caching...
+        # root = TreeNode()
+        # root.appendchild(TextNode("12"))
+        # root.appendchild(ruby.dup()
+                # .appendchild(meta.dup()
+                    # .appendchild(TextNode("45"))
+                    # .appendchild(field2.dup())))
+        # root.appendchild(TextNode("6789"))
+        # self.dotest(root, False)
+
+        xEnum = xMeta.createEnumeration()
+        self.assertIsNotNone("createEnumeration(): returns None", xEnum)
+
+        self.assertTrue(xEnum.hasMoreElements(),"hasNext(): first missing")
+        xPortion = xEnum.nextElement()
+        type_ = xPortion.TextPortionType
+        self.assertEqual("Text", type_, "first: not text")
+        txt = xPortion.getString()
+        self.assertEqual("45", txt, "first: text differs")
+
+        self.assertTrue(xEnum.hasMoreElements(),"hasNext(): second missing")
+        xPortion = xEnum.nextElement()
+        type_ = xPortion.TextPortionType
+        self.assertEqual("TextField", type_, "second: not text")
+
+        ## no ruby end here!!!
+        self.assertFalse(xEnum.hasMoreElements(), "hasNext(): more elements?")
+
+        xMeta.dispose()
+
+        try:
+            xCursor = xMeta.createTextCursor()
+            self.assertIsNone(xCursor,
+                        "createTextCursor(): succeeds on disposed object?")
+        except RuntimeException:
+            pass
+
+    # check that cursor move methods move to positions in the meta,
+    # but do not move to positions outside the meta.
+    def test_meta_xtextcursor(self):
+        xDoc = self.__class__.xDoc
+        inserter = RangeInserter(xDoc)
+        text = TextNode("Text. 12 More text here.")
+        inserter.insertrange(Range(0, 0, text))
+        met1 = MetaNode(self.mkid("id"))
+        xMeta = inserter.makemeta()
+
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.goRight(7, False)
+        xDocTextCursor.goRight(2, True)
+        xDocText.insertTextContent(xDocTextCursor, xMeta, True)
+        xDocTextCursor.gotoStart(True)
+
+        xMeta.MetadataReference = met1.xmlid
+        xStart = xMeta.getStart()
+        self.assertIsNotNone(xStart, "getStart(): no start")
+        xEnd = xMeta.getEnd()
+        self.assertIsNotNone(xEnd, "getEnd(): no end")
+
+        ## XTextCursor
+        xMetaCursor = xMeta.createTextCursor()
+        self.assertIsNotNone(xMetaCursor, "createTextCursor(): no cursor")
+        bSuccess = False
+        xMetaCursor.gotoStart(False)
+        xMetaCursor.gotoEnd(False)
+        bSuccess = xMetaCursor.goLeft(1, False)
+        self.assertTrue(bSuccess, "goLeft(): failed")
+        bSuccess = xMetaCursor.goLeft(1000, False)
+        self.assertFalse(bSuccess, "goLeft(): succeeded")
+        bSuccess = xMetaCursor.goRight(1, False)
+        self.assertTrue(bSuccess, "goRight(): failed")
+        bSuccess = xMetaCursor.goRight(1000, False)
+        self.assertFalse(bSuccess, "goRight(): succeeded")
+        xMetaCursor.gotoRange(xStart, False)
+        xMetaCursor.gotoRange(xEnd, False)
+        try:
+            xMetaCursor.gotoRange(xDocTextCursor, False)
+            fail("gotoRange(): succeeded")
+        except RuntimeException:
+            pass
+
+        ## XWordCursor
+        xMeta.setString("Two words")
+        xMetaCursor.gotoStart(False)
+
+        bSuccess = xMetaCursor.gotoNextWord(True)  # at start of "words"
+        self.assertTrue(bSuccess, "gotoNextWord(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("Two ", string, "gotoNextWord(): wrong string")
+
+        bSuccess = xMetaCursor.gotoNextWord(False)  # at end of "words", cannot leave metafield
+        self.assertFalse(bSuccess,"gotoNextWord(): succeeded")
+        xMetaCursor.collapseToEnd()
+        bSuccess = xMetaCursor.gotoPreviousWord(True)  # at start of "words"
+        self.assertTrue(bSuccess, "gotoPreviousWord(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("words", string, "gotoPreviousWord(): wrong string")
+
+        bSuccess = xMetaCursor.gotoPreviousWord(False)  # at start of "Two"
+        self.assertTrue(bSuccess, "gotoPreviousWord(): failed")
+
+        bSuccess = xMetaCursor.gotoPreviousWord(False)  # cannot leave metafield
+        self.assertFalse(bSuccess, "gotoPreviousWord(): succeeded")
+
+        bSuccess = xMetaCursor.gotoEndOfWord(True)  # at end of "Two"
+        self.assertTrue(bSuccess, "gotoEndOfWord(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("Two", string, "gotoEndOfWord(): wrong string")
+
+        xMetaCursor.gotoEnd(False)
+        bSuccess = xMetaCursor.gotoStartOfWord(True)
+        self.assertTrue(bSuccess, "gotoStartOfWord(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("words", string, "gotoStartOfWord(): wrong string")
+
+        xMeta.setString("")
+        bSuccess = xMetaCursor.gotoEndOfWord(False)
+        self.assertFalse(bSuccess, "gotoEndOfWord(): succeeded")
+        bSuccess = xMetaCursor.gotoStartOfWord(False)
+        self.assertFalse(bSuccess, "gotoStartOfWord(): succeeded")
+
+        ## XSentenceCursor
+        xMeta.setString("This is a sentence. Another sentence.")
+        xMetaCursor.gotoStart(False)
+
+        bSuccess = xMetaCursor.gotoNextSentence(True)
+        self.assertTrue(bSuccess,"gotoNextSentence(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("This is a sentence. ", string,
+                            "gotoNextSentence(): wrong string")
+
+        bSuccess = xMetaCursor.gotoNextSentence(False)
+        self.assertFalse(bSuccess, "gotoNextSentence(): succeeded")
+        ## FIXME:
+        ## the sentence cursor seems to work differently than the word cursor
+        xMeta.setString("This is a sentence. Another sentence. Sentence 3.")
+        xMetaCursor.gotoEnd(False)
+        bSuccess = xMetaCursor.gotoPreviousSentence(True)
+        self.assertTrue(bSuccess, "gotoPreviousSentence(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("Another sentence. Sentence 3.", string,
+                                "gotoPreviousSentence(): wrong string")
+
+        bSuccess = xMetaCursor.gotoPreviousSentence(False)
+        self.assertFalse(bSuccess, "gotoPreviousSentence(): succeeded")
+        bSuccess = xMetaCursor.gotoEndOfSentence(True)
+        self.assertTrue(bSuccess, "gotoEndOfSentence(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("This is a sentence.", string,
+                            "gotoEndOfSentence(): wrong string")
+
+        xMetaCursor.gotoEnd(False)
+        bSuccess = xMetaCursor.gotoStartOfSentence(True)
+        self.assertTrue(bSuccess,"gotoStartOfSentence(): failed")
+
+        string = xMetaCursor.getString()
+        self.assertEqual("Sentence 3.", string,
+                         "gotoStartOfSentence(): wrong string")
+
+        xMeta.setString("")
+        bSuccess = xMetaCursor.gotoEndOfSentence(False)
+        self.assertFalse(bSuccess, "gotoEndOfSentence(): succeeded")
+        bSuccess = xMetaCursor.gotoStartOfSentence(False)
+        self.assertFalse(bSuccess, "gotoStartOfSentence(): succeeded")
+
+        ## XParagraphCursor (does not make sense)
+        bSuccess = xMetaCursor.gotoNextParagraph(False)
+        self.assertFalse(bSuccess, "gotoNextParagraph(): succeeded")
+        bSuccess = xMetaCursor.gotoPreviousParagraph(False)
+        self.assertFalse(bSuccess, "gotoPreviousParagraph(): succeeded")
+        bSuccess = xMetaCursor.gotoStartOfParagraph(False)
+        self.assertFalse(bSuccess, "gotoStartOfParagraph(): succeeded")
+        bSuccess = xMetaCursor.gotoEndOfParagraph(False)
+        self.assertFalse(bSuccess, "gotoEndOfParagraph(): succeeded")
+
+    # See https://bugs.libreoffice.org/show_bug.cgi?id=49629
+    # ensure that gotoEndOfWord does not fail when footnote is at word end
+    def test_xtextcursor(self):
+        xDoc = self.__class__.xDoc
+        inserter = RangeInserter(xDoc)
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.gotoNextParagraph(False)
+        inserter.inserttext(xDocTextCursor, "Text")
+        xDocTextCursor.gotoEndOfWord(False)
+        inserter.insertfootnote(xDocTextCursor, "footnote")
+        xDocTextCursor.gotoStartOfParagraph(False)
+        bSuccess = xDocTextCursor.gotoEndOfWord(True)
+        self.assertTrue(bSuccess, "gotoEndOfWord(): failed")
+        string = xDocTextCursor.getString()
+        self.assertEqual("Text", string, "gotoEndOfWord(): wrong string")
+        self.assertNotEqual("a","b")
 
     def dotest(self, intree, insert=True):
         xDoc = self.__class__.xDoc
