@@ -922,10 +922,7 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 {
     if (nEnd < nStart)
     {
-        T nTemp;
-        nTemp = nEnd;
-        nEnd = nStart;
-        nStart = nTemp;
+        std::swap(nStart, nEnd);
     }
 }
 
