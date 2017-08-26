@@ -1211,6 +1211,12 @@ void SwTextNode::Update(
     if (pSortedObjs)
         pSortedObjs->UpdateAll();
 
+    // Update the paragraph signatures.
+    if (SwEditShell* pEditShell = GetDoc()->GetEditShell())
+    {
+        pEditShell->ValidateParagraphSignatures(false);
+    }
+
     // Inform LOK clients about change in position of redlines (if any)
     if (comphelper::LibreOfficeKit::isActive())
     {
