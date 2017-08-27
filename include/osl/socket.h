@@ -179,11 +179,11 @@ typedef enum {
 /** Common return codes of socket related functions.
  */
 typedef enum {
-    osl_Socket_Ok,          /* successful completion */
-    osl_Socket_Error,       /* error occurred, check osl_getLastSocketError() for details */
-    osl_Socket_TimedOut,    /* blocking operation timed out */
-    osl_Socket_Interrupted, /* blocking operation was interrupted */
-    osl_Socket_InProgress,  /* nonblocking operation is in progress */
+    osl_Socket_Ok,                  /* successful completion */
+    osl_Socket_Error,               /* error occurred, check osl_getLastSocketError() for details */
+    osl_Socket_TimedOut,            /* blocking operation timed out */
+    osl_Socket_Interrupted,         /* blocking operation was interrupted */
+    osl_Socket_InProgress,          /* nonblocking operation is in progress */
     osl_Socket_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketResult;
 
@@ -234,7 +234,7 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_resolveHostname(
     @param[in]  Port port number in host byte order.
     @retval 0 if address could not be created.
 */
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr(
     rtl_uString *strDottedAddr, sal_Int32 Port);
 
 
@@ -266,7 +266,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getServicePort(
 
 /** Retrieves the address-family from the Addr.
     @return the family of the socket-address.
-    In case of an unknown family you get <code>osl_Socket_FamilyInvalid</code>.
+    In case of an unknown family you get osl_Socket_FamilyInvalid.
 */
 SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
         oslSocketAddr Addr);
@@ -274,7 +274,7 @@ SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
 
 /** Retrieves the internet port-number of Addr.
     @return the port-number of the address in host-byte order. If Addr
-    is not an address of type <code>osl_Socket_FamilyInet</code>, it returns <code>OSL_INVALID_PORT</code>
+    is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
         oslSocketAddr Addr);
@@ -299,11 +299,12 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(
 
 
 /** Gets the address in dotted decimal format.
+
     @param[in] Addr The socket address from which to extract the dotted decimal address.
     @param[out] strDottedInetAddr Contains the dotted decimal address
     (e.g. 141.99.20.34) represented by the address.
-    If the address is invalid or not of type <code>osl_Socket_FamilyInet</code>,
-    it returns 0.
+
+    @retval If the address is invalid or not of type osl_Socket_FamilyInet, it returns 0.
     @retval osl_Socket_Ok
     @retval osl_Socket_Error
 */
@@ -402,14 +403,14 @@ typedef struct oslSocketImpl * oslSocket;
 
 /** increases the refcount of the socket handle by one
  */
-SAL_DLLPUBLIC void SAL_CALL osl_acquireSocket( oslSocket Socket );
+SAL_DLLPUBLIC void SAL_CALL osl_acquireSocket(oslSocket Socket);
 
 /** decreases the refcount of the socket handle by one.
 
     If the refcount drops to zero, the underlying socket handle
     is destroyed and becomes invalid.
  */
-SAL_DLLPUBLIC void SAL_CALL osl_releaseSocket( oslSocket Socket );
+SAL_DLLPUBLIC void SAL_CALL osl_releaseSocket(oslSocket Socket);
 
 /** Create a socket of the specified Family and Type. The semantic of
     the Protocol parameter depends on the given family and type.
@@ -417,9 +418,9 @@ SAL_DLLPUBLIC void SAL_CALL osl_releaseSocket( oslSocket Socket );
     to the allocated socket-datastructure.
 */
 SAL_DLLPUBLIC oslSocket SAL_CALL osl_createSocket(
-                                    oslAddrFamily   Family,
-                                    oslSocketType   Type,
-                                    oslProtocol     Protocol);
+                            oslAddrFamily Family,
+                            oslSocketType Type,
+                            oslProtocol Protocol);
 
 /** Retrieves the Address of the local end of the socket.
     Note that a socket must be bound or connected before
@@ -445,8 +446,8 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket);
     @see osl_getLastSocketError()
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_bindAddrToSocket(
-                                       oslSocket Socket,
-                                       oslSocketAddr Addr);
+                           oslSocket Socket,
+                           oslSocketAddr Addr);
 
 /** Connects the socket to the given address.
 
@@ -460,9 +461,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_bindAddrToSocket(
     @retval osl_Socket_Error if the connection failed.
 */
 SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_connectSocketTo(
-                                        oslSocket Socket,
-                                        oslSocketAddr Addr,
-                                        const TimeValue* pTimeout);
+                              oslSocket Socket,
+                              oslSocketAddr Addr,
+                              const TimeValue* pTimeout);
 
 
 /** Prepares the socket to act as an acceptor of incoming connections.
@@ -474,8 +475,8 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_connectSocketTo(
     @retval sal_False if the listen failed.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_listenOnSocket(
-                           oslSocket Socket,
-                           sal_Int32 MaxPendingConnections);
+                            oslSocket Socket,
+                            sal_Int32 MaxPendingConnections);
 
 
 /** Waits for an ingoing connection on the socket.
@@ -485,9 +486,9 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_listenOnSocket(
     @retval 0 if the accept-call failed, otherwise you get a socket
     representing the new connection.
 */
-SAL_DLLPUBLIC oslSocket SAL_CALL osl_acceptConnectionOnSocket
-                                       (oslSocket Socket,
-                                       oslSocketAddr* pAddr);
+SAL_DLLPUBLIC oslSocket SAL_CALL osl_acceptConnectionOnSocket(
+                            oslSocket Socket,
+                            oslSocketAddr* pAddr);
 
 /** Tries to receive BytesToRead data from the connected socket,
     if no error occurs. Note that incomplete recvs due to
@@ -508,10 +509,10 @@ SAL_DLLPUBLIC oslSocket SAL_CALL osl_acceptConnectionOnSocket
     @return the number of received bytes.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveSocket(
-                          oslSocket Socket,
-                          void* pBuffer,
-                           sal_uInt32 BytesToRead,
-                          oslSocketMsgFlag Flag);
+                            oslSocket Socket,
+                            void* pBuffer,
+                            sal_uInt32 BytesToRead,
+                            oslSocketMsgFlag Flag);
 
 /** Tries to receives BufferSize data from the (usually unconnected)
     (datagram-)socket, if no error occurs.
@@ -534,11 +535,11 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveSocket(
     @return the number of received bytes.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveFromSocket(
-                              oslSocket Socket,
-                              oslSocketAddr SenderAddr,
-                              void* pBuffer,
-                              sal_uInt32 BufferSize,
-                              oslSocketMsgFlag Flag);
+                            oslSocket Socket,
+                            oslSocketAddr SenderAddr,
+                            void* pBuffer,
+                            sal_uInt32 BufferSize,
+                            oslSocketMsgFlag Flag);
 
 /** Tries to send BytesToSend data from the connected socket,
     if no error occurs.
@@ -548,19 +549,19 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveFromSocket(
     @param[in] BytesToSend The number of bytes to send. pBuffer must have at least
     this size.
     @param[in] Flag Modifier for the call. Valid values are:
-    @li osl_Socket_MsgNormal</code>
-    @li osl_Socket_MsgOOB</code>
-    @li osl_Socket_MsgPeek</code>
-    @li osl_Socket_MsgDontRoute</code>
-    @li osl_Socket_MsgMaxIOVLen</code>
+    @li osl_Socket_MsgNormal
+    @li osl_Socket_MsgOOB
+    @li osl_Socket_MsgPeek
+    @li osl_Socket_MsgDontRoute
+    @li osl_Socket_MsgMaxIOVLen
 
     @return the number of transferred bytes.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendSocket(
-                       oslSocket Socket,
-                       const void* pBuffer,
-                        sal_uInt32 BytesToSend,
-                       oslSocketMsgFlag Flag);
+                            oslSocket Socket,
+                            const void* pBuffer,
+                            sal_uInt32 BytesToSend,
+                            oslSocketMsgFlag Flag);
 
 /** Tries to send one datagram with BytesToSend data to the given ReceiverAddr
     via the (implicitly unconnected) datagram-socket.
@@ -589,11 +590,11 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendSocket(
     @return the number of transferred bytes.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendToSocket(
-                         oslSocket Socket,
-                         oslSocketAddr ReceiverAddr,
-                          const void* pBuffer,
-                         sal_uInt32 BytesToSend,
-                         oslSocketMsgFlag Flag);
+                            oslSocket Socket,
+                            oslSocketAddr ReceiverAddr,
+                            const void* pBuffer,
+                            sal_uInt32 BytesToSend,
+                            oslSocketMsgFlag Flag);
 
 /** Checks if read operations will block.
 
@@ -608,7 +609,8 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendToSocket(
     @retval sal_False if it would block or if an error occurred.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isReceiveReady(
-        oslSocket Socket, const TimeValue* pTimeout);
+                            oslSocket Socket,
+                            const TimeValue* pTimeout);
 
 /** Checks if send operations will block.
     You can specify a timeout-value in seconds/microseconds that denotes
@@ -623,7 +625,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isReceiveReady(
     @retval sal_False if it would block or if an error occurred.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isSendReady(
-        oslSocket Socket, const TimeValue* pTimeout);
+                            oslSocket Socket,
+                            const TimeValue* pTimeout);
 
 /** Checks if a request for out-of-band data will block.
     You can specify a timeout-value in seconds/microseconds that denotes
@@ -637,22 +640,24 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isSendReady(
     @retval sal_False if it would block or if an error occurred.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
-        oslSocket Socket, const TimeValue* pTimeout);
+                            oslSocket Socket,
+                            const TimeValue* pTimeout);
 
 /** Shuts down communication on a connected socket.
     @param[in] Socket the Socket to perfom the operation on.
     @param[in]
     @parblock
-    Direction denotes which end of the socket should be closed:
-    @li osl_Socket_DirRead - closes read operations.
-    @li osl_Socket_DirReadWrite - closes write operations.
-    @li osl_Socket_DirWrite - closes read and write operations.
+        Direction denotes which end of the socket should be closed:
+        @li osl_Socket_DirRead - closes read operations.
+        @li osl_Socket_DirReadWrite - closes write operations.
+        @li osl_Socket_DirWrite - closes read and write operations.
     @endparblock
 
     @retval sal_True if the socket could be closed down.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
-                           oslSocketDirection Direction);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(
+                            oslSocket Socket,
+                            oslSocketDirection Direction);
 
 /** Retrieves attributes associated with the socket.
 
@@ -707,11 +712,12 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
 
     @see osl_setSocketOption()
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getSocketOption( oslSocket Socket,
-                               oslSocketOptionLevel Level,
-                            oslSocketOption      Option,
-                            void*                pBuffer,
-                            sal_uInt32               BufferLen);
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getSocketOption(
+                            oslSocket Socket,
+                            oslSocketOptionLevel Level,
+                            oslSocketOption Option,
+                            void* pBuffer,
+                            sal_uInt32 BufferLen);
 
 /** Sets the sockets attributes.
 
@@ -730,11 +736,12 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getSocketOption( oslSocket Socket,
 
     @retval True if the option could be changed.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption( oslSocket Socket,
-                            oslSocketOptionLevel    Level,
-                            oslSocketOption         Option,
-                            void*                   pBuffer,
-                            sal_uInt32              BufferLen);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption(
+                            oslSocket Socket,
+                            oslSocketOptionLevel Level,
+                            oslSocketOption Option,
+                            void* pBuffer,
+                            sal_uInt32 BufferLen);
 
 /** Enables/disables non-blocking-mode of the socket.
 
@@ -744,7 +751,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption( oslSocket Socket,
     @retval sal_True if mode could be changed.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_enableNonBlockingMode(
-        oslSocket Socket, sal_Bool On);
+                            oslSocket Socket,
+                            sal_Bool On);
 
 
 /** Query state of non-blocking-mode of the socket.
@@ -753,8 +761,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_enableNonBlockingMode(
 
     @retval True if non-blocking-mode is enabled.
 */
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(
-        oslSocket Socket);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
 
 /** Queries the socket for its type.
 
@@ -767,8 +774,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(
     @retval osl_Socket_TypeSeqPacket
     @retval osl_invalid_SocketType if an error occurred
 */
-SAL_DLLPUBLIC oslSocketType SAL_CALL osl_getSocketType(
-        oslSocket Socket);
+SAL_DLLPUBLIC oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket);
 
 /** returns  a string which describes the last socket error.
 
@@ -776,7 +782,8 @@ SAL_DLLPUBLIC oslSocketType SAL_CALL osl_getSocketType(
     @param[out] strError The string that receives the error message.
 */
 SAL_DLLPUBLIC void SAL_CALL osl_getLastSocketErrorDescription(
-        oslSocket Socket, rtl_uString **strError);
+                            oslSocket Socket,
+                            rtl_uString **strError);
 
 /** Returns a constant describing the last error for the socket system.
 
@@ -785,7 +792,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_getLastSocketErrorDescription(
             error occurred, otherwise an enum describing the error.
 */
 SAL_DLLPUBLIC oslSocketError SAL_CALL osl_getLastSocketError(
-        oslSocket Socket);
+                            oslSocket Socket);
 
 /** Type for the representation of socket sets.
 */
@@ -845,10 +852,11 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket So
     @return -1 on errors, otherwise the number of sockets with pending events. In case of timeout, the
         number might be 0.
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
-                                    oslSocketSet OutgoingSet,
-                                    oslSocketSet OutOfBandSet,
-                                    const TimeValue* pTimeout);
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_demultiplexSocketEvents(
+                            oslSocketSet IncomingSet,
+                            oslSocketSet OutgoingSet,
+                            oslSocketSet OutOfBandSet,
+                            const TimeValue* pTimeout);
 
 /** Closes the socket terminating any ongoing dataflow.
 
@@ -868,7 +876,10 @@ SAL_DLLPUBLIC void SAL_CALL osl_closeSocket(oslSocket Socket);
     @return the number of read bytes. The number will only be smaller than
         n if an exceptional condition (e.g. connection closed) occurs.
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer, sal_Int32 nSize );
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readSocket(
+                            oslSocket Socket,
+                            void *pBuffer,
+                            sal_Int32 nSize);
 
 
 /** Writes n bytes from pBuffer to the stream. The method avoids
@@ -881,7 +892,10 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer
     @return the number of written bytes. The number will only be smaller than
         nSize if an exceptional condition (e.g. connection closed) occurs.
 */
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_Int32 nSize );
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writeSocket(
+                            oslSocket Socket,
+                            const void *pBuffer,
+                            sal_Int32 nSize);
 
 /**@} end section oslSocket
 */
