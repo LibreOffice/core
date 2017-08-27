@@ -1184,46 +1184,44 @@ oslSocket SAL_CALL osl_createSocket(
 
 void SAL_CALL osl_acquireSocket(oslSocket pSocket)
 {
-    osl_atomic_increment( &(pSocket->m_nRefCount ) );
+    osl_atomic_increment(&(pSocket->m_nRefCount));
 }
 
-void SAL_CALL osl_releaseSocket( oslSocket pSocket )
+void SAL_CALL osl_releaseSocket(oslSocket pSocket)
 {
-    if( pSocket && osl_atomic_decrement( &(pSocket->m_nRefCount) ) == 0 )
+    if (pSocket && osl_atomic_decrement(&(pSocket->m_nRefCount)) == 0)
     {
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
-    if ( pSocket->m_bIsAccepting )
-    {
-        SAL_WARN( "sal.osl", "attempt to destroy socket while accepting" );
-        return;
-    }
+        if (pSocket->m_bIsAccepting)
+        {
+            SAL_WARN( "sal.osl", "attempt to destroy socket while accepting" );
+            return;
+        }
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
-        osl_closeSocket( pSocket );
-        destroySocketImpl( pSocket );
+        osl_closeSocket(pSocket);
+        destroySocketImpl(pSocket);
     }
 }
 
 void SAL_CALL osl_closeSocket(oslSocket pSocket)
 {
-    int nRet;
-    int nFD;
-
     /* socket already invalid */
-    if(pSocket==nullptr)
+    if (!pSocket)
         return;
 
     pSocket->m_nLastError=0;
-    nFD = pSocket->m_Socket;
+    sal_Int32 nFD = pSocket->m_Socket;
 
     if (nFD == OSL_INVALID_SOCKET)
         return;
 
     pSocket->m_Socket = OSL_INVALID_SOCKET;
 
+    sal_Int32 nRet=0;
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pSocket->m_bIsInShutdown = true;
 
-    if ( pSocket->m_bIsAccepting )
+    if (pSocket->m_bIsAccepting)
     {
         union {
             struct sockaddr aSockAddr;
@@ -1232,21 +1230,21 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         socklen_t nSockLen = sizeof(s.aSockAddr);
 
         nRet = getsockname(nFD, &s.aSockAddr, &nSockLen);
-        if ( nRet < 0 )
+        if (nRet < 0)
         {
             int nErrno = errno;
             SAL_WARN( "sal.osl", "getsockname call failed with error: (" << nErrno << ") " << strerror(nErrno) );
         }
 
-        if ( s.aSockAddr.sa_family == AF_INET )
+        if (s.aSockAddr.sa_family == AF_INET)
         {
-            if ( s.aSockAddrIn.sin_addr.s_addr == htonl(INADDR_ANY) )
+            if (s.aSockAddrIn.sin_addr.s_addr == htonl(INADDR_ANY))
             {
                 s.aSockAddrIn.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
             }
 
             int nConnFD = socket(AF_INET, SOCK_STREAM, 0);
-            if ( nConnFD < 0 )
+            if (nConnFD < 0)
             {
                 int nErrno = errno;
                 SAL_WARN( "sal.osl", "socket call failed with error: (" << nErrno << ") " << strerror(nErrno) );
@@ -1254,7 +1252,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             else
             {
                 nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
-                if ( nRet < 0 )
+                if (nRet < 0)
                 {
                     int nErrno = errno;
                     SAL_WARN( "sal.osl", "connect call failed with error: (" << nErrno << ") " << strerror(nErrno) );
@@ -1267,7 +1265,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
     nRet=close(nFD);
-    if ( nRet != 0 )
+    if (nRet != 0)
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;

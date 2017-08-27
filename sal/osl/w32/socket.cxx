@@ -810,24 +810,24 @@ oslSocket SAL_CALL osl_createSocket(
     return pSocket;
 }
 
-void SAL_CALL osl_acquireSocket( oslSocket pSocket )
+void SAL_CALL osl_acquireSocket(oslSocket pSocket)
 {
-    osl_atomic_increment( &(pSocket->m_nRefCount) );
+    osl_atomic_increment(&(pSocket->m_nRefCount));
 }
 
-void SAL_CALL osl_releaseSocket( oslSocket pSocket )
+void SAL_CALL osl_releaseSocket(oslSocket pSocket)
 {
-    if( pSocket && 0 == osl_atomic_decrement( &(pSocket->m_nRefCount) ) )
+    if (pSocket && osl_atomic_decrement(&(pSocket->m_nRefCount)) == 0)
     {
-        osl_closeSocket( pSocket );
-        destroySocketImpl( pSocket );
+        osl_closeSocket(pSocket);
+        destroySocketImpl(pSocket);
     }
 }
 
 void SAL_CALL osl_closeSocket(oslSocket pSocket)
 {
     /* socket already invalid */
-    if(pSocket==nullptr)
+    if (!pSocket)
         return;
 
     /* close */
