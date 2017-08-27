@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	zmf \
 	png \
 	pagemaker \
+	qxp \
 	revenge \
 	staroffice \
 	visio \
@@ -72,6 +73,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/MSPUBImportFilter \
 	writerperfect/source/draw/MWAWDrawImportFilter \
 	writerperfect/source/draw/PageMakerImportFilter \
+	writerperfect/source/draw/QXPImportFilter \
 	writerperfect/source/draw/StarOfficeDrawImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \

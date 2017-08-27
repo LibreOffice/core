@@ -1991,6 +1991,39 @@ endef
 endif # SYSTEM_PAGEMAKER
 
 
+ifneq ($(SYSTEM_QXP),)
+
+define gb_LinkTarget__use_qxp
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(QXP_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(QXP_LIBS))
+
+endef
+gb_ExternalProject__use_qxp :=
+
+else # !SYSTEM_QXP
+
+define gb_LinkTarget__use_qxp
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libqxp)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libqxp)/src/lib/.libs/libqxp-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libqxp)
+
+endef
+define gb_ExternalProject__use_qxp
+$(call gb_ExternalProject_use_external_project,$(1),libqxp)
+
+endef
+
+endif # SYSTEM_QXP
+
+
 ifneq ($(SYSTEM_ZMF),)
 
 define gb_LinkTarget__use_zmf
