@@ -1000,6 +1000,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkLayer, "watermark-layer.docx")
     // Watermark was not visible if page background was set.
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     SdrPage* pPage = pTextDoc->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
 
