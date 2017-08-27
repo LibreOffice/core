@@ -54,6 +54,8 @@ import com.sun.star.sdbcx.XDataDescriptorFactory;
 import com.sun.star.sdbcx.XDrop;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.OEnumerationByIndex;
+import com.sun.star.sdbcx.comp.postgresql.util.Resources;
+import com.sun.star.sdbcx.comp.postgresql.util.SharedResources;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;

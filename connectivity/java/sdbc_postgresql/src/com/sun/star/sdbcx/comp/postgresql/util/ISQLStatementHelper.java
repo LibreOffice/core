@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql.sdbcx;
+package com.sun.star.sdbcx.comp.postgresql.util;
 
 import com.sun.star.beans.XPropertySet;
 

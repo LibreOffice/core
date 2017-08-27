@@ -26,8 +26,8 @@ import java.util.Collections;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.Resources;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.SharedResources;
+import com.sun.star.sdbcx.comp.postgresql.util.Resources;
+import com.sun.star.sdbcx.comp.postgresql.util.SharedResources;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 
 public abstract class SdbcxDescriptorContainer extends OContainer {

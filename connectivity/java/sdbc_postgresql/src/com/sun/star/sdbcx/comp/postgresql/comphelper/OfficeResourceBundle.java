@@ -19,14 +19,13 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql.sdbcx;
+package com.sun.star.sdbcx.comp.postgresql.comphelper;
 
 import com.sun.star.lang.NullPointerException;
 import com.sun.star.resource.MissingResourceException;
 import com.sun.star.resource.OfficeResourceLoader;
 import com.sun.star.resource.XResourceBundle;
 import com.sun.star.resource.XResourceBundleLoader;
-import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 

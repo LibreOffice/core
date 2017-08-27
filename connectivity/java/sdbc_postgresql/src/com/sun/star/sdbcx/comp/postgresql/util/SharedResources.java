@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql.sdbcx;
+package com.sun.star.sdbcx.comp.postgresql.util;
 
 import java.util.List;
 
@@ -28,6 +28,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.sun.star.lang.NullPointerException;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
+import com.sun.star.sdbcx.comp.postgresql.comphelper.OfficeResourceBundle;
 import com.sun.star.uno.XComponentContext;
 
 /**

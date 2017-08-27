@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-package com.sun.star.sdbcx.comp.postgresql.sdbcx;
+package com.sun.star.sdbcx.comp.postgresql.util;
 
 public class Resources {
     public static final int STR_COMMON_BASE = 1200;

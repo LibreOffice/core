@@ -37,7 +37,7 @@ import com.sun.star.sdbc.XDriver;
 import com.sun.star.sdbc.XDriverManager;
 import com.sun.star.sdbcx.XDataDefinitionSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
-import com.sun.star.sdbcx.comp.postgresql.sdbcx.SharedResources;
+import com.sun.star.sdbcx.comp.postgresql.util.SharedResources;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
