@@ -74,7 +74,8 @@ enum class SwFieldIds : sal_uInt16 {
     TableOfAuthorities,
     CombinedChars,
     Dropdown,
-    LAST = Dropdown,
+    ParagraphSignature,
+    LAST = ParagraphSignature,
 
     Unknown = USHRT_MAX, // used as default value in some method calls
 };
@@ -125,6 +126,8 @@ enum SwFieldTypesEnum {
     TYP_AUTHORITY,              // 40
     TYP_COMBINED_CHARS,
     TYP_DROPDOWN,
+    TYP_CUSTOM,     // Unused - necessary for alignment with aSwFields in fldmgr.cxx
+    TYP_PARAGRAPHSIGFLD,
     TYP_END
 };
 enum SwAttrFieldTYpe {

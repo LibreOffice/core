@@ -95,7 +95,7 @@ using namespace nsSwDocInfoSubType;
 enum
 {
     GRP_DOC_BEGIN   =  0,
-    GRP_DOC_END     =  GRP_DOC_BEGIN + 11,
+    GRP_DOC_END     =  GRP_DOC_BEGIN + 12,
 
     GRP_FKT_BEGIN   =  GRP_DOC_END,
     GRP_FKT_END     =  GRP_FKT_BEGIN + 8,
@@ -310,6 +310,7 @@ static const SwFieldPack aSwFields[] =
 
     { TYP_CHAPTERFLD,       nullptr,            0,                              FMT_CHAPTER_ARY,  SAL_N_ELEMENTS(FMT_CHAPTER_ARY) },
     { TYP_TEMPLNAMEFLD,     nullptr,            0,                              FMT_FF_ARY,       SAL_N_ELEMENTS(FMT_FF_ARY) },
+    { TYP_PARAGRAPHSIGFLD,  nullptr,            0,                              nullptr,          0 },
 
     // Functions
     { TYP_CONDTXTFLD,       nullptr,            0,                              nullptr,          0 },
@@ -1456,6 +1457,14 @@ bool SwFieldMgr::InsertField(
             static_cast<SwDropDownField*>(pField)->SetName(rData.m_sPar1);
         }
         break;
+
+        // Insert Paragraph Signature field by signing the paragraph.
+        // The resulting field is really a metadata field, created and added via signing.
+        case TYP_PARAGRAPHSIGFLD:
+            pCurShell->SignParagraph(pCurShell->GetCursor());
+            return true;
+        break;
+
         default:
         {   OSL_ENSURE(false, "wrong field type");
             return false;
@@ -1750,7 +1759,8 @@ void SwFieldType::GetFieldName_()
         STR_AUTHORITY,
         STR_COMBINED_CHARS,
         STR_DROPDOWN,
-        STR_CUSTOM_FIELD
+        STR_CUSTOM_FIELD,
+        STR_PARAGRAPH_SIGNATURE
     };
 
     // insert infos for fields
