@@ -193,10 +193,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_provider">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Data Provider:</property>
+                                <property name="label" translatable="yes" context="datastreams|label_provider">Data Provider:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -228,10 +228,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="label_search">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Search String:</property>
+                                <property name="label" translatable="yes" context="datastreams|label_search">Search String:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
