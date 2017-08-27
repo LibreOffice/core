@@ -44,9 +44,9 @@ typedef struct oslSocketAddrImpl * oslSocketAddr;
     Represents the address-family of a socket
 */
 typedef enum {
-    osl_Socket_FamilyInet,      /* IP */
-    osl_Socket_FamilyIpx,       /* Novell IPX/SPX */
-    osl_Socket_FamilyInvalid,   /* always last entry in enum! */
+    osl_Socket_FamilyInet,          /*!< IP (AF_INET)                           */
+    osl_Socket_FamilyIpx,           /*!< Novell IPX/SPX (AF_IPX)                */
+    osl_Socket_FamilyInvalid,       /*!< always last entry in enum!             */
     osl_Socket_Family_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslAddrFamily;
 
@@ -54,11 +54,11 @@ typedef enum {
     represent a specific protocol within a address-family
 */
 typedef enum {
-    osl_Socket_ProtocolIp,      /* for all af_inet */
-    osl_Socket_ProtocolIpx,     /* af_ipx datagram sockets (IPX) */
-    osl_Socket_ProtocolSpx,     /* af_ipx seqpacket or stream for SPX */
-    osl_Socket_ProtocolSpxII,   /* af_ipx seqpacket or stream for SPX II */
-    osl_Socket_ProtocolInvalid,
+    osl_Socket_ProtocolIp,          /*!< for all af_inet                        */
+    osl_Socket_ProtocolIpx,         /*!< af_ipx datagram sockets (IPX)          */
+    osl_Socket_ProtocolSpx,         /*!< af_ipx seqpacket or stream for SPX     */
+    osl_Socket_ProtocolSpxII,       /*!< af_ipx seqpacket or stream for SPX II  */
+    osl_Socket_ProtocolInvalid,     /*!< always last entry in enum              */
     osl_Socket_Protocol_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslProtocol;
 
@@ -66,12 +66,16 @@ typedef enum {
     Represents the type of a socket
 */
 typedef enum {
-    osl_Socket_TypeStream,
-    osl_Socket_TypeDgram,
-    osl_Socket_TypeRaw,
-    osl_Socket_TypeRdm,
-    osl_Socket_TypeSeqPacket,
-    osl_Socket_TypeInvalid,     /* always last entry in enum! */
+    osl_Socket_TypeStream,          /*!< stream socket                          */
+    osl_Socket_TypeDgram,           /*!< datagram socket                        */
+    osl_Socket_TypeRaw,             /*!< raw socket                             */
+    osl_Socket_TypeRdm,             /*!< connectionless, message-oriented,
+                                         reliably delivered message (RDM)
+                                         sockets                                */
+    osl_Socket_TypeSeqPacket,       /*!< connection-oriented and reliable
+                                         two-way transport of ordered byte
+                                         steams                                 */
+    osl_Socket_TypeInvalid,         /*!< always last entry in enum              */
     osl_Socket_Type_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketType;
 
@@ -80,25 +84,35 @@ typedef enum {
     Represents socket-options
 */
 typedef enum {
-    osl_Socket_OptionDebug,
-    osl_Socket_OptionAcceptConn,
-    osl_Socket_OptionReuseAddr,
-    osl_Socket_OptionKeepAlive,
-    osl_Socket_OptionDontRoute,
-    osl_Socket_OptionBroadcast,
-    osl_Socket_OptionUseLoopback,
-    osl_Socket_OptionLinger,
-    osl_Socket_OptionOOBinLine,
-    osl_Socket_OptionSndBuf,
-    osl_Socket_OptionRcvBuf,
-    osl_Socket_OptionSndLowat,
-    osl_Socket_OptionRcvLowat,
-    osl_Socket_OptionSndTimeo,
-    osl_Socket_OptionRcvTimeo,
-    osl_Socket_OptionError,
-    osl_Socket_OptionType,
-    osl_Socket_OptionTcpNoDelay,
-    osl_Socket_OptionInvalid,       /* always last entry in enum! */
+    osl_Socket_OptionDebug,         /*!< record debugging info                  */
+    osl_Socket_OptionAcceptConn,    /*!< listen for connection                  */
+    osl_Socket_OptionReuseAddr,     /*!< bind to address already in use         */
+    osl_Socket_OptionKeepAlive,     /*!< use keep-alives                        */
+    osl_Socket_OptionDontRoute,     /*!< do not route packet, send direct to
+                                         interface addresses                    */
+    osl_Socket_OptionBroadcast,     /*!< send broadcast message                 */
+    osl_Socket_OptionUseLoopback,   /*!< socket recieves copy of everything
+                                         sent on the socket                     */
+    osl_Socket_OptionLinger,        /*!< don't immediately close - "linger"
+                                         a while to allow for graceful
+                                         connection closure                     */
+    osl_Socket_OptionOOBinLine,     /*!< out-of-band (OOB) data placed in
+                                         normal input queue (i.e. OOB inline)   */
+    osl_Socket_OptionSndBuf,        /*!< send buffer                            */
+    osl_Socket_OptionRcvBuf,        /*!< receive buffer                         */
+    osl_Socket_OptionSndLowat,      /*!< send "low-water" mark - amount of
+                                         available space in send buffer for
+                                         select() to return "writable"          */
+    osl_Socket_OptionRcvLowat,      /*!< receive "low-water" mark - amount of
+                                         available space in receive buffer
+                                         for select() to receive "readable"     */
+    osl_Socket_OptionSndTimeo,      /*!< send timeout                           */
+    osl_Socket_OptionRcvTimeo,      /*!< receive timeout                        */
+    osl_Socket_OptionError,         /*!< socket error                           */
+    osl_Socket_OptionType,          /*!< returns socket type (e.g. datagram,
+                                         stream).                               */
+    osl_Socket_OptionTcpNoDelay,    /*!< disable TCP Nagle algorithm            */
+    osl_Socket_OptionInvalid,       /*!< always last entry in enum              */
     osl_Socket_Option_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketOption;
 
@@ -108,7 +122,7 @@ typedef enum {
 typedef enum  {
     osl_Socket_LevelSocket,
     osl_Socket_LevelTcp,
-    osl_Socket_LevelInvalid,            /* always last entry in enum! */
+    osl_Socket_LevelInvalid,        /*!< always last entry in enum              */
     osl_Socket_Level_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketOptionLevel;
 
@@ -122,7 +136,7 @@ typedef enum {
     osl_Socket_MsgPeek,
     osl_Socket_MsgDontRoute,
     osl_Socket_MsgMaxIOVLen,
-    osl_Socket_MsgInvalid,          /* always last entry in enum! */
+    osl_Socket_MsgInvalid,          /*!< always last entry in enum              */
     osl_Socket_Msg_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketMsgFlag;
 
@@ -133,57 +147,58 @@ typedef enum {
     osl_Socket_DirRead,
     osl_Socket_DirWrite,
     osl_Socket_DirReadWrite,
-    osl_Socket_DirInvalid,          /* always last entry in enum! */
+    osl_Socket_DirInvalid,          /*!< always last entry in enum              */
     osl_Socket_Dir_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketDirection;
 
 /** Describes the various error socket error conditions, which may
     occur */
 typedef enum {
-    osl_Socket_E_None,              /* no error */
-    osl_Socket_E_NotSocket,         /* Socket operation on non-socket */
-    osl_Socket_E_DestAddrReq,       /* Destination address required */
-    osl_Socket_E_MsgSize,           /* Message too long */
-    osl_Socket_E_Prototype,         /* Protocol wrong type for socket */
-    osl_Socket_E_NoProtocol,        /* Protocol not available */
-    osl_Socket_E_ProtocolNoSupport, /* Protocol not supported */
-    osl_Socket_E_TypeNoSupport,     /* Socket type not supported */
-    osl_Socket_E_OpNotSupport,      /* Operation not supported on socket */
-    osl_Socket_E_PfNoSupport,       /* Protocol family not supported */
-    osl_Socket_E_AfNoSupport,       /* Address family not supported by */
-                                    /* protocol family */
-    osl_Socket_E_AddrInUse,         /* Address already in use */
-    osl_Socket_E_AddrNotAvail,      /* Can't assign requested address */
-    osl_Socket_E_NetDown,           /* Network is down */
-    osl_Socket_E_NetUnreachable,    /* Network is unreachable */
-    osl_Socket_E_NetReset,          /* Network dropped connection because */
-                                    /* of reset */
-    osl_Socket_E_ConnAborted,       /* Software caused connection abort */
-    osl_Socket_E_ConnReset,         /* Connection reset by peer */
-    osl_Socket_E_NoBufferSpace,     /* No buffer space available */
-    osl_Socket_E_IsConnected,       /* Socket is already connected */
-    osl_Socket_E_NotConnected,      /* Socket is not connected */
-    osl_Socket_E_Shutdown,          /* Can't send after socket shutdown */
-    osl_Socket_E_TooManyRefs,       /* Too many references: can't splice */
-    osl_Socket_E_TimedOut,          /* Connection timed out */
-    osl_Socket_E_ConnRefused,       /* Connection refused */
-    osl_Socket_E_HostDown,          /* Host is down */
-    osl_Socket_E_HostUnreachable,   /* No route to host */
-    osl_Socket_E_WouldBlock,        /* call would block on non-blocking socket */
-    osl_Socket_E_Already,           /* operation already in progress */
-    osl_Socket_E_InProgress,        /* operation now in progress */
-    osl_Socket_E_InvalidError,      /* unmapped error: always last entry in enum! */
+    osl_Socket_E_None,              /*!< no error                               */
+    osl_Socket_E_NotSocket,         /*!< Socket operation on non-socket         */
+    osl_Socket_E_DestAddrReq,       /*!< Destination address required           */
+    osl_Socket_E_MsgSize,           /*!< Message too long                       */
+    osl_Socket_E_Prototype,         /*!< Protocol wrong type for socket         */
+    osl_Socket_E_NoProtocol,        /*!< Protocol not available                 */
+    osl_Socket_E_ProtocolNoSupport, /*!< Protocol not supported                 */
+    osl_Socket_E_TypeNoSupport,     /*!< Socket type not supported              */
+    osl_Socket_E_OpNotSupport,      /*!< Operation not supported on socket      */
+    osl_Socket_E_PfNoSupport,       /*!< Protocol family not supported          */
+    osl_Socket_E_AfNoSupport,       /*!< Address family not supported by        */
+                                    /*!< protocol family                        */
+    osl_Socket_E_AddrInUse,         /*!< Address already in use                 */
+    osl_Socket_E_AddrNotAvail,      /*!< Can't assign requested address         */
+    osl_Socket_E_NetDown,           /*!< Network is down                        */
+    osl_Socket_E_NetUnreachable,    /*!< Network is unreachable                 */
+    osl_Socket_E_NetReset,          /*!< Network dropped connection because
+                                       of reset                                 */
+    osl_Socket_E_ConnAborted,       /*!< Software caused connection abort       */
+    osl_Socket_E_ConnReset,         /*!< Connection reset by peer               */
+    osl_Socket_E_NoBufferSpace,     /*!< No buffer space available              */
+    osl_Socket_E_IsConnected,       /*!< Socket is already connected            */
+    osl_Socket_E_NotConnected,      /*!< Socket is not connected                */
+    osl_Socket_E_Shutdown,          /*!< Can't send after socket shutdown       */
+    osl_Socket_E_TooManyRefs,       /*!< Too many references: can't splice      */
+    osl_Socket_E_TimedOut,          /*!< Connection timed out                   */
+    osl_Socket_E_ConnRefused,       /*!< Connection refused                     */
+    osl_Socket_E_HostDown,          /*!< Host is down                           */
+    osl_Socket_E_HostUnreachable,   /*!< No route to host                       */
+    osl_Socket_E_WouldBlock,        /*!< call would block on non-blocking socket */
+    osl_Socket_E_Already,           /*!< operation already in progress          */
+    osl_Socket_E_InProgress,        /*!< operation now in progress              */
+    osl_Socket_E_InvalidError,      /*!< unmapped error: always last entry in enum */
     osl_Socket_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketError;
 
 /** Common return codes of socket related functions.
  */
 typedef enum {
-    osl_Socket_Ok,                  /* successful completion */
-    osl_Socket_Error,               /* error occurred, check osl_getLastSocketError() for details */
-    osl_Socket_TimedOut,            /* blocking operation timed out */
-    osl_Socket_Interrupted,         /* blocking operation was interrupted */
-    osl_Socket_InProgress,          /* nonblocking operation is in progress */
+    osl_Socket_Ok,                  /*!< successful completion                  */
+    osl_Socket_Error,               /*!< error occurred, check
+                                         osl_getLastSocketError() for details   */
+    osl_Socket_TimedOut,            /*!< blocking operation timed out           */
+    osl_Socket_Interrupted,         /*!< blocking operation was interrupted     */
+    osl_Socket_InProgress,          /*!< nonblocking operation is in progress   */
     osl_Socket_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketResult;
 
