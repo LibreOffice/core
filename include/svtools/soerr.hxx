@@ -24,8 +24,8 @@
 #include <svtools/svtdllapi.h>
 
 // error codes
-#define SO_ERR(x) ErrCode(ErrCodeArea::So, ERRCODE_CLASS_SO | x)
-#define SO_WRN(x) ErrCode(ErrCodeArea::So, ERRCODE_CLASS_SO | ERRCODE_WARNING_MASK | x)
+#define SO_ERR(x) ErrCode(ErrCodeArea::So, ErrCodeClass::So, x)
+#define SO_WRN(x) ErrCode(WarningFlag::Yes, ErrCodeArea::So, ErrCodeClass::So, x)
 
 #define ERRCODE_SO_GENERALERROR             SO_ERR(1)
 #define ERRCODE_SO_CANNOT_DOVERB_NOW        SO_WRN(28)
