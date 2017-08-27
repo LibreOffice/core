@@ -139,6 +139,8 @@ public class DbTools {
         }
     }
 
+    /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
+     */
     public static String composeTableName(
             XDatabaseMetaData metadata, String catalog, String schema, String table, boolean quote, ComposeRule composeRule) throws SQLException {
         if (metadata == null) {
@@ -182,6 +184,11 @@ public class DbTools {
                 shouldQuote, composeRule);
     }
 
+    /** check if a specific property is enabled in the info sequence
+     *  @deprecated
+     *  Use getBooleanDataSourceSetting instead, which cares for the default of the property itself,
+     *   instead of spreading this knowledge through all callers.
+     */
     public static boolean isDataSourcePropertyEnabled(Object object, String property, boolean defaultValue) throws SQLException {
         try {
             boolean enabled = defaultValue;
@@ -201,6 +208,8 @@ public class DbTools {
         }
     }
 
+    /** search the parent hierarchy for a data source.
+     */
     public static XDataSource findDataSource(Object parent) {
         XOfficeDatabaseDocument databaseDocument = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, parent);
         XDataSource dataSource = null;
@@ -252,6 +261,12 @@ public class DbTools {
         return composedName.toString();
     }
 
+    /** composes a table name for usage in a SELECT statement
+     *
+     * This includes quoting of the table as indicated by the connection's meta data, plus respecting
+     * the settings "UseCatalogInSelect" and "UseSchemaInSelect", which might be present
+     * in the data source which the connection belongs to.
+     */
     public static String composeTableNameForSelect(XConnection connection, String catalog,
             String schema, String table) throws SQLException {
         boolean useCatalogInSelect = isDataSourcePropertyEnabled(connection, "UseCatalogInSelect", true);
@@ -260,6 +275,12 @@ public class DbTools {
                 useSchemaInSelect ? schema : "", table, true, ComposeRule.InDataManipulation);
     }
 
+    /** composes a table name for usage in a SELECT statement
+     *
+     * This includes quoting of the table as indicated by the connection's meta data, plus respecting
+     * the settings "UseCatalogInSelect" and "UseSchemaInSelect", which might be present
+     * in the data source which the connection belongs to.
+     */
     public static String composeTableNameForSelect(XConnection connection, XPropertySet table) throws SQLException {
         NameComponents nameComponents = getTableNameComponents(table);
         return composeTableNameForSelect(connection, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable());
@@ -285,6 +306,8 @@ public class DbTools {
         }
     }
 
+    /** quote the given name with the given quote string.
+     */
     public static String quoteName(String quote, String name) {
         if (!quote.isEmpty() && quote.codePointAt(0) != ' ') {
             return quote + name + quote;
@@ -292,11 +315,19 @@ public class DbTools {
         return name;
     }
 
+    /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
+     */
     public static String quoteTableName(XDatabaseMetaData metadata, String name, ComposeRule composeRule) throws SQLException {
         NameComponents nameComponents = qualifiedNameComponents(metadata, name, composeRule);
         return doComposeTableName(metadata, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable(), true, composeRule);
     }
 
+    /** split a fully qualified table name (including catalog and schema, if applicable) into its component parts.
+     * @param  _rxConnMetaData     meta data describing the connection where you got the table name from
+     * @param  _rQualifiedName     fully qualified table name
+     * @param  _eComposeRule       where do you need the name for
+     * @return the NameComponents object with the catalog, schema and table
+     */
     public static NameComponents qualifiedNameComponents(XDatabaseMetaData _rxConnMetaData, String _rQualifiedName,
             ComposeRule _eComposeRule) throws SQLException {
         Osl.ensure(_rxConnMetaData, "QualifiedNameComponents : invalid meta data!");
@@ -339,6 +370,19 @@ public class DbTools {
         return ret;
     }
 
+    /** creates a SQL CREATE TABLE statement
+     *
+     * @param  descriptor
+     *    The descriptor of the new table.
+     * @param  connection
+     *    The connection.
+     * @param  helper
+     *    Allow to add special SQL constructs.
+     * @param  createPattern
+     *
+     * @return
+     *   The CREATE TABLE statement.
+     */
     public static String createSqlCreateTableStatement(XPropertySet descriptor, XConnection connection,
             ISQLStatementHelper helper, String createPattern) throws SQLException {
 
@@ -352,6 +396,16 @@ public class DbTools {
         return sql;
     }
 
+    /** creates the standard sql create table statement without the key part.
+     * @param  descriptor
+     *    The descriptor of the new table.
+     * @param  connection
+     *    The connection.
+     * @param  helper
+     *    Allow to add special SQL constructs.
+     * @param  createPattern
+     *
+     */
     public static String createStandardCreateStatement(XPropertySet descriptor, XConnection connection,
             ISQLStatementHelper helper, String createPattern) throws SQLException {
         try {
@@ -394,6 +448,16 @@ public class DbTools {
         }
     }
 
+    /** creates the standard sql statement for the column part of a create table statement.
+     *  @param  columnProperties
+     *      The descriptor of the column.
+     *  @param  connection
+     *      The connection.
+     *  @param  helper
+     *       Allow to add special SQL constructs.
+     *  @param  createPattern
+     *
+     */
     public static String createStandardColumnPart(XPropertySet columnProperties, XConnection connection,
             ISQLStatementHelper helper, String createPattern) throws SQLException {
         try {
@@ -507,6 +571,12 @@ public class DbTools {
         }
     }
 
+    /** creates the standard sql statement for the key part of a create table statement.
+     * @param  descriptor
+     *      The descriptor of the new table.
+     * @param  connection
+     *      The connection.
+     */
     public static String createStandardKeyStatement(XPropertySet descriptor, XConnection connection) throws SQLException {
         try {
             XDatabaseMetaData metadata = connection.getMetaData();
@@ -601,7 +671,17 @@ public class DbTools {
         return sql.toString();
     }
 
-    /// We need some more information about the column.
+    /** collects the information about auto increment, currency and data type for the given column name.
+     * The column must be quoted, * is also valid.
+     * @param  connection
+     *     The connection.
+     * @param  composedName
+     *    The quoted table name. ccc.sss.ttt
+     * @param  columnName
+     *    The name of the column, or *
+     * @return
+     *    The information about the column(s).
+     */
     public static Map<String,ExtraColumnInfo> collectColumnInformation(XConnection connection, String composedName, String columnName) throws SQLException {
         String sql = String.format("SELECT %s FROM %s WHERE 0 = 1", columnName, composedName);
         XStatement statement = null;
@@ -632,6 +712,8 @@ public class DbTools {
         }
     }
 
+    /** returns the primary key columns of the table
+     */
     public static XNameAccess getPrimaryKeyColumns(XPropertySet table) throws SQLException {
         try {
             XNameAccess keyColumns = null;

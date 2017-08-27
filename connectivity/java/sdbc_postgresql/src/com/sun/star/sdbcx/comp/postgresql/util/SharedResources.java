@@ -105,7 +105,7 @@ public class SharedResources {
         @param  _nResId
             the resource ID of the string to load
         @param  _pAsciiPatternToReplace
-            the ASCII string which is to search in the string. Must not be <NULL/>.
+            the ASCII string which is to search in the string. Must not be null.
         @param  _rStringToSubstitute
             the String which should substitute the ASCII pattern.
 
@@ -129,11 +129,11 @@ public class SharedResources {
         @param  _nResId
             the resource ID of the string to load
         @param  _pAsciiPatternToReplace1
-            the ASCII string (1) which is to search in the string. Must not be <NULL/>.
+            the ASCII string (1) which is to search in the string. Must not be null.
         @param  _rStringToSubstitute1
             the String which should substitute the ASCII pattern (1)
         @param  _pAsciiPatternToReplace2
-            the ASCII string (2) which is to search in the string. Must not be <NULL/>.
+            the ASCII string (2) which is to search in the string. Must not be null.
         @param  _rStringToSubstitute2
             the String which should substitute the ASCII pattern (2)
 
@@ -160,15 +160,15 @@ public class SharedResources {
         @param  _nResId
             the resource ID of the string to load
         @param  _pAsciiPatternToReplace1
-            the ASCII string (1) which is to search in the string. Must not be <NULL/>.
+            the ASCII string (1) which is to search in the string. Must not be null.
         @param  _rStringToSubstitute1
             the String which should substitute the ASCII pattern (1)
         @param  _pAsciiPatternToReplace2
-            the ASCII string (2) which is to search in the string. Must not be <NULL/>.
+            the ASCII string (2) which is to search in the string. Must not be null.
         @param  _rStringToSubstitute2
             the String which should substitute the ASCII pattern (2)
         @param  _pAsciiPatternToReplace3
-            the ASCII string (3) which is to search in the string. Must not be <NULL/>.
+            the ASCII string (3) which is to search in the string. Must not be null.
         @param  _rStringToSubstitute3
             the String which should substitute the ASCII pattern (3)
 
@@ -196,7 +196,7 @@ public class SharedResources {
 
         @param  _nResId
             the resource ID of the string to load
-        @param  _aStringToSubstitutes
+        @param  patternsAndSubstitutes
             A list of substitutions.
 
         @return

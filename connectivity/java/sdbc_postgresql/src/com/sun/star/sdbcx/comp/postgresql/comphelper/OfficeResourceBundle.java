@@ -42,8 +42,8 @@ public class OfficeResourceBundle implements AutoCloseable {
             the component context to operate in
         @param  bundleBaseName
             the base name of the resource file which should be accessed (*without* the SUPD!)
-        @raises ::com::sun::star::lang::NullPointerException
-            if the given component context is <NULL/>
+        @throws com.sun.star.lang.NullPointerException
+            if the given component context is null
      */
     public OfficeResourceBundle(XComponentContext context, String bundleBaseName) throws NullPointerException {
         if (context == null) {
@@ -64,8 +64,7 @@ public class OfficeResourceBundle implements AutoCloseable {
             the id of the string to load
         @return
             the requested resource string. If no string with the given id exists in the resource bundle,
-            an empty string is returned. In a non-product version, an OSL_ENSURE will notify you of this
-            then.
+            an empty string is returned.
     */
     public String loadString( int _resourceId ) {
         synchronized (this) {
@@ -85,7 +84,7 @@ public class OfficeResourceBundle implements AutoCloseable {
         @param  _resourceId
             the id of the string whose existence is to be checked
         @return
-            <TRUE/> if and only if a string with the given ID exists in the resource
+            true if and only if a string with the given ID exists in the resource
             bundle.
     */
     public boolean hasString( int _resourceId ) {
