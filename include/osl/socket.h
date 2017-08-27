@@ -660,7 +660,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
 
 /** Shuts down communication on a connected socket.
     @param[in] Socket the Socket to perfom the operation on.
-    @param[in]
+    @param[in] Direction
     @parblock
         Direction denotes which end of the socket should be closed:
         @li osl_Socket_DirRead - closes read operations.
