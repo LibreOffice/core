@@ -151,7 +151,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     if (aUniqueName.isEmpty())
     {
         sal_Int32 nUserIndex = 1;
-        const OUString aUser(SvxResId(pPrefixResId)) + " ";
+        const OUString aUser(SvxResId(pPrefixResId) + " ");
 
         if( pDefaults.get() )
         {
@@ -1544,7 +1544,7 @@ bool XLineEndItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
-        rVal <<= SvxUnogetApiNameForItem(Which(), GetName();
+        rVal <<= SvxUnogetApiNameForItem(Which(), GetName());
     }
     else
     {
