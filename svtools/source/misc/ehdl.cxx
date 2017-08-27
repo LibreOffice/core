@@ -84,7 +84,7 @@ static DialogMask aWndFunc(
       default: break;
     }
 
-    OUString aErr(STR_ERR_HDLMESS);
+    OUString aErr("$(ACTION)$(ERROR)");
     OUString aAction(rAction);
     if ( !aAction.isEmpty() )
         aAction += ":\n";
@@ -182,7 +182,7 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
     return false;
 }
 
-void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
+void SfxErrorHandler::GetClassString(ErrCodeClass lClassId, OUString &rStr)
 
 /*  [Description]
 
@@ -192,9 +192,9 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     */
 
 {
-    for (const ErrMsgCode* pItem = getRID_ERRHDL(); pItem->second; ++pItem)
+    for (const std::pair<const char*, ErrCodeClass>* pItem = RID_ERRHDL_CLASS; pItem->first; ++pItem)
     {
-        if (sal_uInt32(pItem->second) == lClassId)
+        if (pItem->second == lClassId)
         {
             rStr = SvtResId(pItem->first);
             break;
@@ -213,7 +213,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 
 {
     bool bRet = false;
-    rStr = RID_ERRHDL_CLASS;
+    rStr = "$(CLASS)$(ERROR)";
 
     for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {
@@ -228,8 +228,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
     if( bRet )
     {
         OUString aErrStr;
-        GetClassString((sal_uInt32)lErrId & ERRCODE_CLASS_MASK,
-                       aErrStr);
+        GetClassString(lErrId.GetClass(), aErrStr);
         if(!aErrStr.isEmpty())
             aErrStr += ".\n";
         rStr = rStr.replaceAll("$(CLASS)",aErrStr);

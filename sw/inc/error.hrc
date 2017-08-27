@@ -24,8 +24,8 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-#define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class | sal_uInt32(err))
-#define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class | sal_uInt32(err))
+#define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class, err.GetRest())
+#define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class, err.GetRest())
 
 const ErrMsgCode RID_SW_ERRHDL[] =
 {
@@ -41,16 +41,16 @@ const ErrMsgCode RID_SW_ERRHDL[] =
     { NC_("RID_SW_ERRHDL", "Wrong AutoText document version.") , ERR_SWG_OLD_GLOSSARY },
     { NC_("RID_SW_ERRHDL", "Error in writing sub-document $(ARG1)."), ERR_WRITE_ERROR_FILE },
     // Import-/Export-Errors
-    { NC_("RID_SW_ERRHDL", "Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR ) },
-    { NC_("RID_SW_ERRHDL", "Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR ) },
+    { NC_("RID_SW_ERRHDL", "Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ErrCodeClass::Read , ERR_SWG_INTERNAL_ERROR ) },
+    { NC_("RID_SW_ERRHDL", "Internal error in %PRODUCTNAME Writer file format.") , ERR_CODE ( ErrCodeClass::Write , ERR_SWG_INTERNAL_ERROR ) },
     { NC_("RID_SW_ERRHDL", "$(ARG1) has changed.") , ERR_TXTBLOCK_NEWFILE_ERROR },
     { NC_("RID_SW_ERRHDL", "$(ARG1) does not exist.") , ERR_AUTOPATH_ERROR },
     { NC_("RID_SW_ERRHDL", "Cells cannot be further split.") , ERR_TBLSPLIT_ERROR },
     { NC_("RID_SW_ERRHDL", "Additional columns cannot be inserted.") , ERR_TBLINSCOL_ERROR },
     { NC_("RID_SW_ERRHDL", "The structure of a linked table cannot be modified.") , ERR_TBLDDECHG_ERROR },
 
-    { NC_("RID_SW_ERRHDL", "Not all attributes could be read.") , WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST ) },
-    { NC_("RID_SW_ERRHDL", "Not all attributes could be recorded.") , WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST ) },
+    { NC_("RID_SW_ERRHDL", "Not all attributes could be read.") , WARN_CODE ( ErrCodeClass::Read , WARN_SWG_FEATURES_LOST ) },
+    { NC_("RID_SW_ERRHDL", "Not all attributes could be recorded.") , WARN_CODE ( ErrCodeClass::Write , WARN_SWG_FEATURES_LOST ) },
     { NC_("RID_SW_ERRHDL", "Document could not be completely saved.") , WARN_SWG_POOR_LOAD },
     { NC_("RID_SW_ERRHDL", "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings."), WARN_SWG_HTML_NO_MACROS },
     { NC_("RID_SW_ERRHDL", "Error in writing sub-document $(ARG1)."), WARN_WRITE_ERROR_FILE },
