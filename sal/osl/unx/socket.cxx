@@ -87,18 +87,12 @@
 /* Buffer size for gethostbyname */
 #define MAX_HOSTBUFFER_SIZE 2048
 
-/*****************************************************************************/
-/* enum oslAddrFamily */
-/*****************************************************************************/
-
-/* map */
 static const unsigned long FamilyMap[]= {
     AF_INET,                    /* osl_Socket_FamilyInet    */
     AF_IPX,                     /* osl_Socket_FamilyIpx     */
     0                           /* osl_Socket_FamilyInvalid */
 };
 
-/* reverse map */
 static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
 {
     oslAddrFamily i= (oslAddrFamily)0;
@@ -113,15 +107,9 @@ static oslAddrFamily osl_AddrFamilyFromNative(sal_uInt32 nativeType)
     return i;
 }
 
-/* macros */
 #define FAMILY_FROM_NATIVE(y) osl_AddrFamilyFromNative(y)
 #define FAMILY_TO_NATIVE(x) (short)FamilyMap[x]
 
-/*****************************************************************************/
-/* enum oslProtocol */
-/*****************************************************************************/
-
-/* map */
 static const sal_uInt32 ProtocolMap[]= {
     0,                          /* osl_Socket_ProtocolIp      */
     NSPROTO_IPX,                /* osl_Socket_ProtocolIpx     */
@@ -130,7 +118,6 @@ static const sal_uInt32 ProtocolMap[]= {
     0                           /* osl_Socket_ProtocolInvalid */
 };
 
-/* reverse map */
 /* mfe: NOT USED
 static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 {
@@ -147,14 +134,8 @@ static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 }
 */
 
-/* macros */
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
 
-/*****************************************************************************/
-/* enum oslSocketType */
-/*****************************************************************************/
-
-/* map */
 static const sal_uInt32 TypeMap[]= {
     SOCK_STREAM,                /* osl_Socket_TypeStream    */
     SOCK_DGRAM,                 /* osl_Socket_TypeDgram     */
@@ -164,7 +145,6 @@ static const sal_uInt32 TypeMap[]= {
     0                           /* osl_Socket_TypeInvalid   */
 };
 
-/* reverse map */
 static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
 {
     oslSocketType i= (oslSocketType)0;
@@ -179,15 +159,9 @@ static oslSocketType osl_SocketTypeFromNative(sal_uInt32 nativeType)
     return i;
 }
 
-/* macros */
 #define TYPE_TO_NATIVE(x)       TypeMap[x]
 #define TYPE_FROM_NATIVE(y)     osl_SocketTypeFromNative(y)
 
-/*****************************************************************************/
-/* enum oslSocketOption */
-/*****************************************************************************/
-
-/* map */
 static const sal_uInt32 OptionMap[]= {
     SO_DEBUG,                   /* osl_Socket_OptionDebug       */
     SO_ACCEPTCONN,              /* osl_Socket_OptionAcceptConn  */
@@ -210,7 +184,6 @@ static const sal_uInt32 OptionMap[]= {
     0                           /* osl_Socket_OptionInvalid     */
 };
 
-/* reverse map */
 /* mfe: NOT USED
 static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
 {
@@ -226,12 +199,7 @@ static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
     return i;
 }
 */
-/* macros */
 #define OPTION_TO_NATIVE(x)     OptionMap[x]
-
-/*****************************************************************************/
-/* enum oslSocketOptionLevel */
-/*****************************************************************************/
 
 static const sal_uInt32 OptionLevelMap[]= {
     SOL_SOCKET,                 /* osl_Socket_LevelSocket  */
@@ -239,7 +207,6 @@ static const sal_uInt32 OptionLevelMap[]= {
     0                           /* osl_Socket_LevelInvalid */
 };
 
-/* reverse map */
 /* mfe: NOT USED
 static oslSocketOptionLevel osl_SocketOptionLevelFromNative(sal_uInt32 nativeType)
 {
@@ -255,12 +222,7 @@ static oslSocketOptionLevel osl_SocketOptionLevelFromNative(sal_uInt32 nativeTyp
     return i;
 }
 */
-/* macros */
 #define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
-
-/*****************************************************************************/
-/* enum oslSocketMsgFlag */
-/*****************************************************************************/
 
 static const sal_uInt32 SocketMsgFlagMap[]= {
     0,                          /* osl_Socket_MsgNormal    */
@@ -271,7 +233,6 @@ static const sal_uInt32 SocketMsgFlagMap[]= {
     0                           /* osl_Socket_MsgInvalid   */
 };
 
-/* reverse map */
 /* mfe: NOT USED
 static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
 {
@@ -288,12 +249,7 @@ static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
 }
 */
 
-/* macros */
 #define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
-
-/*****************************************************************************/
-/* enum oslSocketDirection */
-/*****************************************************************************/
 
 static const sal_uInt32 SocketDirection[]= {
     SD_RECEIVE,                 /* osl_Socket_DirRead      */
@@ -302,7 +258,6 @@ static const sal_uInt32 SocketDirection[]= {
     0                           /* osl_Socket_DirInvalid   */
 };
 
-/* reverse map */
 /* mfe: NOT USED
 static oslSocketDirection osl_SocketDirectionFromNative(sal_uInt32 nativeType)
 {
@@ -319,12 +274,7 @@ static oslSocketDirection osl_SocketDirectionFromNative(sal_uInt32 nativeType)
 }
 */
 
-/* macros */
 #define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
-
-/*****************************************************************************/
-/* enum oslSocketError */
-/*****************************************************************************/
 
 static const struct
 {
@@ -341,14 +291,14 @@ static const struct
     { ESOCKTNOSUPPORT, osl_Socket_E_TypeNoSupport     }, /* Socket type not supported */
     { EOPNOTSUPP,      osl_Socket_E_OpNotSupport      }, /* Operation not supported on socket */
     { EPFNOSUPPORT,    osl_Socket_E_PfNoSupport       }, /* Protocol family not supported */
-    { EAFNOSUPPORT,    osl_Socket_E_AfNoSupport       }, /* Address family not supported by */
-                                                            /* protocol family */
+    { EAFNOSUPPORT,    osl_Socket_E_AfNoSupport       }, /* Address family not supported by
+                                                            protocol family */
     { EADDRINUSE,      osl_Socket_E_AddrInUse         }, /* Address already in use */
     { EADDRNOTAVAIL,   osl_Socket_E_AddrNotAvail      }, /* Can't assign requested address */
     { ENETDOWN,        osl_Socket_E_NetDown           }, /* Network is down */
     { ENETUNREACH,     osl_Socket_E_NetUnreachable    }, /* Network is unreachable */
-    { ENETRESET,       osl_Socket_E_NetReset          }, /* Network dropped connection because */
-                                                             /* of reset */
+    { ENETRESET,       osl_Socket_E_NetReset          }, /* Network dropped connection because
+                                                            of reset */
     { ECONNABORTED,    osl_Socket_E_ConnAborted       }, /* Software caused connection abort */
     { ECONNRESET,      osl_Socket_E_ConnReset         }, /* Connection reset by peer */
     { ENOBUFS,         osl_Socket_E_NoBufferSpace     }, /* No buffer space available */
@@ -367,7 +317,6 @@ static const struct
     { -1,              osl_Socket_E_InvalidError      }
 };
 
-/* map */
 /* mfe: NOT USED
 static int osl_NativeFromSocketError(oslSocketError errorCode)
 {
@@ -380,7 +329,6 @@ static int osl_NativeFromSocketError(oslSocketError errorCode)
 }
 */
 
-/* reverse map */
 static oslSocketError osl_SocketErrorFromNative(int nativeType)
 {
     int i = 0;
@@ -391,12 +339,7 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
     return SocketError[i].error;
 }
 
-/* macros */
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
-
-/*****************************************************************************/
-/* local function prototypes */
-/*****************************************************************************/
 
 oslSocketAddr SAL_CALL osl_psz_createInetSocketAddr (
     const sal_Char* pszDottedAddr, sal_Int32 Port);
@@ -1246,9 +1189,6 @@ oslSocketResult SAL_CALL osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
     return osl_Socket_Error;
 }
 
-/*****************************************************************************/
-/* osl_getDottedInetAddrOfSocketAddr */
-/*****************************************************************************/
 oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrDottedInetAddr)
 {
     oslSocketResult Result;
@@ -1426,12 +1366,9 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     pSocket->m_Socket = OSL_INVALID_SOCKET;
 }
 
-/*****************************************************************************/
-/* osl_getLocalAddrOfSocket  */
-/* Note that I rely on the fact that oslSocketAddr and struct sockaddr */
-/* are the same! I don't like it very much but see no other easy way to conceal */
-/* the struct sockaddr from the eyes of the user. */
-/*****************************************************************************/
+/* Note from function creator: I rely on the fact that oslSocketAddr and struct sockaddr
+   are the same! I don't like it very much but see no other easy way to conceal
+   the struct sockaddr from the eyes of the user. */
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
     socklen_t AddrLen;
