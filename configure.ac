@@ -7776,6 +7776,8 @@ libo_CHECK_SYSTEM_MODULE([libabw],[ABW],[libabw-0.1])
 
 libo_CHECK_SYSTEM_MODULE([libpagemaker],[PAGEMAKER],[libpagemaker-0.0])
 
+libo_CHECK_SYSTEM_MODULE([libqxp],[QXP],[libqxp-0.0])
+
 libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
 
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
