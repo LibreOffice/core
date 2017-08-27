@@ -24,5 +24,5 @@ package com.sun.star.sdbcx.comp.postgresql.sdbcx;
 import com.sun.star.beans.XPropertySet;
 
 public interface ISQLStatementHelper {
-    void addComment(XPropertySet propertySet, StringBuilder sql);
+    void addComment(XPropertySet descriptor, StringBuilder sql);
 }
