@@ -36,12 +36,12 @@ class SvStream;
 struct WmfExternal;
 struct ConvertData;
 
-#define ERRCODE_GRFILTER_OPENERROR    ErrCode(ErrCodeArea::Vcl, ERRCODE_CLASS_GENERAL | 1)
-#define ERRCODE_GRFILTER_IOERROR      ErrCode(ErrCodeArea::Vcl, ERRCODE_CLASS_GENERAL | 2)
-#define ERRCODE_GRFILTER_FORMATERROR  ErrCode(ErrCodeArea::Vcl, ERRCODE_CLASS_GENERAL | 3)
-#define ERRCODE_GRFILTER_VERSIONERROR ErrCode(ErrCodeArea::Vcl, ERRCODE_CLASS_GENERAL | 4)
-#define ERRCODE_GRFILTER_FILTERERROR  ErrCode(ErrCodeArea::Vcl, ERRCODE_CLASS_GENERAL | 5)
-#define ERRCODE_GRFILTER_TOOBIG       ErrCode(ErrCodeArea::Vcl, ERRCODE_CLASS_GENERAL | 7)
+#define ERRCODE_GRFILTER_OPENERROR    ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 1)
+#define ERRCODE_GRFILTER_IOERROR      ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 2)
+#define ERRCODE_GRFILTER_FORMATERROR  ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 3)
+#define ERRCODE_GRFILTER_VERSIONERROR ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 4)
+#define ERRCODE_GRFILTER_FILTERERROR  ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 5)
+#define ERRCODE_GRFILTER_TOOBIG       ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 7)
 
 #define GRFILTER_OUTHINT_GREY       1
 

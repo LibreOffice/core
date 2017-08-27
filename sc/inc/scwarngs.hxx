@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_INC_SCWARNGS_HXX
 #define INCLUDED_SC_INC_SCWARNGS_HXX
 
-#define ERRCODE_SC_EXPORT_WRN_ASCII       (ERRCODE_WARNING_MASK | ErrCodeArea::Sc | ERRCODE_CLASS_WRITE | 1)
-#define ERRCODE_SC_IMPORT_WRN_RNGOVRFLW   (ERRCODE_WARNING_MASK | ErrCodeArea::Sc | ERRCODE_CLASS_READ  | 1)
+#define ERRCODE_SC_EXPORT_WRN_ASCII       ErrCode(WarningFlag::Yes, ErrCodeArea::Sc, ErrCodeClass::Write, 1)
+#define ERRCODE_SC_IMPORT_WRN_RNGOVRFLW   ErrCode(WarningFlag::Yes, ErrCodeArea::Sc, ErrCodeClass::Read, 1)
 
 #endif
 

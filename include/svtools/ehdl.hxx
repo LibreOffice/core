@@ -65,7 +65,7 @@ private:
     const ErrMsgCode*    pIds;
     const std::locale&   rResLocale;
 
-    SVT_DLLPRIVATE static void GetClassString(sal_uLong lErrId, OUString &);
+    SVT_DLLPRIVATE static void GetClassString(ErrCodeClass lErrId, OUString &);
     virtual bool          CreateString(const ErrorInfo *, OUString &) const override;
 };
 
