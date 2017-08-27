@@ -24,24 +24,25 @@ package com.sun.star.sdbcx.comp.postgresql.util;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.mutable.MutableObject;
-
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.ElementExistException;
+import com.sun.star.container.XChild;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.KeyRule;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetMetaData;
@@ -176,21 +177,18 @@ public class DbTools {
     public static String composeTableName(
             XDatabaseMetaData metadata, XPropertySet table, ComposeRule composeRule,
             boolean suppressCatalog, boolean suppressSchema, boolean shouldQuote) throws SQLException {
-        MutableObject<String> catalog = new MutableObject<>("");
-        MutableObject<String> schema = new MutableObject<>("");
-        MutableObject<String> name = new MutableObject<>("");
-        getTableNameComponents(table, catalog, schema, name);
+        NameComponents nameComponents = getTableNameComponents(table);
         return doComposeTableName(metadata,
-                suppressCatalog ? "" : catalog.getValue(),
-                suppressSchema ? "" : schema.getValue(),
-                name.getValue(),
+                suppressCatalog ? "" : nameComponents.getCatalog(),
+                suppressSchema ? "" : nameComponents.getSchema(),
+                nameComponents.getTable(),
                 shouldQuote, composeRule);
     }
 
     public static boolean isDataSourcePropertyEnabled(Object object, String property, boolean defaultValue) throws SQLException {
         try {
             boolean enabled = defaultValue;
-            XPropertySet properties = UnoRuntime.queryInterface(XPropertySet.class, object);
+            XPropertySet properties = UnoRuntime.queryInterface(XPropertySet.class, findDataSource(object));
             if (properties != null) {
                 PropertyValue[] info = (PropertyValue[]) AnyConverter.toArray(properties.getPropertyValue("Info"));
                 for (PropertyValue propertyValue : info) {
@@ -201,18 +199,31 @@ public class DbTools {
                 }
             }
             return enabled;
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new SQLException("Error", object, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, illegalArgumentException);
-        } catch (WrappedTargetException wrappedTargetException) {
-            throw new SQLException("Error", object, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, wrappedTargetException);
-        } catch (UnknownPropertyException unknownPropertyException) {
-            throw new SQLException("Error", object, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, unknownPropertyException);
+        } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
+            throw new SQLException("Error", object, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
+    }
+
+    public static XDataSource findDataSource(Object parent) {
+        XOfficeDatabaseDocument databaseDocument = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, parent);
+        XDataSource dataSource = null;
+        if (databaseDocument != null) {
+            dataSource = databaseDocument.getDataSource();
+        }
+        if (dataSource == null) {
+            dataSource = UnoRuntime.queryInterface(XDataSource.class, parent);
+        }
+        if (dataSource == null) {
+            XChild child = UnoRuntime.queryInterface(XChild.class, parent);
+            if (child != null) {
+                dataSource = findDataSource(child.getParent());
+            }
+        }
+        return dataSource;
     }
 
     public static String doComposeTableName(XDatabaseMetaData metadata, String catalog, String schema, String table,
             boolean shouldQuote, ComposeRule composeRule) throws SQLException {
-        System.out.println(String.format("doComposeTableName(%s, %s, %s)\n", catalog, schema, table));
         Osl.ensure(!table.isEmpty(), "At least the table name should be non-empty");
         String quoteString = metadata.getIdentifierQuoteString();
         NameComponentSupport nameComponentSupport = getNameComponentSupport(metadata, composeRule);
@@ -253,30 +264,27 @@ public class DbTools {
     }
 
     public static String composeTableNameForSelect(XConnection connection, XPropertySet table) throws SQLException {
-        MutableObject<String> catalog = new MutableObject<>();
-        MutableObject<String> schema = new MutableObject<>();
-        MutableObject<String> tableName = new MutableObject<>();
-        getTableNameComponents(table, catalog, schema, tableName);
-        return composeTableNameForSelect(connection, catalog.getValue(), schema.getValue(), tableName.getValue());
+        NameComponents nameComponents = getTableNameComponents(table);
+        return composeTableNameForSelect(connection, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable());
     }
 
-    private static void getTableNameComponents(XPropertySet table, MutableObject<String> catalog,
-            MutableObject<String> schema, MutableObject<String> tableName) {
+    private static NameComponents getTableNameComponents(XPropertySet table) throws SQLException {
         try {
+            NameComponents nameComponents = new NameComponents();
             XPropertySetInfo propertySetInfo = table.getPropertySetInfo();
             if (propertySetInfo != null && propertySetInfo.hasPropertyByName(PropertyIds.NAME.name)) {
                 if (propertySetInfo.hasPropertyByName(PropertyIds.CATALOGNAME.name)
                         && propertySetInfo.hasPropertyByName(PropertyIds.SCHEMANAME.name)) {
-                    catalog.setValue(AnyConverter.toString(table.getPropertyValue(PropertyIds.CATALOGNAME.name)));
-                    schema.setValue(AnyConverter.toString(table.getPropertyValue(PropertyIds.SCHEMANAME.name)));
+                    nameComponents.setCatalog(AnyConverter.toString(table.getPropertyValue(PropertyIds.CATALOGNAME.name)));
+                    nameComponents.setSchema(AnyConverter.toString(table.getPropertyValue(PropertyIds.SCHEMANAME.name)));
                 }
-                tableName.setValue(AnyConverter.toString(table.getPropertyValue(PropertyIds.NAME.name)));
+                nameComponents.setTable(AnyConverter.toString(table.getPropertyValue(PropertyIds.NAME.name)));
             } else {
-                Osl.ensure(false, "not a table");
+                Osl.ensure(false, "this is not a table object");
             }
-        } catch (IllegalArgumentException illegalArgumentException) {
-        } catch (WrappedTargetException wrappedTargetException) {
-        } catch (UnknownPropertyException unknownPropertyException) {
+            return nameComponents;
+        } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 
@@ -323,7 +331,7 @@ public class DbTools {
 
         if ( aNameComps.useSchemas ) {
             int nIndex = sName.indexOf('.');
-            Osl.ensure(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
+            //Osl.ensure(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
             if ( nIndex != -1 ) {
                 ret.setSchema(sName.substring(0, nIndex));
             }
@@ -335,8 +343,7 @@ public class DbTools {
     }
 
     public static String createSqlCreateTableStatement(XPropertySet descriptor, XConnection connection,
-            ISQLStatementHelper helper, String createPattern) throws
-                SQLException, WrappedTargetException, UnknownPropertyException, IllegalArgumentException, IndexOutOfBoundsException {
+            ISQLStatementHelper helper, String createPattern) throws SQLException {
 
         String sql = createStandardCreateStatement(descriptor, connection, helper, createPattern);
         final String keyStatement = createStandardKeyStatement(descriptor, connection);
@@ -349,223 +356,231 @@ public class DbTools {
     }
 
     public static String createStandardCreateStatement(XPropertySet descriptor, XConnection connection,
-            ISQLStatementHelper helper, String createPattern) throws
-            SQLException, WrappedTargetException, UnknownPropertyException, IllegalArgumentException, IndexOutOfBoundsException {
-
-        XDatabaseMetaData metadata = connection.getMetaData();
-        String catalog = AnyConverter.toString(descriptor.getPropertyValue("CatalogName"));
-        String schema = AnyConverter.toString(descriptor.getPropertyValue("SchemaName"));
-        String table = AnyConverter.toString(descriptor.getPropertyValue("Name"));
-        String composedName = composeTableName(metadata, catalog, schema, table, true, ComposeRule.InTableDefinitions);
-        if (composedName.isEmpty()) {
-            throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
-                    StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
-        }
-
-        XIndexAccess columns = null;
-        XColumnsSupplier columnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, descriptor);
-        if (columnsSupplier != null) {
-            columns = UnoRuntime.queryInterface(XIndexAccess.class, columnsSupplier.getColumns());
-        }
-        if (columns == null || columns.getCount() <= 0) {
-            throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
-                    StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
-        }
-
-        int columnCount = columns.getCount();
-        StringBuilder columnText = new StringBuilder();
-        String separator = "";
-        for (int i = 0; i < columnCount; i++) {
-            XPropertySet columnProperties;
-            columnProperties = AnyConverter.toObject(XPropertySet.class, columns.getByIndex(i));
-            if (columnProperties != null) {
-                columnText.append(separator);
-                separator = ",";
-                columnText.append(createStandardColumnPart(columnProperties, connection, helper, createPattern));
+            ISQLStatementHelper helper, String createPattern) throws SQLException {
+        try {
+            XDatabaseMetaData metadata = connection.getMetaData();
+            String catalog = AnyConverter.toString(descriptor.getPropertyValue("CatalogName"));
+            String schema = AnyConverter.toString(descriptor.getPropertyValue("SchemaName"));
+            String table = AnyConverter.toString(descriptor.getPropertyValue("Name"));
+            String composedName = composeTableName(metadata, catalog, schema, table, true, ComposeRule.InTableDefinitions);
+            if (composedName.isEmpty()) {
+                throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
+                        StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
             }
-        }
 
-        return String.format("CREATE TABLE %s (%s", composedName, columnText.toString());
+            XIndexAccess columns = null;
+            XColumnsSupplier columnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, descriptor);
+            if (columnsSupplier != null) {
+                columns = UnoRuntime.queryInterface(XIndexAccess.class, columnsSupplier.getColumns());
+            }
+            if (columns == null || columns.getCount() <= 0) {
+                throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
+                        StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
+            }
+
+            int columnCount = columns.getCount();
+            StringBuilder columnText = new StringBuilder();
+            String separator = "";
+            for (int i = 0; i < columnCount; i++) {
+                XPropertySet columnProperties;
+                columnProperties = AnyConverter.toObject(XPropertySet.class, columns.getByIndex(i));
+                if (columnProperties != null) {
+                    columnText.append(separator);
+                    separator = ",";
+                    columnText.append(createStandardColumnPart(columnProperties, connection, helper, createPattern));
+                }
+            }
+
+            return String.format("CREATE TABLE %s (%s", composedName, columnText.toString());
+        } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException | IndexOutOfBoundsException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+        }
     }
 
     public static String createStandardColumnPart(XPropertySet columnProperties, XConnection connection,
-            ISQLStatementHelper helper, String createPattern) throws
-            SQLException, WrappedTargetException, UnknownPropertyException, IllegalArgumentException, IndexOutOfBoundsException {
-
-        XDatabaseMetaData metadata = connection.getMetaData();
-
-        final String quoteString = metadata.getIdentifierQuoteString();
-        final StringBuilder sql = new StringBuilder();
-        sql.append(quoteName(quoteString, AnyConverter.toString(columnProperties.getPropertyValue("Name"))));
-        sql.append(' ');
-
-        String typename = AnyConverter.toString(columnProperties.getPropertyValue("TypeName"));
-        int datatype = AnyConverter.toInt(columnProperties.getPropertyValue("Type"));
-        int precision = AnyConverter.toInt(columnProperties.getPropertyValue("Precision"));
-        int scale = AnyConverter.toInt(columnProperties.getPropertyValue("Scale"));
-        boolean isAutoIncrement = AnyConverter.toBoolean(columnProperties.getPropertyValue("IsAutoIncrement"));
-
-        // check if the user enter a specific string to create autoincrement values
-        String autoIncrementValue = "";
-        XPropertySetInfo columnPropertiesInfo = columnProperties.getPropertySetInfo();
-        if (columnPropertiesInfo != null && columnPropertiesInfo.hasPropertyByName("AutoIncrementCreation")) {
-            autoIncrementValue = AnyConverter.toString(columnProperties.getPropertyValue("AutoIncrementCreation"));
-        }
-
-        // look if we have to use precisions
-        boolean useLiteral = false;
-        String prefix = "";
-        String postfix ="";
-        String createParams = "";
-        XResultSet results = null;
+            ISQLStatementHelper helper, String createPattern) throws SQLException {
         try {
-            results = metadata.getTypeInfo();
-            if (results != null) {
-                XRow row = UnoRuntime.queryInterface(XRow.class, results);
-                while (results.next()) {
-                    String typeName2Cmp = row.getString(1);
-                    int nType = row.getShort(2);
-                    prefix = row.getString(4);
-                    postfix = row.getString(5);
-                    createParams = row.getString(6);
-                    // first identical type will be used if typename is empty
-                    if (typename.isEmpty() && nType == datatype) {
-                        typename = typeName2Cmp;
-                    }
-                    if (typename.equals(typeName2Cmp) && nType == datatype && !row.wasNull() && !createParams.isEmpty()) {
-                        useLiteral = true;
-                        break;
-                    }
-                }
-            }
-        } finally {
-            CompHelper.disposeComponent(results);
-        }
+            XDatabaseMetaData metadata = connection.getMetaData();
 
-        int index = 0;
-        if (!autoIncrementValue.isEmpty() && (index = typename.indexOf(autoIncrementValue)) != -1) {
-            typename = typename.substring(0, index);
-        }
-
-        if ((precision > 0 || scale > 0) && useLiteral) {
-            int parenPos = typename.indexOf('(');
-            if (parenPos == -1) {
-                sql.append(typename);
-                sql.append('(');
-            } else {
-                sql.append(typename.substring(0, ++parenPos));
-            }
-
-            if (precision > 0 && datatype != DataType.TIMESTAMP) {
-                sql.append(precision);
-                if (scale > 0 || (!createPattern.isEmpty() && createParams.indexOf(createPattern) != -1)) {
-                    sql.append(',');
-                }
-            }
-            if (scale > 0 || (!createPattern.isEmpty() && createParams.indexOf(createPattern) != -1) || datatype == DataType.TIMESTAMP) {
-                sql.append(scale);
-            }
-            if (parenPos == -1) {
-                sql.append(')');
-            } else {
-                parenPos = typename.indexOf(')', parenPos);
-                sql.append(typename.substring(parenPos));
-            }
-        } else {
-            sql.append(typename); // simply add the type name
-        }
-
-        String defaultValue = AnyConverter.toString(columnProperties.getPropertyValue("DefaultValue"));
-        if (defaultValue != null && !defaultValue.isEmpty()) {
-            sql.append(" DEFAULT ");
-            sql.append(prefix);
-            sql.append(defaultValue);
-            sql.append(postfix);
-        }
-
-        if (AnyConverter.toInt(columnProperties.getPropertyValue("IsNullable")) == ColumnValue.NO_NULLS) {
-            sql.append(" NOT NULL");
-        }
-
-        if (isAutoIncrement && !autoIncrementValue.isEmpty()) {
+            final String quoteString = metadata.getIdentifierQuoteString();
+            final StringBuilder sql = new StringBuilder();
+            sql.append(quoteName(quoteString, AnyConverter.toString(columnProperties.getPropertyValue("Name"))));
             sql.append(' ');
-            sql.append(autoIncrementValue);
-        }
 
-        if (helper != null) {
-            helper.addComment(columnProperties, sql);
-        }
+            String typename = AnyConverter.toString(columnProperties.getPropertyValue("TypeName"));
+            int datatype = AnyConverter.toInt(columnProperties.getPropertyValue("Type"));
+            int precision = AnyConverter.toInt(columnProperties.getPropertyValue("Precision"));
+            int scale = AnyConverter.toInt(columnProperties.getPropertyValue("Scale"));
+            boolean isAutoIncrement = AnyConverter.toBoolean(columnProperties.getPropertyValue("IsAutoIncrement"));
 
-        return sql.toString();
+            // check if the user enter a specific string to create autoincrement values
+            String autoIncrementValue = "";
+            XPropertySetInfo columnPropertiesInfo = columnProperties.getPropertySetInfo();
+            if (columnPropertiesInfo != null && columnPropertiesInfo.hasPropertyByName("AutoIncrementCreation")) {
+                autoIncrementValue = AnyConverter.toString(columnProperties.getPropertyValue("AutoIncrementCreation"));
+            }
+
+            // look if we have to use precisions
+            boolean useLiteral = false;
+            String prefix = "";
+            String postfix ="";
+            String createParams = "";
+            XResultSet results = null;
+            try {
+                results = metadata.getTypeInfo();
+                if (results != null) {
+                    XRow row = UnoRuntime.queryInterface(XRow.class, results);
+                    while (results.next()) {
+                        String typeName2Cmp = row.getString(1);
+                        int nType = row.getShort(2);
+                        prefix = row.getString(4);
+                        postfix = row.getString(5);
+                        createParams = row.getString(6);
+                        // first identical type will be used if typename is empty
+                        if (typename.isEmpty() && nType == datatype) {
+                            typename = typeName2Cmp;
+                        }
+                        if (typename.equalsIgnoreCase(typeName2Cmp) && nType == datatype && !row.wasNull() && !createParams.isEmpty()) {
+                            useLiteral = true;
+                            break;
+                        }
+                    }
+                }
+            } finally {
+                CompHelper.disposeComponent(results);
+            }
+
+            int index = 0;
+            if (!autoIncrementValue.isEmpty() && (index = typename.indexOf(autoIncrementValue)) != -1) {
+                typename = typename.substring(0, index);
+            }
+
+            if ((precision > 0 || scale > 0) && useLiteral) {
+                int parenPos = typename.indexOf('(');
+                if (parenPos == -1) {
+                    sql.append(typename);
+                    sql.append('(');
+                } else {
+                    sql.append(typename.substring(0, ++parenPos));
+                }
+
+                if (precision > 0 && datatype != DataType.TIMESTAMP) {
+                    sql.append(precision);
+                    if (scale > 0 || (!createPattern.isEmpty() && createParams.indexOf(createPattern) != -1)) {
+                        sql.append(',');
+                    }
+                }
+                if (scale > 0 || (!createPattern.isEmpty() && createParams.indexOf(createPattern) != -1) || datatype == DataType.TIMESTAMP) {
+                    sql.append(scale);
+                }
+                if (parenPos == -1) {
+                    sql.append(')');
+                } else {
+                    parenPos = typename.indexOf(')', parenPos);
+                    sql.append(typename.substring(parenPos));
+                }
+            } else {
+                sql.append(typename); // simply add the type name
+            }
+
+            String defaultValue = AnyConverter.toString(columnProperties.getPropertyValue("DefaultValue"));
+            if (!defaultValue.isEmpty()) {
+                sql.append(" DEFAULT ");
+                sql.append(prefix);
+                sql.append(defaultValue);
+                sql.append(postfix);
+            }
+
+            if (AnyConverter.toInt(columnProperties.getPropertyValue("IsNullable")) == ColumnValue.NO_NULLS) {
+                sql.append(" NOT NULL");
+            }
+
+            if (isAutoIncrement && !autoIncrementValue.isEmpty()) {
+                sql.append(' ');
+                sql.append(autoIncrementValue);
+            }
+
+            if (helper != null) {
+                helper.addComment(columnProperties, sql);
+            }
+
+            return sql.toString();
+        } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+        }
     }
 
-    public static String createStandardKeyStatement(XPropertySet descriptor, XConnection connection) throws
-            SQLException, WrappedTargetException, UnknownPropertyException, IllegalArgumentException, IndexOutOfBoundsException {
-        XDatabaseMetaData metadata = connection.getMetaData();
-        StringBuilder sql = new StringBuilder();
+    public static String createStandardKeyStatement(XPropertySet descriptor, XConnection connection) throws SQLException {
+        try {
+            XDatabaseMetaData metadata = connection.getMetaData();
+            StringBuilder sql = new StringBuilder();
 
-        XKeysSupplier keysSupplier = UnoRuntime.queryInterface(XKeysSupplier.class, descriptor);
-        XIndexAccess keys = keysSupplier.getKeys();
-        if (keys != null) {
-            boolean hasPrimaryKey = false;
-            for (int i = 0; i < keys.getCount(); i++) {
-                XPropertySet columnProperties = AnyConverter.toObject(XPropertySet.class, keys.getByIndex(i));
-                if (columnProperties != null) {
-                    int keyType = AnyConverter.toInt(columnProperties.getPropertyValue("Type"));
-                    XColumnsSupplier columnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, columnProperties);
-                    XIndexAccess columns = UnoRuntime.queryInterface(XIndexAccess.class, columnsSupplier.getColumns());
-                    if (columns == null || columns.getCount() == 0) {
-                        throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
-                                StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
-                    }
-                    if (keyType == KeyType.PRIMARY) {
-                        if (hasPrimaryKey) {
+            XKeysSupplier keysSupplier = UnoRuntime.queryInterface(XKeysSupplier.class, descriptor);
+            XIndexAccess keys = keysSupplier.getKeys();
+            if (keys != null) {
+                boolean hasPrimaryKey = false;
+                for (int i = 0; i < keys.getCount(); i++) {
+                    XPropertySet columnProperties = AnyConverter.toObject(XPropertySet.class, keys.getByIndex(i));
+                    if (columnProperties != null) {
+                        int keyType = AnyConverter.toInt(columnProperties.getPropertyValue("Type"));
+                        XColumnsSupplier columnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, columnProperties);
+                        XIndexAccess columns = UnoRuntime.queryInterface(XIndexAccess.class, columnsSupplier.getColumns());
+                        if (columns == null || columns.getCount() == 0) {
                             throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
                                     StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
                         }
-                        hasPrimaryKey = true;
-                        sql.append(" PRIMARY KEY ");
-                        sql.append(generateColumnNames(columns, metadata));
-                    } else if (keyType == KeyType.UNIQUE) {
-                        sql.append(" UNIQUE ");
-                        sql.append(generateColumnNames(columns, metadata));
-                    } else if (keyType == KeyType.FOREIGN) {
-                        int deleteRule = AnyConverter.toInt(columnProperties.getPropertyValue("DeleteRule"));
-                        sql.append(" FOREIGN KEY ");
-                        sql.append(generateColumnNames(columns, metadata));
+                        if (keyType == KeyType.PRIMARY) {
+                            if (hasPrimaryKey) {
+                                throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
+                                        StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
+                            }
+                            hasPrimaryKey = true;
+                            sql.append(" PRIMARY KEY ");
+                            sql.append(generateColumnNames(columns, metadata));
+                        } else if (keyType == KeyType.UNIQUE) {
+                            sql.append(" UNIQUE ");
+                            sql.append(generateColumnNames(columns, metadata));
+                        } else if (keyType == KeyType.FOREIGN) {
+                            int deleteRule = AnyConverter.toInt(columnProperties.getPropertyValue("DeleteRule"));
+                            sql.append(" FOREIGN KEY ");
 
-                        String referencedTable = AnyConverter.toString(columnProperties.getPropertyValue("ReferencedTable"));
-                        NameComponents nameComponents = qualifiedNameComponents(metadata, referencedTable, ComposeRule.InDataManipulation);
-                        String composedName = composeTableName(metadata, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable(),
-                                true, ComposeRule.InTableDefinitions);
-                        if (composedName.isEmpty()) {
-                            throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
-                                    StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
-                        }
+                            String referencedTable = AnyConverter.toString(columnProperties.getPropertyValue("ReferencedTable"));
+                            NameComponents nameComponents = qualifiedNameComponents(metadata, referencedTable, ComposeRule.InDataManipulation);
+                            String composedName = composeTableName(metadata, nameComponents.getCatalog(), nameComponents.getSchema(), nameComponents.getTable(),
+                                    true, ComposeRule.InTableDefinitions);
+                            if (composedName.isEmpty()) {
+                                throw new SQLException(SharedResources.getInstance().getResourceString(Resources.STR_ERRORMSG_SEQUENCE), connection,
+                                        StandardSQLState.SQL_FUNCTION_SEQUENCE_ERROR.text(), 0, null);
+                            }
 
-                        switch (deleteRule) {
-                        case KeyRule.CASCADE:
-                            sql.append(" ON DELETE CASCADE ");
-                            break;
-                        case KeyRule.RESTRICT:
-                            sql.append(" ON DELETE RESTRICT ");
-                            break;
-                        case KeyRule.SET_NULL:
-                            sql.append(" ON DELETE SET NULL ");
-                            break;
-                        case KeyRule.SET_DEFAULT:
-                            sql.append(" ON DELETE SET DEFAULT ");
-                            break;
+                            sql.append(generateColumnNames(columns, metadata));
+
+                            switch (deleteRule) {
+                            case KeyRule.CASCADE:
+                                sql.append(" ON DELETE CASCADE ");
+                                break;
+                            case KeyRule.RESTRICT:
+                                sql.append(" ON DELETE RESTRICT ");
+                                break;
+                            case KeyRule.SET_NULL:
+                                sql.append(" ON DELETE SET NULL ");
+                                break;
+                            case KeyRule.SET_DEFAULT:
+                                sql.append(" ON DELETE SET DEFAULT ");
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (sql.length() > 0) {
-            sql.append(')');
+            if (sql.length() > 0) {
+                sql.append(')');
+            }
+            return sql.toString();
+        } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException | IndexOutOfBoundsException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
-        return sql.toString();
     }
 
     private static String generateColumnNames(XIndexAccess columns, XDatabaseMetaData metadata) throws
@@ -612,14 +627,8 @@ public class DbTools {
                 columns.put(newColumnName, columnInfo);
             }
             return columns;
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new SQLException();
-        } catch (WrappedTargetException wrappedTargetException) {
-            throw new SQLException();
-        } catch (UnknownPropertyException unknownPropertyException) {
-            throw new SQLException();
-        } catch (PropertyVetoException propertyVetoException) {
-            throw new SQLException();
+        } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException | PropertyVetoException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         } finally {
             CompHelper.disposeComponent(statement);
         }
@@ -648,14 +657,8 @@ public class DbTools {
                 }
             }
             return keyColumns;
-        } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            throw new SQLException();
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new SQLException();
-        } catch (WrappedTargetException wrappedTargetException) {
-            throw new SQLException();
-        } catch (UnknownPropertyException unknownPropertyException) {
-            throw new SQLException();
+        } catch (IndexOutOfBoundsException | IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
+            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 

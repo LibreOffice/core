@@ -26,7 +26,6 @@ import java.util.List;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
@@ -38,9 +37,9 @@ import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxTableDescriptor;
 import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
+import com.sun.star.sdbcx.comp.postgresql.util.DbTools.NameComponents;
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
-import com.sun.star.sdbcx.comp.postgresql.util.DbTools.NameComponents;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
@@ -105,11 +104,7 @@ public class PostgresqlTables extends OContainer {
                 CompHelper.disposeComponent(statement);
             }
             // FIXME: delete it from our views
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, illegalArgumentException);
-        } catch (UnknownPropertyException unknownPropertyException) {
-            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, unknownPropertyException);
-        } catch (WrappedTargetException wrappedTargetException) {
+        } catch (IllegalArgumentException | UnknownPropertyException | WrappedTargetException wrappedTargetException) {
             throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, wrappedTargetException);
         }
     }
@@ -136,14 +131,6 @@ public class PostgresqlTables extends OContainer {
             String sql = DbTools.createSqlCreateTableStatement(descriptor, metadata.getConnection(), null, "(M,D)");
             statement = metadata.getConnection().createStatement();
             statement.execute(sql);
-        } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, indexOutOfBoundsException);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, illegalArgumentException);
-        } catch (UnknownPropertyException unknownPropertyException) {
-            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, unknownPropertyException);
-        } catch (WrappedTargetException wrappedTargetException) {
-            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, wrappedTargetException);
         } finally {
             CompHelper.disposeComponent(statement);
         }
