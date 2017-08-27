@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_libraries,setgetenv,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,setgetenv,\
-    sal/workben/osl/setgetenv \
+    sal/workben/osl/process/setgetenv \
 ))
 
 $(call gb_Executable_get_clean_target,setgetenv) :
