@@ -951,12 +951,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf111964, "tdf111964.docx")
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
 {
     uno::Reference<drawing::XShape> xShape1(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape1.is());
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
-    xShape1.is();
 
     uno::Reference<drawing::XShape> xShape2(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape2.is());
     uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY);
-    xShape2.is();
 
     CPPUNIT_ASSERT_EQUAL(xPropertySet1->getPropertyValue("TextAutoGrowHeight"), xPropertySet2->getPropertyValue("TextAutoGrowHeight"));
 }
