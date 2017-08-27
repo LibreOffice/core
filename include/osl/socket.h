@@ -74,7 +74,7 @@ typedef enum {
                                          sockets                                */
     osl_Socket_TypeSeqPacket,       /*!< connection-oriented and reliable
                                          two-way transport of ordered byte
-                                         steams                                 */
+                                         streams                                */
     osl_Socket_TypeInvalid,         /*!< always last entry in enum              */
     osl_Socket_Type_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketType;
@@ -87,11 +87,11 @@ typedef enum {
     osl_Socket_OptionDebug,         /*!< record debugging info                  */
     osl_Socket_OptionAcceptConn,    /*!< listen for connection                  */
     osl_Socket_OptionReuseAddr,     /*!< bind to address already in use         */
-    osl_Socket_OptionKeepAlive,     /*!< use keep-alives                        */
+    osl_Socket_OptionKeepAlive,     /*!< use keep-alive                         */
     osl_Socket_OptionDontRoute,     /*!< do not route packet, send direct to
                                          interface addresses                    */
     osl_Socket_OptionBroadcast,     /*!< send broadcast message                 */
-    osl_Socket_OptionUseLoopback,   /*!< socket recieves copy of everything
+    osl_Socket_OptionUseLoopback,   /*!< socket receives copy of everything
                                          sent on the socket                     */
     osl_Socket_OptionLinger,        /*!< don't immediately close - "linger"
                                          a while to allow for graceful
