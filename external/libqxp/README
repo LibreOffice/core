@@ -1,0 +1,4 @@
+libqxp is a library and a set of tools for reading and converting
+QuarkXPress file format. It supports versions 3.1-4.1 currently.
+
+[https://wiki.documentfoundation.org/DLP/Libraries/libqxp]
