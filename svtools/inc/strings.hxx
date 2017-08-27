@@ -10,8 +10,6 @@
 #ifndef INCLUDED_SVTOOLS_INC_STRINGS_HXX
 #define INCLUDED_SVTOOLS_INC_STRINGS_HXX
 
-#define STR_ERR_HDLMESS                 "$(ACTION)$(ERROR)"
-#define RID_ERRHDL_CLASS                "$(CLASS)$(ERROR)"
 // no need to translate this
 // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
 // field label list of the dialog
