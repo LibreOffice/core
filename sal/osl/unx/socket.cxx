@@ -118,22 +118,6 @@ static const sal_uInt32 ProtocolMap[]= {
     0                           /* osl_Socket_ProtocolInvalid */
 };
 
-/* mfe: NOT USED
-static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
-{
-    oslProtocol i= (oslProtocol)0;
-
-    while(i != osl_Socket_ProtocolInvalid)
-    {
-        if(ProtocolMap[i] == nativeType)
-            return i;
-        i = (oslProtocol) ( i + 1);
-    }
-
-    return i;
-}
-*/
-
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
 
 static const sal_uInt32 TypeMap[]= {
@@ -184,21 +168,6 @@ static const sal_uInt32 OptionMap[]= {
     0                           /* osl_Socket_OptionInvalid     */
 };
 
-/* mfe: NOT USED
-static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
-{
-    oslSocketOption i= (oslSocketOption)0;
-
-    while(i != osl_Socket_OptionInvalid)
-    {
-        if(OptionMap[i] == nativeType)
-            return i;
-        i = (oslSocketOption) ( i + 1 );
-    }
-
-    return i;
-}
-*/
 #define OPTION_TO_NATIVE(x)     OptionMap[x]
 
 static const sal_uInt32 OptionLevelMap[]= {
@@ -207,21 +176,6 @@ static const sal_uInt32 OptionLevelMap[]= {
     0                           /* osl_Socket_LevelInvalid */
 };
 
-/* mfe: NOT USED
-static oslSocketOptionLevel osl_SocketOptionLevelFromNative(sal_uInt32 nativeType)
-{
-    oslSocketOptionLevel i= (oslSocketOptionLevel)0;
-
-    while(i != osl_Socket_LevelInvalid)
-    {
-        if(OptionLevelMap[i] == nativeType)
-            return i;
-        i = (oslSocketOptionLevel) ( i + 1 );
-    }
-
-    return i;
-}
-*/
 #define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
 
 static const sal_uInt32 SocketMsgFlagMap[]= {
@@ -233,22 +187,6 @@ static const sal_uInt32 SocketMsgFlagMap[]= {
     0                           /* osl_Socket_MsgInvalid   */
 };
 
-/* mfe: NOT USED
-static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
-{
-    oslSocketMsgFlag i= (oslSocketMsgFlag)0;
-
-    while(i != osl_Socket_MsgInvalid)
-    {
-        if(SocketMsgFlagMap[i] == nativeType)
-            return i;
-        i = (oslSocketMsgFlag) ( i + 1 );
-    }
-
-    return i;
-}
-*/
-
 #define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
 
 static const sal_uInt32 SocketDirection[]= {
@@ -257,22 +195,6 @@ static const sal_uInt32 SocketDirection[]= {
     SD_BOTH,                    /* osl_Socket_DirReadWrite */
     0                           /* osl_Socket_DirInvalid   */
 };
-
-/* mfe: NOT USED
-static oslSocketDirection osl_SocketDirectionFromNative(sal_uInt32 nativeType)
-{
-    oslSocketDirection i= (oslSocketDirection)0;
-
-    while(i != osl_Socket_DirInvalid)
-    {
-        if(SocketDirection[i] == nativeType)
-            return i;
-        i = (oslSocketDirection) ( i + 1 );
-    }
-
-    return i;
-}
-*/
 
 #define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
 
@@ -316,18 +238,6 @@ static const struct
     { EAGAIN,          osl_Socket_E_WouldBlock        }, /* same as EWOULDBLOCK */
     { -1,              osl_Socket_E_InvalidError      }
 };
-
-/* mfe: NOT USED
-static int osl_NativeFromSocketError(oslSocketError errorCode)
-{
-    int i = 0;
-
-    while ((SocketError[i].error != osl_Socket_E_InvalidError) &&
-           (SocketError[i].error != errorCode)) i++;
-
-    return SocketError[i].errcode;
-}
-*/
 
 static oslSocketError osl_SocketErrorFromNative(int nativeType)
 {
