@@ -284,7 +284,7 @@ ErrCode SwASCIIParser::ReadChars()
         hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
         OSL_ENSURE( hConverter, "no string convert available" );
         if (!hConverter)
-            return ErrCode(ErrCodeArea::Sw, ERRCODE_CLASS_READ);
+            return ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 0);
         bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
     }

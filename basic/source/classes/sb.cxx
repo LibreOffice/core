@@ -1669,7 +1669,7 @@ bool StarBASIC::RTError( ErrCode code, const OUString& rMsg, sal_Int32 l, sal_In
     SolarMutexGuard aSolarGuard;
 
     ErrCode c = code;
-    if( c.GetClass() == ERRCODE_CLASS_COMPILER )
+    if( c.GetClass() == ErrCodeClass::Compiler )
     {
         c = ERRCODE_NONE;
     }

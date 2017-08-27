@@ -23,23 +23,23 @@
 #include <svtools/ehdl.hxx>
 #include <svx/svxdllapi.h>
 
-#define ERRCODE_SVX_LINGU_LINGUNOTEXISTS      ErrCode( ErrCodeArea::Svx,  3UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE   ErrCode( ErrCodeArea::Svx,  6UL | ERRCODE_CLASS_WRITE )
-#define ERRCODE_SVX_GRAPHIC_NOTREADABLE       ErrCode( ErrCodeArea::Svx,  7UL | ERRCODE_CLASS_READ )
-#define ERRCODE_SVX_LINGU_NOLANGUAGE          ErrCode( ErrCodeArea::Svx,  9UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_SVX_MODIFIED_VBASIC_STORAGE   ErrCode( ErrCodeArea::Svx, 13UL | ERRCODE_CLASS_WRITE | ERRCODE_WARNING_MASK )
-#define ERRCODE_SVX_VBASIC_STORAGE_EXIST      ErrCode( ErrCodeArea::Svx, 14UL | ERRCODE_CLASS_WRITE | ERRCODE_WARNING_MASK )
+#define ERRCODE_SVX_LINGU_LINGUNOTEXISTS      ErrCode( ErrCodeArea::Svx, ErrCodeClass::NotExists, 3 )
+#define ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE   ErrCode( ErrCodeArea::Svx, ErrCodeClass::Write, 6 )
+#define ERRCODE_SVX_GRAPHIC_NOTREADABLE       ErrCode( ErrCodeArea::Svx, ErrCodeClass::Read, 7 )
+#define ERRCODE_SVX_LINGU_NOLANGUAGE          ErrCode( ErrCodeArea::Svx, ErrCodeClass::NotExists, 9 )
+#define ERRCODE_SVX_MODIFIED_VBASIC_STORAGE   ErrCode( WarningFlag::Yes, ErrCodeArea::Svx, ErrCodeClass::Write, 13 )
+#define ERRCODE_SVX_VBASIC_STORAGE_EXIST      ErrCode( WarningFlag::Yes, ErrCodeArea::Svx, ErrCodeClass::Write, 14 )
 /** Error message: "Wrong password." */
-#define ERRCODE_SVX_WRONGPASS                 ErrCode( ErrCodeArea::Svx, 15UL | ERRCODE_CLASS_NONE)
+#define ERRCODE_SVX_WRONGPASS                 ErrCode( ErrCodeArea::Svx, ErrCodeClass::NONE, 15)
 /** Error message: "Read error. Unsupported encryption method." */
-#define ERRCODE_SVX_READ_FILTER_CRYPT         ErrCode( ErrCodeArea::Svx, 16UL | ERRCODE_CLASS_READ)
+#define ERRCODE_SVX_READ_FILTER_CRYPT         ErrCode( ErrCodeArea::Svx, ErrCodeClass::Read, 16)
 /** Error message: "Read error. Passwort encrypted Powerpoint documents..." */
-#define ERRCODE_SVX_READ_FILTER_PPOINT        ErrCode( ErrCodeArea::Svx, 17UL | ERRCODE_CLASS_READ)
+#define ERRCODE_SVX_READ_FILTER_PPOINT        ErrCode( ErrCodeArea::Svx, ErrCodeClass::Read, 17)
 /** Error message: "Warning. Passwort protection is not supported when..." */
-#define ERRCODE_SVX_EXPORT_FILTER_CRYPT       ErrCode( ErrCodeArea::Svx, 18UL | ERRCODE_CLASS_EXPORT | ERRCODE_WARNING_MASK)
+#define ERRCODE_SVX_EXPORT_FILTER_CRYPT       ErrCode( WarningFlag::Yes, ErrCodeArea::Svx, ErrCodeClass::Export, 18)
 
 
-// both codes will be used twice : with ERRCODE_CLASS_READ- and ERRCODE_CLASS_WRITE-bits
+// both codes will be used twice : with ErrCodeClass::Read- and ErrCodeClass::Write-bits
 #define ERRCTX_SVX_LINGU_THESAURUS              1
 #define ERRCTX_SVX_LINGU_SPELLING               2
 #define ERRCTX_SVX_LINGU_HYPHENATION            3

@@ -59,13 +59,23 @@ Warning           ||   ||      |
 #define ERRCODE_DYNAMIC_MASK             (31UL << ERRCODE_DYNAMIC_SHIFT)
 
 enum class ErrCodeArea;
+enum class ErrCodeClass;
+
+enum class WarningFlag { Yes };
 
 class SAL_WARN_UNUSED ErrCode final
 {
 public:
-    explicit constexpr ErrCode(ErrCodeArea nArea, sal_uInt32 value) : m_value(value | (sal_uInt32(nArea) << ERRCODE_AREA_SHIFT)) {}
-    explicit constexpr ErrCode(sal_uInt32 value) : m_value(value) {}
-    constexpr ErrCode() : m_value(0) {}
+    explicit constexpr ErrCode(WarningFlag, ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
+        : m_value(ERRCODE_WARNING_MASK | (sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode) {}
+    explicit constexpr ErrCode(ErrCodeArea nArea, ErrCodeClass nClass, sal_uInt16 nCode)
+        : m_value((sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | (sal_uInt32(nClass) << ERRCODE_CLASS_SHIFT) | nCode) {}
+    explicit constexpr ErrCode(ErrCodeArea nArea, sal_uInt32 nClassAndCode)
+        : m_value((sal_uInt32(nArea) << ERRCODE_AREA_SHIFT) | nClassAndCode) {}
+    explicit constexpr ErrCode(sal_uInt32 nValue)
+        : m_value(nValue) {}
+    constexpr ErrCode()
+        : m_value(0) {}
 
     explicit operator sal_uInt32() const { return m_value; }
     explicit operator bool() const { return m_value != 0; }
@@ -108,12 +118,12 @@ public:
         return ErrCode(m_value & ~ERRCODE_DYNAMIC_MASK);
     }
 
-    ErrCodeArea GetArea() const {
+    constexpr ErrCodeArea GetArea() const {
         return static_cast<ErrCodeArea>((m_value >> ERRCODE_AREA_SHIFT) & 0x01fff);
     }
 
-    sal_uInt32 GetClass() const {
-        return m_value & ERRCODE_CLASS_MASK;
+    constexpr ErrCodeClass GetClass() const {
+        return static_cast<ErrCodeClass>((m_value >> ERRCODE_CLASS_SHIFT) & 0x1f);
     }
 
     constexpr sal_uInt16 GetRest() const {
@@ -160,70 +170,72 @@ enum class ErrCodeArea {
     Sw                  = 56,
 };
 
-#define ERRCODE_CLASS_NONE               ( 0  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_ABORT              ( 1  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_GENERAL            ( 2  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_NOTEXISTS          ( 3  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_ALREADYEXISTS      ( 4  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_ACCESS             ( 5  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_PATH               ( 6  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_LOCKING            ( 7  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_PARAMETER          ( 8  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_SPACE              ( 9  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_NOTSUPPORTED       (10  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_READ               (11  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_WRITE              (12  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_UNKNOWN            (13  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_VERSION            (14  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_FORMAT             (15  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_CREATE             (16  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_IMPORT             (17  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_EXPORT             (18  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_SO                 (20  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_SBX                (21  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_RUNTIME            (22  << ERRCODE_CLASS_SHIFT)
-#define ERRCODE_CLASS_COMPILER           (23  << ERRCODE_CLASS_SHIFT)
+enum class ErrCodeClass {
+    NONE               =  0,
+    Abort              =  1,
+    General            =  2,
+    NotExists          =  3,
+    AlreadyExists      =  4,
+    Access             =  5,
+    Path               =  6,
+    Locking            =  7,
+    Parameter          =  8,
+    Space              =  9,
+    NotSupported       = 10,
+    Read               = 11,
+    Write              = 12,
+    Unknown            = 13,
+    Version            = 14,
+    Format             = 15,
+    Create             = 16,
+    Import             = 17,
+    Export             = 18,
+    So                 = 20,
+    Sbx                = 21,
+    Runtime            = 22,
+    Compiler           = 23
+};
 
 #define ERRCODE_NONE                     ErrCode(0)
 
-#define ERRCODE_IO_MISPLACEDCHAR         ErrCode( ErrCodeArea::Io, 1UL  | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_NOTEXISTS             ErrCode( ErrCodeArea::Io, 2UL  | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_IO_ALREADYEXISTS         ErrCode( ErrCodeArea::Io, 3UL  | ERRCODE_CLASS_ALREADYEXISTS )
-#define ERRCODE_IO_NOTADIRECTORY         ErrCode( ErrCodeArea::Io, 4UL  | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_NOTAFILE              ErrCode( ErrCodeArea::Io, 5UL  | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_INVALIDDEVICE         ErrCode( ErrCodeArea::Io, 6UL  | ERRCODE_CLASS_PATH )
-#define ERRCODE_IO_ACCESSDENIED          ErrCode( ErrCodeArea::Io, 7UL  | ERRCODE_CLASS_ACCESS )
-#define ERRCODE_IO_LOCKVIOLATION         ErrCode( ErrCodeArea::Io, 8UL  | ERRCODE_CLASS_LOCKING )
-#define ERRCODE_IO_OUTOFSPACE            ErrCode( ErrCodeArea::Io, 9UL  | ERRCODE_CLASS_SPACE )
-#define ERRCODE_IO_ISWILDCARD            ErrCode( ErrCodeArea::Io, 11UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_NOTSUPPORTED          ErrCode( ErrCodeArea::Io, 12UL | ERRCODE_CLASS_NOTSUPPORTED )
-#define ERRCODE_IO_GENERAL               ErrCode( ErrCodeArea::Io, 13UL | ERRCODE_CLASS_GENERAL )
-#define ERRCODE_IO_TOOMANYOPENFILES      ErrCode( ErrCodeArea::Io, 14UL | ERRCODE_CLASS_SPACE )
-#define ERRCODE_IO_CANTREAD              ErrCode( ErrCodeArea::Io, 15UL | ERRCODE_CLASS_READ )
-#define ERRCODE_IO_CANTWRITE             ErrCode( ErrCodeArea::Io, 16UL | ERRCODE_CLASS_WRITE )
-#define ERRCODE_IO_OUTOFMEMORY           ErrCode( ErrCodeArea::Io, 17UL | ERRCODE_CLASS_SPACE )
-#define ERRCODE_IO_CANTSEEK              ErrCode( ErrCodeArea::Io, 18UL | ERRCODE_CLASS_GENERAL )
-#define ERRCODE_IO_CANTTELL              ErrCode( ErrCodeArea::Io, 19UL | ERRCODE_CLASS_GENERAL )
-#define ERRCODE_IO_WRONGVERSION          ErrCode( ErrCodeArea::Io, 20UL | ERRCODE_CLASS_VERSION )
-#define ERRCODE_IO_WRONGFORMAT           ErrCode( ErrCodeArea::Io, 21UL | ERRCODE_CLASS_FORMAT )
-#define ERRCODE_IO_INVALIDCHAR           ErrCode( ErrCodeArea::Io, 22UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_UNKNOWN               ErrCode( ErrCodeArea::Io, 23UL | ERRCODE_CLASS_UNKNOWN )
-#define ERRCODE_IO_INVALIDACCESS         ErrCode( ErrCodeArea::Io, 24UL | ERRCODE_CLASS_ACCESS )
-#define ERRCODE_IO_CANTCREATE            ErrCode( ErrCodeArea::Io, 25UL | ERRCODE_CLASS_CREATE )
-#define ERRCODE_IO_INVALIDPARAMETER      ErrCode( ErrCodeArea::Io, 26UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_ABORT                 ErrCode( ErrCodeArea::Io, 27UL | ERRCODE_CLASS_ABORT )
-#define ERRCODE_IO_NOTEXISTSPATH         ErrCode( ErrCodeArea::Io, 28UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_IO_PENDING               ErrCode( ErrCodeArea::Io, 29UL | ERRCODE_CLASS_NOTEXISTS )
-#define ERRCODE_IO_RECURSIVE             ErrCode( ErrCodeArea::Io, 30UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_NAMETOOLONG           ErrCode( ErrCodeArea::Io, 31UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_INVALIDLENGTH         ErrCode( ErrCodeArea::Io, 32UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_CURRENTDIR            ErrCode( ErrCodeArea::Io, 33UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_NOTSAMEDEVICE         ErrCode( ErrCodeArea::Io, 34UL | ERRCODE_CLASS_PARAMETER )
-#define ERRCODE_IO_DEVICENOTREADY        ErrCode( ErrCodeArea::Io, 35UL | ERRCODE_CLASS_READ )
-#define ERRCODE_IO_BADCRC                ErrCode( ErrCodeArea::Io, 36UL | ERRCODE_CLASS_READ )
-#define ERRCODE_IO_WRITEPROTECTED        ErrCode( ErrCodeArea::Io, 37UL | ERRCODE_CLASS_ACCESS )
-#define ERRCODE_IO_BROKENPACKAGE         ErrCode( ErrCodeArea::Io, 38UL | ERRCODE_CLASS_FORMAT )
-#define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT ErrCode( ErrCodeArea::Io, 39UL | ERRCODE_CLASS_FORMAT )
+#define ERRCODE_IO_MISPLACEDCHAR         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 1 )
+#define ERRCODE_IO_NOTEXISTS             ErrCode( ErrCodeArea::Io, ErrCodeClass::NotExists, 2 )
+#define ERRCODE_IO_ALREADYEXISTS         ErrCode( ErrCodeArea::Io, ErrCodeClass::AlreadyExists, 3 )
+#define ERRCODE_IO_NOTADIRECTORY         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 4 )
+#define ERRCODE_IO_NOTAFILE              ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 5 )
+#define ERRCODE_IO_INVALIDDEVICE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Path, 6 )
+#define ERRCODE_IO_ACCESSDENIED          ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 7 )
+#define ERRCODE_IO_LOCKVIOLATION         ErrCode( ErrCodeArea::Io, ErrCodeClass::Locking, 8 )
+#define ERRCODE_IO_OUTOFSPACE            ErrCode( ErrCodeArea::Io, ErrCodeClass::Space, 9 )
+#define ERRCODE_IO_ISWILDCARD            ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 11 )
+#define ERRCODE_IO_NOTSUPPORTED          ErrCode( ErrCodeArea::Io, ErrCodeClass::NotSupported, 12 )
+#define ERRCODE_IO_GENERAL               ErrCode( ErrCodeArea::Io, ErrCodeClass::General, 13 )
+#define ERRCODE_IO_TOOMANYOPENFILES      ErrCode( ErrCodeArea::Io, ErrCodeClass::Space, 14 )
+#define ERRCODE_IO_CANTREAD              ErrCode( ErrCodeArea::Io, ErrCodeClass::Read, 15 )
+#define ERRCODE_IO_CANTWRITE             ErrCode( ErrCodeArea::Io, ErrCodeClass::Write, 16 )
+#define ERRCODE_IO_OUTOFMEMORY           ErrCode( ErrCodeArea::Io, ErrCodeClass::Space, 17 )
+#define ERRCODE_IO_CANTSEEK              ErrCode( ErrCodeArea::Io, ErrCodeClass::General, 18 )
+#define ERRCODE_IO_CANTTELL              ErrCode( ErrCodeArea::Io, ErrCodeClass::General, 19 )
+#define ERRCODE_IO_WRONGVERSION          ErrCode( ErrCodeArea::Io, ErrCodeClass::Version, 20 )
+#define ERRCODE_IO_WRONGFORMAT           ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 21 )
+#define ERRCODE_IO_INVALIDCHAR           ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 22 )
+#define ERRCODE_IO_UNKNOWN               ErrCode( ErrCodeArea::Io, ErrCodeClass::Unknown, 23 )
+#define ERRCODE_IO_INVALIDACCESS         ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 24 )
+#define ERRCODE_IO_CANTCREATE            ErrCode( ErrCodeArea::Io, ErrCodeClass::Create, 25 )
+#define ERRCODE_IO_INVALIDPARAMETER      ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 26 )
+#define ERRCODE_IO_ABORT                 ErrCode( ErrCodeArea::Io, ErrCodeClass::Abort, 27 )
+#define ERRCODE_IO_NOTEXISTSPATH         ErrCode( ErrCodeArea::Io, ErrCodeClass::NotExists, 28 )
+#define ERRCODE_IO_PENDING               ErrCode( ErrCodeArea::Io, ErrCodeClass::NotExists, 29 )
+#define ERRCODE_IO_RECURSIVE             ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 30 )
+#define ERRCODE_IO_NAMETOOLONG           ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 31 )
+#define ERRCODE_IO_INVALIDLENGTH         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 32 )
+#define ERRCODE_IO_CURRENTDIR            ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 33 )
+#define ERRCODE_IO_NOTSAMEDEVICE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Parameter, 34 )
+#define ERRCODE_IO_DEVICENOTREADY        ErrCode( ErrCodeArea::Io, ErrCodeClass::Read, 35 )
+#define ERRCODE_IO_BADCRC                ErrCode( ErrCodeArea::Io, ErrCodeClass::Read, 36 )
+#define ERRCODE_IO_WRITEPROTECTED        ErrCode( ErrCodeArea::Io, ErrCodeClass::Access, 37 )
+#define ERRCODE_IO_BROKENPACKAGE         ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 38 )
+#define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT ErrCode( ErrCodeArea::Io, ErrCodeClass::Format, 39 )
 
 // StreamErrorCodes
 
@@ -257,12 +269,12 @@ enum class ErrCodeArea {
 
 #define ERRCODE_ABORT                    ERRCODE_IO_ABORT
 
-#define ERRCODE_INET_NAME_RESOLVE        ErrCode(ErrCodeArea::Inet, ERRCODE_CLASS_READ | 1)
-#define ERRCODE_INET_CONNECT             ErrCode(ErrCodeArea::Inet, ERRCODE_CLASS_READ | 2)
-#define ERRCODE_INET_READ                ErrCode(ErrCodeArea::Inet, ERRCODE_CLASS_READ | 3)
-#define ERRCODE_INET_WRITE               ErrCode(ErrCodeArea::Inet, ERRCODE_CLASS_WRITE| 4)
-#define ERRCODE_INET_GENERAL             ErrCode(ErrCodeArea::Inet, ERRCODE_CLASS_WRITE| 5)
-#define ERRCODE_INET_OFFLINE             ErrCode(ErrCodeArea::Inet, ERRCODE_CLASS_READ | 6)
+#define ERRCODE_INET_NAME_RESOLVE        ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  1)
+#define ERRCODE_INET_CONNECT             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  2)
+#define ERRCODE_INET_READ                ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  3)
+#define ERRCODE_INET_WRITE               ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 4)
+#define ERRCODE_INET_GENERAL             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Write, 5)
+#define ERRCODE_INET_OFFLINE             ErrCode(ErrCodeArea::Inet, ErrCodeClass::Read,  6)
 
 #endif
 
