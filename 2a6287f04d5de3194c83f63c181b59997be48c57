@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_55ed458a",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-27T20:41:50Z",
+      "side": 1,
+      "message": "you do not need this functor",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 2
+      },
+      "revId": "2a6287f04d5de3194c83f63c181b59997be48c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_75024140",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-27T20:41:50Z",
+      "side": 1,
+      "message": "first delete the element\n\n\u003e delete *pElementIter;\n\nthen erase the pointer from the vector\n\n\u003e pElementIter \u003d  m_aChildrenVector.erase(pElementIter);\n\npElementIter will point to the element after the erased element in the vector now.",
+      "range": {
+        "startLine": 1050,
+        "startChar": 12,
+        "endLine": 1050,
+        "endChar": 175
+      },
+      "revId": "2a6287f04d5de3194c83f63c181b59997be48c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_95ffad33",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-27T20:41:50Z",
+      "side": 1,
+      "message": "do the same as in line 1050",
+      "range": {
+        "startLine": 1230,
+        "startChar": 0,
+        "endLine": 1230,
+        "endChar": 175
+      },
+      "revId": "2a6287f04d5de3194c83f63c181b59997be48c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_55a46556",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-27T20:41:50Z",
+      "side": 1,
+      "message": "here you want to move the pointer from m_aChildrenVector to\nm_aDeletedVector.\nstd::remove_if works, but easiest is std::remove.\nand you still need to erase the empty pointer field from the vector.\n\n\u003e m_aChildrenVector.erase(\n\u003e      std::remove(m_aChildrenVector.begin(), m_aChildrenVector.end(), pDeletedElm),\n\u003e      m_aChildrenVector.end());\n\nsecond line is ok.",
+      "range": {
+        "startLine": 1445,
+        "startChar": 0,
+        "endLine": 1446,
+        "endChar": 50
+      },
+      "revId": "2a6287f04d5de3194c83f63c181b59997be48c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9586cdb7",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-27T20:41:50Z",
+      "side": 1,
+      "message": "here you want to delete pElement and remove it from m_aChildrenVector.\n\n\u003e delete pElement;\n\u003e m_aChildrenVector.erase(\n\u003e        std::remove(m_aChildrenVector.begin(), m_aChildrenVector.end(), pElement),\n\u003e        m_aChildrenVector.end());",
+      "range": {
+        "startLine": 1531,
+        "startChar": 0,
+        "endLine": 1531,
+        "endChar": 151
+      },
+      "revId": "2a6287f04d5de3194c83f63c181b59997be48c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
