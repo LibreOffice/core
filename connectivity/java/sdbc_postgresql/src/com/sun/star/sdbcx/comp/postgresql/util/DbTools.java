@@ -604,6 +604,7 @@ public class DbTools {
         return sql.toString();
     }
 
+    /// We need some more information about the column.
     public static Map<String,ExtraColumnInfo> collectColumnInformation(XConnection connection, String composedName, String columnName) throws SQLException {
         String sql = String.format("SELECT %s FROM %s WHERE 0 = 1", columnName, composedName);
         XStatement statement = null;

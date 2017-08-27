@@ -886,7 +886,7 @@ public class ORowSetValue {
                 aRet = (String)value;
                 break;
             case DataType.BIGINT:
-                aRet = isSigned() ? Long.toString((long)value) : Long.toUnsignedString((long)value);
+                aRet = isSigned() ? Long.toString((long)value) : DBTypeConversion.toUnsignedString((long)value);
                 break;
             case DataType.FLOAT:
                 aRet = ((Float)value).toString();
@@ -911,7 +911,7 @@ public class ORowSetValue {
                     StringBuilder sVal = new StringBuilder("0x");
                     byte[] sSeq = getSequence();
                     for (byte b : sSeq) {
-                        sVal.append(String.format("%02x", Byte.toUnsignedInt(b)));
+                        sVal.append(String.format("%02x", DBTypeConversion.toUnsignedInt(b)));
                     }
                     aRet = sVal.toString();
                 }
@@ -921,13 +921,13 @@ public class ORowSetValue {
                 aRet = ((Boolean)value).toString();
                 break;
             case DataType.TINYINT:
-                aRet = isSigned() ? Integer.toString((byte)value) : Integer.toUnsignedString(0xff & (byte)value);
+                aRet = isSigned() ? Integer.toString((byte)value) : DBTypeConversion.toUnsignedString(0xff & (byte)value);
                 break;
             case DataType.SMALLINT:
-                aRet = isSigned() ? Integer.toString((short)value) : Integer.toUnsignedString(0xffff & (short)value);
+                aRet = isSigned() ? Integer.toString((short)value) : DBTypeConversion.toUnsignedString(0xffff & (short)value);
                 break;
             case DataType.INTEGER:
-                aRet = isSigned() ? Integer.toString((int)value) : Integer.toUnsignedString((int)value);
+                aRet = isSigned() ? Integer.toString((int)value) : DBTypeConversion.toUnsignedString((int)value);
                 break;
             case DataType.CLOB:
                 if (AnyConverter.isObject(value)) {

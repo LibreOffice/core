@@ -21,6 +21,7 @@
 
 package com.sun.star.sdbcx.comp.postgresql.util;
 
+import java.math.BigInteger;
 import java.util.StringTokenizer;
 
 import com.sun.star.util.Date;
@@ -79,6 +80,22 @@ public class DBTypeConversion {
             d += 0x1p63f;
         }
         return d;
+    }
+
+    public static int toUnsignedInt(byte value) {
+        return value & 0xff;
+    }
+
+    public static int toUnsignedInt(short value) {
+        return value & 0xffff;
+    }
+
+    public static String toUnsignedString(int value) {
+        return Long.toString(value & 0xffffFFFFL);
+    }
+
+    public static String toUnsignedString(long value) {
+        return new BigInteger(Long.toHexString(value), 16).toString();
     }
 
     public static void addDays(int nDays, Date _rDate) {
@@ -399,28 +416,31 @@ public class DBTypeConversion {
         return new Time(nHundredthSeconds,nSecond,nMinute,nHour);
     }
 
+    /// Return the date in the format %04d-%02d-%02d.
     public static String toDateString(Date date) {
         return String.format("%04d-%02d-%02d",
-                Short.toUnsignedInt(date.Year),
-                Short.toUnsignedInt(date.Month),
-                Short.toUnsignedInt(date.Day));
+                toUnsignedInt(date.Year),
+                toUnsignedInt(date.Month),
+                toUnsignedInt(date.Day));
     }
 
+    /// Return the time in the format %02d:%02d:%02d.
     public static String toTimeString(Time time) {
         return String.format("%02d:%02d:%02d",
-                Short.toUnsignedInt(time.Hours),
-                Short.toUnsignedInt(time.Minutes),
-                Short.toUnsignedInt(time.Seconds));
+                toUnsignedInt(time.Hours),
+                toUnsignedInt(time.Minutes),
+                toUnsignedInt(time.Seconds));
     }
 
+    /// Return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%d.
     public static String toDateTimeString(DateTime dateTime) {
         return String.format("%04d-%02d-%02d %02d:%02d:%02d.%d",
-                Short.toUnsignedInt(dateTime.Year),
-                Short.toUnsignedInt(dateTime.Month),
-                Short.toUnsignedInt(dateTime.Day),
-                Short.toUnsignedInt(dateTime.Hours),
-                Short.toUnsignedInt(dateTime.Minutes),
-                Short.toUnsignedInt(dateTime.Seconds),
-                Short.toUnsignedInt(dateTime.HundredthSeconds));
+                toUnsignedInt(dateTime.Year),
+                toUnsignedInt(dateTime.Month),
+                toUnsignedInt(dateTime.Day),
+                toUnsignedInt(dateTime.Hours),
+                toUnsignedInt(dateTime.Minutes),
+                toUnsignedInt(dateTime.Seconds),
+                toUnsignedInt(dateTime.HundredthSeconds));
     }
 }
