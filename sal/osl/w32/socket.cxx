@@ -771,10 +771,10 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
     return osl_Socket_Ok;
 }
 
-oslSocket SAL_CALL osl_createSocket (
+oslSocket SAL_CALL osl_createSocket(
     oslAddrFamily Family,
     oslSocketType Type,
-    oslProtocol   Protocol)
+    oslProtocol Protocol)
 {
     /* alloc memory */
     oslSocket pSocket = osl_createSocketImpl_(0);
@@ -783,19 +783,28 @@ oslSocket SAL_CALL osl_createSocket (
         return nullptr;
 
     /* create socket */
-    pSocket->m_Socket= socket(FAMILY_TO_NATIVE(Family),
-                                TYPE_TO_NATIVE(Type),
-                                PROTOCOL_TO_NATIVE(Protocol));
+    pSocket->m_Socket = socket(FAMILY_TO_NATIVE(Family),
+                               TYPE_TO_NATIVE(Type),
+                               PROTOCOL_TO_NATIVE(Protocol));
 
     /* creation failed => free memory */
     if(pSocket->m_Socket == OSL_INVALID_SOCKET)
     {
+        sal_uInt32 nErrno = WSAGetLastError();
+        wchar_t *sErr = nullptr;
+        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                       NULL, nErrno,
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                       (LPWSTR)&sErr, 0, NULL);
+        SAL_WARN("sal.osl", "socket creation failed: (" << nErrno << ") " << sErr);
+        LocalFree(sErr);
+
         osl_destroySocketImpl_(pSocket);
-        pSocket= nullptr;
+        pSocket = nullptr;
     }
     else
     {
-        pSocket->m_Flags            = 0;
+        pSocket->m_Flags = 0;
     }
 
     return pSocket;

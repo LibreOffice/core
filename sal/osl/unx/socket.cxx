@@ -1135,11 +1135,11 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAd
     return osl_Socket_Error;
 }
 
-oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
-                           oslSocketType    Type,
-                           oslProtocol      Protocol)
+oslSocket SAL_CALL osl_createSocket(
+    oslAddrFamily Family,
+    oslSocketType Type,
+    oslProtocol Protocol)
 {
-    int            Flags;
     oslSocket pSocket;
 
     /* alloc memory */
@@ -1153,7 +1153,7 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
     /* creation failed => free memory */
     if(pSocket->m_Socket == OSL_INVALID_SOCKET)
     {
-        int nErrno = errno;
+        sal_Int32 nErrno = errno;
         SAL_WARN( "sal.osl", "socket creation failed: (" << nErrno << ") " << strerror(nErrno) );
 
         destroySocketImpl(pSocket);
@@ -1161,14 +1161,15 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
     }
     else
     {
+        sal_Int32 nFlags=0;
         /* set close-on-exec flag */
-        if ((Flags = fcntl(pSocket->m_Socket, F_GETFD, 0)) != -1)
+        if ((nFlags = fcntl(pSocket->m_Socket, F_GETFD, 0)) != -1)
         {
-            Flags |= FD_CLOEXEC;
-            if (fcntl(pSocket->m_Socket, F_SETFD, Flags) == -1)
+            nFlags |= FD_CLOEXEC;
+            if (fcntl(pSocket->m_Socket, F_SETFD, nFlags) == -1)
             {
                 pSocket->m_nLastError=errno;
-                int nErrno = errno;
+                sal_uInt32 nErrno = errno;
                 SAL_WARN( "sal.osl", "failed changing socket flags: (" << nErrno << ") " << strerror(nErrno) );
             }
         }
