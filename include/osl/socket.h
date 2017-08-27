@@ -39,7 +39,6 @@ extern "C" {
 */
 typedef struct oslSocketAddrImpl * oslSocketAddr;
 
-
 /**
     Represents the address-family of a socket
 */
@@ -126,7 +125,6 @@ typedef enum  {
     osl_Socket_Level_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslSocketOptionLevel;
 
-
 /**
     Represents flags to be used with send/recv-calls.
 */
@@ -208,213 +206,21 @@ typedef sal_uInt8 oslSocketIpxNodeNumber[6];
 /**@} end section types
 */
 
-/**@{ begin section oslSocketAddr
-*/
-
-/** Creates a socket-address for the given family.
-    @param Family If family == osl_Socket_FamilyInet the address is
-                  set to INADDR_ANY port 0.
-    @return 0 if address could not be created.
-*/
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createEmptySocketAddr(
-        oslAddrFamily Family);
-
-
-/** Creates a new SocketAddress and fills it from Addr.
-*/
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_copySocketAddr(
-        oslSocketAddr Addr);
-
-/** Compares the values of two SocketAddresses.
-    @retval sal_True if both addresses denote the same socket address.
-    @retval sal_False if both addresses do not denote the same socket address.
-*/
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isEqualSocketAddr(
-    oslSocketAddr Addr1, oslSocketAddr Addr2);
-
-/** Uses the systems name-service interface to find an address for strHostname.
-    @param[in] strHostname The name for which you search for an address.
-    @return The desired address if one could be found, otherwise 0.
-    Don't forget to destroy the address if you don't need it any longer.
-*/
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_resolveHostname(
-        rtl_uString *strHostname);
-
-/** Create an internet address usable for sending broadcast datagrams.
-    To limit the broadcast to your subnet, pass your hosts IP address
-    in dotted decimal notation as first argument.
-    @see    osl_sendToSocket()
-    @see    oslSocketAddr
-    @param[in]  strDottedAddr dotted decimal internet address, may be 0.
-    @param[in]  Port port number in host byte order.
-    @retval 0 if address could not be created.
-*/
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr(
-    rtl_uString *strDottedAddr, sal_Int32 Port);
-
-
-/** Create an internet-address, consisting of host address and port.
-    We interpret strDottedAddr as a dotted-decimal inet-addr
-    (e.g. "141.99.128.50").
-    @param[in] strDottedAddr  String with dotted address.
-    @param[in] Port  portnumber in host byte order.
-    @retval 0 if address could not be created.
-*/
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetSocketAddr (
-    rtl_uString *strDottedAddr, sal_Int32 Port);
-
-
-/** Frees all resources allocated by Addr. The handle Addr must not
-    be used after the call anymore.
-*/
-SAL_DLLPUBLIC void SAL_CALL osl_destroySocketAddr(
-        oslSocketAddr Addr);
-
-/** Looks up the port-number designated to the specified service/protocol-pair.
-    (e.g. "ftp" "tcp").
-    @retval OSL_INVALID_PORT if no appropriate entry was found, otherwise the port-number.
-*/
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getServicePort(
-        rtl_uString *strServicename, rtl_uString *strProtocol);
-
-
-
-/** Retrieves the address-family from the Addr.
-    @return the family of the socket-address.
-    In case of an unknown family you get osl_Socket_FamilyInvalid.
-*/
-SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
-        oslSocketAddr Addr);
-
-
-/** Retrieves the internet port-number of Addr.
-    @return the port-number of the address in host-byte order. If Addr
-    is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
-*/
-SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
-        oslSocketAddr Addr);
-
-
-/** Sets the Port of Addr.
-    @param[in] Addr the SocketAddr to perfom the operation on.
-    @param[in] Port is expected in host byte-order.
-    @retval sal_False if Addr is not an inet-addr.
-*/
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(
-        oslSocketAddr Addr, sal_Int32 Port);
-
-
-/** Returns the hostname represented by Addr.
-    @param[in] Addr The socket address from which to extract the hostname.
-    @param[out] strHostname The hostname represented by the address. If
-    there is no hostname to be found, it returns 0.
-*/
-SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(
-        oslSocketAddr Addr, rtl_uString **strHostname);
-
-
-/** Gets the address in dotted decimal format.
-
-    @param[in] Addr The socket address from which to extract the dotted decimal address.
-    @param[out] strDottedInetAddr Contains the dotted decimal address
-    (e.g. 141.99.20.34) represented by the address.
-
-    @retval If the address is invalid or not of type osl_Socket_FamilyInet, it returns 0.
-    @retval osl_Socket_Ok
-    @retval osl_Socket_Error
-*/
-SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(
-        oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
-
-/** Sets the addr field in the struct sockaddr with pByteSeq. pByteSeq must be in network byte order.
- */
-SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_setAddrOfSocketAddr(
-        oslSocketAddr Addr, sal_Sequence *pByteSeq );
-
-/** Returns the addr field in the struct sockaddr.
-    @param[in] Addr The socket address from which to extract the ipaddress.
-    @param[out] ppByteSeq After the call, *ppByteSeq contains the ipaddress
-                     in network byteorder. *ppByteSeq may be 0 in case of an invalid socket handle.
-    @retval osl_Socket_Ok
-    @retval osl_Socket_Error
- */
-SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getAddrOfSocketAddr(
-        oslSocketAddr Addr, sal_Sequence **ppByteSeq );
-
-/*
-    Opaque datatype HostAddr.
-*/
-typedef struct oslHostAddrImpl * oslHostAddr;
-
-
-/** Create an oslHostAddr from given hostname and socket address.
-    @param[in] strHostname The hostname to be stored.
-    @param[in] Addr The socket address to be stored.
-    @return The created address or 0 upon failure.
-*/
-SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddr(
-        rtl_uString *strHostname, const oslSocketAddr Addr);
-
-
-/** Create an oslHostAddr by resolving the given strHostname.
-    Successful name resolution should result in the fully qualified
-    domain name (FQDN) and its address as hostname and socket address
-    members of the resulting oslHostAddr.
-    @param[in] strHostname The hostname to be resolved.
-    @return The resulting address or 0 upon failure.
-*/
-SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
-
-
-/** Create an oslHostAddr by reverse resolution of the given Addr.
-    Successful name resolution should result in the fully qualified
-    domain name (FQDN) and its address as hostname and socket address
-    members of the resulting oslHostAddr.
-    @param[in] Addr The socket address to be reverse resolved.
-    @return The resulting address or 0 upon failure.
-*/
-SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr Addr);
-
-
-/** Create a copy of the given Addr.
-    @return The copied address or 0 upon failure.
-*/
-SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_copyHostAddr(const oslHostAddr Addr);
-
-
-/** Frees all resources allocated by Addr. The handle Addr must not
-    be used after the call anymore.
-*/
-SAL_DLLPUBLIC void SAL_CALL osl_destroyHostAddr(oslHostAddr Addr);
-
-
-/** Get the hostname member of Addr.
-    @return The hostname or 0 upon failure.
-*/
-SAL_DLLPUBLIC void SAL_CALL osl_getHostnameOfHostAddr(const oslHostAddr Addr, rtl_uString **strHostname);
-
-
-/** Get the socket address member of Addr.
-    @return The socket address or 0 upon failure.
-*/
-SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAddr Addr);
-
-/** Retrieve this machines hostname.
-    May not always be a fully qualified domain name (FQDN).
-    @param  strLocalHostname out-parameter. The string that receives the local host name.
-    @retval sal_True upon success
-    @retval sal_False
-*/
-SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
-
-
-/**@} end section oslHostAddr
-*/
-
 /**@{ begin section oslSocket
 */
 
 typedef struct oslSocketImpl * oslSocket;
+
+/** Create a socket of the specified Family and Type. The semantic of
+    the Protocol parameter depends on the given family and type.
+
+    @returns 0 if socket could not be created, otherwise you get a handle
+             to the allocated socket-datastructure.
+*/
+SAL_DLLPUBLIC oslSocket SAL_CALL osl_createSocket(
+                            oslAddrFamily Family,
+                            oslSocketType Type,
+                            oslProtocol Protocol);
 
 /** increases the refcount of the socket handle by one
  */
@@ -427,21 +233,12 @@ SAL_DLLPUBLIC void SAL_CALL osl_acquireSocket(oslSocket Socket);
  */
 SAL_DLLPUBLIC void SAL_CALL osl_releaseSocket(oslSocket Socket);
 
-/** Create a socket of the specified Family and Type. The semantic of
-    the Protocol parameter depends on the given family and type.
-    @retval 0 if socket could not be created, otherwise you get a handle
-    to the allocated socket-datastructure.
-*/
-SAL_DLLPUBLIC oslSocket SAL_CALL osl_createSocket(
-                            oslAddrFamily Family,
-                            oslSocketType Type,
-                            oslProtocol Protocol);
-
 /** Retrieves the Address of the local end of the socket.
     Note that a socket must be bound or connected before
     a valid address can be returned.
-    @retval 0 if socket-address could not be created, otherwise you get
-    the created Socket-Address.
+
+    @returns 0 if socket-address could not be created, otherwise you get
+             the created Socket-Address.
 */
 SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
 
@@ -913,6 +710,208 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writeSocket(
                             sal_Int32 nSize);
 
 /**@} end section oslSocket
+*/
+/**@{ begin section oslSocketAddr
+*/
+
+/** Creates a socket-address for the given family.
+    @param Family If family == osl_Socket_FamilyInet the address is
+                  set to INADDR_ANY port 0.
+    @return 0 if address could not be created.
+*/
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createEmptySocketAddr(
+        oslAddrFamily Family);
+
+
+/** Creates a new SocketAddress and fills it from Addr.
+*/
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_copySocketAddr(
+        oslSocketAddr Addr);
+
+/** Compares the values of two SocketAddresses.
+    @retval sal_True if both addresses denote the same socket address.
+    @retval sal_False if both addresses do not denote the same socket address.
+*/
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isEqualSocketAddr(
+    oslSocketAddr Addr1, oslSocketAddr Addr2);
+
+/** Uses the systems name-service interface to find an address for strHostname.
+    @param[in] strHostname The name for which you search for an address.
+    @return The desired address if one could be found, otherwise 0.
+    Don't forget to destroy the address if you don't need it any longer.
+*/
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_resolveHostname(
+        rtl_uString *strHostname);
+
+/** Create an internet address usable for sending broadcast datagrams.
+    To limit the broadcast to your subnet, pass your hosts IP address
+    in dotted decimal notation as first argument.
+    @see    osl_sendToSocket()
+    @see    oslSocketAddr
+    @param[in]  strDottedAddr dotted decimal internet address, may be 0.
+    @param[in]  Port port number in host byte order.
+    @retval 0 if address could not be created.
+*/
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr(
+    rtl_uString *strDottedAddr, sal_Int32 Port);
+
+
+/** Create an internet-address, consisting of host address and port.
+    We interpret strDottedAddr as a dotted-decimal inet-addr
+    (e.g. "141.99.128.50").
+    @param[in] strDottedAddr  String with dotted address.
+    @param[in] Port  portnumber in host byte order.
+    @retval 0 if address could not be created.
+*/
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetSocketAddr (
+    rtl_uString *strDottedAddr, sal_Int32 Port);
+
+
+/** Frees all resources allocated by Addr. The handle Addr must not
+    be used after the call anymore.
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_destroySocketAddr(
+        oslSocketAddr Addr);
+
+/** Looks up the port-number designated to the specified service/protocol-pair.
+    (e.g. "ftp" "tcp").
+    @retval OSL_INVALID_PORT if no appropriate entry was found, otherwise the port-number.
+*/
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getServicePort(
+        rtl_uString *strServicename, rtl_uString *strProtocol);
+
+
+
+/** Retrieves the address-family from the Addr.
+    @return the family of the socket-address.
+    In case of an unknown family you get osl_Socket_FamilyInvalid.
+*/
+SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
+        oslSocketAddr Addr);
+
+
+/** Retrieves the internet port-number of Addr.
+    @return the port-number of the address in host-byte order. If Addr
+    is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
+*/
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
+        oslSocketAddr Addr);
+
+
+/** Sets the Port of Addr.
+    @param[in] Addr the SocketAddr to perfom the operation on.
+    @param[in] Port is expected in host byte-order.
+    @retval sal_False if Addr is not an inet-addr.
+*/
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(
+        oslSocketAddr Addr, sal_Int32 Port);
+
+
+/** Returns the hostname represented by Addr.
+    @param[in] Addr The socket address from which to extract the hostname.
+    @param[out] strHostname The hostname represented by the address. If
+    there is no hostname to be found, it returns 0.
+*/
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(
+        oslSocketAddr Addr, rtl_uString **strHostname);
+
+
+/** Gets the address in dotted decimal format.
+
+    @param[in] Addr The socket address from which to extract the dotted decimal address.
+    @param[out] strDottedInetAddr Contains the dotted decimal address
+    (e.g. 141.99.20.34) represented by the address.
+
+    @retval If the address is invalid or not of type osl_Socket_FamilyInet, it returns 0.
+    @retval osl_Socket_Ok
+    @retval osl_Socket_Error
+*/
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(
+        oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
+
+/** Sets the addr field in the struct sockaddr with pByteSeq. pByteSeq must be in network byte order.
+ */
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_setAddrOfSocketAddr(
+        oslSocketAddr Addr, sal_Sequence *pByteSeq );
+
+/** Returns the addr field in the struct sockaddr.
+    @param[in] Addr The socket address from which to extract the ipaddress.
+    @param[out] ppByteSeq After the call, *ppByteSeq contains the ipaddress
+                     in network byteorder. *ppByteSeq may be 0 in case of an invalid socket handle.
+    @retval osl_Socket_Ok
+    @retval osl_Socket_Error
+ */
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getAddrOfSocketAddr(
+        oslSocketAddr Addr, sal_Sequence **ppByteSeq );
+
+/*
+    Opaque datatype HostAddr.
+*/
+typedef struct oslHostAddrImpl * oslHostAddr;
+
+
+/** Create an oslHostAddr from given hostname and socket address.
+    @param[in] strHostname The hostname to be stored.
+    @param[in] Addr The socket address to be stored.
+    @return The created address or 0 upon failure.
+*/
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddr(
+        rtl_uString *strHostname, const oslSocketAddr Addr);
+
+
+/** Create an oslHostAddr by resolving the given strHostname.
+    Successful name resolution should result in the fully qualified
+    domain name (FQDN) and its address as hostname and socket address
+    members of the resulting oslHostAddr.
+    @param[in] strHostname The hostname to be resolved.
+    @return The resulting address or 0 upon failure.
+*/
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
+
+
+/** Create an oslHostAddr by reverse resolution of the given Addr.
+    Successful name resolution should result in the fully qualified
+    domain name (FQDN) and its address as hostname and socket address
+    members of the resulting oslHostAddr.
+    @param[in] Addr The socket address to be reverse resolved.
+    @return The resulting address or 0 upon failure.
+*/
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr Addr);
+
+
+/** Create a copy of the given Addr.
+    @return The copied address or 0 upon failure.
+*/
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_copyHostAddr(const oslHostAddr Addr);
+
+
+/** Frees all resources allocated by Addr. The handle Addr must not
+    be used after the call anymore.
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_destroyHostAddr(oslHostAddr Addr);
+
+
+/** Get the hostname member of Addr.
+    @return The hostname or 0 upon failure.
+*/
+SAL_DLLPUBLIC void SAL_CALL osl_getHostnameOfHostAddr(const oslHostAddr Addr, rtl_uString **strHostname);
+
+
+/** Get the socket address member of Addr.
+    @return The socket address or 0 upon failure.
+*/
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAddr Addr);
+
+/** Retrieve this machines hostname.
+    May not always be a fully qualified domain name (FQDN).
+    @param  strLocalHostname out-parameter. The string that receives the local host name.
+    @retval sal_True upon success
+    @retval sal_False
+*/
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
+
+
+/**@} end section oslHostAddr
 */
 
 #ifdef __cplusplus
