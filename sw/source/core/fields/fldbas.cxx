@@ -119,7 +119,8 @@ namespace
     /* SwFieldIds::DateTime      */      TYP_BEGIN,         // dynamic
     /* SwFieldIds::TableOfAuthorities*/  TYP_AUTHORITY,
     /* SwFieldIds::CombinedChars */      TYP_COMBINED_CHARS,
-    /* SwFieldIds::Dropdown      */      TYP_DROPDOWN
+    /* SwFieldIds::Dropdown      */      TYP_DROPDOWN,
+    /* SwFieldIds::ParagraphSignature */ TYP_PARAGRAPHSIGFLD
     };
 
 }
