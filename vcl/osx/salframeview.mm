@@ -1523,7 +1523,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 {
     SolarMutexGuard aGuard;
 
-    long nRet = 0;
+    bool nRet = false;
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         SalKeyEvent aEvent;
@@ -1533,11 +1533,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         nRet = mpFrame->CallCallback( SalEvent::KeyInput, &aEvent );
         std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
         if( it != GetSalData()->maKeyEventAnswer.end() )
-            it->second = nRet != 0;
+            it->second = nRet;
         if( AquaSalFrame::isAlive( mpFrame ) )
             mpFrame->CallCallback( SalEvent::KeyUp, &aEvent );
     }
-    return nRet ? YES : NO;
+    return nRet;
 }
 
 
