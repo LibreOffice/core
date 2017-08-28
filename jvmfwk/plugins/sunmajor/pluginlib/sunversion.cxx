@@ -97,7 +97,7 @@ bool SunVersion::init(const char *szVersion)
                 pCur + 1 != pEnd
                 || rtl::isAsciiDigit(static_cast<unsigned char>(*pCur))) )
         {
-            bool afterMaint = pCur != pEnd && (*pCur == '_' || *pCur == '-');
+            bool afterMaint = pCur == pEnd || *pCur == '_' || *pCur == '-';
 
             int len = pCur - pLast;
             if (len >= 127)
