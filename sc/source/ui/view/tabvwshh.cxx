@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <basic/sberrors.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>

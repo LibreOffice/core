@@ -20,7 +20,39 @@
 #ifndef INCLUDED_BASIC_SBERRORS_HXX
 #define INCLUDED_BASIC_SBERRORS_HXX
 
-#include <basic/sbxdef.hxx>
+#include <vcl/errcode.hxx>
+
+// New error codes per define
+#define ERRCODE_SBX_SYNTAX               ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Compiler, 1)
+#define ERRCODE_SBX_NOTIMP               ErrCode( ErrCodeArea::Sbx, ErrCodeClass::NotSupported, 2)
+#define ERRCODE_SBX_OVERFLOW             ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Sbx, 3)        // overflow
+#define ERRCODE_SBX_BOUNDS               ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Sbx, 4)        // Invalid array index
+#define ERRCODE_SBX_ZERODIV              ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Sbx, 5)        // Division by zero
+#define ERRCODE_SBX_CONVERSION           ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Sbx, 6)        // wrong data type
+#define ERRCODE_SBX_BAD_PARAMETER        ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 7)    // invalid Parameter
+#define ERRCODE_SBX_PROC_UNDEFINED       ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 8)    // Sub or Func not def
+#define ERRCODE_SBX_ERROR                ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Unknown, 9)    // generic object error
+#define ERRCODE_SBX_NO_OBJECT            ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 10)   // Object var not object
+#define ERRCODE_SBX_CANNOT_LOAD          ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Create, 11)    // Object init/load fail
+#define ERRCODE_SBX_BAD_INDEX            ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Sbx, 12)       // Invalid object index
+#define ERRCODE_SBX_NO_ACTIVE_OBJECT     ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Access, 13)    // Object not active
+#define ERRCODE_SBX_BAD_PROP_VALUE       ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 14)   // Bad property value
+#define ERRCODE_SBX_PROP_READONLY        ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Read, 15)      // Property is read only
+#define ERRCODE_SBX_PROP_WRITEONLY       ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Write, 16)     // Property is write only
+#define ERRCODE_SBX_INVALID_OBJECT       ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Access, 17)    // Invalid object reference
+#define ERRCODE_SBX_NO_METHOD            ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 18)   // Property or Method unknown
+#define ERRCODE_SBX_INVALID_USAGE_OBJECT ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Access, 19)   // Invalid object usage
+#define ERRCODE_SBX_NO_OLE               ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Access, 20)    // No OLE-Object
+#define ERRCODE_SBX_BAD_METHOD           ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 21)   // Method not supported
+#define ERRCODE_SBX_OLE_ERROR            ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 22)   // OLE Automation Error
+#define ERRCODE_SBX_BAD_ACTION           ErrCode( ErrCodeArea::Sbx, ErrCodeClass::NotSupported, 23)  // Action not supported
+#define ERRCODE_SBX_NO_NAMED_ARGS        ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 24)   // No named arguments
+#define ERRCODE_SBX_BAD_LOCALE           ErrCode( ErrCodeArea::Sbx, ErrCodeClass::NotSupported, 25)  // Locale not supported
+#define ERRCODE_SBX_NAMED_NOT_FOUND      ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 26)   // Unknown named argument
+#define ERRCODE_SBX_NOT_OPTIONAL         ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 27)   // Argument not optional
+#define ERRCODE_SBX_WRONG_ARGS           ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Sbx, 28)       // Invalid number of arguments
+#define ERRCODE_SBX_NOT_A_COLL           ErrCode( ErrCodeArea::Sbx, ErrCodeClass::Runtime, 29)   // Object contains no elements
+#define LAST_SBX_ERROR_ID                29UL
 
 // Mapping to ErrCode
 #define ERRCODE_BASIC_SYNTAX                ERRCODE_SBX_SYNTAX                  // unspecified syntax error

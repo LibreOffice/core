@@ -25,6 +25,7 @@
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 
+#include <basic/sberrors.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
