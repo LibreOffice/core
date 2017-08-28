@@ -229,7 +229,8 @@ std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
                 hbox.reset(new Hidden);
                 break;
             case CH_HEADER_FOOTER:                // 16
-                hbox.reset(new HeaderFooter);
+                if (!hwpf.already_importing_type(CH_HEADER_FOOTER))
+                    hbox.reset(new HeaderFooter);
                 break;
             case CH_FOOTNOTE:                     // 17
                 hbox.reset(new Footnote);
@@ -274,11 +275,19 @@ std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
                 break;
         }
     }
-    if (!hbox || !hbox->Read(hwpf))
+
+    if (!hbox)
+        return nullptr;
+
+    hwpf.push_hpara_type(scflag);
+    bool bRead = hbox->Read(hwpf);
+    hwpf.pop_hpara_type();
+    if (!bRead)
     {
         hbox.reset();
-        return hbox;
+        return nullptr;
     }
+
     if( hh == CH_TEXT_BOX || hh == CH_PICTURE || hh == CH_LINE )
     {
         FBox *fbox = static_cast<FBox *>(hbox.get());

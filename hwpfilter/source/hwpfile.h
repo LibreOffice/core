@@ -25,6 +25,7 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 #define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
+#include <algorithm>
 #include <list>
 #include <vector>
 #include <stdio.h>
@@ -252,6 +253,13 @@ class DLLEXPORT HWPFile
           int getMaxSettedPage(){ return m_nMaxSettedPage; }
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
 
+        void push_hpara_type(unsigned char scflag) { element_import_stack.push_back(scflag); }
+        bool already_importing_type(unsigned char scflag) const
+        {
+            return std::find(element_import_stack.begin(), element_import_stack.end(), scflag) != element_import_stack.end();
+        }
+        void pop_hpara_type() { element_import_stack.pop_back(); }
+
     private:
         int compareCharShape(CharShape const *shape);
         int compareParaShape(ParaShape const *shape);
@@ -290,6 +298,8 @@ class DLLEXPORT HWPFile
         std::vector<HeaderFooter*> headerfooters;
         std::vector<ShowPageNum*> pagenumbers;
         std::vector<Table*> tables;
+        //track the stack of HParas types we're currently importing
+        std::vector<unsigned char> element_import_stack;
 
 // for global document handling
         static HWPFile *cur_doc;
