@@ -20,7 +20,11 @@
 #ifndef INCLUDED_BRIDGES_INC_BRIDGE_HXX
 #define INCLUDED_BRIDGES_INC_BRIDGE_HXX
 
-#include "osl/interlck.h"
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include "sal/types.h"
 #include "typelib/typedescription.h"
 #include "uno/environment.h"
@@ -90,7 +94,7 @@ private:
         Bridge * pBridge;
     };
 
-    oslInterlockedCount nRef;
+    std::atomic<std::size_t> nRef;
 
     uno_ExtEnvironment * pCppEnv;
     uno_ExtEnvironment * pUnoEnv;

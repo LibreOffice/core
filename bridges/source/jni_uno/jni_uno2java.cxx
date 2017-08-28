@@ -19,7 +19,9 @@
 
 #include <sal/config.h>
 
+#include <atomic>
 #include <cassert>
+#include <cstddef>
 #include <memory>
 
 #include <sal/alloca.h>
@@ -383,7 +385,7 @@ void Bridge::call_java(
 // an UNO proxy wrapping a Java interface
 struct UNO_proxy : public uno_Interface
 {
-    mutable oslInterlockedCount         m_ref;
+    mutable std::atomic<std::size_t>    m_ref;
     Bridge const *                      m_bridge;
 
     // mapping information
@@ -438,7 +440,7 @@ inline UNO_proxy::UNO_proxy(
 
 inline void UNO_proxy::acquire() const
 {
-    if (osl_atomic_increment( &m_ref ) == 1)
+    if (++m_ref == 1)
     {
         // rebirth of proxy zombie
         void * that = const_cast< UNO_proxy * >( this );
@@ -454,7 +456,7 @@ inline void UNO_proxy::acquire() const
 
 inline void UNO_proxy::release() const
 {
-    if (osl_atomic_decrement( &m_ref ) == 0)
+    if (--m_ref == 0)
     {
         // revoke from uno env on last release
         (*m_bridge->m_uno_env->revokeInterface)(

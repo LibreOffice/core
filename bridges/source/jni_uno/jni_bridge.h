@@ -20,11 +20,15 @@
 #ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BRIDGE_H
 #define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BRIDGE_H
 
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include "jni_base.h"
 #include "jni_helper.h"
 
 #include "osl/diagnose.h"
-#include "osl/interlck.h"
 
 #include "uno/mapping.h"
 #include "uno/dispatcher.h"
@@ -46,7 +50,7 @@ struct Mapping : public uno_Mapping
 // Holds environments and mappings:
 struct Bridge
 {
-    mutable oslInterlockedCount m_ref;
+    mutable std::atomic<std::size_t> m_ref;
 
     uno_ExtEnvironment *        m_uno_env;
     uno_Environment *           m_java_env;

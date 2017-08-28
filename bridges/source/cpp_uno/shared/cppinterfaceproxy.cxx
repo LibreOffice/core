@@ -26,7 +26,6 @@
 
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/getglobalmutex.hxx"
-#include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/instance.hxx"
 #include "typelib/typedescription.h"
@@ -120,7 +119,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
 
 void CppInterfaceProxy::acquireProxy()
 {
-    if (osl_atomic_increment( &nRef ) == 1)
+    if (++nRef == 1)
     {
         // rebirth of proxy zombie
         // register at cpp env
@@ -134,7 +133,7 @@ void CppInterfaceProxy::acquireProxy()
 
 void CppInterfaceProxy::releaseProxy()
 {
-    if (! osl_atomic_decrement( &nRef )) // last release
+    if (! --nRef ) // last release
     {
         // revoke from cpp env
         (*pBridge->getCppEnv()->revokeInterface)(

@@ -20,7 +20,11 @@
 #ifndef INCLUDED_BRIDGES_INC_CPPINTERFACEPROXY_HXX
 #define INCLUDED_BRIDGES_INC_CPPINTERFACEPROXY_HXX
 
-#include "osl/interlck.h"
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.h"
@@ -84,7 +88,7 @@ private:
     static com::sun::star::uno::XInterface * castProxyToInterface(
         CppInterfaceProxy * pProxy);
 
-    oslInterlockedCount nRef;
+    std::atomic<std::size_t> nRef;
     Bridge * pBridge;
 
     // mapping information

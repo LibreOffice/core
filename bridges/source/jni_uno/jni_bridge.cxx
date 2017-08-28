@@ -194,7 +194,7 @@ namespace jni_uno
 
 void Bridge::acquire() const
 {
-    if (osl_atomic_increment( &m_ref ) == 1)
+    if (++m_ref == 1)
     {
         if (m_registered_java2uno)
         {
@@ -216,7 +216,7 @@ void Bridge::acquire() const
 
 void Bridge::release() const
 {
-    if (! osl_atomic_decrement( &m_ref ))
+    if (! --m_ref )
     {
         uno_revokeMapping(
             m_registered_java2uno

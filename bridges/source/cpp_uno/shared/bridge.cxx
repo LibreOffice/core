@@ -24,7 +24,6 @@
 #include "unointerfaceproxy.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/interlck.h"
 #include "rtl/ustring.h"
 #include "sal/types.h"
 #include "typelib/typedescription.h"
@@ -151,7 +150,7 @@ uno_Mapping * Bridge::createMapping(
 
 void Bridge::acquire()
 {
-    if (osl_atomic_increment( &nRef ) == 1)
+    if (++nRef == 1)
     {
         if (bExportCpp2Uno)
         {
@@ -172,7 +171,7 @@ void Bridge::acquire()
 
 void Bridge::release()
 {
-    if (! osl_atomic_decrement( &nRef ))
+    if (! --nRef )
     {
         ::uno_revokeMapping( bExportCpp2Uno ? &aCpp2Uno : &aUno2Cpp );
     }

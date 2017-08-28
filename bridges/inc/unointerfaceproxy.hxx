@@ -20,7 +20,11 @@
 #ifndef INCLUDED_BRIDGES_INC_UNOINTERFACEPROXY_HXX
 #define INCLUDED_BRIDGES_INC_UNOINTERFACEPROXY_HXX
 
-#include "osl/interlck.h"
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.h"
@@ -83,7 +87,7 @@ private:
 
     ~UnoInterfaceProxy();
 
-    oslInterlockedCount nRef;
+    std::atomic<std::size_t> nRef;
     Bridge * pBridge;
 
     // mapping information
