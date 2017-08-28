@@ -115,7 +115,6 @@ class TemplateScanner::FolderDescriptorList
 TemplateScanner::TemplateScanner()
     : meState(INITIALIZE_SCANNING),
       maFolderContent(),
-      maFolderList(),
       mpFolderDescriptors(new FolderDescriptorList),
       mxTemplateRoot(),
       mxFolderEnvironment(),
@@ -195,7 +194,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
                     ||  (sContentType == "Impress 2.0"))
                 {
                     OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(sTitle);
-                    mpTemplateEntries.push_back(new TemplateEntry(sLocalisedTitle, sTargetURL));
+                    mpTemplateEntries.push_back(o3tl::make_unique<TemplateEntry>(sLocalisedTitle, sTargetURL));
                 }
             }
 
@@ -204,12 +203,6 @@ TemplateScanner::State TemplateScanner::ScanEntry()
         }
         else
         {
-            if (!mpTemplateEntries.empty())
-            {
-                SolarMutexGuard aGuard;
-                maFolderList.push_back(mpTemplateEntries);
-            }
-
             // Continue with scanning the next folder.
             eNextState = SCAN_FOLDER;
         }

@@ -24,6 +24,7 @@
 #include "sddllapi.h"
 #include <ucbhelper/content.hxx>
 #include "com/sun/star/uno/Reference.hxx"
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <vector>
@@ -93,7 +94,7 @@ public:
             <nullptr/> is returned either before the template scanning is
             started or after it has ended.
     */
-    const TemplateEntry* GetLastAddedEntry() const { return mpTemplateEntries.empty()?nullptr:mpTemplateEntries.back();}
+    const TemplateEntry* GetLastAddedEntry() const { return mpTemplateEntries.empty()?nullptr:mpTemplateEntries.back().get();}
 
 private:
     /** The current state determines which step will be executed next by
@@ -112,12 +113,7 @@ private:
     State meState;
 
     ::ucbhelper::Content maFolderContent;
-    ::std::vector<TemplateEntry*> mpTemplateEntries;
-
-    /** The data structure that is to be filled with information about the
-        template files.
-    */
-    std::vector< ::std::vector<TemplateEntry*> > maFolderList;
+    ::std::vector< std::unique_ptr<TemplateEntry> > mpTemplateEntries;
 
     /** The folders that are collected by GatherFolderList().
     */
