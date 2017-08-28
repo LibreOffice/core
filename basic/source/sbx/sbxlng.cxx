@@ -32,7 +32,7 @@ start:
     switch( +p->eType )
     {
         case SbxNULL:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
             SAL_FALLTHROUGH;
         case SbxEMPTY:
             nRes = 0; break;
@@ -51,7 +51,7 @@ start:
         case SbxULONG:
             if( p->nULong > SbxMAXLNG )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMAXLNG;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }
             else
                 nRes = (sal_Int32) p->nULong;
@@ -59,11 +59,11 @@ start:
         case SbxSINGLE:
             if( p->nSingle > SbxMAXLNG )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMAXLNG;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }
             else if( p->nSingle < SbxMINLNG )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMINLNG;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
             }
             else
                 nRes = (sal_Int32) rtl::math::round( p->nSingle );
@@ -78,7 +78,7 @@ start:
         {
             sal_Int64  tstVal = p->nInt64 / CURRENCY_FACTOR;
             nRes = (sal_Int32) tstVal;
-            if( tstVal < SbxMINLNG || SbxMAXLNG < tstVal )  SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+            if( tstVal < SbxMINLNG || SbxMAXLNG < tstVal )  SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             if( SbxMAXLNG < tstVal ) nRes = SbxMAXLNG;
             if( tstVal < SbxMINLNG ) nRes = SbxMINLNG;
             break;
@@ -100,11 +100,11 @@ start:
 
             if( dVal > SbxMAXLNG )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMAXLNG;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
             }
             else if( dVal < SbxMINLNG )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMINLNG;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
             }
             else
                 nRes = (sal_Int32) rtl::math::round( dVal );
@@ -123,11 +123,11 @@ start:
                     nRes = 0;
                 else if( d > SbxMAXLNG )
                 {
-                    SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMAXLNG;
+                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXLNG;
                 }
                 else if( d < SbxMINLNG )
                 {
-                    SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMINLNG;
+                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINLNG;
                 }
                 else
                     nRes = (sal_Int32) rtl::math::round( d );
@@ -140,7 +140,7 @@ start:
                 nRes = pVal->GetLong();
             else
             {
-                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT ); nRes = 0;
+                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT ); nRes = 0;
             }
             break;
         }
@@ -177,7 +177,7 @@ start:
             p = &aTmp; goto start;
 
         default:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION ); nRes = 0;
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION ); nRes = 0;
     }
     return nRes;
 }
@@ -238,49 +238,49 @@ start:
             if( pVal )
                 pVal->PutLong( n );
             else
-                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
             break;
         }
         case SbxBYREF | SbxCHAR:
             if( n > SbxMAXCHAR )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = SbxMAXCHAR;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXCHAR;
             }
             else if( n < SbxMINCHAR )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = SbxMINCHAR;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMINCHAR;
             }
             *p->pChar = (sal_Unicode) n; break;
         case SbxBYREF | SbxBYTE:
             if( n > SbxMAXBYTE )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = SbxMAXBYTE;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXBYTE;
             }
             else if( n < 0 )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = 0;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }
             *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( n > SbxMAXINT )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = SbxMAXINT;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXINT;
             }
             else if( n < SbxMININT )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = SbxMININT;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMININT;
             }
             *p->pInteger = (sal_Int16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( n > SbxMAXUINT )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = SbxMAXUINT;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = SbxMAXUINT;
             }
             else if( n < 0 )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = 0;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }
             *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
@@ -288,7 +288,7 @@ start:
         case SbxBYREF | SbxULONG:
             if( n < 0 )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); n = 0;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); n = 0;
             }
             *p->pULong = (sal_uInt32) n; break;
         case SbxBYREF | SbxSALINT64:
@@ -296,7 +296,7 @@ start:
         case SbxBYREF | SbxSALUINT64:
             if( n < 0 )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); *p->puInt64 = 0;
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); *p->puInt64 = 0;
             }
             else
                 *p->puInt64 = n;
@@ -309,7 +309,7 @@ start:
         case SbxBYREF | SbxCURRENCY:
             *p->pnInt64 = (sal_Int64)n * (sal_Int64)CURRENCY_FACTOR; break;
         default:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }
 }
 

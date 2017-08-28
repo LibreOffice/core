@@ -29,7 +29,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
     switch( +p->eType )
     {
         case SbxNULL:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
             SAL_FALLTHROUGH;
         case SbxEMPTY:
             nRes = SbxFALSE; break;
@@ -91,7 +91,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                         }
                     }
                     if( bError )
-                        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+                        SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
                 }
             }
             break;
@@ -102,7 +102,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                 nRes = pVal->GetBool() ? SbxTRUE : SbxFALSE;
             else
             {
-                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT ); nRes = SbxFALSE;
+                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT ); nRes = SbxFALSE;
             }
             break;
         }
@@ -132,7 +132,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
         case SbxBYREF | SbxSALUINT64:
             nRes = ( *p->puInt64 ) ? SbxTRUE : SbxFALSE; break;
         default:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION ); nRes = SbxFALSE;
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION ); nRes = SbxFALSE;
     }
     return nRes;
 }
@@ -187,7 +187,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             if( pVal )
                 pVal->PutBool( n != 0 );
             else
-                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
             break;
         }
         case SbxBYREF | SbxCHAR:
@@ -215,7 +215,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = (sal_uInt64) n; break;
         default:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }
 }
 

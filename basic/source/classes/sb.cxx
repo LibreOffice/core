@@ -2129,7 +2129,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
     sal_uInt16 nCount = pPar_->Count();
     if( nCount < 2 || nCount > 5 )
     {
-        SetError( ERRCODE_SBX_WRONG_ARGS );
+        SetError( ERRCODE_BASIC_WRONG_ARGS );
         return;
     }
 
@@ -2206,7 +2206,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
 {
     if( pPar_->Count() != 2 )
     {
-        SetError( ERRCODE_SBX_WRONG_ARGS );
+        SetError( ERRCODE_BASIC_WRONG_ARGS );
         return;
     }
     SbxVariable* pRes = nullptr;
@@ -2230,7 +2230,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
 {
     if( pPar_ == nullptr || pPar_->Count() != 2 )
     {
-        SetError( ERRCODE_SBX_WRONG_ARGS );
+        SetError( ERRCODE_BASIC_WRONG_ARGS );
         return;
     }
 

@@ -421,7 +421,7 @@ start:
     switch( +eType )
     {
         case SbxNULL:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
             SAL_FALLTHROUGH;
         case SbxEMPTY:
             pnDecRes->setShort( 0 ); break;
@@ -441,24 +441,24 @@ start:
             pnDecRes->setULong( p->nULong ); break;
         case SbxSINGLE:
             if( !pnDecRes->setSingle( p->nSingle ) )
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             break;
         case SbxCURRENCY:
             {
                 if( !pnDecRes->setDouble( ImpCurrencyToDouble( p->nInt64 ) ) )
-                    SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
             }
         case SbxSALINT64:
             {
                 if( !pnDecRes->setDouble( (double)p->nInt64 ) )
-                    SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
             }
         case SbxSALUINT64:
             {
                 if( !pnDecRes->setDouble( (double)p->uInt64 ) )
-                    SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 break;
             }
         case SbxDATE:
@@ -466,7 +466,7 @@ start:
         {
             double dVal = p->nDouble;
             if( !pnDecRes->setDouble( dVal ) )
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             break;
         }
         case SbxLPSTR:
@@ -482,7 +482,7 @@ start:
                 pnDecRes->setDecimal( pVal->GetDecimal() );
             else
             {
-                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
                 pnDecRes->setShort( 0 );
             }
             break;
@@ -519,7 +519,7 @@ start:
             p = &aTmp; goto start;
 
         default:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION ); pnDecRes->setShort( 0 );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION ); pnDecRes->setShort( 0 );
     }
     return pnDecRes;
 }
@@ -600,21 +600,21 @@ start:
             if( pVal )
                 pVal->PutDecimal( pDec );
             else
-                SbxBase::SetError( ERRCODE_SBX_NO_OBJECT );
+                SbxBase::SetError( ERRCODE_BASIC_NO_OBJECT );
             break;
         }
 
         case SbxBYREF | SbxCHAR:
             if( !pDec->getChar( *p->pChar ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pChar = 0;
             }
             break;
         case SbxBYREF | SbxBYTE:
             if( !pDec->getChar( *p->pChar ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pByte = 0;
             }
             break;
@@ -622,7 +622,7 @@ start:
         case SbxBYREF | SbxBOOL:
             if( !pDec->getShort( *p->pInteger ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pInteger = 0;
             }
             break;
@@ -630,21 +630,21 @@ start:
         case SbxBYREF | SbxUSHORT:
             if( !pDec->getUShort( *p->pUShort ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pUShort = 0;
             }
             break;
         case SbxBYREF | SbxLONG:
             if( !pDec->getLong( *p->pLong ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pLong = 0;
             }
             break;
         case SbxBYREF | SbxULONG:
             if( !pDec->getULong( *p->pULong ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pULong = 0;
             }
             break;
@@ -652,7 +652,7 @@ start:
             {
             double d(0.0);
             if( !pDec->getDouble( d ) )
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             *p->pnInt64 = ImpDoubleToCurrency( d );
             }
             break;
@@ -660,7 +660,7 @@ start:
             {
             double d(0.0);
             if( !pDec->getDouble( d ) )
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             else
                 *p->pnInt64 = ImpDoubleToSalInt64( d );
             }
@@ -669,7 +669,7 @@ start:
             {
             double d(0.0);
             if( !pDec->getDouble( d ) )
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
             else
                 *p->puInt64 = ImpDoubleToSalUInt64( d );
             }
@@ -677,7 +677,7 @@ start:
         case SbxBYREF | SbxSINGLE:
             if( !pDec->getSingle( *p->pSingle ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pSingle = 0;
             }
             break;
@@ -685,12 +685,12 @@ start:
         case SbxBYREF | SbxDOUBLE:
             if( !pDec->getDouble( *p->pDouble ) )
             {
-                SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
+                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
                 *p->pDouble = 0;
             }
             break;
         default:
-            SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }
 }
 
