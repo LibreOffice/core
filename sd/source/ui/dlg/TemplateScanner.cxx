@@ -195,7 +195,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
                     ||  (sContentType == "Impress 2.0"))
                 {
                     OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(sTitle);
-                    mpTemplateEntries.push_back(new TemplateEntry(sLocalisedTitle, sTargetURL));
+                    mpTemplateEntries.push_back(o3tl::make_unique<TemplateEntry>(sLocalisedTitle, sTargetURL));
                 }
             }
 
@@ -207,7 +207,7 @@ TemplateScanner::State TemplateScanner::ScanEntry()
             if (!mpTemplateEntries.empty())
             {
                 SolarMutexGuard aGuard;
-                maFolderList.push_back(mpTemplateEntries);
+                maFolderList.push_back(std::move(mpTemplateEntries));
             }
 
             // Continue with scanning the next folder.
