@@ -494,6 +494,7 @@ Task::Task( const sal_Char *pDebugName )
     , mePriority( TaskPriority::DEFAULT )
     , mbActive( false )
 {
+    fprintf(stderr, "Task 1 ctor\n");
 }
 
 Task::Task( const Task& rTask )
@@ -502,12 +503,14 @@ Task::Task( const Task& rTask )
     , mePriority( rTask.mePriority )
     , mbActive( false )
 {
+    fprintf(stderr, "Task 2 ctor\n");
     if ( rTask.IsActive() )
         Start();
 }
 
 Task::~Task() COVERITY_NOEXCEPT_FALSE
 {
+    fprintf(stderr, "Task dtor\n");
     SchedulerGuard aSchedulerGuard;
     if ( mpSchedulerData )
         mpSchedulerData->mpTask = nullptr;
