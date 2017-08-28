@@ -2385,7 +2385,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
                 GrafikCtor();
 
             SdrObject* pOurNewObject = CreateContactObject(m_xSFlyPara->pFlyFormat);
-            m_pWWZOrder->InsertTextLayerObject(pOurNewObject);
+            m_xWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
         if (RndStdIds::FLY_AS_CHAR != m_xSFlyPara->eAnchor && m_xSFlyPara->pFlyFormat)

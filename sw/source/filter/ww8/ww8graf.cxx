@@ -1428,7 +1428,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         SfxAllItemSet aSet( m_pDrawModel->GetItemPool() );
         if (SdrObject *pObject = ReadGrafPrimitive(nLeft, aSet))
         {
-            m_pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
+            m_xWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
 
             tools::Rectangle aRect(pObject->GetSnapRect());
 
@@ -2482,8 +2482,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         return nullptr;
     }
 
-    if (!m_pMSDffManager->GetModel())
-         m_pMSDffManager->SetModel(m_pDrawModel, 1440);
+    if (!m_xMSDffManager->GetModel())
+         m_xMSDffManager->SetModel(m_pDrawModel, 1440);
 
     tools::Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
     SvxMSDffImportData aData( aRect );
@@ -2497,7 +2497,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     m_rDoc.SetDocShell(nullptr);         // #i20540# Persist guard
 
     SdrObject* pObject = nullptr;
-    bool bOk = (m_pMSDffManager->GetShape(pF->nSpId, pObject, aData) && pObject);
+    bool bOk = (m_xMSDffManager->GetShape(pF->nSpId, pObject, aData) && pObject);
 
     m_rDoc.SetDocShell(pPersist);  // #i20540# Persist guard
 
@@ -2703,12 +2703,12 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             {
                 /* Need to make sure that the correct layer ordering is applied. */
                 //  pass information, if object is in page header|footer to method.
-                m_pWWZOrder->InsertEscherObject( pObject, pF->nSpId,
+                m_xWWZOrder->InsertEscherObject( pObject, pF->nSpId,
                                                m_bIsHeader || m_bIsFooter );
             }
             else
             {
-                m_pWWZOrder->InsertTextLayerObject(pObject);
+                m_xWWZOrder->InsertTextLayerObject(pObject);
             }
 
             pRetFrameFormat = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pObject, aFlySet );
@@ -2817,7 +2817,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
                 if (pSdrTextObj != pNewObj)
                 {
                     // Replace object in the Z-Order-List
-                    m_pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0, pNewObj);
+                    m_xMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0, pNewObj);
                     // now delete object
                     SdrObject::Free( pRecord->pObj );
                     // and save the new object.
@@ -2827,7 +2827,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             else
             {
                 // remove the object from Z-Order list
-                m_pMSDffManager->RemoveFromShapeOrder( pSdrTextObj );
+                m_xMSDffManager->RemoveFromShapeOrder( pSdrTextObj );
                 // take the object from the drawing page
                 if( pSdrTextObj->GetPage() )
                     m_pDrawPg->RemoveObject( pSdrTextObj->GetOrdNum() );
@@ -2894,7 +2894,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         rpOurNewObject = CreateContactObject(pRetFrameFormat);
 
         // remove old object from the Z-Order list
-        m_pMSDffManager->RemoveFromShapeOrder( rpObject );
+        m_xMSDffManager->RemoveFromShapeOrder( rpObject );
 
         // and delete the object
         SdrObject::Free( rpObject );
@@ -2915,7 +2915,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             contact object, while a raw rpOutNewObject stored here becomes
             deleted and useless.
             */
-            m_pMSDffManager->StoreShapeOrder(pF->nSpId,
+            m_xMSDffManager->StoreShapeOrder(pF->nSpId,
                 (((sal_uLong)pRecord->aTextId.nTxBxS) << 16) +
                 pRecord->aTextId.nSequence, nullptr, pRetFrameFormat);
 
@@ -2924,7 +2924,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             if (!rpOurNewObject->IsInserted())
             {
                 // pass information, if object is in page header|footer to method.
-                m_pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
+                m_xWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
                                                m_bIsHeader || m_bIsFooter );
             }
         }
@@ -2939,7 +2939,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
             SwNodeIndex aStart(m_pPaM->GetPoint()->nNode);
 
-            m_pWWZOrder->InsideEscher(pF->nSpId);
+            m_xWWZOrder->InsideEscher(pF->nSpId);
 
             // read in the text
             m_bTxbxFlySection = true;
@@ -2947,7 +2947,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 MAN_MAINTEXT == m_xPlcxMan->GetManType() ?
                         MAN_TXBX : MAN_TXBX_HDFT);
 
-            m_pWWZOrder->OutsideEscher();
+            m_xWWZOrder->OutsideEscher();
 
             MoveOutsideFly(pRetFrameFormat, aSave.GetStartPos(),!bJoined);
 
@@ -3055,7 +3055,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     rpOurNewObject = CreateContactObject(pRetFrameFormat);
 
     // remove old object from Z-Order-List
-    m_pMSDffManager->RemoveFromShapeOrder( rpObject );
+    m_xMSDffManager->RemoveFromShapeOrder( rpObject );
     // remove from Drawing-Page
     if( rpObject->GetPage() )
         m_pDrawPg->RemoveObject( rpObject->GetOrdNum() );
@@ -3070,14 +3070,14 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     if (rpOurNewObject)
     {
         if (!m_bHdFtFootnoteEdn)
-            m_pMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject );
+            m_xMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject );
 
         // The Contact-Object MUST be set in the Draw-Page, so that in
         // SwWW8ImplReader::LoadDoc1() the Z-Order can be defined !!!
         if (!rpOurNewObject->IsInserted())
         {
             // pass information, if object is in page header|footer to method.
-            m_pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
+            m_xWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
                                            m_bIsHeader || m_bIsFooter );
         }
     }
@@ -3093,23 +3093,23 @@ void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
         OSL_ENSURE(m_pDrawModel, "Cannot create DrawModel");
         m_pDrawPg = m_pDrawModel->GetPage(0);
 
-        m_pMSDffManager = new SwMSDffManager(*this, m_bSkipImages);
-        m_pMSDffManager->SetModel(m_pDrawModel, 1440);
+        m_xMSDffManager.reset(new SwMSDffManager(*this, m_bSkipImages));
+        m_xMSDffManager->SetModel(m_pDrawModel, 1440);
         /*
          Now the dff manager always needs a controls converter as well, but a
          control converter may still exist without a dffmanager.
         */
-        m_pFormImpl = new SwMSConvertControls(m_pDocShell, m_pPaM);
+        m_xFormImpl.reset(new SwMSConvertControls(m_pDocShell, m_pPaM));
 
-        m_pWWZOrder = new wwZOrderer(sw::util::SetLayer(m_rDoc), m_pDrawPg,
-            m_pMSDffManager->GetShapeOrders());
+        m_xWWZOrder.reset(new wwZOrderer(sw::util::SetLayer(m_rDoc), m_pDrawPg,
+            m_xMSDffManager->GetShapeOrders()));
     }
 }
 
 void SwWW8ImplReader::GrafikDtor()
 {
     DELETEZ(m_pDrawEditEngine); // maybe created by graphic
-    DELETEZ(m_pWWZOrder);       // same
+    m_xWWZOrder.reset();       // same
 }
 
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrameFormat *pFormat)

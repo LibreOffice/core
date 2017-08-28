@@ -511,10 +511,10 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
         tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName );
-        OSL_ENSURE(rReader.m_pFormImpl, "No Form Implementation!");
+        OSL_ENSURE(rReader.m_xFormImpl.get(), "No Form Implementation!");
         css::uno::Reference< css::drawing::XShape > xShape;
         if ( (!(rReader.m_bIsHeader || rReader.m_bIsFooter)) &&
-            rReader.m_pFormImpl->ReadOCXStream(xSrc,&xShape,true))
+            rReader.m_xFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {
             pRet = GetSdrObjectFromXShape(xShape);
         }
@@ -4125,7 +4125,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aGrfNameGenerator(bNewDoc, OUString('G'))
     , m_aParaStyleMapper(rD)
     , m_aCharStyleMapper(rD)
-    , m_pFormImpl(nullptr)
     , m_pFlyFormatOfJustInsertedGraphic(nullptr)
     , m_pFormatOfJustInsertedApo(nullptr)
     , m_pPreviousNumPaM(nullptr)
@@ -4141,9 +4140,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pDrawModel(nullptr)
     , m_pDrawPg(nullptr)
     , m_pDrawEditEngine(nullptr)
-    , m_pWWZOrder(nullptr)
     , m_pNumFieldType(nullptr)
-    , m_pMSDffManager(nullptr)
     , m_pAtnNames(nullptr)
     , m_sBaseURL(rBaseURL)
     , m_nIniFlags(0)
@@ -4255,12 +4252,12 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     if(mrReader.m_xWDop->fUseBackGroundInAllmodes) // #i56806# Make sure mrReader is initialized
         mrReader.GrafikCtor();
 
-    if (mrReader.m_xWDop->fUseBackGroundInAllmodes && mrReader.m_pMSDffManager)
+    if (mrReader.m_xWDop->fUseBackGroundInAllmodes && mrReader.m_xMSDffManager)
     {
         tools::Rectangle aRect(0, 0, 100, 100); // A dummy, we don't care about the size
         SvxMSDffImportData aData(aRect);
         SdrObject* pObject = nullptr;
-        if (mrReader.m_pMSDffManager->GetShape(0x401, pObject, aData) && !aData.empty())
+        if (mrReader.m_xMSDffManager->GetShape(0x401, pObject, aData) && !aData.empty())
         {
             // Only handle shape if it is a background shape
             if (((*aData.begin())->nFlags & 0x400) != 0)
@@ -5167,18 +5164,18 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     m_xProgress->Update(m_nProgress); // Update
 
-    if (m_pDrawPg && m_pMSDffManager && m_pMSDffManager->GetShapeOrders())
+    if (m_pDrawPg && m_xMSDffManager && m_xMSDffManager->GetShapeOrders())
     {
         // Helper array to chain the inserted frames (instead of SdrTextObj)
         SvxMSDffShapeTxBxSort aTxBxSort;
 
         // Ensure correct z-order of read Escher objects
-        sal_uInt16 nShapeCount = m_pMSDffManager->GetShapeOrders()->size();
+        sal_uInt16 nShapeCount = m_xMSDffManager->GetShapeOrders()->size();
 
         for (sal_uInt16 nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
         {
             SvxMSDffShapeOrder *pOrder =
-                (*m_pMSDffManager->GetShapeOrders())[nShapeNum].get();
+                (*m_xMSDffManager->GetShapeOrders())[nShapeNum].get();
             // Insert Pointer into new Sort array
             if (pOrder->nTxBxComp && pOrder->pFly)
                 aTxBxSort.insert(pOrder);
@@ -5243,10 +5240,9 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     m_xStyles.reset();
 
-    if( m_pFormImpl )
-        DeleteFormImpl();
+    m_xFormImpl.reset();
     GrafikDtor();
-    DELETEZ( m_pMSDffManager );
+    m_xMSDffManager.reset();
     m_xHdFt.reset();
     m_xSBase.reset();
     m_xWDop.reset();
