@@ -1153,7 +1153,7 @@ oslSocket SAL_CALL osl_createSocket(
     /* creation failed => free memory */
     if(pSocket->m_Socket == OSL_INVALID_SOCKET)
     {
-        sal_Int32 nErrno = errno;
+        int nErrno = errno;
         SAL_WARN( "sal.osl", "socket creation failed: (" << nErrno << ") " << strerror(nErrno) );
 
         destroySocketImpl(pSocket);
@@ -1169,7 +1169,7 @@ oslSocket SAL_CALL osl_createSocket(
             if (fcntl(pSocket->m_Socket, F_SETFD, nFlags) == -1)
             {
                 pSocket->m_nLastError=errno;
-                sal_uInt32 nErrno = errno;
+                int nErrno = errno;
                 SAL_WARN( "sal.osl", "failed changing socket flags: (" << nErrno << ") " << strerror(nErrno) );
             }
         }
