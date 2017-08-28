@@ -411,10 +411,8 @@ void GtkInstance::RemoveTimer ()
     m_pTimer = nullptr;
 }
 
-bool GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    (void) nReleased;
-    assert(nReleased == 0); // not implemented
     EnsureInit();
     return GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
 }

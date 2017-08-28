@@ -304,12 +304,9 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
 #endif
 }
 
-bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    (void) nReleased;
-    assert(nReleased == 0); // not implemented
     // first, check for already queued events.
-
     std::list< SalUserEvent > aEvents;
     {
         osl::MutexGuard g(m_aEventGuard);
