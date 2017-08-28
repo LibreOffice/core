@@ -257,13 +257,13 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     else if ( SbiRuntime::isVBAEnabled() )
     {
         SAL_WARN("basic", "Reporting error converting");
-        return ERRCODE_SBX_CONVERSION;
+        return ERRCODE_BASIC_CONVERSION;
     }
 #endif
     if( pLen )
         *pLen = (sal_uInt16) ( p - pStart );
     if( !bRes )
-        return ERRCODE_SBX_CONVERSION;
+        return ERRCODE_BASIC_CONVERSION;
     if( bMinus )
         nVal = -nVal;
     rType = eScanType;
@@ -280,7 +280,7 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
     // read completely?
     if( nRetError == ERRCODE_NONE && nLen != rSrc.getLength() )
     {
-        nRetError = ERRCODE_SBX_CONVERSION;
+        nRetError = ERRCODE_BASIC_CONVERSION;
     }
     if( bSingle )
     {
@@ -552,7 +552,7 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     ErrCode eRes = ERRCODE_NONE;
     if( !CanWrite() )
     {
-        eRes = ERRCODE_SBX_PROP_READONLY;
+        eRes = ERRCODE_BASIC_PROP_READONLY;
     }
     else
     {

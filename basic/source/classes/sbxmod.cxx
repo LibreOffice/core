@@ -787,7 +787,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if( pProp )
         {
             if( pProp->GetModule() != this )
-                SetError( ERRCODE_SBX_BAD_ACTION );
+                SetError( ERRCODE_BASIC_BAD_ACTION );
         }
         else if( pMeth )
         {
@@ -1065,7 +1065,7 @@ void SbModule::Run( SbMethod* pMeth )
         // i80726 The Find below will generate an error in Testtool so we reset it unless there was one before already
         bool bWasError = SbxBase::GetError() != ERRCODE_NONE;
         SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxClassType::Object );
-        if ( !bWasError && (SbxBase::GetError() == ERRCODE_SBX_PROC_UNDEFINED) )
+        if ( !bWasError && (SbxBase::GetError() == ERRCODE_BASIC_PROC_UNDEFINED) )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
         {

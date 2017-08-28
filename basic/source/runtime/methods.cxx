@@ -1765,7 +1765,7 @@ void SbRtl_CDateFromUnoDate(StarBASIC *, SbxArray & rPar, bool)
     if(aAny >>= aUnoDate)
         SbxDateFromUNODate(rPar.Get(0), aUnoDate);
     else
-        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+        SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
 }
 
 css::util::Time SbxDateToUNOTime( const SbxValue* const pVal )
@@ -1812,7 +1812,7 @@ void SbRtl_CDateFromUnoTime(StarBASIC *, SbxArray & rPar, bool)
     if(aAny >>= aUnoTime)
         SbxDateFromUNOTime(rPar.Get(0), aUnoTime);
     else
-        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+        SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
 }
 
 css::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
@@ -1868,7 +1868,7 @@ void SbRtl_CDateFromUnoDateTime(StarBASIC *, SbxArray & rPar, bool)
     if(aAny >>= aUnoDT)
         SbxDateFromUNODateTime(rPar.Get(0), aUnoDT);
     else
-        SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+        SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
 }
 
 // Function to convert date to ISO 8601 date format YYYYMMDD
@@ -1972,7 +1972,7 @@ void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
         }
         while (false);
 
-        SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );
+        SbxBase::SetError( ERRCODE_BASIC_BAD_PARAMETER );
     }
     else
     {

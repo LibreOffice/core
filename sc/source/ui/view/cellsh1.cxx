@@ -1856,7 +1856,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 #if HAVE_FEATURE_SCRIPTING
                 else if (rReq.IsAPI())
-                    SbxBase::SetError(ERRCODE_SBX_BAD_PARAMETER);
+                    SbxBase::SetError(ERRCODE_BASIC_BAD_PARAMETER);
 #endif
             }
             break;
@@ -1903,7 +1903,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         rReq.Done();
 #if HAVE_FEATURE_SCRIPTING
                     else
-                        SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );  // Basic-error
+                        SbxBase::SetError( ERRCODE_BASIC_BAD_PARAMETER );  // Basic-error
 #endif
                 }
             }
