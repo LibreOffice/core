@@ -38,7 +38,7 @@ public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapte
     }
 
     @Override
-    public void onBindViewHolder(final ColorPaletteViewHolder holder, final int position) {
+    public void onBindViewHolder(final ColorPaletteViewHolder holder, int position) {
 
         holder.colorBox.setBackgroundColor(color_palette[upperSelectedBox][position]);
         if (selectedBox == position) {
@@ -50,7 +50,7 @@ public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapte
         holder.colorBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setPosition(position);
+                setPosition(holder.getAdapterPosition());
             }
         });
         if (animate) //it will only animate when the upper color box is selected

@@ -39,7 +39,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final ColorPickerViewHolder holder, final int position) {
+    public void onBindViewHolder(final ColorPickerViewHolder holder, int position) {
         holder.colorBox.setBackgroundColor(colorList[position]);
 
         if (selectedBox != position)
@@ -51,12 +51,10 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
         holder.colorBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setPosition(position);
-                colorPaletteListener.applyColor(colorList[position]);
+                setPosition(holder.getAdapterPosition());
+                colorPaletteListener.applyColor(colorList[holder.getAdapterPosition()]);
             }
         });
-
-
     }
 
     @Override
