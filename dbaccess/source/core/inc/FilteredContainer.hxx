@@ -19,6 +19,11 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_FILTEREDCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_FILTEREDCONTAINER_HXX
 
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
@@ -40,7 +45,7 @@ namespace dbaccess
 
     protected:
         IRefreshListener*               m_pRefreshListener;
-        oslInterlockedCount&            m_nInAppend;
+        std::atomic<std::size_t>&       m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
         css::uno::Reference< css::container::XNameAccess >    m_xMasterContainer;
@@ -68,19 +73,19 @@ namespace dbaccess
         class EnsureReset
         {
         public:
-            EnsureReset( oslInterlockedCount& _rValueLocation)
+            EnsureReset( std::atomic<std::size_t>& _rValueLocation)
                 :m_rValue( _rValueLocation )
             {
-                osl_atomic_increment(&m_rValue);
+                ++m_rValue;
             }
 
             ~EnsureReset()
             {
-                osl_atomic_decrement(&m_rValue);
+                --m_rValue;
             }
 
         private:
-            oslInterlockedCount&   m_rValue;
+            std::atomic<std::size_t>&   m_rValue;
         };
 
         /** retrieve a table type filter to pass to <member scope="css::sdbc">XDatabaseMetaData::getTables</member>,
@@ -103,7 +108,7 @@ namespace dbaccess
                             const css::uno::Reference< css::sdbc::XConnection >& _xCon,
                             bool _bCase,
                             IRefreshListener*   _pRefreshListener,
-                            oslInterlockedCount& _nInAppend
+                            std::atomic<std::size_t>& _nInAppend
                         );
 
         void dispose() { disposing(); }

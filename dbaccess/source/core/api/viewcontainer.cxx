@@ -62,7 +62,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,const Reference< XConnection >& _xCon
                                  ,bool _bCase
                                  ,IRefreshListener* _pRefreshListener
-                                 ,oslInterlockedCount& _nInAppend)
+                                 ,std::atomic<std::size_t>& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_nInAppend)
     ,m_bInElementRemoved(false)
 {

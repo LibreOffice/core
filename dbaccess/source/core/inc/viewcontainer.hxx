@@ -20,6 +20,11 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEWCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEWCONTAINER_HXX
 
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -62,7 +67,7 @@ namespace dbaccess
                         const css::uno::Reference< css::sdbc::XConnection >& _xCon,
                         bool _bCase,
                         IRefreshListener*   _pRefreshListener,
-                        oslInterlockedCount& _nInAppend
+                        std::atomic<std::size_t>& _nInAppend
                         );
 
         virtual ~OViewContainer() override;

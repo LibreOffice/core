@@ -20,6 +20,11 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSET_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_ROWSET_HXX
 
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include "apitools.hxx"
 #include "RowSetBase.hxx"
 
@@ -124,7 +129,7 @@ namespace dbaccess
         sal_Int32                   m_nTransactionIsolation;
         sal_Int32                   m_nPrivileges;
         sal_Int32                   m_nLastKnownRowCount;
-        oslInterlockedCount         m_nInAppend;
+        std::atomic<std::size_t>    m_nInAppend;
         bool                        m_bInsertingRow;
         bool                        m_bLastKnownRowCountFinal;
         bool                        m_bUseEscapeProcessing ;

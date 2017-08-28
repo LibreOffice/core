@@ -20,6 +20,11 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX
 
+#include <sal/config.h>
+
+#include <atomic>
+#include <cstddef>
+
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -89,7 +94,7 @@ namespace dbaccess
             bool _bCase,
             const css::uno::Reference< css::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
-            oslInterlockedCount& _nInAppend
+            std::atomic<std::size_t>& _nInAppend
             );
 
         virtual ~OTableContainer() override;

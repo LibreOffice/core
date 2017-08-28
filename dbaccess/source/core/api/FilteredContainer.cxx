@@ -240,7 +240,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
                                  const Reference< XConnection >& _xCon,
                                  bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
-                                 oslInterlockedCount& _nInAppend)
+                                 std::atomic<std::size_t>& _nInAppend)
         :OCollection(_rParent,_bCase,_rMutex,std::vector< OUString>())
         ,m_bConstructed(false)
         ,m_pRefreshListener(_pRefreshListener)

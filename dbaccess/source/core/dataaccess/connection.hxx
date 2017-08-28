@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <atomic>
+#include <cstddef>
 #include <map>
 
 #include "apitools.hxx"
@@ -98,7 +100,7 @@ protected:
     OTableContainer*                m_pTables;
     OViewContainer*                 m_pViews;
     ::dbtools::WarningsContainer    m_aWarnings;
-    oslInterlockedCount             m_nInAppend;
+    std::atomic<std::size_t>        m_nInAppend;
     bool                            m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
     bool                            m_bSupportsUsers;
     bool                            m_bSupportsGroups;
