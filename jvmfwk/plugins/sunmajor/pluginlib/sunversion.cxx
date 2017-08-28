@@ -96,7 +96,7 @@ bool SunVersion::init(const char *szVersion)
                 //prevent 1.4.0. 1.4.0-
                 pCur + 1 != pEnd || isdigit(*(pCur))) )
         {
-            bool afterMaint = pCur != pEnd && (*pCur == '_' || *pCur == '-');
+            bool afterMaint = pCur == pEnd || *pCur == '_' || *pCur == '-';
 
             int len = pCur - pLast;
             if (len >= 127)
