@@ -50,7 +50,6 @@ private:
         this weak pointer to avoid creating a new instance.
     */
     static std::weak_ptr<CacheConfiguration> mpWeakInstance;
-    static Timer maReleaseTimer;
     css::uno::Reference<css::container::XNameAccess> mxCacheNode;
 
     CacheConfiguration();
