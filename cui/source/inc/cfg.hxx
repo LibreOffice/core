@@ -409,6 +409,7 @@ protected:
     VclPtr<ListBox>                            m_pSaveInListBox;
 
     VclPtr<MenuButton>                         m_pInsertBtn;
+    VclPtr<MenuButton>                         m_pModifyBtn;
     // Used to reset the selected toolbar/menu/context menu
     VclPtr<PushButton>                         m_pResetBtn;
 
