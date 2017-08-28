@@ -451,12 +451,12 @@ void Application::Execute()
     pSVData->maAppData.mbInAppExecute = false;
 }
 
-inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased)
+inline bool ImplYield(bool i_bWait, bool i_bAllEvents)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
-             ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
+             ": " << (i_bAllEvents ? "all events" : "one event"));
 
     // TODO: there's a data race here on WNT only because ImplYield may be
     // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
@@ -466,10 +466,8 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     // do not wait for events if application was already quit; in that
     // case only dispatch events already available
-    bool bProcessedEvent =
-        pSVData->mpDefInst->DoYield(
-            i_bWait && !pSVData->maAppData.mbAppQuit,
-            i_bAllEvents, nReleased);
+    bool bProcessedEvent = pSVData->mpDefInst->DoYield(
+            i_bWait && !pSVData->maAppData.mbAppQuit, i_bAllEvents );
 
     pSVData->maAppData.mnDispatchLevel--;
 
@@ -485,7 +483,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
 bool Application::Reschedule( bool i_bAllEvents )
 {
-    return ImplYield(false, i_bAllEvents, 0);
+    return ImplYield(false, i_bAllEvents);
 }
 
 void Scheduler::ProcessEventsToSignal(bool& bSignal)
@@ -537,27 +535,7 @@ SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 
 void Application::Yield()
 {
-    ImplYield(true, false, 0);
-}
-
-void Application::ReAcquireSolarMutex(sal_uLong const nReleased)
-{
-    // 0 would mean that events/timers will be handled without locking
-    // SolarMutex (racy)
-    SAL_WARN_IF(nReleased == 0, "vcl", "SolarMutexReleaser without SolarMutex");
-#ifdef _WIN32
-    if (nReleased == 0 || ImplGetSVData()->mbDeInit) //do not Yield in DeInitVCL
-        AcquireSolarMutex(nReleased);
-    else
-        ImplYield(false, false, nReleased);
-#else
-    // a) Yield is not needed on non-WNT platforms
-    // b) some Yield implementations for X11 (e.g. kde4) make it non-obvious
-    //    how to use nReleased
-    // c) would require a review of what all Yield implementations do
-    //    currently _before_ releasing SolarMutex that would run without lock
-    AcquireSolarMutex(nReleased);
-#endif
+    ImplYield(true, false);
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )

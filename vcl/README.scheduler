@@ -89,6 +89,21 @@ can be added to the scheduler reasonably.
 
 = Implementation details =
 
+== General: main thread deferral ==
+
+Currently for Mac and Windows, we run main thread deferrals by disabling the
+SolarMutex using a boolean. In the case of the redirect, this makes
+tryToaAcquire and doAcquire return true or 1, while a release is ignored.
+Also the IsCurrentThread() mutex check function will act accordingly, so all
+the DBG_TESTSOLARMUTEX won't fail.
+
+Since we just disable the locks when we start running the deferred code in the
+main thread, we won't let the main thread run into stuff, where it would
+normally wait for the SolarMutex.
+
+Eventually this will move into the GenericSolarMutex. KDE / Qt also does main
+thread redirects using Qt::BlockingQueuedConnection.
+
 == MacOS implementation details ==
 
 Generally the Scheduler is handled as expected, except on resize, which is
@@ -100,9 +115,9 @@ Like the Windows backend, all Cocoa / GUI handling also has to be run in
 the main thread. We're emulating Windows out-of-order PeekMessage processing,
 via a YieldWakeupEvent and two conditionals. When in a RUNINMAIN call, all
 the DBG_TESTSOLARMUTEX calls are disabled, as we can't release the SolarMutex,
-but we can prevent running any other SolarMutex based code. Same for all the
-SolarMutex acquire and release calls, so the calling and the main thread
-don't deadlock. Those wakeup events must be ignored to prevent busy-locks.
+but we can prevent running any other SolarMutex based code. Those wakeup
+events must be ignored to prevent busy-locks. For more info read the "General:
+main thread deferral" section.
 
 We can neither rely on MacOS dispatch_sync code block execution nor the
 message handling, as both can't be prioritized or filtered and the first
@@ -135,6 +150,10 @@ just posted timer callback message. We handle this by adding a timestamp to
 the timer callback message, which is checked before starting the Scheduler.
 This way we can end with multiple timer callback message in the queue, which
 we were asserting.
+
+To run the required GUI code in the main thread without unlocking the
+SolarMutex, we "disable" it. For more infos read the "General: main thread
+deferral" section.
 
 == KDE implementation details ==
 
