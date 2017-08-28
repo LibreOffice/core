@@ -19,7 +19,6 @@
 
 
 #include "filterfactory.hxx"
-#include "macros.hxx"
 #include "constant.hxx"
 #include "versions.hxx"
 
@@ -93,7 +92,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
         if (!cache.hasItem(FilterCache::E_FILTER, sFilter) && cache.hasItem(FilterCache::E_TYPE, sFilter))
         {
             OSL_FAIL("Who use this deprecated functionality?");
-            FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
             css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPE, css::uno::makeAny(sFilter) } };
 

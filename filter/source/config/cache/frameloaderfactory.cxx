@@ -19,7 +19,6 @@
 
 
 #include "frameloaderfactory.hxx"
-#include "macros.hxx"
 #include "constant.hxx"
 #include "versions.hxx"
 
@@ -73,8 +72,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
         if (!cache.hasItem(FilterCache::E_FRAMELOADER, sLoader) && cache.hasItem(FilterCache::E_TYPE, sLoader))
         {
-            FILTER_CONFIG_LOG_("FrameLoaderFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
-
             css::uno::Sequence< OUString > lTypes { sLoader };
 
             css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPES, css::uno::makeAny(lTypes) } };

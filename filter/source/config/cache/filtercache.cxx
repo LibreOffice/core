@@ -20,7 +20,6 @@
 
 #include <memory>
 #include "filtercache.hxx"
-#include "macros.hxx"
 #include "constant.hxx"
 #include "cacheupdatelistener.hxx"
 
@@ -224,7 +223,6 @@ void FilterCache::load(EFillState eRequired)
         impl_getDirectCFGValue(CFGDIRECTKEY_OFFICELOCALE) >>= m_sActLocale;
         if (m_sActLocale.isEmpty())
         {
-            FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify office locale => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_OFFICELOCALE));
             m_sActLocale = DEFAULT_OFFICELOCALE;
         }
 
@@ -269,8 +267,6 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
                                        pIt != rList.end()  ;
                                      ++pIt                 )
     {
-        FILTER_CONFIG_LOG_1_("getMatchingProps for \"%s\"  ...\n",
-                              FILTER_CONFIG_TO_ASCII_(pIt->first))
         if (
             (pIt->second.haveProps(lIProps)    ) &&
             (pIt->second.dontHaveProps(lEProps))
@@ -1731,7 +1727,6 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
     if (bItemInConfig)
     {
         (*pList)[sItem] = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
-        FILTER_CONFIG_LOG_2_("impl_loadItemOnDemand(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(sItem).getStr())
     }
     else
     {
@@ -2042,7 +2037,6 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
                         if (nOrder > 0)
                         {
                             SAL_WARN( "filter.config", "FilterCache::impl_interpretDataVal4Filter()\nCan not move Order value from filter to type on demand!");
-                            FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
                         }
                     }
                     break;
