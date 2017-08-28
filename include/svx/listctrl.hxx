@@ -24,6 +24,7 @@
 #include <vcl/scrbar.hxx>
 
 #include <vector>
+#include <limits>
 
 #include <svx/svxdllapi.h>
 
@@ -42,7 +43,7 @@ public:
     virtual ~ListControl() override;
     virtual void dispose() override;
 
-    void addEntry(VclPtr<Control> xEntry, sal_uInt32 nPos = 0);
+    void addEntry(VclPtr<Control> xEntry, sal_uInt32 nPos = std::numeric_limits<sal_uInt16>::max());
     void deleteEntry(sal_uInt32 nPos);
 
     virtual Size GetOptimalSize() const override;
