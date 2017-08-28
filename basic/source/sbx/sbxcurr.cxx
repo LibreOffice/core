@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include <basic/sbxvar.hxx>
 #include "sbxconv.hxx"
 

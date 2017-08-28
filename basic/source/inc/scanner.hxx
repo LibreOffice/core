@@ -20,7 +20,8 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_SCANNER_HXX
 #define INCLUDED_BASIC_SOURCE_INC_SCANNER_HXX
 
-#include <basic/sberrors.hxx>
+#include <basic/sbxdef.hxx>
+#include <vcl/errcode.hxx>
 
 // The scanner is stand-alone, i. e. it can be used from everywhere.
 // A BASIC-instance is necessary for error messages. Without BASIC

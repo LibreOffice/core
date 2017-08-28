@@ -55,6 +55,7 @@
 
 #include <comphelper/string.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>

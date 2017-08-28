@@ -20,6 +20,7 @@
 
 #include <array>
 
+#include <basic/sberrors.hxx>
 #include "sal/macros.h"
 #include "basiccharclass.hxx"
 #include "token.hxx"

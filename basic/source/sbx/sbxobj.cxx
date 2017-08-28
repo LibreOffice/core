@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include "sbxres.hxx"
 

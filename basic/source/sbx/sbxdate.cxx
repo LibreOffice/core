@@ -24,6 +24,7 @@
 #include <tools/color.hxx>
 #include <i18nlangtag/lang.h>
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 #include "math.h"
 #include <comphelper/processfactory.hxx>
