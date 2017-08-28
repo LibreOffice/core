@@ -145,6 +145,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     m_pInsertBtn->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, InsertHdl ) );
+    m_pModifyBtn->SetSelectHdl(
+        LINK( this, SvxToolbarConfigPage, ModifyItemHdl ) );
     m_pResetBtn->SetClickHdl(
         LINK( this, SvxToolbarConfigPage, ResetToolbarHdl ) );
 
@@ -451,6 +453,57 @@ IMPL_LINK( SvxToolbarConfigPage, InsertHdl, MenuButton *, pButton, void )
         //This block should never be reached
         SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
         return;
+    }
+}
+
+IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
+{
+    bool bNeedsApply = false;
+
+    // get currently selected toolbar
+    SvxConfigEntry* pToolbar = GetTopLevelSelection();
+
+    OString sIdent = pButton->GetCurItemIdent();
+
+    SAL_WARN("cui.customize", "sIdent: " << sIdent);
+
+    if (sIdent == "renameItem")
+    {
+        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        SvxConfigEntry* pEntry =
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
+        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
+
+        if ( pNameDialog->Execute() == RET_OK )
+        {
+            pNameDialog->GetName(aNewName);
+
+            if( aNewName.isEmpty() )    // tdf#80758 - Accelerator character ("~") is passed as
+                pEntry->SetName( "~" ); // the button name in case of empty values.
+            else
+                pEntry->SetName( aNewName );
+
+            m_pContentsListBox->SetEntryText( pActEntry, aNewName );
+            bNeedsApply = true;
+        }
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        return;
+    }
+
+    if ( bNeedsApply )
+    {
+        static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
+        UpdateButtonStates();
     }
 }
 
