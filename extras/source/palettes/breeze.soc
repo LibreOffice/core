@@ -2,9 +2,9 @@
 <!-- https://community.kde.org/KDE_Visual_Design_Group/HIG/Color -->
 <ooo:color-table xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ooo="http://openoffice.org/2004/office">
 <draw:color draw:name="Paper White" draw:color="#fcfcfc"/>
-<draw:color draw:name="Cardboard Grey" draw:color="#eff0f1"/>
-<draw:color draw:name="Icon Grey" draw:color="#4d4d4d"/>
-<draw:color draw:name="Charcoal Grey" draw:color="#31363b"/>
+<draw:color draw:name="Cardboard Gray" draw:color="#eff0f1"/>
+<draw:color draw:name="Icon Gray" draw:color="#4d4d4d"/>
+<draw:color draw:name="Charcoal Gray" draw:color="#31363b"/>
 <draw:color draw:name="Shade Black" draw:color="#232629"/>
 <draw:color draw:name="Plasma Blue" draw:color="#3daee9"/>
 <draw:color draw:name="Icon Red" draw:color="#da4453"/>
