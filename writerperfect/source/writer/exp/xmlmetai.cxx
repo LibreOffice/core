@@ -84,6 +84,28 @@ void XMLDcDateContext::characters(const OUString &rChars)
     mrMeta.m_aPropertyList.insert("dc:date", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+/// Handler for <meta:generator>.
+class XMLMetaGeneratorContext : public XMLImportContext
+{
+public:
+    XMLMetaGeneratorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+
+    void SAL_CALL characters(const OUString &rChars) override;
+
+    XMLMetaDocumentContext &mrMeta;
+};
+
+XMLMetaGeneratorContext::XMLMetaGeneratorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
+    : XMLImportContext(rImport), mrMeta(rMeta)
+{
+}
+
+void XMLMetaGeneratorContext::characters(const OUString &rChars)
+{
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrMeta.m_aPropertyList.insert("meta:generator", librevenge::RVNGString(sCharU8.getStr()));
+}
+
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
@@ -97,6 +119,8 @@ XMLImportContext *XMLMetaDocumentContext::CreateChildContext(const OUString &rNa
         return new XMLDcLanguageContext(mrImport, *this);
     if (rName == "dc:date")
         return new XMLDcDateContext(mrImport, *this);
+    if (rName == "meta:generator")
+        return new XMLMetaGeneratorContext(mrImport, *this);
     return nullptr;
 }
 
