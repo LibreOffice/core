@@ -68,7 +68,8 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so",
-        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so"
+        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so",
+        "/lib/server/libjvm.so"
 #endif
     };
     *size = SAL_N_ELEMENTS(ar);
