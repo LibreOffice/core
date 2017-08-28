@@ -530,8 +530,8 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
             SdrObject* pObject = nullptr;
 
             WW8PicDesc aPD( aPic );
-            if (!m_pMSDffManager)
-                m_pMSDffManager = new SwMSDffManager(*this, m_bSkipImages);
+            if (!m_xMSDffManager)
+                m_xMSDffManager.reset(new SwMSDffManager(*this, m_bSkipImages));
             /* ##835##
              * Disable use of main stream as fallback stream for inline direct
              * blips as it is known that they are directly after the record
@@ -539,9 +539,9 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
              * incorrect fallback graphic being found if other escher graphics
              * have been inserted in the document
              */
-            m_pMSDffManager->DisableFallbackStream();
-            if( !m_pMSDffManager->GetModel() )
-                m_pMSDffManager->SetModel(m_pDrawModel, 1440);
+            m_xMSDffManager->DisableFallbackStream();
+            if (!m_xMSDffManager->GetModel())
+                m_xMSDffManager->SetModel(m_pDrawModel, 1440);
 
             if (0x66 == aPic.MFP.mm)
             {
@@ -554,7 +554,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
             tools::Rectangle aChildRect;
             tools::Rectangle aClientRect( 0,0, aPD.nWidth,  aPD.nHeight);
             SvxMSDffImportData aData( aClientRect );
-            pObject = m_pMSDffManager->ImportObj(*m_pDataStream, &aData, aClientRect, aChildRect );
+            pObject = m_xMSDffManager->ImportObj(*m_pDataStream, &aData, aClientRect, aChildRect );
             if (pObject)
             {
                 // for the frame
@@ -701,7 +701,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     {
                         if (pOurNewObject != pObject)
                         {
-                            m_pMSDffManager->ExchangeInShapeOrder( pObject, 0,
+                            m_xMSDffManager->ExchangeInShapeOrder( pObject, 0,
                                 pOurNewObject );
 
                             // delete and destroy old SdrGrafObj from page
@@ -711,16 +711,16 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                         }
                     }
                     else
-                        m_pMSDffManager->RemoveFromShapeOrder( pObject );
+                        m_xMSDffManager->RemoveFromShapeOrder( pObject );
                 }
                 else
-                    m_pMSDffManager->RemoveFromShapeOrder( pObject );
+                    m_xMSDffManager->RemoveFromShapeOrder( pObject );
 
                 // also delete this from the page if not grouped
                 if (pTextObj && !bTextObjWasGrouped && pTextObj->GetPage())
                     m_pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
-            m_pMSDffManager->EnableFallbackStream();
+            m_xMSDffManager->EnableFallbackStream();
         }
         else if (aPic.lcb >= 58)
             pRet = ImportGraf1(aPic, m_pDataStream, m_nPicLocFc);
@@ -730,7 +730,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
     if (pRet)
     {
         SdrObject* pOurNewObject = CreateContactObject(pRet);
-        m_pWWZOrder->InsertTextLayerObject(pOurNewObject);
+        m_xWWZOrder->InsertTextLayerObject(pOurNewObject);
     }
 
     return AddAutoAnchor(pRet);

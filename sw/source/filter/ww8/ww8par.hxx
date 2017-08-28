@@ -38,6 +38,7 @@
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
 #include "ww8glsy.hxx"
+#include "ww8graf.hxx"
 #include "wrtww8.hxx"
 #include <msfilter.hxx>
 #include <xmloff/odffields.hxx>
@@ -103,7 +104,6 @@ class SwAttrSet;
 class GDIMetaFile;
 struct ESelection;
 class SfxItemSet;
-class wwZOrderer;
 class OutlinerParaObject;
 
 namespace com{namespace sun {namespace star{
@@ -1189,7 +1189,7 @@ private:
      */
     std::unique_ptr<ImportProgress> m_xProgress;
 
-    SwMSConvertControls *m_pFormImpl; // implementation of control
+    std::unique_ptr<SwMSConvertControls> m_xFormImpl; // implementation of control
 
     SwFlyFrameFormat* m_pFlyFormatOfJustInsertedGraphic;
     SwFrameFormat* m_pFormatOfJustInsertedApo;
@@ -1242,11 +1242,11 @@ private:
     SdrModel* m_pDrawModel;
     SdrPage* m_pDrawPg;
     EditEngine* m_pDrawEditEngine;
-    wwZOrderer *m_pWWZOrder;
+    std::unique_ptr<wwZOrderer> m_xWWZOrder;
 
     SwFieldType* m_pNumFieldType;   // for number circle
 
-    SwMSDffManager* m_pMSDffManager;
+    std::unique_ptr<SwMSDffManager> m_xMSDffManager;
 
     std::vector<OUString>* m_pAtnNames;
 
@@ -1861,8 +1861,6 @@ public:     // really private, but can only be done public
     eF_ResT Read_F_Hyperlink(WW8FieldDesc*, OUString& rStr);
     eF_ResT Read_F_Shape(WW8FieldDesc* pF, OUString& rStr);
     eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, OUString& rStr);
-
-    void DeleteFormImpl();
 
     short ImportSprm(const sal_uInt8* pPos, sal_Int32 nMemLen, sal_uInt16 nId = 0);
 

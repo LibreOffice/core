@@ -161,8 +161,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 {
     WW8FormulaCheckBox aFormula(*this);
 
-    if (!m_pFormImpl)
-        m_pFormImpl = new SwMSConvertControls(m_pDocShell, m_pPaM);
+    if (!m_xFormImpl)
+        m_xFormImpl.reset(new SwMSConvertControls(m_pDocShell, m_pPaM));
 
     if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
@@ -171,7 +171,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 
     if (!bUseEnhFields)
     {
-        m_pFormImpl->InsertFormula(aFormula);
+        m_xFormImpl->InsertFormula(aFormula);
         return eF_ResT::OK;
     }
 
@@ -295,12 +295,6 @@ eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, OUString&)
         m_nObjLocFc = m_nPicLocFc;
     m_bEmbeddObj = true;
     return eF_ResT::TEXT;
-}
-
-void SwWW8ImplReader::DeleteFormImpl()
-{
-    delete m_pFormImpl;
-    m_pFormImpl = nullptr;
 }
 
 // Helper declarations
