@@ -112,6 +112,7 @@ public:
     explicit SalYieldMutex();
 
     virtual bool              IsCurrentThread() const override;
+    virtual bool              tryToAcquire() override;
 };
 
 SalYieldMutex::SalYieldMutex()
@@ -139,6 +140,8 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst && pInst->IsMainThread() )
     {
+        if ( pInst->mbNoYieldLock )
+            return;
         // tdf#96887 If this is the main thread, then we must wait for two things:
         // - the mpSalYieldMutex being freed
         // - SendMessage() being triggered
@@ -167,13 +170,29 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 {
-    sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
+    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    if ( pInst && pInst->mbNoYieldLock && pInst->IsMainThread() )
+        return 1;
 
+    sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
     // wake up ImplSalYieldMutexAcquireWithWait() after release
     if ( 0 == m_nCount )
         m_condition.set();
-
     return nCount;
+}
+
+bool SalYieldMutex::tryToAcquire()
+{
+    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    if ( pInst )
+    {
+        if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
+            return true;
+        else
+            return comphelper::GenericSolarMutex::tryToAcquire();
+    }
+    else
+        return false;
 }
 
 void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
@@ -186,10 +205,7 @@ void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
 bool ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
-    if ( pInst )
-        return pInst->mpSalYieldMutex->tryToAcquire();
-    else
-        return false;
+    return pInst ? pInst->mpSalYieldMutex->tryToAcquire() : false;
 }
 
 void ImplSalYieldMutexRelease()
@@ -204,8 +220,11 @@ void ImplSalYieldMutexRelease()
 
 bool SalYieldMutex::IsCurrentThread() const
 {
-    // For the Windows backend, the LO identifier is the system thread ID
-    return m_nThreadId == GetCurrentThreadId();
+    if ( !GetSalData()->mpFirstInstance->mbNoYieldLock )
+        // For the Windows backend, the LO identifier is the system thread ID
+        return m_nThreadId == GetCurrentThreadId();
+    else
+        return GetSalData()->mpFirstInstance->IsMainThread();
 }
 
 void SalData::initKeyCodeMap()
@@ -443,9 +462,10 @@ void DestroySalInstance( SalInstance* pInst )
 }
 
 WinSalInstance::WinSalInstance()
+    : mhComWnd( nullptr )
+    , mbNoYieldLock( false )
 {
-    mhComWnd                 = nullptr;
-    mpSalYieldMutex          = new SalYieldMutex();
+    mpSalYieldMutex = new SalYieldMutex();
     mpSalYieldMutex->acquire();
 }
 
@@ -484,8 +504,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
 
-bool
-ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
+static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
@@ -535,38 +554,44 @@ bool WinSalInstance::IsMainThread() const
     return pSalData->mnAppThreadId == GetCurrentThreadId();
 }
 
-bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
     bool bDidWork = false;
-    // NOTE: if nReleased != 0 this will be called without SolarMutex
-    //       so don't do anything dangerous before releasing it here
-    sal_uInt32 const nCount = (nReleased != 0)
-                              ? nReleased : mpSalYieldMutex->release( true );
+    SolarMutexReleaser aReleaser;
     if ( !IsMainThread() )
     {
-        // #97739# A SendMessage call blocks until the called thread (here: the main thread)
-        // returns. During a yield however, messages are processed in the main thread that might
-        // result in a new message loop due to opening a dialog. Thus, SendMessage would not
-        // return which will block this thread!
-        // Solution: just give up the time slice and hope that messages are processed
-        // by the main thread anyway (where all windows are created)
-        // If the mainthread is not currently handling messages, then our SendMessage would
-        // also do nothing, so this seems to be reasonable.
+        if ( bWait )
+        {
+            maWaitingYieldCond.reset();
+            maWaitingYieldCond.wait();
+            bDidWork = true;
+        }
+        else {
+            // #97739# A SendMessage call blocks until the called thread (here: the main thread)
+            // returns. During a yield however, messages are processed in the main thread that might
+            // result in a new message loop due to opening a dialog. Thus, SendMessage would not
+            // return which will block this thread!
+            // Solution: just give up the time slice and hope that messages are processed
+            // by the main thread anyway (where all windows are created)
+            // If the mainthread is not currently handling messages, then our SendMessage would
+            // also do nothing, so this seems to be reasonable.
 
-        // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
-        if( ImplGetSVData()->maAppData.mnModalMode )
-            Sleep(1);
-        else
-            // If you change the SendMessageW function, you might need to update
-            // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
-            bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
+            // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
+            if( ImplGetSVData()->maAppData.mnModalMode )
+                Sleep(1);
+            else
+                // If you change the SendMessageW function, you might need to update
+                // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
+                bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD,
+                                         (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
+        }
     }
     else
     {
-        if (nReleased == 0) // tdf#99383 ReAcquireSolarMutex shouldn't Yield
-            bDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
+        bDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
+        if ( bDidWork )
+            maWaitingYieldCond.set();
     }
-    mpSalYieldMutex->acquire( nCount );
 
     return bDidWork;
 }
@@ -574,6 +599,7 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
+    WinSalInstance *pInst = GetSalData()->mpFirstInstance;
 
     switch ( nMsg )
     {
@@ -596,19 +622,31 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStop();
             break;
         case SAL_MSG_CREATEFRAME:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpFirstInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATEHWND:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND( reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false ));
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATECHILDHWND:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND( reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true ));
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYFRAME:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             delete reinterpret_cast<SalFrame*>(lParam);
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYHWND:
@@ -624,19 +662,31 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEOBJECT:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject( GetSalData()->mpFirstInstance, reinterpret_cast<WinSalFrame*>(lParam) ));
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYOBJECT:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             delete reinterpret_cast<SalObject*>(lParam);
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_GETDC:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             nRet = reinterpret_cast<LRESULT>(GetDCEx( reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE ));
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_RELEASEDC:
+            assert( !pInst->mbNoYieldLock );
+            pInst->mbNoYieldLock = true;
             ReleaseDC( reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam) );
+            pInst->mbNoYieldLock = false;
             rDef = FALSE;
             break;
         case SAL_MSG_TIMER_CALLBACK:
@@ -646,7 +696,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             MSG aMsg;
             bool bValidMSG = pTimer->IsValidWPARAM( wParam );
             // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
-            while ( PeekMessageW(&aMsg, GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
+            while ( PeekMessageW(&aMsg, pInst->mhComWnd, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
             {
                 assert( !bValidMSG && "Unexpected non-last valid message" );
