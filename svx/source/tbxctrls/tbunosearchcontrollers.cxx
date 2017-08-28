@@ -28,6 +28,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -111,14 +112,6 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         }
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(7);
-    lArgs[0].Name = "SearchItem.SearchString";
-    lArgs[0].Value <<= sFindText;
-    lArgs[1].Name = "SearchItem.Backward";
-    lArgs[1].Value <<= aSearchBackwards;
-    lArgs[2].Name = "SearchItem.SearchFlags";
-    lArgs[2].Value <<= (sal_Int32)0;
-    lArgs[3].Name = "SearchItem.TransliterateFlags";
     SvtCTLOptions aCTLOptions;
     TransliterationFlags nFlags = TransliterationFlags::NONE;
     if (!aMatchCase)
@@ -127,21 +120,24 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
     if (aCTLOptions.IsCTLFontEnabled())
         nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
-    lArgs[3].Value <<= (sal_Int32)nFlags;
-    lArgs[4].Name = "SearchItem.Command";
-    lArgs[4].Value <<= (sal_Int16)(aFindAll ?
-        SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND );
-    lArgs[5].Name = "SearchItem.AlgorithmType";
-    lArgs[5].Value <<= (sal_Int16)0;  // 0 == SearchAlgorithms_ABSOLUTE
-    lArgs[6].Name = "SearchItem.SearchFormatted";
-    lArgs[6].Value <<= bSearchFormatted;
+
+    auto aArgs( comphelper::InitPropertySequence( {
+        { "SearchItem.SearchString", css::uno::makeAny( sFindText ) },
+        { "SearchItem.Backward", css::uno::makeAny( aSearchBackwards ) },
+        { "SearchItem.SearchFlags", css::uno::makeAny( (sal_Int32)0 ) },
+        { "SearchItem.TransliterateFlags", css::uno::makeAny( (sal_Int32)nFlags ) },
+        { "SearchItem.Command", css::uno::makeAny( (sal_Int16)(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
+        { "SearchItem.AlgorithmType", css::uno::makeAny( (sal_Int16)0 ) }, // 0 == SearchAlgorithms_ABSOLUTE
+        { "SearchItem.AlgorithmType2", css::uno::makeAny( (sal_Int16)1 ) }, // 1 == SearchAlgorithms2_ABSOLUTE
+        { "SearchItem.SearchFormatted", css::uno::makeAny( bSearchFormatted ) }
+    } ) );
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
     if ( xDispatchProvider.is() )
     {
         css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
         if ( xDispatch.is() && !aURL.Complete.isEmpty() )
-            xDispatch->dispatch( aURL, lArgs );
+            xDispatch->dispatch( aURL, aArgs );
     }
 }
 
