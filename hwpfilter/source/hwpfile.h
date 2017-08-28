@@ -291,7 +291,7 @@ class DLLEXPORT HWPFile
         std::list<EmPicture*> emblist;
         std::list<HyperText*> hyperlist;
         int currenthyper;
-        std::vector<std::shared_ptr<ParaShape>> pslist;             /* 스타오피스의 구조상 필요 */
+        std::vector<std::shared_ptr<ParaShape>> pslist;
         std::vector<std::shared_ptr<CharShape>> cslist;
         std::vector<FBoxStyle*> fbslist;
         std::vector<DateCode*> datecodes;
