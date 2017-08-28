@@ -418,11 +418,11 @@ SwTwips SwFootnoteContFrame::ShrinkFrame( SwTwips nDiff, bool bTst, bool bInfo )
 
 SwFootnoteFrame::SwFootnoteFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwContentFrame *pCnt, SwTextFootnote *pAt ):
     SwLayoutFrame( pFormat, pSib ),
-    pFollow( nullptr ),
-    pMaster( nullptr ),
-    pRef( pCnt ),
-    pAttr( pAt ),
-    bBackMoveLocked( false ),
+    mpFollow( nullptr ),
+    mpMaster( nullptr ),
+    mpReference( pCnt ),
+    mpAttribute( pAt ),
+    mbBackMoveLocked( false ),
     // #i49383#
     mbUnlockPosOfLowerObjs( true )
 {
@@ -2758,19 +2758,19 @@ SwSaveFootnoteHeight::~SwSaveFootnoteHeight()
 const SwContentFrame* SwFootnoteFrame::GetRef() const
 {
     const SwContentFrame* pRefAttr = GetRefFromAttr();
-    SAL_WARN_IF( pRef != pRefAttr && !pRef->IsAnFollow( pRefAttr )
-            && !pRefAttr->IsAnFollow( pRef ),
+    SAL_WARN_IF( mpReference != pRefAttr && !mpReference->IsAnFollow( pRefAttr )
+            && !pRefAttr->IsAnFollow( mpReference ),
             "sw.core", "access to deleted Frame? pRef != pAttr->GetRef()" );
-    return pRef;
+    return mpReference;
 }
 
 SwContentFrame* SwFootnoteFrame::GetRef()
 {
     const SwContentFrame* pRefAttr = GetRefFromAttr();
-    SAL_WARN_IF( pRef != pRefAttr && !pRef->IsAnFollow( pRefAttr )
-            && !pRefAttr->IsAnFollow( pRef ),
+    SAL_WARN_IF( mpReference != pRefAttr && !mpReference->IsAnFollow( pRefAttr )
+            && !pRefAttr->IsAnFollow( mpReference ),
             "sw.core", "access to deleted Frame? pRef != pAttr->GetRef()" );
-    return pRef;
+    return mpReference;
 }
 #endif
 
@@ -2782,9 +2782,9 @@ const SwContentFrame* SwFootnoteFrame::GetRefFromAttr()  const
 
 SwContentFrame* SwFootnoteFrame::GetRefFromAttr()
 {
-    assert(pAttr && "invalid Attribute");
-    SwTextNode& rTNd = const_cast<SwTextNode&>(pAttr->GetTextNode());
-    SwPosition aPos( rTNd, SwIndex( &rTNd, pAttr->GetStart() ));
+    assert(mpAttribute && "invalid Attribute");
+    SwTextNode& rTNd = const_cast<SwTextNode&>(mpAttribute->GetTextNode());
+    SwPosition aPos( rTNd, SwIndex( &rTNd, mpAttribute->GetStart() ));
     SwContentFrame* pCFrame = rTNd.getLayoutFrame( getRootFrame(), nullptr, &aPos, false );
     return pCFrame;
 }
