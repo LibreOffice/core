@@ -177,6 +177,7 @@ SvxLanguageBoxBase::~SvxLanguageBoxBase()
 {
 }
 
+namespace {
 
 bool lcl_isPrerequisite( LanguageType nLangType, SvxLanguageListFlags nLangList )
 {
@@ -199,6 +200,8 @@ bool lcl_isScriptTypeRequested( LanguageType nLangType, SvxLanguageListFlags nLa
          (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) == SvtScriptType::COMPLEX)) ||
         (bool(nLangList & SvxLanguageListFlags::CJK) &&
          (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) == SvtScriptType::ASIAN));
+}
+
 }
 
 void SvxLanguageBoxBase::AddLanguages( const std::vector< LanguageType >& rLanguageTypes,
