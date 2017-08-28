@@ -21,6 +21,7 @@
 
 #include <comphelper/newarray.hxx>
 
+#include <assert.h>
 #include <list>
 
 #include "hwpfile.h"
@@ -459,12 +460,14 @@ bool Picture::Read(HWPFile & hwpf)
 
         if (pictype == PICTYPE_DRAW)
         {
-            hmem = new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size);
+            HMemIODev* pOldMem = hmem;
+            HMemIODev* pNewMem = new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size);
+            hmem = pNewMem;
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
-            delete hmem;
-
-            hmem = nullptr;
+            assert(hmem == pNewMem);
+            delete pNewMem;
+            hmem = pOldMem;
         }
         else if (follow_block_size >= 4)
         {
