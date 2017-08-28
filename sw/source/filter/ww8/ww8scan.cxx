@@ -2147,7 +2147,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
     if (!failure)
     {
-        size_t nSiz = 6 * nIMax + 4;
+        size_t nSiz = (4 + nStru) * nIMax + 4;
         size_t nElems = ( nSiz + 3 ) / 4;
         pPLCF_PosArray.reset( new sal_Int32[ nElems ] ); // Pointer to Pos-array
 
@@ -2202,7 +2202,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
         for (sal_Int32 i = 0; i < ncpN; ++i)         // construct PNs
         {
             ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
-            p+=2;
+            p += nStru;
         }
     }
 
