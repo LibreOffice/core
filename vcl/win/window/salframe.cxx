@@ -1054,10 +1054,15 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
             if ( mpGraphics2->getDefPal() )
                 SelectPalette( mpGraphics2->getHDC(), mpGraphics2->getDefPal(), TRUE );
             mpGraphics2->DeInitGraphics();
-            SendMessageW( pSalData->mpFirstInstance->mhComWnd,
-                             SAL_MSG_RELEASEDC,
-                             reinterpret_cast<WPARAM>(mhWnd),
-                             reinterpret_cast<LPARAM>(mpGraphics2->getHDC()) );
+            // we don't want to run the WinProc in the main thread directly
+            // so we don't hit the mbNoYieldLock assert
+            if ( !pSalData->mpFirstInstance->IsMainThread() )
+                SendMessageW( pSalData->mpFirstInstance->mhComWnd,
+                              SAL_MSG_RELEASEDC,
+                              reinterpret_cast<WPARAM>(mhWnd),
+                              reinterpret_cast<LPARAM>(mpGraphics2->getHDC()) );
+            else
+                ReleaseDC( mhWnd, mpGraphics2->getHDC() );
             mpGraphics2->setHDC(nullptr);
             pSalData->mnCacheDCInUse--;
         }

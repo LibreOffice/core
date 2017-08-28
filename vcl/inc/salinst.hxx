@@ -133,7 +133,7 @@ public:
      * If bHandleAllCurrentEvents - dispatch multiple posted
      * user events. Returns true if events were processed.
      */
-    virtual bool           DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
+    virtual bool           DoYield(bool bWait, bool bHandleAllCurrentEvents) = 0;
     virtual bool           AnyInput( VclInputFlags nType ) = 0;
 
     // menus

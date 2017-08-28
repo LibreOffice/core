@@ -114,8 +114,7 @@ public:
     virtual comphelper::SolarMutex* GetYieldMutex() override;
     virtual sal_uInt32      ReleaseYieldMutex( bool bUnlockAll = false ) override;
     virtual void            AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
-    virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents,
-                                    sal_uLong nReleased) override;
+    virtual bool            DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool            AnyInput( VclInputFlags nType ) override;
     virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pVCLMenu ) override;
     virtual void            DestroyMenu( SalMenu* ) override;

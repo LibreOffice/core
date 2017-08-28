@@ -34,6 +34,9 @@ public:
     /// The Yield mutex ensures that only one thread calls into VCL
     SalYieldMutex*      mpSalYieldMutex;
 
+    osl::Condition      maWaitingYieldCond;
+    bool                mbNoYieldLock;
+
 public:
     WinSalInstance();
     virtual ~WinSalInstance() override;
@@ -63,7 +66,7 @@ public:
     virtual void                AcquireYieldMutex( sal_uInt32 nCount = 1 ) override;
     virtual bool                IsMainThread() const override;
 
-    virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
+    virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;
     virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) override;
     virtual void                DestroyMenu( SalMenu* ) override;
