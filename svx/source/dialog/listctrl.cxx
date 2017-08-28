@@ -142,4 +142,17 @@ void ListControl::deleteEntry(sal_uInt32 nPos)
     RecalcAll();
 }
 
+bool ListControl::EventNotify( NotifyEvent& rNEvt )
+{
+    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+    {
+        const CommandEvent* pEvent = rNEvt.GetCommandEvent();
+        if (pEvent && pEvent->GetCommand() == CommandEventId::Wheel)
+        {
+            HandleScrollCommand(*pEvent, nullptr, mpScrollBar.get());
+        }
+    }
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

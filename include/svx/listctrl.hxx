@@ -48,6 +48,7 @@ public:
     virtual Size GetOptimalSize() const override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     virtual void Resize() override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 };
