@@ -1789,15 +1789,27 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     SCTAB nTab = pPrintFuncCache->GetTabForPage( nRenderer );
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    FmFormView* pDrawView = nullptr;
+    struct DrawViewKeeper
+    {
+        FmFormView* mpDrawView;
+        DrawViewKeeper() : mpDrawView(nullptr) {}
+        ~DrawViewKeeper()
+        {
+            if (mpDrawView)
+            {
+                mpDrawView->HideSdrPage();
+                delete mpDrawView;
+            }
+        }
+    } aDrawViewKeeper;
 
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
     if( pModel )
     {
-        pDrawView = new FmFormView( pModel, pDev );
-        pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview();
+        aDrawViewKeeper.mpDrawView = new FmFormView( pModel, pDev );
+        aDrawViewKeeper.mpDrawView->ShowSdrPage(aDrawViewKeeper.mpDrawView->GetModel()->GetPage(nTab));
+        aDrawViewKeeper.mpDrawView->SetPrintPreview();
     }
 
     ScRange aRange;
@@ -1812,7 +1824,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     //  pages of the same sheet
 
     ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
-    aFunc.SetDrawView( pDrawView );
+    aFunc.SetDrawView( aDrawViewKeeper.mpDrawView );
     aFunc.SetRenderFlag( true );
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
         aFunc.SetExclusivelyDrawOleAndDrawObjects();
@@ -1945,10 +1957,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
         rBookmarks.clear();
     }
-
-    if ( pDrawView )
-        pDrawView->HideSdrPage();
-    delete pDrawView;
 }
 
 // XLinkTargetSupplier
