@@ -145,6 +145,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     m_pInsertBtn->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, InsertHdl ) );
+    m_pModifyBtn->SetSelectHdl(
+        LINK( this, SvxToolbarConfigPage, ModifyItemHdl ) );
     m_pResetBtn->SetClickHdl(
         LINK( this, SvxToolbarConfigPage, ResetToolbarHdl ) );
 
@@ -454,6 +456,226 @@ IMPL_LINK( SvxToolbarConfigPage, InsertHdl, MenuButton *, pButton, void )
     }
 }
 
+IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
+{
+    bool bNeedsApply = false;
+
+    // get currently selected toolbar
+    SvxConfigEntry* pToolbar = GetTopLevelSelection();
+
+    OString sIdent = pButton->GetCurItemIdent();
+
+    if (sIdent == "renameItem")
+    {
+        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        SvxConfigEntry* pEntry =
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
+        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
+
+        if ( pNameDialog->Execute() == RET_OK )
+        {
+            pNameDialog->GetName(aNewName);
+
+            if( aNewName.isEmpty() )    // tdf#80758 - Accelerator character ("~") is passed as
+                pEntry->SetName( "~" ); // the button name in case of empty values.
+            else
+                pEntry->SetName( aNewName );
+
+            m_pContentsListBox->SetEntryText( pActEntry, aNewName );
+            bNeedsApply = true;
+        }
+    }
+    else if (sIdent == "changeIcon")
+    {
+        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        SvxConfigEntry* pEntry =
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+        // Position of entry within the list
+        // TODO: Add a GetSelectionPos() method to the SvTreeListBox class
+        sal_uInt16 nSelectionPos = m_pContentsListBox->GetModel()->GetAbsPos( pActEntry );
+
+        ScopedVclPtr<SvxIconSelectorDialog> pIconDialog(
+            VclPtr<SvxIconSelectorDialog>::Create( nullptr,
+                GetSaveInData()->GetImageManager(),
+                GetSaveInData()->GetParentImageManager() ));
+
+        if ( pIconDialog->Execute() == RET_OK )
+        {
+            css::uno::Reference< css::graphic::XGraphic > newgraphic =
+                pIconDialog->GetSelectedIcon();
+
+            if ( newgraphic.is() )
+            {
+                css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >
+                    aGraphicSeq( 1 );
+
+                css::uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
+
+                if ( !pEntry->GetBackupGraphic().is() )
+                {
+                    css::uno::Reference< css::graphic::XGraphic > backup;
+                    backup = SvxConfigPageHelper::GetGraphic(
+                        GetSaveInData()->GetImageManager(), aURLSeq[ 0 ] );
+
+                    if ( backup.is() )
+                    {
+                        pEntry->SetBackupGraphic( backup );
+                    }
+                }
+
+                aGraphicSeq[ 0 ] = newgraphic;
+                try
+                {
+                    GetSaveInData()->GetImageManager()->replaceImages(
+                        SvxConfigPageHelper::GetImageType(), aURLSeq, aGraphicSeq );
+
+                    m_pContentsListBox->GetModel()->Remove( pActEntry );
+                    SvTreeListEntry* pNewLBEntry =
+                        InsertEntryIntoUI( pEntry, nSelectionPos );
+
+                    m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
+                        pEntry->IsVisible() ?
+                        SvButtonState::Checked : SvButtonState::Unchecked );
+
+                    m_pContentsListBox->Select( pNewLBEntry );
+                    m_pContentsListBox->MakeVisible( pNewLBEntry );
+
+                    GetSaveInData()->PersistChanges(
+                        GetSaveInData()->GetImageManager() );
+                }
+                catch ( css::uno::Exception& e)
+                {
+                    SAL_WARN("cui.customize", "Error replacing image: " << e.Message);
+                }
+            }
+        }
+    }
+    else if (sIdent == "resetIcon")
+    {
+        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        SvxConfigEntry* pEntry =
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+        // Position of entry within the list
+        // TODO: Add a GetSelectionPos() method to the SvTreeListBox class
+        sal_uInt16 nSelectionPos = m_pContentsListBox->GetModel()->GetAbsPos( pActEntry );
+
+        css::uno::Reference< css::graphic::XGraphic > backup =
+            pEntry->GetBackupGraphic();
+
+        css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >
+            aGraphicSeq( 1 );
+        aGraphicSeq[ 0 ] = backup;
+
+        css::uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
+
+        try
+        {
+            GetSaveInData()->GetImageManager()->replaceImages(
+                SvxConfigPageHelper::GetImageType(), aURLSeq, aGraphicSeq );
+
+            m_pContentsListBox->GetModel()->Remove( pActEntry );
+
+            SvTreeListEntry* pNewLBEntry =
+                InsertEntryIntoUI( pEntry, nSelectionPos );
+
+            m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
+                pEntry->IsVisible() ?
+                    SvButtonState::Checked : SvButtonState::Unchecked );
+
+            m_pContentsListBox->Select( pNewLBEntry );
+            m_pContentsListBox->MakeVisible( pNewLBEntry );
+
+            // reset backup in entry
+            pEntry->SetBackupGraphic(
+                css::uno::Reference< css::graphic::XGraphic >() );
+
+            GetSaveInData()->PersistChanges(
+                GetSaveInData()->GetImageManager() );
+        }
+        catch ( css::uno::Exception& e )
+        {
+            SAL_WARN("cui.customize", "Error resetting image: " << e.Message);
+        }
+    }
+    else if (sIdent == "restoreItem")
+    {
+        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        SvxConfigEntry* pEntry =
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+        // Position of entry within the list
+        // TODO: Add a GetSelectionPos() method to the SvTreeListBox class
+        sal_uInt16 nSelectionPos = m_pContentsListBox->GetModel()->GetAbsPos( pActEntry );
+
+        ToolbarSaveInData* pSaveInData =
+            static_cast<ToolbarSaveInData*>( GetSaveInData() );
+
+        OUString aSystemName =
+            pSaveInData->GetSystemUIName( pEntry->GetCommand() );
+
+        if ( !pEntry->GetName().equals( aSystemName ) )
+        {
+            pEntry->SetName( aSystemName );
+            m_pContentsListBox->SetEntryText(
+                pActEntry, SvxConfigPageHelper::stripHotKey( aSystemName ) );
+            bNeedsApply = true;
+        }
+
+        css::uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
+
+        try
+        {
+            GetSaveInData()->GetImageManager()->removeImages(
+                SvxConfigPageHelper::GetImageType(), aURLSeq );
+
+            // reset backup in entry
+            pEntry->SetBackupGraphic(
+                css::uno::Reference< css::graphic::XGraphic >() );
+
+            GetSaveInData()->PersistChanges(
+                GetSaveInData()->GetImageManager() );
+
+            m_pContentsListBox->RemoveEntry( pActEntry );
+
+            SvTreeListEntry* pNewLBEntry =
+                InsertEntryIntoUI( pEntry, nSelectionPos );
+
+            m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
+                pEntry->IsVisible() ?
+                    SvButtonState::Checked : SvButtonState::Unchecked );
+
+            m_pContentsListBox->Select( pNewLBEntry );
+            m_pContentsListBox->MakeVisible( pNewLBEntry );
+
+            bNeedsApply = true;
+        }
+        catch ( css::uno::Exception& e )
+        {
+            SAL_WARN("cui.customize", "Error restoring image: " << e.Message);
+        }
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        return;
+    }
+
+    if ( bNeedsApply )
+    {
+        static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
+        UpdateButtonStates();
+    }
+}
+
 IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetToolbarHdl, Button *, void )
 {
     sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
@@ -477,19 +699,19 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetToolbarHdl, Button *, void )
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
-    m_pDescriptionField->SetText("");
-
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
-    if ( m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr )
-    {
-        return;
-    }
 
-    SvxConfigEntry* pEntryData = static_cast<SvxConfigEntry*>(selection->GetUserData());
-    if ( !pEntryData->IsSeparator() )
-    {
-        m_pDescriptionField->SetText(pEntryData->GetHelpText());
-    }
+    bool  bIsSeparator =
+        selection && (static_cast<SvxConfigEntry*>(selection->GetUserData()))->IsSeparator();
+    bool bIsValidSelection =
+        !(m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr);
+
+    m_pMoveUpButton->Enable( bIsValidSelection );
+    m_pMoveDownButton->Enable( bIsValidSelection );
+
+    m_pRemoveCommandButton->Enable( bIsValidSelection );
+
+    m_pModifyBtn->Enable( bIsValidSelection && !bIsSeparator );
 }
 
 short SvxToolbarConfigPage::QueryReset()
