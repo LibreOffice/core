@@ -88,7 +88,7 @@ bool SunVersion::init(const char *szVersion)
             ! (nPartPos == 0) // prevents: ".4.1", "..1", part must start with digit
             && (
                 //separators after maintenance (1.4.1_01, 1.4.1-beta, or 1.4.1)
-                ((pCur == pEnd || *pCur == '_' || *pCur == '-') && (nPart == 2 ))
+                (pCur == pEnd || *pCur == '_' || *pCur == '-')
                 ||
                 //separators between major-minor and minor-maintenance
                 (nPart < 2 && *pCur == '.') )
@@ -97,6 +97,8 @@ bool SunVersion::init(const char *szVersion)
                 pCur + 1 != pEnd
                 || rtl::isAsciiDigit(static_cast<unsigned char>(*pCur))) )
         {
+            bool afterMaint = pCur != pEnd && (*pCur == '_' || *pCur == '-');
+
             int len = pCur - pLast;
             if (len >= 127)
                 return false;
@@ -107,6 +109,9 @@ bool SunVersion::init(const char *szVersion)
             pLast = pCur;
 
             m_arVersionParts[nPart] = atoi(buf);
+
+            if (afterMaint)
+                nPart = 2;
             nPart ++;
             nPartPos = 0;
             if (nPart == 3)
