@@ -24,6 +24,7 @@ endif
 $(eval $(call gb_UnpackedTarball_add_patches,libqxp, \
 	external/libqxp/0001-don-t-use-RVNGStringStream-in-the-main-lib.patch.1 \
 	external/libqxp/0001-add-missing-includes.patch.1 \
+	external/libqxp/0001-WaE-narrowing-conversion.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
