@@ -585,7 +585,11 @@ void SdrObject::AddListener(SfxListener& rListener)
 {
     ImpForcePlusData();
     if (pPlusData->pBroadcast==nullptr) pPlusData->pBroadcast=new SfxBroadcaster;
-    rListener.StartListening(*pPlusData->pBroadcast);
+
+    // SdrEdgeObj may be connected to same SdrObject on both ends so allow it
+    // to listen twice
+    SdrEdgeObj const*const pEdge(dynamic_cast<SdrEdgeObj const*>(&rListener));
+    rListener.StartListening(*pPlusData->pBroadcast, pEdge != nullptr);
 }
 
 void SdrObject::RemoveListener(SfxListener& rListener)
