@@ -85,12 +85,12 @@ public class OKeyContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createDescriptor() {
+    protected XPropertySet createDescriptor() {
         return SdbcxKeyDescriptor.create(isCaseSensitive());
     }
 
     @Override
-    public XPropertySet createObject(String name) throws SQLException {
+    protected XPropertySet createObject(String name) throws SQLException {
         OKey ret = null;
 
         if (!name.isEmpty()) {
@@ -106,12 +106,12 @@ public class OKeyContainer extends OContainer {
     }
 
     @Override
-    public void impl_refresh() {
+    protected void impl_refresh() {
         //throw new NotImplementedException("");
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         XConnection connection = table.getConnection();
         if (connection == null) {
             return null;
@@ -235,7 +235,7 @@ public class OKeyContainer extends OContainer {
     }
 
     @Override
-    public void dropObject(int index, String name) throws SQLException {
+    protected void dropObject(int index, String name) throws SQLException {
         XConnection connection = table.getConnection();
         if (connection == null) {
             return;

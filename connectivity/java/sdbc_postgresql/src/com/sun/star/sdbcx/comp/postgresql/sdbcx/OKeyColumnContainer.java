@@ -45,12 +45,12 @@ public class OKeyColumnContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createDescriptor() {
+    protected XPropertySet createDescriptor() {
         return SdbcxKeyColumnDescriptor.create(isCaseSensitive());
     }
 
     @Override
-    public XPropertySet createObject(String name) throws SQLException {
+    protected XPropertySet createObject(String name) throws SQLException {
         try {
             XPropertySet tableProperties = UnoRuntime.queryInterface(XPropertySet.class, key.getTable());
             Object catalog = tableProperties.getPropertyValue(PropertyIds.CATALOGNAME.name);
@@ -100,16 +100,16 @@ public class OKeyColumnContainer extends OContainer {
     }
 
     @Override
-    public void impl_refresh() {
+    protected void impl_refresh() {
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         throw new SQLException("Cannot change a key's columns, please delete and re-create the key instead");
     }
 
     @Override
-    public void dropObject(int index, String name) throws SQLException {
+    protected void dropObject(int index, String name) throws SQLException {
         throw new SQLException("Cannot change a key's columns, please delete and re-create the key instead");
     }
 }

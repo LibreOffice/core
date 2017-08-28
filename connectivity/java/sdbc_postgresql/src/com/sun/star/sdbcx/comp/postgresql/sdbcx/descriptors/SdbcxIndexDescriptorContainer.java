@@ -31,12 +31,12 @@ public class SdbcxIndexDescriptorContainer extends SdbcxDescriptorContainer {
     }
 
     @Override
-    public XPropertySet createDescriptor() {
+    protected XPropertySet createDescriptor() {
         return SdbcxIndexDescriptor.create(isCaseSensitive());
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         XPropertySet newDescriptor = cloneDescriptor(descriptor);
         DbTools.cloneDescriptorColumns(descriptor, newDescriptor);
         return newDescriptor;

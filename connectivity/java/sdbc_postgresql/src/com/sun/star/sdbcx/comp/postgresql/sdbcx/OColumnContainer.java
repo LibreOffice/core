@@ -68,7 +68,7 @@ public class OColumnContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createObject(String name) throws SQLException {
+    protected XPropertySet createObject(String name) throws SQLException {
         boolean queryInfo = true;
         boolean isAutoIncrement = false;
         boolean isCurrency = false;
@@ -102,22 +102,22 @@ public class OColumnContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createDescriptor() {
+    protected XPropertySet createDescriptor() {
         return SdbcxColumnDescriptor.create(isCaseSensitive());
     }
 
     @Override
-    public void impl_refresh() {
+    protected void impl_refresh() {
         extraColumnInfo.clear();
         table.refreshColumns();
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         return null;
     }
 
     @Override
-    public void dropObject(int index, String name) throws SQLException {
+    protected void dropObject(int index, String name) throws SQLException {
     }
 }

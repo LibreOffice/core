@@ -46,12 +46,12 @@ public class OIndexColumnContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createDescriptor() {
+    protected XPropertySet createDescriptor() {
         return SdbcxIndexColumnDescriptor.create(isCaseSensitive());
     }
 
     @Override
-    public XPropertySet createObject(String name) throws SQLException {
+    protected XPropertySet createObject(String name) throws SQLException {
         try {
             Object catalog = index.getTable().getPropertyValue(PropertyIds.CATALOGNAME.name);
             String schema = AnyConverter.toString(index.getTable().getPropertyValue(PropertyIds.SCHEMANAME.name));
@@ -105,17 +105,17 @@ public class OIndexColumnContainer extends OContainer {
     }
 
     @Override
-    public void impl_refresh() {
+    protected void impl_refresh() {
         // FIXME
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         throw new SQLException("Unsupported");
     }
 
     @Override
-    public void dropObject(int index, String name) throws SQLException {
+    protected void dropObject(int index, String name) throws SQLException {
         throw new SQLException("Unsupported");
     }
 }

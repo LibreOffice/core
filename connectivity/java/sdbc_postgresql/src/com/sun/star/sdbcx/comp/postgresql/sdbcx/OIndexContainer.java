@@ -56,12 +56,12 @@ public class OIndexContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createDescriptor() {
+    protected XPropertySet createDescriptor() {
         return SdbcxIndexDescriptor.create(isCaseSensitive());
     }
 
     @Override
-    public XPropertySet createObject(String name) throws SQLException {
+    protected XPropertySet createObject(String name) throws SQLException {
         try {
             XConnection connection = table.getConnection();
             if (connection == null) {
@@ -135,7 +135,7 @@ public class OIndexContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         try {
             XConnection connection = table.getConnection();
             if (connection == null) {
@@ -176,7 +176,7 @@ public class OIndexContainer extends OContainer {
     }
 
     @Override
-    public void dropObject(int index, String elementName) throws SQLException {
+    protected void dropObject(int index, String elementName) throws SQLException {
         XConnection connection = table.getConnection();
         if (connection == null) {
             return;
@@ -202,7 +202,7 @@ public class OIndexContainer extends OContainer {
     }
 
     @Override
-    public void impl_refresh() {
+    protected void impl_refresh() {
         // FIXME
     }
 }

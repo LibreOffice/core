@@ -36,7 +36,7 @@ public abstract class SdbcxDescriptorContainer extends OContainer {
     }
 
     @Override
-    public XPropertySet createObject(String name) throws SQLException {
+    protected XPropertySet createObject(String name) throws SQLException {
         // This should never be called. DescriptorContainer always starts off empty,
         // and only grows as a result of appending.
         String error = SharedResources.getInstance().getResourceString(
@@ -45,15 +45,15 @@ public abstract class SdbcxDescriptorContainer extends OContainer {
     }
 
     @Override
-    public void dropObject(int index, String name) throws SQLException {
+    protected void dropObject(int index, String name) throws SQLException {
     }
 
     @Override
-    public void impl_refresh() {
+    protected void impl_refresh() {
     }
 
     @Override
-    public XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
+    protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
         return cloneDescriptor(descriptor);
     }
 }
