@@ -63,6 +63,8 @@ using namespace com::sun::star::style;
 
 namespace svx { namespace sidebar {
 
+namespace {
+
 const vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
@@ -79,7 +81,7 @@ const vcl::Font& lcl_GetDefaultBulletFont()
     return aDefBulletFont;
 }
 
-static const sal_Unicode aDefaultBulletTypes[] =
+const sal_Unicode aDefaultBulletTypes[] =
 {
     0x2022,
     0x25cf,
@@ -119,6 +121,8 @@ NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& 
     if( cLocalPrefix == ' ') pNew->sPrefix.clear();
     if( cLocalSuffix == ' ') pNew->sSuffix.clear();
     return pNew;
+}
+
 }
 
 sal_uInt16 NBOTypeMgrBase:: IsSingleLevel(sal_uInt16 nCurLevel)

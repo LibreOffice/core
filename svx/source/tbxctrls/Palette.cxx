@@ -172,7 +172,7 @@ void PaletteASE::LoadPalette()
 
 // PaletteGPL ------------------------------------------------------------------
 
-OString lcl_getToken(const OString& rStr, sal_Int32& index);
+static OString lcl_getToken(const OString& rStr, sal_Int32& index);
 
 PaletteGPL::PaletteGPL( const OUString &rFPath, const OUString &rFName ) :
     mbLoadedPalette( false ),
@@ -287,7 +287,7 @@ void PaletteGPL::LoadPalette()
 
 // finds first token in rStr from index, separated by whitespace
 // returns position of next token in index
-OString lcl_getToken(const OString& rStr, sal_Int32& index)
+static OString lcl_getToken(const OString& rStr, sal_Int32& index)
 {
     sal_Int32 substart, toklen = 0;
     OUString aWhitespaceChars( " \n\t" );

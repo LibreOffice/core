@@ -166,6 +166,8 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
     return pPageView;
 }
 
+namespace {
+
 /// Removes outliner views registered in other draw views that use pOutputDevice.
 void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const * pThis, SdrPageView const * pPageView, OutputDevice const * pOutputDevice)
 {
@@ -195,6 +197,8 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const * pThis, SdrPageView c
             delete pOutlinerView;
         }
     }
+}
+
 }
 
 void SdrObjEditView::HideSdrPage()
