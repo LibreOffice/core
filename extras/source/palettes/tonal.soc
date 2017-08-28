@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ooo:color-table xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ooo="http://openoffice.org/2004/office">
-<draw:color draw:name="0% Grey" draw:color="#000000"/>
-<draw:color draw:name="10% Grey" draw:color="#191919"/>
-<draw:color draw:name="20% Grey" draw:color="#333333"/>
-<draw:color draw:name="30% Grey" draw:color="#4C4C4C"/>
-<draw:color draw:name="40% Grey" draw:color="#666666"/>
-<draw:color draw:name="50% Grey" draw:color="#7F7F7F"/>
-<draw:color draw:name="58% Grey" draw:color="#939393"/>
-<draw:color draw:name="65% Grey" draw:color="#A5A5A5"/>
-<draw:color draw:name="73% Grey" draw:color="#BABABA"/>
-<draw:color draw:name="82% Grey" draw:color="#D0D0D0"/>
-<draw:color draw:name="91% Grey" draw:color="#E8E8E8"/>
-<draw:color draw:name="100% Grey" draw:color="#FFFFFF"/>
+<draw:color draw:name="0% Gray" draw:color="#000000"/>
+<draw:color draw:name="10% Gray" draw:color="#191919"/>
+<draw:color draw:name="20% Gray" draw:color="#333333"/>
+<draw:color draw:name="30% Gray" draw:color="#4C4C4C"/>
+<draw:color draw:name="40% Gray" draw:color="#666666"/>
+<draw:color draw:name="50% Gray" draw:color="#7F7F7F"/>
+<draw:color draw:name="58% Gray" draw:color="#939393"/>
+<draw:color draw:name="65% Gray" draw:color="#A5A5A5"/>
+<draw:color draw:name="73% Gray" draw:color="#BABABA"/>
+<draw:color draw:name="82% Gray" draw:color="#D0D0D0"/>
+<draw:color draw:name="91% Gray" draw:color="#E8E8E8"/>
+<draw:color draw:name="100% Gray" draw:color="#FFFFFF"/>
 <draw:color draw:name="82% Magenta" draw:color="#FF00FF"/>
 <draw:color draw:name="82% Violet (Out of Gamut)" draw:color="#FFFFFE"/>
 <draw:color draw:name="82% Blue (Out of Gamut)" draw:color="#FFFFFE"/>
