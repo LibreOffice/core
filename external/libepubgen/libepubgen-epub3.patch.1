@@ -1803,3 +1803,62 @@ index 019404f..aa09332 100644
 -- 
 2.12.3
 
+From 143a470f190aaf2f420d2f84b5f08e9b01b40473 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 25 Aug 2017 17:44:38 +0200
+Subject: [PATCH] Export generator
+
+---
+ src/lib/EPUBGenerator.cpp          | 28 ++++++++++++++++++++++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 17 +++++++++++++++++
+ 2 files changed, 45 insertions(+)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 4ce2964..1661064 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -7,6 +7,10 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #include <ctime>
+ #include <sstream>
+ 
+@@ -298,6 +302,30 @@ void EPUBGenerator::writeRoot()
+     sink.openElement("meta", metaAttrs);
+     sink.insertCharacters(date);
+     sink.closeElement("meta");
++
++#ifdef VERSION
++    const std::string version(VERSION);
++#else
++    const std::string version("unknown");
++#endif
++    std::string generator;
++    if (m_metadata["meta:generator"])
++      generator = m_metadata["meta:generator"]->getStr().cstr();
++
++    if (generator.empty())
++      generator = "libepubgen/" + version;
++    else
++    {
++      generator += " (";
++      generator += "libepubgen/" + version;
++      generator += ")";
++    }
++
++    metaAttrs.clear();
++    metaAttrs.insert("name", "generator");
++    metaAttrs.insert("content", generator.c_str());
++    sink.openElement("meta", metaAttrs);
++    sink.closeElement("meta");
+   }
+ 
+   sink.closeElement("metadata");
+-- 
+2.12.3
+

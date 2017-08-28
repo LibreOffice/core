@@ -19,6 +19,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
+#include <unotools/docinfohelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -138,6 +139,10 @@ void EPUBExportTest::testMimetype()
     mpXmlDoc = parseExport("OEBPS/content.opf");
     // Default is EPUB3.
     assertXPath(mpXmlDoc, "/opf:package", "version", "3.0");
+
+    // This was just "libepubgen/x.y.z", i.e. the LO version was missing.
+    OUString aGenerator = getXPath(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@name='generator']", "content");
+    CPPUNIT_ASSERT(aGenerator.startsWith(utl::DocInfoHelper::GetGeneratorString()));
 }
 
 void EPUBExportTest::testEPUB2()
