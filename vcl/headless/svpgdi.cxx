@@ -1348,9 +1348,16 @@ cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
 
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
 {
+    const bool bXoring = (m_ePaintMode == PaintMode::Xor && bXorModeAllowed);
+
     if (rExtents.isEmpty())
     {
         //nothing changed, return early
+        if (bXoring)
+        {
+            cairo_surface_t* surface = cairo_get_target(cr);
+            cairo_surface_destroy(surface);
+        }
         cairo_destroy(cr);
         return;
     }
@@ -1370,7 +1377,7 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
     //For the most part we avoid the use of XOR these days, but there
     //are some edge cases where legacy stuff still supports it, so
     //emulate it (slowly) here.
-    if (m_ePaintMode == PaintMode::Xor && bXorModeAllowed)
+    if (bXoring)
     {
         cairo_surface_t* target_surface = m_pSurface;
         if (cairo_surface_get_type(target_surface) != CAIRO_SURFACE_TYPE_IMAGE)
