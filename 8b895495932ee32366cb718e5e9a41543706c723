@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_eb3652b3",
+        "filename": "sd/source/ui/dlg/TemplateScanner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-28T20:27:34Z",
+      "side": 1,
+      "message": "do you realise this will empty the mpTemplatesEntries vector?",
+      "revId": "8b895495932ee32366cb718e5e9a41543706c723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
