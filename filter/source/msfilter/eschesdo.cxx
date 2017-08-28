@@ -425,9 +425,13 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             const Reference< XPropertySet > xPropSet(rObj.mXPropSet, UNO_QUERY);
             if(xPropSet.is())
             {
-                text::TextContentAnchorType eAnchorType;
-                xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
-                bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+                const Reference<XPropertySetInfo> xPropInfo = xPropSet->getPropertySetInfo();
+                if (xPropInfo.is() && xPropInfo->hasPropertyByName("AnchorType"))
+                {
+                    text::TextContentAnchorType eAnchorType;
+                    xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
+                    bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+                }
             }
 
             if(bInline)
