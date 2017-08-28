@@ -420,28 +420,26 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType() == "drawing.Control" )
         {
-            mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            bool bInline = false;
             const Reference< XPropertySet > xPropSet(rObj.mXPropSet, UNO_QUERY);
-            if(xPropSet.is())
+            const Reference<XPropertySetInfo> xPropInfo = xPropSet.is() ? xPropSet->getPropertySetInfo() : Reference<XPropertySetInfo>();
+            // This code is expected to be called only for DOCX format.
+            if (xPropInfo.is() && xPropInfo->hasPropertyByName("AnchorType") && bOOxmlExport)
             {
-                const Reference<XPropertySetInfo> xPropInfo = xPropSet->getPropertySetInfo();
-                if (xPropInfo.is() && xPropInfo->hasPropertyByName("AnchorType"))
+                text::TextContentAnchorType eAnchorType;
+                xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
+                bool bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+                mpEscherEx->OpenContainer( ESCHER_SpContainer );
+                if(bInline)
                 {
-                    text::TextContentAnchorType eAnchorType;
-                    xPropSet->getPropertyValue("AnchorType") >>= eAnchorType;
-                    bInline = eAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+                    ADD_SHAPE( ESCHER_ShpInst_PictureFrame, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR );
+                }
+                else
+                {
+                    ADD_SHAPE( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR );
                 }
             }
-
-            if(bInline)
-            {
-                ADD_SHAPE( ESCHER_ShpInst_PictureFrame, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR );
-            }
             else
-            {
-                ADD_SHAPE( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR );
-            }
+                break;
         }
         else if ( rObj.GetType() == "drawing.Connector" )
         {
