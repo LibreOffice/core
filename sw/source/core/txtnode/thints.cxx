@@ -76,7 +76,6 @@
 #include <map>
 #include <memory>
 
-#include <docsh.hxx>
 #include <rdfhelper.hxx>
 
 #ifdef DBG_UTIL
