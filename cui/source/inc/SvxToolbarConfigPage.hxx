@@ -64,6 +64,7 @@ private:
     DECL_LINK( RemoveCommandHdl, Button *, void );
 
     DECL_LINK( InsertHdl, MenuButton *, void );
+    DECL_LINK( ModifyItemHdl, MenuButton *, void );
     DECL_LINK( ResetToolbarHdl, Button *, void );
 
     void            UpdateButtonStates() override;

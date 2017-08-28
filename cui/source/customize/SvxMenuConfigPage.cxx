@@ -135,8 +135,17 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     m_pInsertBtn->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, InsertHdl ) );
+    m_pModifyBtn->SetSelectHdl(
+        LINK( this, SvxMenuConfigPage, ModifyItemHdl ) );
     m_pResetBtn->SetClickHdl(
         LINK( this, SvxMenuConfigPage, ResetMenuHdl ) );
+
+    PopupMenu* pPopup = m_pModifyBtn->GetPopupMenu();
+    // These operations are not possible on menus/context menus yet
+    pPopup->EnableItem( pPopup->GetItemId("changeIcon"), false );
+    pPopup->EnableItem( pPopup->GetItemId("resetIcon"), false );
+    pPopup->EnableItem( pPopup->GetItemId("restoreItem"), false );
+    pPopup->RemoveDisabledEntries();
 
     if ( !bIsMenuBar )
     {
@@ -149,7 +158,6 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         // TODO: Remove this when it is possible to reset menubar menus individually
         m_pResetBtn->Disable();
     }
-
 }
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
@@ -197,19 +205,19 @@ void SvxMenuConfigPage::UpdateButtonStates()
     // Disable Up and Down buttons depending on current selection
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
 
-    if ( m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr )
-    {
-        m_pMoveUpButton->Enable( false );
-        m_pMoveDownButton->Enable( false );
+    bool  bIsSeparator =
+        selection && (static_cast<SvxConfigEntry*>(selection->GetUserData()))->IsSeparator();
+    bool bIsValidSelection =
+        !(m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr);
 
-        return;
-    }
+    m_pMoveUpButton->Enable(
+        bIsValidSelection &&  selection != m_pContentsListBox->First() );
+    m_pMoveDownButton->Enable(
+        bIsValidSelection && selection != m_pContentsListBox->Last() );
 
-    SvTreeListEntry* first = m_pContentsListBox->First();
-    SvTreeListEntry* last = m_pContentsListBox->Last();
+    m_pRemoveCommandButton->Enable( bIsValidSelection );
 
-    m_pMoveUpButton->Enable( selection != first );
-    m_pMoveDownButton->Enable( selection != last );
+    m_pModifyBtn->Enable( bIsValidSelection && !bIsSeparator);
 }
 
 void SvxMenuConfigPage::DeleteSelectedTopLevel()
@@ -372,6 +380,49 @@ IMPL_LINK( SvxMenuConfigPage, InsertHdl, MenuButton *, pButton, void )
             GetSaveInData()->SetModified();
         }
 
+    }
+    else
+    {
+        //This block should never be reached
+        SAL_WARN("cui.customize", "Unknown insert option: " << sIdent);
+        return;
+    }
+
+    if ( GetSaveInData()->IsModified() )
+    {
+        UpdateButtonStates();
+    }
+}
+
+IMPL_LINK( SvxMenuConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
+{
+    OString sIdent = pButton->GetCurItemIdent();
+
+    SAL_WARN("cui.customize", "sIdent: " << sIdent);
+
+    if (sIdent == "renameItem")
+    {
+        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
+        SvxConfigEntry* pEntry =
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
+
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+
+        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
+        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_MENU ) );
+
+        if ( pNameDialog->Execute() == RET_OK )
+        {
+            pNameDialog->GetName( aNewName );
+
+            pEntry->SetName( aNewName );
+            m_pContentsListBox->SetEntryText( pActEntry, aNewName );
+
+            GetSaveInData()->SetModified();
+            GetTopLevelSelection()->SetModified();
+        }
     }
     else
     {
