@@ -55,13 +55,13 @@ class SwFootnoteFrame: public SwLayoutFrame
     //  - 0     no following existent
     //  - this  for the last one
     //  - otherwise the following FootnoteFrame
-    SwFootnoteFrame     *pFollow;
-    SwFootnoteFrame     *pMaster;      // FootnoteFrame from which I am the following
-    SwContentFrame   *pRef;         // in this ContentFrame is the footnote reference
-    SwTextFootnote     *pAttr;        // footnote attribute (for recognition)
+    SwFootnoteFrame     *mpFollow;
+    SwFootnoteFrame     *mpMaster;      // FootnoteFrame from which I am the following
+    SwContentFrame   *mpReference;         // in this ContentFrame is the footnote reference
+    SwTextFootnote     *mpAttribute;        // footnote attribute (for recognition)
 
     // if true paragraphs in this footnote are NOT permitted to flow backwards
-    bool bBackMoveLocked : 1;
+    bool mbBackMoveLocked : 1;
     // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
 
@@ -79,30 +79,30 @@ public:
     const SwContentFrame *GetRef() const;
          SwContentFrame  *GetRef();
 #else
-    const SwContentFrame *GetRef() const    { return pRef; }
-         SwContentFrame  *GetRef()          { return pRef; }
+    const SwContentFrame *GetRef() const    { return mpReference; }
+         SwContentFrame  *GetRef()          { return mpReference; }
 #endif
     const SwContentFrame *GetRefFromAttr()  const;
           SwContentFrame *GetRefFromAttr();
 
-    const SwFootnoteFrame *GetFollow() const   { return pFollow; }
-          SwFootnoteFrame *GetFollow()         { return pFollow; }
+    const SwFootnoteFrame *GetFollow() const   { return mpFollow; }
+          SwFootnoteFrame *GetFollow()         { return mpFollow; }
 
-    const SwFootnoteFrame *GetMaster() const   { return pMaster; }
-          SwFootnoteFrame *GetMaster()         { return pMaster; }
+    const SwFootnoteFrame *GetMaster() const   { return mpMaster; }
+          SwFootnoteFrame *GetMaster()         { return mpMaster; }
 
-    const SwTextFootnote   *GetAttr() const   { return pAttr; }
-          SwTextFootnote   *GetAttr()         { return pAttr; }
+    const SwTextFootnote   *GetAttr() const   { return mpAttribute; }
+          SwTextFootnote   *GetAttr()         { return mpAttribute; }
 
-    void SetFollow( SwFootnoteFrame *pNew ) { pFollow = pNew; }
-    void SetMaster( SwFootnoteFrame *pNew ) { pMaster = pNew; }
-    void SetRef   ( SwContentFrame *pNew ) { pRef = pNew; }
+    void SetFollow( SwFootnoteFrame *pNew ) { mpFollow = pNew; }
+    void SetMaster( SwFootnoteFrame *pNew ) { mpMaster = pNew; }
+    void SetRef   ( SwContentFrame *pNew ) { mpReference = pNew; }
 
     void InvalidateNxtFootnoteCnts( SwPageFrame const * pPage );
 
-    void LockBackMove()     { bBackMoveLocked = true; }
-    void UnlockBackMove()   { bBackMoveLocked = false;}
-    bool IsBackMoveLocked() { return bBackMoveLocked; }
+    void LockBackMove()     { mbBackMoveLocked = true; }
+    void UnlockBackMove()   { mbBackMoveLocked = false;}
+    bool IsBackMoveLocked() { return mbBackMoveLocked; }
 
     // prevents that the last content deletes the SwFootnoteFrame as well (Cut())
     void ColLock()       { mbColLocked = true; }
