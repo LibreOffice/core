@@ -7961,8 +7961,17 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
             }
             break;
         case 0xD608:
-            nL = SVBT16ToShort( &pSprm[1 + mnDelta] );
+        {
+            sal_uInt8 nIndex = 1 + mnDelta;
+            if (nIndex + 1 >= nRemLen)
+            {
+                SAL_WARN("sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
+                nL = 0;
+            }
+            else
+                nL = SVBT16ToShort(&pSprm[nIndex]);
             break;
+        }
         default:
             switch (aSprm.nVari)
             {
