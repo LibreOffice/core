@@ -36,6 +36,7 @@ using namespace ::com::sun::star;
 #include <sfx2/docfile.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/sbxcore.hxx>
+#include <basic/sberrors.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/ofaitem.hxx>
 #include <svl/whiter.hxx>

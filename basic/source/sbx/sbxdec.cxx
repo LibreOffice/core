@@ -20,6 +20,7 @@
 #include <vcl/errcode.hxx>
 
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>

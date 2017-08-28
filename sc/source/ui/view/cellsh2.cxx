@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <basic/sberrors.hxx>
 #include "scitems.hxx"
 #include <comphelper/lok.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include "sbxres.hxx"
 
 

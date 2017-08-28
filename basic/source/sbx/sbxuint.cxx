@@ -19,6 +19,7 @@
 
 #include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 
 sal_uInt16 ImpGetUShort( const SbxValues* p )
