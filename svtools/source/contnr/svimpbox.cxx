@@ -45,7 +45,7 @@
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = nullptr;
 Image*  SvImpLBox::s_pDefExpanded       = nullptr;
-sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
+oslInterlockedCount SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
     : aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
