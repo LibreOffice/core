@@ -20,7 +20,6 @@
 
 #include "contenthandlerfactory.hxx"
 #include "querytokenizer.hxx"
-#include "macros.hxx"
 #include "constant.hxx"
 #include "versions.hxx"
 
@@ -76,8 +75,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
         if (!cache.hasItem(FilterCache::E_CONTENTHANDLER, sHandler) && cache.hasItem(FilterCache::E_TYPE, sHandler))
         {
-            FILTER_CONFIG_LOG_("ContentHandlerFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
-
             css::uno::Sequence< OUString > lTypes { sHandler };
 
             css::uno::Sequence< css::beans::NamedValue > lQuery { { PROPNAME_TYPES, css::uno::makeAny(lTypes) } };
