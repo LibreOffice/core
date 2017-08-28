@@ -19,7 +19,6 @@
 
 
 #include "cacheitem.hxx"
-#include "macros.hxx"
 #include "constant.hxx"
 
 #include <com/sun/star/uno/Sequence.h>
@@ -123,7 +122,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
 
     if (!aT1.equals(aT2))
     {
-        FILTER_CONFIG_LOG_("isSubSet() ... types of any values are different => return FALSE\n")
         return false;
     }
 
@@ -143,7 +141,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
         case css::uno::TypeClass_DOUBLE :
         {
             bool bIs = (aSubSet == aSet);
-            FILTER_CONFIG_LOG_1_("isSubSet() ... check for atomic types => return %s\n", bIs ? "TRUE" : "FALSE")
             return bIs;
         }
 
@@ -159,7 +156,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
                )
             {
                 bool bIs = v1 == v2;
-                FILTER_CONFIG_LOG_1_("isSubSet() ... check for string types => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
         }
@@ -177,7 +173,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
                )
             {
                 bool bIs = (p1.Name == p2.Name) && isSubSet(p1.Value, p2.Value);
-                FILTER_CONFIG_LOG_1_("isSubSet() ... check for structured types [PropertyValue] => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
 
@@ -190,7 +185,6 @@ bool isSubSet(const css::uno::Any& aSubSet,
                )
             {
                 bool bIs = (n1.Name == n2.Name) && isSubSet(n1.Value, n2.Value);
-                FILTER_CONFIG_LOG_1_("isSubSet() ... check for structured types [NamedValue] => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
         }
@@ -216,12 +210,9 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 {
                     if (::std::find(stl_s2.begin(), stl_s2.end(), *it1) == stl_s2.end())
                     {
-                        FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [OUString] ... didn't found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(*it1))
                         return false;
                     }
-                    FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [OUString] ... found \"%s\" => continue loop\n", _FILTER_CONFIG_TO_ASCII_(*it1))
                 }
-                FILTER_CONFIG_LOG_("isSubSet() ... check for list types [OUString] => return TRUE\n")
                 return true;
             }
 
@@ -243,17 +234,13 @@ bool isSubSet(const css::uno::Any& aSubSet,
                     ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_p2.find(it1->first);
                     if (it2 == stl_p2.end())
                     {
-                        FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [PropertyValue] ... didn't found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                         return false;
                     }
                     if (!isSubSet(it1->second, it2->second))
                     {
-                        FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [PropertyValue] ... found \"%s\" but has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                         return false;
                     }
-                    FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [PropertyValue] ... found \"%s\" with right value => continue loop\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                 }
-                FILTER_CONFIG_LOG_("isSubSet() ... check for list types [PropertyValue] => return TRUE\n")
                 return true;
             }
 
@@ -275,17 +262,13 @@ bool isSubSet(const css::uno::Any& aSubSet,
                     ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_n2.find(it1->first);
                     if (it2 == stl_n2.end())
                     {
-                        FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [NamedValue] ... didn't found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                         return false;
                     }
                     if (!isSubSet(it1->second, it2->second))
                     {
-                        FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [NamedValue] ... found \"%s\" but has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                         return false;
                     }
-                    FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [NamedValue] ... found \"%s\" with right value => continue loop\n", _FILTER_CONFIG_TO_ASCII_(it1->first))
                 }
-                FILTER_CONFIG_LOG_("isSubSet() ... check for list types [NamedValue] => return TRUE\n")
                 return true;
             }
         }
@@ -308,14 +291,12 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
         const_iterator pItThis = find(pIt->first);
         if (pItThis == end())
         {
-            FILTER_CONFIG_LOG_1_("CacheItem::haveProps() ... didn't found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
             return false;
         }
 
         // ii) one item does not have the right value => return false
         if (!isSubSet(pIt->second, pItThis->second))
         {
-            FILTER_CONFIG_LOG_1_("CacheItem::haveProps() ... item \"%s\" has different value => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
             return false;
         }
     }
@@ -323,7 +304,6 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
     // this method was not breaked before =>
     // the given property set seems to match with our
     // own properties in its minimum => return TRUE
-    FILTER_CONFIG_LOG_("CacheItem::haveProps() ... => return TRUE\n")
     return true;
 }
 
@@ -341,7 +321,6 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         const_iterator pItThis = find(pIt->first);
         if (pItThis == end())
         {
-            FILTER_CONFIG_LOG_1_("CacheItem::dontHaveProps() ... not found \"%s\" => continue loop!\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
             continue;
         }
 
@@ -350,7 +329,6 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         //     But we checked for "don't have it" here.
         if (isSubSet(pIt->second, pItThis->second))
         {
-            FILTER_CONFIG_LOG_1_("CacheItem::dontHaveProps() ... item \"%s\" has same value => return FALSE!\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
             return false;
         }
     }
@@ -358,7 +336,6 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
     // this method was not breaked before =>
     // That means: this item has no matching property
     // of the given set. It "don't have" it ... => return true.
-    FILTER_CONFIG_LOG_("CacheItem::dontHaveProps() ... => return TRUE\n")
     return true;
 }
 
