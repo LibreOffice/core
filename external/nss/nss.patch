@@ -1,5 +1,16 @@
---- a/nss.orig/nspr/pr/src/misc/prnetdb.c	2016-02-12 14:51:25.000000000 +0100
-+++ b/nss/nspr/pr/src/misc/prnetdb.c	2016-03-04 19:23:00.462892600 +0100
+--- a/a/nspr/configure	2017-08-29 23:44:13.686045013 +0530
++++ b/b/nspr/configure	2017-08-29 23:46:53.774768655 +0530
+@@ -7034,7 +7034,7 @@
+     PR_MD_CSRCS=linux.c
+     MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
+     DSO_CFLAGS=-fPIC
+-    DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
++    DSO_LDOPTS='-shared -Wl,-z,origin -Wl,-rpath,\$$ORIGIN -Wl,-soname -Wl,$(notdir $@)'
+     _OPTIMIZE_FLAGS=-O2
+     _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
+                                    # combo is not yet good at debugging inlined
+--- a/nss.orig/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:44:13.690045031 +0530
++++ b/nss/nspr/pr/src/misc/prnetdb.c	2017-08-29 23:47:03.810814019 +0530
 @@ -438,7 +438,7 @@
  	char *buf = *bufp;
  	PRIntn buflen = *buflenp;
@@ -9,21 +20,8 @@
  		PRIntn skip = align - ((ptrdiff_t)buf & (align - 1));
  		if (buflen < skip) {
  			return 0;
-diff -ru a/nspr/configure b/nspr/configure
---- a/a/nspr/configure	2014-09-29 16:46:38.427423757 +0100
-+++ b/b/nspr/configure	2014-09-29 16:47:42.984012225 +0100
-@@ -7018,7 +7018,7 @@
-     PR_MD_CSRCS=linux.c
-     MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
-     DSO_CFLAGS=-fPIC
--    DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
-+    DSO_LDOPTS='-shared -Wl,-z,origin -Wl,-rpath,\$$ORIGIN -Wl,-soname -Wl,$(notdir $@)'
-     _OPTIMIZE_FLAGS=-O2
-     _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
-                                    # combo is not yet good at debugging inlined
-diff -ru a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
---- a/a/nss/cmd/platlibs.mk	2014-09-29 16:46:38.306422654 +0100
-+++ b/b/nss/cmd/platlibs.mk	2014-09-29 16:47:42.987012253 +0100
+--- a/a/nss/cmd/platlibs.mk	2017-08-29 23:44:13.554044416 +0530
++++ b/b/nss/cmd/platlibs.mk	2017-08-29 23:46:09.638569150 +0530
 @@ -10,17 +10,22 @@
  
  ifeq ($(OS_ARCH), SunOS) 
@@ -51,10 +49,9 @@ diff -ru a/nss/cmd/platlibs.mk b/nss/cmd/platlibs.mk
  endif
  endif
  
-diff -ru nss.orig/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
---- a/nss.orig/nss/coreconf/arch.mk	2016-02-12 15:36:18.000000000 +0100
-+++ b/nss/nss/coreconf/arch.mk	2016-02-23 20:48:31.595941079 +0100
-@@ -280,11 +280,17 @@
+--- a/nss.org/nss/coreconf/arch.mk	2017-08-29 23:44:13.646044832 +0530
++++ b/nss/nss/coreconf/arch.mk	2017-08-29 23:45:51.494487134 +0530
+@@ -305,11 +305,17 @@
      OBJDIR_NAME_COMPILER = $(COMPILER_TAG)
  endif
  OBJDIR_NAME_BASE = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(OBJDIR_NAME_COMPILER)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG)
@@ -74,9 +71,8 @@ diff -ru nss.orig/nss/coreconf/arch.mk nss/nss/coreconf/arch.mk
  #
  # Define USE_DEBUG_RTL if you want to use the debug runtime library
  # (RTL) in the debug build
-diff -ru a/nss/coreconf/FreeBSD.mk b/nss/coreconf/FreeBSD.mk
---- a/a/nss/coreconf/FreeBSD.mk	2014-09-29 16:46:38.189421588 +0100
-+++ b/b/nss/coreconf/FreeBSD.mk	2014-09-29 16:47:42.984012225 +0100
+--- a/nss.org/nss/coreconf/FreeBSD.mk	2017-08-29 23:44:13.642044814 +0530
++++ b/nss/nss/coreconf/FreeBSD.mk	2017-08-29 23:45:20.850348615 +0530
 @@ -25,6 +25,7 @@
  
  DSO_CFLAGS		= -fPIC
@@ -85,19 +81,18 @@ diff -ru a/nss/coreconf/FreeBSD.mk b/nss/coreconf/FreeBSD.mk
  
  #
  # The default implementation strategy for FreeBSD is pthreads.
-diff -ru a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
---- a/a/nss/coreconf/Linux.mk	2014-09-29 16:46:38.189421588 +0100
-+++ b/b/nss/coreconf/Linux.mk	2014-09-29 16:47:42.985012235 +0100
-@@ -157,7 +160,7 @@
+--- a/nss.org/nss/coreconf/Linux.mk	2017-08-29 23:44:13.642044814 +0530
++++ b/nss/nss/coreconf/Linux.mk	2017-08-29 23:47:26.318915759 +0530
+@@ -147,7 +147,7 @@
+ # Also, -z defs conflicts with Address Sanitizer, which emits relocations
  # against the libsanitizer runtime built into the main executable.
  ZDEFS_FLAG		= -Wl,-z,defs
- ifneq ($(USE_ASAN),1)
 -DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
-+DSO_LDOPTS             += $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
- endif
- LDFLAGS			+= $(ARCHFLAG)
++DSO_LDOPTS      += $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
+ LDFLAGS			+= $(ARCHFLAG) -z noexecstack
  
-@@ -189,8 +192,13 @@
+ # On Maemo, we need to use the -rpath-link flag for even the standard system
+@@ -177,8 +177,13 @@
  endif
  endif
  
@@ -111,9 +106,8 @@ diff -ru a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
  
  # The -rpath '$$ORIGIN' linker option instructs this library to search for its
  # dependencies in the same directory where it resides.
-diff -ru a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
---- a/a/nss/coreconf/rules.mk	2014-09-29 16:46:38.188421578 +0100
-+++ b/b/nss/coreconf/rules.mk	2014-09-29 16:47:42.986012244 +0100
+--- a/nss.org/nss/coreconf/rules.mk	2017-08-29 23:44:13.646044832 +0530
++++ b/nss/nss/coreconf/rules.mk	2017-08-29 23:47:37.442966042 +0530
 @@ -261,7 +261,7 @@
  ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
  	$(AR) $(subst /,\\,$(OBJS))
@@ -123,34 +117,43 @@ diff -ru a/nss/coreconf/rules.mk b/nss/coreconf/rules.mk
  endif
  	$(RANLIB) $@
  
-diff -ru a/nss/coreconf/SunOS5.mk b/nss/coreconf/SunOS5.mk
---- a/a/nss/coreconf/SunOS5.mk	2014-09-29 16:46:38.175421471 +0100
-+++ b/b/nss/coreconf/SunOS5.mk	2014-09-29 16:47:42.985012235 +0100
-@@ -48,8 +48,12 @@
+--- a/nss.org/nss/coreconf/SunOS5.mk	2017-08-29 23:44:13.646044832 +0530
++++ b/nss/nss/coreconf/SunOS5.mk	2017-08-29 23:45:00.902258445 +0530
+@@ -48,8 +48,11 @@
  	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
  	endif
  else
 -	CC         = cc
 -	CCC        = CC
-+# CC is taken from environment automatically.
-+#	CC         = cc
-+# Use CXX from environment.
-+#	CCC        = CC
-+        CCC       = $(CXX)
-+
++	# CC is taken from environment automatically.
++	#	CC         = cc
++	# Use CXX from environment.
++	#	CCC        = CC
++    CCC       = $(CXX)
  	ASFLAGS   += -Wa,-P
  	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
  	ifndef BUILD_OPT
-diff -ru a/nss/Makefile b/nss/Makefile
---- a/a/nss/Makefile	2014-09-29 16:46:38.171421425 +0100
-+++ b/b/nss/Makefile	2014-09-29 16:47:42.987012253 +0100
+--- a/nss.org/nss/coreconf/Werror.mk	2017-08-29 23:44:13.646044832 +0530
++++ b/nss/nss/coreconf/Werror.mk	2017-08-29 23:44:23.994091608 +0530
+@@ -94,7 +94,8 @@
+     endif #ndef NSS_ENABLE_WERROR
+ 
+     ifeq ($(NSS_ENABLE_WERROR),1)
+-      WARNING_CFLAGS += -Werror
++      # We do not treat warnings as errors.
++	  # WARNING_CFLAGS += -Werror
+     else
+       # Old versions of gcc (< 4.8) don't support #pragma diagnostic in functions.
+       # Use this to disable use of that #pragma and the warnings it suppresses.
+--- a/nss.org/nss/Makefile	2017-08-29 23:44:13.402043729 +0530
++++ b/nss/nss/Makefile	2017-08-29 23:44:39.774162939 +0530
 @@ -1,3 +1,5 @@
 +export AR
 +export RANLIB
  #! gmake
  #
  # This Source Code Form is subject to the terms of the Mozilla Public
-@@ -91,10 +91,10 @@
+@@ -89,10 +91,10 @@
  NSPR_CONFIGURE_ENV = CC=gcc CXX=g++
  endif
  ifdef CC
@@ -163,16 +166,3 @@ diff -ru a/nss/Makefile b/nss/Makefile
  endif
  # Remove -arch definitions. NSPR can't handle that.
  NSPR_CONFIGURE_ENV := $(filter-out -arch x86_64,$(NSPR_CONFIGURE_ENV))
-diff -ru nss.orig/nss/coreconf/Werror.mk nss/nss/coreconf/Werror.mk
---- a/nss.orig/nss/coreconf/Werror.mk	2016-02-12 15:36:18.000000000 +0100
-+++ b/nss/nss/coreconf/Werror.mk	2016-02-23 23:58:15.119584046 +0100
-@@ -94,7 +94,8 @@
-     endif #ndef NSS_ENABLE_WERROR
- 
-     ifeq ($(NSS_ENABLE_WERROR),1)
--      WARNING_CFLAGS += -Werror
-+# We do not treat warnings as errors.
-+#    WARNING_CFLAGS += -Werror
-     else
-       # Old versions of gcc (< 4.8) don't support #pragma diagnostic in functions.
-       # Use this to disable use of that #pragma and the warnings it suppresses.
