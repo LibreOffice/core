@@ -39,6 +39,8 @@ public:
     */
     static std::shared_ptr<CacheConfiguration> Instance();
 
+    static void Shutdown();
+
     /** Look up the specified value in
         MultiPaneGUI/SlideSorter/PreviewCache.   When the specified value
         does not exist then an empty Any is returned.
@@ -50,7 +52,7 @@ private:
         this weak pointer to avoid creating a new instance.
     */
     static std::weak_ptr<CacheConfiguration> mpWeakInstance;
-    static Timer maReleaseTimer;
+    Timer m_ReleaseTimer;
     css::uno::Reference<css::container::XNameAccess> mxCacheNode;
 
     CacheConfiguration();

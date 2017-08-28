@@ -41,7 +41,6 @@ namespace
 }
 
 std::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
-Timer CacheConfiguration::maReleaseTimer;
 
 std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 {
@@ -58,11 +57,11 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
             rInstancePtr.reset(new CacheConfiguration());
             mpWeakInstance = rInstancePtr;
             // Prepare to release this instance in the near future.
-            maReleaseTimer.SetInvokeHandler(
+            rInstancePtr->m_ReleaseTimer.SetInvokeHandler(
                 LINK(rInstancePtr.get(),CacheConfiguration,TimerCallback));
-            maReleaseTimer.SetTimeout(5000 /* 5s */);
-            maReleaseTimer.SetDebugName("sd::CacheConfiguration maReleaseTimer");
-            maReleaseTimer.Start();
+            rInstancePtr->m_ReleaseTimer.SetTimeout(5000 /* 5s */);
+            rInstancePtr->m_ReleaseTimer.SetDebugName("sd::CacheConfiguration maReleaseTimer");
+            rInstancePtr->m_ReleaseTimer.Start();
         }
     }
     return rInstancePtr;
@@ -131,6 +130,15 @@ IMPL_STATIC_LINK_NOARG(CacheConfiguration, TimerCallback, Timer *, void)
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
     // Release our reference to the instance.
     rInstancePtr.reset();
+    // note: if there are no other references to the instance, m_ReleaseTimer
+    // will be deleted now
+}
+
+void CacheConfiguration::Shutdown()
+{
+    CacheConfigSharedPtr &rInstancePtr = theInstance::get();
+    rInstancePtr.reset();
+    assert(mpWeakInstance.expired()); // ensure m_ReleaseTimer is destroyed
 }
 
 } } } // end of namespace ::sd::slidesorter::cache
