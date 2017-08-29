@@ -12,6 +12,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -192,6 +194,20 @@ DECLARE_WW8EXPORT_TEST(testTdf108448_endNote, "tdf108448_endNote.odt")
         nRet++;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of paragraphs in Endnote i", 1, nRet );
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJustification.doc")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left writing mode", text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
+    if ( !mbExported )
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTable, "HoriOrient"));
+        CPPUNIT_ASSERT_MESSAGE("Table Indent", getProperty<long>(xTable, "LeftMargin") > 3000);
+    }
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")

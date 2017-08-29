@@ -2583,13 +2583,9 @@ void WW8TabDesc::CreateSwTable()
                 nLeft = GetMinLeft();
             else
             {
-                if (m_nPreferredWidth)
-                {
-                    nLeft = m_pIo->m_aSectionManager.GetTextAreaWidth();
-                    nLeft = nLeft - m_nPreferredWidth  - m_nOrgDxaLeft;
-                }
-                else
-                    nLeft = -GetMinLeft();
+                const short nTableWidth = m_nPreferredWidth ? m_nPreferredWidth : m_nSwWidth;
+                nLeft = m_pIo->m_aSectionManager.GetTextAreaWidth();
+                nLeft = nLeft - nTableWidth - m_nOrgDxaLeft;
             }
 
             aL.SetLeft(nLeft);
