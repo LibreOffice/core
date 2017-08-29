@@ -4788,13 +4788,14 @@ SCROW ScFormulaCell::GetSharedLength() const
 
 sal_Int32 ScFormulaCell::GetWeight() const
 {
-#if 0
     if (!mxGroup)
-        return pCode->GetWeight();
-    return GetSharedLength() * GetSharedCode()->GetWeight();
-#else
-    return GetSharedLength();
-#endif
+        return 1;
+    double nSharedCodeWeight = GetSharedCode()->GetWeight();
+    double nResult = nSharedCodeWeight * GetSharedLength();
+    if (nResult < SAL_MAX_INT32)
+        return nResult;
+    else
+        return SAL_MAX_INT32;
 }
 
 ScTokenArray* ScFormulaCell::GetSharedCode()
