@@ -46,6 +46,34 @@ void XMLParagraphPropertiesContext::startElement(const OUString &/*rName*/, cons
     }
 }
 
+/// Handler for <style:text-properties>.
+class XMLTextPropertiesContext : public XMLImportContext
+{
+public:
+    XMLTextPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    XMLStyleContext &mrStyle;
+};
+
+XMLTextPropertiesContext::XMLTextPropertiesContext(XMLImport &rImport, XMLStyleContext &rStyle)
+    : XMLImportContext(rImport)
+    , mrStyle(rStyle)
+{
+}
+
+void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
+{
+    for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
+    {
+        OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
+        mrStyle.GetPropertyList().insert(sName.getStr(), sValue.getStr());
+    }
+}
+
 XMLStyleContext::XMLStyleContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
@@ -55,6 +83,8 @@ XMLImportContext *XMLStyleContext::CreateChildContext(const OUString &rName, con
 {
     if (rName == "style:paragraph-properties")
         return new XMLParagraphPropertiesContext(mrImport, *this);
+    if (rName == "style:text-properties")
+        return new XMLTextPropertiesContext(mrImport, *this);
     return nullptr;
 }
 
