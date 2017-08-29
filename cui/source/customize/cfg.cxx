@@ -1174,6 +1174,12 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pFunctions->set_height_request(aSize.Height());
     m_pFunctions->set_width_request(aSize.Width());
 
+    // Make the middle buttons bigger
+    m_pAddCommandButton->set_height_request( m_pAddCommandButton->GetOptimalSize().Height() * 1.5 );
+    m_pAddCommandButton->set_width_request( m_pAddCommandButton->GetOptimalSize().Width() * 1.5 );
+    m_pRemoveCommandButton->set_height_request( m_pRemoveCommandButton->GetOptimalSize().Height() * 1.5 );
+    m_pRemoveCommandButton->set_width_request( m_pRemoveCommandButton->GetOptimalSize().Width() * 1.5 );
+
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
 
