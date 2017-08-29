@@ -25,13 +25,13 @@
 #include "hwpfile.h"
 #include "htags.h"
 
-void HyperText::Read(HWPFile & hwpf)
+bool HyperText::Read(HWPFile& hwpf)
 {
-    hwpf.Read1b(filename, 256);
-    hwpf.Read2b(bookmark, 16);
-    hwpf.Read1b(macro, 325);
-    hwpf.Read1b(&type, 1);
-    hwpf.Read1b(reserve, 3);
+    size_t nRead = hwpf.Read1b(filename, 256);
+    nRead += hwpf.Read2b(bookmark, 16);
+    nRead += hwpf.Read1b(macro, 325);
+    nRead += hwpf.Read1b(&type, 1);
+    nRead += hwpf.Read1b(reserve, 3);
     if( type == 2 )
     {
         for( int i = 1; i < 256; i++)
@@ -41,8 +41,8 @@ void HyperText::Read(HWPFile & hwpf)
                 break;
         }
     }
+    return nRead == 617;
 }
-
 
 EmPicture::EmPicture(size_t tsize)
     : size(tsize >= 32 ? tsize - 32 : 0)
