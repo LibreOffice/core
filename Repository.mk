@@ -91,6 +91,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     setgetenv \
     signal \
     monitor \
+    socket \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \

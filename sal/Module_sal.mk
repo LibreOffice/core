@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,sal,\
     Executable_setgetenv \
     Executable_signal \
     Executable_monitor \
+    Executable_socket \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
