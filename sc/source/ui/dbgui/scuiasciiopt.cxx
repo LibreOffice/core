@@ -85,7 +85,7 @@ static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode 
     }
 }
 
-static sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const OUString& rList )
+static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rList )
 {
     sal_Unicode c = 0;
     OUString aStr = rCombo.GetText();
@@ -695,7 +695,7 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorEditHdl, Edit&, rEdit, void )
 {
     SeparatorHdl(&rEdit);
 }
-void ScImportAsciiDlg::SeparatorHdl( Control* pCtrl )
+void ScImportAsciiDlg::SeparatorHdl( const Control* pCtrl )
 {
     OSL_ENSURE( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
     OSL_ENSURE( !pRbFixed->IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );

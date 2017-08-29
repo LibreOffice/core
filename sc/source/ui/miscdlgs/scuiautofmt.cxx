@@ -54,7 +54,7 @@
 ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
     ScAutoFormat* pAutoFormat,
     const ScAutoFormatData* pSelFormatData,
-    ScViewData *pViewData)
+    const ScViewData *pViewData)
     : ModalDialog(pParent, "AutoFormatTableDialog",
         "modules/scalc/ui/autoformattable.ui")
     , aStrTitle(ScResId(STR_ADD_AUTOFORMAT_TITLE))

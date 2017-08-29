@@ -275,7 +275,7 @@ public:
     void                writeSourceHeaderCell( const WorksheetHelper& rSheetHelper,
                             sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Writes a source field item value into the passed sheet. */
-    void                writeSourceDataCell( WorksheetHelper& rSheetHelper,
+    void                writeSourceDataCell( const WorksheetHelper& rSheetHelper,
                             sal_Int32 nCol, sal_Int32 nRow,
                             const PivotCacheItem& rItem ) const;
 
@@ -385,13 +385,13 @@ public:
     /** Writes the titles of all source fields into the passed sheet. */
     void                writeSourceHeaderCells( const WorksheetHelper& rSheetHelper ) const;
     /** Writes a source field item value into the passed sheet. */
-    void                writeSourceDataCell( WorksheetHelper& rSheetHelper,
+    void                writeSourceDataCell( const WorksheetHelper& rSheetHelper,
                             sal_Int32 nColIdx, sal_Int32 nRowIdx,
                             const PivotCacheItem& rItem ) const;
 
     /** Reads a PCRECORD record and writes all item values to the passed sheet. */
     void                importPCRecord( SequenceInputStream& rStrm,
-                            WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
+                            const WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
 
 private:
 

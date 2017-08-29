@@ -351,7 +351,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectListBoxHdl, ListBox&, rLb, void )
 {
     SelectHdl(&rLb);
 }
-void ScTpSubTotalGroup::SelectHdl(void *pLb)
+void ScTpSubTotalGroup::SelectHdl(const void *pLb)
 {
     if (   (mpLbColumns->GetEntryCount() > 0)
         && (mpLbColumns->GetSelectionCount() > 0) )

@@ -511,7 +511,7 @@ void WorkbookFragment::finalizeImport()
 
 namespace {
 
-ScDocShell& getDocShell(ScDocument& rDoc)
+ScDocShell& getDocShell(const ScDocument& rDoc)
 {
     return static_cast<ScDocShell&>(*rDoc.GetDocumentShell());
 }

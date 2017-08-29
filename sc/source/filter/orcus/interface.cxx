@@ -913,7 +913,7 @@ void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
     rSet.Put(aBoxItem);
 }
 
-void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, ScDocument& rDoc) const
+void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet, const ScDocument& rDoc) const
 {
     sal_uInt32 nKey;
     sal_Int32 nCheckPos;

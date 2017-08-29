@@ -82,7 +82,10 @@ class EnumWrapper : public EnumerationHelper_BASE
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-        EnumWrapper(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< container::XIndexAccess >& xIndexAccess ) :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+        EnumWrapper( const uno::Reference< XHelperInterface >& xParent,
+                     const uno::Reference< uno::XComponentContext >& xContext,
+                     const uno::Reference< container::XIndexAccess >& xIndexAccess )
+            :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
 
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
