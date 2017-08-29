@@ -112,17 +112,19 @@ void ItemHolder1::impl_addItem(EItem eItem)
 
 void ItemHolder1::impl_releaseAllItems()
 {
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TItems items;
+    {
+        ::osl::MutexGuard aLock(m_aLock);
+        items.swap(m_lItems);
+    }
 
     TItems::iterator pIt;
-    for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end();
+    for (  pIt  = items.begin();
+           pIt != items.end();
          ++pIt                    )
     {
-        TItemInfo& rInfo = *pIt;
-        impl_deleteItem(rInfo);
+        delete pIt->pItem;
     }
-    m_lItems.clear();
 }
 
 void ItemHolder1::impl_newItem(TItemInfo& rItem)
@@ -220,15 +222,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
         default:
             OSL_FAIL( "unknown item type" );
             break;
-    }
-}
-
-void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
-{
-    if (rItem.pItem)
-    {
-        delete rItem.pItem;
-        rItem.pItem = nullptr;
     }
 }
 

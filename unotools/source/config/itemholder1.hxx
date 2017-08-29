@@ -51,7 +51,6 @@ class ItemHolder1 : private ItemHolderMutexBase
         void impl_addItem(EItem eItem);
         void impl_releaseAllItems();
         static void impl_newItem(TItemInfo& rItem);
-        static void impl_deleteItem(TItemInfo& rItem);
 };
 
 // namespaces
