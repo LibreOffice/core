@@ -793,9 +793,9 @@ oslSocket SAL_CALL osl_createSocket(
         int nErrno = WSAGetLastError();
         wchar_t *sErr = nullptr;
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                       NULL, nErrno,
+                       nullptr, nErrno,
                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                       (LPWSTR)&sErr, 0, NULL);
+                       reinterpret_cast<LPWSTR>(&sErr), 0, nullptr);
         SAL_WARN("sal.osl", "socket creation failed: (" << nErrno << ") " << sErr);
         LocalFree(sErr);
 
