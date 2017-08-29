@@ -1391,11 +1391,11 @@ void CustomPropertiesYesNoButton::Resize()
 {
     Size aParentSize(GetSizePixel());
     const long nWidth = aParentSize.Width();
-    Size a1Size = LogicToPixel(Size(1, 1), MapUnit::MapAppFont);
+    const long n1Width = LogicToPixel(Size(1, 1), MapUnit::MapAppFont).Width();
     const long n3Width = LogicToPixel(Size(3, 3), MapUnit::MapAppFont).Width();
     const long nNewWidth = (nWidth / 2) - n3Width - 2;
-    Size aSize(nNewWidth, aParentSize.Height() - 2 * a1Size.Height());
-    Point aPos(a1Size.Width(), a1Size.Height());
+    Size aSize(nNewWidth, m_aYesButton->get_preferred_size().Height());
+    Point aPos(n1Width, (aParentSize.Height() - aSize.Height()) / 2);
     m_aYesButton->SetPosSizePixel(aPos, aSize);
     aPos.X() += aSize.Width() + n3Width;
     m_aNoButton->SetPosSizePixel(aPos, aSize);
@@ -1407,11 +1407,10 @@ namespace
     {
         VclPtr<ComboBox> aNameBox(VclPtr<ComboBox>::Create(pParent, WB_TABSTOP|WB_DROPDOWN|
                                                                     WB_AUTOSIZE|WB_AUTOHSCROLL));
-        aNameBox->SetPosSizePixel(aNameBox->LogicToPixel(Point(0, 2), MapUnit::MapAppFont),
-                                  aNameBox->LogicToPixel(Size(60, 72), MapUnit::MapAppFont));
         ResStringArray aStrArr(ResId(SFX_CB_PROPERTY_STRINGARRAY, *SfxResMgr::GetResMgr()));
         for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
             aNameBox->InsertEntry(aStrArr.GetString(i));
+        aNameBox->EnableAutoSize(true);
         return aNameBox;
     }
 }
@@ -1420,8 +1419,6 @@ CustomPropertiesTypeBox::CustomPropertiesTypeBox(vcl::Window* pParent, CustomPro
     : ListBox(pParent, WB_BORDER|WB_DROPDOWN)
     , m_pLine(pLine)
 {
-    SetPosSizePixel(LogicToPixel(Point(63, 2), MapUnit::MapAppFont),
-                    LogicToPixel(Size(60, 80), MapUnit::MapAppFont));
     ResStringArray aStrArr(ResId(SFX_LB_PROPERTY_STRINGARRAY, *SfxResMgr::GetResMgr()));
     for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
     {
@@ -1429,25 +1426,71 @@ CustomPropertiesTypeBox::CustomPropertiesTypeBox(vcl::Window* pParent, CustomPro
         SetEntryData(i, reinterpret_cast<void*>(aStrArr.GetValue(i)));
     }
     SelectEntryPos(0);
+    EnableAutoSize(true);
 }
 
 // struct CustomPropertyLine ---------------------------------------------
 CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
-    m_aNameBox      ( makeComboBox(pParent) ),
-    m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(pParent, this) ),
-    m_aValueEdit    ( VclPtr<CustomPropertiesEdit>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
-    m_aDateField    ( VclPtr<CustomPropertiesDateField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_aTimeField    ( VclPtr<CustomPropertiesTimeField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
+    m_aLine         ( VclPtr<VclGrid>::Create(pParent) ),
+    m_aNameBox      ( makeComboBox(m_aLine) ),
+    m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(m_aLine, this) ),
+    m_aValueEdit    ( VclPtr<CustomPropertiesEdit>::Create(m_aLine, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
+    m_aDateField    ( VclPtr<CustomPropertiesDateField>::Create(m_aLine, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
+    m_aTimeField    ( VclPtr<CustomPropertiesTimeField>::Create(m_aLine, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
     m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ) ),
-    m_aDurationField( VclPtr<CustomPropertiesDurationField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ) ),
-    m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(pParent, WB_TABSTOP, this) ),
-    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(pParent) ),
-    m_aRemoveButton ( VclPtr<CustomPropertiesRemoveButton>::Create(pParent, 0, this) ),
+    m_aDurationField( VclPtr<CustomPropertiesDurationField>::Create(m_aLine, WB_BORDER|WB_TABSTOP|WB_READONLY, this ) ),
+    m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(m_aLine, WB_TABSTOP, this) ),
+    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(m_aLine) ),
+    m_aRemoveButton ( VclPtr<CustomPropertiesRemoveButton>::Create(m_aLine, 0, this) ),
     m_bIsDate       ( false ),
     m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
-
 {
+    m_aLine->set_column_spacing(4);
+
+    m_aNameBox->set_grid_left_attach(0);
+    m_aNameBox->set_grid_top_attach(0);
+    m_aNameBox->set_margin_left(4);
+    m_aNameBox->Show();
+
+    m_aTypeBox->set_grid_left_attach(1);
+    m_aTypeBox->set_grid_top_attach(0);
+    m_aTypeBox->Show();
+
+    m_aValueEdit->set_grid_left_attach(2);
+    m_aValueEdit->set_grid_top_attach(0);
+    m_aValueEdit->set_hexpand(true);
+    m_aValueEdit->Show();
+
+    m_aDateField->set_grid_left_attach(3);
+    m_aDateField->set_grid_top_attach(0);
+    m_aDateField->set_hexpand(true);
+    m_aDateField->Show();
+
+    m_aTimeField->set_grid_left_attach(4);
+    m_aTimeField->set_grid_top_attach(0);
+    m_aTimeField->set_hexpand(true);
+    m_aTimeField->Show();
+
+    m_aDurationField->set_grid_left_attach(5);
+    m_aDurationField->set_grid_top_attach(0);
+    m_aDurationField->set_hexpand(true);
+    m_aDurationField->Show();
+
+    m_aEditButton->set_grid_left_attach(6);
+    m_aEditButton->set_grid_top_attach(0);
+    m_aEditButton->Show();
+
+    m_aYesNoButton->set_grid_left_attach(7);
+    m_aYesNoButton->set_grid_top_attach(0);
+    m_aYesNoButton->set_hexpand(true);
+    m_aYesNoButton->Show();
+
+    m_aRemoveButton->set_grid_left_attach(8);
+    m_aRemoveButton->set_grid_top_attach(0);
+    m_aRemoveButton->set_margin_right(4);
+    m_aRemoveButton->Show();
+
     m_aTimeField->SetExtFormat( ExtTimeFieldFormat::Long24H );
     m_aDateField->SetExtDateFormat( ExtDateFieldFormat::SystemShortYYYY );
 
@@ -1461,77 +1504,41 @@ void CustomPropertyLine::SetRemoved()
 {
     DBG_ASSERT( !m_bIsRemoved, "CustomPropertyLine::SetRemoved(): line already removed" );
     m_bIsRemoved = true;
-    m_aNameBox->Hide();
-    m_aTypeBox->Hide();
-    m_aValueEdit->Hide();
-    m_aDateField->Hide();
-    m_aTimeField->Hide();
-    m_aDurationField->Hide();
-    m_aEditButton->Hide();
-    m_aYesNoButton->Hide();
-    m_aRemoveButton->Hide();
+    m_aLine->Hide();
 }
 
 CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     FixedText *pHeaderAccName,
     FixedText *pHeaderAccType,
     FixedText *pHeaderAccValue) :
-    Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL),
+    Window(pParent, WB_HIDE | WB_TABSTOP | WB_DIALOGCONTROL),
     m_pHeaderAccName(pHeaderAccName),
     m_pHeaderAccType(pHeaderAccType),
     m_pHeaderAccValue(pHeaderAccValue),
-    m_aNameBox      ( makeComboBox(this) ),
-    m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(pParent, nullptr) ),
-    m_aValueEdit    ( VclPtr<Edit>::Create( this, WB_BORDER|WB_TABSTOP|WB_LEFT ) ),
-    m_aDateField    ( VclPtr<DateField>::Create( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_aTimeField    ( VclPtr<TimeField>::Create( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_aDurationField( VclPtr<Edit>::Create( this, WB_BORDER|WB_TABSTOP|WB_READONLY ) ),
-    m_aEditButton   ( VclPtr<PushButton>::Create( this, WB_TABSTOP ) ),
-    m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(this) ),
-    m_aRemoveButton ( VclPtr<ImageButton>::Create( this, 0 ) ),
     m_nScrollPos (0),
     m_pCurrentLine (nullptr),
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 {
-    Point aPos(LogicToPixel(Point(159, 2), MapUnit::MapAppFont));
+    m_nRemoveButtonWidth = ScopedVclPtrInstance<CustomPropertiesRemoveButton>(pParent, 0, nullptr)->get_preferred_size().Width();
+    Size aSize = ScopedVclPtrInstance<CustomPropertiesTypeBox>(pParent, nullptr)->CalcMinimumSize();
+    m_nTypeBoxWidth = aSize.Width();
+    m_nWidgetHeight = aSize.Height();
 
-    m_aEditButton->SetPosSizePixel(aPos,
-        LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MapUnit::MapAppFont));
-
-    m_aRemoveButton->SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MapUnit::MapAppFont));
-
-    Size aSize(LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MapUnit::MapAppFont));
-    m_aValueEdit->SetPosSizePixel(aPos, aSize);
-    m_aDurationField->SetPosSizePixel(aPos, aSize);
-    m_aDateField->SetPosSizePixel(aPos, aSize);
-    m_aTimeField->SetPosSizePixel(aPos, aSize);
-    m_aYesNoButton->SetPosSizePixel(aPos, aSize);
+    Point aPos(LogicToPixel(Point(0, 2), MapUnit::MapAppFont));
 
     m_aEditLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aEditLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
     m_aBoxLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
     m_aBoxLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
-    m_aNameBox->add_mnemonic_label(m_pHeaderAccName);
-    m_aNameBox->SetAccessibleName(m_pHeaderAccName->GetText());
-    m_aTypeBox->add_mnemonic_label(m_pHeaderAccType);
-    m_aTypeBox->SetAccessibleName(m_pHeaderAccType->GetText());
-    m_aValueEdit->add_mnemonic_label(m_pHeaderAccValue);
-    m_aValueEdit->SetAccessibleName(m_pHeaderAccValue->GetText());
+    m_nLineHeight = (aPos.Y() * 2) + m_nWidgetHeight;
+}
 
-    m_aNameBox->Hide();
-    m_aTypeBox->Hide();
-    m_aValueEdit->Hide();
-    m_aDateField->Hide();
-    m_aTimeField->Hide();
-    m_aDurationField->Hide();
-    m_aEditButton->Hide();
-    m_aYesNoButton->Hide();
-    m_aRemoveButton->Hide();
-
-    m_nLineHeight =
-        ( m_aRemoveButton->GetPosPixel().Y() * 2 ) + m_aRemoveButton->GetSizePixel().Height();
+void CustomPropertiesWindow::Init(HeaderBar* pHeaderBar, ScrollBar* pScrollBar)
+{
+    m_pHeaderBar = pHeaderBar;
+    m_pScrollBar = pScrollBar;
 }
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
@@ -1544,23 +1551,15 @@ void CustomPropertiesWindow::dispose()
     m_aEditLoseFocusIdle.Stop();
     m_aBoxLoseFocusIdle.Stop();
     ClearAllLines();
-    m_aNameBox.disposeAndClear();
-    m_aTypeBox.disposeAndClear();
-    m_aValueEdit.disposeAndClear();
-    m_aDateField.disposeAndClear();
-    m_aTimeField.disposeAndClear();
-    m_aDurationField.disposeAndClear();
-    m_aEditButton.disposeAndClear();
-    m_aYesNoButton.disposeAndClear();
-    m_aRemoveButton.disposeAndClear();
+    m_pHeaderBar.clear();
+    m_pScrollBar.clear();
     m_pHeaderAccName.clear();
     m_pHeaderAccType.clear();
     m_pHeaderAccValue.clear();
     vcl::Window::dispose();
 }
 
-IMPL_STATIC_LINK(
-    CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void )
+IMPL_LINK(CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void)
 {
     CustomPropertiesTypeBox* pBox = static_cast<CustomPropertiesTypeBox*>(&rListBox);
     long nType = reinterpret_cast<long>( pBox->GetSelectEntryData() );
@@ -1574,17 +1573,11 @@ IMPL_STATIC_LINK(
 
     //adjust positions of date and time controls
     if ( nType == CUSTOM_TYPE_DATE )
-    {
         pLine->m_bIsDate = true;
-        pLine->m_aDateField->SetSizePixel( pLine->m_aValueEdit->GetSizePixel() );
-    }
     else if ( nType == CUSTOM_TYPE_DATETIME)
-    {
-        // because m_aDateField and m_aTimeField have the same size for type "DateTime",
-        // we just rely on m_aTimeField here.
         pLine->m_bIsDate = false;
-        pLine->m_aDateField->SetSizePixel( pLine->m_aTimeField->GetSizePixel() );
-    }
+
+    pLine->m_aLine->SetSizePixel(Size(GetSizePixel().Width(), m_nWidgetHeight));
 }
 
 IMPL_LINK( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
@@ -1602,21 +1595,11 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
         for ( ; pIter != m_aCustomPropertiesLines.end(); ++pIter )
         {
             pLine = *pIter;
-            if ( pLine->m_bIsRemoved )
+            if (pLine->m_bIsRemoved)
                 continue;
-
-            vcl::Window* pWindows[] = {  pLine->m_aNameBox.get(), pLine->m_aTypeBox.get(), pLine->m_aValueEdit.get(),
-                                    pLine->m_aDateField.get(), pLine->m_aTimeField.get(),
-                                    pLine->m_aDurationField.get(), pLine->m_aEditButton.get(),
-                                    pLine->m_aYesNoButton.get(), pLine->m_aRemoveButton.get(), nullptr };
-            vcl::Window** pCurrent = pWindows;
-            while ( *pCurrent )
-            {
-                Point aPos = (*pCurrent)->GetPosPixel();
-                aPos.Y() -= nDelta;
-                (*pCurrent)->SetPosPixel( aPos );
-                pCurrent++;
-            }
+            Point aPos = pLine->m_aLine->GetPosPixel();
+            aPos.Y() -= nDelta;
+            pLine->m_aLine->SetPosPixel(aPos);
         }
     }
 
@@ -1692,74 +1675,51 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
             pLine->m_bTypeLostFocus = true;
         vcl::Window* pParent = GetParent()->GetParent();
         if (ScopedVclPtrInstance<MessageDialog>(pParent, SfxResId(STR_SFX_QUERY_WRONG_TYPE), VclMessageType::Question, VclButtonsType::OkCancel)->Execute() == RET_OK)
-            pLine->m_aTypeBox->SelectEntryPos( m_aTypeBox->GetEntryPos( reinterpret_cast<void*>(CUSTOM_TYPE_TEXT) ) );
+            pLine->m_aTypeBox->SelectEntryPos(pLine->m_aTypeBox->GetEntryPos(reinterpret_cast<void*>(CUSTOM_TYPE_TEXT)));
         else
             pLine->m_aValueEdit->GrabFocus();
     }
 }
 
-bool CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar )
+void CustomPropertiesWindow::SetWidgetWidths(const CustomPropertyLine* pLine) const
 {
-    bool bChanged = false;
-
-    DBG_ASSERT( pHeaderBar, "CustomPropertiesWindow::InitControls(): invalid headerbar" );
-    DBG_ASSERT( pScrollBar, "CustomPropertiesWindow::InitControls(): invalid scrollbar" );
-
     const long nOffset = 4;
-    const long nScrollBarWidth = pScrollBar->GetSizePixel().Width();
-    const long nButtonWidth = m_aRemoveButton->GetSizePixel().Width() + nScrollBarWidth + nOffset;
-    long nTypeWidth = m_aTypeBox->CalcMinimumSize().Width() + ( 2 * nOffset );
-    long nFullWidth = pHeaderBar->GetSizePixel().Width();
+    long nItemWidth = m_pHeaderBar->GetItemSize(HI_NAME);
+    nItemWidth -= nOffset;
+
+    pLine->m_aNameBox->set_width_request(nItemWidth);
+    pLine->m_aTypeBox->set_width_request(m_nTypeBoxWidth);
+    pLine->m_aValueEdit->set_width_request(nItemWidth);
+
+    long nTimeWidth = nItemWidth;
+    nTimeWidth /= 2;
+    nTimeWidth -= 2;
+
+    pLine->m_aDateField->set_width_request(nTimeWidth);
+    pLine->m_aTimeField->set_width_request(nTimeWidth);
+
+    pLine->m_aDurationField->set_width_request(nItemWidth - (pLine->m_aEditButton->get_preferred_size().Width() + nOffset));
+    pLine->m_aYesNoButton->set_width_request(nItemWidth);
+    pLine->m_aRemoveButton->set_width_request(m_nRemoveButtonWidth);
+
+    pLine->m_aLine->SetSizePixel(Size(GetSizePixel().Width(), m_nWidgetHeight));
+}
+
+void CustomPropertiesWindow::Resize()
+{
+    const long nOffset = 4;
+    const long nScrollBarWidth = m_pScrollBar->GetSizePixel().Width();
+    long nButtonWidth = m_nRemoveButtonWidth + nScrollBarWidth + nOffset;
+    long nTypeWidth = m_nTypeBoxWidth + (2 * nOffset);
+    long nFullWidth = m_pHeaderBar->GetSizePixel().Width();
     long nItemWidth = ( nFullWidth - nTypeWidth - nButtonWidth ) / 2;
-    pHeaderBar->SetItemSize( HI_NAME, nItemWidth );
-    pHeaderBar->SetItemSize( HI_TYPE, nTypeWidth );
-    pHeaderBar->SetItemSize( HI_VALUE, nItemWidth );
-    pHeaderBar->SetItemSize( HI_ACTION, nButtonWidth );
+    m_pHeaderBar->SetItemSize( HI_NAME, nItemWidth );
+    m_pHeaderBar->SetItemSize( HI_TYPE, nTypeWidth );
+    m_pHeaderBar->SetItemSize( HI_VALUE, nItemWidth );
+    m_pHeaderBar->SetItemSize( HI_ACTION, nButtonWidth );
 
-    vcl::Window* pWindows[] = { m_aNameBox.get(), m_aTypeBox.get(), m_aValueEdit.get(), m_aRemoveButton.get(), nullptr };
-    vcl::Window** pCurrent = pWindows;
-    sal_uInt16 nPos = 0;
-    while ( *pCurrent )
-    {
-        tools::Rectangle aRect = pHeaderBar->GetItemRect( pHeaderBar->GetItemId( nPos++ ) );
-        Size aOrigSize = (*pCurrent)->GetSizePixel();
-        Point aOrigPos = (*pCurrent)->GetPosPixel();
-        Size aSize(aOrigSize);
-        Point aPos(aOrigPos);
-        long nWidth = aRect.GetWidth() - nOffset;
-        if ( *pCurrent == m_aRemoveButton.get() )
-            nWidth -= pScrollBar->GetSizePixel().Width();
-        aSize.Width() = nWidth;
-        aPos.X() = aRect.getX() + ( nOffset / 2 );
-
-        if (aOrigSize != aSize || aOrigPos != aPos)
-        {
-            (*pCurrent)->SetPosSizePixel(aPos, aSize);
-            bChanged = true;
-        }
-
-        if ( *pCurrent == m_aValueEdit.get() )
-        {
-            Point aDurationPos( aPos );
-            m_aDurationField->SetPosPixel( aDurationPos );
-            Size aDurationSize(aSize);
-            aDurationSize.Width() -= (m_aEditButton->GetSizePixel().Width() + 3 );
-            m_aDurationField->SetSizePixel(aDurationSize);
-            aDurationPos.X() = aPos.X() - m_aEditButton->GetSizePixel().Width() + aSize.Width();
-            m_aEditButton->SetPosPixel(aDurationPos);
-
-            m_aYesNoButton->SetPosSizePixel( aPos, aSize );
-
-            aSize.Width() /= 2;
-            aSize.Width() -= 2;
-            m_aDateField->SetPosSizePixel( aPos, aSize );
-            aPos.X() += aSize.Width() + 4;
-            m_aTimeField->SetPosSizePixel( aPos, aSize );
-        }
-
-        pCurrent++;
-    }
-    return bChanged;
+    for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
+        SetWidgetWidths(pLine);
 }
 
 sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
@@ -1774,44 +1734,6 @@ sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
             nCount++;
     }
     return nCount;
-}
-
-void CustomPropertiesWindow::updateLineWidth()
-{
-    vcl::Window* pWindows[] = {  m_aNameBox.get(), m_aTypeBox.get(), m_aValueEdit.get(),
-                            m_aDateField.get(), m_aTimeField.get(),
-                            m_aDurationField.get(), m_aEditButton.get(),
-                            m_aYesNoButton.get(), m_aRemoveButton.get(), nullptr };
-
-    for (std::vector< CustomPropertyLine* >::iterator aI =
-        m_aCustomPropertiesLines.begin(), aEnd = m_aCustomPropertiesLines.end();
-        aI != aEnd; ++aI)
-    {
-        CustomPropertyLine* pNewLine = *aI;
-
-        vcl::Window* pNewWindows[] =
-            {   pNewLine->m_aNameBox.get(), pNewLine->m_aTypeBox.get(), pNewLine->m_aValueEdit.get(),
-                pNewLine->m_aDateField.get(), pNewLine->m_aTimeField.get(),
-                pNewLine->m_aDurationField.get(), pNewLine->m_aEditButton.get(),
-                pNewLine->m_aYesNoButton.get(), pNewLine->m_aRemoveButton.get(), nullptr };
-
-        vcl::Window** pCurrent = pWindows;
-        vcl::Window** pNewCurrent = pNewWindows;
-        while (*pCurrent)
-        {
-            Size aSize = (*pNewCurrent)->GetSizePixel();
-            aSize.Width() = (*pCurrent)->GetSizePixel().Width();
-            Point aPos = (*pNewCurrent)->GetPosPixel();
-            aPos.X() = (*pCurrent)->GetPosPixel().X();
-            (*pNewCurrent)->SetPosSizePixel(aPos, aSize);
-            pCurrent++;
-            pNewCurrent++;
-        }
-
-        // if we have type "Date", we use the full width, not only the half
-        if (pNewLine->m_bIsDate)
-            pNewLine->m_aDateField->SetSizePixel( pNewLine->m_aValueEdit->GetSizePixel() );
-    }
 }
 
 void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
@@ -1833,28 +1755,10 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
 
     sal_Int32 nPos = GetVisibleLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
-    vcl::Window* pWindows[] = {  m_aNameBox.get(), m_aTypeBox.get(), m_aValueEdit.get(),
-                            m_aDateField.get(), m_aTimeField.get(),
-                            m_aDurationField.get(), m_aEditButton.get(),
-                            m_aYesNoButton.get(), m_aRemoveButton.get(), nullptr };
-    vcl::Window* pNewWindows[] =
-        {   pNewLine->m_aNameBox.get(), pNewLine->m_aTypeBox.get(), pNewLine->m_aValueEdit.get(),
-            pNewLine->m_aDateField.get(), pNewLine->m_aTimeField.get(),
-            pNewLine->m_aDurationField.get(), pNewLine->m_aEditButton.get(),
-            pNewLine->m_aYesNoButton.get(), pNewLine->m_aRemoveButton.get(), nullptr };
-    vcl::Window** pCurrent = pWindows;
-    vcl::Window** pNewCurrent = pNewWindows;
-    while ( *pCurrent )
-    {
-        Size aSize = (*pCurrent)->GetSizePixel();
-        Point aPos = (*pCurrent)->GetPosPixel();
-        aPos.Y() += nPos;
-        aPos.Y() += m_nScrollPos;
-        (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
-        (*pNewCurrent)->Show();
-        pCurrent++;
-        pNewCurrent++;
-    }
+
+    SetWidgetWidths(pNewLine);
+    pNewLine->m_aLine->SetPosSizePixel(Point(0, nPos + m_nScrollPos), Size(GetSizePixel().Width(), m_nWidgetHeight));
+    pNewLine->m_aLine->Show();
 
     double nTmpValue = 0;
     bool bTmpValue = false;
@@ -1930,10 +1834,10 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
             else
                 pNewLine->m_aYesNoButton->CheckNo();
         }
-        pNewLine->m_aTypeBox->SelectEntryPos( m_aTypeBox->GetEntryPos( reinterpret_cast<void*>(nType) ) );
+        pNewLine->m_aTypeBox->SelectEntryPos(pNewLine->m_aTypeBox->GetEntryPos(reinterpret_cast<void*>(nType)));
     }
 
-    TypeHdl( nullptr, *pNewLine->m_aTypeBox.get() );
+    TypeHdl(*pNewLine->m_aTypeBox.get());
     pNewLine->m_aNameBox->GrabFocus();
 }
 
@@ -1972,24 +1876,13 @@ void CustomPropertiesWindow::ClearAllLines()
 void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
 {
     m_nScrollPos += nNewPos;
-    std::vector< CustomPropertyLine* >::iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-            pIter != m_aCustomPropertiesLines.end(); ++pIter )
+    for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
     {
-        CustomPropertyLine* pLine = *pIter;
-        if ( pLine->m_bIsRemoved )
+        if (pLine->m_bIsRemoved)
             continue;
-
-        vcl::Window* pWindows[] = {  pLine->m_aNameBox.get(), pLine->m_aTypeBox.get(), pLine->m_aValueEdit.get(), pLine->m_aDateField.get(), pLine->m_aTimeField.get(),
-                                pLine->m_aDurationField.get(), pLine->m_aEditButton.get(), pLine->m_aYesNoButton.get(), pLine->m_aRemoveButton.get(), nullptr };
-        vcl::Window** pCurrent = pWindows;
-        while ( *pCurrent )
-        {
-            Point aPos = (*pCurrent)->GetPosPixel();
-            aPos.Y() += nNewPos;
-            (*pCurrent)->SetPosPixel( aPos );
-            pCurrent++;
-        }
+        Point aPos = pLine->m_aLine->GetPosPixel();
+        aPos.Y() += nNewPos;
+        pLine->m_aLine->SetPosPixel(aPos);
     }
 }
 
@@ -2083,6 +1976,8 @@ CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
     , m_pVertScroll(nullptr)
     , m_nThumbPos(0)
 {
+    Size aRequest(LogicToPixel(Size(320, 141), MapUnit::MapAppFont));
+    set_width_request(aRequest.Width());
 }
 
 void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
@@ -2098,6 +1993,7 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
     OUString sValue = pValue->GetText();
     m_pPropertiesWin = VclPtr<CustomPropertiesWindow>::Create(m_pBody, pName, pType, pValue);
     m_pVertScroll = VclPtr<ScrollBar>::Create(m_pBody, WB_VERT);
+    m_pPropertiesWin->Init(m_pHeaderBar, m_pVertScroll);
 
     set_hexpand(true);
     set_vexpand(true);
@@ -2148,22 +2044,15 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
 
 void CustomPropertiesControl::Resize()
 {
-    Window::Resize();
-
-    if (!m_pVBox)
-        return;
-
-    m_pVBox->SetSizePixel(GetSizePixel());
-
-    bool bWidgetsResized = m_pPropertiesWin->InitControls( m_pHeaderBar, m_pVertScroll );
-    sal_Int32 nScrollOffset = m_pPropertiesWin->GetLineHeight();
-    sal_Int32 nVisibleEntries = m_pPropertiesWin->GetSizePixel().Height() / nScrollOffset;
-    m_pVertScroll->SetPageSize( nVisibleEntries - 1 );
-    m_pVertScroll->SetVisibleSize( nVisibleEntries );
-    if (bWidgetsResized)
+    if (m_pVBox)
     {
-        m_pPropertiesWin->updateLineWidth();
+        m_pVBox->SetSizePixel(GetSizePixel());
+        sal_Int32 nScrollOffset = m_pPropertiesWin->GetLineHeight();
+        sal_Int32 nVisibleEntries = m_pPropertiesWin->GetSizePixel().Height() / nScrollOffset;
+        m_pVertScroll->SetPageSize( nVisibleEntries - 1 );
+        m_pVertScroll->SetVisibleSize( nVisibleEntries );
     }
+    Window::Resize();
 }
 
 VCL_BUILDER_FACTORY(CustomPropertiesControl)
