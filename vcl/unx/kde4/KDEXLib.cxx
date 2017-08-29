@@ -293,8 +293,7 @@ bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // (it's ok to release it here, since even normal processYield() would
         // temporarily do it while checking for new events)
         SolarMutexReleaser aReleaser;
-        Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
-        return false;
+        return Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
     }
 }
 
