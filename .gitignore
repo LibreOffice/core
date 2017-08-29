@@ -138,7 +138,8 @@ DerivedData
 *.opensdf
 *.vcxproj*
 /.vs
-LibreOffice.VC.db
+/.vscode
+*.VC.db
 LibreOffice.VC.VC.opendb
 
 # QtCreator specific
