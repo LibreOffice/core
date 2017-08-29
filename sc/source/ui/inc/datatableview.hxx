@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DATATABELVIEW_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DATATABELVIEW_HXX
+#ifndef INCLUDED_SC_SOURCE_UI_INC_DATATABLEVIEW_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_DATATABLEVIEW_HXX
 
 #include <vcl/ctrl.hxx>
 
