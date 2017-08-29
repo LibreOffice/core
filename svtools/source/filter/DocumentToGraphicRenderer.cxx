@@ -89,13 +89,15 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
 
     PropertyValues renderProperties;
 
-    renderProperties.realloc( 3 );
+    renderProperties.realloc( 4 );
     renderProperties[0].Name = "IsPrinter";
     renderProperties[0].Value <<= true;
     renderProperties[1].Name = "RenderDevice";
     renderProperties[1].Value <<= xDevice;
     renderProperties[2].Name = "View";
     renderProperties[2].Value <<= mxController;
+    renderProperties[3].Name = "RenderToGraphic";
+    renderProperties[3].Value <<= true;
 
     awt::Size aSize;
 
@@ -133,13 +135,15 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     double fScaleY = aTargetSizePixel.Height() / (double) aDocumentSizePixel.Height();
 
     PropertyValues renderProps;
-    renderProps.realloc( 3 );
+    renderProps.realloc( 4 );
     renderProps[0].Name = "IsPrinter";
     renderProps[0].Value <<= true;
     renderProps[1].Name = "RenderDevice";
     renderProps[1].Value <<= xDevice;
     renderProps[2].Name = "View";
     renderProps[2].Value <<= mxController;
+    renderProps[3].Name = "RenderToGraphic";
+    renderProps[3].Value <<= true;
 
     GDIMetaFile aMtf;
 

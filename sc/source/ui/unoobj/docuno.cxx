@@ -1432,7 +1432,8 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
 bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
-                                     ScPrintSelectionStatus& rStatus, OUString& rPagesStr ) const
+                                     ScPrintSelectionStatus& rStatus, OUString& rPagesStr,
+                                     bool& rbRenderToGraphic ) const
 {
     OSL_ENSURE( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     OSL_ENSURE( pDocShell, "FillRenderMarkData: DocShell must be set" );
@@ -1476,6 +1477,10 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         else if ( rOptions[i].Name == "View" )
         {
             rOptions[i].Value >>= xView;
+        }
+        else if ( rOptions[i].Name == "RenderToGraphic" )
+        {
+            rOptions[i].Value >>= rbRenderToGraphic;
         }
     }
 
@@ -1613,7 +1618,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
-    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
+    bool bRenderToGraphic = false;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
         return 0;
 
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
@@ -1650,6 +1656,11 @@ static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const OUString& rPa
     return *aIter; // returns -1 if reached the end
 }
 
+static bool lcl_renderSelectionToGraphic( bool bRenderToGraphic, const ScPrintSelectionStatus& rStatus )
+{
+    return bRenderToGraphic && rStatus.GetMode() == SC_PRINTSEL_RANGE;
+}
+
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
                                     const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& rOptions  )
 {
@@ -1665,7 +1676,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     OUString aPagesStr;
     // #i115266# if FillRenderMarkData fails, keep nTotalPages at 0, but still handle getRenderer(0) below
     long nTotalPages = 0;
-    if ( FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
+    bool bRenderToGraphic = false;
+    if ( FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
     {
         if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
         {
@@ -1681,10 +1693,26 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         {
             // getRenderer(0) is used to query the settings, so it must always return something
 
-            SCTAB const nCurTab = 0;      //! use current sheet from view?
-            ScPrintFunc aDefaultFunc( pDocShell, pDocShell->GetPrinter(), nCurTab );
-            Size aTwips = aDefaultFunc.GetPageSize();
-            awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
+            awt::Size aPageSize;
+            if (lcl_renderSelectionToGraphic( bRenderToGraphic, aStatus))
+            {
+                assert( aMark.IsMarked());
+                ScRange aRange;
+                aMark.GetMarkArea( aRange );
+                tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
+                        aRange.aStart.Col(), aRange.aStart.Row(),
+                        aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
+                aPageSize.Width = aMMRect.GetWidth();
+                aPageSize.Height = aMMRect.GetHeight();
+            }
+            else
+            {
+                SCTAB const nCurTab = 0;      //! use current sheet from view?
+                ScPrintFunc aDefaultFunc( pDocShell, pDocShell->GetPrinter(), nCurTab );
+                Size aTwips = aDefaultFunc.GetPageSize();
+                aPageSize.Width = TwipsToHMM( aTwips.Width());
+                aPageSize.Height = TwipsToHMM( aTwips.Height());
+            }
 
             uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
                 { SC_UNONAME_PAGESIZE, uno::Any(aPageSize) }
@@ -1712,24 +1740,41 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         aMark.GetMarkArea( aRange );
         pSelRange = &aRange;
     }
-    ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
-                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
-    aFunc.SetRenderFlag( true );
 
-    Range aPageRange( nRenderer+1, nRenderer+1 );
-    MultiSelection aPage( aPageRange );
-    aPage.SetTotalRange( Range(0,RANGE_MAX) );
-    aPage.Select( aPageRange );
-
-    long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
-    long nTabStart = pPrintFuncCache->GetTabStart( nTab );
-
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
-
+    awt::Size aPageSize;
+    bool bWasCellRange = false;
     ScRange aCellRange;
-    bool bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
-    Size aTwips = aFunc.GetPageSize();
-    awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
+    if (lcl_renderSelectionToGraphic( bRenderToGraphic, aStatus))
+    {
+        bWasCellRange = true;
+        aCellRange = aRange;
+        tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
+                    aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
+        aPageSize.Width = aMMRect.GetWidth();
+        aPageSize.Height = aMMRect.GetHeight();
+    }
+    else
+    {
+        ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
+                pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
+        aFunc.SetRenderFlag( true );
+
+        Range aPageRange( nRenderer+1, nRenderer+1 );
+        MultiSelection aPage( aPageRange );
+        aPage.SetTotalRange( Range(0,RANGE_MAX) );
+        aPage.Select( aPageRange );
+
+        long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
+        long nTabStart = pPrintFuncCache->GetTabStart( nTab );
+
+        (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
+
+        bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
+        Size aTwips = aFunc.GetPageSize();
+        aPageSize.Width = TwipsToHMM( aTwips.Width());
+        aPageSize.Height = TwipsToHMM( aTwips.Height());
+    }
 
     long nPropCount = bWasCellRange ? 3 : 2;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
@@ -1769,7 +1814,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
-    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
+    bool bRenderToGraphic = false;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -1786,8 +1832,37 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     if ( !pDev )
         throw lang::IllegalArgumentException();
 
-    SCTAB nTab = pPrintFuncCache->GetTabForPage( nRenderer );
     ScDocument& rDoc = pDocShell->GetDocument();
+
+    ScRange aRange;
+    const ScRange* pSelRange = nullptr;
+    if ( aMark.IsMarked() )
+    {
+        aMark.GetMarkArea( aRange );
+        pSelRange = &aRange;
+    }
+
+    if (lcl_renderSelectionToGraphic( bRenderToGraphic, aStatus))
+    {
+        // Similar to as in and when calling ScTransferObj::PaintToDev()
+
+        Point aPoint;
+        tools::Rectangle aBound( aPoint, pDev->GetOutputSize());
+
+        ScViewData aViewData(nullptr,nullptr);
+        aViewData.InitData( &rDoc );
+
+        aViewData.SetTabNo( aRange.aStart.Tab() );
+        aViewData.SetScreen( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row() );
+
+        const double nPrintFactor = 1.0;    /* XXX: currently (2017-08-28) is not evaluated */
+        // The bMetaFile argument maybe could be
+        // pDev->GetConnectMetaFile() != nullptr
+        // but for some yet unknow reason does not draw cell content if true.
+        ScPrintFunc::DrawToDev( &rDoc, pDev, nPrintFactor, aBound, &aViewData, false /*bMetaFile*/ );
+
+        return;
+    }
 
     struct DrawViewKeeper
     {
@@ -1803,6 +1878,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         }
     } aDrawViewKeeper;
 
+    SCTAB nTab = pPrintFuncCache->GetTabForPage( nRenderer );
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
     if( pModel )
@@ -1810,14 +1886,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         aDrawViewKeeper.mpDrawView = new FmFormView( pModel, pDev );
         aDrawViewKeeper.mpDrawView->ShowSdrPage(aDrawViewKeeper.mpDrawView->GetModel()->GetPage(nTab));
         aDrawViewKeeper.mpDrawView->SetPrintPreview();
-    }
-
-    ScRange aRange;
-    const ScRange* pSelRange = nullptr;
-    if ( aMark.IsMarked() )
-    {
-        aMark.GetMarkArea( aRange );
-        pSelRange = &aRange;
     }
 
     //  to increase performance, ScPrintState might be used here for subsequent
