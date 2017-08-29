@@ -1505,6 +1505,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aDurationField->SetPosSizePixel(aPos, aSize);
     m_aDateField->SetPosSizePixel(aPos, aSize);
     m_aTimeField->SetPosSizePixel(aPos, aSize);
+    m_aYesNoButton->SetPosSizePixel(aPos, aSize);
 
     m_aEditLoseFocusIdle.SetPriority( SchedulerPriority::LOWEST );
     m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
@@ -1795,12 +1796,13 @@ void CustomPropertiesWindow::updateLineWidth()
 
         vcl::Window** pCurrent = pWindows;
         vcl::Window** pNewCurrent = pNewWindows;
-        while ( *pCurrent )
+        while (*pCurrent)
         {
-            Size aSize = (*pCurrent)->GetSizePixel();
-            Point aPos = (*pCurrent)->GetPosPixel();
-            aPos.Y() = (*pNewCurrent)->GetPosPixel().Y();
-            (*pNewCurrent)->SetPosSizePixel( aPos, aSize );
+            Size aSize = (*pNewCurrent)->GetSizePixel();
+            aSize.Width() = (*pCurrent)->GetSizePixel().Width();
+            Point aPos = (*pNewCurrent)->GetPosPixel();
+            aPos.X() = (*pCurrent)->GetPosPixel().X();
+            (*pNewCurrent)->SetPosSizePixel(aPos, aSize);
             pCurrent++;
             pNewCurrent++;
         }
