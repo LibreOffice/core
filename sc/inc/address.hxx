@@ -367,9 +367,9 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScAddress& rAddress)
 {
     stream <<
-        rAddress.Tab() << "!" <<
-        "R" << rAddress.Row() <<
-        "C" << rAddress.Col();
+        rAddress.Tab()+1 << "!"
+        "R" << rAddress.Row()+1 <<
+        "C" << rAddress.Col()+1;
 
     return stream;
 }
