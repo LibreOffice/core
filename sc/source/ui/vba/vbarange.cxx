@@ -4255,6 +4255,12 @@ static void lcl_SelectAll( const ScDocShell* pDocShell, const ScQueryParam& aPar
     if ( pDocShell )
     {
         ScViewData* pViewData = ScDocShell::GetViewData();
+        if ( !pViewData )
+        {
+            ScTabViewShell* pViewSh = pDocShell->GetBestViewShell( true );
+            pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
+        }
+
         if ( pViewData )
         {
             pViewData->GetView()->Query( aParam, nullptr, true );
