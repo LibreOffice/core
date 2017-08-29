@@ -1210,6 +1210,20 @@ DECLARE_RTFEXPORT_TEST(testTdf107620, "tdf107620.docx")
     CPPUNIT_ASSERT(!bAddParaTableSpacing);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104937, "tdf104937.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    auto aSeparators = getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators");
+    // First table's second row had 9 cells (so 8 separators).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aSeparators.getLength());
+    // This was 3174, i.e. last cell was wider than expected, while others were
+    // narrower.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4651), aSeparators[7].Position);
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf107480, "tdf107480.rtf")
 {
     // These were 176 (100 twips), as \htmautsp was parsed too late.
