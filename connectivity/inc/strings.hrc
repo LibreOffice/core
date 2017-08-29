@@ -119,8 +119,6 @@
 // KAB
 #define STR_NO_KDE_INST                         NC_("STR_NO_KDE_INST", "No suitable KDE installation was found.")
 #define STR_KDE_VERSION_TOO_OLD                 NC_("STR_KDE_VERSION_TOO_OLD", "KDE version $major$.$minor$ or higher is required to access the KDE Address Book.")
-#define STR_KDE_VERSION_TOO_NEW                 NC_("STR_KDE_VERSION_TOO_NEW", "The found KDE version is too new. Only KDE up to version $major$.$minor$ is known to work with this product.\n")
-#define STR_KDE_VERSION_TOO_NEW_WORK_AROUND     NC_("STR_KDE_VERSION_TOO_NEW_WORK_AROUND", "If you are sure that your KDE version works, you might execute the following Basic macro to disable this version check:\n\n")
 #define STR_PARA_ONLY_PREPARED                  NC_("STR_PARA_ONLY_PREPARED", "Parameters can appear only in prepared statements.")
 // MACAB
 #define STR_NO_TABLE                            NC_("STR_NO_TABLE", "No such table!")

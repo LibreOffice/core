@@ -210,14 +210,6 @@ End
     End
 #endif
 
-#define STD_RES_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        RESFILE_ALL_LANG(name); \
-        Dir     = gid_Dir_Resource; \
-        Styles  = (PACKED); \
-    End
-
 #define LIBO_JAR_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \

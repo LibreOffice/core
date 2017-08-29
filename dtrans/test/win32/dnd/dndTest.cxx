@@ -49,8 +49,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
-#define WM_CREATE_MTA_WND
-
 HRESULT doTest();
 DWORD WINAPI MTAFunc( void* threadData);
 

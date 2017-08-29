@@ -188,18 +188,6 @@ Class::createServiceFactory( const css::uno::Reference< css::lang::XMultiService
                 Class::getSupportedServiceNames_Static() ) );               \
 }
 
-// Service without service factory.
-
-// 1 service name
-#define XSERVICEINFO_NOFACTORY_IMPL_1( Class, ImplName, Service1 )          \
-XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
-                                                                            \
-css::uno::Sequence< OUString >                              \
-Class::getSupportedServiceNames_Static()                                    \
-{                                                                           \
-    return { Service1 };                       \
-}
-
 #endif /* ! INCLUDED_UCBHELPER_MACROS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

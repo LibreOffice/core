@@ -70,16 +70,6 @@ public:                                             \
     virtual Bitmap  createScreenshot() const override; \
     virtual OString GetScreenshotId() const override; \
 
-#define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
-    ScopedVclPtr<DialogClass> pDlg;                 \
-public:                                             \
-    explicit        Class( DialogClass* p)          \
-                     : pDlg(p)                      \
-                     {}                             \
-    virtual         ~Class() override;                       \
-    virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override; \
-    long            GetResult() override;
-
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
@@ -103,19 +93,6 @@ Bitmap Class::createScreenshot() const              \
 OString Class::GetScreenshotId() const              \
 {                                                   \
     return pDlg->GetScreenshotId();                 \
-}
-
-#define IMPL_ABSTDLG2_BASE(Class)                   \
-Class::~Class()                                     \
-{                                                   \
-}                                                   \
-void Class::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) \
-{                                                   \
-    pDlg->StartExecuteModal( rEndDialogHdl ) ;      \
-}                                                   \
-long Class::GetResult()                             \
-{                                                   \
-    return pDlg->GetResult();                       \
 }
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
