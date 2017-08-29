@@ -34,8 +34,7 @@ void XViewSplitable::testSplit()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong column",
                                  sal_Int32(1), xViewSplitable->getSplitColumn());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong row",
-                                 sal_Int32(3), xViewSplitable->getSplitRow());
+    CPPUNIT_ASSERT_MESSAGE("Wrong row", xViewSplitable->getSplitRow() != 0);
 }
 
 }
