@@ -319,7 +319,7 @@ public:
 };
 
 /// @throws css::uno::RuntimeException
-bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRange& refRange,
+bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const ScRange& refRange,
                                ScRangeList& aCellRanges,
                                formula::FormulaGrammar::AddressConvention aConv = formula::FormulaGrammar::CONV_XL_A1 );
 

@@ -46,7 +46,7 @@ namespace vba {
 namespace excel {
 
 uno::Reference< sheet::XUnnamedDatabaseRanges >
-GetUnnamedDataBaseRanges( ScDocShell* pShell )
+GetUnnamedDataBaseRanges( const ScDocShell* pShell )
 {
     uno::Reference< frame::XModel > xModel;
     if ( pShell )
@@ -59,7 +59,7 @@ GetUnnamedDataBaseRanges( ScDocShell* pShell )
 // returns the XDatabaseRange for the autofilter on sheet (nSheet)
 // also populates sName with the name of range
 uno::Reference< sheet::XDatabaseRange >
-GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet )
+GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet )
 {
     uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( GetUnnamedDataBaseRanges( pShell ), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XDatabaseRange > xDataBaseRange;

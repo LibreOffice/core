@@ -73,7 +73,7 @@ private:
     DECL_LINK( SelectListBoxHdl, ListBox&, void );
     DECL_LINK( SelectTreeListBoxHdl, SvTreeListBox*, void );
     DECL_LINK( CheckHdl, SvTreeListBox*, void );
-    void SelectHdl(void *);
+    void SelectHdl(const void *);
 };
 
 class ScTpSubTotalGroup1 : public ScTpSubTotalGroup

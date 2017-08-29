@@ -100,7 +100,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-static void getNewSpreadsheetName (OUString &aNewName, const OUString& aOldName, uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
+static void getNewSpreadsheetName (OUString &aNewName, const OUString& aOldName, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( "getNewSpreadsheetName() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
@@ -114,7 +114,7 @@ static void getNewSpreadsheetName (OUString &aNewName, const OUString& aOldName,
     }
 }
 
-static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString& aSheetName)
+static void removeAllSheets( const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString& aSheetName)
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( "removeAllSheets() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );

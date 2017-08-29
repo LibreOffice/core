@@ -94,9 +94,9 @@ private:
     void InsertToDefinedList();
     void RemoveFromDefinedList();
     void SetSelectDefinedList();
-    bool IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj);
-    static bool IsDateEntry(EditTextObject* pTextObj);
-    static bool IsExtFileNameEntry(EditTextObject* pTextObj);
+    bool IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextObj);
+    static bool IsDateEntry(const EditTextObject* pTextObj);
+    static bool IsExtFileNameEntry(const EditTextObject* pTextObj);
     DECL_LINK( ListHdl_Impl, ListBox&, void);
     DECL_LINK( ClickHdl, Button*, void );
     DECL_LINK( MenuHdl, ScExtIButton&, void );

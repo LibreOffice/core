@@ -178,7 +178,7 @@ void ScInsertTableDlg::SetFromTo_Impl()
     }
 }
 
-void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
+void ScInsertTableDlg::FillTables_Impl( const ScDocument* pSrcDoc )
 {
     m_pLbTables->SetUpdateMode( false );
     m_pLbTables->Clear();
