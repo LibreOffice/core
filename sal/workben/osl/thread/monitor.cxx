@@ -47,13 +47,10 @@ SAL_IMPLEMENT_MAIN()
     queueMutex = osl_createMutex();
     fullOrEmpty = osl_createCondition();
 
-    while(true)
-    {
-        producer = osl_createThread(produce, nullptr);
-        consumer = osl_createThread(consume, nullptr);
+    producer = osl_createThread(produce, nullptr);
+    consumer = osl_createThread(consume, nullptr);
 
-        osl_joinWithThread(consumer);
-    }
+    osl_joinWithThread(consumer);
 
     return 0;
 }
