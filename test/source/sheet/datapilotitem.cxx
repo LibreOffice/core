@@ -15,7 +15,6 @@
 
 #include "cppunit/extensions/HelperMacros.h"
 
-#include <iostream>
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
