@@ -2388,7 +2388,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
             return aExpected == aActual;
         }
 
-        bool check( ScDocument& rDoc )
+        bool check( const ScDocument& rDoc )
         {
             CheckItem aChecks[] =
             {
@@ -2578,7 +2578,7 @@ void ScExportTest::testSheetTabColorsXLSX()
 {
     struct
     {
-        bool checkContent( ScDocument& rDoc )
+        bool checkContent( const ScDocument& rDoc )
         {
 
             std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
@@ -2737,7 +2737,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
 {
     struct
     {
-        bool checkContent( ScDocument& rDoc )
+        bool checkContent( const ScDocument& rDoc )
         {
             SCTAB nTabCount = rDoc.GetTableCount();
             if (nTabCount != 2)
@@ -2832,7 +2832,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
 {
     struct
     {
-        bool checkContent( ScDocument& rDoc )
+        bool checkContent( const ScDocument& rDoc )
         {
             {
                 // B2:B7 should show A,B,....,F.
@@ -2982,7 +2982,7 @@ void ScExportTest::testRelativePathsODS()
 
 namespace {
 
-void testSheetProtection_Impl(ScDocument& rDoc)
+void testSheetProtection_Impl(const ScDocument& rDoc)
 {
     CPPUNIT_ASSERT(rDoc.IsTabProtected(0));
     ScTableProtection* pTabProtection = rDoc.GetTabProtection(0);

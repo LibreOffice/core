@@ -115,7 +115,7 @@ public:
 
 class ToxTextGeneratorWithMockedChapterField : public ToxTextGenerator {
 public:
-    explicit ToxTextGeneratorWithMockedChapterField(SwForm &form)
+    explicit ToxTextGeneratorWithMockedChapterField(SwForm const &form)
     : ToxTextGenerator(form, std::make_shared<MockedToxTabStopTokenHandler>()),
       mChapterFieldType(), mChapterField(&mChapterFieldType) {}
 

@@ -623,7 +623,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeSdt, "groupshape-sdt.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
 }
 
-void lcl_countTextFrames(css::uno::Reference< lang::XComponent >& xComponent,
+void lcl_countTextFrames(const css::uno::Reference< lang::XComponent >& xComponent,
    sal_Int32 nExpected )
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(xComponent, uno::UNO_QUERY);

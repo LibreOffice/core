@@ -46,6 +46,7 @@ public:
             || startswith(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx")
             // some weird calling through a function pointer
             || startswith(fn, SRCDIR "/svtools/source/table/defaultinputhandler.cxx")
+            || startswith(fn, SRCDIR "/sdext/source/pdfimport/test/pdfunzip.cxx")
             // windows only
             || startswith(fn, SRCDIR "/basic/source/sbx/sbxdec.cxx")
             || startswith(fn, SRCDIR "/sfx2/source/doc/syspath.cxx")
@@ -493,7 +494,7 @@ bool ConstParams::isPointerOrReferenceToConst(const QualType& qt) {
     return false;
 }
 
-loplugin::Plugin::Registration< ConstParams > X("constparams", false);
+loplugin::Plugin::Registration< ConstParams > X("constparams", true);
 
 }
 

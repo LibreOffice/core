@@ -401,7 +401,7 @@ bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 
 namespace {
 
-void testRangeNameImpl(ScDocument& rDoc)
+void testRangeNameImpl(const ScDocument& rDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
@@ -2687,7 +2687,7 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
 
 namespace {
 
-void checkDatabarPositiveColor(ScConditionalFormat* pFormat, const Color& rColor)
+void checkDatabarPositiveColor(const ScConditionalFormat* pFormat, const Color& rColor)
 {
     CPPUNIT_ASSERT(pFormat);
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
@@ -2741,7 +2741,7 @@ void ScFiltersTest::testCondFormatThemeColor3XLSX()
 
 namespace {
 
-void testComplexIconSetsXLSX_Impl(ScDocument& rDoc, SCCOL nCol, ScIconSetType eType)
+void testComplexIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, ScIconSetType eType)
 {
     ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 0);
     CPPUNIT_ASSERT(pFormat);
@@ -2753,7 +2753,7 @@ void testComplexIconSetsXLSX_Impl(ScDocument& rDoc, SCCOL nCol, ScIconSetType eT
     CPPUNIT_ASSERT_EQUAL(eType, pIconSet->GetIconSetData()->eIconSetType);
 }
 
-void testCustomIconSetsXLSX_Impl(ScDocument& rDoc, SCCOL nCol, SCROW nRow, ScIconSetType eType, sal_Int32 nIndex)
+void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, ScIconSetType eType, sal_Int32 nIndex)
 {
     ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 1);
     CPPUNIT_ASSERT(pFormat);
@@ -3869,7 +3869,7 @@ void ScFiltersTest::testAutofilterXLSX()
 
 namespace {
 
-void checkValidationFormula(const ScAddress& rPos, ScDocument& rDoc, const OUString& rExpectedFormula)
+void checkValidationFormula(const ScAddress& rPos, const ScDocument& rDoc, const OUString& rExpectedFormula)
 {
     const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(rPos, ATTR_VALIDDATA) );
     CPPUNIT_ASSERT(pItem);

@@ -75,7 +75,7 @@ namespace /* private */
         return true;
     }
 
-    void releaseBigPtrArrayContent(BigPtrArray& bparr)
+    void releaseBigPtrArrayContent(BigPtrArray const & bparr)
     {
         for (sal_uLong i = 0; i < bparr.Count(); i++)
             delete bparr[i];

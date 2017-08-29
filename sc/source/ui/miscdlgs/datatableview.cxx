@@ -174,7 +174,7 @@ void ScDataTableView::MouseButtonDown(const MouseEvent& rMEvt)
 
 namespace {
 
-SCCOL findColFromPos(sal_uInt16 nPixelPos, ScDocument* pDoc, SCCOL nStartCol = 0)
+SCCOL findColFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCCOL nStartCol = 0)
 {
     nPixelPos -= nRowHeaderWidth;
     sal_uInt32 nPixelLength = 0;
@@ -194,7 +194,7 @@ SCCOL findColFromPos(sal_uInt16 nPixelPos, ScDocument* pDoc, SCCOL nStartCol = 0
     return -1;
 }
 
-SCROW findRowFromPos(sal_uInt16 nPixelPos, ScDocument* pDoc, SCROW nStartRow = 0)
+SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartRow = 0)
 {
     nPixelPos -= nColHeaderHeight;
     sal_uInt32 nPixelLength = 0;

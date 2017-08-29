@@ -686,7 +686,7 @@ void ScTiledRenderingTest::testUndoShells()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-bool lcl_hasEditView(ScViewData& rViewData)
+bool lcl_hasEditView(const ScViewData& rViewData)
 {
     bool bResult = false;
     for (unsigned int i=0; i<4; i++)

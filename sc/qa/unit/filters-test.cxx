@@ -159,7 +159,7 @@ void ScFiltersTest::testCVEs()
 
 namespace {
 
-void testRangeNameImpl(ScDocument& rDoc)
+void testRangeNameImpl(const ScDocument& rDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
@@ -434,7 +434,7 @@ void ScFiltersTest::testSheetNamesXLSX()
     xDocSh->DoClose();
 }
 
-void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, tools::Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
+void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, tools::Rectangle& aRect, const ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
@@ -548,7 +548,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
     }
 }
 
-void testEnhancedProtectionImpl( ScDocument& rDoc )
+void testEnhancedProtectionImpl( const ScDocument& rDoc )
 {
     const ScTableProtection* pProt = rDoc.GetTabProtection(0);
 

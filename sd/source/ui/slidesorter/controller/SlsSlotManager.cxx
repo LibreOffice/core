@@ -851,7 +851,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     }
 }
 
-void SlotManager::RenameSlide(SfxRequest& rRequest)
+void SlotManager::RenameSlide(const SfxRequest& rRequest)
 {
     View* pDrView = &mrSlideSorter.GetView();
 

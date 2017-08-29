@@ -1451,7 +1451,7 @@ void SwDocTest::testTableAutoFormats()
 }
 
 static OUString
-translitTest(SwDoc & rDoc, SwPaM & rPaM, TransliterationFlags const nType)
+translitTest(SwDoc & rDoc, const SwPaM & rPaM, TransliterationFlags const nType)
 {
     utl::TransliterationWrapper aTrans(
             ::comphelper::getProcessComponentContext(), nType);

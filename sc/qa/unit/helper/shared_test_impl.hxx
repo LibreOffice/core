@@ -51,7 +51,7 @@ DataBarData aData[] = {
     { ScRange(1,9,0,1,12,0), COLORSCALE_AUTO, COLORSCALE_AUTO, databar::MIDDLE }
 };
 
-void testDataBar_Impl(ScDocument& rDoc)
+void testDataBar_Impl(const ScDocument& rDoc)
 {
     ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
@@ -88,7 +88,7 @@ ColorScale2EntryData aData2Entry[] = {
     { ScRange(5,2,0,5,5,0), COLORSCALE_VALUE, COLORSCALE_FORMULA }
 };
 
-void testColorScale2Entry_Impl(ScDocument& rDoc)
+void testColorScale2Entry_Impl(const ScDocument& rDoc)
 {
     const ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
@@ -127,7 +127,7 @@ ColorScale3EntryData aData3Entry[] = {
     { ScRange(5,1,1,5,6,1), COLORSCALE_VALUE, COLORSCALE_VALUE, COLORSCALE_FORMULA }
 };
 
-void testColorScale3Entry_Impl(ScDocument& rDoc)
+void testColorScale3Entry_Impl(const ScDocument& rDoc)
 {
     ScConditionalFormatList* pList = rDoc.GetCondFormList(1);
     CPPUNIT_ASSERT(pList);
