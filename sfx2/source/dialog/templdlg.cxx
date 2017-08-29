@@ -1044,6 +1044,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
             FillBox_Impl(pTreeBox, aArr[i], aEntries, pItem->GetFamily(), nullptr);
+            delete aArr[i];
         }
         pTreeBox->Recalc();
 
