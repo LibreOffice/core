@@ -472,19 +472,13 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             GetImport().GetTextImport()->SetCellParaStyleDefault(rValue);
             break;
         case XML_TOK_TABLE_NUM_COLS_SPANNED:
-            nColSpan = (sal_uInt32)rValue.toInt32();
-            if( nColSpan < 1UL )
-                nColSpan = 1UL;
+            nColSpan = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
             break;
         case XML_TOK_TABLE_NUM_ROWS_SPANNED:
-            nRowSpan = (sal_uInt32)rValue.toInt32();
-            if( nRowSpan < 1UL )
-                nRowSpan = 1UL;
+            nRowSpan = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
             break;
         case XML_TOK_TABLE_NUM_COLS_REPEATED:
-            nColRepeat = (sal_uInt32)rValue.toInt32();
-            if( nColRepeat < 1UL )
-                nColRepeat = 1UL;
+            nColRepeat = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
             break;
         case XML_TOK_TABLE_FORMULA:
             {
@@ -902,9 +896,7 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
             }
             else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
             {
-                nRowRepeat = (sal_uInt32)rValue.toInt32();
-                if( nRowRepeat < 1UL )
-                    nRowRepeat = 1UL;
+                nRowRepeat = (sal_uInt32)std::max<sal_Int32>(1, rValue.toInt32());
             }
             else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
             {
