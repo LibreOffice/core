@@ -341,7 +341,8 @@ void DrawViewShell::Init (bool bIsMainViewShell)
 {
     ViewShell::Init(bIsMainViewShell);
 
-    StartListening (*GetDocSh());
+    if (!IsListening(*GetDocSh()))
+        StartListening (*GetDocSh());
 }
 
 void DrawViewShell::Shutdown()
