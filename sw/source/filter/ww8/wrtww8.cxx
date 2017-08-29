@@ -2244,6 +2244,14 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
                     m_rWW8Export.InsUInt16( 2 );
                 }
                 break;
+            case text::HoriOrientation::LEFT_AND_WIDTH:
+                // Width can only be specified for the LOGICAL left, so in RTL, that is always PHYSICAL right
+                if ( bIsRTL )
+                {
+                    m_rWW8Export.InsUInt16( NS_sprm::sprmTJc90 ); //required for LO
+                    m_rWW8Export.InsUInt16( 2 );
+                }
+                break;
             default:
                 break;
         }
