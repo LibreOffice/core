@@ -572,30 +572,15 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     SolarMutexReleaser aReleaser;
     if ( !IsMainThread() )
     {
-        if ( bWait )
+        // If you change the SendMessageW function, you might need to update
+        // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
+        bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD,
+                                 (WPARAM) false, (LPARAM) bHandleAllCurrentEvents );
+        if ( !bDidWork && bWait )
         {
             maWaitingYieldCond.reset();
             maWaitingYieldCond.wait();
             bDidWork = true;
-        }
-        else {
-            // #97739# A SendMessage call blocks until the called thread (here: the main thread)
-            // returns. During a yield however, messages are processed in the main thread that might
-            // result in a new message loop due to opening a dialog. Thus, SendMessage would not
-            // return which will block this thread!
-            // Solution: just give up the time slice and hope that messages are processed
-            // by the main thread anyway (where all windows are created)
-            // If the mainthread is not currently handling messages, then our SendMessage would
-            // also do nothing, so this seems to be reasonable.
-
-            // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
-            if( ImplGetSVData()->maAppData.mnModalMode )
-                Sleep(1);
-            else
-                // If you change the SendMessageW function, you might need to update
-                // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
-                bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD,
-                                         (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
         }
     }
     else
@@ -616,7 +601,8 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:
-            nRet = static_cast<LRESULT>(ImplSalYield( (bool)wParam, (bool)lParam ));
+            assert( !(bool)wParam );
+            nRet = static_cast<LRESULT>(ImplSalYield( false, (bool)lParam ));
             rDef = FALSE;
             break;
         case SAL_MSG_STARTTIMER:

@@ -122,6 +122,14 @@ basically the same we're doing with the LO scheduler as a system event.
 The gen X11 backend has some levels of redirection, but needs quite some work
 to get this fixed.
 
+== General: non-main thread yield ==
+
+Yielding from a non-main thread must not wait in the main thread, as this
+may block the main thread until some events happen.
+
+Currently we wait on an extra conditional, which is cleared by the main event
+loop.
+
 == MacOS implementation details ==
 
 Generally the Scheduler is handled as expected, except on resize, which is
