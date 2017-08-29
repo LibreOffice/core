@@ -87,14 +87,14 @@ static OUString lcl_GetVbaTabName( SCTAB n )
     return aRet;
 }
 
-static void lcl_AddBookviews( XclExpRecordList<>& aRecList, ExcTable& self )
+static void lcl_AddBookviews( XclExpRecordList<>& aRecList, const ExcTable& self )
 {
     aRecList.AppendNewRecord( new XclExpXmlStartElementRecord( XML_bookViews ) );
     aRecList.AppendNewRecord( new XclExpWindow1( self.GetRoot() ) );
     aRecList.AppendNewRecord( new XclExpXmlEndElementRecord( XML_bookViews ) );
 }
 
-static void lcl_AddCalcPr( XclExpRecordList<>& aRecList, ExcTable& self )
+static void lcl_AddCalcPr( XclExpRecordList<>& aRecList, const ExcTable& self )
 {
     ScDocument& rDoc = self.GetDoc();
 
@@ -110,7 +110,7 @@ static void lcl_AddCalcPr( XclExpRecordList<>& aRecList, ExcTable& self )
     aRecList.AppendNewRecord( new XclExpXmlEndSingleElementRecord() );  // XML_calcPr
 }
 
-static void lcl_AddWorkbookProtection( XclExpRecordList<>& aRecList, ExcTable& self )
+static void lcl_AddWorkbookProtection( XclExpRecordList<>& aRecList, const ExcTable& self )
 {
     aRecList.AppendNewRecord( new XclExpXmlStartSingleElementRecord( XML_workbookProtection ) );
 

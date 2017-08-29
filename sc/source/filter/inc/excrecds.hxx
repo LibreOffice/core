@@ -221,11 +221,11 @@ public:
 class ExcDummy_041 : public ExcDummyRec
 {
 private:
-    static const sal_uInt8      pMyData[];
+    static const sal_uInt8     pMyData[];
     static const std::size_t   nMyLen;
 public:
     virtual std::size_t        GetLen() const override;
-    virtual const sal_uInt8*        GetData() const override;
+    virtual const sal_uInt8*   GetData() const override;
 };
 
 //------------------------------------------------------------- class Exc1904 -
@@ -233,8 +233,8 @@ public:
 class Exc1904 : public ExcBoolRecord
 {
 public:
-                            Exc1904( ScDocument& rDoc );
-    virtual sal_uInt16          GetNum() const override;
+                            Exc1904( const ScDocument& rDoc );
+    virtual sal_uInt16      GetNum() const override;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 private:
@@ -248,15 +248,15 @@ class ExcBundlesheetBase : public ExcRecord
 protected:
     sal_uInt64              m_nStrPos;
     sal_uInt64              m_nOwnPos;    // Position after # and Len
-    sal_uInt16                  nGrbit;
+    sal_uInt16              nGrbit;
     SCTAB                   nTab;
 
                             ExcBundlesheetBase();
 
 public:
-                            ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
+                            ExcBundlesheetBase( const RootData& rRootData, SCTAB nTab );
 
-    void             SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
+    void                    SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual sal_uInt16          GetNum() const override;
@@ -270,7 +270,7 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm ) override;
 
 public:
-                            ExcBundlesheet( RootData& rRootData, SCTAB nTab );
+                            ExcBundlesheet( const RootData& rRootData, SCTAB nTab );
     virtual std::size_t     GetLen() const override;
 };
 
@@ -362,7 +362,7 @@ public:
     bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
     std::size_t             GetTextBytes() const;
 
-    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT );
+    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, const OUString* pT );
 
     void                    Save( XclExpStream& rStrm );
     void                    SaveXml( XclExpXmlStream& rStrm );
@@ -380,7 +380,7 @@ private:
     std::vector<OUString> maMultiValues;
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
-                                sal_uInt8 nOp, double fVal, OUString* pText,
+                                sal_uInt8 nOp, double fVal, const OUString* pText,
                                 bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm ) override;

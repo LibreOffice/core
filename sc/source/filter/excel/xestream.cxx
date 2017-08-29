@@ -847,7 +847,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperP
     return pStream;
 }
 
-static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
+static void lcl_WriteValue( const sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
 {
     if( !pValue )
         return;

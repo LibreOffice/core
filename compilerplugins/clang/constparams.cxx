@@ -420,6 +420,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return true;
     } else if (isa<SwitchStmt>(parent)) {
         return true;
+    } else if (isa<DoStmt>(parent)) {
+        return true;
     } else if (isa<CXXDeleteExpr>(parent)) {
         return false;
     } else if (isa<VAArgExpr>(parent)) {

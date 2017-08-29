@@ -196,7 +196,7 @@ OUString ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const
     return ScHTMLImport::GetHTMLRangeNameList( pDoc, rOrigName );
 }
 
-OUString ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName )
+OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument* pDoc, const OUString& rOrigName )
 {
     OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
 

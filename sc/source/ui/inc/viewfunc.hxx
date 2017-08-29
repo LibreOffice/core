@@ -128,7 +128,7 @@ public:
 
     bool            PasteDataFormat( SotClipboardFormatId nFormatId,
                                         const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
-                                        SCCOL nPosX, SCROW nPosY, Point* pLogicPos,
+                                        SCCOL nPosX, SCROW nPosY, const Point* pLogicPos,
                                         bool bLink = false, bool bAllowDialogs = false );
 
     bool            PasteFile( const Point&, const OUString&, bool bLink );
@@ -170,7 +170,7 @@ public:
 
     const SfxStyleSheet*
                     GetStyleSheetFromMarked();
-    void            SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet );
+    void            SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet );
     void            RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
     void            UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
@@ -195,7 +195,7 @@ public:
 
     void SetWidthOrHeight(
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
-        sal_uInt16 nSizeTwips, bool bRecord = true, ScMarkData* pMarkData = nullptr );
+        sal_uInt16 nSizeTwips, bool bRecord = true, const ScMarkData* pMarkData = nullptr );
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips );
 

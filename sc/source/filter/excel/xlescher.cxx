@@ -58,7 +58,7 @@ double lclGetTwipsScale( MapUnit eMapUnit )
 }
 
 /** Calculates a drawing layer X position (in twips) from an object column position. */
-long lclGetXFromCol( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
+long lclGetXFromCol( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
 {
     SCCOL nScCol = static_cast< SCCOL >( nXclCol );
     return static_cast< long >( fScale * (rDoc.GetColOffset( nScCol, nScTab ) +
@@ -66,7 +66,7 @@ long lclGetXFromCol( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uIn
 }
 
 /** Calculates a drawing layer Y position (in twips) from an object row position. */
-long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
+long lclGetYFromRow( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
 {
     SCROW nScRow = static_cast< SCROW >( nXclRow );
     return static_cast< long >( fScale * (rDoc.GetRowOffset( nScRow, nScTab ) +
@@ -75,7 +75,7 @@ long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uIn
 
 /** Calculates an object column position from a drawing layer X position (in twips). */
 void lclGetColFromX(
-        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
+        const ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
         sal_uInt16& rnOffset, sal_uInt16 nXclStartCol, sal_uInt16 nXclMaxCol,
         long& rnStartW, long nX, double fScale )
 {
@@ -94,7 +94,7 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab, sal_uInt32& rnXclRow,
+        const ScDocument& rDoc, SCTAB nScTab, sal_uInt32& rnXclRow,
         sal_uInt32& rnOffset, sal_uInt32 nXclStartRow, sal_uInt32 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {

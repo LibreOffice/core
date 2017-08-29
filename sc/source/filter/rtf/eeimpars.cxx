@@ -638,7 +638,7 @@ ScEEParser::~ScEEParser()
     SfxItemPool::Free(pPool);
 }
 
-void ScEEParser::NewActEntry( ScEEParseEntry* pE )
+void ScEEParser::NewActEntry( const ScEEParseEntry* pE )
 {   // New free-flying pActEntry
     pActEntry = new ScEEParseEntry( pPool );
     pActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);

@@ -170,7 +170,7 @@ public:
      */
     void                ReadDConName( XclImpStream& rStrm );
     /** Reads the entire pivot cache stream. Uses decrypter from passed stream. */
-    void                ReadPivotCacheStream( XclImpStream& rStrm );
+    void                ReadPivotCacheStream( const XclImpStream& rStrm );
 
     bool                IsRefreshOnLoad() const;
     bool                IsValid() const;
@@ -406,7 +406,7 @@ public:
     void                ReadSxViewEx9( XclImpStream& rStrm );
 
     /** Reads all used pivot caches and creates additional sheets for external data sources. */
-    void                ReadPivotCaches( XclImpStream& rStrm );
+    void                ReadPivotCaches( const XclImpStream& rStrm );
     /** Inserts all pivot tables into the Calc document. */
     void                ConvertPivotTables();
 

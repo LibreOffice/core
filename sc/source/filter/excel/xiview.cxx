@@ -94,7 +94,7 @@ void XclImpTabViewSettings::Initialize()
     maData.SetDefaults();
 }
 
-void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& rPal )
+void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, const XclImpPalette& rPal )
 {
     OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF8 );
     if( GetBiff() < EXC_BIFF8 )

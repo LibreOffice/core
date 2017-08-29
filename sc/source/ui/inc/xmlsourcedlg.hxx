@@ -70,7 +70,7 @@ private:
 
     void SelectSourceFile();
     void LoadSourceFileStructure(const OUString& rPath);
-    void HandleGetFocus(Control* pCtrl);
+    void HandleGetFocus(const Control* pCtrl);
     void TreeItemSelected();
     void DefaultElementSelected(SvTreeListEntry& rEntry);
     void RepeatElementSelected(SvTreeListEntry& rEntry);

@@ -141,7 +141,7 @@ void lclIgnoreString32( XclImpStream& rStrm, bool b16Bit )
 /** Converts a path to an absolute path.
     @param rPath  The source path. The resulting path is returned here.
     @param nLevel  Number of parent directories to add in front of the path. */
-void lclGetAbsPath( OUString& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell )
+void lclGetAbsPath( OUString& rPath, sal_uInt16 nLevel, const SfxObjectShell* pDocShell )
 {
     OUStringBuffer aTmpStr;
     while( nLevel )

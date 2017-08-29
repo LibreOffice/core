@@ -96,7 +96,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
 }
 
 bool ScClipUtil::CheckDestRanges(
-    ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
+    const ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
 {
     for (size_t i = 0, n = rDest.size(); i < n; ++i)
     {

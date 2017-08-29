@@ -72,7 +72,7 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
     return bValid ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
-void XclImpDecrypter::Update( SvStream& rStrm, sal_uInt16 nRecSize )
+void XclImpDecrypter::Update( const SvStream& rStrm, sal_uInt16 nRecSize )
 {
     if( IsValid() )
     {

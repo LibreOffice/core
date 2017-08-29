@@ -618,13 +618,13 @@ XclExpNumberCell::XclExpNumberCell(
 {
 }
 
-static OString lcl_GetStyleId( XclExpXmlStream& rStrm, sal_uInt32 nXFIndex )
+static OString lcl_GetStyleId( const XclExpXmlStream& rStrm, sal_uInt32 nXFIndex )
 {
     return OString::number( rStrm.GetRoot().GetXFBuffer()
             .GetXmlCellIndex( nXFIndex ) );
 }
 
-static OString lcl_GetStyleId( XclExpXmlStream& rStrm, const XclExpCellBase& rCell )
+static OString lcl_GetStyleId( const XclExpXmlStream& rStrm, const XclExpCellBase& rCell )
 {
     sal_uInt32 nXFId    = rCell.GetFirstXFId();
     sal_uInt16 nXFIndex = rStrm.GetRoot().GetXFBuffer().GetXFIndex( nXFId );

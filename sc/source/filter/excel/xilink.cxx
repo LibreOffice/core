@@ -416,7 +416,7 @@ void XclImpExtName::CreateDdeData( ScDocument& rDoc, const OUString& rApplic, co
     rDoc.CreateDdeLink( rApplic, rTopic, maName, SC_DDE_DEFAULT, xResults );
 }
 
-void XclImpExtName::CreateExtNameData( ScDocument& rDoc, sal_uInt16 nFileId ) const
+void XclImpExtName::CreateExtNameData( const ScDocument& rDoc, sal_uInt16 nFileId ) const
 {
     if (!mxArray.get())
         return;

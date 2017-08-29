@@ -62,7 +62,7 @@ OUString ScfApiHelper::GetServiceName( const Reference< XInterface >& xInt )
     return aService;
 }
 
-Reference< XMultiServiceFactory > ScfApiHelper::GetServiceFactory( SfxObjectShell* pShell )
+Reference< XMultiServiceFactory > ScfApiHelper::GetServiceFactory( const SfxObjectShell* pShell )
 {
     Reference< XMultiServiceFactory > xFactory;
     if( pShell )
@@ -88,7 +88,7 @@ Reference< XInterface > ScfApiHelper::CreateInstance(
     return xInt;
 }
 
-Reference< XInterface > ScfApiHelper::CreateInstance( SfxObjectShell* pShell, const OUString& rServiceName )
+Reference< XInterface > ScfApiHelper::CreateInstance( const SfxObjectShell* pShell, const OUString& rServiceName )
 {
     return CreateInstance( GetServiceFactory( pShell ), rServiceName );
 }
