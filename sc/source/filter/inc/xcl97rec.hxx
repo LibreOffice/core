@@ -165,7 +165,7 @@ class XclObjComment : public XclObj
 
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
-                                    const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, tools::Rectangle &rFrom, tools::Rectangle &To );
+                                    const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &To );
     virtual                     ~XclObjComment() override;
 
     /** c'tor process for formatted text objects above .
@@ -309,7 +309,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
-                                ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
+                                ExcBundlesheet8( const RootData& rRootData, SCTAB nTab );
                                 ExcBundlesheet8( const OUString& rString );
 
     virtual std::size_t         GetLen() const override;

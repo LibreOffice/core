@@ -59,7 +59,7 @@ public:
     virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
-    void                Update( SvStream& rStrm, sal_uInt16 nRecSize );
+    void                Update( const SvStream& rStrm, sal_uInt16 nRecSize );
     /** Reads and decrypts nBytes bytes and stores data into the existing(!) buffer pData.
         @return  Count of bytes really read. */
     sal_uInt16          Read( SvStream& rStrm, void* pData, sal_uInt16 nBytes );

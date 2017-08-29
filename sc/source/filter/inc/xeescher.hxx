@@ -397,7 +397,7 @@ public:
 
     /** Processes a drawing page and returns the record block containing all
         related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    std::shared_ptr< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
+    std::shared_ptr< XclExpRecordBase > ProcessDrawing( const SdrPage* pSdrPage );
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
     std::shared_ptr< XclExpRecordBase > ProcessDrawing( const css::uno::Reference< css::drawing::XShapes >& rxShapes );

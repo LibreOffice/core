@@ -73,7 +73,7 @@ using namespace com::sun::star;
 
 bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    SCCOL nPosX, SCROW nPosY, Point* pLogicPos, bool bLink, bool bAllowDialogs )
+                    SCCOL nPosX, SCROW nPosY, const Point* pLogicPos, bool bLink, bool bAllowDialogs )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( true );

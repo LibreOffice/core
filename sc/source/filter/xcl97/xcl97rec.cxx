@@ -494,7 +494,7 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 
   // --- class XclObjComment ------------------------------------------
 
-XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, tools::Rectangle &rFrom, tools::Rectangle &rTo ) :
+XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const tools::Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, const tools::Rectangle &rFrom, const tools::Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
             , mpCaption( pCaption->Clone() )
@@ -599,7 +599,7 @@ class VmlCommentExporter : public VMLExport
     tools::Rectangle           maTo;
 
 public:
-                        VmlCommentExporter ( const sax_fastparser::FSHelperPtr& p, const ScAddress& aScPos, SdrCaptionObj* pCaption, bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo );
+                        VmlCommentExporter ( const sax_fastparser::FSHelperPtr& p, const ScAddress& aScPos, SdrCaptionObj* pCaption, bool bVisible, const tools::Rectangle &aFrom, const tools::Rectangle &aTo );
 protected:
     virtual void        Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect ) override;
     using VMLExport::StartShape;
@@ -609,7 +609,7 @@ protected:
 };
 
 VmlCommentExporter::VmlCommentExporter( const sax_fastparser::FSHelperPtr& p, const ScAddress& aScPos, SdrCaptionObj* pCaption,
-                                        bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo )
+                                        bool bVisible, const tools::Rectangle &aFrom, const tools::Rectangle &aTo )
     : VMLExport( p )
     , maScPos( aScPos )
     , mpCaption( pCaption )
@@ -1049,7 +1049,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
 }
 
 static const char*
-GetEditAs( XclObjAny& rObj )
+GetEditAs( const XclObjAny& rObj )
 {
     if( const SdrObject* pShape = EscherEx::GetSdrObject( rObj.GetShape() ) )
     {
@@ -1065,7 +1065,7 @@ GetEditAs( XclObjAny& rObj )
 
 namespace {
 
-ScRefFlags parseRange(const OUString& rString, ScRange& rRange, ScDocument* pDoc)
+ScRefFlags parseRange(const OUString& rString, ScRange& rRange, const ScDocument* pDoc)
 {
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -1087,7 +1087,7 @@ ScRefFlags parseRange(const OUString& rString, ScRange& rRange, ScDocument* pDoc
     return rRange.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument* pDoc)
+ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, const ScDocument* pDoc)
 {
     // start with the address convention set in the document
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -1109,7 +1109,7 @@ ScRefFlags parseAddress(const OUString& rString, ScAddress& rAddress, ScDocument
     return rAddress.Parse(rString, pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 }
 
-bool transformURL(const OUString& rOldURL, OUString& rNewURL, ScDocument* pDoc)
+bool transformURL(const OUString& rOldURL, OUString& rNewURL, const ScDocument* pDoc)
 {
     if (rOldURL.startsWith("#"))
     {
@@ -1233,7 +1233,7 @@ ExcBofW8::ExcBofW8()
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
-ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB _nTab ) :
+ExcBundlesheet8::ExcBundlesheet8( const RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, static_cast<sal_uInt16>(_nTab) ),
     sUnicodeName( rRootData.pER->GetTabInfo().GetScTabName( _nTab ) )
 {

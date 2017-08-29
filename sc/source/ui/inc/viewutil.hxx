@@ -59,18 +59,18 @@ public:
 
     static TransliterationFlags GetTransliterationType( sal_uInt16 nSlotID );
 
-    static bool HasFiltered( const ScRange& rRange, ScDocument* pDoc );
+    static bool HasFiltered( const ScRange& rRange, const ScDocument* pDoc );
     /** Fit a range to cover nRows number of unfiltered rows.
         @return <TRUE/> if the resulting range covers nRows unfiltered rows. */
-    static bool FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows );
-    static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
+    static bool FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows );
+    static void UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc );
 
     static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal_uInt16 nSlotId );
 
     /** Returns true, if the passed view shell is in full screen mode. */
-    static bool IsFullScreen( SfxViewShell& rViewShell );
+    static bool IsFullScreen( const SfxViewShell& rViewShell );
     /** Enters or leaves full screen mode at the passed view shell. */
-    static void SetFullScreen( SfxViewShell& rViewShell, bool bSet );
+    static void SetFullScreen( const SfxViewShell& rViewShell, bool bSet );
 };
 
 class ScUpdateRect

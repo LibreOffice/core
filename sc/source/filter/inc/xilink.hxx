@@ -133,7 +133,7 @@ public:
     void                CreateDdeData( ScDocument& rDoc,
                             const OUString& rApplc, const OUString& rExtDoc ) const;
 
-    void                CreateExtNameData( ScDocument& rDoc, sal_uInt16 nFileId ) const;
+    void                CreateExtNameData( const ScDocument& rDoc, sal_uInt16 nFileId ) const;
 
     /**
      * Create OLE link data.  OLE link data is converted to external

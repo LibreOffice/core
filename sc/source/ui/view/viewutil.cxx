@@ -227,7 +227,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     return true;
 }
 
-void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
+void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc )
 {
     rMark.MarkToMulti();
 
@@ -264,7 +264,7 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
     rMark.MarkToSimple();
 }
 
-bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows )
+bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows )
 {
     SCTAB nTab = rRange.aStart.Tab();
     bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
@@ -278,7 +278,7 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_
     return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
-bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
+bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument* pDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
@@ -353,7 +353,7 @@ bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
     return bRet;
 }
 
-bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
+bool ScViewUtil::IsFullScreen( const SfxViewShell& rViewShell )
 {
     SfxBindings&    rBindings       = rViewShell.GetViewFrame()->GetBindings();
     std::unique_ptr<SfxPoolItem> pItem;
@@ -365,7 +365,7 @@ bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
     return bIsFullScreen;
 }
 
-void ScViewUtil::SetFullScreen( SfxViewShell& rViewShell, bool bSet )
+void ScViewUtil::SetFullScreen( const SfxViewShell& rViewShell, bool bSet )
 {
     if( IsFullScreen( rViewShell ) != bSet )
     {

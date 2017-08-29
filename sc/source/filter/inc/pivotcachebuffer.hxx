@@ -272,7 +272,7 @@ public:
                             PivotCacheGroupItemVector& orItemNames ) const;
 
     /** Writes the title of the field into the passed sheet at the passed address. */
-    void                writeSourceHeaderCell( WorksheetHelper& rSheetHelper,
+    void                writeSourceHeaderCell( const WorksheetHelper& rSheetHelper,
                             sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Writes a source field item value into the passed sheet. */
     void                writeSourceDataCell( WorksheetHelper& rSheetHelper,
@@ -281,14 +281,14 @@ public:
 
     /** Reads an item from the PCRECORD record and writes it to the passed sheet. */
     void                importPCRecordItem( SequenceInputStream& rStrm,
-                            WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
+                            const WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const;
 
 private:
     /** Tries to write the passed value to the passed sheet position. */
-    static void         writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
+    static void         writeItemToSourceDataCell( const WorksheetHelper& rSheetHelper,
                             sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem );
     /** Tries to write the value of a shared item to the passed sheet position. */
-    void                writeSharedItemToSourceDataCell( WorksheetHelper& rSheetHelper,
+    void                writeSharedItemToSourceDataCell( const WorksheetHelper& rSheetHelper,
                             sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nItemIdx ) const;
 
 private:
@@ -383,7 +383,7 @@ public:
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;
 
     /** Writes the titles of all source fields into the passed sheet. */
-    void                writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const;
+    void                writeSourceHeaderCells( const WorksheetHelper& rSheetHelper ) const;
     /** Writes a source field item value into the passed sheet. */
     void                writeSourceDataCell( WorksheetHelper& rSheetHelper,
                             sal_Int32 nColIdx, sal_Int32 nRowIdx,
@@ -402,7 +402,7 @@ private:
     /** Creates a dummy sheet that will be filled with the pivot cache data. */
     void                prepareSourceDataSheet();
     /** Checks, if the row index has changed since last call, and initializes the sheet data buffer. */
-    void                updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
+    void                updateSourceDataRow( const WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
 
 private:
     typedef RefVector< PivotCacheField >    PivotCacheFieldVector;

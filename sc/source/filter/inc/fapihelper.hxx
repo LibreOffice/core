@@ -63,7 +63,7 @@ public:
     static OUString GetServiceName( const css::uno::Reference< css::uno::XInterface >& xInt );
 
     /** Returns the multi service factory from a document shell. */
-    static css::uno::Reference< css::lang::XMultiServiceFactory > GetServiceFactory( SfxObjectShell* pShell );
+    static css::uno::Reference< css::lang::XMultiServiceFactory > GetServiceFactory( const SfxObjectShell* pShell );
 
     /** Creates an instance from the passed service name, using the passed service factory. */
     static css::uno::Reference< css::uno::XInterface > CreateInstance(
@@ -72,7 +72,7 @@ public:
 
     /** Creates an instance from the passed service name, using the service factory of the passed object. */
     static css::uno::Reference< css::uno::XInterface > CreateInstance(
-                            SfxObjectShell* pShell,
+                            const SfxObjectShell* pShell,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the process service factory. */

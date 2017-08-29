@@ -698,7 +698,7 @@ void XclExpChTrAction::SetAddAction( XclExpChTrAction* pAction )
 void XclExpChTrAction::AddDependentContents(
         const ScChangeAction& rAction,
         const XclExpRoot& rRoot,
-        ScChangeTrack& rChangeTrack )
+        const ScChangeTrack& rChangeTrack )
 {
     ScChangeActionMap aActionMap;
     ScChangeActionMap::iterator itChangeAction;
@@ -1095,7 +1095,7 @@ XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeAction& rAction,
         const XclExpRoot& rRoot,
         const XclExpChTrTabIdBuffer& rTabIdBuffer,
-        ScChangeTrack& rChangeTrack ) :
+        const ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer ),
     mbEndOfList(false),
     aRange( rAction.GetBigRange().MakeRange() )
@@ -1258,7 +1258,7 @@ XclExpChTrMoveRange::XclExpChTrMoveRange(
         const ScChangeActionMove& rAction,
         const XclExpRoot& rRoot,
         const XclExpChTrTabIdBuffer& rTabIdBuffer,
-        ScChangeTrack& rChangeTrack ) :
+        const ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer, EXC_CHTR_OP_MOVE ),
     aDestRange( rAction.GetBigRange().MakeRange() )
 {

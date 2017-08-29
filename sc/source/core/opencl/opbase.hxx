@@ -211,7 +211,7 @@ public:
 class CheckVariables : public Normal
 {
 public:
-    static void GenTmpVariables( std::stringstream& ss, SubArguments& vSubArguments );
+    static void GenTmpVariables( std::stringstream& ss, const SubArguments& vSubArguments );
     static void CheckSubArgumentIsNan( std::stringstream& ss,
         SubArguments& vSubArguments, int argumentNum );
     static void CheckAllSubArgumentIsNan( std::stringstream& ss,
@@ -220,7 +220,7 @@ public:
     static void CheckSubArgumentIsNan2( std::stringstream& ss,
         SubArguments& vSubArguments, int argumentNum, const std::string& p );
     static void UnrollDoubleVector( std::stringstream& ss,
-        std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
+        const std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
         int nCurWindowSize );
 };
 

@@ -651,7 +651,7 @@ void XclImpPivotCache::ReadDConName( XclImpStream& rStrm )
         maSrcRangeName.clear();
 }
 
-void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
+void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
 {
     if( (mnSrcType != EXC_SXVS_SHEET) && (mnSrcType != EXC_SXVS_EXTERN) )
         return;
@@ -1605,7 +1605,7 @@ void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
         maPTables.back()->ReadSxViewEx9( rStrm );
 }
 
-void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
+void XclImpPivotTableManager::ReadPivotCaches( const XclImpStream& rStrm )
 {
     for( XclImpPivotCacheVec::iterator aIt = maPCaches.begin(), aEnd = maPCaches.end(); aIt != aEnd; ++aIt )
         (*aIt)->ReadPivotCacheStream( rStrm );

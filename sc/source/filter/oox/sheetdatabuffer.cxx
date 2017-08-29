@@ -318,7 +318,7 @@ void SheetDataBuffer::setMergedRange( const ScRange& rRange )
 
 typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;
 
-void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ScRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ScRangeList& rRangeList )
+void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPair, ScRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ScRangeList& rRangeList )
 {
     Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
     if ( pXf1 )

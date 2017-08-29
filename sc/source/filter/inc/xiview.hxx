@@ -73,7 +73,7 @@ public:
     /** Reads a SELECTION record. */
     void                ReadSelection( XclImpStream& rStrm );
     /** Reads a SHEETEXT record (Tab Color). */
-    void                ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& rPal );
+    void                ReadTabBgColor( XclImpStream& rStrm, const XclImpPalette& rPal );
     /** Sets the view settings at the current sheet or the extended sheet options object. */
     void                Finalize();
 

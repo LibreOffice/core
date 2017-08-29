@@ -284,7 +284,7 @@ const sal_uInt8* ExcDummy_041::GetData() const
 
 //------------------------------------------------------------- class Exc1904 -
 
-Exc1904::Exc1904( ScDocument& rDoc )
+Exc1904::Exc1904( const ScDocument& rDoc )
 {
     const Date& rDate = rDoc.GetFormatTable()->GetNullDate();
     bVal = (rDate == Date( 1, 1, 1904 ));
@@ -317,7 +317,7 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
 
 //------------------------------------------------------ class ExcBundlesheet -
 
-ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTabNum ) :
+ExcBundlesheetBase::ExcBundlesheetBase( const RootData& rRootData, SCTAB nTabNum ) :
     m_nStrPos( STREAM_SEEK_TO_END ),
     m_nOwnPos( STREAM_SEEK_TO_END ),
     nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTabNum ) ? 0x0000 : 0x0001 ),
@@ -346,7 +346,7 @@ sal_uInt16 ExcBundlesheetBase::GetNum() const
     return 0x0085;
 }
 
-ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
+ExcBundlesheet::ExcBundlesheet( const RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, _nTab )
 {
     OUString sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
@@ -576,7 +576,7 @@ std::size_t ExcFilterCondition::GetTextBytes() const
     return pText ? (1 + pText->GetBufferSize()) : 0;
 }
 
-void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT )
+void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, const OUString* pT )
 {
     nType = nTp;
     nOper = nOp;
@@ -619,7 +619,7 @@ static const char* lcl_GetOperator( sal_uInt8 nOper )
     }
 }
 
-static OString lcl_GetValue( sal_uInt8 nType, double fVal, XclExpString* pStr )
+static OString lcl_GetValue( sal_uInt8 nType, double fVal, const XclExpString* pStr )
 {
     switch( nType )
     {
@@ -661,7 +661,7 @@ XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
 }
 
 bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
-                                     double fVal, OUString* pText, bool bSimple )
+                                     double fVal, const OUString* pText, bool bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
         return false;

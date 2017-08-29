@@ -169,7 +169,7 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
 
 namespace {
 
-::Color ARgbToARgbComponents( sal_uInt32& nRgb )
+::Color ARgbToARgbComponents( sal_uInt32 nRgb )
 {
     // sal_Int32 ornA = 255 - ((nRgb >> 24) & 0xFF);
     //
@@ -180,7 +180,7 @@ namespace {
     return ::Color(/*ornA*/ 0, ornR, ornG, ornB);
 }
 
-::Color importOOXColor(const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer, GraphicHelper& rGraphicHelper)
+::Color importOOXColor(const AttributeList& rAttribs, const ThemeBuffer& rThemeBuffer, const GraphicHelper& rGraphicHelper)
 {
     sal_uInt32 nColor = 0;
     if( rAttribs.hasAttribute( XML_rgb ) )
@@ -1089,7 +1089,7 @@ CondFormatRef CondFormatBuffer::importConditionalFormatting( const AttributeList
 
 namespace {
 
-ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, ScDocument* pDoc, SCTAB nTab)
+ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, const ScDocument* pDoc, SCTAB nTab)
 {
     ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
     for (auto const& it : *pList)
@@ -1209,7 +1209,7 @@ CondFormatRef CondFormatBuffer::createCondFormat()
     return xCondFmt;
 }
 
-ExtCfDataBarRule::ExtCfDataBarRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent):
+ExtCfDataBarRule::ExtCfDataBarRule(ScDataBarFormatData* pTarget, const WorksheetHelper& rParent):
     WorksheetHelper(rParent),
     mnRuleType( ExtCfDataBarRule::UNKNOWN ),
     mpTarget(pTarget)

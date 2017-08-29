@@ -546,7 +546,7 @@ ShapeInteractionHelper::CreateShapeObj( XclExpObjectManager& rObjMgr, const Refe
 }
 
 void
-ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape, EscherExHostAppData& rHostAppData )
+ShapeInteractionHelper::PopulateShapeInteractionInfo( const XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape, EscherExHostAppData& rHostAppData )
 {
    try
    {

@@ -50,7 +50,7 @@ class ScQProStyle
             maFontHeight[ nIndex ] = nPtSize;
         }
     }
-    void setFontType( sal_uInt16 nIndex, OUString &aLabel )
+    void setFontType( sal_uInt16 nIndex, const OUString &aLabel )
         { if (nIndex < maxsize) maFontType[ nIndex ] = aLabel; }
     void setAlign( sal_uInt16 nIndex, sal_uInt8 nData )
         { if (nIndex < maxsize) maAlign[ nIndex ] = nData; }

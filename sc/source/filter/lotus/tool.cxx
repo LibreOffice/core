@@ -147,7 +147,7 @@ double Snum32ToDouble( sal_uInt32 nValue )
     return fValue;
 }
 
-FormCache::FormCache( ScDocument* pDoc1 )
+FormCache::FormCache( const ScDocument* pDoc1 )
     : nIndex(0)
 {
     pFormTable = pDoc1->GetFormatTable();

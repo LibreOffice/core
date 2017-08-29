@@ -179,10 +179,10 @@ private:
     void                NewActEntry( ScEEParseEntry* );
     static void         EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( HtmlImportInfo* );
-    void                CloseEntry( HtmlImportInfo* );
-    void                NextRow(  HtmlImportInfo*  );
+    void                CloseEntry( const HtmlImportInfo* );
+    void                NextRow(  const HtmlImportInfo*  );
     void                SkipLocked( ScEEParseEntry*, bool bJoin = true );
-    static bool         SeekOffset( ScHTMLColOffset*, sal_uInt16 nOffset,
+    static bool         SeekOffset( const ScHTMLColOffset*, sal_uInt16 nOffset,
                                     SCCOL* pCol, sal_uInt16 nOffsetTol );
     static void         MakeCol( ScHTMLColOffset*, sal_uInt16& nOffset,
                                 sal_uInt16& nWidth, sal_uInt16 nOffsetTol,
@@ -198,15 +198,15 @@ private:
     void                Adjust();
 
     sal_uInt16          GetWidthPixel( const HTMLOption& );
-    bool                IsAtBeginningOfText( HtmlImportInfo* );
+    bool                IsAtBeginningOfText( const HtmlImportInfo* );
 
     void                TableOn( HtmlImportInfo* );
     void                ColOn( HtmlImportInfo* );
-    void                TableRowOn( HtmlImportInfo* );
-    void                TableRowOff( HtmlImportInfo* );
+    void                TableRowOn( const HtmlImportInfo* );
+    void                TableRowOff( const HtmlImportInfo* );
     void                TableDataOn( HtmlImportInfo* );
-    void                TableDataOff( HtmlImportInfo* );
-    void                TableOff( HtmlImportInfo* );
+    void                TableDataOff( const HtmlImportInfo* );
+    void                TableOff( const HtmlImportInfo* );
     void                Image( HtmlImportInfo* );
     void                AnchorOn( HtmlImportInfo* );
     void                FontOn( HtmlImportInfo* );

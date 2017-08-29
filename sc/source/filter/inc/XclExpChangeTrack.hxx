@@ -361,7 +361,7 @@ protected:
     void                        AddDependentContents(
                                     const ScChangeAction& rAction,
                                     const XclExpRoot& rRoot,
-                                    ScChangeTrack& rChangeTrack );
+                                    const ScChangeTrack& rChangeTrack );
 
     static inline void          Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress );
     static inline void          Write2DRange( XclExpStream& rStrm, const ScRange& rRange );
@@ -511,7 +511,7 @@ public:
                                     const ScChangeAction& rAction,
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
-                                    ScChangeTrack& rChangeTrack );
+                                    const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrInsert() override;
 
     virtual sal_uInt16              GetNum() const override;
@@ -560,7 +560,7 @@ public:
                                     const ScChangeActionMove& rAction,
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
-                                    ScChangeTrack& rChangeTrack );
+                                    const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrMoveRange() override;
 
     virtual sal_uInt16              GetNum() const override;

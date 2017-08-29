@@ -3633,7 +3633,7 @@ public:
     DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize );
     virtual ~DynamicKernel() override;
 
-    static DynamicKernel* create( const ScCalcConfig& config, ScTokenArray& rCode, int nResultSize );
+    static DynamicKernel* create( const ScCalcConfig& config, const ScTokenArray& rCode, int nResultSize );
 
     /// OpenCL code generation
     void CodeGen();
@@ -3940,7 +3940,7 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
     return nullptr;
 }
 
-DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray& rCode, int nResultSize )
+DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScTokenArray& rCode, int nResultSize )
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
@@ -4158,7 +4158,7 @@ public:
 
 
 CLInterpreterContext createCLInterpreterContext( const ScCalcConfig& rConfig,
-    ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode )
+    const ScFormulaCellGroupRef& xGroup, const ScTokenArray& rCode )
 {
     CLInterpreterContext aCxt(xGroup->mnLength);
 

@@ -315,7 +315,7 @@ static bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 
 namespace HelperNotifyChanges
 {
-    void NotifyIfChangesListeners(ScDocShell &rDocShell, ScMarkData& rMark, SCCOL nCol, SCROW nRow)
+    void NotifyIfChangesListeners(const ScDocShell &rDocShell, ScMarkData& rMark, SCCOL nCol, SCROW nRow)
     {
         if (ScModelObj *pModelObj = getMustPropagateChangesModel(rDocShell))
         {
@@ -1310,7 +1310,7 @@ const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
     return pSheet;
 }
 
-void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
+void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -1361,7 +1361,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
                 new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, pUndoDoc ) );
         }
 
-        rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*pStyleSheet), aFuncMark );
+        rDoc.ApplySelectionStyle( static_cast<const ScStyleSheet&>(*pStyleSheet), aFuncMark );
 
         if (!AdjustBlockHeight())
             rViewData.GetDocShell()->PostPaint( aMarkRange, PaintPartFlags::Grid );
@@ -1397,7 +1397,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
 
         ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
         for (; itr != itrEnd; ++itr)
-            rDoc.ApplyStyle( nCol, nRow, *itr, static_cast<ScStyleSheet&>(*pStyleSheet) );
+            rDoc.ApplyStyle( nCol, nRow, *itr, static_cast<const ScStyleSheet&>(*pStyleSheet) );
 
         if (!AdjustBlockHeight())
             rViewData.GetDocShell()->PostPaintCell( nCol, nRow, nTab );
@@ -1858,7 +1858,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 
 void ScViewFunc::SetWidthOrHeight(
     bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, ScSizeMode eMode,
-    sal_uInt16 nSizeTwips, bool bRecord, ScMarkData* pMarkData )
+    sal_uInt16 nSizeTwips, bool bRecord, const ScMarkData* pMarkData )
 {
     if (rRanges.empty())
         return;

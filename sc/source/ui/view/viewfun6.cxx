@@ -107,7 +107,7 @@ void ScViewFunc::DetectiveRefresh()
     RecalcPPT();
 }
 
-static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument* pDoc)
+static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, const ScDocument* pDoc)
 {
     OUString aAddrText(rRange.Format(ScRefFlags::RANGE_ABS_3D, pDoc));
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);

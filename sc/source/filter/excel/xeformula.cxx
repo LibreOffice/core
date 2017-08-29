@@ -366,7 +366,7 @@ private:
     void                ProcessMatrix( const XclExpScToken& rTokData );
 
     void                ProcessFunction( const XclExpScToken& rTokData );
-    void                PrepareFunction( XclExpFuncData& rFuncData );
+    void                PrepareFunction( const XclExpFuncData& rFuncData );
     void                FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nCloseSpaces );
     void                FinishIfFunction( XclExpFuncData& rFuncData );
     void                FinishChooseFunction( XclExpFuncData& rFuncData );
@@ -1397,7 +1397,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
     }
 }
 
-void XclExpFmlaCompImpl::PrepareFunction( XclExpFuncData& rFuncData )
+void XclExpFmlaCompImpl::PrepareFunction( const XclExpFuncData& rFuncData )
 {
     // For OOXML these are not rewritten anymore.
     if (GetOutput() != EXC_OUTPUT_XML_2007)
