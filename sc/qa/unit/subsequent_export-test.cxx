@@ -45,6 +45,7 @@
 #include <dpsave.hxx>
 #include <dputil.hxx>
 #include "validat.hxx"
+#include <attrib.hxx>
 
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -169,6 +170,7 @@ public:
     void testPivotTableXLSX();
     void testPivotTableTwoDataFieldsXLSX();
     void testPivotTableMedianODS();
+    void testPivotTableRowHeaderXLS();
 
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
@@ -272,6 +274,7 @@ public:
     CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
     CPPUNIT_TEST(testPivotTableMedianODS);
+    CPPUNIT_TEST(testPivotTableRowHeaderXLS);
 #if !defined(_WIN32)
     CPPUNIT_TEST(testSupBookVirtualPathXLS);
 #endif
@@ -4183,6 +4186,76 @@ void ScExportTest::testHyperlinkTargetFrameODS()
     OUString aTargetFrameExport = getXPath(pDoc,
             "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
+}
+
+void ScExportTest::testPivotTableRowHeaderXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot_row_header.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // There should be exactly 2 pivot tables
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    // First table has extra row header
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[0];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT(pDPObj->GetHeaderLayout());
+        // Check whether the row header has the right popupbutton flag
+        const ScPatternAttr* pPattern = rDoc.GetPattern(3, 3, 0);
+        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+    }
+
+    // Second table has no extra row header
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[1];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT(!pDPObj->GetHeaderLayout());
+        // Check whether the row header has the right popupbutton flag
+        const ScPatternAttr* pPattern = rDoc.GetPattern(0, 2, 0);
+        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+    }
+
+    // Check also after a reload
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+
+    // There should be exactly 2 pivot tables
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    // First table has extra row header
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[0];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT(pDPObj->GetHeaderLayout());
+        // Check whether the row header has the right popupbutton flag
+        const ScPatternAttr* pPattern = rLoadedDoc.GetPattern(3, 3, 0);
+        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+    }
+
+    // Second table has no extra row header
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[1];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        CPPUNIT_ASSERT(!pDPObj->GetHeaderLayout());
+        // Check whether the row header has the right popupbutton flag
+        const ScPatternAttr* pPattern = rLoadedDoc.GetPattern(0, 2, 0);
+        const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+        const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+        CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+    }
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

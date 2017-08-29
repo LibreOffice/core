@@ -1446,6 +1446,13 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     aGeometry.setDataFieldCount(maPTInfo.mnDataFields);
     aGeometry.setRowFieldCount(maPTInfo.mnRowFields);
 
+    // Make sure we set headerlayout when input file has additional raw header
+    if(maPTInfo.mnColFields == 0)
+    {
+        mpDPObj->SetHeaderLayout( maPTInfo.mnFirstHeadRow - 2 == static_cast<sal_uInt16>(aGeometry.getRowFieldHeaderRow()) );
+    }
+    aGeometry.setHeaderLayout(mpDPObj->GetHeaderLayout());
+
     ScDocument& rDoc = GetDoc();
 
     vector<const ScDPSaveDimension*> aFieldDims;
