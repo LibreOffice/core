@@ -104,6 +104,24 @@ normally wait for the SolarMutex.
 Eventually this will move into the GenericSolarMutex. KDE / Qt also does main
 thread redirects using Qt::BlockingQueuedConnection.
 
+== General: processing all current events for DoYield ==
+
+This is easily implemented for all non-priority queue based implementations.
+Windows and MacOS both have a timestamp attached to their events / messages,
+so simply get the current time and just process anything < timestamp.
+For the KDE backend this is already the default behaviour - single event
+processing isn't even supported. The headless backend accomplishes this by
+just processing a copy of the list of current events.
+
+Problematic in this regard is the Gtk+ backend. g_main_context_iteration
+dispatches "only those highest priority event sources". There is no real way
+to tell, when these became ready. I've added a workaround idea to the TODO
+list. FWIW: Qt runs just a single timer source in the glib main context,
+basically the same we're doing with the LO scheduler as a system event.
+
+The gen X11 backend has some levels of redirection, but needs quite some work
+to get this fixed.
+
 == MacOS implementation details ==
 
 Generally the Scheduler is handled as expected, except on resize, which is
@@ -224,3 +242,39 @@ workaround using a validation timestamp is better then the current peek,
 remove, re-postEvent, which has to run in the main thread.
 
 Originally I didn't evaluate, if the event is actually lost or just delayed.
+
+== Drop nMaxEvents from Gtk+ based backends ==
+
+gint last_priority = G_MAXINT;
+bool bWasEvent = false;
+do {
+    gint max_priority;
+    g_main_context_acquire( NULL );
+    bool bHasPending = g_main_context_prepare( NULL, &max_priority );
+    g_main_context_release( NULL );
+    if ( bHasPending )
+    {
+        if ( last_priority > max_priority )
+        {
+            bHasPending = g_main_context_iteration( NULL, bWait );
+	    bWasEvent = bWasEvent || bHasPending;
+	}
+	else
+	    bHasPending = false;
+    }
+}
+while ( bHasPending )
+
+The idea is to use g_main_context_prepare and keep the max_priority as an
+indicator. We cannot prevent running newer lower events, but we can prevent
+running new higher events, which should be sufficient for most stuff.
+
+This also touches user event processing, which currently runs as a high
+priority idle in the event loop.
+
+== Drop nMaxEvents from gen (X11) backend ==
+
+A few layers of indirection make this code hard to follow. The SalXLib::Yield
+and SalX11Display::Yield architecture makes it impossible to process just the
+current events. This really needs a refactorung and rearchitecture step, which
+will also affect the Gtk+ and KDE4 backend for the user event handling.

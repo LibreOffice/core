@@ -506,12 +506,17 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 
 static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    static sal_uInt32 nLastTicks = 0;
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
     ImplSVData *const pSVData = ImplGetSVData();
     WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
 
-    int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+    sal_uInt32 nCurTicks = 0;
+    if ( bHandleAllCurrentEvents )
+        nCurTicks = GetTickCount();
+
+    bool bHadNewerEvent = false;
     do
     {
         bOneEvent = PeekMessageW( &aMsg, nullptr, 0, 0, PM_REMOVE );
@@ -520,20 +525,26 @@ static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
             bWasMsg = true;
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
+            if ( bHandleAllCurrentEvents
+                    && !bHadNewerEvent && aMsg.time > nCurTicks
+                    && (nLastTicks <= nCurTicks || aMsg.time < nLastTicks) )
+                bHadNewerEvent = true;
+            bOneEvent = !bHadNewerEvent;
         }
-        else
-            // busy loop to catch the 0ms timeout
-            // We don't need to busy loop, if we wait anyway.
-            // Even if we didn't process the event directly, report it.
-            if ( pTimer && pTimer->PollForMessage() && !bWait )
-            {
-                SwitchToThread();
-                nMaxEvents++;
-                bOneEvent = true;
-                bWasMsg = true;
-            }
+        // busy loop to catch a message, eventually the 0ms timer.
+        // we don't need to loop, if we wait anyway.
+        if ( !bWait && !bWasMsg && pTimer && pTimer->PollForMessage() )
+        {
+            SwitchToThread();
+            continue;
+        }
+        if ( !(bHandleAllCurrentEvents && bOneEvent) )
+            break;
     }
-    while( --nMaxEvents && bOneEvent );
+    while( true );
+
+    if ( bHandleAllCurrentEvents )
+        nLastTicks = nCurTicks;
 
     // Also check that we don't wait when application already has quit
     if ( bWait && !bWasMsg && !pSVData->maAppData.mbAppQuit )
@@ -545,6 +556,7 @@ static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
             ImplSalDispatchMessage( &aMsg );
         }
     }
+
     return bWasMsg;
 }
 

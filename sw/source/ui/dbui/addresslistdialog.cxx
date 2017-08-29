@@ -487,8 +487,7 @@ IMPL_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void)
             m_pListLB->SetEntryText(m_sConnecting, pSelect, ITEMID_TABLE - 1);
             // allow painting of the new entry
             m_pListLB->Window::Invalidate(InvalidateFlags::Update);
-            for (int i = 0; i < 10; ++i)
-                Application::Reschedule();
+            Application::Reschedule( true );
         }
 
         pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
