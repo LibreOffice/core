@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
+  <requires lib="" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkMenu" id="Menu3D">
     <property name="visible">True</property>
@@ -5568,57 +5569,20 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkBox" id="box17">
+                                  <object class="sfxlo-NotebookbarToolBox" id="first11">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">both-horiz</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first11">
+                                      <object class="GtkToolButton" id="Zoom">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="Zoom">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:Zoom</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:Zoom</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first14">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ZoomPage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ZoomPage</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5629,57 +5593,42 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box18">
+                                  <object class="sfxlo-NotebookbarToolBox" id="second11">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second11">
+                                      <object class="GtkToolButton" id="ControlCodes1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ControlCodes1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ControlCodes</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:ControlCodes</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second15">
+                                      <object class="GtkToolButton" id="PrintPreview">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="BrowseView1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:BrowseView</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:PrintPreview</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="BrowseView1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:BrowseView</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9763,57 +9712,20 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkBox" id="box61">
+                                  <object class="sfxlo-NotebookbarToolBox" id="first42">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">both-horiz</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first42">
+                                      <object class="GtkToolButton" id="Zoom1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="Zoom1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:Zoom</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:Zoom</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first43">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ZoomPage3">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ZoomPage</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9824,57 +9736,42 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box62">
+                                  <object class="sfxlo-NotebookbarToolBox" id="second47">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second47">
+                                      <object class="GtkToolButton" id="ControlCodes2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ControlCodes2">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ControlCodes</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:ControlCodes</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second48">
+                                      <object class="GtkToolButton" id="PrintPreview2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="BrowseView2">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:BrowseView</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:PrintPreview</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="BrowseView2">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:BrowseView</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -11139,7 +11036,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="svtlo-ManagedMenuButton" id="GridDrawB:MenuGrid">
-                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridDrawB">_View</property>
+                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|GridDrawB">_Grid</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -12185,57 +12082,20 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkBox" id="box83">
+                                  <object class="sfxlo-NotebookbarToolBox" id="first44">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">both-horiz</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first44">
+                                      <object class="GtkToolButton" id="Zoom2">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="Zoom2">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:Zoom</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:Zoom</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first51">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ZoomPage1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ZoomPage</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -12246,57 +12106,42 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box84">
+                                  <object class="sfxlo-NotebookbarToolBox" id="second42">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second42">
+                                      <object class="GtkToolButton" id="ControlCodes3">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ControlCodes3">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ControlCodes</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:ControlCodes</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second46">
+                                      <object class="GtkToolButton" id="PrintPreview3">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="BrowseView3">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:BrowseView</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:PrintPreview</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="BrowseView3">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:BrowseView</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -13793,57 +13638,20 @@
                                 <property name="vexpand">True</property>
                                 <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkBox" id="box78">
+                                  <object class="sfxlo-NotebookbarToolBox" id="first49">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">both-horiz</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first49">
+                                      <object class="GtkToolButton" id="Zoom3">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="Zoom3">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:Zoom</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:Zoom</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="first50">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ZoomPage2">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ZoomPage</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -13854,57 +13662,42 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="box79">
+                                  <object class="sfxlo-NotebookbarToolBox" id="second15">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second52">
+                                      <object class="GtkToolButton" id="ControlCodes4">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="toolbar_style">both-horiz</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="ControlCodes4">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:ControlCodes</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:ControlCodes</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="sfxlo-NotebookbarToolBox" id="second53">
+                                      <object class="GtkToolButton" id="PrintPreview1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="toolbar_style">icons</property>
-                                        <property name="show_arrow">False</property>
-                                        <child>
-                                          <object class="GtkToolButton" id="BrowseView4">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:BrowseView</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="homogeneous">True</property>
-                                          </packing>
-                                        </child>
+                                        <property name="action_name">.uno:PrintPreview</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="BrowseView4">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:BrowseView</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
                                   </object>
