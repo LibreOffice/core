@@ -132,7 +132,6 @@ void ImpSvNumberInputScan::Reset()
     nAcceptedDatePattern = -2;
     nDatePatternStart = 0;
     nDatePatternNumbers = 0;
-    nCanForceToIso8601 = 0;
 
     for (sal_uInt32 i = 0; i < SV_MAX_ANZ_INPUT_STRINGS; i++)
     {
@@ -1046,44 +1045,66 @@ bool ImpSvNumberInputScan::MayBeIso8601()
 
 bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
 {
-    if (nCanForceToIso8601 == 0)
+    int nCanForceToIso8601 = 0;
+    if (!MayBeIso8601())
     {
+        return false;
+    }
+    else if (nMayBeIso8601 >= 3)
+    {
+        return true;    // at least 3 digits in year
+    }
+    else
+    {
+        if (eDateOrder == DateOrder::Invalid)
+        {
+            // As if any of the cases below can be applied, but only if a
+            // locale dependent date pattern was not matched.
+            return (GetDatePatternNumbers() != nAnzNums) || !IsDatePatternNumberOfType(0,'Y');
+        }
 
-        if (!MayBeIso8601())
-        {
-            nCanForceToIso8601 = 1;
-        }
-        else if (nMayBeIso8601 >= 3)
-        {
-            nCanForceToIso8601 = 2; // at least 3 digits in year
-        }
-        else
-        {
-            nCanForceToIso8601 = 1;
-        }
+        nCanForceToIso8601 = 1;
+    }
 
-        sal_Int32 n;
-        switch (eDateOrder)
-        {
+    sal_Int32 n;
+    switch (eDateOrder)
+    {
         case DateOrder::DMY:               // "day" value out of range => ISO 8601 year
             if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 31)
             {
                 nCanForceToIso8601 = 2;
             }
-            break;
+        break;
         case DateOrder::MDY:               // "month" value out of range => ISO 8601 year
             if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 12)
             {
                 nCanForceToIso8601 = 2;
             }
-            break;
+        break;
         case DateOrder::YMD:               // always possible
             nCanForceToIso8601 = 2;
-            break;
+        break;
         default: break;
-        }
     }
     return nCanForceToIso8601 > 1;
+}
+
+
+bool ImpSvNumberInputScan::IsAcceptableIso8601( const SvNumberformat* pFormat )
+{
+    if (pFormat && (pFormat->GetType() & css::util::NumberFormat::DATE))
+    {
+        switch (pFormatter->GetEvalDateFormat())
+        {
+            case NF_EVALDATEFORMAT_INTL:
+                return CanForceToIso8601( GetDateOrder());
+            case NF_EVALDATEFORMAT_FORMAT:
+                return CanForceToIso8601( pFormat->GetDateOrder());
+            default:
+                return CanForceToIso8601( GetDateOrder()) || CanForceToIso8601( pFormat->GetDateOrder());
+        }
+    }
+    return CanForceToIso8601( GetDateOrder());
 }
 
 
@@ -3644,7 +3665,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                         // not. The count of numbers in pattern must match the
                         // count of numbers in input.
                         res = (GetDatePatternNumbers() == nAnzNums)
-                            || MayBeIso8601() || nMatchedAllStrings;
+                            || IsAcceptableIso8601( pFormat) || nMatchedAllStrings;
                     }
                 }
                 break;
