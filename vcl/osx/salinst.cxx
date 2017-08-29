@@ -596,13 +596,14 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
 
         // handle available events
         NSEvent* pEvent = nil;
+        NSDate *now = [[NSDate alloc] init];
         do
         {
             sal_uLong nCount = ReleaseYieldMutex();
 
     // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
-                            untilDate: nil
+                            untilDate: now
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
 

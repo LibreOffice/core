@@ -494,8 +494,7 @@ IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Timer*, _pTimer, void)
 
 IMPL_LINK_TYPED( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
 {
-    for( long i = 0; i < 128; i++ )
-        Application::Reschedule();
+    Application::Reschedule( true );
 
     Flush();
 

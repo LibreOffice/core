@@ -718,8 +718,7 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
             while(true)
             {
                 //time for other slots is needed
-                for(sal_Int16 r = 0; r < 10; ++r)
-                    Application::Reschedule();
+                Application::Reschedule( true );
                 bool bFailed = false;
                 try
                 {
@@ -1090,8 +1089,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
     //help to force painting the dialog
     //TODO/CLEANUP
     //predetermined breaking point
-    for ( sal_Int16 i = 0; i < 25; i++)
-        Application::Reschedule();
+    Application::Reschedule( true );
     for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
     {
         SwDocMergeInfo& rInfo = pConfigItem->GetDocumentMergeInfo(nDoc);
@@ -1234,8 +1232,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
         aDesc.sBCC = m_sBCC;
         pDlg->AddDocument( aDesc );
         //help to force painting the dialog
-        for ( sal_Int16 i = 0; i < 25; i++)
-            Application::Reschedule();
+        Application::Reschedule( true );
         //stop creating of data when dialog has been closed
         if(!pDlg->IsVisible())
         {
