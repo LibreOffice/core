@@ -53,9 +53,9 @@ void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
         {
-            // Reference to an automatic style, try to look it up.
-            auto itStyle = mrImport.GetAutomaticStyles().find(rAttributeValue);
-            if (itStyle == mrImport.GetAutomaticStyles().end())
+            // Reference to an automatic text style, try to look it up.
+            auto itStyle = mrImport.GetAutomaticTextStyles().find(rAttributeValue);
+            if (itStyle == mrImport.GetAutomaticTextStyles().end())
                 continue;
 
             // Apply properties directly, librevenge has no notion of automatic styles.
@@ -152,15 +152,17 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
         {
+            m_aStyleName = rAttributeValue;
+
             // Reference to an automatic style, try to look it up.
-            auto itStyle = mrImport.GetAutomaticStyles().find(rAttributeValue);
-            if (itStyle == mrImport.GetAutomaticStyles().end())
+            auto itStyle = mrImport.GetAutomaticParagraphStyles().find(m_aStyleName);
+            if (itStyle == mrImport.GetAutomaticParagraphStyles().end())
                 continue;
 
-            // Apply properties directly, librevenge has no notion of automatic styles.
+            // Found an automatic paragraph style.
             librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
             for (itProp.rewind(); itProp.next();)
-                aPropertyList.insert(itProp.key(), itProp());
+                aPropertyList.insert(itProp.key(), itProp()->clone());
         }
         else
         {
@@ -180,8 +182,25 @@ void XMLParaContext::endElement(const OUString &/*rName*/)
 
 void XMLParaContext::characters(const OUString &rChars)
 {
+    librevenge::RVNGPropertyList aPropertyList;
+    if (!m_aStyleName.isEmpty())
+    {
+        // Reference to an automatic style, try to look it up.
+        auto itStyle = mrImport.GetAutomaticTextStyles().find(m_aStyleName);
+        if (itStyle != mrImport.GetAutomaticTextStyles().end())
+        {
+            // Found an automatic text style.
+            librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+            for (itProp.rewind(); itProp.next();)
+                aPropertyList.insert(itProp.key(), itProp()->clone());
+        }
+    }
+    mrImport.GetGenerator().openSpan(aPropertyList);
+
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+
+    mrImport.GetGenerator().closeSpan();
 }
 
 } // namespace exp

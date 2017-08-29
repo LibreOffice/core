@@ -52,6 +52,7 @@ public:
     void testEPUB2();
     void testPageBreakSplit();
     void testSpanAutostyle();
+    void testParaAutostyleCharProps();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testEPUB2);
     CPPUNIT_TEST(testPageBreakSplit);
     CPPUNIT_TEST(testSpanAutostyle);
+    CPPUNIT_TEST(testParaAutostyleCharProps);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -188,6 +190,16 @@ void EPUBExportTest::testSpanAutostyle()
     // did not differ.
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class", "span1");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[3]", "class", "span2");
+}
+
+void EPUBExportTest::testParaAutostyleCharProps()
+{
+    createDoc("para-autostyle-char-props.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This failed, para-level char props were not exported.
+    assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:span", "class", "span0");
+    assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "class", "span1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

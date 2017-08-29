@@ -29,11 +29,14 @@ public:
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
 
-    librevenge::RVNGPropertyList &GetPropertyList();
+    librevenge::RVNGPropertyList &GetTextPropertyList();
+    librevenge::RVNGPropertyList &GetParagraphPropertyList();
 
 private:
     OUString m_aName;
-    librevenge::RVNGPropertyList m_aPropertyList;
+    OUString m_aFamily;
+    librevenge::RVNGPropertyList m_aTextPropertyList;
+    librevenge::RVNGPropertyList m_aParagraphPropertyList;
 };
 
 } // namespace exp

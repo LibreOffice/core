@@ -42,7 +42,7 @@ void XMLParagraphPropertiesContext::startElement(const OUString &/*rName*/, cons
     {
         OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
         OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
-        mrStyle.GetPropertyList().insert(sName.getStr(), sValue.getStr());
+        mrStyle.GetParagraphPropertyList().insert(sName.getStr(), sValue.getStr());
     }
 }
 
@@ -70,7 +70,7 @@ void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css
     {
         OString sName = OUStringToOString(xAttribs->getNameByIndex(i), RTL_TEXTENCODING_UTF8);
         OString sValue = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
-        mrStyle.GetPropertyList().insert(sName.getStr(), sValue.getStr());
+        mrStyle.GetTextPropertyList().insert(sName.getStr(), sValue.getStr());
     }
 }
 
@@ -94,10 +94,9 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
     {
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
         if (rAttributeName == "style:name")
-        {
             m_aName = xAttribs->getValueByIndex(i);
-            break;
-        }
+        else if (rAttributeName == "style:family")
+            m_aFamily = xAttribs->getValueByIndex(i);
     }
 }
 
@@ -106,12 +105,20 @@ void XMLStyleContext::endElement(const OUString &/*rName*/)
     if (m_aName.isEmpty())
         return;
 
-    mrImport.GetAutomaticStyles()[m_aName] = m_aPropertyList;
+    if (m_aFamily == "text" || m_aFamily == "paragraph")
+        mrImport.GetAutomaticTextStyles()[m_aName] = m_aTextPropertyList;
+    if (m_aFamily == "paragraph")
+        mrImport.GetAutomaticParagraphStyles()[m_aName] = m_aParagraphPropertyList;
 }
 
-librevenge::RVNGPropertyList &XMLStyleContext::GetPropertyList()
+librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()
 {
-    return m_aPropertyList;
+    return m_aTextPropertyList;
+}
+
+librevenge::RVNGPropertyList &XMLStyleContext::GetParagraphPropertyList()
+{
+    return m_aParagraphPropertyList;
 }
 
 } // namespace exp

@@ -28,6 +28,9 @@ public:
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
     void SAL_CALL characters(const OUString &rChars) override;
+
+private:
+    OUString m_aStyleName;
 };
 
 } // namespace exp
