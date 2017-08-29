@@ -72,6 +72,8 @@ class AquaSalInstance : public SalInstance
         {}
     };
 
+    bool RunInMainYield( bool bHandleAllCurrentEvents );
+
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     OUString                                maDefaultPrinter;
