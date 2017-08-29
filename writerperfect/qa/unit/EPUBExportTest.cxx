@@ -51,12 +51,14 @@ public:
     void testMimetype();
     void testEPUB2();
     void testPageBreakSplit();
+    void testSpanAutostyle();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
     CPPUNIT_TEST(testMimetype);
     CPPUNIT_TEST(testEPUB2);
     CPPUNIT_TEST(testPageBreakSplit);
+    CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -85,6 +87,7 @@ void EPUBExportTest::tearDown()
 void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
 {
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("opf"), BAD_CAST("http://www.idpf.org/2007/opf"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
 void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData)
@@ -173,6 +176,18 @@ void EPUBExportTest::testPageBreakSplit()
     // This failed, output was a single section.
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/sections/section0002.xhtml"));
     CPPUNIT_ASSERT(!mxZipFile->hasByName("OEBPS/sections/section0003.xhtml"));
+}
+
+void EPUBExportTest::testSpanAutostyle()
+{
+    createDoc("span-autostyle.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[1]", "class", "span0");
+    // This failed, it was still span1, i.e. the bold and the italic formatting
+    // did not differ.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class", "span1");
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[3]", "class", "span2");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
