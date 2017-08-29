@@ -367,6 +367,7 @@ public:
 
 struct CustomPropertyLine
 {
+    ScopedVclPtr<VclGrid>                       m_aLine;
     ScopedVclPtr<ComboBox>                      m_aNameBox;
     ScopedVclPtr<CustomPropertiesTypeBox>       m_aTypeBox;
     ScopedVclPtr<CustomPropertiesEdit>          m_aValueEdit;
@@ -391,20 +392,15 @@ struct CustomPropertyLine
 class CustomPropertiesWindow : public vcl::Window
 {
 private:
+    VclPtr<HeaderBar>                   m_pHeaderBar;
+    VclPtr<ScrollBar>                   m_pScrollBar;
     VclPtr<FixedText>                   m_pHeaderAccName;
     VclPtr<FixedText>                   m_pHeaderAccType;
     VclPtr<FixedText>                   m_pHeaderAccValue;
 
-    VclPtr<ComboBox>                    m_aNameBox;
-    VclPtr<ListBox>                     m_aTypeBox;
-    VclPtr<Edit>                        m_aValueEdit;
-    VclPtr<DateField>                   m_aDateField;
-    VclPtr<TimeField>                   m_aTimeField;
-    VclPtr<Edit>                        m_aDurationField;
-    VclPtr<PushButton>                  m_aEditButton;
-    VclPtr<CustomPropertiesYesNoButton> m_aYesNoButton;
-    VclPtr<ImageButton>                 m_aRemoveButton;
-
+    sal_Int32                           m_nWidgetHeight;
+    sal_Int32                           m_nRemoveButtonWidth;
+    sal_Int32                           m_nTypeBoxWidth;
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
@@ -414,10 +410,10 @@ private:
     Idle                                m_aBoxLoseFocusIdle;
     Link<void*,void>                    m_aRemovedHdl;
 
-    DECL_STATIC_LINK( CustomPropertiesWindow, TypeHdl, ListBox&, void );
-    DECL_LINK(  RemoveHdl, Button*, void );
-    DECL_LINK(  EditLoseFocusHdl, Control&, void );
-    DECL_LINK(  BoxLoseFocusHdl, Control&, void );
+    DECL_LINK(TypeHdl, ListBox&, void);
+    DECL_LINK(RemoveHdl, Button*, void);
+    DECL_LINK(EditLoseFocusHdl, Control&, void);
+    DECL_LINK(BoxLoseFocusHdl, Control&, void);
     //add lose focus handlers of Date/TimeField?
 
     DECL_LINK(EditTimeoutHdl, Timer *, void);
@@ -431,10 +427,18 @@ public:
         FixedText *pHeaderAccName,
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
+    void Init(HeaderBar* pHeaderBar, ScrollBar* pScrollBar);
     virtual ~CustomPropertiesWindow() override;
     virtual void dispose() override;
 
-    bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
+    virtual void Resize() override;
+    //these consts are unhelpful, this changes the state of the widgets
+    //that belong to CustomPropertyLine, but they are held by VclPtr
+    //and operator-> on a VclPtr is a const method that returns the
+    //non-const contents of the VclPtr, but loplugin:constparams
+    //correctly sees that it could all be set to const, so we end
+    //up with this unhappy situation
+    void SetWidgetWidths(const CustomPropertyLine* pLine) const;
     sal_uInt16          GetVisibleLineCount() const;
     sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sName, css::uno::Any& rAny );
