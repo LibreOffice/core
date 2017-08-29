@@ -143,7 +143,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads nmemb short type array from HIODev
  */
-        void Read2b( void *ptr, size_t nmemb );
+        size_t Read2b(void *ptr, size_t nmemb);
 /**
  * Reads nmemb long type array from HIODev
  */

@@ -174,12 +174,10 @@ size_t HWPFile::Read1b(void *ptr, size_t nmemb)
     return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }
 
-void HWPFile::Read2b(void *ptr, size_t nmemb)
+size_t HWPFile::Read2b(void *ptr, size_t nmemb)
 {
-    if (hiodev)
-        hiodev->read2b(ptr, nmemb);
+    return hiodev ? hiodev->read2b(ptr, nmemb) : 0;
 }
-
 
 void HWPFile::Read4b(void *ptr, size_t nmemb)
 {
@@ -187,18 +185,15 @@ void HWPFile::Read4b(void *ptr, size_t nmemb)
         hiodev->read4b(ptr, nmemb);
 }
 
-
 size_t HWPFile::ReadBlock(void *ptr, size_t size)
 {
     return hiodev ? hiodev->readBlock(ptr, size) : 0;
 }
 
-
 size_t HWPFile::SkipBlock(size_t size)
 {
     return hiodev ? hiodev->skipBlock(size) : 0;
 }
-
 
 void HWPFile::SetCompressed(bool flag)
 {
@@ -313,15 +308,22 @@ void HWPFile::TagsRead()
                 break;
             case FILETAG_HYPERTEXT:
             {
-                if( (size % 617) != 0 )
+                const int nRecordLen = 617;
+                if( (size % nRecordLen) != 0 )
                     SkipBlock( size );
                 else
                 {
-                    for( int i = 0 ; i < size/617 ; i++)
+                    const int nRecords = size / nRecordLen;
+                    for (int i = 0 ; i < nRecords; ++i)
                     {
                         HyperText *hypert = new HyperText;
-                        hypert->Read(*this);
-                        hyperlist.push_back(hypert);
+                        if (hypert->Read(*this))
+                            hyperlist.push_back(hypert);
+                        else
+                        {
+                            delete hypert;
+                            break;
+                        }
                     }
                 }
                 break;

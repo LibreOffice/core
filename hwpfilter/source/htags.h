@@ -48,7 +48,7 @@ struct HyperText
     char  macro[325];
     uchar type;
     char reserve[3];
-    void Read(HWPFile& hwpf);
+    bool Read(HWPFile& hwpf);
 };
 /**
  * @short Win32 OLE object
