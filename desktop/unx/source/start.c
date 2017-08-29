@@ -81,7 +81,7 @@ child_info_destroy(ChildInfo *info)
     free (info);
 }
 
-static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
+static ChildInfo * child_spawn(Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus)
 {
     rtl_uString *pApp = NULL, *pTmp = NULL;
     rtl_uString **ppArgs;
@@ -150,7 +150,7 @@ static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
     return info;
 }
 
-static bool child_exited_wait(ChildInfo *info, bool bShortWait)
+static sal_Bool child_exited_wait(ChildInfo *info, sal_Bool bShortWait)
 {
     TimeValue t = { 0, 250 /* ms */ * 1000 * 1000 };
     if (!bShortWait)
@@ -405,12 +405,12 @@ static rtl_uString *escape_path(rtl_uString *pToEscape)
 }
 
 /* Send args to the LO instance (using the 'fd' file descriptor) */
-static bool send_args(int fd, rtl_uString *pCwdPath)
+static sal_Bool send_args(int fd, rtl_uString *pCwdPath)
 {
     rtl_uString *pBuffer = NULL, *pTmp = NULL;
     sal_Int32 nCapacity = 1000;
     rtl_String *pOut = NULL;
-    bool bResult;
+    sal_Bool bResult;
     size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path(pCwdPath);
     sal_uInt32 nArg = 0;
@@ -727,7 +727,7 @@ void sigterm_handler(int ignored)
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    bool bSentArgs = false;
+    sal_Bool bSentArgs = sal_False;
     const char* pUsePlugin;
     rtl_uString *pPipePath = NULL;
     Args *args;
@@ -756,12 +756,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
 #ifndef ENABLE_QUICKSTART_LIBPNG
     /* we can't load and render it anyway */
-    args->bInhibitSplash = true;
+    args->bInhibitSplash = sal_True;
 #endif
 
     pUsePlugin = getenv("SAL_USE_VCLPLUGIN");
     if (pUsePlugin && !strcmp(pUsePlugin, "svp"))
-        args->bInhibitSplash = true;
+        args->bInhibitSplash = sal_True;
 
     if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
     {
@@ -793,8 +793,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         /* we have to prepare for, and exec the binary */
         int nPercent = 0;
         ChildInfo *info;
-        bool bAllArgs = true;
-        bool bShortWait, bRestart;
+        sal_Bool bAllArgs = sal_True;
+        sal_Bool bShortWait, bRestart;
 
         /* sanity check pieces */
         system_checks();
@@ -815,10 +815,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         do
         {
-            bRestart = false;
+            bRestart = sal_False;
 
             /* fast updates if we have somewhere to update it to */
-            bShortWait = splash ? true : false;
+            bShortWait = splash ? sal_True : sal_False;
 
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
@@ -836,7 +836,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 {
                     splash_destroy(splash);
                     splash = NULL;
-                    bShortWait = false;
+                    bShortWait = sal_False;
                 }
             }
 
@@ -846,12 +846,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             switch (status)
             {
                 case EXITHELPER_CRASH_WITH_RESTART: // re-start with just -env: parameters
-                    bRestart = true;
-                    bAllArgs = false;
+                    bRestart = sal_True;
+                    bAllArgs = sal_False;
                     break;
                 case EXITHELPER_NORMAL_RESTART: // re-start with all arguments
-                    bRestart = true;
-                    bAllArgs = true;
+                    bRestart = sal_True;
+                    bAllArgs = sal_True;
                     break;
                 default:
                     break;
