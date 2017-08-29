@@ -18,6 +18,7 @@
  */
 
 #include <svtools/GraphicExportOptionsDialog.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace css::beans;
 using namespace css::lang;
@@ -61,6 +62,12 @@ void GraphicExportOptionsDialog::initialize()
 {
     mCurrentPage = mRenderer.getCurrentPageWriter();
     mSize100mm = mRenderer.getDocumentSizeIn100mm(mCurrentPage);
+    // Init DPI with screen resolution, taking width. This may lead to unusual
+    // DPI values but ensures a size in pixels that matches the actual screen
+    // content, which is vital for example for Calc with drawing layer and
+    // pixel images.
+    Size aSizePixels = Application::GetDefaultDevice()->LogicToPixel( mSize100mm, MapUnit::Map100thMM );
+    mResolution = aSizePixels.Width() / getViewWidthInch();
 }
 
 IMPL_LINK_NOARG( GraphicExportOptionsDialog, widthModifiedHandle, Edit&, void )
