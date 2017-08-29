@@ -4249,6 +4249,12 @@ static void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
     if ( pDocShell )
     {
         ScViewData* pViewData = ScDocShell::GetViewData();
+        if ( !pViewData )
+        {
+            ScTabViewShell* pViewSh = pDocShell->GetBestViewShell( true );
+            pViewData = pViewSh ? &pViewSh->GetViewData() : nullptr;
+        }
+
         if ( pViewData )
         {
             OSL_TRACE("Pushing out SelectAll query");
