@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ebd2d233",
+        "filename": "package/source/xstor/xstorage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-08-29T00:19:15Z",
+      "side": 1,
+      "message": "m_aChildrenVector.erase(...\nis missing here now.",
+      "range": {
+        "startLine": 1524,
+        "startChar": 8,
+        "endLine": 1524,
+        "endChar": 82
+      },
+      "revId": "7256eb1be99032a1aaf5ad37847da4d3c43cacf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
