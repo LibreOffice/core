@@ -48,7 +48,7 @@ public:
     }
 };
 
-static WatchDog aWatchDog( 120 ); // random high number in secs
+static WatchDog * aWatchDog = new WatchDog( 120 ); // random high number in secs
 
 class TimerTest : public test::BootstrapFixture
 {
