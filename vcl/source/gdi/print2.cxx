@@ -1230,8 +1230,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             pCurrAct->Execute( aPaintVDev.get() );
                                         }
 
-                                        if( !( nActionNum % 8 ) )
-                                            Application::Reschedule();
+                                        Application::Reschedule( true );
                                     }
 
                                     const bool bOldMap = mbMap;

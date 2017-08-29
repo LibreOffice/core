@@ -180,7 +180,7 @@ bool SvpSalInstance::PostedEventsInQueue()
     bool result = false;
     {
         osl::MutexGuard g(m_aEventGuard);
-        result = m_aUserEvents.size() > 0;
+        result = !m_aUserEvents.empty();
     }
     return result;
 }

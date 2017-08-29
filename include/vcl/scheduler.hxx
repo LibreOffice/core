@@ -53,7 +53,16 @@ public:
     static void       CallbackTaskScheduling();
     /// Process one pending task ahead of time with highest priority.
     static bool       ProcessTaskScheduling();
-    /// Process all events until we are idle
+    /**
+     * Process all events until none is pending
+     *
+     * This can busy-lock, if some task or system event always generates new
+     * events when being processed. Most time it's called in unit tests to
+     * process all pending events. Internally it just calls
+     * Application::Reschedule( true ) until it fails.
+     *
+     * @see Application::Reschedule
+     */
     static void       ProcessEventsToIdle();
     /**
      * Process events until the parameter turns true,

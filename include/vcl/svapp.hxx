@@ -466,17 +466,19 @@ public:
     /** Attempt to process current pending event(s)
 
      It doesn't sleep if no events are available for processing.
+     This doesn't processs any events generated after invoking the function.
+     So in contrast to Scheduler::ProcessEventsToIdle, this cannot become
+     busy-locked by an event-generating event in the event queue.
 
-     @param bAllEvents  If set to true, then try to process all the
-        events. If set to false, then only process the current
-        event. Defaults to false.
+     @param bHandleAllCurrentEvents  If set to true, then try to process all
+        the current events. If set to false, then only process one event.
+        Defaults to false.
 
      @returns true if any event was processed.
 
-     @see Execute, Quit, Yield, EndYield, GetSolarMutex,
-          GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
+     @see Yield, Scheduler::ProcessEventsToIdle
      */
-    static bool                 Reschedule( bool bAllEvents = false );
+    static bool                 Reschedule( bool bHandleAllCurrentEvents = false );
 
     /** Process the next event.
 
