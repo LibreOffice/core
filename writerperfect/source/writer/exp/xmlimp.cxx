@@ -84,9 +84,14 @@ librevenge::RVNGTextInterface &XMLImport::GetGenerator() const
     return mrGenerator;
 }
 
-std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticStyles()
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticTextStyles()
 {
-    return maAutomaticStyles;
+    return maAutomaticTextStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticParagraphStyles()
+{
+    return maAutomaticParagraphStyles;
 }
 
 void XMLImport::startDocument()
