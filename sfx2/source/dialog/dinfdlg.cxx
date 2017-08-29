@@ -2077,6 +2077,8 @@ CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
     , m_pVertScroll(nullptr)
     , m_nThumbPos(0)
 {
+    Size aRequest(LogicToPixel(Size(320, 141), MapUnit::MapAppFont));
+    set_width_request(aRequest.Width());
 }
 
 void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
