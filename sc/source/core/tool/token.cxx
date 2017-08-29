@@ -5243,6 +5243,39 @@ bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCR
     return false;
 }
 
+sal_Int32 ScTokenArray::GetWeight() const
+{
+    sal_Int32 nResult = 0;
+    for (auto i = 0; i < nRPN; ++i)
+    {
+        switch ((*pRPN[i]).GetType())
+        {
+        case svDoubleRef:
+            {
+                const auto pComplexRef = (*pRPN[i]).GetDoubleRef();
+
+                // Number of cells referenced divided by 10.
+                const double nNumCellsTerm =
+                    (1 + (pComplexRef->Ref2.Row() - pComplexRef->Ref1.Row())) *
+                    (1 + (pComplexRef->Ref2.Col() - pComplexRef->Ref1.Col())) / 10.;
+
+                if (nNumCellsTerm + nResult < SAL_MAX_INT32)
+                    nResult += nNumCellsTerm;
+                else
+                    nResult = SAL_MAX_INT32;
+            }
+            break;
+        default:
+            ;
+        }
+    }
+
+    if (nResult == 0)
+        nResult = 1;
+
+    return nResult;
+}
+
 #if DEBUG_FORMULA_COMPILER
 
 void ScTokenArray::Dump() const
