@@ -215,7 +215,6 @@
                           <object class="GtkComboBoxText" id="savein">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
                             <property name="margin_right">5</property>
                             <property name="hexpand">True</property>
                           </object>
@@ -227,11 +226,10 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label" translatable="yes">Function</property>
-                            <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="halign">start</property>
                             <property name="hexpand">True</property>
+                            <property name="image_position">right</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -253,7 +251,6 @@
                           <object class="GtkComboBoxText" id="toplevellist">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_right">36</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
@@ -267,6 +264,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="margin_left">5</property>
+                            <property name="margin_right">5</property>
                             <property name="hexpand">True</property>
                             <property name="always_show_image">True</property>
                           </object>
@@ -364,13 +363,19 @@
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_bottom">5</property>
                             <child>
                               <object class="GtkButton" id="add">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="halign">center</property>
+                                <property name="valign">start</property>
+                                <property name="margin_bottom">5</property>
                                 <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
                                 <property name="image">image3</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -398,13 +403,19 @@
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
                             <child>
                               <object class="GtkButton" id="remove">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="halign">center</property>
+                                <property name="valign">end</property>
+                                <property name="margin_bottom">5</property>
                                 <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
                                 <property name="image">image4</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -545,7 +556,7 @@
         <child type="label">
           <object class="GtkLabel">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
+            <property name="label" translatable="yes">Label</property>
           </object>
         </child>
       </object>
@@ -555,6 +566,12 @@
         <property name="position">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="grid4"/>
+      <widget name="grid6"/>
+    </widgets>
   </object>
   <object class="GtkMenu" id="insertmenu">
     <property name="visible">True</property>
@@ -612,6 +629,5 @@
       </object>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1"/>
   <object class="GtkSizeGroup" id="sizegroup2"/>
 </interface>
