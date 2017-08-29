@@ -26,9 +26,9 @@
 #include <vector>
 #include <limits>
 
-#include <svx/svxdllapi.h>
+#include <vcl/dllapi.h>
 
-class SVX_DLLPUBLIC ListControl : public Control
+class VCL_DLLPUBLIC ListControl : public Control
 {
 private:
     std::vector<VclPtr<Control>> maEntries;
