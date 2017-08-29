@@ -62,12 +62,6 @@ public:
     /** Whether input can be forced to ISO 8601 format.
 
         Depends on locale's date separator and a specific date format order.
-
-        @param eDateOrder
-            Evaluated only on first call during one scan process, subsequent
-            calls return state of nCanForceToIso8601!
-
-        @see nCanForceToIso8601
      */
     bool CanForceToIso8601( DateOrder eDateOrder );
 
@@ -142,16 +136,6 @@ private:
         @see MayBeIso8601()
      */
     sal_uInt8    nMayBeIso8601;
-
-    /** State of ISO 8601 can be forced.
-
-        0:= don't know yet
-        1:= no
-        2:= yes
-
-        @see CanForceToIso8601()
-     */
-    sal_uInt8   nCanForceToIso8601;
 
     /** State of dd-month-yy or yy-month-dd detection, with month name.
 

@@ -124,7 +124,6 @@ void ImpSvNumberInputScan::Reset()
     nAcceptedDatePattern = -2;
     nDatePatternStart = 0;
     nDatePatternNumbers = 0;
-    nCanForceToIso8601 = 0;
 
     for (sal_uInt32 i = 0; i < SV_MAX_COUNT_INPUT_STRINGS; i++)
     {
@@ -1037,42 +1036,39 @@ bool ImpSvNumberInputScan::MayBeIso8601()
 
 bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
 {
-    if (nCanForceToIso8601 == 0)
+    int nCanForceToIso8601 = 0;
+    if (!MayBeIso8601())
     {
+        nCanForceToIso8601 = 1;
+    }
+    else if (nMayBeIso8601 >= 3)
+    {
+        nCanForceToIso8601 = 2; // at least 3 digits in year
+    }
+    else
+    {
+        nCanForceToIso8601 = 1;
+    }
 
-        if (!MayBeIso8601())
-        {
-            nCanForceToIso8601 = 1;
-        }
-        else if (nMayBeIso8601 >= 3)
-        {
-            nCanForceToIso8601 = 2; // at least 3 digits in year
-        }
-        else
-        {
-            nCanForceToIso8601 = 1;
-        }
-
-        sal_Int32 n;
-        switch (eDateOrder)
-        {
+    sal_Int32 n;
+    switch (eDateOrder)
+    {
         case DateOrder::DMY:               // "day" value out of range => ISO 8601 year
             if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 31)
             {
                 nCanForceToIso8601 = 2;
             }
-            break;
+        break;
         case DateOrder::MDY:               // "month" value out of range => ISO 8601 year
             if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 12)
             {
                 nCanForceToIso8601 = 2;
             }
-            break;
+        break;
         case DateOrder::YMD:               // always possible
             nCanForceToIso8601 = 2;
-            break;
+        break;
         default: break;
-        }
     }
     return nCanForceToIso8601 > 1;
 }
