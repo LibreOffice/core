@@ -197,7 +197,6 @@
 #define STR_HEADER                              NC_("STR_HEADER", "Header")
 #define STR_FOOTER                              NC_("STR_FOOTER", "Footer")
 #define STR_TEXTATTRS                           NC_("STR_TEXTATTRS", "Text Attributes")
-#define STR_HFCMD_DELIMITER                     NC_("STR_HFCMD_DELIMITER", "\\")
 #define STR_HFCMD_PAGE                          NC_("STR_HFCMD_PAGE", "PAGE")
 #define STR_HFCMD_PAGES                         NC_("STR_HFCMD_PAGES", "PAGES")
 #define STR_HFCMD_DATE                          NC_("STR_HFCMD_DATE", "DATE")

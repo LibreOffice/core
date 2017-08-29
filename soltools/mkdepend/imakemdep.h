@@ -177,11 +177,6 @@ in this Software without prior written authorization from the X Consortium.
 #if defined(sun) || defined(SYSV) || defined(SVR4) || defined(hcx) || defined(_WIN32) || (defined(AMOEBA) && defined(CROSS_COMPILE))
 #define FIXUP_CPP_WHITESPACE
 #endif
-#ifdef _WIN32
-#define REMOVE_CPP_LEADSPACE
-#define INLINE_SYNTAX
-#define MAGIC_MAKE_VARS
-#endif
 #ifdef __minix_vmd
 #define FIXUP_CPP_WHITESPACE
 #endif
