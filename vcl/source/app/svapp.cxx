@@ -512,6 +512,11 @@ bool Application::Reschedule( bool i_bAllEvents )
     return ImplYield(false, i_bAllEvents, 0);
 }
 
+void Scheduler::ProcessEventsToSignal(bool& bSignal)
+{
+    while (!bSignal && Application::Reschedule() );
+}
+
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1;
@@ -545,7 +550,8 @@ void Scheduler::ProcessEventsToIdle()
             if ( pIdle && pIdle->IsActive() )
             {
                 bAnyIdle = true;
-                SAL_WARN( "vcl.schedule", "Unprocessed Idle: " << pIdle->GetDebugName() );
+                SAL_WARN( "vcl.schedule", "Unprocessed Idle: "
+                          << pIdle << " " << pIdle->GetDebugName() );
             }
         }
         pSchedulerData = pSchedulerData->mpNext;

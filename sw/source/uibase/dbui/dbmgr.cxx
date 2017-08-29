@@ -160,15 +160,6 @@ const sal_Char cActiveConnection[] = "ActiveConnection";
         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_##type, \
             SwDocShell::GetEventName(STR_SW_EVENT_##type), shell))
 
-namespace {
-
-void rescheduleGui() {
-    for( sal_uInt16 i = 0; i < 25; i++)
-        Application::Reschedule();
-}
-
-}
-
 enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
 
@@ -1234,7 +1225,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );
         pProgressDlg->Show();
 
-        rescheduleGui();
+        Application::Reschedule( true );
     }
 
     if( bCreateSingleFile && !pTargetView )
@@ -1379,7 +1370,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 pProgressDlg->Update();
             }
 
-            rescheduleGui();
+            Application::Reschedule( true );
 
             // Create a copy of the source document and work with that one instead of the source.
             // If we're not in the single file mode (which requires modifying the document for the merging),
@@ -1549,7 +1540,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     }
     else if( IsMergeOk() ) // && bCreateSingleFile
     {
-        rescheduleGui();
+        Application::Reschedule( true );
 
         // sw::DocumentLayoutManager::CopyLayoutFormat() did not generate
         // unique fly names, do it here once.
@@ -1565,7 +1556,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             aLayout->AllCheckPageDescs();
         }
 
-        rescheduleGui();
+        Application::Reschedule( true );
 
         if( IsMergeOk() && bMT_FILE )
         {
@@ -1602,7 +1593,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             xTargetDocShell->DoClose();
     }
 
-    rescheduleGui();
+    Application::Reschedule( true );
 
     pProgressDlg.disposeAndClear();
 

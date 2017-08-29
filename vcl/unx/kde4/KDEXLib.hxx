@@ -69,7 +69,7 @@ class KDEXLib : public QObject, public SalXLib
 
     Q_SIGNALS:
         void startTimeoutTimerSignal();
-        void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
+        bool processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >& );
         int getFrameWidthSignal();
