@@ -1039,11 +1039,11 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
     int nCanForceToIso8601 = 0;
     if (!MayBeIso8601())
     {
-        nCanForceToIso8601 = 1;
+        return false;
     }
     else if (nMayBeIso8601 >= 3)
     {
-        nCanForceToIso8601 = 2; // at least 3 digits in year
+        return true;    // at least 3 digits in year
     }
     else
     {
