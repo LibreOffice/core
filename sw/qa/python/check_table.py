@@ -498,16 +498,16 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         xDispatcher.executeDispatch(xDocFrame, '.uno:GoToStartOfDoc', '', 0, ())
         xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
-                                    (PropertyValue('Text', 0, '15-10-30', 0),))
+                                    (PropertyValue('Text', 0, '2015-10-30', 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
-        # Without number recognition 15-10-30 should not be interpreted as a date
-        self.assertEqual(xTable.getCellByPosition(0, 0).getString(), '15-10-30')
+        # Without number recognition 2015-10-30 should not be interpreted as a date
+        self.assertEqual(xTable.getCellByPosition(0, 0).getString(), '2015-10-30')
         self.assertEqual(xTable.getCellByPosition(0, 0).getValue(), 0)
         # Activate number recognition
         xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
                                     (PropertyValue('TableNumberRecognition', 0, True, 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
-                                    (PropertyValue('Text', 0, '15-10-30', 0),))
+                                    (PropertyValue('Text', 0, '2015-10-30', 0),))
         xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
         # With number recognition it should now be a date, confirm by checking
         # the string and value of the cell.
