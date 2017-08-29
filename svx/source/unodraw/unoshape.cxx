@@ -3034,7 +3034,8 @@ void SvxShape::setAllPropertiesToDefault()
         mpObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
 
-    mpModel->SetChanged();
+    if (mpModel)
+        mpModel->SetChanged();
 }
 
 void SvxShape::setPropertiesToDefault(
