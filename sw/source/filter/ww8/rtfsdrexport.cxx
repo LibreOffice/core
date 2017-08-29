@@ -407,19 +407,11 @@ void RtfSdrExport::AddLineDimensions(const tools::Rectangle& rRectangle)
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
 
-    switch (m_nShapeFlags & 0xC0)
-    {
-    case 0x40:
-        m_aShapeProps.insert(std::pair<OString,OString>("fFlipV", "1"));
-        break;
-    case 0x80:
-        m_aShapeProps.insert(std::pair<OString,OString>("fFlipH", "1"));
-        break;
-    case 0xC0:
-        m_aShapeProps.insert(std::pair<OString,OString>("fFlipV", "1"));
-        m_aShapeProps.insert(std::pair<OString,OString>("fFlipH", "1"));
-        break;
-    }
+    if (m_nShapeFlags & SHAPEFLAG_FLIPV)
+         m_aShapeProps.insert(std::pair<OString,OString>("fFlipV", "1"));
+
+    if (m_nShapeFlags & SHAPEFLAG_FLIPH)
+         m_aShapeProps.insert(std::pair<OString,OString>("fFlipH", "1"));
 
     // the actual dimensions
     m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
