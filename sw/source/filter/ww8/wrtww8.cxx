@@ -2359,6 +2359,15 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
                 nTableOffset = rHori.GetPos();
                 const SvxLRSpaceItem& rLRSp = pFormat->GetLRSpace();
                 nTableOffset += rLRSp.GetLeft();
+
+                // convert offset to be measured from right margin in right-to-left tables
+                if ( nTableOffset && m_rWW8Export.TrueFrameDirection(*pFormat) == SvxFrameDirection::Horizontal_RL_TB )
+                {
+                    SwTwips nLeftPageMargin, nRightPageMargin;
+                    const SwTwips nPageSize = m_rWW8Export.CurrentPageWidth(nLeftPageMargin, nRightPageMargin);
+                    const SwTwips nTableWidth = pFormat->GetFrameSize().GetWidth();
+                    nTableOffset = nPageSize - nLeftPageMargin - nRightPageMargin - nTableWidth - nTableOffset;
+                }
                 break;
         }
     }
