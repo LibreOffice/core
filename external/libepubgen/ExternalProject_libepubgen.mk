@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,libepubgen,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
-			--disable-debug \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS)" \
