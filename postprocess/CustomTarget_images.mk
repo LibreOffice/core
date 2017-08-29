@@ -33,7 +33,7 @@ $(packimages_DIR)/%.zip : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		ILSTFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
-		$(PERL) $(SRCDIR)/solenv/bin/packimages.pl \
+		$(PYTHON) $(SRCDIR)/solenv/bin/pack_images.py \
 			$(if $(DEFAULT_THEME),\
 				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
 				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
