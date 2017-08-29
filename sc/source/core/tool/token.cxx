@@ -1341,7 +1341,9 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         // It's already disabled.  No more checking needed.
         return;
 
-    if (!ScCalcConfig::isOpenCLEnabled() && std::getenv("CPU_THREADED_CALCULATION"))
+    static const bool bThreadingRequested = std::getenv("CPU_THREADED_CALCULATION");
+
+    if (!ScCalcConfig::isOpenCLEnabled() && bThreadingRequested)
         return;
 
     OpCode eOp = r.GetOpCode();
