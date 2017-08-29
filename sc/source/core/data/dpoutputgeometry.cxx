@@ -31,7 +31,8 @@ ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilte
     mnPageFields(0),
     mnDataFields(0),
     meDataLayoutType(None),
-    mbShowFilter(bShowFilter)
+    mbShowFilter(bShowFilter),
+    mbHeaderLayout (false)
 {
 }
 
@@ -62,6 +63,11 @@ void ScDPOutputGeometry::setDataFieldCount(sal_uInt32 nCount)
 void ScDPOutputGeometry::setDataLayoutType(FieldType eType)
 {
     meDataLayoutType = eType;
+}
+
+void ScDPOutputGeometry::setHeaderLayout(bool bHeaderLayout)
+{
+    mbHeaderLayout = bHeaderLayout;
 }
 
 void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) const
@@ -156,7 +162,7 @@ SCROW ScDPOutputGeometry::getRowFieldHeaderRow() const
 
     if (nColumnFields)
         nCurRow += static_cast<SCROW>(nColumnFields);
-    else if (nRowFields)
+    else if (nRowFields && mbHeaderLayout)
         ++nCurRow;
 
     return nCurRow;
