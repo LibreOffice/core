@@ -295,7 +295,7 @@ namespace emfio
         void        AddPolyPolygon(const tools::PolyPolygon& rPolyPolygon);
     };
 
-    struct GDIObj
+    struct EMFIO_DLLPUBLIC GDIObj
     {
         virtual ~GDIObj() = default; // Polymorphic base class
     };
