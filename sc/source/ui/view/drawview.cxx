@@ -56,6 +56,8 @@
 #include "postit.hxx"
 #include "undocell.hxx"
 #include "gridwin.hxx"
+#include "inputhdl.hxx"
+#include "inputwin.hxx"
 
 #include "sc.hrc"
 
@@ -397,6 +399,14 @@ void ScDrawView::MarkListHasChanged()
     if (nMarkCount == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+        // Show name of shape in "Name box"
+        if( !pObj->GetName().isEmpty() )
+        {
+            pViewSh->GetInputHandler()->GetInputWindow()->SetPosString(
+                    pObj->GetName() );
+        }
+
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
         {
             pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
