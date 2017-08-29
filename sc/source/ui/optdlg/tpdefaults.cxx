@@ -113,7 +113,7 @@ void ScTpDefaultsOptions::CheckPrefix(Edit* pEdit)
     }
 }
 
-void ScTpDefaultsOptions::OnFocusPrefixInput(Edit* pEdit)
+void ScTpDefaultsOptions::OnFocusPrefixInput(const Edit* pEdit)
 {
     if (!pEdit)
         return;

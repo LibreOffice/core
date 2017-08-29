@@ -120,7 +120,7 @@ private:
                                 DECL_LINK( SeparatorEditHdl, Edit&, void );
                                 DECL_LINK( SeparatorClickHdl, Button*, void );
                                 DECL_LINK( SeparatorComboBoxHdl, ComboBox&, void );
-                                void SeparatorHdl(Control*);
+                                void SeparatorHdl(const Control*);
                                 DECL_LINK( LbColTypeHdl, ListBox&, void );
                                 DECL_LINK( UpdateTextHdl, ScCsvTableBox&, void );
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox&, void );

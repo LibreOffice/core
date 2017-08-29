@@ -486,7 +486,7 @@ void ScHFEditPage::SetSelectDefinedList()
     m_pLbDefined->SelectEntryPos( sal::static_int_cast<sal_uInt16>( eSelectEntry ) );
 }
 
-bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
+bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextObj)
 {
     if(!pEngine || !pTextObj)
         return false;
@@ -524,7 +524,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
     return bReturn;
 }
 
-bool ScHFEditPage::IsDateEntry(EditTextObject* pTextObj)
+bool ScHFEditPage::IsDateEntry(const EditTextObject* pTextObj)
 {
     if(!pTextObj)
         return false;
@@ -543,7 +543,7 @@ bool ScHFEditPage::IsDateEntry(EditTextObject* pTextObj)
     return bReturn;
 }
 
-bool ScHFEditPage::IsExtFileNameEntry(EditTextObject* pTextObj)
+bool ScHFEditPage::IsExtFileNameEntry(const EditTextObject* pTextObj)
 {
     if(!pTextObj)
         return false;

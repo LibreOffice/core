@@ -26,7 +26,7 @@ public:
     ScAutoFormatDlg(vcl::Window* pParent,
                     ScAutoFormat* pAutoFormat,
                     const ScAutoFormatData* pSelFormatData,
-                    ScViewData *pViewData);
+                    const ScViewData *pViewData);
     virtual ~ScAutoFormatDlg() override;
     virtual void dispose() override;
 

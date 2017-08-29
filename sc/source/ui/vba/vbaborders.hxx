@@ -36,7 +36,10 @@ class ScVbaBorders : public ScVbaBorders_BASE
     bool bRangeIsSingleCell;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
-    ScVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, ScVbaPalette& rPalette );
+    ScVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                  const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                  const css::uno::Reference< css::table::XCellRange >& xRange,
+                  const ScVbaPalette& rPalette );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

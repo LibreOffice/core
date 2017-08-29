@@ -88,7 +88,7 @@ private:
     void    Init_Impl( bool bFromFile );
     void    SetNewTable_Impl();
     void    SetFromTo_Impl();
-    void    FillTables_Impl( ScDocument* pSrcDoc );
+    void    FillTables_Impl( const ScDocument* pSrcDoc );
     void    DoEnable_Impl();
 
     DECL_LINK( BrowseHdl_Impl, Button*, void );

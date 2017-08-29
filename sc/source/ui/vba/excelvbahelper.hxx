@@ -48,10 +48,10 @@ ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XC
 SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
 
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( ScDocShell* pShell );
+css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( const ScDocShell* pShell );
 
 /// @throws css::uno::RuntimeException
-css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet );
+css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet );
 /// @throws css::uno::RuntimeException
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet );
 /// @throws css::uno::RuntimeException

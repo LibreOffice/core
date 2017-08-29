@@ -760,7 +760,7 @@ void PivotCacheField::writeSourceHeaderCell( const WorksheetHelper& rSheetHelper
     rSheetHelper.getSheetData().setStringCell( aModel, maFieldModel.maName );
 }
 
-void PivotCacheField::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
+void PivotCacheField::writeSourceDataCell( const WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
 {
     bool bHasIndex = rItem.getType() == XML_x;
     OSL_ENSURE( bHasIndex != maSharedItems.empty(), "PivotCacheField::writeSourceDataCell - shared items missing or not expected" );
@@ -1038,7 +1038,7 @@ void PivotCache::writeSourceHeaderCells( const WorksheetHelper& rSheetHelper ) c
         (*aIt)->writeSourceHeaderCell( rSheetHelper, nCol, nRow );
 }
 
-void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nColIdx, sal_Int32 nRowIdx, const PivotCacheItem& rItem ) const
+void PivotCache::writeSourceDataCell( const WorksheetHelper& rSheetHelper, sal_Int32 nColIdx, sal_Int32 nRowIdx, const PivotCacheItem& rItem ) const
 {
     SCCOL nCol = maSheetSrcModel.maRange.aStart.Col() + nColIdx;
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Col() <= nCol ) && ( nCol <= maSheetSrcModel.maRange.aEnd.Col() ), "PivotCache::writeSourceDataCell - invalid column index" );
@@ -1049,7 +1049,7 @@ void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 n
         pCacheField->writeSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const
+void PivotCache::importPCRecord( SequenceInputStream& rStrm, const WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const
 {
     SCROW nRow = maSheetSrcModel.maRange.aStart.Row() + nRowIdx;
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Row() < nRow ) && ( nRow <= maSheetSrcModel.maRange.aEnd.Row() ), "PivotCache::importPCRecord - invalid row index" );
