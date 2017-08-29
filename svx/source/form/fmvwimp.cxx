@@ -397,7 +397,6 @@ FmXFormView::FmXFormView(FmFormView* _pView )
     ,m_nErrorMessageEvent( nullptr )
     ,m_nAutoFocusEvent( nullptr )
     ,m_nControlWizardEvent( nullptr )
-    ,m_pWatchStoredList( nullptr )
     ,m_bFirstActivation( true )
     ,m_isTabOrderUpdateSuspended( false )
 {
@@ -455,9 +454,6 @@ FmXFormView::~FmXFormView()
     }
 
     cancelEvents();
-
-    delete m_pWatchStoredList;
-    m_pWatchStoredList = nullptr;
 }
 
 //      EventListener
@@ -1735,8 +1731,7 @@ void FmXFormView::stopMarkListWatching()
     if ( m_pWatchStoredList )
     {
         m_pWatchStoredList->EndListeningAll();
-        delete m_pWatchStoredList;
-        m_pWatchStoredList = nullptr;
+        m_pWatchStoredList.reset();
     }
 }
 
@@ -1749,7 +1744,7 @@ void FmXFormView::startMarkListWatching()
         DBG_ASSERT( pModel != nullptr, "FmXFormView::startMarkListWatching: shell has no model!" );
         if (pModel)
         {
-            m_pWatchStoredList = new ObjectRemoveListener( this );
+            m_pWatchStoredList.reset(new ObjectRemoveListener( this ));
             m_pWatchStoredList->StartListening( *static_cast< SfxBroadcaster* >( pModel ) );
         }
     }

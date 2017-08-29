@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <memory>
 
 #include "svx/svdmark.hxx"
 #include "fmdocumentclassification.hxx"
@@ -171,7 +172,8 @@ class FmXFormView : public ::cppu::WeakImplHelper<
 
     // list of selected objects, used for restoration when switching from Alive to DesignMode
     SdrMarkList             m_aMark;
-    ObjectRemoveListener*   m_pWatchStoredList;
+    std::unique_ptr<ObjectRemoveListener>
+                    m_pWatchStoredList;
 
     bool            m_bFirstActivation;
     bool            m_isTabOrderUpdateSuspended;
