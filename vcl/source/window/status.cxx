@@ -1373,15 +1373,15 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     SAL_WARN_IF( !mbProgressMode, "vcl", "StatusBar::SetProgressValue(): no progress mode" );
     SAL_WARN_IF( nNewPercent > 100, "vcl", "StatusBar::SetProgressValue(): nPercent > 100" );
 
-    if ( mbProgressMode
-    &&   IsReallyVisible()
-    &&   (!mnPercent || (mnPercent != nNewPercent)) )
+    bool bInvalidate = mbProgressMode && IsReallyVisible() && (!mnPercent || (mnPercent != nNewPercent));
+
+    mnPercent = nNewPercent;
+
+    if (bInvalidate)
     {
-        bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
-        Invalidate(maPrgsFrameRect, bNeedErase ? InvalidateFlags::NONE : InvalidateFlags::NoErase);
+        Invalidate(maPrgsFrameRect);
         Update();
     }
-    mnPercent = nNewPercent;
 }
 
 void StatusBar::EndProgressMode()
