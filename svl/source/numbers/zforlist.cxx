@@ -1105,7 +1105,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
         {
         case css::util::NumberFormat::DATE :
             // Preserve ISO 8601 input.
-            if (pStringScanner->CanForceToIso8601( DateOrder::DMY))
+            if (pStringScanner->CanForceToIso8601( DateOrder::Invalid))
             {
                 F_Index = GetFormatIndex( NF_DATE_DIN_YYYYMMDD, ActLnge );
             }
