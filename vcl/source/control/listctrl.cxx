@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/listctrl.hxx>
+#include <vcl/listctrl.hxx>
 
 ListControl::ListControl(vcl::Window* pParent, WinBits nBits):
     Control(pParent, nBits),
