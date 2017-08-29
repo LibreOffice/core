@@ -81,7 +81,7 @@ private:
     /** The implementation is a copy of the code for SID_RENAMEPAGE in
         drviews2.cxx.
     */
-    void RenameSlide( SfxRequest& rRequest );
+    void RenameSlide( const SfxRequest& rRequest );
     DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog&, bool);
     bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString& rName);
 

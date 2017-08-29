@@ -118,7 +118,7 @@ void loadFile(const OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
-void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat)
+void testFile(const OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat)
 {
     csv_handler aHandler(&rDoc, nTab, aStringFormat);
     orcus::csv::parser_config aConfig;
@@ -143,7 +143,7 @@ void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStr
     }
 }
 
-void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+void testCondFile(const OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 {
     conditional_format_handler aHandler(pDoc, nTab);
     orcus::csv::parser_config aConfig;
@@ -486,7 +486,7 @@ ScTokenArray* compileFormula(
 }
 
 bool checkOutput(
-    ScDocument* pDoc, const ScRange& aOutRange,
+    const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aCheck, const char* pCaption )
 {
     bool bResult = true;

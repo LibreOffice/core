@@ -299,7 +299,7 @@ void Test::testSharedStringPoolUndoDoc()
 {
     struct
     {
-        bool check( ScDocument& rSrcDoc, ScDocument& rCopyDoc )
+        bool check( const ScDocument& rSrcDoc, ScDocument& rCopyDoc )
         {
             // Copy A1:A4 to the undo document.
             for (SCROW i = 0; i <= 4; ++i)
