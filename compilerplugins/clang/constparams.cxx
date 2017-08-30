@@ -418,6 +418,12 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     } else if (isa<CXXConstCastExpr>(parent)) {
         return false;
     } else if (isa<CastExpr>(parent)) { // all other cast expression subtypes
+        if (auto e = dyn_cast<ExplicitCastExpr>(parent)) {
+            if (loplugin::TypeCheck(e->getTypeAsWritten()).Pointer().NonConst())
+            {
+                return false;
+            }
+        }
         return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<MemberExpr>(parent)) {
         return checkIfCanBeConst(parent, parmVarDecl);
