@@ -609,20 +609,19 @@ namespace emfio
 
             if ( pGDIObj )
             {
-                const auto pen = dynamic_cast<WinMtfLineStyle*>(pGDIObj);
-                if (pen)
+                if (const auto pen = dynamic_cast<WinMtfLineStyle*>(pGDIObj))
                     maLineStyle = *pen;
-
-                const auto brush = dynamic_cast<WinMtfFillStyle*>(pGDIObj);
-                if (brush)
+                else if (const auto brush = dynamic_cast<WinMtfFillStyle*>(
+                             pGDIObj))
                 {
                     maFillStyle = *brush;
                     mbFillStyleSelected = true;
                 }
-
-                const auto font = dynamic_cast<WinMtfFontStyle*>(pGDIObj);
-                if (font)
+                else if (const auto font = dynamic_cast<WinMtfFontStyle*>(
+                             pGDIObj))
                     maFont = font->aFont;
+                else
+                    assert(false);
             }
         }
     }
