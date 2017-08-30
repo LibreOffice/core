@@ -1047,6 +1047,13 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
     }
     else
     {
+        if (eDateOrder == DateOrder::Invalid)
+        {
+            // As if any of the cases below can be applied, but only if a
+            // locale dependent date pattern was not matched.
+            return (GetDatePatternNumbers() != nNumericsCnt) || !IsDatePatternNumberOfType(0,'Y');
+        }
+
         nCanForceToIso8601 = 1;
     }
 
