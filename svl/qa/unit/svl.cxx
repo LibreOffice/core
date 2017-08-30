@@ -1097,7 +1097,11 @@ void Test::testIsNumberFormat()
         { "Jan1", false },
         { "Jan1 2000", true },
         { "Jan 1", true },
-        { "Jan 1 2000", true}
+        { "Jan 1 2000", true },
+        { "5-12-14", false },
+        { "005-12-14", true },
+        { "15-10-30", true },
+        { "2015-10-30", true }
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
@@ -1106,7 +1110,7 @@ void Test::testIsNumberFormat()
         double nNumber = 0;
         OUString aString = OUString::createFromAscii(aTests[i].pFormat);
         bool bIsNumber = aFormatter.IsNumberFormat(aString, nIndex, nNumber);
-        CPPUNIT_ASSERT_EQUAL(aTests[i].bIsNumber, bIsNumber);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aTests[i].pFormat, aTests[i].bIsNumber, bIsNumber);
 
     }
 
