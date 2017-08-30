@@ -997,14 +997,26 @@ bool ScTableRefToken::operator==( const FormulaToken& r ) const
     return true;
 }
 
-ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
+ScJumpMatrixToken::ScJumpMatrixToken( std::shared_ptr<ScJumpMatrix> p )
+    : FormulaToken( formula::svJumpMatrix ), mpJumpMatrix( p )
+{}
+
+ScJumpMatrixToken::ScJumpMatrixToken( const ScJumpMatrixToken & p )
+    : FormulaToken( p ), mpJumpMatrix( p.mpJumpMatrix )
+{}
+
+ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const
+{
+    return mpJumpMatrix.get();
+}
+
 bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && pJumpMatrix == r.GetJumpMatrix();
+    return FormulaToken::operator==( r ) && mpJumpMatrix.get() == r.GetJumpMatrix();
 }
+
 ScJumpMatrixToken::~ScJumpMatrixToken()
 {
-    delete pJumpMatrix;
 }
 
 double          ScEmptyCellToken::GetDouble() const     { return 0.0; }

@@ -127,14 +127,8 @@ void UseUniquePtr::CheckForSingleUnconditionalDelete(const CXXDestructorDecl* de
     // something platform-specific
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/hwpfilter/source/htags.h"))
         return;
-    // @TODO there is clearly a bug in the ownership here, the operator= method cannot be right
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/formula/formdata.hxx"))
-        return;
     // passes pointers to member fields
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sd/inc/sdpptwrp.hxx"))
-        return;
-    // @TODO there is clearly a bug in the ownership here, the ScJumpMatrixToken copy constructor cannot be right
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/token.hxx"))
         return;
     // @TODO intrusive linked-lists here, with some trickiness
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/html/parcss1.hxx"))
