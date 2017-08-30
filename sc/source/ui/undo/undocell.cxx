@@ -387,6 +387,7 @@ void ScUndoSetCell::Undo()
 {
     BeginUndo();
     SetValue(maOldValue);
+    MoveCursorToCell();
     pDocShell->PostPaintCell(maPos);
 
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -401,6 +402,7 @@ void ScUndoSetCell::Redo()
 {
     BeginRedo();
     SetValue(maNewValue);
+    MoveCursorToCell();
     pDocShell->PostPaintCell(maPos);
     SetChangeTrack();
     EndRedo();
@@ -466,6 +468,16 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
         break;
         default:
             ;
+    }
+}
+
+void ScUndoSetCell::MoveCursorToCell()
+{
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if ( pViewShell )
+    {
+        pViewShell->SetTabNo( maPos.Tab() );
+        pViewShell->MoveCursorAbs( maPos.Col(), maPos.Row(), SC_FOLLOW_JUMP, false, false );
     }
 }
 
