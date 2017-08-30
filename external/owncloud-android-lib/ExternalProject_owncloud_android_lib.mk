@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,owncloud_android_lib,\
 $(call gb_ExternalProject_get_state_target,owncloud_android_lib,build) :
 	$(call gb_ExternalProject_run,build,\
 	$(ICECREAM_RUN) "$(ANT)" \
-		-q \
+		$(if $(verbose),-v,-q) \
 		-f build.xml \
 		-Dsdk.dir=$(ANDROID_SDK_HOME) -Dtarget=android-22 \
 		release \
