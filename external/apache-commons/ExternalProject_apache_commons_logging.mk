@@ -17,7 +17,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_logging,build) :
 	$(call gb_ExternalProject_run,build,\
 	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
 	$(ICECREAM_RUN) "$(ANT)" \
-		-q \
+		$(if $(verbose),-v,-q) \
 		-f build.xml \
 		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
 		-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
