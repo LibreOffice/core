@@ -194,7 +194,8 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
     // calculate the ones we want to check
     for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         // ignore unused params
-        if (pParmVarDecl->getName().empty())
+        if (pParmVarDecl->getName().empty()
+            || pParmVarDecl->hasAttr<UnusedAttr>())
             continue;
         auto const type = loplugin::TypeCheck(pParmVarDecl->getType());
         if (!type.Pointer() && !type.LvalueReference())
