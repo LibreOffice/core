@@ -34,7 +34,7 @@ namespace svt
     extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeOFileURLControl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
     {
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
-                           WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
+                           WB_DROPDOWN|WB_AUTOHSCROLL;
         VclPtrInstance<OFileURLControl> pListBox(pParent, nWinBits);
         pListBox->EnableAutoSize(true);
         rRet = pListBox;
