@@ -132,6 +132,7 @@ class ScColumnsRange final
         explicit Iterator(std::vector<ScColumn*>::const_iterator colIter) : maColIter(colIter) {}
 
         Iterator& operator++() { maColIter++; return *this;}
+        Iterator& operator--() { maColIter--; return *this;}
 
         bool operator==(Iterator other) const {return maColIter == other.maColIter;}
         bool operator!=(Iterator other) const {return !(*this == other);}
@@ -141,6 +142,8 @@ class ScColumnsRange final
     ScColumnsRange(Iterator nBegin, Iterator nEnd) : maBegin(nBegin), maEnd(nEnd) {}
     const Iterator & begin() { return maBegin; }
     const Iterator & end() { return maEnd; }
+    std::reverse_iterator<Iterator> rbegin() { return std::reverse_iterator<Iterator>(maEnd); }
+    std::reverse_iterator<Iterator> rend() { return std::reverse_iterator<Iterator>(maBegin); }
 private:
     const Iterator maBegin;
     const Iterator maEnd;

@@ -131,6 +131,7 @@
 #include <sortparam.hxx>
 #include "condformatuno.hxx"
 #include "TablePivotCharts.hxx"
+#include "table.hxx"
 
 #include <list>
 #include <memory>
@@ -6932,8 +6933,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         }
 
         SCCOL nCount = 0;
-        SCCOL nCol;
-        for (nCol=0; nCol<=MAXCOL; nCol++)
+        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL))
             if (rDoc.HasColBreak(nCol, nTab) != ScBreakType::NONE)
                 ++nCount;
 
@@ -6941,7 +6941,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         uno::Sequence<sheet::TablePageBreakData> aSeq(nCount);
         sheet::TablePageBreakData* pAry = aSeq.getArray();
         sal_uInt16 nPos = 0;
-        for (nCol=0; nCol<=MAXCOL; nCol++)
+        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL))
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
             if (nBreak != ScBreakType::NONE)
