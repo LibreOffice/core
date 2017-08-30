@@ -10,21 +10,21 @@ index 1ff0aeb26..f48036f2b 100644
 -// On Windows system, functions are exported in a DLL
 +#if defined(PDFIUM_DLLIMPLEMENTATION)
 +#ifdef _WIN32
- #define DLLEXPORT __declspec(dllexport)
--#define STDCALL __stdcall
+ #define FPDF_EXPORT __declspec(dllexport)
+-#define FPDF_CALLCONV __stdcall
  #else
--#define DLLEXPORT
--#define STDCALL
-+#define DLLEXPORT __attribute__ ((visibility("default")))
+-#define FPDF_EXPORT
+-#define FPDF_CALLCONV
++#define FPDF_EXPORT __attribute__ ((visibility("default")))
 +#endif
 +#else
 +#ifdef _WIN32
-+#define DLLEXPORT __declspec(dllimport)
++#define FPDF_EXPORT __declspec(dllimport)
 +#else
-+#define DLLEXPORT __attribute__ ((visibility("default")))
++#define FPDF_EXPORT __attribute__ ((visibility("default")))
  #endif
 +#endif
-+#define STDCALL
++#define FPDF_CALLCONV
  
  // Exported Functions
  #ifdef __cplusplus
