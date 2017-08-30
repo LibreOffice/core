@@ -2322,7 +2322,7 @@ public:
     void                SwapNonEmpty( sc::TableValues& rValues );
     void                finalizeOutlineImport();
 
-    ScColumnsRange      GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
+    SC_DLLPUBLIC ScColumnsRange GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 
 private:
 

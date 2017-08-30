@@ -122,6 +122,7 @@
 #include "drtxtob.hxx"
 #include "transobj.hxx"
 #include "chgtrack.hxx"
+#include "table.hxx"
 
 #include "strings.hrc"
 
@@ -4315,7 +4316,7 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount()
     if (pDocShell)
     {
         const ScDocument& rDoc = pDocShell->GetDocument();
-        for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
+        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL))
             nCount += rDoc.GetNoteCount(nTab, nCol);
     }
     return nCount;

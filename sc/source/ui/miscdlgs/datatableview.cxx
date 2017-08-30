@@ -23,6 +23,7 @@
 #include "viewdata.hxx"
 #include "output.hxx"
 #include "fillinfo.hxx"
+#include "table.hxx"
 
 constexpr double nPPTX = 0.06666;
 constexpr double nPPTY = 0.06666;
@@ -178,7 +179,7 @@ SCCOL findColFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCCOL nStartC
 {
     nPixelPos -= nRowHeaderWidth;
     sal_uInt32 nPixelLength = 0;
-    for (SCCOL nCol = nStartCol; nCol <= MAXCOL; ++nCol)
+    for (SCCOL nCol : pDoc->GetColumnsRange(0, nStartCol, MAXCOL))
     {
         sal_uInt16 nColWidth = pDoc->GetColWidth(nCol, 0, true);
         sal_uInt32 nPixel = ScViewData::ToPixel(nColWidth, nPPTX);

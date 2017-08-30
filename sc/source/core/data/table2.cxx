@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <memory>
 #include "table.hxx"
 #include "patattr.hxx"
@@ -263,18 +264,19 @@ void ScTable::DeleteRow(
 
 bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const
 {
-    bool bTest = true;
-
-    if ( nStartRow==0 && nEndRow==MAXROW && pOutlineTable )
-        bTest = pOutlineTable->TestInsertCol(nSize);
-
     if ( nSize > static_cast<SCSIZE>(MAXCOL) )
-        bTest = false;
+        return false;
 
-    for (SCCOL i=MAXCOL; (i+static_cast<SCCOL>(nSize)>MAXCOL) && bTest; i--)
-        bTest = aCol[i].TestInsertCol(nStartRow, nEndRow);
+    if ( nStartRow==0 && nEndRow==MAXROW && pOutlineTable
+        && ! pOutlineTable->TestInsertCol(nSize) )
+            return false;
 
-    return bTest;
+    auto range = GetColumnsRange( MAXCOL - static_cast<SCCOL>(nSize) + 1, MAXCOL );
+    for (auto it = range.rbegin(); it != range.rend(); ++it )
+        if (! aCol[*it].TestInsertCol(nStartRow, nEndRow))
+            return false;
+
+    return true;
 }
 
 void ScTable::InsertCol(

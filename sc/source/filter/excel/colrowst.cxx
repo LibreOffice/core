@@ -29,6 +29,7 @@
 #include "xistyle.hxx"
 #include "queryparam.hxx"
 #include "excimp8.hxx"
+#include "table.hxx"
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -188,7 +189,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     // column widths ----------------------------------------------------------
 
     maColWidths.build_tree();
-    for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
+    for( SCCOL nCol : rDoc.GetColumnsRange(nScTab, 0, MAXCOL) )
     {
         sal_uInt16 nWidth = mnDefWidth;
         if (GetColFlag(nCol, ExcColRowFlags::Used))
@@ -280,7 +281,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     ScDocument& rDoc = GetDoc();
 
     // hide the columns
-    for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
+    for( SCCOL nCol : rDoc.GetColumnsRange(nScTab, 0, MAXCOL) )
         if (GetColFlag(nCol, ExcColRowFlags::Hidden))
             rDoc.ShowCol( nCol, nScTab, false );
 
