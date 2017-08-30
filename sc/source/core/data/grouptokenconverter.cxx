@@ -102,6 +102,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
     }
 #endif
 
+    const SCROW nLen = mrCell.GetCellGroup()->mnLength;
     formula::FormulaTokenArrayPlainIterator aIter(rCode);
     for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
@@ -110,7 +111,6 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
         // vector reference token.  Note: we only care about relative vs
         // absolute reference state for row directions.
 
-        SCROW nLen = mrCell.GetCellGroup()->mnLength;
         switch (p->GetType())
         {
             case svSingleRef:
