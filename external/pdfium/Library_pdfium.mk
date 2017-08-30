@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pdfsdk_fieldaction \
     UnpackedTarball/pdfium/fpdfsdk/fsdk_filewriteadapter \
     UnpackedTarball/pdfium/fpdfsdk/fpdfannot \
+    UnpackedTarball/pdfium/fpdfsdk/fpdfattachment \
 ))
 
 # fdrm
@@ -95,6 +96,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_pushbutton \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_radiobutton \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textfield \
+    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_button \
+    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_textobject \
 ))
 
 # fpdfapi
@@ -227,6 +230,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_syntax_parser \
     UnpackedTarball/pdfium/core/fpdfapi/parser/fpdf_parser_decode \
     UnpackedTarball/pdfium/core/fpdfapi/parser/fpdf_parser_utility \
+    UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_object_walker \
+    UnpackedTarball/pdfium/core/fpdfapi/parser/cpdf_read_validator \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_charposlist \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_devicebuffer \
     UnpackedTarball/pdfium/core/fpdfapi/render/cpdf_dibsource \
@@ -329,7 +334,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_Context \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_GrdProc \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_GrrdProc \
-    UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_GsidProc \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanDecoder \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable \
@@ -376,13 +380,27 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_content \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_object \
     UnpackedTarball/pdfium/core/fxcrt/xml/cfx_saxcontext \
-))
-
-# fxedit
-$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/fpdfsdk/fxedit/fxet_ap \
-    UnpackedTarball/pdfium/fpdfsdk/fxedit/fxet_edit \
-    UnpackedTarball/pdfium/fpdfsdk/fxedit/fxet_list \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscolorvalue \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscomputedstyle \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscustomproperty \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdatatable \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdeclaration \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssenumvalue \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssexttextbuf \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssnumbervalue \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csspropertyholder \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssrulecollection \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssselector \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssstringvalue \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssstylerule \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssstyleselector \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssstylesheet \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csssyntaxparser \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csstextbuf \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssvalue \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssvaluelist \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssvaluelistparser \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_datetime \
 ))
 
 # fxge
@@ -416,26 +434,27 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitSerifMM \
     UnpackedTarball/pdfium/core/fxge/fontdata/chromefontdata/FoxitSymbol \
     UnpackedTarball/pdfium/core/fxge/freetype/fx_freetype \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_cliprgn \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_facecache \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_folderfontinfo \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_font \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_fontcache \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_fontmapper \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_fontmgr \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_gemodule \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_graphstate \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_graphstatedata \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_pathdata \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_renderdevice \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_substfont \
-    UnpackedTarball/pdfium/core/fxge/ge/cfx_unicodeencoding \
-    UnpackedTarball/pdfium/core/fxge/ge/cttfontdesc \
-    UnpackedTarball/pdfium/core/fxge/ge/fx_ge_fontmap \
-    UnpackedTarball/pdfium/core/fxge/ge/fx_ge_linux \
-    UnpackedTarball/pdfium/core/fxge/ge/fx_ge_text \
     UnpackedTarball/pdfium/core/fxge/ifx_renderdevicedriver \
     UnpackedTarball/pdfium/core/fxge/agg/fx_agg_driver \
+    UnpackedTarball/pdfium/core/fxge/cfx_cliprgn \
+    UnpackedTarball/pdfium/core/fxge/cfx_color \
+    UnpackedTarball/pdfium/core/fxge/cfx_facecache \
+    UnpackedTarball/pdfium/core/fxge/cfx_folderfontinfo \
+    UnpackedTarball/pdfium/core/fxge/cfx_font \
+    UnpackedTarball/pdfium/core/fxge/cfx_fontcache \
+    UnpackedTarball/pdfium/core/fxge/cfx_fontmapper \
+    UnpackedTarball/pdfium/core/fxge/cfx_fontmgr \
+    UnpackedTarball/pdfium/core/fxge/cfx_gemodule \
+    UnpackedTarball/pdfium/core/fxge/cfx_graphstate \
+    UnpackedTarball/pdfium/core/fxge/cfx_graphstatedata \
+    UnpackedTarball/pdfium/core/fxge/cfx_pathdata \
+    UnpackedTarball/pdfium/core/fxge/cfx_renderdevice \
+    UnpackedTarball/pdfium/core/fxge/cfx_substfont \
+    UnpackedTarball/pdfium/core/fxge/cfx_unicodeencoding \
+    UnpackedTarball/pdfium/core/fxge/cttfontdesc \
+    UnpackedTarball/pdfium/core/fxge/fx_ge_fontmap \
+    UnpackedTarball/pdfium/core/fxge/fx_ge_linux \
+    UnpackedTarball/pdfium/core/fxge/fx_ge_text \
 ))
 
 # javascript, build with pdf_enable_v8 disabled.
@@ -443,23 +462,24 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/javascript/JS_Runtime_Stub \
 ))
 
-# pdfwindow
+# pwl
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_color \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_button \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_caret \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_combo_box \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_edit \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_edit_ctrl \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_font_map \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_icon \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_list_box \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_scroll_bar \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_special_button \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_timer \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_timer_handler \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_utils \
-    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_wnd \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_appstream \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_button \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_caret \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_combo_box \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_impl \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_font_map \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_icon \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_box \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_impl \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_scroll_bar \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_special_button \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_timer \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_timer_handler \
+    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_wnd \
 ))
 
 # third_party/bigint
@@ -598,6 +618,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafontmgr \
     UnpackedTarball/pdfium/core/fxge/android/cfx_androidfontinfo \
     UnpackedTarball/pdfium/core/fxge/android/fx_android_imp \
+    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiabufferfont \
+    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafilefont \
+    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiafontdescriptor \
+    UnpackedTarball/pdfium/core/fxge/android/cfpf_skiapathfont \
 ))
 endif
 
