@@ -6557,7 +6557,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
     if( IsTextFrame() || IsSctFrame() )
         aPaintRect = UnionFrame( true );
 
-    if ( aPaintRect.IsOver( rRect ) )
+    if ( (!bOnlyTextBackground || IsTextFrame()) && aPaintRect.IsOver( rRect ) )
     {
         if ( bBack || bPageFrame || !bLowerMode )
         {
@@ -6651,7 +6651,6 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
                     //     background transparency have to be considered
                     //     Set missing 5th parameter to the default value GRFNUM_NO
                     //         - see declaration in /core/inc/frmtool.hxx.
-                        if (IsTextFrame() || !bOnlyTextBackground)
                             ::DrawGraphic(
                                 pItem,
                                 pOut,
@@ -6696,7 +6695,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
                 if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) ||
                      aFrameRect.IsOver( aRect ) )
                     pFrame->PaintBackground( aRect, pPage, rTmpAttrs, bLowMode,
-                                           bLowerBorder );
+                                           bLowerBorder, bOnlyTextBackground );
                 if ( bLowerBorder )
                     pFrame->PaintBorder( aBorderRect, pPage, rTmpAttrs );
             }
