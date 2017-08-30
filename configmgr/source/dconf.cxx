@@ -749,7 +749,7 @@ ReadValue readValue(
 
 void finalize(
     GObjectHolder<DConfClient> const & client, OString const & path,
-    rtl::Reference<Node> & node, int layer)
+    rtl::Reference<Node> const & node, int layer)
 {
     if (!dconf_client_is_writable(client.get(), path.getStr())) {
         node->setFinalized(layer);
