@@ -398,6 +398,20 @@ namespace basegfx
             return aRetval;
         }
 
+        B2DHomMatrix createCoordinateSystemTransform(
+            const B2DPoint& rOrigin,
+            const B2DVector& rX,
+            const B2DVector& rY)
+        {
+            return basegfx::B2DHomMatrix(
+                rX.getX(), rY.getX(), rOrigin.getX(),
+                rX.getY(), rY.getY(), rOrigin.getY());
+        }
+
+        B2DTuple getColumn(const B2DHomMatrix& rMatrix, sal_uInt16 nCol)
+        {
+            return B2DTuple(rMatrix.get(0, nCol), rMatrix.get(1, nCol));
+        }
     } // end of namespace tools
 } // end of namespace basegfx
 

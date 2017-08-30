@@ -41,64 +41,36 @@ using namespace editeng;
 namespace svx {
 namespace frame {
 
-
-namespace {
-
-/** Converts a width in twips to a width in another map unit (specified by fScale). */
-double lclScaleValue( double nValue, double fScale, sal_uInt16 nMaxWidth )
-{
-    return std::min<double>(nValue * fScale, nMaxWidth);
-}
-
-} // namespace
-
-
 // Classes
-
-
-#define SCALEVALUE( value ) lclScaleValue( value, fScale, nMaxWidth )
-
-Style::Style() :
-    meRefMode(REFMODE_CENTERED),
-    mfPatternScale(1.0),
-    mnType(table::BorderLineStyle::SOLID),
-    mpUsingCell(nullptr)
+Style::Style() : maImplStyle(new implStyle())
 {
     Clear();
 }
 
-Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
-    meRefMode(REFMODE_CENTERED),
-    mfPatternScale(1.0),
-    mnType(nType),
-    mpUsingCell(nullptr)
+Style::Style( double nP, double nD, double nS, SvxBorderStyle nType ) : maImplStyle(new implStyle())
 {
+    maImplStyle->mnType = nType;
     Clear();
     Set( nP, nD, nS );
 }
 
-Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-              double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
-    meRefMode(REFMODE_CENTERED),
-    mfPatternScale(1.0),
-    mnType(nType),
-    mpUsingCell(nullptr)
+Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderStyle nType ) : maImplStyle(new implStyle())
 {
+    maImplStyle->mnType = nType;
     Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
 }
 
-Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth) :
-    meRefMode(REFMODE_CENTERED),
-    mfPatternScale(fScale),
-    mpUsingCell(nullptr)
+Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) : maImplStyle(new implStyle())
 {
-    Set( pBorder, fScale, nMaxWidth );
+    maImplStyle->mfPatternScale = fScale;
+    Set( pBorder, fScale );
 }
 
-
-void Style::SetPatternScale( double fScale )
+double Style::GetWidth() const
 {
-    mfPatternScale = fScale;
+    implStyle* pTarget = maImplStyle.get();
+
+    return pTarget->mfPrim + pTarget->mfDist + pTarget->mfSecn;
 }
 
 void Style::Clear()
@@ -115,66 +87,78 @@ void Style::Set( double nP, double nD, double nS )
         >0  0   >0      nP      0       0
         >0  >0  >0      nP      nD      nS
      */
-    mfPrim = rtl::math::round(nP ? nP : nS, 2);
-    mfDist = rtl::math::round((nP && nS) ? nD : 0, 2);
-    mfSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
+    implStyle* pTarget = maImplStyle.get();
+    pTarget->mfPrim = rtl::math::round(nP ? nP : nS, 2);
+    pTarget->mfDist = rtl::math::round((nP && nS) ? nD : 0, 2);
+    pTarget->mfSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
 }
 
 void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS )
 {
-    maColorPrim = rColorPrim;
-    maColorSecn = rColorSecn;
-    maColorGap = rColorGap;
-    mbUseGapColor = bUseGapColor;
+    implStyle* pTarget = maImplStyle.get();
+    pTarget->maColorPrim = rColorPrim;
+    pTarget->maColorSecn = rColorSecn;
+    pTarget->maColorGap = rColorGap;
+    pTarget->mbUseGapColor = bUseGapColor;
     Set( nP, nD, nS );
 }
 
 void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth )
 {
-    maColorPrim = rBorder.GetColorOut();
-    maColorSecn = rBorder.GetColorIn();
-    maColorGap = rBorder.GetColorGap();
-    mbUseGapColor = rBorder.HasGapColor();
+    implStyle* pTarget = maImplStyle.get();
+    pTarget->maColorPrim = rBorder.GetColorOut();
+    pTarget->maColorSecn = rBorder.GetColorIn();
+    pTarget->maColorGap = rBorder.GetColorGap();
+    pTarget->mbUseGapColor = rBorder.HasGapColor();
 
     sal_uInt16 nPrim = rBorder.GetOutWidth();
     sal_uInt16 nDist = rBorder.GetDistance();
     sal_uInt16 nSecn = rBorder.GetInWidth();
 
-    mnType = rBorder.GetBorderLineStyle();
+    pTarget->mnType = rBorder.GetBorderLineStyle();
     if( !nSecn )    // no or single frame border
     {
-        Set( SCALEVALUE( nPrim ), 0, 0 );
+        Set( std::min<double>(nPrim * fScale, nMaxWidth), 0, 0 );
     }
     else
     {
-        Set( SCALEVALUE( nPrim ), SCALEVALUE( nDist ), SCALEVALUE( nSecn ) );
+        Set(std::min<double>(nPrim * fScale, nMaxWidth), std::min<double>(nDist * fScale, nMaxWidth), std::min<double>(nSecn * fScale, nMaxWidth));
         // Enlarge the style if distance is too small due to rounding losses.
-        double nPixWidth = SCALEVALUE( nPrim + nDist + nSecn );
+        double nPixWidth = std::min<double>((nPrim + nDist + nSecn) * fScale, nMaxWidth);
+
         if( nPixWidth > GetWidth() )
-            mfDist = nPixWidth - mfPrim - mfSecn;
+        {
+            pTarget->mfDist = nPixWidth - pTarget->mfPrim - pTarget->mfSecn;
+        }
+
         // Shrink the style if it is too thick for the control.
         while( GetWidth() > nMaxWidth )
         {
             // First decrease space between lines.
-            if (mfDist)
-                --mfDist;
-            // Still too thick? Decrease the line widths.
-            if( GetWidth() > nMaxWidth )
+            if (pTarget->mfDist)
             {
-                if (!rtl::math::approxEqual(mfPrim, 0.0) && rtl::math::approxEqual(mfPrim, mfSecn))
-                {
-                    // Both lines equal - decrease both to keep symmetry.
-                    --mfPrim;
-                    --mfSecn;
-                }
-                else
-                {
-                    // Decrease each line for itself
-                    if (mfPrim)
-                        --mfPrim;
-                    if ((GetWidth() > nMaxWidth) && !rtl::math::approxEqual(mfSecn, 0.0))
-                        --mfSecn;
-                }
+                --(pTarget->mfDist);
+                continue;
+            }
+
+            // Still too thick? Decrease the line widths.
+            if (pTarget->mfPrim != 0.0 && rtl::math::approxEqual(pTarget->mfPrim, pTarget->mfSecn))
+            {
+                // Both lines equal - decrease both to keep symmetry.
+                --(pTarget->mfPrim);
+                --(pTarget->mfSecn);
+                continue;
+            }
+
+            // Decrease each line for itself
+            if (pTarget->mfPrim)
+            {
+                --(pTarget->mfPrim);
+            }
+
+            if ((GetWidth() > nMaxWidth) && pTarget->mfSecn != 0.0)
+            {
+                --(pTarget->mfSecn);
             }
         }
     }
@@ -183,27 +167,35 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
 void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth )
 {
     if( pBorder )
+    {
         Set( *pBorder, fScale, nMaxWidth );
+    }
     else
     {
         Clear();
-        mnType = table::BorderLineStyle::SOLID;
+        maImplStyle->mnType = ::com::sun::star::table::BorderLineStyle::SOLID;
     }
 }
 
 Style& Style::MirrorSelf()
 {
-    if (mfSecn)
-        std::swap( mfPrim, mfSecn );
-    if( meRefMode != REFMODE_CENTERED )
-        meRefMode = (meRefMode == REFMODE_BEGIN) ? REFMODE_END : REFMODE_BEGIN;
+    implStyle* pTarget = maImplStyle.get();
+
+    if (pTarget->mfSecn)
+    {
+        std::swap( pTarget->mfPrim, pTarget->mfSecn );
+    }
+
+    if( pTarget->meRefMode != RefMode::REFMODE_CENTERED )
+    {
+        pTarget->meRefMode = (pTarget->meRefMode == RefMode::REFMODE_BEGIN) ? RefMode::REFMODE_END : RefMode::REFMODE_BEGIN;
+    }
+
     return *this;
 }
 
-Style Style::Mirror() const
-{
-    return Style( *this ).MirrorSelf();
-}
+const Cell* Style::GetUsingCell() const { return maImplStyle->mpUsingCell; }
+void Style::SetUsingCell(const Cell* pCell) { maImplStyle->mpUsingCell = pCell; }
 
 bool operator==( const Style& rL, const Style& rR )
 {
@@ -232,8 +224,6 @@ bool operator<( const Style& rL, const Style& rR )
     // seem to be equal
     return false;
 }
-
-#undef SCALEVALUE
 
 bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
@@ -510,7 +500,7 @@ void CreateBorderPrimitives(
         const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
         const double fLength(rX.getLength());
 
-        // do not forget RefMode offset, primitive will assume RefMode::Centered
+        // do not forget RefMode offset, primitive will assume RefMode::REFMODE_CENTERED
         basegfx::B2DVector aRefModeOffset;
 
         if (REFMODE_CENTERED != rBorder.GetRefMode())

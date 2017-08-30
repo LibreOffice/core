@@ -131,6 +131,15 @@ namespace basegfx
             const B2DRange& rSourceRange,
             const B2DRange& rTargetRange);
 
+        /// create based on given CoordinateSystem which is defined by origin and x/yaxis
+        BASEGFX_DLLPUBLIC B2DHomMatrix createCoordinateSystemTransform(
+            const B2DPoint& rOrigin,
+            const B2DVector& rX,
+            const B2DVector& rY);
+
+        /// get column vector from B2dHomMatrix, e.g. to extract coordinate system origin and x/yaxis
+        BASEGFX_DLLPUBLIC B2DTuple getColumn(const B2DHomMatrix& rMatrix, sal_uInt16 nCol);
+
     } // end of namespace tools
 } // end of namespace basegfx
 
