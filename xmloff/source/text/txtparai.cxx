@@ -427,7 +427,7 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
 
 XMLImpHyperlinkContext_Impl::~XMLImpHyperlinkContext_Impl()
 {
-    if( mpHint != nullptr )
+    if (mpHint)
         mpHint->SetEnd( GetImport().GetTextImport()
                             ->GetCursorAsRange()->getStart() );
 }
@@ -441,7 +441,8 @@ SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
     {
         XMLEventsImportContext* pCtxt = new XMLEventsImportContext(
             GetImport(), nPrefix, rLocalName);
-        mpHint->SetEventsContext(pCtxt);
+        if (mpHint)
+            mpHint->SetEventsContext(pCtxt);
         return pCtxt;
     }
     else
