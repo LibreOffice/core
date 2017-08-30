@@ -2143,7 +2143,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     m_rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFormatField(aPostIt));
     m_xCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
     // If this is a range, make sure that it ends after the just inserted character, not before it.
-    m_xReffedStck->MoveAttrs(*aEnd.GetPoint());
+    m_xReffedStck->MoveAttrs(*aEnd.GetPoint(), SwFltControlStack::MoveAttrsMode::POSTIT_INSERTED);
 
     return 0;
 }

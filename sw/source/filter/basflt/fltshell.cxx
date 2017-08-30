@@ -103,6 +103,7 @@ SwFltStackEntry::SwFltStackEntry(const SwPosition& rStartPos, SfxPoolItem* pHt)
     : m_aMkPos(rStartPos)
     , m_aPtPos(rStartPos)
     , pAttr( pHt )            // store a copy of the attribute
+    , m_isAnnotationOnEnd(false)
     , mnStartCP(-1)
     , mnEndCP(-1)
     , bIsParaEnd(false)
@@ -206,7 +207,7 @@ SwFltControlStack::~SwFltControlStack()
 // After setting the attribute in the doc, MoveAttrs() needs to be
 // called in order to push all attribute positions to the right in the
 // same paragraph further out by one character.
-void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
+void SwFltControlStack::MoveAttrs(const SwPosition& rPos, MoveAttrsMode eMode)
 {
     size_t nCnt = m_Entries.size();
     sal_uLong nPosNd = rPos.nNode.GetIndex();
@@ -230,10 +231,22 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
             (rEntry.m_aPtPos.m_nContent >= nPosCt)
            )
         {
-            rEntry.m_aPtPos.m_nContent++;
-            OSL_ENSURE( rEntry.m_aPtPos.m_nContent
-                <= pDoc->GetNodes()[nPosNd]->GetContentNode()->Len(),
-                    "Attribute ends after end of line" );
+            if (    !rEntry.m_isAnnotationOnEnd
+                ||  rEntry.m_aPtPos.m_nContent > nPosCt)
+            {
+                assert(!(rEntry.m_isAnnotationOnEnd && rEntry.m_aPtPos.m_nContent > nPosCt));
+                if (    eMode == MoveAttrsMode::POSTIT_INSERTED
+                    &&  rEntry.m_aPtPos.m_nContent == nPosCt
+                    &&  rEntry.pAttr->Which() == RES_FLTR_ANNOTATIONMARK)
+                {
+                    rEntry.m_isAnnotationOnEnd = true;
+                    eMode = MoveAttrsMode::DEFAULT; // only set 1 flag
+                }
+                rEntry.m_aPtPos.m_nContent++;
+                OSL_ENSURE( rEntry.m_aPtPos.m_nContent
+                    <= pDoc->GetNodes()[nPosNd]->GetContentNode()->Len(),
+                        "Attribute ends after end of line" );
+            }
         }
     }
 }
@@ -646,6 +659,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         dynamic_cast<SwPostItField const*>(pField->GetFormatField().GetField()));
                     if (pPostIt)
                     {
+                        assert(pPostIt->GetName().isEmpty());
                         pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
                     }
                     else

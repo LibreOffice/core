@@ -104,6 +104,7 @@ public:
     bool bOld;          // to mark Attributes *before* skipping field results
     bool bOpen;     //Entry open, awaiting being closed
     bool bConsumedByField;
+    bool m_isAnnotationOnEnd; ///< annotation already moved onto its end pos.
 
     sal_Int32 mnStartCP;
     sal_Int32 mnEndCP;
@@ -155,7 +156,8 @@ protected:
     bool HasSdOD();
 
 public:
-    void MoveAttrs( const SwPosition&  rPos );
+    enum class MoveAttrsMode { DEFAULT, POSTIT_INSERTED };
+    void MoveAttrs(const SwPosition& rPos, MoveAttrsMode = MoveAttrsMode::DEFAULT);
     enum Flags
     {
         HYPO,
