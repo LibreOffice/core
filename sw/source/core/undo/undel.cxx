@@ -210,7 +210,7 @@ SwUndoDelete::SwUndoDelete(
     }
 
     // Move now also the PaM. The SPoint is at the beginning of a SSelection.
-    if( pEnd == rPam.GetPoint() && ( !bFullPara || pSttTextNd || pEndTextNd ) )
+    if( pEnd == rPam.GetPoint() && ( !bFullPara || pSttTextNd || pEndTextNd ) && !m_bRedlineDelete )
         rPam.Exchange();
 
     if( !pSttTextNd && !pEndTextNd )
