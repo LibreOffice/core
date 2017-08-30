@@ -46,6 +46,8 @@
 #include <dputil.hxx>
 #include "validat.hxx"
 #include <attrib.hxx>
+#include "globstr.hrc"
+#include "global.hxx"
 
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -207,6 +209,7 @@ public:
 
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
+    void testTdf112106();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -310,6 +313,7 @@ public:
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
 
+    CPPUNIT_TEST(testTdf112106);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4254,6 +4258,35 @@ void ScExportTest::testPivotTableRowHeaderXLS()
         const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
         CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
     }
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf112106()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf112106.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check data layout dim
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    // Check that we have an existing data layout dimension
+    const ScDPSaveDimension* pDim = pSaveData->GetExistingDataLayoutDimension();
+    CPPUNIT_ASSERT(pDim);
+    const OUString* pLayoutName = pDim->GetLayoutName();
+    CPPUNIT_ASSERT(pLayoutName);
+    CPPUNIT_ASSERT_EQUAL(ScGlobal::GetRscString(STR_PIVOT_DATA), (*pLayoutName));
 
     xDocSh->DoClose();
 }
