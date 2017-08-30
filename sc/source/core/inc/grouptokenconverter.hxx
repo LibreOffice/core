@@ -22,7 +22,7 @@ class SC_DLLPUBLIC ScGroupTokenConverter
     ScTokenArray& mrGroupTokens;
     ScDocument& mrDoc;
     std::shared_ptr<sc::FormulaGroupContext> mxFormulaGroupContext;
-    ScFormulaCell& mrCell;
+    const ScFormulaCell& mrCell;
     const ScAddress& mrPos;
 
     bool isSelfReferenceRelative(const ScAddress& rRefPos, SCROW nRelRow);
