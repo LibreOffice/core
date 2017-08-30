@@ -19,6 +19,7 @@
 
 #include <mtftools.hxx>
 
+#include <cassert>
 #include <memory>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
