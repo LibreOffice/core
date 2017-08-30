@@ -1070,12 +1070,12 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             rRange.aStart.SetCol( 0 );
             if (nWidth <= nStartX)
             {
-                for (const ScColumn* pCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL))
+                for (SCCOL nCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL))
                 {
-                    nWidth += pDoc->GetColWidth(pCol->GetCol(),nTab);
+                    nWidth += pDoc->GetColWidth(nCol,nTab);
                     if (nWidth > nStartX)
                     {
-                        rRange.aStart.SetCol( pCol->GetCol() );
+                        rRange.aStart.SetCol( nCol );
                         break;
                     }
                 }
@@ -1085,12 +1085,12 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             rRange.aEnd.SetCol( 0 );
             if (nWidth <= nEndX)
             {
-                for (const ScColumn* pCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL)) //TODO: start at Start
+                for (SCCOL nCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL)) //TODO: start at Start
                 {
-                    nWidth += pDoc->GetColWidth(pCol->GetCol(),nTab);
+                    nWidth += pDoc->GetColWidth(nCol,nTab);
                     if (nWidth > nEndX)
                     {
-                        rRange.aEnd.SetCol( pCol->GetCol() );
+                        rRange.aEnd.SetCol( nCol );
                         break;
                     }
                 }
