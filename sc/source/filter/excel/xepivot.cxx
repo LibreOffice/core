@@ -1305,7 +1305,7 @@ void XclExpPivotTable::SetPropertiesFromDP( const ScDPSaveData& rSaveData )
     mbFilterBtn = rSaveData.GetFilterButton();
     const ScDPSaveDimension* pDim = rSaveData.GetExistingDataLayoutDimension();
     if (!pDim)
-        return;
+        maPTInfo.maDataName = ScGlobal::GetRscString(STR_PIVOT_DATA);
 
     const OUString* pLayoutName = pDim->GetLayoutName();
     if (pLayoutName)
