@@ -32,6 +32,7 @@
 #include "scerrors.hxx"
 #include "scitems.hxx"
 #include "stringutil.hxx"
+#include "table.hxx"
 #include <memory>
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
@@ -686,7 +687,7 @@ void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_u
 
 void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
-    for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
+    for( SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL) )
     {
         if( mvCols[ nCol ] )
             mvCols[ nCol ]->Apply( rDoc, nCol, nTab );
