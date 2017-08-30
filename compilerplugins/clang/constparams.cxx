@@ -187,8 +187,6 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "egiGraphicExport"
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
-            || name == "QueueCallbackFunction"
-                // apple_remote/source/HIDRemoteControlDevice.m
             )
                 return true;
     }
@@ -419,8 +417,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return false;
     } else if (isa<CastExpr>(parent)) { // all other cast expression subtypes
         if (auto e = dyn_cast<ExplicitCastExpr>(parent)) {
-            if (loplugin::TypeCheck(e->getTypeAsWritten()).Pointer().NonConst())
-            {
+            loplugin::TypeCheck tc(e->getTypeAsWritten());
+            if (tc.Pointer().NonConst() || tc.Void()) {
                 return false;
             }
         }
