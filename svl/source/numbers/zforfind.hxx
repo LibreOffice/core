@@ -412,6 +412,11 @@ private:
         @see nMayBeMonthDate
      */
     bool MayBeMonthDate();
+
+    /** Whether input is acceptable as ISO 8601 date format in the current
+        NfEvalDateFormat setting.
+     */
+    bool IsAcceptableIso8601( const SvNumberformat* pFormat );
 };
 
 #endif // INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX

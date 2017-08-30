@@ -1074,6 +1074,24 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
 }
 
 
+bool ImpSvNumberInputScan::IsAcceptableIso8601( const SvNumberformat* pFormat )
+{
+    if (pFormat && (pFormat->GetType() & css::util::NumberFormat::DATE))
+    {
+        switch (pFormatter->GetEvalDateFormat())
+        {
+            case NF_EVALDATEFORMAT_INTL:
+                return CanForceToIso8601( GetDateOrder());
+            case NF_EVALDATEFORMAT_FORMAT:
+                return CanForceToIso8601( pFormat->GetDateOrder());
+            default:
+                return CanForceToIso8601( GetDateOrder()) || CanForceToIso8601( pFormat->GetDateOrder());
+        }
+    }
+    return CanForceToIso8601( GetDateOrder());
+}
+
+
 bool ImpSvNumberInputScan::MayBeMonthDate()
 {
     if (nMayBeMonthDate == 0)
@@ -3631,7 +3649,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                         // not. The count of numbers in pattern must match the
                         // count of numbers in input.
                         res = (GetDatePatternNumbers() == nNumericsCnt)
-                            || MayBeIso8601() || nMatchedAllStrings;
+                            || IsAcceptableIso8601( pFormat) || nMatchedAllStrings;
                     }
                 }
                 break;
