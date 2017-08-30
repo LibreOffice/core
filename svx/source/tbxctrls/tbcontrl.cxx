@@ -1312,7 +1312,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
 
     mpColorSet->SetAccessibleName( GetText() );
 
-    mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
+    mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER );
     mpPaletteListBox->SetSelectHdl( LINK( this, SvxColorWindow, SelectPaletteHdl ) );
     mpPaletteListBox->AdaptDropDownLineCountToMaximum();
     std::vector<OUString> aPaletteList = mrPaletteManager.GetPaletteList();
