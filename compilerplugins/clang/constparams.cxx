@@ -40,6 +40,7 @@ public:
                         compiler.getSourceManager().getMainFileID())->getName() );
         normalizeDotDotInFilePath(fn);
         if (startswith(fn, SRCDIR "/sal/")
+            || fn == SRCDIR "/jurt/source/pipe/staticsalhack.cxx"
             || startswith(fn, SRCDIR "/bridges/")
             || startswith(fn, SRCDIR "/binaryurp/")
             || startswith(fn, SRCDIR "/stoc/")
