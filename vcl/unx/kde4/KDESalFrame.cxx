@@ -74,7 +74,8 @@ static Color toColor( const QColor &rColor )
 
 /** Helper function to read untranslated text entry from KConfig configuration repository.
 */
-static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
+static OUString readEntryUntranslated(
+        KConfigGroup const*const pGroup, char const*const pKey)
 {
     return OUString::createFromAscii( static_cast<const char *>(pGroup->readEntryUntranslated( pKey ).toAscii()) );
 }
