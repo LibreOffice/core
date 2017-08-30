@@ -325,11 +325,16 @@ sal_uInt16 XclRoot::GetBaseYear() const
     return (GetNullDate().GetYear() == 1904) ? 1904 : 1900;
 }
 
+static const DateTime theOurCompatNullDate( Date( 30, 12, 1899 ));
+static const DateTime theExcelCutOverDate( Date( 1, 3, 1900 ));
+
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
     double fValue = rDateTime - GetNullDate();
     // adjust dates before 1900-03-01 to get correct time values in the range [0.0,1.0)
-    if( rDateTime < DateTime( Date( 1, 3, 1900 ) ) )
+    /* XXX: this is only used when reading BIFF, otherwise we'd have to check
+     * for dateCompatibility==true as mentioned below. */
+    if( rDateTime < theExcelCutOverDate && GetNullDate() == theOurCompatNullDate )
         fValue -= 1.0;
     return fValue;
 }
@@ -338,7 +343,11 @@ DateTime XclRoot::GetDateTimeFromDouble( double fValue ) const
 {
     DateTime aDateTime = GetNullDate() + fValue;
     // adjust dates before 1900-03-01 to get correct time values
-    if( aDateTime < DateTime( Date( 1, 3, 1900 ) ) )
+    /* FIXME: correction should only be done when writing BIFF or OOXML
+     * transitional with dateCompatibility==true (or absent for default true),
+     * but not if strict ISO/IEC 29500 which does not have the Excel error
+     * compatibility and the null date is the same 1899-12-30 as ours. */
+    if( aDateTime < theExcelCutOverDate && GetNullDate() == theOurCompatNullDate )
         aDateTime.AddDays(1);
     return aDateTime;
 }
