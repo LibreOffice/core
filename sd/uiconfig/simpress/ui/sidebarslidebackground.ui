@@ -99,7 +99,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">9</property>
+            <property name="top_attach">10</property>
           </packing>
         </child>
         <child>
@@ -110,7 +110,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">7</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
@@ -122,7 +122,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
@@ -175,7 +175,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">8</property>
+            <property name="top_attach">9</property>
           </packing>
         </child>
         <child>
@@ -237,111 +237,48 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">10</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labeltop">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes" context="sidebarslidebackground|labeltop">Top: </property>
-            <property name="mnemonic_widget">top:0.00cm</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">13</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="top:0.00cm">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">•</property>
-            <property name="digits">2</property>
-            <property name="adjustment">adjustment1</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">13</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelbottom">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes" context="sidebarslidebackground|labelbottom">Bottom: </property>
-            <property name="mnemonic_widget">bottom:0.00cm</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">14</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="bottom:0.00cm">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">•</property>
-            <property name="digits">2</property>
-            <property name="adjustment">adjustment1</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">14</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelleft">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes" context="sidebarslidebackground|labelleft">Left: </property>
-            <property name="mnemonic_widget">left:0.00cm</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
             <property name="top_attach">11</property>
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="left:0.00cm">
+          <object class="GtkComboBoxText" id="marginLB">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">•</property>
-            <property name="digits">2</property>
-            <property name="adjustment">adjustment1</property>
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">None</item>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">Narrow</item>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">Moderate</item>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">Normal 0.75"</item>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">Normal 1"</item>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">Normal 1.25"</item>
+              <item translatable="yes" context="sidebarslidebackground|marginLB">Wide</item>
+            </items>
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">11</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="labelright">
+          <object class="GtkLabel" id="labelmargin">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes" context="sidebarslidebackground|labelright">Right: </property>
-            <property name="mnemonic_widget">right:0.00cm</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|labelmargin">Margin: </property>
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">12</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
-          <object class="GtkSpinButton" id="right:0.00cm">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">•</property>
-            <property name="digits">2</property>
-            <property name="adjustment">adjustment1</property>
+          <object class="GtkLabel" id="customlabel">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="sidebarslidebackground|customlabel">Custom</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">12</property>
+            <property name="top_attach">16</property>
           </packing>
         </child>
         <child>
