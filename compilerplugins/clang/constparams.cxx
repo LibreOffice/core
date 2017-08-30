@@ -186,6 +186,8 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "egiGraphicExport"
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
+            || name == "QueueCallbackFunction"
+                // apple_remote/source/HIDRemoteControlDevice.m
             )
                 return true;
     }
@@ -388,6 +390,24 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                     return false;
                 if (callExpr->getArg(i) == stmt) {
                     return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
+                }
+            }
+        }
+        return false; // TODO ????
+    } else if (auto callExpr = dyn_cast<ObjCMessageExpr>(parent)) {
+        if (callExpr->getInstanceReceiver() == stmt) {
+            return true;
+        }
+        if (auto const method = callExpr->getMethodDecl()) {
+            // TODO could do better
+            if (method->isVariadic()) {
+                return false;
+            }
+            assert(method->param_size() == callExpr->getNumArgs());
+            for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
+                if (callExpr->getArg(i) == stmt) {
+                    return isPointerOrReferenceToConst(
+                        method->param_begin()[i]->getType());
                 }
             }
         }
