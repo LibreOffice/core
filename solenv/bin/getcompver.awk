@@ -40,8 +40,13 @@ BEGIN {
 /java version/ || /openjdk version/ {
     compiler_matched = 1
     # match on the format of the java versions ( d[d].d[d].d[d] )
-    x = match( $0, /[0-9]*\.[0-9]*\.[0-9]*/ )
-    CCversion = substr( $0, RSTART, RLENGTH)
+    if (match($0, /[0-9]+\.[0-9]+\.[0-9]+/)) {
+        CCversion = substr($0, RSTART, RLENGTH)
+    } else if (match($0, /[0-9]+\.[0-9]+/)) {
+        CCversion = substr($0, RSTART, RLENGTH) "."
+    } else if (match($0, /[0-9]+/)) {
+        CCversion = substr($0, RSTART, RLENGTH) ".."
+    }
 }
 /^[0-9]*[.][0-9]*\r*$/ {
     if ( compiler_matched == 0 ) {
