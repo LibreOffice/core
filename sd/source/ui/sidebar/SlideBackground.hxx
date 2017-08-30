@@ -93,11 +93,9 @@ private:
     VclPtr<Button> mpCloseMaster;
     VclPtr<Button> mpEditMaster;
     VclPtr<FixedText> mpMasterLabel;
-    VclPtr<MetricField> m_pLeftMarginEdit;
-    VclPtr<MetricField> m_pRightMarginEdit;
-    VclPtr<MetricField> m_pTopMarginEdit;
-    VclPtr<MetricField> m_pBottomMarginEdit;
+    VclPtr<ListBox> mpMarginSelectBox;
     VclPtr<VclVBox> m_pContainer;
+    VclPtr<FixedText> mpCustomEntry;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
@@ -129,11 +127,14 @@ private:
     vcl::EnumContext maImpressOtherContext;
     vcl::EnumContext maImpressMasterContext;
     bool         mbTitle;
+    std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
+    std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
     FieldUnit meFieldUnit;
     long m_nPageLeftMargin;
     long m_nPageRightMargin;
     long m_nPageTopMargin;
     long m_nPageBottomMargin;
+    OUString maCustomEntry;
 
     SfxBindings* mpBindings;
 
@@ -149,11 +150,11 @@ private:
     DECL_LINK(DspObjects, Button*, void);
     DECL_LINK(CloseMasterHdl, Button*, void);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
-    DECL_LINK( ModifyLRMarginHdl, Edit&, void );
-    DECL_LINK( ModifyULMarginHdl, Edit&, void );
+    DECL_LINK( ModifyMarginHdl, ListBox&, void );
 
     void Initialize();
     void Update();
+    void UpdateMarginBox();
     void SetPanelTitle(const OUString& rTitle);
 
     Color GetColorSetOrDefault();
@@ -164,9 +165,10 @@ private:
     bool IsImpress();
     void addListener();
     void removeListener();
+    void ExecuteMarginLRChange(const long mnPageLeftMargin, const long mnPageRightMargin);
+    void ExecuteMarginULChange(const long mnPageTopMargin, const long mnPageBottomMargin);
     void populateMasterSlideDropdown();
     void updateMasterSlideSelection();
-    void SetMetricFieldMaxValues(const Size& rPageSize);
 };
 
 }}
