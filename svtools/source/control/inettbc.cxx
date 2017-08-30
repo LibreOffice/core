@@ -814,7 +814,7 @@ void SvtURLBox::TryAutoComplete()
 
 
 SvtURLBox::SvtURLBox( vcl::Window* pParent, INetProtocol eSmart, bool bSetDefaultHelpID )
-    :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOSIZE | WB_AUTOHSCROLL ),
+    :   ComboBox( pParent , WB_DROPDOWN | WB_AUTOHSCROLL ),
         eSmartProtocol( eSmart ),
         bAutoCompleteMode( false ),
         bOnlyDirectories( false ),
@@ -847,7 +847,7 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvtURLBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
-                       WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
+                       WB_DROPDOWN|WB_AUTOHSCROLL;
     VclPtrInstance<SvtURLBox> pListBox(pParent, nWinBits, INetProtocol::NotValid, false);
     pListBox->EnableAutoSize(true);
     rRet = pListBox;
@@ -867,7 +867,7 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
     GetSubEdit()->SetAutocompleteHdl(LINK(this, SvtURLBox, AutoCompleteHdl_Impl));
     UpdatePicklistForSmartProtocol_Impl();
 
-    EnableAutoSize(GetStyle() & WB_AUTOSIZE);
+    EnableAutoSize(true);
 }
 
 SvtURLBox::~SvtURLBox()
