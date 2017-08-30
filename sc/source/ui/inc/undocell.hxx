@@ -158,6 +158,7 @@ public:
 private:
     void SetChangeTrack();
     void SetValue( const ScCellValue& rVal );
+    void MoveCursorToCell();
 
 private:
     ScAddress maPos;
