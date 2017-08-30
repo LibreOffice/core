@@ -28,6 +28,7 @@
 #include "SlideSorterViewShell.hxx"
 #include "drawdoc.hxx"
 #include "filedlg.hxx"
+#include "PageMarginUtils.hxx"
 #include "strings.hrc"
 #include "DocumentHelper.hxx"
 #include "MasterPagesSelector.hxx"
@@ -141,11 +142,14 @@ SlideBackground::SlideBackground(
     maImpressMasterContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterPage),
     maImpressHandoutContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::HandoutPage),
     mbTitle(false),
+    mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
+    mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
     meFieldUnit(lcl_GetFieldUnit()),
     m_nPageLeftMargin(0),
     m_nPageRightMargin(0),
     m_nPageTopMargin(0),
     m_nPageBottomMargin(0),
+    maCustomEntry(),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
@@ -165,10 +169,9 @@ SlideBackground::SlideBackground(
     get(mpCloseMaster, "closemasterslide");
     get(mpEditMaster, "masterslidebutton");
     get(mpMasterLabel, "masterlabel");
-    get(m_pLeftMarginEdit, "left");
-    get(m_pRightMarginEdit, "right");
-    get(m_pTopMarginEdit, "top");
-    get(m_pBottomMarginEdit, "bottom");
+    get(mpMarginSelectBox, "marginLB");
+
+    maCustomEntry = get<FixedText>("customlabel")->GetText();
 
     SfxViewFrame* pCurrent = SfxViewFrame::Current();
     if (pCurrent)
@@ -181,10 +184,6 @@ SlideBackground::SlideBackground(
             m_aPageSize = pSize->GetSize();
         }
     }
-    SetFieldUnit( *m_pTopMarginEdit, meFieldUnit );
-    SetFieldUnit( *m_pBottomMarginEdit, meFieldUnit );
-    SetFieldUnit( *m_pLeftMarginEdit, meFieldUnit );
-    SetFieldUnit( *m_pRightMarginEdit, meFieldUnit );
     addListener();
     Initialize();
 }
@@ -238,12 +237,10 @@ void SlideBackground::Initialize()
     mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
 
     //margins
-    m_pLeftMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyLRMarginHdl));
-    m_pRightMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyLRMarginHdl));
-    m_pTopMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyULMarginHdl));
-    m_pBottomMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyULMarginHdl));
+    mpMarginSelectBox->SetSelectHdl(LINK(this, SlideBackground,ModifyMarginHdl));
 
     Update();
+    UpdateMarginBox();
 }
 
 void SlideBackground::HandleContextChange(
@@ -367,6 +364,56 @@ void SlideBackground::Update()
         break;
         default:
             break;
+    }
+}
+
+void SlideBackground::UpdateMarginBox()
+{
+    m_nPageLeftMargin = mpPageLRMarginItem->GetLeft();
+    m_nPageRightMargin = mpPageLRMarginItem->GetRight();
+    m_nPageTopMargin = mpPageULMarginItem->GetUpper();
+    m_nPageBottomMargin = mpPageULMarginItem->GetLower();
+
+    if( IsNone(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(0);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else if( IsNarrow(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(1);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else if( IsModerate(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(2);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else if( IsNormal075(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(3);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else if( IsNormal100(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(4);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else if( IsNormal125(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(5);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else if( IsWide(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    {
+        mpMarginSelectBox->SelectEntryPos(6);
+        mpMarginSelectBox->RemoveEntry(maCustomEntry);
+    }
+    else
+    {
+        if(mpMarginSelectBox->GetEntryPos(maCustomEntry) == LISTBOX_ENTRY_NOTFOUND)
+            mpMarginSelectBox->InsertEntry(maCustomEntry);
+        mpMarginSelectBox->SelectEntry(maCustomEntry);
     }
 }
 
@@ -546,15 +593,13 @@ void SlideBackground::dispose()
     mpFillStyle.clear();
     mpFillLB.clear();
     mpInsertImage.clear();
+    mpMarginSelectBox.disposeAndClear();
     mpDspMasterBackground.clear();
     mpDspMasterObjects.clear();
     mpMasterLabel.clear();
     mpEditMaster.clear();
     mpCloseMaster.clear();
-    m_pLeftMarginEdit.clear();
-    m_pRightMarginEdit.clear();
-    m_pTopMarginEdit.clear();
-    m_pBottomMarginEdit.clear();
+
     m_pContainer.clear();
 
     maPaperSizeController.dispose();
@@ -576,7 +621,23 @@ void SlideBackground::dispose()
     mpColorItem.reset();
     mpHatchItem.reset();
     mpBitmapItem.reset();
+    mpPageLRMarginItem.reset();
+    mpPageULMarginItem.reset();
     PanelLayout::dispose();
+}
+
+void SlideBackground::ExecuteMarginLRChange(const long mnPageLeftMargin, const long mnPageRightMargin)
+{
+    mpPageLRMarginItem->SetLeft(mnPageLeftMargin);
+    mpPageLRMarginItem->SetRight(mnPageRightMargin);
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() } );
+}
+
+void SlideBackground::ExecuteMarginULChange(const long mnPageTopMargin, const long mnPageBottomMargin)
+{
+    mpPageULMarginItem->SetUpper(mnPageTopMargin);
+    mpPageULMarginItem->SetLower(mnPageBottomMargin);
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { mpPageULMarginItem.get() } );
 }
 
 Color SlideBackground::GetColorSetOrDefault()
@@ -789,12 +850,8 @@ void SlideBackground::NotifyItemUpdate(
                 pLRItem = dynamic_cast<const SvxLongLRSpaceItem*>(pState);
             if (pLRItem)
             {
-                m_nPageLeftMargin = pLRItem->GetLeft();
-                m_nPageRightMargin = pLRItem->GetRight();
-                SetFieldUnit(*m_pLeftMarginEdit, meFieldUnit, true);
-                SetMetricValue(*m_pLeftMarginEdit.get(), m_nPageLeftMargin, meUnit);
-                SetFieldUnit(*m_pRightMarginEdit, meFieldUnit, true);
-                SetMetricValue(*m_pRightMarginEdit.get(), m_nPageRightMargin, meUnit);
+                mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                UpdateMarginBox();
             }
         }
         break;
@@ -806,12 +863,8 @@ void SlideBackground::NotifyItemUpdate(
                 pULItem = dynamic_cast<const SvxLongULSpaceItem*>(pState);
             if (pULItem)
             {
-                m_nPageTopMargin = pULItem->GetUpper();
-                m_nPageBottomMargin = pULItem->GetLower();
-                SetFieldUnit(*m_pTopMarginEdit, meFieldUnit, true);
-                SetMetricValue(*m_pTopMarginEdit.get(), m_nPageTopMargin, meUnit);
-                SetFieldUnit(*m_pBottomMarginEdit, meFieldUnit, true);
-                SetMetricValue(*m_pBottomMarginEdit.get(), m_nPageBottomMargin, meUnit);
+                mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                UpdateMarginBox();
             }
         }
         break;
@@ -846,33 +899,6 @@ void SlideBackground::NotifyItemUpdate(
         default:
             break;
     }
-}
-
-void SlideBackground::SetMetricFieldMaxValues( const Size& rPageSize )
-{
-    const long nML = m_pLeftMarginEdit->Denormalize( m_pLeftMarginEdit->GetValue( FUNIT_TWIP ) );
-    const long nMR = m_pRightMarginEdit->Denormalize( m_pRightMarginEdit->GetValue( FUNIT_TWIP ) );
-    const long nMT = m_pTopMarginEdit->Denormalize( m_pTopMarginEdit->GetValue( FUNIT_TWIP ) );
-    const long nMB = m_pBottomMarginEdit->Denormalize( m_pBottomMarginEdit->GetValue( FUNIT_TWIP ) );
-
-    const long nPH  = LogicToLogic( rPageSize.Height(), meUnit, MapUnit::MapTwip );
-    const long nPW  = LogicToLogic( rPageSize.Width(), meUnit, MapUnit::MapTwip );
-
-    // Left
-    long nMax = nPW - nMR - MINBODY;
-    m_pLeftMarginEdit->SetMax( m_pLeftMarginEdit->Normalize( nMax ), FUNIT_TWIP );
-
-    // Right
-    nMax = nPW - nML - MINBODY;
-    m_pRightMarginEdit->SetMax( m_pRightMarginEdit->Normalize( nMax ), FUNIT_TWIP );
-
-    //Top
-    nMax = nPH - nMB - MINBODY;
-    m_pTopMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FUNIT_TWIP );
-
-    //Bottom
-    nMax = nPH - nMT -  MINBODY;
-    m_pBottomMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FUNIT_TWIP );
 }
 
 IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
@@ -1055,34 +1081,42 @@ IMPL_LINK_NOARG(SlideBackground, DspObjects, Button*, void)
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_OBJECTS, SfxCallMode::RECORD, { &aBoolItem, &aBoolItem });
 }
 
-IMPL_LINK_NOARG( SlideBackground, ModifyLRMarginHdl, Edit&, void )
+IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, ListBox&, void )
 {
-    m_nPageLeftMargin = GetCoreValue( *m_pLeftMarginEdit.get(), meUnit );
-    m_nPageRightMargin = GetCoreValue( *m_pRightMarginEdit.get(), meUnit );
-    if ( SfxViewFrame::Current() )
+    bool bApplyNewPageMargins = true;
+    switch ( mpMarginSelectBox->GetSelectedEntryPos() )
     {
-        std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) );
-        pPageLRMarginItem->SetLeft( m_nPageLeftMargin );
-        pPageLRMarginItem->SetRight( m_nPageRightMargin );
-        GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { pPageLRMarginItem.get() } );
-        pPageLRMarginItem.reset();
+        case 0:
+            SetNone(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        case 1:
+            SetNarrow(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        case 2:
+            SetModerate(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        case 3:
+            SetNormal075(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        case 4:
+            SetNormal100(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        case 5:
+            SetNormal125(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        case 6:
+            SetWide(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            break;
+        default:
+            bApplyNewPageMargins = false;
+            break;
     }
-    SetMetricFieldMaxValues( m_aPageSize );
-}
 
-IMPL_LINK_NOARG( SlideBackground, ModifyULMarginHdl, Edit&, void )
-{
-    m_nPageTopMargin = GetCoreValue( *m_pTopMarginEdit.get(), meUnit );
-    m_nPageBottomMargin = GetCoreValue( *m_pBottomMarginEdit.get(), meUnit );
-    if ( SfxViewFrame::Current() )
+    if(bApplyNewPageMargins)
     {
-        std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) );
-        pPageULMarginItem->SetUpper( m_nPageTopMargin );
-        pPageULMarginItem->SetLower( m_nPageBottomMargin );
-        GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { pPageULMarginItem.get() } );
-        pPageULMarginItem.reset();
+        ExecuteMarginLRChange(m_nPageLeftMargin, m_nPageRightMargin);
+        ExecuteMarginULChange(m_nPageTopMargin, m_nPageBottomMargin);
     }
-    SetMetricFieldMaxValues( m_aPageSize );
 }
 
 }}
