@@ -119,13 +119,31 @@ class ScHint;
 
 class ScColumnsRange final
 {
-    typedef std::vector<ScColumn*>::const_iterator const_iterator;
-    const const_iterator maBegin;
-    const const_iterator maEnd;
-public:
-    ScColumnsRange(const_iterator nBegin, const_iterator nEnd) : maBegin(nBegin), maEnd(nEnd) {}
-    const const_iterator & begin() { return maBegin; }
-    const const_iterator & end() { return maEnd; }
+ public:
+    class Iterator final : public std::iterator<
+                            std::input_iterator_tag,  // iterator_category
+                            SCCOL,                    // value_type
+                            SCCOL,                    // difference_type
+                            const SCCOL*,             // pointer
+                            SCCOL>                    // reference
+    {
+        std::vector<ScColumn*>::const_iterator maColIter;
+    public:
+        explicit Iterator(std::vector<ScColumn*>::const_iterator colIter) : maColIter(colIter) {}
+
+        Iterator& operator++() { maColIter++; return *this;}
+
+        bool operator==(Iterator other) const {return maColIter == other.maColIter;}
+        bool operator!=(Iterator other) const {return !(*this == other);}
+        reference operator*() const {return (*maColIter)->GetCol();}
+    };
+
+    ScColumnsRange(Iterator nBegin, Iterator nEnd) : maBegin(nBegin), maEnd(nEnd) {}
+    const Iterator & begin() { return maBegin; }
+    const Iterator & end() { return maEnd; }
+private:
+    const Iterator maBegin;
+    const Iterator maEnd;
 };
 
 class ScTable

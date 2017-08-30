@@ -296,7 +296,6 @@ friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
 friend class sc::TableColumnBlockPositionSet;
-friend class ScDrawLayer;
 
     typedef std::vector<ScTable*> TableContainer;
 
@@ -2323,6 +2322,8 @@ public:
     void                SwapNonEmpty( sc::TableValues& rValues );
     void                finalizeOutlineImport();
 
+    ScColumnsRange      GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
+
 private:
 
     /**
@@ -2385,8 +2386,6 @@ private:
 
     void EndListeningGroups( const std::vector<ScAddress>& rPosArray );
     void SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray );
-
-    ScColumnsRange       GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 };
 
 #endif

@@ -2523,7 +2523,8 @@ ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL n
     if (!TableExists(nTab))
     {
         std::vector<ScColumn*> aEmptyVector;
-        return ScColumnsRange(aEmptyVector.begin(), aEmptyVector.end());
+        return ScColumnsRange(ScColumnsRange::Iterator(aEmptyVector.begin()),
+                              ScColumnsRange::Iterator(aEmptyVector.end()));
     }
 
     return maTabs[nTab]->GetColumnsRange(nColBegin, nColEnd);
@@ -6591,9 +6592,8 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (const ScColumn* pCol : GetColumnsRange(nTab, 0, MAXCOL))
+        for (SCCOL nCol : GetColumnsRange(nTab, 0, MAXCOL))
         {
-            SCCOL nCol = pCol->GetCol();
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
                 continue;
@@ -6619,9 +6619,8 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 
 ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
 {
-    for (const ScColumn * pCol : GetColumnsRange(nTab, 0, MAXCOL))
+    for (SCCOL nCol : GetColumnsRange(nTab, 0, MAXCOL))
     {
-        SCCOL nCol = pCol->GetCol();
         size_t nColNoteCount = GetNoteCount(nTab, nCol);
         if (!nColNoteCount)
             continue;

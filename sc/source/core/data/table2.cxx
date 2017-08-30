@@ -2107,9 +2107,8 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
     SCROW nY1 = pRowInfo[0].nRowNo;
     SCROW nY2 = pRowInfo[nArrCount-1].nRowNo;
 
-    for (ScColumn* pCol : GetColumnsRange(0, MAXCOL))
+    for (SCCOL nCol : GetColumnsRange(0, MAXCOL))
     {
-        SCCOL nCol = pCol->GetCol();
         if (!ColHidden(nCol))
         {
             SCSIZE nArrY = 0;

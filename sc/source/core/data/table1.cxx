@@ -1681,14 +1681,14 @@ void ScTable::UpdateReference(
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc )
 {
-    for (ScColumn* pCol : GetColumnsRange(0, MAXCOL))
-        pCol->UpdateTranspose( rSource, rDest, pUndoDoc );
+    for (auto const & rpCol : aCol)
+        rpCol->UpdateTranspose( rSource, rDest, pUndoDoc );
 }
 
 void ScTable::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    for (ScColumn* pCol : GetColumnsRange(0, MAXCOL))
-        pCol->UpdateGrow( rArea, nGrowX, nGrowY );
+    for (auto const & rpCol : aCol)
+        rpCol->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
 void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
@@ -2386,7 +2386,8 @@ const ScConditionalFormatList* ScTable::GetCondFormList() const
 ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 {
     // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
-    return ScColumnsRange(aCol.begin() + nColBegin, nColEnd < nColBegin ? (aCol.begin() + nColBegin) : (aCol.begin() + nColEnd + 1));
+    return ScColumnsRange(ScColumnsRange::Iterator(aCol.begin() + nColBegin),
+                          ScColumnsRange::Iterator(nColEnd < nColBegin ? (aCol.begin() + nColBegin) : (aCol.begin() + nColEnd + 1)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

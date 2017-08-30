@@ -44,6 +44,7 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 #include "attrib.hxx"
+#include "table.hxx"
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
@@ -2454,7 +2455,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         long nLeftBoundPx = rRectangle.Left() / TWIPS_PER_PIXEL;
         long nRightBoundPx = rRectangle.Right() / TWIPS_PER_PIXEL;
         nEndCol = MAXCOL;
-        for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
+        for (SCCOL nCol : pDoc->GetColumnsRange(aViewData.GetTabNo(), 0, MAXCOL))
         {
             if (nTotalPixels > nRightBoundPx)
             {

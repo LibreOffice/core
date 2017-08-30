@@ -290,8 +290,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     if (nEndCol < MAXCOL)
     {
         SetColBreak(nEndCol+1, true, false);  // AREABREAK
-        for (const ScColumn* pCol : GetColumnsRange(nEndCol + 2, MAXCOL))
-            RemoveColBreak(pCol->GetCol(), true, false);
+        for (SCCOL nCol : GetColumnsRange(nEndCol + 2, MAXCOL))
+            RemoveColBreak(nCol, true, false);
     }
     if (nEndRow < MAXROW)
     {
