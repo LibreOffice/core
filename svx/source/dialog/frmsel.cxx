@@ -410,8 +410,11 @@ void FrameSelectorImpl::InitBorderGeometry()
     {
         for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
         {
-            tools::Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
-            const double fHorDiagAngle(atan2(static_cast< double >(std::abs(aRect.GetHeight())), static_cast< double >(std::abs(aRect.GetWidth()))));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+            const tools::Rectangle aRect(
+                basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
+                basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
+            const double fHorDiagAngle(atan2(fabs(aCellRange.getHeight()), fabs(aCellRange.getWidth())));
             const double fVerDiagAngle(fHorDiagAngle > 0.0 ? F_PI2 - fHorDiagAngle : 0.0);
             const long nDiagFocusOffsX(basegfx::fround(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
             const long nDiagFocusOffsY(basegfx::fround(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
@@ -466,11 +469,10 @@ void FrameSelectorImpl::InitBorderGeometry()
             for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
             {
                 // the usable area between horizonal/vertical frame borders of current quadrant
-                tools::Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
-                aRect.Left() += nClV + 1;
-                aRect.Right() -= nClV + 1;
-                aRect.Top() += nClH + 1;
-                aRect.Bottom() -= nClH + 1;
+                const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+                const tools::Rectangle aRect(
+                    basegfx::fround(aCellRange.getMinX()) + nClV + 1, basegfx::fround(aCellRange.getMinY()) + nClH + 1,
+                    basegfx::fround(aCellRange.getMaxX()) - nClV + 1, basegfx::fround(aCellRange.getMaxY()) - nClH + 1);
 
                 /*  Both diagonal frame borders enabled. */
                 if( mbTLBR && mbBLTR )

@@ -709,7 +709,10 @@ MAKENUMSTR:
         SvtScriptedTextHelper aScriptedText(rRenderContext);
         Size aStrSize;
         sal_uInt8 nFormatIndex = GetFormatIndex( nCol, nRow );
-        tools::Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
+        const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+        const tools::Rectangle cellRect(
+            basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
+            basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
         Point aPos = cellRect.TopLeft();
         long nRightX = 0;
 
@@ -801,7 +804,11 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(aBrushItem.GetColor());
-            rRenderContext.DrawRect(maArray.GetCellRect(nCol, nRow));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
+            rRenderContext.DrawRect(
+                tools::Rectangle(
+                    basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
+                    basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
             rRenderContext.Pop();
         }
     }

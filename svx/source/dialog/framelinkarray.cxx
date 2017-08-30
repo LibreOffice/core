@@ -808,25 +808,15 @@ long Array::GetHeight() const
     return GetRowPosition( mxImpl->mnHeight ) - GetRowPosition( 0 );
 }
 
-Point Array::GetCellPosition( size_t nCol, size_t nRow ) const
+basegfx::B2DRange Array::GetCellRange( size_t nCol, size_t nRow ) const
 {
     size_t nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
     size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
-    return Point( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
-}
-
-Size Array::GetCellSize( size_t nCol, size_t nRow ) const
-{
-    size_t nFirstCol =  mxImpl->GetMergedFirstCol( nCol, nRow );
-    size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
     size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
     size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
-    return Size( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
-}
-
-tools::Rectangle Array::GetCellRect( size_t nCol, size_t nRow ) const
-{
-    tools::Rectangle aRect( GetCellPosition( nCol, nRow ), GetCellSize( nCol, nRow ) );
+    const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
+    const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
+    tools::Rectangle aRect(aPoint, aSize);
 
     // adjust rectangle for partly visible merged cells
     const Cell& rCell = CELL( nCol, nRow );
@@ -837,7 +827,7 @@ tools::Rectangle Array::GetCellRect( size_t nCol, size_t nRow ) const
         aRect.Top() -= rCell.mnAddTop;
         aRect.Bottom() += rCell.mnAddBottom;
     }
-    return aRect;
+    return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
 }
 
 // mirroring
@@ -938,9 +928,9 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
             if ((!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) || (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow))
             {
-                const tools::Rectangle aRect(GetCellRect(nCol, nRow));
+                const basegfx::B2DRange aRange(GetCellRange(nCol, nRow));
 
-                if ((aRect.GetWidth() > 1) && (aRect.GetHeight() > 1))
+                if (!aRange.isEmpty())
                 {
                     size_t _nFirstCol = mxImpl->GetMergedFirstCol(nCol, nRow);
                     size_t _nFirstRow = mxImpl->GetMergedFirstRow(nCol, nRow);
@@ -952,7 +942,6 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                     if (rTLBR.GetWidth() || rBLTR.GetWidth())
                     {
                         drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                        const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
                         basegfx::B2DPoint aOrigin;
                         basegfx::B2DVector aX;
                         basegfx::B2DVector aY;
@@ -1039,8 +1028,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                         // we need to take care if the borderline is at top or bottom, so use pointer
                         // compare here to find out
                         const bool bUpper(&pCell->GetStyleTop() == pStart);
-                        const tools::Rectangle aRect(GetCellRect(nCol - 1, bUpper ? nRow : nRow - 1));
-                        const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                        const basegfx::B2DRange aRange(GetCellRange(nCol - 1, bUpper ? nRow : nRow - 1));
 
                         // adapt to cell coordinate system, including shear
                         CreateCoordinateSystemForCell(aRange, *pCell, aOrigin, aX, aY);
@@ -1110,8 +1098,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
             if (pCell && pCell->IsRotated())
             {
                 const bool bUpper(&pCell->GetStyleTop() == pStart);
-                const tools::Rectangle aRect(GetCellRect(nCol - 1, bUpper ? nRow : nRow - 1));
-                const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                const basegfx::B2DRange aRange(GetCellRange(nCol - 1, bUpper ? nRow : nRow - 1));
 
                 CreateCoordinateSystemForCell(aRange, *pCell, aOrigin, aX, aY);
 
@@ -1198,8 +1185,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                     if (pCell && pCell->IsRotated())
                     {
                         const bool bLeft(&pCell->GetStyleLeft() == pStart);
-                        const tools::Rectangle aRect(GetCellRect(bLeft ? nCol : nCol - 1, nRow - 1));
-                        const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                        const  basegfx::B2DRange aRange(GetCellRange(bLeft ? nCol : nCol - 1, nRow - 1));
 
                         CreateCoordinateSystemForCell(aRange, *pCell, aOrigin, aX, aY);
 
@@ -1278,8 +1264,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
             if (pCell && pCell->IsRotated())
             {
                 const bool bLeft(&pCell->GetStyleLeft() == pStart);
-                const tools::Rectangle aRect(GetCellRect(bLeft ? nCol : nCol - 1, nRow - 1));
-                const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                const basegfx::B2DRange aRange(GetCellRange(bLeft ? nCol : nCol - 1, nRow - 1));
 
                 CreateCoordinateSystemForCell(aRange, *pCell, aOrigin, aX, aY);
 
