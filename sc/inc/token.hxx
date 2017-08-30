@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_INC_TOKEN_HXX
 #define INCLUDED_SC_INC_TOKEN_HXX
 
+#include <memory>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 
@@ -247,12 +248,10 @@ private:
 class ScJumpMatrixToken : public formula::FormulaToken
 {
 private:
-            ScJumpMatrix*       pJumpMatrix;
+    std::shared_ptr<ScJumpMatrix> mpJumpMatrix;
 public:
-                                ScJumpMatrixToken( ScJumpMatrix* p ) :
-                                    FormulaToken( formula::svJumpMatrix ), pJumpMatrix( p ) {}
-                                ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
-                                    FormulaToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
+                                ScJumpMatrixToken( std::shared_ptr<ScJumpMatrix> p );
+                                ScJumpMatrixToken( const ScJumpMatrixToken & p );
     virtual                     ~ScJumpMatrixToken() override;
     virtual ScJumpMatrix*       GetJumpMatrix() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
