@@ -117,7 +117,6 @@ WinBits const WB_BORDER =               0x00000008;
 WinBits const WB_NOBORDER =             0x00000010;
 WinBits const WB_SIZEABLE =             0x00000020;
 WinBits const WB_3DLOOK =               0x00000040;
-WinBits const WB_AUTOSIZE =             0x00000080;
 
 // Window-Bits for SystemWindows
 WinBits const WB_MOVEABLE =             0x00000100;
