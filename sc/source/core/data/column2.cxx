@@ -2614,27 +2614,6 @@ copyFirstFormulaBlock(
     return rCxt.setCachedColArray(nTab, nCol, pNumArray, pStrArray);
 }
 
-bool
-DoFormulaBlockForParallelism( const sc::CellStoreType::iterator& itBlk )
-{
-    sc::formula_block::iterator it = sc::formula_block::begin(*itBlk->data);
-    sc::formula_block::iterator itEnd;
-
-    itEnd = it;
-    std::advance(itEnd, itBlk->size);
-    for (; it != itEnd; ++it)
-    {
-        ScFormulaCell& rFC = **it;
-        sc::FormulaResultValue aRes = rFC.GetResult();
-        if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError != FormulaError::NONE)
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 struct NonNullStringFinder
 {
     bool operator() (const rtl_uString* p) const { return p != nullptr; }
@@ -2832,17 +2811,11 @@ bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2 )
     if (nRow1 > nRow2)
         return false;
 
-    for (auto itBlk = maCells.begin(); itBlk != maCells.end(); ++itBlk)
+    for (auto i = nRow1; i <= nRow2; ++i)
     {
-        switch (itBlk->type)
-        {
-            case sc::element_type_formula:
-            {
-                if (!DoFormulaBlockForParallelism( itBlk))
-                    return false;
-                return true;
-            }
-        }
+        auto aCell = GetCellValue(i);
+        if (aCell.meType == CELLTYPE_FORMULA)
+            aCell.mpFormula->MaybeInterpret();
     }
 
     return true;
