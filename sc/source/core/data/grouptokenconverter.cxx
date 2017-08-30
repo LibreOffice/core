@@ -84,7 +84,7 @@ SCROW ScGroupTokenConverter::trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SC
 }
 
 ScGroupTokenConverter::ScGroupTokenConverter(
-    ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos) :
+    ScTokenArray& rGroupTokens, ScDocument& rDoc, const ScFormulaCell& rCell, const ScAddress& rPos) :
     mrGroupTokens(rGroupTokens),
     mrDoc(rDoc),
     mrCell(rCell),

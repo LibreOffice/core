@@ -30,7 +30,7 @@ class SC_DLLPUBLIC ScGroupTokenConverter
     SCROW trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCROW nRowLen);
 
 public:
-    ScGroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos);
+    ScGroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, const ScFormulaCell& rCell, const ScAddress& rPos);
 
     bool convert( const ScTokenArray& rCode, sc::FormulaLogger::GroupScope& rScope );
 };
