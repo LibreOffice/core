@@ -112,7 +112,7 @@ void ScInterpreter::ScIfJump()
                     xNew = (*aMapIter).second;
                 else
                 {
-                    ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                    std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>( nCols, nRows ) );
                     for ( SCSIZE nC=0; nC < nCols; ++nC )
                     {
                         for ( SCSIZE nR=0; nR < nRows; ++nR )
@@ -341,7 +341,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                 else
                 {
                     const ScMatrix* pMatPtr = pMat.get();
-                    ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                    std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>( nCols, nRows ) );
                     // Init all jumps to no error to save single calls. Error
                     // is the exceptional condition.
                     const double fFlagResult = CreateDoubleError( FormulaError::JumpMatHasResult);
@@ -353,7 +353,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                     {
                         for (nR = 0 ; nR < nRows && (nC != nErrorCol || nR != nErrorRow); ++nR)
                         {
-                            lcl_storeJumpMatResult(pMatPtr, pJumpMat, nC, nR);
+                            lcl_storeJumpMatResult(pMatPtr, pJumpMat.get(), nC, nR);
                         }
                         if (nC != nErrorCol && nR != nErrorRow)
                             ++nC;
@@ -370,7 +370,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                             }
                             else
                             {   // FALSE, EMPTY path, store result instead
-                                lcl_storeJumpMatResult(pMatPtr, pJumpMat, nC, nR);
+                                lcl_storeJumpMatResult(pMatPtr, pJumpMat.get(), nC, nR);
                             }
                         }
                         nR = 0;
@@ -432,7 +432,7 @@ void ScInterpreter::ScChooseJump()
                     xNew = (*aMapIter).second;
                 else
                 {
-                    ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                    std::shared_ptr<ScJumpMatrix> pJumpMat( std::make_shared<ScJumpMatrix>( nCols, nRows ) );
                     for ( SCSIZE nC=0; nC < nCols; ++nC )
                     {
                         for ( SCSIZE nR=0; nR < nRows; ++nR )

@@ -1579,7 +1579,7 @@ bool ScInterpreter::ConvertMatrixParameters()
             xNew = (*aMapIter).second;
         else
         {
-            ScJumpMatrix* pJumpMat = new ScJumpMatrix( nJumpCols, nJumpRows);
+            std::unique_ptr<ScJumpMatrix> pJumpMat( new ScJumpMatrix( nJumpCols, nJumpRows) );
             pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
             // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
             ScTokenVec* pParams = new ScTokenVec( nParams);
@@ -1591,7 +1591,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 (*pParams)[ nParams - i ] = p;
             }
             pJumpMat->SetJumpParameters( pParams);
-            xNew = new ScJumpMatrixToken( pJumpMat );
+            xNew = new ScJumpMatrixToken( std::move(pJumpMat) );
             GetTokenMatrixMap().emplace(pCur, xNew);
         }
         PushTempTokenWithoutError( xNew.get());
