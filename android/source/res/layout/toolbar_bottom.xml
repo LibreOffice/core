@@ -180,7 +180,7 @@
                                         android:text="Font Color"
                                         android:paddingBottom="12dp"
                                         android:paddingTop="12dp"
-                                        android:textSize="14dp"
+                                        android:textSize="14sp"
                                         android:gravity="center_vertical"
                                         android:textColor="@color/fontBlack"
                                         android:layout_alignParentLeft="true"
