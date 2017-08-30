@@ -4569,7 +4569,7 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
     {
         CRFlags nStartFlags = maTabs[nTab]->GetColFlags(nStart);
         sal_uInt16 nStartWidth = maTabs[nTab]->GetOriginalWidth(nStart);
-        for (SCCOL nCol = nStart + 1; nCol <= MAXCOL; nCol++)
+        for (SCCOL nCol : maTabs[nTab]->GetColumnsRange( nStart + 1, MAXCOL))
         {
             if (((nStartFlags & CRFlags::ManualBreak) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::ManualBreak)) ||
                 (nStartWidth != maTabs[nTab]->GetOriginalWidth(nCol)) ||

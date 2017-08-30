@@ -80,7 +80,6 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     SfxItemSet* pStyleSet = &pStyle->GetItemSet();
     const SfxPoolItem* pItem;
 
-    SCCOL nX;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
     SCCOL nEndCol = MAXCOL;
@@ -99,7 +98,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             // Show nothing, when multiple ranges
 
-            for (nX=0; nX<MAXCOL; nX++)
+            for (SCCOL nX : GetColumnsRange(0, MAXCOL))
                 RemoveColBreak(nX, true, false);
 
             RemoveRowPageBreaks(0, MAXROW-1);
@@ -150,7 +149,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         //  Beginning: Remove breaks
 
-    for (nX=0; nX<nStartCol; nX++)
+    for (SCCOL nX : GetColumnsRange(0, nStartCol-1))
         RemoveColBreak(nX, true, false);
     RemoveRowPageBreaks(0, nStartRow-1);
 
@@ -164,7 +163,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
     bool bColFound = false;
     long nSizeX = 0;
-    for (nX=nStartCol; nX<=nEndCol; nX++)
+    for (SCCOL nX=nStartCol; nX<=nEndCol; nX++)
     {
         bool bStartOfPage = false;
         long nThisX = ColHidden(nX) ? 0 : pColWidth[nX];
