@@ -564,7 +564,7 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const tools::Rect
 
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
-    mrEscherEx.AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    mrEscherEx.AddShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty );
     aPropOpt.Commit( mrEscherEx.GetStream() );
 
     XclExpDffNoteAnchor( rRoot, rRect ).WriteDffData( mrEscherEx );
@@ -691,7 +691,7 @@ XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& r
     SetAutoLine( false );
     nGrbit |= 0x0100;   // undocumented
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
-    mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty );
     EscherPropertyContainer aPropOpt;
     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 ); // bool field
     aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field

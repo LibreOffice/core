@@ -63,7 +63,7 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLText
     , m_pSdrObject( nullptr )
     , m_pShapeAttrList( nullptr )
     , m_nShapeType( ESCHER_ShpInst_Nil )
-    , m_nShapeFlags(0)
+    , m_nShapeFlags(ShapeFlag::NONE)
     , m_ShapeStyle( 200 )
     , m_aShapeTypeWritten( ESCHER_ShpInst_COUNT )
     , m_bSkipwzName( false )
@@ -181,7 +181,7 @@ void VMLExport::LeaveGroup()
     m_pSerializer->endElementNS( XML_v, XML_group );
 }
 
-void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId )
+void VMLExport::AddShape( sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt32 nShapeId )
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
@@ -906,12 +906,15 @@ OString VMLExport::ShapeIdString( sal_uInt32 nId )
 
 void VMLExport::AddFlipXY( )
 {
-    const sal_uInt32 nFlipHandV = SHAPEFLAG_FLIPH + SHAPEFLAG_FLIPV;
-    switch ( m_nShapeFlags & nFlipHandV )
+    if (m_nShapeFlags & (ShapeFlag::FlipH | ShapeFlag::FlipV))
     {
-        case SHAPEFLAG_FLIPH:   m_ShapeStyle.append( ";flip:x" );  break;
-        case SHAPEFLAG_FLIPV:   m_ShapeStyle.append( ";flip:y" );  break;
-        case nFlipHandV:        m_ShapeStyle.append( ";flip:xy" ); break;
+        m_ShapeStyle.append( ";flip:" );
+
+        if (m_nShapeFlags & ShapeFlag::FlipH)
+            m_ShapeStyle.append( "x" );
+
+        if (m_nShapeFlags & ShapeFlag::FlipV)
+            m_ShapeStyle.append( "y" );
     }
 }
 

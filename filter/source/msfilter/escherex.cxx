@@ -2123,7 +2123,7 @@ void lcl_Rotate(sal_Int32 nAngle, Point center, Point& pt)
 Generally, draw the connector from top to bottom, from left to right when meet the adjust value,
 but when (X1>X2 or Y1>Y2),the draw director must be reverse, FlipV or FlipH should be set to true.
 */
-bool lcl_GetAngle(tools::Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngle )
+bool lcl_GetAngle(tools::Polygon &rPoly, ShapeFlag& rShapeFlags,sal_Int32& nAngle )
 {
     Point aStart = rPoly[0];
     Point aEnd = rPoly[rPoly.GetSize()-1];
@@ -2139,22 +2139,22 @@ bool lcl_GetAngle(tools::Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngl
     if (  p1.X() > p2.X() )
     {
         if ( nAngle )
-            rShapeFlags |= SHAPEFLAG_FLIPV;
+            rShapeFlags |= ShapeFlag::FlipV;
         else
-            rShapeFlags |= SHAPEFLAG_FLIPH;
+            rShapeFlags |= ShapeFlag::FlipH;
 
     }
     if (  p1.Y() > p2.Y()  )
     {
         if ( nAngle )
-            rShapeFlags |= SHAPEFLAG_FLIPH;
+            rShapeFlags |= ShapeFlag::FlipH;
         else
-            rShapeFlags |= SHAPEFLAG_FLIPV;
+            rShapeFlags |= ShapeFlag::FlipV;
     }
 
-    if ( (rShapeFlags&SHAPEFLAG_FLIPH) && (rShapeFlags&SHAPEFLAG_FLIPV) )
+    if ( (rShapeFlags&ShapeFlag::FlipH) && (rShapeFlags&ShapeFlag::FlipV) )
     {
-        rShapeFlags  &= ~( SHAPEFLAG_FLIPH | SHAPEFLAG_FLIPV );
+        rShapeFlags  &= ~ShapeFlag( ShapeFlag::FlipH | ShapeFlag::FlipV );
         nAngle +=18000;
     }
 
@@ -2171,10 +2171,11 @@ bool lcl_GetAngle(tools::Polygon &rPoly,sal_uInt16& rShapeFlags,sal_Int32& nAngl
 bool EscherPropertyContainer::CreateConnectorProperties(
     const css::uno::Reference< css::drawing::XShape > & rXShape,
     EscherSolverContainer& rSolverContainer, css::awt::Rectangle& rGeoRect,
-            sal_uInt16& rShapeType, sal_uInt16& rShapeFlags )
+            sal_uInt16& rShapeType, ShapeFlag& rShapeFlags )
 {
     bool bRetValue = false;
-    rShapeType = rShapeFlags = 0;
+    rShapeType = 0;
+    rShapeFlags = ShapeFlag::NONE;
 
     if ( rXShape.is() )
     {
@@ -2195,7 +2196,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                     {
                         aEndPoint = *o3tl::doAccess<css::awt::Point>(aAny);
 
-                        rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT | SHAPEFLAG_CONNECTOR;
+                        rShapeFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Connector;
                         rGeoRect = css::awt::Rectangle( aStartPoint.X, aStartPoint.Y,
                                                             ( aEndPoint.X - aStartPoint.X ) + 1, ( aEndPoint.Y - aStartPoint.Y ) + 1 );
                         // set standard's FLIP in below code
@@ -2203,13 +2204,13 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                         {
                             if ( rGeoRect.Height < 0 )          // justify
                             {
-                                rShapeFlags |= SHAPEFLAG_FLIPV;
+                                rShapeFlags |= ShapeFlag::FlipV;
                                 rGeoRect.Y = aEndPoint.Y;
                                 rGeoRect.Height = -rGeoRect.Height;
                             }
                             if ( rGeoRect.Width < 0 )
                             {
-                                rShapeFlags |= SHAPEFLAG_FLIPH;
+                                rShapeFlags |= ShapeFlag::FlipH;
                                 rGeoRect.X = aEndPoint.X;
                                 rGeoRect.Width = -rGeoRect.Width;
                             }
@@ -3720,10 +3721,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     }
 }
 
-MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags, OUString& rShapeType, bool bOOXML )
+MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, ShapeFlag& nMirrorFlags, OUString& rShapeType, bool bOOXML )
 {
     MSO_SPT eShapeType = mso_sptNil;
-    nMirrorFlags = 0;
+    nMirrorFlags = ShapeFlag::NONE;
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
     if ( aXPropSet.is() )
     {
@@ -3760,13 +3761,13 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                     {
                         bool bMirroredX;
                         if ( ( rProp.Value >>= bMirroredX ) && bMirroredX )
-                            nMirrorFlags  |= SHAPEFLAG_FLIPH;
+                            nMirrorFlags  |= ShapeFlag::FlipH;
                     }
                     else if ( rProp.Name == "MirroredY" )
                     {
                         bool bMirroredY;
                         if ( ( rProp.Value >>= bMirroredY ) && bMirroredY )
-                            nMirrorFlags  |= SHAPEFLAG_FLIPV;
+                            nMirrorFlags  |= ShapeFlag::FlipV;
                     }
                 }
             }
@@ -5218,10 +5219,10 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const tools::Rectan
 
     sal_uInt32 nShapeId = GenerateShapeId();
     if ( !mnGroupLevel )
-        AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
+        AddShape( ESCHER_ShpInst_Min, ShapeFlag::Group | ShapeFlag::Patriarch, nShapeId );
     else
     {
-        AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
+        AddShape( ESCHER_ShpInst_Min, ShapeFlag::Group | ShapeFlag::HaveAnchor, nShapeId );
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x00040004 );
         aPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft, 0 );
@@ -5290,19 +5291,19 @@ void EscherEx::LeaveGroup()
     CloseContainer();
 }
 
-void EscherEx::AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlags, sal_uInt32 nShapeID )
+void EscherEx::AddShape( sal_uInt32 nShpInstance, ShapeFlag nFlags, sal_uInt32 nShapeID )
 {
     AddAtom( 8, ESCHER_Sp, 2, nShpInstance );
 
     if ( !nShapeID )
         nShapeID = GenerateShapeId();
 
-    if ( nFlags ^ 1 )                           // is this a group shape ?
-    {                                           // if not
+    if (!(nFlags & ShapeFlag::Group))
+    {
         if ( mnGroupLevel > 1 )
-            nFlags |= 2;                        // this not a topmost shape
+            nFlags |= ShapeFlag::Child; // this not a topmost shape
     }
-    mpOutStrm->WriteUInt32( nShapeID ).WriteUInt32( nFlags );
+    mpOutStrm->WriteUInt32( nShapeID ).WriteUInt32( static_cast<sal_uInt32>(nFlags) );
 }
 
 void EscherEx::Commit( EscherPropertyContainer& rProps, const tools::Rectangle& )

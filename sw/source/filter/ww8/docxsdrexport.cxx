@@ -935,7 +935,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrame
 
     // Depending on the shape type, we actually don't write the shape as DML.
     OUString sShapeType;
-    sal_uInt32 nMirrorFlags = 0;
+    ShapeFlag nMirrorFlags = ShapeFlag::NONE;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
 
     // Locked canvas is OK inside DML.

@@ -227,10 +227,10 @@ sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle const * pBoundRect, SvMem
 
         nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
-            AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
+            AddShape( ESCHER_ShpInst_Min, ShapeFlag::Group | ShapeFlag::Patriarch, nShapeId );
         else
         {
-            AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
+            AddShape( ESCHER_ShpInst_Min, ShapeFlag::HaveAnchor | ShapeFlag::Group, nShapeId );
             if ( mnGroupLevel == 1 )
             {
                 AddAtom( 8, ESCHER_ClientAnchor );

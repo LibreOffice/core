@@ -47,7 +47,7 @@ class RtfSdrExport : public EscherEx
     sal_uInt32 m_nShapeType;
 
     /// Remember the shape flags.
-    sal_uInt32 m_nShapeFlags;
+    ShapeFlag m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
     OStringBuffer m_aShapeStyle;
@@ -94,7 +94,7 @@ private:
     sal_uInt32 EnterGroup(const OUString& rShapeName, const tools::Rectangle* pBoundRect) override;
     void LeaveGroup() override;
 
-    void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) override;
+    void AddShape(sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt32 nShapeId = 0) override;
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.

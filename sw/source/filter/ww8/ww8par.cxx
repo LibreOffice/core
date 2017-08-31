@@ -906,7 +906,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     }
                 }
 
-                if ( ( ( rObjData.nSpFlags & SP_FFLIPV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
+                if ( ( ( rObjData.nSpFlags & ShapeFlag::FlipV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
                 {
                     SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
                     if (pCustomShape)
@@ -916,7 +916,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
                             fExtraTextRotation = -mnFix16Angle;
                         }
-                        if ( rObjData.nSpFlags & SP_FFLIPV )    // sj: in ppt the text is flipped, whereas in word the text
+                        if ( rObjData.nSpFlags & ShapeFlag::FlipV )    // sj: in ppt the text is flipped, whereas in word the text
                         {                                       // remains unchanged, so we have to take back the flipping here
                             fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
                         }
@@ -1058,7 +1058,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             // Only store objects which are not deep inside the tree
             if( ( rObjData.nCalledByGroup == 0 )
                 ||
-                ( (rObjData.nSpFlags & SP_FGROUP)
+                ( (rObjData.nSpFlags & ShapeFlag::Group)
                  && (rObjData.nCalledByGroup < 2) )
               )
                 StoreShapeOrder( pImpRec->nShapeId,
@@ -4260,7 +4260,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         if (mrReader.m_xMSDffManager->GetShape(0x401, pObject, aData) && !aData.empty())
         {
             // Only handle shape if it is a background shape
-            if (((*aData.begin())->nFlags & 0x400) != 0)
+            if (aData.begin()->get()->nFlags & ShapeFlag::Background)
             {
                 SfxItemSet aSet(rFormat.GetAttrSet());
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,

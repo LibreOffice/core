@@ -33,6 +33,7 @@
 #include <comphelper/stl_types.hxx>
 #include <filter/msfilter/dffpropset.hxx>
 #include <filter/msfilter/dffrecordheader.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -134,15 +135,6 @@ typedef ::std::multiset< std::shared_ptr<SvxMSDffShapeInfo>,
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2
 #define SVXMSDFF_SETTINGS_IMPORT_EXCEL      4
 
-#define SP_FGROUP       0x001   ///< This shape is a group shape
-#define SP_FPATRIARCH   0x004   ///< This is the topmost group shape.
-                                ///< Exactly one of these per drawing.
-#define SP_FOLESHAPE    0x010   ///< The shape is an OLE object
-#define SP_FHAVEMASTER  0x020   ///< Shape has a hspMaster property
-#define SP_FFLIPH       0x040   ///< Shape is flipped horizontally
-#define SP_FFLIPV       0x080   ///< Shape is flipped vertically
-#define SP_FBACKGROUND  0x400   ///< Background shape
-
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this is stored in
 #define OLE_MATHTYPE_2_STARMATH             0x0001
@@ -157,9 +149,9 @@ struct SvxMSDffConnectorRule
     sal_uInt32  nShapeC;   ///< SPID of connector shape
     sal_uInt32  ncptiA;    ///< Connection site Index of shape A
     sal_uInt32  ncptiB;    ///< Connection site Index of shape B
-    sal_uInt32  nSpFlagsA; ///< SpFlags of shape A (the original mirror flags
+    ShapeFlag   nSpFlagsA; ///< SpFlags of shape A (the original mirror flags
                            ///< must be known when solving the Solver Container)
-    sal_uInt32  nSpFlagsB; ///< SpFlags of shape B
+    ShapeFlag   nSpFlagsB; ///< SpFlags of shape B
 
     SdrObject*  pAObj;     ///< pPtr of object (corresponding to shape A)
     SdrObject*  pBObj;     ///< pPtr of object (corresponding to shape B)
@@ -171,8 +163,8 @@ struct SvxMSDffConnectorRule
         , nShapeC(0)
         , ncptiA(0)
         , ncptiB(0)
-        , nSpFlagsA( 0 )
-        , nSpFlagsB( 0 )
+        , nSpFlagsA( ShapeFlag::NONE )
+        , nSpFlagsB( ShapeFlag::NONE )
         , pAObj( nullptr )
         , pBObj( nullptr )
         , pCObj( nullptr )
@@ -224,7 +216,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_uInt32      nYAlign;
     boost::optional<sal_uInt32> nYRelTo;
     sal_uInt32      nLayoutInTableCell;
-    sal_uInt32      nFlags;
+    ShapeFlag       nFlags;
     sal_Int32       nDxTextLeft;    ///< distance of text box from surrounding shape
     sal_Int32       nDyTextTop;
     sal_Int32       nDxTextRight;
@@ -290,7 +282,7 @@ struct DffObjData
     tools::Rectangle   aChildAnchor;
 
     sal_uInt32  nShapeId;
-    sal_uInt32  nSpFlags;
+    ShapeFlag   nSpFlags;
     MSO_SPT     eShapeType;
 
     bool        bShapeType     : 1;
@@ -309,7 +301,7 @@ struct DffObjData
         rSpHd( rObjHd ),
         aBoundRect( rBoundRect ),
         nShapeId( 0 ),
-        nSpFlags( 0 ),
+        nSpFlags( ShapeFlag::NONE ),
         eShapeType( mso_sptNil ),
         bShapeType( false ),
         bClientAnchor( false ),
@@ -405,7 +397,7 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     SvxMSDffShapeOrders     m_aShapeOrders;
     sal_uInt32              nOffsDgg;
     sal_uInt16              nBLIPCount;
-    sal_uInt32              nGroupShapeFlags;
+    ShapeFlag               nGroupShapeFlags;
 
     void CheckTxBxStoryChain();
     void GetFidclData(sal_uInt32 nOffsDgg);

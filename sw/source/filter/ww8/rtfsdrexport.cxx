@@ -42,7 +42,7 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
       m_rAttrOutput(static_cast<RtfAttributeOutput&>(m_rExport.AttrOutput())),
       m_pSdrObject(nullptr),
       m_nShapeType(ESCHER_ShpInst_Nil),
-      m_nShapeFlags(0),
+      m_nShapeFlags(ShapeFlag::NONE),
       m_aShapeStyle(200),
       m_pShapeTypeWritten(new bool[ ESCHER_ShpInst_COUNT ])
 {
@@ -94,7 +94,7 @@ void RtfSdrExport::LeaveGroup()
     /* noop */
 }
 
-void RtfSdrExport::AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 /*nShapeId*/)
+void RtfSdrExport::AddShape(sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt32 /*nShapeId*/)
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;
@@ -407,19 +407,11 @@ void RtfSdrExport::AddLineDimensions(const tools::Rectangle& rRectangle)
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
 
-    switch (m_nShapeFlags & 0xC0)
-    {
-    case 0x40:
+    if (m_nShapeFlags & ShapeFlag::FlipV)
         m_aShapeProps.insert(std::pair<OString,OString>("fFlipV", "1"));
-        break;
-    case 0x80:
+
+    if (m_nShapeFlags & ShapeFlag::FlipH)
         m_aShapeProps.insert(std::pair<OString,OString>("fFlipH", "1"));
-        break;
-    case 0xC0:
-        m_aShapeProps.insert(std::pair<OString,OString>("fFlipV", "1"));
-        m_aShapeProps.insert(std::pair<OString,OString>("fFlipH", "1"));
-        break;
-    }
 
     // the actual dimensions
     m_aShapeStyle.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());

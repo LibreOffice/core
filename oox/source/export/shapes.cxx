@@ -725,7 +725,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     bool bHasHandles = false;
 
     OUString sShapeType;
-    sal_uInt32 nMirrorFlags = 0;
+    ShapeFlag nMirrorFlags = ShapeFlag::NONE;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>( GetSdrObjectFromXShape( xShape ) );
     bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );

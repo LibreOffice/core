@@ -1513,7 +1513,7 @@ void SwBasicEscherEx::WriteFrameExtraData(const SwFrameFormat&)
 void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId)
 {
     OpenContainer(ESCHER_SpContainer);
-    AddShape(ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId);
+    AddShape(ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, nShapeId);
     // store anchor attribute
     WriteFrameExtraData(rFormat);
 
@@ -1523,7 +1523,7 @@ void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt3
     CloseContainer();   // ESCHER_SpContainer
 }
 
-sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
+ShapeFlag AddMirrorFlags(ShapeFlag nFlags, const SwMirrorGrf &rMirror)
 {
     switch (rMirror.GetValue())
     {
@@ -1531,14 +1531,13 @@ sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
         case MirrorGraph::Dont:
             break;
         case MirrorGraph::Vertical:
-            nFlags |= SHAPEFLAG_FLIPH;
+            nFlags |= ShapeFlag::FlipH;
             break;
         case MirrorGraph::Horizontal:
-            nFlags |= SHAPEFLAG_FLIPV;
+            nFlags |= ShapeFlag::FlipV;
             break;
         case MirrorGraph::Both:
-            nFlags |= SHAPEFLAG_FLIPH;
-            nFlags |= SHAPEFLAG_FLIPV;
+            nFlags |= ShapeFlag::FlipH | ShapeFlag::FlipV;
             break;
 
     }
@@ -1548,7 +1547,7 @@ sal_uInt32 AddMirrorFlags(sal_uInt32 nFlags, const SwMirrorGrf &rMirror)
 void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
 {
     OpenContainer( ESCHER_SpContainer );
-    AddShape(ESCHER_ShpInst_PictureFrame, 0xa00,0x401);
+    AddShape(ESCHER_ShpInst_PictureFrame, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, 0x401);
     EscherPropertyContainer aPropOpt;
     GraphicObject aGraphicObject( rGrf );
     OString aUniqueId = aGraphicObject.GetUniqueID();
@@ -1604,8 +1603,9 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
     OpenContainer( ESCHER_SpContainer );
 
     const SwMirrorGrf &rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
-    AddShape(ESCHER_ShpInst_PictureFrame, AddMirrorFlags(0xa00, rMirror),
-        nShapeId);
+    AddShape(ESCHER_ShpInst_PictureFrame,
+             AddMirrorFlags(ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, rMirror),
+             nShapeId);
 
     EscherPropertyContainer aPropOpt;
 
@@ -1834,8 +1834,9 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrameFormat& rFormat, sal_uI
 
         EscherPropertyContainer aPropOpt;
         const SwMirrorGrf &rMirror = rOLENd.GetSwAttrSet().GetMirrorGrf();
-        WriteOLEPicture(aPropOpt, AddMirrorFlags(0xa00 | SHAPEFLAG_OLESHAPE,
-            rMirror), pGraphic ? *pGraphic : Graphic(), *pSdrObj, nShapeId, bRectIsSet ? &aRect : nullptr );
+        WriteOLEPicture(aPropOpt,
+                        AddMirrorFlags(ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::OLEShape, rMirror),
+                        pGraphic ? *pGraphic : Graphic(), *pSdrObj, nShapeId, bRectIsSet ? &aRect : nullptr );
 
         nBorderThick = WriteFlyFrameAttr(rFormat, mso_sptPictureFrame, aPropOpt);
         WriteGrfAttr(rOLENd, rFormat, aPropOpt);
@@ -2323,7 +2324,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         {
             OpenContainer( ESCHER_SpContainer );
 
-            AddShape( ESCHER_ShpInst_Rectangle, 0xe00, nSecondShapeId );
+            AddShape( ESCHER_ShpInst_Rectangle,
+                      ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Background,
+                      nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
             const SwFrameFormat &rFormat = rWrt.m_pDoc->GetPageDesc(0).GetMaster();
@@ -2886,7 +2889,7 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
     sal_Int32 nBorderThick=0;
     OpenContainer( ESCHER_SpContainer );
 
-    AddShape( ESCHER_ShpInst_TextBox, 0xa00, nShapeId );
+    AddShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, nShapeId );
     EscherPropertyContainer aPropOpt;
     aPropOpt.AddOpt(ESCHER_Prop_lTxid, nTextBox);
     if (const SwFrameFormat *pNext = rFormat.GetChain().GetNext())
@@ -2929,7 +2932,7 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
 }
 
 void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
-    sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
+    ShapeFlag nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
     sal_uInt32 nShapeId, const awt::Rectangle* pVisArea )
 {
     //nShapeFlags == 0xA00 + flips and ole active
@@ -2970,7 +2973,8 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
         Graphic aGraphic(SdrExchangeView::GetObjGraphic(pModel, pSdrObj));
 
         EscherPropertyContainer aPropOpt;
-        WriteOLEPicture(aPropOpt, 0xa00 | SHAPEFLAG_OLESHAPE, aGraphic,
+        WriteOLEPicture(aPropOpt,
+            ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::OLEShape, aGraphic,
             *pSdrObj, nShapeId, nullptr );
 
         WriteFlyFrameAttr( rFormat, mso_sptPictureFrame , aPropOpt );

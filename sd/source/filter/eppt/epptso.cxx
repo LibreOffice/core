@@ -1564,7 +1564,8 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage,
     {
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
         sal_uInt32 nPresShapeID = mpPptEscherEx->GenerateShapeId();
-        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nPresShapeID );// Flags: HaveAnchor | HasSpt
+        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, nPresShapeID );
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
         aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
@@ -1609,7 +1610,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage,
     return bRet;
 }
 
-void PPTWriter::ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& rSolver )
+void PPTWriter::ImplCreateShape( sal_uInt32 nType, ShapeFlag nFlags, EscherSolverContainer& rSolver )
 {
     sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
     mpPptEscherEx->AddShape( nType, nFlags, nId );
@@ -1620,7 +1621,7 @@ void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSo
 {
     mnTextStyle = EPP_TEXTSTYLE_TEXT;
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-    ImplCreateShape( ESCHER_ShpInst_TextBox, 0xa00, rSolver );
+    ImplCreateShape( ESCHER_ShpInst_TextBox, ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty, rSolver );
     if ( bFill )
         rPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
     if ( ImplGetText() )
@@ -1749,12 +1750,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             if ( mType == "drawing.Custom" )
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                sal_uInt32 nMirrorFlags;
+                ShapeFlag nMirrorFlags;
                 OUString sCustomShapeType;
                 MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
                 if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
                 {   // sj: creating metafile for customshapes that can't be saved to ms format properly
-                    ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
+                    ImplCreateShape( ESCHER_ShpInst_PictureFrame,
+                                     ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                     aSolverContainer );
                     if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -1771,7 +1774,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    ImplCreateShape( eShapeType, nMirrorFlags | 0xa00, aSolverContainer );
+                    ImplCreateShape( eShapeType,
+                                     nMirrorFlags | ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                     aSolverContainer );
                     aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape );
                     aPropOpt.CreateFillProperties( mXPropSet, true, mXShape);
                     if ( ImplGetText() )
@@ -1792,7 +1797,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 if ( nRadius )
                 {
-                    ImplCreateShape( ESCHER_ShpInst_RoundRectangle, 0xa00, aSolverContainer ); // Flags: Connector | HasSpt
+                    ImplCreateShape( ESCHER_ShpInst_RoundRectangle,
+                                     ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                     aSolverContainer );
                     sal_Int32 nLength = maRect.GetWidth();
                     if ( nLength > maRect.GetHeight() )
                         nLength = maRect.GetHeight();
@@ -1805,7 +1812,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa00, aSolverContainer );          // Flags: Connector | HasSpt
+                    ImplCreateShape( ESCHER_ShpInst_Rectangle,
+                                     ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                     aSolverContainer );
                 }
                 aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                 if ( ImplGetText() )
@@ -1844,7 +1853,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( eCircleKind == css::drawing::CircleKind_FULL )
                 {
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                    ImplCreateShape( ESCHER_ShpInst_Ellipse, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
+                    ImplCreateShape( ESCHER_ShpInst_Ellipse,
+                                     ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                     aSolverContainer );
                     aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                     if ( ImplGetText() )
                         aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, false, false );
@@ -1889,7 +1900,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         mnAngle = 0;
                     }
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                    ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
+                    ImplCreateShape( ESCHER_ShpInst_NotPrimitive,
+                                     ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                     aSolverContainer );
                     css::awt::Rectangle aNewRect;
                     switch ( ePolyKind )
                     {
@@ -2012,7 +2025,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 nOlePictureId = mnExEmbed;
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                sal_uInt32 const nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
+                ShapeFlag const nSpFlags = ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor | ShapeFlag::OLEShape;
                 ImplCreateShape( ESCHER_ShpInst_HostControl, nSpFlags, aSolverContainer );
                 if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false  ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -2041,7 +2054,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "drawing.Connector" )
             {
-                sal_uInt16 nSpType, nSpFlags;
+                sal_uInt16 nSpType;
+                ShapeFlag nSpFlags;
                 css::awt::Rectangle aNewRect;
                 if ( !aPropOpt.CreateConnectorProperties( mXShape, aSolverContainer, aNewRect, nSpType, nSpFlags ) )
                     continue;
@@ -2076,11 +2090,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     // mpPptEscherEx->EnterGroup( &maRect,0 );
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                sal_uInt32 nFlags = 0xa00;                                  // Flags: Connector | HasSpt
+                ShapeFlag nFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty;
+
                 if ( maRect.Top() > maRect.Bottom() )
-                    nFlags |= 0x80;                                         // Flags: VertMirror
+                    nFlags |= ShapeFlag::FlipV;
                 if ( maRect.Left() > maRect.Right() )
-                    nFlags |= 0x40;                                         // Flags: HorzMirror
+                    nFlags |= ShapeFlag::FlipH;
 
                 ImplCreateShape( ESCHER_ShpInst_Line, nFlags, aSolverContainer );
                 aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
@@ -2098,7 +2113,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
+                ImplCreateShape( ESCHER_ShpInst_NotPrimitive,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
                 css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect );
                 maRect = MapRectangle( aNewRect );
@@ -2118,7 +2135,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
+                ImplCreateShape( ESCHER_ShpInst_NotPrimitive,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
                 css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect );
                 maRect = MapRectangle( aNewRect );
@@ -2138,7 +2157,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
+                ImplCreateShape( ESCHER_ShpInst_NotPrimitive,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
                 css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect );
                 maRect = MapRectangle( aNewRect );
@@ -2158,7 +2179,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mnTextSize = 0;
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_NotPrimitive, 0xa00, aSolverContainer );            // Flags: Connector | HasSpt
+                ImplCreateShape( ESCHER_ShpInst_NotPrimitive,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
                 css::awt::Rectangle aNewRect;
                 aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect );
                 maRect = MapRectangle( aNewRect );
@@ -2175,7 +2198,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
                 {
                     nPlaceHolderAtom = rLayout.nUsedObjectPlaceHolder;
-                    ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );           // Flags: HaveAnchor | HaveMaster
+                    ImplCreateShape( ESCHER_ShpInst_Rectangle, ShapeFlag::HaveAnchor | ShapeFlag::HaveMaster, aSolverContainer );
                     aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
@@ -2193,7 +2216,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         /* SJ #i34951#: because M. documents are not allowing GraphicObjects containing text, we
                         have to create a simple Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                         */
-                        ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
+                        ImplCreateShape( ESCHER_ShpInst_Rectangle,
+                                         ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                         aSolverContainer );
                         if ( aPropOpt.CreateGraphicProperties( mXPropSet, "GraphicURL", true, true, false ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
@@ -2207,7 +2232,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                     else
                     {
-                        ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
+                        ImplCreateShape( ESCHER_ShpInst_PictureFrame,
+                                         ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                         aSolverContainer );
 
                         if ( aPropOpt.CreateGraphicProperties( mXPropSet, "GraphicURL", false, true ) )
                         {
@@ -2235,7 +2262,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     {
                         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                         nPlaceHolderAtom = EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE;
-                        ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x200, aSolverContainer );
+                        ImplCreateShape( ESCHER_ShpInst_Rectangle, ShapeFlag::HaveAnchor, aSolverContainer );
                         aPropOpt.CreateLineProperties( mXPropSet, false );
                         aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                     }
@@ -2254,7 +2281,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                                 mnShapeMasterTitle = mpPptEscherEx->GenerateShapeId();
-                                mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
+                                mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle,
+                                                         ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                                         mnShapeMasterTitle );
                                 EscherPropertyContainer aPropertyOptions;
                                 aPropertyOptions.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
@@ -2305,7 +2334,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                             mnTextStyle = EPP_TEXTSTYLE_TITLE;
                             nPlaceHolderAtom = rLayout.nTypeOfTitle;
-                            ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );          // Flags: HaveAnchor | HaveMaster
+                            ImplCreateShape( ESCHER_ShpInst_Rectangle,
+                                             ShapeFlag::HaveAnchor | ShapeFlag::HaveMaster,
+                                             aSolverContainer );
                             aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
                             aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                             aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60 );
@@ -2346,7 +2377,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             {
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                                 mnShapeMasterBody = mpPptEscherEx->GenerateShapeId();
-                                mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );  // Flags: HaveAnchor | HasSpt
+                                mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle,
+                                                         ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                                         mnShapeMasterBody );
                                 EscherPropertyContainer aPropOpt2;
                                 aPropOpt2.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
                                 aPropOpt2.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
@@ -2406,7 +2439,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             mnTextStyle = EPP_TEXTSTYLE_BODY;
                             nPlaceHolderAtom = rLayout.nTypeOfOutliner;
                             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                            ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );          // Flags: HaveAnchor | HaveMaster
+                            ImplCreateShape( ESCHER_ShpInst_Rectangle,
+                                             ShapeFlag::HaveAnchor | ShapeFlag::HaveMaster,
+                                             aSolverContainer );
                             aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
                             aPropOpt.CreateFillProperties( mXPropSet, true, mXShape );
                             aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60 );
@@ -2459,7 +2494,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
                 {
                     nPlaceHolderAtom = rLayout.nUsedObjectPlaceHolder;
-                    ImplCreateShape( ESCHER_ShpInst_Rectangle, 0x220, aSolverContainer );              // Flags: HaveAnchor | HaveMaster
+                    ImplCreateShape( ESCHER_ShpInst_Rectangle,
+                                     ShapeFlag::HaveAnchor | ShapeFlag::HaveMaster,
+                                     aSolverContainer );
                     aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
@@ -2513,9 +2550,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mpExEmbed->Seek( STREAM_SEEK_TO_END );
                     nOlePictureId = mnExEmbed;
 
-                    sal_uInt32 nSpFlags = 0xa00;
+                    ShapeFlag nSpFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty;
                     if ( nOlePictureId )
-                        nSpFlags |= 0x10;
+                        nSpFlags |= ShapeFlag::OLEShape;
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame, nSpFlags, aSolverContainer );
                     if ( aPropOpt.CreateOLEGraphicProperties( mXShape ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -2574,7 +2611,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     continue;
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
+                ImplCreateShape( ESCHER_ShpInst_PictureFrame,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
 
                 if ( aPropOpt.CreateGraphicProperties( mXPropSet, "Bitmap", false ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
@@ -2583,7 +2622,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 mnAngle = 0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
+                ImplCreateShape( ESCHER_ShpInst_PictureFrame,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
                 if ( aPropOpt.CreateMediaGraphicProperties( mXShape ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 css::uno::Any aAny;
@@ -2666,7 +2707,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 mnAngle = 0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
+                ImplCreateShape( ESCHER_ShpInst_PictureFrame,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty,
+                                 aSolverContainer );
                 if ( aPropOpt.CreateGraphicProperties( mXPropSet, "MetaFile", false ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
@@ -2933,7 +2976,9 @@ bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
         EscherPropertyContainer aPropOptSp;
 
         sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
-        mpPptEscherEx->AddShape( ESCHER_ShpInst_Line, 0xa02, nId );
+        mpPptEscherEx->AddShape( ESCHER_ShpInst_Line,
+                                 ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Child,
+                                 nId );
         aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
         aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0xa0008 );
         aPropOptSp.AddOpt( ESCHER_Prop_fshadowObscured, 0x20000 );
@@ -3072,7 +3117,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                        .WriteInt32( maRect.Bottom() );
 
             sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
-            mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
+            mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, ShapeFlag::HaveAnchor | ShapeFlag::Group, nShapeId );
+            // TODO: check flags, comment does not match code // Flags: Group | Patriarch
             aSolverContainer.AddShape( rXShape, nShapeId );
             EscherPropertyContainer aPropOpt2;
 
@@ -3122,7 +3168,9 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
 
                         EscherPropertyContainer aPropOptSp;
                         std::unique_ptr<ContainerGuard> xCellContainer(new ContainerGuard(mpPptEscherEx, ESCHER_SpContainer));
-                        ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
+                        ImplCreateShape( ESCHER_ShpInst_Rectangle,
+                                         ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Child,
+                                         aSolverContainer );
                         aPropOptSp.CreateFillProperties( mXPropSet, true );
                         aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
                         aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60 );

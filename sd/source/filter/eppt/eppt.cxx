@@ -297,7 +297,8 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     else
     {
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );             // Flags: Connector | Background | HasSpt
+        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle,
+                                 ShapeFlag::Background | ShapeFlag::HaveShapeProperty );
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
         aPropOpt.AddOpt( ESCHER_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Width ) );
@@ -1004,7 +1005,7 @@ bool PPTWriter::ImplCreateMainNotes()
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-    mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );
+    mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, ShapeFlag::Background | ShapeFlag::HaveShapeProperty );
     EscherPropertyContainer aPropOpt;
     aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffffff );                             // stock valued fill color
     aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
@@ -1133,7 +1134,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-    mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 ); // Flags: Connector | Background | HasSpt
+    mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, ShapeFlag::Background | ShapeFlag::HaveShapeProperty );
     EscherPropertyContainer aPropOpt;
     aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffffff );     // stock valued fill color
     aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
@@ -1164,7 +1165,7 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
     sal_uInt32 nFillBackColor = 0;
 
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-    mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
+    mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, ShapeFlag::Background | ShapeFlag::HaveShapeProperty );
 
     // #i121183# Use real PageSize in 100th mm
     ::tools::Rectangle aRect(Point(0, 0), Size(maPageSize.Width, maPageSize.Height));
