@@ -56,8 +56,6 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-	$(if $(filter LINUX MACOSX ANDROID %BSD SOLARIS,$(OS)), \
-		curl) \
 	jpeg \
 	libeot \
 	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
