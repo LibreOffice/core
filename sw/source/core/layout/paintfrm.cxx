@@ -2745,55 +2745,71 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     aPaintEnd.Y() = aUpperAligned.Bottom_();
             }
 
-            if (bHori)
+            if(aStyles[0].Prim())
             {
-                const basegfx::B2DPoint aOrigin(aPaintStart.X(), aPaintStart.Y());
-                const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintEnd.X(), aPaintEnd.Y()) - aOrigin);
-                const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
                 drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
-                svx::frame::CreateBorderPrimitives(
-                    aSequence,
-                    aOrigin,
-                    aX,
+                if (bHori)
+                {
+                    const basegfx::B2DPoint aOrigin(aPaintStart.X(), aPaintStart.Y());
+                    const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintEnd.X(), aPaintEnd.Y()) - aOrigin);
 
-                    // Writer creates it's vertical BorderLines bottom-to-top (see below).
-                    // To make the horizontal lines correctly 'guess' the line extensions
-                    // for the then mirrored svx::frame::Style for irregular double lines,
-                    // hand over the for that case correct orientation of the 'other'
-                    // incoming edges
-                    -aY,
+                    if(!aX.equalZero())
+                    {
+                        const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
+                        svx::frame::StyleVectorTable aStartTable;
+                        svx::frame::StyleVectorTable aEndTable;
 
-                    aStyles[ 0 ],   // current style
-                    aStyles[ 1 ],   // aLFromT
-                    aStyles[ 2 ],   // aLFromL
-                    aStyles[ 3 ],   // aLFromB
-                    aStyles[ 4 ],   // aRFromT
-                    aStyles[ 5 ],   // aRFromR
-                    aStyles[ 6 ],   // aRFromB
-                    pTmpColor);
-                mrTabFrame.ProcessPrimitives(aSequence);
-            }
-            else
-            {
-                const basegfx::B2DPoint aOrigin(aPaintEnd.X(), aPaintEnd.Y());
-                const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintStart.X(), aPaintStart.Y()) - aOrigin);
-                const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                drawinglayer::primitive2d::Primitive2DContainer aSequence;
+                        if(aStyles[ 1 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], -aY)); // aLFromT
+                        if(aStyles[ 2 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aLFromL
+                        if(aStyles[ 3 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], aY)); // aLFromB
 
-                svx::frame::CreateBorderPrimitives(
-                    aSequence,
-                    aOrigin,
-                    aX,
-                    aY,
-                    aStyles[ 0 ],   // current style
-                    aStyles[ 4 ],   // aBFromL
-                    aStyles[ 5 ],   // aBFromB
-                    aStyles[ 6 ],   // aBFromR
-                    aStyles[ 1 ],   // aTFromL
-                    aStyles[ 2 ],   // aTFromT
-                    aStyles[ 3 ],   // aTFromR
-                    pTmpColor);
+                        if(aStyles[ 4 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], -aY)); // aRFromT
+                        if(aStyles[ 5 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aRFromR
+                        if(aStyles[ 6 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY)); // aRFromB
+
+                        CreateBorderPrimitives(
+                            aSequence,
+                            aOrigin,
+                            aX,
+                            aStyles[ 0 ],
+                            aStartTable,
+                            aEndTable,
+                            nullptr
+                        );
+                    }
+                }
+                else // vertical
+                {
+                    const basegfx::B2DPoint aOrigin(aPaintStart.X(), aPaintStart.Y());
+                    const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintEnd.X(), aPaintEnd.Y()) - aOrigin);
+
+                    if(!aX.equalZero())
+                    {
+                        const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
+                        svx::frame::StyleVectorTable aStartTable;
+                        svx::frame::StyleVectorTable aEndTable;
+
+                        if(aStyles[ 3 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], -aY)); // aTFromR
+                        if(aStyles[ 2 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aTFromT
+                        if(aStyles[ 1 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], aY)); // aTFromL
+
+                        if(aStyles[ 6 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], -aY)); // aBFromR
+                        if(aStyles[ 5 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aBFromB
+                        if(aStyles[ 4 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY)); // aBFromL
+
+                        CreateBorderPrimitives(
+                            aSequence,
+                            aOrigin,
+                            aX,
+                            aStyles[ 0 ],
+                            aStartTable,
+                            aEndTable,
+                            nullptr
+                        );
+                    }
+                }
+
                 mrTabFrame.ProcessPrimitives(aSequence);
             }
         }
