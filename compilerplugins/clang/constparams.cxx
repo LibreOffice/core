@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -328,7 +329,10 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
             if (operatorCallExpr->getArg(0) == stmt) {
                 return calleeMethodDecl->isConst();
             }
-            for (unsigned i = 1; i < operatorCallExpr->getNumArgs(); ++i)
+            unsigned const n = std::min(
+                operatorCallExpr->getNumArgs(),
+                calleeMethodDecl->getNumParams());
+            for (unsigned i = 1; i < n; ++i)
                 if (operatorCallExpr->getArg(i) == stmt) {
                     return isPointerOrReferenceToConst(calleeMethodDecl->getParamDecl(i - 1)->getType());
                 }
