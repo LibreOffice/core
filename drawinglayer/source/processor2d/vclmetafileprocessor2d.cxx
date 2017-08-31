@@ -1220,6 +1220,8 @@ namespace drawinglayer
                     }
                     else
                     {
+                        mpOutputDevice->Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+
                         // support SvtGraphicStroke MetaCommentAction
                         SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
                             rBasePolygon, nullptr,
@@ -1275,6 +1277,8 @@ namespace drawinglayer
                         }
 
                         impEndSvtGraphicStroke(pSvtGraphicStroke);
+
+                        mpOutputDevice->Pop();
                     }
 
                     break;
@@ -1667,6 +1671,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
+                    mpOutputDevice->Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
                     const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
 
@@ -1742,6 +1747,7 @@ namespace drawinglayer
                         RenderMetafilePrimitive2D(aMetafile);
                     }
 
+                    mpOutputDevice->Pop();
                     break;
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
@@ -1812,6 +1818,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
+                    mpOutputDevice->Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
                     // for metafile: Need to examine what the pure vcl version is doing here actually
                     // - uses DrawTransparent with metafile for content and a gradient
                     // - uses DrawTransparent for single PolyPolygons directly. Can be detected by
@@ -1946,6 +1953,7 @@ namespace drawinglayer
                         }
                     }
 
+                    mpOutputDevice->Pop();
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
