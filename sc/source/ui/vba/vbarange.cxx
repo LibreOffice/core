@@ -4250,7 +4250,7 @@ static ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
     return pRet;
 }
 
-static void lcl_SelectAll( const ScDocShell* pDocShell, const ScQueryParam& aParam )
+static void lcl_SelectAll( ScDocShell* pDocShell, const ScQueryParam& aParam )
 {
     if ( pDocShell )
     {
