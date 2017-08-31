@@ -2427,6 +2427,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
 sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
                                                bool* pIsSystemLanguage )
 {
+    if (!m_xImpl->m_xAutoStyles.is())
+        return -1;
+
     const SvXMLStyleContext* pStyle =
         static_cast<SvXMLStylesContext *>(m_xImpl->m_xAutoStyles.get())->
                   FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE,
