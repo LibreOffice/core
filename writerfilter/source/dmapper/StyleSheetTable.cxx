@@ -1591,7 +1591,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
             ++aCharPropIter;
         }
         xCharStyles->insertByName( sListLabel, uno::makeAny( xStyle) );
-        m_pImpl->m_aListCharStylePropertyVector.push_back( ListCharStylePropertyMap_t( sListLabel, rCharProperties ));
+        m_pImpl->m_aListCharStylePropertyVector.emplace_back( sListLabel, rCharProperties );
     }
     catch( const uno::Exception& )
     {

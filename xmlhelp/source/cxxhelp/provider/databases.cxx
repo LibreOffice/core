@@ -621,7 +621,7 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
         else
         {
             id.push_back( ids.copy( k, idx-k ) );
-            anchor.push_back( OUString() );
+            anchor.emplace_back( );
         }
     }
 
@@ -768,10 +768,10 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
                         if( !bBelongsToDatabase )
                             continue;
 
-                        aVector.push_back( KeywordInfo::KeywordElement( this,
+                        aVector.emplace_back( this,
                                                                         pHdf,
                                                                         keyword,
-                                                                        doclist ) );
+                                                                        doclist );
                     }
                     aHdf.stopIteration();
 

@@ -432,9 +432,9 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
     {
         // No, and have to add one.
         std::vector<beans::StringPair> aRelation;
-        aRelation.push_back(beans::StringPair("Id", "rId" + OUString::number(++nCount)));
-        aRelation.push_back(beans::StringPair("Type", OOXML_SIGNATURE_ORIGIN));
-        aRelation.push_back(beans::StringPair("Target", "_xmlsignatures/origin.sigs"));
+        aRelation.emplace_back("Id", "rId" + OUString::number(++nCount));
+        aRelation.emplace_back("Type", OOXML_SIGNATURE_ORIGIN);
+        aRelation.emplace_back("Target", "_xmlsignatures/origin.sigs");
         aRelationsInfo.push_back(comphelper::containerToSequence(aRelation));
     }
     else if (bHaveRelation && !bAdd)
@@ -479,9 +479,9 @@ void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css:
     for (int i = 0; i < nSignatureCount; ++i)
     {
         std::vector<beans::StringPair> aRelation;
-        aRelation.push_back(beans::StringPair("Id", "rId" + OUString::number(i + 1)));
-        aRelation.push_back(beans::StringPair("Type", OOXML_SIGNATURE_SIGNATURE));
-        aRelation.push_back(beans::StringPair("Target", "sig" + OUString::number(i + 1) + ".xml"));
+        aRelation.emplace_back("Id", "rId" + OUString::number(i + 1));
+        aRelation.emplace_back("Type", OOXML_SIGNATURE_SIGNATURE);
+        aRelation.emplace_back("Target", "sig" + OUString::number(i + 1) + ".xml");
         aRelations.push_back(comphelper::containerToSequence(aRelation));
     }
     comphelper::OFOPXMLHelper::WriteRelationsInfoSequence(xRelStream, comphelper::containerToSequence(aRelations), mxCtx);
@@ -508,14 +508,14 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
         return rPair.First == "rels";
     });
     if (it == rDefaults.end())
-        aDefaults.push_back(beans::StringPair("rels", "application/vnd.openxmlformats-package.relationships+xml"));
+        aDefaults.emplace_back("rels", "application/vnd.openxmlformats-package.relationships+xml");
 
     it = std::find_if(rDefaults.begin(), rDefaults.end(), [](const beans::StringPair& rPair)
     {
         return rPair.First == "sigs";
     });
     if (it == rDefaults.end())
-        aDefaults.push_back(beans::StringPair("sigs", "application/vnd.openxmlformats-package.digital-signature-origin"));
+        aDefaults.emplace_back("sigs", "application/vnd.openxmlformats-package.digital-signature-origin");
     rDefaults = comphelper::containerToSequence(aDefaults);
 
     // Remove existing signature overrides.
@@ -528,7 +528,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
 
     // Add our signature overrides.
     for (int i = 1; i <= nSignatureCount; ++i)
-        aOverrides.push_back(beans::StringPair("/_xmlsignatures/sig" + OUString::number(i) + ".xml", "application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml"));
+        aOverrides.emplace_back("/_xmlsignatures/sig" + OUString::number(i) + ".xml", "application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml");
 
     rOverrides = comphelper::containerToSequence(aOverrides);
     uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();
