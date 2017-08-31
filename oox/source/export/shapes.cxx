@@ -496,13 +496,32 @@ ShapeExport& ShapeExport::WriteOpenPolyPolygonShape( const Reference< XShape >& 
 ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>& xShape)
 {
     FSHelperPtr pFS = GetFS();
-    bool bToplevel = !m_xParent.is();
-    if (!bToplevel)
-        mnXmlNamespace = XML_wpg;
-    pFS->startElementNS(mnXmlNamespace, (bToplevel ? XML_wgp : XML_grpSp), FSEND);
+
+    sal_Int32 nGroupShapeToken = XML_grpSp;
+    if (GetDocumentType() == DOCUMENT_DOCX)
+    {
+        if (!m_xParent.is())
+            nGroupShapeToken = XML_wgp; // toplevel
+        else
+            mnXmlNamespace = XML_wpg;
+    }
+
+    pFS->startElementNS(mnXmlNamespace, nGroupShapeToken, FSEND);
 
     // non visual properties
-    pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr, FSEND);
+    if (GetDocumentType() != DOCUMENT_DOCX)
+    {
+        pFS->startElementNS(mnXmlNamespace, XML_nvGrpSpPr, FSEND);
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
+                XML_id, I32S(GetNewShapeID(xShape)),
+                XML_name, IDS(Group),
+                FSEND);
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr, FSEND);
+        WriteNonVisualProperties(xShape );
+        pFS->endElementNS(mnXmlNamespace, XML_nvGrpSpPr);
+    }
+    else
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr, FSEND);
 
     // visual properties
     pFS->startElementNS(mnXmlNamespace, XML_grpSpPr, FSEND);
@@ -518,17 +537,20 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
         sal_Int32 nSavedNamespace = mnXmlNamespace;
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(xChild, uno::UNO_QUERY_THROW);
-        if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
-            mnXmlNamespace = XML_pic;
-        else
-            mnXmlNamespace = XML_wps;
+        if (GetDocumentType() == DOCUMENT_DOCX)
+        {
+            if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+                mnXmlNamespace = XML_pic;
+            else
+                mnXmlNamespace = XML_wps;
+        }
         WriteShape(xChild);
 
         mnXmlNamespace = nSavedNamespace;
     }
     m_xParent = xParent;
 
-    pFS->endElementNS(mnXmlNamespace, (bToplevel ? XML_wgp : XML_grpSp));
+    pFS->endElementNS(mnXmlNamespace, nGroupShapeToken);
     return *this;
 }
 
@@ -1369,7 +1391,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( const Reference< XShape >& );
 typedef std::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::CStringEqual> NameToConvertMapType;
 
-static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
+static const NameToConvertMapType& lcl_GetConverters()
 {
     static bool shape_map_inited = false;
     static NameToConvertMapType shape_converters;
@@ -1385,12 +1407,13 @@ static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
     shape_converters[ "com.sun.star.drawing.GraphicObjectShape" ]       = &ShapeExport::WriteGraphicObjectShape;
     shape_converters[ "com.sun.star.drawing.LineShape" ]                = &ShapeExport::WriteLineShape;
     shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.PolyPolygonShape" ]          = &ShapeExport::WriteClosedPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.PolyLineShape" ]          = &ShapeExport::WriteClosedPolyPolygonShape;
+    shape_converters[ "com.sun.star.drawing.PolyPolygonShape" ]         = &ShapeExport::WriteClosedPolyPolygonShape;
+    shape_converters[ "com.sun.star.drawing.PolyLineShape" ]            = &ShapeExport::WriteClosedPolyPolygonShape;
     shape_converters[ "com.sun.star.drawing.RectangleShape" ]           = &ShapeExport::WriteRectangleShape;
     shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
     shape_converters[ "com.sun.star.drawing.TableShape" ]               = &ShapeExport::WriteTableShape;
     shape_converters[ "com.sun.star.drawing.TextShape" ]                = &ShapeExport::WriteTextShape;
+    shape_converters[ "com.sun.star.drawing.GroupShape" ]               = &ShapeExport::WriteGroupShape;
 
     shape_converters[ "com.sun.star.presentation.GraphicObjectShape" ]  = &ShapeExport::WriteGraphicObjectShape;
     shape_converters[ "com.sun.star.presentation.OLE2Shape" ]           = &ShapeExport::WriteOLE2Shape;
@@ -1404,8 +1427,6 @@ static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
     shape_converters[ "com.sun.star.presentation.OutlinerShape" ]       = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.SlideNumberShape" ]    = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.TitleTextShape" ]      = &ShapeExport::WriteTextShape;
-    if (eDocumentType == DOCUMENT_DOCX)
-        shape_converters[ "com.sun.star.drawing.GroupShape" ] = &ShapeExport::WriteGroupShape;
     shape_map_inited = true;
 
     return shape_converters;
@@ -1415,8 +1436,8 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
     OUString sShapeType = xShape->getShapeType();
     SAL_INFO("oox.shape", "write shape: " << sShapeType);
-    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters(GetDocumentType()).find( USS( sShapeType ) );
-    if( aConverter == lcl_GetConverters(GetDocumentType()).end() )
+    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters().find(USS(sShapeType));
+    if (aConverter == lcl_GetConverters().end())
     {
         SAL_INFO("oox.shape", "unknown shape");
         return WriteUnknownShape( xShape );
