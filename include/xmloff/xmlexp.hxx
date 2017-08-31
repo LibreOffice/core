@@ -138,6 +138,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     OUString     msGraphicObjectProtocol;
     OUString     msEmbeddedObjectProtocol;
     OUString     msFilterName;
+    OUString     msImgFilterName;
     SvXMLNamespaceMap           *mpNamespaceMap;    // the namepspace map
     SvXMLUnitConverter          maUnitConv;        // the unit converter
     SvXMLNumFmtExport           *mpNumExport;
