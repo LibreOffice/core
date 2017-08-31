@@ -58,7 +58,7 @@ BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 }
 
 
-char* UnicodeToAnsiString( wchar_t* pUniString )
+char* UnicodeToAnsiString( wchar_t const * pUniString )
 {
     int len = WideCharToMultiByte(
         CP_ACP, 0, pUniString, -1, nullptr, 0, nullptr, nullptr );
