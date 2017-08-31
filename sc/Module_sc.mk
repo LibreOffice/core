@@ -153,6 +153,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sc,\
 	UITest_hide_cols \
 	UITest_autofilter \
 	UITest_search_replace \
+	UITest_loadtest \
 ))
 endif
 
