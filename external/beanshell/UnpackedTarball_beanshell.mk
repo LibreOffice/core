@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,beanshell,\
 $(eval $(call gb_UnpackedTarball_add_patches,beanshell,\
 	external/beanshell/bsh-2.0b1-src.patch \
 	external/beanshell/beanshell-invoke.patch \
+	external/beanshell/java9.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
