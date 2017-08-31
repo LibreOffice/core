@@ -600,7 +600,7 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
     OSL_ENSURE(m_aCurrentTabStops.empty(), "tab stops already initialized");
     for( sal_Int32 nTab = 0; nTab < rInitTabStops.getLength(); ++nTab)
     {
-        m_aCurrentTabStops.push_back( DeletableTabStop(rInitTabStops[nTab]) );
+        m_aCurrentTabStops.emplace_back(rInitTabStops[nTab] );
     }
 }
 
@@ -5227,13 +5227,13 @@ void DomainMapper_Impl::ApplySettingsTable()
                 std::vector<beans::PropertyValue> aViewProps;
                 if (m_pSettingsTable->GetZoomFactor())
                 {
-                    aViewProps.push_back(beans::PropertyValue("ZoomFactor", -1, uno::makeAny(m_pSettingsTable->GetZoomFactor()), beans::PropertyState_DIRECT_VALUE));
-                    aViewProps.push_back(beans::PropertyValue("VisibleBottom", -1, uno::makeAny(sal_Int32(0)), beans::PropertyState_DIRECT_VALUE));
-                    aViewProps.push_back(beans::PropertyValue("ZoomType", -1, uno::makeAny(sal_Int16(0)), beans::PropertyState_DIRECT_VALUE));
+                    aViewProps.emplace_back("ZoomFactor", -1, uno::makeAny(m_pSettingsTable->GetZoomFactor()), beans::PropertyState_DIRECT_VALUE);
+                    aViewProps.emplace_back("VisibleBottom", -1, uno::makeAny(sal_Int32(0)), beans::PropertyState_DIRECT_VALUE);
+                    aViewProps.emplace_back("ZoomType", -1, uno::makeAny(sal_Int16(0)), beans::PropertyState_DIRECT_VALUE);
                 }
                 if (m_pSettingsTable->GetView())
                 {
-                    aViewProps.push_back(beans::PropertyValue("ShowOnlineLayout", -1, uno::makeAny(m_pSettingsTable->GetView() == NS_ooxml::LN_Value_doc_ST_View_web), beans::PropertyState_DIRECT_VALUE));
+                    aViewProps.emplace_back("ShowOnlineLayout", -1, uno::makeAny(m_pSettingsTable->GetView() == NS_ooxml::LN_Value_doc_ST_View_web), beans::PropertyState_DIRECT_VALUE);
                 }
                 uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(m_xComponentContext);
                 xBox->insertByIndex(sal_Int32(0), uno::makeAny(comphelper::containerToSequence(aViewProps)));
