@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d2094633",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6651,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-08-31T12:46:31Z",
+      "side": 1,
+      "message": "I added ,bOnlyTextBackground to the recursive call to PageBackground() simply because it seemed safer - not because I found any problems.",
+      "range": {
+        "startLine": 6651,
+        "startChar": 55,
+        "endLine": 6651,
+        "endChar": 77
+      },
+      "revId": "e251d5acab419667e16accfdd2910c4437094dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
