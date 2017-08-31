@@ -146,7 +146,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event )
                  it != m_aFrames.end(); ++it )
         {
             GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(*it);
-            if( (GdkNativeWindow)pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
+            if( pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
                 ( pFrame->getForeignParent() && pFrame->getForeignParentWindow() == pEvent->xany.window ) ||
                 ( pFrame->getForeignTopLevel() && pFrame->getForeignTopLevelWindow() == pEvent->xany.window )
                 )
@@ -216,7 +216,7 @@ bool GtkSalDisplay::Dispatch( XEvent* pEvent )
         for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
              it != m_aFrames.end(); ++it )
         {
-            if( (GdkNativeWindow)(*it)->GetSystemData()->aWindow == pEvent->xany.window )
+            if ((*it)->GetSystemData()->aWindow == pEvent->xany.window)
                 return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent );
         }
     }

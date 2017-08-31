@@ -1271,9 +1271,9 @@ GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow )
 void GtkSalFrame::Init( SystemParentData* pSysData )
 {
     m_pParent = nullptr;
-    m_aForeignParentWindow = (GdkNativeWindow)pSysData->aWindow;
+    m_aForeignParentWindow = pSysData->aWindow;
     m_pForeignParent = nullptr;
-    m_aForeignTopLevelWindow = findTopLevelSystemWindow( (GdkNativeWindow)pSysData->aWindow );
+    m_aForeignTopLevelWindow = findTopLevelSystemWindow(pSysData->aWindow);
     m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
 
