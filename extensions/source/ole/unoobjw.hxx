@@ -109,7 +109,7 @@ class InterfaceOleWrapper_Impl : public WeakImplHelper<XBridgeSupplier2, XInitia
 public:
 
 
-    InterfaceOleWrapper_Impl(Reference<XMultiServiceFactory>& xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    InterfaceOleWrapper_Impl(Reference<XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~InterfaceOleWrapper_Impl() override;
 
     /* IUnknown methods */
@@ -237,7 +237,7 @@ protected:
 class UnoObjectWrapperRemoteOpt: public InterfaceOleWrapper_Impl
 {
 public:
-    UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory>& aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~UnoObjectWrapperRemoteOpt() override;
 
     STDMETHOD( GetIDsOfNames )( REFIID riid, OLECHAR ** rgszNames, unsigned int cNames,

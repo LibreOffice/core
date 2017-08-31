@@ -63,7 +63,7 @@ class IUnknownWrapper_Impl : public WeakImplHelper< XBridgeSupplier2, XInitializ
 
 {
 public:
-    IUnknownWrapper_Impl(Reference<XMultiServiceFactory> &xFactory,
+    IUnknownWrapper_Impl(Reference<XMultiServiceFactory> const &xFactory,
                          sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
 
     ~IUnknownWrapper_Impl() override;

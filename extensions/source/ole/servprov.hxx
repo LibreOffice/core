@@ -81,7 +81,7 @@ class ProviderOleWrapper_Impl : public IClassFactoryWrapper
 public:
 
     ProviderOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr,
-                             const Reference<XSingleServiceFactory>& xSFactory, GUID* pGuid);
+                             const Reference<XSingleServiceFactory>& xSFactory, GUID const * pGuid);
     virtual ~ProviderOleWrapper_Impl();
 
     bool registerClass() override;
@@ -123,7 +123,7 @@ class OneInstanceOleWrapper_Impl : public IClassFactoryWrapper
 {
 public:
 
-    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid );
+    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID const * pGuid );
     virtual ~OneInstanceOleWrapper_Impl();
 
     bool registerClass() override;
@@ -258,8 +258,8 @@ public:
 
 protected:
 
-    bool provideService(const Reference<XSingleServiceFactory>& xMulFact, GUID* guid);
-    bool provideInstance(const Reference<XInterface>& xInst, GUID* guid);
+    bool provideService(const Reference<XSingleServiceFactory>& xMulFact, GUID const * guid);
+    bool provideInstance(const Reference<XInterface>& xInst, GUID const * guid);
 
     list< IClassFactoryWrapper* > m_wrapperList;
     Reference< XBridgeSupplier2 >   m_bridgeSupplier;

@@ -53,7 +53,7 @@ DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50
 *****************************************************************************/
 
 ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFactory>& smgr,
-                                                 const Reference<XSingleServiceFactory>& xSFact, GUID* pGuid)
+                                                 const Reference<XSingleServiceFactory>& xSFact, GUID const * pGuid)
     : m_xSingleServiceFactory(xSFact),
       m_smgr( smgr)
 {
@@ -188,7 +188,7 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int /*fLock*/)
 
 OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
                                                          const Reference<XInterface>& xInst,
-                                                         GUID* pGuid )
+                                                         GUID const * pGuid )
     : m_refCount(0)
     , m_xInst(xInst)
     , m_factoryHandle(0)
@@ -623,7 +623,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
         a >>= m_bridgeSupplier;
     }
 
-    (void) provideInstance( m_smgr, const_cast<GUID*>(&OID_ServiceManager) );
+    (void) provideInstance( m_smgr, &OID_ServiceManager );
 }
 
 OleServer_Impl::~OleServer_Impl()
@@ -653,7 +653,7 @@ css::uno::Sequence<OUString> OleServer_Impl::getSupportedServiceNames()
         "com.sun.star.bridge.oleautomation.ApplicationRegistration"};
 }
 
-bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& xSFact, GUID* guid)
+bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& xSFact, GUID const * guid)
 {
     IClassFactoryWrapper* pFac = new ProviderOleWrapper_Impl( m_smgr, xSFact, guid);
 
@@ -664,7 +664,7 @@ bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& xSFa
     return pFac->registerClass();
 }
 
-bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID* guid)
+bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID const * guid)
 {
     IClassFactoryWrapper* pFac =
         new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid );

@@ -88,7 +88,7 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
     }
 }
 
-InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFactory>& xFactory,
+InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFactory> const & xFactory,
                                                     sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
         UnoConversionUtilities<InterfaceOleWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
         m_defaultValueType( 0)
@@ -1214,7 +1214,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
 
 // UnoObjectWrapperRemoteOpt ---------------------------------------------------
 
-UnoObjectWrapperRemoteOpt::UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory>& aFactory,
+UnoObjectWrapperRemoteOpt::UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory> const & aFactory,
                                                      sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
 InterfaceOleWrapper_Impl( aFactory, unoWrapperClass, comWrapperClass),
 m_currentId(1)

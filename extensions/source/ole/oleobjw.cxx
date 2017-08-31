@@ -85,7 +85,7 @@ std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > ComPtrToWrapperMap;
 
 *****************************************************************************/
 
-IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory>& xFactory,
+IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory> const & xFactory,
                                            sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
     UnoConversionUtilities<IUnknownWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
     m_pxIdlClass( nullptr), m_eJScript( JScriptUndefined),

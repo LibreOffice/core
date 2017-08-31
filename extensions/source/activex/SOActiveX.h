@@ -202,7 +202,7 @@ public:
     HRESULT GetUnoStruct( OLECHAR const * sStructName, CComPtr<IDispatch>& pdispResult );
     HRESULT LoadURLToFrame();
     HRESULT CallDispatchMethod( OLECHAR const * sUrl, CComVariant* sArgNames, CComVariant* sArgVal, unsigned int count );
-    HRESULT CallLoadComponentFromURL1PBool( OLECHAR* sUrl, OLECHAR* sArgName, BOOL sArgVal );
+    HRESULT CallLoadComponentFromURL1PBool( OLECHAR const * sUrl, OLECHAR const * sArgName, BOOL sArgVal );
     HRESULT GetUrlStruct( OLECHAR const * sUrl, CComPtr<IDispatch>& pdispUrl );
     HRESULT Cleanup();
     HRESULT TerminateOffice();
