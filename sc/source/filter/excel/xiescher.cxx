@@ -150,7 +150,7 @@ XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
     mnTab( 0 ),
     mnObjType( EXC_OBJTYPE_UNKNOWN ),
     mnDffShapeId( 0 ),
-    mnDffFlags( 0 ),
+    mnDffFlags( ShapeFlag::NONE ),
     mbHasAnchor( false ),
     mbHidden( false ),
     mbVisible( true ),
@@ -3142,7 +3142,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
 
 // DFF stream conversion ======================================================
 
-void XclImpSolverContainer::InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, sal_uInt32 nDffFlags )
+void XclImpSolverContainer::InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, ShapeFlag nDffFlags )
 {
     if( nDffShapeId > 0 )
     {
@@ -3195,7 +3195,7 @@ void XclImpSolverContainer::RemoveConnectorRules()
     maSdrObjMap.clear();
 }
 
-void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags )
+void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, ShapeFlag* pnDffFlags )
 {
     XclImpSdrInfoMap::const_iterator aIt = maSdrInfoMap.find( nDffShapeId );
     if( aIt != maSdrInfoMap.end() )
@@ -3495,8 +3495,8 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     XclImpDrawObjRef xDrawObj = rConvData.mrDrawing.FindDrawObj( rDffObjData.rSpHd );
     const tools::Rectangle& rAnchorRect = rDffObjData.aChildAnchor;
 
-    // Do not process the global page group shape (flag SP_FPATRIARCH)
-    bool bGlobalPageGroup = ::get_flag< sal_uInt32 >( rDffObjData.nSpFlags, SP_FPATRIARCH );
+    // Do not process the global page group shape
+    bool bGlobalPageGroup( rDffObjData.nSpFlags & ShapeFlag::Patriarch );
     if( !xDrawObj || !xDrawObj->IsProcessSdrObj() || bGlobalPageGroup )
         return nullptr;   // simply return, xSdrObj will be destroyed
 

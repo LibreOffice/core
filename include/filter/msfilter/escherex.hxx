@@ -79,12 +79,26 @@ namespace tools {
 #define ESCHER_ConnectorRule    0xF012u /*                           an FConnectorRule                                                      X   X   1 */
 #define ESCHER_UDefProp         0xF122u
 
-#define SHAPEFLAG_OLESHAPE      0x010   /* The shape is an OLE object */
-#define SHAPEFLAG_FLIPH         0x040   /* Shape is flipped horizontally */
-#define SHAPEFLAG_FLIPV         0x080   /* Shape is flipped vertically */
-#define SHAPEFLAG_CONNECTOR     0x100   /* Connector type of shape */
-#define SHAPEFLAG_HAVEANCHOR    0x200   /* Shape has an anchor of some kind */
-#define SHAPEFLAG_HAVESPT       0x800   /* Shape has a shape type property */
+enum class ShapeFlag : sal_uInt32
+{
+    NONE                = 0x000,
+    Group               = 0x001,   /* shape is a group shape */
+    Child               = 0x002,   /* shape is a child shape */
+    Patriarch           = 0x004,   /* shape is the topmost group shape.
+                                      Exactly one of these per drawing. */
+    Deleted             = 0x008,   /* shape has been deleted */
+    OLEShape            = 0x010,   /* shape is an OLE object */
+    HaveMaster          = 0x020,   /* shape has a valid master in hspMaster property */
+    FlipH               = 0x040,   /* shape is flipped horizontally */
+    FlipV               = 0x080,   /* shape is flipped vertically */
+    Connector           = 0x100,   /* shape is a connector shape */
+    HaveAnchor          = 0x200,   /* shape has an anchor of some kind */
+    Background          = 0x400,   /* shape is a background shape */
+    HaveShapeProperty   = 0x800    /* shape has a shape type property */
+};  /* 20 bits unused */
+namespace o3tl {
+    template<> struct typed_flags<ShapeFlag> : is_typed_flags<ShapeFlag, 0x00000FFF> {};
+}
 
 #define ESCHER_ShpInst_Min                          0
 #define ESCHER_ShpInst_NotPrimitive                 ESCHER_ShpInst_Min
@@ -120,6 +134,7 @@ enum ESCHER_BlibType
    FirstClient = 32,        // First client defined blip type
    LastClient  = 255        // Last client defined blip type
 };
+
 
 enum ESCHER_FillStyle
 {
@@ -789,7 +804,7 @@ public:
                     EscherSolverContainer& rSolver,
                     css::awt::Rectangle& rGeoRect,
                     sal_uInt16& rShapeType,
-                    sal_uInt16& rShapeFlags
+                    ShapeFlag& rShapeFlags
                 );
 
                 // Because shadow properties depends to the line and fillstyle, the CreateShadowProperties method should be called at last.
@@ -814,7 +829,7 @@ public:
     static tools::PolyPolygon  GetPolyPolygon( const css::uno::Any& rSource );
     static MSO_SPT      GetCustomShapeType(
                             const css::uno::Reference< css::drawing::XShape > & rXShape,
-                            sal_uInt32& nMirrorFlags,
+                            ShapeFlag& nMirrorFlags,
                             OUString& rShapeType,
                             bool bOOXML = false
                         );
@@ -1124,7 +1139,7 @@ public:
     virtual void LeaveGroup();
 
                 // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)
-    virtual void AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlagIds, sal_uInt32 nShapeID = 0 );
+    virtual void AddShape( sal_uInt32 nShpInstance, ShapeFlag nFlagIds, sal_uInt32 nShapeID = 0 );
 
     virtual void Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect);
 

@@ -439,7 +439,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
             for ( int nN = 0; nN < 2; nN++ )
             {
                 SdrObject*  pO;
-                sal_uInt32  nC, nSpFlags;
+                sal_uInt32  nC;
+                ShapeFlag   nSpFlags;
                 if ( !nN )
                 {
                     pO = pPtr->pAObj;
@@ -479,12 +480,12 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             {
                                 if ( nC & 1 )
                                 {
-                                    if ( nSpFlags & SP_FFLIPH )
+                                    if ( nSpFlags & ShapeFlag::FlipH )
                                         nC ^= 2;    // 1 <-> 3
                                 }
                                 else
                                 {
-                                    if ( nSpFlags & SP_FFLIPV )
+                                    if ( nSpFlags & ShapeFlag::FlipV )
                                         nC ^= 1;    // 0 <-> 2
                                 }
                                 switch( nC )
@@ -614,12 +615,12 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 {
                                     if ( nC & 1 )
                                     {
-                                        if ( nSpFlags & SP_FFLIPH )
+                                        if ( nSpFlags & ShapeFlag::FlipH )
                                             nC ^= 2;    // 1 <-> 3
                                     }
                                     else
                                     {
-                                        if ( nSpFlags & SP_FFLIPV )
+                                        if ( nSpFlags & ShapeFlag::FlipV )
                                             nC ^= 1;    // 0 <-> 2
                                     }
                                     switch( nC )
@@ -1253,9 +1254,9 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
                     aBitmap.Rotate( nFix16Angle / 10, rShadeColors[ 0 ].aColor );
 
                     BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
-                    if ( rObjData.nSpFlags & SP_FFLIPV )
+                    if ( rObjData.nSpFlags & ShapeFlag::FlipV )
                         nMirrorFlags |= BmpMirrorFlags::Vertical;
-                    if ( rObjData.nSpFlags & SP_FFLIPH )
+                    if ( rObjData.nSpFlags & ShapeFlag::FlipH )
                         nMirrorFlags |= BmpMirrorFlags::Horizontal;
                     if ( nMirrorFlags != BmpMirrorFlags::NONE )
                         aBitmap.Mirror( nMirrorFlags );
@@ -2684,7 +2685,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         ApplyCustomShapeTextAttributes( rSet );
         if ( rManager.GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL )
         {
-            if ( mnFix16Angle || ( rObjData.nSpFlags & SP_FFLIPV ) )
+            if ( mnFix16Angle || ( rObjData.nSpFlags & ShapeFlag::FlipV ) )
                 CheckAndCorrectExcelTextRotation( rIn, rSet, rObjData );
         }
     }
@@ -2770,7 +2771,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
 
         if ( rManager.mnFix16Angle )
             fExtraTextRotateAngle += mnFix16Angle / 100.0;
-        if ( rObjData.nSpFlags & SP_FFLIPV )
+        if ( rObjData.nSpFlags & ShapeFlag::FlipV )
             fExtraTextRotateAngle -= 180.0;
 
         css::beans::PropertyValue aTextRotateAngle;
@@ -3806,7 +3807,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             // the writer is doing its own cropping, so this part affects only impress and calc,
             // unless we're inside a group, in which case writer doesn't crop either
             if (( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS ) || rObjData.nCalledByGroup != 0 )
-                lcl_ApplyCropping( *this, ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 ? &rSet : nullptr, aGraf );
+                lcl_ApplyCropping( *this, !bool( rObjData.nSpFlags & ShapeFlag::OLEShape ) ? &rSet : nullptr, aGraf );
 
             if ( IsProperty( DFF_Prop_pictureTransparent ) )
             {
@@ -3881,7 +3882,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 // contrast or brightness need to be altered, the result is the same, but if both are involved,
                 // there's no way to map that, so just force a conversion of the image.
                 bool needsConversion = nContrast != 0 && nBrightness != 0;
-                if ( ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0 && !needsConversion )
+                if ( !bool(rObjData.nSpFlags & ShapeFlag::OLEShape) && !needsConversion )
                 {
                     if ( nBrightness )
                         rSet.Put( SdrGrafLuminanceItem( nBrightness ) );
@@ -4045,7 +4046,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
         if ( pRet )
         {
             sal_Int32 nGroupRotateAngle = 0;
-            sal_Int32 nSpFlags = nGroupShapeFlags;
+            ShapeFlag nSpFlags = nGroupShapeFlags;
             nGroupRotateAngle = mnFix16Angle;
 
             tools::Rectangle aClientRect( rClientRect );
@@ -4116,13 +4117,13 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 double a = nGroupRotateAngle * nPi180;
                 pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle, sin( a ), cos( a ) );
             }
-            if ( nSpFlags & SP_FFLIPV )     // Vertical flip?
+            if ( nSpFlags & ShapeFlag::FlipV )
             {   // BoundRect in aBoundRect
                 Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
                 Point aRight( aLeft.X() + 1000, aLeft.Y() );
                 pRet->NbcMirror( aLeft, aRight );
             }
-            if ( nSpFlags & SP_FFLIPH )     // Horizontal flip?
+            if ( nSpFlags & ShapeFlag::FlipH )
             {   // BoundRect in aBoundRect
                 Point aTop( ( aClientRect.Left() + aClientRect.Right() ) >> 1, aClientRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
@@ -4180,14 +4181,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp );
     if ( aObjData.bShapeType )
     {
+        sal_uInt32 temp;
         rSt.ReadUInt32( aObjData.nShapeId )
-           .ReadUInt32( aObjData.nSpFlags );
+           .ReadUInt32( temp );
+        aObjData.nSpFlags = ShapeFlag(temp);
         aObjData.eShapeType = (MSO_SPT)maShapeRecords.Current()->nRecInstance;
     }
     else
     {
         aObjData.nShapeId = 0;
-        aObjData.nSpFlags = 0;
+        aObjData.nSpFlags = ShapeFlag::NONE;
         aObjData.eShapeType = mso_sptNil;
     }
 
@@ -4251,7 +4254,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if ( aObjData.bChildAnchor )
         aObjData.aBoundRect = aObjData.aChildAnchor;
 
-    if ( aObjData.nSpFlags & SP_FBACKGROUND )
+    if ( aObjData.nSpFlags & ShapeFlag::Background )
         aObjData.aBoundRect = tools::Rectangle( Point(), Size( 1, 1 ) );
 
     tools::Rectangle aTextRect;
@@ -4276,7 +4279,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             IsProperty( DFF_Prop_pibName ) ||
                             IsProperty( DFF_Prop_pibFlags );
 
-        if ( aObjData.nSpFlags & SP_FGROUP )
+        if ( aObjData.nSpFlags & ShapeFlag::Group )
         {
             pRet = new SdrObjGroup;
             /*  After CWS aw033 has been integrated, an empty group object
@@ -4293,7 +4296,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
             bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
             sal_Int32   nObjectRotation = mnFix16Angle;
-            sal_uInt32  nSpFlags = aObjData.nSpFlags;
+            ShapeFlag   nSpFlags = aObjData.nSpFlags;
 
             if ( bGraphic )
             {
@@ -4588,7 +4591,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             if ( aPolyBoundRect.GetWidth() && aPolyPieRect.GetWidth() )
                             {
                                 fXScale = (double)aLogicRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                                if ( nSpFlags & SP_FFLIPH )
+                                if ( nSpFlags & ShapeFlag::FlipH )
                                     fXOfs = ( (double)aPolyPieRect.Right() - (double)aPolyBoundRect.Right() ) * fXScale;
                                 else
                                     fXOfs = ( (double)aPolyBoundRect.Left() - (double)aPolyPieRect.Left() ) * fXScale;
@@ -4596,7 +4599,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             if ( aPolyBoundRect.GetHeight() && aPolyPieRect.GetHeight() )
                             {
                                 fYScale = (double)aLogicRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-                                if ( nSpFlags & SP_FFLIPV )
+                                if ( nSpFlags & ShapeFlag::FlipV )
                                     fYOfs = ( (double)aPolyPieRect.Bottom() - (double)aPolyBoundRect.Bottom() ) * fYScale;
                                 else
                                     fYOfs = ((double)aPolyBoundRect.Top() - (double)aPolyPieRect.Top() ) * fYScale;
@@ -4637,9 +4640,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             if ( mnFix16Angle )
                             {
                                 sal_Int32 nAngle = mnFix16Angle;
-                                if ( nSpFlags & SP_FFLIPH )
+                                if ( nSpFlags & ShapeFlag::FlipH )
                                     nAngle = 36000 - nAngle;
-                                if ( nSpFlags & SP_FFLIPV )
+                                if ( nSpFlags & ShapeFlag::FlipV )
                                     nAngle = -nAngle;
                                 double a = nAngle * F_PI18000;
                                 double ss = sin( a );
@@ -4681,7 +4684,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                         }
                         // mirrored horizontally?
-                        if ( nSpFlags & SP_FFLIPH )
+                        if ( nSpFlags & ShapeFlag::FlipH )
                         {
                             tools::Rectangle aBndRect( pRet->GetSnapRect() );
                             Point aTop( ( aBndRect.Left() + aBndRect.Right() ) >> 1, aBndRect.Top() );
@@ -4689,7 +4692,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             pRet->NbcMirror( aTop, aBottom );
                         }
                         // mirrored vertically?
-                        if ( nSpFlags & SP_FFLIPV )
+                        if ( nSpFlags & ShapeFlag::FlipV )
                         {
                             tools::Rectangle aBndRect( pRet->GetSnapRect() );
                             Point aLeft( aBndRect.Left(), ( aBndRect.Top() + aBndRect.Bottom() ) >> 1 );
@@ -4729,23 +4732,23 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         }
 
                         // rotate/mirror line within the area as we need it
-                        if ( nSpFlags & SP_FFLIPH )
+                        if ( nSpFlags & ShapeFlag::FlipH )
                         {
                             sal_Int32 n = aPoint1.X();
                             aPoint1.X() = aPoint2.X();
                             aPoint2.X() = n;
 
                             // #i120437# reset hor filp
-                            nSpFlags &= ~SP_FFLIPH;
+                            nSpFlags &= ~ShapeFlag::FlipH;
                         }
-                        if ( nSpFlags & SP_FFLIPV )
+                        if ( nSpFlags & ShapeFlag::FlipV )
                         {
                             sal_Int32 n = aPoint1.Y();
                             aPoint1.Y() = aPoint2.Y();
                             aPoint2.Y() = n;
 
                             // #i120437# reset ver filp
-                            nSpFlags &= ~SP_FFLIPV;
+                            nSpFlags &= ~ShapeFlag::FlipV;
                         }
 
                         pRet->NbcSetPoint(aPoint1, 0L); // start point
@@ -4792,7 +4795,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                 }
                 // mirrored horizontally?
-                if ( nSpFlags & SP_FFLIPH )
+                if ( nSpFlags & ShapeFlag::FlipH )
                 {
                     tools::Rectangle aBndRect( pRet->GetSnapRect() );
                     Point aTop( ( aBndRect.Left() + aBndRect.Right() ) >> 1, aBndRect.Top() );
@@ -4800,7 +4803,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     pRet->NbcMirror( aTop, aBottom );
                 }
                 // mirrored vertically?
-                if ( nSpFlags & SP_FFLIPV )
+                if ( nSpFlags & ShapeFlag::FlipV )
                 {
                     tools::Rectangle aBndRect( pRet->GetSnapRect() );
                     Point aLeft( aBndRect.Left(), ( aBndRect.Top() + aBndRect.Bottom() ) >> 1 );
@@ -5456,8 +5459,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->nCropFromRight = GetPropertyValue(
                                     DFF_Prop_cropFromRight, 0 );
 
-        pImpRec->bVFlip = (rObjData.nSpFlags & SP_FFLIPV) != 0;
-        pImpRec->bHFlip = (rObjData.nSpFlags & SP_FFLIPH) != 0;
+        pImpRec->bVFlip = bool(rObjData.nSpFlags & ShapeFlag::FlipV);
+        pImpRec->bHFlip = bool(rObjData.nSpFlags & ShapeFlag::FlipH);
 
         sal_uInt32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash, 0 );
         pImpRec->eLineStyle = (nLineFlags & 8)
@@ -5498,7 +5501,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             /*Only store objects which are not deep inside the tree*/
             if( ( rObjData.nCalledByGroup == 0 )
                 ||
-                ( (rObjData.nSpFlags & SP_FGROUP)
+                ( (rObjData.nSpFlags & ShapeFlag::Group)
                  && (rObjData.nCalledByGroup < 2) )
               )
                 StoreShapeOrder( pImpRec->nShapeId,
@@ -5594,7 +5597,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      nOffsDgg( nOffsDgg_ ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
-     nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
+     nGroupShapeFlags(ShapeFlag::NONE),     // ensure initialization here, as some corrupted
                                             // files may yield to this being uninitialized
      maBaseURL( rBaseURL ),
      mnIdClusters(0),
@@ -5638,7 +5641,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      nOffsDgg( 0 ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
-     nGroupShapeFlags(0),
+     nGroupShapeFlags(ShapeFlag::NONE),
      maBaseURL( rBaseURL ),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
@@ -7281,7 +7284,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       nXAlign( 0 ), // position n cm from left
       nYAlign( 0 ), // position n cm below
       nLayoutInTableCell( 0 ), // element is laid out in table cell
-      nFlags( 0 ),
+      nFlags( ShapeFlag::NONE ),
       nDxTextLeft( 144 ),
       nDyTextTop( 72 ),
       nDxTextRight( 144 ),

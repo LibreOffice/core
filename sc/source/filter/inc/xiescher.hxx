@@ -103,7 +103,7 @@ public:
     /** Returns the shape identifier used in the DFF stream. */
     sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
     /** Returns the shape flags from the DFF stream. */
-    sal_uInt32   GetDffFlags() const { return mnDffFlags; }
+    ShapeFlag    GetDffFlags() const { return mnDffFlags; }
 
     /** Returns true, if the object is hidden. */
     bool         IsHidden() const { return mbHidden; }
@@ -193,7 +193,7 @@ private:
     SCTAB               mnTab;          /// Location of object
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
-    sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
+    ShapeFlag           mnDffFlags;     /// Shape flags from DFF stream.
     OUString       maObjName;      /// Name of the object.
     OUString       maMacroName;    /// Name of an attached macro.
     OUString       maHyperlink;    /// On-click hyperlink URL.
@@ -881,7 +881,7 @@ class XclImpSolverContainer : public SvxMSDffSolverContainer
 public:
 
     /** Inserts information about a new SdrObject. */
-    void                InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, sal_uInt32 nDffFlags );
+    void                InsertSdrObjectInfo( SdrObject& rSdrObj, sal_uInt32 nDffShapeId, ShapeFlag nDffFlags );
     /** Removes information of an SdrObject (and all child objects if it is a group). */
     void                RemoveSdrObjectInfo( SdrObject& rSdrObj );
 
@@ -892,16 +892,16 @@ public:
 
 private:
     /** Updates the data of a connected shape in a connector rule. */
-    void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnDffFlags = nullptr );
+    void                UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*& rpSdrObj, ShapeFlag* pnDffFlags = nullptr );
 
 private:
     /** Stores data about an SdrObject processed during import. */
     struct XclImpSdrInfo
     {
         SdrObject*          mpSdrObj;       /// Pointer to an SdrObject.
-        sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
-        explicit     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( 0 ) {}
-        void         Set( SdrObject* pSdrObj, sal_uInt32 nDffFlags )
+        ShapeFlag           mnDffFlags;     /// Shape flags from DFF stream.
+        explicit     XclImpSdrInfo() : mpSdrObj( nullptr ), mnDffFlags( ShapeFlag::NONE ) {}
+        void         Set( SdrObject* pSdrObj, ShapeFlag nDffFlags )
                                 { mpSdrObj = pSdrObj; mnDffFlags = nDffFlags; }
     };
     typedef std::map< sal_uInt32, XclImpSdrInfo > XclImpSdrInfoMap;

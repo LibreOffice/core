@@ -2079,8 +2079,8 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
             pGrfNd->SetAttr( aCrop );
         }
 
-        bool bFlipH = pRecord->nFlags & SHAPEFLAG_FLIPH;
-        bool bFlipV = pRecord->nFlags & SHAPEFLAG_FLIPV;
+        bool bFlipH(pRecord->nFlags & ShapeFlag::FlipH);
+        bool bFlipV(pRecord->nFlags & ShapeFlag::FlipV);
         if ( bFlipH || bFlipV )
         {
             SwMirrorGrf aMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
