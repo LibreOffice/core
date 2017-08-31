@@ -115,7 +115,7 @@ std::wstring getFileTypeInfo(const std::string& file_extension)
 
 /** get file size.
 */
-DWORD getSizeOfFile( char* FileName )
+DWORD getSizeOfFile( char const * FileName )
 {
     HANDLE hFile = CreateFile(StringToWString(FileName).c_str(),            // open file
                         GENERIC_READ,                                       // open for reading
@@ -178,7 +178,7 @@ std::wstring formatSizeOfFile( DWORD dwSize )
 
 /** get file size information.
 */
-std::wstring getFileSizeInfo(char* FileName)
+std::wstring getFileSizeInfo(char const * FileName)
 {
     DWORD dwSize=getSizeOfFile(FileName);
     if (dwSize != INVALID_FILE_SIZE)

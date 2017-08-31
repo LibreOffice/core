@@ -41,7 +41,7 @@ namespace /* private */
 
     size_t ColumnInfoTableSize = SAL_N_ELEMENTS(ColumnInfoTable);
 
-bool IsOOFileExtension(wchar_t* Extension)
+bool IsOOFileExtension(wchar_t const * Extension)
 {
     for (size_t i = 0; i < OOFileExtensionTableSize; i++)
     {
