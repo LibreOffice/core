@@ -334,41 +334,36 @@ SVX_DLLPUBLIC void CreateBorderPrimitives(
     const Color*        pForceColor     /// If specified, overrides frame border color.
 );
 
-/** Draws both diagonal frame borders, regards all connected frame styles.
+class StyleVectorCombination
+{
+private:
+    const Style&                mrStyle;
+    const basegfx::B2DVector&   mrB2DVector;
 
-One or both passed diagonal frame styles may be invisible.
+public:
+    StyleVectorCombination(const Style& rStyle, const basegfx::B2DVector& rB2DVector) :
+        mrStyle(rStyle),
+        mrB2DVector(rB2DVector)
+    {}
 
-The function preserves all settings of the passed output device.
-*/
-SVX_DLLPUBLIC void CreateDiagFrameBorderPrimitives(
+    const Style& getStyle() const { return mrStyle; }
+    const basegfx::B2DVector& getB2DVector() const { return mrB2DVector; }
+};
+
+typedef std::vector< StyleVectorCombination > StyleVectorTable;
+
+SVX_DLLPUBLIC void CreateBorderPrimitives(
     drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
-
-    const basegfx::B2DPoint&                            rOrigin,        /// Origin of the coordinate system spawning the cell
-    const basegfx::B2DVector&                           rXAxis,         /// X-Axis of the coordinate system spawning the cell
-    const basegfx::B2DVector&                           rYAxis,         /// Y-Axis of the coordinate system spawning the cell
-
-    const Style&        rTLBR,          /// Style of the processed top-left to bottom-right diagonal frame border.
-    const Style&        rBLTR,          /// Style of the processed bottom-left to top-right diagonal frame border.
-
-    const Style&        rTLFromB,       /// Vertical frame border from bottom to top-left end of rTLBR.
-    const Style&        rTLFromR,       /// Horizontal frame border from right to top-left end of rTLBR.
-    const Style&        rBRFromT,       /// Vertical frame border from top to bottom-right end of rTLBR.
-    const Style&        rBRFromL,       /// Horizontal frame border from left to bottom-right end of rTLBR.
-
-    const Style&        rBLFromT,       /// Vertical frame border from top to bottom-left end of rBLTR.
-    const Style&        rBLFromR,       /// Horizontal frame border from right to bottom-left end of rBLTR.
-    const Style&        rTRFromB,       /// Vertical frame border from bottom to top-right end of rBLTR.
-    const Style&        rTRFromL,       /// Horizontal frame border from left to top-right end of rBLTR.
-
-    const Color*        pForceColor     /// If specified, overrides frame border color.
+    const basegfx::B2DPoint&    rOrigin,                /// start point of borderline
+    const basegfx::B2DVector&   rX,                     /// X-Axis of borderline with length
+    const Style&                rBorder,                /// Style of borderline
+    const StyleVectorTable&     rStartStyleVectorTable, /// Styles and vectors (pointing away) at borderline start, ccw
+    const StyleVectorTable&     rEndStyleVectorTable,   /// Styles and vectors (pointing away) at borderline end, cw
+    const Color*                pForceColor             /// If specified, overrides frame border color.
 );
 
-
 }
 }
-
-/* Yes, I love ASCII art. :-) -DR- */
 
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
