@@ -172,11 +172,11 @@ namespace connectivity
     }
 
     OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
-                    const std::list< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const
+                    const std::vector< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
-        std::list< std::pair<const sal_Char* , OUString > >::const_iterator aIter = _rStringToSubstitutes.begin();
-        std::list< std::pair<const sal_Char* , OUString > >::const_iterator aEnd  = _rStringToSubstitutes.end();
+        std::vector< std::pair<const sal_Char* , OUString > >::const_iterator aIter = _rStringToSubstitutes.begin();
+        std::vector< std::pair<const sal_Char* , OUString > >::const_iterator aEnd  = _rStringToSubstitutes.end();
         for(;aIter != aEnd; ++aIter)
             OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );
 
