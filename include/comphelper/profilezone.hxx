@@ -24,7 +24,7 @@ namespace comphelper
 namespace ProfileRecording
 {
 
-COMPHELPER_DLLPUBLIC void startRecording(bool bRecording = true);
+COMPHELPER_DLLPUBLIC void startRecording(bool bRecording);
 
 COMPHELPER_DLLPUBLIC long long addRecording(const char * aProfileId, long long aCreateTime);
 

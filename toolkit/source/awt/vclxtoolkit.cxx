@@ -1924,7 +1924,7 @@ void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
 
 void SAL_CALL VCLXToolkit::startRecording()
 {
-    ::comphelper::ProfileRecording::startRecording();
+    ::comphelper::ProfileRecording::startRecording(true);
 }
 
 void SAL_CALL VCLXToolkit::stopRecording()
