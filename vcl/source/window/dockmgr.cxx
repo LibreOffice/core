@@ -91,7 +91,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
     maDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maDockIdle" );
 
     maEndDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
-    maDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
+    maEndDockIdle.SetPriority( TaskPriority::HIGH_IDLE );
     maEndDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maEndDockIdle" );
 }
 
