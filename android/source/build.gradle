@@ -64,7 +64,6 @@ android {
         // 22 treats them as warnings, on 23 it is fatal error
         // ToDo: fix openssl stuff to not block targeting 23 or later
         targetSdkVersion 22
-        manifestPlaceholders = [installLocation: "preferExternal"]
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -72,7 +71,12 @@ android {
             // make android studio happy...
             jniDebuggable true
             // would work just fine with external, but setting emulator up is a little more work
-            manifestPlaceholders = [installLocation: "internalOnly"]
+            manifestPlaceholders = [installLocation: "auto", extractNativeLibs: "false"]
+        }
+        release {
+            // need to extract native libs (allow to compress them in apk), since otherwise would
+            // exceed maximum size for playstore
+            manifestPlaceholders = [installLocation: "preferExternal", extractNativeLibs: "true"]
         }
     }
     productFlavors {

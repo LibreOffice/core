@@ -12,7 +12,9 @@
     <application
         android:name=".LibreOfficeApplication"
         android:allowBackup="true"
+        android:extractNativeLibs="${extractNativeLibs}"
         android:icon="@mipmap/ic_launcher"
+        android:installLocation="${installLocation}"
         android:label="@string/app_name"
         android:theme="@style/LibreOfficeTheme"
         android:debuggable="true"
