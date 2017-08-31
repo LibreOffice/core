@@ -947,17 +947,17 @@ void HelperCreateHorizontalBorderPrimitives(
         StyleVectorTable aStart;
         StyleVectorTable aEnd;
 
-        if(rStartFromTR.Prim()) aStart.push_back(StyleVectorCombination(rStartFromTR, aX - aY));
-        if(rStartLFromT.Prim()) aStart.push_back(StyleVectorCombination(rStartLFromT, -aY));
-        if(rStartLFromL.Prim()) aStart.push_back(StyleVectorCombination(rStartLFromL, -aX));
-        if(rStartLFromB.Prim()) aStart.push_back(StyleVectorCombination(rStartLFromB, aY));
-        if(rStartFromBR.Prim()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
+        if(rStartFromTR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromTR, aX - aY));
+        if(rStartLFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromT, -aY));
+        if(rStartLFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromL, -aX));
+        if(rStartLFromB.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromB, aY));
+        if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
 
-        if(rEndFromTL.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -aX -aY));
-        if(rEndRFromT.Prim()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -aY));
-        if(rEndRFromR.Prim()) aEnd.push_back(StyleVectorCombination(rEndRFromR, aX));
-        if(rEndRFromB.Prim()) aEnd.push_back(StyleVectorCombination(rEndRFromB, aY));
-        if(rEndFromBL.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromBL, aY - aX));
+        if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -aX -aY));
+        if(rEndRFromT.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -aY));
+        if(rEndRFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromR, aX));
+        if(rEndRFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromB, aY));
+        if(rEndFromBL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromBL, aY - aX));
 
         CreateBorderPrimitives(
             rSequence,
@@ -986,17 +986,17 @@ void HelperCreateVerticalBorderPrimitives(
         StyleVectorTable aStart;
         StyleVectorTable aEnd;
 
-        if(rStartFromBR.Prim()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
-        if(rStartTFromR.Prim()) aStart.push_back(StyleVectorCombination(rStartTFromR, aX));
-        if(rStartTFromT.Prim()) aStart.push_back(StyleVectorCombination(rStartTFromT, aY));
-        if(rStartTFromL.Prim()) aStart.push_back(StyleVectorCombination(rStartTFromL, -aX));
-        if(rStartFromBL.Prim()) aStart.push_back(StyleVectorCombination(rStartFromBL, aY - aX));
+        if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
+        if(rStartTFromR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromR, aX));
+        if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, aY));
+        if(rStartTFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromL, -aX));
+        if(rStartFromBL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBL, aY - aX));
 
-        if(rEndFromTR.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromTR, aX - aY));
-        if(rEndBFromR.Prim()) aEnd.push_back(StyleVectorCombination(rEndBFromR, aX));
-        if(rEndBFromB.Prim()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -aY));
-        if(rEndBFromL.Prim()) aEnd.push_back(StyleVectorCombination(rEndBFromL, aX));
-        if(rEndFromTL.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromTL, aX + aY));
+        if(rEndFromTR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTR, aX - aY));
+        if(rEndBFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromR, aX));
+        if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -aY));
+        if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, aX));
+        if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, aX + aY));
 
         CreateBorderPrimitives(
             rSequence,
@@ -1058,15 +1058,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
                             /// Fill top-left Style Table
                             const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
-                            if(rTLFromRight.Prim()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX));
+                            if(rTLFromRight.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX));
                             const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
-                            if(rTLFromBottom.Prim()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY));
+                            if(rTLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY));
 
                             /// Fill bottom-right Style Table
                             const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
-                            if(rBRFromBottom.Prim()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY));
+                            if(rBRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY));
                             const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
-                            if(rBRFromLeft.Prim()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX));
+                            if(rBRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX));
 
                             CreateBorderPrimitives(
                                 aSequence,
@@ -1087,15 +1087,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
                             /// Fill bottom-left Style Table
                             const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
-                            if(rBLFromTop.Prim()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY));
+                            if(rBLFromTop.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY));
                             const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
-                            if(rBLFromBottom.Prim()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX));
+                            if(rBLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX));
 
                             /// Fill top-right Style Table
                             const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
-                            if(rTRFromBottom.Prim()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY));
+                            if(rTRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY));
                             const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
-                            if(rTRFromLeft.Prim()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX));
+                            if(rTRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX));
 
                             CreateBorderPrimitives(
                                 aSequence,
@@ -1156,7 +1156,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                 // draw previous frame border
                 basegfx::B2DPoint aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.getY() );
 
-                if ((pStart->Prim() || pStart->Secn()) && (aStartPos.getX() <= aEndPos.getX()))
+                if (pStart->IsUsed() && (aStartPos.getX() <= aEndPos.getX()))
                 {
                     // prepare defaults for borderline coordinate system
                     const Cell* pCell = pStart->GetUsingCell();
@@ -1196,7 +1196,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
         // draw last frame border
         basegfx::B2DPoint aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.getY() );
-        if ((pStart->Prim() || pStart->Secn()) && (aStartPos.getX() <= aEndPos.getX()))
+        if (pStart->IsUsed() && (aStartPos.getX() <= aEndPos.getX()))
         {
             // for description of involved coordinate systems have a look at
             // the first CreateBorderPrimitives call above
@@ -1259,7 +1259,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
             {
                 // draw previous frame border
                 basegfx::B2DPoint aEndPos( aStartPos.getX(), mxImpl->GetRowPosition( nRow ) );
-                if ((pStart->Prim() || pStart->Secn()) && (aStartPos.getY() <= aEndPos.getY()))
+                if (pStart->IsUsed() && (aStartPos.getY() <= aEndPos.getY()))
                 {
                     // for description of involved coordinate systems have a look at
                     // the first CreateBorderPrimitives call above. Additionally adapt to vertical
@@ -1300,7 +1300,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
         // draw last frame border
         basegfx::B2DPoint aEndPos( aStartPos.getX(), mxImpl->GetRowPosition( nRow ) );
-        if ((pStart->Prim() || pStart->Secn()) && (aStartPos.getY() <= aEndPos.getY()))
+        if (pStart->IsUsed() && (aStartPos.getY() <= aEndPos.getY()))
         {
             // for description of involved coordinate systems have a look at
             // the first CreateBorderPrimitives call above, adapt to vertical
