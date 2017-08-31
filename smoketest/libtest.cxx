@@ -24,7 +24,7 @@
         return GetTickCount();
     }
 
-    bool IsAbsolutePath(char *pPath)
+    bool IsAbsolutePath(char const *pPath)
     {
         if (pPath[1] != ':')
         {
