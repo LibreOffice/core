@@ -1727,8 +1727,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         OString aByteLine;
         SCCOL nCol = nStartCol;
         SCROW nRow = nStartRow;
-        SCCOL nRefCol = 1;
-        SCROW nRefRow = 1;
+        SCCOL nRefCol = nCol;
+        SCROW nRefRow = nRow;
         rStrm.Seek( nOldPos );
         for( ;; )
         {
