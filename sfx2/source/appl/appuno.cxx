@@ -162,6 +162,7 @@ static char const sEncryptionData[] = "EncryptionData";
 static char const sFailOnWarning[] = "FailOnWarning";
 static char const sDocumentService[] = "DocumentService";
 static char const sFilterProvider[] = "FilterProvider";
+static char const sImageFilter[] = "ImageFilter";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
@@ -733,6 +734,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
             }
+            else if ( aName == sImageFilter )
+            {
+                OUString sVal;
+                bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_CONVERT_IMAGES, sVal ) );
+            }
             else if ( aName == sMacroExecMode )
             {
                 sal_Int16 nVal =-1;
@@ -1055,6 +1064,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if (rSet.HasItem(SID_FILTER_PROVIDER))
                 ++nAdditional;
+            if ( rSet.GetItemState( SID_CONVERT_IMAGES ) == SfxItemState::SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1195,6 +1206,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_DOC_SERVICE )
                         continue;
                     if (nId == SID_FILTER_PROVIDER)
+                        continue;
+                    if ( nId == SID_CONVERT_IMAGES )
                         continue;
 
                     // used only internally
@@ -1595,6 +1608,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if (rSet.HasItem(SID_FILTER_PROVIDER, &pItem))
         {
             pValue[nActProp].Name = sFilterProvider;
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
+        }
+        if (rSet.HasItem(SID_CONVERT_IMAGES, &pItem))
+        {
+            pValue[nActProp].Name = sImageFilter;
             pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
     }
