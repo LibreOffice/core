@@ -241,6 +241,7 @@ public:
     void testTdf100709XLSX();
     void testTdf97598XLSX();
     void testTdf110440XLSX();
+    void testTdf111974XLSM();
     void testTdf83672XLSX();
 
     void testPageScalingXLSX();
@@ -370,6 +371,7 @@ public:
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf110440XLSX);
+    CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testTdf83672XLSX);
 
     CPPUNIT_TEST(testPageScalingXLSX);
@@ -3810,6 +3812,14 @@ void ScFiltersTest::testTdf110440XLSX()
     // This failed: group shape's hidden property was lost on import.
     CPPUNIT_ASSERT(!bVisible);
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf111974XLSM()
+{
+    // Would crash without the fix on loading
+    ScDocShellRef xDocSh = loadDoc("tdf111974.", FORMAT_XLSM);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
     xDocSh->DoClose();
 }
 

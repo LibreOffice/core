@@ -75,6 +75,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
+    emfio/emfio \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
