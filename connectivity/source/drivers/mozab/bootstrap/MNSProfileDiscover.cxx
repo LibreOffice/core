@@ -85,8 +85,8 @@ namespace connectivity
                 OUString sIsRelative;
                 OUString sIsDefault;
 
-                for(NameValueList::iterator itor=aSection->lList.begin();
-                    itor != aSection->lList.end();
+                for(NameValueVector::iterator itor=aSection->vVector.begin();
+                    itor != aSection->vVector.end();
                     ++itor)
                 {
                         struct ini_NameValue * aValue = &(*itor);

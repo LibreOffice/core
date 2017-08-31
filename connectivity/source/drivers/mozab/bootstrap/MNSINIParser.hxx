@@ -24,7 +24,7 @@
 #include <osl/process.h>
 
 #include <map>
-#include <list>
+#include <vector>
 
 struct ini_NameValue
 {
@@ -32,14 +32,14 @@ struct ini_NameValue
     OUString sValue;
 };
 
-typedef std::list<
+typedef std::vector<
     ini_NameValue
-> NameValueList;
+> NameValueVector;
 
 struct ini_Section
 {
     OUString sName;
-    NameValueList lList;
+    NameValueVector vVector;
 };
 typedef std::map<OUString,
                 ini_Section

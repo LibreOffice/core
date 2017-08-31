@@ -22,7 +22,7 @@
 #include <osl/process.h>
 
 #include <map>
-#include <list>
+#include <vector>
 
 
 struct ini_NameValue
@@ -39,14 +39,14 @@ struct ini_NameValue
         {}
 };
 
-typedef std::list<
+typedef std::vector<
     ini_NameValue
-> NameValueList;
+> NameValueVector;
 
 struct ini_Section
 {
     OUString sName;
-    NameValueList lList;
+    NameValueVector vVector;
 };
 typedef std::map<OUString,
                 ini_Section
@@ -100,7 +100,7 @@ public:
                     nameValue.sValue = OStringToOUString(
                         line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
-                    aSection->lList.push_back(nameValue);
+                    aSection->vVector.push_back(nameValue);
 
                 }
                 else
@@ -137,8 +137,8 @@ public:
         for(;iBegin != iEnd;iBegin++)
         {
             ini_Section *aSection = &(*iBegin).second;
-            for(NameValueList::iterator itor=aSection->lList.begin();
-                itor != aSection->lList.end();
+            for(NameValueVector::iterator itor=aSection->vVector.begin();
+                itor != aSection->vVector.end();
                 itor++)
             {
                     struct ini_NameValue * aValue = &(*itor);
