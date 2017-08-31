@@ -474,7 +474,7 @@ void SAL_CALL OStatement::addBatch( const OUString& sql )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    m_aBatchList.push_back(sql);
+    m_aBatchVector.push_back(sql);
 }
 
 Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
@@ -485,7 +485,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 
     OString aBatchSql;
     sal_Int32 nLen = 0;
-    for(std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
+    for(std::vector< OUString>::const_iterator i=m_aBatchVector.begin();i != m_aBatchVector.end();++i,++nLen)
     {
         aBatchSql += OUStringToOString(*i,getOwnConnection()->getTextEncoding());
         aBatchSql += ";";

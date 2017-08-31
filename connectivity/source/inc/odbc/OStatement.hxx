@@ -36,7 +36,7 @@
 #include "odbc/OFunctions.hxx"
 #include "odbc/OConnection.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#include <list>
+#include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity
@@ -68,7 +68,7 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
             //  for this Statement
 
-            std::list< OUString>   m_aBatchList;
+            std::vector< OUString>   m_aBatchVector;
             OUString                 m_sSqlStatement;
 
             rtl::Reference<OConnection>     m_pConnection;// The owning Connection object

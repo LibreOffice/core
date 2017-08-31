@@ -195,7 +195,7 @@ void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLExcept
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    m_aBatchList.push_back(sql);
+    m_aBatchVector.push_back(sql);
 }
 
 Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, RuntimeException)

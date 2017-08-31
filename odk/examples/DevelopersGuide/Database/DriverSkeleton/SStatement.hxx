@@ -45,7 +45,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include "SConnection.hxx"
-#include <list>
+#include <vector>
 #include "OSubComponent.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -72,7 +72,7 @@ namespace connectivity
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            ::std::vector< ::rtl::OUString>               m_aBatchVector;
 
             OConnection*                                m_pConnection;  // The owning Connection object
         protected:
