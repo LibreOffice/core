@@ -66,7 +66,7 @@ namespace xmlscript
 
 void EventElement::endElement()
 {
-    static_cast< ControlElement * >( m_xParent.get() )->_events.push_back( this );
+    static_cast< ControlElement * >( m_xParent.get() )->_events.emplace_back(this );
 }
 
 ControlElement::ControlElement(
