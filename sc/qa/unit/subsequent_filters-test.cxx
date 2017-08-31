@@ -241,6 +241,7 @@ public:
     void testTdf100458();
     void testTdf100709XLSX();
     void testTdf97598XLSX();
+    void testTdf111974XLSM();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -359,6 +360,7 @@ public:
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
+    CPPUNIT_TEST(testTdf111974XLSM);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3775,6 +3777,14 @@ void ScFiltersTest::testColumnStyle2XLSX()
         CPPUNIT_ASSERT_EQUAL(OUString("Linux Biolinum G"), aName);
     }
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf111974XLSM()
+{
+    // Would crash without the fix on loading
+    ScDocShellRef xDocSh = loadDoc("tdf111974.", FORMAT_XLSM);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
     xDocSh->DoClose();
 }
 
