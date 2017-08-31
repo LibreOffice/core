@@ -97,38 +97,42 @@ basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray) const
     if(-1 != maCellIndex)
     {
         const basegfx::B2DRange aRange(rArray.GetCellRange(maCellIndex));
-        basegfx::B2DPoint aOrigin(aRange.getMinimum());
-        basegfx::B2DVector aX(aRange.getWidth(), 0.0);
-        basegfx::B2DVector aY(0.0, aRange.getHeight());
 
-        if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode)
+        if(!aRange.isEmpty())
         {
-            // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
-            const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
+            basegfx::B2DPoint aOrigin(aRange.getMinimum());
+            basegfx::B2DVector aX(aRange.getWidth(), 0.0);
+            basegfx::B2DVector aY(0.0, aRange.getHeight());
 
-            switch (meRotMode)
+            if (IsRotated() && SvxRotateMode::SVX_ROTATE_MODE_STANDARD != meRotMode)
             {
-            case SvxRotateMode::SVX_ROTATE_MODE_TOP:
-                // shear Y-Axis
-                aY.setX(-fSkew);
-                break;
-            case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
-                // shear origin half, Y full
-                aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
-                aY.setX(-fSkew);
-                break;
-            case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
-                // shear origin full, Y full
-                aOrigin.setX(aOrigin.getX() + fSkew);
-                aY.setX(-fSkew);
-                break;
-            default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
-                break;
-            }
-        }
+                // when rotated, adapt values. Get Skew (cos/sin == 1/tan)
+                const double fSkew(aY.getY() * (cos(mfOrientation) / sin(mfOrientation)));
 
-        // use column vectors as coordinate axes, homogen column for translation
-        const_cast<Cell*>(this)->maCoordinateSystem = basegfx::tools::createCoordinateSystemTransform(aOrigin, aX, aY);
+                switch (meRotMode)
+                {
+                case SvxRotateMode::SVX_ROTATE_MODE_TOP:
+                    // shear Y-Axis
+                    aY.setX(-fSkew);
+                    break;
+                case SvxRotateMode::SVX_ROTATE_MODE_CENTER:
+                    // shear origin half, Y full
+                    aOrigin.setX(aOrigin.getX() + (fSkew * 0.5));
+                    aY.setX(-fSkew);
+                    break;
+                case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
+                    // shear origin full, Y full
+                    aOrigin.setX(aOrigin.getX() + fSkew);
+                    aY.setX(-fSkew);
+                    break;
+                default: // SvxRotateMode::SVX_ROTATE_MODE_STANDARD, already excluded above
+                    break;
+                }
+            }
+
+            // use column vectors as coordinate axes, homogen column for translation
+            const_cast<Cell*>(this)->maCoordinateSystem = basegfx::tools::createCoordinateSystemTransform(aOrigin, aX, aY);
+        }
     }
 
     return maCoordinateSystem;
@@ -928,6 +932,84 @@ void Array::MirrorSelfX()
 }
 
 // drawing
+void HelperCreateHorizontalBorderPrimitives(
+    const basegfx::B2DHomMatrix& rCoordinateSystem, drawinglayer::primitive2d::Primitive2DContainer& rSequence, bool bUpper, const Style& rBorder,
+    const Style& rStartFromTR, const Style& rStartLFromT, const Style& rStartLFromL, const Style& rStartLFromB, const Style& rStartFromBR,
+    const Style& rEndFromTL, const Style& rEndRFromT, const Style& rEndRFromR, const Style& rEndRFromB, const Style& rEndFromBL,
+    const Color* pForceColor)
+{
+    const basegfx::B2DVector aX(basegfx::tools::getColumn(rCoordinateSystem, 0));
+    const basegfx::B2DVector aY(basegfx::tools::getColumn(rCoordinateSystem, 1));
+
+    if(!aX.equalZero() && !aY.equalZero())
+    {
+        const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(rCoordinateSystem, 2));
+        StyleVectorTable aStart;
+        StyleVectorTable aEnd;
+
+        if(rStartFromTR.Prim()) aStart.push_back(StyleVectorCombination(rStartFromTR, aX - aY));
+        if(rStartLFromT.Prim()) aStart.push_back(StyleVectorCombination(rStartLFromT, -aY));
+        if(rStartLFromL.Prim()) aStart.push_back(StyleVectorCombination(rStartLFromL, -aX));
+        if(rStartLFromB.Prim()) aStart.push_back(StyleVectorCombination(rStartLFromB, aY));
+        if(rStartFromBR.Prim()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
+
+        if(rEndFromTL.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -aX -aY));
+        if(rEndRFromT.Prim()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -aY));
+        if(rEndRFromR.Prim()) aEnd.push_back(StyleVectorCombination(rEndRFromR, aX));
+        if(rEndRFromB.Prim()) aEnd.push_back(StyleVectorCombination(rEndRFromB, aY));
+        if(rEndFromBL.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromBL, aY - aX));
+
+        CreateBorderPrimitives(
+            rSequence,
+            bUpper ? aOrigin : aOrigin + aY,
+            aX,
+            rBorder,
+            aStart,
+            aEnd,
+            pForceColor
+        );
+    }
+}
+
+void HelperCreateVerticalBorderPrimitives(
+    const basegfx::B2DHomMatrix& rCoordinateSystem, drawinglayer::primitive2d::Primitive2DContainer& rSequence, bool bLeft, const Style& rBorder,
+    const Style& rStartFromBR, const Style& rStartTFromR, const Style& rStartTFromT, const Style& rStartTFromL, const Style& rStartFromBL,
+    const Style& rEndFromTR, const Style& rEndBFromR, const Style& rEndBFromB, const Style& rEndBFromL, const Style& rEndFromTL,
+    const Color* pForceColor)
+{
+    const basegfx::B2DVector aX(basegfx::tools::getColumn(rCoordinateSystem, 0));
+    const basegfx::B2DVector aY(basegfx::tools::getColumn(rCoordinateSystem, 1));
+
+    if(!aX.equalZero() && !aY.equalZero())
+    {
+        const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(rCoordinateSystem, 2));
+        StyleVectorTable aStart;
+        StyleVectorTable aEnd;
+
+        if(rStartFromBR.Prim()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
+        if(rStartTFromR.Prim()) aStart.push_back(StyleVectorCombination(rStartTFromR, aX));
+        if(rStartTFromT.Prim()) aStart.push_back(StyleVectorCombination(rStartTFromT, aY));
+        if(rStartTFromL.Prim()) aStart.push_back(StyleVectorCombination(rStartTFromL, -aX));
+        if(rStartFromBL.Prim()) aStart.push_back(StyleVectorCombination(rStartFromBL, aY - aX));
+
+        if(rEndFromTR.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromTR, aX - aY));
+        if(rEndBFromR.Prim()) aEnd.push_back(StyleVectorCombination(rEndBFromR, aX));
+        if(rEndBFromB.Prim()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -aY));
+        if(rEndBFromL.Prim()) aEnd.push_back(StyleVectorCombination(rEndBFromL, aX));
+        if(rEndFromTL.Prim()) aEnd.push_back(StyleVectorCombination(rEndFromTL, aX + aY));
+
+        CreateBorderPrimitives(
+            rSequence,
+            bLeft ? aOrigin : aOrigin + aX,
+            aY,
+            rBorder,
+            aStart,
+            aEnd,
+            pForceColor
+        );
+    }
+}
+
 void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
         const Color* pForceColor ) const
@@ -950,38 +1032,81 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
             if ((!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) || (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow))
             {
-                const basegfx::B2DRange aRange(GetCellRange(nCol, nRow));
+                size_t _nFirstCol = mxImpl->GetMergedFirstCol(nCol, nRow);
+                size_t _nFirstRow = mxImpl->GetMergedFirstRow(nCol, nRow);
+                const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
+                const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
 
-                if (!aRange.isEmpty())
+                if (rTLBR.GetWidth() || rBLTR.GetWidth())
                 {
-                    size_t _nFirstCol = mxImpl->GetMergedFirstCol(nCol, nRow);
-                    size_t _nFirstRow = mxImpl->GetMergedFirstRow(nCol, nRow);
-                    size_t _nLastCol = mxImpl->GetMergedLastCol(nCol, nRow);
-                    size_t _nLastRow = mxImpl->GetMergedLastRow(nCol, nRow);
-                    const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
-                    const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
+                    basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this));
+                    const basegfx::B2DVector aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
+                    const basegfx::B2DVector aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
 
-                    if (rTLBR.GetWidth() || rBLTR.GetWidth())
+                    if(!aX.equalZero() && !aY.equalZero())
                     {
+                        size_t _nLastCol = mxImpl->GetMergedLastCol(nCol, nRow);
+                        size_t _nLastRow = mxImpl->GetMergedLastRow(nCol, nRow);
+                        const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(aCoordinateSystem, 2));
                         drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                        basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this));
 
-                        CreateDiagFrameBorderPrimitives(
-                            aSequence,
-                            basegfx::tools::getColumn(aCoordinateSystem, 2),
-                            basegfx::tools::getColumn(aCoordinateSystem, 0),
-                            basegfx::tools::getColumn(aCoordinateSystem, 1),
-                            rTLBR,
-                            rBLTR,
-                            GetCellStyleLeft(_nFirstCol, _nFirstRow),
-                            GetCellStyleTop(_nFirstCol, _nFirstRow),
-                            GetCellStyleRight(_nLastCol, _nLastRow),
-                            GetCellStyleBottom(_nLastCol, _nLastRow),
-                            GetCellStyleLeft(_nFirstCol, _nLastRow),
-                            GetCellStyleBottom(_nFirstCol, _nLastRow),
-                            GetCellStyleRight(_nLastCol, _nFirstRow),
-                            GetCellStyleTop(_nLastCol, _nFirstRow),
-                            pForceColor);
+                        if(rTLBR.GetWidth())
+                        {
+                            /// top-left and bottom-right Style Tables
+                            StyleVectorTable aStart;
+                            StyleVectorTable aEnd;
+
+                            /// Fill top-left Style Table
+                            const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
+                            if(rTLFromRight.Prim()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX));
+                            const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
+                            if(rTLFromBottom.Prim()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY));
+
+                            /// Fill bottom-right Style Table
+                            const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
+                            if(rBRFromBottom.Prim()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY));
+                            const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
+                            if(rBRFromLeft.Prim()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX));
+
+                            CreateBorderPrimitives(
+                                aSequence,
+                                aOrigin,
+                                aX + aY,
+                                rTLBR,
+                                aStart,
+                                aEnd,
+                                pForceColor
+                            );
+                        }
+
+                        if(rBLTR.GetWidth())
+                        {
+                            /// bottom-left and top-right Style Tables
+                            StyleVectorTable aStart;
+                            StyleVectorTable aEnd;
+
+                            /// Fill bottom-left Style Table
+                            const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
+                            if(rBLFromTop.Prim()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY));
+                            const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
+                            if(rBLFromBottom.Prim()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX));
+
+                            /// Fill top-right Style Table
+                            const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
+                            if(rTRFromBottom.Prim()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY));
+                            const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
+                            if(rTRFromLeft.Prim()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX));
+
+                            CreateBorderPrimitives(
+                                aSequence,
+                                aOrigin + aY,
+                                aX - aY,
+                                rBLTR,
+                                aStart,
+                                aEnd,
+                                pForceColor
+                            );
+                        }
 
                         rProcessor.process(aSequence);
                     }
@@ -1038,34 +1163,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
                     if(pCell)
                     {
-                        basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                        const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
                         const bool bUpper(&pCell->GetStyleTop() == pStart);
 
-                        if(!bUpper)
-                        {
-                            // for the lower edge we need to translate to get to the
-                            // borderline coordinate system
-                            aCoordinateSystem.set(0, 2, aCoordinateSystem.get(0, 2) + aCoordinateSystem.get(0, 1));
-                            aCoordinateSystem.set(1, 2, aCoordinateSystem.get(1, 2) + aCoordinateSystem.get(1, 1));
-                        }
-                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                        CreateBorderPrimitives(
-                            aSequence,
-                            basegfx::tools::getColumn(aCoordinateSystem, 2),
-                            basegfx::tools::getColumn(aCoordinateSystem, 0),
-                            basegfx::B2DVector(basegfx::tools::getColumn(aCoordinateSystem, 1)).normalize(),
-                            *pStart,
-                            aStartLFromTR,
-                            *pStartLFromT,
-                            *pStartLFromL,
-                            *pStartLFromB,
-                            aStartLFromBR,
-                            aEndRFromTL,
-                            *pEndRFromT,
-                            *pEndRFromR,
-                            *pEndRFromB,
-                            aEndRFromBL,
-                            pForceColor);
+                        HelperCreateHorizontalBorderPrimitives(
+                            aCoordinateSystem, aSequence, bUpper, *pStart,
+                            aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
+                            aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor);
+
                         rProcessor.process(aSequence);
                     }
                 }
@@ -1098,35 +1204,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
             if(pCell)
             {
-                basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                drawinglayer::primitive2d::Primitive2DContainer aSequence;
                 const bool bUpper(&pCell->GetStyleTop() == pStart);
 
-                if(!bUpper)
-                {
-                    // for the lower edge we need to translate to get to the
-                    // borderline coordinate system
-                    aCoordinateSystem.set(0, 2, aCoordinateSystem.get(0, 2) + aCoordinateSystem.get(0, 1));
-                    aCoordinateSystem.set(1, 2, aCoordinateSystem.get(1, 2) + aCoordinateSystem.get(1, 1));
-                }
+                HelperCreateHorizontalBorderPrimitives(
+                    aCoordinateSystem, aSequence, bUpper, *pStart,
+                    aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
+                    aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor);
 
-                drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                CreateBorderPrimitives(
-                    aSequence,
-                    basegfx::tools::getColumn(aCoordinateSystem, 2),
-                    basegfx::tools::getColumn(aCoordinateSystem, 0),
-                    basegfx::B2DVector(basegfx::tools::getColumn(aCoordinateSystem, 1)).normalize(),
-                    *pStart,
-                    aStartLFromTR,
-                    *pStartLFromT,
-                    *pStartLFromL,
-                    *pStartLFromB,
-                    aStartLFromBR,
-                    aEndRFromTL,
-                    *pEndRFromT,
-                    *pEndRFromR,
-                    *pEndRFromB,
-                    aEndRFromBL,
-                    pForceColor);
                 rProcessor.process(aSequence);
             }
         }
@@ -1181,51 +1267,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
                     if(pCell)
                     {
-                         basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                        const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
                         const bool bLeft(&pCell->GetStyleLeft() == pStart);
 
-                        if(!bLeft)
-                        {
-                            // for the Right edge we need to translate to get to the
-                            // borderline coordinate system
-                            aCoordinateSystem.set(0, 2, aCoordinateSystem.get(0, 2) + aCoordinateSystem.get(0, 0));
-                            aCoordinateSystem.set(1, 2, aCoordinateSystem.get(1, 2) + aCoordinateSystem.get(1, 0));
-                        }
+                        HelperCreateVerticalBorderPrimitives(
+                            aCoordinateSystem, aSequence, bLeft, *pStart,
+                            aStartTFromBR, *pStartTFromR, *pStartTFromT, *pStartTFromL, aStartTFromBL,
+                            aEndBFromTR, *pEndBFromR, *pEndBFromB, *pEndBFromL, aEndBFromTL, pForceColor);
 
-                        // The *coordinate system* of the edge has to be given, which for vertical
-                        // lines uses the Y-Vector as X-Axis and the X-Vector as Y-Axis, so swap both
-                        // and mirror aX to keep the same orientation (should be (-1.0, 0.0) for
-                        // horizontal lines anyways, this could be used as test here, checked in debug mode)
-                        const basegfx::B2DTuple aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
-                        const basegfx::B2DTuple aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
-                        aCoordinateSystem = basegfx::tools::createCoordinateSystemTransform(basegfx::tools::getColumn(aCoordinateSystem, 2), aY, -aX);
-
-                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                        CreateBorderPrimitives(
-                            // This replaces DrawVerFrameBorder which went from top to bottom. To be able to use
-                            // the same method as for horizontal (CreateBorderPrimitives), the given borders
-                            // have to be rearranged. Best is to look at the explanations of parameters in
-                            // framelink.hxx and the former calls to DrawVerFrameBorder and it's parameters.
-                            // In principle, the order of the five TFrom and BFrom has to be
-                            // inverted to get the same orientation. Before, EndPos and StartPos were changed
-                            // which avoids the reordering, but also leads to inverted line patters for vertical
-                            // lines.
-                            aSequence,
-                            basegfx::tools::getColumn(aCoordinateSystem, 2),
-                            basegfx::tools::getColumn(aCoordinateSystem, 0),
-                            basegfx::B2DVector(basegfx::tools::getColumn(aCoordinateSystem, 1)).normalize(),
-                            *pStart,
-                            aStartTFromBR,
-                            *pStartTFromR,
-                            *pStartTFromT,
-                            *pStartTFromL,
-                            aStartTFromBL,
-                            aEndBFromTR,
-                            *pEndBFromR,
-                            *pEndBFromB,
-                            *pEndBFromL,
-                            aEndBFromTL,
-                            pForceColor);
                         rProcessor.process(aSequence);
                     }
                 }
@@ -1258,44 +1308,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
 
             if(pCell)
             {
-                basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
+                drawinglayer::primitive2d::Primitive2DContainer aSequence;
                 const bool bLeft(&pCell->GetStyleLeft() == pStart);
 
-                if(!bLeft)
-                {
-                    // for the Right edge we need to translate to get to the
-                    // borderline coordinate system
-                    aCoordinateSystem.set(0, 2, aCoordinateSystem.get(0, 2) + aCoordinateSystem.get(0, 0));
-                    aCoordinateSystem.set(1, 2, aCoordinateSystem.get(1, 2) + aCoordinateSystem.get(1, 0));
-                }
+                HelperCreateVerticalBorderPrimitives(
+                    aCoordinateSystem, aSequence, bLeft, *pStart,
+                    aStartTFromBR, *pStartTFromR, *pStartTFromT, *pStartTFromL, aStartTFromBL,
+                    aEndBFromTR, *pEndBFromR, *pEndBFromB, *pEndBFromL, aEndBFromTL, pForceColor);
 
-                // The *coordinate system* of the edge has to be given, which for vertical
-                // lines uses the Y-Vector as X-Axis and the X-Vector as Y-Axis, so swap both
-                // and mirror aX to keep the same orientation (should be (-1.0, 0.0) for
-                // horizontal lines anyways, this could be used as test here, checked in debug mode)
-                const basegfx::B2DTuple aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
-                const basegfx::B2DTuple aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
-                aCoordinateSystem = basegfx::tools::createCoordinateSystemTransform(basegfx::tools::getColumn(aCoordinateSystem, 2), aY, -aX);
-
-                drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                CreateBorderPrimitives(
-                    // also reordered, see call to CreateBorderPrimitives above
-                    aSequence,
-                    basegfx::tools::getColumn(aCoordinateSystem, 2),
-                    basegfx::tools::getColumn(aCoordinateSystem, 0),
-                    basegfx::B2DVector(basegfx::tools::getColumn(aCoordinateSystem, 1)).normalize(),
-                    *pStart,
-                    aStartTFromBR,
-                    *pStartTFromR,
-                    *pStartTFromT,
-                    *pStartTFromL,
-                    aStartTFromBL,
-                    aEndBFromTR,
-                    *pEndBFromR,
-                    *pEndBFromB,
-                    *pEndBFromL,
-                    aEndBFromTL,
-                    pForceColor);
                 rProcessor.process(aSequence);
             }
         }

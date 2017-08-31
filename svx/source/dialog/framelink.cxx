@@ -624,6 +624,44 @@ void CreateBorderPrimitives(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const basegfx::B2DPoint& rOrigin,
     const basegfx::B2DVector& rX,
+    const Style& rBorder,
+    const StyleVectorTable& rStartStyleVectorTable,
+    const StyleVectorTable& rEndStyleVectorTable,
+    const Color* pForceColor)
+{
+    /// rough mapping for testing
+    if (rBorder.Prim() || rBorder.Secn())
+    {
+        const size_t nStart(rStartStyleVectorTable.size());
+        const size_t nEnd(rEndStyleVectorTable.size());
+
+        CreateBorderPrimitives(
+            rTarget,
+            rOrigin,
+            rX,
+            basegfx::getNormalizedPerpendicular(rX),
+            rBorder,
+
+            2 == nStart ? rStartStyleVectorTable[0].getStyle() : 5 == nStart ? rStartStyleVectorTable[0].getStyle() : Style(),
+            5 == nStart ? rStartStyleVectorTable[1].getStyle() : Style(),
+            5 == nStart ? rStartStyleVectorTable[2].getStyle() : Style(),
+            5 == nStart ? rStartStyleVectorTable[3].getStyle() : Style(),
+            2 == nStart ? rStartStyleVectorTable[1].getStyle() : 5 == nStart ? rStartStyleVectorTable[4].getStyle() : Style(),
+
+            2 == nEnd ? rEndStyleVectorTable[0].getStyle() : 5 == nEnd ? rEndStyleVectorTable[0].getStyle() : Style(),
+            5 == nEnd ? rEndStyleVectorTable[1].getStyle() : Style(),
+            5 == nEnd ? rEndStyleVectorTable[2].getStyle() : Style(),
+            5 == nEnd ? rEndStyleVectorTable[3].getStyle() : Style(),
+            2 == nEnd ? rEndStyleVectorTable[1].getStyle() : 5 == nEnd ? rEndStyleVectorTable[4].getStyle() : Style(),
+
+            pForceColor);
+    }
+}
+
+void CreateBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    const basegfx::B2DPoint& rOrigin,
+    const basegfx::B2DVector& rX,
     const basegfx::B2DVector& rY,
     const Style& rBorder,
     const Style& rLFromT,
@@ -656,98 +694,6 @@ void CreateBorderPrimitives(
     }
 }
 
-void CreateDiagFrameBorderPrimitives(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DPoint& rOrigin,
-    const basegfx::B2DVector& rXAxis,
-    const basegfx::B2DVector& rYAxis,
-    const Style& rTLBR,
-    const Style& rBLTR,
-    const Style& /*rTLFromB*/,
-    const Style& /*rTLFromR*/,
-    const Style& /*rBRFromT*/,
-    const Style& /*rBRFromL*/,
-    const Style& /*rBLFromT*/,
-    const Style& /*rBLFromR*/,
-    const Style& /*rTRFromB*/,
-    const Style& /*rTRFromL*/,
-    const Color* pForceColor)
-{
-    // currently the diagonal edges are just added as-is without cutting them against the incoming
-    // edges. This needs to be improved in the future, so please do *not* remove the currently unused
-    // parameters from above
-    if (rTLBR.Prim())
-    {
-        // top-left to bottom-right
-        if (basegfx::fTools::equalZero(rTLBR.Secn()))
-        {
-            rTarget.append(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    rOrigin,
-                    rOrigin + rXAxis + rYAxis,
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Prim(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
-                    rTLBR.Type(),
-                    rTLBR.PatternScale()));
-        }
-        else
-        {
-            rTarget.append(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    rOrigin,
-                    rOrigin + rXAxis + rYAxis,
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Prim(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Dist(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Secn(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
-                    rTLBR.UseGapColor(),
-                    rTLBR.Type(),
-                    rTLBR.PatternScale()));
-        }
-    }
-
-    if (rBLTR.Prim())
-    {
-        // bottom-left to top-right
-        if (basegfx::fTools::equalZero(rTLBR.Secn()))
-        {
-            rTarget.append(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    rOrigin + rYAxis,
-                    rOrigin + rXAxis,
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Prim(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
-                    rBLTR.Type(),
-                    rBLTR.PatternScale()));
-        }
-        else
-        {
-            rTarget.append(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    rOrigin + rYAxis,
-                    rOrigin + rXAxis,
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Prim(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Dist(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
-                    drawinglayer::primitive2d::BorderLine(
-                        rTLBR.Secn(),
-                        (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
-                    rBLTR.UseGapColor(),
-                    rBLTR.Type(),
-                    rBLTR.PatternScale()));
-        }
-    }
-}
 }
 }
 
