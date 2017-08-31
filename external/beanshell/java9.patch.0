@@ -1,0 +1,21 @@
+--- build.xml
++++ build.xml
+@@ -176,7 +176,6 @@
+ 			deprecation="${deprecation}"
+ 			optimize="on"
+ 			debug="on"
+-      target="1.5"
+ 			includes="**/*.java"
+ 			excludes="${excludes},**/bak/**"
+ 		>
+--- src/bsh/util/AWTConsole.java
++++ src/bsh/util/AWTConsole.java
+@@ -214,8 +214,6 @@
+ 		Great.  What a piece of crap.
+ 	*/
+ 	public void setCaretPosition( int pos ) {
+-		((java.awt.peer.TextComponentPeer)getPeer()).setCaretPosition( 
+-			pos + countNLs() );
+ 	}
+ 
+ 	/*
