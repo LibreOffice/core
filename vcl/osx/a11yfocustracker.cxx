@@ -173,7 +173,7 @@ void AquaA11yFocusTracker::toolbox_highlight_on(vcl::Window *pWindow)
     notify_toolbox_item_focus(static_cast <ToolBox *> (pWindow));
 }
 
-void AquaA11yFocusTracker::toolbox_highlight_off(vcl::Window *pWindow)
+void AquaA11yFocusTracker::toolbox_highlight_off(vcl::Window const *pWindow)
 {
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox * >( pWindow->GetParent() );
 

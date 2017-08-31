@@ -653,7 +653,7 @@ static void addSubgroup( NSView* pCurParent, long& rCurY, const rtl::OUString& r
     rCurY = aTextRect.origin.y - 5;
 }
 
-static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+static void addBool( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOffset,
                     const rtl::OUString& rText, bool bEnabled,
                     const rtl::OUString& rProperty, bool bValue,
                     std::vector<ColumnItem >& rRightColumn,
@@ -696,7 +696,7 @@ static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     rCurY = aCheckRect.origin.y - 5;
 }
 
-static void addRadio( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOffset,
                      const rtl::OUString& rText,
                      const rtl::OUString& rProperty, Sequence<rtl::OUString> const & rChoices, sal_Int32 nSelectValue,
                      std::vector<ColumnItem >& rLeftColumn,
@@ -832,7 +832,7 @@ static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttac
     rCurY = aBtnRect.origin.y - 5;
 }
 
-static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
+static void addEdit( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOffset,
                     const rtl::OUString& rCtrlType,
                     const rtl::OUString& rText,
                     const rtl::OUString& rProperty, const PropertyValue* pValue,

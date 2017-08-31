@@ -88,7 +88,7 @@ public:
     CoreTextStyle( const FontSelectPattern& );
     ~CoreTextStyle( void );
 
-    void       GetFontMetric( ImplFontMetricDataRef& ) const;
+    void       GetFontMetric( ImplFontMetricDataRef const & ) const;
     bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
     bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
     hb_font_t* GetHbFont() const { return mpHbFont; }

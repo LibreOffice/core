@@ -423,7 +423,7 @@ namespace vcl
  * @return glyph ID, if the character is missing in the font, the return value is 0.
  * @ingroup sft
  */
-    sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch);
+    sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch);
 #endif
 
 /**

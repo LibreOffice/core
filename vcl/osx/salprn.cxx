@@ -328,7 +328,7 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     }
 }
 
-static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPage )
+static Size getPageSize( vcl::PrinterController const & i_rController, sal_Int32 i_nPage )
 {
     Size aPageSize;
     uno::Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );

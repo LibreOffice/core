@@ -29,7 +29,7 @@
 
 #include <AppKit/NSOpenGLView.h>
 
-AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowData ) :
+AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWindowData ) :
     mpFrame( pFrame ),
     mnClipX( -1 ),
     mnClipY( -1 ),

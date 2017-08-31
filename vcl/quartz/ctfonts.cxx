@@ -110,7 +110,7 @@ CoreTextStyle::~CoreTextStyle()
         hb_font_destroy( mpHbFont );
 }
 
-void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef& rxFontMetric ) const
+void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?

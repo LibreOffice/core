@@ -24,7 +24,7 @@
 
 /* Transform plain HTML into the format expected by MS Office.
  */
-css::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(css::uno::Sequence<sal_Int8>& aTextHtml);
+css::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(css::uno::Sequence<sal_Int8> const & aTextHtml);
 
 /* Transform the MS Office HTML format into plain HTML.
  */

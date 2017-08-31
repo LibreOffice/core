@@ -60,7 +60,7 @@ protected:
     void toolbox_highlight_on(vcl::Window *pWindow);
 
     // received a TOOLBOX_HIGHLIGHTOFF event for this window
-    void toolbox_highlight_off(vcl::Window *pWindow);
+    void toolbox_highlight_off(vcl::Window const *pWindow);
 
     // received a TABPAGE_ACTIVATE event for this window
     void tabpage_activated(vcl::Window *pWindow);

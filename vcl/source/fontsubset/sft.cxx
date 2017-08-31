@@ -2288,7 +2288,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 }
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
-sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch)
+sal_uInt16 MapChar(TrueTypeFont const *ttf, sal_uInt16 ch)
 {
     switch (ttf->cmapType) {
         case CMAP_MS_Symbol:
