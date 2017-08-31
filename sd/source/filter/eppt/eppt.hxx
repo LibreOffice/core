@@ -230,7 +230,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
                                 TextRuleEntry* pTextRule, SvStream& rExtBu, EscherPropertyContainer* );
         void                ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt );
-        void                ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& );
+        void                ImplCreateShape( sal_uInt32 nType, ShapeFlag nFlags, EscherSolverContainer& );
         void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, bool bFill );
 
         void                ImplWritePage( const PHLayout& rLayout,
