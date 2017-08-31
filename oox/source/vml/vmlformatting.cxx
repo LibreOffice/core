@@ -305,8 +305,8 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                      LINE_REL, LINE_ABS, CLOSE, END, UNSUPPORTED };
     VML_State state = START;
 
-    rPointLists.push_back( ::std::vector< Point>() );
-    rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+    rPointLists.emplace_back( );
+    rFlagLists.emplace_back( );
 
     for ( sal_Int32 i = 0; i < rPath.getLength(); i++ )
     {
@@ -340,10 +340,10 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                 case MOVE_REL: // 2* params -> param count reset
                     if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
                     {
-                        rPointLists.push_back( ::std::vector< Point >() );
-                        rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                        rPointLists.emplace_back( );
+                        rFlagLists.emplace_back( );
                     }
-                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
+                    rPointLists.back().emplace_back( aCoordList[ 0 ], aCoordList[ 1 ] );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     nParamCount = 2;
@@ -352,21 +352,21 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                 case MOVE_ABS: // 2 params -> no param count reset
                     if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
                     {
-                        rPointLists.push_back( ::std::vector< Point >() );
-                        rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                        rPointLists.emplace_back( );
+                        rFlagLists.emplace_back( );
                     }
-                    rPointLists.back().push_back( Point( (aCoordList[ 0 ]), (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) ) );
+                    rPointLists.back().emplace_back( (aCoordList[ 0 ]), (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     break;
 
                 case BEZIER_REL: // 6* params -> param count reset
-                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 0 ],
-                                            aCurrentPoint.Y + aCoordList[ 1 ] ) );
-                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 2 ],
-                                            aCurrentPoint.Y + aCoordList[ 3 ] ) );
-                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 4 ],
-                                            aCurrentPoint.Y + aCoordList[ 5 ] ) );
+                    rPointLists.back().emplace_back( aCurrentPoint.X + aCoordList[ 0 ],
+                                            aCurrentPoint.Y + aCoordList[ 1 ] );
+                    rPointLists.back().emplace_back( aCurrentPoint.X + aCoordList[ 2 ],
+                                            aCurrentPoint.Y + aCoordList[ 3 ] );
+                    rPointLists.back().emplace_back( aCurrentPoint.X + aCoordList[ 4 ],
+                                            aCurrentPoint.Y + aCoordList[ 5 ] );
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
@@ -375,9 +375,9 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     break;
 
                 case BEZIER_ABS: // 6* params -> param count reset
-                    rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
-                    rPointLists.back().push_back( Point( aCoordList[ 2 ], aCoordList[ 3 ] ) );
-                    rPointLists.back().push_back( Point( aCoordList[ 4 ], aCoordList[ 5 ] ) );
+                    rPointLists.back().emplace_back( aCoordList[ 0 ], aCoordList[ 1 ] );
+                    rPointLists.back().emplace_back( aCoordList[ 2 ], aCoordList[ 3 ] );
+                    rPointLists.back().emplace_back( aCoordList[ 4 ], aCoordList[ 5 ] );
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
@@ -386,15 +386,15 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     break;
 
                 case LINE_REL: // 2* params -> param count reset
-                    rPointLists.back().push_back( Point( aCurrentPoint.X + aCoordList[ 0 ],
-                                            aCurrentPoint.Y + aCoordList[ 1 ] ) );
+                    rPointLists.back().emplace_back( aCurrentPoint.X + aCoordList[ 0 ],
+                                            aCurrentPoint.Y + aCoordList[ 1 ] );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     nParamCount = 2;
                     break;
 
                 case LINE_ABS: // 2* params -> param count reset
-                    rPointLists.back().push_back( Point( aCoordList[ 0 ], (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) ) );
+                    rPointLists.back().emplace_back( aCoordList[ 0 ], (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
                     nParamCount = 2;
@@ -411,8 +411,8 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     break;
 
                 case END: // 0 param
-                    rPointLists.push_back( ::std::vector< Point >() );
-                    rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                    rPointLists.emplace_back( );
+                    rFlagLists.emplace_back( );
                     break;
 
                 case START:
@@ -559,7 +559,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
                     aValues.push_back( rDashStyle.getToken( 0, ' ', nIndex ).toInt32() );
                 size_t nPairs = aValues.size() / 2; // ignore last value if size is odd
                 for( size_t nPairIdx = 0; nPairIdx < nPairs; ++nPairIdx )
-                    orCustomDash.push_back( LineProperties::DashStop( aValues[ 2 * nPairIdx ], aValues[ 2 * nPairIdx + 1 ] ) );
+                    orCustomDash.emplace_back( aValues[ 2 * nPairIdx ], aValues[ 2 * nPairIdx + 1 ] );
             }
         }
     }

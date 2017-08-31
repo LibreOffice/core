@@ -141,7 +141,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
         }
     }
 
-    m_vIDsPairList.push_back(std::make_pair(pBulletOver, aIndentID));
+    m_vIDsPairList.emplace_back(pBulletOver, aIndentID);
     OUString aStyleName;
 
     LwpFribPtr& rBulletParaFribs = pBulletPara->GetFribs();

@@ -83,121 +83,103 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "RelativePosition",
+    rOutProperties.emplace_back( "RelativePosition",
                   PROP_DIAGRAM_REL_POS,
                   cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "RelativeSize",
+    rOutProperties.emplace_back( "RelativeSize",
                   PROP_DIAGRAM_REL_SIZE,
                   cppu::UnoType<chart2::RelativeSize>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "PosSizeExcludeAxes",
+    rOutProperties.emplace_back( "PosSizeExcludeAxes",
                   PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_SORT_BY_XVALUES,
+    rOutProperties.emplace_back( CHART_UNONAME_SORT_BY_XVALUES,
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "ConnectBars",
+    rOutProperties.emplace_back( "ConnectBars",
                   PROP_DIAGRAM_CONNECT_BARS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "GroupBarsPerAxis",
+    rOutProperties.emplace_back( "GroupBarsPerAxis",
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "IncludeHiddenCells",
+    rOutProperties.emplace_back( "IncludeHiddenCells",
                   PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "StartingAngle",
+    rOutProperties.emplace_back( "StartingAngle",
                   PROP_DIAGRAM_STARTING_ANGLE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "RightAngledAxes",
+    rOutProperties.emplace_back( "RightAngledAxes",
                   PROP_DIAGRAM_RIGHT_ANGLED_AXES,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "Perspective",
+    rOutProperties.emplace_back( "Perspective",
                   PROP_DIAGRAM_PERSPECTIVE,
                   cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::MAYBEVOID ));
+                  beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "RotationHorizontal",
+    rOutProperties.emplace_back( "RotationHorizontal",
                   PROP_DIAGRAM_ROTATION_HORIZONTAL,
                   cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::MAYBEVOID ));
+                  beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "RotationVertical",
+    rOutProperties.emplace_back( "RotationVertical",
                   PROP_DIAGRAM_ROTATION_VERTICAL,
                   cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::MAYBEVOID ));
+                  beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "MissingValueTreatment",
+    rOutProperties.emplace_back( "MissingValueTreatment",
                   PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-   rOutProperties.push_back(
-        Property( "3DRelativeHeight",
+                  | beans::PropertyAttribute::MAYBEVOID );
+   rOutProperties.emplace_back( "3DRelativeHeight",
                   PROP_DIAGRAM_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::MAYBEVOID ));
-   rOutProperties.push_back(
-       Property( "DataTableHBorder",
+                  beans::PropertyAttribute::MAYBEVOID );
+   rOutProperties.emplace_back( "DataTableHBorder",
                PROP_DIAGRAM_DATATABLEHBORDER,
                  cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
-                 | beans::PropertyAttribute::MAYBEDEFAULT ));
-   rOutProperties.push_back(
-       Property( "DataTableVBorder",
+                 | beans::PropertyAttribute::MAYBEDEFAULT );
+   rOutProperties.emplace_back( "DataTableVBorder",
                PROP_DIAGRAM_DATATABLEVBORDER,
                  cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
-                 | beans::PropertyAttribute::MAYBEDEFAULT ));
-   rOutProperties.push_back(
-       Property( "DataTableOutline",
+                 | beans::PropertyAttribute::MAYBEDEFAULT );
+   rOutProperties.emplace_back( "DataTableOutline",
                PROP_DIAGRAM_DATATABLEOUTLINE,
                  cppu::UnoType<bool>::get(),
                  beans::PropertyAttribute::BOUND
-                 | beans::PropertyAttribute::MAYBEDEFAULT ));
-   rOutProperties.push_back(
-        Property( "ExternalData",
+                 | beans::PropertyAttribute::MAYBEDEFAULT );
+   rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
-                  beans::PropertyAttribute::MAYBEVOID ));
+                  beans::PropertyAttribute::MAYBEVOID );
 }
 
 struct StaticDiagramDefaults_Initializer

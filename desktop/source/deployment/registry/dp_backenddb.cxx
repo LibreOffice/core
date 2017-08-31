@@ -368,8 +368,8 @@ BackendDb::readVectorOfPair(
                 xpathApi->selectSingleNode(aPair, sExprSecond);
             OSL_ASSERT(first.is() && second.is());
 
-            retVector.push_back(std::make_pair(
-                                    first->getNodeValue(), second->getNodeValue()));
+            retVector.emplace_back(
+                                    first->getNodeValue(), second->getNodeValue());
         }
         return retVector;
     }

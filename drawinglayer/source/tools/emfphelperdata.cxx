@@ -550,7 +550,7 @@ namespace emfplushelper
                         aColor.setGreen( aStartColor.getGreen() * (1. - brush->blendFactors[i]) + aEndColor.getGreen() * brush->blendFactors[i] );
                         aColor.setBlue ( aStartColor.getBlue()  * (1. - brush->blendFactors[i]) + aEndColor.getBlue()  * brush->blendFactors[i] );
                         aColor.setRed  ( aStartColor.getRed()   * (1. - brush->blendFactors[i]) + aEndColor.getRed()   * brush->blendFactors[i] );
-                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(aBlendPoint, aColor, 1.) );
+                        aVector.emplace_back(aBlendPoint, aColor, 1. );
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -572,20 +572,20 @@ namespace emfplushelper
                             aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
                         }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(aBlendPoint, aColor, 1.) );
+                        aVector.emplace_back(aBlendPoint, aColor, 1. );
                     }
                 }
                 else // ok, no extra points: just start and end
                 {
                     if (brush->type == BrushTypeLinearGradient)
                     {
-                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(0.0, aStartColor, 1.) );
-                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(1.0, aEndColor, 1.) );
+                        aVector.emplace_back(0.0, aStartColor, 1. );
+                        aVector.emplace_back(1.0, aEndColor, 1. );
                     }
                     else // again, here reverse
                     {
-                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(0.0, aEndColor, 1.) );
-                        aVector.push_back( drawinglayer::primitive2d::SvgGradientEntry(1.0, aStartColor, 1.) );
+                        aVector.emplace_back(0.0, aEndColor, 1. );
+                        aVector.emplace_back(1.0, aStartColor, 1. );
                     }
                 }
 

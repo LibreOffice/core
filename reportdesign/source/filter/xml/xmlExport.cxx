@@ -498,7 +498,7 @@ void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sa
 void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames)
 {
     ::std::vector< XMLPropertyState > aPropertyStates;
-    aPropertyStates.push_back(XMLPropertyState(0));
+    aPropertyStates.emplace_back(0);
     ::std::vector<sal_Int32>::const_iterator aIter = _aSize.begin();
     ::std::vector<sal_Int32>::const_iterator aIter2 = aIter + 1;
     ::std::vector<sal_Int32>::const_iterator aEnd = _aSize.end();
@@ -1155,15 +1155,15 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             if ( !aPos.X )
             {
                 sBorderProp = PROPERTY_BORDERLEFT;
-                aProps.push_back(PROPERTY_BORDERRIGHT);
+                aProps.emplace_back(PROPERTY_BORDERRIGHT);
             }
             else
             {
                 sBorderProp = PROPERTY_BORDERRIGHT;
-                aProps.push_back(PROPERTY_BORDERLEFT);
+                aProps.emplace_back(PROPERTY_BORDERLEFT);
             }
-            aProps.push_back(PROPERTY_BORDERTOP);
-            aProps.push_back(PROPERTY_BORDERBOTTOM);
+            aProps.emplace_back(PROPERTY_BORDERTOP);
+            aProps.emplace_back(PROPERTY_BORDERBOTTOM);
         }
         else // horizontal
         {
@@ -1171,15 +1171,15 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             if ( (aPos.Y + aSize.Height) == nSectionHeight )
             {
                 sBorderProp = PROPERTY_BORDERBOTTOM;
-                aProps.push_back(PROPERTY_BORDERTOP);
+                aProps.emplace_back(PROPERTY_BORDERTOP);
             }
             else
             {
                 sBorderProp = PROPERTY_BORDERTOP;
-                aProps.push_back(PROPERTY_BORDERBOTTOM);
+                aProps.emplace_back(PROPERTY_BORDERBOTTOM);
             }
-            aProps.push_back(PROPERTY_BORDERRIGHT);
-            aProps.push_back(PROPERTY_BORDERLEFT);
+            aProps.emplace_back(PROPERTY_BORDERRIGHT);
+            aProps.emplace_back(PROPERTY_BORDERLEFT);
         }
 
         xBorderProp->setPropertyValue(sBorderProp,uno::makeAny(aValue));

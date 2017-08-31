@@ -556,7 +556,7 @@ namespace basegfx
                                     if(!fTools::equal(pPrev->getX(), pCurr->getX()))
                                     {
                                         // X-order not needed, just add
-                                        aTrDeSimpleEdges.push_back(TrDeSimpleEdge(pPrev, pCurr));
+                                        aTrDeSimpleEdges.emplace_back(pPrev, pCurr);
 
                                         const double fMiddle((pPrev->getY() + pCurr->getY()) * 0.5);
                                         pPrev->setY(fMiddle);
@@ -567,7 +567,7 @@ namespace basegfx
                                 {
                                     // vertical edge. Positive Y-direction is guaranteed by the
                                     // TrDeEdgeEntry constructor
-                                    maTrDeEdgeEntries.push_back(TrDeEdgeEntry(pPrev, pCurr, 0));
+                                    maTrDeEdgeEntries.emplace_back(pPrev, pCurr, 0);
                                     mnInitialEdgeEntryCount++;
                                 }
 
@@ -874,14 +874,13 @@ namespace basegfx
                     // the two edges start at the same Y, they use the same DeltaY, they
                     // do not cut themselves and not any other edge in range. Create a
                     // B2DTrapezoid and consume both edges
-                    ro_Result.push_back(
-                        B2DTrapezoid(
+                    ro_Result.emplace_back(
                             aLeft.getStart().getX(),
                             aRight.getStart().getX(),
                             aLeft.getStart().getY(),
                             aLeftEnd.getX(),
                             aRightEnd.getX(),
-                            aLeftEnd.getY()));
+                            aLeftEnd.getY());
 
                     maTrDeEdgeEntries.pop_front();
                     maTrDeEdgeEntries.pop_front();
@@ -980,14 +979,13 @@ namespace basegfx
                 const double fLeftX(rPointA.getX() - fHalfLineWidth);
                 const double fRightX(rPointA.getX() + fHalfLineWidth);
 
-                ro_Result.push_back(
-                    B2DTrapezoid(
+                ro_Result.emplace_back(
                         fLeftX,
                         fRightX,
                         std::min(rPointA.getY(), rPointB.getY()),
                         fLeftX,
                         fRightX,
-                        std::max(rPointA.getY(), rPointB.getY())));
+                        std::max(rPointA.getY(), rPointB.getY()));
             }
             else if(fTools::equal(rPointA.getY(), rPointB.getY()))
             {
@@ -995,14 +993,13 @@ namespace basegfx
                 const double fLeftX(std::min(rPointA.getX(), rPointB.getX()));
                 const double fRightX(std::max(rPointA.getX(), rPointB.getX()));
 
-                ro_Result.push_back(
-                    B2DTrapezoid(
+                ro_Result.emplace_back(
                         fLeftX,
                         fRightX,
                         rPointA.getY() - fHalfLineWidth,
                         fLeftX,
                         fRightX,
-                        rPointA.getY() + fHalfLineWidth));
+                        rPointA.getY() + fHalfLineWidth);
             }
             else
             {
@@ -1021,10 +1018,10 @@ namespace basegfx
                 // create EdgeEntries
                 basegfx::trapezoidhelper::TrDeEdgeEntries aTrDeEdgeEntries;
 
-                aTrDeEdgeEntries.push_back(basegfx::trapezoidhelper::TrDeEdgeEntry(&aStartLow, &aStartHigh, 0));
-                aTrDeEdgeEntries.push_back(basegfx::trapezoidhelper::TrDeEdgeEntry(&aStartHigh, &aEndHigh, 0));
-                aTrDeEdgeEntries.push_back(basegfx::trapezoidhelper::TrDeEdgeEntry(&aEndHigh, &aEndLow, 0));
-                aTrDeEdgeEntries.push_back(basegfx::trapezoidhelper::TrDeEdgeEntry(&aEndLow, &aStartLow, 0));
+                aTrDeEdgeEntries.emplace_back(&aStartLow, &aStartHigh, 0);
+                aTrDeEdgeEntries.emplace_back(&aStartHigh, &aEndHigh, 0);
+                aTrDeEdgeEntries.emplace_back(&aEndHigh, &aEndLow, 0);
+                aTrDeEdgeEntries.emplace_back(&aEndLow, &aStartLow, 0);
                 aTrDeEdgeEntries.sort();
 
                 // here we know we have exactly four edges, and they do not cut, touch or
@@ -1038,26 +1035,24 @@ namespace basegfx
                 if(bEndOnSameLine)
                 {
                     // create two triangle trapezoids
-                    ro_Result.push_back(
-                        B2DTrapezoid(
+                    ro_Result.emplace_back(
                             aLeft.getStart().getX(),
                             aRight.getStart().getX(),
                             aLeft.getStart().getY(),
                             aLeft.getEnd().getX(),
                             aRight.getEnd().getX(),
-                            aLeft.getEnd().getY()));
+                            aLeft.getEnd().getY());
 
                     basegfx::trapezoidhelper::TrDeEdgeEntries::reference aLeft2(*aCurrent++);
                     basegfx::trapezoidhelper::TrDeEdgeEntries::reference aRight2(*aCurrent++);
 
-                    ro_Result.push_back(
-                        B2DTrapezoid(
+                    ro_Result.emplace_back(
                             aLeft2.getStart().getX(),
                             aRight2.getStart().getX(),
                             aLeft2.getStart().getY(),
                             aLeft2.getEnd().getX(),
                             aRight2.getEnd().getX(),
-                            aLeft2.getEnd().getY()));
+                            aLeft2.getEnd().getY());
                 }
                 else
                 {
@@ -1072,32 +1067,29 @@ namespace basegfx
                         const B2DPoint aSplitLeft(aLeft.getCutPointForGivenY(aRight.getEnd().getY()));
                         const B2DPoint aSplitRight(aRight2.getCutPointForGivenY(aLeft.getEnd().getY()));
 
-                        ro_Result.push_back(
-                            B2DTrapezoid(
+                        ro_Result.emplace_back(
                                 aLeft.getStart().getX(),
                                 aRight.getStart().getX(),
                                 aLeft.getStart().getY(),
                                 aSplitLeft.getX(),
                                 aRight.getEnd().getX(),
-                                aRight.getEnd().getY()));
+                                aRight.getEnd().getY());
 
-                        ro_Result.push_back(
-                            B2DTrapezoid(
+                        ro_Result.emplace_back(
                                 aSplitLeft.getX(),
                                 aRight.getEnd().getX(),
                                 aRight.getEnd().getY(),
                                 aLeft2.getStart().getX(),
                                 aSplitRight.getX(),
-                                aLeft2.getStart().getY()));
+                                aLeft2.getStart().getY());
 
-                        ro_Result.push_back(
-                            B2DTrapezoid(
+                        ro_Result.emplace_back(
                                 aLeft2.getStart().getX(),
                                 aSplitRight.getX(),
                                 aLeft2.getStart().getY(),
                                 aLeft2.getEnd().getX(),
                                 aRight2.getEnd().getX(),
-                                aLeft2.getEnd().getY()));
+                                aLeft2.getEnd().getY());
                     }
                     else
                     {
@@ -1106,32 +1098,29 @@ namespace basegfx
                         const B2DPoint aSplitRight(aRight.getCutPointForGivenY(aLeft.getEnd().getY()));
                         const B2DPoint aSplitLeft(aLeft2.getCutPointForGivenY(aRight.getEnd().getY()));
 
-                        ro_Result.push_back(
-                            B2DTrapezoid(
+                        ro_Result.emplace_back(
                                 aLeft.getStart().getX(),
                                 aRight.getStart().getX(),
                                 aLeft.getStart().getY(),
                                 aLeft.getEnd().getX(),
                                 aSplitRight.getX(),
-                                aLeft.getEnd().getY()));
+                                aLeft.getEnd().getY());
 
-                        ro_Result.push_back(
-                            B2DTrapezoid(
+                        ro_Result.emplace_back(
                                 aLeft.getEnd().getX(),
                                 aSplitRight.getX(),
                                 aLeft.getEnd().getY(),
                                 aSplitLeft.getX(),
                                 aRight.getEnd().getX(),
-                                aRight2.getStart().getY()));
+                                aRight2.getStart().getY());
 
-                        ro_Result.push_back(
-                            B2DTrapezoid(
+                        ro_Result.emplace_back(
                                 aSplitLeft.getX(),
                                 aRight.getEnd().getX(),
                                 aRight2.getStart().getY(),
                                 aLeft2.getEnd().getX(),
                                 aRight2.getEnd().getX(),
-                                aLeft2.getEnd().getY()));
+                                aLeft2.getEnd().getY());
                     }
                 }
             }

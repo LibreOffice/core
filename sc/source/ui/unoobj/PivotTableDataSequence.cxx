@@ -179,7 +179,7 @@ uno::Reference<util::XCloneable> SAL_CALL PivotTableDataSequence::createClone()
 void SAL_CALL PivotTableDataSequence::addModifyListener(const uno::Reference<util::XModifyListener>& aListener)
 {
     SolarMutexGuard aGuard;
-    m_aValueListeners.push_back(uno::Reference<util::XModifyListener>(aListener));
+    m_aValueListeners.emplace_back(aListener);
 }
 
 void SAL_CALL PivotTableDataSequence::removeModifyListener(const uno::Reference<util::XModifyListener>& aListener)

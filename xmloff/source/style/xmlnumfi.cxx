@@ -399,7 +399,7 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemo
         SetUsed( nKey );
     }
 
-    m_NameEntries.push_back(SvXMLNumFmtEntry(rName, nKey, bRemoveAfterUse));
+    m_NameEntries.emplace_back(rName, nKey, bRemoveAfterUse);
 }
 
 void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )

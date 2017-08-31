@@ -550,7 +550,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         ::std::map< sal_Int32, Reference< chart2::XDataSeries > >::const_iterator aIndexEnd( aIndexSeriesMap.end() );
 
         for( ; aIndexIt != aIndexEnd; ++aIndexIt )
-            aNewSeriesVector.push_back( NewDonutSeries(aIndexIt->second,nOldSeriesCount) );
+            aNewSeriesVector.emplace_back(aIndexIt->second,nOldSeriesCount );
     }
 
     //overwrite attached axis information according to old series styles

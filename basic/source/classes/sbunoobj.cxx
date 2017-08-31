@@ -458,7 +458,7 @@ static sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
 {
     NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
     sal_uInt32 nIndex = rNativeObjectWrapperVector.size();
-    rNativeObjectWrapperVector.push_back( ObjectItem( pNativeObj ) );
+    rNativeObjectWrapperVector.emplace_back( pNativeObj );
     return nIndex;
 }
 
@@ -4452,7 +4452,7 @@ void registerComponentToBeDisposedForBasic
     ( const Reference< XComponent >& xComponent, StarBASIC* pBasic )
 {
     StarBasicDisposeItem* pItem = lcl_getOrCreateItemForBasic( pBasic );
-    pItem->m_vComImplementsObjects.push_back( xComponent );
+    pItem->m_vComImplementsObjects.emplace_back(xComponent );
 }
 
 void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic )

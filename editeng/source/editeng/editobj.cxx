@@ -924,7 +924,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         if (rBorders.size() == 1 && rBorders[0] == 0)
         {
             // Empty paragraph. Push an empty section.
-            aAttrs.push_back(editeng::Section(nPara, 0, 0));
+            aAttrs.emplace_back(nPara, 0, 0);
             continue;
         }
 
@@ -934,7 +934,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         for (++itBorder; itBorder != itBorderEnd; ++itBorder, nPrev = nCur)
         {
             nCur = *itBorder;
-            aAttrs.push_back(editeng::Section(nPara, nPrev, nCur));
+            aAttrs.emplace_back(nPara, nPrev, nCur);
         }
     }
 

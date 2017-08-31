@@ -179,13 +179,13 @@ Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForU
 void CommandDispatchContainer::setDrawCommandDispatch( DrawCommandDispatch* pDispatch )
 {
     m_pDrawCommandDispatch = pDispatch;
-    m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pDispatch ) );
+    m_aToBeDisposedDispatches.emplace_back( pDispatch );
 }
 
 void CommandDispatchContainer::setShapeController( ShapeController* pController )
 {
     m_pShapeController = pController;
-    m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pController ) );
+    m_aToBeDisposedDispatches.emplace_back( pController );
 }
 
 } //  namespace chart

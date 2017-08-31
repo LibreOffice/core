@@ -57,7 +57,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
     {
         if (pTableFilters->indexOf('%') != -1)
         {
-            _rOut.push_back(WildCard(pTableFilters->replace('%', '*')));
+            _rOut.emplace_back(pTableFilters->replace('%', '*'));
         }
         else
         {
@@ -276,7 +276,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
             const OUString*  name = aNames.getConstArray();
             const OUString*  nameEnd = name + aNames.getLength();
             for ( ; name != nameEnd; ++name )
-                aUnfilteredTables.push_back( TableInfo( *name ) );
+                aUnfilteredTables.emplace_back( *name );
 
             reFill( lcl_filter( aUnfilteredTables,
                 _rTableFilter, _rTableTypeFilter, m_xMetaData, m_xMasterContainer ) );
@@ -357,7 +357,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
                 sName       = xCurrentRow->getString(3);
                 sType       = xCurrentRow->getString(4);
 
-                aUnfilteredTables.push_back( TableInfo( sCatalog, sSchema, sName, sType ) );
+                aUnfilteredTables.emplace_back( sCatalog, sSchema, sName, sType );
             }
 
             reFill( lcl_filter( aUnfilteredTables,

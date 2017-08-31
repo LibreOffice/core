@@ -123,7 +123,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             xStreamComp->addEventListener( static_cast< lang::XEventListener* >( this ) );
         }
 
-        m_aOpenStreams.push_back( uno::WeakReference< embed::XExtendedStorageStream >( xResult ) );
+        m_aOpenStreams.emplace_back( xResult );
     }
     else
     {

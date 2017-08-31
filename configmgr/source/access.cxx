@@ -249,25 +249,24 @@ css::uno::Sequence< OUString > Access::getSupportedServiceNames()
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     std::vector<OUString> services;
-    services.push_back("com.sun.star.configuration.ConfigurationAccess");
+    services.emplace_back("com.sun.star.configuration.ConfigurationAccess");
     if (getRootAccess()->isUpdate()) {
-        services.push_back(
-            "com.sun.star.configuration.ConfigurationUpdateAccess");
+        services.emplace_back("com.sun.star.configuration.ConfigurationUpdateAccess");
     }
-    services.push_back("com.sun.star.configuration.HierarchyAccess");
-    services.push_back("com.sun.star.configuration.HierarchyElement");
+    services.emplace_back("com.sun.star.configuration.HierarchyAccess");
+    services.emplace_back("com.sun.star.configuration.HierarchyElement");
     if (getNode()->kind() == Node::KIND_GROUP) {
-        services.push_back("com.sun.star.configuration.GroupAccess");
-        services.push_back("com.sun.star.configuration.PropertyHierarchy");
+        services.emplace_back("com.sun.star.configuration.GroupAccess");
+        services.emplace_back("com.sun.star.configuration.PropertyHierarchy");
         if (getRootAccess()->isUpdate()) {
-            services.push_back("com.sun.star.configuration.GroupUpdate");
+            services.emplace_back("com.sun.star.configuration.GroupUpdate");
         }
     } else {
-        services.push_back("com.sun.star.configuration.SetAccess");
-        services.push_back("com.sun.star.configuration.SimpleSetAccess");
+        services.emplace_back("com.sun.star.configuration.SetAccess");
+        services.emplace_back("com.sun.star.configuration.SimpleSetAccess");
         if (getRootAccess()->isUpdate()) {
-            services.push_back("com.sun.star.configuration.SetUpdate");
-            services.push_back("com.sun.star.configuration.SimpleSetUpdate");
+            services.emplace_back("com.sun.star.configuration.SetUpdate");
+            services.emplace_back("com.sun.star.configuration.SimpleSetUpdate");
         }
     }
     addSupportedServiceNames(&services);
@@ -1672,11 +1671,10 @@ void Access::initBroadcasterAndChanges(
                                 //TODO: non-void Element, ReplacedElement
                         }
                         if (collectPropChanges) {
-                            propChanges.push_back(
-                                css::beans::PropertyChangeEvent(
+                            propChanges.emplace_back(
                                     static_cast< cppu::OWeakObject * >(this),
                                     i.first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
+                                    css::uno::Any());
                         }
                     }
                 }
@@ -1759,11 +1757,10 @@ void Access::initBroadcasterAndChanges(
                             //TODO: non-void ReplacedElement
                     }
                     if (collectPropChanges) {
-                        propChanges.push_back(
-                            css::beans::PropertyChangeEvent(
+                        propChanges.emplace_back(
                                 static_cast< cppu::OWeakObject * >(this),
                                 i.first, false, -1, css::uno::Any(),
-                                css::uno::Any()));
+                                css::uno::Any());
                     }
                 }
                 break;
@@ -1895,11 +1892,10 @@ void Access::initBroadcasterAndChanges(
                             //TODO: non-void ReplacedElement
                     }
                     if (collectPropChanges) {
-                        propChanges.push_back(
-                            css::beans::PropertyChangeEvent(
+                        propChanges.emplace_back(
                                 static_cast< cppu::OWeakObject * >(this),
                                 i.first, false, -1, css::uno::Any(),
-                                css::uno::Any()));
+                                css::uno::Any());
                     }
                 }
                 break;

@@ -645,7 +645,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     }
     else
         // "Select" the entire column if no selection exists.
-        aMarkedSpans.push_back(sc::RowSpan(0, MAXROW));
+        aMarkedSpans.emplace_back(0, MAXROW);
 
     sal_uInt16 nWidth = static_cast<sal_uInt16>(nOldWidth*nPPTX);
     bool bFound = false;
@@ -1117,7 +1117,7 @@ public:
         {
             // Store the string replacement for later commits.
             OUString aText = ScEditUtil::GetSpaceDelimitedString(*mpEngine);
-            maStrEntries.push_back(StrEntry(nRow, aText));
+            maStrEntries.emplace_back(nRow, aText);
         }
     }
 };

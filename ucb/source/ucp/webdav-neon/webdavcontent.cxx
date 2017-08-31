@@ -110,8 +110,8 @@ namespace
         bool bIsRequestSize = false;
         DAVResource aResource;
         DAVRequestHeaders aPartialGet;
-        aPartialGet.push_back( DAVRequestHeader( OUString( "Range" ), // see <https://tools.ietf.org/html/rfc7233#section-3.1>
-                                                 OUString( "bytes=0-0" ) ) );
+        aPartialGet.emplace_back( OUString( "Range" ), // see <https://tools.ietf.org/html/rfc7233#section-3.1>
+                                  OUString( "bytes=0-0" ) );
 
         for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
               it != aHeaderNames.end(); ++it )
@@ -127,8 +127,8 @@ namespace
         {
             // we need to know if the server accepts range requests for a resource
             // and the range unit it uses
-            aHeaderNames.push_back( OUString( "Accept-Ranges" ) ); // see <https://tools.ietf.org/html/rfc7233#section-2.3>
-            aHeaderNames.push_back( OUString( "Content-Range" ) ); // see <https://tools.ietf.org/html/rfc7233#section-4.2>
+            aHeaderNames.emplace_back( "Accept-Ranges" ); // see <https://tools.ietf.org/html/rfc7233#section-2.3>
+            aHeaderNames.emplace_back( "Content-Range" ); // see <https://tools.ietf.org/html/rfc7233#section-4.2>
         }
         try
         {
@@ -1522,7 +1522,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     // in case of not DAV PROFIND (previously in program flow) failed
                     // so we need to add the only prop that's common
                     // to DAV and NON_DAV: MediaType, that maps to Content-Type
-                    aHeaderNames.push_back( "Content-Type" );
+                    aHeaderNames.emplace_back("Content-Type" );
                 }
 
                 if (!aHeaderNames.empty()) try
@@ -2479,10 +2479,9 @@ void Content::queryChildren( ContentRefList& rChildren )
                  ( nPos == ( aChildURL.getLength() - 1 ) ) )
             {
                 // No further slashes / only a final slash. It's a child!
-                rChildren.push_back(
-                    ::webdav_ucp::Content::ContentRef(
+                rChildren.emplace_back(
                         static_cast< ::webdav_ucp::Content * >(
-                            xChild.get() ) ) );
+                            xChild.get() ) );
             }
         }
         ++it;
@@ -4277,10 +4276,9 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
                     // do a GET with a payload of 0, the server does not
                     // support HEAD (or has HEAD disabled)
                     DAVRequestHeaders aPartialGet;
-                    aPartialGet.push_back(
-                        DAVRequestHeader(
+                    aPartialGet.emplace_back(
                             OUString( "Range" ),
-                            OUString( "bytes=0-0" )));
+                            OUString( "bytes=0-0" ));
 
                     rResAccess->GET0( aPartialGet,
                                      aHeaderNames,

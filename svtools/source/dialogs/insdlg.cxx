@@ -163,7 +163,7 @@ void SvObjectServerList::FillInsertObjects()
                     {
                         if( !Get( aClassName ) )
                             // not entered yet
-                            aObjectServerList.push_back( SvObjectServer( aClassName, aUIName ) );
+                            aObjectServerList.emplace_back( aClassName, aUIName );
                     }
                 }
             }

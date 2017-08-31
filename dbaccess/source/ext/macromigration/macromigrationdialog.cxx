@@ -93,7 +93,7 @@ namespace dbmm
         _out_rControllers.clear();
         Reference< XEnumeration > xControllerEnum( _rxDocument->getControllers(), UNO_SET_THROW );
         while ( xControllerEnum->hasMoreElements() )
-            _out_rControllers.push_back( Reference< XController2 >( xControllerEnum->nextElement(), UNO_QUERY_THROW ) );
+            _out_rControllers.emplace_back( xControllerEnum->nextElement(), UNO_QUERY_THROW );
     }
 
     // MacroMigrationDialog_Data
@@ -470,7 +470,7 @@ namespace dbmm
                     throw CloseVetoException();
                 }
 
-                aViews.push_back( ViewDescriptor( xFrame, sViewName ) );
+                aViews.emplace_back( xFrame, sViewName );
                 xFrame->setComponent( nullptr, nullptr );
                 xController->dispose();
             }

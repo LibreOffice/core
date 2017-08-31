@@ -786,7 +786,7 @@ void handleEnumType(
             std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, pair.second, classDescriptor);
             blockCode->instrAreturn();
-            blocks.push_back(std::make_pair(pair.first, blockCode.get()));
+            blocks.emplace_back(pair.first, blockCode.get());
             blockCode.release();
         }
         code->instrLookupswitch(defCode.get(), blocks);
@@ -1908,13 +1908,12 @@ void handleInterfaceType(
                     "set" + attrName, sdesc.getDescriptor(), nullptr, exc2,
                     sdesc.getSignature());
             }
-            typeInfo.push_back(
-                TypeInfo(
+            typeInfo.emplace_back(
                     TypeInfo::KIND_ATTRIBUTE, attrName, specialType,
                     static_cast< TypeInfo::Flags >(
                         (attr.readOnly ? TypeInfo::FLAG_READONLY : 0)
                         | (attr.bound ? TypeInfo::FLAG_BOUND : 0)),
-                    index, polymorphicUnoType));
+                    index, polymorphicUnoType);
             index += (attr.readOnly ? 1 : 2);
         }
         for (const unoidl::InterfaceTypeEntity::Method& method : entity->getDirectMethods())
@@ -1925,11 +1924,10 @@ void handleInterfaceType(
             MethodDescriptor desc(
                 manager, dependencies, method.returnType, &specialReturnType,
                 &polymorphicUnoReturnType);
-            typeInfo.push_back(
-                TypeInfo(
+            typeInfo.emplace_back(
                     TypeInfo::KIND_METHOD, methodName, specialReturnType,
                     static_cast< TypeInfo::Flags >(0), index++,
-                    polymorphicUnoReturnType));
+                    polymorphicUnoReturnType);
             sal_Int32 paramIndex = 0;
             for (const unoidl::InterfaceTypeEntity::Method::Parameter& param : method.parameters)
             {
@@ -1943,10 +1941,9 @@ void handleInterfaceType(
                 if (out || isSpecialType(specialType)
                     || polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE)
                 {
-                    typeInfo.push_back(
-                        TypeInfo(
+                    typeInfo.emplace_back(
                             codemaker::convertString(param.name), specialType, in,
-                            out, methodName, paramIndex, polymorphicUnoType));
+                            out, methodName, paramIndex, polymorphicUnoType);
                 }
                 ++paramIndex;
             }

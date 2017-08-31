@@ -550,7 +550,7 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
     if ( rType.isEmpty() )
         sName = "------------------------------------------";
 
-    m_aFilters.push_back( std::pair< OUString, OUString >( rFilter, rType ) );
+    m_aFilters.emplace_back( rFilter, rType );
     m_pFilter_lb->InsertEntry( sName );
 
     if( m_pFilter_lb->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
@@ -1372,7 +1372,7 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
 
             if( rFolder.mbIsFolder )
             {
-                aFolders.push_back( std::pair< OUString, OUString > ( sTitle, aFolderName ) );
+                aFolders.emplace_back( sTitle, aFolderName );
             }
 
             // add entries to the autocompletion mechanism

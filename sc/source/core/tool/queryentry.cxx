@@ -146,7 +146,7 @@ void ScQueryEntry::Clear()
     eConnect        = SC_AND;
     nField          = 0;
     maQueryItems.clear();
-    maQueryItems.push_back(Item());
+    maQueryItems.emplace_back();
 
     delete pSearchParam;
     delete pSearchText;

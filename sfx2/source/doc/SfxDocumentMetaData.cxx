@@ -839,8 +839,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         }
         const css::uno::Type & type = any.getValueType();
         std::vector<std::pair<const char*, OUString> > as;
-        as.push_back(std::make_pair(static_cast<const char*>("meta:name"),
-                                        name));
+        as.emplace_back("meta:name", name);
         const char* vt = "meta:value-type";
 
         // convert according to type
@@ -850,8 +849,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             OUStringBuffer buf;
             ::sax::Converter::convertBool(buf, b);
             values.push_back(buf.makeStringAndClear());
-            as.push_back(std::make_pair(vt,
-                OUString("boolean")));
+            as.emplace_back(vt, OUString("boolean"));
         } else if (type == ::cppu::UnoType< OUString>::get()) {
             OUString s;
             any >>= s;
@@ -862,33 +860,28 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 // => best backward compatibility: first 4 without @value-type, rest with
             if (4 <= i)
             {
-                as.push_back(std::make_pair(vt,
-                    OUString("string")));
+                as.emplace_back(vt, OUString("string"));
             }
         } else if (type == ::cppu::UnoType<css::util::DateTime>::get()) {
             css::util::DateTime dt;
             any >>= dt;
             values.push_back(dateTimeToText(dt));
-            as.push_back(std::make_pair(vt,
-                OUString("date")));
+            as.emplace_back(vt, OUString("date"));
         } else if (type == ::cppu::UnoType<css::util::Date>::get()) {
             css::util::Date d;
             any >>= d;
             values.push_back(dateToText(d, nullptr));
-            as.push_back(std::make_pair(vt,
-                OUString("date")));
+            as.emplace_back(vt,OUString("date"));
         } else if (type == ::cppu::UnoType<css::util::DateTimeWithTimezone>::get()) {
             css::util::DateTimeWithTimezone dttz;
             any >>= dttz;
             values.push_back(dateTimeToText(dttz.DateTimeInTZ, &dttz.Timezone));
-            as.push_back(std::make_pair(vt,
-                OUString("date")));
+            as.emplace_back(vt, OUString("date"));
         } else if (type == ::cppu::UnoType<css::util::DateWithTimezone>::get()) {
             css::util::DateWithTimezone dtz;
             any >>= dtz;
             values.push_back(dateToText(dtz.DateInTZ, &dtz.Timezone));
-            as.push_back(std::make_pair(vt,
-                OUString("date")));
+            as.emplace_back(vt, OUString("date"));
         } else if (type == ::cppu::UnoType<css::util::Time>::get()) {
             // #i97029#: replaced by Duration
             // Time is supported for backward compatibility with OOo 3.x, x<=2
@@ -900,14 +893,12 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ud.Seconds = ut.Seconds;
             ud.NanoSeconds = ut.NanoSeconds;
             values.push_back(durationToText(ud));
-            as.push_back(std::make_pair(vt,
-                OUString("time")));
+            as.emplace_back(vt, OUString("time"));
         } else if (type == ::cppu::UnoType<css::util::Duration>::get()) {
             css::util::Duration ud;
             any >>= ud;
             values.push_back(durationToText(ud));
-            as.push_back(std::make_pair(vt,
-                OUString("time")));
+            as.emplace_back(vt, OUString("time"));
         } else if (::cppu::UnoType<double>::get().isAssignableFrom(type)) {
             // support not just double, but anything that can be converted
             double d = 0;
@@ -915,8 +906,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             OUStringBuffer buf;
             ::sax::Converter::convertDouble(buf, d);
             values.push_back(buf.makeStringAndClear());
-            as.push_back(std::make_pair(vt,
-                OUString("float")));
+            as.emplace_back(vt, OUString("float"));
         } else {
             SAL_WARN("sfx.doc", "Unsupported property type: " << any.getValueTypeName() );
             continue;
@@ -980,20 +970,13 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     std::vector<std::pair<const char *, OUString> > attributes;
     if (!m_TemplateName.isEmpty() || !m_TemplateURL.isEmpty()
             || isValidDateTime(m_TemplateDate)) {
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("xlink:type"),
-                OUString("simple")));
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("xlink:actuate"),
-                OUString("onRequest")));
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("xlink:title"), m_TemplateName));
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("xlink:href" ), m_TemplateURL ));
+        attributes.emplace_back("xlink:type", OUString("simple"));
+        attributes.emplace_back("xlink:actuate", OUString("onRequest"));
+        attributes.emplace_back("xlink:title", m_TemplateName);
+        attributes.emplace_back("xlink:href", m_TemplateURL );
         if (isValidDateTime(m_TemplateDate)) {
-            attributes.push_back(std::make_pair(
-                static_cast<const char*>("meta:date"  ),
-                dateTimeToText(m_TemplateDate)));
+            attributes.emplace_back(
+                "meta:date", dateTimeToText(m_TemplateDate));
         }
         updateElement("meta:template", &attributes);
     } else {
@@ -1002,11 +985,9 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     attributes.clear();
 
     if (!m_AutoloadURL.isEmpty() || (0 != m_AutoloadSecs)) {
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("xlink:href" ), m_AutoloadURL ));
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("meta:delay" ),
-                durationToText(m_AutoloadSecs)));
+        attributes.emplace_back("xlink:href", m_AutoloadURL );
+        attributes.emplace_back("meta:delay",
+                durationToText(m_AutoloadSecs));
         updateElement("meta:auto-reload", &attributes);
     } else {
         updateElement("meta:auto-reload");
@@ -1014,14 +995,14 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     attributes.clear();
 
     if (!m_DefaultTarget.isEmpty()) {
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("office:target-frame-name"),
-                m_DefaultTarget));
+        attributes.emplace_back(
+                "office:target-frame-name",
+                m_DefaultTarget);
         // xlink:show: _blank -> new, any other value -> replace
         const sal_Char* show = m_DefaultTarget == "_blank" ? "new" : "replace";
-        attributes.push_back(std::make_pair(
-                static_cast<const char*>("xlink:show"),
-                OUString::createFromAscii(show)));
+        attributes.emplace_back(
+                "xlink:show",
+                OUString::createFromAscii(show));
         updateElement("meta:hyperlink-behaviour", &attributes);
     } else {
         updateElement("meta:hyperlink-behaviour");
@@ -1641,8 +1622,8 @@ SfxDocumentMetaData::setDocumentStatistics(
                 const css::uno::Any any = the_value[i].Value;
                 sal_Int32 val = 0;
                 if (any >>= val) {
-                    attributes.push_back(std::make_pair(s_stdStatAttrs[j],
-                                OUString::number(val)));
+                    attributes.emplace_back(s_stdStatAttrs[j],
+                                OUString::number(val));
                 } else {
                     SAL_WARN("sfx.doc", "Invalid statistic: " << name);
                 }

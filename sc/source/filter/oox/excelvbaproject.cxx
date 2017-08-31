@@ -90,7 +90,7 @@ void ExcelVbaProject::prepareImport()
             else
             {
                 // TODO: once we have chart sheets we need a switch/case on sheet type ('SheetNNN' vs. 'ChartNNN')
-                aCodeNameInfos.push_back( SheetCodeNameInfo( aSheetProp, "Sheet" ) );
+                aCodeNameInfos.emplace_back( aSheetProp, "Sheet" );
             }
         }
         catch( Exception& )

@@ -911,7 +911,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         aVal <<= nNumFmt;
         vector<XMLPropertyState> aProps;
         aVal <<= aDefaultStyle;
-        aProps.push_back(XMLPropertyState(nEntryIndex, aVal));
+        aProps.emplace_back(nEntryIndex, aVal);
 
         OUString aName;
         sal_Int32 nIndex;
@@ -953,7 +953,7 @@ void handleFont(
     if (!pItem->QueryValue(aAny, MID_FONT_FAMILY_NAME))
         return;
 
-    rPropStates.push_back(XMLPropertyState(nIndexFontName, aAny));
+    rPropStates.emplace_back(nIndexFontName, aAny);
 }
 
 const SvxFieldData* toXMLPropertyStates(
@@ -1002,7 +1002,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxWeightItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_FONTHEIGHT:
@@ -1012,7 +1012,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxFontHeightItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_ITALIC:
@@ -1022,7 +1022,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxPostureItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_UNDERLINE:
@@ -1050,15 +1050,15 @@ const SvxFieldData* toXMLPropertyStates(
 
                 const SvxUnderlineItem* pUL = static_cast<const SvxUnderlineItem*>(p);
                 pUL->QueryValue(aAny, MID_TL_STYLE);
-                rPropStates.push_back(XMLPropertyState(nIndexStyle, aAny));
-                rPropStates.push_back(XMLPropertyState(nIndexType,  aAny));
-                rPropStates.push_back(XMLPropertyState(nIndexWidth, aAny));
+                rPropStates.emplace_back(nIndexStyle, aAny);
+                rPropStates.emplace_back(nIndexType,  aAny);
+                rPropStates.emplace_back(nIndexWidth, aAny);
 
                 pUL->QueryValue(aAny, MID_TL_COLOR);
-                rPropStates.push_back(XMLPropertyState(nIndexColor, aAny));
+                rPropStates.emplace_back(nIndexColor, aAny);
 
                 pUL->QueryValue(aAny, MID_TL_HASCOLOR);
-                rPropStates.push_back(XMLPropertyState(nIndexHasColor, aAny));
+                rPropStates.emplace_back(nIndexHasColor, aAny);
             }
             break;
             case EE_CHAR_OVERLINE:
@@ -1086,15 +1086,15 @@ const SvxFieldData* toXMLPropertyStates(
 
                 const SvxOverlineItem* pOL = static_cast<const SvxOverlineItem*>(p);
                 pOL->QueryValue(aAny, MID_TL_STYLE);
-                rPropStates.push_back(XMLPropertyState(nIndexStyle, aAny));
-                rPropStates.push_back(XMLPropertyState(nIndexType,  aAny));
-                rPropStates.push_back(XMLPropertyState(nIndexWidth, aAny));
+                rPropStates.emplace_back(nIndexStyle, aAny);
+                rPropStates.emplace_back(nIndexType,  aAny);
+                rPropStates.emplace_back(nIndexWidth, aAny);
 
                 pOL->QueryValue(aAny, MID_TL_COLOR);
-                rPropStates.push_back(XMLPropertyState(nIndexColor, aAny));
+                rPropStates.emplace_back(nIndexColor, aAny);
 
                 pOL->QueryValue(aAny, MID_TL_HASCOLOR);
-                rPropStates.push_back(XMLPropertyState(nIndexHasColor, aAny));
+                rPropStates.emplace_back(nIndexHasColor, aAny);
             }
             break;
             case EE_CHAR_COLOR:
@@ -1107,7 +1107,7 @@ const SvxFieldData* toXMLPropertyStates(
                 {
                     sal_Int32 nIndexColor = ( nColor == COL_AUTO ) ? xMapper->GetEntryIndex(
                         XML_NAMESPACE_STYLE, GetXMLToken( XML_USE_WINDOW_FONT_COLOR ), 0 ) : nIndex;
-                    rPropStates.push_back( XMLPropertyState( nIndexColor, aAny ) );
+                    rPropStates.emplace_back( nIndexColor, aAny );
                 }
             }
             break;
@@ -1116,7 +1116,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxWordLineModeItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_STRIKEOUT:
@@ -1124,7 +1124,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxCrossedOutItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_RELIEF:
@@ -1132,7 +1132,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxCharReliefItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_OUTLINE:
@@ -1140,7 +1140,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxContourItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_SHADOW:
@@ -1148,7 +1148,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxShadowedItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_KERNING:
@@ -1156,7 +1156,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxKerningItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_PAIRKERNING:
@@ -1164,7 +1164,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxAutoKernItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_FONTWIDTH:
@@ -1172,7 +1172,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxCharScaleWidthItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_ESCAPEMENT:
@@ -1188,10 +1188,10 @@ const SvxFieldData* toXMLPropertyStates(
                 const SvxEscapementItem* pEsc = static_cast<const SvxEscapementItem*>(p);
 
                 pEsc->QueryValue(aAny);
-                rPropStates.push_back(XMLPropertyState(nIndexEsc, aAny));
+                rPropStates.emplace_back(nIndexEsc, aAny);
 
                 pEsc->QueryValue(aAny, MID_ESC_HEIGHT);
-                rPropStates.push_back(XMLPropertyState(nIndexEscHeight, aAny));
+                rPropStates.emplace_back(nIndexEscHeight, aAny);
 
             }
             break;
@@ -1200,7 +1200,7 @@ const SvxFieldData* toXMLPropertyStates(
                 if (!static_cast<const SvxEmphasisMarkItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
                     continue;
 
-                rPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                rPropStates.emplace_back(nIndex, aAny);
             }
             break;
             case EE_CHAR_LANGUAGE:
@@ -1236,10 +1236,10 @@ const SvxFieldData* toXMLPropertyStates(
                         nIndexLanguage = nIndexCountry = nIndexScript = nIndexTag = -1;
                 }
                 assert( nIndexLanguage >= 0 && nIndexCountry >= 0 && nIndexScript >= 0 && nIndexTag >= 0);
-                rPropStates.push_back( XMLPropertyState( nIndexLanguage, aAny));
-                rPropStates.push_back( XMLPropertyState( nIndexCountry, aAny));
-                rPropStates.push_back( XMLPropertyState( nIndexScript, aAny));
-                rPropStates.push_back( XMLPropertyState( nIndexTag, aAny));
+                rPropStates.emplace_back( nIndexLanguage, aAny);
+                rPropStates.emplace_back( nIndexCountry, aAny);
+                rPropStates.emplace_back( nIndexScript, aAny);
+                rPropStates.emplace_back( nIndexTag, aAny);
             }
             break;
             default:

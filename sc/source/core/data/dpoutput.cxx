@@ -491,7 +491,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
             /* TODO: any numeric value to obtain? */
             double fValue;
             rtl::math::setNan(&fValue);
-            aRes.push_back(sheet::MemberResult(rName, aCaption, 0, fValue));
+            aRes.emplace_back(rName, aCaption, 0, fValue);
         }
     }
 

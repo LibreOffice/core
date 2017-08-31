@@ -270,7 +270,7 @@ void SAL_CALL ScDispatch::addStatusListener(
 
     if ( aURL.Complete == cURLDocDataSource )
     {
-        aDataSourceListeners.push_back( uno::Reference<frame::XStatusListener>( xListener ) );
+        aDataSourceListeners.emplace_back( xListener );
 
         if (!bListeningToView)
         {

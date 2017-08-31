@@ -690,15 +690,15 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::BOOLEAN:
                     {
                         aCurrentModelType = "CheckBox";
-                        aInitialValues.push_back( NamedValue( "VisualEffect", makeAny( VisualEffect::FLAT ) ) );
+                        aInitialValues.emplace_back( "VisualEffect", makeAny( VisualEffect::FLAT ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
                         sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                         OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
-                        aInitialValues.push_back( NamedValue(
+                        aInitialValues.emplace_back(
                             "TriState",
                             makeAny( ColumnValue::NO_NULLS != nNullable )
-                        ) );
+                        );
                         if ( ColumnValue::NO_NULLS == nNullable )
                             aDefault <<= (sal_Int16)TRISTATE_FALSE;
                     }
@@ -706,7 +706,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
 
                     case DataType::LONGVARCHAR:
                     case DataType::CLOB:
-                        aInitialValues.push_back( NamedValue( "MultiLine", makeAny( true ) ) );
+                        aInitialValues.emplace_back( "MultiLine", makeAny( true ) );
                         SAL_FALLTHROUGH;
                     case DataType::BINARY:
                     case DataType::VARBINARY:
@@ -724,19 +724,19 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
-                            aInitialValues.push_back( NamedValue( "FormatsSupplier", makeAny( xSupplier ) ) );
-                        aInitialValues.push_back( NamedValue( "TreatAsNumber", makeAny( bFormattedIsNumeric ) ) );
-                        aCopyProperties.push_back( PROPERTY_FORMATKEY );
+                            aInitialValues.emplace_back( "FormatsSupplier", makeAny( xSupplier ) );
+                        aInitialValues.emplace_back( "TreatAsNumber", makeAny( bFormattedIsNumeric ) );
+                        aCopyProperties.emplace_back(PROPERTY_FORMATKEY );
                         break;
                 }
 
-                aInitialValues.push_back( NamedValue( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) ) );
+                aInitialValues.emplace_back( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) );
                 OUString sLabel;
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
                 if ( !sLabel.isEmpty() )
-                    aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( sLabel ) ) );
+                    aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( sLabel ) );
                 else
-                    aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
+                    aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( *pIter ) );
 
                 Reference< XPropertySet > xGridCol( xColFactory->createColumn( aCurrentModelType ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
@@ -756,11 +756,11 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 }
 
                 if ( aDefault.hasValue() )
-                    aInitialValues.push_back( NamedValue( sDefaultProperty, aDefault ) );
+                    aInitialValues.emplace_back( sDefaultProperty, aDefault );
 
                 // transfer properties from the definition to the UNO-model :
-                aCopyProperties.push_back( PROPERTY_HIDDEN );
-                aCopyProperties.push_back( PROPERTY_WIDTH );
+                aCopyProperties.emplace_back(PROPERTY_HIDDEN );
+                aCopyProperties.emplace_back(PROPERTY_WIDTH );
 
                 // help text to display for the column
                 Any aDescription;
@@ -772,18 +772,18 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     xColumn->getPropertyValue( PROPERTY_DESCRIPTION ) >>= sTemp;
 
                 aDescription <<= sTemp;
-                aInitialValues.push_back( NamedValue( PROPERTY_HELPTEXT, aDescription ) );
+                aInitialValues.emplace_back( PROPERTY_HELPTEXT, aDescription );
 
                 // ... horizontal justify
                 Any aAlign; aAlign <<= sal_Int16( 0 );
                 Any aColAlign( xColumn->getPropertyValue( PROPERTY_ALIGN ) );
                 if ( aColAlign.hasValue() )
                     aAlign <<= sal_Int16( ::comphelper::getINT32( aColAlign ) );
-                aInitialValues.push_back( NamedValue( PROPERTY_ALIGN, aAlign ) );
+                aInitialValues.emplace_back( PROPERTY_ALIGN, aAlign );
 
                 // don't allow the mouse to scroll in the cells
                 if ( xGridColPSI->hasPropertyByName( PROPERTY_MOUSE_WHEEL_BEHAVIOR ) )
-                    aInitialValues.push_back( NamedValue( PROPERTY_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) ) );
+                    aInitialValues.emplace_back( PROPERTY_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
 
                 // now set all those values
                 for ( std::vector< NamedValue >::const_iterator property = aInitialValues.begin();

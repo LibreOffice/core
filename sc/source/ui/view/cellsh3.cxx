@@ -542,7 +542,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        aRanges.push_back(sc::ColRowSpan(nRow, nRow));
+                        aRanges.emplace_back(nRow, nRow);
                     }
 
                     pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, HMMToTwips(nHeight));
@@ -648,7 +648,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        aRanges.push_back(sc::ColRowSpan(nColumn, nColumn));
+                        aRanges.emplace_back(nColumn, nColumn);
                     }
 
                     pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, HMMToTwips(nWidth));

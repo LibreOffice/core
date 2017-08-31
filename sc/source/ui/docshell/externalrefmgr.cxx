@@ -1390,7 +1390,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     if( pnIndex ) *pnIndex = nIndex;
     TableTypeRef pTab(new Table);
     rDoc.maTables.push_back(pTab);
-    rDoc.maTableNames.push_back(TableName(aTabNameUpper, rTabName));
+    rDoc.maTableNames.emplace_back(aTabNameUpper, rTabName);
     rDoc.maTableNameIndex.emplace(aTabNameUpper, nIndex);
     return pTab;
 }
@@ -2282,7 +2282,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
 
     vector<ScExternalRefCache::SingleRangeData> aCacheData;
     aCacheData.reserve(nTabSpan+1);
-    aCacheData.push_back(ScExternalRefCache::SingleRangeData());
+    aCacheData.emplace_back();
     aCacheData.back().maTableName = ScGlobal::pCharClass->uppercase(rTabName);
 
     for (SCTAB i = 1; i < nTabSpan + 1; ++i)
@@ -2292,7 +2292,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
             // source document doesn't have any table by the specified name.
             break;
 
-        aCacheData.push_back(ScExternalRefCache::SingleRangeData());
+        aCacheData.emplace_back();
         aCacheData.back().maTableName = ScGlobal::pCharClass->uppercase(aTabName);
     }
 

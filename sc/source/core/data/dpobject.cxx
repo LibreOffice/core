@@ -2241,7 +2241,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
                     nDupCount = it->mnDupCount + 1;
             }
 
-            aFields.push_back(ScPivotField());
+            aFields.emplace_back();
             ScPivotField& rField = aFields.back();
             if (bDataLayout)
             {
@@ -2291,7 +2291,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
     }
 
     if (bAddData && !bDataFound)
-        aFields.push_back(ScPivotField(PIVOT_DATA_FIELD));
+        aFields.emplace_back(PIVOT_DATA_FIELD);
 
     rFields.swap(aFields);
 }

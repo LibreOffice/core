@@ -2405,7 +2405,7 @@ bool AxContainerModelBase::importClassTable( BinaryInputStream& rInStrm, AxClass
         sal_uInt16 nCount = rInStrm.readuInt16();
         for( sal_uInt16 nIndex = 0; bValid && (nIndex < nCount); ++nIndex )
         {
-            orClassTable.push_back( OUString() );
+            orClassTable.emplace_back( );
             AxBinaryPropertyReader aReader( rInStrm );
             aReader.readGuidProperty( orClassTable.back() );
             aReader.skipGuidProperty(); // source interface GUID

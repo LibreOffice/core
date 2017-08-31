@@ -622,10 +622,9 @@ void Bridge::sendRequestChangeRequest() {
     assert(mode_ == MODE_REQUESTED);
     random_ = random();
     std::vector< BinaryAny > a;
-    a.push_back(
-        BinaryAny(
+    a.emplace_back(
             css::uno::TypeDescription(cppu::UnoType< sal_Int32 >::get()),
-            &random_));
+            &random_);
     sendProtPropRequest(OutgoingRequest::KIND_REQUEST_CHANGE, a);
 }
 
@@ -865,10 +864,9 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     css::uno::TypeDescription ifc(cppu::UnoType<css::uno::XInterface>::get());
     typelib_TypeDescription * p = ifc.get();
     std::vector< BinaryAny > inArgs;
-    inArgs.push_back(
-        BinaryAny(
+    inArgs.emplace_back(
             css::uno::TypeDescription(cppu::UnoType< css::uno::Type >::get()),
-            &p));
+            &p);
     BinaryAny ret;
     std::vector< BinaryAny> outArgs;
     bool bExc = makeCall(

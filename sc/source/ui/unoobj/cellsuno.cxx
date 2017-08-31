@@ -3375,7 +3375,7 @@ void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XMo
     if ( aRanges.empty() )
         throw uno::RuntimeException();
 
-    aValueListeners.push_back( uno::Reference<util::XModifyListener>( aListener ) );
+    aValueListeners.emplace_back( aListener );
 
     if ( aValueListeners.size() == 1 )
     {
@@ -4406,7 +4406,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
                 //  if a name is given, also insert into list of named entries
                 //  (only possible for a single range)
                 //  name is not in m_pImpl->m_aNamedEntries (tested above)
-                m_pImpl->m_aNamedEntries.push_back(ScNamedEntry( aName, *rAddRanges[ 0 ] ));
+                m_pImpl->m_aNamedEntries.emplace_back( aName, *rAddRanges[ 0 ] );
             }
         }
     }

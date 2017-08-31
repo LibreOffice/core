@@ -76,7 +76,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
     // No requester for the given canvas found.  Create a new one.
     std::shared_ptr<CanvasUpdateRequester> pRequester (
         new CanvasUpdateRequester(rxSharedCanvas), Deleter());
-    s_RequesterMap.push_back(std::make_pair(rxSharedCanvas, pRequester));
+    s_RequesterMap.emplace_back(rxSharedCanvas, pRequester);
     return pRequester;
 }
 

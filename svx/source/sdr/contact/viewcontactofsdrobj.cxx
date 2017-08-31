@@ -158,7 +158,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createGlueP
                 const SdrGluePoint& rCandidate = (*pGluePointList)[(sal_uInt16)a];
                 const Point aPosition(rCandidate.GetAbsolutePos(GetSdrObject()));
 
-                aGluepointVector.push_back(basegfx::B2DPoint(aPosition.X(), aPosition.Y()));
+                aGluepointVector.emplace_back(aPosition.X(), aPosition.Y());
             }
 
             if(!aGluepointVector.empty())

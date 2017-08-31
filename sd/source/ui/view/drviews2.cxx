@@ -806,7 +806,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         auto pNewSet = o3tl::make_unique<SfxItemSet>( GetDoc()->GetPool(), svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{} );
                         pNewSet->Put(pObj->GetMergedItemSet());
-                        aAttrList.push_back(std::make_pair(std::move(pNewSet), pObj->GetUserCall()));
+                        aAttrList.emplace_back(std::move(pNewSet), pObj->GetUserCall());
                     }
                 }
 

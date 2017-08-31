@@ -262,7 +262,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 if (!bInValue)
                 {
                     OSL_ASSERT(!sType.isEmpty());
-                    retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+                    retVal.emplace_back(sType, sbufValue.makeStringAndClear());
                     sType.clear();
                     //The next char is the start of the new type
                     nTypeNameStart = i + 1;
@@ -288,7 +288,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         if (!sbufValue.isEmpty())
         {
             OSL_ASSERT(!sType.isEmpty());
-            retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+            retVal.emplace_back(sType, sbufValue.makeStringAndClear());
         }
         return retVal;
     }

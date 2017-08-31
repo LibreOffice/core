@@ -217,11 +217,11 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
             beans::PropertyValue* aGrabIter = vGrabVals.begin();
             for(; aGrabIter!=vGrabVals.end(); ++aGrabIter) {
                 if(!IgnoreForCharStyle(aGrabIter->Name))
-                    rProperties.push_back(beans::PropertyValue(aGrabIter->Name, 0, aGrabIter->Value, beans::PropertyState_DIRECT_VALUE));
+                    rProperties.emplace_back(aGrabIter->Name, 0, aGrabIter->Value, beans::PropertyState_DIRECT_VALUE);
             }
         }
         else
-            rProperties.push_back(beans::PropertyValue(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE));
+            rProperties.emplace_back(aValIter->Name, 0, aValIter->Value, beans::PropertyState_DIRECT_VALUE);
     }
 
     return comphelper::containerToSequence(rProperties);
@@ -303,16 +303,12 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     for(PropertyIds const & rReadId : aReadIds) {
         boost::optional<PropertyMap::Property> aProp = getProperty(rReadId);
         if (aProp)
-            aNumberingProperties.push_back(
-                    beans::PropertyValue( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE )
-                    );
+            aNumberingProperties.emplace_back( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE );
     }
 
     boost::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
     if(aPropFont && !isOutlineNumbering())
-        aNumberingProperties.push_back(
-                beans::PropertyValue( getPropertyName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE )
-                );
+        aNumberingProperties.emplace_back( getPropertyName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE );
 
     return comphelper::containerToSequence(aNumberingProperties);
 }

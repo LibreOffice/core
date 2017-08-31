@@ -31,17 +31,17 @@ PivotTableSources::PivotTableSources() {}
 
 void PivotTableSources::appendSheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc )
 {
-    maSheetSources.push_back(SheetSource(pObj, rDesc));
+    maSheetSources.emplace_back(pObj, rDesc);
 }
 
 void PivotTableSources::appendDBSource( ScDPObject* pObj, const ScImportSourceDesc& rDesc )
 {
-    maDBSources.push_back(DBSource(pObj, rDesc));
+    maDBSources.emplace_back(pObj, rDesc);
 }
 
 void PivotTableSources::appendServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc )
 {
-    maServiceSources.push_back(ServiceSource(pObj, rDesc));
+    maServiceSources.emplace_back(pObj, rDesc);
 }
 
 void PivotTableSources::appendSelectedPages( ScDPObject* pObj, const SelectedPagesType& rSelected )
@@ -49,7 +49,7 @@ void PivotTableSources::appendSelectedPages( ScDPObject* pObj, const SelectedPag
     if (rSelected.empty())
         return;
 
-    maSelectedPagesList.push_back(SelectedPages(pObj, rSelected));
+    maSelectedPagesList.emplace_back(pObj, rSelected);
 }
 
 namespace {

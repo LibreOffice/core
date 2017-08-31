@@ -30,7 +30,7 @@ ScEditDataArray::~ScEditDataArray()
 void ScEditDataArray::AddItem(SCTAB nTab, SCCOL nCol, SCROW nRow,
                               EditTextObject* pOldData, EditTextObject* pNewData)
 {
-    maArray.push_back(Item(nTab, nCol, nRow, pOldData, pNewData));
+    maArray.emplace_back(nTab, nCol, nRow, pOldData, pNewData);
 }
 
 const ScEditDataArray::Item* ScEditDataArray::First()

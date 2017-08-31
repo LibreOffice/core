@@ -3380,7 +3380,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                 }
 
                                                 // add to vector
-                                                aWrongSpellVector.push_back(EEngineData::WrongSpellClass(nStart, nEnd));
+                                                aWrongSpellVector.emplace_back(nStart, nEnd);
 
                                                 // goto next index
                                                 nStart = nEnd + 1;

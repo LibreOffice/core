@@ -836,30 +836,30 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case ANA_Node_Type:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_EffectNodeType ) )
-                    aUserData.push_back( NamedValue( GetXMLToken( XML_NODE_TYPE ), makeAny( nEnum ) ) );
+                    aUserData.emplace_back( GetXMLToken( XML_NODE_TYPE ), makeAny( nEnum ) );
             }
             break;
             case ANA_Preset_ID:
             {
-                aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_ID ), makeAny( rValue ) ) );
+                aUserData.emplace_back( GetXMLToken( XML_PRESET_ID ), makeAny( rValue ) );
             }
             break;
             case ANA_Preset_Sub_Type:
             {
-                aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_SUB_TYPE ), makeAny( rValue ) ) );
+                aUserData.emplace_back( GetXMLToken( XML_PRESET_SUB_TYPE ), makeAny( rValue ) );
             }
             break;
             case ANA_Preset_Class:
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, rValue, aAnimations_EnumMap_EffectPresetClass ) )
-                    aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_CLASS ), makeAny( nEnum ) ) );
+                    aUserData.emplace_back( GetXMLToken( XML_PRESET_CLASS ), makeAny( nEnum ) );
             }
             break;
             case ANA_After_Effect:
             {
                 bool bTemp;
                 if (::sax::Converter::convertBool( bTemp, rValue ))
-                    aUserData.push_back( NamedValue( GetXMLToken( XML_AFTER_EFFECT ), makeAny( bTemp ) ) );
+                    aUserData.emplace_back( GetXMLToken( XML_AFTER_EFFECT ), makeAny( bTemp ) );
             }
             break;
             case ANA_XLink:
@@ -909,7 +909,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case ANA_MasterElement:
             {
                 Reference< XAnimationNode > xMaster( GetImport().getInterfaceToIdentifierMapper().getReference( rValue ), UNO_QUERY );
-                aUserData.push_back( NamedValue( GetXMLToken( XML_MASTER_ELEMENT ), makeAny( xMaster ) ) );
+                aUserData.emplace_back( GetXMLToken( XML_MASTER_ELEMENT ), makeAny( xMaster ) );
             }
             break;
 
@@ -1166,7 +1166,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
 
             case ANA_Group_Id:
             {
-                aUserData.push_back( NamedValue( aLocalName, makeAny( rValue.toInt32() ) ) );
+                aUserData.emplace_back( aLocalName, makeAny( rValue.toInt32() ) );
             }
             break;
 
@@ -1186,7 +1186,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 // push all unknown attributes within the presentation namespace as user data
                 if( nPrefix == XML_NAMESPACE_PRESENTATION )
                 {
-                    aUserData.push_back( NamedValue( aLocalName, makeAny( rValue ) ) );
+                    aUserData.emplace_back( aLocalName, makeAny( rValue ) );
                 }
             }
         }

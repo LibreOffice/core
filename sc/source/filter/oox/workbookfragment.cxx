@@ -440,7 +440,7 @@ void WorkbookFragment::finalizeImport()
                         // insert the fragment into the map
                         if( xFragment.is() )
                         {
-                            aSheetFragments.push_back( SheetFragmentHandler( xSheetGlob, xFragment.get() ) );
+                            aSheetFragments.emplace_back( xSheetGlob, xFragment.get() );
                             aHelpers.push_back(xFragment.get());
                         }
                     }

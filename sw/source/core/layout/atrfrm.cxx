@@ -813,7 +813,7 @@ SwFormatCol::SwFormatCol( const SwFormatCol& rCpy )
     m_aColumns.reserve(rCpy.GetNumCols());
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
-        m_aColumns.push_back( SwColumn(rCpy.GetColumns()[i]) );
+        m_aColumns.emplace_back(rCpy.GetColumns()[i] );
     }
 }
 
@@ -834,7 +834,7 @@ SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
         m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
-        m_aColumns.push_back( SwColumn(rCpy.GetColumns()[i]) );
+        m_aColumns.emplace_back(rCpy.GetColumns()[i] );
     }
     return *this;
 }
@@ -939,7 +939,7 @@ void SwFormatCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16
         m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
     {
-        m_aColumns.push_back( SwColumn() );
+        m_aColumns.emplace_back( );
     }
     m_bOrtho = true;
     m_nWidth = USHRT_MAX;

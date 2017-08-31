@@ -166,7 +166,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                     pDescriptor->mpPreviewProvider = std::shared_ptr<PreviewProvider>(
                         new PagePreviewProvider());
                 MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
-                mvMasterPages.push_back(Descriptor(aToken,sURL,sName));
+                mvMasterPages.emplace_back(aToken,sURL,sName);
             }
         }
 

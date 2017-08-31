@@ -483,7 +483,7 @@
             PropSeqArray &rAggProperties = AggregateProperties::get();
             m_nPropertyMapId = rAggProperties.size();
             rAggProperties.push_back( xPI->getProperties() );
-            AmbiguousPropertyIds::get().push_back( IntArrayArray::value_type() );
+            AmbiguousPropertyIds::get().emplace_back( );
 
             rMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
         }

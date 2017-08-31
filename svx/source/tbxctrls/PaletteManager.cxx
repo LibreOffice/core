@@ -166,7 +166,7 @@ void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
     {
         Color aColor(Colorlist[i]);
         OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
-        maRecentColors.push_back(std::make_pair(aColor, sColorName));
+        maRecentColors.emplace_back(aColor, sColorName);
         rColorSet.InsertItem(nIx, aColor, sColorName);
         ++nIx;
     }
@@ -278,7 +278,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
     if (bFront)
         maRecentColors.push_front(std::make_pair(rRecentColor, rName));
     else
-        maRecentColors.push_back(std::make_pair(rRecentColor, rName));
+        maRecentColors.emplace_back(rRecentColor, rName);
     css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
     css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
     for (size_t i = 0; i < maRecentColors.size(); ++i)

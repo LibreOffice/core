@@ -124,7 +124,7 @@ namespace comphelper
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
         // remember this event
-        m_xImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
+        m_xImpl->aEvents.emplace_back( _rEvent, _xProcessor );
 
         // awake the thread
         m_xImpl->aPendingActions.set();

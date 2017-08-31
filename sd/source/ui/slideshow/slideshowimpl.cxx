@@ -441,11 +441,10 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             Sequence< Any > aValue(2);
             aValue[0] <<= xSlide;
             aValue[1] <<= xAnimNode;
-            aProperties.push_back(
-                PropertyValue( "Prefetch" ,
+            aProperties.emplace_back( "Prefetch" ,
                     -1,
                     Any(aValue),
-                    PropertyState_DIRECT_VALUE));
+                    PropertyState_DIRECT_VALUE);
         }
         if (bSkipAllMainSequenceEffects)
         {
@@ -453,16 +452,14 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
             // shown (to speed up the transition to the previous slide) and
             // one to show all main sequence effects so that the user can
             // continue to undo effects.
-            aProperties.push_back(
-                PropertyValue( "SkipAllMainSequenceEffects",
+            aProperties.emplace_back( "SkipAllMainSequenceEffects",
                     -1,
                     Any(true),
-                    PropertyState_DIRECT_VALUE));
-            aProperties.push_back(
-                PropertyValue("SkipSlideTransition",
+                    PropertyState_DIRECT_VALUE);
+            aProperties.emplace_back("SkipSlideTransition",
                     -1,
                     Any(true),
-                    PropertyState_DIRECT_VALUE));
+                    PropertyState_DIRECT_VALUE);
         }
 
         if( getSlideAPI( nCurrentSlideNumber, xSlide, xAnimNode ) )
@@ -977,47 +974,40 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             std::vector<beans::PropertyValue> aProperties;
             aProperties.reserve( 4 );
 
-            aProperties.push_back(
-                beans::PropertyValue( "AdvanceOnClick" ,
+            aProperties.emplace_back( "AdvanceOnClick" ,
                     -1, Any( !maPresSettings.mbLockedPages ),
-                    beans::PropertyState_DIRECT_VALUE ) );
+                    beans::PropertyState_DIRECT_VALUE );
 
-            aProperties.push_back(
-                beans::PropertyValue( "ImageAnimationsAllowed" ,
+            aProperties.emplace_back( "ImageAnimationsAllowed" ,
                     -1, Any( maPresSettings.mbAnimationAllowed ),
-                    beans::PropertyState_DIRECT_VALUE ) );
+                    beans::PropertyState_DIRECT_VALUE );
 
             const bool bZOrderEnabled(
                 SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
-            aProperties.push_back(
-                beans::PropertyValue( "DisableAnimationZOrder" ,
+            aProperties.emplace_back( "DisableAnimationZOrder" ,
                     -1, Any( !bZOrderEnabled ),
-                    beans::PropertyState_DIRECT_VALUE ) );
+                    beans::PropertyState_DIRECT_VALUE );
 
-            aProperties.push_back(
-                beans::PropertyValue( "ForceManualAdvance" ,
+            aProperties.emplace_back( "ForceManualAdvance" ,
                     -1, Any( maPresSettings.mbManual ),
-                    beans::PropertyState_DIRECT_VALUE ) );
+                    beans::PropertyState_DIRECT_VALUE );
 
             if( mbUsePen )
              {
-                aProperties.push_back(
-                    beans::PropertyValue( "UserPaintColor" ,
+                aProperties.emplace_back( "UserPaintColor" ,
                         // User paint color is black by default.
                         -1, Any( mnUserPaintColor ),
-                        beans::PropertyState_DIRECT_VALUE ) );
+                        beans::PropertyState_DIRECT_VALUE );
 
-                aProperties.push_back(
-                    beans::PropertyValue( "UserPaintStrokeWidth" ,
+                aProperties.emplace_back( "UserPaintStrokeWidth" ,
                         // User paint color is black by default.
                         -1, Any( mdUserPaintStrokeWidth ),
-                        beans::PropertyState_DIRECT_VALUE ) );
+                        beans::PropertyState_DIRECT_VALUE );
             }
 
             if (mbRehearseTimings) {
-                aProperties.push_back(
-                    beans::PropertyValue( "RehearseTimings" ,
-                        -1, Any(true), beans::PropertyState_DIRECT_VALUE ) );
+                aProperties.emplace_back( "RehearseTimings" ,
+                        -1, Any(true), beans::PropertyState_DIRECT_VALUE );
             }
 
             bRet = startShowImpl( Sequence<beans::PropertyValue>(

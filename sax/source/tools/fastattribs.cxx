@@ -110,12 +110,12 @@ void FastAttributeList::addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, cons
 
 void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& value )
 {
-    maUnknownAttributes.push_back( UnknownAttribute( rNamespaceURL, rName, value ) );
+    maUnknownAttributes.emplace_back( rNamespaceURL, rName, value );
 }
 
 void FastAttributeList::addUnknown( const OString& rName, const OString& value )
 {
-    maUnknownAttributes.push_back( UnknownAttribute( rName, value ) );
+    maUnknownAttributes.emplace_back( rName, value );
 }
 
 // XFastAttributeList

@@ -49,7 +49,7 @@ namespace svl {
 IndexedStyleSheets::IndexedStyleSheets()
 {
     for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
-        mStyleSheetPositionsByFamily.push_back(std::vector<unsigned>());
+        mStyleSheetPositionsByFamily.emplace_back();
     }
 ;}
 
@@ -69,7 +69,7 @@ IndexedStyleSheets::Reindex()
     mPositionsByName.clear();
     mStyleSheetPositionsByFamily.clear();
     for (size_t i = 0; i < NUMBER_OF_FAMILIES; i++) {
-        mStyleSheetPositionsByFamily.push_back(std::vector<unsigned>());
+        mStyleSheetPositionsByFamily.emplace_back();
     }
 
     unsigned i = 0;

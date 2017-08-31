@@ -1554,7 +1554,7 @@ void SdOutliner::HandleChangedSelection()
             maMarkListCopy.clear();
             maMarkListCopy.reserve (nCount);
             for (size_t i=0; i<nCount; ++i)
-                maMarkListCopy.push_back (rMarkList.GetMark(i)->GetMarkedSdrObj ());
+                maMarkListCopy.emplace_back(rMarkList.GetMark(i)->GetMarkedSdrObj ());
         }
         else
             // No marked object.  Is this case possible?

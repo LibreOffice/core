@@ -164,7 +164,7 @@ void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDr
     OSL_ENSURE( maFormats.empty() || (maFormats.back().mnChar < nChar), "XclExpString::AppendFormat - invalid char index" );
     size_t nMaxSize = static_cast< size_t >( mbIsBiff8 ? EXC_STR_MAXLEN : EXC_STR_MAXLEN_8BIT );
     if( maFormats.empty() || ((maFormats.size() < nMaxSize) && (!bDropDuplicate || (maFormats.back().mnFontIdx != nFontIdx))) )
-        maFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
+        maFormats.emplace_back( nChar, nFontIdx );
 }
 
 void XclExpString::AppendTrailingFormat( sal_uInt16 nFontIdx )

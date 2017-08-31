@@ -295,7 +295,7 @@ void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
         case XML_alpha:     lclSetValue( mnAlpha, nValue ); break;
         case XML_alphaMod:  lclModValue( mnAlpha, nValue ); break;
         case XML_alphaOff:  lclOffValue( mnAlpha, nValue ); break;
-        default:            maTransforms.push_back( Transformation( nToken, nValue ) );
+        default:            maTransforms.emplace_back( nToken, nValue );
     }
     sal_Int32 nSize = maInteropTransformations.getLength();
     maInteropTransformations.realloc(nSize + 1);
@@ -307,15 +307,15 @@ void Color::addChartTintTransformation( double fTint )
 {
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( fTint * MAX_PERCENT + 0.5, -MAX_PERCENT, MAX_PERCENT );
     if( nValue < 0 )
-        maTransforms.push_back( Transformation( XML_shade, nValue + MAX_PERCENT ) );
+        maTransforms.emplace_back( XML_shade, nValue + MAX_PERCENT );
     else if( nValue > 0 )
-        maTransforms.push_back( Transformation( XML_tint, MAX_PERCENT - nValue ) );
+        maTransforms.emplace_back( XML_tint, MAX_PERCENT - nValue );
 }
 
 void Color::addExcelTintTransformation( double fTint )
 {
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( fTint * MAX_PERCENT + 0.5, -MAX_PERCENT, MAX_PERCENT );
-    maTransforms.push_back( Transformation( XLS_TOKEN( tint ), nValue ) );
+    maTransforms.emplace_back( XLS_TOKEN( tint ), nValue );
 }
 
 void Color::clearTransformations()

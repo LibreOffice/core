@@ -169,9 +169,9 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     m_xPackageManagerFactory = css::deployment::thePackageManagerFactory::get(m_xContext);
     OSL_ASSERT(m_xPackageManagerFactory.is());
 
-    m_repositoryNames.push_back("user");
-    m_repositoryNames.push_back("shared");
-    m_repositoryNames.push_back("bundled");
+    m_repositoryNames.emplace_back("user");
+    m_repositoryNames.emplace_back("shared");
+    m_repositoryNames.emplace_back("bundled");
 }
 
 ExtensionManager::~ExtensionManager()

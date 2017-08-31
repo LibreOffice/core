@@ -163,7 +163,7 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(std::vector<ScDPName>& rDataF
                             pEachItemValue->maFunctionData.mnDupCount);
         }
 
-        rDataFieldNames.push_back(ScDPName(rLabelData.maName, sLayoutName, rLabelData.mnDupCount));
+        rDataFieldNames.emplace_back(rLabelData.maName, sLayoutName, rLabelData.mnDupCount);
     }
 }
 

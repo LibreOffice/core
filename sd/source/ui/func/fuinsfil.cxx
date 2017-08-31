@@ -100,7 +100,7 @@ void lcl_AddFilter ( ::std::vector< FilterDesc >& rFilterDescList,
                      const std::shared_ptr<const SfxFilter>& pFilter )
 {
     if (pFilter)
-        rFilterDescList.push_back( ::std::make_pair( pFilter->GetUIName(), pFilter->GetDefaultExtension() ) );
+        rFilterDescList.emplace_back( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 }
 
 }

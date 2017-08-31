@@ -78,9 +78,8 @@ namespace slideshow
                 pNewLayer = rNewView->createViewLayer(maBounds);
 
             // add to local list
-            maViewEntries.push_back(
-                ViewEntry( rNewView,
-                           pNewLayer ));
+            maViewEntries.emplace_back( rNewView,
+                           pNewLayer );
 
             return maViewEntries.back().mpViewLayer;
         }

@@ -115,13 +115,11 @@ public:
 
 void WrappedGL3DProperties::addProperties( std::vector<css::beans::Property> & rOutProps )
 {
-    rOutProps.push_back(
-        beans::Property(
+    rOutProps.emplace_back(
             CHART_UNONAME_ROUNDED_EDGE,
             PROP_GL3DCHARTTYPE_ROUNDED_EDGE,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT
-        )
     );
 }
 

@@ -236,9 +236,9 @@ sal_Int32 compileFile(const OString * pathname)
     idlc()->setRealFileName(tmpFile);
 
     ::std::vector< OUString> lCppArgs;
-    lCppArgs.push_back("-DIDL");
-    lCppArgs.push_back("-C");
-    lCppArgs.push_back("-zI");
+    lCppArgs.emplace_back("-DIDL");
+    lCppArgs.emplace_back("-C");
+    lCppArgs.emplace_back("-zI");
 
     OStringBuffer cppArgs(256);
     Options* pOptions = idlc()->getOptions();
@@ -284,7 +284,7 @@ sal_Int32 compileFile(const OString * pathname)
         } while( nIndex != -1 );
     }
 
-    lCppArgs.push_back(OUString("-o"));
+    lCppArgs.emplace_back("-o");
 
     cppArgs.append(preprocFile);
     lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));

@@ -90,10 +90,10 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     std::vector<Image> imgVector;
     OUString aStrTitle;
     SvxIconChoiceCtrlEntry *pEntry;
-    imgVector.push_back(Image(BitmapEx(RID_SVXBMP_HLINETTP)));
-    imgVector.push_back(Image(BitmapEx(RID_SVXBMP_HLMAILTP)));
-    imgVector.push_back(Image(BitmapEx(RID_SVXBMP_HLDOCTP)));
-    imgVector.push_back(Image(BitmapEx(RID_SVXBMP_HLDOCNTP)));
+    imgVector.emplace_back(BitmapEx(RID_SVXBMP_HLINETTP));
+    imgVector.emplace_back(BitmapEx(RID_SVXBMP_HLMAILTP));
+    imgVector.emplace_back(BitmapEx(RID_SVXBMP_HLDOCTP));
+    imgVector.emplace_back(BitmapEx(RID_SVXBMP_HLDOCNTP));
 
     for(Image &aImage : imgVector )
     {

@@ -36,141 +36,123 @@ namespace
 
 void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans::Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "FillStyle",
+    rOutProperties.emplace_back( "FillStyle",
                   FillProperties::PROP_FILL_STYLE,
                   cppu::UnoType<drawing::FillStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillColor",
+    rOutProperties.emplace_back( "FillColor",
                   FillProperties::PROP_FILL_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillTransparence",
+    rOutProperties.emplace_back( "FillTransparence",
                   FillProperties::PROP_FILL_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillTransparenceGradientName",
+    rOutProperties.emplace_back( "FillTransparenceGradientName",
                   FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillGradientName",
+    rOutProperties.emplace_back( "FillGradientName",
                   FillProperties::PROP_FILL_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        beans::Property( "FillGradientStepCount",
+    rOutProperties.emplace_back( "FillGradientStepCount",
                   FillProperties::PROP_FILL_GRADIENT_STEPCOUNT,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "FillHatchName",
+    rOutProperties.emplace_back( "FillHatchName",
                   FillProperties::PROP_FILL_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     //bitmap properties see lcl_AddPropertiesToVector_only_BitmapProperties()
 
-    rOutProperties.push_back(
-        Property( "FillBackground",
+    rOutProperties.emplace_back( "FillBackground",
                   FillProperties::PROP_FILL_BACKGROUND,
                   cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void lcl_AddPropertiesToVector_only_BitmapProperties( std::vector< css::beans::Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "FillBitmapName",
+    rOutProperties.emplace_back( "FillBitmapName",
                   FillProperties::PROP_FILL_BITMAP_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapOffsetX",
+    rOutProperties.emplace_back( "FillBitmapOffsetX",
                   FillProperties::PROP_FILL_BITMAP_OFFSETX,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapOffsetY",
+    rOutProperties.emplace_back( "FillBitmapOffsetY",
                   FillProperties::PROP_FILL_BITMAP_OFFSETY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapPositionOffsetX",
+    rOutProperties.emplace_back( "FillBitmapPositionOffsetX",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapPositionOffsetY",
+    rOutProperties.emplace_back( "FillBitmapPositionOffsetY",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapRectanglePoint",
+    rOutProperties.emplace_back( "FillBitmapRectanglePoint",
                   FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
                   cppu::UnoType<drawing::RectanglePoint>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapLogicalSize",
+    rOutProperties.emplace_back( "FillBitmapLogicalSize",
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
                   cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapSizeX",
+    rOutProperties.emplace_back( "FillBitmapSizeX",
                   FillProperties::PROP_FILL_BITMAP_SIZEX,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapSizeY",
+    rOutProperties.emplace_back( "FillBitmapSizeY",
                   FillProperties::PROP_FILL_BITMAP_SIZEY,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapMode",
+    rOutProperties.emplace_back( "FillBitmapMode",
                   FillProperties::PROP_FILL_BITMAP_MODE,
                   cppu::UnoType<drawing::BitmapMode>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void lcl_AddDefaultsToMap_without_BitmapProperties(

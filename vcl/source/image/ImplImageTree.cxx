@@ -203,14 +203,14 @@ std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag
         for (OUString& rFallback : rLanguageTag.getFallbackStrings(true))
         {
             OUString aFallbackName = getNameNoExtension(getRealImageName(createPath(name, pos, rFallback)));
-            sPaths.push_back(aFallbackName + ".png");
-            sPaths.push_back(aFallbackName + ".svg");
+            sPaths.emplace_back(aFallbackName + ".png");
+            sPaths.emplace_back(aFallbackName + ".svg");
         }
     }
 
     OUString aRealName = getNameNoExtension(getRealImageName(name));
-    sPaths.push_back(aRealName + ".png");
-    sPaths.push_back(aRealName + ".svg");
+    sPaths.emplace_back(aRealName + ".png");
+    sPaths.emplace_back(aRealName + ".svg");
 
     return sPaths;
 }

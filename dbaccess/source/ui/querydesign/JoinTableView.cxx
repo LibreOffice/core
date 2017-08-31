@@ -1563,7 +1563,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,bool _bAddData
 #endif
         m_pView->getController().getTableConnectionData().push_back(_pConnection->GetData());
     }
-    m_vTableConnection.push_back(_pConnection);
+    m_vTableConnection.emplace_back(_pConnection);
     _pConnection->RecalcLines();
     _pConnection->InvalidateConnection();
 

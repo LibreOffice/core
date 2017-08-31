@@ -1911,34 +1911,30 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         InsertTabNumber func;
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
-        aResult.push_back(
-            beans::PropertyValue( "TableNumberList", -1,
+        aResult.emplace_back( "TableNumberList", -1,
                                   uno::makeAny( lcl_createTableNumberList( aTableNumList ) ),
-                                  beans::PropertyState_DIRECT_VALUE ));
+                                  beans::PropertyState_DIRECT_VALUE );
     }
 
     // DataRowSource (calculated before)
     if( bRowSourceDetected )
     {
-        aResult.push_back(
-            beans::PropertyValue( "DataRowSource", -1,
-                                  uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE ));
+        aResult.emplace_back( "DataRowSource", -1,
+                                  uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE );
     }
 
     // HasCategories
     if( bRowSourceDetected )
     {
-        aResult.push_back(
-            beans::PropertyValue( "HasCategories", -1,
-                                  uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE ));
+        aResult.emplace_back( "HasCategories", -1,
+                                  uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
     }
 
     // FirstCellAsLabel
     if( bRowSourceDetected )
     {
-        aResult.push_back(
-            beans::PropertyValue( "FirstCellAsLabel", -1,
-                                  uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ));
+        aResult.emplace_back( "FirstCellAsLabel", -1,
+                                  uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
     }
 
     // Add the left upper corner to the range if it is missing.
@@ -1962,9 +1958,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     lcl_convertTokensToString(sRangeRep, aAllTokens, m_pDocument);
 
     // add cell range property
-    aResult.push_back(
-        beans::PropertyValue( "CellRangeRepresentation", -1,
-                              uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE ));
+    aResult.emplace_back( "CellRangeRepresentation", -1,
+                              uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE );
 
     //Sequence Mapping
     bool const bSequencesReordered = true;//todo detect this above or detect this sequence mapping cheaper ...
@@ -2023,10 +2018,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
         if( bDifferentIndexes && !aSequenceMappingVector.empty() )
         {
-            aResult.push_back(
-                beans::PropertyValue( "SequenceMapping", -1,
+            aResult.emplace_back( "SequenceMapping", -1,
                     uno::makeAny( comphelper::containerToSequence(aSequenceMappingVector) )
-                    , beans::PropertyState_DIRECT_VALUE ));
+                    , beans::PropertyState_DIRECT_VALUE );
         }
     }
 
@@ -2680,7 +2674,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     aItem.mbIsValue = false;
                     aItem.maString = pMat->GetString(nC, nR).getString();
 
-                    m_aDataArray.push_back(Item());
+                    m_aDataArray.emplace_back();
                     ++nDataCount;
                 }
             }
@@ -3246,7 +3240,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
 
     ScRangeList aRanges;
     ScRefTokenHelper::getRangeListFromTokens(aRanges, m_aTokens, ScAddress());
-    m_aValueListeners.push_back( uno::Reference<util::XModifyListener>( aListener ) );
+    m_aValueListeners.emplace_back( aListener );
 
     if ( m_aValueListeners.size() == 1 )
     {

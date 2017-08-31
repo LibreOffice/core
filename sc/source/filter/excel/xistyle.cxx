@@ -560,7 +560,7 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
 {
-    maFontList.push_back( XclImpFont( GetRoot() ) );
+    maFontList.emplace_back( GetRoot() );
     XclImpFont& rFont = maFontList.back();
     rFont.ReadFont( rStrm );
 
@@ -1964,7 +1964,7 @@ void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, Sv
 
 void XclImpXFRangeBuffer::SetHyperlink( const XclRange& rXclRange, const OUString& rUrl )
 {
-    maHyperlinks.push_back( XclImpHyperlinkRange( rXclRange, rUrl ) );
+    maHyperlinks.emplace_back( rXclRange, rUrl );
 }
 
 void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2 )

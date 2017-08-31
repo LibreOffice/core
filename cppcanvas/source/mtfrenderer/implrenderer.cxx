@@ -397,10 +397,9 @@ namespace cppcanvas
 
             if( pPolyAction )
             {
-                maActions.push_back(
-                    MtfAction(
+                maActions.emplace_back(
                         pPolyAction,
-                        rParms.mrCurrActionIndex ) );
+                        rParms.mrCurrActionIndex );
 
                 rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
             }
@@ -703,10 +702,9 @@ namespace cppcanvas
 
                         if( pPolyAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pPolyAction,
-                                    rParms.mrCurrActionIndex ) );
+                                    rParms.mrCurrActionIndex );
 
                             rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
                         }
@@ -1018,17 +1016,15 @@ namespace cppcanvas
 
             if( pTextAction )
             {
-                maActions.push_back(
-                    MtfAction(
+                maActions.emplace_back(
                         pTextAction,
-                        rParms.mrCurrActionIndex ) );
+                        rParms.mrCurrActionIndex );
 
                 if ( pStrikeoutTextAction )
                 {
-                    maActions.push_back(
-                        MtfAction(
+                    maActions.emplace_back(
                         pStrikeoutTextAction,
-                        rParms.mrCurrActionIndex ) );
+                        rParms.mrCurrActionIndex );
                 }
 
                 rParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
@@ -1739,10 +1735,9 @@ namespace cppcanvas
 
                                     if( pPolyAction )
                                     {
-                                        maActions.push_back(
-                                            MtfAction(
+                                        maActions.emplace_back(
                                                 pPolyAction,
-                                                io_rCurrActionIndex ) );
+                                                io_rCurrActionIndex );
 
                                         io_rCurrActionIndex += pPolyAction->getActionCount()-1;
                                     }
@@ -1805,10 +1800,9 @@ namespace cppcanvas
 
                             if( pPointAction )
                             {
-                                maActions.push_back(
-                                    MtfAction(
+                                maActions.emplace_back(
                                         pPointAction,
-                                        io_rCurrActionIndex ) );
+                                        io_rCurrActionIndex );
 
                                 io_rCurrActionIndex += pPointAction->getActionCount()-1;
                             }
@@ -1831,10 +1825,9 @@ namespace cppcanvas
 
                             if( pPointAction )
                             {
-                                maActions.push_back(
-                                    MtfAction(
+                                maActions.emplace_back(
                                         pPointAction,
-                                        io_rCurrActionIndex ) );
+                                        io_rCurrActionIndex );
 
                                 io_rCurrActionIndex += pPointAction->getActionCount()-1;
                             }
@@ -1870,10 +1863,9 @@ namespace cppcanvas
 
                                 if( pLineAction )
                                 {
-                                    maActions.push_back(
-                                        MtfAction(
+                                    maActions.emplace_back(
                                             pLineAction,
-                                            io_rCurrActionIndex ) );
+                                            io_rCurrActionIndex );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -1901,10 +1893,9 @@ namespace cppcanvas
 
                                 if( pLineAction )
                                 {
-                                    maActions.push_back(
-                                        MtfAction(
+                                    maActions.emplace_back(
                                             pLineAction,
-                                            io_rCurrActionIndex ) );
+                                            io_rCurrActionIndex );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -2055,10 +2046,9 @@ namespace cppcanvas
 
                                 if( pLineAction )
                                 {
-                                    maActions.push_back(
-                                        MtfAction(
+                                    maActions.emplace_back(
                                             pLineAction,
-                                            io_rCurrActionIndex ) );
+                                            io_rCurrActionIndex );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -2081,10 +2071,9 @@ namespace cppcanvas
 
                                 if( pLineAction )
                                 {
-                                    maActions.push_back(
-                                        MtfAction(
+                                    maActions.emplace_back(
                                             pLineAction,
-                                            io_rCurrActionIndex ) );
+                                            io_rCurrActionIndex );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -2127,10 +2116,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2153,10 +2141,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2186,10 +2173,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2210,10 +2196,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2236,10 +2221,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2269,10 +2253,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2299,10 +2282,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2331,10 +2313,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2369,10 +2350,9 @@ namespace cppcanvas
 
                         if( pBmpAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pBmpAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2407,10 +2387,9 @@ namespace cppcanvas
 
                             if( pPolyAction )
                             {
-                                maActions.push_back(
-                                    MtfAction(
+                                maActions.emplace_back(
                                         pPolyAction,
-                                        io_rCurrActionIndex ) );
+                                        io_rCurrActionIndex );
 
                                 io_rCurrActionIndex += pPolyAction->getActionCount()-1;
                             }
@@ -2444,10 +2423,9 @@ namespace cppcanvas
 
                         if( pFloatTransAction )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pFloatTransAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pFloatTransAction->getActionCount()-1;
                         }
@@ -2522,10 +2500,9 @@ namespace cppcanvas
 
                         if( pPolyAction.get() )
                         {
-                            maActions.push_back(
-                                MtfAction(
+                            maActions.emplace_back(
                                     pPolyAction,
-                                    io_rCurrActionIndex ) );
+                                    io_rCurrActionIndex );
 
                             io_rCurrActionIndex += pPolyAction->getActionCount()-1;
                         }

@@ -448,8 +448,8 @@ void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW n
                 SCCOL nNewRangeEndCol = std::min<SCCOL>(nColEnd, pRange->aEnd.Col());
                 SCROW nNewRangeStartRow = pRange->aEnd.Row() + 1;
                 SCROW nNewRangeEndRow = nRowPos + nSize - 1;
-                aNewRanges.push_back(ScRange(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
-                            nNewRangeEndRow, nTab));
+                aNewRanges.emplace_back(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
+                            nNewRangeEndRow, nTab);
                 if (mnMaxRowUsed < nNewRangeEndRow)
                     mnMaxRowUsed = nNewRangeEndRow;
             }
@@ -481,8 +481,8 @@ void ScRangeList::InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL n
                 SCROW nNewRangeEndRow = std::min<SCROW>(nRowEnd, pRange->aEnd.Row());
                 SCCOL nNewRangeStartCol = pRange->aEnd.Col() + 1;
                 SCCOL nNewRangeEndCol = nColPos + nSize - 1;
-                aNewRanges.push_back(ScRange(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
-                            nNewRangeEndRow, nTab));
+                aNewRanges.emplace_back(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
+                            nNewRangeEndRow, nTab);
             }
         }
     }

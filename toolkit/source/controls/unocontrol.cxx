@@ -530,7 +530,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 // Add properties with dependencies on other properties last
                 // since they're dependent on properties added later (such as
                 // VALUE dependency on VALUEMIN/MAX)
-                aPeerPropertiesToSet.push_back(PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
+                aPeerPropertiesToSet.emplace_back(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE);
             }
             else
             {
@@ -600,8 +600,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                     OUString aPropName( OUString::createFromAscii( pLangDepProp->pPropName ));
                     if ( xPSI.is() && xPSI->hasPropertyByName( aPropName ) )
                     {
-                        aPeerPropertiesToSet.push_back(
-                            PropertyValue( aPropName, 0, xPS->getPropertyValue( aPropName ), PropertyState_DIRECT_VALUE ) );
+                        aPeerPropertiesToSet.emplace_back( aPropName, 0, xPS->getPropertyValue( aPropName ), PropertyState_DIRECT_VALUE );
                     }
                 }
 

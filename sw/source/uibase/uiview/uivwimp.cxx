@@ -236,7 +236,7 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
                 ++it;
         }
 
-        mxTransferables.push_back(uno::WeakReference<lang::XUnoTunnel>(uno::Reference<lang::XUnoTunnel>(&rTransferable)));
+        mxTransferables.emplace_back(uno::Reference<lang::XUnoTunnel>(&rTransferable));
     }
     rTransferable.m_refCount--;
 }

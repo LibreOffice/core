@@ -1520,7 +1520,7 @@ namespace wmfemfhelper
                         }
 
                         const Point& rPoint = pA->GetPoint();
-                        aPositions.push_back(basegfx::B2DPoint(rPoint.X(), rPoint.Y()));
+                        aPositions.emplace_back(rPoint.X(), rPoint.Y());
                         nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
                     }
 
@@ -1544,7 +1544,7 @@ namespace wmfemfhelper
                         {
                             const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
                             const Point& rPoint = pA->GetPoint();
-                            aPositions.push_back(basegfx::B2DPoint(rPoint.X(), rPoint.Y()));
+                            aPositions.emplace_back(rPoint.X(), rPoint.Y());
                             nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
                         }
 

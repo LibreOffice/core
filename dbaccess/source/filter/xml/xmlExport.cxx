@@ -458,8 +458,8 @@ void ODBExport::exportDataSource()
                 {
                     if ( !aDriverSupportedProperties.has(pProperties->Name) || aDriverSupportedProperties.get(pProperties->Name) != aValue )
                     {
-                        m_aDataSourceSettings.push_back( TypedPropertyValue(
-                            pProperties->Name, pProperties->Type, aValue ) );
+                        m_aDataSourceSettings.emplace_back(
+                            pProperties->Name, pProperties->Type, aValue );
                     }
                     continue;
                 }

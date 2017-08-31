@@ -128,7 +128,7 @@ void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
         SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
     }
 
-    maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
+    maViews.emplace_back( rView, sprite );
 }
 
 void PointerSymbol::viewRemoved( const UnoViewSharedPtr& rView )

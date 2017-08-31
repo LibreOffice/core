@@ -702,12 +702,12 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
             if ( _bHasCategories && aColumns.empty() )
             {
                 if ( aRowSetColumnNames.getLength() )
-                    aColumns.push_back( ColumnDescription( aRowSetColumnNames[0] ) );
+                    aColumns.emplace_back( aRowSetColumnNames[0] );
                 else
-                    aColumns.push_back( ColumnDescription( sColumnName ) );
+                    aColumns.emplace_back( sColumnName );
                 bFirstColumnIsCategory = true;
             }
-            aColumns.push_back( ColumnDescription( sColumnName ) );
+            aColumns.emplace_back( sColumnName );
         }
     }
     if ( aColumns.empty() )

@@ -47,38 +47,33 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "Japanese",
+    rOutProperties.emplace_back( "Japanese",
                   PROP_CANDLESTICKCHARTTYPE_JAPANESE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "WhiteDay",
+    rOutProperties.emplace_back( "WhiteDay",
                   PROP_CANDLESTICKCHARTTYPE_WHITE_DAY,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "BlackDay",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "BlackDay",
                   PROP_CANDLESTICKCHARTTYPE_BLACK_DAY,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "ShowFirst",
+    rOutProperties.emplace_back( "ShowFirst",
                   PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ShowHighLow",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ShowHighLow",
                   PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 struct StaticCandleStickChartTypeDefaults_Initializer
@@ -225,17 +220,17 @@ uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRo
 
     std::vector< OUString > aMandRoles;
 
-    aMandRoles.push_back( "label");
+    aMandRoles.emplace_back("label");
     if( bShowFirst )
-        aMandRoles.push_back( "values-first");
+        aMandRoles.emplace_back("values-first");
 
     if( bShowHiLow )
     {
-        aMandRoles.push_back( "values-min");
-        aMandRoles.push_back( "values-max");
+        aMandRoles.emplace_back("values-min");
+        aMandRoles.emplace_back("values-max");
     }
 
-    aMandRoles.push_back( "values-last");
+    aMandRoles.emplace_back("values-last");
 
     return comphelper::containerToSequence( aMandRoles );
 }
@@ -250,12 +245,12 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
     std::vector< OUString > aOptRoles;
 
     if( ! bShowFirst )
-        aOptRoles.push_back( "values-first");
+        aOptRoles.emplace_back("values-first");
 
     if( ! bShowHiLow )
     {
-        aOptRoles.push_back( "values-min");
-        aOptRoles.push_back( "values-max");
+        aOptRoles.emplace_back("values-min");
+        aOptRoles.emplace_back("values-max");
     }
 
     return comphelper::containerToSequence( aOptRoles );

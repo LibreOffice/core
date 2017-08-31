@@ -173,8 +173,8 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
             }
             else
             {
-                maFixedTexts.push_back( nullptr );
-                maEdits.push_back( nullptr );
+                maFixedTexts.emplace_back(nullptr );
+                maEdits.emplace_back(nullptr );
             }
             if (maEdits[nIndex] != nullptr)
                 maEdits[nIndex]->SetModifyHdl( HDL(Impl_DataModifyHdl) );

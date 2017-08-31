@@ -2304,11 +2304,11 @@ public:
                     e = mvSubArguments.end(); it != e; ++it)
                 {
                     if (VectorRef* VR = dynamic_cast<VectorRef*>(it->get()))
-                        vclmem.push_back(SumIfsArgs(VR->GetCLBuffer()));
+                        vclmem.emplace_back(VR->GetCLBuffer());
                     else if (DynamicKernelConstantArgument* CA = dynamic_cast<DynamicKernelConstantArgument*>(it->get()))
-                        vclmem.push_back(SumIfsArgs(CA->GetDouble()));
+                        vclmem.emplace_back(CA->GetDouble());
                     else
-                        vclmem.push_back(SumIfsArgs(nullptr));
+                        vclmem.emplace_back(nullptr);
                 }
                 mpClmem2 = clCreateBuffer(kEnv.mpkContext, CL_MEM_READ_WRITE,
                     sizeof(double) * nVectorWidth, nullptr, &err);

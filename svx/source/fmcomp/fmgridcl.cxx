@@ -419,56 +419,56 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         {
             case DataType::BIT:
             case DataType::BOOLEAN:
-                aPossibleTypes.push_back(FM_COL_CHECKBOX);
-                aImgResId.push_back(RID_SVXBMP_CHECKBOX);
+                aPossibleTypes.emplace_back(FM_COL_CHECKBOX);
+                aImgResId.emplace_back(RID_SVXBMP_CHECKBOX);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
-                aPossibleTypes.push_back(FM_COL_NUMERICFIELD);
-                aImgResId.push_back(RID_SVXBMP_NUMERICFIELD);
-                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
-                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
+                aPossibleTypes.emplace_back(FM_COL_NUMERICFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_NUMERICFIELD);
+                aPossibleTypes.emplace_back(FM_COL_FORMATTEDFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
             case DataType::NUMERIC:
             case DataType::DECIMAL:
-                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
-                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
-                aPossibleTypes.push_back(FM_COL_NUMERICFIELD);
-                aImgResId.push_back(RID_SVXBMP_NUMERICFIELD);
+                aPossibleTypes.emplace_back(FM_COL_FORMATTEDFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_FORMATTEDFIELD);
+                aPossibleTypes.emplace_back(FM_COL_NUMERICFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_NUMERICFIELD);
                 break;
             case DataType::TIMESTAMP:
-                aPossibleTypes.push_back("dateandtimefield");
-                aImgResId.push_back(RID_SVXBMP_DATE_N_TIME_FIELDS);
-                aPossibleTypes.push_back(FM_COL_DATEFIELD);
-                aImgResId.push_back(RID_SVXBMP_DATEFIELD);
-                aPossibleTypes.push_back(FM_COL_TIMEFIELD);
-                aImgResId.push_back(RID_SVXBMP_TIMEFIELD);
-                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
-                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
+                aPossibleTypes.emplace_back("dateandtimefield");
+                aImgResId.emplace_back(RID_SVXBMP_DATE_N_TIME_FIELDS);
+                aPossibleTypes.emplace_back(FM_COL_DATEFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_DATEFIELD);
+                aPossibleTypes.emplace_back(FM_COL_TIMEFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_TIMEFIELD);
+                aPossibleTypes.emplace_back(FM_COL_FORMATTEDFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::DATE:
-                aPossibleTypes.push_back(FM_COL_DATEFIELD);
-                aImgResId.push_back(RID_SVXBMP_DATEFIELD);
-                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
-                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
+                aPossibleTypes.emplace_back(FM_COL_DATEFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_DATEFIELD);
+                aPossibleTypes.emplace_back(FM_COL_FORMATTEDFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::TIME:
-                aPossibleTypes.push_back(FM_COL_TIMEFIELD);
-                aImgResId.push_back(RID_SVXBMP_TIMEFIELD);
-                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
-                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
+                aPossibleTypes.emplace_back(FM_COL_TIMEFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_TIMEFIELD);
+                aPossibleTypes.emplace_back(FM_COL_FORMATTEDFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
             default:
-                aPossibleTypes.push_back(FM_COL_TEXTFIELD);
-                aImgResId.push_back(RID_SVXBMP_EDITBOX);
-                aPossibleTypes.push_back(FM_COL_FORMATTEDFIELD);
-                aImgResId.push_back(RID_SVXBMP_FORMATTEDFIELD);
+                aPossibleTypes.emplace_back(FM_COL_TEXTFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_EDITBOX);
+                aPossibleTypes.emplace_back(FM_COL_FORMATTEDFIELD);
+                aImgResId.emplace_back(RID_SVXBMP_FORMATTEDFIELD);
                 break;
         }
         // if it's a currency field, a "currency field" option

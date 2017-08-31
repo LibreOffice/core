@@ -1581,13 +1581,13 @@ static std::vector< CommentStrip > getComment( const OUString& rQuery )
                 {
                     bComment2 = false;
                     aBuf.append( &pCopy[++i], 1);
-                    aRet.push_back( CommentStrip( aBuf.makeStringAndClear(), false));
+                    aRet.emplace_back( aBuf.makeStringAndClear(), false);
                 }
             }
             else
             {
                 // comment can't close anymore, actually an error, but..
-                aRet.push_back( CommentStrip( aBuf.makeStringAndClear(), false));
+                aRet.emplace_back( aBuf.makeStringAndClear(), false);
             }
             continue;
         }
@@ -1597,7 +1597,7 @@ static std::vector< CommentStrip > getComment( const OUString& rQuery )
             {
                 if (i == nQueryLen-1 && pCopy[i] != '\n')
                     aBuf.append( &pCopy[i], 1);
-                aRet.push_back( CommentStrip( aBuf.makeStringAndClear(), true));
+                aRet.emplace_back( aBuf.makeStringAndClear(), true);
                 bComment = false;
             }
             else if (!aRet.empty())

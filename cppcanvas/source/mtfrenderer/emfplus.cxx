@@ -538,10 +538,9 @@ namespace cppcanvas
             {
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tadd poly action");
 
-                maActions.push_back(
-                    MtfAction(
+                maActions.emplace_back(
                         pPolyAction,
-                        rParms.mrCurrActionIndex ) );
+                        rParms.mrCurrActionIndex );
 
                 rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
             }
@@ -583,7 +582,7 @@ namespace cppcanvas
                 std::shared_ptr<Action> pAction2(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState));
                 if (pAction2)
                 {
-                    maActions.push_back(MtfAction(pAction2, rParms.mrCurrActionIndex));
+                    maActions.emplace_back(pAction2, rParms.mrCurrActionIndex);
                     rParms.mrCurrActionIndex += pAction2->getActionCount()-1;
                 }
                 rState.isFillColorSet = bWasFillColorSet;
@@ -593,7 +592,7 @@ namespace cppcanvas
                 std::shared_ptr<Action> pAction(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState, rAttributes));
                 if (pAction)
                 {
-                    maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
+                    maActions.emplace_back(pAction, rParms.mrCurrActionIndex);
                     rParms.mrCurrActionIndex += pAction->getActionCount()-1;
                 }
             }
@@ -688,7 +687,7 @@ namespace cppcanvas
                 std::shared_ptr<Action> pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aFinalPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
                 if( pPolyAction )
                 {
-                    maActions.push_back(MtfAction(pPolyAction, rParms.mrCurrActionIndex));
+                    maActions.emplace_back(pPolyAction, rParms.mrCurrActionIndex);
                     rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
                 }
             }
@@ -1243,8 +1242,8 @@ namespace cppcanvas
                                                 rState));
 
                                         if( pBmpAction ) {
-                                            maActions.push_back( MtfAction( pBmpAction,
-                                                                            rFactoryParms.mrCurrActionIndex ) );
+                                            maActions.emplace_back( pBmpAction,
+                                                                            rFactoryParms.mrCurrActionIndex );
 
                                             rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
                                         }
@@ -1316,10 +1315,9 @@ namespace cppcanvas
                                 {
                                     SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
 
-                                    maActions.push_back(
-                                                        MtfAction(
+                                    maActions.emplace_back(
                                                                   pTextAction,
-                                                                  rFactoryParms.mrCurrActionIndex ) );
+                                                                  rFactoryParms.mrCurrActionIndex );
 
                                     rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
                                 }
@@ -1632,10 +1630,9 @@ namespace cppcanvas
                             {
                                 SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
 
-                                maActions.push_back(
-                                        MtfAction(
+                                maActions.emplace_back(
                                             pTextAction,
-                                            rFactoryParms.mrCurrActionIndex ) );
+                                            rFactoryParms.mrCurrActionIndex );
 
                                 rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
                             }

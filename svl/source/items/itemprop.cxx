@@ -157,7 +157,7 @@ PropertyEntryVector_t SfxItemPropertyMap::getPropertyEntries() const
     while( aIt != m_pImpl->end() )
     {
         const SfxItemPropertySimpleEntry* pEntry = &(*aIt).second;
-        aRet.push_back( SfxItemPropertyNamedEntry( (*aIt).first, * pEntry ) );
+        aRet.emplace_back( (*aIt).first, * pEntry );
         ++aIt;
     }
     return aRet;

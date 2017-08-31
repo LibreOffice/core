@@ -282,7 +282,7 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     for( size_t nVecIdx = 0; *ppcPropNames; ++ppcPropNames, ++nVecIdx )
     {
         OUString aPropName = OUString::createFromAscii( *ppcPropNames );
-        aPropNameVec.push_back( IndexedOUString( aPropName, nVecIdx ) );
+        aPropNameVec.emplace_back( aPropName, nVecIdx );
     }
 
     // sorts the pairs, which will be sorted by first component (the property name)

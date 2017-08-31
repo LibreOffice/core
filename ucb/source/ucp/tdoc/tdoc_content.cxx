@@ -743,9 +743,8 @@ void Content::queryChildren( ContentRefList& rChildren )
                  ( nPos == ( aChildURL.getLength() - 1 ) ) )
             {
                 // No further slashes / only a final slash. It's a child!
-                rChildren.push_back(
-                    ContentRef(
-                        static_cast< Content * >( xChild.get() ) ) );
+                rChildren.emplace_back(
+                        static_cast< Content * >( xChild.get() ) );
             }
         }
         ++it;

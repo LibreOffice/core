@@ -109,7 +109,7 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
                 nSp = rAttribs.getInteger( XML_sp, 0 );
             }
 
-            mrLineProperties.maCustomDash.push_back( LineProperties::DashStop( nDash, nSp ) );
+            mrLineProperties.maCustomDash.emplace_back( nDash, nSp );
         }
         break;
 

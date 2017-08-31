@@ -50,12 +50,11 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "NumberOfLines",
+    rOutProperties.emplace_back( "NumberOfLines",
                   PROP_COL_LINE_NUMBER_OF_LINES,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 struct StaticColumnLineChartTypeTemplateDefaults_Initializer

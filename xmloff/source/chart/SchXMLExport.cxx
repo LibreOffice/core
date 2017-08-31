@@ -494,7 +494,7 @@ tLabelAndValueRange lcl_getLabelAndValueRangeByRole(
             aResult.second = lcl_ConvertRange( xValueSeq->getSourceRangeRepresentation(), xDoc );
 
         if( xLabelSeq.is() || xValueSeq.is())
-            rOutSequencesToExport.push_back( SchXMLExportHelper_Impl::tLabelValuesDataPair( xLabelSeq, xValueSeq ));
+            rOutSequencesToExport.emplace_back( xLabelSeq, xValueSeq );
     }
 
     return aResult;
@@ -2755,8 +2755,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
                                     if( lcl_exportDomainForThisSequence( xValues, aFirstXDomainRange, mrExport ) )
-                                        m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
-                                            uno::Reference< chart2::data::XDataSequence >(), xValues ));
+                                        m_aDataSequencesToExport.emplace_back(
+                                            uno::Reference< chart2::data::XDataSequence >(), xValues );
                                 }
                                 else if( nSeriesIdx==0 )
                                 {
@@ -2771,8 +2771,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 }
                             }
                             if( xYValuesForBubbleChart.is() )
-                                m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
-                                    uno::Reference< chart2::data::XDataSequence >(), xYValuesForBubbleChart ));
+                                m_aDataSequencesToExport.emplace_back(
+                                    uno::Reference< chart2::data::XDataSequence >(), xYValuesForBubbleChart );
                         }
                     }
 
@@ -2873,8 +2873,8 @@ void SchXMLExportHelper_Impl::exportPropertyMapping(
                 SvXMLElementExport( mrExport, XML_NAMESPACE_LO_EXT, XML_PROPERTY_MAPPING, true, true );
 
                 // register range for data table export
-                m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
-                            uno::Reference< chart2::data::XDataSequence >(), xValues ));
+                m_aDataSequencesToExport.emplace_back(
+                            uno::Reference< chart2::data::XDataSequence >(), xValues );
             }
         }
     }
@@ -3057,8 +3057,8 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
                          aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
                 {
-                    m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
-                        uno::Reference< chart2::data::XDataSequence >(), *aIt ));
+                    m_aDataSequencesToExport.emplace_back(
+                        uno::Reference< chart2::data::XDataSequence >(), *aIt );
                 }
             }
 

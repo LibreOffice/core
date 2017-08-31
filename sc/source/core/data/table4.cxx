@@ -1210,7 +1210,7 @@ void ScTable::FillFormulaVertical(
             if (nRowStart >= 0)
             {
                 nRowEnd = rInner - 1;
-                aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
+                aSpans.emplace_back(nRowStart, nRowEnd);
                 nRowStart = -1;
             }
             rInner = nHiddenLast;
@@ -1224,7 +1224,7 @@ void ScTable::FillFormulaVertical(
     if (nRowStart >= 0)
     {
         nRowEnd = rInner - 1;
-        aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
+        aSpans.emplace_back(nRowStart, nRowEnd);
     }
 
     if (aSpans.empty())

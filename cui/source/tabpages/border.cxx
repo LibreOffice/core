@@ -164,7 +164,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pnBorderImgIds); ++i)
-        m_aBorderImgVec.push_back(BitmapEx(pnBorderImgIds[i]));
+        m_aBorderImgVec.emplace_back(pnBorderImgIds[i]);
 
     static const OUStringLiteral pnShadowImgIds[SVX_BORDER_SHADOW_COUNT] =
     {
@@ -176,7 +176,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pnShadowImgIds); ++i)
-        m_aShadowImgVec.push_back(BitmapEx(pnShadowImgIds[i]));
+        m_aShadowImgVec.emplace_back(pnShadowImgIds[i]);
     assert(m_aShadowImgVec.size() == SVX_BORDER_SHADOW_COUNT);
 
     if ( GetDPIScaleFactor() > 1 )

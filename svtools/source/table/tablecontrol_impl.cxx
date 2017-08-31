@@ -772,7 +772,7 @@ namespace svt { namespace table
             if ( flexibility > 0 )
                 ++flexibleColumnCount;
 
-            effectiveColumnLimits.push_back( ::std::pair< long, long >( effectiveMin, effectiveMax ) );
+            effectiveColumnLimits.emplace_back( effectiveMin, effectiveMax );
             accumulatedMinWidth += effectiveMin;
             accumulatedMaxWidth += effectiveMax;
         }
@@ -1028,7 +1028,7 @@ namespace svt { namespace table
         {
             const long columnStart = accumulatedWidthPixel;
             const long columnEnd = columnStart + newWidthsPixel[col];
-            m_aColumnWidths.push_back( MutableColumnMetrics( columnStart, columnEnd ) );
+            m_aColumnWidths.emplace_back( columnStart, columnEnd );
             accumulatedWidthPixel = columnEnd;
 
             // and don't forget to forward this to the column models

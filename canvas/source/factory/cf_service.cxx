@@ -168,15 +168,15 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                     Sequence<OUString> implementationList;
                     if( (xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList) )
                     {
-                        m_aAvailableImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                        m_aAvailableImplementations.emplace_back(*pCurr,implementationList );
                     }
                     if( (xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList) )
                     {
-                        m_aAcceleratedImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                        m_aAcceleratedImplementations.emplace_back(*pCurr,implementationList );
                     }
                     if( (xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList) )
                     {
-                        m_aAAImplementations.push_back( std::make_pair(*pCurr,implementationList) );
+                        m_aAAImplementations.emplace_back(*pCurr,implementationList );
                     }
 
                 }
@@ -198,12 +198,12 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         // Ugh. Looks like configuration is borked. Fake minimal
         // setup.
         Sequence<OUString> aServices { "com.sun.star.comp.rendering.Canvas.VCL" };
-        m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.Canvas"),
-                                                              aServices) );
+        m_aAvailableImplementations.emplace_back(OUString("com.sun.star.rendering.Canvas"),
+                                                              aServices );
 
         aServices[0] = "com.sun.star.comp.rendering.SpriteCanvas.VCL";
-        m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.SpriteCanvas"),
-                                                              aServices) );
+        m_aAvailableImplementations.emplace_back(OUString("com.sun.star.rendering.SpriteCanvas"),
+                                                              aServices );
     }
 }
 
@@ -428,8 +428,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                 else
                 {
                     // new service name, add new cache entry
-                    m_aCachedImplementations.push_back(std::make_pair(serviceName,
-                                                                      pCurrImpl->trim()));
+                    m_aCachedImplementations.emplace_back(serviceName,
+                                                                      pCurrImpl->trim());
                 }
 
                 return xCanvas;

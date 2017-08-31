@@ -761,7 +761,7 @@ namespace sw { namespace mark
                     {
                         pSaveBkmk->push_back( SaveBookmark( *pMark, rStt, pSttIdx ) );
                     }
-                    vMarksToDelete.push_back(ppMark);
+                    vMarksToDelete.emplace_back(ppMark);
                 }
                 else
                 {

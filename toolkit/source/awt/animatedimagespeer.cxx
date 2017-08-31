@@ -171,7 +171,7 @@ namespace toolkit
             o_images.reserve( count );
             for ( size_t i = 0; i < count; ++i )
             {
-                o_images.push_back( CachedImage( i_imageURLs[i] ) );
+                o_images.emplace_back( i_imageURLs[i] );
             }
         }
 

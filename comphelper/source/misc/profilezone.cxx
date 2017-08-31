@@ -49,8 +49,7 @@ long long addRecording(const char * aProfileId, long long aCreateTime)
         if (!aProfileId)
             aProfileId = "(null)";
         OUString aString(aProfileId, strlen(aProfileId), RTL_TEXTENCODING_UTF8);
-        g_aRecording.push_back(
-            OUString::number(osl_getThreadIdentifier(nullptr)) + " " +
+        g_aRecording.emplace_back(OUString::number(osl_getThreadIdentifier(nullptr)) + " " +
             OUString::number(aTime/1000000.0) + " " + aString + ": " +
             (aCreateTime == 0 ? OUString("start") : OUString("stop")) +
             (aCreateTime != 0 ? (" " + OUString::number((aTime - aCreateTime)/1000.0) + " ms") : OUString(""))

@@ -95,8 +95,8 @@ void XMLErrors::AddRecord(
     const OUString& rPublicId,
     const OUString& rSystemId )
 {
-    aErrors.push_back( ErrorRecord( nId, rParams, rExceptionMessage,
-                                    nRow, nColumn, rPublicId, rSystemId ) );
+    aErrors.emplace_back( nId, rParams, rExceptionMessage,
+                                    nRow, nColumn, rPublicId, rSystemId );
 
 #ifdef DBG_UTIL
 

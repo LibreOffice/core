@@ -279,7 +279,7 @@ void ReorderParam::reverse()
     {
         SCCOLROW nPos1 = i + nStart;
         SCCOLROW nPos2 = maOrderIndices[i];
-        aBucket.push_back(ReorderIndex(nPos1, nPos2));
+        aBucket.emplace_back(nPos1, nPos2);
     }
 
     std::sort(aBucket.begin(), aBucket.end(), ReorderIndex::LessByPos2());

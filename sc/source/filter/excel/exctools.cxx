@@ -210,7 +210,7 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
         nR = rIn.ReaduInt16();
         nC = rIn.ReaduInt16();
 
-        aEntries.push_back(ExcScenarioCell( nC, nR ));
+        aEntries.emplace_back( nC, nR );
 
         n--;
     }

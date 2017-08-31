@@ -742,7 +742,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
                 return;
         }
     }
-    aLineRects.push_back( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ) );
+    aLineRects.emplace_back( rRect, pCol, nStyle, pTab, nSCol );
 }
 
 void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties const & properties )
@@ -847,9 +847,9 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
                             aIns.Bottom( pLA->Bottom() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
+                            aLineRects.emplace_back( aIns, &rL1.GetColor(),
                                         SvxBorderLineStyle::SOLID,
-                                        rL1.GetTab(), SubColFlags::Tab ) );
+                                        rL1.GetTab(), SubColFlags::Tab );
                             if ( isFull() )
                             {
                                 --i;
@@ -888,9 +888,9 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
                             aIns.Right( pLA->Right() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
+                            aLineRects.emplace_back( aIns, &rL1.GetColor(),
                                         SvxBorderLineStyle::SOLID,
-                                        rL1.GetTab(), SubColFlags::Tab ) );
+                                        rL1.GetTab(), SubColFlags::Tab );
                             if ( isFull() )
                             {
                                 --i;
@@ -965,16 +965,16 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Bottom( nTmp );
-                            aLineRects.push_back( SwLineRect( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() ) );
+                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
+                                                aSubsLineRect.GetSubColor() );
                         }
                         nTmp = rLine.Bottom()+properties.nSPixelSzH+1;
                         if ( aSubsLineRect.Bottom() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Top( nTmp );
-                            aLineRects.push_back( SwLineRect( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() ) );
+                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
+                                                aSubsLineRect.GetSubColor() );
                         }
                         aLineRects.erase(aLineRects.begin() + i);
                         --i;
@@ -991,16 +991,16 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Right( nTmp );
-                            aLineRects.push_back( SwLineRect( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() ) );
+                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
+                                                aSubsLineRect.GetSubColor() );
                         }
                         nTmp = rLine.Right()+properties.nSPixelSzW+1;
                         if ( aSubsLineRect.Right() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Left( nTmp );
-                            aLineRects.push_back(  SwLineRect( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
-                                                aSubsLineRect.GetSubColor() ) );
+                            aLineRects.emplace_back( aNewSubsRect, nullptr, aSubsLineRect.GetStyle(), nullptr,
+                                                aSubsLineRect.GetSubColor() );
                         }
                         aLineRects.erase(aLineRects.begin() + i);
                         --i;

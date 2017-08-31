@@ -35,7 +35,7 @@ void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
         if (rRect == m_List[i].GetRect())
             return;
 
-    m_List.push_back(SwURLNote(rURL, rTarget, rRect));
+    m_List.emplace_back(rURL, rTarget, rRect);
 }
 
 void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,

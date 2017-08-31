@@ -2058,7 +2058,7 @@ class FilterEntriesHandler
 
         if (rCell.hasString())
         {
-            mrStrings.push_back(ScTypedStrData(aStr));
+            mrStrings.emplace_back(aStr);
             return;
         }
 
@@ -2080,7 +2080,7 @@ class FilterEntriesHandler
                     OUString aErr = ScGlobal::GetErrorString(nErr);
                     if (!aErr.isEmpty())
                     {
-                        mrStrings.push_back(ScTypedStrData(aErr));
+                        mrStrings.emplace_back(aErr);
                         return;
                     }
                 }
@@ -2107,7 +2107,7 @@ class FilterEntriesHandler
             pFormatter->GetInputLineString( fVal, nIndex, aStr);
         }
         // maybe extend ScTypedStrData enum is also an option here
-        mrStrings.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
+        mrStrings.emplace_back(aStr, fVal, ScTypedStrData::Value,bDate);
     }
 
 public:
@@ -2141,7 +2141,7 @@ public:
     void operator() (const int nElemType, size_t nRow, size_t /* nDataSize */)
     {
         if ( nElemType == sc::element_type_empty ) {
-            mrStrings.push_back(ScTypedStrData(OUString()));
+            mrStrings.emplace_back(OUString());
             return;
         }
         ScRefCellValue aCell = mrColumn.GetCellValue(nRow);
@@ -2383,9 +2383,9 @@ public:
     {
         ScFormulaCell* p2 = const_cast<ScFormulaCell*>(p);
         if (p2->IsValue())
-            maEntries.push_back(Entry(nRow, p2->GetValue()));
+            maEntries.emplace_back(nRow, p2->GetValue());
         else
-            maEntries.push_back(Entry(nRow, p2->GetString()));
+            maEntries.emplace_back(nRow, p2->GetString());
     }
 
     void commitCells(ScColumn& rColumn)

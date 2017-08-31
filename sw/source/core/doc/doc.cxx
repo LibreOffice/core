@@ -1038,7 +1038,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 
             pStPage = pNxtPage;
         }
-        rPagePairs.push_back( std::pair< sal_Int32, sal_Int32 >(nFirst, nSecond) );
+        rPagePairs.emplace_back(nFirst, nSecond );
 
         nSPg = nSPg + nStep;
         nEPg = nEPg - nStep;

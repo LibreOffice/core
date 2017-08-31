@@ -86,8 +86,8 @@ XmlReader::XmlReader(OUString const & fileUrl)
         throw css::uno::RuntimeException(
             "cannot mmap " + fileUrl_ + " (" + OUString::number(e) + ")" );
     }
-    namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
-    namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
+    namespaceIris_.emplace_back("http://www.w3.org/XML/1998/namespace");
+    namespaces_.emplace_back(Span("xml"), NAMESPACE_XML);
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
     state_ = State::Content;
@@ -120,7 +120,7 @@ int XmlReader::registerNamespaceIri(Span const & iri) {
         // those files during migration would fail without this hack that can be
         // removed once migration is no longer relevant (see
         // configmgr::Components::parseModificationLayer):
-        namespaces_.push_back(NamespaceData(Span("xsi"), id));
+        namespaces_.emplace_back(Span("xsi"), id);
     }
     return id;
 }
@@ -646,15 +646,13 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
                    Span(attrNameBegin, attrNameColon - attrNameBegin).equals(
                        "xmlns"))
         {
-            namespaces_.push_back(
-                NamespaceData(
+            namespaces_.emplace_back(
                     Span(attrNameColon + 1, attrNameEnd - (attrNameColon + 1)),
-                    scanNamespaceIri(valueBegin, valueEnd)));
+                    scanNamespaceIri(valueBegin, valueEnd));
         } else {
-            attributes_.push_back(
-                AttributeData(
+            attributes_.emplace_back(
                     attrNameBegin, attrNameEnd, attrNameColon, valueBegin,
-                    valueEnd));
+                    valueEnd);
         }
     }
     if (!hasDefaultNs && !elements_.empty()) {

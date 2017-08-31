@@ -685,7 +685,7 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 
                 if( !sText.isEmpty() )
                 {
-                    rArr.push_back(SwGetINetAttr(sText, rAttr));
+                    rArr.emplace_back(sText, rAttr);
                 }
             }
         }

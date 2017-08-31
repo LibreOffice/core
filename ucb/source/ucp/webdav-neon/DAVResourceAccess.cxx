@@ -1089,10 +1089,9 @@ void DAVResourceAccess::getUserRequestHeaders(
 
             for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
             {
-                rRequestHeaders.push_back(
-                    DAVRequestHeader(
+                rRequestHeaders.emplace_back(
                         aRequestHeaders[ n ].First,
-                        aRequestHeaders[ n ].Second ) );
+                        aRequestHeaders[ n ].Second );
             }
         }
     }
@@ -1109,8 +1108,7 @@ void DAVResourceAccess::getUserRequestHeaders(
             return;
         }
     }
-    rRequestHeaders.push_back(
-        DAVRequestHeader( "User-Agent", "LibreOffice" ) );
+    rRequestHeaders.emplace_back( "User-Agent", "LibreOffice" );
 }
 
 // This function member implements the control on cyclical redirections

@@ -57,39 +57,35 @@ void Broadcaster::addDisposeNotification(
     css::uno::Reference< css::lang::XEventListener > const & listener,
     css::lang::EventObject const & event)
 {
-    disposeNotifications_.push_back(DisposeNotification(listener, event));
+    disposeNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addContainerElementReplacedNotification(
     css::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
-    containerElementReplacedNotifications_.push_back(
-        ContainerNotification(listener, event));
+    containerElementReplacedNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addContainerElementInsertedNotification(
     css::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
-    containerElementInsertedNotifications_.push_back(
-        ContainerNotification(listener, event));
+    containerElementInsertedNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addContainerElementRemovedNotification(
     css::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
-    containerElementRemovedNotifications_.push_back(
-        ContainerNotification(listener, event));
+    containerElementRemovedNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addPropertyChangeNotification(
     css::uno::Reference< css::beans::XPropertyChangeListener > const & listener,
     css::beans::PropertyChangeEvent const & event)
 {
-    propertyChangeNotifications_.push_back(
-        PropertyChangeNotification(listener, event));
+    propertyChangeNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addPropertiesChangeNotification(
@@ -97,15 +93,14 @@ void Broadcaster::addPropertiesChangeNotification(
         listener,
     css::uno::Sequence< css::beans::PropertyChangeEvent > const & event)
 {
-    propertiesChangeNotifications_.push_back(
-        PropertiesChangeNotification(listener, event));
+    propertiesChangeNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addChangesNotification(
     css::uno::Reference< css::util::XChangesListener > const & listener,
     css::util::ChangesEvent const & event)
 {
-    changesNotifications_.push_back(ChangesNotification(listener, event));
+    changesNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::send() {

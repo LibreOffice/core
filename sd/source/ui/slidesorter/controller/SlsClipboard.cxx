@@ -424,9 +424,9 @@ void Clipboard::CreateSlideTransferable (
         if ( ! pDescriptor || pDescriptor->GetPage()==nullptr)
             continue;
         Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
-        aRepresentatives.push_back(TransferableData::Representative(
+        aRepresentatives.emplace_back(
             aPreview,
-            pDescriptor->HasState(model::PageDescriptor::ST_Excluded)));
+            pDescriptor->HasState(model::PageDescriptor::ST_Excluded));
         if (aRepresentatives.size() >= 3)
             break;
     }
@@ -535,9 +535,9 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
         if ( ! pDescriptor || pDescriptor->GetPage()==nullptr)
             break;
         Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
-        aRepresentatives.push_back(TransferableData::Representative(
+        aRepresentatives.emplace_back(
                 aPreview,
-                pDescriptor->HasState(model::PageDescriptor::ST_Excluded)));
+                pDescriptor->HasState(model::PageDescriptor::ST_Excluded));
 
         // Remember the page in maPagesToRemove so that it can be removed
         // when drag and drop action is "move".

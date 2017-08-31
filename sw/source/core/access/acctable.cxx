@@ -1734,11 +1734,11 @@ void SwAccessibleTable::AddSelectionCell(
     uno::Reference<XAccessible> const xTmp(pAccCell);
     if (bAddOrRemove)
     {
-        m_vecCellAdd.push_back(std::make_pair(pAccCell, xTmp));
+        m_vecCellAdd.emplace_back(pAccCell, xTmp);
     }
     else
     {
-        m_vecCellRemove.push_back(std::make_pair(pAccCell, xTmp));
+        m_vecCellRemove.emplace_back(pAccCell, xTmp);
     }
 }
 

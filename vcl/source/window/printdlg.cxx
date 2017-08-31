@@ -1001,7 +1001,7 @@ void PrintDialog::setupOptionalUI()
             maNUpPage.mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != nullptr );
             maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
 
-            maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(maNUpPage.mpBrochureBtn );
             maControlToPropertyMap[maNUpPage.mpBrochureBtn] = aPropertyName;
 
             // set help id
@@ -1029,7 +1029,7 @@ void PrintDialog::setupOptionalUI()
             pNewBox->Check( bVal );
             pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
 
-            maPropertyToWindowMap[ aPropertyName ].push_back( pNewBox );
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pNewBox );
             maControlToPropertyMap[pNewBox] = aPropertyName;
 
             // set help id
@@ -1062,7 +1062,7 @@ void PrintDialog::setupOptionalUI()
                 if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] )
                     pBtn->Enable( false );
                 pBtn->Show();
-                maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
+                maPropertyToWindowMap[ aPropertyName ].emplace_back(pBtn );
                 maControlToPropertyMap[pBtn] = aPropertyName;
                 maControlToNumValMap[pBtn] = m;
 
@@ -1101,7 +1101,7 @@ void PrintDialog::setupOptionalUI()
             // set help text
             setHelpText( pList, aHelpTexts, 0 );
 
-            maPropertyToWindowMap[ aPropertyName ].push_back( pList );
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pList );
             maControlToPropertyMap[pList] = aPropertyName;
         }
         else if ( aCtrlType == "Range" )
@@ -1132,7 +1132,7 @@ void PrintDialog::setupOptionalUI()
             // set help text
             setHelpText( pField, aHelpTexts, 0 );
 
-            maPropertyToWindowMap[ aPropertyName ].push_back( pField );
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pField );
             maControlToPropertyMap[pField] = aPropertyName;
         }
         else if (aCtrlType == "Edit")
@@ -1157,7 +1157,7 @@ void PrintDialog::setupOptionalUI()
             // set help text
             setHelpText( pField, aHelpTexts, 0 );
 
-            maPropertyToWindowMap[ aPropertyName ].push_back( pField );
+            maPropertyToWindowMap[ aPropertyName ].emplace_back(pField );
             maControlToPropertyMap[pField] = aPropertyName;
         }
         else

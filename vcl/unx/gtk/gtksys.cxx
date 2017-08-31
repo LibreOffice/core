@@ -119,7 +119,7 @@ GtkSalSystem::countScreenMonitors()
                     GdkRectangleCoincident()));
             nMonitors = std::distance(aGeometries.begin(), aUniqueEnd);
         }
-        maScreenMonitors.push_back(std::make_pair(pScreen, nMonitors));
+        maScreenMonitors.emplace_back(pScreen, nMonitors);
     }
 }
 

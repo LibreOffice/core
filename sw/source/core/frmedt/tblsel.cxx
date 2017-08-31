@@ -542,8 +542,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                                 rUnion.Top()    <= nFrameBottom &&
                                 nFrameBottom      <= nUnionBottom+ nYFuzzy )
 
-                                aCellFrames.push_back(
-                                        Sort_CellFrame( *static_cast<const SwCellFrame*>(pCell)) );
+                                aCellFrames.emplace_back( *static_cast<const SwCellFrame*>(pCell) );
                             else
                             {
                                 bValidChartSel = false;
@@ -1918,7 +1917,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
 
         if( aRectFnSet.GetWidth(aUnion) )
         {
-            rUnions.push_back(SwSelUnion(aUnion, const_cast<SwTabFrame*>(pTable)));
+            rUnions.emplace_back(aUnion, const_cast<SwTabFrame*>(pTable));
         }
 
         pTable = pTable->GetFollow();
