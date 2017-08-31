@@ -751,7 +751,7 @@ const unsigned nASN1_TAGGED_CONSTRUCTED = 0xa0;
 const unsigned nASN1_CONSTRUCTED = 0x20;
 
 /// Create payload for the 'signing-certificate' signed attribute.
-bool CreateSigningCertificateAttribute(void* pDerEncoded, int nDerEncoded, PCCERT_CONTEXT pCertContext, SvStream& rEncodedCertificate)
+bool CreateSigningCertificateAttribute(void const * pDerEncoded, int nDerEncoded, PCCERT_CONTEXT pCertContext, SvStream& rEncodedCertificate)
 {
     // CryptEncodeObjectEx() does not support encoding arbitrary ASN.1
     // structures, like SigningCertificateV2 from RFC 5035, so let's build it
