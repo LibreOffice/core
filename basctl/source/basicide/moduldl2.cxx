@@ -1104,12 +1104,16 @@ void LibPage::Export()
             return;
     }
 
-    ScopedVclPtrInstance< ExportDialog > aNewDlg(this);
+    ScopedVclPtrInstance<ExportDialog> aNewDlg(this);
     if (aNewDlg->Execute() == RET_OK)
     {
         try
         {
-            if (aNewDlg->isExportAsPackage())
+            bool bExportAsPackage = aNewDlg->isExportAsPackage();
+            //tdf#112063 ensure closing aNewDlg is not selected as
+            //parent of file dialog from ExportAs...
+            aNewDlg.disposeAndClear();
+            if (bExportAsPackage)
                 ExportAsPackage( aLibName );
             else
                 ExportAsBasic( aLibName );
