@@ -91,6 +91,7 @@ SfxFormalArgument const aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Margin1", SID_RULER_MARGIN1 },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "Margin2", SID_RULER_MARGIN2 },
 //    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "FileName", SID_FILE_NAME },
+    { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "ImageFilter", SID_CONVERT_IMAGES },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "URL", SID_FILE_NAME },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "OpenFlags", SID_OPTIONS },
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "Overwrite", SID_OVERWRITE },
@@ -732,6 +733,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
                 if (bOK)
                     rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
+            }
+            else if ( aName == "ImageFilter" )
+            {
+                OUString sVal;
+                bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
+                DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
+                if (bOK)
+                    rSet.Put( SfxStringItem( SID_CONVERT_IMAGES, sVal ) );
             }
             else if ( aName == sMacroExecMode )
             {
@@ -1595,6 +1604,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if (rSet.HasItem(SID_FILTER_PROVIDER, &pItem))
         {
             pValue[nActProp].Name = sFilterProvider;
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
+        }
+        if (rSet.HasItem(SID_CONVERT_IMAGES, &pItem))
+        {
+            pValue[nActProp].Name = "ImageFilter";
             pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
     }

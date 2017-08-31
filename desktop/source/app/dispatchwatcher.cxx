@@ -583,9 +583,12 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             OUString aParam = aDispatchRequest.aPrinterName;
                             sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
                             sal_Int32 nFilterIndex = aParam.indexOf( ':' );
+                            sal_Int32 nImgFilterIndex = aParam.lastIndexOf( '|' );
                             if( nPathIndex < nFilterIndex )
                                 nFilterIndex = -1;
-                            OUString aFilterOut=aParam.copy( nPathIndex+1 );
+
+                            OUString aFilterOut;
+                            OUString aImgOut;
                             OUString aFilter;
                             OUString aFilterExt;
                             bool bGuess = false;
@@ -601,6 +604,15 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 bGuess = true;
                                 aFilterExt = aParam.copy( 0, nPathIndex );
                             }
+
+                            if( nImgFilterIndex >= 0 )
+                            {
+                                aImgOut = aParam.copy( nImgFilterIndex+1 );
+                                aFilterOut = aParam.copy( nPathIndex+1, nImgFilterIndex-nPathIndex-1 );
+                            }
+                            else
+                                aFilterOut = aParam.copy( nPathIndex+1 );
+
                             INetURLObject aOutFilename( aObj );
                             aOutFilename.SetExtension( aFilterExt );
                             FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
@@ -633,7 +645,11 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             else
                             {
                                 sal_Int32 nFilterOptionsIndex = aFilter.indexOf(':');
-                                Sequence<PropertyValue> conversionProperties( 0 < nFilterOptionsIndex ? 3 : 2 );
+                                sal_Int32 nProps = ( 0 < nFilterOptionsIndex ) ? 3 : 2;
+
+                                if ( !aImgOut.isEmpty() )
+                                    nProps +=1;
+                                Sequence<PropertyValue> conversionProperties( nProps );
                                 conversionProperties[0].Name = "Overwrite";
                                 conversionProperties[0].Value <<= true;
 
@@ -648,6 +664,12 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 else
                                 {
                                     conversionProperties[1].Value <<= aFilter;
+                                }
+
+                                if ( !aImgOut.isEmpty() )
+                                {
+                                    conversionProperties[nProps-1].Name = "ImageFilter";
+                                    conversionProperties[nProps-1].Value <<= aImgOut;
                                 }
 
                                 OUString aTempName;

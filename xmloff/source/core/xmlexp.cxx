@@ -816,10 +816,16 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                 if (!(rValue >>= mpImpl->maDestShellID))
                     return false;
             }
+            else if( rPropName == "ImageFilter")
+            {
+                if (!(rValue >>= msImgFilterName))
+                    return false;
+            }
         }
 
 
         exportDoc( meClass );
+
     }
     catch(const uno::Exception& e)
     {
