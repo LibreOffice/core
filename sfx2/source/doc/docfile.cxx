@@ -473,6 +473,12 @@ bool SfxMedium::IsSkipImages()
     return pSkipImagesItem && pSkipImagesItem->GetValue() == "SkipImages";
 }
 
+OUString SfxMedium::GetConvertImagesFilter()
+{
+    const SfxStringItem* pConvertItem = GetItemSet()->GetItem<SfxStringItem>(SID_CONVERT_IMAGES);
+    return ( pConvertItem ? pConvertItem->GetValue() : OUString() );
+}
+
 SvStream* SfxMedium::GetInStream()
 {
     if ( pImpl->m_pInStream )

@@ -102,6 +102,7 @@
 #define SID_SIGNPDF                         (SID_SFX_START + 519)
 #define SID_SAVEACOPY                       (SID_SFX_START + 999)
 #define SID_SAVEACOPYITEM                   (SID_SFX_START + 998)
+#define SID_CONVERT_IMAGES                  (SID_SFX_START + 997)
 #define SID_CLOSING                         (SID_SFX_START +1539)
 #define SID_CLOSEDOC                        (SID_SFX_START + 503)
 #define SID_CLOSEDOCS                       (SID_SFX_START + 595)
