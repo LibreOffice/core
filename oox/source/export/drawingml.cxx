@@ -1155,8 +1155,8 @@ void DrawingML::WriteStretch( const css::uno::Reference< css::beans::XPropertySe
     mpFS->endElementNS( XML_a, XML_stretch );
 }
 
-void DrawingML::WriteTransformation( const tools::Rectangle& rRect,
-        sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
+void DrawingML::WriteTransformation(const tools::Rectangle& rRect,
+        sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation, bool bIsGroupShape)
 {
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
                           XML_flipH, bFlipH ? "1" : nullptr,
@@ -1175,10 +1175,16 @@ void DrawingML::WriteTransformation( const tools::Rectangle& rRect,
     mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( oox::drawingml::convertHmmToEmu( nLeft ) ), XML_y, IS( oox::drawingml::convertHmmToEmu( nTop ) ), FSEND );
     mpFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( oox::drawingml::convertHmmToEmu( rRect.GetWidth() ) ), XML_cy, IS( oox::drawingml::convertHmmToEmu( rRect.GetHeight() ) ), FSEND );
 
+    if (GetDocumentType() != DOCUMENT_DOCX && bIsGroupShape)
+    {
+        mpFS->singleElementNS(XML_a, XML_chOff, XML_x, IS(oox::drawingml::convertHmmToEmu(nLeft)), XML_y, IS(oox::drawingml::convertHmmToEmu(nTop)), FSEND);
+        mpFS->singleElementNS(XML_a, XML_chExt, XML_cx, IS(oox::drawingml::convertHmmToEmu(rRect.GetWidth())), XML_cy, IS(oox::drawingml::convertHmmToEmu(rRect.GetHeight())), FSEND);
+    }
+
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation  )
+void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation, bool bSuppressFlipping )
 {
     SAL_INFO("oox.shape",  "write shape transformation");
 
@@ -1186,7 +1192,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
-    if (m_xParent.is())
+    if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
     {
         awt::Point aParentPos = m_xParent->getPosition();
         aPos.X -= aParentPos.X;
@@ -1215,7 +1221,19 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
     }
-    WriteTransformation( tools::Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
+
+    // OOXML flips shapes before rotating them.
+    if(bFlipH != bFlipV)
+        nRotation = nRotation * -1 + 36000;
+
+    if(bSuppressFlipping)
+        bFlipH = bFlipV = false;
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(rXShape, uno::UNO_QUERY_THROW);
+    bool bIsGroupShape = (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
+
+    WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
+            bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation), bIsGroupShape);
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
