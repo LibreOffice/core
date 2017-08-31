@@ -294,7 +294,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 
 //inline
 void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
-    FORMATETC& fetc, STGMEDIUM& stgmedium )
+    FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
     if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
     {
@@ -311,7 +311,7 @@ void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
 }
 
 void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
-    FORMATETC& fetc, STGMEDIUM& stgmedium )
+    FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
 
@@ -449,7 +449,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
 
 // the transferable must have only text, so we will synthesize unicode text
 
-void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
     OSL_ASSERT( CF_UNICODETEXT == fetc.cfFormat );
 

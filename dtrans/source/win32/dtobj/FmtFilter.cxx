@@ -147,7 +147,7 @@ Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile 
 
 // convert a openoffice metafile picture to a windows metafile picture
 
-HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
+HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
     HMETAFILEPICT   hPict = nullptr;
     HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
@@ -169,7 +169,7 @@ HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( Sequence< sal_Int8 >& aOOMetaFilePic
 
 // convert a openoffice metafile picture to a windows enhanced metafile picture
 
-HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 >& aOOMetaFilePict )
+HENHMETAFILE SAL_CALL OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
     HENHMETAFILE hEnhMtf = SetEnhMetaFileBits( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
 
@@ -243,7 +243,7 @@ const std::string TAG_END_HTML = std::string("</html>");
 const std::string TAG_BODY = std::string("<body");
 const std::string TAG_END_BODY = std::string("</body");
 
-Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
+Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
 {
     OSL_ASSERT(aTextHtml.getLength() > 0);
 

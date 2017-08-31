@@ -44,8 +44,8 @@ css::uno::Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEn
     aByteStream - a sequence of bytes containing a openoffice metafile
                   picture with a leading METAFILEHEADER
 ------------------------------------------------------------------------*/
-HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( css::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
-HENHMETAFILE  SAL_CALL OOMFPictToWinENHMFPict( css::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
+HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( css::uno::Sequence< sal_Int8 > const & aOOMetaFilePict );
+HENHMETAFILE  SAL_CALL OOMFPictToWinENHMFPict( css::uno::Sequence< sal_Int8 > const & aOOMetaFilePict );
 
 /*------------------------------------------------------------------------
     input:
@@ -75,7 +75,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( css::uno::Sequence< sal_I
     the Format is described in the MSDN Library under HTML Clipboard
     Format
 ------------------------------------------------------------------------*/
-css::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( css::uno::Sequence< sal_Int8 >& aTextHtml );
+css::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( css::uno::Sequence< sal_Int8 > const & aTextHtml );
 
 /**
     Return a FileList in which Windows Shell Links (lnk) are resolved.
