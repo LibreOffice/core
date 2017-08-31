@@ -50,7 +50,7 @@ namespace dxcanvas
     {
         typedef std::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
 
-        bool fillLinearGradient( GraphicsSharedPtr&                             rGraphics,
+        bool fillLinearGradient( GraphicsSharedPtr const & rGraphics,
                                  const ::canvas::ParametricPolyPolygon::Values& /*rValues*/,
                                  const std::vector< Gdiplus::Color >&           rColors,
                                  const std::vector< Gdiplus::REAL >&            rStops,
@@ -196,7 +196,7 @@ namespace dxcanvas
         bool fillPolygonalGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                                     const std::vector< Gdiplus::Color >&           rColors,
                                     const std::vector< Gdiplus::REAL >&            rStops,
-                                    GraphicsSharedPtr&                             rGraphics,
+                                    GraphicsSharedPtr const & rGraphics,
                                     const GraphicsPathSharedPtr&                   rPath,
                                     const rendering::ViewState&                    viewState,
                                     const rendering::RenderState&                  renderState,
@@ -422,7 +422,7 @@ namespace dxcanvas
         bool fillGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                            const std::vector< Gdiplus::Color >&           rColors,
                            const std::vector< Gdiplus::REAL >&            rStops,
-                           GraphicsSharedPtr&                             rGraphics,
+                           GraphicsSharedPtr const & rGraphics,
                            const GraphicsPathSharedPtr&                   rPath,
                            const rendering::ViewState&                    viewState,
                            const rendering::RenderState&                  renderState,
@@ -461,7 +461,7 @@ namespace dxcanvas
         }
 
         void fillBitmap( const uno::Reference< rendering::XBitmap >& xBitmap,
-                         GraphicsSharedPtr&                          rGraphics,
+                         GraphicsSharedPtr const & rGraphics,
                          const GraphicsPathSharedPtr&                rPath,
                          const rendering::Texture&                   rTexture )
         {

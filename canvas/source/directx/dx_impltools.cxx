@@ -172,7 +172,7 @@ namespace dxcanvas
                                         static_cast<Gdiplus::REAL>(rPoint.Y) );
             }
 
-            void graphicsPathFromB2DPolygon( GraphicsPathSharedPtr&             rOutput,
+            void graphicsPathFromB2DPolygon( GraphicsPathSharedPtr const & rOutput,
                                              std::vector< Gdiplus::PointF >&  rPoints,
                                              const ::basegfx::B2DPolygon&       rPoly,
                                              bool bNoLineJoin)

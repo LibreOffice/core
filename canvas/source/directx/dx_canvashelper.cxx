@@ -705,7 +705,7 @@ namespace dxcanvas
         return aRet;
     }
 
-    void CanvasHelper::setupGraphicsState( GraphicsSharedPtr&            rGraphics,
+    void CanvasHelper::setupGraphicsState( GraphicsSharedPtr const & rGraphics,
                                            const rendering::ViewState&   viewState,
                                            const rendering::RenderState& renderState )
     {

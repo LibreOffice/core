@@ -239,7 +239,7 @@ namespace dxcanvas
         bool needOutput() const { return mpGraphicsProvider.get() != nullptr; };
 
         // returns transparency of color
-        void setupGraphicsState( GraphicsSharedPtr&                              rGraphics,
+        void setupGraphicsState( GraphicsSharedPtr const & rGraphics,
                                  const css::rendering::ViewState&   viewState,
                                  const css::rendering::RenderState& renderState );
 
