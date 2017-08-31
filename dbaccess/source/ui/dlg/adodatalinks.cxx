@@ -185,7 +185,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
 
 }
 
-OUString getAdoDatalink(long hWnd,OUString& oldLink)
+OUString getAdoDatalink(long hWnd,OUString const & oldLink)
 {
     OUString dataLink;
     if (!oldLink.isEmpty())
