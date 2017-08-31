@@ -109,7 +109,7 @@ public:
                         const css::uno::Reference< css::datatransfer::XTransferable >& xTransfer );
     void CreateObjectFromFile( const OUString& aFileName );
     void CreateLinkFromFile( const OUString& aFileName );
-    void InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent );
+    void InitEmbeddedCopyOfLink( OleComponent const * pOleLinkComponent );
 
 
     void RunObject(); // switch OLE object to running state

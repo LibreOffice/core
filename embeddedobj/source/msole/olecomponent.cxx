@@ -872,7 +872,7 @@ void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
 }
 
 
-void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
+void OleComponent::InitEmbeddedCopyOfLink( OleComponent const * pOleLinkComponent )
 {
     if ( !pOleLinkComponent || !pOleLinkComponent->m_pNativeImpl->m_pObj )
         throw lang::IllegalArgumentException(); // TODO
