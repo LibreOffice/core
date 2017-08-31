@@ -493,6 +493,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return false;
     } else if (isa<CXXDependentScopeMemberExpr>(parent)) {
         return false;
+    } else if (isa<ObjCIvarRefExpr>(parent)) {
+        return checkIfCanBeConst(parent, parmVarDecl);
     }
     parent->dump();
     parmVarDecl->dump();
