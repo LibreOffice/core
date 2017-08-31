@@ -1062,7 +1062,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
                 nIndex(nTempIndex), aItemSet(rItemSet) {}
         };
 
-        typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
+        typedef ::std::vector<std::unique_ptr<ScMyRememberItem>> ScMyRememberItemVector;
 
 void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
@@ -1083,13 +1083,12 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         if (bUpdateMode)
             rEngine.SetUpdateMode(false);
 
-        ScMyRememberItemList aRememberItems;
-        ScMyRememberItem* pRememberItem = nullptr;
+        ScMyRememberItemVector aRememberItems;
 
         //  All paragraph attributes must be removed before calling CreateTextObject,
         //  not only alignment, so the object doesn't contain the cell attributes as
-        //  paragraph attributes. Before remove the attributes store they in a list to
-        //  set they back to the EditEngine.
+        //  paragraph attributes. Before removing the attributes store them in a vector to
+        //  set them back to the EditEngine.
         sal_Int32 nCount = rEngine.GetParagraphCount();
         for (sal_Int32 i=0; i<nCount; i++)
         {
@@ -1098,8 +1097,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             {
                 if ( !bLoseContent )
                 {
-                    pRememberItem = new ScMyRememberItem(rEngine.GetParaAttribs(i), i);
-                    aRememberItems.push_back(pRememberItem);
+                    aRememberItems.push_back(o3tl::make_unique<ScMyRememberItem>(rEngine.GetParaAttribs(i), i));
                 }
                 rEngine.SetParaAttribs( i, SfxItemSet( *rOld.GetPool(), rOld.GetRanges() ) );
             }
@@ -1112,13 +1110,11 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         // Set the paragraph attributes back to the EditEngine.
         if (!aRememberItems.empty())
         {
-            ScMyRememberItemList::iterator aItr = aRememberItems.begin();
+            ScMyRememberItemVector::iterator aItr = aRememberItems.begin();
             while (aItr != aRememberItems.end())
             {
-                pRememberItem = *aItr;
-                rEngine.SetParaAttribs(pRememberItem->nIndex, pRememberItem->aItemSet);
-                delete pRememberItem;
-                aItr = aRememberItems.erase(aItr);
+                rEngine.SetParaAttribs((*aItr).get()->nIndex, (*aItr).get()->aItemSet);
+                ++aItr;
             }
         }
 
