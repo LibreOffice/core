@@ -28,7 +28,7 @@ MacabOrder::~MacabOrder()
 {
 }
 
-MacabSimpleOrder::MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, bool bAscending)
+MacabSimpleOrder::MacabSimpleOrder(MacabHeader const *header, OUString const &sColumnName, bool bAscending)
     : MacabOrder(),
       m_nFieldNumber(header->getColumnNumber(sColumnName)),
       m_bAscending(bAscending)
