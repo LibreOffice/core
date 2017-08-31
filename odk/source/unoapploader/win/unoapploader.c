@@ -36,7 +36,7 @@
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 
 char const* getPath(void);
-char* createCommandLine( char* lpCmdLine );
+char* createCommandLine( char const * lpCmdLine );
 FILE* getErrorFile( int create );
 void writeError( const char* errstr );
 void closeErrorFile(void);
@@ -299,7 +299,7 @@ char const* getPath()
  * @return the command line for the application process or NULL, if an error
  *         occurred
  */
-char* createCommandLine( char* appendix )
+char* createCommandLine( char const * appendix )
 {
     const char* CMDPREFIX = "_";
     const char* DQUOTE = "\"";
