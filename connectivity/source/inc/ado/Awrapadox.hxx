@@ -84,7 +84,7 @@ namespace connectivity
 
             OUString get_Name() const;
             void get_Command(OLEVariant& _rVar) const;
-            void put_Command(OLEVariant& _rVar);
+            void put_Command(OLEVariant const & _rVar);
         };
 
         class WpADOGroup : public WpOLEBase<ADOGroup>

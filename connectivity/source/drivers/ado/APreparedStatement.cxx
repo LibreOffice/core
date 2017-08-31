@@ -436,7 +436,7 @@ void SAL_CALL OPreparedStatement::release() throw()
     OStatement_Base::release();
 }
 
-void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
+void OPreparedStatement::replaceParameterNodeName(OSQLParseNode const * _pNode,
                                                   const OUString& _sDefaultName,
                                                   sal_Int32& _rParameterCount)
 {

@@ -97,7 +97,7 @@ namespace connectivity
 
              sal_Int32 get_State() const;
 
-             bool OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OLEVariant& SchemaID,ADORecordset**pprset);
+             bool OpenSchema(SchemaEnum eNum,OLEVariant const & Restrictions,OLEVariant const & SchemaID,ADORecordset**pprset);
 
              OUString get_Version() const;
 

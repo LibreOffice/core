@@ -237,7 +237,7 @@ sal_Int32 WpADOConnection::get_State() const
     return nRet;
 }
 
-bool WpADOConnection::OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OLEVariant& SchemaID,ADORecordset**pprset)
+bool WpADOConnection::OpenSchema(SchemaEnum eNum,OLEVariant const & Restrictions,OLEVariant const & SchemaID,ADORecordset**pprset)
 {
     assert(pInterface);
     return SUCCEEDED(pInterface->OpenSchema(eNum,Restrictions,SchemaID,pprset));
@@ -1424,7 +1424,7 @@ void WpADOView::get_Command(OLEVariant& _rVar) const
     pInterface->get_Command(&_rVar);
 }
 
-void WpADOView::put_Command(OLEVariant& _rVar)
+void WpADOView::put_Command(OLEVariant const & _rVar)
 {
     assert(pInterface);
     pInterface->put_Command(_rVar);

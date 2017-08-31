@@ -43,7 +43,7 @@ namespace connectivity
         public:
             OViews(OCatalog* _pParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector,
-                WpADOViews& _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
+                WpADOViews const & _rCollection,bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
                 ,m_aCollection(_rCollection)
                 ,m_pCatalog(_pParent)
             {

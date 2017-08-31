@@ -46,7 +46,7 @@ namespace connectivity
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType, sal_Int32 _nSize,const OLEVariant& Val);
-            void replaceParameterNodeName(  OSQLParseNode* _pNode,
+            void replaceParameterNodeName(  OSQLParseNode const * _pNode,
                                             const OUString& _sDefaultName,
                                             sal_Int32& _nParameterCount);
         protected:
