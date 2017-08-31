@@ -147,7 +147,7 @@ private:
 
 public:
     void Read (
-        ReadContext& rReadContext,
+        const ReadContext& rReadContext,
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
 
     SharedPaneStyle GetPaneStyle (const OUString& rsStyleName) const;
@@ -184,7 +184,7 @@ private:
 
 public:
     void Read (
-        ReadContext& rReadContext,
+        const ReadContext& rReadContext,
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot);
 
     SharedViewStyle GetViewStyle (const OUString& rsStyleName) const;
@@ -810,7 +810,7 @@ BorderSize ReadContext::ReadBorderSize (const Reference<container::XNameAccess>&
 //===== PaneStyleContainer ====================================================
 
 void PaneStyleContainer::Read (
-    ReadContext& rReadContext,
+    const ReadContext& rReadContext,
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
     Reference<container::XNameAccess> xPaneStyleList (
@@ -942,7 +942,7 @@ PresenterTheme::SharedFontDescriptor PaneStyle::GetFont() const
 //===== ViewStyleContainer ====================================================
 
 void ViewStyleContainer::Read (
-    ReadContext& rReadContext,
+    const ReadContext& rReadContext,
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
     Reference<container::XNameAccess> xViewStyleList (
