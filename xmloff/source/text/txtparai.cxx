@@ -2110,8 +2110,15 @@ XMLParaContext::~XMLParaContext()
                     Reference<beans::XPropertySet> xMark(
                         static_cast<const XMLIndexMarkHint_Impl *>(pHint)->GetMark());
                     Reference<XTextContent> xContent(xMark, UNO_QUERY);
-                    xTxtImport->GetText()->insertTextContent(
-                        xAttrCursor, xContent, true );
+                    try
+                    {
+                        xTxtImport->GetText()->insertTextContent(
+                            xAttrCursor, xContent, true );
+                    }
+                    catch (uno::RuntimeException const& e)
+                    {
+                        SAL_INFO("xmloff.text", "could not insert index mark, presumably in editengine text " << e.Message);
+                    }
                 }
                 break;
             case XML_HINT_TEXT_FRAME:
