@@ -63,7 +63,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             bool bHeading );
 
-    virtual ~XMLParaContext() override;
+    virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,

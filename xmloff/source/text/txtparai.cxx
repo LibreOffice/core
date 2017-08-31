@@ -1876,7 +1876,7 @@ XMLParaContext::XMLParaContext(
     }
 }
 
-XMLParaContext::~XMLParaContext()
+void XMLParaContext::EndElement()
 {
     rtl::Reference < XMLTextImportHelper > xTxtImport(
         GetImport().GetTextImport());
