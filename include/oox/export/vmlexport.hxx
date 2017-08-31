@@ -94,7 +94,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     sal_uInt32 m_nShapeType;
 
     /// Remember the shape flags.
-    sal_uInt32 m_nShapeFlags;
+    ShapeFlag m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
     OStringBuffer m_ShapeStyle;
@@ -176,7 +176,7 @@ private:
     virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const tools::Rectangle* pBoundRect ) override;
     virtual void LeaveGroup() override;
 
-    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 ) override;
+    virtual void AddShape( sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt32 nShapeId = 0 ) override;
 
 private:
     /// Create an OString representing the id from a numerical id.
