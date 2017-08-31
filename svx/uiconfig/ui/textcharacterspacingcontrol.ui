@@ -133,6 +133,38 @@
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="very_loose">
+            <property name="label" translatable="yes" context="textcharacterspacingcontrol|very_loose">Very Loose</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">image_spacing_3</property>
+            <property name="relief">none</property>
+            <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="last_custom">
+            <property name="label" translatable="yes" context="textcharacterspacingcontrol|last_custom">Last Custom Value</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">image_spacing_4</property>
+            <property name="relief">none</property>
+            <property name="xalign">0</property>
+            <property name="always_show_image">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -176,38 +208,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="very_loose">
-            <property name="label" translatable="yes" context="textcharacterspacingcontrol|very_loose">Very Loose</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">image_spacing_3</property>
-            <property name="relief">none</property>
-            <property name="xalign">0</property>
-            <property name="always_show_image">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="last_custom">
-            <property name="label" translatable="yes" context="textcharacterspacingcontrol|last_custom">Last Custom Value</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">image_spacing_4</property>
-            <property name="relief">none</property>
-            <property name="xalign">0</property>
-            <property name="always_show_image">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">5</property>
           </packing>
         </child>
       </object>
