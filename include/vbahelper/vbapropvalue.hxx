@@ -30,8 +30,6 @@
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 
-typedef ::cppu::WeakImplHelper< ov::XPropValue > PropValueImpl_BASE;
-
 class VBAHELPER_DLLPUBLIC PropListener
 {
 public:
@@ -43,7 +41,7 @@ protected:
 };
 
 
-class VBAHELPER_DLLPUBLIC ScVbaPropValue : public PropValueImpl_BASE
+class VBAHELPER_DLLPUBLIC ScVbaPropValue : public ::cppu::WeakImplHelper< ov::XPropValue >
 {
     PropListener* m_pListener;
 public:

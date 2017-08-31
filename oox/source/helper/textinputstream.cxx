@@ -35,11 +35,9 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-typedef ::cppu::WeakImplHelper< XInputStream > UnoBinaryInputStream_BASE;
-
 /** Implementation of a UNO input stream wrapping a binary input stream.
  */
-class UnoBinaryInputStream : public UnoBinaryInputStream_BASE
+class UnoBinaryInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
 public:
     explicit            UnoBinaryInputStream( BinaryInputStream& rInStrm );

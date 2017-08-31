@@ -25,9 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 
 
-typedef cppu::WeakImplHelper< ov::msforms::XNewFont > VbaNewFont_BASE;
-
-class VbaNewFont : public VbaNewFont_BASE
+class VbaNewFont : public cppu::WeakImplHelper< ov::msforms::XNewFont >
 {
 public:
     /// @throws css::uno::RuntimeException

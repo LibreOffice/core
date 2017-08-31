@@ -143,10 +143,10 @@ public:
 // only requirement is the object needs to implement XName
 
 
-typedef ::cppu::WeakImplHelper< css::container::XNameAccess, css::container::XIndexAccess, css::container::XEnumerationAccess > XNamedCollectionHelper_BASE;
-
 template< typename OneIfc >
-class XNamedObjectCollectionHelper : public XNamedCollectionHelper_BASE
+class XNamedObjectCollectionHelper : public ::cppu::WeakImplHelper< css::container::XNameAccess,
+                                                                    css::container::XIndexAccess,
+                                                                    css::container::XEnumerationAccess >
 {
 public:
 typedef std::vector< css::uno::Reference< OneIfc > >  XNamedVec;
@@ -330,9 +330,7 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper<ov::XCollection> XCollection_InterfacesBASE;
-
-typedef ScVbaCollectionBase< XCollection_InterfacesBASE > CollImplBase;
+typedef ScVbaCollectionBase< ::cppu::WeakImplHelper<ov::XCollection> > CollImplBase;
 // compatible with the old collections ( pre XHelperInterface base class ) ( some internal objects still use this )
 class VBAHELPER_DLLPUBLIC ScVbaCollectionBaseImpl : public CollImplBase
 {
