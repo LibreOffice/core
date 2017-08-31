@@ -99,6 +99,7 @@ public:
     void testBulletCharAndFont();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
+    void testTdf111884();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -126,6 +127,7 @@ public:
     CPPUNIT_TEST(testBulletCharAndFont);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
+    CPPUNIT_TEST(testTdf111884);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -780,6 +782,21 @@ void SdOOXMLExportTest1::testTableCellBorder()
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf111884()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf111884.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrObject const* pShape = pPage->GetObj(2);
+    CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
+
+    // must be a group shape
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_GRUP), pShape->GetObjIdentifier());
 
     xDocShRef->DoClose();
 }
