@@ -104,6 +104,7 @@ public:
     void testBulletCharAndFont();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
+    void testTdf111884();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testBulletCharAndFont);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
+    CPPUNIT_TEST(testTdf111884);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -221,20 +223,26 @@ void SdOOXMLExportTest1::testBnc870233_2()
 
     // First smart art has blue font color (direct formatting)
     {
-        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
-        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff) );
+        const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
+        CPPUNIT_ASSERT(pObjGroup);
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
+        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0x0000ff));
     }
 
     // Second smart art has "dk2" font color (style)
     {
-        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
+        const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(2)); // FIXME should be 1, smartart import creates an additional empty group for some reason
+        CPPUNIT_ASSERT(pObjGroup);
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
         checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x1F497D) );
     }
 
     // Third smart art has white font color (style)
     {
-        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 2 ) );
-        checkFontAttributes<Color, SvxColorItem>( pObj, Color(0xffffff) );
+        const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(4)); // FIXME should be 2, smartart import creates an additional empty group for some reason
+        CPPUNIT_ASSERT(pObjGroup);
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>(pObjGroup->GetSubList()->GetObj(0));
+        checkFontAttributes<Color, SvxColorItem>(pObj, Color(0xffffff));
     }
 
     xDocShRef->DoClose();
@@ -366,12 +374,14 @@ void SdOOXMLExportTest1::testBnc880763()
 
     // Check z-order of the two shapes, use background color to identify them
     // First object in the background has blue background color
-    const SdrObject *pObj = dynamic_cast<SdrObject *>( pPage->GetObj( 0 ) );
+    const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObjGroup);
+    const SdrObject *pObj = dynamic_cast<SdrObject *>(pObjGroup->GetSubList()->GetObj(0));
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
     // Second object at the front has green background color
-    pObj = dynamic_cast<SdrObject *>( pPage->GetObj( 1 ) );
+    pObj = dynamic_cast<SdrObject *>(pPage->GetObj(2)); // FIXME should be 1, smartart import creates an additional empty group for some reason
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
@@ -386,7 +396,9 @@ void SdOOXMLExportTest1::testBnc862510_5()
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
     // Same as testBnc870237, but here we check the horizontal spacing
-    const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj( 1 ) );
+    const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObjGroup);
+    const SdrObject* pObj = dynamic_cast<SdrObject*>(pObjGroup->GetSubList()->GetObj(1));
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
@@ -775,6 +787,21 @@ void SdOOXMLExportTest1::testTableCellBorder()
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf111884()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf111884.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrObject const* pShape = pPage->GetObj(2);
+    CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
+
+    // must be a group shape
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_GRUP), pShape->GetObjIdentifier());
 
     xDocShRef->DoClose();
 }

@@ -300,14 +300,7 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( const Reference< XShape >
 
     SAL_INFO("sd.eppt", "shape(unknown): " << USS(sShapeType));
 
-    if ( sShapeType == "com.sun.star.drawing.GroupShape" )
-    {
-        Reference< XIndexAccess > rXIndexAccess( xShape, UNO_QUERY );
-
-        mrExport.EnterGroup( rXIndexAccess );
-        SAL_INFO("sd.eppt", "enter group");
-    }
-    else if ( sShapeType == "com.sun.star.drawing.PageShape" )
+    if (sShapeType == "com.sun.star.presentation.PageShape")
     {
         WritePageShape( xShape, mePageType, mrExport.GetPresObj() );
     }

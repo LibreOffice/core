@@ -190,8 +190,8 @@ public:
 
     void WriteShapeTransformation( const css::uno::Reference< css::drawing::XShape >& rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false );
-    void WriteTransformation( const Rectangle& rRectangle,
-                  sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
+    void WriteTransformation(const Rectangle& rRectangle,
+                  sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
     void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph,
