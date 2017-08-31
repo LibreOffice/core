@@ -185,11 +185,9 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
                                        GetResLocale());
 
     aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
-    aSpellIdle.SetDebugName( "sc::ScModule aSpellIdle" );
 
     aIdleTimer.SetTimeout(SC_IDLE_MIN);
     aIdleTimer.SetInvokeHandler( LINK( this, ScModule, IdleHandler ) );
-    aIdleTimer.SetDebugName( "sc::ScModule aIdleTimer" );
     aIdleTimer.Start();
 
     pMessagePool = new ScMessagePool;
