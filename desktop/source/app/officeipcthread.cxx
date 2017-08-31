@@ -1291,6 +1291,7 @@ static void AddConversionsToDispatchList(
     const OUString& rPrinterName,
     const OUString& rFactory,
     const OUString& rParamOut,
+    const OUString& rImgOut,
     const bool isTextCat,
     const bool isScriptCat )
 {
@@ -1317,6 +1318,7 @@ static void AddConversionsToDispatchList(
     }
 
     OUString aOutDir( rParamOut.trim() );
+    OUString aImgOut( rImgOut.trim() );
     OUString aPWD;
     if (cwdUrl)
     {
@@ -1340,6 +1342,9 @@ static void AddConversionsToDispatchList(
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
         aParam += ";" + aPWD;
     }
+
+    if( !rImgOut.trim().isEmpty() )
+        aParam += "|" + aImgOut;
 
     for (std::vector< OUString >::const_iterator i(rRequestList.begin());
          i != rRequestList.end(); ++i)
@@ -1366,7 +1371,7 @@ bool RequestHandler::ExecuteCmdLineRequests(
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, "", aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, "", aRequest.aModule );
-    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.bTextCat, aRequest.bScriptCat );
+    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.aImageConversionType, aRequest.bTextCat, aRequest.bScriptCat );
     bool bShutdown( false );
 
     if ( pGlobal.is() )
