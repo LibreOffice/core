@@ -1189,11 +1189,6 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                         switch( eCmpPos )
                         {
                         case SwComparePosition::Equal:
-                            bCompress = true;
-                            mpRedlineTable->DeleteAndDestroy( n );
-                            bDec = true;
-                            SAL_FALLTHROUGH;
-
                         case SwComparePosition::Inside:
                             if( bCallDelete )
                             {
@@ -1222,6 +1217,12 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             pNewRedl = nullptr;
                             if (eCmpPos == SwComparePosition::Inside)
                                 pRedl->MaybeNotifyModification();
+                            else
+                            {
+                                bCompress = true;
+                                mpRedlineTable->DeleteAndDestroy( n );
+                                bDec = true;
+                            }
                             break;
 
                         case SwComparePosition::Outside:
