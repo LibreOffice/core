@@ -492,7 +492,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl::getImplementation( con
         return nullptr ;
 }
 
-OUString findOIDDescription(char *oid)
+OUString findOIDDescription(char const *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );
     for (int i=0; i<nOID; i++)
