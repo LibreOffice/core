@@ -27,11 +27,11 @@
 
 #include <common.h>
 
-OUString getFilterNameFromGUID_Impl( GUID* );
+OUString getFilterNameFromGUID_Impl( GUID const * );
 
-o3tl::u16string_view getServiceNameFromGUID_Impl( GUID* );
+o3tl::u16string_view getServiceNameFromGUID_Impl( GUID const * );
 
-wchar_t const * getStorageTypeFromGUID_Impl( GUID* guid );
+wchar_t const * getStorageTypeFromGUID_Impl( GUID const * guid );
 
 #endif
 

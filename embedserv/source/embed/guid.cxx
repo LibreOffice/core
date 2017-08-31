@@ -26,7 +26,7 @@
 
 #include <guid.hxx>
 
-wchar_t const * getStorageTypeFromGUID_Impl( GUID* guid )
+wchar_t const * getStorageTypeFromGUID_Impl( GUID const * guid )
 {
     if ( *guid == OID_WriterTextServer )
         return L"soffice.StarWriterDocument.6";
@@ -61,7 +61,7 @@ wchar_t const * getStorageTypeFromGUID_Impl( GUID* guid )
     return L"";
 }
 
-o3tl::u16string_view getServiceNameFromGUID_Impl( GUID* guid )
+o3tl::u16string_view getServiceNameFromGUID_Impl( GUID const * guid )
 {
     if ( *guid == OID_WriterTextServer )
         return u"com.sun.star.comp.Writer.TextDocument";
@@ -96,7 +96,7 @@ o3tl::u16string_view getServiceNameFromGUID_Impl( GUID* guid )
     return u"";
 }
 
-OUString getFilterNameFromGUID_Impl( GUID* guid )
+OUString getFilterNameFromGUID_Impl( GUID const * guid )
 {
     if ( *guid == OID_WriterTextServer )
         return OUString( "StarOffice XML (Writer)" );
