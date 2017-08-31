@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d5c13082",
+        "filename": "offapi/com/sun/star/security/XDocumentDigitalSignatures.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-08-31T16:01:06Z",
+      "side": 1,
+      "message": "those guys also need @since statements",
+      "revId": "04778b83808ba95202319cbdd9a432804110d617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
