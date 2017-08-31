@@ -62,9 +62,7 @@ typedef std::unordered_map<OString, bool, OStringHash>
 
 enum class IdLevel { Null=0, Text=2, Identifier=5 };
 
-typedef std::vector< OString > ExportList;
-
-/// Purpose: holds mandatory data to export a single res (used with ResStack)
+/// Purpose: holds mandatory data to export a single res
 class ResData
 {
 public:
@@ -92,7 +90,6 @@ enum class StringType {
 };
 
 
-typedef ::std::vector< ResData* > ResStack;
 class ParserQueue;
 
 // class MergeEntrys

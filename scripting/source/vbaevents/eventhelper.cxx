@@ -935,10 +935,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
     }
 }
 
-typedef ::cppu::WeakImplHelper< XVBAToOOEventDescGen, css::lang::XServiceInfo > VBAToOOEventDescGen_BASE;
-
-
-class VBAToOOEventDescGen : public VBAToOOEventDescGen_BASE
+class VBAToOOEventDescGen : public ::cppu::WeakImplHelper< XVBAToOOEventDescGen, css::lang::XServiceInfo >
 {
 public:
     VBAToOOEventDescGen();

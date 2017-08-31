@@ -64,12 +64,6 @@ struct KeyEventEqualsFunc
 };
 
 /**
-    Basic OUString hash.
-    Key and values are OUStrings.
-*/
-typedef std::unordered_map<OUString, OUString, OUStringHash> OUStringHashMap;
-
-/**
     It can be used to map names (e.g. of properties) to her corresponding handles.
     Our helper class OPropertySetHelper works optimized with handles but sometimes we have only a property name.
     Mapping between these two parts of a property should be done in the fastest way :-)

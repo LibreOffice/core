@@ -88,10 +88,6 @@ class XMLErrors;
 class StyleMap;
 enum class SvXMLErrorFlags;
 
-typedef std::stack<SvXMLImportContextRef> SvXMLImportContexts_Impl;
-typedef std::stack<css::uno::Reference<css::xml::sax::XFastContextHandler>>
-            FastSvXMLImportContexts_Impl;
-
 namespace xmloff {
     class RDFaImportHelper;
 }
@@ -204,12 +200,13 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     std::unique_ptr<SvXMLImport_Impl>  mpImpl;            // dummy
 
-    std::unique_ptr<SvXMLNamespaceMap> mpNamespaceMap;
-    std::unique_ptr<SvXMLUnitConverter> mpUnitConv;
-    SvXMLImportContexts_Impl    maContexts;
-    FastSvXMLImportContexts_Impl    maFastContexts;
-    std::unique_ptr<SvXMLNumFmtHelper> mpNumImport;
-    std::unique_ptr<ProgressBarHelper> mpProgressBarHelper;
+    std::unique_ptr<SvXMLNamespaceMap>    mpNamespaceMap;
+    std::unique_ptr<SvXMLUnitConverter>   mpUnitConv;
+    std::stack<SvXMLImportContextRef>     maContexts;
+    std::stack<css::uno::Reference<css::xml::sax::XFastContextHandler>>
+                                          maFastContexts;
+    std::unique_ptr<SvXMLNumFmtHelper>    mpNumImport;
+    std::unique_ptr<ProgressBarHelper>    mpProgressBarHelper;
     std::unique_ptr<XMLEventImportHelper> mpEventImportHelper;
     std::unique_ptr<XMLErrors>  mpXMLErrors;
     rtl::Reference<StyleMap>    mpStyleMap;

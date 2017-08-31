@@ -72,8 +72,6 @@ using namespace com::sun::star::lang;
 
 typedef std::unordered_map<OUString, sal_Int32, OUStringHash> NameToHandleMap;
 
-typedef std::unordered_map<sal_Int32, sal_Int32> EnumToHandleMap;
-
 typedef std::set<OUString> VarNameSet;
 
 // class SvtPathOptions_Impl ---------------------------------------------
@@ -85,7 +83,8 @@ class SvtPathOptions_Impl
         Reference< XFastPropertySet >       m_xPathSettings;
         Reference< XStringSubstitution >    m_xSubstVariables;
         Reference< XMacroExpander >         m_xMacroExpander;
-        mutable EnumToHandleMap             m_aMapEnumToPropHandle;
+        mutable std::unordered_map<sal_Int32, sal_Int32>
+                                            m_aMapEnumToPropHandle;
         VarNameSet                          m_aSystemPathVarNames;
 
         OUString                            m_aEmptyString;

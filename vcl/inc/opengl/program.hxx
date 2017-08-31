@@ -23,8 +23,6 @@
 
 #include <unordered_map>
 
-typedef std::unordered_map< OString, GLuint, OStringHash > UniformCache;
-
 enum class TextureShaderType
 {
     Normal = 0,
@@ -44,7 +42,8 @@ class VCL_PLUGIN_PUBLIC OpenGLProgram
 {
 private:
     GLuint          mnId;
-    UniformCache    maUniformLocations;
+    std::unordered_map< OString, GLuint, OStringHash >
+                    maUniformLocations;
     sal_uInt32      mnEnabledAttribs;
     GLuint          mnPositionAttrib;
     GLuint          mnTexCoordAttrib;
