@@ -195,12 +195,6 @@ private:
         const Reference<beans::XPropertySet>& rxProperties);
 };
 
-class ViewDescriptor
-{
-};
-typedef std::shared_ptr<ViewDescriptor> SharedViewDescriptor;
-typedef ::std::vector<SharedViewDescriptor> ViewDescriptorContainer;
-
 class StyleAssociationContainer
 {
 public:
