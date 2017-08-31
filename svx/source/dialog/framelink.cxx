@@ -42,15 +42,21 @@ namespace svx {
 namespace frame {
 
 // Classes
-Style::Style() : maImplStyle(new implStyle())
+void Style::implEnsureImplStyle()
 {
-    Clear();
+    if(!maImplStyle)
+    {
+        maImplStyle.reset(new implStyle());
+    }
+}
+
+Style::Style() : maImplStyle()
+{
 }
 
 Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType ) : maImplStyle(new implStyle())
 {
     maImplStyle->mnType = nType;
-    Clear();
     Set( nP, nD, nS );
 }
 
@@ -66,16 +72,28 @@ Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) : maImplSty
     Set( pBorder, fScale );
 }
 
-double Style::GetWidth() const
+void Style::SetPatternScale( double fScale )
 {
-    implStyle* pTarget = maImplStyle.get();
+    if(!maImplStyle)
+    {
+        if(1.0 == fScale)
+        {
+            return;
+        }
 
-    return pTarget->mfPrim + pTarget->mfDist + pTarget->mfSecn;
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->mfPatternScale = fScale;
 }
 
 void Style::Clear()
 {
-    Set( Color(), Color(), Color(), false, 0, 0, 0 );
+    if(maImplStyle)
+    {
+        Set( Color(), Color(), Color(), false, 0, 0, 0 );
+        maImplStyle->mnType = SvxBorderLineStyle::SOLID;
+    }
 }
 
 void Style::Set( double nP, double nD, double nS )
@@ -87,6 +105,7 @@ void Style::Set( double nP, double nD, double nS )
         >0  0   >0      nP      0       0
         >0  >0  >0      nP      nD      nS
      */
+    implEnsureImplStyle();
     implStyle* pTarget = maImplStyle.get();
     pTarget->mfPrim = rtl::math::round(nP ? nP : nS, 2);
     pTarget->mfDist = rtl::math::round((nP && nS) ? nD : 0, 2);
@@ -95,6 +114,7 @@ void Style::Set( double nP, double nD, double nS )
 
 void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS )
 {
+    implEnsureImplStyle();
     implStyle* pTarget = maImplStyle.get();
     pTarget->maColorPrim = rColorPrim;
     pTarget->maColorSecn = rColorSecn;
@@ -105,6 +125,7 @@ void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& 
 
 void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth )
 {
+    implEnsureImplStyle();
     implStyle* pTarget = maImplStyle.get();
     pTarget->maColorPrim = rBorder.GetColorOut();
     pTarget->maColorSecn = rBorder.GetColorIn();
@@ -173,12 +194,76 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
     else
     {
         Clear();
-        maImplStyle->mnType = SvxBorderLineStyle::SOLID;
     }
+}
+
+void Style::SetRefMode( RefMode eRefMode )
+{
+    if(!maImplStyle)
+    {
+        if(RefMode::Centered == eRefMode)
+        {
+            return;
+        }
+
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->meRefMode = eRefMode;
+}
+
+void Style::SetColorPrim( const Color& rColor )
+{
+    if(!maImplStyle)
+    {
+        if(Color() == rColor)
+        {
+            return;
+        }
+
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->maColorPrim = rColor;
+}
+
+void Style::SetColorSecn( const Color& rColor )
+{
+    if(!maImplStyle)
+    {
+        if(Color() == rColor)
+        {
+            return;
+        }
+
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->maColorSecn = rColor;
+}
+
+void Style::SetType( SvxBorderLineStyle nType )
+{
+    if(!maImplStyle)
+    {
+        if(SvxBorderLineStyle::SOLID == nType)
+        {
+            return;
+        }
+
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->mnType = nType;
 }
 
 Style& Style::MirrorSelf()
 {
+    if(!maImplStyle)
+    {
+        return *this;
+    }
+
     implStyle* pTarget = maImplStyle.get();
 
     if (pTarget->mfSecn)
@@ -194,8 +279,30 @@ Style& Style::MirrorSelf()
     return *this;
 }
 
-const Cell* Style::GetUsingCell() const { return maImplStyle->mpUsingCell; }
-void Style::SetUsingCell(const Cell* pCell) { maImplStyle->mpUsingCell = pCell; }
+const Cell* Style::GetUsingCell() const
+{
+    if(!maImplStyle)
+    {
+        return nullptr;
+    }
+
+    return maImplStyle->mpUsingCell;
+}
+
+void Style::SetUsingCell(const Cell* pCell)
+{
+    if(!maImplStyle)
+    {
+        if(nullptr == pCell)
+        {
+            return;
+        }
+
+        implEnsureImplStyle();
+    }
+
+    maImplStyle->mpUsingCell = pCell;
+}
 
 bool operator==( const Style& rL, const Style& rR )
 {
@@ -298,7 +405,7 @@ const OffsetCutSet* getMinMaxCutSet(bool bMin, const std::vector< OffsetCutSet >
 
 void getOffsetPairsFromStyle(const Style& rStyle, std::vector< OffsetPair >& offsets)
 {
-    if (rStyle.Prim())
+    if (rStyle.IsUsed())
     {
         if (rStyle.Dist() && rStyle.Secn())
         {
@@ -355,7 +462,7 @@ void createCutsWithStyle(
     const basegfx::B2DVector& rMyVector,
     std::vector< OffsetCutSet>& rOtherCuts)
 {
-    if (rStyle.Prim())
+    if (rStyle.IsUsed())
     {
         // get values dependent on source vector
         const basegfx::B2DVector aMyUnifiedPerpendicular(basegfx::getNormalizedPerpendicular(rMyVector));
@@ -495,7 +602,7 @@ void CreateBorderPrimitives(
     const Style& /*rRFromBL*/,
     const Color* pForceColor)
 {
-    if (rBorder.Prim())
+    if (rBorder.IsUsed())
     {
         const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
         const double fLength(rX.getLength());
@@ -630,7 +737,7 @@ void CreateBorderPrimitives(
     const Color* pForceColor)
 {
     /// rough mapping for testing
-    if (rBorder.Prim() || rBorder.Secn())
+    if (rBorder.IsUsed())
     {
         const size_t nStart(rStartStyleVectorTable.size());
         const size_t nEnd(rEndStyleVectorTable.size());
@@ -654,42 +761,6 @@ void CreateBorderPrimitives(
             5 == nEnd ? rEndStyleVectorTable[3].getStyle() : Style(),
             2 == nEnd ? rEndStyleVectorTable[1].getStyle() : 5 == nEnd ? rEndStyleVectorTable[4].getStyle() : Style(),
 
-            pForceColor);
-    }
-}
-
-void CreateBorderPrimitives(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DPoint& rOrigin,
-    const basegfx::B2DVector& rX,
-    const basegfx::B2DVector& rY,
-    const Style& rBorder,
-    const Style& rLFromT,
-    const Style& rLFromL,
-    const Style& rLFromB,
-    const Style& rRFromT,
-    const Style& rRFromR,
-    const Style& rRFromB,
-    const Color* pForceColor)
-{
-    if (rBorder.Prim() || rBorder.Secn())
-    {
-        CreateBorderPrimitives(
-            rTarget,
-            rOrigin,
-            rX,
-            rY,
-            rBorder,
-            Style(),
-            rLFromT,
-            rLFromL,
-            rLFromB,
-            Style(),
-            Style(),
-            rRFromT,
-            rRFromR,
-            rRFromB,
-            Style(),
             pForceColor);
     }
 }

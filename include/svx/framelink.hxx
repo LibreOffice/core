@@ -142,7 +142,16 @@ private:
         {}
     };
 
+    /// the impl class holding the data
     std::shared_ptr< implStyle >        maImplStyle;
+
+    /// call to set maImplStyle on demand
+    void implEnsureImplStyle();
+
+    /// need information which cell this style info comes from due to needed
+    /// rotation info (which is in the cell). Rotation depends on the cell.
+    friend class Cell;
+    void SetUsingCell(const Cell* pCell);
 
 public:
     /** Constructs an invisible frame style. */
@@ -150,62 +159,57 @@ public:
     /** Constructs a frame style with passed line widths. */
     explicit Style( double nP, double nD, double nS, SvxBorderLineStyle nType );
     /** Constructs a frame style with passed color and line widths. */
-    explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                    double nP, double nD, double nS, SvxBorderLineStyle nType );
+    explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType );
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0 );
 
-    RefMode      GetRefMode() const { return maImplStyle->meRefMode; }
-    const Color& GetColorPrim() const { return maImplStyle->maColorPrim; }
-    const Color& GetColorSecn() const { return maImplStyle->maColorSecn; }
-    const Color& GetColorGap() const { return maImplStyle->maColorGap; }
-    bool         UseGapColor() const { return maImplStyle->mbUseGapColor; }
-    double       Prim() const { return maImplStyle->mfPrim; }
-    double       Dist() const { return maImplStyle->mfDist; }
-    double       Secn() const { return maImplStyle->mfSecn; }
-    double PatternScale() const { return maImplStyle->mfPatternScale;}
-    void SetPatternScale( double fScale ) { maImplStyle->mfPatternScale = fScale; }
-    SvxBorderLineStyle Type() const { return maImplStyle->mnType; }
+    RefMode GetRefMode() const { if(!maImplStyle) return RefMode::Centered; return maImplStyle->meRefMode; }
+    const Color GetColorPrim() const { if(!maImplStyle) return Color(); return maImplStyle->maColorPrim; }
+    const Color GetColorSecn() const { if(!maImplStyle) return Color(); return maImplStyle->maColorSecn; }
+    const Color GetColorGap() const { if(!maImplStyle) return Color(); return maImplStyle->maColorGap; }
+    bool UseGapColor() const { if(!maImplStyle) return false; return maImplStyle->mbUseGapColor; }
+    double Prim() const { if(!maImplStyle) return 0.0; return maImplStyle->mfPrim; }
+    double Dist() const { if(!maImplStyle) return 0.0; return maImplStyle->mfDist; }
+    double Secn() const { if(!maImplStyle) return 0.0; return maImplStyle->mfSecn; }
+    double PatternScale() const { if(!maImplStyle) return 0.0; return maImplStyle->mfPatternScale;}
+    void SetPatternScale( double fScale );
+    SvxBorderLineStyle Type() const { if(!maImplStyle) return SvxBorderLineStyle::SOLID; return maImplStyle->mnType; }
+
+    /// Check if this style is used - this depends on it having any width definition.
+    /// As can be seen in the definition comment above, Prim() *must* be non zero to have a width
+    bool IsUsed() const { if(!maImplStyle) return false; return 0.0 != maImplStyle->mfPrim; }
 
     /** Returns the total width of this frame style. */
-    double       GetWidth() const;
+    double GetWidth() const { if(!maImplStyle) return 0.0; implStyle* pTarget = maImplStyle.get(); return pTarget->mfPrim + pTarget->mfDist + pTarget->mfSecn; }
 
     /** Sets the frame style to invisible state. */
-    void                Clear();
+    void Clear();
     /** Sets the frame style to the passed line widths. */
-    void                Set( double nP, double nD, double nS );
+    void Set( double nP, double nD, double nS );
     /** Sets the frame style to the passed line widths. */
-    void                Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
-                            double nP, double nD, double nS );
+    void Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS );
     /** Sets the frame style to the passed SvxBorderLine struct. */
-    void                Set( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
+    void Set( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    void                Set( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
+    void Set( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
-    void         SetRefMode( RefMode eRefMode ) { maImplStyle->meRefMode = eRefMode; }
+    void SetRefMode( RefMode eRefMode );
     /** Sets a new color, does not modify other settings. */
-    void         SetColorPrim( const Color& rColor ) { maImplStyle->maColorPrim = rColor; }
-    void         SetColorSecn( const Color& rColor ) { maImplStyle->maColorSecn = rColor; }
+    void SetColorPrim( const Color& rColor );
+    void SetColorSecn( const Color& rColor );
     /** Sets whether to use dotted style for single hair lines. */
-    void         SetType( SvxBorderLineStyle nType ) { maImplStyle->mnType = nType; }
+    void SetType( SvxBorderLineStyle nType );
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
-    Style&              MirrorSelf();
+    Style& MirrorSelf();
 
     /** return the Cell using this style (if set) */
     const Cell* GetUsingCell() const;
-
-private:
-    /// need information which cell this style info comes from due to needed
-    /// rotation info (which is in the cell). Rotation depends on the cell.
-    friend class Cell;
-    void SetUsingCell(const Cell* pCell);
 };
 
 bool operator==( const Style& rL, const Style& rR );
 SVX_DLLPUBLIC bool operator<( const Style& rL, const Style& rR );
-
 inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
 
 // Various helper functions
@@ -314,27 +318,7 @@ SVX_DLLPUBLIC void CreateBorderPrimitives(
     const Color*        pForceColor     /// If specified, overrides frame border color.
 );
 
-SVX_DLLPUBLIC void CreateBorderPrimitives(
-    drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
-
-    const basegfx::B2DPoint&    rOrigin,    /// start point of borderline
-    const basegfx::B2DVector&   rX,         /// X-Axis with length
-    const basegfx::B2DVector&   rY,         /// Y-Axis for perpendicular, normalized. Does *not* need to be perpendicular, but may express a rotation
-
-    const Style&        rBorder,        /// Style of the processed frame border.
-
-    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
-    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
-    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
-
-    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
-    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
-    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
-
-    const Color*        pForceColor     /// If specified, overrides frame border color.
-);
-
-class StyleVectorCombination
+class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorCombination
 {
 private:
     const Style&                mrStyle;
