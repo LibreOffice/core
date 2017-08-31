@@ -425,7 +425,13 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
                 return false;
             }
             if (loplugin::TypeCheck(t).Void()) {
-                return false;
+                if (auto const sub = dyn_cast<DeclRefExpr>(
+                        e->getSubExpr()->IgnoreParenImpCasts()))
+                {
+                    if (sub->getDecl() == parmVarDecl) {
+                        return false;
+                    }
+                }
             }
         }
         return checkIfCanBeConst(parent, parmVarDecl);
