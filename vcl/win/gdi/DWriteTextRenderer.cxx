@@ -361,7 +361,7 @@ bool D2DWriteTextOutRenderer::ReleaseFont()
 // The inkboxes returned have their origin on the baseline, to a -ve value
 // of Top() means the glyph extends abs(Top()) many pixels above the
 // baseline, and +ve means the ink starts that many pixels below.
-std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const
+std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t const * pGid, uint16_t const * pGidEnd) const
 {
     ptrdiff_t nGlyphs = pGidEnd - pGid;
     if (nGlyphs < 0)

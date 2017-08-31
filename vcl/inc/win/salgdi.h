@@ -205,7 +205,7 @@ public:
 
     HWND gethWnd();
 
-    HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, HFONT& o_rOldFont );
+    HFONT                   ImplDoSetFont( FontSelectPattern const * i_pFont, HFONT& o_rOldFont );
 
 public:
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,

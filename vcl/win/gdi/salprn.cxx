@@ -241,7 +241,7 @@ OUString WinSalInstance::GetDefaultPrinter()
         return OUString();
 }
 
-static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
+static DWORD ImplDeviceCaps( WinSalInfoPrinter const * pPrinter, WORD nCaps,
                              BYTE* pOutput, const ImplJobSetup* pSetupData )
 {
     DEVMODEW const * pDevMode;
@@ -255,7 +255,7 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
                                 nCaps, reinterpret_cast<LPWSTR>(pOutput), pDevMode );
 }
 
-static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
+static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
                                  ImplJobSetup* pSetupData, bool bDelete )
 {
     if ( pSetupData && pSetupData->GetDriverData() )
@@ -338,7 +338,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
     return FALSE;
 }
 
-static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
+static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData,
                                    bool bIn, WinSalFrame* pVisibleDlgParent )
 {
     HANDLE hPrn;
@@ -430,7 +430,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     return TRUE;
 }
 
-static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
+static void ImplDevModeToJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
     if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
@@ -698,7 +698,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 }
 
-static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData, JobSetFlags nFlags )
+static void ImplJobSetupToDevMode( WinSalInfoPrinter const * pPrinter, const ImplJobSetup* pSetupData, JobSetFlags nFlags )
 {
     if ( !pSetupData || !pSetupData->GetDriverData() )
         return;
@@ -996,7 +996,7 @@ static HDC ImplCreateICW_WithCatch( LPWSTR pDriver,
     return hDC;
 }
 
-static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, const ImplJobSetup* pSetupData )
+static HDC ImplCreateSalPrnIC( WinSalInfoPrinter const * pPrinter, const ImplJobSetup* pSetupData )
 {
     HDC hDC = nullptr;
     DEVMODEW const * pDevMode;
@@ -1393,7 +1393,7 @@ void WinSalPrinter::markInvalid()
 
 // need wrappers for StarTocW/A to use structured exception handling
 // since SEH does not mix with standard exception handling's cleanup
-static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
+static int lcl_StartDocW( HDC hDC, DOCINFOW const * pInfo, WinSalPrinter* pPrt )
 {
     int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;

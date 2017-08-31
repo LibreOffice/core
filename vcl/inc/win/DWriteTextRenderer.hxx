@@ -61,7 +61,7 @@ public:
     bool BindFont(HDC hDC) /*override*/;
     bool ReleaseFont() /*override*/;
 
-    std::vector<tools::Rectangle>  GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const /*override*/;
+    std::vector<tools::Rectangle>  GetGlyphInkBoxes(uint16_t const * pGid, uint16_t const * pGidEnd) const /*override*/;
     ID2D1RenderTarget * GetRenderTarget() const { return mpRT; }
     IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
     float               GetEmHeight() const { return mlfEmHeight; }

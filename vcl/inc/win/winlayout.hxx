@@ -146,7 +146,7 @@ public:
 class WinFontInstance : public LogicalFontInstance
 {
 public:
-    explicit                WinFontInstance( FontSelectPattern& );
+    explicit                WinFontInstance( FontSelectPattern const & );
     virtual                 ~WinFontInstance() override;
 
 private:

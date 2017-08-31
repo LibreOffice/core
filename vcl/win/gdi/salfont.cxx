@@ -826,7 +826,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     }
 }
 
-HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern* i_pFont, HFONT& o_rOldFont)
+HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const * i_pFont, HFONT& o_rOldFont)
 {
     HFONT hNewFont = nullptr;
 

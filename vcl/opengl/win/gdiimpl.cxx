@@ -739,7 +739,7 @@ ControlCacheType & TheTextureCache::get() {
     return data->m_pTextureCache->cache;
 }
 
-bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
+bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const & rControlCacheKey, int nX, int nY)
 {
     static bool gbCacheEnabled = !getenv("SAL_WITHOUT_WIDGET_CACHE");
 
@@ -765,7 +765,7 @@ bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
     return bRet;
 }
 
-bool WinOpenGLSalGraphicsImpl::RenderTextureCombo(TextureCombo& rCombo, int nX, int nY)
+bool WinOpenGLSalGraphicsImpl::RenderTextureCombo(TextureCombo const & rCombo, int nX, int nY)
 {
     OpenGLTexture& rTexture = *rCombo.mpTexture;
 

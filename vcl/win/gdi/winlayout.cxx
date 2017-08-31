@@ -300,7 +300,7 @@ LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
     return mpWinFontEntry[nFallbackLevel];
 }
 
-WinFontInstance::WinFontInstance( FontSelectPattern& rFSD )
+WinFontInstance::WinFontInstance( FontSelectPattern const & rFSD )
 :   LogicalFontInstance( rFSD )
 {
 }

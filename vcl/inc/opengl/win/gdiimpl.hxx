@@ -36,14 +36,14 @@ public:
 protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
 
-    bool RenderTextureCombo(TextureCombo& rCombo, int nX, int nY);
+    bool RenderTextureCombo(TextureCombo const & rCombo, int nX, int nY);
 
 public:
     virtual void Init() override;
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
 
 
-    bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY);
+    bool TryRenderCachedNativeControl(ControlCacheKey const & rControlCacheKey, int nX, int nY);
 
     bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
                                      int nX, int nY , ControlCacheKey& aControlCacheKey);
