@@ -63,7 +63,7 @@ IniParser::IniParser(OUString const & rIniName)
                 nameValue.sValue = OStringToOUString(
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
 
-                aSection->lList.push_back(nameValue);
+                aSection->vVector.push_back(nameValue);
 
             }
             else

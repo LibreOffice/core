@@ -34,7 +34,7 @@
  *
  ************************************************************************/
 
-#include <list>
+#include <vector>
 #include <time.h>
 #include <string.h>
 
@@ -196,14 +196,14 @@ Connection::~Connection()
         m_settings.logFile = nullptr;
     }
 }
-typedef std::list< css::uno::Reference< css::sdbc::XCloseable > > CloseableList;
+typedef std::vector< css::uno::Reference< css::sdbc::XCloseable > > CloseableVector;
 
-typedef std::list< css::uno::Reference< css::lang::XComponent > > DisposeableList;
+typedef std::vector< css::uno::Reference< css::lang::XComponent > > DisposeableVector;
 
 void Connection::close()
 {
-    CloseableList lst;
-    DisposeableList lstDispose;
+    CloseableVector vectorCloseable;
+    DisposeableVector vectorDispose;
     {
         MutexGuard guard( m_xMutex->GetMutex() );
         // silently ignore, if the connection has been closed already
@@ -214,9 +214,9 @@ void Connection::close()
             m_settings.pConnection = nullptr;
         }
 
-        lstDispose.push_back( Reference< XComponent > ( m_settings.users, UNO_QUERY ) );
-        lstDispose.push_back( Reference< XComponent > ( m_settings.tables , UNO_QUERY ) );
-        lstDispose.push_back( Reference< XComponent > ( m_meta, UNO_QUERY ) );
+        vectorDispose.push_back( Reference< XComponent > ( m_settings.users, UNO_QUERY ) );
+        vectorDispose.push_back( Reference< XComponent > ( m_settings.tables , UNO_QUERY ) );
+        vectorDispose.push_back( Reference< XComponent > ( m_meta, UNO_QUERY ) );
         m_meta.clear();
         m_settings.tables.clear();
         m_settings.users.clear();
@@ -227,17 +227,17 @@ void Connection::close()
         {
             Reference< XCloseable > r = ii->second;
             if( r.is() )
-                lst.push_back( r );
+                vectorCloseable.push_back( r );
         }
     }
 
     // close all created statements
-    for( CloseableList::iterator ii = lst.begin(); ii != lst.end() ; ++ii )
+    for( CloseableVector::iterator ii = vectorCloseable.begin(); ii != vectorCloseable.end() ; ++ii )
         ii->get()->close();
 
     // close all created statements
-    for( DisposeableList::iterator iiDispose = lstDispose.begin();
-         iiDispose != lstDispose.end() ; ++iiDispose )
+    for( DisposeableVector::iterator iiDispose = vectorDispose.begin();
+         iiDispose != vectorDispose.end() ; ++iiDispose )
     {
         if( iiDispose->is() )
             iiDispose->get()->dispose();

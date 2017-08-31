@@ -45,7 +45,7 @@
 #include <unotools/confignode.hxx>
 #include "strings.hxx"
 
-#include <list>
+#include <vector>
 #include <memory>
 
 using namespace connectivity;
@@ -70,7 +70,7 @@ struct ClassMapEntry {
     jweak classObject;
 };
 
-typedef std::list< ClassMapEntry > ClassMap;
+typedef std::vector< ClassMapEntry > ClassMap;
 
 struct ClassMapData {
     osl::Mutex mutex;
@@ -177,8 +177,8 @@ bool loadClass(
             // JVM that are not easily undone).  If the pushed ClassMapEntry is
             // not used after all (return false, etc.) it will be pruned on next
             // call because its classLoader/classObject are null:
-            d->map.push_front( ClassMapEntry( classPath, name ) );
-            i = d->map.begin();
+            d->map.push_back( ClassMapEntry( classPath, name ) );
+            i = std::prev(d->map.end());
         }
 
         LocalRef< jclass > clClass( environment );
