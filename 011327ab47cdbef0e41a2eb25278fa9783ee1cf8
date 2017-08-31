@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b54bc42a",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-08-31T16:15:20Z",
+      "side": 1,
+      "message": "Does this really work as intended? From my understanding it\u0027s only the ScTokenStack* pointer variable deallocated when the thread ends, but not the allocated ScTokenStack object, so it leaks. Only one object is destroyed in ScInterpreter::GlobalExit()\n\nIt might work if pGlobalStack is changed to unique_ptr.",
+      "revId": "011327ab47cdbef0e41a2eb25278fa9783ee1cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
