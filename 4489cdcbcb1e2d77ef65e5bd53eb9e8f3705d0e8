@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_75a5dc02",
+        "filename": "include/filter/msfilter/escherex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-31T14:05:46Z",
+      "side": 1,
+      "message": "spage-\u003eshape\n\nand you dropped the other comment associated with this enum value",
+      "revId": "4489cdcbcb1e2d77ef65e5bd53eb9e8f3705d0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_156018ce",
+        "filename": "include/filter/msfilter/escherex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-31T14:05:46Z",
+      "side": 1,
+      "message": "HasMaster",
+      "revId": "4489cdcbcb1e2d77ef65e5bd53eb9e8f3705d0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_359b54cb",
+        "filename": "include/filter/msfilter/escherex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-31T14:05:46Z",
+      "side": 1,
+      "message": "HasAnchor",
+      "revId": "4489cdcbcb1e2d77ef65e5bd53eb9e8f3705d0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_95aa48d3",
+        "filename": "include/filter/msfilter/escherex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-31T14:05:46Z",
+      "side": 1,
+      "message": "backgroundshape -\u003e background shape",
+      "revId": "4489cdcbcb1e2d77ef65e5bd53eb9e8f3705d0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_55a0e0f4",
+        "filename": "include/filter/msfilter/escherex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-31T14:05:46Z",
+      "side": 1,
+      "message": "HasShapeTypeProperty",
+      "revId": "4489cdcbcb1e2d77ef65e5bd53eb9e8f3705d0e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
