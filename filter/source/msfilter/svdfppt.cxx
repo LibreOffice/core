@@ -742,7 +742,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     ProcessData& rData = *static_cast<ProcessData*>(pData);
     PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
 
-    if ( ! ( rObjData.nSpFlags & SP_FGROUP  ) )     // sj: #114758# ...
+    if ( ! (rObjData.nSpFlags & ShapeFlag::Group) )     // sj: #114758# ...
     {
         PptOEPlaceholderAtom aPlaceholderAtom;
 
@@ -1169,17 +1169,17 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         }
                     }
                     // rotate text with shape?
-                    sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
+                    sal_Int32 nAngle = ( rObjData.nSpFlags & ShapeFlag::FlipV ) ? -mnFix16Angle : mnFix16Angle; // #72116# vertical flip -> rotate by using the other way
                     nAngle += nTextRotationAngle;
 
                     if ( dynamic_cast< const SdrObjCustomShape* >(pTObj) ==  nullptr )
                     {
-                        if ( rObjData.nSpFlags & SP_FFLIPV )
+                        if ( rObjData.nSpFlags & ShapeFlag::FlipV )
                         {
                             double a = 18000 * nPi180;
                             pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
                         }
-                        if ( rObjData.nSpFlags & SP_FFLIPH )
+                        if ( rObjData.nSpFlags & ShapeFlag::FlipH )
                             nAngle = 36000 - nAngle;
                         if ( nAngle )
                         {
@@ -1237,7 +1237,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     }
     if ( pRet ) // sj: #i38501#, and taking care of connections to group objects
     {
-        if ( rObjData.nSpFlags & SP_FBACKGROUND )
+        if ( rObjData.nSpFlags & ShapeFlag::Background )
         {
             pRet->NbcSetSnapRect( tools::Rectangle( Point(), rData.pPage.page->GetSize() ) );   // set size
         }
@@ -2830,7 +2830,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         {
                                             sal_uInt32 nSpFlags;
                                             rStCtrl.ReadUInt32( nSpFlags ).ReadUInt32( nSpFlags );
-                                            if ( nSpFlags & SP_FBACKGROUND )
+                                            if ( ShapeFlag(nSpFlags) & ShapeFlag::Background )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
                                                 rSlidePersist.pBObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aPageSize, aPageSize );
@@ -6496,7 +6496,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         if ( pObjData )
         {
             mxImplTextObj->mnShapeId = pObjData->nShapeId;
-            if ( pObjData->nSpFlags & SP_FHAVEMASTER )
+            if ( pObjData->nSpFlags & ShapeFlag::HaveMaster )
                 mxImplTextObj->mnShapeMaster = rSdrPowerPointImport.GetPropertyValue( DFF_Prop_hspMaster, 0 );
         }
         // ClientData

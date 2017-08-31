@@ -101,7 +101,7 @@ protected:
     void WriteBrushAttr(const SvxBrushItem &rBrush,
         EscherPropertyContainer& rPropOpt);
     void WriteOLEPicture(EscherPropertyContainer &rPropOpt,
-        sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
+        ShapeFlag nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
         sal_uInt32 nShapeId, const css::awt::Rectangle* pVisArea );
     static void WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat& rFormat, EscherPropertyContainer& rPropOpt);
 
