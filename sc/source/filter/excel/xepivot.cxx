@@ -1304,10 +1304,8 @@ void XclExpPivotTable::SetPropertiesFromDP( const ScDPSaveData& rSaveData )
     ::set_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN, rSaveData.GetDrillDown() );
     mbFilterBtn = rSaveData.GetFilterButton();
     const ScDPSaveDimension* pDim = rSaveData.GetExistingDataLayoutDimension();
-    if (!pDim)
-        return;
 
-    const OUString* pLayoutName = pDim->GetLayoutName();
+    const OUString* pLayoutName = pDim ? pDim->GetLayoutName() : nullptr;
     if (pLayoutName)
         maPTInfo.maDataName = *pLayoutName;
     else
