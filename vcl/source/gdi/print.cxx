@@ -379,7 +379,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
     if( it == m_aNameToIndex.end() )
     {
         m_aNameToIndex[ pData->maPrinterName ] = m_aQueueInfos.size();
-        m_aQueueInfos.push_back( ImplPrnQueueData() );
+        m_aQueueInfos.emplace_back( );
         m_aQueueInfos.back().mpQueueInfo = nullptr;
         m_aQueueInfos.back().mpSalQueueInfo = pData;
         m_aPrinterList.push_back( pData->maPrinterName );

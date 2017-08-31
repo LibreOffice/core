@@ -445,7 +445,7 @@ void SwDropCapsPict::CheckScript()
     for(;;)
     {
         nChg = xBreak->endOfScript( maText, nChg, nScript );
-        maScriptChanges.push_back( ScriptInfo(nScript, nChg) );
+        maScriptChanges.emplace_back(nScript, nChg );
         if( nChg >= maText.getLength() || nChg < 0 )
             break;
         nScript = xBreak->getScriptType( maText, nChg );

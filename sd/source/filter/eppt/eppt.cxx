@@ -731,7 +731,7 @@ bool PPTWriter::ImplCreateDocument()
         if ( aXName.is() )
             maSlideNameList.push_back( aXName->getName() );
         else
-            maSlideNameList.push_back( OUString() );
+            maSlideNameList.emplace_back( );
     }
     mpPptEscherEx->CloseContainer();    // EPP_SlideListWithText
 

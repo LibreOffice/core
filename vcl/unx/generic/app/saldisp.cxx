@@ -2281,7 +2281,7 @@ void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nW
         }
     }
     m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
-    m_aXineramaScreens.push_back( tools::Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
+    m_aXineramaScreens.emplace_back( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) );
 }
 
 void SalDisplay::InitXinerama()

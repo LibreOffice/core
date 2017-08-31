@@ -1892,7 +1892,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                 return this->getInsertValue(column);
                             });
                         aColumnMap.insert(std::make_pair(sName,0));
-                        aColumns->get().push_back(pColumn);
+                        aColumns->get().emplace_back(pColumn);
                         pColumn->setName(sName);
                         aNames.push_back(sName);
                         m_aDataColumns.push_back(pColumn);
@@ -1995,7 +1995,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         [this] (sal_Int32 const column) -> ORowSetValue const& {
                             return this->getInsertValue(column);
                         });
-                    aColumns->get().push_back(pColumn);
+                    aColumns->get().emplace_back(pColumn);
 
                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i) != rKeyColumns.end()));
 
@@ -2096,7 +2096,7 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  )
     {
         ORowSetClone* pClone = new ORowSetClone( m_aContext, *this, m_pMutex );
         Reference< XResultSet > xRet(pClone);
-        m_aClones.push_back(WeakReferenceHelper(xRet));
+        m_aClones.emplace_back(xRet);
         return xRet;
     }
     return Reference< XResultSet >();
@@ -2826,7 +2826,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
                 [this] (sal_Int32 const column) -> ORowSetValue const& {
                     return this->getValue(column);
                 });
-            aColumns->get().push_back(pColumn);
+            aColumns->get().emplace_back(pColumn);
             pColumn->setName(*pIter);
             aNames.push_back(*pIter);
             m_aDataColumns.push_back(pColumn);

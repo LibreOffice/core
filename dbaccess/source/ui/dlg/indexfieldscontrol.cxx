@@ -393,7 +393,7 @@ namespace dbaui
                 if (!sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
                 {   // in the last row, an non-empty string has been selected
                     // -> insert a new row
-                    m_aFields.push_back(OIndexField());
+                    m_aFields.emplace_back();
                     RowInserted(GetRowCount());
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }

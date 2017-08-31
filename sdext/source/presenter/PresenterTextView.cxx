@@ -1057,10 +1057,10 @@ void PresenterTextParagraph::SetupCellArray (
             rpFont->mxFont->createTextLayout(aContext, nTextDirection, 0));
         css::geometry::RealRectangle2D aCharacterBox (xLayout->queryTextBounds());
 
-        maCells.push_back(Cell(
+        maCells.emplace_back(
             nPosition,
             nNewPosition-nPosition,
-            aCharacterBox.X2-aCharacterBox.X1));
+            aCharacterBox.X2-aCharacterBox.X1);
 
         nPosition = nNewPosition;
     }

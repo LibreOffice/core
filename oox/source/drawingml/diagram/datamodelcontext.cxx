@@ -51,7 +51,7 @@ public:
             {
                 case DGM_TOKEN( cxn ):
                 {
-                    mrConnection.push_back( dgm::Connection() );
+                    mrConnection.emplace_back( );
                     dgm::Connection& rConnection=mrConnection.back();
 
                     rConnection.mnType = rAttribs.getToken( XML_type, XML_parOf );
@@ -266,7 +266,7 @@ public:
             case DGM_TOKEN( pt ):
             {
                 // CT_Pt
-                mrPoints.push_back( dgm::Point() );
+                mrPoints.emplace_back( );
                 return new PtContext( *this, rAttribs, mrPoints.back() );
             }
             default:

@@ -147,7 +147,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
                 _rArgs.push_back(rFormula.copy( nStart, nEnd-1-nStart ));
             else
             {
-                _rArgs.push_back(OUString());
+                _rArgs.emplace_back();
                 bLast = true;
             }
         }
@@ -157,13 +157,13 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
             if ( nStart < nEnd )
                 _rArgs.push_back( rFormula.copy( nStart, nEnd-nStart ) );
             else
-                _rArgs.push_back(OUString());
+                _rArgs.emplace_back();
         }
     }
 
     if ( bLast )
         for ( ; i<nArgs; i++ )
-            _rArgs.push_back(OUString());
+            _rArgs.emplace_back();
 }
 
 

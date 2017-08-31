@@ -451,7 +451,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     if (bMm100ToTwip)
                         rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
                     rRectangle.Move(aOrigin.getX(), aOrigin.getY());
-                    v.push_back(rRectangle.toString().getStr());
+                    v.emplace_back(rRectangle.toString().getStr());
                 }
                 sRectangle = comphelper::string::join("; ", v);
             }

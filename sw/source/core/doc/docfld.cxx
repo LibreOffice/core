@@ -501,7 +501,7 @@ void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
     const SwDSParams_t& rArr = pMgr->GetDSParamArray();
     for (const auto& pParam : rArr)
     {
-        rAllDBNames.push_back(pParam->sDataSource + OUStringLiteral1(DB_DELIM) + pParam->sCommand);
+        rAllDBNames.emplace_back(pParam->sDataSource + OUStringLiteral1(DB_DELIM) + pParam->sCommand);
     }
 #endif
 }
@@ -529,7 +529,7 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
             const sal_Int32 nEndPos = sFormula.indexOf('.', nPos);
             if( nEndPos>=0 )
             {
-                rUsedDBNames.push_back(sItem + OUStringLiteral1(DB_DELIM) + sFormula.copy( nPos, nEndPos - nPos ));
+                rUsedDBNames.emplace_back(sItem + OUStringLiteral1(DB_DELIM) + sFormula.copy( nPos, nEndPos - nPos ));
             }
         }
     }

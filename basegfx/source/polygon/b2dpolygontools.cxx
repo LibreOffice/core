@@ -3419,10 +3419,9 @@ namespace basegfx
                         {
                             // add current point (always) and remember StartPointIndex for evtl. later corrections
                             const sal_uInt32 nStartPointIndex(aCollectPoints.size());
-                            aCollectPoints.push_back(
-                                css::awt::Point(
+                            aCollectPoints.emplace_back(
                                     fround(aBezierSegment.getStartPoint().getX()),
-                                    fround(aBezierSegment.getStartPoint().getY())));
+                                    fround(aBezierSegment.getStartPoint().getY()));
                             aCollectFlags.push_back(css::drawing::PolygonFlags_NORMAL);
 
                             // prepare next segment
@@ -3434,16 +3433,14 @@ namespace basegfx
                             if(aBezierSegment.isBezier())
                             {
                                 // if bezier is used, add always two control points due to the old schema
-                                aCollectPoints.push_back(
-                                    css::awt::Point(
+                                aCollectPoints.emplace_back(
                                         fround(aBezierSegment.getControlPointA().getX()),
-                                        fround(aBezierSegment.getControlPointA().getY())));
+                                        fround(aBezierSegment.getControlPointA().getY()));
                                 aCollectFlags.push_back(css::drawing::PolygonFlags_CONTROL);
 
-                                aCollectPoints.push_back(
-                                    css::awt::Point(
+                                aCollectPoints.emplace_back(
                                         fround(aBezierSegment.getControlPointB().getX()),
-                                        fround(aBezierSegment.getControlPointB().getY())));
+                                        fround(aBezierSegment.getControlPointB().getY()));
                                 aCollectFlags.push_back(css::drawing::PolygonFlags_CONTROL);
                             }
 
@@ -3476,10 +3473,9 @@ namespace basegfx
                         {
                             // add last point as closing point
                             const B2DPoint aClosingPoint(rPolygon.getB2DPoint(nPointCount - 1));
-                            aCollectPoints.push_back(
-                                css::awt::Point(
+                            aCollectPoints.emplace_back(
                                     fround(aClosingPoint.getX()),
-                                    fround(aClosingPoint.getY())));
+                                    fround(aClosingPoint.getY()));
                             aCollectFlags.push_back(css::drawing::PolygonFlags_NORMAL);
                         }
 

@@ -613,7 +613,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.FirstSelected() );
     while( pEntry && nSelectionCount )
     {
-        aSelection.push_back( Any( pEntry->mxNode ) );
+        aSelection.emplace_back( pEntry->mxNode );
         pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.NextSelected( pEntry ) );
         --nSelectionCount;
     }

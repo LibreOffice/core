@@ -290,7 +290,7 @@ bool readProperties( std::list< std::pair< OUString, OUString> > & out_result,
         {
             OUString name = aLine.copy(0, posEqual);
             OUString value = aLine.copy(posEqual + 1);
-            out_result.push_back(std::make_pair(name, value));
+            out_result.emplace_back(name, value);
         }
 
         if (bEOF)

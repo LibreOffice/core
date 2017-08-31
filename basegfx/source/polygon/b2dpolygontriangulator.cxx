@@ -233,7 +233,7 @@ namespace basegfx
 
                             if( !aPrevPnt.equal(aNextPnt) )
                             {
-                                maStartEntries.push_back(EdgeEntry(aPrevPnt, aNextPnt));
+                                maStartEntries.emplace_back(aPrevPnt, aNextPnt);
                             }
 
                             aPrevPnt = aNextPnt;

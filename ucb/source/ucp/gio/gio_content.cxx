@@ -586,7 +586,7 @@ void Content::queryChildren( ContentRefList& rChildren )
             if ( ( nPos == -1 ) || ( nPos == ( aChildURL.getLength() - 1 ) ) )
             {
                 // No further slashes / only a final slash. It's a child!
-                rChildren.push_back( ::gio::Content::ContentRef (static_cast< ::gio::Content * >(xChild.get() ) ) );
+                rChildren.emplace_back(static_cast< ::gio::Content * >(xChild.get() ) );
             }
         }
         ++it;

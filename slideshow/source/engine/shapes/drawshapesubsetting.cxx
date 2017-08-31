@@ -185,19 +185,19 @@ namespace slideshow
                 {
                     // non-subsetted node, with some child subsets
                     // that subtract from it
-                    maCurrentSubsets.push_back( DocTreeNode( 0,
-                                                             mnMinSubsetActionIndex ) );
-                    maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
-                                                             maActionClassVector.size() ) );
+                    maCurrentSubsets.emplace_back( 0,
+                                                             mnMinSubsetActionIndex );
+                    maCurrentSubsets.emplace_back( mnMaxSubsetActionIndex,
+                                                             maActionClassVector.size() );
                 }
                 else
                 {
                     // subsetted node, from which some further child
                     // subsets subtract content
-                    maCurrentSubsets.push_back( DocTreeNode( maSubset.getStartIndex(),
-                                                             mnMinSubsetActionIndex ) );
-                    maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
-                                                             maSubset.getEndIndex() ) );
+                    maCurrentSubsets.emplace_back( maSubset.getStartIndex(),
+                                                             mnMinSubsetActionIndex );
+                    maCurrentSubsets.emplace_back( mnMaxSubsetActionIndex,
+                                                             maSubset.getEndIndex() );
                 }
             }
             else

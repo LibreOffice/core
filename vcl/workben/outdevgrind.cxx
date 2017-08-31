@@ -82,7 +82,7 @@ template< typename Functor > void add( functor_vector_type& res,
                                        const char*          pStr,
                                        const Functor&       func )
 {
-    res.push_back( std::make_pair(pStr,functor_type(func)) );
+    res.emplace_back(pStr,functor_type(func) );
 }
 
 void setupMethodStubs( functor_vector_type& res )

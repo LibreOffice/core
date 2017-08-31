@@ -3454,7 +3454,7 @@ void WW8TabDesc::SetNumRuleName( const OUString& rName )
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     for (sal_uInt16 nSize = static_cast< sal_uInt16 >(m_aNumRuleNames.size()); nSize <= nCol; ++nSize)
-        m_aNumRuleNames.push_back(OUString());
+        m_aNumRuleNames.emplace_back();
     m_aNumRuleNames[nCol] = rName;
 }
 
@@ -4456,7 +4456,7 @@ void WW8RStyle::ImportOldFormatStyles()
             nByteCount += nRemainder;
         }
         else
-            aConvertedChpx.push_back( std::vector<sal_uInt8>() );
+            aConvertedChpx.emplace_back( );
 
         ++stcp;
     }

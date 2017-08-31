@@ -114,12 +114,11 @@ enum
 
 void WrappedScaleTextProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "ScaleText",
+    rOutProperties.emplace_back( "ScaleText",
                   PROP_CHART_SCALE_TEXT,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList

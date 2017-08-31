@@ -40,7 +40,7 @@ bool Assistent::InsertControl(int nDestPage, vcl::Window* pUsedControl)
 
     if((nDestPage>0)&&(nDestPage<=mnPages))
     {
-        maPages[nDestPage-1].push_back(pUsedControl);
+        maPages[nDestPage-1].emplace_back(pUsedControl);
         pUsedControl->Hide();
         pUsedControl->Disable();
         return true;

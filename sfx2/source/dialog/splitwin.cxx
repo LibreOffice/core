@@ -408,7 +408,7 @@ void SfxSplitWindow::Split()
 
             rD.pWin->SetItemSize_Impl( aSize );
 
-            aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
+            aNewOrgSizes.emplace_back( nId, nSize );
         }
     }
 
@@ -744,7 +744,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
             {
                 const sal_uInt16 nId = rD.nType;
                 const long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
-                aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
+                aNewOrgSizes.emplace_back( nId, nSize );
             }
         }
         // apply new item sizes

@@ -123,7 +123,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     get(mpAllRecentThumbnails, "all_recent");
     get(mpLocalView, "local_view");
 
-    maDndWindows.push_back(mpAllRecentThumbnails);
+    maDndWindows.emplace_back(mpAllRecentThumbnails);
 
     try
     {

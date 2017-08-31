@@ -70,7 +70,7 @@ XFContentContainer::~XFContentContainer()
 
 void    XFContentContainer::Add(XFContent *pContent)
 {
-    m_aContents.push_back(pContent);
+    m_aContents.emplace_back(pContent);
 }
 
 void    XFContentContainer::Add(const OUString& text)

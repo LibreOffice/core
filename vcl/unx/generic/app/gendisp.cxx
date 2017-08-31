@@ -92,7 +92,7 @@ void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, SalEve
 {
     osl::MutexGuard g( m_aEventGuard );
 
-    m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
+    m_aUserEvents.emplace_back( pFrame, pData, nEvent );
 
     PostUserEvent(); // wakeup the concrete mainloop
 }

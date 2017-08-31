@@ -271,7 +271,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
     }
     if(bDelete)
     {
-        m_RemovedArr.push_back(pUserData->sGroupName + "\t" + pUserData->sGroupTitle);
+        m_RemovedArr.emplace_back(pUserData->sGroupName + "\t" + pUserData->sGroupTitle);
     }
     delete pUserData;
     m_pGroupTLB->GetModel()->Remove(pEntry);

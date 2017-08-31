@@ -207,7 +207,7 @@ FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
 void FilterPropertiesInfo_Impl::AddProperty(
         const OUString& rApiName, const sal_uInt32 nIndex)
 {
-    aPropInfos.push_back(FilterPropertyInfo_Impl(rApiName, nIndex));
+    aPropInfos.emplace_back(rApiName, nIndex);
     nCount++;
 
     OSL_ENSURE( !pApiNames, "performance warning: API names already retrieved" );

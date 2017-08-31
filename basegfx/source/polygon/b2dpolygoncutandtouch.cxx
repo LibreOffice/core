@@ -189,7 +189,7 @@ namespace basegfx
                     const temporaryPoint& rTempPoint = rPointVector[a];
                     const double fCutPosInPolygon((double)rTempPoint.getIndex() + rTempPoint.getCut());
                     const double fRelativeCutPos(fCutPosInPolygon / (double)nEdgeCount);
-                    rTempPoints.push_back(temporaryPoint(rTempPoint.getPoint(), nInd, fRelativeCutPos));
+                    rTempPoints.emplace_back(rTempPoint.getPoint(), nInd, fRelativeCutPos);
                 }
             }
         }
@@ -251,8 +251,8 @@ namespace basegfx
                                 // add a cut point to each list. The lists may be the same for
                                 // self intersections.
                                 const B2DPoint aCutPoint(interpolate(rCurrA, rNextA, fCut));
-                                rTempPointsA.push_back(temporaryPoint(aCutPoint, nIndA, fCut));
-                                rTempPointsB.push_back(temporaryPoint(aCutPoint, nIndB, fCut2));
+                                rTempPointsA.emplace_back(aCutPoint, nIndA, fCut);
+                                rTempPointsB.emplace_back(aCutPoint, nIndB, fCut2);
                             }
                         }
                     }
@@ -340,13 +340,13 @@ namespace basegfx
                                                 // by outer methods and would just produce a double point
                                                 if(a)
                                                 {
-                                                    rTempPointsA.push_back(temporaryPoint(aCurrA, a, 0.0));
+                                                    rTempPointsA.emplace_back(aCurrA, a, 0.0);
                                                 }
                                             }
                                             else
                                             {
                                                 const B2DPoint aCutPoint(interpolate(aCurrA, aNextA, fCutA));
-                                                rTempPointsA.push_back(temporaryPoint(aCutPoint, a, fCutA));
+                                                rTempPointsA.emplace_back(aCutPoint, a, fCutA);
                                             }
 
                                             // #i111715# use fTools::equal instead of fTools::equalZero for better accuracy
@@ -356,13 +356,13 @@ namespace basegfx
                                                 // by outer methods and would just produce a double point
                                                 if(b)
                                                 {
-                                                    rTempPointsB.push_back(temporaryPoint(aCurrB, b, 0.0));
+                                                    rTempPointsB.emplace_back(aCurrB, b, 0.0);
                                                 }
                                             }
                                             else
                                             {
                                                 const B2DPoint aCutPoint(interpolate(aCurrB, aNextB, fCutB));
-                                                rTempPointsB.push_back(temporaryPoint(aCutPoint, b, fCutB));
+                                                rTempPointsB.emplace_back(aCutPoint, b, fCutB);
                                             }
                                         }
                                     }
@@ -414,7 +414,7 @@ namespace basegfx
             // append remapped tempVector entries for edge to tempPoints for edge
             for(temporaryPoint & rTempPoint : aTempPointVectorEdge)
             {
-                rTempPointsB.push_back(temporaryPoint(rTempPoint.getPoint(), nIndB, rTempPoint.getCut()));
+                rTempPointsB.emplace_back(rTempPoint.getPoint(), nIndB, rTempPoint.getCut());
             }
         }
 
@@ -641,7 +641,7 @@ namespace basegfx
 
                                 if(fTools::more(fCut, fZero) && fTools::less(fCut, fOne))
                                 {
-                                    rTempPoints.push_back(temporaryPoint(aTestPoint, nInd, fCut));
+                                    rTempPoints.emplace_back(aTestPoint, nInd, fCut);
                                 }
                             }
                         }

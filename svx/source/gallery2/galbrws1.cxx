@@ -238,18 +238,18 @@ void GalleryBrowser1::ImplGetExecuteVector(std::vector<OString>& o_aExec)
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = true;
 
         if( bUpdateAllowed && pTheme->GetObjectCount() )
-            o_aExec.push_back("update");
+            o_aExec.emplace_back("update");
 
         if( bRenameAllowed )
-            o_aExec.push_back("rename");
+            o_aExec.emplace_back("rename");
 
         if( bRemoveAllowed )
-            o_aExec.push_back("delete");
+            o_aExec.emplace_back("delete");
 
         if( bIdDialog && !pTheme->IsReadOnly() )
-            o_aExec.push_back("assign");
+            o_aExec.emplace_back("assign");
 
-        o_aExec.push_back("properties");
+        o_aExec.emplace_back("properties");
 
         mpGallery->ReleaseTheme( pTheme, *this );
     }

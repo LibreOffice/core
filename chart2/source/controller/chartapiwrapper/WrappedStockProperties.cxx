@@ -243,20 +243,18 @@ enum
 
 void WrappedStockProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "Volume",
+    rOutProperties.emplace_back( "Volume",
                   PROP_CHART_STOCK_VOLUME,
                   cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "UpDown",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "UpDown",
                   PROP_CHART_STOCK_UPDOWN,
                   cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList

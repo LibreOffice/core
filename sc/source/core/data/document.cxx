@@ -2204,7 +2204,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
             pClipDoc->maTabNames.push_back(aTabName);
         }
         else
-            pClipDoc->maTabNames.push_back(OUString());
+            pClipDoc->maTabNames.emplace_back();
     }
 
     pClipDoc->aDocName = aDocName;
@@ -2304,7 +2304,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
                 pClipDoc->maTabNames.push_back(aTabName);
             }
             else
-                pClipDoc->maTabNames.push_back(OUString());
+                pClipDoc->maTabNames.emplace_back();
         }
 
         PutInOrder( nCol1, nCol2 );

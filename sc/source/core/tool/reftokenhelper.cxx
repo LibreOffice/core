@@ -113,7 +113,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
         }
         if (!bFailure)
-            rRefTokens.push_back(ScTokenRef(p->Clone()));
+            rRefTokens.emplace_back(p->Clone());
 
     }
     if (bFailure)

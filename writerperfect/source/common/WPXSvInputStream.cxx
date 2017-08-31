@@ -232,8 +232,8 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage> &rStorage, const rt
             // librevenge::RVNGOLEStream ignores the first character when is a control code, so ...
             if (!rvngName.isEmpty() && rvngName.toChar()<32)
                 rvngName=rvngName.copy(1);
-            maStreams.push_back(OLEStreamData(rtl::OUStringToOString(concatPath(rPath, baseName), RTL_TEXTENCODING_UTF8),
-                                              rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8)));
+            maStreams.emplace_back(rtl::OUStringToOString(concatPath(rPath, baseName), RTL_TEXTENCODING_UTF8),
+                                              rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8));
             maNameMap[concatPath(rPath, rvngName)] = maStreams.size() - 1;
         }
         else if (aIt->IsStorage())
@@ -379,7 +379,7 @@ void ZipStorageImpl::traverse(const Reference<container::XNameAccess> &rxContain
     {
         if (!lNames[n].endsWith("/")) // skip dirs
         {
-            maStreams.push_back(ZipStreamData(rtl::OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8)));
+            maStreams.emplace_back(rtl::OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8));
             maNameMap[lNames[n]] = maStreams.size() - 1;
         }
     }

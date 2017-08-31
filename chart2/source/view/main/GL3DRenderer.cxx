@@ -1810,10 +1810,10 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
     long bmpHeight = rSizePixels.Height();
     glm::vec4 id = getColorAsVector(nUniqueId);
     m_TextInfoBatch.idList.push_back(id);
-    m_TextInfoBatch.vertexList.push_back(glm::vec3(vBottomRight.x, vBottomRight.y, vBottomRight.z));
-    m_TextInfoBatch.vertexList.push_back(glm::vec3(vTopRight.x, vTopRight.y, vTopRight.z));
-    m_TextInfoBatch.vertexList.push_back(glm::vec3(vTopLeft.x, vTopLeft.y, vTopLeft.z));
-    m_TextInfoBatch.vertexList.push_back(glm::vec3(vBottomLeft.x, vBottomLeft.y, vBottomLeft.z));
+    m_TextInfoBatch.vertexList.emplace_back(vBottomRight.x, vBottomRight.y, vBottomRight.z);
+    m_TextInfoBatch.vertexList.emplace_back(vTopRight.x, vTopRight.y, vTopRight.z);
+    m_TextInfoBatch.vertexList.emplace_back(vTopLeft.x, vTopLeft.y, vTopLeft.z);
+    m_TextInfoBatch.vertexList.emplace_back(vBottomLeft.x, vBottomLeft.y, vBottomLeft.z);
     //find the last vector, which size is small than default batch number;
     size_t index = 0;
     while ((m_TextInfoBatch.texture.size() > 0) &&
@@ -1852,18 +1852,18 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
     glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, m_TextInfoBatch.texture[index].subTextureNum, bmpWidth, bmpHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, bitmapBuf.get());
     CHECK_GL_ERROR();
         //calc texture coordinate
-    m_TextInfoBatch.textureCoordList.push_back(glm::vec3((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
+    m_TextInfoBatch.textureCoordList.emplace_back((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
                                                          0,
-                                                         m_TextInfoBatch.texture[index].subTextureNum));
-    m_TextInfoBatch.textureCoordList.push_back(glm::vec3((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
+                                                         m_TextInfoBatch.texture[index].subTextureNum);
+    m_TextInfoBatch.textureCoordList.emplace_back((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
                                                          (float)bmpHeight/ (float)m_TextInfoBatch.texture[index].textureArrayHeight,
-                                                         m_TextInfoBatch.texture[index].subTextureNum));
-    m_TextInfoBatch.textureCoordList.push_back(glm::vec3(0,
+                                                         m_TextInfoBatch.texture[index].subTextureNum);
+    m_TextInfoBatch.textureCoordList.emplace_back(0,
                                                          (float)bmpHeight/ (float)m_TextInfoBatch.texture[index].textureArrayHeight,
-                                                         m_TextInfoBatch.texture[index].subTextureNum));
-    m_TextInfoBatch.textureCoordList.push_back(glm::vec3(0,
+                                                         m_TextInfoBatch.texture[index].subTextureNum);
+    m_TextInfoBatch.textureCoordList.emplace_back(0,
                                                          0,
-                                                         m_TextInfoBatch.texture[index].subTextureNum));
+                                                         m_TextInfoBatch.texture[index].subTextureNum);
     m_TextInfoBatch.texture[index].subTextureNum++;
     glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }

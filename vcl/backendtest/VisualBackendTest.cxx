@@ -168,7 +168,7 @@ public:
                 long x2 = (x+1) * (nWidth  / nPartitionsX);
                 long y2 = (y+1) * (nHeight / nPartitionsY);
 
-                aRegions.push_back(tools::Rectangle(x1 + 1, y1 + 1, x2 - 2, y2 - 2));
+                aRegions.emplace_back(x1 + 1, y1 + 1, x2 - 2, y2 - 2);
             }
         }
         return aRegions;

@@ -356,12 +356,12 @@ namespace svl { namespace undo { namespace impl
         */
         void    scheduleNotification( UndoListenerVoidMethod i_notificationMethod )
         {
-            m_notifiers.push_back( NotifyUndoListener( i_notificationMethod ) );
+            m_notifiers.emplace_back( i_notificationMethod );
         }
 
         void    scheduleNotification( UndoListenerStringMethod i_notificationMethod, const OUString& i_actionComment )
         {
-            m_notifiers.push_back( NotifyUndoListener( i_notificationMethod, i_actionComment ) );
+            m_notifiers.emplace_back( i_notificationMethod, i_actionComment );
         }
 
     private:

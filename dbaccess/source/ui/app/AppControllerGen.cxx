@@ -696,7 +696,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
         else
         {
             Reference< XModel > xModel( openElementWithArguments( *aIter, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
-            aComponents.push_back( std::pair< OUString, Reference< XModel > >( *aIter, xModel ) );
+            aComponents.emplace_back( *aIter, xModel );
         }
     }
 

@@ -449,13 +449,13 @@ namespace basegfx
 
                             if(pLast->getX() != aMiddle.getX() || pLast->getY() != aMiddle.getY())
                             {
-                                maCorrectionTable.push_back(CorrectionPair(*pLast, aMiddle));
+                                maCorrectionTable.emplace_back(*pLast, aMiddle);
                                 *pLast = aMiddle;
                             }
 
                             if(pCurrent->getX() != aMiddle.getX() || pCurrent->getY() != aMiddle.getY())
                             {
-                                maCorrectionTable.push_back(CorrectionPair(*pCurrent, aMiddle));
+                                maCorrectionTable.emplace_back(*pCurrent, aMiddle);
                                 *pCurrent = aMiddle;
                             }
                         }

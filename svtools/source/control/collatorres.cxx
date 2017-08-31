@@ -24,18 +24,18 @@
 //  implementation of the collator-algorithm-name translation
 CollatorResource::CollatorResource()
 {
-    m_aData.push_back(CollatorResourceData("alphanumeric", SvtResId(STR_SVT_COLLATE_ALPHANUMERIC)));
-    m_aData.push_back(CollatorResourceData("charset", SvtResId(STR_SVT_COLLATE_CHARSET)));
-    m_aData.push_back(CollatorResourceData("dict", SvtResId(STR_SVT_COLLATE_DICTIONARY)));
-    m_aData.push_back(CollatorResourceData("normal", SvtResId(STR_SVT_COLLATE_NORMAL)));
-    m_aData.push_back(CollatorResourceData("pinyin", SvtResId(STR_SVT_COLLATE_PINYIN)));
-    m_aData.push_back(CollatorResourceData("radical", SvtResId(STR_SVT_COLLATE_RADICAL)));
-    m_aData.push_back(CollatorResourceData("stroke", SvtResId(STR_SVT_COLLATE_STROKE)));
-    m_aData.push_back(CollatorResourceData("unicode", SvtResId(STR_SVT_COLLATE_UNICODE)));
-    m_aData.push_back(CollatorResourceData("zhuyin", SvtResId(STR_SVT_COLLATE_ZHUYIN)));
-    m_aData.push_back(CollatorResourceData("phonebook", SvtResId(STR_SVT_COLLATE_PHONEBOOK)));
-    m_aData.push_back(CollatorResourceData("phonetic (alphanumeric first)", SvtResId(STR_SVT_COLLATE_PHONETIC_F)));
-    m_aData.push_back(CollatorResourceData("phonetic (alphanumeric last)", SvtResId(STR_SVT_COLLATE_PHONETIC_L)));
+    m_aData.emplace_back("alphanumeric", SvtResId(STR_SVT_COLLATE_ALPHANUMERIC));
+    m_aData.emplace_back("charset", SvtResId(STR_SVT_COLLATE_CHARSET));
+    m_aData.emplace_back("dict", SvtResId(STR_SVT_COLLATE_DICTIONARY));
+    m_aData.emplace_back("normal", SvtResId(STR_SVT_COLLATE_NORMAL));
+    m_aData.emplace_back("pinyin", SvtResId(STR_SVT_COLLATE_PINYIN));
+    m_aData.emplace_back("radical", SvtResId(STR_SVT_COLLATE_RADICAL));
+    m_aData.emplace_back("stroke", SvtResId(STR_SVT_COLLATE_STROKE));
+    m_aData.emplace_back("unicode", SvtResId(STR_SVT_COLLATE_UNICODE));
+    m_aData.emplace_back("zhuyin", SvtResId(STR_SVT_COLLATE_ZHUYIN));
+    m_aData.emplace_back("phonebook", SvtResId(STR_SVT_COLLATE_PHONEBOOK));
+    m_aData.emplace_back("phonetic (alphanumeric first)", SvtResId(STR_SVT_COLLATE_PHONETIC_F));
+    m_aData.emplace_back("phonetic (alphanumeric last)", SvtResId(STR_SVT_COLLATE_PHONETIC_L));
 }
 
 const OUString&

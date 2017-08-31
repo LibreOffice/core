@@ -51,7 +51,7 @@ public:
     LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
     sal_uInt32      AddItem(const OUString& rLanguage, const LanguageType eType)
     {
-        m_aStrings.push_back(std::make_pair(rLanguage, eType));
+        m_aStrings.emplace_back(rLanguage, eType);
         return m_aStrings.size();
     }
     LanguageType    GetValue(sal_uInt32 nIndex) const
@@ -154,7 +154,7 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(STR_ARR_SVT_LANGUAGE_TABLE); ++i)
     {
-        m_aStrings.push_back(std::make_pair(SvtResId(STR_ARR_SVT_LANGUAGE_TABLE[i].first), STR_ARR_SVT_LANGUAGE_TABLE[i].second));
+        m_aStrings.emplace_back(SvtResId(STR_ARR_SVT_LANGUAGE_TABLE[i].first), STR_ARR_SVT_LANGUAGE_TABLE[i].second);
     }
 
     auto xNA = officecfg::VCL::ExtraLanguages::get();

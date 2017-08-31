@@ -468,19 +468,19 @@ namespace canvas
                                           const ::basegfx::B2DPoint&    rNewPos,
                                           const ::basegfx::B2DVector&   rSpriteSize )
     {
-        maChangeRecords.push_back( SpriteChangeRecord( rSprite,
-                                                       rOldPos,
-                                                       rNewPos,
-                                                       rSpriteSize ) );
+        maChangeRecords.emplace_back( rSprite,
+                                      rOldPos,
+                                      rNewPos,
+                                      rSpriteSize );
     }
 
     void SpriteRedrawManager::updateSprite( const Sprite::Reference&    rSprite,
                                             const ::basegfx::B2DPoint&  rPos,
                                             const ::basegfx::B2DRange&  rUpdateArea )
     {
-        maChangeRecords.push_back( SpriteChangeRecord( rSprite,
-                                                       rPos,
-                                                       rUpdateArea ) );
+        maChangeRecords.emplace_back( rSprite,
+                                      rPos,
+                                      rUpdateArea );
     }
 
 }

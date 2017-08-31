@@ -39,22 +39,22 @@ ScSheetSaveData::~ScSheetSaveData()
 
 void ScSheetSaveData::AddCellStyle( const OUString& rName, const ScAddress& rCellPos )
 {
-    maCellStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
+    maCellStyles.emplace_back( rName, rCellPos );
 }
 
 void ScSheetSaveData::AddColumnStyle( const OUString& rName, const ScAddress& rCellPos )
 {
-    maColumnStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
+    maColumnStyles.emplace_back( rName, rCellPos );
 }
 
 void ScSheetSaveData::AddRowStyle( const OUString& rName, const ScAddress& rCellPos )
 {
-    maRowStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
+    maRowStyles.emplace_back( rName, rCellPos );
 }
 
 void ScSheetSaveData::AddTableStyle( const OUString& rName, const ScAddress& rCellPos )
 {
-    maTableStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
+    maTableStyles.emplace_back( rName, rCellPos );
 }
 
 void ScSheetSaveData::HandleNoteStyles( const OUString& rStyleName, const OUString& rTextName, const ScAddress& rCellPos )
@@ -78,14 +78,14 @@ void ScSheetSaveData::HandleNoteStyles( const OUString& rStyleName, const OUStri
 void ScSheetSaveData::AddNoteContentStyle( sal_uInt16 nFamily, const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
 {
     if ( nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
-        maNoteParaStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
+        maNoteParaStyles.emplace_back( rName, rCellPos, rSelection );
     else
-        maNoteTextStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
+        maNoteTextStyles.emplace_back( rName, rCellPos, rSelection );
 }
 
 void ScSheetSaveData::AddTextStyle( const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
 {
-    maTextStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
+    maTextStyles.emplace_back( rName, rCellPos, rSelection );
 }
 
 void ScSheetSaveData::BlockSheet( SCTAB nTab )
@@ -194,7 +194,7 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
         if ( maInitialPrefixes.find( aIter->first ) == maInitialPrefixes.end() )
         {
             const NameSpaceEntry& rEntry = *(aIter->second);
-            maLoadedNamespaces.push_back( ScLoadedNamespaceEntry( rEntry.sPrefix, rEntry.sName, rEntry.nKey ) );
+            maLoadedNamespaces.emplace_back( rEntry.sPrefix, rEntry.sName, rEntry.nKey );
         }
         ++aIter;
     }

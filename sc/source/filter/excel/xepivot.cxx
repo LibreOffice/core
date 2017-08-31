@@ -1061,7 +1061,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 
 void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 {
-    maDataInfoVec.push_back( XclPTDataFieldInfo() );
+    maDataInfoVec.emplace_back( );
     XclPTDataFieldInfo& rDataInfo = maDataInfoVec.back();
     rDataInfo.mnField = GetFieldIndex();
 
@@ -1356,7 +1356,7 @@ void XclExpPivotTable::SetDataFieldPropertiesFromDim( const ScDPSaveDimension& r
         // field properties
         pField->SetDataPropertiesFromDim( rSaveDim );
         // update the data field position list
-        maDataFields.push_back( XclPTDataFieldPos( pField->GetFieldIndex(), pField->GetLastDataInfoIndex() ) );
+        maDataFields.emplace_back( pField->GetFieldIndex(), pField->GetLastDataInfoIndex() );
     }
 }
 

@@ -2204,7 +2204,7 @@ bool FileDialogHelper_Impl::isShowFilterExtensionEnabled() const
 void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
                                            const OUString& rFilterWithExtension )
 {
-    maFilters.push_back( css::beans::StringPair( rFilter, rFilterWithExtension ) );
+    maFilters.emplace_back( rFilter, rFilterWithExtension );
 
 }
 

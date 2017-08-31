@@ -660,11 +660,11 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         case WORKBOOK_OPEN:
         {
             // execute delayed Activate event too (see above)
-            rEventQueue.push_back( WORKBOOK_ACTIVATE );
+            rEventQueue.emplace_back(WORKBOOK_ACTIVATE );
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= mxModel->getCurrentController();
-            rEventQueue.push_back( EventQueueEntry( WORKBOOK_WINDOWACTIVATE, aArgs ) );
-            rEventQueue.push_back( AUTO_OPEN );
+            rEventQueue.emplace_back( WORKBOOK_WINDOWACTIVATE, aArgs );
+            rEventQueue.emplace_back(AUTO_OPEN );
             // remember initial selection
             maOldSelection <<= mxModel->getCurrentSelection();
         }
@@ -680,7 +680,7 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         // add workbook event associated to a sheet event
         bool bSheetEvent = false;
         if( (rInfo.maUserData >>= bSheetEvent) && bSheetEvent )
-            rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
+            rEventQueue.emplace_back( rInfo.mnEventId + USERDEFINED_START, rArgs );
     }
 
     return bExecuteEvent;
@@ -792,7 +792,7 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
             /*  Execute Auto_Close only if not cancelled by event handler, but
                 before UI asks user whether to cancel closing the document. */
             if( !bCancel )
-                rEventQueue.push_back( AUTO_CLOSE );
+                rEventQueue.emplace_back(AUTO_CLOSE );
         break;
     }
 }

@@ -233,8 +233,8 @@ void PageCacheManager::Recycle (
     for (iActiveCache=mpPageCaches->begin(); iActiveCache!=mpPageCaches->end(); ++iActiveCache)
     {
         if (iActiveCache->first.mpDocument == pDocument)
-            aCaches.push_back(BestFittingPageCaches::value_type(
-                iActiveCache->first.maPreviewSize, iActiveCache->second));
+            aCaches.emplace_back(
+                iActiveCache->first.maPreviewSize, iActiveCache->second);
     }
 
     // Add bitmap caches from recently used caches.
@@ -243,8 +243,8 @@ void PageCacheManager::Recycle (
     {
         RecentlyUsedQueue::const_iterator iRecentCache;
         for (iRecentCache=iQueue->second.begin();iRecentCache!=iQueue->second.end();++iRecentCache)
-            aCaches.push_back(BestFittingPageCaches::value_type(
-                iRecentCache->maPreviewSize, iRecentCache->mpCache));
+            aCaches.emplace_back(
+                iRecentCache->maPreviewSize, iRecentCache->mpCache);
     }
 
     ::std::sort(aCaches.begin(), aCaches.end(), BestFittingCacheComparer(rPreviewSize));

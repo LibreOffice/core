@@ -596,10 +596,9 @@ namespace
             {
                 // convert from logic Rectangles to logic Ranges, do not forget to add
                 // one Unit (in this case logical units for one pixel, pre-calculated)
-                aLogicRanges.push_back(
-                    basegfx::B2DRange(
+                aLogicRanges.emplace_back(
                         aRect.Left() - aLogicPixel.Width(), aRect.Top() - aLogicPixel.Height(),
-                        aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height()));
+                        aRect.Right() + aLogicPixel.Width(), aRect.Bottom() + aLogicPixel.Height());
             }
 
             mpOverlaySelection->setRanges(aLogicRanges);

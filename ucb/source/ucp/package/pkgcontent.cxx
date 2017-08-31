@@ -2070,9 +2070,8 @@ void Content::queryChildren( ContentRefList& rChildren )
             if ( aChildURL.indexOf( '/', nLen ) == -1 )
             {
                 // No further slashes. It's a child!
-                rChildren.push_back(
-                    ContentRef(
-                        static_cast< Content * >( xChild.get() ) ) );
+                rChildren.emplace_back(
+                        static_cast< Content * >( xChild.get() ) );
             }
         }
         ++it;

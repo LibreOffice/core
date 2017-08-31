@@ -459,7 +459,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                 if ( nIndex >= 0 )
                 {
                     ScDPItemData aItem(pMembers->getByIndex(nIndex)->FillItemData());
-                    aFilterCriteria.push_back( ScDPFilteredCache::Criterion() );
+                    aFilterCriteria.emplace_back( );
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
                         new ScDPFilteredCache::SingleFilter(aItem));
@@ -743,7 +743,7 @@ void ScDPSource::FilterCacheByPageDimensions()
             continue;
 
         const ScDPItemData& rData = pDim->GetSelectedData();
-        aCriteria.push_back(ScDPFilteredCache::Criterion());
+        aCriteria.emplace_back();
         ScDPFilteredCache::Criterion& r = aCriteria.back();
         r.mnFieldIndex = static_cast<sal_Int32>(nField);
         r.mpFilter.reset(new ScDPFilteredCache::SingleFilter(rData));

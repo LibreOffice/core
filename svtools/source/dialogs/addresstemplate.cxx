@@ -583,7 +583,7 @@ void AssignmentPersistentData::ImplCommit()
         // force a even number of known fields
         m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
         if (m_pImpl->bOddFieldNumber)
-            m_pImpl->aFieldLabels.push_back( OUString() );
+            m_pImpl->aFieldLabels.emplace_back( );
 
         // limit the scrollbar range accordingly
         sal_Int32 nOverallFieldPairs = m_pImpl->aFieldLabels.size() / 2;

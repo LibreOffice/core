@@ -126,8 +126,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
         }
         b.set(new Bridge(this, sName, aConnection, anInstanceProvider));
         if (sName.isEmpty()) {
-            unnamed_.push_back(
-                css::uno::Reference< css::bridge::XBridge >(b.get()));
+            unnamed_.emplace_back(b.get());
         } else {
             named_[sName] = b.get();
         }

@@ -334,8 +334,8 @@ namespace cairocanvas
         {
             if( aFontData.empty() || aGlyphIter->fallbacklevel != aFontData.back().second )
             {
-                aFontData.push_back(FontLevel(rOutDev.GetSysFontData(aGlyphIter->fallbacklevel),
-                                              aGlyphIter->fallbacklevel));
+                aFontData.emplace_back(rOutDev.GetSysFontData(aGlyphIter->fallbacklevel),
+                                              aGlyphIter->fallbacklevel);
                 if( !isCairoRenderable(aFontData.back().first) )
                 {
                     bCairoRenderable = false;

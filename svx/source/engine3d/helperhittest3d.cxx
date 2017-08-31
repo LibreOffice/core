@@ -203,7 +203,7 @@ void getAllHit3DObjectsSortedFrontToBack(
                         for(basegfx::B3DPoint & a : aHitsWithObject)
                         {
                             const basegfx::B3DPoint aPointInViewCoordinates(aViewInfo3D.getObjectToView() * a);
-                            aDepthAndObjectResults.push_back(ImplPairDephAndObject(pCandidate, aPointInViewCoordinates.getZ()));
+                            aDepthAndObjectResults.emplace_back(pCandidate, aPointInViewCoordinates.getZ());
                         }
                     }
                 }

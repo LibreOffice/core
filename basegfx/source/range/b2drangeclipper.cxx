@@ -542,12 +542,11 @@ namespace basegfx
             {
                 const B2DRectangle& rCurrRect( *aCurrRect++ );
 
-                o_rEventVector.push_back(
-                    SweepLineEvent( rCurrRect.getMinX(),
+                o_rEventVector.emplace_back( rCurrRect.getMinX(),
                                     rCurrRect,
                                     SweepLineEvent::STARTING_EDGE,
                                     (*aCurrOrientation++) == B2VectorOrientation::Positive ?
-                                    SweepLineEvent::PROCEED_UP : SweepLineEvent::PROCEED_DOWN) );
+                                    SweepLineEvent::PROCEED_UP : SweepLineEvent::PROCEED_DOWN );
             }
 
             // second pass: add all right edges in reversed order
@@ -558,12 +557,11 @@ namespace basegfx
             {
                 const B2DRectangle& rCurrRect( *aCurrRectR++ );
 
-                o_rEventVector.push_back(
-                    SweepLineEvent( rCurrRect.getMaxX(),
+                o_rEventVector.emplace_back( rCurrRect.getMaxX(),
                                     rCurrRect,
                                     SweepLineEvent::FINISHING_EDGE,
                                     (*aCurrOrientationR++) == B2VectorOrientation::Positive ?
-                                    SweepLineEvent::PROCEED_DOWN : SweepLineEvent::PROCEED_UP ) );
+                                    SweepLineEvent::PROCEED_DOWN : SweepLineEvent::PROCEED_UP );
             }
 
             // sort events
@@ -618,19 +616,17 @@ namespace basegfx
             io_rPolygonPool.get(nIdxPolygon).setPolygonPoolIndex(nIdxPolygon);
 
             // upper edge
-            aNewEdges.push_back(
-                ActiveEdge(
+            aNewEdges.emplace_back(
                     rRect,
                     rRect.getMinY(),
                     bGoesDown ? nIdxPolygon : -1,
-                    bGoesDown ? ActiveEdge::PROCEED_LEFT : ActiveEdge::PROCEED_RIGHT) );
+                    bGoesDown ? ActiveEdge::PROCEED_LEFT : ActiveEdge::PROCEED_RIGHT );
             // lower edge
-            aNewEdges.push_back(
-                ActiveEdge(
+            aNewEdges.emplace_back(
                     rRect,
                     rRect.getMaxY(),
                     bGoesDown ? -1 : nIdxPolygon,
-                    bGoesDown ? ActiveEdge::PROCEED_RIGHT : ActiveEdge::PROCEED_LEFT ) );
+                    bGoesDown ? ActiveEdge::PROCEED_RIGHT : ActiveEdge::PROCEED_LEFT );
 
             // furthermore, have to respect a special tie-breaking
             // rule here, for edges which share the same y value:

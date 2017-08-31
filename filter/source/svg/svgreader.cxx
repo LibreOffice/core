@@ -225,7 +225,7 @@ struct AnnotatingVisitor
             case XML_LINEARGRADIENT:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                maGradientVector.push_back(Gradient(Gradient::LINEAR));
+                maGradientVector.emplace_back(Gradient::LINEAR);
 
                 // do we have a reference to a parent gradient? parse
                 // that first, as it sets our defaults here (manually
@@ -268,7 +268,7 @@ struct AnnotatingVisitor
             case XML_RADIALGRADIENT:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                maGradientVector.push_back(Gradient(Gradient::RADIAL));
+                maGradientVector.emplace_back(Gradient::RADIAL);
 
                 // do we have a reference to a parent gradient? parse
                 // that first, as it sets our defaults here (manually
@@ -388,7 +388,7 @@ struct AnnotatingVisitor
                 if (!maGradientVector.empty())
                 {
                     const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                    maGradientStopVector.push_back(GradientStop());
+                    maGradientStopVector.emplace_back();
                     maGradientVector.back().maStops.push_back(maGradientStopVector.size()-1);
 
                     // first parse 'color' as 'stop-color' might depend on it

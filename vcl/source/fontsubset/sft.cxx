@@ -793,7 +793,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
         }
 
         if (ecflag) {
-            aPathList.push_back( PSPathElement(PS_CLOSEPATH) );
+            aPathList.emplace_back(PS_CLOSEPATH );
             scflag = 1;
             ecflag = false;
             cp = EndContour + 1;

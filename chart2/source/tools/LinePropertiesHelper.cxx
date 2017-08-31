@@ -35,56 +35,49 @@ void LinePropertiesHelper::AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
     // Line Properties see service drawing::LineProperties
-    rOutProperties.push_back(
-        Property( "LineStyle",
+    rOutProperties.emplace_back( "LineStyle",
                   PROP_LINE_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-     rOutProperties.push_back(
-         Property( "LineDash",
+     rOutProperties.emplace_back( "LineDash",
                    PROP_LINE_DASH,
                    cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
-                   | beans::PropertyAttribute::MAYBEVOID ));
+                   | beans::PropertyAttribute::MAYBEVOID );
 
 //not in service description
-    rOutProperties.push_back(
-        Property( "LineDashName",
+    rOutProperties.emplace_back( "LineDashName",
                   PROP_LINE_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "LineColor",
+    rOutProperties.emplace_back( "LineColor",
                   PROP_LINE_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "LineTransparence",
+    rOutProperties.emplace_back( "LineTransparence",
                   PROP_LINE_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "LineWidth",
+    rOutProperties.emplace_back( "LineWidth",
                   PROP_LINE_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "LineJoint",
+    rOutProperties.emplace_back( "LineJoint",
                   PROP_LINE_JOINT,
                   cppu::UnoType<drawing::LineJoint>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void LinePropertiesHelper::AddDefaultsToMap(

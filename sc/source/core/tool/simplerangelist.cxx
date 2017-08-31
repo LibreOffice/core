@@ -165,7 +165,7 @@ void ScSimpleRangeList::getRangeList(list<ScRange>& rList) const
         for (; itr != itrEnd; ++itr)
         {
             const Range& r = *itr;
-            aList.push_back(ScRange(r.mnCol1, r.mnRow1, nTab, r.mnCol2, r.mnRow2, nTab));
+            aList.emplace_back(r.mnCol1, r.mnRow1, nTab, r.mnCol2, r.mnRow2, nTab);
         }
     }
     rList.swap(aList);

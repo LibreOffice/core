@@ -55,22 +55,22 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    aTimes.push_back(TimeRecord("initialization"));
+    aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init(argv[1]);
-    aTimes.push_back(TimeRecord());
+    aTimes.emplace_back();
 
     if (argv[2] != nullptr)
     {
-        aTimes.push_back(TimeRecord("load document"));
+        aTimes.emplace_back("load document");
         Document *pDocument(pOffice->documentLoad(argv[2]));
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
 
-        aTimes.push_back(TimeRecord("getparts"));
+        aTimes.emplace_back("getparts");
         int nParts = pDocument->getParts();
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
 
-        aTimes.push_back(TimeRecord("get size of parts"));
+        aTimes.emplace_back("get size of parts");
         for (int nPart = 0; nPart < nParts; nPart++)
         {
             char* pName = pDocument->getPartName(nPart);
@@ -80,7 +80,7 @@ int main( int argc, char* argv[] )
             fprintf (stderr, "  '%s' -> %ld, %ld\n", pName, nWidth, nHeight);
             free (pName);
         }
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
 
         unsigned char pPixels[256*256*4];
         for (int nPart = 0; nPart < nParts; nPart++)
@@ -95,14 +95,14 @@ int main( int argc, char* argv[] )
             pDocument->getDocumentSize(&nWidth, &nHeight);
 
             { // whole document
-                aTimes.push_back(TimeRecord("render whole document"));
+                aTimes.emplace_back("render whole document");
                 pDocument->paintTile(pPixels, 256, 256,
                                      0, 0, nWidth, nHeight); // not square
-                aTimes.push_back(TimeRecord());
+                aTimes.emplace_back();
             }
 
             { // 1:1
-                aTimes.push_back(TimeRecord("render sub-region at 1:1"));
+                aTimes.emplace_back("render sub-region at 1:1");
                 int nTiles = 0;
                 int nSplit = nWidth / 4;
                 for (int nX = 0; nX < 4; nX++)
@@ -118,11 +118,11 @@ int main( int argc, char* argv[] )
                                  nTiles, nTilePosX, nTilePosY);
                     }
                 }
-                aTimes.push_back(TimeRecord());
+                aTimes.emplace_back();
             }
 
             { // scaled
-                aTimes.push_back(TimeRecord("render sub-regions at scale"));
+                aTimes.emplace_back("render sub-regions at scale");
                 int nTiles = 0;
                 int nSplit = nWidth / 4;
                 for (int nX = 0; nX < 4; nX++)
@@ -138,13 +138,13 @@ int main( int argc, char* argv[] )
                                  nTiles, nTilePosX, nTilePosY);
                     }
                 }
-                aTimes.push_back(TimeRecord());
+                aTimes.emplace_back();
             }
         }
 
-        aTimes.push_back(TimeRecord("destroy document"));
+        aTimes.emplace_back("destroy document");
         delete pDocument;
-        aTimes.push_back(TimeRecord());
+        aTimes.emplace_back();
     }
 
     delete pOffice;

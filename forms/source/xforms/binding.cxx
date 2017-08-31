@@ -532,8 +532,7 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
         OSL_ENSURE( aIter->is(), "no node?" );
 
         // create proper evaluation context for this MIP
-        aVector.push_back( EvaluationContext( *aIter, getModel(),
-                                              getBindingNamespaces() ) );
+        aVector.emplace_back( *aIter, getModel(), getBindingNamespaces() );
     }
     return aVector;
 }
@@ -590,9 +589,8 @@ void Binding::bind( bool bForceRebind )
                  ++aIter )
                 maEventNodes.push_back( *aIter );
         else
-            maEventNodes.push_back(
-                Reference<XNode>( aContext.mxContextNode->getOwnerDocument(),
-                                  UNO_QUERY_THROW ) );
+            maEventNodes.emplace_back( aContext.mxContextNode->getOwnerDocument(),
+                                  UNO_QUERY_THROW );
         for( PathExpression::NodeVector_t::iterator aIter2 = maEventNodes.begin();
              aIter2 != maEventNodes.end();
              ++aIter2 )

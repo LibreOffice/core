@@ -94,7 +94,7 @@ namespace svt
 
     void DialogController::addDependentWindow( vcl::Window& _rWindow )
     {
-        m_pImpl->aConcernedWindows.push_back( &_rWindow );
+        m_pImpl->aConcernedWindows.emplace_back(&_rWindow );
 
         VclWindowEvent aEvent( &_rWindow, VclEventId::NONE, nullptr );
         impl_update( aEvent, _rWindow );

@@ -536,7 +536,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
                         if(SDRGLUEPOINT_NOTFOUND != nGlueNum)
                         {
                             const Point aPoint((*pGPL)[nGlueNum].GetAbsolutePos(*pObj));
-                            aPositions.push_back(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
+                            aPositions.emplace_back(aPoint.X(), aPoint.Y());
                         }
                     }
                 }

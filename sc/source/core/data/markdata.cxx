@@ -511,7 +511,7 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
             std::vector<sc::ColRowSpan> aVec;
             if (aMultiSel.GetRowSelArray().HasMarks())
             {
-                aVec.push_back( sc::ColRowSpan( nStartCol, nEndCol));
+                aVec.emplace_back( nStartCol, nEndCol);
                 return aVec;    // all columns marked
             }
             sc::ColRowSpan aSpan( -1, -1);
@@ -545,7 +545,7 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
     std::vector<sc::ColRowSpan> aVec;
     if (bMarked)
     {
-        aVec.push_back( sc::ColRowSpan( aMarkRange.aStart.Col(), aMarkRange.aEnd.Col()));
+        aVec.emplace_back( aMarkRange.aStart.Col(), aMarkRange.aEnd.Col());
     }
     return aVec;
 }

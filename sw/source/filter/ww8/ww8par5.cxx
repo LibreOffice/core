@@ -863,7 +863,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bCodeNest = aF.bCodeNest;
     if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and lose the inner data
 
-    m_aFieldStack.push_back(WW8FieldEntry(*m_pPaM->GetPoint(), aF.nId));
+    m_aFieldStack.emplace_back(*m_pPaM->GetPoint(), aF.nId);
 
     if (bNested)
         return 0;

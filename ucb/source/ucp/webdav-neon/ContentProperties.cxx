@@ -315,18 +315,15 @@ void ContentProperties::UCBNamesToHTTPNames(
 
         if ( rProp.Name == "DateModified" )
         {
-            propertyNames.push_back(
-                OUString("Last-Modified") );
+            propertyNames.emplace_back("Last-Modified" );
         }
         else if ( rProp.Name == "MediaType" )
         {
-            propertyNames.push_back(
-                OUString("Content-Type") );
+            propertyNames.emplace_back("Content-Type" );
         }
         else if ( rProp.Name == "Size" )
         {
-            propertyNames.push_back(
-                OUString("Content-Length") );
+            propertyNames.emplace_back("Content-Length" );
         }
         else
         {

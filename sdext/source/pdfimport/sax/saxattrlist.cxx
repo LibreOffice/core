@@ -32,7 +32,7 @@ SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString, OUString
          it != rMap.end(); ++it )
     {
         m_aIndexMap[ it->first ] = m_aAttributes.size();
-        m_aAttributes.push_back( AttrEntry( it->first, it->second ) );
+        m_aAttributes.emplace_back( it->first, it->second );
     }
 }
 

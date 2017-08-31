@@ -681,7 +681,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         if (*p == '\0')
         {
             sal_Int32 nLen = i - nStart;
-            aStrs.push_back(OUString(pStart, nLen, eSysEnc));
+            aStrs.emplace_back(pStart, nLen, eSysEnc);
             nStart = ++i;
             pStart = ++p;
         }

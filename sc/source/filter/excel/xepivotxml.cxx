@@ -602,7 +602,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 aPageFields.push_back(nPos);
             break;
             case sheet::DataPilotFieldOrientation_DATA:
-                aDataFields.push_back(DataField(nPos, &rDim));
+                aDataFields.emplace_back(nPos, &rDim);
             break;
             case sheet::DataPilotFieldOrientation_HIDDEN:
             default:
@@ -720,7 +720,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             if (it != iCacheFieldItems_end)
             {
                 size_t nCachePos = it - iCacheFieldItems_begin;
-                aMemberSequence.push_back(std::make_pair(nCachePos, !rMember.mbVisible));
+                aMemberSequence.emplace_back(nCachePos, !rMember.mbVisible);
                 aUsedCachePositions.insert(nCachePos);
             }
         }
@@ -728,7 +728,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         for (size_t nItem = 0; nItem < rCacheFieldItems.size(); ++nItem)
         {
             if (aUsedCachePositions.find(nItem) == aUsedCachePositions.end())
-                aMemberSequence.push_back(std::make_pair(nItem, true));
+                aMemberSequence.emplace_back(nItem, true);
         }
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
@@ -890,7 +890,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
 void XclExpXmlPivotTables::AppendTable( const ScDPObject* pTable, sal_Int32 nCacheId, sal_Int32 nPivotId )
 {
-    maTables.push_back(Entry(pTable, nCacheId, nPivotId));
+    maTables.emplace_back(pTable, nCacheId, nPivotId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

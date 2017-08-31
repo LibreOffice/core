@@ -861,9 +861,8 @@ void BackendImpl::PackageImpl::processPackage_(
                     ::cppu::throwException(exc);
                 }
             }
-            data.items.push_back(
-                std::make_pair(xPackage->getURL(),
-                                 xPackage->getPackageType()->getMediaType()));
+            data.items.emplace_back(xPackage->getURL(),
+                                 xPackage->getPackageType()->getMediaType());
         }
         getMyBackend()->addDataToDb(getURL(), data);
     }

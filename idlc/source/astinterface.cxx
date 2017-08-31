@@ -58,8 +58,7 @@ AstInterface::DoubleDeclarations AstInterface::checkInheritedInterfaceClashes(
 void AstInterface::addInheritedInterface(
     AstType const * ifc, bool optional, OUString const & documentation)
 {
-    m_inheritedInterfaces.push_back(
-        InheritedInterface(ifc, optional, documentation));
+    m_inheritedInterfaces.emplace_back(ifc, optional, documentation);
     if (!optional) {
         ++m_mandatoryInterfaces;
     }

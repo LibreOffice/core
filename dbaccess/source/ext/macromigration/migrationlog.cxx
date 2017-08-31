@@ -144,7 +144,7 @@ namespace dbmm
             "MigrationLog::movedLibrary: document is not known!" );
 
         DocumentEntry& rDocEntry = m_pData->aDocumentLogs[ _nDocID ];
-        rDocEntry.aMovedLibraries.push_back( LibraryEntry( _eScriptType, _rOriginalLibName, _rNewLibName ) );
+        rDocEntry.aMovedLibraries.emplace_back( _eScriptType, _rOriginalLibName, _rNewLibName );
     }
 
     void MigrationLog::finishedDocument( const DocumentID _nDocID )
@@ -191,17 +191,17 @@ namespace dbmm
             {
             case ERR_OPENING_SUB_DOCUMENT_FAILED:
                 pAsciiErrorDescription = "opening '#doc#' failed";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_CLOSING_SUB_DOCUMENT_FAILED:
                 pAsciiErrorDescription = "closing '#doc#' failed";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_STORAGE_COMMIT_FAILED:
                 pAsciiErrorDescription = "committing the changes for document '#doc#' failed";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_STORING_DATABASEDOC_FAILED:
@@ -214,52 +214,52 @@ namespace dbmm
 
             case ERR_UNEXPECTED_LIBSTORAGE_ELEMENT:
                 pAsciiErrorDescription = "unexpected #lib# storage element in document '#doc#', named '#element#'";
-                aParameterNames.push_back(OUString("#doc#"));
-                aParameterNames.push_back(OUString("#libstore#"));
-                aParameterNames.push_back(OUString("#element#"));
+                aParameterNames.emplace_back("#doc#");
+                aParameterNames.emplace_back("#libstore#");
+                aParameterNames.emplace_back("#element#");
                 break;
 
             case ERR_CREATING_DBDOC_SCRIPT_STORAGE_FAILED:
                 pAsciiErrorDescription = "creating the database document's storage for #scripttype# scripts failed";
-                aParameterNames.push_back(OUString("#scripttype#"));
+                aParameterNames.emplace_back("#scripttype#");
                 break;
 
             case ERR_COMMITTING_SCRIPT_STORAGES_FAILED:
                 pAsciiErrorDescription = "saving the #scripttype# scripts for document '#doc#' failed";
-                aParameterNames.push_back(OUString("#scripttype#"));
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#scripttype#");
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_GENERAL_SCRIPT_MIGRATION_FAILURE:
                 pAsciiErrorDescription = "general error while migrating #scripttype# scripts of document '#doc#'";
-                aParameterNames.push_back(OUString("#scripttype#"));
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#scripttype#");
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_GENERAL_MACRO_MIGRATION_FAILURE:
                 pAsciiErrorDescription = "general error during macro migration of document '#doc#'";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_UNKNOWN_SCRIPT_TYPE:
                 pAsciiErrorDescription = "unknown script type: #type#";
-                aParameterNames.push_back(OUString("#type#"));
+                aParameterNames.emplace_back("#type#");
                 break;
 
             case ERR_UNKNOWN_SCRIPT_LANGUAGE:
                 pAsciiErrorDescription = "unknown script language: #lang#";
-                aParameterNames.push_back(OUString("#lang#"));
+                aParameterNames.emplace_back("#lang#");
                 break;
 
             case ERR_UNKNOWN_SCRIPT_NAME_FORMAT:
                 pAsciiErrorDescription = "unknown script name format: #script#";
-                aParameterNames.push_back(OUString("#script#"));
+                aParameterNames.emplace_back("#script#");
                 break;
 
             case ERR_SCRIPT_TRANSLATION_FAILURE:
                 pAsciiErrorDescription = "analyzing/translating the script URL failed; script type: #type#; script: #code#";
-                aParameterNames.push_back(OUString("#type#"));
-                aParameterNames.push_back(OUString("#code#"));
+                aParameterNames.emplace_back("#type#");
+                aParameterNames.emplace_back("#code#");
                 break;
 
             case ERR_INVALID_SCRIPT_DESCRIPTOR_FORMAT:
@@ -268,57 +268,57 @@ namespace dbmm
 
             case ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for document '#doc#' failed";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_ADJUSTING_DIALOG_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for dialog #lib#.#dlg# in document '#doc#' failed";
-                aParameterNames.push_back(OUString("#doc#"));
-                aParameterNames.push_back(OUString("#lib#"));
-                aParameterNames.push_back(OUString("#dlg#"));
+                aParameterNames.emplace_back("#doc#");
+                aParameterNames.emplace_back("#lib#");
+                aParameterNames.emplace_back("#dlg#");
                 break;
 
             case ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting form component events for '#doc#' failed";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_BIND_SCRIPT_STORAGE_FAILED:
                 pAsciiErrorDescription = "binding to the script storage failed for document '#doc#'";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_REMOVE_SCRIPTS_STORAGE_FAILED:
                 pAsciiErrorDescription = "removing a scripts storage failed for document '#doc#'";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_DOCUMENT_BACKUP_FAILED:
                 pAsciiErrorDescription = "backing up the document to #location# failed";
-                aParameterNames.push_back(OUString("#location#"));
+                aParameterNames.emplace_back("#location#");
                 break;
 
             case ERR_UNKNOWN_SCRIPT_FOLDER:
                 pAsciiErrorDescription = "unknown script folder '#name#' in document '#doc#'";
-                aParameterNames.push_back(OUString("#doc#"));
-                aParameterNames.push_back(OUString("#name#"));
+                aParameterNames.emplace_back("#doc#");
+                aParameterNames.emplace_back("#name#");
                 break;
 
             case ERR_EXAMINING_SCRIPTS_FOLDER_FAILED:
                 pAsciiErrorDescription = "examining the 'Scripts' folder failed for document '#doc#'";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
             case ERR_PASSWORD_VERIFICATION_FAILED:
                 pAsciiErrorDescription = "password verification failed for document '#doc#', #libtype# library '#name#'";
-                aParameterNames.push_back(OUString("#doc#"));
-                aParameterNames.push_back(OUString("#libtype#"));
-                aParameterNames.push_back(OUString("#name#"));
+                aParameterNames.emplace_back("#doc#");
+                aParameterNames.emplace_back("#libtype#");
+                aParameterNames.emplace_back("#name#");
                 break;
 
             case ERR_NEW_STYLE_REPORT:
                 pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Oracle Report Builder (TM) extension installed.";
-                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.emplace_back("#doc#");
                 break;
 
                 // do *not* add a default case here: Without a default, some compilers will warn you when

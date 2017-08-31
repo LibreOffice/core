@@ -346,7 +346,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         // #i36010# - set layout direction of the position
                         pFormat->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-                        pFormatsAndObjs[i].push_back( std::pair< SwDrawFrameFormat*, SdrObject* >( pFormat, pSubObj ) );
+                        pFormatsAndObjs[i].emplace_back( pFormat, pSubObj );
 
                         if( bUndo )
                             pUndo->AddObj( static_cast<sal_uInt16>(i2), pFormat );

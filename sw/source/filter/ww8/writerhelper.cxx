@@ -116,7 +116,7 @@ namespace
                 // so set a dummy position and fix it in UpdateFramePositions
                 SwPosition const dummy(SwNodeIndex(
                             const_cast<SwNodes&>(pAnchor->nNode.GetNodes())));
-                aRet.push_back(ww8::Frame(rEntry, dummy));
+                aRet.emplace_back(rEntry, dummy);
             }
             else
             {
@@ -127,7 +127,7 @@ namespace
                     aPos.nContent.Assign(pTextNd, 0);
                 }
 
-                aRet.push_back(ww8::Frame(rEntry, aPos));
+                aRet.emplace_back(rEntry, aPos);
             }
         }
         return aRet;

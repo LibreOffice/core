@@ -324,7 +324,7 @@ XclExpPaletteImpl::XclExpPaletteImpl( const XclDefaultPalette& rDefPal ) :
     sal_uInt16 nCount = static_cast< sal_uInt16 >( mrDefPal.GetColorCount() );
     maPalette.reserve( nCount );
     for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
-        maPalette.push_back( XclPaletteColor( mrDefPal.GetDefColor( GetXclIndex( nIdx ) ) ) );
+        maPalette.emplace_back( mrDefPal.GetDefColor( GetXclIndex( nIdx ) ) );
 
     InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLTEXT );
 }
@@ -1384,7 +1384,7 @@ sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
     if( nSize < static_cast< size_t >( 0xFFFF - mnXclOffset ) )
     {
         sal_uInt16 nXclNumFmt = static_cast< sal_uInt16 >( nSize + mnXclOffset );
-        maFormatMap.push_back( XclExpNumFmt( nScNumFmt, nXclNumFmt, GetFormatCode( nScNumFmt ) ) );
+        maFormatMap.emplace_back( nScNumFmt, nXclNumFmt, GetFormatCode( nScNumFmt ) );
         return nXclNumFmt;
     }
 

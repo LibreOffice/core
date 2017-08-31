@@ -1749,7 +1749,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             }
             else
             {
-                aDelNodes.push_back(std::make_pair(pBox, nIdx));
+                aDelNodes.emplace_back(pBox, nIdx);
             }
         }
     }
@@ -1766,7 +1766,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             if (pPCD)
                 pPCD->DeleteBox( &pTableNd->GetTable(), *pBox );
             aDelBoxes.insert(pBox);
-            aDelNodes.push_back(std::make_pair(pBox, nIdx));
+            aDelNodes.emplace_back(pBox, nIdx);
         }
     }
 

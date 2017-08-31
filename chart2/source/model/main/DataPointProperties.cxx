@@ -50,420 +50,363 @@ void DataPointProperties::AddPropertiesToVector(
 
     // Common
 
-    rOutProperties.push_back(
-        Property( "Color",
+    rOutProperties.emplace_back( "Color",
                   PROP_DATAPOINT_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillColor",
+    rOutProperties.emplace_back( "FillColor",
                   PROP_DATAPOINT_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "Transparency",
+    rOutProperties.emplace_back( "Transparency",
                   PROP_DATAPOINT_TRANSPARENCY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillTransparence",
+    rOutProperties.emplace_back( "FillTransparence",
                   PROP_DATAPOINT_TRANSPARENCY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // Fill Properties
-    rOutProperties.push_back(
-        Property( "FillStyle",
+    rOutProperties.emplace_back( "FillStyle",
                   PROP_DATAPOINT_FILL_STYLE,
                   cppu::UnoType<drawing::FillStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "TransparencyGradientName",
+    rOutProperties.emplace_back( "TransparencyGradientName",
                   PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "FillTransparenceGradientName",
+    rOutProperties.emplace_back( "FillTransparenceGradientName",
                   PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "GradientName",
+    rOutProperties.emplace_back( "GradientName",
                   PROP_DATAPOINT_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "FillGradientName",
+    rOutProperties.emplace_back( "FillGradientName",
                   PROP_DATAPOINT_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        beans::Property( "GradientStepCount",
+    rOutProperties.emplace_back( "GradientStepCount",
                   PROP_DATAPOINT_GRADIENT_STEPCOUNT,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        beans::Property( "FillGradientStepCount",
+    rOutProperties.emplace_back( "FillGradientStepCount",
                   PROP_DATAPOINT_GRADIENT_STEPCOUNT,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "HatchName",
+    rOutProperties.emplace_back( "HatchName",
                   PROP_DATAPOINT_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "FillHatchName",
+    rOutProperties.emplace_back( "FillHatchName",
                   PROP_DATAPOINT_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapName",
+    rOutProperties.emplace_back( "FillBitmapName",
                   PROP_DATAPOINT_FILL_BITMAP_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID  ));
+                  | beans::PropertyAttribute::MAYBEVOID  );
 
-    rOutProperties.push_back(
-        Property( "FillBackground",
+    rOutProperties.emplace_back( "FillBackground",
                   PROP_DATAPOINT_FILL_BACKGROUND,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
     // border for filled objects
-    rOutProperties.push_back(
-        Property( "BorderColor",
+    rOutProperties.emplace_back( "BorderColor",
                   PROP_DATAPOINT_BORDER_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "BorderStyle",
+    rOutProperties.emplace_back( "BorderStyle",
                   PROP_DATAPOINT_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "BorderWidth",
+    rOutProperties.emplace_back( "BorderWidth",
                   PROP_DATAPOINT_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "BorderDashName",
+    rOutProperties.emplace_back( "BorderDashName",
                   PROP_DATAPOINT_BORDER_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "BorderTransparency",
+    rOutProperties.emplace_back( "BorderTransparency",
                   PROP_DATAPOINT_BORDER_TRANSPARENCY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
     // Line Properties
 
-    rOutProperties.push_back(
-        Property( "LineColor",
+    rOutProperties.emplace_back( "LineColor",
                   PROP_DATAPOINT_BORDER_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "LineStyle",
+    rOutProperties.emplace_back( "LineStyle",
                   LinePropertiesHelper::PROP_LINE_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "LineWidth",
+    rOutProperties.emplace_back( "LineWidth",
                   LinePropertiesHelper::PROP_LINE_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-         Property( "LineDash",
+    rOutProperties.emplace_back( "LineDash",
                    LinePropertiesHelper::PROP_LINE_DASH,
                    cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
-                   | beans::PropertyAttribute::MAYBEVOID ));
+                   | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "LineDashName",
+    rOutProperties.emplace_back( "LineDashName",
                   LinePropertiesHelper::PROP_LINE_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "LineTransparence",
+    rOutProperties.emplace_back( "LineTransparence",
                   PROP_DATAPOINT_BORDER_TRANSPARENCY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
     // FillProperties
     // bitmap properties
-    rOutProperties.push_back(
-        Property( "FillBitmapOffsetX",
+    rOutProperties.emplace_back( "FillBitmapOffsetX",
                   FillProperties::PROP_FILL_BITMAP_OFFSETX,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapOffsetY",
+    rOutProperties.emplace_back( "FillBitmapOffsetY",
                   FillProperties::PROP_FILL_BITMAP_OFFSETY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapPositionOffsetX",
+    rOutProperties.emplace_back( "FillBitmapPositionOffsetX",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapPositionOffsetY",
+    rOutProperties.emplace_back( "FillBitmapPositionOffsetY",
                   FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapRectanglePoint",
+    rOutProperties.emplace_back( "FillBitmapRectanglePoint",
                   FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT,
                   cppu::UnoType<drawing::RectanglePoint>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapLogicalSize",
+    rOutProperties.emplace_back( "FillBitmapLogicalSize",
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapSizeX",
+    rOutProperties.emplace_back( "FillBitmapSizeX",
                   FillProperties::PROP_FILL_BITMAP_SIZEX,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapSizeY",
+    rOutProperties.emplace_back( "FillBitmapSizeY",
                   FillProperties::PROP_FILL_BITMAP_SIZEY,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "FillBitmapMode",
+    rOutProperties.emplace_back( "FillBitmapMode",
                   FillProperties::PROP_FILL_BITMAP_MODE,
                   cppu::UnoType<drawing::BitmapMode>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // others
-    rOutProperties.push_back(
-        Property( "Symbol",
+    rOutProperties.emplace_back( "Symbol",
                   PROP_DATAPOINT_SYMBOL_PROP,
                   cppu::UnoType<chart2::Symbol>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "Offset",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "Offset",
                   PROP_DATAPOINT_OFFSET,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "Geometry3D",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "Geometry3D",
                   PROP_DATAPOINT_GEOMETRY3D,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_NUMFMT,
+    rOutProperties.emplace_back( CHART_UNONAME_NUMFMT,
                   PROP_DATAPOINT_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
+    rOutProperties.emplace_back( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     //additional 'PercentageNumberFormat'
-    rOutProperties.push_back(
-        Property( "PercentageNumberFormat",
+    rOutProperties.emplace_back( "PercentageNumberFormat",
                   PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "LabelPlacement",
+    rOutProperties.emplace_back( "LabelPlacement",
                   PROP_DATAPOINT_LABEL_PLACEMENT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "ReferencePageSize",
+    rOutProperties.emplace_back( "ReferencePageSize",
                   PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "TextRotation",
+    rOutProperties.emplace_back( "TextRotation",
                   PROP_DATAPOINT_TEXT_ROTATION,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // statistics
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_ERRORBAR_X,
+    rOutProperties.emplace_back( CHART_UNONAME_ERRORBAR_X,
                   PROP_DATAPOINT_ERROR_BAR_X,
                   // XPropertySet supporting service ErrorBar
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_ERRORBAR_Y,
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( CHART_UNONAME_ERRORBAR_Y,
                   PROP_DATAPOINT_ERROR_BAR_Y,
                   // XPropertySet supporting service ErrorBar
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "ShowErrorBox",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "ShowErrorBox",
                   PROP_DATAPOINT_SHOW_ERROR_BOX,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "PercentDiagonal",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "PercentDiagonal",
                   PROP_DATAPOINT_PERCENT_DIAGONAL,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
     // Properties specific to data label.
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL,
                   PROP_DATAPOINT_LABEL,
                   cppu::UnoType<chart2::DataPointLabel>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "TextWordWrap",
+    rOutProperties.emplace_back( "TextWordWrap",
                   PROP_DATAPOINT_TEXT_WORD_WRAP,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_SEP,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_SEP,
                   PROP_DATAPOINT_LABEL_SEPARATOR,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_STYLE,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_STYLE,
                   PROP_DATAPOINT_LABEL_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_COLOR,
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_COLOR,
                   PROP_DATAPOINT_LABEL_BORDER_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_WIDTH,
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_WIDTH,
                   PROP_DATAPOINT_LABEL_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-         Property( CHART_UNONAME_LABEL_BORDER_DASH,
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_DASH,
                    PROP_DATAPOINT_LABEL_BORDER_DASH,
                    cppu::UnoType<drawing::LineDash>::get(),
                    beans::PropertyAttribute::BOUND
-                   | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_DASHNAME,
+                   | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_DASHNAME,
                   PROP_DATAPOINT_LABEL_BORDER_DASH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_TRANS,
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_TRANS,
                   PROP_DATAPOINT_LABEL_BORDER_TRANS,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void DataPointProperties::AddDefaultsToMap(

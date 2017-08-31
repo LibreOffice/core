@@ -1448,7 +1448,7 @@ SwCellStyleDescriptor SwCellStyleTable::operator[](size_t i) const
 
 void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName)
 {
-    m_aCellStyles.push_back(std::make_pair(sName, new SwBoxAutoFormat(rBoxFormat)));
+    m_aCellStyles.emplace_back(sName, new SwBoxAutoFormat(rBoxFormat));
 }
 
 void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)

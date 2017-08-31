@@ -1136,9 +1136,8 @@ void extractComponentData(
                 css::uno::Reference< css::registry::XRegistryKey > >
                 singletonKeys(singletons->openKeys());
             for (sal_Int32 j = 0; j < singletonKeys.getLength(); ++j) {
-                data->singletons.push_back(
-                    std::pair< OUString, OUString >(
-                        singletonKeys[j]->getKeyName().copy(prefix2), name));
+                data->singletons.emplace_back(
+                        singletonKeys[j]->getKeyName().copy(prefix2), name);
             }
         }
         if (factories != nullptr) {

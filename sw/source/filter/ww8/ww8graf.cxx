@@ -661,7 +661,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             }
                             m_xCtrlStck->DeleteAndDestroy(nI-1);
                         }
-                        aChunks.push_back(Chunk(nStart, sURL));
+                        aChunks.emplace_back(nStart, sURL);
                     }
                 }
                 else

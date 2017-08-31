@@ -880,13 +880,12 @@ void DataBrowserModel::updateFromModel()
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
                             {
                                 // no shared sequence
-                                m_aColumns.push_back(
-                                    tDataColumn(
+                                m_aColumns.emplace_back(
                                         aSeries[nSeriesIdx],
                                         lcl_getUIRoleName( aLSeqs[nSeqIdx] ),
                                         aLSeqs[nSeqIdx],
                                         NUMBER,
-                                        nSequenceNumberFormatKey ));
+                                        nSequenceNumberFormatKey );
                                 ++nHeaderEnd;
                             }
                             // else skip
@@ -906,13 +905,12 @@ void DataBrowserModel::updateFromModel()
                         if( StatisticsHelper::usesErrorBarRanges( aSeries[nSeriesIdx], /* bYError = */ false ))
                             addErrorBarRanges( aSeries[nSeriesIdx], nYAxisNumberFormatKey, nSeqIdx, nHeaderEnd, false );
 
-                        m_aHeaders.push_back(
-                            tDataHeader(
+                        m_aHeaders.emplace_back(
                                 aSeries[nSeriesIdx],
                                 aChartTypes[nCTIdx],
                                 bSwapXAndYAxis,
                                 nHeaderStart,
-                                nHeaderEnd - 1 ));
+                                nHeaderEnd - 1 );
 
                         nHeaderStart = nHeaderEnd;
 
@@ -955,8 +953,8 @@ void DataBrowserModel::addErrorBarRanges(
 
         for (Reference<chart2::data::XLabeledDataSequence> const & rDataSequence : aSequences)
         {
-            m_aColumns.push_back(tDataColumn(xDataSeries, lcl_getUIRoleName(rDataSequence),
-                                             rDataSequence, NUMBER, nNumberFormatKey));
+            m_aColumns.emplace_back(xDataSeries, lcl_getUIRoleName(rDataSequence),
+                                             rDataSequence, NUMBER, nNumberFormatKey);
             ++rInOutSequenceIndex;
             ++rInOutHeaderEnd;
         }

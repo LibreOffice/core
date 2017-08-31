@@ -190,7 +190,7 @@ namespace DOM { namespace events {
             {
                 Reference< XEventTarget > const xRef(
                         rDocument.GetCNode(cur).get());
-                captureVector.push_back(::std::make_pair(xRef, cur));
+                captureVector.emplace_back(xRef, cur);
                 cur = cur->parent;
             }
             captureListeners = m_CaptureListeners;

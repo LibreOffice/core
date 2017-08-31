@@ -77,7 +77,7 @@ ScAutoStyleList::~ScAutoStyleList()
 void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1,
                                     sal_uLong nTimeout, const OUString& rStyle2 )
 {
-    aInitials.push_back( ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 ) );
+    aInitials.emplace_back( rRange, rStyle1, nTimeout, rStyle2 );
     aInitIdle.Start();
 }
 

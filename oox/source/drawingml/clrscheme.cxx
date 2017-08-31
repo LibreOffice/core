@@ -82,7 +82,7 @@ bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
 
 void ClrScheme::setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor )
 {
-    maClrScheme.push_back(std::pair<sal_Int32, sal_Int32>(nSchemeClrToken, nColor));
+    maClrScheme.emplace_back(nSchemeClrToken, nColor);
 }
 
 bool ClrScheme::getColorByIndex(size_t nIndex, sal_Int32& rColor) const

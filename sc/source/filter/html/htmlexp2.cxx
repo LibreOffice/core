@@ -106,8 +106,8 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                     aSpace.Width() /= 2;
                     aSpace.Height() /= 2;
                 }
-                aGraphList.push_back( ScHTMLGraphEntry( pObject,
-                    aR, aSize, bInCell, aSpace ) );
+                aGraphList.emplace_back( pObject,
+                    aR, aSize, bInCell, aSpace );
             }
             pObject = aIter.Next();
         }

@@ -579,7 +579,7 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element
         throw IndexOutOfBoundsException();
 
     if( nIndex == nCount )
-        maObjectList.push_back( pObject );
+        maObjectList.emplace_back(pObject );
     else
     {
         auto aIter = maObjectList.begin();

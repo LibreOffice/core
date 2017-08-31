@@ -125,7 +125,7 @@ Reference< XStatement >  OConnection::createStatement()
     if ( xMasterStatement.is() )
     {
         xStatement = new OStatement(this, xMasterStatement);
-        m_aStatements.push_back(WeakReferenceHelper(xStatement));
+        m_aStatements.emplace_back(xStatement);
     }
     return xStatement;
 }
@@ -141,7 +141,7 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const OUString& s
     if ( xMasterStatement.is() )
     {
         xStatement = new OPreparedStatement(this, xMasterStatement);
-        m_aStatements.push_back(WeakReferenceHelper(xStatement));
+        m_aStatements.emplace_back(xStatement);
     }
     return xStatement;
 }
@@ -156,7 +156,7 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const OUString& sql)
     if ( xMasterStatement.is() )
     {
         xStatement = new OCallableStatement(this, xMasterStatement);
-        m_aStatements.push_back(WeakReferenceHelper(xStatement));
+        m_aStatements.emplace_back(xStatement);
     }
     return xStatement;
 }
@@ -516,7 +516,7 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer()
 
     //  Reference< XNumberFormatsSupplier >  xSupplier = pParent->getNumberFormatsSupplier();
     Reference< XSQLQueryComposer >  xComposer( new OQueryComposer( this ) );
-    m_aComposers.push_back(WeakReferenceHelper(xComposer));
+    m_aComposers.emplace_back(xComposer);
     return xComposer;
 }
 
@@ -634,7 +634,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
     if ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier || _sServiceSpecifier == "com.sun.star.sdb.SingleSelectQueryAnalyzer" )
     {
         xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext );
-        m_aComposers.push_back(WeakReferenceHelper(xRet));
+        m_aComposers.emplace_back(xRet);
     }
     else
     {

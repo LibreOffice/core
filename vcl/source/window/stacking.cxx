@@ -999,7 +999,7 @@ void Window::SetParent( vcl::Window* pNewParent )
         pNewSysWin->GetTaskPaneList()->AddWindow( this );
 
     if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
-        ImplGetOwnerDrawList().push_back( this );
+        ImplGetOwnerDrawList().emplace_back(this );
 
     if ( bVisible )
         Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );

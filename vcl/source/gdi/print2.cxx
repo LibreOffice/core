@@ -853,9 +853,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         {
             // up to and including last ink-generating background
             // action go to background component
-            aBackgroundComponent.aComponentList.push_back(
-                ::std::make_pair(
-                    pCurrAct, nActionNum) );
+            aBackgroundComponent.aComponentList.emplace_back(
+                    pCurrAct, nActionNum );
 
             // execute action to get correct MapModes etc.
             pCurrAct->Execute( aMapModeVDev.get() );
@@ -1051,9 +1050,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
             // set new bounds and add action to list
             aTotalComponents.aBounds = aTotalBounds;
-            aTotalComponents.aComponentList.push_back(
-                ::std::make_pair(
-                    pCurrAct, nActionNum) );
+            aTotalComponents.aComponentList.emplace_back(
+                    pCurrAct, nActionNum );
 
             // add aTotalComponents as a new entry to aCCList
             aCCList.push_back( aTotalComponents );

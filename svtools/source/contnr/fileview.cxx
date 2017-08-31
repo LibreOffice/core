@@ -146,7 +146,7 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
             sToken = _rFilterList.getToken( 0, ';', nIndex );
             if ( !sToken.isEmpty() )
             {
-                _rFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
+                _rFilters.emplace_back( sToken.toAsciiUpperCase() );
             }
         }
         while ( nIndex >= 0 );
@@ -154,7 +154,7 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
     else
     {
         // no filter is given -> match all
-        _rFilters.push_back( WildCard("*") );
+        _rFilters.emplace_back("*" );
     }
 }
 

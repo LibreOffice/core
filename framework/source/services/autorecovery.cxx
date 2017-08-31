@@ -3377,7 +3377,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         // create a new document of the desired type
         Reference< XModel2 > xModel(m_xContext->getServiceManager()->createInstanceWithContext(
                     rInfo.FactoryService, m_xContext), UNO_QUERY_THROW);
-        aCleanup.push_back( xModel.get() );
+        aCleanup.emplace_back(xModel.get() );
 
         // put the filter name into the descriptor - we're not going to involve any type detection, so
         // the document might be lost without the FilterName property
@@ -3417,7 +3417,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             ::std::copy( rInfo.ViewNames.begin(), rInfo.ViewNames.end(), aViewsToRestore.begin() );
         // if we don't have views for whatever reason, then create a default-view, at least
         if ( aViewsToRestore.empty() )
-            aViewsToRestore.push_back( OUString() );
+            aViewsToRestore.emplace_back( );
 
         for (   ::std::vector< OUString >::const_iterator viewName = aViewsToRestore.begin();
                 viewName != aViewsToRestore.end();
@@ -3426,7 +3426,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         {
             // create a frame
             Reference< XFrame > xTargetFrame = xDesktop->findFrame( SPECIALTARGET_BLANK, 0 );
-            aCleanup.push_back( xTargetFrame.get() );
+            aCleanup.emplace_back(xTargetFrame.get() );
 
             // create a view to the document
             Reference< XController2 > xController;

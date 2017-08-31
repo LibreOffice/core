@@ -570,7 +570,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     // <name>=<label>
                     OUString aLabel;
                     xComponentSet->getPropertyValue( PROPERTY_LABEL ) >>= aLabel;
-                    rList.push_back( HtmlSuccessfulObj(aName, aLabel) );
+                    rList.emplace_back(aName, aLabel );
                 }
             }
         } break;
@@ -594,7 +594,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                         aLhs.append(".x");
                     else
                         aLhs.append("x");
-                    rList.push_back( HtmlSuccessfulObj(aLhs.makeStringAndClear(), aRhs) );
+                    rList.emplace_back(aLhs.makeStringAndClear(), aRhs );
 
                     aLhs.append(aName);
                     aRhs = OUString::number( MouseEvt.Y );
@@ -602,7 +602,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                         aLhs.append(".y");
                     else
                         aLhs.append("y");
-                    rList.push_back( HtmlSuccessfulObj(aLhs.makeStringAndClear(), aRhs) );
+                    rList.emplace_back(aLhs.makeStringAndClear(), aRhs );
                 }
             }
         } break;
@@ -623,7 +623,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if( hasProperty(PROPERTY_REFVALUE, xComponentSet) )
                 xComponentSet->getPropertyValue( PROPERTY_REFVALUE ) >>= aStrValue;
 
-            rList.push_back( HtmlSuccessfulObj(aName, aStrValue) );
+            rList.emplace_back(aName, aStrValue );
         } break;
 
         // Edit
@@ -669,7 +669,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             else
                 xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= sText;
 
-            rList.push_back( HtmlSuccessfulObj(aName, sText) );
+            rList.emplace_back(aName, sText );
         } break;
 
         // ComboBox, Patternfield
@@ -681,7 +681,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             {
                 OUString aText;
                 xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= aText;
-                rList.push_back( HtmlSuccessfulObj(aName, aText) );
+                rList.emplace_back(aName, aText );
             }
         } break;
         case FormComponentType::CURRENCYFIELD:
@@ -701,7 +701,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     xComponentSet->getPropertyValue( PROPERTY_DECIMAL_ACCURACY ) >>= nScale;
                     aText = ::rtl::math::doubleToUString(aDoubleVal, rtl_math_StringFormat_F, nScale, '.', true);
                 }
-                rList.push_back( HtmlSuccessfulObj(aName, aText) );
+                rList.emplace_back(aName, aText );
             }
         }   break;
         case FormComponentType::DATEFIELD:
@@ -724,7 +724,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     appendDigits( aDate.GetYear(), 4, aBuffer );
                     aText = aBuffer.makeStringAndClear();
                 }
-                rList.push_back( HtmlSuccessfulObj(aName, aText) );
+                rList.emplace_back(aName, aText );
             }
         }   break;
         case FormComponentType::TIMEFIELD:
@@ -747,7 +747,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     appendDigits( aTime.GetSec(), 2, aBuffer );
                     aText = aBuffer.makeStringAndClear();
                 }
-                rList.push_back( HtmlSuccessfulObj(aName, aText) );
+                rList.emplace_back(aName, aText );
             }
         }   break;
 
@@ -760,7 +760,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             {
                 OUString aText;
                 xComponentSet->getPropertyValue( PROPERTY_HIDDEN_VALUE ) >>= aText;
-                rList.push_back( HtmlSuccessfulObj(aName, aText) );
+                rList.emplace_back(aName, aText );
             }
         } break;
 
@@ -773,7 +773,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
                 OUString aText;
                 xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= aText;
-                rList.push_back( HtmlSuccessfulObj(aName, aText, SUCCESSFUL_REPRESENT_FILE) );
+                rList.emplace_back(aName, aText, SUCCESSFUL_REPRESENT_FILE );
             }
         } break;
 
@@ -831,7 +831,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 {
                     aSubValue = pStrings[nSelPos];
                 }
-                rList.push_back( HtmlSuccessfulObj(aName, aSubValue) );
+                rList.emplace_back(aName, aSubValue );
             }
         } break;
         case FormComponentType::GRIDCONTROL:

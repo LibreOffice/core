@@ -320,7 +320,7 @@ void MSWordStyles::BuildStyleIds()
 {
     std::unordered_set<OString, OStringHash> aUsed;
 
-    m_aStyleIds.push_back("Normal");
+    m_aStyleIds.emplace_back("Normal");
     aUsed.insert("normal");
 
     for (sal_uInt16 n = 1; n < m_nUsedSlots; ++n)
@@ -365,7 +365,7 @@ void MSWordStyles::BuildStyleIds()
                 ++nFree;
 
             aUsed.insert(aLower + OString::number(nFree));
-            m_aStyleIds.push_back(aStyleId + OString::number(nFree));
+            m_aStyleIds.emplace_back(aStyleId + OString::number(nFree));
         }
     }
 }
@@ -1088,7 +1088,7 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aSects.push_back( WW8_SepInfo( pPd, pSectionFormat, nLnNumRestartNo, boost::none, nullptr, bIsFirstParagraph ) );
+    aSects.emplace_back( pPd, pSectionFormat, nLnNumRestartNo, boost::none, nullptr, bIsFirstParagraph );
     NeedsDocumentProtected( aSects.back() );
 }
 
@@ -2165,12 +2165,12 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 for ( sal_uInt16 i = 0; i < nLen; ++i )
                 {
                     const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
-                    aStrArr.push_back(std::pair<OUString,OUString>(rAtn.msOwner,rAtn.m_sInitials));
+                    aStrArr.emplace_back(rAtn.msOwner,rAtn.m_sInitials);
                     // record start and end positions for ranges
                     if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
                     {
-                        aRangeStartPos.push_back(std::make_pair(rAtn.m_nRangeStart, nIdx));
-                        aRangeEndPos.push_back(std::make_pair(rAtn.m_nRangeEnd, nIdx));
+                        aRangeStartPos.emplace_back(rAtn.m_nRangeStart, nIdx);
+                        aRangeEndPos.emplace_back(rAtn.m_nRangeEnd, nIdx);
                         ++nIdx;
                     }
                 }

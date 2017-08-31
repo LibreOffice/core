@@ -108,7 +108,7 @@ public:
 
     void pushDimName(const OUString& rName, bool bDataLayout)
     {
-        mrFilters.push_back(ScDPResultFilter(rName, bDataLayout));
+        mrFilters.emplace_back(rName, bDataLayout);
     }
 
     void pushDimValue(const OUString& rValueName, const OUString& rValue)
@@ -253,7 +253,7 @@ ScDPInitState::Member::Member(long nSrcIndex, SCROW nNameIndex) :
 
 void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
 {
-    maMembers.push_back(Member(nSourceIndex, nMember));
+    maMembers.emplace_back(nSourceIndex, nMember);
 }
 
 void ScDPInitState::RemoveMember()
@@ -772,7 +772,7 @@ void ScDPResultData::SetMeasureData(
 
     maMeasureRefs.swap(rRefs);
     if (maMeasureRefs.empty())
-        maMeasureRefs.push_back(sheet::DataPilotFieldReference()); // default ctor is ok.
+        maMeasureRefs.emplace_back(); // default ctor is ok.
 
     maMeasureRefOrients.swap(rRefOrient);
     if (maMeasureRefOrients.empty())

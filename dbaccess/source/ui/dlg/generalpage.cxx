@@ -128,7 +128,7 @@ namespace dbaui
                         if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
                             && approveDatasourceType( sURLPrefix, sDisplayName ) )
                         {
-                            aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
+                            aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                         }
                     }
                 }
@@ -167,7 +167,7 @@ namespace dbaui
                         if ( m_pEmbeddedDBType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
                             && dbaccess::ODsnTypeCollection::isEmbeddedDatabase( sURLPrefix ) )
                         {
-                            aDisplayedTypes.push_back( DisplayedTypes::value_type( sURLPrefix, sDisplayName ) );
+                            aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                         }
                     }
                 }

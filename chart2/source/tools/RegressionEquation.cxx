@@ -60,54 +60,47 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "ShowEquation",
+    rOutProperties.emplace_back( "ShowEquation",
                   PROP_EQUATION_SHOW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "XName",
+    rOutProperties.emplace_back( "XName",
                   PROP_EQUATION_XNAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "YName",
+    rOutProperties.emplace_back( "YName",
                   PROP_EQUATION_YNAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "ShowCorrelationCoefficient",
+    rOutProperties.emplace_back( "ShowCorrelationCoefficient",
                   PROP_EQUATION_SHOW_CORRELATION_COEFF,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "ReferencePageSize",
+    rOutProperties.emplace_back( "ReferencePageSize",
                   PROP_EQUATION_REF_PAGE_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "RelativePosition",
+    rOutProperties.emplace_back( "RelativePosition",
                   PROP_EQUATION_REL_POS,
                   cppu::UnoType<chart2::RelativePosition>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_NUMFMT,
+    rOutProperties.emplace_back( CHART_UNONAME_NUMFMT,
                   PROP_EQUATION_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 struct StaticRegressionEquationDefaults_Initializer

@@ -103,7 +103,7 @@ PrinterGfx::PrinterGfx()
     maVirtualStatus.mnTextHeight = 12;
     maVirtualStatus.mnTextWidth = 0;
 
-    maGraphicsStack.push_back( GraphicsStatus() );
+    maGraphicsStack.emplace_back( );
 }
 
 PrinterGfx::~PrinterGfx()
@@ -131,7 +131,7 @@ PrinterGfx::Clear()
 
     maClipRegion.clear();
     maGraphicsStack.clear();
-    maGraphicsStack.push_back( GraphicsStatus() );
+    maGraphicsStack.emplace_back( );
 }
 
 /*
@@ -156,7 +156,7 @@ void
 PrinterGfx::UnionClipRegion (sal_Int32 nX,sal_Int32 nY,sal_Int32 nDX,sal_Int32 nDY)
 {
     if( nDX && nDY )
-        maClipRegion.push_back (tools::Rectangle(Point(nX,nY ), Size(nDX,nDY)));
+        maClipRegion.emplace_back(Point(nX,nY ), Size(nDX,nDY));
 }
 
 bool
@@ -171,8 +171,8 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator&
     std::list< Point > leftside, rightside;
 
     tools::Rectangle aLastRect( *it );
-    leftside.push_back( Point( it->Left(), it->Top() ) );
-    rightside.push_back( Point( it->Right()+1, it->Top() ) );
+    leftside.emplace_back( it->Left(), it->Top() );
+    rightside.emplace_back( it->Right()+1, it->Top() );
     while( nextit != maClipRegion.end() )
     {
         tempit = nextit;
@@ -192,8 +192,8 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator&
                     std::abs( aLastRect.Right() - nextit->Right() ) > 2
                     )
                 {
-                    leftside.push_back( Point( aLastRect.Left(), aLastRect.Bottom()+1 ) );
-                    rightside.push_back( Point( aLastRect.Right()+1, aLastRect.Bottom()+1 ) );
+                    leftside.emplace_back( aLastRect.Left(), aLastRect.Bottom()+1 );
+                    rightside.emplace_back( aLastRect.Right()+1, aLastRect.Bottom()+1 );
                 }
                 aLastRect = *nextit;
                 leftside.push_back( aLastRect.TopLeft() );
@@ -206,8 +206,8 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< tools::Rectangle >::iterator&
     if( leftside.size() > 1 )
     {
         // push the last coordinates
-        leftside.push_back( Point( aLastRect.Left(), aLastRect.Bottom()+1 ) );
-        rightside.push_back( Point( aLastRect.Right()+1, aLastRect.Bottom()+1 ) );
+        leftside.emplace_back( aLastRect.Left(), aLastRect.Bottom()+1 );
+        rightside.emplace_back( aLastRect.Right()+1, aLastRect.Bottom()+1 );
 
         // cool, we can concatenate rectangles
         const int nDX = -65536, nDY = 65536;

@@ -315,7 +315,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                 {
                     pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
                     pItem = pTextNd->GetSwAttrSet().GetItem( nWhich );
-                    vItem.push_back( std::make_pair( pItem, std::unique_ptr<SwPaM>(pNewPaM) ) );
+                    vItem.emplace_back( pItem, std::unique_ptr<SwPaM>(pNewPaM) );
                 }
 
                 if( !pTextNd->HasHints() )
@@ -360,7 +360,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                                     else
                                         nStop = *pAttrEnd;
                                     pNewPaM = new SwPaM(*pNd, nStart, *pNd, nStop);
-                                    vItem.push_back( std::make_pair( pItem, std::unique_ptr<SwPaM>(pNewPaM) ) );
+                                    vItem.emplace_back( pItem, std::unique_ptr<SwPaM>(pNewPaM) );
                                     break;
                                 }
                                 pItem = aItemIter.NextItem();
@@ -370,7 +370,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                             {
                                 pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
                                 pItem = pAutoSet->GetPool()->GetPoolDefaultItem( nWhich );
-                                vItem.push_back( std::make_pair( pItem,  std::unique_ptr<SwPaM>(pNewPaM)) );
+                                vItem.emplace_back( pItem,  std::unique_ptr<SwPaM>(pNewPaM) );
                             }
                         }
                     }

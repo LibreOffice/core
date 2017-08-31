@@ -81,7 +81,7 @@ const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
 
 sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const bool bSWB )
 {
-    maEntries.push_back( Cont( rFPAN, rTN, bSWB ) );
+    maEntries.emplace_back( rFPAN, rTN, bSWB );
     // return 1-based index of EXTERNSHEET
     return static_cast< sal_Int16 >( maEntries.size() );
 }

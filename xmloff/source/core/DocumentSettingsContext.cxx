@@ -332,7 +332,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
                                         m_pData->aConfigProps, nullptr);
                 else
                 {
-                    m_pData->aDocSpecificSettings.push_back( SettingsGroup( aLocalConfigName, uno::Any() ) );
+                    m_pData->aDocSpecificSettings.emplace_back( aLocalConfigName, uno::Any() );
 
                     ::std::list< SettingsGroup >::reverse_iterator settingsPos =
                         m_pData->aDocSpecificSettings.rbegin();

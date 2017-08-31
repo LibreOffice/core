@@ -123,7 +123,7 @@ std::vector<KeyEvent> generate_key_events_from_text(const OUString& rStr)
     for (sal_Int32 i = 0, n = rStr.getLength();
             i != n; ++i)
     {
-        aEvents.push_back(KeyEvent(rStr[i], aCode));
+        aEvents.emplace_back(rStr[i], aCode);
     }
     return aEvents;
 }
@@ -222,13 +222,13 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
     if (isFunctionKey(aRemainingText, nFunctionKey))
     {
         vcl::KeyCode aCode(nFunctionKey, bShift, bMod1, bMod2, false);
-        aEvents.push_back(KeyEvent(0, aCode));
+        aEvents.emplace_back(0, aCode);
     }
     else if (aKeyMap.find(aRemainingText) != aKeyMap.end())
     {
         sal_uInt16 nKey = aKeyMap[aRemainingText];
         vcl::KeyCode aCode(nKey, bShift, bMod1, bMod2, false);
-        aEvents.push_back(KeyEvent( 'a', aCode));
+        aEvents.emplace_back( 'a', aCode);
     }
     else
     {
@@ -237,7 +237,7 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
             bool bShiftThroughKey = false;
             sal_uInt16 nKey = get_key(aRemainingText[i], bShiftThroughKey);
             vcl::KeyCode aCode(nKey, bShift || bShiftThroughKey, bMod1, bMod2, false);
-            aEvents.push_back(KeyEvent(aRemainingText[i], aCode));
+            aEvents.emplace_back(aRemainingText[i], aCode);
         }
     }
 

@@ -214,7 +214,7 @@ PassMap StorageItem::getInfo()
 
             PassMap::iterator aIter = aResult.find( aUrl );
             if( aIter != aResult.end() )
-                aIter->second.push_back( NamePassRecord( aName, aEPasswd ) );
+                aIter->second.emplace_back( aName, aEPasswd );
             else
             {
                 NamePassRecord aNewRecord( aName, aEPasswd );

@@ -205,9 +205,8 @@ void ContentProviderImplHelper::queryExistingContents(
         uno::Reference< ucb::XContent > xContent( (*it).second );
         if ( xContent.is() )
         {
-            rContents.push_back(
-                rtl::Reference< ContentImplHelper >(
-                    static_cast< ContentImplHelper * >( xContent.get() ) ) );
+            rContents.emplace_back(
+                    static_cast< ContentImplHelper * >( xContent.get() ) );
         }
         ++it;
     }

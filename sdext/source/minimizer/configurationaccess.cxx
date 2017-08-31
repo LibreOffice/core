@@ -147,7 +147,7 @@ ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContex
     mxContext( rxContext )
 {
     LoadStrings();
-    maSettings.push_back( OptimizerSettings() );
+    maSettings.emplace_back( );
     maSettings.back().maName = "LastUsedSettings";
     LoadConfiguration();
     maInitialSettings = maSettings;
@@ -224,7 +224,7 @@ void ConfigurationAccess::LoadConfiguration()
                         Reference< container::XNameAccess > xTemplates( GetConfigurationNode( xRoot, aPath ), UNO_QUERY );
                         if ( xTemplates.is() )
                         {
-                            maSettings.push_back( OptimizerSettings() );
+                            maSettings.emplace_back( );
                             maSettings.back().LoadSettingsFromConfiguration( xTemplates );
                         }
                     }

@@ -1697,8 +1697,8 @@ void FormulaProcessorBase::convertStringToStringList(
                 aEntry = aEntry.copy( nStart );
             }
             if( !aNewTokens.empty() )
-                aNewTokens.push_back( ApiToken( OPCODE_SEP, Any() ) );
-            aNewTokens.push_back( ApiToken( OPCODE_PUSH, Any( aEntry ) ) );
+                aNewTokens.emplace_back( OPCODE_SEP, Any() );
+            aNewTokens.emplace_back( OPCODE_PUSH, Any( aEntry ) );
         }
         orTokens = ContainerHelper::vectorToSequence( aNewTokens );
     }

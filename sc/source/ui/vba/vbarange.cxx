@@ -658,7 +658,7 @@ class CellsEnumeration : public CellsEnumeration_BASE
         for ( sal_Int32 i=0; i<nRowCount; ++i )
         {
             for ( sal_Int32 j=0; j<nColCount; ++j )
-                m_CellPositions.push_back( CellPos( i,j,nVBAIndex ) );
+                m_CellPositions.emplace_back( i,j,nVBAIndex );
         }
     }
 public:

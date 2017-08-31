@@ -944,7 +944,7 @@ namespace frm
                     while ( xListCursor->next() && ( entryPos++ < SHRT_MAX ) ) // SHRT_MAX is the maximum number of entries
                     {
                         aStr = aValueFormatter.getFormattedValue();
-                        aDisplayList.push_back( aStr );
+                        aDisplayList.emplace_back(aStr );
 
                         if(*aBoundColumn >= 0)
                             aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
@@ -980,7 +980,7 @@ namespace frm
                             // the type of i matters! It will be the type of the ORowSetValue pushed to aValueList!
                             for(size_t i=0; i < aDisplayList.size(); ++i)
                             {
-                                aValueList.push_back(ORowSetValue(sal_Int16(i)));
+                                aValueList.emplace_back(sal_Int16(i));
                             }
                         }
                         else

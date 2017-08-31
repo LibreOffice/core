@@ -1152,7 +1152,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter())
-                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth));
+                m_rDMapper_Impl.m_aPendingFloatingTables.emplace_back(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth);
             else
             {
                 // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
@@ -1183,7 +1183,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
 void DomainMapperTableHandler::startRow(const TablePropertyMapPtr& pProps)
 {
     m_aRowProperties.push_back( pProps );
-    m_aCellProperties.push_back( PropertyMapVector1() );
+    m_aCellProperties.emplace_back( );
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("table.row");
