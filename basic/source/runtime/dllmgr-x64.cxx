@@ -142,7 +142,7 @@ template< typename T > void add(
     *reinterpret_cast< T * >(align(blob, alignment, offset, sizeof (T))) = data;
 }
 
-std::size_t alignment(SbxVariable * variable) {
+std::size_t alignment(SbxVariable const * variable) {
     OSL_ASSERT(variable != nullptr);
     if ((variable->GetType() & SbxARRAY) == 0) {
         switch (variable->GetType()) {
@@ -204,7 +204,7 @@ ErrCode marshalString(
 }
 
 ErrCode marshalStruct(
-    SbxVariable * variable, std::vector< char > & blob, std::size_t offset,
+    SbxVariable const * variable, std::vector< char > & blob, std::size_t offset,
     MarshalData & data)
 {
     OSL_ASSERT(variable != nullptr);
@@ -220,7 +220,7 @@ ErrCode marshalStruct(
 }
 
 ErrCode marshalArray(
-    SbxVariable * variable, std::vector< char > & blob, std::size_t offset,
+    SbxVariable const * variable, std::vector< char > & blob, std::size_t offset,
     MarshalData & data)
 {
     OSL_ASSERT(variable != nullptr);
@@ -436,7 +436,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
     return data;
 }
 
-ErrCode unmarshalString(StringData const & data, SbxVariable & result) {
+ErrCode unmarshalString(StringData const & data, SbxVariable const & result) {
     OUString str;
     if (data.buffer != nullptr) {
         char const * p = static_cast< char const * >(data.buffer);
