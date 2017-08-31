@@ -265,6 +265,7 @@ public:
     void testTableInSection();
     void testTableInNestedSection();
     void testTableInSectionInTable();
+    void testSectionInTableInTable();
     void testLinesMoveBackwardsInSectionInTable();
 #endif
     void testLinesInSectionInTable();
@@ -417,6 +418,7 @@ public:
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
     CPPUNIT_TEST(testTableInSectionInTable);
+    CPPUNIT_TEST(testSectionInTableInTable);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
@@ -5153,6 +5155,14 @@ void SwUiWriterTest::testTableInSectionInTable()
     // table.
     // This crashed the layout.
     createDoc("i95698.odt");
+}
+
+void SwUiWriterTest::testSectionInTableInTable()
+{
+    // The document has a nested table, containing a multi-line section at a
+    // page boundary.
+    // This crashed the layout later in SwFrame::IsFootnoteAllowed().
+    createDoc("tdf112109.fodt");
 }
 #endif
 

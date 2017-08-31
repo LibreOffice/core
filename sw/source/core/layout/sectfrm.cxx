@@ -590,13 +590,33 @@ namespace
     }
 
     /// Checks if pFrame is in a table, which itself is in a section.
-    bool IsInTableInSection(const SwFrame* pFrame)
+    bool IsFrameInTableInSection(const SwFrame* pFrame)
     {
         if (!pFrame->IsInTab())
             return false;
 
         // The frame is in a table, see if the table is in a section.
         return pFrame->FindTabFrame()->IsInSct();
+    }
+
+    /// Checks if pFrame is in a table, which itself is in a table.
+    bool IsFrameInTableInTable(const SwFrame* pFrame)
+    {
+        if (!pFrame->IsInTab())
+            return false;
+
+        // The frame is in a table, see if the inner table is in an outer
+        // table.
+        bool bNested = false;
+        if (const SwFrame* pUpper = pFrame->FindTabFrame()->GetUpper())
+            bNested = pUpper->IsInTab();
+        return bNested;
+    }
+
+    /// Checks if pFrame has a parent that can contain a split section frame.
+    bool CanContainSplitSection(const SwFrame* pFrame)
+    {
+        return !IsFrameInTableInSection(pFrame) && !IsFrameInTableInTable(pFrame);
     }
 }
 
@@ -1452,7 +1472,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
         return static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(GetUpper()->GetUpper()->GetNext())->Lower());
     // Inside a table-in-section, or sections of headers/footers, there can be only
     // one column shift be made, one of the above shortcuts should have applied!
-    if( IsInTableInSection(GetUpper()) || FindFooterOrHeader() )
+    if( !CanContainSplitSection(GetUpper()) || FindFooterOrHeader() )
         return nullptr;
 
     SwSectionFrame *pSect = FindSctFrame();
@@ -1515,7 +1535,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
     SwLayoutFrame *pLayLeaf;
 
     SwLayoutFrame* pCellLeaf = nullptr;
-    if (IsInTab() && !IsInTableInSection(this))
+    if (IsInTab() && CanContainSplitSection(this))
     {
         // We are in a table (which is itself not in a section), see if there
         // is a follow cell frame created already.
@@ -1535,7 +1555,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
         SwContentFrame* pTmpCnt = static_cast<SwTabFrame*>(this)->FindLastContent();
         pLayLeaf = pTmpCnt ? pTmpCnt->GetUpper() : nullptr;
     }
-    else if (pCellLeaf && !IsInTableInSection(this))
+    else if (pCellLeaf && CanContainSplitSection(this))
     {
         // This frame is in a table-not-in-section, its follow should be
         // inserted under the follow of the frame's cell.
@@ -1727,7 +1747,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
         SwFlowFrame::SetMoveBwdJump( true );
 
     SwSectionFrame *pSect = FindSctFrame();
-    if (!pCol && pSect && IsInTab() && !IsInTableInSection(this))
+    if (!pCol && pSect && IsInTab() && CanContainSplitSection(this))
     {
         // We don't have a previous section yet, and we're in a
         // section-in-table.
@@ -2172,8 +2192,8 @@ bool SwSectionFrame::MoveAllowed( const SwFrame* pFrame) const
         return false;
     // Now it has to be examined whether there is a layout sheet wherein
     // a section Follow can be created
-    if( IsInTableInSection(this) || ( !IsInDocBody() && FindFooterOrHeader() ) )
-        return false; // It doesn't work in table-in-sections/headers/footers
+    if( !CanContainSplitSection(this) || ( !IsInDocBody() && FindFooterOrHeader() ) )
+        return false; // It doesn't work in table-in-sections/nested tables/headers/footers
     if( IsInFly() ) // In column based or chained frames
         return nullptr != const_cast<SwFrame*>(static_cast<SwFrame const *>(GetUpper()))->GetNextLeaf( MAKEPAGE_NONE );
     return true;
