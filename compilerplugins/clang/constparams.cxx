@@ -188,6 +188,7 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "egiGraphicExport"
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
+            || name == "releasePool" // vcl/osx/saldata.cxx
             )
                 return true;
     }
@@ -422,13 +423,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return false;
     } else if (isa<CastExpr>(parent)) { // all other cast expression subtypes
         if (auto e = dyn_cast<ExplicitCastExpr>(parent)) {
-            auto t = e->getTypeAsWritten();
-            if (t->isAnyPointerType()
-                && !t->getPointeeType().isConstQualified())
-            {
-                return false;
-            }
-            if (loplugin::TypeCheck(t).Void()) {
+            if (loplugin::TypeCheck(e->getTypeAsWritten()).Void()) {
                 if (auto const sub = dyn_cast<DeclRefExpr>(
                         e->getSubExpr()->IgnoreParenImpCasts()))
                 {

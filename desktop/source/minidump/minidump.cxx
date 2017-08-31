@@ -40,7 +40,7 @@ std::map<std::string, std::string> readStrings(std::istream& file)
 }
 
 // Callback to get the response data from server.
-static size_t WriteCallback(void *ptr, size_t size,
+static size_t WriteCallback(void const *ptr, size_t size,
                             size_t nmemb, void *userp)
 {
   if (!userp)
@@ -48,7 +48,7 @@ static size_t WriteCallback(void *ptr, size_t size,
 
   std::string* response = static_cast<std::string *>(userp);
   size_t real_size = size * nmemb;
-  response->append(static_cast<char *>(ptr), real_size);
+  response->append(static_cast<char const *>(ptr), real_size);
   return real_size;
 }
 
