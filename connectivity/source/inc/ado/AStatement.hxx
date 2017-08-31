@@ -32,7 +32,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include "ado/AConnection.hxx"
-#include <list>
+#include <vector>
 #include "ado/Awrapado.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -62,7 +62,7 @@ namespace connectivity
             css::sdbc::SQLWarning          m_aLastWarning;
 
         protected:
-            std::list< OUString>               m_aBatchList;
+            std::vector< OUString>               m_aBatchVector;
 
             css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement

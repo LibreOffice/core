@@ -671,7 +671,7 @@ void SAL_CALL OPreparedStatement::clearBatch(  )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XPreparedBatchExecution::clearBatch", *this );
     //  clearParameters(  );
-    //  m_aBatchList.erase();
+    //  m_aBatchVector.erase();
 }
 
 
