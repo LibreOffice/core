@@ -452,7 +452,7 @@ void WorkbookFragment::finalizeImport()
     }
 
     // setup structure sizes for the number of sheets
-    getFormulaBuffer().SetSheetCount( aSheetFragments.size() );
+    getFormulaBuffer().SetSheetCount( nWorksheetCount );
 
     // create all database ranges and defined names, in that order
     getTables().finalizeImport();
