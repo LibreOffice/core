@@ -473,7 +473,7 @@ void AccObjectWinManager::DeleteAccChildNode( AccObject* pObj )
    * @param pXAcc XAccessible interface.
    * @return
    */
-void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
+void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible const * pXAcc )
 {
     XHWNDToXAccHash::iterator iter = HwndXAcc.begin();
     while(iter!=HwndXAcc.end())

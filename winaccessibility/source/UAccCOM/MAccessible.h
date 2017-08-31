@@ -242,7 +242,7 @@ public:
         return static_cast<CMAccessible*>(pv)->SmartQI(pv,iid,ppvObject);
     }
 
-    static OUString get_StringFromAny(css::uno::Any& pAny);
+    static OUString get_StringFromAny(css::uno::Any const & pAny);
 
     static OUString get_String4Numbering(const css::uno::Any& pAny,
             sal_Int16 numberingLevel, const OUString& numberingPrefix);

@@ -2660,7 +2660,7 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
         LEAVE_PROTECTED_BLOCK
 }
 
-OUString CMAccessible::get_StringFromAny(Any& pAny)
+OUString CMAccessible::get_StringFromAny(Any const & pAny)
 {
     switch(pAny.getValueTypeClass())
     {
