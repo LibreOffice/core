@@ -175,12 +175,19 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
     // so assume compression of 1:2560 is possible
     // (http://cloudinary.com/blog/a_one_color_image_is_worth_two_thousand_words suggests
     // 1:1472.88 [184.11 x 8] is more realistic)
-    const sal_uInt64 nMinFileData = nWidth * nHeight / 2560;
+
+    sal_uInt64 nMinFileData = nWidth * nHeight / 2560;
+    for (size_t i = 0; i < aAnimation.Count(); ++i)
+    {
+        const Size& rSize = aAnimation.Get(i).aSizePix;
+        nMinFileData += rSize.Width() * rSize.Height() / 2560;
+    }
+
     if (nMaxStreamData < nMinFileData)
     {
         //there is nowhere near enough data in this stream to fill the claimed dimensions
-        SAL_WARN("vcl.filter", "gif claims dimensions " << nWidth << " x " << nHeight <<
-                               " but filesize of " << nMaxStreamData << " is surely insufficiently large to fill it");
+        SAL_WARN("vcl.filter", "in gif frame index " << aAnimation.Count() << " gif claims dimensions " << nWidth << " x " << nHeight <<
+                               " but filesize of " << nMaxStreamData << " is surely insufficiently large to fill all frame images");
         bStatus = false;
         return;
     }
