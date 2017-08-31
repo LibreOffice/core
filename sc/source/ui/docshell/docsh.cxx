@@ -125,6 +125,7 @@
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
 #include "markdata.hxx"
+#include "optuno.hxx"
 #include "orcusfilters.hxx"
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
@@ -3244,6 +3245,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportSLK(SvStream &rStream)
 {
     ScDLL::Init();
     ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
     ScImportExport aImpEx(&aDocument);
     return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::SYLK);

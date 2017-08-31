@@ -34,6 +34,7 @@
 #include <svl/stritem.hxx>
 #include "filter.hxx"
 #include "document.hxx"
+#include "optuno.hxx"
 #include "xistream.hxx"
 
 #include "scerrors.hxx"
@@ -223,6 +224,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportQPW(SvStream &rStream)
 {
     ScDLL::Init();
     ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
     return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == ERRCODE_NONE;
 }
@@ -231,6 +235,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCalcRTF(SvStream &rStrea
 {
     ScDLL::Init();
     ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
     ScRange aRange;
     return ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
@@ -241,6 +248,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL
     ScDLL::Init();
     SfxMedium aMedium(rURL, StreamMode::READ);
     ScDocument aDocument;
+    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    aDocOpt.SetLookUpColRowNames(false);
+    aDocument.SetDocOptions(aDocOpt);
     aDocument.MakeTable(0);
     return ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == ERRCODE_NONE;
 }
