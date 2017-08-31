@@ -1892,7 +1892,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                        std::list< std::pair<const sal_Char* , OUString > > aStringToSubstitutes;
+                        std::vector< std::pair<const sal_Char* , OUString > > aStringToSubstitutes;
                         aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$columnname$", aColName));
                         aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$precision$", OUString::number(nLen)));
                         aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$scale$", OUString::number(nScale)));

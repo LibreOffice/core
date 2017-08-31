@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_RESOURCE_SHAREDRESOURCES_HXX
 
 #include <rtl/ustring.hxx>
-#include <list>
+#include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
 
 
@@ -140,7 +140,7 @@ namespace connectivity
                 the string from the resource file, with applied string substitution
         */
         OUString getResourceStringWithSubstitution( const char* pResId,
-                    const std::list< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const;
+                    const std::vector< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const;
     };
 
 
