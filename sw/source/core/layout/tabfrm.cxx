@@ -2609,7 +2609,6 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
     if ( pPage->GetSortedObjs() && bWrapAllowed )
     {
         SwRectFnSet aRectFnSet(this);
-        const bool bConsiderWrapOnObjPos = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
         long nPrtPos = aRectFnSet.GetTop(Frame());
         nPrtPos = aRectFnSet.YInc( nPrtPos, rUpper );
         SwRect aRect( Frame() );
@@ -2674,6 +2673,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 {
                     const SwFrame* pFlyHeaderFooterFrame = pFly->GetAnchorFrame()->FindFooterOrHeader();
                     const SwFrame* pThisHeaderFooterFrame = FindFooterOrHeader();
+                    const bool bConsiderWrapOnObjPos = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
 
                     if ( pFlyHeaderFooterFrame != pThisHeaderFooterFrame &&
                         // #148493# If bConsiderWrapOnObjPos is set,
@@ -4978,7 +4978,6 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 {
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
-
                     if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
