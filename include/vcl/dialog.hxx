@@ -149,7 +149,6 @@ public:
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
 
     void            SetModalInputMode( bool bModal );
-    void            SetModalInputMode( bool bModal, bool bSubModalDialogs );
     bool            IsModalInputMode() const { return mbModalMode; }
 
     void            GrabFocusToFirstControl();
