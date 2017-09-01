@@ -95,7 +95,7 @@ namespace sfx2
             if ( pObjectShell != nullptr )
                 pUndoManager = pObjectShell->GetUndoManager();
             if ( !pUndoManager )
-                throw NotInitializedException( OUString(), *&i_baseModel );
+                throw NotInitializedException( OUString(), i_baseModel );
             return pUndoManager;
         }
     };

@@ -205,7 +205,7 @@ public:
         :comphelper::ComponentGuard( i_component, i_broadcastHelper )
     {
         if ( !i_component.isInitialized() )
-            throw css::lang::NotInitializedException( OUString(), *&i_component );
+            throw css::lang::NotInitializedException( OUString(), i_component );
     }
 };
 

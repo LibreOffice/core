@@ -319,7 +319,7 @@ namespace chart
     Reference< XInterface > SAL_CALL UndoManager::getParent(  )
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
-        return *&m_pImpl->getParent();
+        return m_pImpl->getParent();
     }
 
     void SAL_CALL UndoManager::setParent( const Reference< XInterface >& )

@@ -402,7 +402,7 @@ void ContentIdxStoreImpl::SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32
         const SwUnoTableCursor* pUnoTableCursor = dynamic_cast<const SwUnoTableCursor*>(pUnoCursor.get());
         if( pUnoTableCursor )
         {
-            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCursor*>(pUnoTableCursor))->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : const_cast<SwUnoTableCursor*>(pUnoTableCursor)->GetSelRing().GetRingContainer())
             {
                 lcl_ChkUnoCrsrPaMBoth(m_aUnoCursorEntries, nNode, nContent, rPaM);
             }
