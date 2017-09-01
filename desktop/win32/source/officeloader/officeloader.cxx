@@ -62,7 +62,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     TCHAR               szIniDirectory[MAX_PATH];
     STARTUPINFO         aStartupInfo;
 
-    desktop_win32::getPaths(szTargetFileName, szIniDirectory);
+    desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof(aStartupInfo);
