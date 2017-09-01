@@ -46,16 +46,16 @@ module com { module sun { module star { module awt {
 */
 service AccessibleTextField
 {
-    /** This interface gives access to the structural information of a text filed:
+    /** This interface gives access to the structural information of a text field:
 
        <ul>
-       <li>Role: The role of a text filed is
+       <li>Role: The role of a text field is
        com::sun::star::accessibility::AccessibleRole::TEXT.</li>
-       <li>Name: The name of a text filed is its localized label.</li>
-       <li>Description: The description of a text filed is its localized
+       <li>Name: The name of a text field is its localized label.</li>
+       <li>Description: The description of a text field is its localized
            help text.</li>
        <li>Children: There exists no children.</li>
-       <li>Parent: The parent is the window that contains the text filed.</li>
+       <li>Parent: The parent is the window that contains the text field.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>

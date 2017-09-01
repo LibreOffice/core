@@ -3991,7 +3991,7 @@ void Content::initOptsCacheLifeTime()
 {
     // see description in
     // officecfg/registry/schema/org/openoffice/Inet.xcs
-    // for use of these filed values.
+    // for use of these field values.
     sal_uInt32 nAtime;
     nAtime = officecfg::Inet::Settings::OptsCacheLifeImplWeb::get( m_xContext );
     m_nOptsCacheLifeImplWeb = std::max( sal_uInt32( 0 ),
