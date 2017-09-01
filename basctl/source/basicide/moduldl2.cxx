@@ -1175,7 +1175,7 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
 void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
-    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE);
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, pTabDlg);
     Reference <XFilePicker3> xFP = aDlg.GetFilePicker();
 
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
