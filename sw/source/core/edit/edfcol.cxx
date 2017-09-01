@@ -237,7 +237,7 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
         {
             const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(encSignature));
             SignatureInformation aInfo(0);
-            valid = svl::crypto::Signing::Verify(data, true, sig, aInfo);
+            valid = svl::crypto::Signing::Verify(data, false, sig, aInfo);
             valid = valid && aInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
             msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", " + aInfo.ouDateTime + ": ";
