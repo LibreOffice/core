@@ -2602,7 +2602,8 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
     m_aDialogClosedLink.Call( this );
 }
 
-ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
+ErrCode FileOpenDialog_Impl( const vcl::Window* pParent,
+                             sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
                              const OUString& rFact,
                              std::vector<OUString>& rpURLList,
@@ -2619,9 +2620,9 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
     // read-only to discourage editing (which would invalidate existing
     // signatures).
     if (nFlags & FileDialogFlags::SignPDF)
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rBlackList));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rBlackList, pParent));
     else
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList, pParent));
 
     OUString aPath;
     if ( pPath )
