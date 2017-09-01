@@ -152,8 +152,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
             m_xListener;
         OUString msPlayLabel;
         FilterList *m_pFilterList;
+        GtkWidget  *m_pParentWidget;
         GtkWidget  *m_pVBox;
-
         GtkWidget  *m_pFilterExpander;
         GtkWidget  *m_pFilterView;
         GtkListStore *m_pFilterStore;

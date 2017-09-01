@@ -147,6 +147,8 @@ public:
 
     GtkSalSystem* getSystem() const { return m_pSys; }
 
+    GtkWidget* findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const;
+
     virtual void deregisterFrame( SalFrame* pFrame ) override;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
 #if GTK_CHECK_VERSION(3,0,0)
