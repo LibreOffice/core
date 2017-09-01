@@ -33,7 +33,7 @@
 
 #include <memory>
 
-#include <list>
+#include <vector>
 
 class SvStream;
 
@@ -107,7 +107,7 @@ class AnimationExporter
 
     static css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNodeClone( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    std::list< AfterEffectNodePtr > maAfterEffectNodes;
+    std::vector< AfterEffectNodePtr > maAfterEffectNodes;
 
 public:
     AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection );

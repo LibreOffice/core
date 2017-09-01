@@ -556,8 +556,8 @@ void CustomAnimationList::update()
 
     CustomAnimationListEntry* pEntry = nullptr;
 
-    std::list< CustomAnimationEffectPtr > aExpanded;
-    std::list< CustomAnimationEffectPtr > aSelected;
+    std::vector< CustomAnimationEffectPtr > aExpanded;
+    std::vector< CustomAnimationEffectPtr > aSelected;
 
     CustomAnimationEffectPtr pFirstSelEffect;
     CustomAnimationEffectPtr pLastSelEffect;
