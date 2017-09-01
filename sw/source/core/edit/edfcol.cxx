@@ -727,7 +727,7 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     uno::Reference<css::text::XTextField> xField(xMultiServiceFactory->createInstance("com.sun.star.text.textfield.MetadataField"), uno::UNO_QUERY);
 
     uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
-    xContent->attach(xParent->getAnchor()->getEnd());
+    xContent->attach(xParent->getAnchor()->getStart());
 
     uno::Reference<rdf::XResource> xRes(xField, uno::UNO_QUERY);
     const OUString name = "loext:signature:signature";
@@ -735,7 +735,7 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
 
     const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text);
     uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
-    xText->setString(res.second);
+    xText->setString(res.second + " ");
 }
 
 void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
