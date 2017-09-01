@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f5e54ca8",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4263,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-01T07:43:13Z",
+      "side": 1,
+      "message": "Just a nitpick: as pViewData was already nullptr I\u0027d rather write\n\n if (pViewSh)\n     pViewData \u003d \u0026pViewSh-\u003eGetViewData();",
+      "revId": "c4e2d908b07b597ced2ab07fa8fbf30d48b95352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
