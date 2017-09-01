@@ -839,6 +839,18 @@ void GtkSalDisplay::PostUserEvent()
     GetGtkSalData()->PostUserEvent();
 }
 
+GtkWidget* GtkSalDisplay::findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const
+{
+    for (auto it = m_aFrames.begin(); it != m_aFrames.end(); ++it)
+    {
+        SalFrame* pFrame = *it;
+        const SystemEnvData* pEnvData = pFrame->GetSystemData();
+        if (pEnvData->aWindow == hWindow)
+            return GTK_WIDGET(pEnvData->pWidget);
+    }
+    return nullptr;
+}
+
 void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
 {
     if( m_pCapture == pFrame )

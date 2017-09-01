@@ -25,19 +25,24 @@
 
 #include <config_gio.h>
 
+#include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <osl/diagnose.h>
 #include <osl/process.h>
+#include <rtl/process.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/string.hxx>
+#include "unx/gtk/gtkdata.hxx"
 #include "unx/gtk/gtkinst.hxx"
 
 #include <vcl/svapp.hxx>
@@ -78,6 +83,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     SalGtkPicker( xContext ),
     SalGtkFilePicker_Base( m_rbHelperMtx ),
     m_pFilterList( nullptr ),
+    m_pParentWidget ( nullptr ),
     m_pVBox ( nullptr ),
     mnHID_FolderChange( 0 ),
     mnHID_SelectionChange( 0 ),
@@ -891,7 +897,12 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
         frame::Desktop::create(m_xContext),
         UNO_QUERY_THROW );
 
-    GtkWindow *pParent = RunDialog::GetTransientFor();
+    GtkWindow *pParent = GTK_WINDOW(m_pParentWidget);
+    if (!pParent)
+    {
+        SAL_WARN( "vcl.gtk", "no parent widget set");
+        pParent = RunDialog::GetTransientFor();
+    }
     if (pParent)
         gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
@@ -1558,6 +1569,26 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
+
+    css::uno::Reference<css::awt::XWindow> xParentWindow;
+    if (aArguments.getLength() > 1)
+    {
+        aArguments[1] >>= xParentWindow;
+    }
+
+    if (xParentWindow.is())
+    {
+        css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
+        if (xSysDepWin.is())
+        {
+            css::uno::Sequence<sal_Int8> aProcessIdent(16);
+            rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
+            aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
+            css::awt::SystemDependentXWindow tmp;
+            aAny >>= tmp;
+            m_pParentWidget = GetGtkSalData()->GetGtkDisplay()->findGtkWidgetForNativeHandle(tmp.WindowHandle);
+        }
+    }
 
     GtkFileChooserAction eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
     const gchar *first_button_text = GTK_STOCK_OPEN;
