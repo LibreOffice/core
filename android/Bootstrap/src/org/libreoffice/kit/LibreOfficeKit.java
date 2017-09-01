@@ -107,7 +107,6 @@ class NativeLibLoader {
         protected static synchronized void load() {
             if (done)
                 return;
-            // TODO: those should likely be merged to lo-native-code as well
             System.loadLibrary("nspr4");
             System.loadLibrary("plds4");
             System.loadLibrary("plc4");
