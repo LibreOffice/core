@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
@@ -47,6 +48,23 @@ DECLARE_WW8EXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPaddi
 {
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf37153, "tdf37153_considerWrapOnObjPos.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::BOTTOM, getProperty<sal_Int16>(xTable->getCellByName("A1"), "VertOrient"));
+
+    //For MSO compatibility, the image should be at the top of the cell, not at the bottom - despite VertOrientation::BOTTOM
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFlyTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/txt/anchored/fly/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("FlyTop should be 3820, not 6623", nFlyTop < 4000);
+    sal_Int32 nTextTop  = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/txt[1]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("TextTop should be 5388", nTextTop > 4000);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNumbering.doc")
