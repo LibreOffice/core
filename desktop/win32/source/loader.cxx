@@ -33,17 +33,28 @@
 
 #include "loader.hxx"
 
+#include <cassert>
+
+namespace {
+
+void fail()
+{
+    LPWSTR buf = nullptr;
+    FormatMessageW(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
+        GetLastError(), 0, reinterpret_cast< LPWSTR >(&buf), 0, nullptr);
+    MessageBoxW(nullptr, buf, nullptr, MB_OK | MB_ICONERROR);
+    LocalFree(buf);
+    TerminateProcess(GetCurrentProcess(), 255);
+}
+
+}
+
 namespace desktop_win32 {
 
-void getPaths(WCHAR * binPath, WCHAR * iniDirectory) {
+void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
     if (!GetModuleFileNameW(nullptr, iniDirectory, MAX_PATH)) {
-        LPWSTR buf = nullptr;
-        FormatMessageW(
-            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
-            GetLastError(), 0, reinterpret_cast< LPWSTR >(&buf), 0, nullptr);
-        MessageBoxW(nullptr, buf, nullptr, MB_OK | MB_ICONERROR);
-        LocalFree(buf);
-        TerminateProcess(GetCurrentProcess(), 255);
+        fail();
     }
     WCHAR * iniDirEnd = tools::filename(iniDirectory);
     WCHAR name[MAX_PATH + MY_LENGTH(L".bin")];
@@ -65,6 +76,32 @@ void getPaths(WCHAR * binPath, WCHAR * iniDirectory) {
     nameEnd[-1] = 'n';
     tools::buildPath(binPath, iniDirectory, iniDirEnd, name, nameEnd - name);
     *iniDirEnd = L'\0';
+    std::size_t const maxEnv = 32767;
+    WCHAR env[maxEnv];
+    DWORD n = GetEnvironmentVariableW(L"PATH", env, maxEnv);
+    if ((n >= maxEnv || n == 0) && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
+        fail();
+    }
+    // must be first in PATH to override other entries
+    assert(*(iniDirEnd - 1) == L'\\'); // hence -1 below
+    if (wcsncmp(env, iniDirectory, iniDirEnd - iniDirectory - 1) != 0
+        || env[iniDirEnd - iniDirectory - 1] != L';')
+    {
+        WCHAR pad[MAX_PATH + maxEnv];
+            // hopefully std::size_t is large enough to not overflow
+        WCHAR * p = commandLineAppend(pad, iniDirectory, iniDirEnd - iniDirectory - 1);
+        if (n != 0) {
+            *p++ = L';';
+            for (DWORD i = 0; i <= n; ++i) {
+                *p++ = env[i];
+            }
+        } else {
+            *p++ = L'\0';
+        }
+        if (!SetEnvironmentVariableW(L"PATH", pad)) {
+            fail();
+        }
+    }
 }
 
 }
