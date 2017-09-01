@@ -1658,7 +1658,6 @@ sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
 
 SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
 :   meKind(eNewKind),
-    mpDAC(nullptr),
     mdBrightness(0.0)
 {
     bClosedObj = IsClosed();
@@ -1667,17 +1666,13 @@ SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
 SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness)
 :   maPathPolygon(rPathPoly),
     meKind(eNewKind),
-    mpDAC(nullptr),
     mdBrightness(dBrightness)
 {
     bClosedObj = IsClosed();
     ImpForceKind();
 }
 
-SdrPathObj::~SdrPathObj()
-{
-    impDeleteDAC();
-}
+SdrPathObj::~SdrPathObj() = default;
 
 static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
@@ -2224,7 +2219,7 @@ basegfx::B2DPolyPolygon SdrPathObj::getSpecialDragPoly(const SdrDragStat& rDrag)
 
 bool SdrPathObj::BegCreate(SdrDragStat& rStat)
 {
-    impDeleteDAC();
+    mpDAC.reset();
     return impGetDAC().BegCreate(rStat);
 }
 
@@ -2274,7 +2269,7 @@ bool SdrPathObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             }
         }
 
-        impDeleteDAC();
+        mpDAC.reset();
     }
 
     return bRetval;
@@ -2288,7 +2283,7 @@ bool SdrPathObj::BckCreate(SdrDragStat& rStat)
 void SdrPathObj::BrkCreate(SdrDragStat& rStat)
 {
     impGetDAC().BrkCreate(rStat);
-    impDeleteDAC();
+    mpDAC.reset();
 }
 
 // polygons
@@ -2817,19 +2812,10 @@ ImpPathForDragAndCreate& SdrPathObj::impGetDAC() const
 {
     if(!mpDAC)
     {
-        const_cast<SdrPathObj*>(this)->mpDAC = new ImpPathForDragAndCreate(*const_cast<SdrPathObj*>(this));
+        const_cast<SdrPathObj*>(this)->mpDAC.reset(new ImpPathForDragAndCreate(*const_cast<SdrPathObj*>(this)));
     }
 
     return *mpDAC;
-}
-
-void SdrPathObj::impDeleteDAC() const
-{
-    if(mpDAC)
-    {
-        delete mpDAC;
-        const_cast<SdrPathObj*>(this)->mpDAC = nullptr;
-    }
 }
 
 
