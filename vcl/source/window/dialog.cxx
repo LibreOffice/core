@@ -815,7 +815,8 @@ bool Dialog::ImplStartExecuteModal()
         GetParent()->CompatNotify( aNEvt );
     }
     mbInExecute = true;
-    SetModalInputMode( true );
+    ImplGetFrame()->SetModal(true);
+    SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
@@ -945,7 +946,8 @@ void Dialog::EndDialog( long nResult )
 {
     if ( mbInExecute )
     {
-        SetModalInputMode( false );
+        SetModalInputMode(false);
+        ImplGetFrame()->SetModal(false);
 
         // remove dialog from the list of dialogs which are being executed
         ImplSVData* pSVData = ImplGetSVData();
@@ -1085,7 +1087,6 @@ void Dialog::SetModalInputMode( bool bModal )
             }
         }
     }
-    ImplGetFrame()->SetModal(bModal);
 }
 
 void Dialog::GrabFocusToFirstControl()
