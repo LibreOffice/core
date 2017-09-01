@@ -30,7 +30,7 @@
 class SwDoc;
 namespace sw{ class DocumentStylePoolManager; }
 
-class SwFormatColl : public SwFormat
+class SAL_DLLPUBLIC_RTTI SwFormatColl : public SwFormat
 {
 protected:
     SwFormatColl( SwAttrPool& rPool, const sal_Char* pFormatName,

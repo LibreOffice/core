@@ -26,7 +26,7 @@
 
 
 template<typename EnumT>
-class SfxEnumItem : public SfxEnumItemInterface
+class SAL_DLLPUBLIC_RTTI SfxEnumItem : public SfxEnumItemInterface
 {
     EnumT m_nValue;
 

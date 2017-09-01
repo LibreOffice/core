@@ -33,7 +33,7 @@ class SvXMLUnitConverter;
 */
 
 // MSVC hack:
-class SvxLanguageItem_Base: public SfxEnumItem<LanguageType> {
+class SAL_DLLPUBLIC_RTTI SvxLanguageItem_Base: public SfxEnumItem<LanguageType> {
 protected:
     explicit SvxLanguageItem_Base(sal_uInt16 nWhich, LanguageType nValue):
         SfxEnumItem(nWhich, nValue)

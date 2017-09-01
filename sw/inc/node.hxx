@@ -292,7 +292,7 @@ private:
 };
 
 /// Starts a section of nodes in the document model.
-class SwStartNode: public SwNode
+class SAL_DLLPUBLIC_RTTI SwStartNode: public SwNode
 {
     friend class SwNode;
     friend class SwNodes;

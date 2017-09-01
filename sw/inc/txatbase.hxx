@@ -37,7 +37,7 @@
 class SfxItemPool;
 class SvXMLAttrContainerItem;
 
-class SwTextAttr
+class SAL_DLLPUBLIC_RTTI SwTextAttr
 {
 private:
     SfxPoolItem * const m_pAttr;
@@ -123,7 +123,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwTextAttrEnd : public virtual SwTextAttr
+class SAL_DLLPUBLIC_RTTI SwTextAttrEnd : public virtual SwTextAttr
 {
 protected:
     sal_Int32 m_nEnd;
@@ -135,7 +135,7 @@ public:
 };
 
 // attribute that must not overlap others
-class SwTextAttrNesting : public SwTextAttrEnd
+class SAL_DLLPUBLIC_RTTI SwTextAttrNesting : public SwTextAttrEnd
 {
 protected:
     SwTextAttrNesting( SfxPoolItem & i_rAttr,
