@@ -242,7 +242,8 @@ public:
 #define SFX2_IMPL_DIALOG_OOO 2
 #define SFX2_IMPL_DIALOG_REMOTE 3
 
-ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
+ErrCode FileOpenDialog_Impl( vcl::Window* pParent,
+                             sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
                              const OUString& rFact,
                              std::vector<OUString>& rpURLList,
