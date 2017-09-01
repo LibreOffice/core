@@ -54,7 +54,7 @@ public:
     virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getSlaveDispatchProvider() override;
 
     // frame::XDispatchProvider
-    virtual uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& xRequests) override;
+    virtual uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
     virtual uno::Reference<frame::XDispatch> SAL_CALL queryDispatch(const util::URL& rURL, const OUString& rTargetFrameName, sal_Int32 SearchFlags) override;
 };
 
