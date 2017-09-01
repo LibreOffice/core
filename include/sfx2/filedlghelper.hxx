@@ -46,7 +46,7 @@ namespace com
             {
                 namespace dialogs
                 {
-                    class XFilePicker2;
+                    class XFilePicker3;
                     class XFilePickerListener;
                     struct FilePickerEvent;
                     struct DialogClosedEvent;
@@ -189,7 +189,7 @@ public:
         with the following differences:
         <ul><li>The FileDialogHelper remembers the given file name, and upon execution,
                 strips its extension if the dialog is set up for "automatic file name extension".</li>
-            <li>Exceptions thrown from the <code>XFilePicker2</code> are caught and silenced.</li>
+            <li>Exceptions thrown from the <code>XFilePicker3</code> are caught and silenced.</li>
         </ul>
     */
     void                     SetFileName( const OUString& _rFileName );
@@ -198,7 +198,7 @@ public:
     OUString                 GetDisplayDirectory() const;
     ErrCode                  GetGraphic( Graphic& rGraphic ) const;
 
-    const css::uno::Reference < css::ui::dialogs::XFilePicker2 >& GetFilePicker() const;
+    const css::uno::Reference < css::ui::dialogs::XFilePicker3 >& GetFilePicker() const;
 
     // XFilePickerListener methods
     void SAL_CALL   FileSelectionChanged();

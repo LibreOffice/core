@@ -44,7 +44,7 @@ namespace sfx2
     {
         friend class FileDialogHelper;
 
-        css::uno::Reference < css::ui::dialogs::XFilePicker2 > mxFileDlg;
+        css::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFileDlg;
         css::uno::Reference < css::container::XNameAccess >   mxFilterCFG;
 
         std::vector< css::beans::StringPair >   maFilters;

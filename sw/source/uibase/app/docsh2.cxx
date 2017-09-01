@@ -108,7 +108,7 @@
 #include <app.hrc>
 #include <strings.hrc>
 #include <globals.hrc>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -504,7 +504,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
                         FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
-                        uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+                        uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
@@ -917,7 +917,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         };
                         aDlgHelper.SetControlHelpIds( nControlIds, aMasterHelpIds );
                     }
-                    uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+                    uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
                     std::shared_ptr<const SfxFilter> pFlt;
                     const char* pStrId;

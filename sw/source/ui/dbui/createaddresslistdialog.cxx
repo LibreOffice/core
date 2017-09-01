@@ -38,7 +38,7 @@
 #include <sfx2/docfile.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <tools/urlobj.hxx>
 #include <dbui.hrc>
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
     if(m_sURL.isEmpty())
     {
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE );
-        uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+        uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );
         aDlgHelper.SetDisplayDirectory( sPath );

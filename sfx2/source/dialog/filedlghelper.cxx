@@ -33,7 +33,7 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -797,7 +797,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
     return nRet;
 }
 
-static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker2 >& _rxFP )
+static bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker3 >& _rxFP )
 {
     try
     {
@@ -1334,7 +1334,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
     }
 
     // a) the new way (optional!)
-    uno::Reference< XFilePicker2 > xPickNew(xPicker, UNO_QUERY);
+    uno::Reference< XFilePicker3 > xPickNew(xPicker, UNO_QUERY);
     if (xPickNew.is())
     {
         Sequence< OUString > lFiles    = xPickNew->getSelectedFiles();
@@ -1346,7 +1346,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
     // b) the olde way ... non optional.
     else
     {
-        uno::Reference< XFilePicker2 > xPickOld(xPicker, UNO_QUERY_THROW);
+        uno::Reference< XFilePicker3 > xPickOld(xPicker, UNO_QUERY_THROW);
         Sequence< OUString > lFiles = xPickOld->getFiles();
         ::sal_Int32          nFiles = lFiles.getLength();
         if ( nFiles == 1 )
@@ -2436,7 +2436,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 {
     // a) the new way (optional!)
     uno::Sequence< OUString > aResultSeq;
-    uno::Reference< XFilePicker2 > xPickNew(mpImpl->mxFileDlg, UNO_QUERY);
+    uno::Reference< XFilePicker3 > xPickNew(mpImpl->mxFileDlg, UNO_QUERY);
     if (xPickNew.is())
     {
         aResultSeq = xPickNew->getSelectedFiles();
@@ -2565,7 +2565,7 @@ void FileDialogHelper::SetCurrentFilter( const OUString& rFilter )
     mpImpl->setFilter( sFilter );
 }
 
-const uno::Reference < XFilePicker2 >& FileDialogHelper::GetFilePicker() const
+const uno::Reference < XFilePicker3 >& FileDialogHelper::GetFilePicker() const
 {
     return mpImpl->mxFileDlg;
 }

@@ -257,7 +257,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     // add filter for all types
     aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_FILES ), "*.*" );
 
-    uno::Reference<ui::dialogs::XFilePicker2> const xFP(aDlg.GetFilePicker());
+    uno::Reference<ui::dialogs::XFilePicker3> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
             uno::UNO_QUERY_THROW);
     if (o_pbLink)

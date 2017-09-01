@@ -64,7 +64,7 @@
 #include <strings.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
@@ -2578,7 +2578,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, Button*, void)
         pGrfDlg->SetTitle(get<VclFrame>("linkframe")->get_label());
     }
     pGrfDlg->SetDisplayDirectory( m_pConnectED->GetText() );
-    uno::Reference < ui::dialogs::XFilePicker2 > xFP = pGrfDlg->GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePicker3 > xFP = pGrfDlg->GetFilePicker();
     uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
     xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, uno::makeAny(true) );
 
@@ -2841,7 +2841,7 @@ VclPtr<SfxTabPage> SwFrameURLPage::Create(vcl::Window *pParent, const SfxItemSet
 IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
 {
     FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
-    uno::Reference < ui::dialogs::XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     try
     {

@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -185,7 +185,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     OUString sGraphicsPath( aPathOpt.GetGraphicPath() );
 
     FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
-    Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
+    Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
 
     INetURLObject aPath;
     aPath.SetSmartURL( sGraphicsPath );
@@ -347,7 +347,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         OUString sGraphicPath( aPathOpt.GetGraphicPath() );
 
         FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
-        Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
+        Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
 
         aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
 

@@ -74,7 +74,7 @@
 #include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
 #define SwSrcView
@@ -293,7 +293,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // filesave dialog with autoextension
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION );
-            uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+            uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
             // search for an html filter for export

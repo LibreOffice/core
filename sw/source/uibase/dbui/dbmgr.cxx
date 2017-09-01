@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vcl/errinf.hxx>
@@ -2558,7 +2558,7 @@ uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
 OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
-    uno::Reference < ui::dialogs::XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+    uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     OUString sHomePath(SvtPathOptions().GetWorkPath());
     aDlgHelper.SetDisplayDirectory( sHomePath );
