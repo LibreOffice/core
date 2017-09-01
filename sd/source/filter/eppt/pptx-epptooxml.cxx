@@ -53,6 +53,7 @@
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -64,6 +65,7 @@
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -1111,6 +1113,7 @@ void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const
     double fDelay = 0;
     Timing eTiming;
     Event aEvent;
+    Reference<XShape> xShape;
     const char* pDelay = nullptr;
     const char* pEvent = nullptr;
 
@@ -1180,6 +1183,15 @@ void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, Any const
             if (eTiming == Timing_INDEFINITE)
                 pDelay = "indefinite";
             SAL_INFO("sd.eppt", "event offset timing: " << (int)eTiming);
+        }
+    }
+    else if (rAny >>= xShape)
+    {
+        SAL_INFO("sd.eppt", "Got the xShape: " << xShape->getShapeType());
+        if (xShape->getShapeType() == "com.sun.star.drawing.MediaShape" || xShape->getShapeType() == "com.sun.star.presentation.MediaShape")
+        {
+            // write the default
+            bHasFDelay = true;
         }
     }
 
@@ -1440,6 +1452,41 @@ void PowerPointExport::WriteAnimationNodeEffect(const FSHelperPtr& pFS, const Re
     }
 }
 
+void PowerPointExport::WriteAnimationNodeCommand(const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, bool bMainSeqChild)
+{
+    SAL_INFO("sd.eppt", "write animation node COMMAND");
+    Reference<XCommand> xCommand(rXNode, UNO_QUERY);
+    if (xCommand.is())
+    {
+        const char* pType = "call";
+        const char* pCommand = nullptr;
+        switch (xCommand->getCommand())
+        {
+        case EffectCommands::VERB:        pType = "verb"; pCommand = "1"; /* FIXME hardcoded viewing */ break;
+        case EffectCommands::PLAY:        pCommand = "play"; break;
+        case EffectCommands::TOGGLEPAUSE: pCommand = "togglePause"; break;
+        case EffectCommands::STOP:        pCommand = "stop"; break;
+        default:
+            SAL_WARN("sd.eppt", "unknown command: " << xCommand->getCommand());
+            break;
+        }
+
+        pFS->startElementNS(XML_p, XML_cmd,
+                            XML_type, pType,
+                            XML_cmd, pCommand,
+                            FSEND);
+
+        WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, false);
+        pFS->startElementNS(XML_p, XML_cBhvr,
+                            FSEND);
+        WriteAnimationNodeCommonPropsStart(pFS, rXNode, true, bMainSeqChild);
+        WriteAnimationTarget(pFS, xCommand->getTarget());
+        pFS->endElementNS(XML_p, XML_cBhvr);
+
+        pFS->endElementNS(XML_p, XML_cmd);
+    }
+}
+
 void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild)
 {
     SAL_INFO("sd.eppt", "export node type: " << rXNode->getType());
@@ -1470,6 +1517,13 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS, const Referenc
     case AnimationNodeType::TRANSITIONFILTER:
         xmlNodeType = XML_animEffect;
         pMethod = &PowerPointExport::WriteAnimationNodeEffect;
+        break;
+    case AnimationNodeType::COMMAND:
+        xmlNodeType = XML_cmd;
+        pMethod = &PowerPointExport::WriteAnimationNodeCommand;
+        break;
+    default:
+        SAL_WARN("sd.eppt", "unhandled: " << rXNode->getType());
         break;
     }
 
