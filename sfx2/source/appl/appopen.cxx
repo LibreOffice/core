@@ -639,10 +639,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             pBlackListItem->GetStringList( aBlackList );
 
 
-        ErrCode nErr = sfx2::FileOpenDialog_Impl(
+        ErrCode nErr = sfx2::FileOpenDialog_Impl(GetTopWindow(),
                 nDialogType,
                 eDialogFlags, OUString(), aURLList,
-                aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
+                aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList);
 
         if ( nErr == ERRCODE_ABORT )
         {
