@@ -35,7 +35,7 @@
 #include <dbui.hrc>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
 using namespace ::com::sun::star::ui::dialogs;
@@ -136,7 +136,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
     if(!bTemplate)
     {
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
-        Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+        Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
 

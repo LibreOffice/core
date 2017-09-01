@@ -45,7 +45,7 @@
 #include <strings.hrc>
 #include <chrdlgmodes.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, Button*, void)
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+        Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
         m_pURLED->SetText(xFP->getSelectedFiles().getConstArray()[0]);
     }
 }

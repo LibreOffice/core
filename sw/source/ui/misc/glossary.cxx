@@ -40,7 +40,7 @@
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/text/AutoTextContainer.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/urihelper.hxx>
@@ -556,7 +556,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     {
         // call the FileOpenDialog do find WinWord - Files with templates
         FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
-        uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
+        uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
         SvtPathOptions aPathOpt;
         xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
