@@ -426,10 +426,10 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         // #i62663# synchronize possible asynchronouse printer detection now
         rManager.checkPrintersChanged( true );
     }
-    ::std::list< OUString > aPrinters;
+    ::std::vector< OUString > aPrinters;
     rManager.listPrinters( aPrinters );
 
-    for( ::std::list< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
+    for( ::std::vector< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
     {
         const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
         // Neuen Eintrag anlegen

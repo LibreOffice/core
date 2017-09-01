@@ -55,7 +55,7 @@ namespace psp
     {
         mutable Mutex               m_aMutex;
         bool                        m_bChanged;
-        std::list< PrinterInfoManager::SystemPrintQueue >
+        std::vector< PrinterInfoManager::SystemPrintQueue >
                                     m_aQueues;
         OUString                    m_aCommand;
 
@@ -69,7 +69,7 @@ namespace psp
         OUString getCommand() const;
 
         // sets changed status to false; therefore not const
-        void getSystemQueues( std::list< PrinterInfoManager::SystemPrintQueue >& rQueues );
+        void getSystemQueues( std::vector< PrinterInfoManager::SystemPrintQueue >& rQueues );
     };
 } // namespace
 
@@ -128,7 +128,7 @@ PrinterInfoManager::~PrinterInfoManager()
 bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 {
     // check if files were created, deleted or modified since initialize()
-    ::std::list< WatchFile >::const_iterator it;
+    ::std::vector< WatchFile >::const_iterator it;
     bool bChanged = false;
     for( it = m_aWatchFiles.begin(); it != m_aWatchFiles.end() && ! bChanged; ++it )
     {
@@ -199,9 +199,9 @@ void PrinterInfoManager::initialize()
         return;
     }
 
-    std::list< OUString > aDirList;
+    std::vector< OUString > aDirList;
     psp::getPrinterPathList( aDirList, nullptr );
-    std::list< OUString >::const_iterator print_dir_it;
+    std::vector< OUString >::const_iterator print_dir_it;
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
         INetURLObject aFile( *print_dir_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
@@ -504,7 +504,7 @@ void PrinterInfoManager::initialize()
         m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
         m_pQueueInfo.reset();
     }
-    for( ::std::list< SystemPrintQueue >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
+    for( ::std::vector< SystemPrintQueue >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {
         OUString aPrinterName( "<" );
         aPrinterName += it->m_aQueue;
@@ -532,12 +532,12 @@ void PrinterInfoManager::initialize()
     }
 }
 
-void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
+void PrinterInfoManager::listPrinters( ::std::vector< OUString >& rVector ) const
 {
     std::unordered_map< OUString, Printer, OUStringHash >::const_iterator it;
-    rList.clear();
+    rVector.clear();
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
-        rList.push_back( it->first );
+        rVector.push_back( it->first );
 }
 
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
@@ -569,7 +569,7 @@ bool PrinterInfoManager::writePrinterConfig()
     std::unordered_map< OUString, int, OUStringHash > rofiles;
     std::unordered_map< OUString, Config*, OUStringHash >::iterator file_it;
 
-    for( ::std::list< WatchFile >::const_iterator wit = m_aWatchFiles.begin(); wit != m_aWatchFiles.end(); ++wit )
+    for( ::std::vector< WatchFile >::const_iterator wit = m_aWatchFiles.begin(); wit != m_aWatchFiles.end(); ++wit )
     {
         if( checkWriteability( wit->m_aFilePath ) )
         {
@@ -928,7 +928,7 @@ bool SystemQueueInfo::hasChanged() const
     return bChanged;
 }
 
-void SystemQueueInfo::getSystemQueues( std::list< PrinterInfoManager::SystemPrintQueue >& rQueues )
+void SystemQueueInfo::getSystemQueues( std::vector< PrinterInfoManager::SystemPrintQueue >& rQueues )
 {
     MutexGuard aGuard( m_aMutex );
     rQueues = m_aQueues;
@@ -943,8 +943,8 @@ OUString SystemQueueInfo::getCommand() const
 }
 
 struct SystemCommandParameters;
-typedef void(* tokenHandler)(const std::list< OString >&,
-                std::list< PrinterInfoManager::SystemPrintQueue >&,
+typedef void(* tokenHandler)(const std::vector< OString >&,
+                std::vector< PrinterInfoManager::SystemPrintQueue >&,
                 const SystemCommandParameters*);
 
 struct SystemCommandParameters
@@ -959,8 +959,8 @@ struct SystemCommandParameters
 
 #if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
 static void lpgetSysQueueTokenHandler(
-    const std::list< OString >& i_rLines,
-    std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
+    const std::vector< OString >& i_rLines,
+    std::vector< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
     const SystemCommandParameters* )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -975,7 +975,7 @@ static void lpgetSysQueueTokenHandler(
     // find _all: line
     OString aAllLine( "_all:" );
     OString aAllAttr( "all=" );
-    for( std::list< OString >::const_iterator it = i_rLines.begin();
+    for( std::vector< OString >::const_iterator it = i_rLines.begin();
          it != i_rLines.end(); ++it )
     {
         if( it->indexOf( aAllLine, 0 ) == 0 )
@@ -1005,7 +1005,7 @@ static void lpgetSysQueueTokenHandler(
     bool bInsertAttribute = false;
     OString aDescrStr( "description=" );
     OString aLocStr( "location=" );
-    for( std::list< OString >::const_iterator it = i_rLines.begin();
+    for( std::vector< OString >::const_iterator it = i_rLines.begin();
          it != i_rLines.end(); ++it )
     {
         sal_Int32 nPos = 0;
@@ -1056,8 +1056,8 @@ static void lpgetSysQueueTokenHandler(
 }
 #endif
 static void standardSysQueueTokenHandler(
-    const std::list< OString >& i_rLines,
-    std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
+    const std::vector< OString >& i_rLines,
+    std::vector< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
     const SystemCommandParameters* i_pParms)
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -1066,7 +1066,7 @@ static void standardSysQueueTokenHandler(
     OString aAftToken( i_pParms->pAftToken );
     /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing
     */
-    for( std::list< OString >::const_iterator it = i_rLines.begin();
+    for( std::vector< OString >::const_iterator it = i_rLines.begin();
          it != i_rLines.end(); ++it )
     {
         sal_Int32 nPos = 0;
@@ -1119,7 +1119,7 @@ void SystemQueueInfo::run()
     osl_setThreadName("LPR psp::SystemQueueInfo");
 
     char pBuffer[1024];
-    std::list< OString > aLines;
+    std::vector< OString > aLines;
 
     /* Discover which command we can use to get a list of all printer queues */
     for(const auto & rParm : aParms)
@@ -1138,7 +1138,7 @@ void SystemQueueInfo::run()
                 aLines.push_back( OString( pBuffer ) );
             if( ! pclose( pPipe ) )
             {
-                std::list< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
+                std::vector< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
                 rParm.pHandler( aLines, aSysPrintQueues, &rParm );
                 MutexGuard aGuard( m_aMutex );
                 m_bChanged  = true;
