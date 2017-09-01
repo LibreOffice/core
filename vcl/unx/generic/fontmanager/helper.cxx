@@ -102,7 +102,7 @@ static OString getEnvironmentPath( const char* pKey )
 
 } // namespace psp
 
-void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir )
+void psp::getPrinterPathList( std::vector< OUString >& rPathList, const char* pSubDir )
 {
     rPathList.clear();
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();

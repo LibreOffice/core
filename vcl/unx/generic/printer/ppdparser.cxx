@@ -445,9 +445,9 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     rPPDCache.pAllPPDFiles = new std::unordered_map< OUString, OUString, OUStringHash >;
 
     // check installation directories
-    std::list< OUString > aPathList;
+    std::vector< OUString > aPathList;
     psp::getPrinterPathList( aPathList, PRINTER_PPDDIR );
-    for( std::list< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
+    for( std::vector< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
     {
         INetURLObject aPPDDir( *ppd_it, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );

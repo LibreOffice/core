@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <list>
+#include <vector>
 #include <unordered_map>
 
 #include <vcl/dllapi.h>
@@ -102,11 +103,11 @@ protected:
 
     std::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
-    std::list< WatchFile >            m_aWatchFiles;
+    std::vector< WatchFile >            m_aWatchFiles;
     OUString                     m_aDefaultPrinter;
     OUString                     m_aSystemPrintCommand;
 
-    std::list< SystemPrintQueue >     m_aSystemPrintQueues;
+    std::vector< SystemPrintQueue >     m_aSystemPrintQueues;
 
     std::unique_ptr<SystemQueueInfo>
                                       m_pQueueInfo;
@@ -136,7 +137,7 @@ public:
     Type getType() const { return m_eType; }
 
     // lists the names of all known printers
-    void listPrinters( std::list< OUString >& rList ) const;
+    void listPrinters( std::vector< OUString >& rVector ) const;
 
     // gets info about a named printer
     const PrinterInfo& getPrinterInfo( const OUString& rPrinter ) const;
