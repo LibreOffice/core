@@ -4979,7 +4979,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
 
-                    if ( css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
+                    if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
                         if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
