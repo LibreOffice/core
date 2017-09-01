@@ -34,7 +34,6 @@
 
 #include <cppconn/statement.h>
 #include <cppuhelper/compbase5.hxx>
-#include <vector>
 
 namespace connectivity
 {
@@ -71,8 +70,6 @@ namespace connectivity
             SQLWarning m_aLastWarning;
 
         protected:
-            ::std::vector< rtl::OUString>  m_aBatchVector;
-
             OConnection*            m_pConnection;  // The owning Connection object
 
             sql::Statement          *cppStatement;

@@ -187,12 +187,10 @@ Any SAL_CALL OStatement::queryInterface(const Type & rType)
     return aRet;
 }
 
-void SAL_CALL OStatement::addBatch(const rtl::OUString& sql)
+void SAL_CALL OStatement::addBatch(const rtl::OUString&)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-
-    m_aBatchVector.push_back(sql);
 }
 
 Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
