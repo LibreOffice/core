@@ -287,7 +287,7 @@ void FmFieldWin::UpdateContent(FmFormShell const * pShell)
     if (!pShell || !pShell->GetImpl())
         return;
 
-    Reference< XForm >  xForm = pShell->GetImpl()->getCurrentForm();
+    Reference<XForm> const xForm = pShell->GetImpl()->getCurrentForm_Lock();
     if ( xForm.is() )
         UpdateContent( xForm );
 }

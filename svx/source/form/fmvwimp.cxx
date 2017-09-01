@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
         if(!pShImpl)
             return;
 
-        find_active_databaseform fad(pShImpl->getActiveController());
+        find_active_databaseform fad(pShImpl->getActiveController_Lock());
 
         vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
         PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
@@ -764,7 +764,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
 
                 xControllerToActivate = xController;
             }
-            pShImpl->setActiveController( xControllerToActivate );
+            pShImpl->setActiveController_Lock(xControllerToActivate);
         }
     }
 }
@@ -797,7 +797,7 @@ void FmXFormView::Deactivate(bool bDeactivateController)
 
     FmXFormShell* pShImpl =  m_pView->GetFormShell() ? m_pView->GetFormShell()->GetImpl() : nullptr;
     if (pShImpl && bDeactivateController)
-        pShImpl->setActiveController( nullptr );
+        pShImpl->setActiveController_Lock(nullptr);
 }
 
 
@@ -1018,7 +1018,7 @@ void FmXFormView::onCreatedFormObject( FmFormObj const & _rFormObject )
         return;
 
     // it is valid that the form shell's forms collection is not initialized, yet
-    pShellImpl->UpdateForms( true );
+    pShellImpl->UpdateForms_Lock(true);
 
     m_xLastCreatedControlModel.set( _rFormObject.GetUnoControlModel(), UNO_QUERY );
     if ( !m_xLastCreatedControlModel.is() )
@@ -1026,13 +1026,13 @@ void FmXFormView::onCreatedFormObject( FmFormObj const & _rFormObject )
 
     // some initial property defaults
     FormControlFactory aControlFactory;
-    aControlFactory.initializeControlModel( pShellImpl->getDocumentType(), _rFormObject );
+    aControlFactory.initializeControlModel(pShellImpl->getDocumentType_Lock(), _rFormObject);
 
-    if ( !pShellImpl->GetWizardUsing() )
+    if (!pShellImpl->GetWizardUsing_Lock())
         return;
 
     // #i31958# don't call wizards in XForms mode
-    if ( pShellImpl->isEnhancedForm() )
+    if (pShellImpl->isEnhancedForm_Lock())
         return;
 
     // #i46898# no wizards if there is no Base installed - currently, all wizards are
@@ -1916,7 +1916,7 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ )
 DocumentType FmXFormView::impl_getDocumentType() const
 {
     if ( GetFormShell() && GetFormShell()->GetImpl() )
-        return GetFormShell()->GetImpl()->getDocumentType();
+        return GetFormShell()->GetImpl()->getDocumentType_Lock();
     return eUnknownDocumentType;
 }
 

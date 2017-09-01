@@ -222,13 +222,13 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 
 bool FmFormShell::PrepareClose(bool bUI)
 {
-    if ( GetImpl()->didPrepareClose() )
+    if (GetImpl()->didPrepareClose_Lock())
         // we already did a PrepareClose for the current modifications of the current form
         return true;
 
     bool bResult = true;
     // Save the data records, not in DesignMode and FilterMode
-    if (!m_bDesignMode && !GetImpl()->isInFilterMode() &&
+    if (!m_bDesignMode && !GetImpl()->isInFilterMode_Lock() &&
         m_pFormView && m_pFormView->GetActualOutDev() &&
         m_pFormView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
     {
@@ -241,9 +241,9 @@ bool FmFormShell::PrepareClose(bool bUI)
         {
             // First, the current contents of the controls are stored.
             // If everything has gone smoothly, the modified records are stored.
-            if ( GetImpl()->getActiveController().is() )
+            if (GetImpl()->getActiveController_Lock().is())
             {
-                const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
+                const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures_Lock();
                 if ( rController->commitCurrentControl() )
                 {
                     const bool bModified = rController->isModifiedRow();
@@ -259,7 +259,7 @@ bool FmFormShell::PrepareClose(bool bUI)
                                 bResult = rController->commitCurrentRecord( );
                                 SAL_FALLTHROUGH;
                             case RET_NO:
-                                GetImpl()->didPrepareClose( true );
+                                GetImpl()->didPrepareClose_Lock(true);
                                 break;
 
                             case RET_CANCEL:
@@ -281,7 +281,7 @@ void FmFormShell::impl_setDesignMode(bool bDesign)
         if (!bDesign)
             m_nLastSlot = SID_FM_DESIGN_MODE;
 
-        GetImpl()->SetDesignMode(bDesign);
+        GetImpl()->SetDesignMode_Lock(bDesign);
         // my m_bDesignMode is also set by the Impl ...
     }
     else
@@ -302,16 +302,16 @@ bool FmFormShell::HasUIFeature(SfxShellFeature nFeature) const
     if (nFeature & SfxShellFeature::FormShowDatabaseBar)
     {
         // only if forms are also available
-        bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar() && !GetImpl()->isInFilterMode();
+        bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar_Lock() && !GetImpl()->isInFilterMode_Lock();
     }
     else if (nFeature & SfxShellFeature::FormShowFilterBar)
     {
         // only if forms are also available
-        bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar() && GetImpl()->isInFilterMode();
+        bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar_Lock() && GetImpl()->isInFilterMode_Lock();
     }
     else if (nFeature & SfxShellFeature::FormShowFilterNavigator)
     {
-        bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar() && GetImpl()->isInFilterMode();
+        bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar_Lock() && GetImpl()->isInFilterMode_Lock();
     }
     else if (nFeature & SfxShellFeature::FormShowField)
     {
@@ -327,11 +327,11 @@ bool FmFormShell::HasUIFeature(SfxShellFeature nFeature) const
     }
     else if (nFeature & SfxShellFeature::FormShowTextControlBar)
     {
-        bResult = !GetImpl()->IsReadonlyDoc() && m_pImpl->IsActiveControl( true );
+        bResult = !GetImpl()->IsReadonlyDoc_Lock() && m_pImpl->IsActiveControl_Lock(true);
     }
     else if (nFeature & SfxShellFeature::FormShowDataNavigator)
     {
-        bResult = GetImpl()->isEnhancedForm();
+        bResult = GetImpl()->isEnhancedForm_Lock();
     }
     else if (  (nFeature & SfxShellFeature::FormTBControls)
             || (nFeature & SfxShellFeature::FormTBMoreControls)
@@ -518,7 +518,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_MORE_CONTROLS:
         case SID_FM_FORM_DESIGN_TOOLS:
         {
-            FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
+            FormToolboxes aToolboxAccess(GetImpl()->getHostFrame_Lock());
             aToolboxAccess.toggleToolbox( nSlot );
             rReq.Done();
         }
@@ -533,7 +533,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             // if we execute this ourself, then either the application does not implement an own handling for this,
             // of we're on the top of the dispatcher stack, which means a control has the focus.
             // In the latter case, we put the focus to the document window, otherwise, we focus the first control
-            const bool bHasControlFocus = GetImpl()->HasControlFocus();
+            const bool bHasControlFocus = GetImpl()->HasControlFocus_Lock();
             if ( bHasControlFocus )
             {
                 if (m_pFormView)
@@ -552,7 +552,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         break;
 
         case SID_FM_VIEW_AS_GRID:
-            GetImpl()->CreateExternalView();
+            GetImpl()->CreateExternalView_Lock();
             break;
         case SID_FM_CONVERTTO_EDIT          :
         case SID_FM_CONVERTTO_BUTTON            :
@@ -574,10 +574,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CONVERTTO_SCROLLBAR     :
         case SID_FM_CONVERTTO_SPINBUTTON    :
         case SID_FM_CONVERTTO_NAVIGATIONBAR :
-            GetImpl()->executeControlConversionSlot(FmXFormShell::SlotToIdent(nSlot));
+            GetImpl()->executeControlConversionSlot_Lock(FmXFormShell::SlotToIdent(nSlot));
             // after the conversion, re-determine the selection, since the
             // selected object has changed
-            GetImpl()->SetSelection(GetFormView()->GetMarkedObjectList());
+            GetImpl()->SetSelection_Lock(GetFormView()->GetMarkedObjectList());
             break;
         case SID_FM_LEAVE_CREATE:
             m_nLastSlot = 0;
@@ -589,7 +589,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             bool bShow = true;
             if ( pShowItem )
                 bShow = pShowItem->GetValue();
-            GetImpl()->ShowSelectionProperties( bShow );
+            GetImpl()->ShowSelectionProperties_Lock(bShow);
 
             rReq.Done();
         } break;
@@ -601,10 +601,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
             InterfaceBag aOnlyTheForm;
-            aOnlyTheForm.insert( Reference< XInterface >( GetImpl()->getCurrentForm(), UNO_QUERY ) );
-            GetImpl()->setCurrentSelection( aOnlyTheForm );
+            aOnlyTheForm.insert(Reference<XInterface>(GetImpl()->getCurrentForm_Lock(), UNO_QUERY));
+            GetImpl()->setCurrentSelection_Lock(aOnlyTheForm);
 
-            GetImpl()->ShowSelectionProperties( bShow );
+            GetImpl()->ShowSelectionProperties_Lock(bShow);
 
             rReq.Done();
         }   break;
@@ -614,10 +614,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
             const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(nSlot);
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
-            OSL_ENSURE( GetImpl()->onlyControlsAreMarked(), "FmFormShell::Execute: ControlProperties should be disabled!" );
+            OSL_ENSURE( GetImpl()->onlyControlsAreMarked_Lock(), "FmFormShell::Execute: ControlProperties should be disabled!" );
             if ( bShow )
-                GetImpl()->selectLastMarkedControls();
-            GetImpl()->ShowSelectionProperties( bShow );
+                GetImpl()->selectLastMarkedControls_Lock();
+            GetImpl()->ShowSelectionProperties_Lock(bShow);
 
             rReq.Done();
         }   break;
@@ -641,7 +641,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_TAB_DIALOG:
         {
-            GetImpl()->ExecuteTabOrderDialog( Reference< XTabControllerModel >( GetImpl()->getCurrentForm(), UNO_QUERY ) );
+            GetImpl()->ExecuteTabOrderDialog_Lock(
+                Reference<XTabControllerModel>(GetImpl()->getCurrentForm_Lock(), UNO_QUERY));
             rReq.Done();
         }
         break;
@@ -678,15 +679,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
         break;
         case SID_FM_USE_WIZARDS:
         {
-            GetImpl()->SetWizardUsing(!GetImpl()->GetWizardUsing());
+            GetImpl()->SetWizardUsing_Lock(!GetImpl()->GetWizardUsing_Lock());
             GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_USE_WIZARDS);
         }
         break;
         case SID_FM_SEARCH:
         {
-            const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
+            const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures_Lock();
             if ( rController->commitCurrentControl() && rController->commitCurrentRecord() )
-                GetImpl()->ExecuteSearch();
+                GetImpl()->ExecuteSearch_Lock();
             rReq.Done();
         }
         break;
@@ -708,14 +709,14 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_ORDERCRIT:
         case SID_FM_FORM_FILTERED:
         {
-            GetImpl()->ExecuteFormSlot( nSlot );
+            GetImpl()->ExecuteFormSlot_Lock(nSlot);
             rReq.Done();
         }
         break;
 
         case SID_FM_RECORD_ABSOLUTE:
         {
-            const svx::ControllerFeatures& rController = GetImpl()->getNavControllerFeatures();
+            const svx::ControllerFeatures& rController = GetImpl()->getNavControllerFeatures_Lock();
             sal_Int32 nRecord = -1;
 
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -767,13 +768,13 @@ void FmFormShell::Execute(SfxRequest &rReq)
                         bReopenNavigator = true;
                     }
 
-                Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
+                Reference<runtime::XFormController> const xController(GetImpl()->getActiveController_Lock());
 
                 if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of a invalid criterion
 
                     ||  (   xController.is()
-                        &&  !GetImpl()->getActiveControllerFeatures()->commitCurrentControl( )
+                        &&  !GetImpl()->getActiveControllerFeatures_Lock()->commitCurrentControl()
                         )
                         // committing the controller was denied
                     )
@@ -783,7 +784,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 }
             }
 
-            GetImpl()->stopFiltering( !bCancelled );
+            GetImpl()->stopFiltering_Lock(!bCancelled);
             rReq.Done();
 
             if ( bReopenNavigator )
@@ -795,7 +796,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_FILTER_START:
         {
-            GetImpl()->startFiltering();
+            GetImpl()->startFiltering_Lock();
             rReq.Done();
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
@@ -819,14 +820,14 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_MORE_CONTROLS:
             case SID_FM_FORM_DESIGN_TOOLS:
             {
-                FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
+                FormToolboxes aToolboxAccess(GetImpl()->getHostFrame_Lock());
                 rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible( nWhich ) ) );
             }
             break;
 
             case SID_FM_FILTER_EXECUTE:
             case SID_FM_FILTER_EXIT:
-                if (!GetImpl()->isInFilterMode())
+                if (!GetImpl()->isInFilterMode_Lock())
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -836,7 +837,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 else if (!GetFormModel())
                     rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxBoolItem(nWhich, GetImpl()->GetWizardUsing() ) );
+                    rSet.Put(SfxBoolItem(nWhich, GetImpl()->GetWizardUsing_Lock()));
                 break;
             case SID_FM_AUTOCONTROLFOCUS:
                 if (!GetFormModel())
@@ -899,7 +900,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
             case SID_FM_FILTER_NAVIGATOR_CONTROL:
             {
-                if (GetImpl()->isInFilterMode())
+                if (GetImpl()->isInFilterMode_Lock())
                     rSet.Put(SfxObjectItem(nWhich, this));
                 else
                     rSet.Put(SfxObjectItem(nWhich));
@@ -936,7 +937,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
             case SID_FM_SHOW_PROPERTY_BROWSER:
             {
-                rSet.Put(SfxBoolItem(nWhich, GetImpl()->IsPropBrwOpen()));
+                rSet.Put(SfxBoolItem(nWhich, GetImpl()->IsPropBrwOpen_Lock()));
             }
             break;
 
@@ -944,14 +945,14 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             {
                 // potentially, give the Impl the opportunity to update its
                 // current objects which are aligned with the current MarkList
-                if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection();
+                if (GetImpl()->IsSelectionUpdatePending_Lock())
+                    GetImpl()->ForceUpdateSelection_Lock();
 
-                if ( !m_pFormView || !m_bDesignMode || !GetImpl()->onlyControlsAreMarked() )
+                if (!m_pFormView || !m_bDesignMode || !GetImpl()->onlyControlsAreMarked_Lock())
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    bool bChecked  = GetImpl()->IsPropBrwOpen() && !GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
+                    bool const bChecked = GetImpl()->IsPropBrwOpen_Lock() && !GetImpl()->isSolelySelected_Lock(GetImpl()->getCurrentForm_Lock());
                         // if the property browser is open, and only controls are marked, and the current selection
                         // does not consist of only the current form, then the current selection is the (composition of)
                         // the currently marked controls
@@ -963,28 +964,28 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             {
                 // potentially, give the Impl the opportunity to update its
                 // current objects which are aligned with the current MarkList
-                if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection();
+                if (GetImpl()->IsSelectionUpdatePending_Lock())
+                    GetImpl()->ForceUpdateSelection_Lock();
 
-                if ( !m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
+                if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm_Lock().is())
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    bool bChecked = GetImpl()->IsPropBrwOpen() && GetImpl()->isSolelySelected( GetImpl()->getCurrentForm() );
+                    bool const bChecked = GetImpl()->IsPropBrwOpen_Lock() && GetImpl()->isSolelySelected_Lock(GetImpl()->getCurrentForm_Lock());
                     rSet.Put(SfxBoolItem(nWhich, bChecked));
                 }
             }   break;
             case SID_FM_TAB_DIALOG:
                 // potentially, give the Impl the opportunity to update its
                 // current objects which are aligned with the current MarkList
-                if (GetImpl()->IsSelectionUpdatePending())
-                    GetImpl()->ForceUpdateSelection();
+                if (GetImpl()->IsSelectionUpdatePending_Lock())
+                    GetImpl()->ForceUpdateSelection_Lock();
 
-                if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
+                if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm_Lock().is() )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_FM_DESIGN_MODE:
-                if (!m_pFormView || GetImpl()->IsReadonlyDoc() )
+                if (!m_pFormView || GetImpl()->IsReadonlyDoc_Lock())
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, m_bDesignMode) );
@@ -1019,7 +1020,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    if (!GetImpl()->canConvertCurrentSelectionToControl("ConvertToFixed"))
+                    if (!GetImpl()->canConvertCurrentSelectionToControl_Lock("ConvertToFixed"))
                         // if it cannot be converted to a fixed text, it is no single control
                         rSet.DisableItem( nWhich );
                 }
@@ -1046,7 +1047,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_FORMATTED     :
             case SID_FM_CONVERTTO_SPINBUTTON    :
             {
-                if (!m_pFormView || !m_bDesignMode || !GetImpl()->canConvertCurrentSelectionToControl(FmXFormShell::SlotToIdent(nWhich)))
+                if (!m_pFormView || !m_bDesignMode || !GetImpl()->canConvertCurrentSelectionToControl_Lock(FmXFormShell::SlotToIdent(nWhich)))
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -1063,12 +1064,12 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
 void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
 {
-    if  (   !GetImpl()->getNavController().is()
-        ||  !isRowSetAlive(GetImpl()->getNavController()->getModel())
+    if  (   !GetImpl()->getNavController_Lock().is()
+        ||  !isRowSetAlive(GetImpl()->getNavController_Lock()->getModel())
         ||  !m_pFormView
         ||  m_bDesignMode
-        ||  !GetImpl()->getActiveForm().is()
-        ||  GetImpl()->isInFilterMode()
+        ||  !GetImpl()->getActiveForm_Lock().is()
+        ||  GetImpl()->isInFilterMode_Lock()
         )
         rSet.DisableItem(nWhich);
     else
@@ -1079,20 +1080,20 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             switch (nWhich)
             {
             case SID_FM_VIEW_AS_GRID:
-                if (GetImpl()->getHostFrame().is() && GetImpl()->getNavController().is())
+                if (GetImpl()->getHostFrame_Lock().is() && GetImpl()->getNavController_Lock().is())
                 {
                     bEnable = true;
                     bool bDisplayingCurrent =
-                        GetImpl()->getInternalForm(
-                            Reference< XForm >( GetImpl()->getNavController()->getModel(), UNO_QUERY )
-                        ) == GetImpl()->getExternallyDisplayedForm();
+                        GetImpl()->getInternalForm_Lock(
+                            Reference<XForm>(GetImpl()->getNavController_Lock()->getModel(), UNO_QUERY)
+                        ) == GetImpl()->getExternallyDisplayedForm_Lock();
                     rSet.Put(SfxBoolItem(nWhich, bDisplayingCurrent));
                 }
                 break;
 
             case SID_FM_SEARCH:
             {
-                Reference< css::beans::XPropertySet >  xNavSet(GetImpl()->getActiveForm(), UNO_QUERY);
+                Reference<css::beans::XPropertySet> const xNavSet(GetImpl()->getActiveForm_Lock(), UNO_QUERY);
                 sal_Int32 nCount = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
                 bEnable = nCount != 0;
             }   break;
@@ -1100,7 +1101,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_TOTAL:
             {
                 FeatureState aState;
-                GetImpl()->getNavControllerFeatures()->getState( nWhich, aState );
+                GetImpl()->getNavControllerFeatures_Lock()->getState( nWhich, aState );
                 if ( SID_FM_RECORD_ABSOLUTE == nWhich )
                 {
                     sal_Int32 nPosition = 0;
@@ -1147,7 +1148,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             break;
 
             case SID_FM_FILTER_START:
-                bEnable = GetImpl()->getActiveControllerFeatures()->canDoFormFilter();
+                bEnable = GetImpl()->getActiveControllerFeatures_Lock()->canDoFormFilter();
                 break;
             }
         }
@@ -1175,7 +1176,7 @@ void FmFormShell::SetView( FmFormView* _pView )
     if ( m_pFormView )
     {
         if ( IsActive() )
-            GetImpl()->viewDeactivated( *m_pFormView );
+            GetImpl()->viewDeactivated_Lock(*m_pFormView);
 
         m_pFormView->SetFormShell( nullptr, FmFormView::FormShellAccess() );
         m_pFormView = nullptr;
@@ -1196,14 +1197,14 @@ void FmFormShell::SetView( FmFormView* _pView )
     // to the former.
     // FS - 30.06.99 - 67308
     if ( IsActive() )
-        GetImpl()->viewActivated( *m_pFormView );
+        GetImpl()->viewActivated_Lock(*m_pFormView);
 }
 
 
 void FmFormShell::DetermineForms(bool bInvalidate)
 {
     // are there forms on the current page
-    bool bForms = GetImpl()->hasForms();
+    bool bForms = GetImpl()->hasForms_Lock();
     if (bForms != m_bHasForms)
     {
         m_bHasForms = bForms;
@@ -1215,13 +1216,13 @@ void FmFormShell::DetermineForms(bool bInvalidate)
 
 bool FmFormShell::GetY2KState(sal_uInt16& nReturn)
 {
-    return GetImpl()->GetY2KState(nReturn);
+    return GetImpl()->GetY2KState_Lock(nReturn);
 }
 
 
 void FmFormShell::SetY2KState(sal_uInt16 n)
 {
-    GetImpl()->SetY2KState(n);
+    GetImpl()->SetY2KState_Lock(n);
 }
 
 
@@ -1230,7 +1231,7 @@ void FmFormShell::Activate(bool bMDI)
     SfxShell::Activate(bMDI);
 
     if ( m_pFormView )
-        GetImpl()->viewActivated( *m_pFormView, true );
+        GetImpl()->viewActivated_Lock(*m_pFormView, true);
 }
 
 
@@ -1239,37 +1240,37 @@ void FmFormShell::Deactivate(bool bMDI)
     SfxShell::Deactivate(bMDI);
 
     if ( m_pFormView )
-        GetImpl()->viewDeactivated( *m_pFormView, false );
+        GetImpl()->viewDeactivated_Lock(*m_pFormView, false);
 }
 
 
 void FmFormShell::ExecuteTextAttribute( SfxRequest& _rReq )
 {
-    m_pImpl->ExecuteTextAttribute( _rReq );
+    m_pImpl->ExecuteTextAttribute_Lock(_rReq);
 }
 
 
 void FmFormShell::GetTextAttributeState( SfxItemSet& _rSet )
 {
-    m_pImpl->GetTextAttributeState( _rSet );
+    m_pImpl->GetTextAttributeState_Lock(_rSet);
 }
 
 
 bool FmFormShell::IsActiveControl() const
 {
-    return m_pImpl->IsActiveControl(false);
+    return m_pImpl->IsActiveControl_Lock(false);
 }
 
 
 void FmFormShell::ForgetActiveControl()
 {
-    m_pImpl->ForgetActiveControl();
+    m_pImpl->ForgetActiveControl_Lock();
 }
 
 
 void FmFormShell::SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl )
 {
-    m_pImpl->SetControlActivationHandler( _rHdl );
+    m_pImpl->SetControlActivationHandler_Lock(_rHdl);
 }
 
 
@@ -1304,7 +1305,7 @@ void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrVi
         // check if the focus currently is in a control
         // Well, okay, do it the other way 'round: Check whether the current control of the active controller
         // actually has the focus. This should be equivalent.
-        const bool bHasControlFocus = GetImpl()->HasControlFocus();
+        const bool bHasControlFocus = GetImpl()->HasControlFocus_Lock();
 
         if ( bHasControlFocus )
         {

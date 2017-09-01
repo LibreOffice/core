@@ -627,7 +627,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             FmFormShell* pShell = dynamic_cast<FmFormShell*>( static_cast<const SfxObjectItem*>(pState)->GetShell() );
             InterfaceBag aSelection;
             if ( pShell )
-                pShell->GetImpl()->getCurrentSelection( aSelection );
+                pShell->GetImpl()->getCurrentSelection_Lock(aSelection);
 
             impl_ensurePropertyBrowser_nothrow( pShell );
 

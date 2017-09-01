@@ -1835,7 +1835,7 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
         m_pNavigator->UpdateContent( nullptr, nullptr );
     else
     {
-        Reference< XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
+        Reference<XFormController> const xController(pFormShell->GetImpl()->getActiveInternalController_Lock());
         Reference< XIndexAccess >   xContainer;
         if (xController.is())
         {

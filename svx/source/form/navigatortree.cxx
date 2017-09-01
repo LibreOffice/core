@@ -390,11 +390,11 @@ namespace svxform
                     const sal_uInt16 nBrowserId = aContextMenu->GetItemId("props");
                     // in XML forms, we don't allow for the properties of a form
                     // #i36484#
-                    if ( pFormShell->GetImpl()->isEnhancedForm() && !m_nControlsSelected )
+                    if (pFormShell->GetImpl()->isEnhancedForm_Lock() && !m_nControlsSelected)
                         aContextMenu->RemoveItem(aContextMenu->GetItemPos(nBrowserId));
 
                     // if the property browser is already open, we don't allow for the properties, too
-                    if( pFormShell->GetImpl()->IsPropBrwOpen() )
+                    if (pFormShell->GetImpl()->IsPropBrwOpen_Lock())
                         aContextMenu->RemoveItem(aContextMenu->GetItemPos(nBrowserId));
                     // and finally, if there's a mixed selection of forms and controls, disable the entry, too
                     else
@@ -416,16 +416,16 @@ namespace svxform
                     const sal_Int16 nChangeId = aContextMenu->GetItemId("change");
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
                     {
-                        xBuilder.reset(FmXFormShell::GetConversionMenu());
+                        xBuilder.reset(FmXFormShell::GetConversionMenu_Lock());
                         xConversionMenu = xBuilder->get_menu("menu");
                         aContextMenu->SetPopupMenu(nChangeId, xConversionMenu);
 #if OSL_DEBUG_LEVEL > 0
                         FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
-                        OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
+                        OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected_Lock( pCurrent->GetFormComponent() ),
                             "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
 #endif
 
-                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection(*aContextMenu->GetPopupMenu(nChangeId));
+                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection_Lock(*aContextMenu->GetPopupMenu(nChangeId));
                     }
                     else
                         aContextMenu->EnableItem(nChangeId, false );
@@ -488,7 +488,7 @@ namespace svxform
                         Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
                         if( !xTabController.is() )
                             break;
-                        GetNavModel()->GetFormShell()->GetImpl()->ExecuteTabOrderDialog( xTabController );
+                        GetNavModel()->GetFormShell()->GetImpl()->ExecuteTabOrderDialog_Lock(xTabController);
                     }
                     else if (sIdent == "props")
                         ShowSelectionProperties(true);
@@ -510,7 +510,7 @@ namespace svxform
                     else if (FmXFormShell::isControlConversionSlot(sIdent))
                     {
                         FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
-                        if (pFormShell->GetImpl()->executeControlConversionSlot(pCurrent->GetFormComponent(), sIdent))
+                        if (pFormShell->GetImpl()->executeControlConversionSlot_Lock(pCurrent->GetFormComponent(), sIdent))
                             ShowSelectionProperties();
                     }
                 }
@@ -1154,7 +1154,7 @@ namespace svxform
         // in addition, with the move of controls such things as "the current form" may have changed - force the shell
         // to update itself accordingly
         if( pFormShell && pFormShell->GetImpl() && pFormShell->GetFormView() )
-            pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkedObjectList() );
+            pFormShell->GetImpl()->DetermineSelection_Lock( pFormShell->GetFormView()->GetMarkedObjectList() );
 
         if ( m_aControlExchange.isClipboardOwner() && ( DND_ACTION_MOVE == _nAction ) )
             m_aControlExchange->clear();
@@ -1352,7 +1352,7 @@ namespace svxform
         {
             InterfaceBag aSelection;
             aSelection.insert( Reference<XInterface>( xNewForm, UNO_QUERY ) );
-            pFormShell->GetImpl()->setCurrentSelection( aSelection );
+            pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
 
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);
         }
@@ -1629,11 +1629,11 @@ namespace svxform
 
         // and now my form and my SelObject
         if ( bSetSelectionAsMarkList )
-            pFormShell->GetImpl()->setCurrentSelectionFromMark( pFormShell->GetFormView()->GetMarkedObjectList() );
+            pFormShell->GetImpl()->setCurrentSelectionFromMark_Lock(pFormShell->GetFormView()->GetMarkedObjectList());
         else
-            pFormShell->GetImpl()->setCurrentSelection( aSelection );
+            pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
 
-        if ( pFormShell->GetImpl()->IsPropBrwOpen() || bForce )
+        if (pFormShell->GetImpl()->IsPropBrwOpen_Lock() || bForce)
         {
             // and now deliver all to the PropertyBrowser
             pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
@@ -1685,7 +1685,7 @@ namespace svxform
         // form). The other way round, the EntryDatas would be invalid, if I'd first delete the controls and
         // then go on to the structure. This means I have to delete the forms *after* the normal controls, so
         // that during UNDO, they're restored in the proper order.
-        pFormShell->GetImpl()->EnableTrackProperties(false);
+        pFormShell->GetImpl()->EnableTrackProperties_Lock(false);
         for (SvLBoxEntrySortedArray::reverse_iterator it = m_arrCurrentSelection.rbegin();
              it != m_arrCurrentSelection.rend(); )
         {
@@ -1725,7 +1725,7 @@ namespace svxform
             else
                 ++it;
         }
-        pFormShell->GetImpl()->EnableTrackProperties(true);
+        pFormShell->GetImpl()->EnableTrackProperties_Lock(true);
 
         // let the view delete the marked controls
         pFormShell->GetFormView()->DeleteMarked();
@@ -1772,8 +1772,8 @@ namespace svxform
             if (dynamic_cast<const FmFormData*>( pCurrent) !=  nullptr)
             {
                 Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
-                if ( pFormShell->GetImpl()->getCurrentForm() == xCurrentForm )  // shell knows form to be deleted ?
-                    pFormShell->GetImpl()->forgetCurrentForm();                 // -> take away ...
+                if (pFormShell->GetImpl()->getCurrentForm_Lock() == xCurrentForm)  // shell knows form to be deleted ?
+                    pFormShell->GetImpl()->forgetCurrentForm_Lock();                 // -> take away ...
             }
             GetNavModel()->Remove(pCurrent, true);
         }
@@ -1941,7 +1941,7 @@ namespace svxform
         CollectSelectionData(SDI_NORMALIZED_FORMARK);
 
         // the view shouldn't notify now if MarkList changed
-        pFormShell->GetImpl()->EnableTrackProperties(false);
+        pFormShell->GetImpl()->EnableTrackProperties_Lock(false);
 
         UnmarkAllViewObj();
 
@@ -1981,7 +1981,7 @@ namespace svxform
         ShowSelectionProperties();
 
         // reset flag at view
-        pFormShell->GetImpl()->EnableTrackProperties(true);
+        pFormShell->GetImpl()->EnableTrackProperties_Lock(true);
 
         // if exactly one form is selected now, shell should notice it as CurrentForm
         // (if selection handling isn't locked, view cares about it in MarkListHasChanged
@@ -1994,7 +1994,7 @@ namespace svxform
             {
                 InterfaceBag aSelection;
                 aSelection.insert( Reference< XInterface >( pSingleSelectionData->GetFormIface(), UNO_QUERY ) );
-                pFormShell->GetImpl()->setCurrentSelection( aSelection );
+                pFormShell->GetImpl()->setCurrentSelection_Lock(aSelection);
             }
         }
     }

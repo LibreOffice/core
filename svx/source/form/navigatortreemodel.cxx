@@ -422,7 +422,7 @@ namespace svxform
 
             // If root has no more form, reset CurForm at shell
             if ( !GetRootList()->size() )
-                m_pFormShell->GetImpl()->forgetCurrentForm();
+                m_pFormShell->GetImpl()->forgetCurrentForm_Lock();
         }
 
 

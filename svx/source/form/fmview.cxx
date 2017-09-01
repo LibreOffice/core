@@ -166,7 +166,7 @@ void FmFormView::MarkListHasChanged()
             //OLMRefreshAllIAOManagers();
         }
 
-        pFormShell->GetImpl()->SetSelectionDelayed();
+        pFormShell->GetImpl()->SetSelectionDelayed_Lock();
     }
 }
 
@@ -235,7 +235,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
 
     // --- 2. simulate a deactivation (the shell will handle some things there ...?)
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated( *this );
+        pFormShell->GetImpl()->viewDeactivated_Lock(*this);
     else
         pImpl->Deactivate();
 
@@ -248,7 +248,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     if ( pCurPage )
     {
         if ( pFormShell && pFormShell->GetImpl() )
-            pFormShell->GetImpl()->loadForms( pCurPage, ( bDesign ? LoadFormsFlags::Unload : LoadFormsFlags::Load ) );
+            pFormShell->GetImpl()->loadForms_Lock(pCurPage, (bDesign ? LoadFormsFlags::Unload : LoadFormsFlags::Load));
     }
 
     // --- 5. base class functionality
@@ -257,7 +257,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     // --- 6. simulate a activation (the shell will handle some things there ...?)
     OSL_PRECOND( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: is this really allowed? No shell?" );
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewActivated( *this );
+        pFormShell->GetImpl()->viewActivated_Lock(*this);
     else
         pImpl->Activate();
 
@@ -326,18 +326,18 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
         else if ( pFormShell && pFormShell->IsDesignMode() )
         {
             FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
-            pFormShellImpl->UpdateForms( true );
+            pFormShellImpl->UpdateForms_Lock(true);
 
             // so that the form navigator can react to the pagechange
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
 
-            pFormShellImpl->SetSelection(GetMarkedObjectList());
+            pFormShellImpl->SetSelection_Lock(GetMarkedObjectList());
         }
     }
 
     // notify our shell that we have been activated
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewActivated( *this );
+        pFormShell->GetImpl()->viewActivated_Lock(*this);
     else
         pImpl->Activate();
 
@@ -353,7 +353,7 @@ void FmFormView::HideSdrPage()
 
     // --- 2. tell the shell the view is (going to be) deactivated
     if ( pFormShell && pFormShell->GetImpl() )
-        pFormShell->GetImpl()->viewDeactivated( *this );
+        pFormShell->GetImpl()->viewDeactivated_Lock(*this);
     else
         pImpl->Deactivate();
 
@@ -506,7 +506,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             &&   rKeyCode.IsMod2()
             )
         {
-            pFormShell->GetImpl()->handleShowPropertiesRequest();
+            pFormShell->GetImpl()->handleShowPropertiesRequest_Lock();
         }
 
     }
@@ -535,7 +535,7 @@ bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, vcl::Window* _pWin )
     {
         SdrViewEvent aViewEvent;
         PickAnything( _rMEvt, SdrMouseEventKind::BUTTONDOWN, aViewEvent );
-        pFormShell->GetImpl()->handleMouseButtonDown( aViewEvent );
+        pFormShell->GetImpl()->handleMouseButtonDown_Lock(aViewEvent);
     }
 
     return bReturn;
