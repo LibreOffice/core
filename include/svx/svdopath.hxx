@@ -24,6 +24,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/svxdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
+#include <memory>
 
 class ImpPathForDragAndCreate;
 
@@ -53,7 +54,7 @@ protected:
     SdrObjKind                  meKind;
 
     // for isolation of old Drag/Create code
-    ImpPathForDragAndCreate*    mpDAC;
+    std::unique_ptr<ImpPathForDragAndCreate> mpDAC;
 
     // brightness - used in EnhancedCustomShapes2d.cxx for DARKEN[LESS] and LIGHTEN[LESS] segments implementation
     double mdBrightness;
@@ -63,7 +64,6 @@ protected:
     void ImpForceKind();
     void ImpForceLineAngle();
     ImpPathForDragAndCreate& impGetDAC() const;
-    void impDeleteDAC() const;
 
 public:
     double GetBrightness() { return mdBrightness; }
