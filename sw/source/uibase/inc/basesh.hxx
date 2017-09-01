@@ -36,7 +36,7 @@ class SfxItemSet;
 class SwCursorShell;
 
 struct DBTextStruct_Impl;
-class SwBaseShell: public SfxShell
+class SAL_DLLPUBLIC_RTTI SwBaseShell: public SfxShell
 {
     SwView      &rView;
 

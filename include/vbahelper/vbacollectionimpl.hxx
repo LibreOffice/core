@@ -233,7 +233,7 @@ public:
 
 // including a HelperInterface implementation
 template< typename... Ifc >
-class ScVbaCollectionBase : public InheritedHelperInterfaceImpl< Ifc... >
+class SAL_DLLPUBLIC_RTTI ScVbaCollectionBase : public InheritedHelperInterfaceImpl< Ifc... >
 {
 typedef InheritedHelperInterfaceImpl< Ifc... > BaseColBase;
 protected:
@@ -341,7 +341,7 @@ public:
 };
 
 template < typename... Ifc > // where Ifc must implement XCollectionTest
-class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... > >
+class SAL_DLLPUBLIC_RTTI CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... > >
 {
 typedef ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... >  > ImplBase;
 

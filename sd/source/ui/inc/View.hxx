@@ -73,7 +73,7 @@ public:
     void End();
 };
 
-class View : public FmFormView
+class SAL_DLLPUBLIC_RTTI View : public FmFormView
 {
 public:
 

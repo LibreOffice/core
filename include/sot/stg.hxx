@@ -81,7 +81,7 @@ public:
 
 enum class SotClipboardFormatId : sal_uLong;
 
-class BaseStorage : public StorageBase
+class SAL_DLLPUBLIC_RTTI BaseStorage : public StorageBase
 {
 public:
     virtual const OUString&     GetName() const = 0;

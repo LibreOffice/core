@@ -34,7 +34,7 @@ class SwTextFrame;
 // implemented in cntfrm.cxx, used in cntfrm.cxx and crsrsh.cxx
 extern bool GetFrameInPage( const SwContentFrame*, SwWhichPage, SwPosPage, SwPaM* );
 
-class SwContentFrame: public SwFrame, public SwFlowFrame
+class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
 {
     friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );    // calls MakePrtArea
 

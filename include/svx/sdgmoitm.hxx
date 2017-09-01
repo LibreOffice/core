@@ -26,7 +26,7 @@
 #include <svx/svxdllapi.h>
 
 // MSVC hack:
-class SdrGrafModeItem_Base: public SfxEnumItem<GraphicDrawMode> {
+class SAL_DLLPUBLIC_RTTI SdrGrafModeItem_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
     SdrGrafModeItem_Base(GraphicDrawMode eMode):
         SfxEnumItem(SDRATTR_GRAFMODE, eMode) {}

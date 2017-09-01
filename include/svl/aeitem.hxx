@@ -30,7 +30,7 @@
 class SfxAllEnumValueArr;
 
 // MSVC hack:
-class SfxAllEnumItem_Base: public SfxEnumItem<sal_uInt16> {
+class SAL_DLLPUBLIC_RTTI SfxAllEnumItem_Base: public SfxEnumItem<sal_uInt16> {
 protected:
     explicit SfxAllEnumItem_Base(sal_uInt16 nWhich, sal_uInt16 nValue):
         SfxEnumItem(nWhich, nValue)

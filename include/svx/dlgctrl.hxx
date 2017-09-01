@@ -294,7 +294,7 @@ class SdrObject;
 class SdrPathObj;
 class SdrModel;
 
-class SAL_WARN_UNUSED SvxPreviewBase : public Control
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI SvxPreviewBase : public Control
 {
 private:
     SdrModel*             mpModel;
