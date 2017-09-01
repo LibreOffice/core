@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_958888e9",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3867,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-01T02:32:10Z",
+      "side": 1,
+      "message": "is this still useful? surely thread exit will clean up by itself?",
+      "revId": "da276446a2c53d3dbf768ab839f6c474fc415c08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
