@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XSessionManagerListener2.hpp>
 
-#include <list>
+#include <vector>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -64,7 +64,7 @@ class VCLSession:
         {}
     };
 
-    std::list< Listener >                           m_aListeners;
+    std::vector< Listener >                         m_aListeners;
     std::unique_ptr< SalSession >                   m_xSession;
     bool                                            m_bInteractionRequested;
     bool                                            m_bInteractionGranted;
@@ -111,17 +111,15 @@ void VCLSession::callSaveRequested( bool bShutdown )
 {
     SAL_INFO("vcl.se", "VCLSession::callSaveRequested" );
 
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
         // reset listener states
-        for( std::list< Listener >::iterator it = m_aListeners.begin();
-             it != m_aListeners.end(); ++it )
-        {
-            it->m_bSaveDone = it->m_bInteractionRequested = it->m_bInteractionDone = false;
+        for (auto & it: m_aListeners) {
+            it.m_bSaveDone = it.m_bInteractionRequested = it.m_bInteractionDone = false;
         }
 
-        // copy listener list since calling a listener may remove it.
+        // copy listener vector since calling a listener may remove it.
         aListeners = m_aListeners;
         // set back interaction state
         m_bSaveDone = false;
@@ -144,21 +142,21 @@ void VCLSession::callSaveRequested( bool bShutdown )
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
-        it->m_xListener->doSave( bShutdown, false/*bCancelable*/ );
+    for (auto const & it: aListeners)
+        it.m_xListener->doSave( bShutdown, false/*bCancelable*/ );
 }
 
 void VCLSession::callInteractionGranted( bool bInteractionGranted )
 {
     SAL_INFO("vcl.se", "VCLSession::callInteractionGranted" );
 
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
-        // copy listener list since calling a listener may remove it.
-        for( std::list< Listener >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
-            if( it->m_bInteractionRequested )
-                aListeners.push_back( *it );
+        // copy listener vector since calling a listener may remove it.
+        for (auto const & it: m_aListeners)
+            if( it.m_bInteractionRequested )
+                aListeners.push_back( it );
 
         m_bInteractionGranted = bInteractionGranted;
 
@@ -176,45 +174,45 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
-        it->m_xListener->approveInteraction( bInteractionGranted );
+    for (auto const & it: aListeners)
+        it.m_xListener->approveInteraction( bInteractionGranted );
 }
 
 void VCLSession::callShutdownCancelled()
 {
     SAL_INFO("vcl.se", "VCLSession::callShutdownCancelled");
 
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
-        // copy listener list since calling a listener may remove it.
+        // copy listener vector since calling a listener may remove it.
         aListeners = m_aListeners;
         // set back interaction state
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
-        it->m_xListener->shutdownCanceled();
+    for (auto const & it: aListeners)
+        it.m_xListener->shutdownCanceled();
 }
 
 void VCLSession::callQuit()
 {
     SAL_INFO("vcl.se", "VCLSession::callQuit");
 
-    std::list< Listener > aListeners;
+    std::vector< Listener > aListeners;
     {
         osl::MutexGuard aGuard( m_aMutex );
-        // copy listener list since calling a listener may remove it.
+        // copy listener vector since calling a listener may remove it.
         aListeners = m_aListeners;
         // set back interaction state
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
     SolarMutexReleaser aReleaser;
-    for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
+    for (auto const & it: aListeners)
     {
-        css::uno::Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );
+        css::uno::Reference< XSessionManagerListener2 > xListener2( it.m_xListener, UNO_QUERY );
         if( xListener2.is() )
             xListener2->doQuit();
     }
@@ -268,18 +266,11 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Referenc
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    std::list< Listener >::iterator it = m_aListeners.begin();
+    std::vector< Listener >::iterator it = m_aListeners.begin();
 
     SAL_INFO("vcl.se.debug", "  m_aListeners.size() = " << m_aListeners.size() );
-    while( it != m_aListeners.end() )
-    {
-        if( it->m_xListener == xListener )
-        {
-            it = m_aListeners.erase(it);
-        }
-        else
-            ++it;
-    }
+
+    m_aListeners.erase(std::remove_if(m_aListeners.begin(), m_aListeners.end(), [&](Listener& listener) {return xListener == listener.m_xListener;}), m_aListeners.end());
 }
 
 void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerListener>& xListener )
@@ -303,13 +294,13 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
         m_xSession->queryInteraction();
         m_bInteractionRequested = true;
     }
-    for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    for (auto & it: m_aListeners)
     {
-        if( it->m_xListener == xListener )
+        if( it.m_xListener == xListener )
         {
             SAL_INFO("vcl.se.debug", "  it->m_xListener == xListener");
-            it->m_bInteractionRequested = true;
-            it->m_bInteractionDone      = false;
+            it.m_bInteractionRequested = true;
+            it.m_bInteractionDone      = false;
         }
     }
 }
@@ -320,15 +311,15 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
 
     osl::MutexGuard aGuard( m_aMutex );
     int nRequested = 0, nDone = 0;
-    for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
+    for (auto & it: m_aListeners)
     {
-        if( it->m_bInteractionRequested )
+        if( it.m_bInteractionRequested )
         {
             nRequested++;
-            if( xListener == it->m_xListener )
-                it->m_bInteractionDone = true;
+            if( xListener == it.m_xListener )
+                it.m_bInteractionDone = true;
         }
-        if( it->m_bInteractionDone )
+        if( it.m_bInteractionDone )
             nDone++;
     }
 
@@ -349,12 +340,11 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
     osl::MutexGuard aGuard( m_aMutex );
 
     bool bSaveDone = true;
-    for( std::list< Listener >::iterator it = m_aListeners.begin();
-         it != m_aListeners.end(); ++it )
+    for (auto & it: m_aListeners)
     {
-        if( it->m_xListener == xListener )
-            it->m_bSaveDone = true;
-        if( ! it->m_bSaveDone )
+        if( it.m_xListener == xListener )
+            it.m_bSaveDone = true;
+        if( ! it.m_bSaveDone )
             bSaveDone = false;
     }
 
@@ -378,13 +368,13 @@ sal_Bool SAL_CALL VCLSession::cancelShutdown()
 void VCLSession::disposing() {
     SAL_INFO("vcl.se", "VCLSession::disposing");
 
-    std::list<Listener> list;
+    std::vector<Listener> vector;
     {
         osl::MutexGuard g(m_aMutex);
-        list.swap(m_aListeners);
+        vector.swap(m_aListeners);
     }
     css::lang::EventObject src(static_cast<OWeakObject *>(this));
-    for (auto const & i: list) {
+    for (auto const & i: vector) {
         try {
             i.m_xListener->disposing(src);
             SAL_INFO("vcl.se.debug", "  call Listener disposing");
