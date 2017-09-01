@@ -1906,6 +1906,52 @@ bool VerifyNonDetachedSignature(const std::vector<unsigned char>& aData, const s
     return aActualHash.size() == rExpectedHash.size() &&
            !std::memcmp(aActualHash.data(), rExpectedHash.data(), aActualHash.size());
 }
+
+OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
+{
+    OUString subjectName;
+
+    // Get Subject name size.
+    DWORD dwData = CertGetNameString(pCertContext,
+                                     CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                                     0,
+                                     nullptr,
+                                     nullptr,
+                                     0);
+    if (!dwData)
+    {
+        SAL_WARN("svl.crypto", "ValidateSignature: CertGetNameString failed");
+        return subjectName;
+    }
+
+    // Allocate memory for subject name.
+    LPTSTR szName = (LPTSTR)LocalAlloc(LPTR, dwData * sizeof(TCHAR));
+    if (!szName)
+    {
+        SAL_WARN("svl.crypto", "ValidateSignature: Unable to allocate memory for subject name");
+        return subjectName;
+    }
+
+    // Get subject name.
+    if (!CertGetNameString(pCertContext,
+                           CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                           0,
+                           nullptr,
+                           szName,
+                           dwData))
+    {
+        SAL_WARN("svl.crypto", "ValidateSignature: CertGetNameString failed");
+        return subjectName;
+    }
+
+    subjectName = OUString::fromUtf8(OString(szName));
+
+    if (szName != nullptr)
+        LocalFree(szName);
+
+    return subjectName;
+}
+
 #endif
 }
 
@@ -2211,6 +2257,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         OUStringBuffer aBuffer;
         comphelper::Base64::encode(aBuffer, aDerCert);
         rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
+        rInformation.ouSubject = GetSubjectName(pSignerCertContext);
     }
 
     if (bNonDetached)
