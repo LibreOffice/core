@@ -1088,23 +1088,6 @@ void Dialog::SetModalInputMode( bool bModal )
     ImplGetFrame()->SetModal(bModal);
 }
 
-void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
-{
-    if ( bSubModalDialogs )
-    {
-        vcl::Window* pOverlap = ImplGetFirstOverlapWindow();
-        pOverlap = pOverlap->mpWindowImpl->mpFirstOverlap;
-        while ( pOverlap )
-        {
-            if ( pOverlap->IsDialog() )
-                static_cast<Dialog*>(pOverlap)->SetModalInputMode( bModal, true );
-            pOverlap = pOverlap->mpWindowImpl->mpNext;
-        }
-    }
-
-    SetModalInputMode( bModal );
-}
-
 void Dialog::GrabFocusToFirstControl()
 {
     vcl::Window* pFocusControl;
