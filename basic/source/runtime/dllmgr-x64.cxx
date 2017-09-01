@@ -26,7 +26,6 @@
 
 #include <algorithm>
 #include <cstddef>
-#include <list>
 #include <map>
 #include <vector>
 
@@ -108,8 +107,8 @@ public:
     const MarshalData& operator=(const MarshalData&) = delete;
 
     std::vector< char > * newBlob() {
-        blobs_.push_front(std::vector< char >());
-        return &blobs_.front();
+        blobs_.push_back(std::vector< char >());
+        return &blobs_.back();
     }
 
     std::vector< UnmarshalData > unmarshal;
@@ -117,7 +116,7 @@ public:
     std::vector< StringData > unmarshalStrings;
 
 private:
-    std::list< std::vector< char > > blobs_;
+    std::vector< std::vector< char > > blobs_;
 };
 
 std::size_t align(std::size_t address, std::size_t alignment) {
