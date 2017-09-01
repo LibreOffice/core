@@ -30,6 +30,7 @@
 #include <rtl/uri.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
@@ -1174,11 +1175,12 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
 void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE);
+    Reference <XFilePicker3> xFP = aDlg.GetFilePicker();
+
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
     Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
-
-    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_SIMPLE);
 
     xFP->setTitle(IDEResId(RID_STR_EXPORTPACKAGE));
 
