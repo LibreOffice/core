@@ -147,7 +147,7 @@ void SwAccessiblePortionData::Special(
         case POR_HIDDEN:
         case POR_COMBINED:
         case POR_ISOREF:
-            // When the filed content is empty, input a special character.
+            // When the field content is empty, input a special character.
             if (rText.isEmpty())
                 sDisplay = OUString(u'\xfffc');
             else

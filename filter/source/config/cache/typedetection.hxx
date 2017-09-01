@@ -132,7 +132,7 @@ private:
 
     /** @short      seek a might existing stream to position 0.
 
-        @descr      This is an optinal action to be more robust
+        @descr      This is an optional action to be more robust
                     in case any detect service doesn't make this seek ...
                     Normally it's part of any called detect service or filter ...
                     but sometimes it's not done there.
