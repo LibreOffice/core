@@ -847,7 +847,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
     sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UNKNOWN_CONTEXT;
-
+    vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && !aPreselectedFilterPropsHM.empty() )
@@ -855,13 +855,13 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             // this is a PDF export
             // the filter options has been shown already
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rBlackList ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rBlackList, pWin ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
             // This is the normal dialog
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList, pWin ));
         }
 
         if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
@@ -889,7 +889,6 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     else
     {
         // This is the normal dialog
-        vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
         pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog,
             nMust, nDont, rStandardDir, rBlackList, pWin ));
         pFileDlg->CreateMatcher( aDocServiceName );
