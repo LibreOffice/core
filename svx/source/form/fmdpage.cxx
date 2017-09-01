@@ -22,6 +22,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/unoshape.hxx>
+#include <vcl/svapp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -92,6 +93,8 @@ css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObje
 // XFormsSupplier
 css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms()
 {
+    SolarMutexGuard g;
+
     css::uno::Reference< css::container::XNameContainer >  xForms;
 
     FmFormPage *pFmPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
@@ -104,6 +107,8 @@ css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxFmDrawPage::ge
 // XFormsSupplier2
 sal_Bool SAL_CALL SvxFmDrawPage::hasForms()
 {
+    SolarMutexGuard g;
+
     bool bHas = false;
     FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
     if ( pFormPage )
