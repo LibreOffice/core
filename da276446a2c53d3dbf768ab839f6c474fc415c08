@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_154c98c6",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3866,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-01T07:24:21Z",
+      "side": 1,
+      "message": "This ensure (rather assert) doesn\u0027t make sense, as once the interpreter was run pGlobalStack will be allocated. With removing the bGlobalStackInUse mechanism there is no detection whether an ScInterpreter instance is still using it or not.",
+      "revId": "da276446a2c53d3dbf768ab839f6c474fc415c08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_958888e9",
         "filename": "sc/source/core/tool/interpr4.cxx",
         "patchSetId": 2
