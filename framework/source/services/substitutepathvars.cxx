@@ -184,7 +184,7 @@ private:
 
     VarNameToIndexMap            m_aPreDefVarMap;         // Mapping from pre-def variable names to enum for array access
     PredefinedPathVariables      m_aPreDefVars;           // All predefined variables
-    std::list<ReSubstFixedVarOrder> m_aReSubstFixedVarOrder; // To speed up resubstitution fixed variables (order for lookup)
+    std::vector<ReSubstFixedVarOrder> m_aReSubstFixedVarOrder; // To speed up resubstitution fixed variables (order for lookup)
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
@@ -219,7 +219,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
             m_aReSubstFixedVarOrder.push_back( aFixedVar );
         }
     }
-    m_aReSubstFixedVarOrder.sort();
+    sort(m_aReSubstFixedVarOrder.begin(),m_aReSubstFixedVarOrder.end());
 }
 
 // XStringSubstitution
