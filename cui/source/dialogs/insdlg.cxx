@@ -48,6 +48,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -95,9 +96,8 @@ IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, Button*, void)
 {
-    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-
-    Reference< XFilePicker3 > xFilePicker = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
+    sfx2::FileDialogHelper aHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, this);
+    Reference< XFilePicker3 > xFilePicker = aHelper.GetFilePicker();
 
     // add filter
     try
