@@ -103,7 +103,7 @@ private:
 public:
                             FileDialogHelper( sal_Int16 nDialogType,
                                               FileDialogFlags nFlags = FileDialogFlags::NONE,
-                                              vcl::Window* _pPreferredParent = nullptr );
+                                              const vcl::Window* _pPreferredParent = nullptr );
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               FileDialogFlags nFlags,
@@ -119,7 +119,7 @@ public:
                                               SfxFilterFlags nDont,
                                               const OUString& rStandardDir,
                                               const css::uno::Sequence< OUString >& rBlackList,
-                                              vcl::Window* _pPreferredParent = nullptr);
+                                              const vcl::Window* _pPreferredParent = nullptr);
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               FileDialogFlags nFlags,
@@ -127,7 +127,7 @@ public:
                                               const OUString& aExtName,
                                               const OUString& rStandardDir,
                                               const css::uno::Sequence< OUString >& rBlackList,
-                                              vcl::Window* _pPreferredParent = nullptr );
+                                              const vcl::Window* _pPreferredParent = nullptr );
 
     virtual                 ~FileDialogHelper();
 

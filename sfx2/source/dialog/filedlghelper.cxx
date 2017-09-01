@@ -845,7 +845,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
     sal_Int16 nDialog,
-    vcl::Window* _pPreferredParentWindow,
+    const vcl::Window* _pPreferredParentWindow,
     const OUString& sStandardDir,
     const css::uno::Sequence< OUString >& rBlackList
     )
@@ -874,7 +874,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpPreferredParentWindow = _pPreferredParentWindow;
+    mpPreferredParentWindow = _pPreferredParentWindow ? _pPreferredParentWindow->GetSystemWindow() : nullptr;
     mpAntiImpl              = _pAntiImpl;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
@@ -2266,7 +2266,7 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nDont,
     const OUString& rStandardDir,
     const css::uno::Sequence< OUString >& rBlackList,
-    vcl::Window* _pPreferredParent)
+    const vcl::Window* _pPreferredParent)
     :   m_nError(0),
         mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, _pPreferredParent, rStandardDir, rBlackList ) )
 {
@@ -2278,7 +2278,7 @@ FileDialogHelper::FileDialogHelper(
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
-    vcl::Window* _pPreferredParent )
+    const vcl::Window* _pPreferredParent )
     :   m_nError(0),
         mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent ) )
 {
@@ -2291,7 +2291,7 @@ FileDialogHelper::FileDialogHelper(
     const OUString& aExtName,
     const OUString& rStandardDir,
     const css::uno::Sequence< OUString >& rBlackList,
-    vcl::Window* _pPreferredParent )
+    const vcl::Window* _pPreferredParent )
     :   m_nError(0),
         mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir, rBlackList ) )
 {
