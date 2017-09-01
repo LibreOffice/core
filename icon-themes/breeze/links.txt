@@ -696,10 +696,8 @@ cmd/lc_presentation.png cmd/lc_dia.png
 cmd/sc_presentation.png cmd/sc_dia.png
 
 # Style
-cmd/lc_editstyle.png cmd/lc_designerdialog.png
-cmd/lc_editstyled.png cmd/lc_designerdialog.png
-cmd/sc_editstyle.png cmd/sc_designerdialog.png
-cmd/sc_editstyled.png cmd/sc_designerdialog.png
+cmd/lc_editstyled.png cmd/lc_editstyle.png
+cmd/sc_editstyled.png cmd/sc_editstyle.png
 
 # Outline
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
