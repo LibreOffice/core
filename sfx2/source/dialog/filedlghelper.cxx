@@ -845,7 +845,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
     sal_Int16 nDialog,
-    vcl::Window* _pPreferredParentWindow,
+    const vcl::Window* _pPreferredParentWindow,
     const OUString& sStandardDir,
     const css::uno::Sequence< OUString >& rBlackList
     )
@@ -874,7 +874,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpPreferredParentWindow = _pPreferredParentWindow;
+    mpPreferredParentWindow = _pPreferredParentWindow ? _pPreferredParentWindow->GetSystemWindow() : nullptr;
     mpAntiImpl              = _pAntiImpl;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
