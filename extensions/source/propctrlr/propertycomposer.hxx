@@ -135,7 +135,7 @@ namespace pcr
                 : ::osl::MutexGuard( _rInstance.m_aMutex )
             {
                 if ( _rInstance.m_aSlaveHandlers.empty() )
-                    throw css::lang::DisposedException( OUString(), *(&_rInstance) );
+                    throw css::lang::DisposedException( OUString(), _rInstance );
             }
         };
     };

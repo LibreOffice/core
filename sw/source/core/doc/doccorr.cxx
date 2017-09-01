@@ -147,7 +147,7 @@ void PaMCorrAbs( const SwPaM& rRange,
             dynamic_cast<SwUnoTableCursor *>(pUnoCursor.get());
         if( pUnoTableCursor )
         {
-            for(SwPaM& rPaM : (&pUnoTableCursor->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : pUnoTableCursor->GetSelRing().GetRingContainer())
             {
                 bChange |=
                     lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
@@ -289,7 +289,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
             dynamic_cast<SwUnoTableCursor*>(pUnoCursor.get());
         if( pUnoTableCursor )
         {
-            for(SwPaM& rPaM : (&pUnoTableCursor->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : pUnoTableCursor->GetSelRing().GetRingContainer())
             {
                 lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
             }

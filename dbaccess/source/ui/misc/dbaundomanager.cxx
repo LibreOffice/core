@@ -309,7 +309,7 @@ namespace dbaui
     Reference< XInterface > SAL_CALL UndoManager::getParent(  )
     {
         UndoManagerMethodGuard aGuard( *m_xImpl );
-        return *&m_xImpl->rParent;
+        return m_xImpl->rParent;
     }
 
     void SAL_CALL UndoManager::setParent( const Reference< XInterface >& )
