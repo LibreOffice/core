@@ -4963,10 +4963,6 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             return;
         }
         bool bVertDir = true;
-        // #i43913# - no vertical alignment, if wrapping
-        // style influence is considered on object positioning and
-        // an object is anchored inside the cell.
-        const bool bConsiderWrapOnObjPos( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
         //No alignment if border with flow overlaps the cell.
         if ( pPg->GetSortedObjs() )
         {
@@ -4975,11 +4971,14 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             {
                 SwRect aTmp( pAnchoredObj->GetObjRect() );
                 const SwFrame* pAnch = pAnchoredObj->GetAnchorFrame();
+                // #i43913# - no vertical alignment, if wrapping
+                // style influence is considered on object positioning and
+                // an object is anchored inside the cell.
+                const bool bConsiderWrapOnObjPos( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
                 if ( (bConsiderWrapOnObjPos && IsAnLower( pAnch )) || (!bConsiderWrapOnObjPos && aTmp.IsOver( aRect )) )
                 {
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
-
                     if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
