@@ -78,7 +78,7 @@ using namespace com::sun::star::uno;
 #include <sbintern.hxx>
 #include <basic/vbahelper.hxx>
 
-#include <list>
+#include <vector>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -3437,7 +3437,7 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
 
         // #55735 if there are parameters, they have to be separated
         // #72471 also separate the single parameters
-        std::list<OUString> aTokenList;
+        std::vector<OUString> aTokenVector;
         OUString aToken;
         sal_Int32 i = 0;
         sal_Unicode c;
@@ -3486,7 +3486,7 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
             }
 
             // insert into the list
-            aTokenList.push_back( aToken );
+            aTokenVector.push_back( aToken );
         }
         // #55735 / #72471 end
 
@@ -3519,21 +3519,21 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
         }
 
         // #72471 work parameter(s) up
-        std::list<OUString>::const_iterator iter = aTokenList.begin();
+        std::vector<OUString>::const_iterator iter = aTokenVector.begin();
         OUString aOUStrProgURL = getFullPath( *iter );
 
         ++iter;
 
-        sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(aTokenList.size() - 1 );
+        sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(aTokenVector.size() - 1 );
         std::unique_ptr<rtl_uString*[]> pParamList;
         if( nParamCount )
         {
             pParamList.reset( new rtl_uString*[nParamCount]);
-            for(int iList = 0; iter != aTokenList.end(); ++iList, ++iter)
+            for(int iVector = 0; iter != aTokenVector.end(); ++iVector, ++iter)
             {
                 const OUString& rParamStr = (*iter);
-                pParamList[iList] = nullptr;
-                rtl_uString_assign(&(pParamList[iList]), rParamStr.pData);
+                pParamList[iVector] = nullptr;
+                rtl_uString_assign(&(pParamList[iVector]), rParamStr.pData);
             }
         }
 
