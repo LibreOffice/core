@@ -274,7 +274,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     SAL_INFO("other", ...) generate output, while calls like
     SAL_INFO("foo", ...) or SAL_INFO("foo.barzzz", ...) do not.
 
-    The generated log output consists of the optinal timestamp, the given level
+    The generated log output consists of the optional timestamp, the given level
     ("info" or "warn"), the given area, the process ID, the thread ID, the
     source file, and the source line number, each followed by a colon, followed
     by a space, the given message, and a newline.  The precise format of the log

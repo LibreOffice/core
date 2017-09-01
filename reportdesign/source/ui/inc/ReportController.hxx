@@ -237,7 +237,7 @@ namespace rptui
         */
         void createPageNumber(const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
-        /** creates a formatted filed with TODAY() function and if set also an NOW() function
+        /** creates a formatted field with TODAY() function and if set also an NOW() function
         *
         * \param _aArgs
         */

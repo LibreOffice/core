@@ -233,7 +233,7 @@ namespace dbaui
 
         void            adjustSelectionMode( bool _bClickedOntoHeader, bool _bClickedOntoHandleCol );
 
-        /** save the filed change in save modified
+        /** save the field change in save modified
             @param  _sFieldName
                 The field name inserted by the user.
             @param  _pEntry

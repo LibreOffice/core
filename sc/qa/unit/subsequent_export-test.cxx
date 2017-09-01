@@ -625,7 +625,7 @@ void ScExportTest::testPivotCacheExportXLSX()
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[1]/x:sharedItems", "count", "5");
 
     // Two integers and one empty field
-    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "mixed empty fileds and integers");
+    assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]", "name", "mixed empty fields and integers");
     assertXPath(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsBlank", "1");
     assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsMixedTypes");
     assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[2]/x:sharedItems", "containsSemiMixedTypes");

@@ -1522,7 +1522,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             = "TITLE";
         static const sal_Char* aName14 // Spanish
             = "TITRO";
-        static const sal_Char* aName20 = "\x15"; // SW filed code
+        static const sal_Char* aName20 = "\x15"; // SW field code
         static const sal_Char* aName21 // German
             = "ERSTELLDATUM";
         static const sal_Char* aName22 // French
@@ -1531,7 +1531,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             = "CREATED";
         static const sal_Char* aName24 // Spanish
             = "CREADO";
-        static const sal_Char* aName30 = "\x16"; // SW filed code
+        static const sal_Char* aName30 = "\x16"; // SW field code
         static const sal_Char* aName31 // German
             = "ZULETZTGESPEICHERTZEIT";
         static const sal_Char* aName32 // French
@@ -1540,7 +1540,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             = "SAVED";
         static const sal_Char* aName34 // Spanish
             = "MODIFICADO";
-        static const sal_Char* aName40 = "\x17"; // SW filed code
+        static const sal_Char* aName40 = "\x17"; // SW field code
         static const sal_Char* aName41 // German
             = "ZULETZTGEDRUCKT";
         static const sal_Char* aName42 // French
@@ -1549,7 +1549,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             = "LASTPRINTED";
         static const sal_Char* aName44 // Spanish
             = "HUPS PUPS";
-        static const sal_Char* aName50 = "\x18"; // SW filed code
+        static const sal_Char* aName50 = "\x18"; // SW field code
         static const sal_Char* aName51 // German
             = "\xDC" "BERARBEITUNGSNUMMER";
         static const sal_Char* aName52 // French
