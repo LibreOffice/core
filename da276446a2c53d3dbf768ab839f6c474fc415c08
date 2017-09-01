@@ -16,6 +16,24 @@
       "revId": "da276446a2c53d3dbf768ab839f6c474fc415c08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_755a3c85",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3867,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-09-01T05:12:23Z",
+      "side": 1,
+      "message": "Sure, but I don\u0027t know when this GlobalExit() thing is called, so to keep semantics as intact as possible I have it there. (As such, I am in the camp that thinks most cleanups and deallocations before process exit are pointless, so if this is called when the process is about to exit I agree, but...)",
+      "parentUuid": "1a430d35_958888e9",
+      "revId": "da276446a2c53d3dbf768ab839f6c474fc415c08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
