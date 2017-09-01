@@ -37,9 +37,6 @@ typedef ::cppu::ImplHelper1 <   css::awt::XSystemDependentWindowPeer
 class TOOLKIT_DLLPUBLIC VCLXTopWindow_Base  :public VCLXTopWindow_XBase
                                             ,public VCLXTopWindow_SBase
 {
-private:
-    const bool  m_bWHWND;
-
 protected:
     css::uno::Reference< css::awt::XMenuBar> mxMenuBar;
 
@@ -47,7 +44,7 @@ protected:
     virtual vcl::Window* GetWindowImpl() = 0;
     virtual ::comphelper::OInterfaceContainerHelper2& GetTopWindowListenersImpl() = 0;
 
-    VCLXTopWindow_Base( const bool _bSupportSystemWindowPeer );
+    VCLXTopWindow_Base();
 
 public:
     virtual ~VCLXTopWindow_Base();
@@ -88,7 +85,7 @@ protected:
     virtual ::comphelper::OInterfaceContainerHelper2& GetTopWindowListenersImpl() override;
 
 public:
-    VCLXTopWindow(bool bWHWND = false);
+    VCLXTopWindow();
     virtual ~VCLXTopWindow() override;
 
     // css::uno::XInterface

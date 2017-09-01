@@ -49,8 +49,7 @@ using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
-VCLXTopWindow_Base::VCLXTopWindow_Base( const bool _bSupportSystemWindowPeer )
-    :m_bWHWND( _bSupportSystemWindowPeer )
+VCLXTopWindow_Base::VCLXTopWindow_Base()
 {
 }
 
@@ -62,8 +61,7 @@ Any VCLXTopWindow_Base::queryInterface( const Type & rType )
 {
     css::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
 
-    // do not expose XSystemDependentWindowPeer if we do not have a system window handle
-    if ( !aRet.hasValue() && m_bWHWND )
+    if (!aRet.hasValue())
         aRet = VCLXTopWindow_SBase::queryInterface( rType );
 
     return aRet;
@@ -72,8 +70,7 @@ Any VCLXTopWindow_Base::queryInterface( const Type & rType )
 Sequence< Type > VCLXTopWindow_Base::getTypes()
 {
     Sequence< Type > aTypes( VCLXTopWindow_XBase::getTypes() );
-    if ( m_bWHWND )
-        aTypes = ::comphelper::concatSequences( aTypes, VCLXTopWindow_SBase::getTypes() );
+    aTypes = ::comphelper::concatSequences( aTypes, VCLXTopWindow_SBase::getTypes() );
     return aTypes;
 }
 
@@ -249,8 +246,7 @@ void VCLXTopWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
-VCLXTopWindow::VCLXTopWindow(bool bWHWND)
-    : VCLXTopWindow_Base( bWHWND )
+VCLXTopWindow::VCLXTopWindow()
 {
 }
 
