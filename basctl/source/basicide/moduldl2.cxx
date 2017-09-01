@@ -732,7 +732,9 @@ void LibPage::InsertLib()
 {
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
-    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pTabDlg);
+    Reference <XFilePicker3> xFP = aDlg.GetFilePicker();
+
     xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
 
     // filter
