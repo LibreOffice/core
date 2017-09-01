@@ -874,7 +874,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpPreferredParentWindow = _pPreferredParentWindow;
+    mpPreferredParentWindow = _pPreferredParentWindow ? _pPreferredParentWindow->GetSystemWindow() : nullptr;
     mpAntiImpl              = _pAntiImpl;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
