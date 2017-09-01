@@ -1163,7 +1163,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                             pNewWindow = VclPtr<WorkWindow>::Create( pParent, nWinBits );
                     }
 
-                    *ppNewComp = new VCLXTopWindow( pNewWindow->GetType() == WindowType::WORKWINDOW );
+                    *ppNewComp = new VCLXTopWindow();
                 }
                 else if ( rDescriptor.Type == css::awt::WindowClass_CONTAINER )
                 {
@@ -1406,7 +1406,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
     css::uno::Reference< css::awt::XWindowPeer > xPeer;
     if ( pChildWindow )
     {
-        VCLXTopWindow* pPeer = new VCLXTopWindow(true);
+        VCLXTopWindow* pPeer = new VCLXTopWindow;
         SolarMutexGuard aGuard;
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;
