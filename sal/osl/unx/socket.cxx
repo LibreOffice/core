@@ -1318,23 +1318,19 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     return createSocketAddrFromSystem( &Addr );
 }
 
-sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket pSocket,
-                             oslSocketAddr pAddr)
+sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket pSocket, oslSocketAddr pAddr)
 {
-    int nRet;
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    SAL_WARN_IF(!pAddr, "sal.osl", "undefined address");
 
-    SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-    SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
-    if ( pSocket == nullptr || pAddr == nullptr )
-    {
+    if (!pSocket || !pAddr)
         return false;
-    }
 
     pSocket->m_nLastError=0;
 
-    nRet = bind(pSocket->m_Socket, &(pAddr->m_sockaddr), sizeof(struct sockaddr));
+    int nBindResult = bind(pSocket->m_Socket, &(pAddr->m_sockaddr), sizeof(struct sockaddr));
 
-    if ( nRet == OSL_SOCKET_ERROR)
+    if (nBindResult == OSL_SOCKET_ERROR)
     {
         pSocket->m_nLastError=errno;
         return false;
