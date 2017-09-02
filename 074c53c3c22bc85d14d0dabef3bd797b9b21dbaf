@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_035622d2",
+        "filename": "sc/qa/extras/scannotationobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-02T12:09:49Z",
+      "side": 1,
+      "message": "maybe I\u0027m missing something obvious, but dont we just define a destructor like\n     ScAnnontationObj::~ScAnnontationObj\nand do the document closing there?\n\nthen we don\u0027t need any of this NUMBER_OF_TESTS stuff",
+      "revId": "074c53c3c22bc85d14d0dabef3bd797b9b21dbaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
