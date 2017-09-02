@@ -1614,16 +1614,16 @@ sal_Int32 SAL_CALL osl_receiveSocket(
     return nRead;
 }
 
-sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
-                              oslSocketAddr pSenderAddr,
-                              void* pBuffer,
-                              sal_uInt32 BufferSize,
-                              oslSocketMsgFlag Flag)
+sal_Int32 SAL_CALL osl_receiveFromSocket(
+    oslSocket pSocket,
+    oslSocketAddr pSenderAddr,
+    void* pBuffer,
+    sal_uInt32 BufferSize,
+    oslSocketMsgFlag Flag)
 {
-    int nRead;
     struct sockaddr *pSystemSockAddr = nullptr;
     socklen_t AddrLen = 0;
-    if( pSenderAddr )
+    if (pSenderAddr)
     {
         AddrLen = sizeof( struct sockaddr );
         pSystemSockAddr = &(pSenderAddr->m_sockaddr);
@@ -1635,9 +1635,9 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
         return -1;
     }
 
-    pSocket->m_nLastError=0;
+    pSocket->m_nLastError = 0;
 
-    nRead = recvfrom(pSocket->m_Socket,
+    int nRead = recvfrom(pSocket->m_Socket,
                      pBuffer,
                      BufferSize,
                      MSG_FLAG_TO_NATIVE(Flag),
@@ -1646,13 +1646,13 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
 
     if ( nRead < 0 )
     {
-        pSocket->m_nLastError=errno;
+        pSocket->m_nLastError = errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN("sal.osl", "receive socket [" << nRead << "] failed: (" << nErrno << ") " << strerror(nErrno));
     }
     else if ( nRead == 0 )
     {
-        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: EOL" );
+        SAL_WARN("sal.osl", "receive socket [" << nRead << "] failed: EOL");
     }
 
     return nRead;

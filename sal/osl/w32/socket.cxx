@@ -1106,25 +1106,25 @@ sal_Int32 SAL_CALL osl_receiveSocket(
 }
 
 sal_Int32 SAL_CALL osl_receiveFromSocket (
-    oslSocket        pSocket,
-    oslSocketAddr    SenderAddr,
-    void*            pBuffer,
-    sal_uInt32       BufferSize,
+    oslSocket pSocket,
+    oslSocketAddr SenderAddr,
+    void* pBuffer,
+    sal_uInt32 BufferSize,
     oslSocketMsgFlag Flag)
 {
     struct sockaddr *pSystemSockAddr = nullptr;
     int AddrLen = 0;
-    if( SenderAddr )
+    if (SenderAddr)
     {
-        AddrLen = sizeof( struct sockaddr );
+        AddrLen = sizeof(struct sockaddr);
         pSystemSockAddr = &(SenderAddr->m_sockaddr);
     }
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     return recvfrom(pSocket->m_Socket,
-                     static_cast<sal_Char*>(pBuffer),
+                     static_cast< sal_Char* >(pBuffer),
                      BufferSize,
                      MSG_FLAG_TO_NATIVE(Flag),
                      pSystemSockAddr,
