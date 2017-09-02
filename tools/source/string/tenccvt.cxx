@@ -44,7 +44,7 @@ rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEncoding )
     // East-Europe - Latin2
     else if ( eEncoding == RTL_TEXTENCODING_ISO_8859_2 )
         return RTL_TEXTENCODING_MS_1250;
-    // Latin-15 - Latin 1 mit Euro-Sign
+    // Latin-15 - Latin 1 with euro sign
     else if ( eEncoding == RTL_TEXTENCODING_ISO_8859_15 )
         return RTL_TEXTENCODING_MS_1252;
     else

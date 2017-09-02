@@ -657,7 +657,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             CommandEvent* pCmdEvt = static_cast<CommandEvent*>(rVclWindowEvent.GetData());
             if ( mpImpl->getMouseListeners().getLength() && ( pCmdEvt->GetCommand() == CommandEventId::ContextMenu ) )
             {
-                // CommandEventId::ContextMenu als mousePressed mit PopupTrigger = sal_True versenden...
+                // CommandEventId::ContextMenu: send as mousePressed with PopupTrigger = true ...
                 Point aWhere = static_cast< CommandEvent* >( rVclWindowEvent.GetData() )->GetMousePosPixel();
                 if ( !pCmdEvt->IsMouseEvent() )
                 {   // for keyboard events, we set the coordinates to -1,-1. This is a slight HACK, but the current API

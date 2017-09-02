@@ -52,7 +52,7 @@ private:
     VclPtr<PushButton>         mpEnableBtn;
     VclPtr<PushButton>         mpDisableBtn;
 
-    const bool          mbSignedMode;           // modus of dialog (signed / unsigned macros)
+    const bool          mbSignedMode;           // mode of dialog (signed / unsigned macros)
     const bool          mbShowSignatures;
     sal_Int32           mnActSecLevel;
 

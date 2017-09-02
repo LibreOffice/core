@@ -138,7 +138,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "FontEmphasisMark",       FONTEMPHASISMARK,   sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontDescriptor",         FONTDESCRIPTOR,     FontDescriptor,     BOUND, MAYBEDEFAULT ),
 
-            // Teile des css::awt::FontDescriptor
+            // parts of css::awt::FontDescriptor
             DECL_PROP_2     ( "FontName",               FONTDESCRIPTORPART_NAME,         OUString,BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontStyleName",          FONTDESCRIPTORPART_STYLENAME,    OUString,BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontFamily",             FONTDESCRIPTORPART_FAMILY,       sal_Int16,      BOUND, MAYBEDEFAULT ),
