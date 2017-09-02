@@ -203,7 +203,7 @@ Apache_OpenOffice_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg40sdk
+            DATABASENAME openoffice420sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
