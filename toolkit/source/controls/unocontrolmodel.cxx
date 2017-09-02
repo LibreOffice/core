@@ -525,7 +525,7 @@ OUString UnoControlModel::getServiceName(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    OSL_FAIL( "ServiceName von UnoControlModel ?!" );
+    OSL_FAIL( "ServiceName of UnoControlModel ?!" );
     return OUString();
 }
 

@@ -45,7 +45,7 @@ public class _XServiceInfo {
         boolean result = true;
         log.println("testing getImplementationName() ... ");
 
-        log.println("The ImplementationName ist "+oObj.getImplementationName());
+        log.println("The ImplementationName is "+oObj.getImplementationName());
         result=true;
 
         return result;

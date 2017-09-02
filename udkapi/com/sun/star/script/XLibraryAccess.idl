@@ -59,7 +59,7 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
      */
     string getModuleSource( [in] string aModulName );
 
-    /** Get the hole compiled code of a module.
+    /** Get the whole compiled code of a module.
 
         @param aModuleName the full qualified name of a module.
                             (e.g., "UtilLibrary.ModuleDate")

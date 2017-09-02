@@ -179,7 +179,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
     if ( mpPointAry )
         delete[] reinterpret_cast<char*>(mpPointAry);
 
-    // ggf. FlagArray beruecksichtigen
+    // take FlagArray into account, if applicable
     if( mpFlagAry )
     {
         PolyFlags* pNewFlagAry;

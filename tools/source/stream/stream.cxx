@@ -1464,7 +1464,7 @@ std::size_t SvStream::CryptAndWriteBuffer( const void* pStart, std::size_t nLen)
             nBufCount = nLen;
         nLen -= nBufCount;
         memcpy( pTemp, pDataPtr, (sal_uInt16)nBufCount );
-        // **** Verschluesseln *****
+        // ******** Encrypt ********
         for (unsigned char & rn : pTemp)
         {
             unsigned char aCh = rn;
