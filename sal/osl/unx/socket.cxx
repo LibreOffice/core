@@ -281,7 +281,7 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr (
 void SAL_CALL osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize);
 
-static oslSocket createSocketImpl(int Socket)
+static oslSocket initSocket(int Socket)
 {
     oslSocket pSocket;
 
@@ -1143,7 +1143,7 @@ oslSocket SAL_CALL osl_createSocket(
     oslSocket pSocket;
 
     /* alloc memory */
-    pSocket= createSocketImpl(OSL_INVALID_SOCKET);
+    pSocket = initSocket(OSL_INVALID_SOCKET);
 
     /* create socket */
     pSocket->m_Socket= socket(FAMILY_TO_NATIVE(Family),
@@ -1558,7 +1558,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     }
 
     /* alloc memory */
-    pConnectionSockImpl= createSocketImpl(OSL_INVALID_SOCKET);
+    pConnectionSockImpl = initSocket(OSL_INVALID_SOCKET);
 
     /* set close-on-exec flag */
     if ((Flags = fcntl(Connection, F_GETFD, 0)) != -1)
