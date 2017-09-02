@@ -101,6 +101,7 @@ OUString ScStyleLoaderObj::getTestURL(){
 void ScStyleLoaderObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

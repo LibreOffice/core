@@ -107,6 +107,7 @@ uno::Reference< uno::XInterface > ScAnnontationObj::init()
 void ScAnnontationObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

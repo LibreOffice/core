@@ -73,6 +73,7 @@ uno::Reference< uno::XInterface > ScOutlineObj::init()
 void ScOutlineObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

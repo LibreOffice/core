@@ -58,6 +58,7 @@ uno::Reference< uno::XInterface > ScModelObj::init()
 void ScModelObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     UnoApiTest::setUp();
 }
 

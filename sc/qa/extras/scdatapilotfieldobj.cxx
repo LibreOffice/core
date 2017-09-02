@@ -88,6 +88,7 @@ uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 void ScDataPilotFieldObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

@@ -95,6 +95,7 @@ uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 void ScNamedRangeObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 
