@@ -1041,30 +1041,32 @@ sal_Bool SAL_CALL osl_listenOnSocket (
                    MaxPendingConnections) != OSL_SOCKET_ERROR);
 }
 
-oslSocket SAL_CALL osl_acceptConnectionOnSocket (
-    oslSocket      pSocket,
+oslSocket SAL_CALL osl_acceptConnectionOnSocket(
+    oslSocket pSocket,
     oslSocketAddr* ppAddr)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
-    SOCKET          Connection;
-    if(ppAddr)
+    SOCKET Connection;
+
+    if (ppAddr)
     {
-        if( *ppAddr )
+        if (*ppAddr)
         {
             osl_destroySocketAddr( *ppAddr );
             *ppAddr = nullptr;
         }
-        int AddrLen= sizeof(struct sockaddr);
+
+        int AddrLen = sizeof(struct sockaddr);
 
         /* user wants to know peer Addr */
         struct sockaddr Addr;
+        Connection = accept(pSocket->m_Socket, &Addr, &AddrLen);
+        assert(AddrLen == sizeof(struct sockaddr));
 
-        Connection= accept(pSocket->m_Socket, &Addr, &AddrLen);
-        OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
-
-        if(Connection != static_cast<SOCKET>(OSL_SOCKET_ERROR))
+        if (Connection != static_cast< SOCKET >(OSL_SOCKET_ERROR))
             *ppAddr= createSocketAddFromSystem(&Addr);
         else
             *ppAddr = nullptr;
@@ -1076,14 +1078,14 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
     }
 
     /* accept failed? */
-    if(Connection == static_cast<SOCKET>(OSL_SOCKET_ERROR))
+    if (Connection == static_cast< SOCKET >(OSL_SOCKET_ERROR))
         return nullptr;
 
     /* alloc memory */
-    oslSocket  pConnectionSocket;
+    oslSocket pConnectionSocket;
     pConnectionSocket = initSocket(Connection);
 
-    pConnectionSocket->m_Flags          = 0;
+    pConnectionSocket->m_Flags = 0;
 
     return pConnectionSocket;
 }
