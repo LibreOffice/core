@@ -1296,24 +1296,22 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 
 oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
 {
-    socklen_t AddrLen;
     struct sockaddr Addr;
 
-    SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-    if ( pSocket == nullptr )
-    {
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    if (!pSocket)
         return nullptr;
-    }
 
     pSocket->m_nLastError=0;
-    AddrLen= sizeof(struct sockaddr);
+    socklen_t AddrLen = sizeof(struct sockaddr);
 
-    if(getpeername(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
+    if (getpeername(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
     {
         pSocket->m_nLastError=errno;
         return nullptr;
     }
-    return createSocketAddrFromSystem( &Addr );
+
+    return createSocketAddrFromSystem(&Addr);
 }
 
 sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket pSocket, oslSocketAddr pAddr)
