@@ -196,7 +196,7 @@ bool SvxXMLXTableExportComponent::save(
         OUString *pOptName )
 {
     bool bRet = false;
-    SfxMedium* pMedium = nullptr;
+    std::unique_ptr<SfxMedium> pMedium;
     SvXMLGraphicHelper* pGraphicHelper = nullptr;
     sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
@@ -227,7 +227,7 @@ bool SvxXMLXTableExportComponent::save(
                 xSubStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rURL, eCreate );
             else
             {
-                pMedium = new SfxMedium( rURL, StreamMode::WRITE | StreamMode::TRUNC );
+                pMedium.reset(new SfxMedium( rURL, StreamMode::WRITE | StreamMode::TRUNC ));
 
                 SvStream* pStream = pMedium->GetOutStream();
                 if( !pStream )
@@ -305,10 +305,7 @@ bool SvxXMLXTableExportComponent::save(
     }
 
     if( pMedium )
-    {
         pMedium->Commit();
-        delete pMedium;
-    }
 
     return bRet;
 }
