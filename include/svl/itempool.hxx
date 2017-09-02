@@ -81,7 +81,7 @@ public:
 
 protected:
     static inline void              ClearRefCount(SfxPoolItem& rItem);
-    static inline void              AddRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
+    static inline void              AddRef(const SfxPoolItem& rItem);
     static inline sal_uInt32        ReleaseRef(const SfxPoolItem& rItem, sal_uInt32 n = 1);
 
 public:
@@ -194,9 +194,9 @@ inline void SfxItemPool::ClearRefCount(SfxPoolItem& rItem)
 }
 
 // only the pool may manipulate the reference counts
-inline void SfxItemPool::AddRef(const SfxPoolItem& rItem, sal_uInt32 n)
+inline void SfxItemPool::AddRef(const SfxPoolItem& rItem)
 {
-    rItem.AddRef(n);
+    rItem.AddRef();
 }
 
 // only the pool may manipulate the reference counts
