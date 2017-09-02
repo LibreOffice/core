@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_039462e0",
+        "filename": "sd/source/ui/dlg/LayerTabBar.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-02T23:01:01Z",
+      "side": 1,
+      "message": "hmm, dbg_assert is legacy - can you use plain assert() if this is a hard error, or SAL_WARN() for something just worth a log error on debug builds?",
+      "revId": "ed122acfbf9f3aa5e3dbc32c0291b0455d542769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_23915ef1",
+        "filename": "svtools/source/control/tabbar.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-02T23:01:01Z",
+      "side": 1,
+      "message": "No objections - but perhaps since you\u0027ve read/grokked this code, cleanup follow-up commit changing the above to either all assert(), or SAL_WARN?",
+      "revId": "ed122acfbf9f3aa5e3dbc32c0291b0455d542769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
