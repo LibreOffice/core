@@ -116,19 +116,19 @@ namespace osl
 
         /** Sets the port number of the address.
 
-           @param nPort[in] port number
+           @param nPort[in]     port number
 
-           @retval true     success
-           @retval false    failure
+           @retval true         success
+           @retval false        failure
          */
         inline bool SAL_CALL setPort(sal_Int32 nPort);
 
         /** Sets the address of the underlying socket address struct in network byte order.
 
-           @retval true     success
-           @retval false    failure
+           @retval true         success
+           @retval false        failure
          */
-        inline bool SAL_CALL setAddr(const ::rtl::ByteSequence & address);
+        inline bool SAL_CALL setAddr(const ::rtl::ByteSequence &address);
 
         /** Returns the address of the underlying socket in network byte order
           */
@@ -145,16 +145,25 @@ namespace osl
 #endif
 
         /** Assigns the socket addr without copyconstructing it.
-            @param Addr the socket address.
-            @param nocopy use SAL_NO_COPY
+
+            @param Addr[in]     the socket address.
+            @param nocopy[in]   use SAL_NO_COPY
           */
         inline SocketAddr & SAL_CALL assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
 
-        /** Returns true if the underlying handle is identical to the Addr handle.
+        /** Equality operator
+
+            @param Addr[in]     the socket address.
+
+            @returns true if the underlying handle is identical to the Addr handle.
          */
         inline bool SAL_CALL operator== (oslSocketAddr Addr) const;
 
-        /** Returns true if the underlying handle is identical to the Addr handle.
+        /** Equality operator
+
+            @param Addr[in]     the socket address.
+
+            @returns true if the underlying handle is identical to the Addr handle.
          */
         inline bool SAL_CALL operator== (const SocketAddr & Addr) const;
 
@@ -163,28 +172,37 @@ namespace osl
         inline oslSocketAddr SAL_CALL getHandle() const;
 
         /** Get the hostname for the local interface.
+
             @param pResult after the call *pResult contains osl_Socket_Ok on success or
                    an error on failure.
+
             @return the hostname
         */
-        static inline ::rtl::OUString SAL_CALL getLocalHostname( oslSocketResult *pResult = NULL);
+        static inline ::rtl::OUString SAL_CALL getLocalHostname(oslSocketResult *pResult = NULL);
 
         /** Tries to find an address for a host.
+
+            @param strHostNames[in] host name to resolve
+            @param Addr[out]        resolved address
+
             @see osl_resolveHostname()
             @return A new created socket-address or 0 if the name could not be found.
         */
         static inline void SAL_CALL resolveHostname(
             const ::rtl::OUString & strHostName , SocketAddr & Addr );
 
-        /**
-           Tries to find the port associated with the given service/protocol-
+        /** Tries to find the port associated with the given service/protocol-
            pair (e.g. "ftp"/"tcp").
+
+           @param strServiceName[in]    Service name
+           @param strProtocolName[in]   Protocol name
+
            @return the port number in host-byte order or <code>OSL_INVALID_PORT</code>
            if no service/protocol pair could be found.
         */
         static inline sal_Int32 SAL_CALL getServicePort(
             const ::rtl::OUString& strServiceName,
-            const ::rtl::OUString & strProtocolName= ::rtl::OUString("tcp") );
+            const ::rtl::OUString& strProtocolName = ::rtl::OUString("tcp") );
     };
 
 
@@ -200,20 +218,21 @@ namespace osl
         */
         inline Socket(oslSocketType Type,
                       oslAddrFamily Family = osl_Socket_FamilyInet,
-                      oslProtocol   Protocol = osl_Socket_ProtocolIp);
+                      oslProtocol Protocol = osl_Socket_ProtocolIp);
     public:
-        inline Socket( );
+        inline Socket();
 
-        inline Socket( const Socket & socket );
+        inline Socket(const Socket& socket);
 
-        inline Socket( oslSocket socketHandle );
+        inline Socket(oslSocket socketHandle);
 
         /** The instance takes over the handle's ownership without acquiring the
             handle, but releases it within the dtor.
-            @param socketHandle the handle
-            @param noacquire use SAL_NO_ACQUIRE
+
+            @param socketHandle[in] the handle
+            @param noacquire[in] use SAL_NO_ACQUIRE
          */
-        inline Socket( oslSocket socketHandle, __sal_NoAcquire noacquire );
+        inline Socket(oslSocket socketHandle, __sal_NoAcquire noacquire);
 
         /** Destructor. Releases the underlying handle
          */
@@ -222,7 +241,7 @@ namespace osl
         /** Assignment operator. If socket was already created, the old one will
             be discarded.
         */
-        inline Socket& SAL_CALL operator= ( oslSocket socketHandle);
+        inline Socket& SAL_CALL operator= (oslSocket socketHandle);
 
         /** Assignment operator. If socket was already created, the old one will
             be discarded.
@@ -230,36 +249,41 @@ namespace osl
         inline Socket& SAL_CALL operator= (const Socket& sock);
 
         /**
-           @return <code>true</code>, when the underlying handle of both
-                         Socket instances are identical, <code>false</code> otherwise.
+            @retval true     when handle of both Socket instances are identical
+            @retval false    when handle of both Socket instances are not both identical
          */
-        inline bool SAL_CALL operator==( const Socket& rSocket ) const ;
+        inline bool SAL_CALL operator==(const Socket& rSocket) const ;
 
         /**
-           @return <code>true</code>, when the underlying handle of both
-                         Socket instances are identical, <code>false</code> otherwise.
+            @retval true     when handle of both Socket instances are identical
+            @retval false    when handle of both Socket instances are not both identical
          */
-        inline bool SAL_CALL operator==( const oslSocket socketHandle ) const;
+        inline bool SAL_CALL operator==(const oslSocket socketHandle) const;
 
         /** Closes a definite or both directions of the bidirectional stream.
 
-           @param Direction
-           @see osl_shutdownSocket()
-         */
-        inline void SAL_CALL shutdown( oslSocketDirection Direction = osl_Socket_DirReadWrite );
+            @param Direction[in] direction on which to close
 
-        /** Closes a socket.
-            Note that closing a socket is identical to shutdown( osl_Socket_DirReadWrite ),
+            @see osl_shutdownSocket
+         */
+        inline void SAL_CALL shutdown(oslSocketDirection Direction = osl_Socket_DirReadWrite);
+
+        /** Closes a socket
+
+            Note that closing a socket is identical to shutdown(osl_Socket_DirReadWrite),
             as the operating system distinguish both cases, both functions or offered in this API.
-            @see osl_closeSocket()
+
+            @see osl_closeSocket
          */
         inline void SAL_CALL close();
 
         /** Retrieves the address of the local interface of this socket.
-            @param Addr [out] receives the address.
+
+            @param Addr[out]    receives the address.
+
             @see osl_getLocalAddrOfSocket()
         */
-        inline void SAL_CALL getLocalAddr( SocketAddr &Addr ) const;
+        inline void SAL_CALL getLocalAddr(SocketAddr &Addr) const;
 
         /** Get the local port of the socket. Usually used after bind().
             @return the port number or OSL_INVALID_PORT on errors.
@@ -267,28 +291,35 @@ namespace osl
         inline sal_Int32    SAL_CALL getLocalPort() const;
 
         /** Get the hostname for the local interface.
+
             @return the hostname or an empty string ("").
         */
         inline ::rtl::OUString SAL_CALL getLocalHost() const;
 
         /** Retrieves the address of the remote host of this socket.
+
             @param Addr [out] receives the address.
         */
         inline void SAL_CALL getPeerAddr( SocketAddr & Addr) const;
 
         /** Get the remote port of the socket.
+
             @return the port number or OSL_INVALID_PORT on errors.
         */
         inline sal_Int32    SAL_CALL getPeerPort() const;
 
         /** Get the hostname for the remote interface.
+
             @return the hostname or an empty string ("").
         */
         inline ::rtl::OUString SAL_CALL getPeerHost() const;
 
         /** Binds the socket to the specified (local) interface.
-            @param LocalInterface Address of the Interface
-            @return True if bind was successful.
+
+            @param LocalInterface[in] Address of the Interface
+
+            @retval true        if bind was successful
+            @retval false       if bind was not successful
         */
         inline bool SAL_CALL bind(const SocketAddr& LocalInterface);
 
@@ -296,11 +327,13 @@ namespace osl
 
             You can specify a timeout-value in seconds/nanoseconds that denotes
             how the operation will block if the Socket is not ready.
-            @return <code>true</code> if read operations (recv, recvFrom, accept) on the Socket
-            will NOT block; <code>false</code> if it would block or if an error occurred.
 
-            @param pTimeout if 0, the operation will block without a timeout. Otherwise
-            the specified amount of time.
+            @param pTimeout     if 0, the operation will block without a timeout.
+                                Otherwise, the specified amount of time.
+
+            @retval true        if read operations (recv, recvFrom, accept) on the
+                                Socket will NOT block
+            @retval false       if read operations block or if an error occurred
         */
         inline bool SAL_CALL isRecvReady(const TimeValue *pTimeout = NULL) const;
 
