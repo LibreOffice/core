@@ -91,6 +91,7 @@ uno::Reference< uno::XInterface > ScAreaLinkObj::init()
 void ScAreaLinkObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

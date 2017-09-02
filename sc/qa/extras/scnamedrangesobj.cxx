@@ -73,6 +73,7 @@ uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
 void ScNamedRangesObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

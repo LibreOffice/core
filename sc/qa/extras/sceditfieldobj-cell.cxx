@@ -78,6 +78,7 @@ ScEditFieldObj_Cell::ScEditFieldObj_Cell()
 void ScEditFieldObj_Cell::setUp()
 {
     ++nTest;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

@@ -58,7 +58,8 @@ ScAnnotationShapeObj::ScAnnotationShapeObj()
 
 void ScAnnotationShapeObj::setUp()
 {
-    ++nTest;
+    nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

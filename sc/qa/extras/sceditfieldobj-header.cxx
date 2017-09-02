@@ -74,6 +74,7 @@ ScEditFieldObj_Header::ScEditFieldObj_Header()
 void ScEditFieldObj_Header::setUp()
 {
     ++nTest;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 

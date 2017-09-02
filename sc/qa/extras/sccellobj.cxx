@@ -74,6 +74,7 @@ uno::Reference< uno::XInterface > ScCellObj::init()
 void ScCellObj::setUp()
 {
     nTest++;
+    CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 
