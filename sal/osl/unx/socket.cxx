@@ -1280,19 +1280,17 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
    the struct sockaddr from the eyes of the user. */
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
-    socklen_t AddrLen;
     struct sockaddr Addr;
-    oslSocketAddr  pAddr;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
-    AddrLen= sizeof(struct sockaddr);
+    socklen_t AddrLen = sizeof(struct sockaddr);
 
     if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return nullptr;
 
-    pAddr = createSocketAddrFromSystem( &Addr );
+    oslSocketAddr pAddr = createSocketAddrFromSystem(&Addr);
     return pAddr;
 }
 
