@@ -296,7 +296,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p, void )
         {
             OUString aURL;
 
-             if (MediaWindow::executeMediaURLDialog(aURL, nullptr))
+             if (MediaWindow::executeMediaURLDialog(this, aURL, nullptr))
              {
                  if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
                     MediaWindow::executeFormatErrorBox( this );

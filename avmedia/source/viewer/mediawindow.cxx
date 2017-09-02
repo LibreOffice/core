@@ -209,11 +209,12 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 }
 
 
-bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
+bool MediaWindow::executeMediaURLDialog(const vcl::Window* pParent, OUString& rURL, bool *const o_pbLink)
 {
-    ::sfx2::FileDialogHelper        aDlg( o_pbLink
+    ::sfx2::FileDialogHelper        aDlg(o_pbLink
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
-            : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
+            : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+            FileDialogFlags::NONE, pParent);
     static const char               aWildcard[] = "*.";
     FilterNameVector                aFilters;
     static const char               aSeparator[] = ";";
