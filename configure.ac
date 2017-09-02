@@ -716,7 +716,7 @@ darwin*) # Mac OS X or iOS
     test_freetype=no
     test_fontconfig=no
     test_dbus=no
-    if test "$host_cpu" = "armv7" -o "$host_cpu" = "arm64"; then
+    if test "$enable_ios_simulator" = "yes" -o "$host_cpu" = "armv7" -o "$host_cpu" = "arm64"; then
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -990,6 +990,11 @@ AC_SUBST(DLOPEN_LIBS)
 # extensions are built anyway, just not integrated in the installer,
 # if you use --disable-extension-integration. Is that really the
 # case?
+
+AC_ARG_ENABLE(ios-simulator,
+    AS_HELP_STRING([--enable-ios-simulator],
+        [build i386 or x86_64 for ios simulator])
+)
 
 libo_FUZZ_ARG_ENABLE(extension-integration,
     AS_HELP_STRING([--disable-extension-integration],
@@ -2709,7 +2714,7 @@ dnl ===================================================================
 dnl Check OS X SDK and compiler
 dnl ===================================================================
 
-if test $_os = Darwin; then
+if test $_os = Darwin -o $_os = iOS; then
 
     # If no --with-macosx-sdk option is given, look for one
 
@@ -2946,6 +2951,7 @@ if test $_os = iOS; then
     elif test "$build_cpu" = "x86_64"; then
         platform=iPhoneSimulator
         XCODE_ARCHS=x86_64
+        BITNESS_OVERRIDE=64
         versionmin=-mios-simulator-version-min=9.3
     else
         platform=iPhoneOS
@@ -3152,6 +3158,9 @@ if test "$_os" = "WINNT"; then
         WINDOWS_SDK_ARCH="x64"
         BITNESS_OVERRIDE=64
     fi
+fi
+if test "$_os" = "iOS"; then
+    cross_compiling="yes"
 fi
 
 if test "$cross_compiling" = "yes"; then
@@ -4015,9 +4024,19 @@ darwin*)
         OS=IOS
         ;;
     i*86)
-        AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
+        if test "$enable_ios_simulator" = "yes"; then
+            OS=IOS
+            CPUNAME=i386
+            RTL_ARCH=i386
+            PLATFORMID=macosx_i38
+        else
+            AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
+        fi
         ;;
     x86_64)
+        if test "$enable_ios_simulator" = "yes"; then
+            OS=IOS
+        fi
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=macosx_x86_64
@@ -6343,7 +6362,7 @@ _ACEOF
         fi
     fi
 
-    AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
+   AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
     cat >visibility.cxx <<_ACEOF
 #pragma GCC visibility push(hidden)
 struct __attribute__ ((visibility ("default"))) TestStruct {
@@ -6358,7 +6377,7 @@ _ACEOF
     else
         case "$host_cpu" in
         i?86|x86_64)
-            if test "$_os" = "Darwin"; then
+            if test "$_os" = "Darwin" -o "$_os" = "iOS"; then
                 gccvisbroken=no
             else
                 if $EGREP -q '@PLT|@GOT' visibility.s || test "$ENABLE_LTO" = "TRUE"; then
