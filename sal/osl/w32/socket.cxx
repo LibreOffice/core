@@ -844,17 +844,16 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
     struct sockaddr Addr;
-    int             AddrLen;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
-    AddrLen= sizeof(struct sockaddr);
+    int AddrLen = sizeof(struct sockaddr);
 
     if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return nullptr;
 
-    oslSocketAddr pAddr = createSocketAddFromSystem( &Addr );
+    oslSocketAddr pAddr = createSocketAddFromSystem(&Addr);
     return pAddr;
 }
 
