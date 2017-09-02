@@ -4974,11 +4974,10 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             for (SwAnchoredObject* pAnchoredObj : *pPg->GetSortedObjs())
             {
                 SwRect aTmp( pAnchoredObj->GetObjRect() );
-                if ( aTmp.IsOver( aRect ) )
+                if ( bConsiderWrapOnObjPos || aTmp.IsOver( aRect ) )
                 {
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
-
                     if ( bConsiderWrapOnObjPos || css::text::WrapTextMode_THROUGH != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
