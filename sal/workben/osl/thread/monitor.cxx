@@ -69,7 +69,22 @@ void produce(void* /* pData */)
         osl_acquireMutex(queueMutex);
 
         while (nItemCount == BUFFER_SIZE-1)
+        {
+            /* we aren't doing anything to the queue, so release
+               the mutex and then reacquire it after waiting.
+               Without this, we eventually hit a "missed wakeup"
+               condition, whereby the thread is sleeping due to
+               waiting on the condition variable, but another
+               thread preemptively switched right before the
+               thread went to sleep and another thread sets the
+               condition variable... but of course then it switches
+               back to this thread which then waits forever as it
+               has missed its wakeup event...
+            */
+            osl_releaseMutex(queueMutex);
             osl_waitCondition(fullOrEmpty, nullptr);
+            osl_acquireMutex(queueMutex);
+        }
 
         fprintf(stdout, "produce()\n");
 
@@ -98,7 +113,15 @@ void consume(void* /* pData */)
         osl_acquireMutex(queueMutex);
 
         while (nItemCount == 0)
+        {
+            /* We aren't doing anything to the queue, so release
+               the mutex and then reacquire it after waiting. See
+               comments in produce() for the reasoning.
+             */
+            osl_releaseMutex(queueMutex);
             osl_waitCondition(fullOrEmpty, nullptr);
+            osl_acquireMutex(queueMutex);
+        }
 
         fprintf(stdout, "consume()\n");
 
