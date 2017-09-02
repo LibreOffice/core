@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c3133a5b",
+        "filename": "vcl/source/app/session.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-02T06:07:07Z",
+      "side": 1,
+      "message": "might as well replace this whole loop with the\n   .erase( std::remove(...\nidion",
+      "revId": "0cb3c22854a427ffe496f24c9decd96eb75f8421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
