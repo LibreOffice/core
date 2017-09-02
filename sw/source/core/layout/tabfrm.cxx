@@ -4974,7 +4974,8 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             for (SwAnchoredObject* pAnchoredObj : *pPg->GetSortedObjs())
             {
                 SwRect aTmp( pAnchoredObj->GetObjRect() );
-                if ( aTmp.IsOver( aRect ) )
+                const SwFrame* pAnch = pAnchoredObj->GetAnchorFrame();
+                if ( (bConsiderWrapOnObjPos && IsAnLower( pAnch )) || (!bConsiderWrapOnObjPos && aTmp.IsOver( aRect )) )
                 {
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
@@ -4990,7 +4991,6 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                                 continue;
                         }
 
-                        const SwFrame* pAnch = pAnchoredObj->GetAnchorFrame();
                         // #i43913#
                         // #i52904# - no vertical alignment,
                         // if object, anchored inside cell, has temporarily
