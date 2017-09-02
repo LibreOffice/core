@@ -341,8 +341,12 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
     else if( pPV )
     {
         ::tools::Rectangle aRect( rPos, rSize );
+        SdrObjUserCall* pUserCall = nullptr;
         if( pPickObj )
+        {
             aRect = pPickObj->GetLogicRect();
+            pUserCall = pPickObj->GetUserCall(); // ReplaceObjectAtView can free pPickObj
+        }
 
         pNewMediaObj = new SdrMediaObj( aRect );
 
@@ -371,9 +375,9 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
         if( pPickObj )
         {
-            pNewMediaObj->AdjustToMaxRect( pPickObj->GetLogicRect() );
+            pNewMediaObj->AdjustToMaxRect( aRect );
             if( bIsPres )
-                pNewMediaObj->SetUserCall(pPickObj->GetUserCall());
+                pNewMediaObj->SetUserCall( pUserCall );
         }
     }
 
