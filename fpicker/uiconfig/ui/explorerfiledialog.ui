@@ -453,7 +453,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="gpgencrypt">
-                                    <property name="label" translatable="yes">Encrypt with GPG key</property>
+                                    <property name="label" translatable="yes" context="explorerfiledialog|gpgencrypt">Encrypt with GPG key</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
