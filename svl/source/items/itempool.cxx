@@ -176,7 +176,6 @@ SfxItemPool::SfxItemPool
     pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
     pImpl->eDefMetric = MapUnit::MapTwip;
-    pImpl->nInitRefCount = 1;
 
     if ( pDefaults )
         SetDefaults(pDefaults);
@@ -201,7 +200,6 @@ SfxItemPool::SfxItemPool
     pImpl( new SfxItemPool_Impl( this, rPool.pImpl->aName, rPool.pImpl->mnStart, rPool.pImpl->mnEnd ) )
 {
     pImpl->eDefMetric = rPool.pImpl->eDefMetric;
-    pImpl->nInitRefCount = 1;
 
     // Take over static Defaults
     if ( bCloneStaticDefaults )
@@ -695,7 +693,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         assert((!IsItemPoolable(*pNewItem) || *pNewItem == rItem)
             && "SfxItemPool::Put(): unequal items: no operator== override?");
     }
-    AddRef( *pNewItem, pImpl->nInitRefCount );
+    AddRef( *pNewItem );
 
     // 4. finally insert into the pointer array
     assert( pItemArr->maPtrToIndex.find(pNewItem) == pItemArr->maPtrToIndex.end() );
