@@ -447,7 +447,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
 }
 
 ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uInt16 nP ) :
-    rParent( *pDesc ),
+    xParent( pDesc ),
     nPos( nP )
 {
     OSL_ENSURE(pDesc, "ScSubTotalFieldObj: Parent is 0");
@@ -463,7 +463,7 @@ sal_Int32 SAL_CALL ScSubTotalFieldObj::getGroupColumn()
 {
     SolarMutexGuard aGuard;
     ScSubTotalParam aParam;
-    rParent.GetData(aParam);
+    xParent->GetData(aParam);
 
     return aParam.nField[nPos];
 }
@@ -472,18 +472,18 @@ void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn )
 {
     SolarMutexGuard aGuard;
     ScSubTotalParam aParam;
-    rParent.GetData(aParam);
+    xParent->GetData(aParam);
 
     aParam.nField[nPos] = (SCCOL)nGroupColumn;
 
-    rParent.PutData(aParam);
+    xParent->PutData(aParam);
 }
 
 uno::Sequence<sheet::SubTotalColumn> SAL_CALL ScSubTotalFieldObj::getSubTotalColumns()
 {
     SolarMutexGuard aGuard;
     ScSubTotalParam aParam;
-    rParent.GetData(aParam);
+    xParent->GetData(aParam);
 
     SCCOL nCount = aParam.nSubTotals[nPos];
     uno::Sequence<sheet::SubTotalColumn> aSeq(nCount);
@@ -502,7 +502,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
 {
     SolarMutexGuard aGuard;
     ScSubTotalParam aParam;
-    rParent.GetData(aParam);
+    xParent->GetData(aParam);
 
     sal_uInt32 nColCount = aSubTotalColumns.getLength();
     if ( nColCount <= sal::static_int_cast<sal_uInt32>(SCCOL_MAX) )
@@ -529,7 +529,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
     }
     //! otherwise exception or so? (too many columns)
 
-    rParent.PutData(aParam);
+    xParent->PutData(aParam);
 }
 
 ScSubTotalDescriptorBase::ScSubTotalDescriptorBase() :
