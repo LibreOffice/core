@@ -57,7 +57,7 @@ public class Bootstrap_Test {
             String services[] = msf.getAvailableServiceNames();
             logger.log(Level.FINE, "Available services are:");
             if (services.length == 0)
-                logger.log(Level.FINE, "No services avialable!");
+                logger.log(Level.FINE, "No services available!");
 
             else
                 for ( int i=0; i<services.length; i++ )

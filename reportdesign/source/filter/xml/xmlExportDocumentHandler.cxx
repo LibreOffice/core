@@ -295,7 +295,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     m_xDelegatee = aArgs.getUnpackedValueOrDefault("DocumentHandler",m_xDelegatee);
     m_xModel = aArgs.getUnpackedValueOrDefault("Model",m_xModel);
 
-    OSL_ENSURE(m_xDelegatee.is(),"No document handler avialable!");
+    OSL_ENSURE(m_xDelegatee.is(),"No document handler available!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )
         throw uno::Exception();
 

@@ -36,7 +36,7 @@ Assistent::Assistent(int nNoOfPages)
 
 bool Assistent::InsertControl(int nDestPage, vcl::Window* pUsedControl)
 {
-    DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Page not aviable!");
+    DBG_ASSERT( (nDestPage > 0) && (nDestPage <= mnPages), "Page not available!");
 
     if((nDestPage>0)&&(nDestPage<=mnPages))
     {
@@ -77,7 +77,7 @@ void Assistent::PreviousPage()
 
 bool Assistent::GotoPage(const int nPageToGo)
 {
-    DBG_ASSERT( (nPageToGo > 0) && (nPageToGo <= mnPages), "Page not aviable!");
+    DBG_ASSERT( (nPageToGo > 0) && (nPageToGo <= mnPages), "Page not available!");
 
     if((nPageToGo>0)&&(nPageToGo<=mnPages)&&mpPageStatus[nPageToGo-1])
     {
@@ -136,14 +136,14 @@ bool Assistent::IsFirstPage() const
 
 bool Assistent::IsEnabled( int nPage ) const
 {
-    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Page not aviable!" );
+    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Page not available!" );
 
     return (nPage>0) && (nPage <= mnPages && mpPageStatus[nPage-1]);
 }
 
 void Assistent::EnablePage( int nPage )
 {
-    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Page not aviable!" );
+    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Page not available!" );
 
     if((nPage>0) && (nPage < mnPages && !mpPageStatus[nPage-1]))
     {
@@ -153,7 +153,7 @@ void Assistent::EnablePage( int nPage )
 
 void Assistent::DisablePage( int nPage )
 {
-    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Page not aviable!" );
+    DBG_ASSERT( (nPage>0) && (nPage <= mnPages), "Page not available!" );
 
     if((nPage>0) && (nPage <= mnPages && mpPageStatus[nPage-1]))
     {
