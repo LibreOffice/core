@@ -860,18 +860,17 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
 {
     struct sockaddr Addr;
-    int             AddrLen;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
-    AddrLen= sizeof(struct sockaddr);
+    int AddrLen = sizeof(struct sockaddr);
 
     if (getpeername(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return nullptr;
 
-    oslSocketAddr pAddr = createSocketAddrFromSystem( &Addr );
-    return pAddr;
+    return createSocketAddrFromSystem(&Addr);
 }
 
 sal_Bool SAL_CALL osl_bindAddrToSocket (oslSocket pSocket, oslSocketAddr pAddr)
