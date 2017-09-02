@@ -1361,22 +1361,15 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket pSocket,
     return true;
 }
 
-oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
-                                    oslSocketAddr pAddr,
-                                    const TimeValue* pTimeout)
+oslSocketResult SAL_CALL osl_connectSocketTo(
+    oslSocket pSocket,
+    oslSocketAddr pAddr,
+    const TimeValue* pTimeout)
 {
-    fd_set   WriteSet;
-    fd_set   ExcptSet;
-    int      ReadyHandles;
-    struct timeval  tv;
-    oslSocketResult Result= osl_Socket_Ok;
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
 
-    SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-
-    if ( pSocket == nullptr )
-    {
+    if (!pSocket || !pAddr)
         return osl_Socket_Error;
-    }
 
     pSocket->m_nLastError=0;
 
@@ -1389,13 +1382,13 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
 
         if (errno == EWOULDBLOCK || errno == EINPROGRESS)
         {
-            pSocket->m_nLastError=EINPROGRESS;
+            pSocket->m_nLastError = EINPROGRESS;
             return osl_Socket_InProgress;
         }
 
-        pSocket->m_nLastError=errno;
+        pSocket->m_nLastError = errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN("sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno));
         return osl_Socket_Error;
     }
 
@@ -1417,7 +1410,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     /* really an error or just delayed? */
     if (errno != EINPROGRESS)
     {
-        pSocket->m_nLastError=errno;
+        pSocket->m_nLastError = errno;
         int nErrno = errno;
         SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
 
@@ -1426,12 +1419,17 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     }
 
     /* prepare select set for socket  */
+    fd_set WriteSet;
+    fd_set ExcptSet;
+
     FD_ZERO(&WriteSet);
     FD_ZERO(&ExcptSet);
     FD_SET(pSocket->m_Socket, &WriteSet);
     FD_SET(pSocket->m_Socket, &ExcptSet);
 
     /* prepare timeout */
+    struct timeval tv;
+
     if (pTimeout)
     {
         /* divide milliseconds into seconds and microseconds */
@@ -1440,24 +1438,25 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     }
 
     /* select */
-    ReadyHandles= select(pSocket->m_Socket+1,
+    oslSocketResult Result = osl_Socket_Ok;
+
+    int ReadyHandles = select(pSocket->m_Socket+1,
                          nullptr,
                          PTR_FD_SET(WriteSet),
                          PTR_FD_SET(ExcptSet),
                          (pTimeout) ? &tv : nullptr);
 
-    if (ReadyHandles > 0)  /* connected */
+    if (ReadyHandles > 0) /* connected */
     {
         if ( FD_ISSET(pSocket->m_Socket, &WriteSet ) )
         {
             int nErrorCode = 0;
             socklen_t nErrorSize = sizeof( nErrorCode );
 
-            int nSockOpt;
+            int nSockOpt = getsockopt(pSocket->m_Socket, SOL_SOCKET, SO_ERROR,
+                                  &nErrorCode, &nErrorSize);
 
-            nSockOpt = getsockopt ( pSocket->m_Socket, SOL_SOCKET, SO_ERROR,
-                                    &nErrorCode, &nErrorSize );
-            if ( (nSockOpt == 0) && (nErrorCode == 0))
+            if (nSockOpt == 0 && nErrorCode == 0)
                 Result = osl_Socket_Ok;
             else
                 Result = osl_Socket_Error;
@@ -1478,7 +1477,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
         pSocket->m_nLastError=errno;
         Result= osl_Socket_Error;
     }
-    else    /* timeout */
+    else /* timeout */
     {
         pSocket->m_nLastError=errno;
         Result= osl_Socket_TimedOut;

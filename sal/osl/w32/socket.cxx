@@ -886,35 +886,42 @@ sal_Bool SAL_CALL osl_bindAddrToSocket (oslSocket pSocket, oslSocketAddr pAddr)
     return (nBindResult != OSL_SOCKET_ERROR);
 }
 
-oslSocketResult SAL_CALL osl_connectSocketTo (
-    oslSocket        pSocket,
-    oslSocketAddr    pAddr,
+oslSocketResult SAL_CALL osl_connectSocketTo(
+    oslSocket pSocket,
+    oslSocketAddr pAddr,
     const TimeValue* pTimeout)
 {
+    int nError=0;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
-    if (pAddr == nullptr) /* EDESTADDRREQ */
+    if (!pAddr) /* EDESTADDRREQ */
         return osl_Socket_Error;
 
-    if (pTimeout == nullptr)
+    if (!pTimeout)
     {
-        if(connect(pSocket->m_Socket,
+        if (connect(pSocket->m_Socket,
                    &(pAddr->m_sockaddr),
-                    sizeof(struct sockaddr)) == OSL_SOCKET_ERROR)
-            return osl_Socket_Error;
-        else
+                    sizeof(struct sockaddr)) != OSL_SOCKET_ERROR)
+        {
             return osl_Socket_Ok;
+        }
+        else
+        {
+            wchar_t *sErr = nullptr;
+            FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                           nullptr, nErrno,
+                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                           reinterpret_cast<LPWSTR>(&sErr), 0, nullptr);
+            SAL_WARN("sal.osl", "connection failed: (" << nErrno << ") " << sErr);
+            LocalFree(sErr);
+
+            return osl_Socket_Error;
+        }
     }
     else
     {
-        fd_set          fds;
-        int             error;
-        struct timeval  tv;
-        unsigned long   Param;
-        oslSocketResult Result= osl_Socket_Ok;
-
         if (pSocket->m_Flags & OSL_SOCKET_FLAGS_NONBLOCKING)
         {
             if (connect(pSocket->m_Socket,
@@ -932,84 +939,90 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
                 }
             }
             else
+            {
                 return osl_Socket_Ok;
+            }
         }
 
         /* set socket temporarily to non-blocking */
-        Param= 1;
-        OSL_VERIFY(ioctlsocket(
-            pSocket->m_Socket, FIONBIO, &Param) != OSL_SOCKET_ERROR);
+        unsigned long ulNonblockingMode = 1;
+        SAL_WARN_IF(ioctlsocket(
+                pSocket->m_Socket, FIONBIO, &ulNonblockingMode) == OSL_SOCKET_ERROR,
+                "sal.osl", "cannot set nonblocking mode");
 
         /* initiate connect */
         if (connect(pSocket->m_Socket,
                      &(pAddr->m_sockaddr),
                     sizeof(struct sockaddr)) != OSL_SOCKET_ERROR)
         {
-           /* immediate connection */
-
-            Param= 0;
-            ioctlsocket(pSocket->m_Socket, FIONBIO, &Param);
+            /* immediate connection */
+            ulNonblockingMode = 0;
+            ioctlsocket(pSocket->m_Socket, FIONBIO, &ulNonblockingMode);
 
             return osl_Socket_Ok;
         }
         else
         {
-            error = WSAGetLastError();
+            nError = WSAGetLastError();
 
             /* really an error or just delayed? */
-            if (error != WSAEWOULDBLOCK && error != WSAEINPROGRESS)
+            if (nError != WSAEWOULDBLOCK && nError != WSAEINPROGRESS)
             {
-                 Param= 0;
-                 ioctlsocket(pSocket->m_Socket, FIONBIO, &Param);
+                 ulNonblockingMode = 0;
+                 ioctlsocket(pSocket->m_Socket, FIONBIO, &ulNonblockingMode);
 
                  return osl_Socket_Error;
             }
         }
 
         /* prepare select set for socket  */
+        fd_set fds;
         FD_ZERO(&fds);
         FD_SET(pSocket->m_Socket, &fds);
 
         /* divide milliseconds into seconds and microseconds */
-        tv.tv_sec=  pTimeout->Seconds;
-        tv.tv_usec= pTimeout->Nanosec / 1000L;
+        struct timeval tv;
+        tv.tv_sec = pTimeout->Seconds;
+        tv.tv_usec = pTimeout->Nanosec / 1000L;
 
         /* select */
-        error= select(pSocket->m_Socket+1,
-                      nullptr,
-                      &fds,
-                      nullptr,
-                      &tv);
+        nError = select(pSocket->m_Socket+1, nullptr, &fds, nullptr, &tv);
 
-        if (error > 0)  /* connected */
+        oslSocketResult Result = osl_Socket_Ok;
+
+        if (nError > 0) /* connected */
         {
             SAL_WARN_IF(
                 !FD_ISSET(pSocket->m_Socket, &fds),
                 "sal.osl",
                 "osl_connectSocketTo(): select returned but socket not set");
 
-            Result= osl_Socket_Ok;
+            Result = osl_Socket_Ok;
 
         }
-        else if(error < 0)  /* error */
+        else if (nError < 0)  /* error */
         {
             /* errno == EBADF: most probably interrupted by close() */
-            if(WSAGetLastError() == WSAEBADF)
+            if (WSAGetLastError() == WSAEBADF)
             {
-                /* do not access pSockImpl because it is about to be or */
-                /* already destroyed */
+                /* do not access pSockImpl because it is about to be or
+                   already destroyed */
                 return osl_Socket_Interrupted;
             }
             else
-                Result= osl_Socket_Error;
+            {
+                Result = osl_Socket_Error;
+            }
 
         }
-        else    /* timeout */
-            Result= osl_Socket_TimedOut;
+        else /* timeout */
+        {
+            Result = osl_Socket_TimedOut;
+        }
 
         /* clean up */
-        Param= 0;
-        ioctlsocket(pSocket->m_Socket, FIONBIO, &Param);
+        ulNonblockingMode = 0;
+        ioctlsocket(pSocket->m_Socket, FIONBIO, &ulNonBlockingMode);
 
         return Result;
     }
