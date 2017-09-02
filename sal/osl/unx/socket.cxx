@@ -1573,38 +1573,37 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(
     return pConnectionSockImpl;
 }
 
-sal_Int32 SAL_CALL osl_receiveSocket(oslSocket pSocket,
-                          void* pBuffer,
-                          sal_uInt32 BytesToRead,
-                          oslSocketMsgFlag Flag)
+sal_Int32 SAL_CALL osl_receiveSocket(
+    oslSocket pSocket,
+    void* pBuffer,
+    sal_uInt32 BytesToRead,
+    oslSocketMsgFlag Flag)
 {
-    int nRead;
-
-    SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-    if ( pSocket == nullptr )
-    {
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    if (!pSocket)
         return -1;
-    }
 
     pSocket->m_nLastError=0;
 
+    int nRead;
+
     do
     {
-        nRead =  recv(pSocket->m_Socket,
-                      pBuffer,
-                      BytesToRead,
-                      MSG_FLAG_TO_NATIVE(Flag));
-    } while ( nRead < 0 && errno == EINTR );
+        nRead = recv(pSocket->m_Socket,
+                     pBuffer,
+                     BytesToRead,
+                     MSG_FLAG_TO_NATIVE(Flag));
+    } while (nRead < 0 && errno == EINTR);
 
-    if ( nRead < 0 )
+    if (nRead < 0)
     {
-        pSocket->m_nLastError=errno;
+        pSocket->m_nLastError = errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN("sal.osl", "receive socket [" << nRead << "] failed: (" << nErrno << ") " << strerror(nErrno));
     }
-    else if ( nRead == 0 )
+    else if (nRead == 0)
     {
-        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: EOL" );
+        SAL_WARN("sal.osl", "receive socket [" << nRead << "] failed: EOL");
     }
 
     return nRead;

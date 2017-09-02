@@ -1090,17 +1090,17 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(
     return pConnectionSocket;
 }
 
-sal_Int32 SAL_CALL osl_receiveSocket (
-    oslSocket        pSocket,
-    void*            pBuffer,
-    sal_uInt32       BytesToRead,
+sal_Int32 SAL_CALL osl_receiveSocket(
+    oslSocket pSocket,
+    void* pBuffer,
+    sal_uInt32 BytesToRead,
     oslSocketMsgFlag Flag)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     return recv(pSocket->m_Socket,
-                static_cast<sal_Char*>(pBuffer),
+                static_cast< sal_Char* >(pBuffer),
                 BytesToRead,
                 MSG_FLAG_TO_NATIVE(Flag));
 }
