@@ -209,7 +209,7 @@ class ScSubTotalFieldObj : public cppu::WeakImplHelper<
                                 css::lang::XServiceInfo >
 {
 private:
-    ScSubTotalDescriptorBase&       rParent;
+    rtl::Reference<ScSubTotalDescriptorBase> xParent;
     sal_uInt16                      nPos;
 
 public:
