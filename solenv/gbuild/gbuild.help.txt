@@ -44,6 +44,8 @@ AVAILABLE TARGETS
 
        build-l10n-only      builds translation files for the build products
        build-non-l10n-only  builds the product without the localization files
+       build-nocheck        builds the product but do not build nor run
+                            unit tests
        translations         extract .pot files to workdir/pot
 
        packageinfo          generates package information for distros
