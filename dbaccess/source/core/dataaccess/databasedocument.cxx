@@ -1963,7 +1963,7 @@ void SAL_CALL ODatabaseDocument::switchToStorage( const Reference< XStorage >& _
 
 Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentStorage(  )
 {
-    DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
+    DocumentGuard aGuard(*this, DocumentGuard::MethodUsedDuringInit);
     return m_pImpl->getOrCreateRootStorage();
 }
 
