@@ -221,7 +221,7 @@ struct LeakWarning
 static LeakWarning socketWarning;
 #endif
 
-oslSocket createSocketImpl(SOCKET Socket)
+oslSocket initSocket(SOCKET Socket)
 {
     oslSocket pSockImpl = static_cast<oslSocket>(rtl_allocateZeroMemory( sizeof(struct oslSocketImpl)));
     pSockImpl->m_Socket = Socket;
@@ -777,7 +777,7 @@ oslSocket SAL_CALL osl_createSocket(
     oslProtocol Protocol)
 {
     /* alloc memory */
-    oslSocket pSocket = createSocketImpl(0);
+    oslSocket pSocket = initSocket(0);
 
     if (pSocket == nullptr)
         return nullptr;
@@ -1070,7 +1070,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
 
     /* alloc memory */
     oslSocket  pConnectionSocket;
-    pConnectionSocket= createSocketImpl(Connection);
+    pConnectionSocket = initSocket(Connection);
 
     pConnectionSocket->m_Flags          = 0;
 
