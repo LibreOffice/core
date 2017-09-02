@@ -290,7 +290,7 @@ FuInsertGraphic::~FuInsertGraphic()
 }
 
 FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
-                              vcl::Window*           pWin,
+                              vcl::Window*      pWin,
                               ScDrawView*       pViewP,
                               SdrModel*         pDoc,
                               const SfxRequest& rReq ) :
@@ -312,8 +312,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
     }
 
     bool bLink(true);
-    if (bAPI ||
-        ::avmedia::MediaWindow::executeMediaURLDialog(aURL, & bLink))
+    if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(pWin, aURL, &bLink))
     {
         Size aPrefSize;
 
