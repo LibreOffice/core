@@ -237,6 +237,7 @@ bool ImplSdPPTImport::Import()
         return false;
 
     pSdrModel->setLock(true);
+    const bool bSavedUndoEnabled = pSdrModel->IsUndoEnabled();
     pSdrModel->EnableUndo(false);
 
     SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
@@ -1407,7 +1408,7 @@ bool ImplSdPPTImport::Import()
     xDocProps->setTemplateName(OUString());
 
     pSdrModel->setLock(false);
-    pSdrModel->EnableUndo(true);
+    pSdrModel->EnableUndo(bSavedUndoEnabled);
     return bOk;
 }
 
