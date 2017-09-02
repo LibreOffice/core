@@ -875,16 +875,17 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     return pAddr;
 }
 
-sal_Bool SAL_CALL osl_bindAddrToSocket ( oslSocket pSocket, oslSocketAddr pAddr)
+sal_Bool SAL_CALL osl_bindAddrToSocket (oslSocket pSocket, oslSocketAddr pAddr)
 {
-    OSL_ASSERT( pAddr );
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    SAL_WARN_IF(!pAddr, "sal.osl", "undefined address");
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket || !pAddr) /* ENOTSOCK */
         return false;
 
-    return (bind(pSocket->m_Socket,
-                 &(pAddr->m_sockaddr),
-                 sizeof(struct sockaddr)) != OSL_SOCKET_ERROR);
+    int nBindResult = bind(pSocket->m_Socket, &(pAddr->m_sockaddr), sizeof(struct sockaddr));
+
+    return (nBindResult != OSL_SOCKET_ERROR);
 }
 
 oslSocketResult SAL_CALL osl_connectSocketTo (
