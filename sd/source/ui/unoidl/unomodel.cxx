@@ -119,10 +119,6 @@
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
-#include <sfx2/lokcharthelper.hxx>
-
-#define TWIPS_PER_PIXEL 15
-
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::sd;
@@ -2254,15 +2250,15 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // 100th mm rather than TWIP. It makes most sense just to
     // convert here and in getDocumentSize, and leave the tiled
     // rendering API working in TWIPs.
-    long nTileWidthHMM = convertTwipToMm100( nTileWidth );
-    long nTileHeightHMM = convertTwipToMm100( nTileHeight );
-    int nTilePosXHMM = convertTwipToMm100( nTilePosX );
-    int nTilePosYHMM = convertTwipToMm100( nTilePosY );
+    nTileWidth = convertTwipToMm100( nTileWidth );
+    nTileHeight = convertTwipToMm100( nTileHeight );
+    nTilePosX = convertTwipToMm100( nTilePosX );
+    nTilePosY = convertTwipToMm100( nTilePosY );
 
     MapMode aMapMode = rDevice.GetMapMode();
     aMapMode.SetMapUnit( MapUnit::Map100thMM );
-    aMapMode.SetOrigin( Point( -nTilePosXHMM,
-                               -nTilePosYHMM) );
+    aMapMode.SetOrigin( Point( -nTilePosX,
+                               -nTilePosY) );
     aMapMode.SetScaleX( scaleX );
     aMapMode.SetScaleY( scaleY );
 
@@ -2270,14 +2266,11 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     rDevice.SetOutputSizePixel( Size(nOutputWidth, nOutputHeight) );
 
-    Point aPoint(nTilePosXHMM, nTilePosYHMM);
-    Size aSize(nTileWidthHMM, nTileHeightHMM);
+    Point aPoint(nTilePosX, nTilePosY);
+    Size aSize(nTileWidth, nTileHeight);
     ::tools::Rectangle aRect(aPoint, aSize);
 
     pViewSh->GetView()->CompleteRedraw(&rDevice, vcl::Region(aRect));
-
-    LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
-                                         nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 void SdXImpressDocument::setPart( int nPart )
@@ -2456,16 +2449,9 @@ void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
     if (!pViewShell)
         return;
 
-    vcl::Window* pWindow = pViewShell->GetActiveWindow();
+    sd::Window* pWindow = pViewShell->GetActiveWindow();
     if (!pWindow)
         return;
-
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    vcl::Window* pChartWindow = aChartHelper.GetWindow();
-    if (pChartWindow)
-    {
-        pWindow = pChartWindow;
-    }
 
     KeyEvent aEvent(nCharCode, nKeyCode, 0);
 
@@ -2490,24 +2476,6 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
     DrawViewShell* pViewShell = GetViewShell();
     if (!pViewShell)
         return;
-
-    double fScale = 1.0/TWIPS_PER_PIXEL;
-
-    // check if user hit a chart which is being edited by him
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    if (aChartHelper.postMouseEvent(nType, nX, nY,
-                                    nCount, nButtons, nModifier,
-                                    fScale, fScale))
-        return;
-
-    // check if the user hit a chart which is being edited by someone else
-    // and, if so, skip current mouse event
-    if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
-    {
-        if (LokChartHelper::HitAny(Point(nX, nY)))
-            return;
-    }
-
     Window* pWindow = pViewShell->GetActiveWindow();
 
     Point aPos(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)));
@@ -2545,10 +2513,6 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     if (!pViewShell)
         return;
 
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    if (aChartHelper.setTextSelection(nType, nX, nY))
-        return;
-
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
     switch (nType)
     {
@@ -2584,12 +2548,6 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
 
     DrawViewShell* pViewShell = GetViewShell();
     if (!pViewShell)
-        return;
-
-    double fScale = 1.0/TWIPS_PER_PIXEL;
-
-    LokChartHelper aChartHelper(pViewShell->GetViewShell());
-    if (aChartHelper.setGraphicSelection(nType, nX, nY, fScale, fScale))
         return;
 
     Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));

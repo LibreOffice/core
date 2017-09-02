@@ -52,8 +52,6 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
-#include <editeng/editview.hxx>
-#include <editeng/outliner.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svtools/transfer.hxx>
 #include <sot/storage.hxx>
@@ -70,8 +68,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
-
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <memory>
 
@@ -923,37 +919,6 @@ void ChartController::executeDispatch_ToggleGridVertical()
         }
 
         aUndoGuard.commit();
-    }
-}
-
-void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int nY)
-{
-    if (m_pDrawViewWrapper)
-    {
-        if (m_pDrawViewWrapper->IsTextEdit())
-        {
-            OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-            if (pOutlinerView)
-            {
-                EditView& rEditView = pOutlinerView->GetEditView();
-                Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-                switch (nType)
-                {
-                    case LOK_SETTEXTSELECTION_START:
-                        rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
-                        break;
-                    case LOK_SETTEXTSELECTION_END:
-                        rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
-                        break;
-                    case LOK_SETTEXTSELECTION_RESET:
-                        rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
-                        break;
-                    default:
-                        assert(false);
-                        break;
-                }
-            }
-        }
     }
 }
 

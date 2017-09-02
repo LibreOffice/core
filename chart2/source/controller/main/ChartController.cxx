@@ -1091,20 +1091,7 @@ void SAL_CALL ChartController::dispatch(
 {
     OUString aCommand = rURL.Path;
 
-    if(aCommand == "LOKSetTextSelection")
-    {
-        if (rArgs.getLength() == 3)
-        {
-            sal_Int32 nType = -1;
-            rArgs[0].Value >>= nType;
-            sal_Int32 nX = 0;
-            rArgs[1].Value >>= nX;
-            sal_Int32 nY = 0;
-            rArgs[2].Value >>= nY;
-            executeDispatch_LOKSetTextSelection(nType, nX, nY);
-        }
-    }
-    else if(aCommand == "Paste")
+    if(aCommand == "Paste")
         this->executeDispatch_Paste();
     else if(aCommand == "Copy" )
         this->executeDispatch_Copy();

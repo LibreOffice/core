@@ -64,8 +64,6 @@
 #include <svtools/soerr.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <sfx2/lokhelper.hxx>
-
 #define SFX_CLIENTACTIVATE_TIMEOUT 100
 
 using namespace com::sun::star;
@@ -396,27 +394,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
                                 Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
 
-    // In Writer and Impress the map mode is disabled. So when a chart is
-    // activated (for in place editing) we get the chart win size in 100th mm
-    // and any method that should return pixels returns 100th mm and the chart
-    // window map mode has a ~26.485 scale factor.
-    // All that does not fit with current implementation for handling chart
-    // editing in LOK.
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        vcl::Window* pEditWin = m_pClient->GetEditWin();
-        bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
-        if (!bMapModeEnabled)
-            pEditWin->EnableMapMode();
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
-        if (!bMapModeEnabled && pEditWin->IsMapModeEnabled())
-            pEditWin->EnableMapMode(false);
-    }
-    else
-    {
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
-    }
-
+    aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
     return AWTRectangle( aRealObjArea );
 }
 
@@ -431,22 +409,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
     aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
                                 Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
 
-    // See comment for SfxInPlaceClient_Impl::getPlacement.
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        vcl::Window* pEditWin = m_pClient->GetEditWin();
-        bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
-        if (!bMapModeEnabled)
-            pEditWin->EnableMapMode();
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
-        if (!bMapModeEnabled && pEditWin->IsMapModeEnabled())
-            pEditWin->EnableMapMode(false);
-    }
-    else
-    {
-        aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
-    }
-
+    aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
     return AWTRectangle( aRealObjArea );
 }
 
@@ -915,13 +878,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
             if ( !nError )
             {
-                // See comment for SfxInPlaceClient_Impl::getPlacement.
-                vcl::Window* pEditWin = GetEditWin();
-                bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
-                if (comphelper::LibreOfficeKit::isActive() && !bMapModeEnabled)
-                {
-                    pEditWin->EnableMapMode();
-                }
+
                 m_pViewSh->GetViewFrame()->GetFrame().LockResize_Impl(true);
                 try
                 {
@@ -972,13 +929,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                             " exception caught: " << e.Message);
                     nError = ERRCODE_SO_GENERALERROR;
                     //TODO/LATER: better error handling
+                }
 
-                }
-                if (comphelper::LibreOfficeKit::isActive() && !bMapModeEnabled
-                        && pEditWin->IsMapModeEnabled())
-                {
-                    pEditWin->EnableMapMode(false);
-                }
                 SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
                 pFrame->GetFrame().LockResize_Impl(false);
                 pFrame->GetFrame().Resize();

@@ -832,11 +832,9 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
     if ( !pClients )
         return nullptr;
 
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
-
     for (SfxInPlaceClient* pIPClient : *pClients)
     {
-        if ( pIPClient->IsObjectUIActive() || ( bIsTiledRendering && pIPClient->IsObjectInPlaceActive() ) )
+        if ( pIPClient->IsObjectUIActive() )
             return pIPClient;
     }
 
@@ -1464,17 +1462,6 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
 
 void SfxViewShell::afterCallbackRegistered()
 {
-}
-
-vcl::Window* SfxViewShell::GetEditWindowForActiveOLEObj() const
-{
-    vcl::Window* pEditWin = nullptr;
-    SfxInPlaceClient* pIPClient = GetIPClient();
-    if (pIPClient)
-    {
-        pEditWin = pIPClient->GetEditWin();
-    }
-    return pEditWin;
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const

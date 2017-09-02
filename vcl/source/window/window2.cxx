@@ -1207,11 +1207,6 @@ bool Window::IsDefaultSize() const
     return mpWindowImpl->mbDefSize;
 }
 
-Point Window::GetOffsetPixelFrom(const vcl::Window& rWindow) const
-{
-    return Point(GetOutOffXPixel() - rWindow.GetOutOffXPixel(), GetOutOffYPixel() - rWindow.GetOutOffYPixel());
-}
-
 void Window::EnablePaint( bool bEnable )
 {
     mpWindowImpl->mbPaintDisabled = !bEnable;
