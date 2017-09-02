@@ -844,12 +844,11 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
     struct sockaddr Addr;
-    int             AddrLen;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
-    AddrLen= sizeof(struct sockaddr);
+    int AddrLen = sizeof(struct sockaddr);
 
     if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return nullptr;
@@ -1049,6 +1048,9 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
 
         /* user wants to know peer Addr */
         struct sockaddr Addr;
+
+		Connection= accept(pSocket->m_Socket, &Addr, &AddrLen);
+        OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
 
         if (Connection != static_cast< SOCKET >(OSL_SOCKET_ERROR))
             *ppAddr= createSocketAddrFromSystem(&Addr);
