@@ -129,7 +129,6 @@ job129=sc.ScSpreadsheetSettingsObj
 job130=sc.ScStyleFamiliesObj
 job131=sc.ScStyleFamilyObj
 job132=sc.ScStyleObj
-job133=sc.ScSubTotalFieldObj
 job134=sc.ScTableColumnObj
 job135=sc.ScTableColumnsObj
 job136=sc.ScTableConditionalEntry

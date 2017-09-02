@@ -635,7 +635,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/sheet/_XSubTotalCalculatable \
     qadevOOo/tests/java/ifc/sheet/_XSubTotalDescriptor \
-    qadevOOo/tests/java/ifc/sheet/_XSubTotalField \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesComplex \
@@ -1112,7 +1111,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScStyleFamilyObj \
     qadevOOo/tests/java/mod/_sc/ScStyleObj \
     qadevOOo/tests/java/mod/_sc/ScSubTotalDescriptorBase \
-    qadevOOo/tests/java/mod/_sc/ScSubTotalFieldObj \
     qadevOOo/tests/java/mod/_sc/ScTableColumnObj \
     qadevOOo/tests/java/mod/_sc/ScTableColumnsObj \
     qadevOOo/tests/java/mod/_sc/ScTableConditionalEntry \
