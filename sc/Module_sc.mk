@@ -129,6 +129,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_tabviewobj \
 	CppunitTest_sc_arealinkobj \
 	CppunitTest_sc_datapilotitemobj \
+	CppunitTest_sc_subtotalfieldobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
