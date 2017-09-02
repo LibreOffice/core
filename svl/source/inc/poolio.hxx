@@ -83,7 +83,6 @@ struct SfxItemPool_Impl
     sal_uInt16*                     mpPoolRanges;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
-    sal_uInt16                      nInitRefCount; // 1, during load, may be 2
     MapUnit                         eDefMetric;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
@@ -96,7 +95,6 @@ struct SfxItemPool_Impl
         , mpPoolRanges(nullptr)
         , mnStart(nStart)
         , mnEnd(nEnd)
-        , nInitRefCount(0)
         , eDefMetric(MapUnit::MapCM)
     {
         DBG_ASSERT(mnStart, "Start-Which-Id must be greater 0" );
