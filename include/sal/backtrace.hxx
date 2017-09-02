@@ -29,6 +29,7 @@
 struct BacktraceState {
     void** buffer;
     int nDepth;
+    ~BacktraceState() {delete[] buffer;}
 };
 
 SAL_DLLPUBLIC std::unique_ptr<BacktraceState> SAL_CALL sal_backtrace_get(
