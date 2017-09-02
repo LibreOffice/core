@@ -386,7 +386,7 @@ css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
 Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XControl > >& rCtrls,
  const Reference< XControlModel > & rxCtrlModel )
 {
-    DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - welches ?!" );
+    DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - which one ?!" );
 
     const Reference< XControl > * pCtrls = rCtrls.getConstArray();
     sal_Int32 nCtrls = rCtrls.getLength();

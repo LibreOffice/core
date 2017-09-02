@@ -811,8 +811,8 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     }
     if ( !pParent )
     {
-        // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
-        // spaeter mal css::uno::Exception...
+        // If the component needs a parent, then return NULL,
+        // some time later css::uno::Exception...
         bool bException = true;
         if  (   ( nType == WindowType::DIALOG )
             ||  ( nType == WindowType::MODALDIALOG )

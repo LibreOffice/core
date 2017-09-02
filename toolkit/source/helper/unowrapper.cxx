@@ -232,7 +232,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         pChild = pNextChild;
     }
 
-    // System-Windows suchen...
+    // find system windows...
     VclPtr< vcl::Window > pOverlap = pWindow->GetWindow( GetWindowType::Overlap );
     if ( pOverlap )
     {

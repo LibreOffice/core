@@ -160,7 +160,7 @@ void XNamedRanges::testRemoveByName()
     uno::Reference< container::XIndexAccess > xIndex(xNamedRanges, UNO_QUERY_THROW);
 
     bool bHasIt = xNamedRanges->hasByName(maNameToRemove);
-    CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 des not exits, can't remove it", bHasIt);
+    CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 does not exits, can't remove it", bHasIt);
 
     if (bHasIt)
     {

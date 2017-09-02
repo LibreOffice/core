@@ -267,18 +267,18 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
     // first "New" menu ...
     //      Name                            Value
     //      /New/1/URL                      "private:factory/swriter"
-    //      /New/1/Title                    "Neues Writer Dokument"
+    //      /New/1/Title                    "New Writer Document"
     //      /New/1/ImageIdentifier          "icon_writer"
     //      /New/1/TargetName               "_blank"
 
     //      /New/2/URL                      "private:factory/scalc"
-    //      /New/2/Title                    "Neues Calc Dokument"
+    //      /New/2/Title                    "New Calc Document"
     //      /New/2/ImageIdentifier          "icon_calc"
     //      /New/2/TargetName               "_blank"
 
     // second "Wizard" menu ...
     //      /Wizard/1/URL                   "file://b"
-    //      /Wizard/1/Title                 "MalWas"
+    //      /Wizard/1/Title                 "PaintSomething"
     //      /Wizard/1/ImageIdentifier       "icon_?"
     //      /Wizard/1/TargetName            "_self"
 

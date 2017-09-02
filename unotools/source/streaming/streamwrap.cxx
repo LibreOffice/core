@@ -64,7 +64,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
-    // Wenn gelesene Zeichen < MaxLength, css::uno::Sequence anpassen
+    // If read characters < MaxLength, adjust css::uno::Sequence
     if (nRead < (std::size_t)aData.getLength())
         aData.realloc( nRead );
 
