@@ -1488,28 +1488,28 @@ oslSocketResult SAL_CALL osl_connectSocketTo(
     return Result;
 }
 
-oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
-                        oslSocketAddr* ppAddr)
+oslSocket SAL_CALL osl_acceptConnectionOnSocket(
+    oslSocket pSocket,
+    oslSocketAddr* ppAddr)
 {
     struct sockaddr Addr;
     int Connection, Flags;
     oslSocket pConnectionSockImpl;
 
-    socklen_t AddrLen = sizeof(struct sockaddr);
-    SAL_WARN_IF( !pSocket, "sal.osl", "undefined socket" );
-    if ( pSocket == nullptr )
-    {
+    SAL_WARN_IF(!pSocket, "sal.osl", "undefined socket");
+    if (!pSocket)
         return nullptr;
-    }
+
+    socklen_t AddrLen = sizeof(struct sockaddr);
 
     pSocket->m_nLastError=0;
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pSocket->m_bIsAccepting = true;
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
-    if( ppAddr && *ppAddr )
+    if (ppAddr && *ppAddr)
     {
-        osl_destroySocketAddr( *ppAddr );
+        osl_destroySocketAddr(*ppAddr);
         *ppAddr = nullptr;
     }
 
@@ -1520,7 +1520,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     } while (Connection == -1 && errno == EINTR);
 
     /* accept failed? */
-    if( Connection == OSL_SOCKET_ERROR )
+    if (Connection == OSL_SOCKET_ERROR)
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
@@ -1535,39 +1535,38 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     assert(AddrLen == sizeof(struct sockaddr));
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
-    if ( pSocket->m_bIsInShutdown )
+    if (pSocket->m_bIsInShutdown)
     {
         close(Connection);
-        SAL_WARN( "sal.osl", "close while accept" );
+        SAL_WARN("sal.osl", "close while accept");
         return nullptr;
     }
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
 
-    if(ppAddr)
-    {
-        *ppAddr= createSocketAddrFromSystem(&Addr);
-    }
+    if (ppAddr)
+        *ppAddr = createSocketAddrFromSystem(&Addr);
 
     /* alloc memory */
     pConnectionSockImpl = initSocket(OSL_INVALID_SOCKET);
 
     /* set close-on-exec flag */
-    if ((Flags = fcntl(Connection, F_GETFD, 0)) != -1)
+    Flags = fcntl(Connection, F_GETFD, 0);
+    if (Flags != -1)
     {
         Flags |= FD_CLOEXEC;
         if (fcntl(Connection, F_SETFD, Flags) == -1)
         {
             pSocket->m_nLastError=errno;
             int nErrno = errno;
-            SAL_WARN( "sal.osl", "failed changing socket flags: (" << nErrno << ") " << strerror(nErrno) );
+            SAL_WARN("sal.osl", "failed changing socket flags: (" << nErrno << ") " << strerror(nErrno));
         }
 
     }
 
-    pConnectionSockImpl->m_Socket           = Connection;
-    pConnectionSockImpl->m_nLastError       = 0;
+    pConnectionSockImpl->m_Socket = Connection;
+    pConnectionSockImpl->m_nLastError = 0;
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
-    pConnectionSockImpl->m_bIsAccepting     = false;
+    pConnectionSockImpl->m_bIsAccepting = false;
 
     pSocket->m_bIsAccepting = false;
 #endif /* CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT */
