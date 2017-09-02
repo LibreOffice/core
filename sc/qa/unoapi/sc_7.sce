@@ -17,7 +17,6 @@
 #
 # -o sc.ScStyleObj
 -o sc.ScSubTotalDescriptorBase
--o sc.ScSubTotalFieldObj
 # # i84656 -o sc.ScTabViewObj
 # -o sc.ScTableColumnObj
 -o sc.ScTableColumnsObj
