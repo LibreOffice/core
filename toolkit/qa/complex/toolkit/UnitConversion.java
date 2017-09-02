@@ -70,14 +70,14 @@ public class UnitConversion
      * only a simple test call to convertSizeToLogic(...) with different parameters
      * @param _aSize
      * @param _aMeasureUnit
-     * @param _sEinheit
+     * @param _sUnit
      */
-    private void checkSize(com.sun.star.awt.Size _aSize, short _aMeasureUnit, String _sEinheit)
+    private void checkSize(com.sun.star.awt.Size _aSize, short _aMeasureUnit, String _sUnit)
     {
         com.sun.star.awt.Size aSizeIn = m_xConversion.convertSizeToLogic(_aSize, _aMeasureUnit);
         System.out.println("Window size:");
-        System.out.println("Width:" + aSizeIn.Width + " " + _sEinheit);
-        System.out.println("Height:" + aSizeIn.Height + " " + _sEinheit);
+        System.out.println("Width:" + aSizeIn.Width + " " + _sUnit);
+        System.out.println("Height:" + aSizeIn.Height + " " + _sUnit);
         System.out.println("");
     }
 
