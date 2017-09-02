@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_63c1a6e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-02T23:02:40Z",
+      "side": 1,
+      "message": "No need to mention - also, generally ui code above vcl is pretty stable cross-platform",
+      "revId": "ed122acfbf9f3aa5e3dbc32c0291b0455d542769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_039462e0",
         "filename": "sd/source/ui/dlg/LayerTabBar.cxx",
         "patchSetId": 5
