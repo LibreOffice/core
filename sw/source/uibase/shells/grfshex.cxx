@@ -74,8 +74,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
     }
 
     bool bLink(true);
-    if (bAPI ||
-        ::avmedia::MediaWindow::executeMediaURLDialog(aURL, & bLink))
+    if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(pWindow, aURL, & bLink))
     {
         Size aPrefSize;
 
