@@ -83,7 +83,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     {
         // warnings can be ignored   => approve
         // errors must break loading => abort
-        bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK;
+        bool bWarning = ErrCode(aErrorCodeRequest.ErrCode).IsWarning();
         if (xApprove.is() && bWarning)
             xApprove->select();
         else

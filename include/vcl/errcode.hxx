@@ -46,7 +46,6 @@ Warning           ||   ||      |
 
 #define ERRCODE_ERROR_MASK               0x3fffffffUL
 #define ERRCODE_WARNING_MASK             0x80000000UL
-#define ERRCODE_RES_MASK                 0x7fff
 
 #define ERRCODE_CLASS_SHIFT              8
 #define ERRCODE_AREA_SHIFT               13
@@ -54,7 +53,6 @@ Warning           ||   ||      |
 
 #define ERRCODE_CLASS_MASK               (31UL << ERRCODE_CLASS_SHIFT)
 
-#define ERRCODE_DYNAMIC_START            ( 1UL << ERRCODE_DYNAMIC_SHIFT)
 #define ERRCODE_DYNAMIC_COUNT            31UL
 #define ERRCODE_DYNAMIC_MASK             (31UL << ERRCODE_DYNAMIC_SHIFT)
 
@@ -127,7 +125,7 @@ public:
     }
 
     constexpr sal_uInt16 GetRest() const {
-        return m_value & ERRCODE_RES_MASK;
+        return m_value & 0x7fff;
     }
 
     OUString toHexString() const {

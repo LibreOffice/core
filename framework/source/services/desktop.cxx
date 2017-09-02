@@ -1269,7 +1269,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     css::task::ErrorCodeRequest          aErrorCodeRequest;
     if( aRequest >>= aErrorCodeRequest )
     {
-        bool bWarning = ((aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+        bool bWarning = ErrCode(aErrorCodeRequest.ErrCode).IsWarning();
         if (xApprove.is() && bWarning)
             xApprove->select();
         else
