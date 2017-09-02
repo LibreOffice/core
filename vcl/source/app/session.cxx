@@ -266,7 +266,7 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Referenc
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    std::vector< Listener >::iterator it = m_aListeners.begin();
+//Mac build breaker    std::vector< Listener >::iterator it = m_aListeners.begin();
 
     SAL_INFO("vcl.se.debug", "  m_aListeners.size() = " << m_aListeners.size() );
 
