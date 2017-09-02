@@ -159,14 +159,14 @@ public class ServiceManager implements XMultiServiceFactory,
             ArrayList<Object> availableFact = factoriesByServiceNames.get( serviceName );
 
             DEBUG("");
-            DEBUG("aviable factories for " + serviceName +" "+ availableFact);
+            DEBUG("available factories for " + serviceName +" "+ availableFact);
             DEBUG("");
 
             if ( !availableFact.isEmpty() )
                 factory = availableFact.get(availableFact.size()-1);
 
         } else // not found in list of services - now try the implementations
-            factory = factoriesByImplNames.get( serviceName ); // return null if none is aviable
+            factory = factoriesByImplNames.get( serviceName ); // return null if none is available
 
         if (DEBUG) {
             if (factory == null) System.err.println("service not registered");
@@ -181,7 +181,7 @@ public class ServiceManager implements XMultiServiceFactory,
     }
 
     /**
-     * Supplies a list of all avialable services names.
+     * Supplies a list of all available services names.
      *
      * @return  list of Strings of all service names.
      * @see     com.sun.star.container.XContentEnumerationAccess
@@ -469,7 +469,7 @@ public class ServiceManager implements XMultiServiceFactory,
                     System.err.println("The implementation " + xServiceInfo.getImplementationName() +
                             " is not registered for the service " + serviceName + " - ignoring!");
                 }
-                // remove the vector if no implementations aviable for the service
+                // remove the vector if no implementations available for the service
                 if (vec.isEmpty()) {
                     factoriesByServiceNames.remove(serviceName);
                 }

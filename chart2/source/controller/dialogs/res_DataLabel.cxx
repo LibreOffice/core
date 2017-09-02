@@ -131,16 +131,16 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
         aPlacementToStringMap[nEnum] = m_pLB_LabelPlacement->GetEntry(static_cast<sal_uInt16>(nEnum));
 
 
-    std::vector< sal_Int32 > aAvailabelPlacementList;
+    std::vector< sal_Int32 > aAvailablePlacementList;
     const SfxPoolItem *pPoolItem = nullptr;
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SfxItemState::SET )
-        aAvailabelPlacementList = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetList();
+        aAvailablePlacementList = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetList();
 
     m_pLB_LabelPlacement->Clear();
-    for( size_t nN=0; nN<aAvailabelPlacementList.size(); ++nN )
+    for( size_t nN=0; nN<aAvailablePlacementList.size(); ++nN )
     {
         sal_uInt16 nListBoxPos = static_cast<sal_uInt16>( nN );
-        sal_Int32 nPlacement = aAvailabelPlacementList[nN];
+        sal_Int32 nPlacement = aAvailablePlacementList[nN];
         m_aPlacementToListBoxMap[nPlacement]=nListBoxPos;
         m_aListBoxToPlacementMap[nListBoxPos]=nPlacement;
         m_pLB_LabelPlacement->InsertEntry( aPlacementToStringMap[nPlacement] );

@@ -3146,14 +3146,14 @@ void XMLTextParagraphExport::_exportTextGraphic(
 
 void XMLTextParagraphExport::_collectTextEmbeddedAutoStyles(const Reference < XPropertySet > & )
 {
-    SAL_WARN( "xmloff", "no API implementation avialable" );
+    SAL_WARN( "xmloff", "no API implementation available" );
 }
 
 void XMLTextParagraphExport::_exportTextEmbedded(
         const Reference < XPropertySet > &,
         const Reference < XPropertySetInfo > & )
 {
-    SAL_WARN( "xmloff", "no API implementation avialable" );
+    SAL_WARN( "xmloff", "no API implementation available" );
 }
 
 void XMLTextParagraphExport::exportEvents( const Reference < XPropertySet > & rPropSet )
