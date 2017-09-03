@@ -28,7 +28,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/accessibility/AccessibleRelationSet \
     sw/qa/complex/indeterminateState/CheckIndeterminateState \
     sw/qa/complex/writer/TestDocument \
-    sw/qa/complex/writer/TextPortionEnumerationTest \
 ))
 
 $(eval $(call gb_JunitTest_use_jars,sw_complex,\
@@ -41,7 +40,10 @@ $(eval $(call gb_JunitTest_use_jars,sw_complex,\
 
 $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.accessibility.AccessibleRelationSet \
+<<<<<<< a89c3dc4b0a2ec846af387833474b543b3f149ad
     complex.writer.TextPortionEnumerationTest \
+=======
+>>>>>>> tdf#97362: TextPortionEnumerationTest partially migrated to python (last part)
 ))
 
 # vim: set noet sw=4 ts=4:
