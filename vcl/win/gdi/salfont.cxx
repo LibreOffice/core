@@ -126,6 +126,9 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
     if( nRawDataOfs != mnByteCount )
     {
         mpRawBytes.reset();
+        // mnByteCount must correspond to mpRawBytes length
+        SAL_WARN( "vcl", "Raw data of font is incomplete: " << nRawDataOfs " byte(s) found whereas " << mnByteCount << " byte(s) expected!" );
+        mnByteCount = 0;
     }
 }
 
