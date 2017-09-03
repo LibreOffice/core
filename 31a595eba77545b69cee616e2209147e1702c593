@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_be6801bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-09-03T06:15:26Z",
+      "side": 1,
+      "message": "Can you swap \"fdo\" in favor of \"tdf\"? Using \"fdo\" is obsolete for LibreOffice bugs... Unless you really want to refer to a bug reported at bugs.freedesktop.org.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "31a595eba77545b69cee616e2209147e1702c593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_5e047d14",
         "filename": "framework/source/services/autorecovery.cxx",
         "patchSetId": 1
