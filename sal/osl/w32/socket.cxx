@@ -270,10 +270,10 @@ static oslSocketAddr createSocketAddrWithFamily(
     return pAddr;
 }
 
-static oslSocketAddr createSocketAddFromSystem( struct sockaddr *pSystemSockAddr )
+static oslSocketAddr createSocketAddrFromSystem(struct sockaddr *pSystemSockAddr)
 {
     oslSocketAddr pAddr = createSocketAddr();
-    memcpy( &(pAddr->m_sockaddr), pSystemSockAddr, sizeof( sockaddr ) );
+    memcpy(&(pAddr->m_sockaddr), pSystemSockAddr, sizeof(sockaddr));
     return pAddr;
 }
 
@@ -854,7 +854,7 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
     if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return nullptr;
 
-    oslSocketAddr pAddr = createSocketAddFromSystem( &Addr );
+    oslSocketAddr pAddr = createSocketAddrFromSystem(&Addr);
     return pAddr;
 }
 
@@ -871,7 +871,7 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     if (getpeername(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
         return nullptr;
 
-    oslSocketAddr pAddr = createSocketAddFromSystem( &Addr );
+    oslSocketAddr pAddr = createSocketAddrFromSystem(&Addr);
     return pAddr;
 }
 
@@ -1049,11 +1049,11 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
         /* user wants to know peer Addr */
         struct sockaddr Addr;
 
-        Connection= accept(pSocket->m_Socket, &Addr, &AddrLen);
-        OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
+        Connection = accept(pSocket->m_Socket, &Addr, &AddrLen);
+        assert(AddrLen == sizeof(struct sockaddr));
 
-        if(Connection != static_cast<SOCKET>(OSL_SOCKET_ERROR))
-            *ppAddr= createSocketAddFromSystem(&Addr);
+        if (Connection != static_cast< SOCKET >(OSL_SOCKET_ERROR))
+            *ppAddr= createSocketAddrFromSystem(&Addr);
         else
             *ppAddr = nullptr;
     }
