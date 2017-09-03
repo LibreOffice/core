@@ -5173,8 +5173,10 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     bool bHasShadingMarker = false;
 
     // Check shading marker
+    const SfxPoolItem* pItem = GetExport().HasItem(RES_CHRATR_GRABBAG);
+    if( pItem )
     {
-        const SfxGrabBagItem& aGrabBag = static_cast< const SfxGrabBagItem& >( GetExport().GetItem( RES_CHRATR_GRABBAG ) );
+        const SfxGrabBagItem aGrabBag = static_cast< const SfxGrabBagItem& >(*pItem);
         const std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         auto aIterator = rMap.find("CharShadingMarker");
         if( aIterator != rMap.end() )
