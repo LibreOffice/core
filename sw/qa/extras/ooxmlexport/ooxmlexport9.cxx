@@ -1042,6 +1042,11 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
     CPPUNIT_ASSERT_EQUAL(sGroupName, getProperty<OUString>(xPropertySet, "GroupName"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
+{
+    // LO crashed while export because of chararacter background color handling
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
