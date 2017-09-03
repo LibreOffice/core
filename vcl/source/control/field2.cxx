@@ -368,7 +368,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
     OUString aText = pEdit->GetText();
 
     // remove leading blanks
-    if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
+    if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) && !rEditMask.isEmpty() )
     {
         sal_Int32 i = 0;
         sal_Int32 nMaxLen = aText.getLength();
