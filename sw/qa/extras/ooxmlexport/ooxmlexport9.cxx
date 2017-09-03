@@ -58,7 +58,7 @@ public:
     {
     }
 };
-
+/*
 DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -1040,6 +1040,11 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
     CPPUNIT_ASSERT(xControlShape.is());
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sGroupName, getProperty<OUString>(xPropertySet, "GroupName"));
+}*/
+
+DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
+{
+    // LO crashed while export because of chararacter background color handling
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
