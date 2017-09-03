@@ -480,7 +480,6 @@ class Inserter():
     def insertruby(self, xCursor, rubytext):
         xCursor.RubyText = rubytext
 
-
     def insertmeta(self, xCursor, xmlid):
         xContent = self.makemeta()
         xContent.attach(xCursor)
@@ -2902,6 +2901,547 @@ class TextPortionEnumerationTest(unittest.TestCase):
         string = xDocTextCursor.getString()
         self.assertEqual("Text", string, "gotoEndOfWord(): wrong string")
         self.assertNotEqual("a","b")
+
+    class AttachHelper():
+        def isattribute(self): pass
+        def mktreenode(self): pass
+        def mktextcontent(self, inserter, node): pass
+        def postinserted(self, node, xContent): pass
+
+    def test_meta_xtextattach_toxmark(self):
+        class Helper(self.AttachHelper):
+            def isattribute(_):
+                return True
+            def mktreenode(_):
+                return DocumentIndexMarkNode(self.mkname("toxmark"))
+            def mktextcontent(_, inserter, node):
+                return inserter.makedocumentindexmark(node.name)
+        self.do_meta_xtextattach(Helper())
+
+    def test_meta_xtextattach_refmark(self):
+        class Helper(self.AttachHelper):
+            def isattribute(_):
+                return True
+            def mktreenode(_):
+                return ReferenceMarkNode(self.mkname("refmark"))
+            def mktextcontent(_, inserter, node):
+                return inserter.makereferencemark(node.name)
+        self.do_meta_xtextattach(Helper())
+
+    def test_meta_xtextattach_textfield(self):
+        class Helper(self.AttachHelper):
+            def isattribute(_):
+                return False
+            def mktreenode(_):
+                return TextFieldNode(self.mkname("field"))
+            def mktextcontent(_, inserter, node):
+                return inserter.maketextfield(node.content)
+        self.do_meta_xtextattach(Helper())
+
+    def test_meta_xtextattach_footnote(self):
+        class Helper(self.AttachHelper):
+            def isattribute(_):
+                return False
+            def mktreenode(_):
+                return FootnoteNode(self.mkname("ftn"))
+            def mktextcontent(_, inserter, node):
+                return inserter.makefootnote(node.label)
+        self.do_meta_xtextattach(Helper())
+
+    def test_meta_xtextattach_meta(self):
+        class Helper(self.AttachHelper):
+            def isattribute(_):
+                return True
+            def mktreenode(_):
+                return MetaNode(self.mkid("id"))
+            def mktextcontent(_, inserter, node):
+                return inserter.makemeta()
+            def postinserted(_, node, xContent):
+                xContent.MetadataReference = node.xmlid
+        self.do_meta_xtextattach(Helper())
+
+    def do_meta_xtextattach(self, helper):
+        xDoc = self.__class__.xDoc
+        inserter = RangeInserter(xDoc)
+        text = TextNode("12AB6789")
+        inserter.insertrange(Range(0, 0, text))
+        met1 = MetaNode(self.mkid("id"))
+        xMeta = inserter.makemeta()
+
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.goRight(3, False)
+        xDocTextCursor.goRight(2, True)
+        xDocText.insertTextContent(xDocTextCursor, xMeta, True)
+
+        xMeta.MetadataReference = met1.xmlid
+        xStart = None
+        xEnd = None
+
+        xStart = xMeta.getStart()
+        xEnd = xMeta.getEnd()
+
+        nod1 = helper.mktreenode()
+        nod2 = helper.mktreenode()
+        xContent1 = helper.mktextcontent(inserter, nod1)
+        xContent2 = helper.mktextcontent(inserter, nod2)
+
+        ## insertTextContent with meta getStart()/getEnd()
+        xMeta.insertTextContent(xStart, xContent1, False)
+        xMeta.insertTextContent(xEnd, xContent2, False)
+
+        helper.postinserted(nod1, xContent1)
+        helper.postinserted(nod2, xContent2)
+
+        root = TreeNode()
+        root.appendchild(TextNode("12"))
+        root.appendchild(met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup()))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+
+        xMeta.setString("AB")
+        xStart = xMeta.getStart()
+        xEnd = xMeta.getEnd()
+
+        nod1 = helper.mktreenode()
+        nod2 = helper.mktreenode()
+        xContent1 = helper.mktextcontent(inserter, nod1)
+        xContent2 = helper.mktextcontent(inserter, nod2)
+
+        xTextCursor = xMeta.createTextCursor()
+        xTextCursor.gotoStart(False)
+
+        ## insertTextContent with meta cursor
+        xMeta.insertTextContent(xTextCursor, xContent1, False)
+        xTextCursor.gotoEnd(False)
+        xMeta.insertTextContent(xTextCursor, xContent2, False)
+
+        helper.postinserted(nod1, xContent1)
+        helper.postinserted(nod2, xContent2)
+
+        root = TreeNode()
+        root.appendchild(TextNode("12"))
+        root.appendchild(met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup()))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+
+        if not helper.isattribute():
+            # xMeta.setString("AB")
+            xStart = xMeta.getStart()
+            xEnd = xMeta.getEnd()
+
+            nod1 = helper.mktreenode()
+            nod2 = helper.mktreenode()
+            xContent1 = helper.mktextcontent(inserter, nod1)
+            xContent2 = helper.mktextcontent(inserter, nod2)
+
+            xTextCursor = xMeta.createTextCursor()
+            xTextCursor.gotoStart(False)
+            xTextCursor.goRight(1, True)
+
+            ## insertTextContent with meta cursor and absorb
+            xMeta.insertTextContent(xTextCursor, xContent1, True)
+            xTextCursor.gotoEnd(False)
+            xTextCursor.goLeft(1, True)
+            xMeta.insertTextContent(xTextCursor, xContent2, True)
+
+            helper.postinserted(nod1, xContent1)
+            helper.postinserted(nod2, xContent2)
+
+            root = TreeNode()
+            root.appendchild(TextNode("12"))
+            root.appendchild(met1.dup()
+                    .appendchild(nod1.dup())
+                    .appendchild(TextNode("AB"))
+                    .appendchild(nod2.dup()))
+            root.appendchild(TextNode("6789"))
+            self.dotest(root, False)
+
+            xMeta.setString("AB")
+            xStart = xMeta.getStart()
+            xEnd = xMeta.getEnd()
+
+            nod1 = helper.mktreenode()
+            nod2 = helper.mktreenode()
+            xContent1 = helper.mktextcontent(inserter, nod1)
+            xContent2 = helper.mktextcontent(inserter, nod2)
+
+            xDocTextCursor.gotoRange(xStart, False)
+
+            ## insertTextContent with document cursor
+            xMeta.insertTextContent(xDocTextCursor, xContent1, False)
+            xDocTextCursor.gotoRange(xEnd, False)
+            xMeta.insertTextContent(xDocTextCursor, xContent2, False)
+
+            helper.postinserted(nod1, xContent1)
+            helper.postinserted(nod2, xContent2)
+
+            root = TreeNode()
+            root.appendchild(TextNode("12"))
+            root.appendchild(met1.dup()
+                    .appendchild(nod1.dup())
+                    .appendchild(TextNode("AB"))
+                    .appendchild(nod2.dup()))
+            root.appendchild(TextNode("6789"))
+            self.dotest(root, False)
+
+        if not helper.isattribute():
+            xStart = xMeta.getStart()
+            xEnd = xMeta.getEnd()
+
+            nod1 = helper.mktreenode()
+            nod2 = helper.mktreenode()
+            xContent1 = helper.mktextcontent(inserter, nod1)
+            xContent2 = helper.mktextcontent(inserter, nod2)
+
+            xDocTextCursor.gotoRange(xStart, False)
+            xDocTextCursor.goRight(1, True)
+
+            ## insertTextContent with document cursor and absorb
+            xMeta.insertTextContent(xDocTextCursor, xContent1, True)
+            xDocTextCursor.gotoRange(xEnd, False)
+            xDocTextCursor.goLeft(1, True)
+            xMeta.insertTextContent(xDocTextCursor, xContent2, True)
+
+            helper.postinserted(nod1, xContent1)
+            helper.postinserted(nod2, xContent2)
+
+            root = TreeNode()
+            root.appendchild(TextNode("12"))
+            root.appendchild(met1.dup()
+                    .appendchild(nod1.dup())
+                    .appendchild(TextNode("AB"))
+                    .appendchild(nod2.dup()))
+            root.appendchild(TextNode("6789"))
+            self.dotest(root, False)
+
+            xMeta.setString("AB")
+            xStart = xMeta.getStart()
+            xEnd = xMeta.getEnd()
+
+            nod1 = helper.mktreenode()
+            nod2 = helper.mktreenode()
+            xContent1 = helper.mktextcontent(inserter, nod1)
+            xContent2 = helper.mktextcontent(inserter, nod2)
+
+            ## attach to range from meta getStart()/getEnd()
+            xContent1.attach(xStart)
+            xContent2.attach(xEnd)
+
+            helper.postinserted(nod1, xContent1)
+            helper.postinserted(nod2, xContent2)
+
+            root = TreeNode()
+            root.appendchild(TextNode("12"))
+            root.appendchild(met1.dup()
+                    .appendchild(nod1.dup())
+                    .appendchild(TextNode("AB"))
+                    .appendchild(nod2.dup()))
+            root.appendchild(TextNode("6789"))
+            self.dotest(root, False)
+
+            xMeta.setString("AB")
+            xStart = xMeta.getStart()
+            xEnd = xMeta.getEnd()
+
+            nod1 = helper.mktreenode()
+            nod2 = helper.mktreenode()
+            xContent1 = helper.mktextcontent(inserter, nod1)
+            xContent2 = helper.mktextcontent(inserter, nod2)
+
+            xTextCursor = xMeta.createTextCursor()
+            xTextCursor.gotoStart(False)
+
+            ## attach to cursor from meta XText
+            xContent1.attach(xTextCursor)
+            xTextCursor.gotoEnd(False)
+            xContent2.attach(xTextCursor)
+
+            helper.postinserted(nod1, xContent1)
+            helper.postinserted(nod2, xContent2)
+
+            root = TreeNode()
+            root.appendchild(TextNode("12"))
+            root.appendchild(met1.dup()
+                    .appendchild(nod1.dup())
+                    .appendchild(TextNode("AB"))
+                    .appendchild(nod2.dup()))
+            root.appendchild(TextNode("6789"))
+            self.dotest(root, False)
+
+    def test_metafield_xtextfield(self):
+        xDoc = self.__class__.xDoc
+        smgr = self.__class__._uno.xContext.ServiceManager
+        xRepo = xDoc.getRDFRepository()
+        ## for testing just add it to the first graph
+        Graphs = xRepo.getGraphNames()
+        xGraph = xRepo.getGraph(Graphs[0])
+        xOdfPrefix = smgr.createInstance("com.sun.star.rdf.URI")
+        xOdfPrefix.initialize((ODF_PREFIX,))
+        xOdfSuffix = smgr.createInstance("com.sun.star.rdf.URI")
+        xOdfSuffix.initialize((ODF_SUFFIX,))
+
+        xPrefix = smgr.createInstance("com.sun.star.rdf.Literal")
+        xPrefix.initialize(("foo",))
+        xSuffix = smgr.createInstance("com.sun.star.rdf.Literal")
+        xSuffix.initialize(("bar",))
+
+        inserter = RangeInserter(xDoc)
+        text = TextNode("abc")
+        inserter.insertrange(Range(0, 0, text))
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.goRight(1, False)
+        xDocTextCursor.goRight(3, True)
+
+        xMetaField = inserter.makemetafield()
+
+        xDocText.insertTextContent(xDocTextCursor, xMetaField, True)
+
+        xMetaField.ensureMetadataReference
+
+        xGraph.addStatement(xMetaField, xOdfPrefix, xPrefix)
+        xGraph.addStatement(xMetaField, xOdfSuffix, xSuffix)
+        self.assertEqual("fooabcbar", xMetaField.getPresentation(False),
+                         "getPresentation(): wrong")
+        inserter.insertrange(Range(0, 0, text))
+
+    def test_metafield_xpropertyset(self):
+        xDoc = self.__class__.xDoc
+        inserter = RangeInserter(xDoc)
+        text = TextNode("123")
+        inserter.insertrange(Range(0, 0, text))
+        xDocText = xDoc.getText()
+        xDocTextCursor = xDocText.createTextCursor()
+        xDocTextCursor.goRight(1, False)
+        xDocTextCursor.goRight(3, True)
+
+        xMetaField = inserter.makemetafield()
+
+        xDocText.insertTextContent(xDocTextCursor, xMetaField, True)
+
+        self.assertIsNotNone(xMetaField, "PropertySet: not supported?")
+        xPropertySetInfo = xMetaField.getPropertySetInfo()
+        self.assertTrue(xPropertySetInfo.hasPropertyByName("NumberFormat"),
+                        'hasPropertyByName("NumberFormat"):')
+        self.assertTrue(xPropertySetInfo.hasPropertyByName("IsFixedLanguage"),
+                        'hasPropertyByName("IsFixedLanguage"):')
+
+        def_ = xMetaField.NumberFormat
+        print("NumberFormat: default is {}".format(def_))
+        xMetaField.NumberFormat = NUMBER_INT
+        xMetaField.IsFixedLanguage = True
+        format = xMetaField.NumberFormat
+        self.assertEqual(NUMBER_INT, format, "NumberFormat: failed")
+        isfixed = xMetaField.IsFixedLanguage
+        self.assertTrue(isfixed, "IsFixedLanguage: failed")
+
+    def dostore(self, xComp, file):
+        print("Storing test document...")
+        file = uno.systemPathToFileUrl(file)
+        xComp.storeToURL(file, ())
+        print("...done")
+
+    def doload(self, file):
+        xComp = None
+        print("Loading test document...")
+        xComp = self.__class__._uno.openDoc(file)
+        self.assertIsNotNone(xComp, "cannot load: {}".format(file))
+        print("...done")
+        return xComp
+
+    def close(self, i_comp):
+        try:
+            if i_comp:
+                i_comp.close(True)
+        except Exception as e:
+            pass
+
+    def test_load_store(self):
+        xComp = None
+        filename = "TESTMETA.odt"
+        try:
+            xComp = self.__class__._uno.openWriterTemplateDoc(filename)
+            if xComp:
+                self.checkloadmeta(xComp)
+                with TemporaryDirectory() as tempdir:
+                    file = os.path.join(tempdir, filename)
+                    self.dostore(xComp, file)
+                    self.close(xComp)
+                    xComp = self.doload(file)
+                    self.checkloadmeta(xComp)
+        finally:
+            self.close(xComp)
+
+    def checkloadmeta(self, xTextDoc):
+        xText = xTextDoc.getText()
+        print("Checking meta(-field)s in loaded test document...")
+        root = TreeNode()
+        root.appendchild(RubyNode("ruby1")
+                .appendchild(TextNode("1")))
+        root.appendchild(MetaNode(self.mkid_("id1"))
+                .appendchild(TextNode("2")))
+        root.appendchild(MetaFieldNode(self.mkid_("id2"))
+                .appendchild(TextNode("3")))
+        root.appendchild(RubyNode("ruby2")
+                .appendchild(MetaNode(self.mkid_("id3"))
+                    .appendchild(TextNode("4"))))
+        root.appendchild(RubyNode("ruby3")
+                .appendchild(MetaFieldNode(self.mkid_("id4"))
+                    .appendchild(TextNode("5"))))
+        root.appendchild(MetaNode(self.mkid_("id5"))
+                .appendchild(RubyNode("ruby4")
+                    .appendchild(TextNode("6"))))
+        root.appendchild(MetaFieldNode(self.mkid_("id6"))
+                .appendchild(RubyNode("ruby5")
+                    .appendchild(TextNode("7"))))
+        root.appendchild(MetaNode(self.mkid_("id7"))
+                .appendchild(MetaNode(self.mkid_("id8"))
+                    .appendchild(TextNode("8"))))
+        root.appendchild(MetaNode(self.mkid_("id9"))
+                .appendchild(MetaFieldNode(self.mkid_("id10"))
+                    .appendchild(TextNode("9"))))
+        root.appendchild(MetaFieldNode(self.mkid_("id11"))
+                .appendchild(MetaNode(self.mkid_("id12"))
+                    .appendchild(TextNode("10"))))
+        root.appendchild(MetaFieldNode(self.mkid_("id13"))
+                .appendchild(MetaFieldNode(self.mkid_("id14"))
+                    .appendchild(TextNode("11"))))
+        root.appendchild(MetaNode(self.mkid_("id15"))
+                .appendchild(RubyNode("ruby6")
+                    .appendchild(MetaFieldNode(self.mkid_("id16"))
+                        .appendchild(TextNode("12")))))
+
+        class MetaNode_(MetaNode):
+            def __init__(self, id):
+                super().__init__(id)
+            def __eq__(self, other):
+                return isinstance(other, MetaNode)
+        root.appendchild(MetaNode_(self.mkid_(""))
+                .appendchild(TextNode("13")))
+        root.appendchild(TextNode(" X X "))
+        self._dotest(xTextDoc, root, False)
+        print("...done")
+
+    def test_load_store_xmlid(self):
+        xComp = None
+        filename = "TESTXMLID.odt"
+        try:
+            xComp = self.__class__._uno.openWriterTemplateDoc(filename)
+            if xComp:
+                self.checkloadxmlid(xComp)
+                with TemporaryDirectory() as tempdir:
+                    file = os.path.join(tempdir, filename)
+                    self.dostore(xComp, file)
+                    self.close(xComp)
+                    xComp = self.doload(file)
+                    self.checkloadxmlid(xComp)
+        finally:
+            self.close(xComp)
+
+    def checkloadxmlid(self, xTextDoc):
+        xText = xTextDoc.getText()
+        xRepo = xTextDoc.getRDFRepository()
+
+        print("Checking bookmarks in loaded test document...")
+        xBookmarks = xTextDoc.getBookmarks()
+        xMark1 = xBookmarks["mk1"]
+        self.assertTrue(self.eq(xMark1.MetadataReference,
+                                StringPair("content.xml", "id90")), "mark1")
+        xMark2 = xBookmarks["mk2"]
+        result = xRepo.getStatementRDFa(xMark2)
+        self.assertTrue(len(result.First) == 1 and
+                        result.First[0].Subject.StringValue == "uri:foo" and
+                        result.First[0].Predicate.StringValue == "uri:bar" and
+                        result.First[0].Object.Value == "a fooish bar",
+                        "mark2")
+        xMark3 = xBookmarks["mk3"]
+        self.assertTrue(self.eq(xMark3.MetadataReference,
+                        StringPair("content.xml", "id91")), "mark3")
+        print("...done")
+
+        print("Checking sections in loaded test document...")
+        xSections = xTextDoc.getTextSections()
+        xSection1 = xSections["Section 1"]
+        self.assertTrue(self.eq(xSection1.MetadataReference,
+                        StringPair("content.xml", "idSection1")), "idsection1")
+        xSection2 = xSections["Section 2"]
+        self.assertTrue(self.eq(xSection2.MetadataReference,
+                        StringPair("content.xml", "idSection2")),"idSection2")
+        xSection3 = xSections["Table of Contents1_Head"]
+        self.assertTrue(self.eq(xSection3.MetadataReference,
+                        StringPair("content.xml", "idTOCTitle")), "idTOCTitle")
+        xSection4 = xSections["Alphabetical Index1_Head"]
+        self.assertTrue(self.eq(xSection4.MetadataReference,
+                        StringPair("content.xml", "idAITitle")), "idAITitle")
+        xSection5 = xSections["Illustration Index1_Head"]
+        self.assertTrue(self.eq(xSection5.MetadataReference,
+                        StringPair("content.xml", "idIITitle")), "idIITitle")
+        xSection6 = xSections["Index of Tables1_Head"]
+        self.assertTrue(self.eq(xSection6.MetadataReference,
+                        StringPair("content.xml", "idIOTTitle")), "idIOTTitle")
+        xSection7 = xSections["User-Defined1_Head"]
+        self.assertTrue(self.eq(xSection7.MetadataReference,
+                        StringPair("content.xml", "idUDTitle")), "idUDTitle")
+        xSection8 = xSections["Table of Objects1_Head"]
+        self.assertTrue(self.eq(xSection8.MetadataReference,
+                        StringPair("content.xml", "idTOOTitle")), "idTOOTitle")
+        xSection9 = xSections["Bibliography1_Head"]
+        self.assertTrue(self.eq(xSection9.MetadataReference,
+                        StringPair("content.xml", "idBibTitle")), "idBibTitle")
+        print("...done")
+
+        print("Checking indexes in loaded test document...")
+        xIndexes = xTextDoc.getDocumentIndexes()
+        xIndex1 = xIndexes["Table of Contents1"]
+        self.assertTrue(self.eq(xIndex1.MetadataReference,
+                        StringPair("content.xml", "idTOC")), "idTOC")
+        xIndex1s = xSections["Table of Contents1"]
+        self.assertTrue(self.eq(xIndex1s.MetadataReference,
+                        StringPair("content.xml", "idTOC")), "idTOC")
+        xIndex2 = xIndexes["Alphabetical Index1"]
+        self.assertTrue(self.eq(xIndex2.MetadataReference,
+                        StringPair("content.xml", "idAI")), "idAI")
+        xIndex2s = xSections["Alphabetical Index1"]
+        self.assertTrue(self.eq(xIndex2s.MetadataReference,
+                        StringPair("content.xml", "idAI")), "idAI")
+        xIndex3 = xIndexes["Illustration Index1"]
+        self.assertTrue(self.eq(xIndex3.MetadataReference,
+                        StringPair("content.xml", "idII")), "idII")
+        xIndex3s = xSections["Illustration Index1"]
+        self.assertTrue(self.eq(xIndex3s.MetadataReference,
+                        StringPair("content.xml", "idII")), "idII")
+        xIndex4 = xIndexes["Index of Tables1"]
+        self.assertTrue(self.eq(xIndex4.MetadataReference,
+                        StringPair("content.xml", "idIOT")), "idIOT")
+        xIndex4s = xSections["Index of Tables1"]
+        self.assertTrue(self.eq(xIndex4s.MetadataReference,
+                        StringPair("content.xml", "idIOT")), "idIOT")
+        xIndex5 = xIndexes["User-Defined1"]
+        self.assertTrue(self.eq(xIndex5.MetadataReference,
+                        StringPair("content.xml", "idUD")), "idUD")
+        xIndex5s = xSections["User-Defined1"]
+        self.assertTrue(self.eq(xIndex5s.MetadataReference,
+                        StringPair("content.xml", "idUD")), "idUD")
+        xIndex6 = xIndexes["Table of Objects1"]
+        self.assertTrue(self.eq(xIndex6.MetadataReference,
+                        StringPair("content.xml", "idTOO")), "idTOO")
+        xIndex6s = xSections["Table of Objects1"]
+        self.assertTrue(self.eq(xIndex6s.MetadataReference,
+                        StringPair("content.xml", "idTOO")), "idTOO")
+        xIndex7 = xIndexes["Bibliography1"]
+        self.assertTrue(self.eq(xIndex7.MetadataReference,
+                        StringPair("content.xml", "idBib")), "idBib")
+        xIndex7s = xSections["Bibliography1"]
+        self.assertTrue(self.eq(xIndex7s.MetadataReference,
+                        StringPair("content.xml", "idBib")), "idBib")
+        print("...done")
 
     def dotest(self, intree, insert=True):
         xDoc = self.__class__.xDoc
