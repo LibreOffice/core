@@ -2872,6 +2872,8 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
+    const int nDefaultFontSize = 25;
+
     if ( pList )
     {
         sal_uInt16 nFontCount = pList->GetFontNameCount();
@@ -2890,18 +2892,53 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
                     nullptr, Size(1, 1), DeviceFormat::DEFAULT));
             ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
-            aFont.SetFontSize(Size(0, 25));
+            aFont.SetFontSize(Size(0, nDefaultFontSize));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
             if (aRect.IsEmpty())
                 break;
 
             int nFontWidth = aRect.BottomRight().X() + 1;
-            *pFontWidth = nFontWidth;
             int nFontHeight = aRect.BottomRight().Y() + 1;
-            *pFontHeight = nFontHeight;
+
             if (!(nFontWidth > 0 && nFontHeight > 0))
                 break;
+
+            double fScaleX = 1.0;
+            double fScaleY = 1.0;
+
+            if (*pFontWidth > 0)
+            {
+                fScaleX = *pFontWidth / static_cast<double>(nFontWidth);
+            }
+
+            if (*pFontHeight > 0)
+            {
+                fScaleY = *pFontHeight / static_cast<double>(nFontHeight);
+            }
+
+            double fScale = std::min(fScaleX, fScaleY);
+
+            if (fScale != 1.0)
+            {
+                int nFontSize = fScale * nDefaultFontSize;
+                if (nFontSize < 14)
+                    nFontSize = 14;
+                aFont.SetFontSize(Size(0, nFontSize));
+                aDevice->SetFont(aFont);
+                aDevice->GetTextBoundRect(aRect, aText);
+                if (aRect.IsEmpty())
+                    break;
+
+                nFontWidth = aRect.BottomRight().X() + 1;
+                nFontHeight = aRect.BottomRight().Y() + 1;
+
+                if (!(nFontWidth > 0 && nFontHeight > 0))
+                    break;
+            }
+
+            *pFontWidth = nFontWidth;
+            *pFontHeight = nFontHeight;
 
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             if (!pBuffer)
