@@ -2880,6 +2880,8 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
 
+    const int nDefaultFontSize = 25;
+
     if ( pList )
     {
         sal_uInt16 nFontCount = pList->GetFontNameCount();
@@ -2898,30 +2900,67 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                     nullptr, Size(1, 1), DeviceFormat::DEFAULT));
             ::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
-            aFont.SetFontSize(Size(0, 25));
+            aFont.SetFontSize(Size(0, nDefaultFontSize));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
             if (aRect.IsEmpty())
                 break;
 
             int nFontWidth = aRect.BottomRight().X() + 1;
-            *pFontWidth = nFontWidth;
             int nFontHeight = aRect.BottomRight().Y() + 1;
-            *pFontHeight = nFontHeight;
+
             if (!(nFontWidth > 0 && nFontHeight > 0))
                 break;
+
+            if (*pFontWidth > 0 && *pFontHeight > 0)
+            {
+                double fScaleX = *pFontWidth / static_cast<double>(nFontWidth);
+                double fScaleY = *pFontHeight / static_cast<double>(nFontHeight);
+
+                double fScale = std::min(fScaleX, fScaleY);
+
+                if (fScale >= 1.0)
+                {
+                    int nFontSize = fScale * nDefaultFontSize;
+                    aFont.SetFontSize(Size(0, nFontSize));
+                    aDevice->SetFont(aFont);
+                }
+
+                aRect = tools::Rectangle(0, 0, *pFontWidth, *pFontHeight);
+
+                nFontWidth = *pFontWidth;
+                nFontHeight = *pFontHeight;
+
+            }
 
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             if (!pBuffer)
                 break;
 
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
-
             aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
             aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
                         pBuffer);
-            aDevice->DrawText(Point(0,0), aText);
+
+            if (*pFontWidth > 0 && *pFontHeight > 0)
+            {
+                DrawTextFlags nStyle =
+                        DrawTextFlags::Center
+                        | DrawTextFlags::VCenter
+                        | DrawTextFlags::MultiLine
+                        | DrawTextFlags::WordBreakHyphenation;// | DrawTextFlags::WordBreak ;
+
+                aDevice->DrawText(aRect, aText, nStyle);
+            }
+            else
+            {
+                *pFontWidth = nFontWidth;
+                *pFontHeight = nFontHeight;
+
+                aDevice->DrawText(Point(0,0), aText);
+            }
+
 
             return pBuffer;
         }
