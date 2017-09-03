@@ -546,7 +546,7 @@ namespace emfio
     {
         if ( nIndex & ENHMETA_STOCK_OBJECT )
         {
-             sal_uInt16 nStockId = (sal_uInt8)nIndex;
+            sal_uInt16 nStockId = (sal_uInt8)nIndex;
             switch( nStockId )
             {
                 case WHITE_BRUSH :
@@ -608,6 +608,8 @@ namespace emfio
             if ( (sal_uInt32)nIndex < mvGDIObj.size() )
                 pGDIObj = mvGDIObj[ nIndex ].get();
 
+            fprintf(stderr, "index %d is %p\n", nIndex, pGDIObj);
+
             if ( pGDIObj )
             {
                 if (const auto pen = dynamic_cast<WinMtfLineStyle*>(pGDIObj))
@@ -620,9 +622,9 @@ namespace emfio
                 }
                 else if (const auto font = dynamic_cast<WinMtfFontStyle*>(
                              pGDIObj))
+                {
                     maFont = font->aFont;
-                else
-                    assert(false);
+                }
             }
         }
     }
@@ -715,6 +717,7 @@ namespace emfio
         if ( nIndex == mvGDIObj.size() )
             ImplResizeObjectArry( mvGDIObj.size() + 16 );
 
+        fprintf(stderr, "index %ld set to %p\n", nIndex, pObject.get());
         mvGDIObj[ nIndex ] = std::move(pObject);
     }
 
@@ -750,6 +753,8 @@ namespace emfio
             }
             if ( (sal_uInt32)nIndex >= mvGDIObj.size() )
                 ImplResizeObjectArry( nIndex + 16 );
+
+            fprintf(stderr, "22 index %d set to %p\n", nIndex, pObject.get());
 
             mvGDIObj[ nIndex ] = std::move(pObject);
         }
