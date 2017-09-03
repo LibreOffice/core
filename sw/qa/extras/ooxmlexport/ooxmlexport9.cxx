@@ -274,6 +274,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
         assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
+{
+    // LO crashed while export because of chararacter background color handling
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
