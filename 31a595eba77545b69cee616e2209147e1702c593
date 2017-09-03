@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5e047d14",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-03T00:01:34Z",
+      "side": 1,
+      "message": "please align/format the code properly",
+      "revId": "31a595eba77545b69cee616e2209147e1702c593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7e09392c",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-03T00:01:34Z",
+      "side": 1,
+      "message": "wouldn\u0027t unique_ptr do here, too?",
+      "revId": "31a595eba77545b69cee616e2209147e1702c593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9e0ee532",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3668,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-03T00:01:34Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "31a595eba77545b69cee616e2209147e1702c593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_be13a15b",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3725,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-03T00:01:34Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "31a595eba77545b69cee616e2209147e1702c593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_de106d51",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3787,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-03T00:01:34Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "31a595eba77545b69cee616e2209147e1702c593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
