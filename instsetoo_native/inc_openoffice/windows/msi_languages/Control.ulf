@@ -719,13 +719,13 @@ en-US = "The version specified in the folder below cannot be updated."
 en-US = "Check the destination folder."
 
 [OOO_CONTROL_305]
-en-US = "To continue, click "Next"."
+en-US = "To continue, click Next."
 
 [OOO_CONTROL_306]
-en-US = "To select a different version, click "Change". Otherwise click "Cancel" to abort the Installation Wizard."
+en-US = "To select a different version, click Change. Otherwise click Cancel to abort the Installation Wizard."
 
 [OOO_CONTROL_307]
-en-US = "To select a different folder, click "Change"."
+en-US = "To select a different folder, click Change."
 
 [OOO_CONTROL_308]
 en-US = "Install [ProductName] to:"
