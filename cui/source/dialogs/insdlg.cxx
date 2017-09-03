@@ -51,7 +51,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/filedlghelper.hxx>
 #include <svl/ownlist.hxx>
 #include <comphelper/seqstream.hxx>
 
