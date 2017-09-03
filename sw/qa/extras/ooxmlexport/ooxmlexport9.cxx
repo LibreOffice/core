@@ -631,6 +631,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
     CPPUNIT_ASSERT(xTextRange->getString().endsWith("\tfootnote"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf112169, "tdf112169.odt")
+{
+    // LO crashed while export because of chararacter background color handling
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
