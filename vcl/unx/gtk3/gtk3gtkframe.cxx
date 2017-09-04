@@ -369,7 +369,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 
 static bool dumpframes = false;
 
-void GtkSalFrame::doKeyCallback( guint state,
+bool GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
                                  guint8 group,
@@ -395,19 +395,19 @@ void GtkSalFrame::doKeyCallback( guint state,
         {
             fprintf( stderr, "force widget_queue_draw\n");
             gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
-            return;
+            return false;
         }
         else if (keyval == GDK_KEY_1)
         {
             fprintf( stderr, "force repaint all\n");
             TriggerPaintEvent();
-            return;
+            return false;
         }
         else if (keyval == GDK_KEY_2)
         {
             dumpframes = !dumpframes;
             fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
-            return;
+            return false;
         }
     }
 #endif
@@ -456,11 +456,12 @@ void GtkSalFrame::doKeyCallback( guint state,
 
     aEvent.mnCode   |= GetKeyModCode( state );
 
+    bool bStopProcessingKey;
     if (bDown)
     {
-        bool bHandled = CallCallbackExc( SalEvent::KeyInput, &aEvent );
+        bStopProcessingKey = CallCallbackExc(SalEvent::KeyInput, &aEvent);
         // #i46889# copy AlternateKeyCode handling from generic plugin
-        if( ! bHandled )
+        if (!bStopProcessingKey)
         {
             KeyAlternate aAlternate = GetAlternateKeyCode( aEvent.mnCode );
             if( aAlternate.nKeyCode )
@@ -468,16 +469,17 @@ void GtkSalFrame::doKeyCallback( guint state,
                 aEvent.mnCode = aAlternate.nKeyCode;
                 if( aAlternate.nCharCode )
                     aEvent.mnCharCode = aAlternate.nCharCode;
-                CallCallbackExc( SalEvent::KeyInput, &aEvent );
+                bStopProcessingKey = CallCallbackExc(SalEvent::KeyInput, &aEvent);
             }
         }
         if( bSendRelease && ! aDel.isDeleted() )
         {
-            CallCallbackExc( SalEvent::KeyUp, &aEvent );
+            CallCallbackExc(SalEvent::KeyUp, &aEvent);
         }
     }
     else
-        CallCallbackExc( SalEvent::KeyUp, &aEvent );
+        bStopProcessingKey = CallCallbackExc(SalEvent::KeyUp, &aEvent);
+    return bStopProcessingKey;
 }
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
@@ -3099,6 +3101,8 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
             return true;
     }
 
+    bool bStopProcessingKey = false;
+
     // handle modifiers
     if( pEvent->keyval == GDK_KEY_Shift_L || pEvent->keyval == GDK_KEY_Shift_R ||
         pEvent->keyval == GDK_KEY_Control_L || pEvent->keyval == GDK_KEY_Control_R ||
@@ -3175,14 +3179,14 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
     }
     else
     {
-        pThis->doKeyCallback( pEvent->state,
-                              pEvent->keyval,
-                              pEvent->hardware_keycode,
-                              pEvent->group,
-                              pEvent->time,
-                              sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
-                              (pEvent->type == GDK_KEY_PRESS),
-                              false );
+        bStopProcessingKey = pThis->doKeyCallback(pEvent->state,
+                                                  pEvent->keyval,
+                                                  pEvent->hardware_keycode,
+                                                  pEvent->group,
+                                                  pEvent->time,
+                                                  sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
+                                                  (pEvent->type == GDK_KEY_PRESS),
+                                                  false);
         if( ! aDel.isDeleted() )
             pThis->m_nKeyModifiers = ModKeyFlags::NONE;
     }
@@ -3190,7 +3194,7 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
     if( !aDel.isDeleted() && pThis->m_pIMHandler )
         pThis->m_pIMHandler->updateIMSpotLocation();
 
-    return false;
+    return bStopProcessingKey;
 }
 
 gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
