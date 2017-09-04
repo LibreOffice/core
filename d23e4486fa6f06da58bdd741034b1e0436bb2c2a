@@ -16,6 +16,24 @@
       "revId": "d23e4486fa6f06da58bdd741034b1e0436bb2c2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_64044c15",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-04T16:12:17Z",
+      "side": 1,
+      "message": "d\u0027oh!",
+      "parentUuid": "1a430d35_09e641b4",
+      "revId": "d23e4486fa6f06da58bdd741034b1e0436bb2c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
