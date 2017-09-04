@@ -205,6 +205,7 @@ public:
     void testTableInNestedSection();
     void testTableInSectionInTable();
     void testSectionInTableInTable();
+    void testTdf112160();
     void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
 
@@ -316,6 +317,7 @@ public:
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testTableInSectionInTable);
     CPPUNIT_TEST(testSectionInTableInTable);
+    CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
 
@@ -3838,6 +3840,29 @@ void SwUiWriterTest::testSectionInTableInTable()
     // page boundary.
     // This crashed the layout later in SwFrame::IsFootnoteAllowed().
     createDoc("tdf112109.fodt");
+}
+
+void SwUiWriterTest::testTdf112160()
+{
+    // Assert that the A2 cell is on page 1.
+    SwDoc* pDoc = createDoc("tdf112160.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_uInt32 nA2CellNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("Table1.A2"), pDoc->GetNodes()[nA2CellNode]->GetTextNode()->GetText());
+
+    // Append a new paragraph to the end of the A2 cell.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    while (pWrtShell->GetCursor()->GetNode().GetIndex() < nA2CellNode)
+        pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara();
+    pWrtShell->SplitNode();
+
+    // Assert that after A2 got extended, D2 stays on page 1.
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    sal_uInt32 nD2CellNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[last()]/section/txt[last()]", "txtNodeIndex").toUInt32();
+    // This was Table1.C2, Table1.D2 was moved to the next page, unexpected.
+    CPPUNIT_ASSERT_EQUAL(OUString("Table1.D2"), pDoc->GetNodes()[nD2CellNode]->GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
