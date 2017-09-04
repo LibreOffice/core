@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_245324e3",
+        "filename": "i18npool/Executable_gendict.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-04T19:51:44Z",
+      "side": 1,
+      "message": "Based on similar code elsewhere, something like this might have more luck:\n\nifeq ($(gb_Side),build)\n$(if $(filter IOS,$(OS)), \\\n$(eval $(call gb_Executable_add_cxxflags,gendict,\\\n\t-DDICT_JA_ZH_IN_DATAFILE \\\n)))\nendif",
+      "revId": "fb1d866c4d3bb813d086f339c562141d1672aaaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
