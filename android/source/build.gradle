@@ -51,10 +51,7 @@ android {
     }
     defaultConfig {
         minSdkVersion 14
-        // openssl on x86 makes the native-code.so contain text-relocations,
-        // 22 treats them as warnings, on 23 it is fatal error
-        // ToDo: fix openssl stuff to not block targeting 23 or later
-        targetSdkVersion 22
+        targetSdkVersion 24
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
