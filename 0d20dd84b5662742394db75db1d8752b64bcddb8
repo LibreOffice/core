@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_29bcdd04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-04T00:13:16Z",
+      "side": 1,
+      "message": "no need to track changes in the commit message - it\u0027s of no interest to the casual git log reader",
+      "revId": "0d20dd84b5662742394db75db1d8752b64bcddb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
