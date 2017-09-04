@@ -138,7 +138,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpUndoManager( nullptr ),
         mpEditEngine( nullptr ),
         mpNoteEngine( nullptr ),
-        pShell( pDocShell ),
+        mpShell( pDocShell ),
         pPrinter( nullptr ),
         pVirtualDevice_100th_mm( nullptr ),
         pDrawLayer( nullptr ),
@@ -266,7 +266,7 @@ const sfx2::LinkManager* ScDocument::GetLinkManager() const
 sc::DocumentLinkManager& ScDocument::GetDocLinkManager()
 {
     if (!mpDocLinkMgr)
-        mpDocLinkMgr.reset(new sc::DocumentLinkManager(pShell));
+        mpDocLinkMgr.reset(new sc::DocumentLinkManager(mpShell));
     return *mpDocLinkMgr;
 }
 
@@ -297,7 +297,7 @@ sal_uInt32 ScDocument::GetDocumentID() const
     const ScDocument* pThis = this;
     sal_uInt32 nCrc = rtl_crc32( 0, &pThis, sizeof(ScDocument*) );
     // the this pointer only might not be sufficient
-    nCrc = rtl_crc32( nCrc, &pShell, sizeof(SfxObjectShell*) );
+    nCrc = rtl_crc32( nCrc, &mpShell, sizeof(SfxObjectShell*) );
     return nCrc;
 }
 
@@ -328,16 +328,16 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl, Timer *, void)
     {
         aTrackIdle.Start();            // try again later
     }
-    else if (pShell)                    // execute
+    else if (mpShell)                    // execute
     {
         TrackFormulas();
-        pShell->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
+        mpShell->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
 
             //  modified...
 
-        if (!pShell->IsModified())
+        if (!mpShell->IsModified())
         {
-            pShell->SetModified();
+            mpShell->SetModified();
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {
@@ -977,16 +977,16 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                             // 3 => NameBox
                                             // 4 => both
 
-    if (pSrcDoc->pShell->GetMedium())
+    if (pSrcDoc->mpShell->GetMedium())
     {
-        pSrcDoc->maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+        pSrcDoc->maFileURL = pSrcDoc->mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         // for unsaved files use the title name and adjust during save of file
         if (pSrcDoc->maFileURL.isEmpty())
-            pSrcDoc->maFileURL = pSrcDoc->pShell->GetName();
+            pSrcDoc->maFileURL = pSrcDoc->mpShell->GetName();
     }
     else
     {
-        pSrcDoc->maFileURL = pSrcDoc->pShell->GetName();
+        pSrcDoc->maFileURL = pSrcDoc->mpShell->GetName();
     }
 
     bool bValid = true;

@@ -2001,8 +2001,8 @@ void ScDocument::InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     // Undo document shares its pooled resources with the source document.
     SharePooledResources(pSrcDoc);
 
-    if (pSrcDoc->pShell->GetMedium())
-        maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+    if (pSrcDoc->mpShell->GetMedium())
+        maFileURL = pSrcDoc->mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
 
     if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
         maTabs.resize(nTab2 + 1, nullptr);
@@ -2182,16 +2182,16 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         pClipDoc = ScModule::GetClipDoc();
     }
 
-    if (pShell->GetMedium())
+    if (mpShell->GetMedium())
     {
-        pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+        pClipDoc->maFileURL = mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         // for unsaved files use the title name and adjust during save of file
         if (pClipDoc->maFileURL.isEmpty())
-            pClipDoc->maFileURL = pShell->GetName();
+            pClipDoc->maFileURL = mpShell->GetName();
     }
     else
     {
-        pClipDoc->maFileURL = pShell->GetName();
+        pClipDoc->maFileURL = mpShell->GetName();
     }
 
     //init maTabNames
@@ -2282,16 +2282,16 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
             pClipDoc = ScModule::GetClipDoc();
         }
 
-        if (pShell->GetMedium())
+        if (mpShell->GetMedium())
         {
-            pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+            pClipDoc->maFileURL = mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
             // for unsaved files use the title name and adjust during save of file
             if (pClipDoc->maFileURL.isEmpty())
-                pClipDoc->maFileURL = pShell->GetName();
+                pClipDoc->maFileURL = mpShell->GetName();
         }
         else
         {
-            pClipDoc->maFileURL = pShell->GetName();
+            pClipDoc->maFileURL = mpShell->GetName();
         }
 
         //init maTabNames
@@ -5266,7 +5266,7 @@ bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
-    if (!bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly())
+    if (!bImportingXML && !mbChangeReadOnlyEnabled && mpShell && mpShell->IsReadOnly())
     {
         if ( pOnlyNotBecauseOfMatrix )
             *pOnlyNotBecauseOfMatrix = false;
@@ -5288,7 +5288,7 @@ bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
             bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
-    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && mpShell && mpShell->IsReadOnly() )
     {
         if ( pOnlyNotBecauseOfMatrix )
             *pOnlyNotBecauseOfMatrix = false;
@@ -6401,13 +6401,13 @@ void ScDocument::EnableUserInteraction( bool bVal )
 
 bool ScDocument::IsInVBAMode() const
 {
-    if (!pShell)
+    if (!mpShell)
         return false;
 
     try
     {
         uno::Reference<script::vba::XVBACompatibility> xVBA(
-            pShell->GetBasicContainer(), uno::UNO_QUERY);
+            mpShell->GetBasicContainer(), uno::UNO_QUERY);
 
         return xVBA.is() && xVBA->getVBACompatibilityMode();
     }

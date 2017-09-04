@@ -107,7 +107,7 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
 
 void ScDocument::UpdateAllCharts()
 {
-    if ( !pDrawLayer || !pShell )
+    if ( !pDrawLayer || !mpShell )
         return;
 
     if (pChartCollection->empty())
@@ -159,7 +159,7 @@ void ScDocument::UpdateAllCharts()
                                     // connect
                                     xReceiver->attachDataProvider( xDataProvider );
                                     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
-                                            pShell->GetModel(), uno::UNO_QUERY );
+                                            mpShell->GetModel(), uno::UNO_QUERY );
                                     xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
                                     lcl_SetChartParameters( xReceiver, sRangeStr, chart::ChartDataRowSource_COLUMNS,
@@ -393,13 +393,13 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                         aNewRanges = rNewList;
                     }
 
-                    if ( bInternalData && pShell )
+                    if ( bInternalData && mpShell )
                     {
                         // Calc -> DataProvider
                         uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( this );
                         xReceiver->attachDataProvider( xDataProvider );
                         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
-                                pShell->GetModel(), uno::UNO_QUERY );
+                                mpShell->GetModel(), uno::UNO_QUERY );
                         xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
                     }
 

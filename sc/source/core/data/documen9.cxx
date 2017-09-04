@@ -108,14 +108,14 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
 void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 {
-    if (pDocShell && !pShell)
-        pShell = pDocShell;
+    if (pDocShell && !mpShell)
+        mpShell = pDocShell;
 
     if (!pDrawLayer)
     {
         OUString aName;
-        if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
-            aName = pShell->GetTitle();
+        if ( mpShell && !mpShell->IsLoading() )       // don't call GetTitle while loading
+            aName = mpShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
 
         sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);

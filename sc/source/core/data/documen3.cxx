@@ -581,7 +581,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     SetLink( rTab, ScLinkMode::VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
     if ( !bWasThere ) // Add link only once per source document
     {
-        ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
+        ScTableLink* pLink = new ScTableLink( mpShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( true );
         OUString aFilName = aFilterName;
         GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilName );
@@ -1847,7 +1847,7 @@ bool ScDocument::IsDocProtected() const
 bool ScDocument::IsDocEditable() const
 {
     // Import into read-only document is possible
-    return !IsDocProtected() && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
+    return !IsDocProtected() && ( bImportingXML || mbChangeReadOnlyEnabled || !mpShell || !mpShell->IsReadOnly() );
 }
 
 bool ScDocument::IsTabProtected( SCTAB nTab ) const

@@ -690,9 +690,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
 
 void ScDocument::RepaintRange( const ScRange& rRange )
 {
-    if ( bIsVisible && pShell )
+    if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = ScModelObj::getImplementation( pShell->GetModel() );
+        ScModelObj* pModel = ScModelObj::getImplementation( mpShell->GetModel() );
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }
@@ -700,9 +700,9 @@ void ScDocument::RepaintRange( const ScRange& rRange )
 
 void ScDocument::RepaintRange( const ScRangeList& rRange )
 {
-    if ( bIsVisible && pShell )
+    if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = ScModelObj::getImplementation( pShell->GetModel() );
+        ScModelObj* pModel = ScModelObj::getImplementation( mpShell->GetModel() );
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }
@@ -848,12 +848,12 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
     if (bAny)
     {
         TrackFormulas();
-        pShell->Broadcast( SfxHint(SfxHintId::ScDataChanged) );
+        mpShell->Broadcast( SfxHint(SfxHintId::ScDataChanged) );
 
         // #i101960# set document modified, as in TrackTimeHdl for DDE links
-        if (!pShell->IsModified())
+        if (!mpShell->IsModified())
         {
-            pShell->SetModified();
+            mpShell->SetModified();
             SfxBindings* pBindings = GetViewBindings();
             if (pBindings)
             {
@@ -1165,17 +1165,17 @@ SfxBindings* ScDocument::GetViewBindings()
 {
     //  used to invalidate slots after changes to this document
 
-    if ( !pShell )
+    if ( !mpShell )
         return nullptr;        // no ObjShell -> no view
 
     //  first check current view
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if ( pViewFrame && pViewFrame->GetObjectShell() != pShell )     // wrong document?
+    if ( pViewFrame && pViewFrame->GetObjectShell() != mpShell )     // wrong document?
         pViewFrame = nullptr;
 
     //  otherwise use first view for this doc
     if ( !pViewFrame )
-        pViewFrame = SfxViewFrame::GetFirst( pShell );
+        pViewFrame = SfxViewFrame::GetFirst( mpShell );
 
     if (pViewFrame)
         return &pViewFrame->GetBindings();

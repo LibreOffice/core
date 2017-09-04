@@ -319,7 +319,7 @@ private:
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  mpEditEngine;                   // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   mpNoteEngine;                   // uses pEditPool from xPoolHelper
-    SfxObjectShell*     pShell;
+    SfxObjectShell*     mpShell;
     VclPtr<SfxPrinter>    pPrinter;
     VclPtr<VirtualDevice> pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
@@ -931,7 +931,7 @@ public:
     bool            SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults );
 
     SfxBindings*                    GetViewBindings();
-    SfxObjectShell*                 GetDocumentShell() const    { return pShell; }
+    SfxObjectShell*                 GetDocumentShell() const    { return mpShell; }
     SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return pDrawLayer;  }
     SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return pDrawLayer;  }
     SfxBroadcaster*                 GetDrawBroadcaster();       // to avoid header
