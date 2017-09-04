@@ -3510,7 +3510,9 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    if ( nVal < nMin  )
+    if (!rtl::math::isFinite(nVal))
+        PushError( GetDoubleErrorValue( nVal));
+    else if ( nVal < nMin  )
         PushDouble(0.0);
     else
         PushDouble(nMin);
@@ -3605,7 +3607,9 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    if ( nVal > nMax  )
+    if (!rtl::math::isFinite(nVal))
+        PushError( GetDoubleErrorValue( nVal));
+    else if ( nVal > nMax  )
         PushDouble(0.0);
     else
         PushDouble(nMax);

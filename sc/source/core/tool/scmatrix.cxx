@@ -1385,6 +1385,10 @@ struct MaxOp
     static double init() { return -std::numeric_limits<double>::max(); }
     static double compare(double left, double right)
     {
+        if (!rtl::math::isFinite(left))
+            return left;
+        if (!rtl::math::isFinite(right))
+            return right;
         return std::max(left, right);
     }
 
@@ -1403,6 +1407,10 @@ struct MinOp
     static double init() { return std::numeric_limits<double>::max(); }
     static double compare(double left, double right)
     {
+        if (!rtl::math::isFinite(left))
+            return left;
+        if (!rtl::math::isFinite(right))
+            return right;
         return std::min(left, right);
     }
 
