@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_699a6516",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3825,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-04T12:53:32Z",
+      "side": 1,
+      "message": "This changes semantics such that now only one (the very first) interpreter (in a thread) uses pGlobalStack, all subsequent interpreters will allocate a new one, regardless whether another interpreter is running (in that case it\u0027s necessary) or not (in which case the global stack was used before). The bGlobalStackInUse check is needed.",
+      "revId": "3270b2036fa7cb98ce1daf37a5d2f66a37dd5e57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
