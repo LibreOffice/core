@@ -20,7 +20,7 @@
 /**
  * Look for:
  *     (&x)->y
- * which can be tranformed to:
+ * which can be transformed to:
  *      x.y
  * And
  *    &*x
