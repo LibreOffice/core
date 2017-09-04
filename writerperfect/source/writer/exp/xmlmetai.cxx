@@ -106,6 +106,28 @@ void XMLMetaGeneratorContext::characters(const OUString &rChars)
     mrMeta.m_aPropertyList.insert("meta:generator", librevenge::RVNGString(sCharU8.getStr()));
 }
 
+/// Handler for <meta:initial-creator>.
+class XMLMetaInitialCreatorContext : public XMLImportContext
+{
+public:
+    XMLMetaInitialCreatorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta);
+
+    void SAL_CALL characters(const OUString &rChars) override;
+
+    XMLMetaDocumentContext &mrMeta;
+};
+
+XMLMetaInitialCreatorContext::XMLMetaInitialCreatorContext(XMLImport &rImport, XMLMetaDocumentContext &rMeta)
+    : XMLImportContext(rImport), mrMeta(rMeta)
+{
+}
+
+void XMLMetaInitialCreatorContext::characters(const OUString &rChars)
+{
+    OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
+    mrMeta.m_aPropertyList.insert("meta:initial-creator", librevenge::RVNGString(sCharU8.getStr()));
+}
+
 XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
@@ -121,6 +143,8 @@ XMLImportContext *XMLMetaDocumentContext::CreateChildContext(const OUString &rNa
         return new XMLDcDateContext(mrImport, *this);
     if (rName == "meta:generator")
         return new XMLMetaGeneratorContext(mrImport, *this);
+    if (rName == "meta:initial-creator")
+        return new XMLMetaInitialCreatorContext(mrImport, *this);
     return nullptr;
 }
 
