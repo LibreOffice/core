@@ -983,8 +983,8 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     // transformation dependent font metrics
     rxFontMetric->SetWidth(aWinMetric.tmAveCharWidth);
 
-    const std::vector<uint8_t> rHhea(aHheaRawData.get(), aHheaRawData.get() + aHheaRawData.size());
-    const std::vector<uint8_t> rOS2(aOS2RawData.get(), aOS2RawData.get() + aOS2RawData.size());
+    const std::vector<uint8_t> rHhea((aHheaRawData.get())?aHheaRawData.get():0, (aHheaRawData.get())?aHheaRawData.get() + aHheaRawData.size():0);
+    const std::vector<uint8_t> rOS2((aOS2RawData.get())?aOS2RawData.get():0, (aOS2RawData.get())?aOS2RawData.get() + aOS2RawData.size():0);
     rxFontMetric->ImplCalcLineSpacing(rHhea, rOS2, aOutlineMetric.otmEMSquare);
 }
 
