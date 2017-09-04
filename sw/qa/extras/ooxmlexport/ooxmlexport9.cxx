@@ -230,22 +230,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf98700_keepWithNext, "tdf98700_keepWithNext.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Text Body style toggled off keep with next", false, getProperty<bool>(getParagraph(5), "ParaKeepTogether"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf111895_foregroundShape, "tdf111895_foregroundShape.docx")
-{
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light yellow background", sal_Int32(0xFFFF66), getProperty<sal_Int32>(xPageStyle, "BackColor"));
-    // despite a behindDoc==1, put shape in foreground since the page background would have hidden it otherwise.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of page background", true, getProperty<bool>(getShape(1), "Opaque"));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf111895_foregroundShape2, "tdf111895_foregroundShape2.docx")
-{
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Light yellow background", sal_Int32(0xFFFF66), getProperty<sal_Int32>(xPageStyle, "BackColor"));
-    // despite a page background, don't show behindDoc==1 shape in front since it would have hidden wrap_THROUGH text.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of page background", false, getProperty<bool>(getShape(1), "Opaque"));
-}
-
 // base class to supply a helper method for testHFLinkToPrev
 class testHFBase : public Test
 {
