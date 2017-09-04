@@ -1588,6 +1588,13 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, nullptr);
         }
+        case GtkControlPart::ProgressBarTrough:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarStyle));
+            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
+            set_object_name(path, -1, "trough");
+            return makeContext(path, mpProgressBarStyle);
+        }
         case GtkControlPart::ProgressBarProgress:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarTroughStyle));
@@ -1920,6 +1927,13 @@ GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, nullptr);
+        }
+        case GtkControlPart::ProgressBarTrough:
+        {
+            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarStyle));
+            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
+            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
+            return makeContext(path, mpProgressBarStyle);
         }
         case GtkControlPart::ProgressBarProgress:
         {
@@ -3496,7 +3510,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Progress Bar */
     mpProgressBarStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBar);
-    mpProgressBarTroughStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBar);
+    mpProgressBarTroughStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBarTrough);
     mpProgressBarProgressStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBarProgress);
 
     gtk_widget_show_all(gDumbContainer);
