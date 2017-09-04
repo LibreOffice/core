@@ -27,45 +27,27 @@
 #include <vcl/dllapi.h>
 #include <list>
 #include <vector>
+#include <salusereventlist.hxx>
 
 class SalFrame;
-class VCL_DLLPUBLIC SalGenericDisplay
+class VCL_DLLPUBLIC SalGenericDisplay : public SalUserEventList
 {
-    mutable osl::Mutex m_aEventGuard;
-    struct SalUserEvent
-    {
-        SalFrame*  m_pFrame;
-        void*      m_pData;
-        SalEvent   m_nEvent;
-
-        SalUserEvent( SalFrame* pFrame, void* pData,
-                      SalEvent nEvent )
-                : m_pFrame( pFrame ),
-                  m_pData( pData ),
-                  m_nEvent( nEvent )
-        {}
-    };
-    std::list< SalUserEvent > m_aUserEvents;
 protected:
     SalFrame* m_pCapture;
-    std::list<SalFrame*> m_aFrames;
+
+    virtual void ProcessEvent( SalUserEvent aEvent ) override;
+
 public:
                  SalGenericDisplay();
-    virtual      ~SalGenericDisplay();
+    virtual      ~SalGenericDisplay() override;
 
-    osl::Mutex& getEventGuardMutex() { return m_aEventGuard; }
-
-    void registerFrame( SalFrame* pFrame );
-    virtual void deregisterFrame( SalFrame* pFrame );
+    void registerFrame( const SalFrame* pFrame );
+    virtual void deregisterFrame( const SalFrame* pFrame );
     void emitDisplayChanged();
 
-    // Event handling
-    virtual void PostUserEvent() = 0;
-
     void SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent = SalEvent::UserEvent );
-    void CancelInternalEvent( SalFrame const * pFrame, void const * pData, SalEvent nEvent );
+    void CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
     bool DispatchInternalEvent();
-    bool HasUserEvents() const;
 
     bool     MouseCaptured( const SalFrame *pFrameData ) const
                         { return m_pCapture == pFrameData; }

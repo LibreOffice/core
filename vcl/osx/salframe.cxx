@@ -87,8 +87,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     initWindowAndView();
 
     SalData* pSalData = GetSalData();
-    pSalData->maFrames.push_front( this );
-    pSalData->maFrameCheck.insert( this );
+    pSalData->mpFirstInstance->insertFrame( this );
 }
 
 AquaSalFrame::~AquaSalFrame()
@@ -106,8 +105,7 @@ AquaSalFrame::~AquaSalFrame()
     [SalFrameView unsetMouseFrame: this];
 
     SalData* pSalData = GetSalData();
-    pSalData->maFrames.remove( this );
-    pSalData->maFrameCheck.erase( this );
+    pSalData->mpFirstInstance->eraseFrame( this );
     pSalData->maPresentationFrames.remove( this );
 
     SAL_WARN_IF( this == s_pCaptureFrame, "vcl", "capture frame destroyed" );
@@ -296,7 +294,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 bool AquaSalFrame::PostEvent(ImplSVEvent* pData)
 {
-    GetSalData()->mpFirstInstance->PostUserEvent( this, SalEvent::UserEvent, pData );
+    GetSalData()->mpFirstInstance->PostEvent( this, pData, SalEvent::UserEvent );
     return TRUE;
 }
 

@@ -255,19 +255,10 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         AquaSalFrame* pSalFrame = mpGraphics->getGraphicsFrame();
         if( !pSalFrame || !AquaSalFrame::isAlive( pSalFrame ))
         {
-            if( !GetSalData()->maFrames.empty() )
-            {
-                // get the first matching frame
-                pSalFrame = *GetSalData()->maFrames.begin();
-            }
-            else
-            {
-                // ensure we don't reuse a dead AquaSalFrame on the very
-                // unlikely case of no other frame to use
-                pSalFrame = nullptr;
-            }
-            // update the frame reference
-            mpGraphics->setGraphicsFrame( pSalFrame );
+            pSalFrame = static_cast<AquaSalFrame*>( GetSalData()->mpFirstInstance->anyFrame() );
+            if ( pSalFrame )
+                // update the frame reference
+                mpGraphics->setGraphicsFrame( pSalFrame );
         }
         if( pSalFrame )
         {

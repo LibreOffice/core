@@ -25,6 +25,7 @@
 #include <salinst.hxx>
 #include <salwtype.hxx>
 #include <saltimer.hxx>
+#include <salusereventlist.hxx>
 #include <unx/geninst.h>
 #include <unx/genprn.h>
 
@@ -57,34 +58,17 @@ class GenPspGraphics;
 
 SalInstance* svp_create_SalInstance();
 
-class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
+class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEventList
 {
     timeval                 m_aTimeout;
     sal_uLong               m_nTimeoutMS;
     int                     m_pTimeoutFDS[2];
 
-    // internal event queue
-    struct SalUserEvent
-    {
-        const SalFrame*     m_pFrame;
-        ImplSVEvent*        m_pData;
-        SalEvent            m_nEvent;
-
-        SalUserEvent( const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent )
-                : m_pFrame( pFrame ),
-                  m_pData( pData ),
-                  m_nEvent( nEvent )
-        {}
-    };
-
-    osl::Mutex              m_aEventGuard;
-    std::list< SalUserEvent > m_aUserEvents;
-
-    std::list< SalFrame* >  m_aFrames;
-
-    bool                    isFrameAlive( const SalFrame* pFrame ) const;
-
     void                    DoReleaseYield( int nTimeoutMS );
+
+    virtual void            TriggerUserEventProcessing() override;
+    virtual void            ProcessEvent( SalUserEvent aEvent ) override;
+    void                    Wakeup();
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -95,20 +79,15 @@ public:
     void                    CloseWakeupPipe(bool log);
     void                    CreateWakeupPipe(bool log);
 
-    void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent);
-
 #ifdef ANDROID
     bool                    PostedEventsInQueue();
 #endif
 
     void                    StartTimer( sal_uLong nMS );
     void                    StopTimer();
-    void                    Wakeup();
 
-    void                    registerFrame( SalFrame* pFrame ) { m_aFrames.push_back( pFrame ); }
-    void                    deregisterFrame( SalFrame* pFrame );
-    const std::list< SalFrame* >&
-                            getFrames() const { return m_aFrames; }
+    inline void             registerFrame( const SalFrame* pFrame );
+    inline void             deregisterFrame( const SalFrame* pFrame );
 
     bool                    CheckTimeout( bool bExecuteTimers = true );
 
@@ -170,6 +149,16 @@ public:
 
     virtual GenPspGraphics *CreatePrintGraphics() override;
 };
+
+inline void SvpSalInstance::registerFrame( const SalFrame* pFrame )
+{
+    insertFrame( pFrame );
+}
+
+inline void SvpSalInstance::deregisterFrame( const SalFrame* pFrame )
+{
+    eraseFrame( pFrame );
+}
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 

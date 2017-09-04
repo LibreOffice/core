@@ -133,19 +133,17 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event )
         // so we need to listen for corresponding property notifications here
         // these should be rare enough so that we can assume that the settings
         // actually change when a corresponding PropertyNotify occurs
-        if( pEvent->type == PropertyNotify &&
-            pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::XSETTINGS ) &&
-            ! m_aFrames.empty()
-           )
+        SalFrame *pAnyFrame = anyFrame();
+        if( pAnyFrame && pEvent->type == PropertyNotify &&
+            pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::XSETTINGS ) )
         {
-            SendInternalEvent( m_aFrames.front(), nullptr, SalEvent::SettingsChanged );
+            PostEvent( pAnyFrame, nullptr, SalEvent::SettingsChanged );
         }
         // let's see if one of our frames wants to swallow these events
         // get the frame
-        for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
-                 it != m_aFrames.end(); ++it )
+        for (auto pSalFrame : m_aFrames )
         {
-            GtkSalFrame* pFrame = static_cast<GtkSalFrame*>(*it);
+            GtkSalFrame* pFrame = static_cast<GtkSalFrame*>( pSalFrame );
             if( pFrame->GetSystemData()->aWindow == pEvent->xany.window ||
                 ( pFrame->getForeignParent() && pFrame->getForeignParentWindow() == pEvent->xany.window ) ||
                 ( pFrame->getForeignTopLevel() && pFrame->getForeignTopLevelWindow() == pEvent->xany.window )
@@ -213,11 +211,10 @@ bool GtkSalDisplay::Dispatch( XEvent* pEvent )
     {
         // let's see if one of our frames wants to swallow these events
         // get the child frame
-        for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
-             it != m_aFrames.end(); ++it )
+        for (auto pSalFrame : m_aFrames )
         {
-            if ((*it)->GetSystemData()->aWindow == pEvent->xany.window)
-                return static_cast<GtkSalFrame*>(*it)->Dispatch( pEvent );
+            if (pSalFrame->GetSystemData()->aWindow == pEvent->xany.window)
+                return static_cast<GtkSalFrame*>( pSalFrame )->Dispatch( pEvent );
         }
     }
 
@@ -816,47 +813,23 @@ void GtkSalTimer::Stop()
     }
 }
 
-gboolean GtkSalData::userEventFn( gpointer data )
-{
-    gboolean bContinue = FALSE;
-    GtkSalData *pThis = static_cast<GtkSalData *>(data);
-    GenericUnixSalData *pData = GetGenericUnixSalData();
-    SolarMutexGuard aGuard;
-    const SalGenericDisplay *pDisplay = pData->GetDisplay();
-    if (pDisplay)
-    {
-        OSL_ASSERT(static_cast<const SalGenericDisplay *>(pThis->GetGtkDisplay()) == pDisplay);
-        {
-            osl::MutexGuard g (pThis->GetGtkDisplay()->getEventGuardMutex());
-
-            if( !pThis->GetGtkDisplay()->HasUserEvents() )
-            {
-                if( pThis->m_pUserEvent )
-                {
-                    g_source_unref (pThis->m_pUserEvent);
-                    pThis->m_pUserEvent = nullptr;
-                }
-                bContinue = FALSE;
-            }
-            else
-                bContinue = TRUE;
-        }
-        pThis->GetGtkDisplay()->DispatchInternalEvent();
-    }
-
-    return bContinue;
-}
-
 extern "C" {
     static gboolean call_userEventFn( void *data )
     {
+        GtkSalData *pThis = static_cast<GtkSalData *>(data);
         SolarMutexGuard aGuard;
-        return GtkSalData::userEventFn( data );
+        const SalGenericDisplay *pDisplay = GetGenericUnixSalData()->GetDisplay();
+        if ( pDisplay )
+        {
+            GtkSalDisplay *pThisDisplay = pThis->GetGtkDisplay();
+            assert(static_cast<const SalGenericDisplay *>(pThisDisplay) == pDisplay);
+            pThisDisplay->DispatchInternalEvent();
+        }
+        return TRUE;
     }
 }
 
-// hEventGuard_ held during this invocation
-void GtkSalData::PostUserEvent()
+void GtkSalData::TriggerUserEventProcessing()
 {
     if (m_pUserEvent)
         g_main_context_wakeup (nullptr); // really needed ?
@@ -871,16 +844,28 @@ void GtkSalData::PostUserEvent()
     }
 }
 
-void GtkSalDisplay::PostUserEvent()
+void GtkSalData::TriggerAllUserEventsProcessed()
 {
-    GetGtkSalData()->PostUserEvent();
+    assert( m_pUserEvent );
+    g_source_destroy( m_pUserEvent );
+    g_source_unref( m_pUserEvent );
+    m_pUserEvent = nullptr;
+}
+
+void GtkSalDisplay::TriggerUserEventProcessing()
+{
+    GetGtkSalData()->TriggerUserEventProcessing();
+}
+
+void GtkSalDisplay::TriggerAllUserEventsProcessed()
+{
+    GetGtkSalData()->TriggerAllUserEventsProcessed();
 }
 
 GtkWidget* GtkSalDisplay::findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const
 {
-    for (auto it = m_aFrames.begin(); it != m_aFrames.end(); ++it)
+    for (auto pFrame : m_aFrames)
     {
-        SalFrame* pFrame = *it;
         const SystemEnvData* pEnvData = pFrame->GetSystemData();
         if (pEnvData->aWindow == hWindow)
             return GTK_WIDGET(pEnvData->pWidget);
@@ -888,7 +873,7 @@ GtkWidget* GtkSalDisplay::findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) cons
     return nullptr;
 }
 
-void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
+void GtkSalDisplay::deregisterFrame( const SalFrame* pFrame )
 {
     if( m_pCapture == pFrame )
     {
