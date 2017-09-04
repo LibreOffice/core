@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="${installLocation}"
     package="org.libreoffice">
 
     <!-- App requires OpenGL ES 2.0 -->
@@ -14,7 +15,6 @@
         android:allowBackup="true"
         android:extractNativeLibs="${extractNativeLibs}"
         android:icon="@mipmap/ic_launcher"
-        android:installLocation="${installLocation}"
         android:label="@string/app_name"
         android:theme="@style/LibreOfficeTheme"
         android:debuggable="true"
