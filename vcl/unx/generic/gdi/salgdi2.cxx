@@ -127,12 +127,11 @@ void X11SalGraphics::YieldGraphicsExpose()
     ::Window aWindow = GetDrawable();
     if( ! pFrame )
     {
-        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
-        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end() && ! pFrame; ++it )
+        for (auto pSalFrame : vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames() )
         {
-            const SystemEnvData* pEnvData = (*it)->GetSystemData();
+            const SystemEnvData* pEnvData = pSalFrame->GetSystemData();
             if( Drawable(pEnvData->aWindow) == aWindow )
-                pFrame = *it;
+                pFrame = const_cast<SalFrame*>( pSalFrame );
         }
         if( ! pFrame )
             return;

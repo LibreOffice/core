@@ -94,10 +94,9 @@ SvpSalFrame::~SvpSalFrame()
         // pass focus to another frame, preferably a document style window
         if( s_pFocusFrame == nullptr )
         {
-            const std::list< SalFrame* >& rFrames( m_pInstance->getFrames() );
-            for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+            for (auto pSalFrame : m_pInstance->getFrames() )
             {
-                SvpSalFrame* pFrame = static_cast<SvpSalFrame*>(*it);
+                SvpSalFrame* pFrame = static_cast<SvpSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
                 if( pFrame->m_bVisible        &&
                     pFrame->m_pParent == nullptr &&
                     (pFrame->m_nStyle & (SalFrameStyleFlags::MOVEABLE |

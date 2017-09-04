@@ -117,9 +117,9 @@ public:
     static void initNWF();
     static void deInitNWF();
 
-    static gboolean userEventFn( gpointer data );
+    void TriggerUserEventProcessing();
+    void TriggerAllUserEventsProcessed();
 
-    void PostUserEvent();
     bool Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
 
@@ -146,6 +146,7 @@ class GtkSalDisplay : public SalDisplay
 
     GdkCursor* getFromXBM( const unsigned char *pBitmap, const unsigned char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
+
 public:
              GtkSalDisplay( GdkDisplay* pDisplay );
     virtual ~GtkSalDisplay() override;
@@ -157,7 +158,7 @@ public:
 
     GtkWidget* findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const;
 
-    virtual void deregisterFrame( SalFrame* pFrame ) override;
+    virtual void deregisterFrame( const SalFrame* pFrame ) override;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
 #if GTK_CHECK_VERSION(3,0,0)
     virtual int CaptureMouse( SalFrame* pFrame );
@@ -180,7 +181,8 @@ public:
     void screenSizeChanged( GdkScreen const * );
     void monitorsChanged( GdkScreen const * );
 
-    virtual void PostUserEvent() override;
+    virtual void TriggerUserEventProcessing() override;
+    virtual void TriggerAllUserEventsProcessed() override;
 
 #if !GTK_CHECK_VERSION(3,0,0)
     virtual bool Dispatch( XEvent *pEvent ) override;

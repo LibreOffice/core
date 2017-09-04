@@ -168,7 +168,7 @@ public:
 
     virtual bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void    Wakeup();
-    virtual void    PostUserEvent();
+    void            TriggerUserEventProcessing();
 
     virtual void    Insert( int fd, void* data,
                             YieldFunc   pending,
@@ -371,12 +371,10 @@ public:
             { return getDataForScreen( nXScreen ).m_aRoot; }
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }
 
-    const std::list< SalFrame* >& getFrames() const { return m_aFrames; }
+    const std::set< const SalFrame* >& getFrames() const { return m_aFrames; }
     bool            IsNumLockFromXS() const { return bNumLockFromXS_; }
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
-
-    virtual void    PostUserEvent() override = 0;
 };
 
 inline  Display *SalColormap::GetXDisplay() const
@@ -390,7 +388,7 @@ public:
 
     virtual bool        Dispatch( XEvent *pEvent ) override;
     virtual void        Yield();
-    virtual void        PostUserEvent() override;
+    virtual void        TriggerUserEventProcessing() override;
 
     bool                IsEvent();
     void                SetupInput();

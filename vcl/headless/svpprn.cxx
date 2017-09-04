@@ -257,10 +257,9 @@ OUString SvpSalInstance::GetDefaultPrinter()
 
 void SvpSalInstance::PostPrintersChanged()
 {
-    const std::list< SalFrame* >& rList = SvpSalInstance::s_pDefaultInstance->getFrames();
-    for( std::list< SalFrame* >::const_iterator it = rList.begin();
-         it != rList.end(); ++it )
-        SvpSalInstance::s_pDefaultInstance->PostEvent( *it, nullptr, SalEvent::PrinterChanged );
+    SvpSalInstance *pInst = SvpSalInstance::s_pDefaultInstance;
+    for (auto pSalFrame : pInst->getFrames() )
+        pInst->PostEvent( const_cast<SalFrame*>( pSalFrame ), nullptr, SalEvent::PrinterChanged );
 }
 
 GenPspGraphics *SvpSalInstance::CreatePrintGraphics()

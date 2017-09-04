@@ -45,6 +45,7 @@
 
 #include "apple_remote/RemoteMainController.h"
 
+class AquaSalFrame;
 class AquaSalInstance;
 class SalObject;
 class SalFrame;
@@ -54,7 +55,6 @@ class SystemFontList;
 
 #define SAL_CLIPRECT_COUNT 16
 
-class AquaSalFrame;
 struct FrameHash : public std::hash<sal_IntPtr>
 {
     size_t operator()(const AquaSalFrame* frame) const
@@ -71,8 +71,6 @@ class SalData
 public:
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
-    std::list<AquaSalFrame*>                      maFrames;         // list of all frames
-    std::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;// for fast check of frame existence
     std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
