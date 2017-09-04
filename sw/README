@@ -197,3 +197,15 @@ There are multiple model classes involved for fields:
 
 Note that there is no UNO service to represent a list.
 
+=== Layout ===
+
+The layout is a tree of SwFrame subclasses, the following relationships are
+possible between frames:
+
+- You can visit the tree by following the upper, lower, next and previous pointers.
+- The functionality of flowing of a frame across multiple parents (e.g. pages)
+  is implemented in SwFlowFrame, which is not an SwFrame subclass. The logical
+  chain of such frames can be visited using the follow and precede pointers.
+  ("Leaf" is a term that refers to such a relationship.)
+- In case a frame is split into multiple parts, then the first one is called
+  master, while the others are called follows.
