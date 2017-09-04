@@ -53,6 +53,7 @@ public:
     void testPageBreakSplit();
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
+    void testMeta();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -61,6 +62,7 @@ public:
     CPPUNIT_TEST(testPageBreakSplit);
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
+    CPPUNIT_TEST(testMeta);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -88,6 +90,7 @@ void EPUBExportTest::tearDown()
 
 void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
 {
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("opf"), BAD_CAST("http://www.idpf.org/2007/opf"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
@@ -200,6 +203,16 @@ void EPUBExportTest::testParaAutostyleCharProps()
     // This failed, para-level char props were not exported.
     assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:span", "class", "span0");
     assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "class", "span1");
+}
+
+void EPUBExportTest::testMeta()
+{
+    createDoc("meta.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/content.opf");
+    // This was "Unknown Author", <meta:initial-creator> was not handled.
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "A U Thor");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "Title");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

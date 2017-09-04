@@ -1862,3 +1862,47 @@ index 4ce2964..1661064 100644
 -- 
 2.12.3
 
+From 7e3b5186616326534b1ae95c6d2d188c5e522c7f Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 4 Sep 2017 17:18:49 +0200
+Subject: [PATCH] EPUBGenerator: always write author and title
+
+Some EPUB3 readers categorize books by author and then title, so if
+these are empty, then it's next to impossible to reach the export result
+there.
+---
+ src/lib/EPUBGenerator.cpp          | 11 ++++++++---
+ src/test/EPUBTextGeneratorTest.cpp | 11 +++++++++++
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/EPUBGenerator.cpp b/src/lib/EPUBGenerator.cpp
+index 1661064..3340643 100644
+--- a/src/lib/EPUBGenerator.cpp
++++ b/src/lib/EPUBGenerator.cpp
+@@ -260,15 +260,20 @@ void EPUBGenerator::writeRoot()
+   sink.insertCharacters(identifierCharactrs.c_str());
+   sink.closeElement("dc:identifier");
+ 
+-  // Zero-width space as it must be at least one character in length after
+-  // white space has been trimmed.
+-  RVNGString title("\u200b");
++  RVNGString title("Unknown Title");
+   if (m_metadata["dc:title"] && !m_metadata["dc:title"]->getStr().empty())
+     title = m_metadata["dc:title"]->getStr();
+   sink.openElement("dc:title");
+   sink.insertCharacters(title);
+   sink.closeElement("dc:title");
+ 
++  RVNGString creator("Unknown Author");
++  if (m_metadata["meta:initial-creator"] && !m_metadata["meta:initial-creator"]->getStr().empty())
++    creator = m_metadata["meta:initial-creator"]->getStr();
++  sink.openElement("dc:creator");
++  sink.insertCharacters(creator);
++  sink.closeElement("dc:creator");
++
+   RVNGString language("en");
+   if (m_metadata["dc:language"] && !m_metadata["dc:language"]->getStr().empty())
+     language = m_metadata["dc:language"]->getStr();
+-- 
+2.12.3
+
