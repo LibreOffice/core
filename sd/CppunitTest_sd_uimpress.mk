@@ -19,7 +19,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,sd_uimpress))
 $(eval $(call gb_CppunitTest_use_library_objects,sd_uimpress,sd))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
-	$(call gb_Helper_optional,AVMEDIA,avmedia) \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     canvastools \
     comphelper \
@@ -41,7 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     svt \
     svxcore \
     svx \
-	test \
+    test \
     tk \
     tl \
     ucbhelper \
@@ -52,19 +52,19 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_system_win32_libs,sd_uimpress,\
-	uuid \
-	ws2_32 \
+    uuid \
+    ws2_32 \
 ))
 endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
-	-lobjc \
+    -lobjc \
 ))
 
 $(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sd_uimpress,\
-	Foundation \
-	IOBluetooth \
+    Foundation \
+    IOBluetooth \
 ))
 endif
 
@@ -72,11 +72,11 @@ $(eval $(call gb_CppunitTest_use_externals,sd_uimpress,\
     boost_headers \
     gtk \
     dbus \
-	$(if $(ENABLE_AVAHI), \
-	    avahi \
-	) \
-	$(if $(filter WNT,$(OS)),mDNSResponder) \
-	libxml2 \
+    $(if $(ENABLE_AVAHI), \
+        avahi \
+    ) \
+    $(if $(filter WNT,$(OS)),mDNSResponder) \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\

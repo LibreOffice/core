@@ -12,7 +12,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sd_svg_export_tests))
 
 $(eval $(call gb_CppunitTest_use_externals,sd_svg_export_tests,\
-	boost_headers \
+    boost_headers \
     libxml2 \
 ))
 

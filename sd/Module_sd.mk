@@ -27,8 +27,8 @@ $(eval $(call gb_Module_add_l10n_targets,sd,\
 
 ifeq ($(filter DRAGONFLY FREEBSD,$(OS)),)
 $(eval $(call gb_Module_add_check_targets,sd,\
-	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
-		CppunitTest_sd_uimpress) \
+    $(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
+        CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
     CppunitTest_sd_import_tests_smartart \
     CppunitTest_sd_export_ooxml1 \

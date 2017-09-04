@@ -29,7 +29,7 @@ endif
 endif
 
 $(eval $(call gb_Library_use_custom_headers,sdui,\
-	officecfg/registry \
+    officecfg/registry \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,sdui,$(SRCDIR)/sd/inc/pch/precompiled_sdui))
@@ -93,6 +93,6 @@ $(eval $(call gb_Library_add_exception_objects,sdui,\
 ))
 
 # $(WORKDIR)/inc/sd/sddll0.hxx :
-	# echo "#define" DLL_NAME \"$(if $(filter-out WNT,$(OS)),lib)sd$(DLLPOSTFIX)$(DLLPOST)\" > $@
+    # echo "#define" DLL_NAME \"$(if $(filter-out WNT,$(OS)),lib)sd$(DLLPOSTFIX)$(DLLPOST)\" > $@
 
 # vim: set noet sw=4 ts=4:

@@ -12,8 +12,8 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sd_export_ooxml2))
 
 $(eval $(call gb_CppunitTest_use_externals,sd_export_ooxml2,\
-	boost_headers \
-	libxml2 \
+    boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_export_ooxml2, \
@@ -21,42 +21,42 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_export_ooxml2, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_export_ooxml2, \
-	$(call gb_Helper_optional,AVMEDIA,avmedia) \
-	basegfx \
-	comphelper \
-	cppu \
-	cppuhelper \
-	drawinglayer \
-	editeng \
-	for \
-	forui \
-	i18nlangtag \
-	msfilter \
-	oox \
-	sal \
-	salhelper \
-	sax \
-	sd \
-	sfx \
-	sot \
-	svl \
-	svt \
-	svx \
-	svxcore \
-	test \
-	tl \
-	tk \
-	ucbhelper \
-	unotest \
-	utl \
-	vcl \
-	xo \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
+    basegfx \
+    comphelper \
+    cppu \
+    cppuhelper \
+    drawinglayer \
+    editeng \
+    for \
+    forui \
+    i18nlangtag \
+    msfilter \
+    oox \
+    sal \
+    salhelper \
+    sax \
+    sd \
+    sfx \
+    sot \
+    svl \
+    svt \
+    svx \
+    svxcore \
+    test \
+    tl \
+    tk \
+    ucbhelper \
+    unotest \
+    utl \
+    vcl \
+    xo \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_export_ooxml2,\
-	-I$(SRCDIR)/sd/source/ui/inc \
-	-I$(SRCDIR)/sd/inc \
-	$$(INCLUDE) \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,sd_export_ooxml2))
@@ -67,13 +67,13 @@ $(eval $(call gb_CppunitTest_use_vcl,sd_export_ooxml2))
 $(eval $(call gb_CppunitTest_use_rdb,sd_export_ooxml2,services))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sd_export_ooxml2,\
-	officecfg/registry \
+    officecfg/registry \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_export_ooxml2))
 
 $(eval $(call gb_CppunitTest_add_arguments,sd_export_ooxml2,\
-	-env:SVG_DISABLE_FONT_EMBEDDING= \
+    -env:SVG_DISABLE_FONT_EMBEDDING= \
 ))
 
 # vim: set noet sw=4 ts=4:

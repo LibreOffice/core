@@ -23,7 +23,7 @@ endif
 $(eval $(call gb_Library_use_external,sdfilt,boost_headers))
 
 $(eval $(call gb_Library_use_custom_headers,sdfilt,\
-	oox/generated \
+    oox/generated \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,sdfilt))

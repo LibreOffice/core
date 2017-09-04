@@ -67,8 +67,8 @@ $(eval $(call gb_CppunitTest_use_rdb,sd_dialogs_test,services))
 $(eval $(call gb_CppunitTest_use_configuration,sd_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sd_dialogs_test,\
-	modules/sdraw \
-	modules/simpress \
+    modules/sdraw \
+    modules/simpress \
 ))
 
 # vim: set noet sw=4 ts=4:

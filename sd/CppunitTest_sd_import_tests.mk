@@ -12,8 +12,8 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sd_import_tests))
 
 $(eval $(call gb_CppunitTest_use_externals,sd_import_tests,\
-	boost_headers \
-	libxml2 \
+    boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_import_tests, \
@@ -21,7 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_import_tests, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_import_tests, \
-	$(call gb_Helper_optional,AVMEDIA,avmedia) \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \
@@ -76,10 +76,10 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     embeddedobj/util/embobj \
     emfio/emfio \
     filter/source/config/cache/filterconfig1 \
-	filter/source/odfflatxml/odfflatxml \
+    filter/source/odfflatxml/odfflatxml \
     filter/source/svg/svgfilter \
     filter/source/xmlfilteradaptor/xmlfa \
-	filter/source/xmlfilterdetect/xmlfd \
+    filter/source/xmlfilterdetect/xmlfd \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
@@ -114,7 +114,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
 $(eval $(call gb_CppunitTest_use_configuration,sd_import_tests))
 
 $(eval $(call gb_CppunitTest_use_packages,sd_import_tests,\
-	oox_customshapes \
+    oox_customshapes \
 ))
 
 ifneq ($(ENABLE_PDFIMPORT),)

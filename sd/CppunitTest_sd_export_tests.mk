@@ -12,8 +12,8 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sd_export_tests))
 
 $(eval $(call gb_CppunitTest_use_externals,sd_export_tests,\
-	boost_headers \
-	libxml2 \
+    boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_export_tests, \
@@ -21,7 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_export_tests, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_export_tests, \
-	$(call gb_Helper_optional,AVMEDIA,avmedia) \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \
@@ -67,7 +67,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sd_export_tests))
 $(eval $(call gb_CppunitTest_use_rdb,sd_export_tests,services))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sd_export_tests,\
-	officecfg/registry \
+    officecfg/registry \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_export_tests))
