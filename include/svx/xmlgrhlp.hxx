@@ -59,6 +59,7 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
     GraphicOutputStreamVector   maGrfStms;
     URLSet                      maURLSet;
     SvXMLGraphicHelperMode      meCreateMode;
+    OUString                    maOutputMimeType;
     bool                        mbDirect;
 
     SVX_DLLPRIVATE static bool          ImplGetStreamNames( const OUString& rURLStr,
@@ -82,7 +83,8 @@ class SVX_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHel
                                 virtual ~SvXMLGraphicHelper() override;
     void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
-                                      bool bDirect );
+                                      bool bDirect,
+                                      const OUString& rGraphicMimeType = OUString() );
 
     virtual void SAL_CALL       disposing() override;
 
@@ -91,8 +93,12 @@ public:
 
     static rtl::Reference<SvXMLGraphicHelper> Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
-                                        bool bDirect = true );
-    static rtl::Reference<SvXMLGraphicHelper> Create( SvXMLGraphicHelperMode eCreateMode );
+                                        bool bDirect = true,
+                                        const OUString& rGraphicMimeType = OUString() );
+    static rtl::Reference<SvXMLGraphicHelper>  Create( SvXMLGraphicHelperMode eCreateMode,
+                                        const OUString& rMimeType = OUString() );
+
+public:
 
     // XGraphicObjectResolver
     virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;

@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/evtmethodhelper \
     comphelper/source/misc/fileurl \
     comphelper/source/misc/getexpandeduri \
+    comphelper/source/misc/graphicmimetype \
     comphelper/source/misc/hash \
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \
