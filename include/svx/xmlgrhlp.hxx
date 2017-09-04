@@ -61,6 +61,7 @@ private:
     GraphicOutputStreamVector   maGrfStms;
     URLSet                      maURLSet;
     SvXMLGraphicHelperMode      meCreateMode;
+    OUString                    maOutputMimeType;
     bool                        mbDirect;
 
     SVX_DLLPRIVATE static bool          ImplGetStreamNames( const OUString& rURLStr,
@@ -85,6 +86,7 @@ protected:
                                 virtual ~SvXMLGraphicHelper() override;
     void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
+                                      const OUString& rGraphicMimeType,
                                       bool bDirect );
 
     virtual void SAL_CALL       disposing() override;
@@ -94,6 +96,7 @@ public:
 
     static SvXMLGraphicHelper*  Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
+                                        const OUString& rGraphicMimeType = OUString(),
                                         bool bDirect = true );
     static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
 

@@ -554,6 +554,9 @@ public:
 
     /// set null date from model to unit converter, if not already done
     bool SetNullDateOnUnitConverter();
+
+    /// Get clamped mimetype for image export (empty if none)
+    OUString GetImageFilterName() const;
 };
 
 inline rtl::Reference< XMLTextParagraphExport > const & SvXMLExport::GetTextParagraphExport()

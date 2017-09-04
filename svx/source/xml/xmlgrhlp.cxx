@@ -89,14 +89,15 @@ private:
 
 public:
 
-    explicit                        SvXMLGraphicInputStream( const OUString& rGraphicId );
+    SvXMLGraphicInputStream( const OUString& rGraphicId, const OUString& rMimeType );
                                     SvXMLGraphicInputStream(const SvXMLGraphicInputStream&) = delete;
     SvXMLGraphicInputStream&        operator=(const SvXMLGraphicInputStream&) = delete;
 
     bool                            Exists() const { return mxStmWrapper.is(); }
 };
 
-SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
+
+SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId, const OUString& rMimeType )
 {
     GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
 
@@ -122,21 +123,26 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 if( aGraphic.GetType() == GraphicType::Bitmap )
                 {
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-                    OUString          aFormat;
+                    OUString          aFormat=rMimeType;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = "gif";
-                    else
-                        aFormat = "png";
+                        aFormat = "image/gif";
+                    else if( aFormat.isEmpty() )
+                        aFormat = "image/png";
 
-                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == ERRCODE_NONE );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForMediaType( aFormat ) ) == ERRCODE_NONE );
                 }
-                else if( aGraphic.GetType() == GraphicType::GdiMetafile )
+                else if( rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile )
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStm->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
                     const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ).Write( *pStm );
                     bRet = ( pStm->GetError() == ERRCODE_NONE );
+                }
+                else if( !rMimeType.isEmpty() )
+                {
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
                 }
             }
 
@@ -344,7 +350,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
     cppu::WeakComponentImplHelper< css::document::XGraphicObjectResolver,
                                       css::document::XBinaryStreamResolver >( maMutex )
 {
-    Init( nullptr, eCreateMode, false );
+    Init( nullptr, eCreateMode, "", false );
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper()
@@ -766,21 +772,24 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
+                               const OUString& rGraphicMimeType,
                                bool bDirect )
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
+    maOutputMimeType = rGraphicMimeType;
     mbDirect = meCreateMode != SvXMLGraphicHelperMode::Read || bDirect;
 }
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
+                                                const OUString& rGraphicMimeType,
                                                 bool bDirect )
 {
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
     pThis->acquire();
-    pThis->Init( rXMLStorage, eCreateMode, bDirect );
+    pThis->Init( rXMLStorage, eCreateMode, rGraphicMimeType, bDirect );
 
     return pThis;
 }
@@ -790,7 +799,7 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMo
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
     pThis->acquire();
-    pThis->Init( nullptr, eCreateMode, false );
+    pThis->Init( nullptr, eCreateMode, "", false );
 
     return pThis;
 }
@@ -857,7 +866,7 @@ Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const OUS
     if( ( SvXMLGraphicHelperMode::Write == meCreateMode ) &&
         ImplGetStreamNames( rURL, aPictureStorageName, aGraphicId ) )
     {
-        SvXMLGraphicInputStream* pInputStream = new SvXMLGraphicInputStream( aGraphicId );
+        SvXMLGraphicInputStream* pInputStream = new SvXMLGraphicInputStream( aGraphicId, "image/svg+xml" );
 
         if( pInputStream->Exists() )
             xRet = pInputStream;

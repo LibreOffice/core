@@ -2453,6 +2453,10 @@ bool SvXMLExport::SetNullDateOnUnitConverter()
     return mpImpl->mbNullDateInitialized;
 }
 
+OUString SvXMLExport::GetImageFilterName() const
+{
+    return msImgFilterName;
+}
 
 void SvXMLElementExport::StartElement(
     const sal_uInt16 nPrefixKey,
