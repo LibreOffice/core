@@ -610,7 +610,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             else
             {
                 //2do: could be made an option in HostAppData whether OLE object should be written or not
-                bool bAppOLE = true;
+                const bool bAppOLE = true;
                 addShape( ESCHER_ShpInst_PictureFrame,
                     ShapeFlag::HaveShapeProperty | ShapeFlag::HaveAnchor | (bAppOLE ? ShapeFlag::OLEShape : ShapeFlag::NONE) );
                 if ( aPropOpt.CreateOLEGraphicProperties( rObj.GetShapeRef() ) )
