@@ -490,7 +490,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                  SvXMLGraphicHelperMode::Read,
-                                                 false );
+                                                 "", false );
     xGraphicResolver = pGraphicHelper;
     SfxObjectShell *pPersist = rDoc.GetPersist();
     if( pPersist )

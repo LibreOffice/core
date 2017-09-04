@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -127,6 +128,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >    mxExtHandler;
     css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
     css::uno::Reference< css::document::XGraphicObjectResolver > mxGraphicResolver;
+    css::uno::Reference< css::drawing::XGraphicExportFilter > mxGraphicExportFilter;
     css::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
     css::uno::Reference< css::beans::XPropertySet > mxExportInfo;
@@ -554,6 +556,9 @@ public:
 
     /// set null date from model to unit converter, if not already done
     bool SetNullDateOnUnitConverter();
+
+    /// Get clamped mimetype for image export (empty if none)
+    OUString GetImageFilterName() const;
 };
 
 inline rtl::Reference< XMLTextParagraphExport > const & SvXMLExport::GetTextParagraphExport()

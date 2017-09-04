@@ -820,6 +820,12 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             {
                 if (!(rValue >>= msImgFilterName))
                     return false;
+
+                // conversion of imgs to different format is desired
+                if (!msImgFilterName.isEmpty())
+                {
+                    mxGraphicExportFilter = drawing::GraphicExportFilter::create( m_xContext );
+                }
             }
         }
 
@@ -2453,6 +2459,10 @@ bool SvXMLExport::SetNullDateOnUnitConverter()
     return mpImpl->mbNullDateInitialized;
 }
 
+OUString SvXMLExport::GetImageFilterName() const
+{
+    return msImgFilterName;
+}
 
 void SvXMLElementExport::StartElement(
     const sal_uInt16 nPrefixKey,

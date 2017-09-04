@@ -324,7 +324,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
         return;
     }
     pParserInput->aInputStream = xIStm->getInputStream();
-    *ppGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
+    *ppGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read, "" );
 }
 
 bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
