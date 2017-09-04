@@ -1962,9 +1962,13 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
             bool bLeft;
             bool bTop;
             aViewData.GetMouseQuadrant( aSplit, ePos, nPosX, nPosY, bLeft, bTop );
-            if (!bLeft)
+            if (eSplitMetod == SC_SPLIT_METHOD_FIRST_COL)
+                nPosX = 1;
+            else if (!bLeft)
                 ++nPosX;
-            if (!bTop)
+            if (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW)
+                nPosY = 1;
+            else if (!bTop)
                 ++nPosY;
         }
         else
