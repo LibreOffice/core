@@ -159,7 +159,7 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
     else if( pPage )
         aEvent.Source = const_cast<SdrPage*>(pPage)->getUnoPage();
     else
-        aEvent.Source = (const_cast<SdrModel*>(pDoc))->getUnoModel();
+        aEvent.Source = const_cast<SdrModel*>(pDoc)->getUnoModel();
 
     return true;
 }

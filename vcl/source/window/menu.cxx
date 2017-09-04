@@ -1884,7 +1884,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     const Menu *pMenu = this;
                     while (!pMenu->IsMenuBar() && pMenu->pStartedFrom)
                         pMenu = pMenu->pStartedFrom;
-                    if (pMenu->IsMenuBar() && (static_cast<MenuBarWindow*>(pMenu->pWindow.get()))->GetMBWHideAccel())
+                    if (pMenu->IsMenuBar() && static_cast<MenuBarWindow*>(pMenu->pWindow.get())->GetMBWHideAccel())
                         nStyle |= DrawTextFlags::HideMnemonic;
 
                     if (pData->bIsTemporary)

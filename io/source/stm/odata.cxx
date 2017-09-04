@@ -384,7 +384,7 @@ void ODataInputStream::setSuccessor( const Reference < XConnectable > &r )
          if( m_succ.is() ) {
               /// set this instance as the sink !
               m_succ->setPredecessor( Reference< XConnectable > (
-                  (static_cast< XConnectable *  >(this)) ) );
+                  static_cast< XConnectable * >(this) ) );
          }
      }
 }
@@ -402,7 +402,7 @@ void ODataInputStream::setPredecessor( const Reference < XConnectable > &r )
         m_pred = r;
         if( m_pred.is() ) {
             m_pred->setSuccessor( Reference< XConnectable > (
-                (static_cast< XConnectable *  >(this)) ) );
+                static_cast< XConnectable * >(this) ) );
         }
     }
 }
@@ -722,7 +722,7 @@ void ODataOutputStream::setSuccessor( const Reference < XConnectable > &r )
          {
               /// set this instance as the sink !
               m_succ->setPredecessor( Reference < XConnectable > (
-                  (static_cast< XConnectable *  >(this)) ));
+                  static_cast< XConnectable * >(this) ));
          }
      }
 }
@@ -739,7 +739,7 @@ void ODataOutputStream::setPredecessor( const Reference < XConnectable > &r )
         m_pred = r;
         if( m_pred.is() ) {
             m_pred->setSuccessor( Reference< XConnectable > (
-                (static_cast< XConnectable *  >(this)) ));
+                static_cast< XConnectable * >(this) ));
         }
     }
 }
@@ -932,7 +932,7 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 
     if( bWriteObj )
         xPObj->write( Reference< XObjectOutputStream > (
-            (static_cast< XObjectOutputStream *  >(this)) ) );
+            static_cast< XObjectOutputStream *  >(this) ) );
 
     sal_Int32 nObjLen = m_rMarkable->offsetToMark( nObjLenMark ) -4;
     m_rMarkable->jumpToMark( nObjLenMark );
@@ -1021,7 +1021,7 @@ Reference< XInterface > SAL_CALL OObjectOutputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
 {
     OObjectOutputStream *p = new OObjectOutputStream;
-    return  Reference< XInterface > ( (static_cast< OWeakObject *  >(p)) );
+    return  Reference< XInterface > ( static_cast< OWeakObject *  >(p) );
 }
 
 OUString OObjectOutputStream_getImplementationName()
@@ -1181,7 +1181,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
 
                 m_aPersistVector[nId] = xLoadedObj;
                 xLoadedObj->read( Reference< XObjectInputStream >(
-                    (static_cast< XObjectInputStream * >(this)) ) );
+                    static_cast< XObjectInputStream * >(this) ) );
             }
             else
             {
@@ -1303,7 +1303,7 @@ Sequence< OUString > OObjectInputStream::getSupportedServiceNames()
 Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference < XComponentContext > & rCtx )
 {
     OObjectInputStream *p = new OObjectInputStream( rCtx );
-    return Reference< XInterface> ( (static_cast< OWeakObject * >(p)) );
+    return Reference< XInterface> ( static_cast< OWeakObject * >(p) );
 }
 
 OUString OObjectInputStream_getImplementationName()

@@ -109,8 +109,10 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     if (insideConditionalOperator && parenExpr == insideConditionalOperator)
         return true;
 
-    auto subParenExpr = dyn_cast<ParenExpr>(parenExpr->getSubExpr()->IgnoreImpCasts());
-    if (subParenExpr) {
+    auto subExpr = parenExpr->getSubExpr()->IgnoreImpCasts();
+
+    if (auto subParenExpr = dyn_cast<ParenExpr>(subExpr))
+    {
         if (subParenExpr->getLocStart().isMacroID())
             return true;
         report(
@@ -119,8 +121,7 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             << parenExpr->getSourceRange();
     }
 
-    auto declRefExpr = dyn_cast<DeclRefExpr>(parenExpr->getSubExpr()->IgnoreImpCasts());
-    if (declRefExpr) {
+    if (auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr)) {
         if (declRefExpr->getLocStart().isMacroID())
             return true;
 
@@ -136,6 +137,17 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             parenExpr->getLocStart())
             << parenExpr->getSourceRange();
     }
+
+
+    if (auto cxxNamedCastExpr = dyn_cast<CXXNamedCastExpr>(subExpr)) {
+        if (cxxNamedCastExpr->getLocStart().isMacroID())
+            return true;
+        report(
+            DiagnosticsEngine::Warning, "unnecessary parentheses around cast",
+            parenExpr->getLocStart())
+            << parenExpr->getSourceRange();
+    }
+
     return true;
 }
 

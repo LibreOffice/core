@@ -89,9 +89,9 @@ uno::Any SAL_CALL
 XInputStream_impl::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                                          (static_cast< io::XInputStream* >(this)),
-                                          (static_cast< lang::XTypeProvider* >(this)),
-                                          (static_cast< io::XSeekable* >(this)) );
+                                          static_cast< io::XInputStream* >(this),
+                                          static_cast< lang::XTypeProvider* >(this),
+                                          static_cast< io::XSeekable* >(this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

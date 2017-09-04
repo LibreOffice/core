@@ -758,7 +758,8 @@ IMPL_XTYPEPROVIDER_END
 uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XTabListener* >(this)), (static_cast< awt::XSimpleTabController* >(this)) );
+                                        static_cast< awt::XTabListener* >(this),
+                                        static_cast< awt::XSimpleTabController* >(this) );
     return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
 }
 

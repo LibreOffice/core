@@ -582,7 +582,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     m_bRangePosUnique = ( aState != SfxItemState::DONTCARE );
     if( aState == SfxItemState::SET )
     {
-        OUString sRangePositive = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
+        OUString sRangePositive = static_cast< const SfxStringItem * >( pPoolItem )->GetValue();
         m_pEdRangePositive->SetText( sRangePositive );
     }
 
@@ -590,7 +590,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     m_bRangeNegUnique = ( aState != SfxItemState::DONTCARE );
     if( aState == SfxItemState::SET )
     {
-        OUString sRangeNegative = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
+        OUString sRangeNegative = static_cast< const SfxStringItem * >( pPoolItem )->GetValue();
         m_pEdRangeNegative->SetText( sRangeNegative );
         if( m_eErrorKind == SvxChartKindError::Range &&
             !sRangeNegative.isEmpty() &&

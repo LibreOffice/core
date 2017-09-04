@@ -787,8 +787,8 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
 css::uno::Any VCLXCheckBox::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XButton* >(this)),
-                                        (static_cast< css::awt::XCheckBox* >(this)) );
+                                        static_cast< css::awt::XButton* >(this),
+                                        static_cast< css::awt::XCheckBox* >(this) );
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
@@ -1088,8 +1088,8 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
 css::uno::Any VCLXRadioButton::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XRadioButton* >(this)),
-                                        (static_cast< css::awt::XButton* >(this)) );
+                                        static_cast< css::awt::XRadioButton* >(this),
+                                        static_cast< css::awt::XButton* >(this) );
     return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
@@ -1349,7 +1349,7 @@ VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
 css::uno::Any VCLXSpinField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XSpinField* >(this)) );
+                                        static_cast< css::awt::XSpinField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXEdit::queryInterface( rType ));
 }
 
@@ -2170,7 +2170,7 @@ VCLXMessageBox::~VCLXMessageBox()
 css::uno::Any VCLXMessageBox::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XMessageBox* >(this)) );
+                                        static_cast< css::awt::XMessageBox* >(this) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
@@ -2253,8 +2253,8 @@ VCLXDialog::~VCLXDialog()
 css::uno::Any VCLXDialog::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XDialog2* >(this)),
-                                        (static_cast< css::awt::XDialog* >(this)) );
+                                        static_cast< css::awt::XDialog2* >(this),
+                                        static_cast< css::awt::XDialog* >(this) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
@@ -2828,7 +2828,7 @@ VCLXFixedHyperlink::~VCLXFixedHyperlink()
 css::uno::Any VCLXFixedHyperlink::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XFixedHyperlink* >(this)) );
+                                        static_cast< css::awt::XFixedHyperlink* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -3139,7 +3139,7 @@ VCLXFixedText::~VCLXFixedText()
 css::uno::Any VCLXFixedText::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XFixedText* >(this)) );
+                                        static_cast< css::awt::XFixedText* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -3281,7 +3281,7 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 css::uno::Any VCLXScrollBar::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XScrollBar* >(this)) );
+                                        static_cast< css::awt::XScrollBar* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -3764,9 +3764,9 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
 css::uno::Any VCLXEdit::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XTextComponent* >(this)),
-                                        (static_cast< css::awt::XTextEditField* >(this)),
-                                        (static_cast< css::awt::XTextLayoutConstrains* >(this)) );
+                                        static_cast< css::awt::XTextComponent* >(this),
+                                        static_cast< css::awt::XTextEditField* >(this),
+                                        static_cast< css::awt::XTextLayoutConstrains* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -4758,7 +4758,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXDateField::Cre
 css::uno::Any VCLXDateField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XDateField* >(this)) );
+                                        static_cast< css::awt::XDateField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5105,7 +5105,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXTimeField::Cre
 css::uno::Any VCLXTimeField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XTimeField* >(this)) );
+                                        static_cast< css::awt::XTimeField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5404,7 +5404,7 @@ VCLXNumericField::~VCLXNumericField()
 css::uno::Any VCLXNumericField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XNumericField* >(this)) );
+                                        static_cast< css::awt::XNumericField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5760,8 +5760,7 @@ MetricField *VCLXMetricField::GetMetricField()
 // css::uno::XInterface
 css::uno::Any VCLXMetricField::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                                              (static_cast< css::awt::XMetricField* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< css::awt::XMetricField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -5999,7 +5998,7 @@ VCLXCurrencyField::~VCLXCurrencyField()
 css::uno::Any VCLXCurrencyField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XCurrencyField* >(this)) );
+                                        static_cast< css::awt::XCurrencyField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 
@@ -6348,7 +6347,7 @@ VCLXPatternField::~VCLXPatternField()
 css::uno::Any VCLXPatternField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XPatternField* >(this)) );
+                                        static_cast< css::awt::XPatternField* >(this) );
     return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
 }
 

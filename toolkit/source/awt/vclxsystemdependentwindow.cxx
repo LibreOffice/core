@@ -53,7 +53,7 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XSystemDependentWindowPeer* >(this)) );
+                                        static_cast< css::awt::XSystemDependentWindowPeer* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 

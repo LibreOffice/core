@@ -45,7 +45,7 @@ namespace framework
 
 UIElementWrapperBase::UIElementWrapperBase( sal_Int16 nType )
     :   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aMutex )
-    ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+    ,   ::cppu::OPropertySetHelper  ( *static_cast< ::cppu::OBroadcastHelper* >(this) )
     ,   m_aListenerContainer        ( m_aMutex )
     ,   m_nType                     ( nType                                             )
     ,   m_bInitialized              ( false                                         )

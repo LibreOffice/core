@@ -549,7 +549,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         {
             bool bShowStaggeringControls = m_pParameter->CanAxisLabelsBeStaggered();
             static_cast<SchAxisLabelTabPage&>(rPage).ShowStaggeringControls( bShowStaggeringControls );
-            ( dynamic_cast< SchAxisLabelTabPage& >( rPage ) ).SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
+            dynamic_cast< SchAxisLabelTabPage& >( rPage ).SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
             break;
         }
 

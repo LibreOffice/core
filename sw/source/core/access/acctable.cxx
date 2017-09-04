@@ -693,7 +693,7 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
     const SwTableBox* pBox = nullptr;
 
     // get table box for 'our' table cell
-    SwAccessibleChild aCell( GetChild( *(const_cast<SwAccessibleMap*>(GetMap())), nChildIndex ) );
+    SwAccessibleChild aCell( GetChild( *const_cast<SwAccessibleMap*>(GetMap()), nChildIndex ) );
     if( aCell.GetSwFrame()  )
     {
         const SwFrame* pChildFrame = aCell.GetSwFrame();

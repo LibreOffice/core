@@ -33,10 +33,10 @@
 css::uno::Any VCLXBitmap::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XBitmap* >(this)),
-                                        (static_cast< css::awt::XDisplayBitmap* >(this)),
-                                        (static_cast< css::lang::XUnoTunnel* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XBitmap* >(this),
+                                        static_cast< css::awt::XDisplayBitmap* >(this),
+                                        static_cast< css::lang::XUnoTunnel* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

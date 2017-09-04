@@ -109,9 +109,9 @@ namespace sdr
                 // for SC, the caption object may have a specialized shadow. The usual object shadow is off
                 // and a specialized shadow gets created here (see old paint)
                 const XColorItem& rShadColItem = static_cast<const XColorItem&>(rItemSet.Get(SDRATTR_SHADOWCOLOR));
-                const sal_uInt16 nShadowTransparence((static_cast<const SdrPercentItem&>(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+                const sal_uInt16 nShadowTransparence(static_cast<const SdrPercentItem&>(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
                 const Color aShadowColor(rShadColItem.GetColorValue());
-                const drawing::FillStyle eShadowStyle = (static_cast<const XFillStyleItem&>(rItemSet.Get(XATTR_FILLSTYLE))).GetValue();
+                const drawing::FillStyle eShadowStyle = static_cast<const XFillStyleItem&>(rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
 
                 // Create own ItemSet and modify as needed
                 // Always hide lines for special calc shadow
@@ -121,7 +121,7 @@ namespace sdr
                 if(drawing::FillStyle_HATCH == eShadowStyle)
                 {
                     // #41666# Hatch color is set hard to shadow color
-                    XHatch aHatch = (static_cast<const XFillHatchItem&>(rItemSet.Get(XATTR_FILLHATCH))).GetHatchValue();
+                    XHatch aHatch = static_cast<const XFillHatchItem&>(rItemSet.Get(XATTR_FILLHATCH)).GetHatchValue();
                     aHatch.SetColor(aShadowColor);
                     aSet.Put(XFillHatchItem(OUString(),aHatch));
                 }
@@ -145,8 +145,8 @@ namespace sdr
                 if(!aFill.isDefault() && 1.0 != aFill.getTransparence())
                 {
                     // add shadow offset to object matrix
-                    const sal_uInt32 nXDist((static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
-                    const sal_uInt32 nYDist((static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
+                    const sal_uInt32 nXDist(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_SHADOWXDIST)).GetValue());
+                    const sal_uInt32 nYDist(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_SHADOWYDIST)).GetValue());
 
                     if(nXDist || nYDist)
                     {

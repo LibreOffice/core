@@ -150,8 +150,8 @@ template<typename charT, typename traits>
 inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScQueryParam& rParam)
 {
     stream << "{" <<
-        "base=" << *(static_cast<const ScQueryParamBase*>(&rParam)) <<
-        ",table=" << *(static_cast<const ScQueryParamTable*>(&rParam)) <<
+        "base=" << *static_cast<const ScQueryParamBase*>(&rParam) <<
+        ",table=" << *static_cast<const ScQueryParamTable*>(&rParam) <<
         ",destPers=" << (rParam.bDestPers?"YES":"NO") <<
         ",destTab=" << rParam.nDestTab <<
         ",destCol=" << rParam.nDestCol <<

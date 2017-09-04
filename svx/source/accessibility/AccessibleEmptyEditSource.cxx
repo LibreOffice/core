@@ -84,7 +84,7 @@ namespace accessibility
         SvxViewForwarder*       GetViewForwarder() override { return this; }
         SvxEditSource*          Clone() const override { return nullptr; }
         void                    UpdateData() override {}
-        SfxBroadcaster&         GetBroadcaster() const override { return *(const_cast<AccessibleEmptyEditSource_Impl*>(this)); }
+        SfxBroadcaster&         GetBroadcaster() const override { return *const_cast<AccessibleEmptyEditSource_Impl*>(this); }
 
         // SvxTextForwarder
         sal_Int32          GetParagraphCount() const override { return 1; }
@@ -297,7 +297,7 @@ namespace accessibility
 
     SfxBroadcaster& AccessibleEmptyEditSource::GetBroadcaster() const
     {
-        return *(const_cast<AccessibleEmptyEditSource*>(this));
+        return *const_cast<AccessibleEmptyEditSource*>(this);
     }
 
     void AccessibleEmptyEditSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )

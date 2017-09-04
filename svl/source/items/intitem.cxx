@@ -60,7 +60,7 @@ SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
 bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return m_nValue == (static_cast< const SfxInt16Item * >(&rItem))->
+    return m_nValue == static_cast< const SfxInt16Item * >(&rItem)->
                         m_nValue;
 }
 

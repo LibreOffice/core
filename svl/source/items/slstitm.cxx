@@ -95,7 +95,7 @@ std::vector<OUString>& SfxStringListItem::GetList()
 
 const std::vector<OUString>& SfxStringListItem::GetList () const
 {
-    return (const_cast< SfxStringListItem * >(this))->GetList();
+    return const_cast< SfxStringListItem * >(this)->GetList();
 }
 
 

@@ -108,7 +108,7 @@ OUString SwHistorySetFormat::GetDescription() const
     switch (m_pAttr->Which())
     {
     case RES_BREAK:
-        switch ((static_cast<SvxFormatBreakItem &>(*m_pAttr)).GetBreak())
+        switch (static_cast<SvxFormatBreakItem &>(*m_pAttr).GetBreak())
         {
         case SvxBreak::PageBefore:
         case SvxBreak::PageAfter:
@@ -226,7 +226,7 @@ void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
     if ( RES_TXTATR_CHARFMT == m_pAttr->Which() )
     {
         // ask the Doc if the CharFormat still exists
-        if (!pDoc->GetCharFormats()->IsAlive((static_cast<SwFormatCharFormat&>(*m_pAttr)).GetCharFormat()))
+        if (!pDoc->GetCharFormats()->IsAlive(static_cast<SwFormatCharFormat&>(*m_pAttr).GetCharFormat()))
             return; // do not set, format does not exist
     }
 

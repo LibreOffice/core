@@ -102,7 +102,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_
 
 LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) : LayoutManager_Base()
         , ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >(m_aMutex)
-        , LayoutManager_PBase( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+        , LayoutManager_PBase( *static_cast< ::cppu::OBroadcastHelper* >(this) )
         , m_xContext( xContext )
         , m_xURLTransformer( URLTransformer::create(xContext) )
         , m_nLockCount( 0 )
@@ -750,7 +750,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
             pMenuBar = static_cast<MenuBar *>(xInplaceMenuBar->GetMenuBar());
         else
         {
-            MenuBarWrapper* pMenuBarWrapper = (static_cast< MenuBarWrapper* >(xMenuBar.get()) );
+            MenuBarWrapper* pMenuBarWrapper = static_cast< MenuBarWrapper* >(xMenuBar.get());
             pMenuBar = static_cast<MenuBar *>(pMenuBarWrapper->GetMenuBarManager()->GetMenuBar());
         }
 
@@ -1166,7 +1166,7 @@ void LayoutManager::implts_resetInplaceMenuBar()
     if ( m_xContainerWindow.is() )
     {
         SolarMutexGuard aGuard;
-        MenuBarWrapper* pMenuBarWrapper = (static_cast< MenuBarWrapper* >(m_xMenuBar.get()) );
+        MenuBarWrapper* pMenuBarWrapper = static_cast< MenuBarWrapper* >(m_xMenuBar.get());
         SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
         if ( pSysWindow )
         {

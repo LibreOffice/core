@@ -1180,7 +1180,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         sal_uInt32 nToPageNum = 0;
         const bool bMoveFwdByObjPos = SwLayouter::FrameMovedFwdByObjPos(
                                                     *(GetAttrSet()->GetDoc()),
-                                                    *(static_cast<SwTextFrame*>(this)),
+                                                    *static_cast<SwTextFrame*>(this),
                                                     nToPageNum );
         // #i58182#
         // Also move a paragraph forward, which is the first one inside a table cell.

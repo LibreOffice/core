@@ -1935,7 +1935,7 @@ TaskManager::write( sal_Int32 CommandId,
         {
             const sal_Int8* p = seq.getConstArray();
 
-            err = aFile.write( (static_cast<void const *>(p)),
+            err = aFile.write( static_cast<void const *>(p),
                                sal_uInt64( nReadBytes ),
                                nWrittenBytes );
 

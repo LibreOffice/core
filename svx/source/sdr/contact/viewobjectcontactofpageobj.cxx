@@ -190,7 +190,7 @@ OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrVi
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
-    const SdrPageObj& rPageObject((static_cast< ViewContactOfPageObj& >(GetViewContact())).GetPageObj());
+    const SdrPageObj& rPageObject(static_cast< ViewContactOfPageObj& >(GetViewContact()).GetPageObj());
     const SdrPage* pPage = rPageObject.GetReferencedPage();
     const svtools::ColorConfig aColorConfig;
 

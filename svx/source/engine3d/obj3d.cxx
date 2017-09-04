@@ -424,7 +424,7 @@ void E3dObject::NbcMove(const Size& rSize)
 
 SdrObjList* E3dObject::GetSubList() const
 {
-    return &(const_cast< E3dObjList& >(maSubList));
+    return &const_cast< E3dObjList& >(maSubList);
 }
 
 void E3dObject::RecalcSnapRect()

@@ -216,10 +216,10 @@ css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > ImplReadCon
 css::uno::Any StdTabControllerModel::queryAggregation( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XTabControllerModel* >(this)),
-                                        (static_cast< css::lang::XServiceInfo* >(this)),
-                                        (static_cast< css::io::XPersistObject* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XTabControllerModel* >(this),
+                                        static_cast< css::lang::XServiceInfo* >(this),
+                                        static_cast< css::io::XPersistObject* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 

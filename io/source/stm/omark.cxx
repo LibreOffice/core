@@ -289,7 +289,7 @@ void OMarkableOutputStream::setSuccessor( const Reference< XConnectable > &r )
 
          if( m_succ.is() ) {
               m_succ->setPredecessor( Reference < XConnectable > (
-                  (static_cast< XConnectable *  >(this)) ) );
+                  static_cast< XConnectable *  >(this) ) );
          }
      }
 }
@@ -306,7 +306,7 @@ void OMarkableOutputStream::setPredecessor( const Reference< XConnectable > &r )
         m_pred = r;
         if( m_pred.is() ) {
             m_pred->setSuccessor( Reference < XConnectable > (
-                (static_cast< XConnectable *  >(this )) ) );
+                static_cast< XConnectable *  >(this ) ) );
         }
     }
 }
@@ -718,7 +718,7 @@ void OMarkableInputStream::setSuccessor( const Reference< XConnectable > &r )
          if( m_succ.is() ) {
               /// set this instance as the sink !
               m_succ->setPredecessor( Reference< XConnectable > (
-                  (static_cast< XConnectable *  >(this)) ) );
+                  static_cast< XConnectable * >(this) ) );
          }
      }
 }
@@ -736,7 +736,7 @@ void OMarkableInputStream::setPredecessor( const Reference < XConnectable >  &r 
         m_pred = r;
         if( m_pred.is() ) {
             m_pred->setSuccessor( Reference< XConnectable > (
-                (static_cast< XConnectable *  >(this)) ) );
+                static_cast< XConnectable * >(this) ) );
         }
     }
 }

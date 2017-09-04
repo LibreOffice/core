@@ -245,7 +245,7 @@ void SwObjectFormatter::FormatLayout_( SwLayoutFrame& _rLayoutFrame )
     {
         if ( pLowerFrame->IsLayoutFrame() )
         {
-            FormatLayout_( *(static_cast<SwLayoutFrame*>(pLowerFrame)) );
+            FormatLayout_( *static_cast<SwLayoutFrame*>(pLowerFrame) );
         }
         pLowerFrame = pLowerFrame->GetNext();
     }

@@ -69,7 +69,7 @@ TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
 // css::uno::XInterface
 css::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType )
 {
-    css::uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< css::datatransfer::XTransferable* >(this)) );
+    css::uno::Any aRet = ::cppu::queryInterface( rType, static_cast< css::datatransfer::XTransferable* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

@@ -51,8 +51,8 @@ VCLXContainer::~VCLXContainer()
 css::uno::Any VCLXContainer::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XVclContainer* >(this)),
-                                        (static_cast< css::awt::XVclContainerPeer* >(this)) );
+                                        static_cast< css::awt::XVclContainer* >(this),
+                                        static_cast< css::awt::XVclContainerPeer* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 

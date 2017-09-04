@@ -1323,7 +1323,7 @@ void SwPostItMgr::RemoveSidebarWin()
     {
         for(std::list<SwSidebarItem*>::iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
         {
-            EndListening( *(const_cast<SfxBroadcaster*>((*i)->GetBroadCaster())) );
+            EndListening( *const_cast<SfxBroadcaster*>((*i)->GetBroadCaster()) );
             (*i)->pPostIt.disposeAndClear();
             delete (*i);
         }

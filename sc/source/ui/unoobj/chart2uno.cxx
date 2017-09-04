@@ -1437,7 +1437,7 @@ ScChart2DataProvider::createDataSource(
             {
                 sal_Int32 nSource(0);
                 if( aArguments[i].Value >>= nSource )
-                    eSource = (static_cast< chart::ChartDataRowSource >( nSource ));
+                    eSource = static_cast< chart::ChartDataRowSource >( nSource );
             }
             bOrientCol = (eSource == chart::ChartDataRowSource_COLUMNS);
         }

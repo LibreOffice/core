@@ -114,7 +114,7 @@ private:
     {
         if ( m_bCalcHiddenParaField )
         {
-            (const_cast<SwpHints*>(this))->CalcHiddenParaField();
+            const_cast<SwpHints*>(this)->CalcHiddenParaField();
         }
         return m_bHasHiddenParaField;
     }

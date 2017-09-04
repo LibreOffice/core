@@ -78,7 +78,7 @@ uno::Any SAL_CALL ToolBarWrapper::queryInterface( const uno::Type & rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                (static_cast< css::ui::XUIFunctionListener* >(this)) );
+                static_cast< css::ui::XUIFunctionListener* >(this) );
 
     if( a.hasValue() )
         return a;

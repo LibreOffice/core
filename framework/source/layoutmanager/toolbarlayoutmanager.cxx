@@ -94,9 +94,9 @@ void SAL_CALL ToolbarLayoutManager::release() throw()
 uno::Any SAL_CALL ToolbarLayoutManager::queryInterface( const uno::Type & rType )
 {
     uno::Any a = ::cppu::queryInterface( rType,
-        (static_cast< awt::XDockableWindowListener* >(this)),
-        (static_cast< ui::XUIConfigurationListener* >(this)),
-        (static_cast< awt::XWindowListener* >(this)));
+        static_cast< awt::XDockableWindowListener* >(this),
+        static_cast< ui::XUIConfigurationListener* >(this),
+        static_cast< awt::XWindowListener* >(this));
 
     if ( a.hasValue() )
         return a;

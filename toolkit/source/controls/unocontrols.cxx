@@ -1645,8 +1645,8 @@ OUString UnoFixedHyperlinkControl::GetComponentServiceName()
 uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XFixedHyperlink* >(this)),
-                                        (static_cast< awt::XLayoutConstrains* >(this)) );
+                                        static_cast< awt::XFixedHyperlink* >(this),
+                                        static_cast< awt::XLayoutConstrains* >(this) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
@@ -1846,8 +1846,8 @@ OUString UnoFixedTextControl::GetComponentServiceName()
 uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XFixedText* >(this)),
-                                        (static_cast< awt::XLayoutConstrains* >(this)) );
+                                        static_cast< awt::XFixedText* >(this),
+                                        static_cast< awt::XLayoutConstrains* >(this) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
@@ -3164,15 +3164,15 @@ void UnoComboBoxControl::dispose()
 uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XComboBox* >(this)) );
+                                        static_cast< awt::XComboBox* >(this) );
     if ( !aRet.hasValue() )
     {
         aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XItemListener* >(this)) );
+                                        static_cast< awt::XItemListener* >(this) );
         if ( !aRet.hasValue() )
         {
             aRet = ::cppu::queryInterface( rType,
-                                            (static_cast< awt::XItemListListener* >(this)) );
+                                            static_cast< awt::XItemListListener* >(this) );
         }
     }
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
@@ -3457,7 +3457,7 @@ UnoSpinFieldControl::UnoSpinFieldControl()
 uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XSpinField* >(this)) );
+                                        static_cast< awt::XSpinField* >(this) );
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
 
@@ -3620,7 +3620,7 @@ OUString UnoDateFieldControl::GetComponentServiceName()
 uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XDateField* >(this)) );
+                                        static_cast< awt::XDateField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -3894,7 +3894,7 @@ OUString UnoTimeFieldControl::GetComponentServiceName()
 uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XTimeField* >(this)) );
+                                        static_cast< awt::XTimeField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -4128,7 +4128,7 @@ OUString UnoNumericFieldControl::GetComponentServiceName()
 uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XNumericField* >(this)) );
+                                        static_cast< awt::XNumericField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -4357,7 +4357,7 @@ OUString UnoCurrencyFieldControl::GetComponentServiceName()
 uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XCurrencyField* >(this)) );
+                                        static_cast< awt::XCurrencyField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -4604,7 +4604,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
 uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XPatternField* >(this)) );
+                                        static_cast< awt::XPatternField* >(this) );
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
@@ -4762,7 +4762,7 @@ OUString UnoProgressBarControl::GetComponentServiceName()
 uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< awt::XProgressBar* >(this)) );
+                                        static_cast< awt::XProgressBar* >(this) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 

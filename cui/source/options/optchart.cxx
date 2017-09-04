@@ -142,7 +142,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
     const SfxPoolItem* pItem = nullptr;
     if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SfxItemState::SET )
     {
-        pColorConfig = (static_cast< SvxChartColorTableItem* >(pItem->Clone()) );
+        pColorConfig = static_cast< SvxChartColorTableItem* >(pItem->Clone());
     }
     else
     {
@@ -199,7 +199,7 @@ VclPtr<SfxTabPage> SvxDefaultColorOptPage::Create( vcl::Window* pParent, const S
 bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
     if( pColorConfig )
-        rOutAttrs->Put( *(static_cast< SfxPoolItem* >(pColorConfig)));
+        rOutAttrs->Put( *static_cast< SfxPoolItem* >(pColorConfig) );
 
     return true;
 }

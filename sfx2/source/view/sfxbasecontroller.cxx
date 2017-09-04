@@ -204,7 +204,7 @@ public:
                             {
                                 ++m_refCount;
                                 Reference< lang::XComponent > xComponent(
-                                    (static_cast< ::cppu::OWeakObject* >(pController)), uno::UNO_QUERY );
+                                    static_cast< ::cppu::OWeakObject* >(pController), uno::UNO_QUERY );
                                 if (xComponent.is())
                                     xComponent->addEventListener(this);
                                 --m_refCount;

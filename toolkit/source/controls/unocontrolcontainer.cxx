@@ -759,12 +759,12 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
                 sal_Int32 nDialogStep = 0;
                 aVal >>= nDialogStep;
                 uno::Reference< awt::XControlContainer > xContainer =
-                    (static_cast< awt::XControlContainer* >(this));
+                    static_cast< awt::XControlContainer* >(this);
                 implUpdateVisibility( nDialogStep, xContainer );
 
                 uno::Reference< beans::XPropertyChangeListener > xListener =
-                    (static_cast< beans::XPropertyChangeListener* >(
-                        new DialogStepChangedListener( xContainer ) ) );
+                    static_cast< beans::XPropertyChangeListener* >(
+                        new DialogStepChangedListener( xContainer ) );
                 xPSet->addPropertyChangeListener( aPropName, xListener );
             }
 

@@ -54,7 +54,7 @@ void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (nId == mnCharName)
     {
-        SvxFontListItem aItem(*( static_cast<const SvxFontListItem*>( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+        SvxFontListItem aItem(* static_cast<const SvxFontListItem*>( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) );
 
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);

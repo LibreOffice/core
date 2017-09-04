@@ -1406,7 +1406,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                 ScAddress( nEndCol, nStartRow+nSize-1, nTabRangeEnd ) ) );
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( nStartCol, nStartRow+nSize, nTabRangeStart ),
-                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, -(static_cast<SCROW>(nSize)), 0 );
+                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, -static_cast<SCROW>(nSize), 0 );
         }
         else
             DelBroadcastAreasInRange( ScRange(
@@ -1421,7 +1421,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
         aCxt.meMode = URM_INSDEL;
-        aCxt.mnRowDelta = -(static_cast<SCROW>(nSize));
+        aCxt.mnRowDelta = -static_cast<SCROW>(nSize);
         if (bLastRowIncluded)
         {
             // Last row is included, shift a virtually non-existent row in.
@@ -1630,7 +1630,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
         aCxt.meMode = URM_INSDEL;
-        aCxt.mnColDelta = -(static_cast<SCCOL>(nSize));
+        aCxt.mnColDelta = -static_cast<SCCOL>(nSize);
         if (bLastColIncluded)
         {
             // Last column is included, shift a virtually non-existent column in.
@@ -2619,7 +2619,7 @@ void ScDocument::CopyBlockFromClip(
     {
         if (maTabs[i] && rMark.GetTableSelect(i) )
         {
-            while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
+            while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % static_cast<SCTAB>(rClipTabs.size());
 
             maTabs[i]->CopyFromClip(
                 rCxt, nCol1, nRow1, nCol2, nRow2, nDx, nDy, rClipTabs[nClipTab]);
@@ -2645,7 +2645,7 @@ void ScDocument::CopyBlockFromClip(
                 }
             }
 
-            nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
+            nClipTab = (nClipTab+1) % static_cast<SCTAB>(rClipTabs.size());
         }
     }
     if (rCxt.getInsertFlag() & InsertDeleteFlags::CONTENTS)
@@ -2655,7 +2655,7 @@ void ScDocument::CopyBlockFromClip(
         {
             if (maTabs[i] && rMark.GetTableSelect(i) )
             {
-                while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
+                while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % static_cast<SCTAB>(rClipTabs.size());
                 SCTAB nDz = i - nClipTab;
 
                 //  ranges of consecutive selected tables (in clipboard and dest. doc)
@@ -2703,7 +2703,7 @@ void ScDocument::CopyBlockFromClip(
                     UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
                 }
 
-                nClipTab = (nClipTab+nFollow+1) % (static_cast<SCTAB>(rClipTabs.size()));
+                nClipTab = (nClipTab+nFollow+1) % static_cast<SCTAB>(rClipTabs.size());
                 i = sal::static_int_cast<SCTAB>( i + nFollow );
             }
         }

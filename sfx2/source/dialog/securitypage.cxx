@@ -59,7 +59,7 @@ namespace
             SfxItemState nState = pDisp->QueryState( _nSlot, pItem );
             bRet = SfxItemState::DEFAULT <= nState;
             if (bRet)
-                _rValue = ( static_cast< const SfxBoolItem* >( pItem ) )->GetValue();
+                _rValue = static_cast< const SfxBoolItem* >( pItem )->GetValue();
         }
         return bRet;
     }

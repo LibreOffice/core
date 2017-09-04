@@ -1372,7 +1372,7 @@ namespace svx
         rLoseFocusHdl.Call( *this );
         m_pScrollBar->SetThumbPos( m_pScrollBar->GetThumbPos() + ( _bUp? -1 : 1 ) );
 
-        ( static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() ) )->UpdateScrollbar();
+        static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() )->UpdateScrollbar();
     }
 
     SuggestionEdit::SuggestionEdit( vcl::Window* pParent, WinBits nBits )

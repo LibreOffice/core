@@ -907,7 +907,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
 
 bool SdXMLShapeContext::isPresentationShape() const
 {
-    if( !maPresentationClass.isEmpty() && (const_cast<SdXMLShapeContext*>(this))->GetImport().GetShapeImport()->IsPresentationShapesSupported() )
+    if( !maPresentationClass.isEmpty() && const_cast<SdXMLShapeContext*>(this)->GetImport().GetShapeImport()->IsPresentationShapesSupported() )
     {
         if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily)
         {

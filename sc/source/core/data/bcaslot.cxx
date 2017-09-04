@@ -686,7 +686,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
         {
             const ScSlotData& rSD = i;
             return rSD.nCumulated +
-                (static_cast<SCSIZE>(nRow - rSD.nStartRow)) / rSD.nSlice +
+                static_cast<SCSIZE>(nRow - rSD.nStartRow) / rSD.nSlice +
                 static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * nBcaSlotsRow;
         }
     }

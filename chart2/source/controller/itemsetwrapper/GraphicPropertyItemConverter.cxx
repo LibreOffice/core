@@ -520,8 +520,8 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     ? OUString( "GradientStepCount" )
                     : OUString( "FillGradientStepCount" );
 
-                sal_Int16 nStepCount = ( static_cast< const XGradientStepCountItem & >(
-                            rItemSet.Get( nWhichId ))).GetValue();
+                sal_Int16 nStepCount = static_cast< const XGradientStepCountItem & >(
+                            rItemSet.Get( nWhichId )).GetValue();
 
                 aValue <<= nStepCount;
                 if( aValue != GetPropertySet()->getPropertyValue( aPropName ))

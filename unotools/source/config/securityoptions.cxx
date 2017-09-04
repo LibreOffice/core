@@ -871,7 +871,7 @@ bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption )
     bool*   pRO;
     bool    bRet = false;
 
-    if( ( const_cast< SvtSecurityOptions_Impl* >( this ) )->GetOption( eOption, pValue, pRO ) )
+    if( const_cast< SvtSecurityOptions_Impl* >( this )->GetOption( eOption, pValue, pRO ) )
         bRet = *pValue;
 
     return bRet;
@@ -895,7 +895,7 @@ bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption eOpti
     bool*   pRO;
     bool    bRet = false;
 
-    if( ( const_cast< SvtSecurityOptions_Impl* >( this ) )->GetOption( eOption, pValue, pRO ) )
+    if( const_cast< SvtSecurityOptions_Impl* >( this )->GetOption( eOption, pValue, pRO ) )
         bRet = !*pRO;
 
     return bRet;

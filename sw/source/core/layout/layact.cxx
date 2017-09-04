@@ -824,7 +824,7 @@ bool SwLayAction::TurboAction_( const SwContentFrame *pCnt )
 
     // format floating screen objects at content frame.
     if ( pCnt->IsTextFrame() &&
-         !SwObjectFormatter::FormatObjsAtFrame( *(const_cast<SwContentFrame*>(pCnt)),
+         !SwObjectFormatter::FormatObjsAtFrame( *const_cast<SwContentFrame*>(pCnt),
                                               *pPage, this ) )
     {
         return false;
@@ -1625,7 +1625,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
             if ( !IsAgain() &&
                  ( !IsInterrupt() || mbFormatContentOnInterrupt ) &&
                  pContent->IsTextFrame() &&
-                 !SwObjectFormatter::FormatObjsAtFrame( *(const_cast<SwContentFrame*>(pContent)),
+                 !SwObjectFormatter::FormatObjsAtFrame( *const_cast<SwContentFrame*>(pContent),
                                                       *(pContent->FindPageFrame()), this ) )
             {
                 return false;
@@ -1817,7 +1817,7 @@ bool SwLayAction::FormatFlyContent( const SwFlyFrame *pFly )
         // pass correct page frame to the object formatter.
         if ( pContent->IsTextFrame() &&
              !SwObjectFormatter::FormatObjsAtFrame(
-                                            *(const_cast<SwContentFrame*>(pContent)),
+                                            *const_cast<SwContentFrame*>(pContent),
                                             *(pContent->FindPageFrame()), this ) )
         {
             // restart format with first content

@@ -101,7 +101,7 @@ namespace accessibility
 
     SfxBroadcaster& AccessibleOutlineEditSource::GetBroadcaster() const
     {
-        return *( const_cast< AccessibleOutlineEditSource* > (this) );
+        return * const_cast< AccessibleOutlineEditSource* > (this);
     }
 
     bool AccessibleOutlineEditSource::IsValid() const

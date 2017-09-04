@@ -174,7 +174,7 @@ OUString ScContentTree::getAltLongDescText( SvTreeListEntry* pEntry, bool isAltT
     case ScContentId::DRAWING:
         {
             SdrObject* pFound = nullptr;
-            ScDocument* pDoc = ( const_cast< ScContentTree* >(this) )->GetSourceDocument();
+            ScDocument* pDoc =  const_cast< ScContentTree* >(this)->GetSourceDocument();
             SdrIterMode eIter = ( nType == ScContentId::DRAWING ) ? SdrIterMode::Flat : SdrIterMode::DeepNoGroups;
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             SfxObjectShell* pShell = pDoc->GetDocumentShell();

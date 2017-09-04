@@ -370,9 +370,9 @@ const SwDBData& SwDoc::GetDBDesc()
                             if(pField->IsFieldInDoc())
                             {
                                 if(SwFieldIds::Database == nWhich)
-                                    maDBData = (static_cast < SwDBFieldType * > (pField->GetField()->GetTyp()))->GetDBData();
+                                    maDBData = static_cast < SwDBFieldType * > (pField->GetField()->GetTyp())->GetDBData();
                                 else
-                                    maDBData = (static_cast < SwDBNameInfField* > (pField->GetField()))->GetRealDBData();
+                                    maDBData = static_cast < SwDBNameInfField* > (pField->GetField())->GetRealDBData();
                                 break;
                             }
                         }

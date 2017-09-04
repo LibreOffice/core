@@ -260,15 +260,15 @@ void SAL_CALL UniversalContentBroker::release()
 css::uno::Any SAL_CALL UniversalContentBroker::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XUniversalContentBroker* >(this)),
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XComponent* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XInitialization* >(this)),
-                                               (static_cast< XContentProviderManager* >(this)),
-                                               (static_cast< XContentProvider* >(this)),
-                                               (static_cast< XContentIdentifierFactory* >(this)),
-                                               (static_cast< XCommandProcessor* >(this))
+                                               static_cast< XUniversalContentBroker* >(this),
+                                               static_cast< XTypeProvider* >(this),
+                                               static_cast< XComponent* >(this),
+                                               static_cast< XServiceInfo* >(this),
+                                               static_cast< XInitialization* >(this),
+                                               static_cast< XContentProviderManager* >(this),
+                                               static_cast< XContentProvider* >(this),
+                                               static_cast< XContentIdentifierFactory* >(this),
+                                               static_cast< XCommandProcessor* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -297,7 +297,7 @@ void SAL_CALL UniversalContentBroker::dispose()
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
     {
         EventObject aEvt;
-        aEvt.Source = (static_cast< XComponent* >(this));
+        aEvt.Source = static_cast< XComponent* >(this);
         m_pDisposeEventListeners->disposeAndClear( aEvt );
     }
 

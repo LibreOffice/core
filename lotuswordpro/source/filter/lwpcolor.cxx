@@ -66,8 +66,8 @@
 sal_uInt32 LwpColor::To24Color()
 {
     return ((m_nRed >> 8) |
-                (m_nGreen & 0xFF00) |
-                (static_cast<sal_uInt32>((m_nBlue & 0xFF00) << 8)));
+            (m_nGreen & 0xFF00) |
+            static_cast<sal_uInt32>((m_nBlue & 0xFF00) << 8));
 }
 
 /**

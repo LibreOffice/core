@@ -165,7 +165,7 @@ void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
 
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << (static_cast< sal_uInt16 >( mbValue ? 1 : 0 ));
+    rStrm << static_cast< sal_uInt16 >( mbValue ? 1 : 0 );
 }
 
 void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )

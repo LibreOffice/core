@@ -119,9 +119,9 @@ css::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const css::uno::
 {
     //list all interfaces inclusive baseclasses of interfaces
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XComponent* >(this)), //base of XDynamicResultSet
-                                               (static_cast< XDynamicResultSet* >(this)),
-                                               (static_cast< XSourceInitialization* >(this))
+                                               static_cast< XComponent* >(this), //base of XDynamicResultSet
+                                               static_cast< XDynamicResultSet* >(this),
+                                               static_cast< XSourceInitialization* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -455,8 +455,8 @@ void SAL_CALL DynamicResultSetWrapperListener::release()
 css::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XDynamicResultSetListener* >(this)),
-                                               (static_cast< XEventListener* >(this))
+                                               static_cast< XDynamicResultSetListener* >(this),
+                                               static_cast< XEventListener* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

@@ -236,9 +236,9 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
 {
     // PropertySet implementation
     Any a = ::cppu::queryInterface( aType,
-                                   (static_cast< XInvocation* >(this)),
-                                   (static_cast< XMaterialHolder* >(this)),
-                                   (static_cast< XTypeProvider * >(this))    );
+                                   static_cast< XInvocation* >(this),
+                                   static_cast< XMaterialHolder* >(this),
+                                   static_cast< XTypeProvider * >(this) );
     if( a.hasValue() )
     {
         return a;
@@ -251,50 +251,50 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
         if ((_xDirect.is() && _xENDirect.is()) ||
             (!_xDirect.is() && _xENIntrospection.is()))
         {
-            return makeAny( Reference< XExactName >( (static_cast< XExactName* >(this)) ) );
+            return makeAny( Reference< XExactName >( static_cast< XExactName* >(this) ) );
         }
     }
     else if ( aType == cppu::UnoType<XNameContainer>::get())
     {
         if( _xNameContainer.is() )
-            return makeAny( Reference< XNameContainer >( (static_cast< XNameContainer* >(this)) ) );
+            return makeAny( Reference< XNameContainer >( static_cast< XNameContainer* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XNameReplace>::get())
     {
         if( _xNameReplace.is() )
-            return makeAny( Reference< XNameReplace >( (static_cast< XNameReplace* >(this)) ) );
+            return makeAny( Reference< XNameReplace >( static_cast< XNameReplace* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XNameAccess>::get())
     {
         if( _xNameAccess.is() )
-            return makeAny( Reference< XNameAccess >( (static_cast< XNameAccess* >(this)) ) );
+            return makeAny( Reference< XNameAccess >( static_cast< XNameAccess* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XIndexContainer>::get())
     {
         if (_xIndexContainer.is())
-            return makeAny( Reference< XIndexContainer >( (static_cast< XIndexContainer* >(this)) ) );
+            return makeAny( Reference< XIndexContainer >( static_cast< XIndexContainer* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XIndexReplace>::get())
     {
         if (_xIndexReplace.is())
-            return makeAny( Reference< XIndexReplace >( (static_cast< XIndexReplace* >(this)) ) );
+            return makeAny( Reference< XIndexReplace >( static_cast< XIndexReplace* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XIndexAccess>::get())
     {
         if (_xIndexAccess.is())
-            return makeAny( Reference< XIndexAccess >( (static_cast< XIndexAccess* >(this)) ) );
+            return makeAny( Reference< XIndexAccess >( static_cast< XIndexAccess* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XEnumerationAccess>::get())
     {
         if (_xEnumerationAccess.is())
-            return makeAny( Reference< XEnumerationAccess >( (static_cast< XEnumerationAccess* >(this)) ) );
+            return makeAny( Reference< XEnumerationAccess >( static_cast< XEnumerationAccess* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XElementAccess>::get())
     {
         if (_xElementAccess.is())
         {
             return makeAny( Reference< XElementAccess >(
-                (static_cast< XElementAccess* >((static_cast< XNameContainer* >(this))) ) ) );
+                static_cast< XElementAccess* >(static_cast< XNameContainer* >(this)) ) );
         }
     }
     else if ( aType == cppu::UnoType<XInvocation2>::get())
@@ -304,7 +304,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
         if ( ( _xDirect.is() && _xDirect2.is()) ||
              (!_xDirect.is() && _xIntrospectionAccess.is() ) )
         {
-            return makeAny( Reference< XInvocation2 >( (static_cast< XInvocation2* >(this)) ) );
+            return makeAny( Reference< XInvocation2 >( static_cast< XInvocation2* >(this) ) );
         }
     }
 

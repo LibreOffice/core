@@ -124,19 +124,19 @@ public:
 
     css::uno::Reference < css::io::XInputStream > getInputStream_Impl() const
                             {
-                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
+                                osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xInputStream;
                             }
 
     css::uno::Reference < css::io::XOutputStream > getOutputStream_Impl() const
                             {
-                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
+                                osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xOutputStream;
                             }
 
     css::uno::Reference < css::io::XSeekable > getSeekable_Impl() const
                             {
-                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
+                                osl::MutexGuard aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xSeekable;
                             }
 

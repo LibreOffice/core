@@ -110,7 +110,7 @@ void SidebarTextEditSource::UpdateData()
 
 SfxBroadcaster& SidebarTextEditSource::GetBroadcaster() const
 {
-    return *( const_cast< SidebarTextEditSource* > (this) );
+    return * const_cast< SidebarTextEditSource* > (this);
 }
 
 IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify&, rNotify, void)

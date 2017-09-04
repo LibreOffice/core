@@ -53,7 +53,7 @@ namespace framework
 
 ActionTriggerPropertySet::ActionTriggerPropertySet()
     : OBroadcastHelper         ( m_aMutex )
-    ,   OPropertySetHelper       ( *(static_cast< OBroadcastHelper * >(this)))
+    , OPropertySetHelper       ( *static_cast< OBroadcastHelper * >(this) )
     , OWeakObject              ()
     , m_xBitmap                ( nullptr )
     , m_xActionTriggerContainer( nullptr )
@@ -69,8 +69,8 @@ Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
 {
     Any a = ::cppu::queryInterface(
                 aType,
-                (static_cast< XServiceInfo* >(this)),
-                (static_cast< XTypeProvider* >(this)));
+                static_cast< XServiceInfo* >(this),
+                static_cast< XTypeProvider* >(this));
 
     if( a.hasValue() )
         return a;

@@ -1132,7 +1132,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             {
                 uno::Reference < XAccessible > xAcc( (*aIter).second );
                 if( xAcc.is() )
-                    (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->SetState( AccessibleStateType::SELECTED );
+                    static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->SetState( AccessibleStateType::SELECTED );
 
                 ++aIter;
             }
@@ -1156,7 +1156,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 {
                     uno::Reference < XAccessible > xAcc( (*aIter).second );
                     if(xAcc.is())
-                        (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
+                        static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
 
                     ++aIter;
                     continue;
@@ -1218,7 +1218,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if(xAcc.is())
-                                                (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
+                                                static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
                                         }
                                     }
                                 }
@@ -1235,7 +1235,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             {
                                 uno::Reference < XAccessible > xAcc( (*aIter).second );
                                 if(xAcc.is())
-                                    (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
+                                    static_cast < ::accessibility::AccessibleShape* >(xAcc.get())->ResetState( AccessibleStateType::SELECTED );
                             }
                             --nNumShapes;
                             ++pShape;
@@ -1263,7 +1263,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
                 if(xAcc.is())
                 {
-                    SwAccessibleFrameBase *pAccFrame = (static_cast< SwAccessibleFrameBase * >(xAcc.get()));
+                    SwAccessibleFrameBase *pAccFrame = static_cast< SwAccessibleFrameBase * >(xAcc.get());
                     bool bFrameChanged = pAccFrame->SetSelectedState( true );
                     if (bFrameChanged)
                     {
@@ -1338,7 +1338,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             bool isChanged = false;
                             if( xAcc.is() )
                             {
-                                isChanged = (static_cast< SwAccessibleContext * >(xAcc.get()))->SetSelectedState( true );
+                                isChanged = static_cast< SwAccessibleContext * >(xAcc.get())->SetSelectedState( true );
                             }
                             if(!isChanged)
                             {
@@ -1369,7 +1369,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             uno::Reference < XAccessible > xAcc = (*aIter).second;
             if(xAcc.is())
-                (static_cast< SwAccessibleContext * >(xAcc.get()))->SetSelectedState( false );
+                static_cast< SwAccessibleContext * >(xAcc.get())->SetSelectedState( false );
             ++aIter;
             vecRemove.push_back(static_cast< SwAccessibleContext * >(xAcc.get()));
         }

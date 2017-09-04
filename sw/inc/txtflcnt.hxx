@@ -50,7 +50,7 @@ inline SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame( const SwFrame *pCurrFrame
 
 inline const SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame( const SwFrame *pCurrFrame ) const
 {
-    return (const_cast<SwTextFlyCnt*>(this))->GetFlyFrame_( pCurrFrame );
+    return const_cast<SwTextFlyCnt*>(this)->GetFlyFrame_( pCurrFrame );
 }
 
 #endif

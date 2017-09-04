@@ -510,7 +510,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
          bMovedForward && nNewPos < nObjCount - 1 )
     {
         sal_uInt32 nMaxChildOrdNum =
-                    GetMaxChildOrdNum( *(static_cast<const SwFlyFrame*>(pMovedAnchoredObj)) );
+                    GetMaxChildOrdNum( *static_cast<const SwFlyFrame*>(pMovedAnchoredObj) );
         if ( nNewPos < nMaxChildOrdNum )
         {
             // determine position before the object before its top 'child' object

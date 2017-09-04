@@ -64,7 +64,7 @@ namespace vcl { namespace unohelper {
     // css::uno::XInterface
     uno::Any TextDataObject::queryInterface( const uno::Type & rType )
     {
-        uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
+        uno::Any aRet = ::cppu::queryInterface( rType, static_cast< datatransfer::XTransferable* >(this) );
         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
     }
 

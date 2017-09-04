@@ -1722,7 +1722,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             // retrieve reference destination - the name of the bookmark
             OUString aLinkStr;
             const sal_uInt16 nSubType = pField->GetSubType();
-            const SwGetRefField& rRField = *(static_cast<const SwGetRefField*>(pField));
+            const SwGetRefField& rRField = *static_cast<const SwGetRefField*>(pField);
             if ( nSubType == REF_SETREFATTR ||
                  nSubType == REF_BOOKMARK )
             {

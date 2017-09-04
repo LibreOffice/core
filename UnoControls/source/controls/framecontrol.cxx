@@ -55,7 +55,7 @@ enum PropertyHandle  // values represent index in PropertyArray
 FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
     : BaseControl                   ( rxContext                                     )
     , OBroadcastHelper              ( m_aMutex                                      )
-    , OPropertySetHelper            ( *(static_cast< OBroadcastHelper * >(this))    )
+    , OPropertySetHelper            ( *static_cast< OBroadcastHelper * >(this)      )
     , m_aConnectionPointContainer   ( new OConnectionPointContainerHelper(m_aMutex) )
 {
 }

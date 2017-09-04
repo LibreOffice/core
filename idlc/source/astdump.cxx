@@ -193,7 +193,7 @@ bool AstService::dump(RegistryKey& rKey)
         case NT_service_member:
             if (getNodeType() == NT_singleton) {
                 OSL_ASSERT(superName.isEmpty());
-                superName = (static_cast<AstServiceMember *>(*i))->
+                superName = static_cast<AstServiceMember *>(*i)->
                     getRealService()->getRelativName();
                 break;
             }

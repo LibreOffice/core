@@ -2290,7 +2290,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                                 if (SdrPage *pPage = pModel->GetPage(0))
                                 {
                                     bSwapInPage = true;
-                                    (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
+                                    const_cast<SdrObject*>(pSdrObj)->SetPage(pPage);
                                 }
                             }
                         }
@@ -2298,7 +2298,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         nShapeId = AddSdrObject(*pSdrObj);
 
                         if (bSwapInPage)
-                            (const_cast<SdrObject*>(pSdrObj))->SetPage(nullptr);
+                            const_cast<SdrObject*>(pSdrObj)->SetPage(nullptr);
                     }
 #if OSL_DEBUG_LEVEL > 0
                     else

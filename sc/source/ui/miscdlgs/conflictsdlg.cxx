@@ -581,7 +581,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
                 if ( pAction && ( pAction->GetType() != SC_CAT_DELETE_TABS ) &&
                      ( pAction->IsClickable() || pAction->IsVisible() ) )
                 {
-                    const ScBigRange& rBigRange = ( static_cast< const ScChangeAction* >( pAction ) )->GetBigRange();
+                    const ScBigRange& rBigRange = static_cast< const ScChangeAction* >( pAction )->GetBigRange();
                     if ( rBigRange.IsValid( mpOwnDoc ) )
                     {
                         bool bSetCursor = !m_pLbConflicts->NextSelected( pEntry );
@@ -687,7 +687,7 @@ void ScConflictsDlg::UpdateView()
                     // only display shared top content entries
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
-                        ScChangeActionContent* pNextContent = (dynamic_cast<ScChangeActionContent&>(*pAction)).GetNextContent();
+                        ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
                         if ( pNextContent && aItr->HasSharedAction( pNextContent->GetActionNumber() ) )
                         {
                             continue;
@@ -708,7 +708,7 @@ void ScConflictsDlg::UpdateView()
                     // only display own top content entries
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
-                        ScChangeActionContent* pNextContent = ( dynamic_cast<ScChangeActionContent&>(*pAction) ).GetNextContent();
+                        ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
                         if ( pNextContent && aItr->HasOwnAction( pNextContent->GetActionNumber() ) )
                         {
                             continue;

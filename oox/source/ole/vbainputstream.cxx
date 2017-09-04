@@ -157,7 +157,7 @@ bool VbaInputStream::updateChunk()
                     sal_uInt16 nCopyToken = mpInStrm->readuInt16();
                     nChunkPos = nChunkPos + 2;
                     // update bit count used for offset/length in the token
-                    while( ((static_cast<size_t>(1)) << nBitCount ) < maChunk.size() ) ++nBitCount;
+                    while( ( static_cast<size_t>(1) << nBitCount ) < maChunk.size() ) ++nBitCount;
                     // extract length from lower (16-nBitCount) bits, plus 3
                     sal_uInt16 nLength = extractValue< sal_uInt16 >( nCopyToken, 0, 16 - nBitCount ) + 3;
                     // extract offset from high nBitCount bits, plus 1
