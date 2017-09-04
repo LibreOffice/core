@@ -946,23 +946,31 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_WINDOW_FIX:
-        case SID_WINDOW_FIX_COL:
-        case SID_WINDOW_FIX_ROW:
             {
-                SplitMethod eSplitMethod = SC_SPLIT_METHOD_CURSOR;
-                if (nSlot == SID_WINDOW_FIX_COL)
-                    eSplitMethod = SC_SPLIT_METHOD_FIRST_COL;
-                else if (nSlot == SID_WINDOW_FIX_ROW)
-                    eSplitMethod = SC_SPLIT_METHOD_FIRST_ROW;
-
                 ScSplitMode eHSplit = GetViewData().GetHSplitMode();
                 ScSplitMode eVSplit = GetViewData().GetVSplitMode();
                 if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // remove
                     RemoveSplit();
                 else
-                    FreezeSplitters( true, eSplitMethod);        // create or fixate
-                rReq.Done();
+                    FreezeSplitters( true, SC_SPLIT_METHOD_CURSOR);        // create or fixate
 
+                rReq.Done();
+                InvalidateSplit();
+            }
+            break;
+
+        case SID_WINDOW_FIX_COL:
+            {
+                FreezeSplitters( true, SC_SPLIT_METHOD_FIRST_COL);
+                rReq.Done();
+                InvalidateSplit();
+            }
+            break;
+
+        case SID_WINDOW_FIX_ROW:
+            {
+                FreezeSplitters( true, SC_SPLIT_METHOD_FIRST_ROW);
+                rReq.Done();
                 InvalidateSplit();
             }
             break;
