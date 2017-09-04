@@ -6432,19 +6432,19 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             {
                 if ( bZCodecCompression )
                 {
-                    xOut->Seek( STREAM_SEEK_TO_END );
-                    pDbgOut->Write( xOut->GetData(), xOut->Tell() );
-                    xOut->Seek( STREAM_SEEK_TO_BEGIN );
+                    xOut->Seek(STREAM_SEEK_TO_END);
+                    pDbgOut->WriteBytes(xOut->GetData(), xOut->Tell());
+                    xOut->Seek(STREAM_SEEK_TO_BEGIN);
                 }
                 else
                 {
                     sal_Int32 nDbgLen = nLength - nSkip;
                     if ( nDbgLen )
                     {
-                        std::unique_ptr<sal_Char[]> xDat(new sal_Char[ nDbgLen ]);
-                        pGrStream->Read( xDat.get(), nDbgLen );
-                        pDbgOut->Write( xDat.get(), nDbgLen );
-                        pGrStream->SeekRel( -nDbgLen );
+                        std::vector<sal_Char> aData(nDbgLen);
+                        pGrStream->ReadBytes(aData.data(), nDbgLen);
+                        pDbgOut->WriteBytes(aData.data(), nDbgLen);
+                        pGrStream->SeekRel(-nDbgLen);
                     }
                 }
             }
