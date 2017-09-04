@@ -1622,7 +1622,14 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             InsertPage(pOldLayLeaf ? pOldLayLeaf->FindPageFrame() : FindPageFrame(),
                        false );
             // and again the whole thing
-            pLayLeaf = pOldLayLeaf ? pOldLayLeaf : GetNextLayoutLeaf();
+            if (pCellLeaf && CanContainSplitSection(this))
+                // GetNextLayoutLeaf() would refer to the next cell in the same
+                // row, avoid that. pCellLeaf points to the correct cell in the
+                // follow table, and in the next round it'll be used, as we now
+                // have a next page.
+                pLayLeaf = pCellLeaf;
+            else
+                pLayLeaf = pOldLayLeaf ? pOldLayLeaf : GetNextLayoutLeaf();
             continue;
         }
         break;
