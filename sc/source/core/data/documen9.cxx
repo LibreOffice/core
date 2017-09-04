@@ -633,7 +633,7 @@ const std::shared_ptr<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenChar
 void ScDocument::SetForbiddenCharacters(const std::shared_ptr<SvxForbiddenCharactersTable>& rNew)
 {
     xForbiddenCharacters = rNew;
-    if ( pEditEngine )
+    if ( mpEditEngine )
         EditEngine::SetForbiddenCharsTable( xForbiddenCharacters );
     if ( pDrawLayer )
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
@@ -655,8 +655,8 @@ CharCompressType ScDocument::GetAsianCompression() const
 void ScDocument::SetAsianCompression(CharCompressType nNew)
 {
     nAsianCompression = nNew;
-    if ( pEditEngine )
-        pEditEngine->SetAsianCompressionMode( nAsianCompression );
+    if ( mpEditEngine )
+        mpEditEngine->SetAsianCompressionMode( nAsianCompression );
     if ( pDrawLayer )
         pDrawLayer->SetCharCompressType( nAsianCompression );
 }
@@ -677,8 +677,8 @@ bool ScDocument::GetAsianKerning() const
 void ScDocument::SetAsianKerning(bool bNew)
 {
     nAsianKerning = (sal_uInt8)bNew;
-    if ( pEditEngine )
-        pEditEngine->SetKernAsianPunctuation( static_cast<bool>( nAsianKerning ) );
+    if ( mpEditEngine )
+        mpEditEngine->SetKernAsianPunctuation( static_cast<bool>( nAsianKerning ) );
     if ( pDrawLayer )
         pDrawLayer->SetKernAsianPunctuation( static_cast<bool>( nAsianKerning ) );
 }

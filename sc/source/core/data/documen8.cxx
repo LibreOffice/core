@@ -1191,7 +1191,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
     bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
     LanguageType nLanguage = LANGUAGE_SYSTEM;
 
-    std::unique_ptr<ScEditEngineDefaulter> pEngine;        // not using pEditEngine member because of defaults
+    std::unique_ptr<ScEditEngineDefaulter> pEngine;        // not using mpEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
     ScMarkData::const_iterator itr = rMultiMark.begin(), itrEnd = rMultiMark.end();

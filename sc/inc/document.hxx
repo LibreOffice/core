@@ -317,7 +317,7 @@ private:
     ScCalcConfig        maCalcConfig;
 
     SfxUndoManager*     mpUndoManager;
-    ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
+    ScFieldEditEngine*  mpEditEngine;                   // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
     SfxObjectShell*     pShell;
     VclPtr<SfxPrinter>    pPrinter;

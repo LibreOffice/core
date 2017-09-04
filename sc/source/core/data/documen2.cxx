@@ -136,7 +136,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpFormulaGroupCxt(nullptr),
         maCalcConfig( ScInterpreter::GetGlobalConfig()),
         mpUndoManager( nullptr ),
-        pEditEngine( nullptr ),
+        mpEditEngine( nullptr ),
         pNoteEngine( nullptr ),
         pShell( pDocShell ),
         pPrinter( nullptr ),
@@ -435,7 +435,7 @@ ScDocument::~ScDocument()
     delete pClipData;
     delete pDetOpList;                  // also deletes entries
     delete pChangeTrack;
-    delete pEditEngine;
+    delete mpEditEngine;
     delete pNoteEngine;
     delete pChangeViewSettings;         // and delete
     pVirtualDevice_100th_mm.disposeAndClear();
@@ -515,15 +515,15 @@ SfxItemPool* ScDocument::GetEnginePool() const
 
 ScFieldEditEngine& ScDocument::GetEditEngine()
 {
-    if ( !pEditEngine )
+    if ( !mpEditEngine )
     {
-        pEditEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
-        pEditEngine->SetUpdateMode( false );
-        pEditEngine->EnableUndo( false );
-        pEditEngine->SetRefMapMode( MapUnit::Map100thMM );
-        ApplyAsianEditSettings( *pEditEngine );
+        mpEditEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
+        mpEditEngine->SetUpdateMode( false );
+        mpEditEngine->EnableUndo( false );
+        mpEditEngine->SetRefMapMode( MapUnit::Map100thMM );
+        ApplyAsianEditSettings( *mpEditEngine );
     }
-    return *pEditEngine;
+    return *mpEditEngine;
 }
 
 ScNoteEditEngine& ScDocument::GetNoteEngine()
