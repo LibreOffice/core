@@ -3095,7 +3095,11 @@ void XMLTextParagraphExport::_exportTextGraphic(
                                   sGrfFilter );
 
     // Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
-    OUString aSourceMimeType = getMimeType(sOrigURL);
+    // do we have a hard export image filter set? then that's our mimetype
+    OUString aSourceMimeType = GetExport().GetImageFilterName();
+    // otherwise determine mimetype from graphic
+    if ( aSourceMimeType.isEmpty() )
+        aSourceMimeType = getMimeType(sOrigURL);
     if ( !aSourceMimeType.isEmpty() )
         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
 

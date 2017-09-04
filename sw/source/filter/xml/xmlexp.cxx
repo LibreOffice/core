@@ -241,7 +241,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     rtl::Reference<SvXMLGraphicHelper> xGraphicResolver;
     if( !GetGraphicResolver().is() )
     {
-        xGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
+        xGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write, GetImageFilterName() );
         SetGraphicResolver( xGraphicResolver.get() );
     }
 
