@@ -1189,8 +1189,26 @@ SvNumberformat::SvNumberformat(OUString& rString,
         }
         if (sBuff.getLength() == nPos)
         {
-            if ( nIndex == 2 && eSymbolType == BRACKET_SYMBOLTYPE_FORMAT &&
-                 sBuff[nPos - 1] == ';' )
+            if (nIndex < 3 && rString[rString.getLength()-1] == ';')
+            {
+                // A trailing ';' is significant and specifies the following
+                // subformat to be empty. We don't enter the scanning loop
+                // above again though.
+                // Note that the operators apply to the current last scanned
+                // subformat.
+                if (nIndex == 0 && eOp1 == NUMBERFORMAT_OP_NO)
+                {
+                    eOp1 = NUMBERFORMAT_OP_GT;  // undefined condition, default: > 0
+                }
+                else if (nIndex == 1 && eOp2 == NUMBERFORMAT_OP_NO)
+                {
+                    eOp2 = NUMBERFORMAT_OP_LT;  // undefined condition, default: < 0
+                }
+                NumFor[nIndex+1].Info().eScannedType = css::util::NumberFormat::EMPTY;
+                if (sBuff[nPos-1] != ';')
+                    sBuff.insert( nPos++, ';');
+            }
+            if (nIndex == 2 && eSymbolType == BRACKET_SYMBOLTYPE_FORMAT && sBuff[nPos-1] == ';')
             {
                 // #83510# A 4th subformat explicitly specified to be empty
                 // hides any text. Need the type here for HasTextFormat()
