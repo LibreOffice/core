@@ -288,7 +288,7 @@ class GtkSalFrame : public SalFrame
     void            Center();
     void            SetDefaultSize();
 
-    void            doKeyCallback( guint state,
+    bool            doKeyCallback( guint state,
                                    guint keyval,
                                    guint16 hardware_keycode,
                                    guint8 group,

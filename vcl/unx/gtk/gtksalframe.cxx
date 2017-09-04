@@ -363,7 +363,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
     return aAlternate;
 }
 
-void GtkSalFrame::doKeyCallback( guint state,
+bool GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
                                  guint16 hardware_keycode,
                                  guint8 group,
@@ -445,6 +445,8 @@ void GtkSalFrame::doKeyCallback( guint state,
     }
     else
         CallCallback( SalEvent::KeyUp, &aEvent );
+
+    return false;
 }
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
