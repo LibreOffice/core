@@ -980,6 +980,12 @@ DECLARE_RTFEXPORT_TEST(testTdf106953, "tdf106953.rtf")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf112208, "tdf112208_hangingIndent.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-2000), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_RTFEXPORT_TEST(testParaBottomMargin, "para-bottom-margin.rtf")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
