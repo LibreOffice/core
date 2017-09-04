@@ -8803,6 +8803,51 @@ void ScInterpreter::ScFindB()
     }
 }
 
+void ScInterpreter::ScSearchB()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    {
+        sal_Int32 nStart;
+        if ( nParamCount == 3 )
+        {
+            nStart = GetStringPositionArgument();
+            if( nStart < 1 )
+            {
+                PushIllegalArgument();
+                return;
+            }
+        }
+        else
+            nStart = 1;
+        OUString aStr = GetString().getString();
+        sal_Int32 nLen = getLengthB( aStr );
+        OUString asStr = GetString().getString();
+        sal_Int32 nsLen = nStart - 1;
+        if( nsLen >= nLen )
+            PushNoValue();
+        else
+        {
+            // create a string from sStr starting at nStart
+            OUString aSubStr( lcl_RightB( aStr, nLen - nStart + 1 ) );
+            // search aSubStr for asStr
+            sal_Int32 nPos = 0;
+            sal_Int32 nEndPos = aSubStr.getLength();
+            utl::SearchParam::SearchType eSearchType = DetectSearchType( asStr, pDok );
+            utl::SearchParam sPar( asStr, eSearchType, false, '~', false );
+            utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
+            if ( !sT.SearchForward( aSubStr, &nPos, &nEndPos ) )
+                PushNoValue();
+            else
+            {
+                // obtain byte value of nPos
+                int nBytePos = lcl_getLengthB( aSubStr, nPos );
+                PushDouble( nBytePos + nStart );
+            }
+        }
+    }
+}
+
 void ScInterpreter::ScRight()
 {
     sal_uInt8 nParamCount = GetByte();
