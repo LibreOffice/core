@@ -11,7 +11,6 @@
 #include <avmedia/mediaitem.hxx>
 
 #if !HAVE_FEATURE_AVMEDIA
-SAL_DLLPUBLIC_EXPORT TypeId avmedia::MediaItem::StaticType() { return 0; }
 #endif
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
