@@ -83,7 +83,7 @@ private:
 };
 
 RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
-:   mnByteCount( 0 )
+:   mnByteCount( 0 ), mpRawBytes.reset(new unsigned char[ 0 ])
 {
     // get required size in bytes
     mnByteCount = ::GetFontData( hDC, nTableTag, 0, nullptr, 0 );
