@@ -185,14 +185,6 @@
    </target>
  
    <target name="compile" depends="properties,get-swing-ex">
-@@ -68,6 +54,7 @@
-            includes="org/**/*.java"
-            deprecation="on"
-            debug="${debug}">
-+      <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
-     </javac>
-     <copy todir="${nest}/${classes}">
-       <fileset dir="." includes="org/**/*.properties" />
 --- misc/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	2004-03-25 21:54:34.000000000 +0100
 +++ misc/build/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	2009-01-17 20:44:22.000000000 +0100
 @@ -470,15 +470,21 @@
