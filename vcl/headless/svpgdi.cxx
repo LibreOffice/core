@@ -113,6 +113,7 @@ namespace
 
     void Toggle1BitTransparency(const BitmapBuffer& rBuf)
     {
+        assert(rBuf.maPalette.GetBestIndex(BitmapColor(Color(COL_BLACK))) == 0);
         // TODO: make upper layers use standard alpha
         if (getCairoFormat(rBuf) == CAIRO_FORMAT_A1)
         {
@@ -216,10 +217,14 @@ namespace
                 pAlphaBits.reset( new unsigned char[nImageSize] );
                 memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
 
-                // TODO: make upper layers use standard alpha
-                unsigned char* pDst = pAlphaBits.get();
-                for (int i = nImageSize; --i >= 0; ++pDst)
-                    *pDst = ~*pDst;
+                const sal_Int32 nBlackIndex = pMaskBuf->maPalette.GetBestIndex(BitmapColor(Color(COL_BLACK)));
+                if (nBlackIndex == 0)
+                {
+                    // TODO: make upper layers use standard alpha
+                    unsigned char* pDst = pAlphaBits.get();
+                    for (int i = nImageSize; --i >= 0; ++pDst)
+                        *pDst = ~*pDst;
+                }
 
                 mask = cairo_image_surface_create_for_data(pAlphaBits.get(),
                                                 CAIRO_FORMAT_A1,
