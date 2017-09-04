@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a4463421",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-04T19:41:39Z",
+      "side": 1,
+      "message": "not strictly true. if the length is zero, then aHheaRawData.get() will return nullptr, and aHheaRawData.get() + 0 will still be nullptr and nothing bad will happen.\n\nYou might as well just check for 0 or GDI_ERROR here and skip calling ImplCalcLineSpacing",
+      "revId": "dc173c37493e8f8a9b4500f84b5e4f70e20bcc06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
