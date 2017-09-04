@@ -503,7 +503,7 @@ Date OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
 {
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == SQL_TYPE_DATE)
     {
-        ISC_DATE aISCDate = *(reinterpret_cast<ISC_DATE*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata));
+        ISC_DATE aISCDate = *reinterpret_cast<ISC_DATE*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
 
         struct tm aCTime;
         isc_decode_sql_date(&aISCDate, &aCTime);
@@ -521,7 +521,7 @@ Time OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
 {
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == SQL_TYPE_TIME)
     {
-        ISC_TIME aISCTime = *(reinterpret_cast<ISC_TIME*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata));
+        ISC_TIME aISCTime = *reinterpret_cast<ISC_TIME*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
 
         struct tm aCTime;
         isc_decode_sql_time(&aISCTime, &aCTime);
@@ -541,7 +541,7 @@ DateTime OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
 {
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == SQL_TIMESTAMP)
     {
-        ISC_TIMESTAMP aISCTimestamp = *(reinterpret_cast<ISC_TIMESTAMP*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata));
+        ISC_TIMESTAMP aISCTimestamp = *reinterpret_cast<ISC_TIMESTAMP*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
 
         struct tm aCTime;
         isc_decode_timestamp(&aISCTimestamp, &aCTime);
@@ -577,7 +577,7 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     {
         // First 2 bytes are a short containing the length of the string
         // No idea if sqllen is still valid here?
-        sal_uInt16 aLength = *(reinterpret_cast<sal_uInt16*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata));
+        sal_uInt16 aLength = *reinterpret_cast<sal_uInt16*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
         return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
                         aLength,
                         RTL_TEXTENCODING_UTF8);
