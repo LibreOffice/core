@@ -17,21 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
+#include <new>
+#include <stdio.h>
+#include <string.h>
 #include <typeinfo>
 
+#include <cxxabi.h>
 #include <dlfcn.h>
 
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/mutex.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/genfunc.hxx"
 #include <sal/log.hxx>
-
-#include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
-#include <typelib/typedescription.hxx>
-#include <uno/any2.h>
+#include "osl/mutex.hxx"
+#include "rtl/strbuf.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "typelib/typedescription.h"
+#include "uno/any2.h"
 #include <unordered_map>
 #include "share.hxx"
 
@@ -43,16 +47,16 @@ namespace CPPU_CURRENT_NAMESPACE {
 namespace {
 
 struct Fake_type_info {
-    virtual ~Fake_type_info() {}
+    virtual ~Fake_type_info() = delete;
     char const * name;
 };
 
-static_assert(
-    sizeof (Fake_type_info) == sizeof (std::type_info), "must be the same size");
-
-struct Fake_class_type_info: Fake_type_info {};
+struct Fake_class_type_info: Fake_type_info {
+    virtual ~Fake_class_type_info() override = delete;
+};
 
 struct Fake_si_class_type_info: Fake_class_type_info {
+    virtual ~Fake_si_class_type_info() override = delete;
     void const * base;
 };
 
@@ -61,14 +65,12 @@ struct Derived: Base {};
 
 std::type_info * createFake_class_type_info(char const * name) {
     char * buf = new char[sizeof (Fake_class_type_info)];
+
     *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Base));
         // copy __cxxabiv1::__class_type_info vtable into place
     Fake_class_type_info * fake = reinterpret_cast<Fake_class_type_info *>(buf);
     fake->name = name;
-#ifdef _LIBCPP_NONUNIQUE_RTTI_BIT
-    *(uintptr_t*)(&fake->name) |= _LIBCPP_NONUNIQUE_RTTI_BIT;
-#endif
     return reinterpret_cast<std::type_info *>(
         static_cast<Fake_type_info *>(fake));
 }
@@ -77,15 +79,13 @@ std::type_info * createFake_si_class_type_info(
     char const * name, std::type_info const * base)
 {
     char * buf = new char[sizeof (Fake_si_class_type_info)];
+
     *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Derived));
         // copy __cxxabiv1::__si_class_type_info vtable into place
     Fake_si_class_type_info * fake
         = reinterpret_cast<Fake_si_class_type_info *>(buf);
     fake->name = name;
-#ifdef _LIBCPP_NONUNIQUE_RTTI_BIT
-    *(uintptr_t*)(&fake->name) |= _LIBCPP_NONUNIQUE_RTTI_BIT;
-#endif
     fake->base = base;
     return reinterpret_cast<std::type_info *>(
         static_cast<Fake_type_info *>(fake));
@@ -93,12 +93,23 @@ std::type_info * createFake_si_class_type_info(
 
 }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 void dummy_can_throw_anything( char const * )
 {
 }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 static OUString toUNOname( char const * p )
 {
+#if OSL_DEBUG_LEVEL > 1
+    char const * start = p;
+#endif
+
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
@@ -120,9 +131,14 @@ static OUString toUNOname( char const * p )
             buf.append( '.' );
     }
 
-    OUString result( buf.makeStringAndClear() );
-
-    return result;
+#if OSL_DEBUG_LEVEL > 1
+    OUString ret( buf.makeStringAndClear() );
+    OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
+    return ret;
+#else
+    return buf.makeStringAndClear();
+#endif
 }
 
 class RTTI
@@ -143,23 +159,8 @@ public:
 };
 
 RTTI::RTTI()
-    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+    : m_hApp( dlopen( nullptr, RTLD_LAZY ) )
 {
-    // Insert commonly needed type_infos to avoid dlsym() calls
-    // Ideally we should insert all needed ones, and we actually must,
-    // for arm64, as the dynamically generated type_infos don't seem
-    // to work correctly. Luckily it seems that quite few types of
-    // exceptions are thrown through the C++/UNO bridge at least in
-    // the TiledLibreOffice test app.
-
-    // (As no Java, Basic or Python is supported in LO code on iOS, we
-    // can know the set of types of exceptions throws a priori, so
-    // keeping this list complete should be possible.)
-
-    m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
-                                            (std::type_info*) &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
-    m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.NameClashException",
-                                            (std::type_info*) &typeid( com::sun::star::ucb::NameClashException ) ) );
 }
 
 RTTI::~RTTI()
@@ -167,11 +168,12 @@ RTTI::~RTTI()
     dlclose( m_hApp );
 }
 
+
 std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 {
     std::type_info * rtti;
 
-    OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
+    OUString const & unoName = OUString::unacquired(&pTypeDescr->aBase.pTypeName);
 
     MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
@@ -192,11 +194,10 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-        rtti = (std::type_info *)dlsym( m_hApp, symName.getStr() );
+        rtti = static_cast<std::type_info *>(dlsym( m_hApp, symName.getStr() ));
 
         if (rtti)
         {
-            SAL_INFO( "bridges.ios", "getRTTI: dlsym() found type_info for " << unoName << ": " << symName );
             std::pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
             SAL_WARN_IF( !insertion.second,
@@ -205,8 +206,6 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
         }
         else
         {
-            SAL_INFO( "bridges.ios", "getRTTI: dlsym() could NOT find type_info for " << unoName << ": " << symName );
-
             // try to lookup the symbol in the generated rtti map
             t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
             if (iFind2 == m_generatedRttis.end())
@@ -215,17 +214,17 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
                 char * rttiName = strdup(symName.getStr() + 4);
-                if (rttiName == 0) {
+                if (rttiName == nullptr) {
                     throw std::bad_alloc();
                 }
-
-                SAL_INFO( "bridges.ios", "getRTTI: generating typeinfo " << rttiName );
-
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr,"generated rtti for %s\n", rttiName );
+#endif
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
                     std::type_info * base_rtti = getRTTI(
-                        (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
+                        pTypeDescr->pBaseTypeDescription );
                     rtti = createFake_si_class_type_info(rttiName, base_rtti);
                 }
                 else
@@ -253,10 +252,31 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
     return rtti;
 }
 
+
 static void deleteException( void * pExc )
 {
-    __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
-    typelib_TypeDescription * pTD = 0;
+    __cxa_exception const * header = static_cast<__cxa_exception const *>(pExc) - 1;
+    // The libcxxabi commit
+    // <http://llvm.org/viewvc/llvm-project?view=revision&revision=303175>
+    // "[libcxxabi] Align unwindHeader on a double-word boundary" towards
+    // LLVM 5.0 changed the size of __cxa_exception by adding
+    //
+    //   __attribute__((aligned))
+    //
+    // to the final member unwindHeader, on x86-64 effectively adding a hole of
+    // size 8 in front of that member (changing its offset from 88 to 96,
+    // sizeof(__cxa_exception) from 120 to 128, and alignof(__cxa_exception)
+    // from 8 to 16); a hack to dynamically determine whether we run against a
+    // new libcxxabi is to look at the exceptionDestructor member, which must
+    // point to this function (the use of __cxa_exception in fillUnoException is
+    // unaffected, as it only accesses members towards the start of the struct,
+    // through a pointer known to actually point at the start):
+    if (header->exceptionDestructor != &deleteException) {
+        header = reinterpret_cast<__cxa_exception const *>(
+            reinterpret_cast<char const *>(header) - 8);
+        assert(header->exceptionDestructor == &deleteException);
+    }
+    typelib_TypeDescription * pTD = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );
     assert(pTD && "### unknown exception type! leaving out destruction => leaking!!!");
@@ -269,30 +289,35 @@ static void deleteException( void * pExc )
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-    SAL_INFO( "bridges.ios", "raiseException: " << OUString::unacquired( &pUnoExc->pType->pTypeName ) );
-
+#if OSL_DEBUG_LEVEL > 1
+    OString cstr(
+        OUStringToOString(
+            OUString::unacquired( &pUnoExc->pType->pTypeName ),
+            RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
+#endif
     void * pCppExc;
     std::type_info * rtti;
 
     {
     // construct cpp exception object
-    typelib_TypeDescription * pTypeDescr = 0;
+    typelib_TypeDescription * pTypeDescr = nullptr;
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
     assert(pTypeDescr);
     if (! pTypeDescr)
     {
         throw RuntimeException(
-            OUString("cannot get typedescription for type ") +
+            "cannot get typedescription for type " +
             OUString::unacquired( &pUnoExc->pType->pTypeName ) );
     }
 
-    pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
+    pCppExc = __cxxabiv1::__cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // destruct uno exception
-    ::uno_any_destruct( pUnoExc, 0 );
+    ::uno_any_destruct( pUnoExc, nullptr );
     // avoiding locked counts
-    static RTTI * s_rtti = 0;
+    static RTTI * s_rtti = nullptr;
     if (! s_rtti)
     {
         MutexGuard guard( Mutex::getGlobalMutex() );
@@ -302,18 +327,18 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
             s_rtti = &rtti_data;
         }
     }
-    rtti = s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+    rtti = s_rtti->getRTTI( reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
-    assert( rtti );
+    assert(rtti && "### no rtti for throwing exception!");
     if (! rtti)
     {
         throw RuntimeException(
-            OUString("no rtti for type ") +
+            "no rtti for type " +
             OUString::unacquired( &pUnoExc->pType->pTypeName ) );
     }
     }
 
-    __cxa_throw( pCppExc, rtti, deleteException );
+    __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
 }
 
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
@@ -323,22 +348,23 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         RuntimeException aRE( "no exception header!" );
         Type const & rType = cppu::UnoType<decltype(aRE)>::get();
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-        SAL_WARN("bridges.ios", aRE.Message);
+        SAL_WARN("bridges", aRE.Message);
         return;
     }
 
-    typelib_TypeDescription * pExcTypeDescr = 0;
+    typelib_TypeDescription * pExcTypeDescr = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-
-    SAL_INFO( "bridges.ios", "fillUnoException: " << unoName );
-
+#if OSL_DEBUG_LEVEL > 1
+    OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
+#endif
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
-    if (0 == pExcTypeDescr)
+    if (nullptr == pExcTypeDescr)
     {
-        RuntimeException aRE( OUString("exception type not found: ") + unoName );
+        RuntimeException aRE( "exception type not found: " + unoName );
         Type const & rType = cppu::UnoType<decltype(aRE)>::get();
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-        SAL_WARN("bridges.ios", aRE.Message);
+        SAL_WARN("bridges", aRE.Message);
     }
     else
     {
