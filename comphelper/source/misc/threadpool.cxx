@@ -22,7 +22,7 @@
 namespace comphelper {
 
 /** prevent waiting for a task from inside a task */
-#if defined DBG_UTIL && defined LINUX
+#if defined DBG_UTIL && (defined LINUX || defined _WIN32)
 static thread_local bool gbIsWorkerThread;
 #endif
 
@@ -55,7 +55,7 @@ public:
 
     virtual void execute() override
     {
-#if defined DBG_UTIL && defined LINUX
+#if defined DBG_UTIL && (defined LINUX || defined _WIN32)
         gbIsWorkerThread = true;
 #endif
         std::unique_lock< std::mutex > aGuard( mpPool->maMutex );
@@ -215,7 +215,7 @@ ThreadTask *ThreadPool::popWorkLocked( std::unique_lock< std::mutex > & rGuard, 
 
 void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
 {
-#if defined DBG_UTIL && defined LINUX
+#if defined DBG_UTIL && (defined LINUX || defined _WIN32)
     assert(!gbIsWorkerThread && "cannot wait for tasks from inside a task");
 #endif
     {
