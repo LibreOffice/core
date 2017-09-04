@@ -70,6 +70,7 @@ enum class GtkControlPart
     ScrollbarHorizontalSlider,
     ScrollbarHorizontalButton,
     ProgressBar,
+    ProgressBarTrough,
     ProgressBarProgress,
     Notebook,
     NotebookHeader,
