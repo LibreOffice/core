@@ -280,7 +280,6 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
         End();
         if ( pActivePopup )
         {
-            //SAL_WARN_IF( pActivePopup->ImplGetWindow(), "vcl", "PopupEnd, obwohl pActivePopup MIT Window!" );
             KillActivePopup(); // should be ok to just remove it
             //pActivePopup->bCanceled = true;
         }
@@ -357,7 +356,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
             sal_uInt16 nRet = pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Right, pMenu, pTimer == nullptr );
             SetPopupModeFlags( nOldFlags );
 
-            // nRet != 0, wenn es waerend Activate() abgeschossen wurde...
+            // nRet != 0, if it was stopped during Activate()...
             if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->ImplGetWindow() )
                 pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
         }
