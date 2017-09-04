@@ -170,12 +170,9 @@ bool XIMStatusWindow::checkLastParent() const
 {
     if( m_pLastParent )
     {
-        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
-        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
-        {
-            if( *it == m_pLastParent )
-                return true;
-        }
+        auto rFrameList = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
+        auto it = rFrameList.find( m_pLastParent );
+        return it != rFrameList.end();
     }
     return false;
 }

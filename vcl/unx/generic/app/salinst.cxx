@@ -225,10 +225,8 @@ void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 void X11SalInstance::PostPrintersChanged()
 {
     SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    const std::list< SalFrame* >& rList = pDisp->getFrames();
-    for( std::list< SalFrame* >::const_iterator it = rList.begin();
-         it != rList.end(); ++it )
-        pDisp->SendInternalEvent( *it, nullptr, SalEvent::PrinterChanged );
+    for (auto pSalFrame : pDisp->getFrames() )
+        pDisp->PostEvent( pSalFrame, nullptr, SalEvent::PrinterChanged );
 }
 
 GenPspGraphics *X11SalInstance::CreatePrintGraphics()

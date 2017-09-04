@@ -26,6 +26,7 @@
 
 #include <vcl/sysdata.hxx>
 
+#include "osx/salinst.h"
 #include "osx/salmenu.h"
 #include "osx/saldata.hxx"
 #include "osx/osxvcltypes.h"
@@ -163,8 +164,7 @@ public:
     // trigger painting of the window
     void SendPaintEvent( const tools::Rectangle* pRect = nullptr );
 
-    static bool isAlive( const AquaSalFrame* pFrame )
-    { return GetSalData()->maFrameCheck.find( pFrame ) != GetSalData()->maFrameCheck.end(); }
+    static inline bool isAlive( const AquaSalFrame* pFrame );
 
     static AquaSalFrame* GetCaptureFrame() { return s_pCaptureFrame; }
 
@@ -203,6 +203,12 @@ private: // data
     AquaSalFrame( const AquaSalFrame& ) = delete;
     AquaSalFrame& operator=(const AquaSalFrame&) = delete;
 };
+
+inline bool AquaSalFrame::isAlive( const AquaSalFrame* pFrame )
+{
+    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    return pInst && pInst->isFrameAlive( pFrame );
+}
 
 #endif // INCLUDED_VCL_INC_OSX_SALFRAME_H
 
