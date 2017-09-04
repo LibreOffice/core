@@ -1145,7 +1145,14 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
-    pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), BitmapPalette());
+    BitmapPalette aPal;
+    if (GetBitCount() == 1)
+    {
+        aPal.SetEntryCount(2);
+        aPal[0] = Color(COL_BLACK);
+        aPal[1] = Color(COL_WHITE);
+    }
+    pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), aPal);
 
     cairo_surface_t* target = SvpSalGraphics::createCairoSurface(pBitmap->GetBuffer());
     cairo_t* cr = cairo_create(target);
