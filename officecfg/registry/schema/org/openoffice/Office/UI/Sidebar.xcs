@@ -245,6 +245,11 @@
           <desc>Contains all registered sidebar content panels.</desc>
         </info>
       </set>
+      <prop oor:name="LastActiveDeck" oor:type="oor:string-list">
+        <info>
+	  <desc>FIXME description</desc>
+	</info>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
