@@ -608,8 +608,6 @@ namespace emfio
             if ( (sal_uInt32)nIndex < mvGDIObj.size() )
                 pGDIObj = mvGDIObj[ nIndex ].get();
 
-            fprintf(stderr, "index %d is %p\n", nIndex, pGDIObj);
-
             if ( pGDIObj )
             {
                 if (const auto pen = dynamic_cast<WinMtfLineStyle*>(pGDIObj))
@@ -717,7 +715,6 @@ namespace emfio
         if ( nIndex == mvGDIObj.size() )
             ImplResizeObjectArry( mvGDIObj.size() + 16 );
 
-        fprintf(stderr, "index %ld set to %p\n", nIndex, pObject.get());
         mvGDIObj[ nIndex ] = std::move(pObject);
     }
 
@@ -753,8 +750,6 @@ namespace emfio
             }
             if ( (sal_uInt32)nIndex >= mvGDIObj.size() )
                 ImplResizeObjectArry( nIndex + 16 );
-
-            fprintf(stderr, "22 index %d set to %p\n", nIndex, pObject.get());
 
             mvGDIObj[ nIndex ] = std::move(pObject);
         }
