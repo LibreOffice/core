@@ -588,6 +588,7 @@
 #define HID_FUNC_ROUNDSIG                                       "SC_HID_FUNC_ROUNDSIG"
 #define HID_FUNC_REPLACEB                                       "SC_HID_FUNC_REPLACEB"
 #define HID_FUNC_FINDB                                          "SC_HID_FUNC_FINDB"
+#define HID_FUNC_SEARCHB                                        "SC_HID_FUNC_SEARCHB"
 
 #endif
 
