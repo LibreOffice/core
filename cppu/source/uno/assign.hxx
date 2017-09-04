@@ -425,7 +425,7 @@ inline bool _assignData(
                 typelib_TypeDescription * pTD = pSourceTypeDescr;
                 while (pTD && !_type_equals( pTD->pWeakRef, pDestType ))
                 {
-                    pTD = &(reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD))->pBaseTypeDescription->aBase;
+                    pTD = &reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD)->pBaseTypeDescription->aBase;
                 }
                 if (pTD) // is base of dest
                 {

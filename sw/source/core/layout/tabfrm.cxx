@@ -246,7 +246,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
     {
         if ( pLowerFrame->IsLayoutFrame() )
         {
-            ::lcl_InvalidateLowerObjs( *(static_cast<SwLayoutFrame*>(pLowerFrame)),
+            ::lcl_InvalidateLowerObjs( *static_cast<SwLayoutFrame*>(pLowerFrame),
                                        _bMoveObjsOutOfRange, _pPageFrame );
         }
         if ( pLowerFrame->GetDrawObjs() )
@@ -1336,7 +1336,7 @@ void SwInvalidatePositions( SwFrame *pFrame, long nBottom )
             {
                 ::SwInvalidatePositions( static_cast<SwLayoutFrame*>(pFrame)->Lower(), nBottom);
                 // #i26945#
-                ::lcl_InvalidateLowerObjs( *(static_cast<SwLayoutFrame*>(pFrame)) );
+                ::lcl_InvalidateLowerObjs( *static_cast<SwLayoutFrame*>(pFrame) );
             }
         }
         else

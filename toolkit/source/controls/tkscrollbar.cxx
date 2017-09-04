@@ -115,8 +115,8 @@ namespace toolkit
     uno::Any UnoScrollBarControl::queryAggregation( const uno::Type & rType )
     {
         uno::Any aRet = ::cppu::queryInterface( rType,
-                                            (static_cast< awt::XAdjustmentListener* >(this)),
-                                            (static_cast< awt::XScrollBar* >(this)) );
+                                            static_cast< awt::XAdjustmentListener* >(this),
+                                            static_cast< awt::XScrollBar* >(this) );
         return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
     }
 

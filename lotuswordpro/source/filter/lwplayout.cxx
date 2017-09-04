@@ -637,7 +637,7 @@ LwpLayoutGeometry* LwpMiddleLayout::Geometry()
 {
     if( !m_LayGeometry.IsNull() )
     {
-        return ( dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get()) );
+        return dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get());
     }
     else
     {

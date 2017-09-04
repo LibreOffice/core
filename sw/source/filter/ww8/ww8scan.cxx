@@ -4327,7 +4327,7 @@ long WW8PLCFx_AtnBook::getHandle() const
     else
     {
         if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
-            return SVBT16ToShort(*(static_cast<const SVBT16*>(p)));
+            return SVBT16ToShort(*static_cast<const SVBT16*>(p));
         else
             return LONG_MAX;
     }
@@ -4459,7 +4459,7 @@ long WW8PLCFx_FactoidBook::getHandle() const
     else
     {
         if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
-            return SVBT16ToShort(*(static_cast<const SVBT16*>(p)));
+            return SVBT16ToShort(*static_cast<const SVBT16*>(p));
         else
             return LONG_MAX;
     }

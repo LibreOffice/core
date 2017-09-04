@@ -89,9 +89,9 @@ void SAL_CALL ContentProviderImplHelper::release()
 css::uno::Any SAL_CALL ContentProviderImplHelper::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< lang::XTypeProvider* >(this)),
-                                               (static_cast< lang::XServiceInfo* >(this)),
-                                               (static_cast< css::ucb::XContentProvider* >(this))
+                                               static_cast< lang::XTypeProvider* >(this),
+                                               static_cast< lang::XServiceInfo* >(this),
+                                               static_cast< css::ucb::XContentProvider* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

@@ -299,7 +299,7 @@ void OPipeImpl::setSuccessor( const Reference < XConnectable >  &r )
          if( m_succ.is() )
          {
               m_succ->setPredecessor(
-                  Reference< XConnectable > ( (static_cast< XConnectable *  >(this)) ) );
+                  Reference< XConnectable > ( static_cast< XConnectable * >(this) ) );
          }
      }
 }
@@ -317,7 +317,7 @@ void OPipeImpl::setPredecessor( const Reference < XConnectable > &r )
         m_pred = r;
         if( m_pred.is() ) {
             m_pred->setSuccessor(
-                Reference < XConnectable > ( (static_cast< XConnectable *  >(this)) ) );
+                Reference < XConnectable > ( static_cast< XConnectable * >(this) ) );
         }
     }
 }
@@ -357,7 +357,7 @@ Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
 {
     OPipeImpl *p = new OPipeImpl;
 
-    return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
+    return Reference < XInterface > ( static_cast< OWeakObject * >(p) );
 }
 
 

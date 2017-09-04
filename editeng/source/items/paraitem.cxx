@@ -809,7 +809,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_STD_TAB:
         {
             const SvxTabStop &rTab = maTabStops.front();
-            rVal <<= (static_cast<sal_Int32>(bConvert ? convertTwipToMm100(rTab.GetTabPos()) : rTab.GetTabPos()));
+            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(rTab.GetTabPos()) : rTab.GetTabPos());
             break;
         }
     }

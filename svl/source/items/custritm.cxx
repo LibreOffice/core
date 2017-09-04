@@ -31,7 +31,7 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
     DBG_ASSERT(dynamic_cast<const CntUnencodedStringItem*>( &rItem ) !=  nullptr,
                "CntUnencodedStringItem::operator ==(): Bad type");
     return m_aValue
-            == (static_cast< const CntUnencodedStringItem * >(&rItem))->
+            == static_cast< const CntUnencodedStringItem * >(&rItem)->
                 m_aValue;
 }
 

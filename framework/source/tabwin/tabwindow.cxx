@@ -82,7 +82,7 @@ DEFINE_INIT_SERVICE                     (   TabWindow, {} )
 
 TabWindow::TabWindow( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aMutex )
-    , ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+    , ::cppu::OPropertySetHelper  ( *static_cast< ::cppu::OBroadcastHelper* >(this) )
     , m_bInitialized( false )
     , m_bDisposed( false )
     , m_nNextTabID( 1 )

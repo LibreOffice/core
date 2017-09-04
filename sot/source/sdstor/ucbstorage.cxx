@@ -2425,7 +2425,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl const & rElemen
             pStream = rElement.m_xStream->m_pAntiImpl;
         if ( !pStream )
         {
-            pStream = ( const_cast < UCBStorage* > (this) )->OpenStream( rElement.m_aName, StreamMode::STD_READ, pImp->m_bDirect );
+            pStream = const_cast< UCBStorage* >(this)->OpenStream( rElement.m_aName, StreamMode::STD_READ, pImp->m_bDirect );
             bDeleteStream = true;
         }
 

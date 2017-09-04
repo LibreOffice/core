@@ -561,7 +561,7 @@ public:
     const BitmapEx& GetReplacementBitmap(bool bIsErrorState);
     void DeleteReplacementBitmaps();
 
-    const SwPostItMgr* GetPostItMgr() const { return (const_cast<SwViewShell*>(this))->GetPostItMgr(); }
+    const SwPostItMgr* GetPostItMgr() const { return const_cast<SwViewShell*>(this)->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
 
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags

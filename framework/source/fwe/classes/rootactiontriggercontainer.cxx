@@ -60,11 +60,11 @@ Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                (static_cast< XMultiServiceFactory*   >(this)),
-                (static_cast< XServiceInfo*           >(this)),
-                (static_cast< XUnoTunnel*             >(this)),
-                (static_cast< XTypeProvider*          >(this)),
-                (static_cast< XNamed*                 >(this)));
+                static_cast< XMultiServiceFactory*   >(this),
+                static_cast< XServiceInfo*           >(this),
+                static_cast< XUnoTunnel*             >(this),
+                static_cast< XTypeProvider*          >(this),
+                static_cast< XNamed*                 >(this));
 
     if( a.hasValue() )
     {

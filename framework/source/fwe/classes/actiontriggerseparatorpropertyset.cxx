@@ -47,8 +47,8 @@ namespace framework
 
 ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet()
         :   OBroadcastHelper        ( m_aMutex )
-        ,   OPropertySetHelper      ( *(static_cast< OBroadcastHelper * >(this))        )
-        ,   OWeakObject             (                                                   )
+        ,   OPropertySetHelper      ( *static_cast< OBroadcastHelper * >(this) )
+        ,   OWeakObject             ()
         ,   m_nSeparatorType( 0 )
 {
 }
@@ -62,8 +62,8 @@ Any SAL_CALL ActionTriggerSeparatorPropertySet::queryInterface( const Type& aTyp
 {
     Any a = ::cppu::queryInterface(
                 aType,
-                (static_cast< XServiceInfo* >(this)),
-                (static_cast< XTypeProvider* >(this)));
+                static_cast< XServiceInfo* >(this),
+                static_cast< XTypeProvider* >(this));
 
     if( a.hasValue() )
         return a;

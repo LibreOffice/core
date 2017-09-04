@@ -130,7 +130,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
         else
         {
             // create a new one and remember in our internal map
-            Reference< XShape > xShape( Reference< XShape >::query( (const_cast<SdrObject*>(pObj))->getUnoShape() ) );
+            Reference< XShape > xShape( Reference< XShape >::query( const_cast<SdrObject*>(pObj)->getUnoShape() ) );
 
             AccessibleShapeInfo aShapeInfo (xShape,mxParent);
             // Create accessible object that corresponds to the descriptor's shape.

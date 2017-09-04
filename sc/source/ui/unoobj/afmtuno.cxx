@@ -756,7 +756,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
                         const SfxPoolItem* pItem = pData->GetItem(nFieldIndex, ATTR_BORDER);
                         if (pItem)
                         {
-                            SvxBoxItem aOuter(*(static_cast<const SvxBoxItem*>(pItem)));
+                            SvxBoxItem aOuter(*static_cast<const SvxBoxItem*>(pItem));
                             SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
 
                             if (pEntry->nWID == SC_WID_UNO_TBLBORD2)

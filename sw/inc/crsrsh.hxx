@@ -625,7 +625,7 @@ public:
     */
     SwShellCursor* getShellCursor( bool bBlock );
     const SwShellCursor* getShellCursor( bool bBlock ) const
-        { return (const_cast<SwCursorShell*>(this))->getShellCursor( bBlock ); }
+        { return const_cast<SwCursorShell*>(this)->getShellCursor( bBlock ); }
 
     bool IsBlockMode() const { return nullptr != m_pBlockCursor; }
 

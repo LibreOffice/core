@@ -212,18 +212,18 @@ css::uno::Any VCLXMenu::queryInterface(
 
     if ( bIsPopupMenu )
         aRet = ::cppu::queryInterface(  rType,
-                                        (static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)) ),
-                                        (static_cast< css::awt::XPopupMenu* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)),
-                                        (static_cast< css::lang::XServiceInfo* >(this)),
-                                        (static_cast< css::lang::XUnoTunnel* >(this)) );
+                                        static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)),
+                                        static_cast< css::awt::XPopupMenu* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this),
+                                        static_cast< css::lang::XServiceInfo* >(this),
+                                        static_cast< css::lang::XUnoTunnel* >(this) );
     else
         aRet = ::cppu::queryInterface(  rType,
-                                        (static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)) ),
-                                        (static_cast< css::awt::XMenuBar* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)),
-                                        (static_cast< css::lang::XServiceInfo* >(this)),
-                                        (static_cast< css::lang::XUnoTunnel* >(this)) );
+                                        static_cast< css::awt::XMenu* >(static_cast<css::awt::XMenuBar*>(this)),
+                                        static_cast< css::awt::XMenuBar* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this),
+                                        static_cast< css::lang::XServiceInfo* >(this),
+                                        static_cast< css::lang::XUnoTunnel* >(this) );
 
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }

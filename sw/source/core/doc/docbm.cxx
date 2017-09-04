@@ -511,7 +511,7 @@ namespace sw { namespace mark
         const IDocumentMarkAccess::MarkType eType )
     {
         SwPosition aPos(rTextNode);
-        aPos.nContent.Assign(&(const_cast<SwTextNode&>(rTextNode)), 0);
+        aPos.nContent.Assign(&const_cast<SwTextNode&>(rTextNode), 0);
         const iterator_t ppExistingMark = lcl_FindMarkAtPos(m_vBookmarks, aPos, eType);
         if(ppExistingMark != m_vBookmarks.end())
             return ppExistingMark->get();

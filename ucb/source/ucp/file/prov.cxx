@@ -318,7 +318,7 @@ Any SAL_CALL
 XPropertySetInfoImpl2::queryInterface( const Type& rType )
 {
     Any aRet = cppu::queryInterface( rType,
-                                          (static_cast< XPropertySetInfo* >(this)) );
+                                     static_cast< XPropertySetInfo* >(this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

@@ -60,7 +60,7 @@ namespace framework
 
 UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     :   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aMutex )
-    ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+    ,   ::cppu::OPropertySetHelper  ( *static_cast< ::cppu::OBroadcastHelper* >(this) )
     ,   m_nType                     ( nType                                             )
     ,   m_bPersistent               ( true                                          )
     ,   m_bInitialized              ( false                                         )

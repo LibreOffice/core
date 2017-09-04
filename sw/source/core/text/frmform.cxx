@@ -1923,7 +1923,7 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
         return false;
     }
 
-    if (m_pFollow && nStart != (static_cast<SwTextFrame*>(m_pFollow))->GetOfst())
+    if (m_pFollow && nStart != static_cast<SwTextFrame*>(m_pFollow)->GetOfst())
         return false; // can be caused by e.g. Orphans
 
     // We made it!

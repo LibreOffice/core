@@ -1307,7 +1307,7 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
                         const SfxPoolItem* pItem = &pItemSet->Get( ATTR_BORDER );
                         if ( pItem )
                         {
-                            SvxBoxItem aOuter( *( static_cast<const SvxBoxItem*>( pItem ) ) );
+                            SvxBoxItem aOuter( * static_cast<const SvxBoxItem*>( pItem ) );
                             SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
                             if (nWhich == SC_WID_UNO_TBLBORD2)
                                 ScHelperFunctions::AssignTableBorder2ToAny( aAny, aOuter, aInner, true);
@@ -1899,7 +1899,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                             const SfxPoolItem* pItem = &pItemSet->Get( ATTR_BORDER );
                             if ( pItem )
                             {
-                                SvxBoxItem aOuter( *( static_cast<const SvxBoxItem*>( pItem ) ) );
+                                SvxBoxItem aOuter( * static_cast<const SvxBoxItem*>( pItem ) );
                                 SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
                                 if (nWhich == SC_WID_UNO_TBLBORD2)
                                     ScHelperFunctions::AssignTableBorder2ToAny( aAny, aOuter, aInner, true);

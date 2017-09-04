@@ -164,9 +164,9 @@ void StdTabController::ImplActivateControl( bool bFirst ) const
 Any StdTabController::queryAggregation( const Type & rType )
 {
     Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< XTabController* >(this)),
-                                        (static_cast< XServiceInfo* >(this)),
-                                        (static_cast< XTypeProvider* >(this)) );
+                                        static_cast< XTabController* >(this),
+                                        static_cast< XServiceInfo* >(this),
+                                        static_cast< XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 

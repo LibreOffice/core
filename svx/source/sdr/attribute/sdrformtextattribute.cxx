@@ -82,11 +82,11 @@ namespace
 
         if(bShadow)
         {
-            nRetval = (sal_uInt8)(((static_cast<const SdrPercentItem&>(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue() * 255) / 100);
+            nRetval = (sal_uInt8)((static_cast<const SdrPercentItem&>(rSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue() * 255) / 100);
         }
         else
         {
-            nRetval = (sal_uInt8)(((static_cast<const XLineTransparenceItem&>(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue() * 255) / 100);
+            nRetval = (sal_uInt8)((static_cast<const XLineTransparenceItem&>(rSet.Get(XATTR_LINETRANSPARENCE)).GetValue() * 255) / 100);
         }
 
         return nRetval;
@@ -98,18 +98,18 @@ namespace
 
         if(bShadow)
         {
-            const Color aShadowColor((static_cast<const XColorItem&>(rSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
+            const Color aShadowColor(static_cast<const XColorItem&>(rSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue());
             aColorAttribute = aShadowColor.getBColor();
         }
         else
         {
-            const Color aLineColor((static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR))).GetColorValue());
+            const Color aLineColor(static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR)).GetColorValue());
             aColorAttribute = aLineColor.getBColor();
         }
 
-        const sal_uInt32 nLineWidth = (static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH))).GetValue();
-        const css::drawing::LineJoint eLineJoint = (static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT))).GetValue();
-        const css::drawing::LineCap eLineCap = (static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP))).GetValue();
+        const sal_uInt32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
+        const css::drawing::LineJoint eLineJoint = static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue();
+        const css::drawing::LineCap eLineCap = static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue();
 
         return drawinglayer::attribute::LineAttribute(
             aColorAttribute,
@@ -120,17 +120,17 @@ namespace
 
     drawinglayer::attribute::StrokeAttribute impGetStrokeAttribute(const SfxItemSet& rSet)
     {
-        const css::drawing::LineStyle eLineStyle = (static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE))).GetValue();
+        const css::drawing::LineStyle eLineStyle = static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
         double fFullDotDashLen(0.0);
         ::std::vector< double > aDotDashArray;
 
         if(css::drawing::LineStyle_DASH == eLineStyle)
         {
-            const XDash& rDash = (static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH))).GetDashValue();
+            const XDash& rDash = static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH)).GetDashValue();
 
             if(rDash.GetDots() || rDash.GetDashes())
             {
-                const sal_uInt32 nLineWidth = (static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+                const sal_uInt32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
                 fFullDotDashLen = rDash.CreateDotDashArray(aDotDashArray, (double)nLineWidth);
             }
         }

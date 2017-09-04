@@ -3260,7 +3260,7 @@ OUString SwXTextDocument::getTrackedChangeAuthors()
 OUString SwXTextDocument::getRulerState()
 {
     SwView* pView = pDocShell->GetView();
-    return OUString::fromUtf8((dynamic_cast<SwCommentRuler&>(pView->GetHRuler())).CreateJsonNotification().c_str());
+    return OUString::fromUtf8(dynamic_cast<SwCommentRuler&>(pView->GetHRuler()).CreateJsonNotification().c_str());
 }
 
 OUString SwXTextDocument::getPostIts()

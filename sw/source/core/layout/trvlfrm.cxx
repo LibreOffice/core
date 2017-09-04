@@ -1786,7 +1786,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
         return 0;
 
     sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
-    if ( !(static_cast<const SwRootFrame*>(pPage->GetUpper()))->IsVirtPageNum() )
+    if ( !static_cast<const SwRootFrame*>(pPage->GetUpper())->IsVirtPageNum() )
         return nPhyPage;
 
     //Search the nearest section using the virtual page number.
@@ -2023,12 +2023,12 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     {
         const SwAnchoredObject* pObj = pStartFrame->FindFlyFrame();
         OSL_ENSURE( pObj, "No Start Object." );
-        if (pObj) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
+        if (pObj) aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj) );
         const SwAnchoredObject* pObj2 = pEndFrame->FindFlyFrame();
         OSL_ENSURE( pObj2, "SwRootFrame::CalcFrameRects(..) - FlyFrame missing - looks like an invalid selection" );
         if ( pObj2 != nullptr && pObj2 != pObj )
         {
-            aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
+            aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj2) );
         }
     }
 
@@ -2459,7 +2459,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             if ( pContent->IsInFly() )
             {
                 const SwAnchoredObject* pObj = pContent->FindFlyFrame();
-                aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
+                aSortObjs.Insert( *const_cast<SwAnchoredObject*>(pObj) );
             }
 
             // Consider only frames which have the same IsInDocBody value like pStartFrame

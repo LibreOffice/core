@@ -173,8 +173,8 @@ ImageProducer::~ImageProducer()
 css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::lang::XInitialization* >(this)),
-                                        (static_cast< css::awt::XImageProducer* >(this)) );
+                                        static_cast< css::lang::XInitialization* >(this),
+                                        static_cast< css::awt::XImageProducer* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

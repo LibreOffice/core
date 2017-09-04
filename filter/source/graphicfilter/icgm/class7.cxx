@@ -102,10 +102,10 @@ void CGM::ImplDoClass7()
                     case 0x320 : /*AppData - TEXT*/
                     {
                         TextEntry* pTextEntry = new TextEntry;
-                        pTextEntry->nTypeOfText = *(reinterpret_cast<sal_uInt16*>( pAppData ) );
-                        pTextEntry->nRowOrLineNum = *(reinterpret_cast<sal_uInt16*>( pAppData + 2 ) );
-                        pTextEntry->nColumnNum = *(reinterpret_cast<sal_uInt16*>( pAppData + 4 ) );
-                        sal_uInt16 nAttributes = *( reinterpret_cast<sal_uInt16*>( pAppData + 6 ) );
+                        pTextEntry->nTypeOfText = *reinterpret_cast<sal_uInt16*>( pAppData );
+                        pTextEntry->nRowOrLineNum = *reinterpret_cast<sal_uInt16*>( pAppData + 2 );
+                        pTextEntry->nColumnNum = *reinterpret_cast<sal_uInt16*>( pAppData + 4 );
+                        sal_uInt16 nAttributes = *reinterpret_cast<sal_uInt16*>( pAppData + 6 );
                         pTextEntry->nZoneSize = nAttributes & 0xff;
                         pTextEntry->nLineType = ( nAttributes >> 8 ) & 0xf;
                         nAttributes >>= 12;

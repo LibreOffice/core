@@ -872,8 +872,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType )
 {
     Any aRet = ::cppu::queryInterface( rType,
-                                       (static_cast< XInputStream* >(this)),
-                                       (static_cast< XSeekable* >(this)) );
+                                       static_cast< XInputStream* >(this),
+                                       static_cast< XSeekable* >(this) );
 
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

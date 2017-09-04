@@ -89,7 +89,7 @@ public:
 
           SwCharFormat* GetCharFormat();
     const SwCharFormat* GetCharFormat() const
-            { return (const_cast<SwTextRuby*>(this))->GetCharFormat(); }
+            { return const_cast<SwTextRuby*>(this)->GetCharFormat(); }
 };
 
 inline const SwTextNode& SwTextRuby::GetTextNode() const

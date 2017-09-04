@@ -324,13 +324,13 @@ css::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::
 {
     //list all interfaces inclusive baseclasses of interfaces
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XComponent* >(this)),
-                                               (static_cast< XCloseable* >(this)),
-                                               (static_cast< XResultSetMetaDataSupplier* >(this)),
-                                               (static_cast< XPropertySet* >(this)),
-                                               (static_cast< XContentAccess* >(this)),
-                                               (static_cast< XResultSet* >(this)),
-                                               (static_cast< XRow* >(this))
+                                               static_cast< XComponent* >(this),
+                                               static_cast< XCloseable* >(this),
+                                               static_cast< XResultSetMetaDataSupplier* >(this),
+                                               static_cast< XPropertySet* >(this),
+                                               static_cast< XContentAccess* >(this),
+                                               static_cast< XResultSet* >(this),
+                                               static_cast< XRow* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

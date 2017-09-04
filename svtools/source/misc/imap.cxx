@@ -687,21 +687,21 @@ bool ImageMap::operator==( const ImageMap& rImageMap )
                 {
                     case IMAP_OBJ_RECTANGLE:
                     {
-                        if ( !( static_cast<IMapRectangleObject*>(pObj) )->IsEqual( *static_cast<IMapRectangleObject*>(pEqObj) ) )
+                        if ( ! static_cast<IMapRectangleObject*>(pObj)->IsEqual( *static_cast<IMapRectangleObject*>(pEqObj) ) )
                             bDifferent = true;
                     }
                     break;
 
                     case IMAP_OBJ_CIRCLE:
                     {
-                        if ( !( static_cast<IMapCircleObject*>(pObj) )->IsEqual( *static_cast<IMapCircleObject*>(pEqObj) ) )
+                        if ( ! static_cast<IMapCircleObject*>(pObj)->IsEqual( *static_cast<IMapCircleObject*>(pEqObj) ) )
                             bDifferent = true;
                     }
                     break;
 
                     case IMAP_OBJ_POLYGON:
                     {
-                        if ( !( static_cast<IMapPolygonObject*>(pObj) )->IsEqual( *static_cast<IMapPolygonObject*>(pEqObj) ) )
+                        if ( ! static_cast<IMapPolygonObject*>(pObj)->IsEqual( *static_cast<IMapPolygonObject*>(pEqObj) ) )
                             bDifferent = true;
                     }
                     break;

@@ -106,7 +106,7 @@ public:
                         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
     {
         assert( dynamic_cast <FastAttributeList *> ( xAttrList.get() ) != nullptr );
-        return ( static_cast <FastAttributeList *> ( xAttrList.get() ) );
+        return static_cast <FastAttributeList *> ( xAttrList.get() );
     }
 
     /// Use for fast iteration and conversion of attributes

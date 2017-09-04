@@ -121,8 +121,8 @@ void SAL_CALL ResultSetMetaData::release()
 css::uno::Any SAL_CALL ResultSetMetaData::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XResultSetMetaData* >(this))
+                                               static_cast< XTypeProvider* >(this),
+                                               static_cast< XResultSetMetaData* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

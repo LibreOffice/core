@@ -42,8 +42,8 @@ namespace cmis
     uno::Any SAL_CALL StdInputStream::queryInterface( const uno::Type& rType )
     {
         uno::Any aRet = ::cppu::queryInterface( rType,
-                                          ( static_cast< XInputStream* >( this ) ),
-                                          ( static_cast< XSeekable* >( this ) ) );
+                                          static_cast< XInputStream* >( this ),
+                                          static_cast< XSeekable* >( this ) );
 
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }

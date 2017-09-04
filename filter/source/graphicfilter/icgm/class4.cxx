@@ -412,7 +412,7 @@ void CGM::ImplDoClass4()
                     if ( mbFigure )
                     {
                         tools::Rectangle aBoundingBox( Point( (long)( aCenterPoint.X - fRadius ), long( aCenterPoint.Y - fRadius ) ),
-                            Size( ( static_cast< long >( 2 * fRadius ) ), (long)( 2 * fRadius) ) );
+                            Size( static_cast< long >( 2 * fRadius ), (long)( 2 * fRadius) ) );
                         tools::Polygon aPolygon( aBoundingBox, Point( (long)aStartingPoint.X, (long)aStartingPoint.Y ) ,Point( (long)aEndingPoint.X, (long)aEndingPoint.Y ), PolyStyle::Arc );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, true );

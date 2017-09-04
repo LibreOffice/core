@@ -511,9 +511,9 @@ void SAL_CALL CachedContentResultSetStubFactory::release()
 css::uno::Any SAL_CALL CachedContentResultSetStubFactory::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XCachedContentResultSetStubFactory* >(this))
+                                               static_cast< XTypeProvider* >(this),
+                                               static_cast< XServiceInfo* >(this),
+                                               static_cast< XCachedContentResultSetStubFactory* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

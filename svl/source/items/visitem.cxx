@@ -35,7 +35,7 @@ SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
 bool SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return m_nValue.bVisible == (static_cast< const SfxVisibilityItem * >(&rItem))->
+    return m_nValue.bVisible == static_cast< const SfxVisibilityItem * >(&rItem)->
                         m_nValue.bVisible;
 }
 

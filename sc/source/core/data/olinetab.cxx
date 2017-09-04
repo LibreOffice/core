@@ -702,7 +702,7 @@ bool ScOutlineArray::DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize)
         if ( nEntryEnd >= nStartPos )
         {
             if ( nEntryStart > nEndPos ) // Right
-                pEntry->Move(-(static_cast<SCCOLROW>(nSize)));
+                pEntry->Move(-static_cast<SCCOLROW>(nSize));
             else if ( nEntryStart < nStartPos && nEntryEnd >= nEndPos ) // Outside
                 pEntry->SetSize( nEntrySize-nSize );
             else

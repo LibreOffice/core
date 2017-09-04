@@ -82,10 +82,10 @@ void SAL_CALL ContentProvider::release()
 css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< lang::XTypeProvider* >(this)),
-                                               (static_cast< lang::XServiceInfo* >(this)),
-                                               (static_cast< ucb::XContentProvider* >(this)),
-                                               (static_cast< frame::XTransientDocumentsDocumentContentFactory* >(this))
+                                               static_cast< lang::XTypeProvider* >(this),
+                                               static_cast< lang::XServiceInfo* >(this),
+                                               static_cast< ucb::XContentProvider* >(this),
+                                               static_cast< frame::XTransientDocumentsDocumentContentFactory* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

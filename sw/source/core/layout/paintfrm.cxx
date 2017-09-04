@@ -4596,7 +4596,7 @@ void SwFrame::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     //         "asked" their frame format.
     const bool bDrawFullShadowRectangle =
             ( IsLayoutFrame() &&
-              (static_cast<const SwLayoutFrame*>(this))->GetFormat()->IsBackgroundTransparent()
+              static_cast<const SwLayoutFrame*>(this)->GetFormat()->IsBackgroundTransparent()
             );
 
     SwRectFnSet aRectFnSet(this);
@@ -7562,7 +7562,7 @@ bool SwFrame::GetBackgroundBrush(
         if ( pFrame->IsFlyFrame() )
         {
             // OD 20.08.2002 - use "static_cast" instead of "old C-cast"
-            pFrame = (static_cast<const SwFlyFrame*>(pFrame))->GetAnchorFrame();
+            pFrame = static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame();
         }
         else
         {

@@ -1591,7 +1591,7 @@ public:
 // private use.
 extern "C" inline void SAL_CALL onDirectoryCreated(void* pData, rtl_uString* aDirectoryUrl)
 {
-    (static_cast<DirectoryCreationObserver*>(pData))->DirectoryCreated(aDirectoryUrl);
+    static_cast<DirectoryCreationObserver*>(pData)->DirectoryCreated(aDirectoryUrl);
 }
 
 /** The directory class object provides a enumeration of DirectoryItems.

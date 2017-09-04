@@ -2121,7 +2121,7 @@ SdrText* SdrTextObj::getText( sal_Int32 nIndex ) const
     if( nIndex == 0 )
     {
         if( mpText == nullptr )
-            const_cast< SdrTextObj* >(this)->mpText = new SdrText( *(const_cast< SdrTextObj* >(this)) );
+            const_cast< SdrTextObj* >(this)->mpText = new SdrText( *const_cast< SdrTextObj* >(this) );
         return mpText;
     }
     else

@@ -902,7 +902,7 @@ SdrObject* DlgEdObj::getFullDragClone() const
     // no need to really add the clone for dragging, it's a temporary
     // object
     SdrObject* pObj = new SdrUnoObj(OUString());
-    *pObj = *(static_cast<const SdrUnoObj*>(this));
+    *pObj = *static_cast<const SdrUnoObj*>(this);
 
     return pObj;
 }

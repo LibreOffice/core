@@ -77,12 +77,12 @@ ResultSetBase::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet = cppu::queryInterface(
         rType,
-        (static_cast< lang::XComponent* >(this)),
-        (static_cast< sdbc::XRow* >(this)),
-        (static_cast< sdbc::XResultSet* >(this)),
-        (static_cast< sdbc::XResultSetMetaDataSupplier* >(this)),
-        (static_cast< beans::XPropertySet* >(this)),
-        (static_cast< ucb::XContentAccess* >(this)) );
+        static_cast< lang::XComponent* >(this),
+        static_cast< sdbc::XRow* >(this),
+        static_cast< sdbc::XResultSet* >(this),
+        static_cast< sdbc::XResultSetMetaDataSupplier* >(this),
+        static_cast< beans::XPropertySet* >(this),
+        static_cast< ucb::XContentAccess* >(this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -372,7 +372,7 @@ public:
     {
         uno::Any aRet = cppu::queryInterface(
             rType,
-            (static_cast< beans::XPropertySetInfo* >(this)) );
+            static_cast< beans::XPropertySetInfo* >(this) );
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }
 

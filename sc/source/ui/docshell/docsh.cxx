@@ -1441,7 +1441,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if ( pSet && SfxItemState::SET ==
                          pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
                     {
-                        OUString aFilterOption = (static_cast<const SfxStringItem*>(pItem))->GetValue();
+                        OUString aFilterOption = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert);
                     }
 

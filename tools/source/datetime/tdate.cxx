@@ -110,12 +110,12 @@ void Date::setDateFromDMY( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
         mnDate =
             (static_cast<sal_Int32>( nYear        ) * 10000) -
             (static_cast<sal_Int32>( nMonth % 100 ) * 100) -
-            (static_cast<sal_Int32>( nDay   % 100 ));
+             static_cast<sal_Int32>( nDay   % 100 );
     else
         mnDate =
             (static_cast<sal_Int32>( nYear        ) * 10000) +
             (static_cast<sal_Int32>( nMonth % 100 ) * 100) +
-            (static_cast<sal_Int32>( nDay   % 100 ));
+             static_cast<sal_Int32>( nDay   % 100 );
 }
 
 void Date::SetDate( sal_Int32 nNewDate )

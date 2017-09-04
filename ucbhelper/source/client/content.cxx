@@ -1302,8 +1302,8 @@ void SAL_CALL ContentEventListener_Impl::release()
 css::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XContentEventListener* >(this)),
-                                               (static_cast< XEventListener* >(this))
+                                               static_cast< XContentEventListener* >(this),
+                                               static_cast< XEventListener* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

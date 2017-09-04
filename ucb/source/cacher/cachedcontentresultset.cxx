@@ -505,8 +505,8 @@ void SAL_CALL CCRS_PropertySetInfo::release()
 css::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XPropertySetInfo* >(this))
+                                               static_cast< XTypeProvider* >(this),
+                                               static_cast< XPropertySetInfo* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -2098,9 +2098,9 @@ void SAL_CALL CachedContentResultSetFactory::release()
 css::uno::Any SAL_CALL CachedContentResultSetFactory::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XCachedContentResultSetFactory* >(this))
+                                               static_cast< XTypeProvider* >(this),
+                                               static_cast< XServiceInfo* >(this),
+                                               static_cast< XCachedContentResultSetFactory* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

@@ -67,9 +67,9 @@ void SAL_CALL FTPContentProvider::release()
 css::uno::Any SAL_CALL FTPContentProvider::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XContentProvider* >(this))
+                                               static_cast< XTypeProvider* >(this),
+                                               static_cast< XServiceInfo* >(this),
+                                               static_cast< XContentProvider* >(this)
         );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

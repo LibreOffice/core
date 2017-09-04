@@ -65,7 +65,7 @@ uno::Any SAL_CALL
 XCommandInfo_impl::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                                          (static_cast< XCommandInfo* >(this)) );
+                                          static_cast< XCommandInfo* >(this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

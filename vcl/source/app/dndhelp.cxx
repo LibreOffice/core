@@ -62,10 +62,10 @@ vcl::unohelper::DragAndDropWrapper::~DragAndDropWrapper()
 uno::Any vcl::unohelper::DragAndDropWrapper::queryInterface( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                            (static_cast< css::lang::XEventListener* >( static_cast<css::datatransfer::dnd::XDragGestureListener*>(this)) ),
-                            (static_cast< css::datatransfer::dnd::XDragGestureListener* >(this)),
-                            (static_cast< css::datatransfer::dnd::XDragSourceListener* >(this)),
-                            (static_cast< css::datatransfer::dnd::XDropTargetListener* >(this)) );
+                            static_cast< css::lang::XEventListener* >( static_cast<css::datatransfer::dnd::XDragGestureListener*>(this) ),
+                            static_cast< css::datatransfer::dnd::XDragGestureListener* >(this),
+                            static_cast< css::datatransfer::dnd::XDragSourceListener* >(this),
+                            static_cast< css::datatransfer::dnd::XDropTargetListener* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

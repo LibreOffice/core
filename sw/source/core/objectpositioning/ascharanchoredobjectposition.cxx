@@ -301,7 +301,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                aRelAttr != rFlyInContentFrame.GetCurrRelPos() ) )
         {
             // set new anchor position and relative position
-            SwFlyInContentFrame* pFlyInContentFrame = &(const_cast<SwFlyInContentFrame&>(rFlyInContentFrame));
+            SwFlyInContentFrame* pFlyInContentFrame = &const_cast<SwFlyInContentFrame&>(rFlyInContentFrame);
             pFlyInContentFrame->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
             if( nObjWidth != aRectFnSet.GetWidth(pFlyInContentFrame->Frame()) )
             {

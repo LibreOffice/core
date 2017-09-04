@@ -956,7 +956,7 @@ rtlCipher SAL_CALL rtl_cipher_createBF(rtlCipherMode Mode) SAL_THROW_EXTERN_C()
         pImpl->m_cipher.m_decode    = rtl_cipher_decodeBF;
         pImpl->m_cipher.m_delete    = rtl_cipher_destroyBF;
     }
-    return (static_cast<rtlCipher>(pImpl));
+    return static_cast<rtlCipher>(pImpl);
 }
 
 rtlCipherError SAL_CALL rtl_cipher_initBF(
@@ -1177,7 +1177,7 @@ rtlCipher SAL_CALL rtl_cipher_createARCFOUR(rtlCipherMode Mode)
         pImpl->m_cipher.m_delete    = rtl_cipher_destroyARCFOUR;
     }
 
-    return (static_cast<rtlCipher>(pImpl));
+    return static_cast<rtlCipher>(pImpl);
 }
 
 rtlCipherError SAL_CALL rtl_cipher_initARCFOUR(

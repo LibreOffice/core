@@ -187,10 +187,10 @@ VCLXMultiLineEdit::~VCLXMultiLineEdit()
 css::uno::Any VCLXMultiLineEdit::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XTextComponent* >(this)),
-                                        (static_cast< css::awt::XTextArea* >(this)),
-                                        (static_cast< css::awt::XTextLayoutConstrains* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XTextComponent* >(this),
+                                        static_cast< css::awt::XTextArea* >(this),
+                                        static_cast< css::awt::XTextLayoutConstrains* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -550,9 +550,9 @@ VCLXFileControl::~VCLXFileControl()
 css::uno::Any VCLXFileControl::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XTextComponent* >(this)),
-                                        (static_cast< css::awt::XTextLayoutConstrains* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XTextComponent* >(this),
+                                        static_cast< css::awt::XTextLayoutConstrains* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
@@ -1648,8 +1648,8 @@ SVTXNumericField::~SVTXNumericField()
 css::uno::Any SVTXNumericField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XNumericField* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XNumericField* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : SVTXFormattedField::queryInterface( rType ));
 }
 
@@ -1815,8 +1815,8 @@ SVTXCurrencyField::~SVTXCurrencyField()
 css::uno::Any SVTXCurrencyField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XCurrencyField* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XCurrencyField* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : SVTXFormattedField::queryInterface( rType ));
 }
 
@@ -2103,8 +2103,8 @@ void VCLXProgressBar::ImplUpdateValue()
 css::uno::Any VCLXProgressBar::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XProgressBar* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)) );
+                                        static_cast< css::awt::XProgressBar* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this) );
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 

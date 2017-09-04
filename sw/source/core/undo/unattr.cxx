@@ -81,7 +81,7 @@ void SwUndoFormatAttrHelper::Modify( const SfxPoolItem* pOld, const SfxPoolItem*
             } else if ( RES_ATTRSET_CHG == pOld->Which() ) {
                 if ( GetUndo() ) {
                     SfxItemIter aIter(
-                        *(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet() );
+                        *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
                     const SfxPoolItem* pItem = aIter.GetCurItem();
                     while ( pItem ) {
                         m_pUndo->PutAttr( *pItem );

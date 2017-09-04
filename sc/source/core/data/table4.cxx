@@ -215,7 +215,7 @@ double approxDiff( double a, double b )
     // the exponent of the error magnitude and round accordingly.
     const double e = fabs(d - c);
     const double fExp = floor( log10( e));
-    return rtl::math::round( c, -(static_cast<int>(fExp))-1);
+    return rtl::math::round( c, -static_cast<int>(fExp)-1);
 }
 }
 

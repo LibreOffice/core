@@ -57,10 +57,10 @@ VCLXDevice::~VCLXDevice()
 css::uno::Any VCLXDevice::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< css::awt::XDevice* >(this)),
-                                        (static_cast< css::lang::XUnoTunnel* >(this)),
-                                        (static_cast< css::lang::XTypeProvider* >(this)),
-                                        (static_cast< css::awt::XUnitConversion* >(this)) );
+                                        static_cast< css::awt::XDevice* >(this),
+                                        static_cast< css::lang::XUnoTunnel* >(this),
+                                        static_cast< css::lang::XTypeProvider* >(this),
+                                        static_cast< css::awt::XUnitConversion* >(this) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 

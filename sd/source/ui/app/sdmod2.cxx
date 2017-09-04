@@ -209,7 +209,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                     aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID(),
                     pAuthorField->GetType(), pAuthorField->GetFormat() );
 
-            *(const_cast< SvxAuthorField* >(pAuthorField)) = aAuthorField;
+            *const_cast< SvxAuthorField* >(pAuthorField) = aAuthorField;
         }
         pInfo->SetRepresentation( pAuthorField->GetFormatted() );
 

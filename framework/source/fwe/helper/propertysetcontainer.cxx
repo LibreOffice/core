@@ -59,10 +59,10 @@ Any SAL_CALL PropertySetContainer::queryInterface( const Type& rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
-                (static_cast< XIndexContainer* >(this)),
-                (static_cast< XIndexReplace* >(this)),
-                (static_cast< XIndexAccess* >(this)),
-                (static_cast< XElementAccess* >(this)) );
+                static_cast< XIndexContainer* >(this),
+                static_cast< XIndexReplace* >(this),
+                static_cast< XIndexAccess* >(this),
+                static_cast< XElementAccess* >(this) );
 
     if( a.hasValue() )
     {

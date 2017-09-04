@@ -46,9 +46,9 @@ Any SAL_CALL ActionTriggerContainer::queryInterface( const Type& aType )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
-                (static_cast< XMultiServiceFactory* >(this)),
-                (static_cast< XServiceInfo* >(this)),
-                (static_cast< XTypeProvider* >(this)));
+                static_cast< XMultiServiceFactory* >(this),
+                static_cast< XServiceInfo* >(this),
+                static_cast< XTypeProvider* >(this));
 
     if( a.hasValue() )
     {

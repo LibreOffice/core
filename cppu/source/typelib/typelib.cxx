@@ -74,7 +74,7 @@ struct AlignSize_Impl
 #endif
 
 // the value of the maximal alignment
-static sal_Int32 nMaxAlignment = (sal_Int32)( reinterpret_cast<sal_Size>(&(reinterpret_cast<AlignSize_Impl *>(16))->dDouble) - 16);
+static sal_Int32 nMaxAlignment = (sal_Int32)( reinterpret_cast<sal_Size>(&reinterpret_cast<AlignSize_Impl *>(16)->dDouble) - 16);
 
 static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 {

@@ -1581,7 +1581,7 @@ bool OoxFormulaParserImpl::importArrayToken( SequenceInputStream& rStrm )
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::readString( rStrm, false );
                 break;
                 case BIFF_TOK_ARRAY_BOOL:
-                    appendRawToken( OPCODE_PUSH ) <<= (static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 ));
+                    appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
                 break;
                 case BIFF_TOK_ARRAY_ERROR:
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( rStrm.readuInt8() );

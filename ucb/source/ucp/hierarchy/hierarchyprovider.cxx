@@ -75,10 +75,10 @@ void SAL_CALL HierarchyContentProvider::release()
 css::uno::Any SAL_CALL HierarchyContentProvider::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< lang::XTypeProvider* >(this)),
-                                               (static_cast< lang::XServiceInfo* >(this)),
-                                               (static_cast< ucb::XContentProvider* >(this)),
-                                               (static_cast< lang::XInitialization* >(this))
+                                               static_cast< lang::XTypeProvider* >(this),
+                                               static_cast< lang::XServiceInfo* >(this),
+                                               static_cast< ucb::XContentProvider* >(this),
+                                               static_cast< lang::XInitialization* >(this)
                                                );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

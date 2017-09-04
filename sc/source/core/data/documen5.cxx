@@ -200,7 +200,7 @@ bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName
 
                 if (IsChart(pObject))
                 {
-                    rName = (static_cast<SdrOle2Obj*>(pObject))->GetPersistName();
+                    rName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                     return true;
                 }
             }

@@ -26,7 +26,7 @@
 bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
     assert(dynamic_cast<const CntByteItem*>(&rItem) != nullptr);
-    return m_nValue == (static_cast< const CntByteItem * >(&rItem))->m_nValue;
+    return m_nValue == static_cast< const CntByteItem * >(&rItem)->m_nValue;
 }
 
 // virtual

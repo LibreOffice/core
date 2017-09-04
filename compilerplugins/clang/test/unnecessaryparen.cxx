@@ -32,6 +32,9 @@ int main()
     // lots of our code uses this style, which I'm loathe to bulk-fix as yet
     int z = (y) ? 1 : 0;
     (void)z;
+
+    int v1 = (static_cast<short>(1)) + 1; // expected-error {{unnecessary parentheses around cast [loplugin:unnecessaryparen]}}
+    (void)v1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
