@@ -29,7 +29,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class SecurityEngine : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SecurityEngine : public cppu::WeakImplHelper
 <
     css::xml::crypto::sax::XReferenceResolvedListener,
     css::xml::crypto::sax::XKeyCollector,
