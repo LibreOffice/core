@@ -197,7 +197,6 @@ public:
     text::WrapTextMode nWrap;
     bool      bLayoutInCell;
     bool      bOpaque;
-    bool      bBehindDoc;
     bool      bContour;
     bool      bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
@@ -267,7 +266,6 @@ public:
         ,nWrap(text::WrapTextMode_NONE)
         ,bLayoutInCell(false)
         ,bOpaque( !rDMapper.IsInHeaderFooter() )
-        ,bBehindDoc( false )
         ,bContour(false)
         ,bContourOutside(true)
         ,nLeftMargin(319)
@@ -367,10 +365,6 @@ public:
             GraphicZOrderHelper* pZOrderHelper = rDomainMapper.graphicZOrderHelper();
             xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
             pZOrderHelper->addItem(xGraphicObjectProperties, zOrder);
-
-            // use opaque setting unless it would hide text that should be in front of the shape.
-            const bool bPutInForeground = bOpaque && !(bBehindDoc && nWrap == text::WrapTextMode_THROUGH);
-            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( bPutInForeground ) );
         }
     }
 
@@ -604,15 +598,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
             if( nIntValue > 0 )
-            {
-                m_pImpl->bBehindDoc = true;
-
-                // In MSO, page background is "in hell" zOrder, however
-                // in LO, page background is at the same zOrder as the text,
-                // so avoid hiding shapes behind the page background.
-                if( !m_pImpl->rDomainMapper.HasPageBackground() )
-                    m_pImpl->bOpaque = false;
-            }
+                m_pImpl->bOpaque = false;
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         break;

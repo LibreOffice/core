@@ -3775,11 +3775,6 @@ bool DomainMapper::IsStyleSheetImport() const
     return m_pImpl->IsStyleSheetImport();
 }
 
-bool DomainMapper::HasPageBackground() const
-{
-    return (bool)m_pImpl->m_oBackgroundColor;
-}
-
 void DomainMapper::enableInteropGrabBag(const OUString& aName)
 {
     m_pImpl->m_aInteropGrabBagName = aName;
