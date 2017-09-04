@@ -1281,10 +1281,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
     xmlDocPtr pXmlDoc = dumper.dumpAndParse(rMetaFile);
 
     // Get first polyline rightside x coordinate
-    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "/metafile/push[1]/polyline[1]/point[2]", "x").toInt32();
+    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[2]", "x").toInt32();
 
     // Get last stroke x coordinate
-    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "/metafile/push[last()]/polyline[last()]/point[2]", "x").toInt32();
+    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "(//polyline)[last()]/point[2]", "x").toInt32();
 
     // Assert that the difference is less than half point.
     CPPUNIT_ASSERT_MESSAGE("Shape line width does not match", abs(nFirstEnd - nSecondEnd) < 10);

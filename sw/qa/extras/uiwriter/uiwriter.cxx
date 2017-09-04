@@ -1494,10 +1494,10 @@ void SwUiWriterTest::testFdo87448()
 
     // The first polyline in the document has a number of points to draw arcs,
     // the last one jumps back to the start, so we call "end" the last but one.
-    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "/metafile/push[2]/polyline[1]/point[last()-1]", "x").toInt32();
+    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[last()-1]", "x").toInt32();
     // The second polyline has a different start point, but the arc it draws
     // should end at the ~same position as the first polyline.
-    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "/metafile/push[5]/polyline[1]/point[last()]", "x").toInt32();
+    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "(//polyline)[2]/point[last()]", "x").toInt32();
 
     // nFirstEnd was 6023 and nSecondEnd was 6648, now they should be much closer, e.g. nFirstEnd = 6550, nSecondEnd = 6548
     OString aMsg = "nFirstEnd is " + OString::number(nFirstEnd) + ", nSecondEnd is " + OString::number(nSecondEnd);
