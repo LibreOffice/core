@@ -2794,6 +2794,9 @@ void SvxColorToolBoxControl::EnsurePaletteManager()
 {
     if (!m_xPaletteManager)
     {
+        // tdf#111894 provide nullptr to avoid deleting pointer
+        // from a std::unique_ptr with the next resetting line
+        m_xPaletteManager->SetBtnUpdater(nullptr);
         m_xPaletteManager.reset(new PaletteManager);
         m_xPaletteManager->SetBtnUpdater(m_xBtnUpdater.get());
         m_xPaletteManager->SetLastColor(m_xBtnUpdater->GetCurrentColor());
