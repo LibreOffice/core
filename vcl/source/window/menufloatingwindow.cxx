@@ -357,7 +357,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
             sal_uInt16 nRet = pActivePopup->ImplExecute( this, tools::Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Right, pMenu, pTimer == nullptr );
             SetPopupModeFlags( nOldFlags );
 
-            // nRet != 0, wenn es waerend Activate() abgeschossen wurde...
+            // nRet != 0, if it was stopped during Activate()...
             if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->ImplGetWindow() )
                 pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
         }
