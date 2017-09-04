@@ -22,7 +22,6 @@
 #include <unx/geninst.h>
 
 SalGenericDisplay::SalGenericDisplay()
- : m_aEventGuard()
 {
     m_pCapture = nullptr;
 }
@@ -33,94 +32,39 @@ SalGenericDisplay::~SalGenericDisplay()
 
 void SalGenericDisplay::registerFrame( SalFrame* pFrame )
 {
-    m_aFrames.push_front( pFrame );
+    insertFrame( pFrame );
 }
 
 void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
 {
-    {
-        osl::MutexGuard g( m_aEventGuard );
-        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-        while ( it != m_aUserEvents.end() )
-        {
-            if( it->m_pFrame == pFrame )
-            {
-                if (it->m_nEvent == SalEvent::UserEvent) {
-                    delete static_cast<ImplSVEvent *>(it->m_pData);
-                }
-                it = m_aUserEvents.erase( it );
-            }
-            else
-                ++it;
-        }
-    }
-
-    m_aFrames.remove( pFrame );
+    eraseFrame( pFrame );
 }
 
 void SalGenericDisplay::emitDisplayChanged()
 {
-    if( !m_aFrames.empty() )
-        m_aFrames.front()->CallCallback( SalEvent::DisplayChanged, nullptr );
+    SalFrame *pAnyFrame = anyFrame();
+    if( pAnyFrame )
+        pAnyFrame->CallCallback( SalEvent::DisplayChanged, nullptr );
 }
 
 bool SalGenericDisplay::DispatchInternalEvent()
 {
-    void* pData = nullptr;
-    SalFrame* pFrame = nullptr;
-    SalEvent nEvent = SalEvent::NONE;
-
-    {
-        osl::MutexGuard g( m_aEventGuard );
-        if( !m_aUserEvents.empty() )
-        {
-            pFrame  = m_aUserEvents.front().m_pFrame;
-            pData   = m_aUserEvents.front().m_pData;
-            nEvent  = m_aUserEvents.front().m_nEvent;
-
-            m_aUserEvents.pop_front();
-        }
-    }
-
-    if( pFrame )
-        pFrame->CallCallback( nEvent, pData );
-
-    return pFrame != nullptr;
+    return DispatchUserEvents( false );
 }
 
 void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
-    osl::MutexGuard g( m_aEventGuard );
-
-    m_aUserEvents.emplace_back( pFrame, pData, nEvent );
-
-    PostUserEvent(); // wakeup the concrete mainloop
+    PostEvent( pFrame, pData, nEvent );
 }
 
-void SalGenericDisplay::CancelInternalEvent( SalFrame const * pFrame, void const * pData, SalEvent nEvent )
+void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
-    osl::MutexGuard g( m_aEventGuard );
-    if( ! m_aUserEvents.empty() )
-    {
-        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-        while (it != m_aUserEvents.end())
-        {
-            if( it->m_pFrame    == pFrame   &&
-                it->m_pData     == pData    &&
-                it->m_nEvent    == nEvent )
-            {
-                it = m_aUserEvents.erase( it );
-            }
-            else
-                ++it;
-        }
-    }
+    RemoveEvent( pFrame, pData, nEvent );
 }
 
-bool SalGenericDisplay::HasUserEvents() const
+void SalGenericDisplay::ProcessEvent( SalUserEvent aEvent )
 {
-    osl::MutexGuard g( m_aEventGuard );
-    return !m_aUserEvents.empty();
+    aEvent.m_pFrame->CallCallback( aEvent.m_nEvent, aEvent.m_pData );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -79,7 +79,8 @@ static bool bLeftMain = false;
 class AquaDelayedSettingsChanged : public Idle
 {
     bool            mbInvalidate;
-    public:
+
+public:
     AquaDelayedSettingsChanged( bool bInvalidate ) :
         mbInvalidate( bInvalidate )
     {
@@ -87,20 +88,20 @@ class AquaDelayedSettingsChanged : public Idle
 
     virtual void Invoke() override
     {
-        SalData* pSalData = GetSalData();
-        if( ! pSalData->maFrames.empty() )
-            pSalData->maFrames.front()->CallCallback( SalEvent::SettingsChanged, nullptr );
+        AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+        SalFrame *pAnyFrame = pInst->anyFrame();
+        if( pAnyFrame )
+            pAnyFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
 
         if( mbInvalidate )
         {
-            for( std::list< AquaSalFrame* >::iterator it = pSalData->maFrames.begin();
-                it != pSalData->maFrames.end(); ++it )
+            for( auto pSalFrame : pInst->getFrames() )
             {
-                if( (*it)->mbShown )
-                    (*it)->SendPaintEvent();
+                AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
+                if( pFrame->mbShown )
+                    pFrame->SendPaintEvent();
             }
         }
-        Stop();
         delete this;
     }
 };
@@ -390,15 +391,17 @@ AquaSalInstance::~AquaSalInstance()
     delete mpSalYieldMutex;
 }
 
-void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData )
+void AquaSalInstance::TriggerUserEventProcessing()
 {
-    {
-        osl::MutexGuard g( maUserEventListMutex );
-        maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
-    }
     dispatch_async(dispatch_get_main_queue(),^{
         ImplNSAppPostEvent( AquaSalInstance::YieldWakeupEvent, NO );
     });
+}
+
+void AquaSalInstance::ProcessEvent( SalUserEvent aEvent )
+{
+    aEvent.m_pFrame->CallCallback( aEvent.m_nEvent, aEvent.m_pData );
+    maWaitingYieldCond.set();
 }
 
 comphelper::SolarMutex* AquaSalInstance::GetYieldMutex()
@@ -453,15 +456,17 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
     {
         MediaCommand nCommand;
-        SalData* pSalData = GetSalData();
+        AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
         bool bIsFullScreenMode = false;
 
-        std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
-        while( it != pSalData->maFrames.end() )
+        for( auto pSalFrame : pInst->getFrames() )
         {
-            if ( (*it) && (*it)->mbFullScreen )
+            const AquaSalFrame* pFrame = static_cast<const AquaSalFrame*>( pSalFrame );
+            if ( pFrame->mbFullScreen )
+            {
                 bIsFullScreenMode = true;
-            ++it;
+                break;
+            }
         }
 
         switch ([pEvent data1])
@@ -497,9 +502,8 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
             default:
                 break;
         }
-        AquaSalFrame* pFrame = pSalData->maFrames.front();
+        AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( pInst->anyFrame() );
         vcl::Window* pWindow = pFrame ? pFrame->GetWindow() : nullptr;
-
         if( pWindow )
         {
             const Point aPoint;
@@ -532,6 +536,7 @@ bool AquaSalInstance::RunInMainYield( bool bHandleAllCurrentEvents )
     return false;
 
 }
+
 static bool isWakeupEvent( NSEvent *pEvent )
 {
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -542,8 +547,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    bool bHadEvent = false;
-
     // ensure that the per thread autorelease pool is top level and
     // will therefore not be destroyed by cocoa implicitly
     SalData::ensureThreadAutoreleasePool();
@@ -552,36 +555,10 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     // an own pool for each yield level
     ReleasePoolHolder aReleasePool;
 
-    // Release all locks so that we don't deadlock when we pull pending
-    // events from the event queue
-    bool bDispatchUser = true;
-    while( bDispatchUser )
-    {
-        // get one user event
-        SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
-        {
-            osl::MutexGuard g( maUserEventListMutex );
-            if( ! maUserEvents.empty() )
-            {
-                aEvent = maUserEvents.front();
-                maUserEvents.pop_front();
-                bHadEvent = true;
-            }
-            else
-                bDispatchUser = false;
-        }
-
-        // dispatch it
-        if( aEvent.mpFrame && AquaSalFrame::isAlive( aEvent.mpFrame ) )
-        {
-            aEvent.mpFrame->CallCallback( aEvent.mnType, aEvent.mpData );
-            maWaitingYieldCond.set();
-        }
-
-        // return if only one event is asked for
-        if( !bHandleAllCurrentEvents && bDispatchUser )
-            return true;
-    }
+    // first, process current user events
+    bool bHadEvent = DispatchUserEvents( bHandleAllCurrentEvents );
+    if ( !bHandleAllCurrentEvents && bHadEvent )
+        return true;
 
     // handle cocoa event queue
     // cocoa events may be only handled in the thread the NSApp was created
@@ -639,13 +616,13 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
 
         // collect update rectangles
-        const std::list< AquaSalFrame* > rFrames( GetSalData()->maFrames );
-        for( std::list< AquaSalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+        for( auto pSalFrame : GetSalData()->mpFirstInstance->getFrames() )
         {
-            if( (*it)->mbShown && ! (*it)->maInvalidRect.IsEmpty() )
+            AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
+            if( pFrame->mbShown && ! pFrame->maInvalidRect.IsEmpty() )
             {
-                (*it)->Flush( (*it)->maInvalidRect );
-                (*it)->maInvalidRect.SetEmpty();
+                pFrame->Flush( pFrame->maInvalidRect );
+                pFrame->maInvalidRect.SetEmpty();
             }
         }
 

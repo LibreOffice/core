@@ -357,10 +357,10 @@ void KDEXLib::Wakeup()
     QAbstractEventDispatcher::instance( qApp->thread())->wakeUp(); // main thread event loop
 }
 
-void KDEXLib::PostUserEvent()
+void KDEXLib::TriggerUserEventProcessing()
 {
     if( !m_isGlibEventLoopType )
-        return SalXLib::PostUserEvent();
+        return SalXLib::TriggerUserEventProcessing();
     QApplication::postEvent(this, new QEvent(QEvent::Type( m_postUserEventId )));
 }
 

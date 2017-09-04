@@ -34,6 +34,8 @@
 
 #include "osx/runinmain.hxx"
 
+#include "salusereventlist.hxx"
+
 class AquaSalFrame;
 class SalFrame;
 class SalObject;
@@ -59,27 +61,18 @@ public:
     virtual bool IsCurrentThread() const override;
 };
 
-class AquaSalInstance : public SalInstance
+class AquaSalInstance : public SalInstance, public SalUserEventList
 {
-    struct SalUserEvent
-    {
-        AquaSalFrame*   mpFrame;
-        void*           mpData;
-        SalEvent        mnType;
-
-        SalUserEvent( AquaSalFrame* pFrame, void* pData, SalEvent nType ) :
-            mpFrame( pFrame ), mpData( pData ), mnType( nType )
-        {}
-    };
-
     bool RunInMainYield( bool bHandleAllCurrentEvents );
+
+    virtual void TriggerUserEventProcessing() override;
+    virtual void ProcessEvent( SalUserEvent aEvent ) override;
 
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     OUString                                maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     int                                     mnActivePrintJobs;
-    std::list< SalUserEvent >               maUserEvents;
     osl::Mutex                              maUserEventListMutex;
     osl::Condition                          maWaitingYieldCond;
     bool                                    mbIsLiveResize;
@@ -145,7 +138,6 @@ public:
 public:
     friend class AquaSalFrame;
 
-    void PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData );
     void delayedSettingsChanged( bool bInvalidate );
 
     // Is this the NSAppThread?
