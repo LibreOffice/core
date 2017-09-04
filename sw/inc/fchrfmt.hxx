@@ -30,7 +30,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFormatCharFormat: public SfxPoolItem, public SwClient
 {
     friend class SwTextCharFormat;
-    SwTextCharFormat* pTextAttr;     ///< My text attribute.
+    SwTextCharFormat* m_pTextAttribute;     ///< My text attribute.
 
 public:
     /// single argument ctors shall be explicit.

@@ -43,7 +43,7 @@ SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
     , m_pTextNode( nullptr )
     , m_nSortNumber( 0 )
 {
-    rAttr.pTextAttr = this;
+    rAttr.m_pTextAttribute = this;
     SetCharFormatAttr( true );
 }
 

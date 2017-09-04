@@ -61,14 +61,14 @@ SfxPoolItem* SwFormatINetFormat::CreateDefault() { return new SwFormatINetFormat
 SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient(pFormat),
-    pTextAttr( nullptr )
+    m_pTextAttribute( nullptr )
 {
 }
 
 SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient( rAttr.GetCharFormat() ),
-    pTextAttr( nullptr )
+    m_pTextAttribute( nullptr )
 {
 }
 
@@ -88,14 +88,14 @@ SfxPoolItem* SwFormatCharFormat::Clone( SfxItemPool* ) const
 // forward to the TextAttribute
 void SwFormatCharFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    if( pTextAttr )
-        pTextAttr->ModifyNotification( pOld, pNew );
+    if( m_pTextAttribute )
+        m_pTextAttribute->ModifyNotification( pOld, pNew );
 }
 
 // forward to the TextAttribute
 bool SwFormatCharFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pTextAttr && pTextAttr->GetInfo( rInfo );
+    return m_pTextAttribute && m_pTextAttribute->GetInfo( rInfo );
 }
 bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
