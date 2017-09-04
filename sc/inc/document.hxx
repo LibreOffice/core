@@ -308,8 +308,7 @@ public:
     };
 
 private:
-
-    rtl::Reference<ScPoolHelper> xPoolHelper;
+    rtl::Reference<ScPoolHelper> mxPoolHelper;
 
     std::shared_ptr<svl::SharedStringPool> mpCellStringPool;
     std::shared_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;

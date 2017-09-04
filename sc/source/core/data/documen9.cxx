@@ -127,9 +127,9 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
         // the PageStyle using SvxBrushItem is visualized and will be potentially
         // used more intense in the future
-        if (xPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
+        if (mxPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
         {
-            ScDocumentPool* pLocalPool = xPoolHelper->GetDocPool();
+            ScDocumentPool* pLocalPool = mxPoolHelper->GetDocPool();
 
             if (pLocalPool)
             {
@@ -237,9 +237,9 @@ void ScDocument::DeleteDrawLayer()
 {
     // remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
     // it is registered as secondary pool
-    if (xPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
+    if (mxPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
     {
-        ScDocumentPool* pLocalPool = xPoolHelper->GetDocPool();
+        ScDocumentPool* pLocalPool = mxPoolHelper->GetDocPool();
 
         if(pLocalPool && pLocalPool->GetSecondaryPool())
         {
@@ -566,7 +566,7 @@ void ScDocument::UpdateFontCharSet()
         sal_uInt32 nCount,i;
         SvxFontItem* pItem;
 
-        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+        ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
         nCount = pPool->GetItemCount2(ATTR_FONT);
         for (i=0; i<nCount; i++)
         {

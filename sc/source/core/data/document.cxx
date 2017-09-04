@@ -2532,8 +2532,8 @@ ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL n
 
 void ScDocument::MergeNumberFormatter(const ScDocument* pSrcDoc)
 {
-    SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
-    SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
+    SvNumberFormatter* pThisFormatter = mxPoolHelper->GetFormTable();
+    SvNumberFormatter* pOtherFormatter = pSrcDoc->mxPoolHelper->GetFormTable();
     if (pOtherFormatter && pOtherFormatter != pThisFormatter)
     {
         SvNumberFormatterIndexTable* pExchangeList =
@@ -2562,8 +2562,8 @@ bool ScDocument::IsClipboardSource() const
         return false;
 
     ScDocument* pClipDoc = ScModule::GetClipDoc();
-    return pClipDoc && pClipDoc->bIsClip && pClipDoc->xPoolHelper.is() && xPoolHelper.is() &&
-            xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
+    return pClipDoc && pClipDoc->bIsClip && pClipDoc->mxPoolHelper.is() && mxPoolHelper.is() &&
+            mxPoolHelper->GetDocPool() == pClipDoc->mxPoolHelper->GetDocPool();
 }
 
 void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
@@ -4696,7 +4696,7 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribut Null" );
         }
     }
-    return &xPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
 }
 
 const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const
@@ -4928,7 +4928,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 {
     if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::UNKNOWN )
     {
-        SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(),
+        SfxStyleSheetIterator aIter( mxPoolHelper->GetStylePool(),
                     SfxStyleFamily::Para );
         for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
                                        pStyle = aIter.Next() )
@@ -5112,7 +5112,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         //  Is attribute used in document?
         //  (as in fillinfo)
 
-        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+        ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
         bool bAnyItem = false;
         sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
@@ -5819,7 +5819,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
         }
         else
         {
-            SfxItemPoolCache aCache( xPoolHelper->GetDocPool(), pSet );
+            SfxItemPoolCache aCache( mxPoolHelper->GetDocPool(), pSet );
             SCTAB nMax = static_cast<SCTAB>(maTabs.size());
             ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd && *itr < nMax; ++itr)
@@ -5973,17 +5973,17 @@ void ScDocument::DeleteSelectionTab(
 
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
-    return const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(&xPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN)));
+    return const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(&mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN)));
 }
 
 ScDocumentPool* ScDocument::GetPool()
 {
-    return xPoolHelper->GetDocPool();
+    return mxPoolHelper->GetDocPool();
 }
 
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
-    return xPoolHelper->GetStylePool();
+    return mxPoolHelper->GetStylePool();
 }
 
 SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
@@ -6026,7 +6026,7 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, 
 
 void ScDocument::UpdStlShtPtrsFrmNms()
 {
-    ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
@@ -6040,7 +6040,7 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 
 void ScDocument::StylesToNames()
 {
-    ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
@@ -6272,7 +6272,7 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
         OUString aNew = maTabs[nTab+1]->GetPageStyle();
         if ( aNew != maTabs[nTab]->GetPageStyle() )
         {
-            SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aNew, SfxStyleFamily::Page );
+            SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( aNew, SfxStyleFamily::Page );
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();

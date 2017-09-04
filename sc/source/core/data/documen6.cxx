@@ -117,7 +117,7 @@ SvtScriptType ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uLong nN
         return nStored;                             // use stored value
 
     Color* pColor;
-    OUString aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *xPoolHelper->GetFormTable());
+    OUString aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *mxPoolHelper->GetFormTable());
 
     SvtScriptType nRet = GetStringScriptType( aStr );
 
@@ -143,7 +143,7 @@ SvtScriptType ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( !static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
-    sal_uLong nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );
+    sal_uLong nFormat = pPattern->GetNumberFormat( mxPoolHelper->GetFormTable(), pCondSet );
 
     return GetCellScriptType(aPos, nFormat);
 }

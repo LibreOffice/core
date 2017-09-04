@@ -120,7 +120,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
     if ( !pPrinter && bCreateIfNotExist )
     {
         auto pSet =
-            o3tl::make_unique<SfxItemSet>( *xPoolHelper->GetDocPool(),
+            o3tl::make_unique<SfxItemSet>( *mxPoolHelper->GetDocPool(),
                             svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
@@ -298,7 +298,7 @@ void ScDocument::CopyStdStylesFrom( const ScDocument* pSrcDoc )
 {
     // number format exchange list has to be handled here, too
     NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
-    xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
+    mxPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->mxPoolHelper->GetStylePool() );
 }
 
 void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
@@ -366,7 +366,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
     EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
 
     OUString aStyleName = GetPageStyle( nTab );
-    SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aStyleName, SfxStyleFamily::Page );
+    SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( aStyleName, SfxStyleFamily::Page );
     if ( pStyle )
     {
         SfxItemSet& rStyleSet = pStyle->GetItemSet();

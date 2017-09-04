@@ -784,7 +784,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                         OUString aStyle = pForm->GetCellStyle(aCell, aPos);
                         if (!aStyle.isEmpty())
                         {
-                            SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
+                            SfxStyleSheetBase* pStyleSheet = mxPoolHelper->GetStylePool()->Find(
                                     aStyle, SfxStyleFamily::Para );
                             if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
                                         nWhich, true, &pItem ) == SfxItemState::SET )
@@ -830,7 +830,7 @@ const SfxItemSet* ScDocument::GetCondResult(
         if (!aStyle.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet =
-                xPoolHelper->GetStylePool()->Find(aStyle, SfxStyleFamily::Para);
+                mxPoolHelper->GetStylePool()->Find(aStyle, SfxStyleFamily::Para);
 
             if (pStyleSheet)
                 return &pStyleSheet->GetItemSet();

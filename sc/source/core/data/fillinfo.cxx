@@ -361,8 +361,8 @@ void ScDocument::FillInfo(
 
     bool bLayoutRTL = IsLayoutRTL( nTab );
 
-    ScDocumentPool* pPool = xPoolHelper->GetDocPool();
-    ScStyleSheetPool* pStlPool = xPoolHelper->GetStylePool();
+    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
+    ScStyleSheetPool* pStlPool = mxPoolHelper->GetStylePool();
 
     RowInfo* pRowInfo = rTabInfo.mpRowInfo.get();
 

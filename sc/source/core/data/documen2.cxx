@@ -228,7 +228,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
 
     if ( eMode == SCDOCMODE_DOCUMENT )
     {
-        xPoolHelper = new ScPoolHelper( this );
+        mxPoolHelper = new ScPoolHelper( this );
 
         pBASM = new ScBroadcastAreaSlotMachine( this );
         pChartListenerCollection = new ScChartListenerCollection( this );
@@ -443,12 +443,12 @@ ScDocument::~ScDocument()
     delete pDPCollection;
     delete mpAnonymousDBData;
 
-    // delete the EditEngine before destroying the xPoolHelper
+    // delete the EditEngine before destroying the mxPoolHelper
     delete pCacheFieldEditEngine;
 
-    if ( xPoolHelper.is() && !bIsClip && !bIsUndo)
-        xPoolHelper->SourceDocumentGone();
-    xPoolHelper.clear();
+    if ( mxPoolHelper.is() && !bIsClip && !bIsUndo)
+        mxPoolHelper->SourceDocumentGone();
+    mxPoolHelper.clear();
 
     delete pScriptTypeData;
     delete pRecursionHelper;
@@ -500,17 +500,17 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
 SvNumberFormatter* ScDocument::GetFormatTable() const
 {
-    return xPoolHelper->GetFormTable();
+    return mxPoolHelper->GetFormTable();
 }
 
 SfxItemPool* ScDocument::GetEditPool() const
 {
-    return xPoolHelper->GetEditPool();
+    return mxPoolHelper->GetEditPool();
 }
 
 SfxItemPool* ScDocument::GetEnginePool() const
 {
-    return xPoolHelper->GetEnginePool();
+    return mxPoolHelper->GetEnginePool();
 }
 
 ScFieldEditEngine& ScDocument::GetEditEngine()

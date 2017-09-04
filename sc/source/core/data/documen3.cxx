@@ -1894,7 +1894,7 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     assert(pDocOptions && "No DocOptions! :-(");
 
     *pDocOptions = rOpt;
-    xPoolHelper->SetFormTableOpt(rOpt);
+    mxPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const
@@ -1921,9 +1921,9 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     eLanguage = eLatin;
     eCjkLanguage = eCjk;
     eCtlLanguage = eCtl;
-    if ( xPoolHelper.is() )
+    if ( mxPoolHelper.is() )
     {
-        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+        ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
         pPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
         pPool->SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
         pPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
@@ -2048,7 +2048,7 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
     RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
 
     const ScMergeAttr* pDefAttr = static_cast<const ScMergeAttr*>(
-                                        &xPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE ));
+                                        &mxPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE ));
     ApplyAttr( nCol, nRow, nTab, *pDefAttr );
 }
 
