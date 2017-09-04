@@ -74,7 +74,7 @@ sub check_whitespaces($)
             }
             if (/\s*	/)
             {
-                bad_line("indent with Tab", $_, $src_limited);
+                bad_line("indent with Tab", $_, $src_full);
             }
             if (/^(?:[<>=]){7}$/)
             {
