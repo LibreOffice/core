@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_09e641b4",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-04T12:39:11Z",
+      "side": 1,
+      "message": "no need for this line, there is already a\n    m_xContext\nfield on this class",
+      "revId": "d23e4486fa6f06da58bdd741034b1e0436bb2c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
