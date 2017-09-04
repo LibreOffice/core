@@ -3631,7 +3631,9 @@ void ScInterpreter::ScMin( bool bTextAsZero )
     }
     else
     {
-        if ( nVal < nMin  )
+        if (!rtl::math::isFinite(nVal))
+            PushError( GetDoubleErrorValue( nVal));
+        else if ( nVal < nMin  )
             PushDouble(0.0);    // zero or only empty arguments
         else
             PushDouble(nMin);
@@ -3786,7 +3788,9 @@ void ScInterpreter::ScMax( bool bTextAsZero )
     }
     else
     {
-        if ( nVal > nMax  )
+        if (!rtl::math::isFinite(nVal))
+            PushError( GetDoubleErrorValue( nVal));
+        else if ( nVal > nMax  )
             PushDouble(0.0);    // zero or only empty arguments
         else
             PushDouble(nMax);
