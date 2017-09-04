@@ -318,7 +318,7 @@ private:
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  mpEditEngine;                   // uses pEditPool from xPoolHelper
-    ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
+    ScNoteEditEngine*   mpNoteEngine;                   // uses pEditPool from xPoolHelper
     SfxObjectShell*     pShell;
     VclPtr<SfxPrinter>    pPrinter;
     VclPtr<VirtualDevice> pVirtualDevice_100th_mm;

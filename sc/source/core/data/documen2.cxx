@@ -137,7 +137,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         maCalcConfig( ScInterpreter::GetGlobalConfig()),
         mpUndoManager( nullptr ),
         mpEditEngine( nullptr ),
-        pNoteEngine( nullptr ),
+        mpNoteEngine( nullptr ),
         pShell( pDocShell ),
         pPrinter( nullptr ),
         pVirtualDevice_100th_mm( nullptr ),
@@ -436,7 +436,7 @@ ScDocument::~ScDocument()
     delete pDetOpList;                  // also deletes entries
     delete pChangeTrack;
     delete mpEditEngine;
-    delete pNoteEngine;
+    delete mpNoteEngine;
     delete pChangeViewSettings;         // and delete
     pVirtualDevice_100th_mm.disposeAndClear();
 
@@ -528,19 +528,19 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
 
 ScNoteEditEngine& ScDocument::GetNoteEngine()
 {
-    if ( !pNoteEngine )
+    if ( !mpNoteEngine )
     {
-        pNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
-        pNoteEngine->SetUpdateMode( false );
-        pNoteEngine->EnableUndo( false );
-        pNoteEngine->SetRefMapMode( MapUnit::Map100thMM );
-        ApplyAsianEditSettings( *pNoteEngine );
+        mpNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
+        mpNoteEngine->SetUpdateMode( false );
+        mpNoteEngine->EnableUndo( false );
+        mpNoteEngine->SetRefMapMode( MapUnit::Map100thMM );
+        ApplyAsianEditSettings( *mpNoteEngine );
         const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
-        SfxItemSet* pEEItemSet = new SfxItemSet( pNoteEngine->GetEmptyItemSet() );
+        SfxItemSet* pEEItemSet = new SfxItemSet( mpNoteEngine->GetEmptyItemSet() );
         ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-        pNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
+        mpNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
     }
-    return *pNoteEngine;
+    return *mpNoteEngine;
 }
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
