@@ -820,6 +820,12 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             {
                 if (!(rValue >>= msImgFilterName))
                     return false;
+
+                // conversion of imgs to different format is desired
+                if (!msImgFilterName.isEmpty())
+                {
+                    mxGraphicExportFilter = drawing::GraphicExportFilter::create( m_xContext );
+                }
             }
         }
 
@@ -1896,6 +1902,21 @@ bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObje
         rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
         mxGraphicResolver.is() )
     {
+        // conversion to different format is desired
+        if( mxGraphicExportFilter.is() )
+        {
+            //FIXME: IDK what properties to pass here, it's pure magic^W dumpsterfire!
+            Sequence< PropertyValue > aDescriptor(2);
+            aDescriptor[0].Name = "URL";
+            aDescriptor[0].Value <<= rGraphicObjectURL;
+            aDescriptor[1].Name = "FilterName";
+            //FIXME:uppercase + verify if img format is valid
+            aDescriptor[1].Value <<= msImgFilterName;
+
+            // mxGraphicExportFilter->setSourceDocument( ... );
+            // mxGraphicExportFilter->filter( aDescriptor );
+        }
+
         Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
 
         if( xStmResolver.is() )
