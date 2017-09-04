@@ -33,7 +33,7 @@ class SwListImpl
         SwListImpl( const OUString& sListId,
                     SwNumRule& rDefaultListStyle,
                     const SwNodes& rNodes );
-        ~SwListImpl();
+        ~SwListImpl() COVERITY_NOEXCEPT_FALSE;
 
         const OUString& GetListId() const { return msListId;}
 
@@ -96,7 +96,7 @@ SwListImpl::SwListImpl( const OUString& sListId,
     while ( pNode != &rNodes.GetEndOfContent() );
 }
 
-SwListImpl::~SwListImpl()
+SwListImpl::~SwListImpl() COVERITY_NOEXCEPT_FALSE
 {
     tListTrees::iterator aNumberTreeIter;
     for ( aNumberTreeIter = maListTrees.begin();
