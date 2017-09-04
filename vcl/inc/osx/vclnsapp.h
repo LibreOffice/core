@@ -61,8 +61,6 @@ class AquaSalFrame;
 #endif
 -(BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL)bWinVisible;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
--(void)cycleFrameForward: (AquaSalFrame*)pCurFrame;
--(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame;
 @end
 
 #endif // INCLUDED_VCL_INC_OSX_VCLNSAPP_H

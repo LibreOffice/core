@@ -47,19 +47,6 @@
 // FIXME: remove when we re-work the svp mainloop
 #include "unx/salunxtime.h"
 
-bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
-{
-    for( std::list< SalFrame* >::const_iterator it = m_aFrames.begin();
-         it != m_aFrames.end(); ++it )
-    {
-        if( *it == pFrame )
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = nullptr;
 
 #if !defined(ANDROID) && !defined(IOS)
@@ -165,12 +152,8 @@ void SvpSalInstance::CreateWakeupPipe(bool log)
 
 #endif
 
-void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent)
+void SvpSalInstance::TriggerUserEventProcessing()
 {
-    {
-        osl::MutexGuard g(m_aEventGuard);
-        m_aUserEvents.emplace_back( pFrame, pData, nEvent );
-    }
     Wakeup();
 }
 
@@ -185,31 +168,6 @@ bool SvpSalInstance::PostedEventsInQueue()
     return result;
 }
 #endif
-
-void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
-{
-    m_aFrames.remove( pFrame );
-
-    osl::MutexGuard g(m_aEventGuard);
-    // cancel outstanding events for this frame
-    if( ! m_aUserEvents.empty() )
-    {
-        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-        do
-        {
-            if( it->m_pFrame == pFrame )
-            {
-                if (it->m_nEvent == SalEvent::UserEvent)
-                {
-                    delete it->m_pData;
-                }
-                it = m_aUserEvents.erase( it );
-            }
-            else
-                ++it;
-        } while( it != m_aUserEvents.end() );
-    }
-}
 
 void SvpSalInstance::Wakeup()
 {
@@ -304,44 +262,24 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
 #endif
 }
 
+void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
+{
+    aEvent.m_pFrame->CallCallback( aEvent.m_nEvent, aEvent.m_pData );
+    if( aEvent.m_nEvent == SalEvent::Resize )
+    {
+        // this would be a good time to post a paint
+        const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>( aEvent.m_pFrame);
+        pSvpFrame->PostPaint();
+    }
+}
+
+
 bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
 {
-    // first, check for already queued events.
-    std::list< SalUserEvent > aEvents;
-    {
-        osl::MutexGuard g(m_aEventGuard);
-        if( ! m_aUserEvents.empty() )
-        {
-            if( bHandleAllCurrentEvents )
-            {
-                aEvents = m_aUserEvents;
-                m_aUserEvents.clear();
-            }
-            else
-            {
-                aEvents.push_back( m_aUserEvents.front() );
-                m_aUserEvents.pop_front();
-            }
-        }
-    }
-
-    bool bEvent = !aEvents.empty();
-    if( bEvent )
-    {
-        for( std::list<SalUserEvent>::const_iterator it = aEvents.begin(); it != aEvents.end(); ++it )
-        {
-            if ( isFrameAlive( it->m_pFrame ) )
-            {
-                it->m_pFrame->CallCallback( it->m_nEvent, it->m_pData );
-                if( it->m_nEvent == SalEvent::Resize )
-                {
-                    // this would be a good time to post a paint
-                    const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
-                    pSvpFrame->PostPaint();
-                }
-            }
-        }
-    }
+    // first, process current user events
+    bool bEvent = DispatchUserEvents( bHandleAllCurrentEvents );
+    if ( !bHandleAllCurrentEvents &&bEvent )
+        return true;
 
     bEvent = CheckTimeout() || bEvent;
 

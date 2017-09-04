@@ -431,10 +431,10 @@ SalX11Display::~SalX11Display()
     }
 }
 
-void SalX11Display::PostUserEvent()
+void SalX11Display::TriggerUserEventProcessing()
 {
     if( pXLib_ )
-        pXLib_->PostUserEvent();
+        pXLib_->TriggerUserEventProcessing();
 }
 
 SalDisplay::ScreenData *
@@ -1935,17 +1935,16 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
     {
         ::Window aWindow = pEvent->xkey.window;
 
-        std::list< SalFrame* >::const_iterator it;
-        for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
+        for (auto pSalFrame : m_aFrames )
         {
-            const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
+            const X11SalFrame* pFrame = static_cast< const X11SalFrame* >( pSalFrame );
             if( pFrame->GetWindow() == aWindow || pFrame->GetShellWindow() == aWindow )
             {
                 aWindow = pFrame->GetWindow();
                 break;
             }
         }
-        if( it != m_aFrames.end() )
+        if( aWindow != pEvent->xkey.window )
         {
             if ( pInputMethod && pInputMethod->FilterEvent( pEvent , aWindow ) )
                 return false;
@@ -1975,9 +1974,8 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
                 {
                     if( pEvent->xproperty.window == rScreen.m_aRefWindow )
                     {
-                        std::list< SalFrame* >::const_iterator it;
-                        for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
-                            (*it)->CallCallback( SalEvent::SettingsChanged, nullptr );
+                        for (auto pSalFrame : m_aFrames )
+                             pSalFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
                         return false;
                     }
                 }
@@ -2009,10 +2007,10 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
             break;
     }
 
-    std::list< SalFrame* >::iterator it;
-    for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
+    for (auto pSalFrame : m_aFrames )
     {
-        X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
+        X11SalFrame* pFrame = static_cast<X11SalFrame*>( pSalFrame );
+
         ::Window aDispatchWindow = pEvent->xany.window;
         if( pFrame->GetWindow() == aDispatchWindow
             || pFrame->GetShellWindow() == aDispatchWindow

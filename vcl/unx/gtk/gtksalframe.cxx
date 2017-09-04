@@ -2180,10 +2180,9 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     if( bGrab )
     {
         bool bUseGdkGrab = true;
-        const std::list< SalFrame* >& rFrames = getDisplay()->getFrames();
-        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+        for (auto pSalFrame : getDisplay()->getFrames() )
         {
-            const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >(*it);
+            const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >( pSalFrame );
             if( pFrame->m_bWindowIsGtkPlug )
             {
                 bUseGdkGrab = false;

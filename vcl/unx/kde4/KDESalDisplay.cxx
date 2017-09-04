@@ -86,4 +86,9 @@ bool SalKDEDisplay::checkDirectInputEvent( XEvent* ev )
     return false;
 }
 
+void SalKDEDisplay::TriggerUserEventProcessing()
+{
+    static_cast<KDEXLib*>(GetXLib())->TriggerUserEventProcessing();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

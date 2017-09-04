@@ -136,24 +136,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 }
             }
 
-            // #i90083# handle frame switching
-            // FIXME: lousy workaround
-            if( (nModMask & (NSControlKeyMask|NSAlternateKeyMask)) == 0 )
-            {
-                if( [[pEvent characters] isEqualToString: @"<"] ||
-                    [[pEvent characters] isEqualToString: @"~"] )
-                {
-                    [self cycleFrameForward: pFrame];
-                    return;
-                }
-                else if( [[pEvent characters] isEqualToString: @">"] ||
-                         [[pEvent characters] isEqualToString: @"`"] )
-                {
-                    [self cycleFrameBackward: pFrame];
-                    return;
-                }
-            }
-
             // get information whether the event was handled; keyDown returns nothing
             GetSalData()->maKeyEventAnswer[ pEvent ] = false;
             bool bHandled = false;
@@ -243,84 +225,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 -(void)sendSuperEvent:(NSEvent*)pEvent
 {
     [super sendEvent: pEvent];
-}
-
--(void)cycleFrameForward: (AquaSalFrame*)pCurFrame
-{
-    // find current frame in list
-    std::list< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
-    std::list< AquaSalFrame* >::iterator it = rFrames.begin();
-    for( ; it != rFrames.end() && *it != pCurFrame; ++it )
-        ;
-    if( it != rFrames.end() )
-    {
-        // now find the next frame (or end)
-        do
-        {
-            ++it;
-            if( it != rFrames.end() )
-            {
-                if( (*it)->mpDockMenuEntry != nullptr &&
-                    (*it)->mbShown )
-                {
-                    [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
-                    return;
-                }
-            }
-        } while( it != rFrames.end() );
-        // cycle around, find the next up to pCurFrame
-        it = rFrames.begin();
-        while( *it != pCurFrame )
-        {
-            if( (*it)->mpDockMenuEntry != nullptr &&
-                (*it)->mbShown )
-            {
-                [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
-                return;
-            }
-            ++it;
-        }
-    }
-}
-
--(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame
-{
-    // do the same as cycleFrameForward only with a reverse iterator
-
-    // find current frame in list
-    std::list< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
-    std::list< AquaSalFrame* >::reverse_iterator it = rFrames.rbegin();
-    for( ; it != rFrames.rend() && *it != pCurFrame; ++it )
-        ;
-    if( it != rFrames.rend() )
-    {
-        // now find the next frame (or end)
-        do
-        {
-            ++it;
-            if( it != rFrames.rend() )
-            {
-                if( (*it)->mpDockMenuEntry != nullptr &&
-                    (*it)->mbShown )
-                {
-                    [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
-                    return;
-                }
-            }
-        } while( it != rFrames.rend() );
-        // cycle around, find the next up to pCurFrame
-        it = rFrames.rbegin();
-        while( *it != pCurFrame )
-        {
-            if( (*it)->mpDockMenuEntry != nullptr &&
-                (*it)->mbShown )
-            {
-                [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
-                return;
-            }
-            ++it;
-        }
-    }
 }
 
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender
@@ -413,12 +317,13 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     {
         SolarMutexGuard aGuard;
 
-        SalData* pSalData = GetSalData();
-        if( ! pSalData->maFrames.empty() )
+        AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+        SalFrame *pAnyFrame = pInst->anyFrame();
+        if( pAnyFrame )
         {
             // the following QueryExit will likely present a message box, activate application
             [NSApp activateIgnoringOtherApps: YES];
-            aReply = pSalData->maFrames.front()->CallCallback( SalEvent::Shutdown, nullptr ) ? NSTerminateCancel : NSTerminateNow;
+            aReply = pAnyFrame->CallCallback( SalEvent::Shutdown, nullptr ) ? NSTerminateCancel : NSTerminateNow;
         }
 
         if( aReply == NSTerminateNow )
@@ -439,9 +344,10 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    const SalData* pSalData = GetSalData();
-    if( !pSalData->maFrames.empty() )
-        pSalData->maFrames.front()->CallCallback( SalEvent::SettingsChanged, nullptr );
+    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    SalFrame *pAnyFrame = pInst->anyFrame();
+    if(  pAnyFrame )
+        pAnyFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
 }
 
 -(void)screenParametersChanged: (NSNotification*) pNotification
@@ -449,11 +355,10 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    SalData* pSalData = GetSalData();
-    std::list< AquaSalFrame* >::iterator it;
-    for( it = pSalData->maFrames.begin(); it != pSalData->maFrames.end(); ++it )
+    for( auto pSalFrame : GetSalData()->mpFirstInstance->getFrames() )
     {
-        (*it)->screenParametersChanged();
+        AquaSalFrame *pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
+        pFrame->screenParametersChanged();
     }
 }
 

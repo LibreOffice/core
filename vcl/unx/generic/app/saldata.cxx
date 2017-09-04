@@ -786,7 +786,7 @@ void SalXLib::Wakeup()
     OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
 
-void SalXLib::PostUserEvent()
+void SalXLib::TriggerUserEventProcessing()
 {
     Wakeup();
 }
