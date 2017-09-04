@@ -2643,6 +2643,7 @@ void Test::testFunctionLists()
         "ROMAN",
         "ROT13",
         "SEARCH",
+        "SEARCHB",
         "SUBSTITUTE",
         "T",
         "TEXT",

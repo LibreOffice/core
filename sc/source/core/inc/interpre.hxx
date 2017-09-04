@@ -966,6 +966,7 @@ void ScLeftB();
 void ScMidB();
 void ScReplaceB();
 void ScFindB();
+void ScSearchB();
 
 void ScFilterXML();
 void ScWebservice();
