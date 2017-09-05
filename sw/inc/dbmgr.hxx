@@ -256,6 +256,9 @@ class SW_DLLPUBLIC SwDBManager
     /// Name of the embedded database that's included in the current document.
     OUString     m_sEmbeddedName;
 
+    /// Store last registrations to revoke or commit
+    static std::vector<OUString> m_aUncommitedRegistrations;
+
     /// The document that owns this manager.
     SwDoc* m_pDoc;
 
@@ -476,6 +479,12 @@ public:
     SwDoc* getDoc() const;
     /// Stop reacting to removed database registrations.
     void releaseRevokeListener();
+
+    /// Revoke not commited registrations in case of mail merge cancel
+    void RevokeLastRegistrations();
+
+    /// Accept not commited registrations
+    void CommitLastRegistrations();
 };
 
 #endif

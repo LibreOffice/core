@@ -161,6 +161,8 @@ void lcl_emitEvent(SfxEventHintId nEventId, sal_Int32 nStrId, SfxObjectShell* pD
 
 }
 
+std::vector<OUString> SwDBManager::m_aUncommitedRegistrations;
+
 enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
 
@@ -2612,6 +2614,8 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
         }
         sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
+
+        m_aUncommitedRegistrations.push_back(sFind);
     }
     return sFind;
 }
@@ -3179,6 +3183,29 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView cons
     rSh.GetDBManager()->Merge(aMergeDesc);
 
     return xConfigItem;
+}
+
+void SwDBManager::RevokeLastRegistrations()
+{
+    releaseRevokeListener();
+
+    SwView* pView = m_pDoc->GetDocShell()->GetView();
+    std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
+    if (xConfigItem)
+    {
+        xConfigItem->DisposeResultSet();
+        xConfigItem->DocumentReloaded();
+    }
+
+    for (const OUString& rName : m_aUncommitedRegistrations)
+        RevokeDataSource(rName);
+
+    m_aUncommitedRegistrations.clear();
+}
+
+void SwDBManager::CommitLastRegistrations()
+{
+    m_aUncommitedRegistrations.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
