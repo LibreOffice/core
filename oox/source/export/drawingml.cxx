@@ -1382,7 +1382,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         mAny >>= aLocale;
         LanguageTag aLanguageTag( aLocale);
         if (!aLanguageTag.isSystemLocale())
-            usLanguage = aLanguageTag.getBcp47();
+            usLanguage = aLanguageTag.getBcp47MS();
     }
 
     if( GETAD( CharEscapement ) )

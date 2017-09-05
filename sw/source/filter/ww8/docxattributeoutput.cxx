@@ -6515,7 +6515,7 @@ void DocxAttributeOutput::CharKerning( const SvxKerningItem& rKerning )
 void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 {
     OString aLanguageCode( OUStringToOString(
-                LanguageTag( rLanguage.GetLanguage()).getBcp47(),
+                LanguageTag( rLanguage.GetLanguage()).getBcp47MS(),
                 RTL_TEXTENCODING_UTF8));
 
     switch ( rLanguage.Which() )

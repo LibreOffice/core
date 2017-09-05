@@ -566,7 +566,7 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const LanguageTag&
     // and obsoleted by RFC 5646, see
     // http://dublincore.org/documents/dcmi-terms/#terms-language
     // http://dublincore.org/documents/dcmi-terms/#elements-language
-    writeElement( pDoc, nXmlElement, rLanguageTag.getBcp47() );
+    writeElement( pDoc, nXmlElement, rLanguageTag.getBcp47MS() );
 }
 
 static void
