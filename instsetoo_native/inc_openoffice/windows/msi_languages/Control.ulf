@@ -380,7 +380,7 @@ en-US = "The highlighted volumes do not have enough disk space available for the
 en-US = "{&MSSansBold8}Out of Disk Space"
 
 [OOO_CONTROL_156]
-en-US = "{120}{70}{70}{70}{70}"
+en-US = "{60}{80}{70}{70}{70}"
 
 [OOO_CONTROL_157]
 en-US = "OK"
