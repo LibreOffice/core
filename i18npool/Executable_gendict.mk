@@ -14,7 +14,7 @@ $(eval $(call gb_Executable_use_libraries,gendict,\
 ))
 
 ifeq ($(gb_Side),build)
-ifeq ($(shell grep OS=IOS $(BUILDDIR)/config_host.mk),)
+ifneq ($(shell grep OS=IOS $(BUILDDIR)/config_host.mk),)
 $(eval $(call gb_Executable_add_cxxflags,gendict,\
 	-DDICT_JA_ZH_IN_DATAFILE \
 ))
