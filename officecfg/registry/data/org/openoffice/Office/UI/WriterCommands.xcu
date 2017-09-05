@@ -2765,14 +2765,56 @@
           <value xml:lang="en-US">Default ~Paragraph</value>
         </prop>
       </node>
+      <node oor:name=".uno:DefaultParaStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Default ~Paragraph</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Default Paragraph Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Title</value>
         </prop>
       </node>
+      <node oor:name=".uno:TitleParaStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Title</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Title Paragraph Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Su~btitle</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SubtitleParaStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Su~btitle</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Subtitle Paragraph Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2840,14 +2882,56 @@
           <value xml:lang="en-US">Heading ~4</value>
         </prop>
       </node>
+      <node oor:name=".uno:Heading4ParaStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~4</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 4 Paragraph Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~5</value>
         </prop>
       </node>
+      <node oor:name=".uno:Heading5ParaStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~5</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 5 Paragraph Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~6</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Heading6ParaStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Heading ~6</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Heading 6 Paragraph Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
@@ -2912,6 +2996,20 @@
           <value xml:lang="en-US">Default ~Character</value>
         </prop>
       </node>
+      <node oor:name=".uno:DefaultCharStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Default ~Character/value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Default Character Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">E~mphasis</value>
@@ -2955,6 +3053,20 @@
           <value xml:lang="en-US">Qu~otation</value>
         </prop>
       </node>
+      <node oor:name=".uno:QuoteCharStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Qu~otation</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Quotation Character Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sou~rce Text</value>
@@ -2979,14 +3091,56 @@
           <value xml:lang="en-US">Bullet List</value>
         </prop>
       </node>
+      <node oor:name=".uno:BulletListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Bullet List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Bullet List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Number List</value>
         </prop>
       </node>
+      <node oor:name=".uno:NumberListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Number List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Number List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Roman List</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RomanListStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Roman List</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Roman List Style</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply" oor:op="replace">
