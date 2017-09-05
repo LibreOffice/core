@@ -47,9 +47,7 @@ namespace comphelper
         /// configuration will be opened readonly
         ReadOnly = 1,
         /// all localized nodes will be interpreted as XInterface instead of interpreting it as atomic value nodes
-        AllLocales = 2,
-        /// enable lazy writing
-        LazyWrite = 4
+        AllLocales = 2
     };
 
 

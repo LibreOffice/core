@@ -33,15 +33,8 @@ class Configuration(object):
         aPathArgument.Value = sPath
 
         args.append(aPathArgument)
-        if updateable:
-            sView = "com.sun.star.configuration.ConfigurationUpdateAccess"
-            aModeArgument = uno.createUnoStruct(
-                'com.sun.star.beans.PropertyValue')
-            aModeArgument.Name = "lazywrite"
-            aModeArgument.Value = False
-            args.append(aModeArgument)
-        else:
-            sView = "com.sun.star.configuration.ConfigurationAccess"
+
+        sView = "com.sun.star.configuration.ConfigurationAccess"
 
         return oConfigProvider.createInstanceWithArguments(sView, tuple(args))
 

@@ -44,8 +44,6 @@ using namespace hierarchy_ucp;
 
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH    "nodepath"
-// true->async. update; false->sync. update
-#define CFGPROPERTY_LAZYWRITE   "lazywrite"
 
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
@@ -355,8 +353,6 @@ HierarchyDataSource::createInstanceWithArguments(
 
     uno::Sequence< uno::Any > aNewArgs( Arguments );
 
-    bool bHasLazyWriteProp = bReadOnly; // property must be added only if
-                                        // a writable view is requested.
     if ( bCheckArgs )
     {
         // Check arguments.
@@ -389,29 +385,12 @@ HierarchyDataSource::createInstanceWithArguments(
                         // Set new path in arguments.
                         aNewArgs[ n ] <<= aProp;
 
-                        if ( bHasLazyWriteProp )
-                            break;
+                        break;
                     }
                     else
                     {
                         OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
                             "Invalid type for property 'nodepath'!" );
-                        return uno::Reference< uno::XInterface >();
-                    }
-                }
-                else if ( aProp.Name == CFGPROPERTY_LAZYWRITE )
-                {
-                    if ( aProp.Value.getValueType() == cppu::UnoType<bool>::get() )
-                    {
-                        bHasLazyWriteProp = true;
-
-                        if ( bHasNodePath )
-                            break;
-                    }
-                    else
-                    {
-                        OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
-                            "Invalid type for property 'lazywrite'!" );
                         return uno::Reference< uno::XInterface >();
                     }
                 }
@@ -443,18 +422,6 @@ HierarchyDataSource::createInstanceWithArguments(
         }
         else
         {
-            // Append 'lazywrite' property value, if not already present.
-            if ( !bHasLazyWriteProp )
-            {
-                sal_Int32 nLen = aNewArgs.getLength();
-                aNewArgs.realloc( nLen + 1 );
-
-                beans::PropertyValue aProp;
-                aProp.Name = CFGPROPERTY_LAZYWRITE;
-                aProp.Value <<= true;
-                aNewArgs[ nLen ] <<= aProp;
-            }
-
             // Create configuration read-write access object.
             xConfigAccess = xProv->createInstanceWithArguments(
                                 "com.sun.star.configuration.ConfigurationUpdateAccess",

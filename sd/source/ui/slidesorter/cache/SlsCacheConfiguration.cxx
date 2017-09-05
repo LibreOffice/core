@@ -83,8 +83,7 @@ CacheConfiguration::CacheConfiguration()
         Sequence<Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
             {"nodepath", makeAny(sPathToImpressConfigurationRoot)},
-            {"depth", makeAny((sal_Int32)-1)},
-            {"lazywrite", makeAny(true)}
+            {"depth", makeAny((sal_Int32)-1)}
         }));
 
         Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(

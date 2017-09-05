@@ -200,8 +200,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
             uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
-                {"nodepath", uno::Any(OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars"))},
-                {"lazywrite", uno::Any(true)}
+                {"nodepath", uno::Any(OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars"))}
             }));
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),

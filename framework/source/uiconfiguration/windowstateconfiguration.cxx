@@ -1214,8 +1214,7 @@ void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     {
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", Any(m_aConfigWindowAccess)},
-            {"lazywrite", Any(true)}
+            {"nodepath", Any(m_aConfigWindowAccess)}
         }));
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationUpdateAccess", aArgs ), UNO_QUERY );

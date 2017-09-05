@@ -53,12 +53,6 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
         lParams.push_back(css::uno::Any(aParam));
     }
 
-    // enable lazy writing
-    bool bLazy(eMode & EConfigurationModes::LazyWrite);
-    aParam.Name    = "lazywrite";
-    aParam.Value   <<= bLazy;
-    lParams.push_back(css::uno::Any(aParam));
-
     // open it
     css::uno::Reference< css::uno::XInterface > xCFG;
 

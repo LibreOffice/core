@@ -292,8 +292,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
         uno::Sequence<uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath",  uno::Any(GetPathToConfigurationRoot())},
-            {"lazywrite", uno::Any(true)}
+            {"nodepath",  uno::Any(GetPathToConfigurationRoot())}
         }));
         OUString sAccessService;
         if ( bReadOnly )

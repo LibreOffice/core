@@ -115,14 +115,8 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
         aPathArgument.Name = "nodepath";
         aPathArgument.Value <<= sTree;
 
-        // creation arguments: commit mode
-        PropertyValue aModeArgument;
-        aModeArgument.Name = "lazywrite";
-        aModeArgument.Value <<= true;
-
-        Sequence< Any > aArguments( 2 );
+        Sequence< Any > aArguments( 1 );
         aArguments[ 0 ] <<= aPathArgument;
-        aArguments[ 1 ] <<= aModeArgument;
 
         try
         {

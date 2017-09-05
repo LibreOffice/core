@@ -48,23 +48,13 @@ public abstract class Configuration
 
         final String sView = updateable ? "com.sun.star.configuration.ConfigurationUpdateAccess" : "com.sun.star.configuration.ConfigurationAccess";
 
-        Object args[] = new Object[updateable ? 2 : 1];
+        Object args[] = new Object[1];
 
         PropertyValue aPathArgument = new PropertyValue();
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = sPath;
 
         args[0] = aPathArgument;
-
-        if (updateable)
-        {
-
-            PropertyValue aModeArgument = new PropertyValue();
-            aModeArgument.Name = "lazywrite";
-            aModeArgument.Value = Boolean.FALSE;
-
-            args[1] = aModeArgument;
-        }
 
         return confMsf.createInstanceWithArguments(sView, args);
     }

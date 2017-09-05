@@ -103,8 +103,6 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
 
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH        "nodepath"
-// true->async. update; false->sync. update
-#define CFGPROPERTY_LAZYWRITE       "lazywrite"
 
 // PropertySetMap_Impl.
 typedef std::unordered_map
@@ -998,8 +996,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
             {
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
-                    {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))},
-                    {CFGPROPERTY_LAZYWRITE, Any(true)}
+                    {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))}
                 }));
 
                 m_pImpl->m_bTriedToGetRootWriteAccess = true;

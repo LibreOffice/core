@@ -244,8 +244,7 @@ namespace utl
                 const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                 const OUString& _rPath,
                 sal_Int32 _nDepth,
-                CREATION_MODE _eMode,
-                bool _bLazyWrite = true
+                CREATION_MODE _eMode
             );
 
         /** open a new top-level configuration node<p/>
@@ -261,7 +260,7 @@ namespace utl
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
         static OConfigurationTreeRoot createWithComponentContext(const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, bool _bLazyWrite = true);
+            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
 
