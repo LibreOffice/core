@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_78bb0c73",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8836,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-05T18:44:59Z",
+      "side": 1,
+      "message": "Asking because I don\u0027t know: does SEARCHB() in Excel really support Wildcards? In ODFF it\u0027s defined without HOST-USE-REGULAR-EXPRESSIONS or HOST-USE-WILDCARDS properties.",
+      "range": {
+        "startLine": 8836,
+        "startChar": 55,
+        "endLine": 8836,
+        "endChar": 71
+      },
+      "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
