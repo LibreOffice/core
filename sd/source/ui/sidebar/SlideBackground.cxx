@@ -138,6 +138,7 @@ SlideBackground::SlideBackground(
     maDrawMasterContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::MasterPage),
     maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),
     maImpressMasterContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterPage),
+    maImpressHandoutContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::HandoutPage),
     mbTitle(false),
     meFieldUnit(lcl_GetFieldUnit()),
     m_nPageLeftMargin(0),
@@ -152,10 +153,12 @@ SlideBackground::SlideBackground(
     //let the listbox shrink to any size so the sidebar isn't forced to grow to
     //the size of the longest master slide name in the document
     mpMasterSlide->set_width_request(0);
+    get(mpBackgroundLabel, "label3");
     get(mpFillAttr, "fillattr1");
     get(mpFillGrad, "fillattr2");
     get(mpFillStyle, "fillstyle");
     get(mpFillLB, "fillattr");
+    get(mpInsertImage, "button2");
     get(mpDspMasterBackground, "displaymasterbackground");
     get(mpDspMasterObjects, "displaymasterobjects");
     get(mpCloseMaster, "closemasterslide");
@@ -192,7 +195,8 @@ SlideBackground::~SlideBackground()
 bool SlideBackground::IsImpress()
 {
     return ( maContext == maImpressMasterContext ||
-             maContext == maImpressOtherContext );
+             maContext == maImpressOtherContext ||
+             maContext == maImpressHandoutContext );
 }
 
 void SlideBackground::Initialize()
@@ -254,6 +258,18 @@ void SlideBackground::HandleContextChange(
         mpMasterSlide->Disable();
         mpDspMasterBackground->Disable();
         mpDspMasterObjects->Disable();
+        mpFillStyle->Show();
+        mpBackgroundLabel->Show();
+        mpInsertImage->Show();
+    }
+    else if ( maContext == maImpressHandoutContext )
+    {
+        mpFillStyle->Hide();
+        mpFillLB->Hide();
+        mpFillAttr->Hide();
+        mpFillGrad->Hide();
+        mpBackgroundLabel->Hide();
+        mpInsertImage->Hide();
     }
     else if (maContext == maImpressOtherContext )
     {
@@ -262,6 +278,9 @@ void SlideBackground::HandleContextChange(
         mpMasterSlide->Enable();
         mpDspMasterBackground->Enable();
         mpDspMasterObjects->Enable();
+        mpFillStyle->Show();
+        mpBackgroundLabel->Show();
+        mpInsertImage->Show();
     }
     // else Draw or something else, do nothing
 }
@@ -287,7 +306,8 @@ void SlideBackground::Update()
         {
             mpFillAttr->Hide();
             mpFillGrad->Hide();
-            mpFillLB->Show();
+            if (maContext != maImpressHandoutContext)
+                mpFillLB->Show();
             const Color aColor = GetColorSetOrDefault();
             mpFillLB->SelectEntry(aColor);
         }
@@ -518,10 +538,12 @@ void SlideBackground::dispose()
     mpPaperSizeBox.clear();
     mpPaperOrientation.clear();
     mpMasterSlide.clear();
+    mpBackgroundLabel.clear();
     mpFillAttr.clear();
     mpFillGrad.clear();
     mpFillStyle.clear();
     mpFillLB.clear();
+    mpInsertImage.clear();
     mpDspMasterBackground.clear();
     mpDspMasterObjects.clear();
     mpMasterLabel.clear();
@@ -638,7 +660,7 @@ void SlideBackground::NotifyItemUpdate(
     switch(nSID)
     {
 
-        case SID_ATTR_PAGE_COLOR:
+    case SID_ATTR_PAGE_COLOR:
         {
             if(eState >= SfxItemState::DEFAULT)
             {
