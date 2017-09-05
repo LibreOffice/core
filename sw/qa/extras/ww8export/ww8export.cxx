@@ -261,6 +261,17 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
     CPPUNIT_ASSERT( abs( boundRect2.Width - boundRect4.Width ) < 5 );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf75539_relativeWidth, "tdf75539_relativeWidth.doc")
+{
+    //divide everything by 10 to give a margin of error for rounding etc.
+    sal_Int32 pageWidth = parseDump("/root/page[1]/body/infos/bounds", "width").toInt32()/10;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page width", sal_Int32(9354/10), pageWidth);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("100% width line", pageWidth,   parseDump("/root/page[1]/body/txt[2]/Special", "nWidth").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("50% width line", pageWidth/2,  parseDump("/root/page[1]/body/txt[4]/Special", "nWidth").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("25% width line", pageWidth/4,  parseDump("/root/page[1]/body/txt[6]/Special", "nWidth").toInt32()/10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("10% width line", pageWidth/10, parseDump("/root/page[1]/body/txt[8]/Special", "nWidth").toInt32()/10);
+}
+
 DECLARE_WW8EXPORT_TEST(testN757905, "n757905.doc")
 {
     // The problem was that the paragraph had only a single fly
