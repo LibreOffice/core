@@ -134,8 +134,8 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
         maCoreStyle = SvxBorderLine();
 
     // from twips to points
-    maUIStyle.Set( maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH );
-    meState = maUIStyle.Prim() ? FRAMESTATE_SHOW : FRAMESTATE_HIDE;
+    maUIStyle.Set( &maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH );
+    meState = maUIStyle.IsUsed() ? FRAMESTATE_SHOW : FRAMESTATE_HIDE;
 }
 
 void FrameBorder::SetState( FrameBorderState eState )
@@ -677,7 +677,7 @@ void FrameSelectorImpl::DrawAllFrameBorders()
 
     if (pProcessor2D)
     {
-        maArray.DrawArray(*pProcessor2D.get());
+        pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
         pProcessor2D.reset();
     }
 }
