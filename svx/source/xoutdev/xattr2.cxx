@@ -262,11 +262,11 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCo
             pId = RID_SVXSTR_LINECAP_BUTT;
         break;
 
-        case(css::drawing::LineCap_ROUND):
+        case css::drawing::LineCap_ROUND:
             pId = RID_SVXSTR_LINECAP_ROUND;
         break;
 
-        case(css::drawing::LineCap_SQUARE):
+        case css::drawing::LineCap_SQUARE:
             pId = RID_SVXSTR_LINECAP_SQUARE;
         break;
     }

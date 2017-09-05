@@ -187,7 +187,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     switch( eStyle )
     {
-    case( WallpaperStyle::Scale ):
+    case WallpaperStyle::Scale:
         if( !pCached || ( pCached->GetSizePixel() != aSize ) )
         {
             if( pCached )
@@ -199,41 +199,41 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         }
         break;
 
-    case( WallpaperStyle::TopLeft ):
+    case WallpaperStyle::TopLeft:
         break;
 
-    case( WallpaperStyle::Top ):
+    case WallpaperStyle::Top:
         aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
         break;
 
-    case( WallpaperStyle::TopRight ):
+    case WallpaperStyle::TopRight:
         aPos.X() += ( aSize.Width() - nBmpWidth );
         break;
 
-    case( WallpaperStyle::Left ):
+    case WallpaperStyle::Left:
         aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
         break;
 
-    case( WallpaperStyle::Center ):
+    case WallpaperStyle::Center:
         aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
         aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
         break;
 
-    case( WallpaperStyle::Right ):
+    case WallpaperStyle::Right:
         aPos.X() += ( aSize.Width() - nBmpWidth );
         aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
         break;
 
-    case( WallpaperStyle::BottomLeft ):
+    case WallpaperStyle::BottomLeft:
         aPos.Y() += ( aSize.Height() - nBmpHeight );
         break;
 
-    case( WallpaperStyle::Bottom ):
+    case WallpaperStyle::Bottom:
         aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
         aPos.Y() += ( aSize.Height() - nBmpHeight );
         break;
 
-    case( WallpaperStyle::BottomRight ):
+    case WallpaperStyle::BottomRight:
         aPos.X() += ( aSize.Width() - nBmpWidth );
         aPos.Y() += ( aSize.Height() - nBmpHeight );
         break;

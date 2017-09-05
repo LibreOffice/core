@@ -55,6 +55,7 @@ public:
     bool VisitDoStmt(const DoStmt *);
     bool VisitWhileStmt(const WhileStmt *);
     bool VisitSwitchStmt(const SwitchStmt *);
+    bool VisitCaseStmt(const CaseStmt *);
     bool VisitReturnStmt(const ReturnStmt* );
     bool VisitCallExpr(const CallExpr *);
     bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
@@ -172,6 +173,12 @@ bool UnnecessaryParen::VisitWhileStmt(const WhileStmt* whileStmt)
 bool UnnecessaryParen::VisitSwitchStmt(const SwitchStmt* switchStmt)
 {
     VisitSomeStmt(switchStmt, switchStmt->getCond(), "switch");
+    return true;
+}
+
+bool UnnecessaryParen::VisitCaseStmt(const CaseStmt* caseStmt)
+{
+    VisitSomeStmt(caseStmt, caseStmt->getLHS(), "case");
     return true;
 }
 
