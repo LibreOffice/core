@@ -443,15 +443,15 @@ static void deflateZipEntry(ZipOutputEntry *pZipEntry,
     pZipEntry->closeEntry();
 }
 
-class DeflateThread: public comphelper::ThreadTask
+class DeflateThread: public sal::ThreadTask
 {
     ZipOutputEntry *mpEntry;
     uno::Reference< io::XInputStream > mxInStream;
 
 public:
-    DeflateThread( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntry *pEntry,
+    DeflateThread( const std::shared_ptr<sal::ThreadTaskTag>& pTag, ZipOutputEntry *pEntry,
                    const uno::Reference< io::XInputStream >& xInStream )
-        : comphelper::ThreadTask(pTag)
+        : sal::ThreadTask(pTag)
         , mpEntry(pEntry)
         , mxInStream(xInStream)
     {}
@@ -826,7 +826,7 @@ bool ZipPackageStream::saveChild(
                     // cores and allow 4-times the amount for having the queue well filled. The
                     // 2nd parameter is the time to wait between cleanups in 10th of a second.
                     // Both values may be added to the configuration settings if needed.
-                    static sal_Int32 nAllowedThreads(comphelper::ThreadPool::getPreferredConcurrency() * 4);
+                    static sal_Int32 nAllowedThreads(sal::ThreadPool::getPreferredConcurrency() * 4);
                     rZipOut.reduceScheduledThreadsToGivenNumberOrLess(nAllowedThreads);
 
                     // Start a new thread deflating this zip entry

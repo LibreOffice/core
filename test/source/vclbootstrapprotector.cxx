@@ -14,7 +14,6 @@
 #include <sal/types.h>
 #include <test/setupvcl.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/threadpool.hxx>
 
 #include <isheadless.hxx>
 
@@ -29,8 +28,6 @@ public:
 private:
     virtual ~Protector() override {
         DeInitVCL();
-        // for the 6 tests that use it
-        comphelper::ThreadPool::getSharedOptimalPool().shutdown();
     }
 
     virtual bool protect(

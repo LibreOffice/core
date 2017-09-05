@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -29,7 +29,7 @@ public:
 void ThreadPoolTest::testPreferredConcurrency() {
 
     // Check default.
-    auto nThreads = comphelper::ThreadPool::getPreferredConcurrency();
+    auto nThreads = sal::ThreadPool::getPreferredConcurrency();
     sal_Int32 nExpected = 4; // UTs are capped to 4.
     CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 
@@ -37,19 +37,17 @@ void ThreadPoolTest::testPreferredConcurrency() {
     // The result should be cached, so this should change anything.
     nThreads = std::thread::hardware_concurrency() * 2;
     setenv("MAX_CONCURRENCY", std::to_string(nThreads).c_str(), true);
-    nThreads = comphelper::ThreadPool::getPreferredConcurrency();
+    nThreads = sal::ThreadPool::getPreferredConcurrency();
     CPPUNIT_ASSERT_MESSAGE("Expected no more than hardware threads",
                            nThreads <= (sal_Int32)std::thread::hardware_concurrency());
 
     // Revert and check. Again, nothing should change.
     unsetenv("MAX_CONCURRENCY");
-    nThreads = comphelper::ThreadPool::getPreferredConcurrency();
+    nThreads = sal::ThreadPool::getPreferredConcurrency();
     CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 #endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ThreadPoolTest);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

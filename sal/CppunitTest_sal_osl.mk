@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl,\
 	sal/qa/osl/process/osl_Thread \
 	sal/qa/osl/profile/osl_old_testprofile \
 	sal/qa/osl/setthreadname/test-setthreadname \
+	sal/qa/osl/thread/threadpooltest \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sal_osl,\

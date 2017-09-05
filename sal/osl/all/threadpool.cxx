@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 
-#include <com/sun/star/uno/Exception.hpp>
+#include <osl/thread.hxx>
 #include <sal/config.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
-#include <salhelper/thread.hxx>
 #include <algorithm>
 #include <memory>
 #include <thread>
 #include <chrono>
 
-namespace comphelper {
+namespace sal {
 
 /** prevent waiting for a task from inside a task */
 #if defined DBG_UTIL && (defined LINUX || defined _WIN32)
@@ -42,19 +42,40 @@ public:
 };
 
 
-class ThreadPool::ThreadWorker : public salhelper::Thread
+class ThreadPool::ThreadWorker : public osl::Thread
 {
     ThreadPool *mpPool;
+    oslInterlockedCount m_nCount;
 public:
 
     explicit ThreadWorker( ThreadPool *pPool ) :
-        salhelper::Thread("thread-pool"),
-        mpPool( pPool )
+        mpPool( pPool ), m_nCount(0)
     {
     }
 
-    virtual void execute() override
+    void acquire()
+    { osl_atomic_increment(&m_nCount); }
+
+    void release()
+    { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
+
+    void launch() {
+        // Assumption is that osl::Thread::create returns normally with a true
+        // return value iff it causes osl::Thread::run to start executing:
+        acquire();
+        try {
+            if (!create()) {
+                throw std::runtime_error("osl::Thread::create failed");
+            }
+        } catch (...) {
+            release();
+            throw;
+        }
+    }
+
+    virtual void run() override
     {
+        setName("sal-thread-pool");
 #if defined DBG_UTIL && (defined LINUX || defined _WIN32)
         gbIsWorkerThread = true;
 #endif
@@ -96,7 +117,7 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
 {
     std::shared_ptr< ThreadPool > operator () () {
         const sal_Int32 nThreads = ThreadPool::getPreferredConcurrency();
-        return std::make_shared< ThreadPool >( nThreads );
+        return std::shared_ptr< ThreadPool >( new ThreadPool(nThreads) );
     };
 };
 
@@ -135,11 +156,7 @@ void ThreadPool::shutdown()
         return;
 
     std::unique_lock< std::mutex > aGuard( maMutex );
-    shutdownLocked(aGuard);
-}
 
-void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
-{
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
         ThreadTask *pTask;
@@ -231,14 +248,6 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
     }
 
     rTag->waitUntilDone();
-
-    {
-        std::unique_lock< std::mutex > aGuard( maMutex );
-        if (maTasks.empty()) // check if there are still tasks from another tag
-        {
-            shutdownLocked(aGuard);
-        }
-    }
 }
 
 std::shared_ptr<ThreadTaskTag> ThreadPool::createThreadTaskTag()
@@ -264,11 +273,11 @@ void ThreadTask::execAndDelete()
     }
     catch (const std::exception &e)
     {
-        SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e.what());
+        SAL_WARN("sal.threadpool", "exception in thread worker while calling doWork(): " << e.what());
     }
-    catch (const css::uno::Exception &e)
+    catch (...)
     {
-        SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e.Message);
+        SAL_WARN("sal.threadpool", "exception in thread worker while calling doWork()");
     }
 
     delete this;
@@ -320,6 +329,6 @@ void ThreadTaskTag::waitUntilDone()
     }
 }
 
-} // namespace comphelper
+} // namespace sal
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

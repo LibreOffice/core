@@ -31,6 +31,7 @@
 #include "osl/process.h"
 #include "sal/main.h"
 #include "sal/types.h"
+#include <sal/threadpool.hxx>
 
 #include <saltime.hxx>
 #include <salusesyslog.hxx>
@@ -81,7 +82,9 @@ void sal_detail_initialize(int argc, char ** argv) {
     osl_setCommandArgs(argc, argv);
 }
 
-void sal_detail_deinitialize() {}
+void sal_detail_deinitialize() {
+    sal::ThreadPool::getSharedOptimalPool().shutdown();
+}
 
 }
 

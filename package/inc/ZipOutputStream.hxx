@@ -23,7 +23,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <ByteChucker.hxx>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 
 #include <vector>
 
@@ -35,7 +35,7 @@ class ZipOutputStream
 {
     css::uno::Reference< css::io::XOutputStream > m_xStream;
     ::std::vector < ZipEntry * > m_aZipList;
-    std::shared_ptr<comphelper::ThreadTaskTag> mpThreadTaskTag;
+    std::shared_ptr<sal::ThreadTaskTag> mpThreadTaskTag;
 
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;
@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    void addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThreadTask );
+    void addDeflatingThread( ZipOutputEntry *pEntry, sal::ThreadTask *pThreadTask );
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
@@ -86,7 +86,7 @@ public:
     void reduceScheduledThreadsToGivenNumberOrLess(
         sal_Int32 nThreads);
 
-    const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
+    const std::shared_ptr<sal::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
 };
 
 #endif
