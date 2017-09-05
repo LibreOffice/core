@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <rtl/ustring.hxx>
 #include <svl/sigstruct.hxx>
-#include "xmlsecurity/xmlsecuritydllapi.h"
+#include "xmlsecuritydllapi.h"
 
 #include <vector>
 

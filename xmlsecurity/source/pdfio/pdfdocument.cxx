@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <xmlsecurity/pdfio/pdfdocument.hxx>
+#include <pdfio/pdfdocument.hxx>
 
 #include <map>
 #include <memory>
