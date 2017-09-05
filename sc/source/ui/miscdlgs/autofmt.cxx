@@ -410,7 +410,7 @@ void ScAutoFmtPreview::PaintCells(vcl::RenderContext& rRenderContext)
 
             if (pProcessor2D)
             {
-                maArray.DrawArray(*pProcessor2D.get());
+                pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
                 pProcessor2D.reset();
             }
         }
