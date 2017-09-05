@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b8a01492",
+        "filename": "helpcontent2",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-05T14:52:30Z",
+      "side": 1,
+      "message": "I don\u0027t know how you managed to add that submodule\u0027s commit to this commit, but it is wrong as it ties this core master and that helpcontent2 commit. Please don\u0027t.",
+      "revId": "9282dea2535e3e18c77092496375ecb71c2e51d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f8aa9c6f",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1782,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-05T14:52:30Z",
+      "side": 1,
+      "message": "Nitpick: please avoid cosmetic changes along with functional code changes. Also, blanks help to keep code readable.. (except blanks before closing parentheses).",
+      "revId": "9282dea2535e3e18c77092496375ecb71c2e51d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
