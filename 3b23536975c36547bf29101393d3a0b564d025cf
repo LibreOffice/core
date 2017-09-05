@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a4ed548d",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4105,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-05T09:01:18Z",
+      "side": 1,
+      "message": "Please note that with\nhttps://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dcommitdiff;h\u003d029f2fdc2a164ca5ab2ecb9e2d4b9cf5112083b4\nI did some clean-up to have consistent parameter naming, i.e. capitalized and without underscores, for a congruent look in the Function Wizard. So the parameter names should be\n\n \"Find text\"\n \"Text\"\n \"Position\"",
+      "revId": "3b23536975c36547bf29101393d3a0b564d025cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_44c75012",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8828,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-05T09:01:18Z",
+      "side": 1,
+      "message": "Why OUStringBuffer and not OUString? aBuf is not modified hereafter. Furthermore, lcl_RightB() already returns OUString.",
+      "range": {
+        "startLine": 8828,
+        "startChar": 12,
+        "endLine": 8828,
+        "endChar": 26
+      },
+      "revId": "3b23536975c36547bf29101393d3a0b564d025cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_64f36c74",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8835,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-05T09:01:18Z",
+      "side": 1,
+      "message": "Note that OUStringBuffer::toString() creates a copy of the string and leaves the buffer as is, which OUStringBuffer::makeStringAndClear() does not, it assigns the internal rtl_uString to an OUString instance. Unless the OUStringBuffer is to be modified after, toString() should be avoided.",
+      "range": {
+        "startLine": 8835,
+        "startChar": 36,
+        "endLine": 8835,
+        "endChar": 49
+      },
+      "revId": "3b23536975c36547bf29101393d3a0b564d025cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
