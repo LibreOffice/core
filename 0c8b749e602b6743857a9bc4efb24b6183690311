@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f8553c1d",
+        "filename": "vcl/source/font/fontmetric.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-05T19:28:19Z",
+      "side": 1,
+      "message": "since these aren\u0027t pixel values (yet), perhaps we should just store Ascent/Descent/etc as float/double?",
+      "revId": "0c8b749e602b6743857a9bc4efb24b6183690311",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
