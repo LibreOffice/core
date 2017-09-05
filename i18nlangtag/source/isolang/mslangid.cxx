@@ -539,11 +539,6 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
     else if (nLang == LANGUAGE_NORWEGIAN)
         nLang = LANGUAGE_NORWEGIAN_BOKMAL;
 
-    // #i94435# A Spanish variant that differs only in collation details we
-    // do not support.
-    else if (nLang == LANGUAGE_SPANISH_DATED)
-        nLang = LANGUAGE_SPANISH_MODERN;
-
     // The erroneous Tibetan vs. Dzongkha case, #i53497#
     // We (and MS) have stored LANGUAGE_TIBETAN_BHUTAN. This will need
     // special attention if MS one day decides to actually use

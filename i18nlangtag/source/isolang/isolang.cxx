@@ -180,7 +180,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ITALIAN,                     "it", "IT", k0     },
     { LANGUAGE_DUTCH,                       "nl", "NL", k0     },
     { LANGUAGE_SPANISH_MODERN,              "es", "ES", k0     },
-    { LANGUAGE_SPANISH_DATED,               "es", "ES", k0     },
     { LANGUAGE_PORTUGUESE,                  "pt", "PT", k0     },
     { LANGUAGE_PORTUGUESE_BRAZILIAN,        "pt", "BR", k0     },
     { LANGUAGE_DANISH,                      "da", "DK", k0     },
@@ -763,6 +762,8 @@ static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN, "ca-ES-valencia", "ES", "", k0 },   // In case MS format files using the old value escaped into the wild, map them back.
     { LANGUAGE_USER_ENGLISH_UK_OXENDICT, "en-GB-oxendict", "GB", "", k0 },
     { LANGUAGE_USER_ENGLISH_UK_OED,           "en-GB-oed", "GB", "", LANGUAGE_USER_ENGLISH_UK_OXENDICT },   // grandfathered, deprecated, prefer en-GB-oxendict
+    { LANGUAGE_SPANISH_DATED,           "es-ES-u-co-trad", "ES", "es-u-co-trad", k0 },  // RFC6067/CLDR
+    { LANGUAGE_SPANISH_DATED,              "es-ES_tradnl", "ES", "", kSAME },           // MS malformed
 //  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "", 0 },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
     { LANGUAGE_DONTKNOW,                    "", "", "", k0 }    // marks end of table
 };

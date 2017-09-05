@@ -691,6 +691,7 @@ bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
     if (rStr1 == "crk-Latn-CN" ) return rStr2 == "crk-Latn-CA";
     if (rStr1 == "crk-Cans-CN" ) return rStr2 == "crk-Cans-CA";
     if (rStr1 == "en-GB-oed"   ) return rStr2 == "en-GB-oxendict";
+    if (rStr1 == "es-ES_tradnl") return rStr2 == "es-ES-u-co-trad";
     return rStr1 == rStr2;
 }
 
