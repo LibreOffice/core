@@ -1099,31 +1099,31 @@ OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat 
 
     switch( nFormat )
     {
-        case( GraphicFileFormat::BMP ) :   pKeyName = "bmp";   break;
-        case( GraphicFileFormat::GIF ) :   pKeyName = "gif";   break;
-        case( GraphicFileFormat::JPG ) :   pKeyName = "jpg";   break;
-        case( GraphicFileFormat::PCD ) :   pKeyName = "pcd";   break;
-        case( GraphicFileFormat::PCX ) :   pKeyName = "pcx";   break;
-        case( GraphicFileFormat::PNG ) :   pKeyName = "png";   break;
-        case( GraphicFileFormat::XBM ) :   pKeyName = "xbm";   break;
-        case( GraphicFileFormat::XPM ) :   pKeyName = "xpm";   break;
-        case( GraphicFileFormat::PBM ) :   pKeyName = "pbm";   break;
-        case( GraphicFileFormat::PGM ) :   pKeyName = "pgm";   break;
-        case( GraphicFileFormat::PPM ) :   pKeyName = "ppm";   break;
-        case( GraphicFileFormat::RAS ) :   pKeyName = "ras";   break;
-        case( GraphicFileFormat::TGA ) :   pKeyName = "tga";   break;
-        case( GraphicFileFormat::PSD ) :   pKeyName = "psd";   break;
-        case( GraphicFileFormat::EPS ) :   pKeyName = "eps";   break;
-        case( GraphicFileFormat::TIF ) :   pKeyName = "tif";   break;
-        case( GraphicFileFormat::DXF ) :   pKeyName = "dxf";   break;
-        case( GraphicFileFormat::MET ) :   pKeyName = "met";   break;
-        case( GraphicFileFormat::PCT ) :   pKeyName = "pct";   break;
-        case( GraphicFileFormat::SGF ) :   pKeyName = "sgf";   break;
-        case( GraphicFileFormat::SGV ) :   pKeyName = "sgv";   break;
-        case( GraphicFileFormat::SVM ) :   pKeyName = "svm";   break;
-        case( GraphicFileFormat::WMF ) :   pKeyName = "wmf";   break;
-        case( GraphicFileFormat::EMF ) :   pKeyName = "emf";   break;
-        case( GraphicFileFormat::SVG ) :   pKeyName = "svg";   break;
+        case GraphicFileFormat::BMP :   pKeyName = "bmp";   break;
+        case GraphicFileFormat::GIF :   pKeyName = "gif";   break;
+        case GraphicFileFormat::JPG :   pKeyName = "jpg";   break;
+        case GraphicFileFormat::PCD :   pKeyName = "pcd";   break;
+        case GraphicFileFormat::PCX :   pKeyName = "pcx";   break;
+        case GraphicFileFormat::PNG :   pKeyName = "png";   break;
+        case GraphicFileFormat::XBM :   pKeyName = "xbm";   break;
+        case GraphicFileFormat::XPM :   pKeyName = "xpm";   break;
+        case GraphicFileFormat::PBM :   pKeyName = "pbm";   break;
+        case GraphicFileFormat::PGM :   pKeyName = "pgm";   break;
+        case GraphicFileFormat::PPM :   pKeyName = "ppm";   break;
+        case GraphicFileFormat::RAS :   pKeyName = "ras";   break;
+        case GraphicFileFormat::TGA :   pKeyName = "tga";   break;
+        case GraphicFileFormat::PSD :   pKeyName = "psd";   break;
+        case GraphicFileFormat::EPS :   pKeyName = "eps";   break;
+        case GraphicFileFormat::TIF :   pKeyName = "tif";   break;
+        case GraphicFileFormat::DXF :   pKeyName = "dxf";   break;
+        case GraphicFileFormat::MET :   pKeyName = "met";   break;
+        case GraphicFileFormat::PCT :   pKeyName = "pct";   break;
+        case GraphicFileFormat::SGF :   pKeyName = "sgf";   break;
+        case GraphicFileFormat::SGV :   pKeyName = "sgv";   break;
+        case GraphicFileFormat::SVM :   pKeyName = "svm";   break;
+        case GraphicFileFormat::WMF :   pKeyName = "wmf";   break;
+        case GraphicFileFormat::EMF :   pKeyName = "emf";   break;
+        case GraphicFileFormat::SVG :   pKeyName = "svg";   break;
         default: assert(false);
     }
 

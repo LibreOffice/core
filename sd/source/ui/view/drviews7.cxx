@@ -1711,7 +1711,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
 
         switch (eXFS)
         {
-            case (drawing::FillStyle_SOLID):
+            case drawing::FillStyle_SOLID:
             {
                 Color aColor =  static_cast<const XFillColorItem*>( rPageAttr.GetItem( XATTR_FILLCOLOR ) )->GetColorValue();
                 XFillColorItem aFillColorItem( OUString(), aColor );
@@ -1720,7 +1720,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
             }
             break;
 
-            case (drawing::FillStyle_GRADIENT):
+            case drawing::FillStyle_GRADIENT:
             {
                 const XFillGradientItem *pGradient =  static_cast<const XFillGradientItem*>( rPageAttr.GetItem( XATTR_FILLGRADIENT ) );
                 XFillGradientItem aFillGradientItem( pGradient->GetName(), pGradient->GetGradientValue(), SID_ATTR_PAGE_GRADIENT );
@@ -1728,7 +1728,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
             }
             break;
 
-            case (drawing::FillStyle_HATCH):
+            case drawing::FillStyle_HATCH:
             {
                 const XFillHatchItem *pFillHatchItem( static_cast<const XFillHatchItem*>( rPageAttr.GetItem( XATTR_FILLHATCH ) ) );
                 XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
@@ -1737,7 +1737,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
             }
             break;
 
-            case (drawing::FillStyle_BITMAP):
+            case drawing::FillStyle_BITMAP:
             {
                 const XFillBitmapItem *pFillBitmapItem = static_cast<const XFillBitmapItem*>( rPageAttr.GetItem( XATTR_FILLBITMAP ) );
                 XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
@@ -1775,7 +1775,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 
         switch (nSlotId)
         {
-            case(SID_ATTR_PAGE_FILLSTYLE):
+            case SID_ATTR_PAGE_FILLSTYLE:
             {
                 XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pArgs->Get( XATTR_FILLSTYLE )) );
                 drawing::FillStyle eXFS = aFSItem.GetValue();
@@ -1785,7 +1785,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             }
             break;
 
-            case(SID_ATTR_PAGE_COLOR):
+            case SID_ATTR_PAGE_COLOR:
             {
                 XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pArgs->Get( XATTR_FILLCOLOR )) );
                 rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
@@ -1793,7 +1793,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             }
             break;
 
-            case(SID_ATTR_PAGE_GRADIENT):
+            case SID_ATTR_PAGE_GRADIENT:
             {
                 XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pArgs->Get( XATTR_FILLGRADIENT )) );
 
@@ -1807,7 +1807,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             }
             break;
 
-            case(SID_ATTR_PAGE_HATCH):
+            case SID_ATTR_PAGE_HATCH:
             {
                 XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pArgs->Get( XATTR_FILLHATCH )) );
                 rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_HATCH ) );
@@ -1815,7 +1815,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             }
             break;
 
-            case(SID_ATTR_PAGE_BITMAP):
+            case SID_ATTR_PAGE_BITMAP:
             {
                 XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pArgs->Get( XATTR_FILLBITMAP )) );
                 rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_BITMAP ) );

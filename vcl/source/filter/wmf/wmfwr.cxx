@@ -1589,7 +1589,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 break;
 
-                case( MetaActionType::LAYOUTMODE ):
+                case MetaActionType::LAYOUTMODE:
                 {
                     ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pMA)->GetLayoutMode();
                     eSrcHorTextAlign = 0; // TA_LEFT

@@ -3381,14 +3381,14 @@ void XMLShapeExport::ImpExportMediaShape(
         xPropSet->getPropertyValue("Zoom") >>= eZoom;
         switch( eZoom )
         {
-            case( media::ZoomLevel_ZOOM_1_TO_4 )  : aZoomValue = "25%"; break;
-            case( media::ZoomLevel_ZOOM_1_TO_2 )  : aZoomValue = "50%"; break;
-            case( media::ZoomLevel_ORIGINAL )     : aZoomValue = "100%"; break;
-            case( media::ZoomLevel_ZOOM_2_TO_1 )  : aZoomValue = "200%"; break;
-            case( media::ZoomLevel_ZOOM_4_TO_1 )  : aZoomValue = "400%"; break;
-            case( media::ZoomLevel_FIT_TO_WINDOW ): aZoomValue = "fit"; break;
-            case( media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): aZoomValue = "fixedfit"; break;
-            case( media::ZoomLevel_FULLSCREEN )   : aZoomValue = "fullscreen"; break;
+            case media::ZoomLevel_ZOOM_1_TO_4  : aZoomValue = "25%"; break;
+            case media::ZoomLevel_ZOOM_1_TO_2  : aZoomValue = "50%"; break;
+            case media::ZoomLevel_ORIGINAL     : aZoomValue = "100%"; break;
+            case media::ZoomLevel_ZOOM_2_TO_1  : aZoomValue = "200%"; break;
+            case media::ZoomLevel_ZOOM_4_TO_1  : aZoomValue = "400%"; break;
+            case media::ZoomLevel_FIT_TO_WINDOW: aZoomValue = "fit"; break;
+            case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT: aZoomValue = "fixedfit"; break;
+            case media::ZoomLevel_FULLSCREEN   : aZoomValue = "fullscreen"; break;
 
             default:
             break;

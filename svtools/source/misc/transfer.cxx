@@ -1819,8 +1819,8 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
     const SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     switch( nFormat )
     {
-        case( SotClipboardFormatId::SOLK ):
-        case( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ):
+        case SotClipboardFormatId::SOLK:
+        case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
         {
             OUString aString;
             if( GetString( rFlavor, aString ) )
@@ -1866,7 +1866,7 @@ bool TransferableDataHelper::GetINetBookmark( const css::datatransfer::DataFlavo
         }
         break;
 
-        case( SotClipboardFormatId::NETSCAPE_BOOKMARK ):
+        case SotClipboardFormatId::NETSCAPE_BOOKMARK:
         {
             Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 

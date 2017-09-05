@@ -23,10 +23,9 @@ int main()
     int y = (x); // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
     (void)y;
 
-    // lots of our code uses this style, which I'm loathe to bulk-fix as yet
     EFoo foo = EFoo::Bar;
     switch (foo) {
-        case (EFoo::Bar): break;
+        case (EFoo::Bar): break; // expected-error {{parentheses immediately inside case statement [loplugin:unnecessaryparen]}}
     }
 
     // lots of our code uses this style, which I'm loathe to bulk-fix as yet

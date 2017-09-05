@@ -180,19 +180,19 @@ void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)
 
             switch( aMediaItem.getZoom() )
             {
-                case( css::media::ZoomLevel_ZOOM_1_TO_2 ):
+                case css::media::ZoomLevel_ZOOM_1_TO_2:
                     nSelectEntryPos = AVMEDIA_ZOOMLEVEL_50;
                     break;
-                case( css::media::ZoomLevel_ORIGINAL ):
+                case css::media::ZoomLevel_ORIGINAL:
                     nSelectEntryPos = AVMEDIA_ZOOMLEVEL_100;
                     break;
-                case( css::media::ZoomLevel_ZOOM_2_TO_1 ):
+                case css::media::ZoomLevel_ZOOM_2_TO_1:
                     nSelectEntryPos = AVMEDIA_ZOOMLEVEL_200;
                     break;
-                case( css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ):
+                case css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT:
                     nSelectEntryPos = AVMEDIA_ZOOMLEVEL_FIT;
                     break;
-                case( css::media::ZoomLevel_FIT_TO_WINDOW ):
+                case css::media::ZoomLevel_FIT_TO_WINDOW:
                     nSelectEntryPos = AVMEDIA_ZOOMLEVEL_SCALED;
                     break;
 

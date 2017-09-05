@@ -869,7 +869,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
 
             switch( nActionType )
             {
-                case( MetaActionType::PIXEL ):
+                case MetaActionType::PIXEL:
                 {
                     MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
                     aMtf.AddAction( new MetaPixelAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -877,14 +877,14 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::POINT ):
+                case MetaActionType::POINT:
                 {
                     MetaPointAction* pAct = static_cast<MetaPointAction*>(pAction);
                     aMtf.AddAction( new MetaPointAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
                 break;
 
-                case( MetaActionType::LINE ):
+                case MetaActionType::LINE:
                 {
                     MetaLineAction* pAct = static_cast<MetaLineAction*>(pAction);
                     aMtf.AddAction( new MetaLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -893,14 +893,14 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::RECT ):
+                case MetaActionType::RECT:
                 {
                     MetaRectAction* pAct = static_cast<MetaRectAction*>(pAction);
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
                 break;
 
-                case( MetaActionType::ROUNDRECT ):
+                case MetaActionType::ROUNDRECT:
                 {
                     MetaRoundRectAction*    pAct = static_cast<MetaRoundRectAction*>(pAction);
                     const tools::Polygon aRoundRectPoly( pAct->GetRect(), pAct->GetHorzRound(), pAct->GetVertRound() );
@@ -909,7 +909,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::ELLIPSE ):
+                case MetaActionType::ELLIPSE:
                 {
                     MetaEllipseAction*      pAct = static_cast<MetaEllipseAction*>(pAction);
                     const tools::Polygon aEllipsePoly( pAct->GetRect().Center(), pAct->GetRect().GetWidth() >> 1, pAct->GetRect().GetHeight() >> 1 );
@@ -918,7 +918,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::ARC ):
+                case MetaActionType::ARC:
                 {
                     MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
                     const tools::Polygon aArcPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Arc );
@@ -927,7 +927,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::PIE ):
+                case MetaActionType::PIE:
                 {
                     MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
                     const tools::Polygon aPiePoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Pie );
@@ -936,7 +936,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::CHORD ):
+                case MetaActionType::CHORD:
                 {
                     MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
                     const tools::Polygon aChordPoly( pAct->GetRect(), pAct->GetStartPoint(), pAct->GetEndPoint(), PolyStyle::Chord );
@@ -945,28 +945,28 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::POLYLINE ):
+                case MetaActionType::POLYLINE:
                 {
                     MetaPolyLineAction* pAct = static_cast<MetaPolyLineAction*>(pAction);
                     aMtf.AddAction( new MetaPolyLineAction( ImplGetRotatedPolygon( pAct->GetPolygon(), aRotAnchor, aRotOffset, fSin, fCos ), pAct->GetLineInfo() ) );
                 }
                 break;
 
-                case( MetaActionType::POLYGON ):
+                case MetaActionType::POLYGON:
                 {
                     MetaPolygonAction* pAct = static_cast<MetaPolygonAction*>(pAction);
                     aMtf.AddAction( new MetaPolygonAction( ImplGetRotatedPolygon( pAct->GetPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
                 break;
 
-                case( MetaActionType::POLYPOLYGON ):
+                case MetaActionType::POLYPOLYGON:
                 {
                     MetaPolyPolygonAction* pAct = static_cast<MetaPolyPolygonAction*>(pAction);
                     aMtf.AddAction( new MetaPolyPolygonAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
                 }
                 break;
 
-                case( MetaActionType::TEXT ):
+                case MetaActionType::TEXT:
                 {
                     MetaTextAction* pAct = static_cast<MetaTextAction*>(pAction);
                     aMtf.AddAction( new MetaTextAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -974,7 +974,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::TEXTARRAY ):
+                case MetaActionType::TEXTARRAY:
                 {
                     MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pAction);
                     aMtf.AddAction( new MetaTextArrayAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -982,7 +982,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::STRETCHTEXT ):
+                case MetaActionType::STRETCHTEXT:
                 {
                     MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pAction);
                     aMtf.AddAction( new MetaStretchTextAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -990,7 +990,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::TEXTLINE ):
+                case MetaActionType::TEXTLINE:
                 {
                     MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pAction);
                     aMtf.AddAction( new MetaTextLineAction( ImplGetRotatedPoint( pAct->GetStartPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -998,7 +998,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::BMPSCALE ):
+                case MetaActionType::BMPSCALE:
                 {
                     MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
                     tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
@@ -1011,7 +1011,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::BMPSCALEPART ):
+                case MetaActionType::BMPSCALEPART:
                 {
                     MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                     tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
@@ -1025,7 +1025,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::BMPEXSCALE ):
+                case MetaActionType::BMPEXSCALE:
                 {
                     MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
                     tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetPoint(), pAct->GetSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
@@ -1038,7 +1038,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::BMPEXSCALEPART ):
+                case MetaActionType::BMPEXSCALEPART:
                 {
                     MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
                     tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() ), aRotAnchor, aRotOffset, fSin, fCos ) );
@@ -1052,7 +1052,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::GRADIENT ):
+                case MetaActionType::GRADIENT:
                 {
                     MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
 
@@ -1062,7 +1062,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::GRADIENTEX ):
+                case MetaActionType::GRADIENTEX:
                 {
                     MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
                     aMtf.AddAction( new MetaGradientExAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -1071,7 +1071,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 break;
 
                 // Handle gradientex comment block correctly
-                case( MetaActionType::COMMENT ):
+                case MetaActionType::COMMENT:
                 {
                     MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
                     if( pCommentAct->GetComment() == "XGRAD_SEQ_BEGIN" )
@@ -1159,7 +1159,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::HATCH ):
+                case MetaActionType::HATCH:
                 {
                     MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
                     Hatch               aHatch( pAct->GetHatch() );
@@ -1170,7 +1170,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::Transparent ):
+                case MetaActionType::Transparent:
                 {
                     MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
                     aMtf.AddAction( new MetaTransparentAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -1178,7 +1178,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::FLOATTRANSPARENT ):
+                case MetaActionType::FLOATTRANSPARENT:
                 {
                     MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pAction);
                     GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
@@ -1191,7 +1191,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::EPS ):
+                case MetaActionType::EPS:
                 {
                     MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
                     GDIMetaFile     aEPSMtf( pAct->GetSubstitute() );
@@ -1204,7 +1204,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::CLIPREGION ):
+                case MetaActionType::CLIPREGION:
                 {
                     MetaClipRegionAction* pAct = static_cast<MetaClipRegionAction*>(pAction);
 
@@ -1218,7 +1218,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::ISECTRECTCLIPREGION ):
+                case MetaActionType::ISECTRECTCLIPREGION:
                 {
                     MetaISectRectClipRegionAction*  pAct = static_cast<MetaISectRectClipRegionAction*>(pAction);
                     aMtf.AddAction( new MetaISectRegionClipRegionAction(vcl::Region(
@@ -1227,7 +1227,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::ISECTREGIONCLIPREGION ):
+                case MetaActionType::ISECTREGIONCLIPREGION:
                 {
                     MetaISectRegionClipRegionAction*    pAct = static_cast<MetaISectRegionClipRegionAction*>(pAction);
                     const vcl::Region&                  rRegion = pAct->GetRegion();
@@ -1242,14 +1242,14 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::REFPOINT ):
+                case MetaActionType::REFPOINT:
                 {
                     MetaRefPointAction* pAct = static_cast<MetaRefPointAction*>(pAction);
                     aMtf.AddAction( new MetaRefPointAction( ImplGetRotatedPoint( pAct->GetRefPoint(), aRotAnchor, aRotOffset, fSin, fCos ), pAct->IsSetting() ) );
                 }
                 break;
 
-                case( MetaActionType::FONT ):
+                case MetaActionType::FONT:
                 {
                     MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
                     vcl::Font       aFont( pAct->GetFont() );
@@ -1259,14 +1259,14 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::BMP ):
-                case( MetaActionType::BMPEX ):
-                case( MetaActionType::MASK ):
-                case( MetaActionType::MASKSCALE ):
-                case( MetaActionType::MASKSCALEPART ):
-                case( MetaActionType::WALLPAPER ):
-                case( MetaActionType::TEXTRECT ):
-                case( MetaActionType::MOVECLIPREGION ):
+                case MetaActionType::BMP:
+                case MetaActionType::BMPEX:
+                case MetaActionType::MASK:
+                case MetaActionType::MASKSCALE:
+                case MetaActionType::MASKSCALEPART:
+                case MetaActionType::WALLPAPER:
+                case MetaActionType::TEXTRECT:
+                case MetaActionType::MOVECLIPREGION:
                 {
                     OSL_FAIL( "GDIMetaFile::Rotate(): unsupported action" );
                 }
@@ -1349,7 +1349,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
 
         switch( nActionType )
         {
-        case( MetaActionType::PIXEL ):
+        case MetaActionType::PIXEL:
         {
             MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
             ImplActionBounds( aBound,
@@ -1359,7 +1359,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::POINT ):
+        case MetaActionType::POINT:
         {
             MetaPointAction* pAct = static_cast<MetaPointAction*>(pAction);
             ImplActionBounds( aBound,
@@ -1369,7 +1369,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::LINE ):
+        case MetaActionType::LINE:
         {
             MetaLineAction* pAct = static_cast<MetaLineAction*>(pAction);
             Point aP1( pAct->GetStartPoint() ), aP2( pAct->GetEndPoint() );
@@ -1388,28 +1388,28 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::RECT ):
+        case MetaActionType::RECT:
         {
             MetaRectAction* pAct = static_cast<MetaRectAction*>(pAction);
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
-        case( MetaActionType::ROUNDRECT ):
+        case MetaActionType::ROUNDRECT:
         {
             MetaRoundRectAction*    pAct = static_cast<MetaRoundRectAction*>(pAction);
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
-        case( MetaActionType::ELLIPSE ):
+        case MetaActionType::ELLIPSE:
         {
             MetaEllipseAction*      pAct = static_cast<MetaEllipseAction*>(pAction);
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
 
-        case( MetaActionType::ARC ):
+        case MetaActionType::ARC:
         {
             MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
             // FIXME: this is imprecise
@@ -1418,7 +1418,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::PIE ):
+        case MetaActionType::PIE:
         {
             MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
             // FIXME: this is imprecise
@@ -1427,7 +1427,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::CHORD ):
+        case MetaActionType::CHORD:
         {
             MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
             // FIXME: this is imprecise
@@ -1436,7 +1436,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::POLYLINE ):
+        case MetaActionType::POLYLINE:
         {
             MetaPolyLineAction* pAct = static_cast<MetaPolyLineAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
@@ -1453,7 +1453,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::POLYGON ):
+        case MetaActionType::POLYGON:
         {
             MetaPolygonAction* pAct = static_cast<MetaPolygonAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
@@ -1461,7 +1461,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::POLYPOLYGON ):
+        case MetaActionType::POLYPOLYGON:
         {
             MetaPolyPolygonAction* pAct = static_cast<MetaPolyPolygonAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
@@ -1469,7 +1469,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::TEXT ):
+        case MetaActionType::TEXT:
         {
             MetaTextAction* pAct = static_cast<MetaTextAction*>(pAction);
             tools::Rectangle aRect;
@@ -1481,7 +1481,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::TEXTARRAY ):
+        case MetaActionType::TEXTARRAY:
         {
             MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pAction);
             tools::Rectangle aRect;
@@ -1494,7 +1494,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::STRETCHTEXT ):
+        case MetaActionType::STRETCHTEXT:
         {
             MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pAction);
             tools::Rectangle aRect;
@@ -1507,7 +1507,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::TEXTLINE ):
+        case MetaActionType::TEXTLINE:
         {
             MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pAction);
             // measure a test string to get ascend and descent right
@@ -1523,7 +1523,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::BMPSCALE ):
+        case MetaActionType::BMPSCALE:
         {
             MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
@@ -1531,7 +1531,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::BMPSCALEPART ):
+        case MetaActionType::BMPSCALEPART:
         {
             MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
@@ -1539,7 +1539,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::BMPEXSCALE ):
+        case MetaActionType::BMPEXSCALE:
         {
             MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
@@ -1547,7 +1547,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::BMPEXSCALEPART ):
+        case MetaActionType::BMPEXSCALEPART:
         {
             MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
@@ -1555,7 +1555,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::GRADIENT ):
+        case MetaActionType::GRADIENT:
         {
             MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
             tools::Rectangle aRect( pAct->GetRect() );
@@ -1563,7 +1563,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::GRADIENTEX ):
+        case MetaActionType::GRADIENTEX:
         {
             MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
@@ -1571,13 +1571,13 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::COMMENT ):
+        case MetaActionType::COMMENT:
         {
             // nothing to do
         };
         break;
 
-        case( MetaActionType::HATCH ):
+        case MetaActionType::HATCH:
         {
             MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
@@ -1585,7 +1585,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::Transparent ):
+        case MetaActionType::Transparent:
         {
             MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
@@ -1593,7 +1593,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::FLOATTRANSPARENT ):
+        case MetaActionType::FLOATTRANSPARENT:
         {
             MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pAction);
             // MetaFloatTransparentAction is defined limiting its content Metafile
@@ -1603,7 +1603,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::EPS ):
+        case MetaActionType::EPS:
         {
             MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
@@ -1611,7 +1611,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::CLIPREGION ):
+        case MetaActionType::CLIPREGION:
         {
             MetaClipRegionAction* pAct = static_cast<MetaClipRegionAction*>(pAction);
             if( pAct->IsClipping() )
@@ -1621,7 +1621,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::ISECTRECTCLIPREGION ):
+        case MetaActionType::ISECTRECTCLIPREGION:
         {
             MetaISectRectClipRegionAction* pAct = static_cast<MetaISectRectClipRegionAction*>(pAction);
             tools::Rectangle aRect( OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ) );
@@ -1632,7 +1632,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::ISECTREGIONCLIPREGION ):
+        case MetaActionType::ISECTREGIONCLIPREGION:
         {
             MetaISectRegionClipRegionAction*    pAct = static_cast<MetaISectRegionClipRegionAction*>(pAction);
             tools::Rectangle aRect( OutputDevice::LogicToLogic( pAct->GetRegion().GetBoundRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ) );
@@ -1643,7 +1643,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::BMP ):
+        case MetaActionType::BMP:
         {
             MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
@@ -1651,7 +1651,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::BMPEX ):
+        case MetaActionType::BMPEX:
         {
             MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmapEx().GetSizePixel() ) );
@@ -1659,7 +1659,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::MASK ):
+        case MetaActionType::MASK:
         {
             MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
@@ -1667,7 +1667,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::MASKSCALE ):
+        case MetaActionType::MASKSCALE:
         {
             MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
@@ -1675,7 +1675,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::MASKSCALEPART ):
+        case MetaActionType::MASKSCALEPART:
         {
             MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
@@ -1683,7 +1683,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::WALLPAPER ):
+        case MetaActionType::WALLPAPER:
         {
             MetaWallpaperAction* pAct = static_cast<MetaWallpaperAction*>(pAction);
             tools::Rectangle aRect( pAct->GetRect() );
@@ -1691,7 +1691,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::TEXTRECT ):
+        case MetaActionType::TEXTRECT:
         {
             MetaTextRectAction* pAct = static_cast<MetaTextRectAction*>(pAction);
             tools::Rectangle aRect( pAct->GetRect() );
@@ -1699,7 +1699,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         }
         break;
 
-        case( MetaActionType::MOVECLIPREGION ):
+        case MetaActionType::MOVECLIPREGION:
         {
             MetaMoveClipRegionAction* pAct = static_cast<MetaMoveClipRegionAction*>(pAction);
             if( ! aClipStack.back().IsEmpty() )
@@ -1854,14 +1854,14 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
         switch( nType )
         {
-            case( MetaActionType::PIXEL ):
+            case MetaActionType::PIXEL:
             {
                 MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
                 aMtf.push_back( new MetaPixelAction( pAct->GetPoint(), pFncCol( pAct->GetColor(), pColParam ) ) );
             }
             break;
 
-            case( MetaActionType::LINECOLOR ):
+            case MetaActionType::LINECOLOR:
             {
                 MetaLineColorAction* pAct = static_cast<MetaLineColorAction*>(pAction);
 
@@ -1874,7 +1874,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::FILLCOLOR ):
+            case MetaActionType::FILLCOLOR:
             {
                 MetaFillColorAction* pAct = static_cast<MetaFillColorAction*>(pAction);
 
@@ -1887,14 +1887,14 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::TEXTCOLOR ):
+            case MetaActionType::TEXTCOLOR:
             {
                 MetaTextColorAction* pAct = static_cast<MetaTextColorAction*>(pAction);
                 aMtf.push_back( new MetaTextColorAction( pFncCol( pAct->GetColor(), pColParam ) ) );
             }
             break;
 
-            case( MetaActionType::TEXTFILLCOLOR ):
+            case MetaActionType::TEXTFILLCOLOR:
             {
                 MetaTextFillColorAction* pAct = static_cast<MetaTextFillColorAction*>(pAction);
 
@@ -1907,7 +1907,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::TEXTLINECOLOR ):
+            case MetaActionType::TEXTLINECOLOR:
             {
                 MetaTextLineColorAction* pAct = static_cast<MetaTextLineColorAction*>(pAction);
 
@@ -1920,7 +1920,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::OVERLINECOLOR ):
+            case MetaActionType::OVERLINECOLOR:
             {
                 MetaOverlineColorAction* pAct = static_cast<MetaOverlineColorAction*>(pAction);
 
@@ -1933,7 +1933,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::FONT ):
+            case MetaActionType::FONT:
             {
                 MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
                 vcl::Font       aFont( pAct->GetFont() );
@@ -1944,7 +1944,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::WALLPAPER ):
+            case MetaActionType::WALLPAPER:
             {
                 MetaWallpaperAction*    pAct = static_cast<MetaWallpaperAction*>(pAction);
                 Wallpaper               aWall( pAct->GetWallpaper() );
@@ -1968,15 +1968,15 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::BMP ):
-            case( MetaActionType::BMPEX ):
-            case( MetaActionType::MASK ):
+            case MetaActionType::BMP:
+            case MetaActionType::BMPEX:
+            case MetaActionType::MASK:
             {
                 OSL_FAIL( "Don't use bitmap actions of this type in metafiles!" );
             }
             break;
 
-            case( MetaActionType::BMPSCALE ):
+            case MetaActionType::BMPSCALE:
             {
                 MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
                 aMtf.push_back( new MetaBmpScaleAction( pAct->GetPoint(), pAct->GetSize(),
@@ -1984,7 +1984,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::BMPSCALEPART ):
+            case MetaActionType::BMPSCALEPART:
             {
                 MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                 aMtf.push_back( new MetaBmpScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
@@ -1994,7 +1994,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::BMPEXSCALE ):
+            case MetaActionType::BMPEXSCALE:
             {
                 MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pAction);
                 aMtf.push_back( new MetaBmpExScaleAction( pAct->GetPoint(), pAct->GetSize(),
@@ -2003,7 +2003,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::BMPEXSCALEPART ):
+            case MetaActionType::BMPEXSCALEPART:
             {
                 MetaBmpExScalePartAction* pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
                 aMtf.push_back( new MetaBmpExScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
@@ -2013,7 +2013,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::MASKSCALE ):
+            case MetaActionType::MASKSCALE:
             {
                 MetaMaskScaleAction* pAct = static_cast<MetaMaskScaleAction*>(pAction);
                 aMtf.push_back( new MetaMaskScaleAction( pAct->GetPoint(), pAct->GetSize(),
@@ -2023,7 +2023,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::MASKSCALEPART ):
+            case MetaActionType::MASKSCALEPART:
             {
                 MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
                 aMtf.push_back( new MetaMaskScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
@@ -2034,7 +2034,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::GRADIENT ):
+            case MetaActionType::GRADIENT:
             {
                 MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
                 Gradient            aGradient( pAct->GetGradient() );
@@ -2045,7 +2045,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::GRADIENTEX ):
+            case MetaActionType::GRADIENTEX:
             {
                 MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
                 Gradient              aGradient( pAct->GetGradient() );
@@ -2056,7 +2056,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::HATCH ):
+            case MetaActionType::HATCH:
             {
                 MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
                 Hatch               aHatch( pAct->GetHatch() );
@@ -2066,7 +2066,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::FLOATTRANSPARENT ):
+            case MetaActionType::FLOATTRANSPARENT:
             {
                 MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pAction);
                 GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
@@ -2079,7 +2079,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             }
             break;
 
-            case( MetaActionType::EPS ):
+            case MetaActionType::EPS:
             {
                 MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
                 GDIMetaFile     aSubst( pAct->GetSubstitute() );
@@ -2278,7 +2278,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
 
         switch( pAction->GetType() )
         {
-            case( MetaActionType::BMP ):
+            case MetaActionType::BMP:
             {
                 MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pAction);
 
@@ -2296,7 +2296,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::BMPSCALE ):
+            case MetaActionType::BMPSCALE:
             {
                 MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
 
@@ -2320,7 +2320,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::BMPSCALEPART ):
+            case MetaActionType::BMPSCALEPART:
             {
                 MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
 
@@ -2356,7 +2356,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::BMPEX ):
+            case MetaActionType::BMPEX:
             {
                 MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pAction);
 
@@ -2374,7 +2374,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::BMPEXSCALE ):
+            case MetaActionType::BMPEXSCALE:
             {
                 MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pAction);
 
@@ -2398,7 +2398,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::BMPEXSCALEPART ):
+            case MetaActionType::BMPEXSCALEPART:
             {
                 MetaBmpExScalePartAction* pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
 
@@ -2434,7 +2434,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::MASK ):
+            case MetaActionType::MASK:
             {
                 MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pAction);
 
@@ -2455,7 +2455,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::MASKSCALE ):
+            case MetaActionType::MASKSCALE:
             {
                 MetaMaskScaleAction* pAct = static_cast<MetaMaskScaleAction*>(pAction);
 
@@ -2482,7 +2482,7 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( MetaActionType::MASKSCALEPART ):
+            case MetaActionType::MASKSCALEPART:
             {
                 MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
 
@@ -2621,21 +2621,21 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
         // add sizes for large action content
         switch( pAction->GetType() )
         {
-            case( MetaActionType::BMP ): nSizeBytes += static_cast<MetaBmpAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
-            case( MetaActionType::BMPSCALE ): nSizeBytes += static_cast<MetaBmpScaleAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
-            case( MetaActionType::BMPSCALEPART ): nSizeBytes += static_cast<MetaBmpScalePartAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
+            case MetaActionType::BMP:            nSizeBytes += static_cast<MetaBmpAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
+            case MetaActionType::BMPSCALE:       nSizeBytes += static_cast<MetaBmpScaleAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
+            case MetaActionType::BMPSCALEPART:   nSizeBytes += static_cast<MetaBmpScalePartAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
 
-            case( MetaActionType::BMPEX ): nSizeBytes += static_cast<MetaBmpExAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
-            case( MetaActionType::BMPEXSCALE ): nSizeBytes += static_cast<MetaBmpExScaleAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
-            case( MetaActionType::BMPEXSCALEPART ): nSizeBytes += static_cast<MetaBmpExScalePartAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case MetaActionType::BMPEX:          nSizeBytes += static_cast<MetaBmpExAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case MetaActionType::BMPEXSCALE:     nSizeBytes += static_cast<MetaBmpExScaleAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case MetaActionType::BMPEXSCALEPART: nSizeBytes += static_cast<MetaBmpExScalePartAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
 
-            case( MetaActionType::MASK ): nSizeBytes += static_cast<MetaMaskAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
-            case( MetaActionType::MASKSCALE ): nSizeBytes += static_cast<MetaMaskScaleAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
-            case( MetaActionType::MASKSCALEPART ): nSizeBytes += static_cast<MetaMaskScalePartAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
+            case MetaActionType::MASK:           nSizeBytes += static_cast<MetaMaskAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
+            case MetaActionType::MASKSCALE:      nSizeBytes += static_cast<MetaMaskScaleAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
+            case MetaActionType::MASKSCALEPART:  nSizeBytes += static_cast<MetaMaskScalePartAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
 
-            case( MetaActionType::POLYLINE ): nSizeBytes += static_cast<MetaPolyLineAction*>( pAction )->GetPolygon().GetSize() * sizeof( Point ); break;
-            case( MetaActionType::POLYGON ): nSizeBytes += static_cast<MetaPolygonAction*>( pAction )->GetPolygon().GetSize() * sizeof( Point ); break;
-            case( MetaActionType::POLYPOLYGON ):
+            case MetaActionType::POLYLINE:       nSizeBytes += static_cast<MetaPolyLineAction*>( pAction )->GetPolygon().GetSize() * sizeof( Point ); break;
+            case MetaActionType::POLYGON:        nSizeBytes += static_cast<MetaPolygonAction*>( pAction )->GetPolygon().GetSize() * sizeof( Point ); break;
+            case MetaActionType::POLYPOLYGON:
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<MetaPolyPolygonAction*>( pAction )->GetPolyPolygon();
 
@@ -2644,10 +2644,10 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
             }
             break;
 
-            case( MetaActionType::TEXT ): nSizeBytes += static_cast<MetaTextAction*>( pAction )->GetText().getLength() * sizeof( sal_Unicode ); break;
-            case( MetaActionType::STRETCHTEXT ): nSizeBytes += static_cast<MetaStretchTextAction*>( pAction )->GetText().getLength() * sizeof( sal_Unicode ); break;
-            case( MetaActionType::TEXTRECT ): nSizeBytes += static_cast<MetaTextRectAction*>( pAction )->GetText().getLength() * sizeof( sal_Unicode ); break;
-            case( MetaActionType::TEXTARRAY ):
+            case MetaActionType::TEXT:        nSizeBytes += static_cast<MetaTextAction*>( pAction )->GetText().getLength() * sizeof( sal_Unicode ); break;
+            case MetaActionType::STRETCHTEXT: nSizeBytes += static_cast<MetaStretchTextAction*>( pAction )->GetText().getLength() * sizeof( sal_Unicode ); break;
+            case MetaActionType::TEXTRECT:    nSizeBytes += static_cast<MetaTextRectAction*>( pAction )->GetText().getLength() * sizeof( sal_Unicode ); break;
+            case MetaActionType::TEXTARRAY:
             {
                 MetaTextArrayAction* pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
 

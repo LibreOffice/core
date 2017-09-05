@@ -67,9 +67,9 @@ void TextBodyProperties::pushRotationAdjustments()
 
     switch( moRotation.get(0) )
     {
-        case (90*1*60000): nOff = 3; break;
-        case (90*2*60000): nOff = 2; break;
-        case (90*3*60000): nOff = 1; break;
+        case 90*1*60000: nOff = 3; break;
+        case 90*2*60000: nOff = 2; break;
+        case 90*3*60000: nOff = 1; break;
         default: break;
     }
 
