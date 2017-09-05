@@ -8783,7 +8783,7 @@ void ScInterpreter::ScFindB()
         int nLen       = getLengthB( aStr );
         OUString asStr = GetString().getString();
         int nsLen      = getLengthB( asStr );
-        if ( nStart < 1 || nStart > nLen - nsLen )
+        if ( nStart < 1 || nStart > nLen - nsLen + 1 )
             PushIllegalArgument();
         else
         {
