@@ -2385,7 +2385,7 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, const sal_uInt1
 }
 
 // TODO, clean up table parsing and re-use it elsewhere in this file.
-void GetTTFontMterics(const std::vector<uint8_t>& hhea,
+void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
                       const std::vector<uint8_t>& os2,
                       TTGlobalFontInfo *info)
 {

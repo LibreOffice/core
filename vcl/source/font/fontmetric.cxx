@@ -415,7 +415,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
 
     vcl::TTGlobalFontInfo rInfo;
     memset(&rInfo, 0, sizeof(vcl::TTGlobalFontInfo));
-    GetTTFontMterics(rHheaData, rOS2Data, &rInfo);
+    GetTTFontMetrics(rHheaData, rOS2Data, &rInfo);
 
     // Try hhea table first.
     if (rInfo.ascender || rInfo.descender)
