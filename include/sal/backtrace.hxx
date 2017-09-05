@@ -23,8 +23,12 @@
   a small handful of recorded stack traces.
 
   @param backtraceDepth value indicating the maximum backtrace depth; must be > 0
+
+  @since LibreOffice 6.0
 */
 #if defined LIBO_INTERNAL_ONLY
+
+namespace sal { namespace detail {
 
 struct BacktraceState {
     void** buffer;
@@ -32,11 +36,12 @@ struct BacktraceState {
     ~BacktraceState() {delete[] buffer;}
 };
 
-SAL_DLLPUBLIC std::unique_ptr<BacktraceState> SAL_CALL sal_backtrace_get(
+SAL_DLLPUBLIC std::unique_ptr<BacktraceState> backtrace_get(
     sal_uInt32 backtraceDepth);
 
-SAL_DLLPUBLIC OUString SAL_CALL sal_backtrace_to_string(
-    BacktraceState* backtraceState);
+SAL_DLLPUBLIC OUString backtrace_to_string(BacktraceState* backtraceState);
+
+} }
 
 #endif
 

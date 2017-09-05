@@ -35,7 +35,8 @@ struct SfxListener::Impl
 {
     SfxBroadcasterArr_Impl maBCs;
 #ifdef DBG_UTIL
-    std::map<SfxBroadcaster*, std::unique_ptr<BacktraceState>> maCallStacks;
+    std::map<SfxBroadcaster*, std::unique_ptr<sal::detail::BacktraceState>>
+        maCallStacks;
 #endif
 };
 
@@ -95,7 +96,7 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
     if (bListeningAlready && !bPreventDuplicates)
     {
         auto f = mpImpl->maCallStacks.find( &rBroadcaster );
-        SAL_WARN("svl", "previous StartListening call came from: " << sal_backtrace_to_string(f->second.get()));
+        SAL_WARN("svl", "previous StartListening call came from: " << sal::detail::backtrace_to_string(f->second.get()));
     }
 #endif
     assert(!(bListeningAlready && !bPreventDuplicates) && "duplicate listener, try building with DBG_UTIL to find the other insert site.");
@@ -105,7 +106,8 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
         rBroadcaster.AddListener(*this);
         mpImpl->maBCs.push_back( &rBroadcaster );
 #ifdef DBG_UTIL
-        mpImpl->maCallStacks.emplace( &rBroadcaster, sal_backtrace_get(10) );
+        mpImpl->maCallStacks.emplace(
+            &rBroadcaster, sal::detail::backtrace_get(10) );
 #endif
         assert(IsListening(rBroadcaster) && "StartListening failed");
     }
