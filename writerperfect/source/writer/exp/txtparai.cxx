@@ -204,6 +204,17 @@ void XMLParaContext::characters(const OUString &rChars)
             for (itProp.rewind(); itProp.next();)
                 aPropertyList.insert(itProp.key(), itProp()->clone());
         }
+        else
+        {
+            itStyle = mrImport.GetTextStyles().find(m_aStyleName);
+            if (itStyle != mrImport.GetTextStyles().end())
+            {
+                // Found a named text style.
+                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+                for (itProp.rewind(); itProp.next();)
+                    aPropertyList.insert(itProp.key(), itProp()->clone());
+            }
+        }
     }
     mrImport.GetGenerator().openSpan(aPropertyList);
 
