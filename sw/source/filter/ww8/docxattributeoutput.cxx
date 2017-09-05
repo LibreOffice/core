@@ -1374,14 +1374,13 @@ void DocxAttributeOutput::EndRun()
 void DocxAttributeOutput::DoWriteBookmarks()
 {
     // Write the start bookmarks
-    for ( std::vector< OString >::const_iterator it = m_rBookmarksStart.begin(), end = m_rBookmarksStart.end();
-          it != end; ++it )
+    for ( const auto & it : m_rBookmarksStart )
     {
-        const OString& rName = *it;
+        OString rName = OUStringToOString( BookmarkToWord( it ), RTL_TEXTENCODING_UTF8 ).getStr();
 
         // Output the bookmark
         const sal_Int32 nId = m_nNextBookmarkId++;
-        m_rOpenedBookmarksIds[rName] = nId;
+        m_rOpenedBookmarksIds[it] = nId;
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
             FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
             FSNS( XML_w, XML_name ), rName.getStr(),
@@ -1391,20 +1390,17 @@ void DocxAttributeOutput::DoWriteBookmarks()
     m_rBookmarksStart.clear();
 
     // export the end bookmarks
-    for ( std::vector< OString >::const_iterator it = m_rBookmarksEnd.begin(), end = m_rBookmarksEnd.end();
-          it != end; ++it )
+    for ( const auto & it : m_rBookmarksEnd )
     {
-        const OString& rName = *it;
-
         // Get the id of the bookmark
-        std::map< OString, sal_Int32 >::iterator pPos = m_rOpenedBookmarksIds.find( rName );
-        if ( pPos != m_rOpenedBookmarksIds.end(  ) )
+        auto pPos = m_rOpenedBookmarksIds.find(it);
+        if ( pPos != m_rOpenedBookmarksIds.end() )
         {
             const sal_Int32 nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
+                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(),
                 FSEND );
-            m_rOpenedBookmarksIds.erase( rName );
+            m_rOpenedBookmarksIds.erase( it );
         }
     }
     m_rBookmarksEnd.clear();
@@ -6988,17 +6984,15 @@ void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFie
 void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         std::vector< OUString >& rEnds )
 {
-    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
+    for ( const auto & it : rStarts )
     {
-        OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
-        m_rBookmarksStart.push_back( rName );
+        m_rBookmarksStart.push_back( it );
     }
     rStarts.clear();
 
-    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
+    for ( const auto & it : rEnds )
     {
-        OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
-        m_rBookmarksEnd.push_back( rName );
+        m_rBookmarksEnd.push_back( it );
     }
     rEnds.clear();
 }
