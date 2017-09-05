@@ -497,6 +497,10 @@ sal_Int32 RtfSdrExport::StartShape()
     // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
+    // Write ZOrder.
+    m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPZ);
+    m_rAttrOutput.RunText().append(OString::number(m_pSdrObject->GetOrdNum()));
+
     for (auto it = m_aShapeProps.rbegin(); it != m_aShapeProps.rend(); ++it)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*it).first.getStr(), (*it).second);
 
