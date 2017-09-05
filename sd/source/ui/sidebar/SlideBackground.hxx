@@ -84,10 +84,12 @@ private:
     VclPtr<PaperSizeListBox> mpPaperSizeBox;
     VclPtr<ListBox> mpPaperOrientation;
     VclPtr<ListBox> mpMasterSlide;
+    VclPtr<FixedText> mpBackgroundLabel;
     VclPtr<SvxFillTypeBox> mpFillStyle;
     VclPtr<SvxColorListBox> mpFillLB;
     VclPtr<SvxFillAttrBox> mpFillAttr;
     VclPtr<SvxColorListBox> mpFillGrad;
+    VclPtr<Button> mpInsertImage;
     VclPtr<CheckBox> mpDspMasterBackground;
     VclPtr<CheckBox> mpDspMasterObjects;
     VclPtr<Button> mpCloseMaster;
@@ -128,6 +130,7 @@ private:
     vcl::EnumContext maDrawMasterContext;
     vcl::EnumContext maImpressOtherContext;
     vcl::EnumContext maImpressMasterContext;
+    vcl::EnumContext maImpressHandoutContext;
     bool         mbTitle;
     FieldUnit meFieldUnit;
     long m_nPageLeftMargin;
