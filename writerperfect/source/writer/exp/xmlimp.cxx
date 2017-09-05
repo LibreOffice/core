@@ -63,7 +63,9 @@ XMLImportContext *XMLOfficeDocContext::CreateChildContext(const OUString &rName,
     else if (rName == "office:meta")
         return new XMLMetaDocumentContext(mrImport);
     else if (rName == "office:automatic-styles")
-        return new XMLAutomaticStylesContext(mrImport);
+        return new XMLStylesContext(mrImport, mrImport.GetAutomaticParagraphStyles(), mrImport.GetAutomaticTextStyles());
+    else if (rName == "office:styles")
+        return new XMLStylesContext(mrImport, mrImport.GetParagraphStyles(), mrImport.GetTextStyles());
     return nullptr;
 }
 
@@ -92,6 +94,16 @@ std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticTextSty
 std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetAutomaticParagraphStyles()
 {
     return maAutomaticParagraphStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetTextStyles()
+{
+    return maTextStyles;
+}
+
+std::map<OUString, librevenge::RVNGPropertyList> &XMLImport::GetParagraphStyles()
+{
+    return maParagraphStyles;
 }
 
 void XMLImport::startDocument()

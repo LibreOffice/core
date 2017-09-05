@@ -9,6 +9,7 @@
 
 #include "txtstyli.hxx"
 
+#include "xmlfmt.hxx"
 #include "xmlimp.hxx"
 
 using namespace com::sun::star;
@@ -74,8 +75,9 @@ void XMLTextPropertiesContext::startElement(const OUString &/*rName*/, const css
     }
 }
 
-XMLStyleContext::XMLStyleContext(XMLImport &rImport)
-    : XMLImportContext(rImport)
+XMLStyleContext::XMLStyleContext(XMLImport &rImport, XMLStylesContext &rStyles)
+    : XMLImportContext(rImport),
+      m_rStyles(rStyles)
 {
 }
 
@@ -106,9 +108,9 @@ void XMLStyleContext::endElement(const OUString &/*rName*/)
         return;
 
     if (m_aFamily == "text" || m_aFamily == "paragraph")
-        mrImport.GetAutomaticTextStyles()[m_aName] = m_aTextPropertyList;
+        m_rStyles.GetCurrentTextStyles()[m_aName] = m_aTextPropertyList;
     if (m_aFamily == "paragraph")
-        mrImport.GetAutomaticParagraphStyles()[m_aName] = m_aParagraphPropertyList;
+        m_rStyles.GetCurrentParagraphStyles()[m_aName] = m_aParagraphPropertyList;
 }
 
 librevenge::RVNGPropertyList &XMLStyleContext::GetTextPropertyList()

@@ -54,6 +54,7 @@ public:
     void testSpanAutostyle();
     void testParaAutostyleCharProps();
     void testMeta();
+    void testParaNamedstyle();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testSpanAutostyle);
     CPPUNIT_TEST(testParaAutostyleCharProps);
     CPPUNIT_TEST(testMeta);
+    CPPUNIT_TEST(testParaNamedstyle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -213,6 +215,16 @@ void EPUBExportTest::testMeta()
     // This was "Unknown Author", <meta:initial-creator> was not handled.
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "A U Thor");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "Title");
+}
+
+void EPUBExportTest::testParaNamedstyle()
+{
+    createDoc("para-namedstyle.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    assertXPath(mpXmlDoc, "//xhtml:p[1]", "class", "para0");
+    // This failed, paragraph properties from style were not exported.
+    assertXPath(mpXmlDoc, "//xhtml:p[2]", "class", "para1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

@@ -10,6 +10,8 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLFMT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLFMT_HXX
 
+#include <map>
+
 #include <librevenge/librevenge.h>
 
 #include "xmlictxt.hxx"
@@ -19,13 +21,19 @@ namespace writerperfect
 namespace exp
 {
 
-/// Handler for <office:automatic-styles>.
-class XMLAutomaticStylesContext : public XMLImportContext
+/// Handler for <office:automatic-styles>/<office:styles>.
+class XMLStylesContext : public XMLImportContext
 {
 public:
-    XMLAutomaticStylesContext(XMLImport &rImport);
+    XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles, std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles);
 
     XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentParagraphStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTextStyles();
+private:
+    std::map<OUString, librevenge::RVNGPropertyList> &m_rParagraphStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> &m_rTextStyles;
 };
 
 } // namespace exp

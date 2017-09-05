@@ -36,7 +36,9 @@ class XMLImport : public cppu::WeakImplHelper
     librevenge::RVNGTextInterface &mrGenerator;
     std::stack< rtl::Reference<XMLImportContext> > maContexts;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticTextStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maTextStyles;
     std::map<OUString, librevenge::RVNGPropertyList> maAutomaticParagraphStyles;
+    std::map<OUString, librevenge::RVNGPropertyList> maParagraphStyles;
 
 public:
     XMLImport(librevenge::RVNGTextInterface &rGenerator);
@@ -46,6 +48,8 @@ public:
     librevenge::RVNGTextInterface &GetGenerator() const;
     std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticTextStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticParagraphStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetTextStyles();
+    std::map<OUString, librevenge::RVNGPropertyList> &GetParagraphStyles();
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;
