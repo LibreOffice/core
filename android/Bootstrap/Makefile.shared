@@ -99,8 +99,6 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
 		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
 		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
 		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
-		&& echo "    liboNdkGdbserver    = '$(ANDROID_NDK_GDBSERVER)'" \
-		&& echo "    liboAndroidAppAbi   = '$(ANDROID_APP_ABI)'" \
 		&& echo "}" \
 		&& echo "android.defaultConfig {" \
 		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \

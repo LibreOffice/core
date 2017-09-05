@@ -210,25 +210,19 @@ swap).
 
 * Using ndk-gdb
 
-When you have all this, install the .apk to the device, and:
+Direct support for using ndk-gdb has been removed from the build system. It is
+recommended that you give the lldb debugger a try that has the benefit of being
+nicely integrated into Android Studio (see below for instructions).
+If you nevertheless want to continue using ndk-gdb, use the following steps
+that are described in more detail here: https://stackoverflow.com/a/10539883
 
-        cd android/source
-        <ndk-bundle>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb [--start]
-
-In case you used --with-android-package-name, add --package=your.package.name
-to the invocation
-
-If you get the error
-
-        ERROR: Could not find gdb.setup under ./libs/
-
-(and an empty "Compatible device ABI:" when run with --verbose), you need to fix
-the quoting in the ndk-gdb script:
-
-@@ -574 +574 @@
--adb_var_shell BCFILES run-as $PACKAGE_NAME /system/bin/sh -c "ls lib/*.bc"
-+adb_var_shell BCFILES run-as $PACKAGE_NAME /system/bin/sh -c \"ls lib/*.bc\"
-
+    - add android:debuggable="true" to AndroidManifest.xml
+    - push gdbserver to device, launch and attach to application
+    - forward debugging port from host to device
+    - launch matching gdb on host and run following setup commands:
+        - set solib-search-path obj/local/<appAbi>
+        - file obj/local/<appAbi>/liblo-native-code.so
+        - target remote :<portused>
 
 Pretty printers aren't loaded automatically due to the single shared
 object, but you can still load them manually. E.g. to have a pretty-printer for
@@ -239,8 +233,9 @@ rtl::OString, you need:
 
 * Using Android Studio (and thus lldb)
 
-Note that both might not yield the same results - so if lldb doesn't show you
-useful info, try with the ndk-gdb method and the other way round.
+Note that lldb might not yield the same results as ndk-gdb. If you suspect a
+problem with lldb, you can try to manually use ndk-gdb as described above.
+Using lldb from within Android Studio is more comfortable though and works like this:
 
     - open android/source/build.gradle in Android Studio via File|New → Import Project
     - make sure you select the right build variant (strippedUIDebug is what you want)
