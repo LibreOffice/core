@@ -65,7 +65,8 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
     return aBuf.makeStringAndClear();
 }
 
-std::unique_ptr<BacktraceState> sal_backtrace_get(sal_uInt32 maxDepth)
+std::unique_ptr<sal::detail::BacktraceState> sal_detail_backtrace_get(
+    sal_uInt32 maxDepth)
 {
     assert(maxDepth != 0);
     auto const maxUlong = std::numeric_limits<ULONG>::max();
@@ -84,10 +85,11 @@ std::unique_ptr<BacktraceState> sal_backtrace_get(sal_uInt32 maxDepth)
     // clamped internally, instead of resulting in an error:
     int nFrames = CaptureStackBackTrace( 0, static_cast<ULONG>(maxDepth), pStack, nullptr );
 
-    return std::unique_ptr<BacktraceState>(new BacktraceState{ pStack, nFrames });
+    return std::unique_ptr<sal::detail::BacktraceState>(new sal::detail::BacktraceState{ pStack, nFrames });
 }
 
-OUString sal_backtrace_to_string(BacktraceState* backtraceState)
+OUString sal_detail_backtrace_to_string(
+    sal::detail::BacktraceState* backtraceState)
 {
     OUStringBuffer aBuf;
 

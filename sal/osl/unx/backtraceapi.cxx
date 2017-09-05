@@ -59,7 +59,8 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth) {
     return b3.makeStringAndClear();
 }
 
-std::unique_ptr<BacktraceState> sal_backtrace_get(sal_uInt32 maxDepth)
+std::unique_ptr<sal::detail::BacktraceState> sal_detail_backtrace_get(
+    sal_uInt32 maxDepth)
 {
     assert(maxDepth != 0);
     auto const maxInt = static_cast<unsigned int>(
@@ -69,10 +70,12 @@ std::unique_ptr<BacktraceState> sal_backtrace_get(sal_uInt32 maxDepth)
     }
     auto b1 = new void *[maxDepth];
     int n = backtrace(b1, static_cast<int>(maxDepth));
-    return std::unique_ptr<BacktraceState>(new BacktraceState{ b1, n });
+    return std::unique_ptr<sal::detail::BacktraceState>(
+        new sal::detail::BacktraceState{ b1, n });
 }
 
-OUString sal_backtrace_to_string(BacktraceState* backtraceState)
+OUString sal_detail_backtrace_to_string(
+    sal::detail::BacktraceState* backtraceState)
 {
     FreeGuard b2(backtrace_symbols(backtraceState->buffer, backtraceState->nDepth));
     if (b2.buffer == nullptr) {

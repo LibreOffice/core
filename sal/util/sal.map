@@ -735,8 +735,8 @@ PRIVATE_1.3 { # LibreOffice 5.4
 
 PRIVATE_1.4 { # LibreOffice 6.0
     global:
-        _Z17sal_backtrace_getj;
-        _Z23sal_backtrace_to_stringP14BacktraceState;
+        sal_detail_backtrace_get;
+        sal_detail_backtrace_to_string;
 } PRIVATE_1.3;
 
 PRIVATE_textenc.1 { # LibreOffice 3.6
