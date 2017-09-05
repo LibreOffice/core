@@ -156,13 +156,23 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
 
             // Reference to an automatic style, try to look it up.
             auto itStyle = mrImport.GetAutomaticParagraphStyles().find(m_aStyleName);
-            if (itStyle == mrImport.GetAutomaticParagraphStyles().end())
+            if (itStyle != mrImport.GetAutomaticParagraphStyles().end())
+            {
+                // Found an automatic paragraph style.
+                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+                for (itProp.rewind(); itProp.next();)
+                    aPropertyList.insert(itProp.key(), itProp()->clone());
                 continue;
+            }
 
-            // Found an automatic paragraph style.
-            librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-            for (itProp.rewind(); itProp.next();)
-                aPropertyList.insert(itProp.key(), itProp()->clone());
+            itStyle = mrImport.GetParagraphStyles().find(m_aStyleName);
+            if (itStyle != mrImport.GetParagraphStyles().end())
+            {
+                // Found a paragraph style.
+                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+                for (itProp.rewind(); itProp.next();)
+                    aPropertyList.insert(itProp.key(), itProp()->clone());
+            }
         }
         else
         {

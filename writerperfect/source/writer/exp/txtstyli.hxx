@@ -19,11 +19,13 @@ namespace writerperfect
 namespace exp
 {
 
+class XMLStylesContext;
+
 /// Handler for <style:style>.
 class XMLStyleContext : public XMLImportContext
 {
 public:
-    XMLStyleContext(XMLImport &rImport);
+    XMLStyleContext(XMLImport &rImport, XMLStylesContext &rStyles);
 
     XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
@@ -37,6 +39,7 @@ private:
     OUString m_aFamily;
     librevenge::RVNGPropertyList m_aTextPropertyList;
     librevenge::RVNGPropertyList m_aParagraphPropertyList;
+    XMLStylesContext &m_rStyles;
 };
 
 } // namespace exp
