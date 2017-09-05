@@ -1202,6 +1202,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
     CPPUNIT_ASSERT(xTextFields->hasElements());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Get bookmark name
+    OUString bookmarkName = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:bookmarkStart", "name");
+
+    // Ensure that name has no spaces
+    CPPUNIT_ASSERT(bookmarkName.indexOf(" ") < 0);
+
+    // Get PAGEREF field
+    OUString fieldName = getXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText");
+
+    // Ensure that PAGEREF field refers exactly our bookmark
+    OUString expectedFieldName(" PAGEREF ");
+    expectedFieldName += bookmarkName;
+    expectedFieldName += " \\h ";
+    CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
