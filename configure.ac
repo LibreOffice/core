@@ -5207,6 +5207,9 @@ find_winsdk()
 find_msms()
 {
     my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
+    if test $VCVER = 150; then
+        my_msm_file=Microsoft_VC141_CRT_x86.msm
+    fi
     AC_MSG_CHECKING([for $my_msm_file])
     msmdir=
     for ver in 14.0 15.0; do
@@ -5236,16 +5239,14 @@ find_msms()
 
     dnl Starting from MSVC 15.0, merge modules are located in different directory
     if test $VCVER = 150; then
-        my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/MergeModules/"
-        if test -e "$my_msm_dir/$my_msm_file"; then
-            msmdir=$my_msm_dir
-        else
-            # got everything in 14.10.15017 except the MSMS in 25008... huh?
-            my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/14.10.25008/MergeModules/"
+        for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
+            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])
+            my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
             if test -e "$my_msm_dir/$my_msm_file"; then
                 msmdir=$my_msm_dir
+                break
             fi
-        fi
+        done
     fi
 
     if test -n "$msmdir"; then
@@ -5265,11 +5266,13 @@ find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     if test "$VCVER" = 150; then
-        if test $vcbuildnumber = 14.10.25017; then
-            msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/onecore/x64/Microsoft.VC${VCVER}.CRT"
-        else
-            msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/x64/Microsoft.VC${VCVER}.CRT"
-        fi
+        for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
+            AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
+            if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
+                msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
+                break
+            fi
+        done
     fi
     msvcdlls="msvcp140.dll vcruntime140.dll"
     for dll in $msvcdlls; do
