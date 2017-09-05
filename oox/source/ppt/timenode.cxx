@@ -309,8 +309,10 @@ namespace oox { namespace ppt {
                             xAnimate->setBy( aValue );
                         break;
                     case NP_TARGET:
-                        if( xAnimate.is() )
-                            xAnimate->setTarget( aValue );
+                        if (xAnimate.is())
+                            xAnimate->setTarget(aValue);
+                        if (xCommand.is())
+                            xCommand->setTarget(aValue);
                         break;
                     case NP_SUBITEM:
                         if( xAnimate.is() )
