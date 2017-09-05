@@ -1220,11 +1220,6 @@
       <text:p>5</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce54" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <table:detective>
-       <table:highlighted-range table:cell-range-address="Sheet2.A9:Sheet2.A9" table:direction="from-same-table"/>
-       <table:highlighted-range table:cell-range-address="Sheet2.B9:Sheet2.B9" table:direction="from-same-table"/>
-       <table:operation table:name="trace-precedents" table:index="0"/>
-      </table:detective>
       <text:p>WAAR</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;3)" calcext:value-type="string">
@@ -1233,17 +1228,32 @@
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:formula="of:=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;5)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;5)" office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce54" table:formula="of:=[.A10]=[.B10]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;5)" calcext:value-type="string">
+      <text:p>=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;5)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;6)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#VALUE!</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:#VALUE!" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#VALUE!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=ISERROR([.A10])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce29" table:formula="of:=ISERROR([.A11])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A10])" office:value-type="string" office:string-value="=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;5)" calcext:value-type="string">
-      <text:p>=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;5)</text:p>
+     <table:table-cell table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;6)" calcext:value-type="string">
+      <text:p>=FINDB(&quot;efg&quot;;&quot;abcdefg&quot;;6)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
@@ -1254,10 +1264,10 @@
      <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
       <text:p>19</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce46" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce46" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;1)" calcext:value-type="string">
+     <table:table-cell table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;1)" calcext:value-type="string">
       <text:p>=FINDB(&quot;ᄫᄬ&quot;;$I$2;1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
@@ -1269,10 +1279,10 @@
      <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
       <text:p>19</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce57" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce57" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;2)" calcext:value-type="string">
+     <table:table-cell table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;2)" calcext:value-type="string">
       <text:p>=FINDB(&quot;ᄫᄬ&quot;;$I$2;2)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
@@ -1284,10 +1294,10 @@
      <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
       <text:p>19</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce73" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce73" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A13])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;18)" calcext:value-type="string">
+     <table:table-cell table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;18)" calcext:value-type="string">
       <text:p>=FINDB(&quot;ᄫᄬ&quot;;$I$2;18)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
@@ -1299,10 +1309,10 @@
      <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
       <text:p>19</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce74" table:formula="of:=[.A14]=[.B14]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce74" table:formula="of:=[.A15]=[.B15]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;19)" calcext:value-type="string">
+     <table:table-cell table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;19)" calcext:value-type="string">
       <text:p>=FINDB(&quot;ᄫᄬ&quot;;$I$2;19)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
@@ -1314,10 +1324,10 @@
      <table:table-cell table:formula="of:#VALUE!" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>#VALUE!</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce75" table:formula="of:=ISERROR([.A15])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce75" table:formula="of:=ISERROR([.A16])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A15])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;20)" calcext:value-type="string">
+     <table:table-cell table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$2;20)" calcext:value-type="string">
       <text:p>=FINDB(&quot;ᄫᄬ&quot;;$I$2;20)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
@@ -1329,10 +1339,10 @@
      <table:table-cell office:value-type="float" office:value="20" calcext:value-type="float">
       <text:p>20</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce36" table:formula="of:=[.A16]=[.B16]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce36" table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A16])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$3;9)" calcext:value-type="string">
+     <table:table-cell table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=FINDB(&quot;ᄫᄬ&quot;;$I$3;9)" calcext:value-type="string">
       <text:p>=FINDB(&quot;ᄫᄬ&quot;;$I$3;9)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
@@ -1354,10 +1364,10 @@
      <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
       <text:p>6</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A17]=[.B17]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A17])" office:value-type="string" office:string-value="=FINDB(76;998877665544)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=FINDB(76;998877665544)" calcext:value-type="string">
       <text:p>=FINDB(76;998877665544)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
@@ -1377,17 +1387,17 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce8" table:formula="of:=FINDB(&quot;M&quot;;[.I17])" office:value-type="float" office:value="1" calcext:value-type="float">
+     <table:table-cell table:style-name="ce8" table:formula="of:=FINDB(&quot;M&quot;;[.I18])" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A18]=[.B18]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A18])" office:value-type="string" office:string-value="=FINDB(&quot;M&quot;;I17)" calcext:value-type="string">
-      <text:p>=FINDB(&quot;M&quot;;I17)</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=FINDB(&quot;M&quot;;I18)" calcext:value-type="string">
+      <text:p>=FINDB(&quot;M&quot;;I18)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce87" table:number-columns-repeated="2"/>
@@ -1403,17 +1413,17 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce8" table:formula="of:=FINDB(&quot;m&quot;;[.I17])" office:value-type="float" office:value="6" calcext:value-type="float">
+     <table:table-cell table:style-name="ce8" table:formula="of:=FINDB(&quot;m&quot;;[.I18])" office:value-type="float" office:value="6" calcext:value-type="float">
       <text:p>6</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
       <text:p>6</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A19]=[.B19]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A19])" office:value-type="string" office:string-value="=FINDB(&quot;m&quot;;I17)" calcext:value-type="string">
-      <text:p>=FINDB(&quot;m&quot;;I17)</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=FINDB(&quot;m&quot;;I18)" calcext:value-type="string">
+      <text:p>=FINDB(&quot;m&quot;;I18)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce8"/>
@@ -1429,17 +1439,17 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce8" table:formula="of:=FINDB(&quot;M&quot;;[.I17];3)" office:value-type="float" office:value="8" calcext:value-type="float">
+     <table:table-cell table:style-name="ce8" table:formula="of:=FINDB(&quot;M&quot;;[.I18];3)" office:value-type="float" office:value="8" calcext:value-type="float">
       <text:p>8</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="8" calcext:value-type="float">
       <text:p>8</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A20]=[.B20]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A20])" office:value-type="string" office:string-value="=FINDB(&quot;M&quot;;I17;3)" calcext:value-type="string">
-      <text:p>=FINDB(&quot;M&quot;;I17;3)</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=FINDB(&quot;M&quot;;I18;3)" calcext:value-type="string">
+      <text:p>=FINDB(&quot;M&quot;;I18;3)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce8"/>
@@ -1452,17 +1462,17 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce8" table:formula="of:=MID([.K17];1;FINDB(&quot; #&quot;;[.K17];1)-1)" office:value-type="string" office:string-value="Ceramic Insulators" calcext:value-type="string">
+     <table:table-cell table:style-name="ce8" table:formula="of:=MID([.K18];1;FINDB(&quot; #&quot;;[.K18];1)-1)" office:value-type="string" office:string-value="Ceramic Insulators" calcext:value-type="string">
       <text:p>Ceramic Insulators</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Ceramic Insulators</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A21])" office:value-type="string" office:string-value="=MID(K17;1;FINDB(&quot; #&quot;;K17;1)-1)" calcext:value-type="string">
-      <text:p>=MID(K17;1;FINDB(&quot; #&quot;;K17;1)-1)</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=MID(K18;1;FINDB(&quot; #&quot;;K18;1)-1)" calcext:value-type="string">
+      <text:p>=MID(K18;1;FINDB(&quot; #&quot;;K18;1)-1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce8"/>
@@ -1476,26 +1486,11 @@
      </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce8" table:formula="of:=MID([.K18];1;FINDB(&quot; #&quot;;[.K18];1)-1)" office:value-type="string" office:string-value="Copper Coils" calcext:value-type="string">
+     <table:table-cell table:style-name="ce8" table:formula="of:=MID([.K19];1;FINDB(&quot; #&quot;;[.K19];1)-1)" office:value-type="string" office:string-value="Copper Coils" calcext:value-type="string">
       <text:p>Copper Coils</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Copper Coils</text:p>
-     </table:table-cell>
-     <table:table-cell table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=MID(K18;1;FINDB(&quot; #&quot;;K18;1)-1)" calcext:value-type="string">
-      <text:p>=MID(K18;1;FINDB(&quot; #&quot;;K18;1)-1)</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="11"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce8" table:formula="of:=MID([.K19];1;FINDB(&quot; #&quot;;[.K19];1)-1)" office:value-type="string" office:string-value="Variable Resistors" calcext:value-type="string">
-      <text:p>Variable Resistors</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
-      <text:p>Variable Resistors</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=[.A23]=[.B23]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
@@ -1506,92 +1501,107 @@
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce8" table:formula="of:=MID([.K20];1;FINDB(&quot; #&quot;;[.K20];1)-1)" office:value-type="string" office:string-value="Variable Resistors" calcext:value-type="string">
+      <text:p>Variable Resistors</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Variable Resistors</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=[.A24]=[.B24]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="=MID(K20;1;FINDB(&quot; #&quot;;K20;1)-1)" calcext:value-type="string">
+      <text:p>=MID(K20;1;FINDB(&quot; #&quot;;K20;1)-1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce9" table:formula="of:=FINDB(&quot;aa&quot;)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:511</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
       <text:p>Err:511</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=ISERROR([.A24])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=ISERROR([.A25])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A24])" office:value-type="string" office:string-value="=FINDB(&quot;aa&quot;)" calcext:value-type="string">
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="=FINDB(&quot;aa&quot;)" calcext:value-type="string">
       <text:p>=FINDB(&quot;aa&quot;)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=FINDB([.O16:.O21];[.N16:.N21])" office:value-type="float" office:value="1" calcext:value-type="float">
+     <table:table-cell table:number-matrix-columns-spanned="1" table:number-matrix-rows-spanned="6" table:formula="of:=FINDB([.O17:.O22];[.N17:.N22])" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A25]=[.B25]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A25])" office:value-type="string" office:string-value="{=FINDB(O16:O21;N16:N21)}" calcext:value-type="string">
-      <text:p>{=FINDB(O16:O21;N16:N21)}</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="11"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
-      <text:p>2</text:p>
-     </table:table-cell>
      <table:table-cell table:formula="of:=[.A26]=[.B26]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="{=FINDB(O16:O21;N16:N21)}" calcext:value-type="string">
-      <text:p>{=FINDB(O16:O21;N16:N21)}</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A26])" office:value-type="string" office:string-value="{=FINDB(O17:O22;N17:N22)}" calcext:value-type="string">
+      <text:p>{=FINDB(O17:O22;N17:N22)}</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3</text:p>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3</text:p>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=[.A27]=[.B27]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="{=FINDB(O16:O21;N16:N21)}" calcext:value-type="string">
-      <text:p>{=FINDB(O16:O21;N16:N21)}</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A27])" office:value-type="string" office:string-value="{=FINDB(O17:O22;N17:N22)}" calcext:value-type="string">
+      <text:p>{=FINDB(O17:O22;N17:N22)}</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4</text:p>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
-      <text:p>4</text:p>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=[.A28]=[.B28]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="{=FINDB(O16:O21;N16:N21)}" calcext:value-type="string">
-      <text:p>{=FINDB(O16:O21;N16:N21)}</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A28])" office:value-type="string" office:string-value="{=FINDB(O17:O22;N17:N22)}" calcext:value-type="string">
+      <text:p>{=FINDB(O17:O22;N17:N22)}</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5</text:p>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
-      <text:p>5</text:p>
+     <table:table-cell office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=[.A29]=[.B29]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="{=FINDB(O16:O21;N16:N21)}" calcext:value-type="string">
-      <text:p>{=FINDB(O16:O21;N16:N21)}</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A29])" office:value-type="string" office:string-value="{=FINDB(O17:O22;N17:N22)}" calcext:value-type="string">
+      <text:p>{=FINDB(O17:O22;N17:N22)}</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="11"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
+      <text:p>5</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="{=FINDB(O17:O22;N17:N22)}" calcext:value-type="string">
+      <text:p>{=FINDB(O17:O22;N17:N22)}</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
@@ -1602,94 +1612,19 @@
      <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
       <text:p>6</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.A30]=[.B30]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:formula="of:=[.A31]=[.B31]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="{=FINDB(O16:O21;N16:N21)}" calcext:value-type="string">
-      <text:p>{=FINDB(O16:O21;N16:N21)}</text:p>
+     <table:table-cell table:style-name="ce86" table:formula="of:=FORMULA([.A31])" office:value-type="string" office:string-value="{=FINDB(O17:O22;N17:N22)}" calcext:value-type="string">
+      <text:p>{=FINDB(O17:O22;N17:N22)}</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C2">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C50">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C3:Sheet2.C3">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C3"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C3"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C3"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C4:Sheet2.C4">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C4"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C4"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C4"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C6:Sheet2.C6">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C6"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C6"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C6"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C7:Sheet2.C7">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C7"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C7"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C7"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C9:Sheet2.C9">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C9"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C9"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C9"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C5:Sheet2.C5">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C5"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C5"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C5"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C8:Sheet2.C8">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C8"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C8"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C8"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C10:Sheet2.C10">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C10"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C10"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C10"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C15:Sheet2.C15">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C15"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C15"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C15"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C11:Sheet2.C11">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C11"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C11"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C11"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C12:Sheet2.C12">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C12"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C12"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C12"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C13:Sheet2.C13">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C13"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C13"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C13"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C14:Sheet2.C14">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C14"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C14"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C14"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C17:Sheet2.C30">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C17"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C17"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C17"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C16:Sheet2.C16">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C16"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C16"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C16"/>
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
