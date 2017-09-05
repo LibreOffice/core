@@ -880,7 +880,8 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
 //  complete set ( ATTR_STARTINDEX, ATTR_ENDINDEX )
 
 void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
-                                  const SfxItemSet* pOldSet )
+                                  const SfxItemSet* pOldSet,
+                                  bool bAdjustBlockHeight)
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -983,13 +984,14 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     pNewPool->Remove(rNewOuter);         // release
     pNewPool->Remove(rNewInner);
 
-    //  adjust height
-    AdjustBlockHeight();
+    //  adjust height only if needed
+    if (bAdjustBlockHeight)
+        AdjustBlockHeight();
 
     // CellContentChanged is called in ApplySelectionPattern / ApplyPatternLines
 }
 
-void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
+void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeight )
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -1008,7 +1010,9 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
         aNewAttrs.GetItemSet().Put( SfxUInt16Item( ATTR_INDENT, 0 ) );
     ApplySelectionPattern( aNewAttrs );
 
-    AdjustBlockHeight();
+    // Prevent useless compute
+    if (bAdjustBlockHeight)
+        AdjustBlockHeight();
 
     // CellContentChanged is called in ApplySelectionPattern
 }
