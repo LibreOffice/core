@@ -266,6 +266,13 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:InsertCurrentDate"/>
             <menu:menuitem menu:id=".uno:InsertCurrentTime"/>
+            <menu:menu menu:id=".uno:FieldMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertFieldDateVariable"/>
+                    <menu:menuitem menu:id=".uno:InsertFieldSheet"/>
+                    <menu:menuitem menu:id=".uno:InsertFieldDocTitle"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
