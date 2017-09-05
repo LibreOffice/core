@@ -53,6 +53,7 @@ enum class Relationship
     STYLES,
     THEME,
     VBAPROJECT,
+    VIDEO,
     VMLDRAWING,
     WORDVBADATA,
     WORKSHEET

@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_api,oox,\
 ))
 
 $(eval $(call gb_Library_use_libraries,oox,\
+    avmedia \
     basegfx \
     comphelper \
     cppu \
@@ -47,7 +48,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     drawinglayer \
     msfilter \
     sal \
-	i18nlangtag \
+    i18nlangtag \
     sax \
     sfx \
     svl \
