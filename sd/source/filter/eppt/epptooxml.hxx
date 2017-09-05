@@ -108,6 +108,7 @@ protected:
     void WriteAnimationNodeAnimateInside( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple );
     void WriteAnimationNodeSeq( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
     void WriteAnimationNodeEffect( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
+    void WriteAnimationNodeCommand(const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
     void WriteAnimationNodeCommonPropsStart( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::animations::XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild );
     static void WriteAnimationProperty( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rAny );
     void WriteAnimationTarget( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Any& rTarget );
