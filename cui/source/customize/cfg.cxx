@@ -933,7 +933,7 @@ void ContextMenuSaveInData::Reset()
     m_pRootEntry.reset();
 }
 
-void ContextMenuSaveInData::ResetContextMenu( SvxConfigEntry* pEntry )
+void ContextMenuSaveInData::ResetContextMenu( const SvxConfigEntry* pEntry )
 {
     try
     {

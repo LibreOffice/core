@@ -242,7 +242,7 @@ public:
     void Reset() override;
     bool Apply() override;
 
-    void ResetContextMenu( SvxConfigEntry* pEntry );
+    void ResetContextMenu( const SvxConfigEntry* pEntry );
 };
 
 class SvxConfigEntry
