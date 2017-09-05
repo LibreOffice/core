@@ -158,8 +158,9 @@ public:
     bool            InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType );
 
-    void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet );
-    void            ApplyAttr( const SfxPoolItem& rAttrItem );
+    void            ApplyAttributes(const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet, bool bAdjustBlockHeight = true);
+    void            ApplyAttr(const SfxPoolItem& rAttrItem, bool bAdjustBlockHeight = true);
+
     void            ApplySelectionPattern( const ScPatternAttr& rAttr,
                                             bool bCursorOnly = false);
     void            ApplyPatternLines(const ScPatternAttr& rAttr,

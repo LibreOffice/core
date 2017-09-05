@@ -1703,7 +1703,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     SvxBrushItem aBrushItem( static_cast<const SvxBrushItem&>(
                                      pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) ) );
                     aBrushItem.SetColor( COL_TRANSPARENT );
-                    pTabViewShell->ApplyAttr( aBrushItem );
+                    pTabViewShell->ApplyAttr( aBrushItem, false );
                 }
                 break;
 
@@ -1776,12 +1776,16 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_OVERLINE:
             case SID_ATTR_CHAR_STRIKEOUT:
             case SID_ATTR_ALIGN_LINEBREAK:
-            case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_CONTOUR:
             case SID_ATTR_CHAR_SHADOWED:
             case SID_ATTR_CHAR_RELIEF:
+                pTabViewShell->ApplyAttr(pNewAttrs->Get(pNewAttrs->GetPool()->GetWhich( nSlot)));
+                rBindings.Invalidate( nSlot );
+                rBindings.Update( nSlot );
+                break;
+            case SID_ATTR_CHAR_COLOR:
             case SID_SCATTR_PROTECTION :
-                pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot ) ) );
+                pTabViewShell->ApplyAttr(pNewAttrs->Get(pNewAttrs->GetPool()->GetWhich( nSlot)), false);
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
                 break;
@@ -1980,7 +1984,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                     aBrushItem.SetColor( rNewColorItem.GetValue() );
 
-                    pTabViewShell->ApplyAttr( aBrushItem );
+                    pTabViewShell->ApplyAttr( aBrushItem, false );
                 }
                 break;
 
