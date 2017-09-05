@@ -61,7 +61,7 @@
 
 #include <oox/core/fastparser.hxx>
 #include <salhelper/thread.hxx>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 #include <osl/conditn.hxx>
 
 #include <algorithm>
@@ -215,18 +215,18 @@ namespace {
 typedef std::pair<WorksheetGlobalsRef, FragmentHandlerRef> SheetFragmentHandler;
 typedef std::vector<SheetFragmentHandler> SheetFragmentVector;
 
-class WorkerThread : public comphelper::ThreadTask
+class WorkerThread : public sal::ThreadTask
 {
     sal_Int32 &mrSheetsLeft;
     WorkbookFragment& mrWorkbookHandler;
     rtl::Reference<FragmentHandler> mxHandler;
 
 public:
-    WorkerThread( const std::shared_ptr<comphelper::ThreadTaskTag> & pTag,
+    WorkerThread( const std::shared_ptr<sal::ThreadTaskTag> & pTag,
                   WorkbookFragment& rWorkbookHandler,
                   const rtl::Reference<FragmentHandler>& xHandler,
                   sal_Int32 &rSheetsLeft ) :
-        comphelper::ThreadTask( pTag ),
+        sal::ThreadTask( pTag ),
         mrSheetsLeft( rSheetsLeft ),
         mrWorkbookHandler( rWorkbookHandler ),
         mxHandler( xHandler )
@@ -311,8 +311,8 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
     rWorkbookHandler.getDocImport().initForSheets();
 
     // test sequential read in this mode
-    comphelper::ThreadPool &rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
-    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    sal::ThreadPool &rSharedPool = sal::ThreadPool::getSharedOptimalPool();
+    std::shared_ptr<sal::ThreadTaskTag> pTag = sal::ThreadPool::createThreadTaskTag();
 
     sal_Int32 nSheetsLeft = 0;
     ProgressBarTimer aProgressUpdater;

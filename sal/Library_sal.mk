@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/all/loadmodulerelative \
 	sal/osl/all/log  \
 	sal/osl/all/signalshared  \
+	sal/osl/all/threadpool  \
 	sal/osl/all/utility \
 	sal/rtl/alloc_arena \
 	sal/rtl/alloc_cache \

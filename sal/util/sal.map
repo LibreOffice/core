@@ -737,6 +737,16 @@ PRIVATE_1.4 { # LibreOffice 6.0
     global:
         _Z17sal_backtrace_getj;
         _Z23sal_backtrace_to_stringP14BacktraceState;
+         # ThreadPool API
+        _ZN3sal10ThreadPool13waitUntilDoneERKSt10shared_ptrINS_13ThreadTaskTagEE;
+        _ZN3sal10ThreadPool19createThreadTaskTagEv;
+        _ZN3sal10ThreadPool20getSharedOptimalPoolEv;
+        _ZN3sal10ThreadPool8pushTaskEPNS_10ThreadTaskE;
+        _ZN3sal10ThreadPool23getPreferredConcurrencyEv;
+        _ZN3sal10ThreadPool8pushTaskEPNS_10ThreadTaskE;
+        _ZN3sal10ThreadPoolC1Ei;
+        _ZN3sal10ThreadPoolD1Ev;
+        _ZN3sal10ThreadTaskC2ERKSt10shared_ptrINS_13ThreadTaskTagEE;
 } PRIVATE_1.3;
 
 PRIVATE_textenc.1 { # LibreOffice 3.6

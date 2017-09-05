@@ -53,7 +53,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <strings.hrc>
 #include <svx/charthelper.hxx>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 #include <atomic>
 #include <deque>
 
@@ -651,7 +651,7 @@ private:
     // data working on itself
     std::atomic< bool>                                  mbKilled;
 
-    std::shared_ptr<comphelper::ThreadTaskTag>          mpTag;
+    std::shared_ptr<sal::ThreadTaskTag>          mpTag;
 
 public:
     explicit DeflateData(const uno::Reference< frame::XModel >& rXModel)
@@ -659,7 +659,7 @@ public:
         maPrimitive2DSequence(),
         maRange(),
         mbKilled(false),
-        mpTag( comphelper::ThreadPool::createThreadTaskTag() )
+        mpTag( sal::ThreadPool::createThreadTaskTag() )
     {
     }
 
@@ -675,7 +675,7 @@ public:
 
     bool isFinished() const
     {
-        return comphelper::ThreadPool::isTaskTagDone(mpTag);
+        return sal::ThreadPool::isTaskTagDone(mpTag);
     }
 
     void waitFinished()
@@ -684,21 +684,21 @@ public:
         // WorkerThreads need the SolarMutex to be able to continue
         // and finish the running import.
         SolarMutexReleaser aReleaser;
-        comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(mpTag);
+        sal::ThreadPool::getSharedOptimalPool().waitUntilDone(mpTag);
     }
 };
 
 namespace {
 
 /// Task for parallelly-executed task to load a chart model
-class DeflateThread : public comphelper::ThreadTask
+class DeflateThread : public sal::ThreadTask
 {
     // the data to work on
     DeflateData&            mrDeflateData;
 
 public:
     explicit DeflateThread(DeflateData& rDeflateData)
-    :   comphelper::ThreadTask(rDeflateData.mpTag), mrDeflateData(rDeflateData)
+    :   sal::ThreadTask(rDeflateData.mpTag), mrDeflateData(rDeflateData)
     {
     }
 
@@ -1056,7 +1056,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartC
                 {
                     m_pDeflateData = new DeflateData(aXModel);
                     DeflateThread* pNew = new DeflateThread(*m_pDeflateData);
-                    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
+                    sal::ThreadPool::getSharedOptimalPool().pushTask(pNew);
                 }
             }
         }

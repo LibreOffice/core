@@ -25,6 +25,7 @@
 #include <osl/process.h>
 #include <sal/main.h>
 #include <sal/types.h>
+#include <sal/threadpool.hxx>
 
 extern "C" {
 
@@ -85,6 +86,7 @@ void sal_detail_deinitialize()
     {
         // We should never reach this point or we did wrong elsewhere
     }
+    sal::ThreadPool::getSharedOptimalPool().shutdown();
 }
 
 }   // extern "C"

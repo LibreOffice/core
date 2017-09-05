@@ -34,7 +34,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <vcl/bitmapaccess.hxx>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 
 using namespace com::sun::star;
 
@@ -374,7 +374,7 @@ namespace drawinglayer
                     // check for parallel execution possibilities
                     static bool bMultithreadAllowed = true;
                     sal_Int32 nThreadCount(0);
-                    comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
+                    sal::ThreadPool& rThreadPool(sal::ThreadPool::getSharedOptimalPool());
 
                     if(bMultithreadAllowed)
                     {
@@ -390,7 +390,7 @@ namespace drawinglayer
 
                     if(nThreadCount > 1)
                     {
-                        class Executor : public comphelper::ThreadTask
+                        class Executor : public sal::ThreadTask
                         {
                         private:
                             processor3d::ZBufferProcessor3D*            mpZBufferProcessor3D;
@@ -398,10 +398,10 @@ namespace drawinglayer
 
                         public:
                             explicit Executor(
-                                std::shared_ptr<comphelper::ThreadTaskTag> const & rTag,
+                                std::shared_ptr<sal::ThreadTaskTag> const & rTag,
                                 processor3d::ZBufferProcessor3D* pZBufferProcessor3D,
                                 const primitive3d::Primitive3DContainer& rChildren3D)
-                            :   comphelper::ThreadTask(rTag),
+                            :   sal::ThreadTask(rTag),
                                 mpZBufferProcessor3D(pZBufferProcessor3D),
                                 mrChildren3D(rChildren3D)
                             {
@@ -417,7 +417,7 @@ namespace drawinglayer
 
                         std::vector< processor3d::ZBufferProcessor3D* > aProcessors;
                         const sal_uInt32 nLinesPerThread(aBZPixelRaster.getHeight() / nThreadCount);
-                        std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+                        std::shared_ptr<sal::ThreadTaskTag> aTag = sal::ThreadPool::createThreadTaskTag();
 
                         for(sal_Int32 a(0); a < nThreadCount; a++)
                         {

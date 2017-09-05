@@ -23,7 +23,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
@@ -1339,18 +1339,18 @@ struct GraphicImportContext
 };
 
 /// Graphic import worker that gets executed on a thread.
-class GraphicImportTask : public comphelper::ThreadTask
+class GraphicImportTask : public sal::ThreadTask
 {
     GraphicImportContext& m_rContext;
 public:
-    GraphicImportTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, GraphicImportContext& rContext);
+    GraphicImportTask(const std::shared_ptr<sal::ThreadTaskTag>& pTag, GraphicImportContext& rContext);
     void doWork() override;
     /// Shared code between threaded and non-threaded version.
     static void doImport(GraphicImportContext& rContext);
 };
 
-GraphicImportTask::GraphicImportTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, GraphicImportContext& rContext)
-    : comphelper::ThreadTask(pTag),
+GraphicImportTask::GraphicImportTask(const std::shared_ptr<sal::ThreadTaskTag>& pTag, GraphicImportContext& rContext)
+    : sal::ThreadTask(pTag),
       m_rContext(rContext)
 {
 }
@@ -1373,8 +1373,8 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     static bool bThreads = !getenv("VCL_NO_THREAD_IMPORT");
     std::vector<GraphicImportContext> aContexts;
     aContexts.reserve(rStreams.size());
-    comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
-    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    sal::ThreadPool& rSharedPool = sal::ThreadPool::getSharedOptimalPool();
+    std::shared_ptr<sal::ThreadTaskTag> pTag = sal::ThreadPool::createThreadTaskTag();
 
     for (const auto& pStream : rStreams)
     {

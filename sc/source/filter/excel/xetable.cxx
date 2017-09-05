@@ -36,7 +36,7 @@
 #include "tokenarray.hxx"
 #include <formula/errorcodes.hxx>
 #include <thread>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 #include <oox/export/utils.hxx>
 #include <android/compatibility.hxx>
 
@@ -2152,16 +2152,16 @@ void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
         GetOrCreateRow(  ::std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
 }
 
-class RowFinalizeTask : public comphelper::ThreadTask
+class RowFinalizeTask : public sal::ThreadTask
 {
     bool mbProgress;
     const ScfUInt16Vec& mrColXFIndexes;
     std::vector< XclExpRow * > maRows;
 public:
-             RowFinalizeTask( const std::shared_ptr<comphelper::ThreadTaskTag> & pTag,
+             RowFinalizeTask( const std::shared_ptr<sal::ThreadTaskTag> & pTag,
                               const ScfUInt16Vec& rColXFIndexes,
                               bool bProgress ) :
-                 comphelper::ThreadTask( pTag ),
+                 sal::ThreadTask( pTag ),
                  mbProgress( bProgress ),
                  mrColXFIndexes( rColXFIndexes ) {}
 
@@ -2183,7 +2183,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     // This is staggeringly slow, and each element operates only
     // on its own data.
     const size_t nRows = maRowMap.size();
-    const size_t nThreads = nRows < 128 ? 1 : comphelper::ThreadPool::getPreferredConcurrency();
+    const size_t nThreads = nRows < 128 ? 1 : sal::ThreadPool::getPreferredConcurrency();
 #else
     const size_t nThreads = 1; // globally disable multi-threading for now.
 #endif
@@ -2195,8 +2195,8 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     }
     else
     {
-        comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
-        std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+        sal::ThreadPool &rPool = sal::ThreadPool::getSharedOptimalPool();
+        std::shared_ptr<sal::ThreadTaskTag> pTag = sal::ThreadPool::createThreadTaskTag();
         std::vector<RowFinalizeTask*> aTasks(nThreads, nullptr);
         for ( size_t i = 0; i < nThreads; i++ )
             aTasks[ i ] = new RowFinalizeTask( pTag, rColXFIndexes, i == 0 );

@@ -22,7 +22,7 @@
 
 #include <algorithm>
 #include <memory>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 
 namespace {
 
@@ -84,13 +84,13 @@ struct ScaleRangeContext {
 
 typedef void (*ScaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
 
-class ScaleTask : public comphelper::ThreadTask
+class ScaleTask : public sal::ThreadTask
 {
     ScaleRangeFn mpFn;
     std::vector< ScaleRangeContext > maStrips;
 public:
-    explicit ScaleTask( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ScaleRangeFn pFn )
-        : comphelper::ThreadTask(pTag), mpFn( pFn ) {}
+    explicit ScaleTask( const std::shared_ptr<sal::ThreadTaskTag>& pTag, ScaleRangeFn pFn )
+        : sal::ThreadTask(pTag), mpFn( pFn ) {}
     void push( ScaleRangeContext const &aRC ) { maStrips.push_back( aRC ); }
     virtual void doWork() override
     {
@@ -1004,8 +1004,8 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             try
             {
                 // partition and queue work
-                comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
-                std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+                sal::ThreadPool &rShared = sal::ThreadPool::getSharedOptimalPool();
+                std::shared_ptr<sal::ThreadTaskTag> pTag = sal::ThreadPool::createThreadTaskTag();
                 sal_uInt32 nThreads = rShared.getWorkerCount();
                 assert( nThreads > 0 );
                 sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;

@@ -7,24 +7,31 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_THREADPOOL_HXX
-#define INCLUDED_COMPHELPER_THREADPOOL_HXX
+#ifndef INCLUDED_SAL_THREADPOOL_HXX
+#define INCLUDED_SAL_THREADPOOL_HXX
 
 #include <sal/config.h>
 #include <rtl/ref.hxx>
-#include <comphelper/comphelperdllapi.h>
+#include <sal/saldllapi.h>
 #include <mutex>
 #include <thread>
 #include <condition_variable>
 #include <vector>
 #include <memory>
 
-namespace comphelper
+/// @cond INTERNAL
+/**
+     @since LibreOffice 6.0
+*/
+#if defined LIBO_INTERNAL_ONLY
+
+namespace sal
 {
 class ThreadTaskTag;
 class ThreadPool;
+struct ThreadPoolStatic;
 
-class COMPHELPER_DLLPUBLIC ThreadTask
+class SAL_DLLPUBLIC ThreadTask
 {
 friend class ThreadPool;
     std::shared_ptr<ThreadTaskTag>  mpTag;
@@ -41,8 +48,9 @@ public:
 };
 
 /// A very basic thread-safe thread pool implementation
-class COMPHELPER_DLLPUBLIC ThreadPool final
+class SAL_DLLPUBLIC ThreadPool final
 {
+friend struct ThreadPoolStatic;
 public:
     /// returns a pointer to a shared pool with optimal thread
     /// count for the CPU
@@ -85,7 +93,6 @@ private:
         @return a new task to perform, or NULL if list empty or terminated
     */
     ThreadTask *popWorkLocked( std::unique_lock< std::mutex > & rGuard, bool bWait );
-    void shutdownLocked(std::unique_lock<std::mutex>&);
 
     /// signalled when all in-progress tasks are complete
     std::mutex              maMutex;
@@ -96,8 +103,10 @@ private:
     std::vector< rtl::Reference< ThreadWorker > > maWorkers;
 };
 
-} // namespace comphelper
+} // namespace sal
 
-#endif // INCLUDED_COMPHELPER_THREADPOOL_HXX
+#endif
+
+#endif // INCLUDED_SAL_THREADPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,7 +10,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotest/filters-test.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
-#include <comphelper/threadpool.hxx>
+#include <sal/threadpool.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -115,17 +115,17 @@ namespace
     // test that actually fails when the aforementioned flag is set to false.
     void PackageTest::testThreadedStreams()
     {
-        class Worker : public comphelper::ThreadTask
+        class Worker : public sal::ThreadTask
         {
             uno::Reference<io::XInputStream> mxStrm;
             std::vector<char>& mrBuf;
 
         public:
             Worker(
-                const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
+                const std::shared_ptr<sal::ThreadTaskTag>& pTag,
                 const uno::Reference<io::XInputStream>& xStrm,
                 std::vector<char>& rBuf ) :
-                comphelper::ThreadTask(pTag), mxStrm(xStrm), mrBuf(rBuf) {}
+                sal::ThreadTask(pTag), mxStrm(xStrm), mrBuf(rBuf) {}
 
             virtual void doWork() override
             {
@@ -144,8 +144,8 @@ namespace
         };
 
         {
-            comphelper::ThreadPool aPool(4);
-            std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+            sal::ThreadPool aPool(4);
+            std::shared_ptr<sal::ThreadTaskTag> pTag = sal::ThreadPool::createThreadTaskTag();
 
             std::vector<std::vector<char>> aTestBuffers(26);
             auto itBuf = aTestBuffers.begin();
