@@ -1,0 +1,14 @@
+diff -ru boost.orig/boost/config/compiler/visualc.hpp boost/boost/config/compiler/visualc.hpp
+--- boost.orig/boost/config/compiler/visualc.hpp	2016-12-22 13:33:14.000000000 +0100
++++ boost/boost/config/compiler/visualc.hpp	2017-09-05 21:33:16.462142600 +0200
+@@ -293,8 +293,8 @@
+ #endif
+ 
+ //
+-// last known and checked version is 19.10.24629 (VC++ 2017 RC):
+-#if (_MSC_VER > 1910)
++// last known and checked version is 19.11.25506 (VC++ 2017.3):
++#if (_MSC_VER > 1911)
+ #  if defined(BOOST_ASSERT_CONFIG)
+ #     error "Unknown compiler version - please run the configure tests and report the results"
+ #  else
