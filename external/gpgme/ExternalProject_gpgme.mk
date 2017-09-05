@@ -29,6 +29,11 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
 		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
+			CFLAGS='$(CFLAGS) \
+				$(if $(ENABLE_OPTIMIZED), \
+					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
+				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
