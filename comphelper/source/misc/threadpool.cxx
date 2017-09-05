@@ -135,11 +135,7 @@ void ThreadPool::shutdown()
         return;
 
     std::unique_lock< std::mutex > aGuard( maMutex );
-    shutdownLocked(aGuard);
-}
 
-void ThreadPool::shutdownLocked(std::unique_lock<std::mutex>& aGuard)
-{
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
         ThreadTask *pTask;
@@ -231,14 +227,6 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag)
     }
 
     rTag->waitUntilDone();
-
-    {
-        std::unique_lock< std::mutex > aGuard( maMutex );
-        if (maTasks.empty()) // check if there are still tasks from another tag
-        {
-            shutdownLocked(aGuard);
-        }
-    }
 }
 
 std::shared_ptr<ThreadTaskTag> ThreadPool::createThreadTaskTag()

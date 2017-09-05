@@ -85,7 +85,6 @@ private:
         @return a new task to perform, or NULL if list empty or terminated
     */
     ThreadTask *popWorkLocked( std::unique_lock< std::mutex > & rGuard, bool bWait );
-    void shutdownLocked(std::unique_lock<std::mutex>&);
 
     /// signalled when all in-progress tasks are complete
     std::mutex              maMutex;
