@@ -225,6 +225,11 @@ void EPUBExportTest::testParaNamedstyle()
     assertXPath(mpXmlDoc, "//xhtml:p[1]", "class", "para0");
     // This failed, paragraph properties from style were not exported.
     assertXPath(mpXmlDoc, "//xhtml:p[2]", "class", "para1");
+
+    // Test character properties from named paragraph style.
+    assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:span", "class", "span0");
+    // This failed, character properties from paragraph style were not exported.
+    assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "class", "span1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
