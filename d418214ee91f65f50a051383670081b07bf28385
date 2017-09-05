@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0482a894",
+        "filename": "filter/source/xslt/import/uof/uof2odf_presentation.xsl",
+        "patchSetId": 6
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T10:29:43Z",
+      "side": 1,
+      "message": "Uhm, why did you change this?",
+      "range": {
+        "startLine": 1752,
+        "startChar": 79,
+        "endLine": 1752,
+        "endChar": 86
+      },
+      "revId": "d418214ee91f65f50a051383670081b07bf28385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e474bcd0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T10:29:43Z",
+      "side": 1,
+      "message": "Given my comment below about top-level menu, we won\u0027t need this command",
+      "revId": "d418214ee91f65f50a051383670081b07bf28385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_644fec92",
+        "filename": "sd/source/ui/dlg/sddlgfact.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T10:29:43Z",
+      "side": 1,
+      "message": "... and following that, this addition to dialog factory can be dropped too",
+      "revId": "d418214ee91f65f50a051383670081b07bf28385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_444af084",
+        "filename": "sd/source/ui/view/drviews2.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2913,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T10:29:43Z",
+      "side": 1,
+      "message": "Since the top-level menu entry is not relevant for the case at hand, this isn\u0027t needed either",
+      "revId": "d418214ee91f65f50a051383670081b07bf28385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a472b4e3",
+        "filename": "sd/uiconfig/simpress/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T10:29:43Z",
+      "side": 1,
+      "message": "Since this dialog is only relevant in sidebar animations panel and custom animation config dialog, we don\u0027t really need to link it from top-level menu. It looks outta place there anyway",
+      "revId": "d418214ee91f65f50a051383670081b07bf28385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c477c0d2",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T10:29:43Z",
+      "side": 1,
+      "message": "Please run this file through lint-ui script (bin/lint-ui.py in your LibO build tree) and fix the issues it reports. Most of them are self-explanatory",
+      "revId": "d418214ee91f65f50a051383670081b07bf28385",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
