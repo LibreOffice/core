@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_58fe506c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-09-05T15:31:03Z",
+      "side": 1,
+      "message": "you mean exit(), not _exit(); the latter doesn\u0027t invoke global dtors, and that of course avoids the deadlock...",
+      "revId": "a00c1dcf1c806d66f7339eee4c9cd28c76532fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
