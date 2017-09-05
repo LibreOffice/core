@@ -41,6 +41,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
@@ -56,6 +57,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -69,6 +71,8 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+
+#include <comphelper/storagehelper.hxx>
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
@@ -87,6 +91,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 
@@ -942,6 +947,99 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
                                 .makeStringAndClear() );
 
     return sRelId;
+}
+
+void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)
+{
+    SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(GetSdrObjectFromXShape(xShape));
+    if (!pMediaObj)
+        return;
+
+    // extension
+    OUString aExtension;
+    const OUString& rURL(pMediaObj->getURL());
+    int nLastDot = rURL.lastIndexOf('.');
+    if (nLastDot >= 0)
+        aExtension = rURL.copy(nLastDot);
+
+    bool bEmbed = rURL.startsWith("vnd.sun.star.Package:");
+
+    // mime type
+    OUString aMimeType(pMediaObj->getMediaProperties().getMimeType());
+    if (aMimeType == "application/vnd.sun.star.media")
+    {
+        // try to set something better
+        // TODO fix the importer to actually set the mimetype on import
+        if (aExtension.equalsIgnoreAsciiCase(".avi"))
+            aMimeType = "video/x-msvideo";
+        else if (aExtension.equalsIgnoreAsciiCase(".flv"))
+            aMimeType = "video/x-flv";
+        else if (aExtension.equalsIgnoreAsciiCase(".mp4"))
+            aMimeType = "video/mp4";
+        else if (aExtension.equalsIgnoreAsciiCase(".mov"))
+            aMimeType = "video/quicktime";
+        else if (aExtension.equalsIgnoreAsciiCase(".ogv"))
+            aMimeType = "video/ogg";
+        else if (aExtension.equalsIgnoreAsciiCase(".wmv"))
+            aMimeType = "video/x-ms-wmv";
+    }
+
+    OUString aVideoFileRelId;
+    OUString aMediaRelId;
+
+    static const OUString aVideoRelationship("http://schemas.openxmlformats.org/officeDocument/2006/relationships/video");
+    static const OUString aMediaRelationship("http://schemas.microsoft.com/office/2007/relationships/media");
+
+    if (bEmbed)
+    {
+        // copy the video stream
+        Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
+                                                                       .appendAscii(GetComponentDir())
+                                                                       .append("/media/media")
+                                                                       .append((sal_Int32) mnImageCounter)
+                                                                       .append(aExtension)
+                                                                       .makeStringAndClear(),
+                                                                       aMimeType);
+
+        uno::Reference<io::XInputStream> xInputStream(pMediaObj->GetInputStream());
+        comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutStream);
+
+        xOutStream->closeOutput();
+
+        // create the relation
+        OUString aPath = OUStringBuffer().appendAscii(GetRelationCompPrefix())
+                                         .append("media/media")
+                                         .append((sal_Int32) mnImageCounter++)
+                                         .append(aExtension)
+                                         .makeStringAndClear();
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), aVideoRelationship, aPath);
+        aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), aMediaRelationship, aPath);
+    }
+    else
+    {
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), aVideoRelationship, rURL);
+        aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), aMediaRelationship, rURL);
+    }
+
+    GetFS()->startElementNS(XML_p, XML_nvPr, FSEND);
+
+    GetFS()->singleElementNS(XML_a, XML_videoFile,
+                    FSNS(XML_r, XML_link), USS(aVideoFileRelId),
+                    FSEND);
+
+    GetFS()->startElementNS(XML_p, XML_extLst, FSEND);
+    GetFS()->startElementNS(XML_p, XML_ext,
+            XML_uri, "{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}", // media extensions; google this ID for details
+            FSEND);
+
+    GetFS()->singleElementNS(XML_p14, XML_media,
+            bEmbed? FSNS(XML_r, XML_embed): FSNS(XML_r, XML_link), USS(aMediaRelId),
+            FSEND);
+
+    GetFS()->endElementNS(XML_p, XML_ext);
+    GetFS()->endElementNS(XML_p, XML_extLst);
+
+    GetFS()->endElementNS(XML_p, XML_nvPr);
 }
 
 OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
