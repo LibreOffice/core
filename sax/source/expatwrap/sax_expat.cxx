@@ -647,18 +647,23 @@ void SaxExpatParser_Impl::parse( )
     while( nRead ) {
         nRead = getEntity().converter.readAndConvert( seqOut , nBufSize );
 
+        bool bContinue(false);
+
         if( ! nRead ) {
-            XML_Parse( getEntity().pParser ,
+            // last call - must return OK
+            XML_Status const ret = XML_Parse( getEntity().pParser,
                                    reinterpret_cast<const char *>(seqOut.getConstArray()),
                                    0 ,
                                    1 );
-            break;
-        }
-
-        bool bContinue = ( XML_Parse( getEntity().pParser ,
+            if (ret == XML_STATUS_OK) {
+                break;
+            }
+        } else {
+            bContinue = ( XML_Parse( getEntity().pParser,
                                                 reinterpret_cast<const char *>(seqOut.getConstArray()),
                                                 nRead,
                                                 0 ) != XML_STATUS_ERROR );
+        }
 
         if( ! bContinue || bExceptionWasThrown ) {
 
