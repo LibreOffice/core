@@ -1118,7 +1118,8 @@ bool WW8AttributeOutput::EndURL(bool const)
 
 OUString BookmarkToWord(const OUString &rBookmark)
 {
-    OUString sRet(INetURLObject::encode(rBookmark,
+    OUString sRet(INetURLObject::encode(
+        rBookmark.replace(' ', '_'), // Spaces are prohibited in bookmark name
         INetURLObject::PART_REL_SEGMENT_EXTRA,
         INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));
     return TruncateBookmark(sRet);

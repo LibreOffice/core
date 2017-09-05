@@ -773,15 +773,15 @@ private:
     sal_Int32 m_nNextAnnotationMarkId;
 
     /// Bookmarks to output
-    std::vector<OString> m_rBookmarksStart;
-    std::vector<OString> m_rBookmarksEnd;
+    std::vector<OUString> m_rBookmarksStart;
+    std::vector<OUString> m_rBookmarksEnd;
 
     /// Annotation marks to output
     std::vector<OString> m_rAnnotationMarksStart;
     std::vector<OString> m_rAnnotationMarksEnd;
 
     /// Maps of the bookmarks ids
-    std::map<OString, sal_Int32> m_rOpenedBookmarksIds;
+    std::map<OUString, sal_Int32> m_rOpenedBookmarksIds;
 
     /// Name of the last opened bookmark.
     OString m_sLastOpenedBookmark;
