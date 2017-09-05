@@ -1864,6 +1864,14 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
         m_rExport.m_bOutFlyFrameAttrs = m_rExport.m_bRTFFlySyntax = true;
         m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
+
+        // Write ZOrder.
+        if (const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject())
+        {
+            m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPZ);
+            m_rExport.OutULong(pObject->GetOrdNum());
+        }
+
         m_rExport.Strm().WriteCharPtr(m_aRunText.makeStringAndClear().getStr());
         m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
         m_rExport.m_bOutFlyFrameAttrs = m_rExport.m_bRTFFlySyntax = false;

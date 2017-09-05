@@ -867,6 +867,17 @@ DECLARE_RTFEXPORT_TEST(testCjklist38, "cjklist38.rtf")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH, numFormat);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104936, "tdf104936.rtf")
+{
+    uno::Reference<text::XTextRange> xShape1(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xShape1, "ZOrder"));
+    // This failed, the shape without text covered the shape with text.
+    CPPUNIT_ASSERT(xShape1->getString().isEmpty());
+    uno::Reference<text::XTextRange> xShape2(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(xShape2, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xShape2->getString());
+}
+
 DECLARE_RTFEXPORT_TEST(testTableRtl, "table-rtl.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
