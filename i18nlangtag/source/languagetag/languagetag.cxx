@@ -2359,6 +2359,14 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
+OUString LanguageTag::getBcp47MS() const
+{
+    if (getLanguageType() == LANGUAGE_SPANISH_DATED)
+        return "es-ES_tradnl";
+    return getBcp47();
+}
+
+
 bool LanguageTag::equals( const LanguageTag & rLanguageTag ) const
 {
     // If SYSTEM is not to be resolved or either both are SYSTEM or none, we

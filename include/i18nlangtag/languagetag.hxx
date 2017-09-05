@@ -120,6 +120,14 @@ public:
      */
     const OUString &                getBcp47( bool bResolveSystem = true ) const;
 
+    /** Obtain BCP 47 language tag, but with MS malformed exceptions.
+
+        To be used *only* in OOXML filter context.
+        For example, es-ES-u-co-trad is stored as es-ES_tradnl which is not a
+        valid BCP 47 language tag.
+     */
+    OUString                        getBcp47MS() const;
+
     /** Obtain language tag as Locale.
 
         As a convention, language tags that can not be expressed as "pure"
