@@ -42,6 +42,7 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <controldata.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
 
@@ -92,7 +93,7 @@ mbSmallSymbol(false), maImage(), meImageAlign(ImageAlign::Top), meSymbolAlign(Sy
 
 Button::Button( WindowType nType ) :
     Control( nType ),
-    mpButtonData( new ImplCommonButtonData )
+    mpButtonData( o3tl::make_unique<ImplCommonButtonData>() )
 {
 }
 
