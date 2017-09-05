@@ -31,15 +31,15 @@
  <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" toolbar:text="Default" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultParaStyle" toolbar:text="Default" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TitleParaStyle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubtitleParaStyle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Heading1ParaStyle" toolbar:text="H1"/>
  <toolbar:toolbaritem xlink:href=".uno:Heading2ParaStyle" toolbar:text="H2"/>
  <toolbar:toolbaritem xlink:href=".uno:Heading3ParaStyle" toolbar:text="H3"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles" toolbar:text="H4" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles" toolbar:text="H5" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles" toolbar:text="H6" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading4ParaStyle" toolbar:text="H4" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading5ParaStyle" toolbar:text="H5" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Heading6ParaStyle" toolbar:text="H6" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:TextBodyParaStyle" toolbar:text="Text"/>
  <toolbar:toolbaritem xlink:href=".uno:QuoteParaStyle" toolbar:text="Quote"/>
  <toolbar:toolbaritem xlink:href=".uno:PreformattedParaStyle" toolbar:text="Pre"/>
@@ -50,10 +50,10 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles" toolbar:text="Default"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultCharStyle" toolbar:text="Default"/>
  <toolbar:toolbaritem xlink:href=".uno:EmphasisCharStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:StrongEmphasisCharStyle" toolbar:text="Strong"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Citation&amp;FamilyName:string=CharacterStyles" toolbar:text="Quote" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:QuoteCharStyle" toolbar:text="Quote" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SourceCharStyle" toolbar:text="Code"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=User Entry&amp;FamilyName:string=CharacterStyles" toolbar:text="User" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
@@ -73,9 +73,9 @@
  <!-- These command can be enabled when tdf#107000 is fixed -->
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" toolbar:text="Bullet"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles" toolbar:text="Number"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles" toolbar:text="Roman"/>
+ <toolbar:toolbaritem xlink:href=".uno:BulletListStyle" toolbar:text="Bullet"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberListStyle" toolbar:text="Number"/>
+ <toolbar:toolbaritem xlink:href=".uno:RomanListStyle" toolbar:text="Roman"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
