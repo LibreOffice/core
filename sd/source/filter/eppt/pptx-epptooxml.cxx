@@ -323,6 +323,8 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape(const Reference< XShape >&
         if (!WritePlaceholder(xShape, Subtitle, mbMaster))
             ShapeExport::WriteTextShape(xShape);
     }
+    else
+        SAL_WARN("sd.eppt", "unknown shape not handled: " << USS(sShapeType));
 
     return *this;
 }
