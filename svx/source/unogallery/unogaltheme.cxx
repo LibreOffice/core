@@ -304,7 +304,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     switch( rGalleryHint.GetType() )
     {
-        case( GalleryHintType::CLOSE_THEME ):
+        case GalleryHintType::CLOSE_THEME:
         {
             DBG_ASSERT( !mpTheme || mpGallery, "Theme is living without Gallery" );
 
@@ -318,7 +318,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         break;
 
-        case( GalleryHintType::CLOSE_OBJECT ):
+        case GalleryHintType::CLOSE_OBJECT:
         {
             GalleryObject* pObj = reinterpret_cast< GalleryObject* >( rGalleryHint.GetData1() );
 

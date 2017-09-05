@@ -64,17 +64,17 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
     {
         switch( nAction )
         {
-            case( MetaActionType::MASK ):
+            case MetaActionType::MASK:
                 mpMetaFile->AddAction( new MetaMaskAction( rDestPt,
                     rBitmap, rMaskColor ) );
             break;
 
-            case( MetaActionType::MASKSCALE ):
+            case MetaActionType::MASKSCALE:
                 mpMetaFile->AddAction( new MetaMaskScaleAction( rDestPt,
                     rDestSize, rBitmap, rMaskColor ) );
             break;
 
-            case( MetaActionType::MASKSCALEPART ):
+            case MetaActionType::MASKSCALEPART:
                 mpMetaFile->AddAction( new MetaMaskScalePartAction( rDestPt, rDestSize,
                     rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor ) );
             break;

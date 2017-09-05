@@ -401,7 +401,7 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
 
     switch( nType )
     {
-        case( MetaActionType::BMPSCALE ):
+        case MetaActionType::BMPSCALE:
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
             if( pA  )
@@ -410,7 +410,7 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
                 OSL_FAIL( "GetBitmapChecksum: MetaBmpScaleAction pointer is null." );
         }
         break;
-        case( MetaActionType::BMPEXSCALE ):
+        case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
             if( pA )
@@ -432,7 +432,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
     const MetaActionType nType = pAction->GetType();
     switch( nType )
     {
-        case( MetaActionType::BMPSCALE ):
+        case MetaActionType::BMPSCALE:
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
             if( pA  )
@@ -441,7 +441,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
                 OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpScaleAction pointer is null." );
         }
         break;
-        case( MetaActionType::BMPEXSCALE ):
+        case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
             if( pA )

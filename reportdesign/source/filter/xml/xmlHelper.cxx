@@ -88,7 +88,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
                 pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum );
             }
             break;
-        case (XML_SD_TYPES_START+34):
+        case XML_SD_TYPES_START+34: // XML_SD_TYPE_IMAGE_SCALE_MODE
             pHandler = new xmloff::ImageScaleModeHandler();
             break;
         default:

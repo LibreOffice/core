@@ -634,24 +634,24 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                 switch( pAction->GetType() )
                 {
                     // only optimizing common bitmap actions:
-                    case( MetaActionType::MAPMODE ):
+                    case MetaActionType::MAPMODE:
                     {
                         pAction->Execute( aDummyVDev.get() );
                         break;
                     }
-                    case( MetaActionType::PUSH ):
+                    case MetaActionType::PUSH:
                     {
                         const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
                         aDummyVDev->Push( pA->GetFlags() );
                         break;
                     }
-                    case( MetaActionType::POP ):
+                    case MetaActionType::POP:
                     {
                         aDummyVDev->Pop();
                         break;
                     }
-                    case( MetaActionType::BMPSCALE ):
-                    case( MetaActionType::BMPEXSCALE ):
+                    case MetaActionType::BMPSCALE:
+                    case MetaActionType::BMPEXSCALE:
                     {
                         BitmapEx aBmpEx;
                         Point aPos;
@@ -689,12 +689,12 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         break;
                     }
                     default:
-                    case( MetaActionType::BMP ):
-                    case( MetaActionType::BMPSCALEPART ):
-                    case( MetaActionType::BMPEX ):
-                    case( MetaActionType::BMPEXSCALEPART ):
-                    case( MetaActionType::MASK ):
-                    case( MetaActionType::MASKSCALE ):
+                    case MetaActionType::BMP:
+                    case MetaActionType::BMPSCALEPART:
+                    case MetaActionType::BMPEX:
+                    case MetaActionType::BMPEXSCALEPART:
+                    case MetaActionType::MASK:
+                    case MetaActionType::MASKSCALE:
                     break;
                 }
             }

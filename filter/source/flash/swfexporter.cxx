@@ -670,19 +670,12 @@ bool FlashExporter::getMetaFile( Reference< XComponent > const &xComponent, GDIM
         tools::Rectangle clipRect;
         for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; i++ )
         {
-            const MetaAction*    pAction = rMtf.GetAction( i );
-            const MetaActionType nType = pAction->GetType();
-
-            switch( nType )
+            const MetaAction* pAction = rMtf.GetAction( i );
+            if (pAction->GetType() == MetaActionType::ISECTRECTCLIPREGION)
             {
-                case( MetaActionType::ISECTRECTCLIPREGION ):
-                {
-                    const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
-                    clipRect = pA->GetRect();
-                    i = nCount;
-                    break;
-                }
-                default: break;
+                const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
+                clipRect = pA->GetRect();
+                break;
             }
         }
         MetaBmpExScaleAction *pmetaAct = new MetaBmpExScaleAction(Point(clipRect.Left(), clipRect.Top()), Size(clipRect.GetWidth(), clipRect.GetHeight()), rBitmapEx);

@@ -1130,7 +1130,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SwFrameFormat &rMaster = aDesc.GetMaster();
             switch (nSlot)
             {
-                case(SID_ATTR_PAGE_FILLSTYLE):
+                case SID_ATTR_PAGE_FILLSTYLE:
                 {
                     XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pReqArgs->Get( XATTR_FILLSTYLE )) );
                     drawing::FillStyle eXFS = aFSItem.GetValue();
@@ -1140,7 +1140,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
                 break;
 
-                case(SID_ATTR_PAGE_COLOR):
+                case SID_ATTR_PAGE_COLOR:
                 {
                     XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pReqArgs->Get( XATTR_FILLCOLOR )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_SOLID ) );
@@ -1148,7 +1148,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
                 break;
 
-                case(SID_ATTR_PAGE_GRADIENT):
+                case SID_ATTR_PAGE_GRADIENT:
                 {
                     XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pReqArgs->Get( XATTR_FILLGRADIENT )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
@@ -1156,7 +1156,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
                 break;
 
-                case(SID_ATTR_PAGE_HATCH):
+                case SID_ATTR_PAGE_HATCH:
                 {
                     XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pReqArgs->Get( XATTR_FILLHATCH )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_HATCH ) );
@@ -1164,7 +1164,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
                 break;
 
-                case(SID_ATTR_PAGE_BITMAP):
+                case SID_ATTR_PAGE_BITMAP:
                 {
                     XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pReqArgs->Get( XATTR_FILLBITMAP )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_BITMAP ) );
@@ -2316,7 +2316,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             rSet.Put(aFillStyleItem);
             switch(eXFS)
             {
-                case (drawing::FillStyle_SOLID):
+                case drawing::FillStyle_SOLID:
                 {
                     Color aColor = aSet.GetItem<XFillColorItem>( XATTR_FILLCOLOR, false )->GetColorValue();
                     XFillColorItem aFillColorItem( OUString(), aColor );
@@ -2325,7 +2325,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 break;
 
-                case (drawing::FillStyle_GRADIENT):
+                case drawing::FillStyle_GRADIENT:
                 {
                     const XGradient& xGradient = aSet.GetItem<XFillGradientItem>( XATTR_FILLGRADIENT )->GetGradientValue();
                     XFillGradientItem aFillGradientItem( OUString(), xGradient, SID_ATTR_PAGE_GRADIENT  );
@@ -2333,7 +2333,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 break;
 
-                case (drawing::FillStyle_HATCH):
+                case drawing::FillStyle_HATCH:
                 {
                     const XFillHatchItem *pFillHatchItem( aSet.GetItem<XFillHatchItem>( XATTR_FILLHATCH ) );
                     XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
@@ -2342,7 +2342,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 break;
 
-                case (drawing::FillStyle_BITMAP):
+                case drawing::FillStyle_BITMAP:
                 {
                     const XFillBitmapItem *pFillBitmapItem = aSet.GetItem<XFillBitmapItem>( XATTR_FILLBITMAP );
                     XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
@@ -2350,7 +2350,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     rSet.Put( aFillBitmapItem );
                 }
                 break;
-                case (drawing::FillStyle_NONE):
+                case drawing::FillStyle_NONE:
                 {
                 }
                 break;

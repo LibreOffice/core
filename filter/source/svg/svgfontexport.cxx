@@ -92,7 +92,7 @@ void SVGFontExport::implCollectGlyphs()
 
                 switch( nType )
                 {
-                    case( MetaActionType::TEXT ):
+                    case MetaActionType::TEXT:
                     {
                         const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                         sal_Int32             aLength=std::min( pA->GetText().getLength(), pA->GetLen() );
@@ -100,14 +100,14 @@ void SVGFontExport::implCollectGlyphs()
                     }
                     break;
 
-                    case( MetaActionType::TEXTRECT ):
+                    case MetaActionType::TEXTRECT:
                     {
                         const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                         aText = pA->GetText();
                     }
                     break;
 
-                    case( MetaActionType::TEXTARRAY ):
+                    case MetaActionType::TEXTARRAY:
                     {
                         const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
                         sal_Int32                   aLength=std::min( pA->GetText().getLength(), pA->GetLen() );
@@ -115,7 +115,7 @@ void SVGFontExport::implCollectGlyphs()
                     }
                     break;
 
-                    case( MetaActionType::STRETCHTEXT ):
+                    case MetaActionType::STRETCHTEXT:
                     {
                         const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                         sal_Int32                    aLength=std::min( pA->GetText().getLength(), pA->GetLen() );
