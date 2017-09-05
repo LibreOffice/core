@@ -447,7 +447,7 @@ namespace vcl
  * @ingroup sft
  *
  */
- void GetTTFontMterics(const std::vector<uint8_t>& hhea,
+ void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
                        const std::vector<uint8_t>& os2,
                        TTGlobalFontInfo *info);
 
