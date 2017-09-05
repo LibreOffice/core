@@ -118,9 +118,9 @@ DiskSpaceRequirements	Banner	Bitmap	0	0	374	44	1		BannerBmp
 DiskSpaceRequirements	BannerLine	Line	0	44	376	0	1				
 DiskSpaceRequirements	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_96		
 DiskSpaceRequirements	DlgLine	Line	0	234	376	0	1				
-DiskSpaceRequirements	DlgText	Text	10	185	358	41	3		OOO_CONTROL_97		
+DiskSpaceRequirements	DlgText	Text	13	185	353	41	3		OOO_CONTROL_97		
 DiskSpaceRequirements	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_98		
-DiskSpaceRequirements	List	VolumeCostList	8	55	358	125	393223		{120}{70}{70}{70}{70}		
+DiskSpaceRequirements	List	VolumeCostList	13	55	353	125	393223		{60}{80}{70}{70}{70}		
 DiskSpaceRequirements	OK	PushButton	301	243	66	17	3		OOO_CONTROL_100		
 FilesInUse	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 FilesInUse	BannerLine	Line	0	44	376	0	1				
