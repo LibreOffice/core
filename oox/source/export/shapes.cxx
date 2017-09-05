@@ -58,6 +58,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -77,6 +78,7 @@
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -1077,10 +1079,15 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     SAL_INFO("oox.shape", "graphicObject without text");
 
     OUString sGraphicURL;
+    OUString sMediaURL;
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
-    if( !pGraphic && ( !xShapeProps.is() || !( xShapeProps->getPropertyValue( "GraphicURL" ) >>= sGraphicURL ) ) )
+
+    bool bHasGraphicURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("GraphicURL") && (xShapeProps->getPropertyValue("GraphicURL") >>= sGraphicURL);
+    bool bHasMediaURL = xShapeProps.is() && xShapeProps->getPropertySetInfo()->hasPropertyByName("MediaURL") && (xShapeProps->getPropertyValue("MediaURL") >>= sMediaURL);
+
+    if (!pGraphic && !bHasGraphicURL && !bHasMediaURL)
     {
-        SAL_INFO("oox.shape", "no graphic URL found");
+        SAL_INFO("oox.shape", "no graphic or media URL found");
         return;
     }
 
@@ -1103,26 +1110,48 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     if ( ( bHaveDesc = GetProperty( xShapeProps, "Description" ) ) )
         mAny >>= sDescr;
 
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
+    pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( GetNewShapeID( xShape ) ),
                           XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::number( mnPictureIdMax++ )).getStr(),
                           XML_descr,  bHaveDesc ? USS( sDescr ) : nullptr,
                           FSEND );
+
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
+    if (bHasMediaURL)
+        pFS->singleElementNS(XML_a, XML_hlinkClick,
+                             FSNS(XML_r, XML_id), "",
+                             XML_action, "ppaction://media",
+                             FSEND);
+
+    pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPicPr,
                           // OOXTODO: XML_preferRelativeSize
                           FSEND );
 
-    WriteNonVisualProperties( xShape );
+    if (bHasMediaURL)
+        WriteMediaNonVisualProperties(xShape);
+    else
+        WriteNonVisualProperties(xShape);
 
     pFS->endElementNS( mnXmlNamespace, XML_nvPicPr );
 
     pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
 
-    WriteBlip( xShapeProps, sGraphicURL, false, pGraphic );
+    if (pGraphic || bHasGraphicURL)
+        WriteBlip(xShapeProps, sGraphicURL, false, pGraphic);
+    else if (bHasMediaURL)
+    {
+        Reference<graphic::XGraphic> rGraphic;
+        if (xShapeProps->getPropertySetInfo()->hasPropertyByName("FallbackGraphic"))
+            xShapeProps->getPropertyValue("FallbackGraphic") >>= rGraphic;
 
-    WriteSrcRect( xShapeProps, sGraphicURL );
+        Graphic aGraphic(rGraphic);
+        WriteBlip(xShapeProps, sMediaURL, false, &aGraphic);
+    }
+
+    if (bHasGraphicURL)
+        WriteSrcRect(xShapeProps, sGraphicURL);
 
     // now we stretch always when we get pGraphic (when changing that
     // behavior, test n#780830 for regression, where the OLE sheet might get tiled
@@ -1397,6 +1426,7 @@ static const NameToConvertMapType& lcl_GetConverters(DocumentType eDocumentType)
     shape_converters[ "com.sun.star.drawing.TextShape" ]                = &ShapeExport::WriteTextShape;
 
     shape_converters[ "com.sun.star.presentation.GraphicObjectShape" ]  = &ShapeExport::WriteGraphicObjectShape;
+    shape_converters[ "com.sun.star.presentation.MediaShape" ]          = &ShapeExport::WriteGraphicObjectShape;
     shape_converters[ "com.sun.star.presentation.OLE2Shape" ]           = &ShapeExport::WriteOLE2Shape;
     shape_converters[ "com.sun.star.presentation.TableShape" ]          = &ShapeExport::WriteTableShape;
     shape_converters[ "com.sun.star.presentation.TextShape" ]           = &ShapeExport::WriteTextShape;
