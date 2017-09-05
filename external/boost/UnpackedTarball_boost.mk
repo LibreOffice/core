@@ -39,6 +39,10 @@ boost_patches += clang-cl.patch.0
 boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost_1_63_0.undef.warning.patch.1
 
+# Silence unknown-compiler-warning for MSVC version 19.11.25506:
+# https://github.com/boostorg/config/pull/177/commits/a0147b73e8bde8f4b2c19c96166353dba8fa9914
+boost_patches += boost_1_63_0.msvs2017.3.warning.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
