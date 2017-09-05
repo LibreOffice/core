@@ -412,7 +412,6 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
 
     double fScale = static_cast<double>(mnHeight) / nUPEM;
-    double fAscent = 0, fDescent = 0, fExtLeading = 0;
 
     vcl::TTGlobalFontInfo rInfo;
     memset(&rInfo, 0, sizeof(vcl::TTGlobalFontInfo));
@@ -421,33 +420,29 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
     // Try hhea table first.
     if (rInfo.ascender || rInfo.descender)
     {
-        fAscent     = rInfo.ascender  * fScale;
-        fDescent    = -rInfo.descender * fScale;
-        fExtLeading = rInfo.linegap   * fScale;
+        mnAscent     =  rInfo.ascender  * fScale;
+        mnDescent    = -rInfo.descender * fScale;
+        mnExtLeading =  rInfo.linegap   * fScale;
     }
 
     // But if OS/2 is present, prefer it.
     if (rInfo.winAscent || rInfo.winDescent || rInfo.typoAscender || rInfo.typoDescender)
     {
-        if (fAscent == 0 && fDescent == 0)
+        if (mnAscent == 0 && mnDescent == 0)
         {
-            fAscent     = rInfo.winAscent  * fScale;
-            fDescent    = rInfo.winDescent * fScale;
-            fExtLeading = 0;
+            mnAscent     = rInfo.winAscent  * fScale;
+            mnDescent    = rInfo.winDescent * fScale;
+            mnExtLeading = 0;
         }
 
         const uint16_t kUseTypoMetricsMask = 1 << 7;
         if (rInfo.fsSelection & kUseTypoMetricsMask)
         {
-            fAscent     =  rInfo.typoAscender  * fScale;
-            fDescent    = -rInfo.typoDescender * fScale;
-            fExtLeading =  rInfo.typoLineGap   * fScale;
+            mnAscent     =  rInfo.typoAscender  * fScale;
+            mnDescent    = -rInfo.typoDescender * fScale;
+            mnExtLeading =  rInfo.typoLineGap   * fScale;
         }
     }
-
-    mnAscent = round(fAscent);
-    mnDescent = round(fDescent);
-    mnExtLeading = round(fExtLeading);
 
     if (mnAscent || mnDescent)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
