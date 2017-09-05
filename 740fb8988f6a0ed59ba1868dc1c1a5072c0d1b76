@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c4d180fd",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-05T05:16:10Z",
+      "side": 1,
+      "message": "0-\u003enullptr",
+      "revId": "740fb8988f6a0ed59ba1868dc1c1a5072c0d1b76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
