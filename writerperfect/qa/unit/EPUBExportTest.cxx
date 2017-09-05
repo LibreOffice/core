@@ -55,6 +55,7 @@ public:
     void testParaAutostyleCharProps();
     void testMeta();
     void testParaNamedstyle();
+    void testCharNamedstyle();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testParaAutostyleCharProps);
     CPPUNIT_TEST(testMeta);
     CPPUNIT_TEST(testParaNamedstyle);
+    CPPUNIT_TEST(testCharNamedstyle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -230,6 +232,18 @@ void EPUBExportTest::testParaNamedstyle()
     assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:span", "class", "span0");
     // This failed, character properties from paragraph style were not exported.
     assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "class", "span1");
+}
+
+void EPUBExportTest::testCharNamedstyle()
+{
+    createDoc("char-namedstyle.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+
+    // Test character properties from named text style.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[1]", "class", "span0");
+    // This failed, character properties from text style were not exported.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class", "span1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

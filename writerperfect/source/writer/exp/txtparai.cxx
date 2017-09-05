@@ -55,13 +55,23 @@ void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         {
             // Reference to an automatic text style, try to look it up.
             auto itStyle = mrImport.GetAutomaticTextStyles().find(rAttributeValue);
-            if (itStyle == mrImport.GetAutomaticTextStyles().end())
+            if (itStyle != mrImport.GetAutomaticTextStyles().end())
+            {
+                // Apply properties directly, librevenge has no notion of automatic styles.
+                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+                for (itProp.rewind(); itProp.next();)
+                    aPropertyList.insert(itProp.key(), itProp()->clone());
                 continue;
+            }
 
-            // Apply properties directly, librevenge has no notion of automatic styles.
-            librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-            for (itProp.rewind(); itProp.next();)
-                aPropertyList.insert(itProp.key(), itProp()->clone());
+            itStyle = mrImport.GetTextStyles().find(rAttributeValue);
+            if (itStyle != mrImport.GetTextStyles().end())
+            {
+                // Apply properties from text style.
+                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+                for (itProp.rewind(); itProp.next();)
+                    aPropertyList.insert(itProp.key(), itProp()->clone());
+            }
         }
         else
         {
