@@ -108,7 +108,9 @@ public:
             ts = t->getPointeeType();
         }
         auto const rts = ts->getAs<RecordType>();
-        assert(rts != nullptr);
+        if (rts == nullptr) { // in case it's a dependent type
+            return true;
+        }
         auto const rds = cast<CXXRecordDecl>(rts->getDecl())->getDefinition();
         assert(rds != nullptr);
         Bases bs;
