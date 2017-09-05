@@ -20,6 +20,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -52,12 +54,12 @@ public class AboutDialogFragment extends DialogFragment {
             String[] tokens = versionName.split("/");
             if (tokens.length == 3)
             {
-                String version = versionView.getText().toString();
+                String version = String.format(versionView.getText().toString().replace("\n", "<br/>"),
+                        tokens[0], "<a href=\"https://cgit.freedesktop.org/libreoffice/core/log/?id=" + tokens[1] + "\">" + tokens[1] + "</a>");
+                versionView.setText(Html.fromHtml(version));
+                versionView.setMovementMethod(LinkMovementMethod.getInstance());
                 String vendor = vendorView.getText().toString();
-                version = version.replace("$VERSION", tokens[0]);
-                version = version.replace("$BUILDID", tokens[1]);
                 vendor = vendor.replace("$VENDOR", tokens[2]);
-                versionView.setText(version);
                 vendorView.setText(vendor);
             }
             else
