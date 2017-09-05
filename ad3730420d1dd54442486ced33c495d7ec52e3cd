@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9b41923c",
+        "filename": "desktop/source/app/cmdlinehelp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-05T21:18:13Z",
+      "side": 1,
+      "message": "The way this is implemented, --convert-images-to is ineffective without --convert-to. Not only ineffective but also treated as invalid arg. The same holds true for --outdir (invalid without --convert-to)\n\nThus it\u0027d perhaps make more sense to list it along w/ --convert-to, as the way it is written now is misleading",
+      "revId": "ad3730420d1dd54442486ced33c495d7ec52e3cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
