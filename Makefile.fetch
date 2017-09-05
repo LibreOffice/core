@@ -96,6 +96,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
+		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
 	,$(call fetch_Download_item_special,https://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,AFMS,$(AFMS_TARBALL)) \
@@ -149,7 +150,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LIBLANGTAG,$(LIBLANGTAG_TARBALL)) \
 		$(call fetch_Optional,LIBXML2,$(LIBXML_TARBALL)) \
 		$(LIBXMLSEC_TARBALL) \
-		$(call fetch_Optional,LIBXSLT,$(LIBXSLT_TARBALL)) \
 		$(call fetch_Optional,LPSOLVE,$(LPSOLVE_TARBALL)) \
 		$(call fetch_Optional,MDDS,$(MDDS_TARBALL)) \
 		$(call fetch_Optional,MYSQLCPPCONN,$(MYSQLCPPCONN_TARBALL)) \
