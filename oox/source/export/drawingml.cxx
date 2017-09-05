@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
@@ -58,6 +59,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -70,6 +72,8 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+
+#include <comphelper/storagehelper.hxx>
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
@@ -88,6 +92,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
 #include <android/compatibility.hxx>
@@ -944,6 +949,55 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
                                 .makeStringAndClear() );
 
     return sRelId;
+}
+
+OUString DrawingML::WriteMedia(const css::uno::Reference<css::drawing::XShape>& xShape, bool bRelPathToMedia)
+{
+    SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(GetSdrObjectFromXShape(xShape));
+    if (!pMediaObj)
+        return OUString();
+
+    // extension
+    OUString aExtension;
+    const OUString& rURL(pMediaObj->getURL());
+    int nLastDot = rURL.lastIndexOf('.');
+    if (nLastDot >= 0)
+        aExtension = rURL.copy(nLastDot);
+
+    // mime type
+    // TODO add more types explicitly based on the extension (?)
+    OUString aMimeType;
+    if (aExtension.equalsIgnoreAsciiCase(".wmv"))
+        aMimeType = "video/x-ms-wmv";
+    else
+        aMimeType = pMediaObj->getMediaProperties().getMimeType();
+
+    Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
+                                                                   .appendAscii(GetComponentDir())
+                                                                   .append("/media/media")
+                                                                   .append((sal_Int32) mnImageCounter)
+                                                                   .append(aExtension)
+                                                                   .makeStringAndClear(),
+                                                                   aMimeType);
+
+    uno::Reference<io::XInputStream> xInputStream(pMediaObj->GetInputStream());
+    comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutStream);
+
+    xOutStream->closeOutput();
+
+    // create the relation
+    OString sRelPathToMedia = "media/media";
+    if (bRelPathToMedia)
+        sRelPathToMedia = "../" + sRelPathToMedia;
+
+    return mpFB->addRelation(mpFS->getOutputStream(),
+                             oox::getRelationship(Relationship::VIDEO),
+                             OUStringBuffer()
+                             .appendAscii(GetRelationCompPrefix())
+                             .appendAscii(sRelPathToMedia.getStr())
+                             .append((sal_Int32) mnImageCounter++)
+                             .append(aExtension)
+                             .makeStringAndClear());
 }
 
 OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )

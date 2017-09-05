@@ -135,6 +135,10 @@ protected:
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OUString WriteImage( const OUString& rURL, bool bRelPathToMedia = false);
+
+    /// Copy a video from vnd.sun.star.Package: to the output and return RelId.
+    OUString WriteMedia(const css::uno::Reference<css::drawing::XShape>& xShape, bool bRelPathToMedia = false);
+
     void WriteStyleProperties( sal_Int32 nTokenId, const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
     const char* GetComponentDir();
