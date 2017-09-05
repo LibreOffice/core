@@ -489,6 +489,8 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
     if (xMMConfig)
         xMMConfig->Commit();
 
+    SwDBManager::CommitLastRegistrations();
+
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
 }
@@ -660,6 +662,12 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl, void*, void)
         }
         xMMConfig->Commit();
     }
+
+    // Revoke created connections
+    SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
+    SwDBManager* pDbManager = pDoc->GetDBManager();
+    if (pDbManager)
+        pDbManager->RevokeLastRegistrations();
 
     m_pWizard.disposeAndClear();
     release();
