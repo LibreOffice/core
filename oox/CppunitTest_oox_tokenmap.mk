@@ -35,6 +35,7 @@ endif
 endif
 
 $(eval $(call gb_CppunitTest_use_libraries,oox_tokenmap,\
+    avmedia \
     basegfx \
     comphelper \
     cppu \
