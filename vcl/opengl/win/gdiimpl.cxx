@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <thread>
 #include "opengl/win/gdiimpl.hxx"
 
 #include <comphelper/windowserrorstring.hxx>
@@ -75,11 +76,24 @@ void WinOpenGLContext::resetCurrent()
     g_bAnyCurrent = false;
 }
 
+std::thread_local bool bEpoxyDispatchMakeCurrentCalled = false;
+
+void ensureDispatchTable()
+{
+    if (!bEpoxyDispatchMakeCurrentCalled)
+    {
+        epoxy_handle_external_wglMakeCurrent();
+        bEpoxyDispatchMakeCurrentCalled = true;
+    }
+}
+
 bool WinOpenGLContext::isCurrent()
 {
     OpenGLZone aZone;
-    return g_bAnyCurrent && m_aGLWin.hRC && wglGetCurrentContext() == m_aGLWin.hRC &&
-           wglGetCurrentDC() == m_aGLWin.hDC;
+    if (!g_bAnyCurrent || !m_aGLWin.hRC)
+        return false;
+    ensureDispatchTable();
+    return wglGetCurrentContext() == m_aGLWin.hRC && wglGetCurrentDC() == m_aGLWin.hDC;
 }
 
 bool WinOpenGLContext::isAnyCurrent()
@@ -96,7 +110,7 @@ void WinOpenGLContext::makeCurrent()
 
     clearCurrent();
 
-    epoxy_handle_external_wglMakeCurrent();
+    ensureDispatchTable();
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
