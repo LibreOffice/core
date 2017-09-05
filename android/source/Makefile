@@ -36,4 +36,4 @@ run:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(ANDROID_PACKAGE_NAME)/.ui.LibreOfficeUIActivity
 
 debugrun:
-	$(SYSBASE)/../../../ndk-gdb --start
+	@echo "please debug with lldb from within Android Studio, or setup ndk-gdb manually (see android/README for details)"
