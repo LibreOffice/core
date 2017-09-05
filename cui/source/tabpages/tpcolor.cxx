@@ -722,39 +722,39 @@ void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
 
 sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
 {
-    sal_uInt16 nWert = 0;
+    sal_uInt16 nValue = 0;
 
     switch (eCM)
     {
         case ColorModel::RGB :
-            nWert = nColor;
+            nValue = nColor;
             break;
 
         case ColorModel::CMYK:
-            nWert = (sal_uInt16) ( (double) nColor * 100.0 / 255.0 + 0.5 );
+            nValue = (sal_uInt16) ( (double) nColor * 100.0 / 255.0 + 0.5 );
             break;
     }
 
-    return nWert;
+    return nValue;
 }
 
 
 sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 {
-    sal_uInt16 nWert = 0;
+    sal_uInt16 nValue = 0;
 
     switch (eCM)
     {
         case ColorModel::RGB :
-            nWert = nPercent;
+            nValue = nPercent;
             break;
 
         case ColorModel::CMYK:
-            nWert = (sal_uInt16) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
+            nValue = (sal_uInt16) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
             break;
     }
 
-    return nWert;
+    return nValue;
 }
 
 
