@@ -27,7 +27,7 @@
 #include <rtl/ref.hxx>
 #include <svl/sigstruct.hxx>
 #include <xsecctl.hxx>
-#include <xmlsecurity/xmlsecuritydllapi.h>
+#include <xmlsecuritydllapi.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>

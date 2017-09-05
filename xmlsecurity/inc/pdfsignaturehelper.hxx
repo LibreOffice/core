@@ -11,7 +11,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
 #define INCLUDED_XMLSECURITY_INC_PDFSIGNATUREHELPER_HXX
 
-#include <xmlsecurity/xmlsecuritydllapi.h>
+#include <xmlsecuritydllapi.h>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>

@@ -21,7 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#include <xmlsecurity/pdfio/pdfdocument.hxx>
+#include <pdfio/pdfdocument.hxx>
 
 #include <svl/sigstruct.hxx>
 

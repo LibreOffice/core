@@ -8,14 +8,14 @@
  *
  */
 
-#ifndef INCLUDED_XMLSECURITY_PDFIO_PDFDOCUMENT_HXX
-#define INCLUDED_XMLSECURITY_PDFIO_PDFDOCUMENT_HXX
+#ifndef INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
+#define INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 
 #include <vcl/filter/pdfdocument.hxx>
 
 #include <tools/stream.hxx>
 
-#include <xmlsecurity/xmlsecuritydllapi.h>
+#include <xmlsecuritydllapi.h>
 
 struct SignatureInformation;
 
@@ -34,6 +34,6 @@ XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream, vcl::filter::PDF
 } // namespace pdfio
 } // namespace xmlsecurity
 
-#endif // INCLUDED_XMLSECURITY_PDFIO_PDFDOCUMENT_HXX
+#endif // INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
