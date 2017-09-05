@@ -1367,13 +1367,13 @@ SvxColorWindow::~SvxColorWindow()
 
 void SvxColorWindow::dispose()
 {
-    mpColorSet.clear();
-    mpRecentColorSet.clear();
-    mpPaletteListBox.clear();
-    mpButtonAutoColor.clear();
-    mpButtonNoneColor.clear();
-    mpButtonPicker.clear();
-    mpAutomaticSeparator.clear();
+    mpColorSet.disposeAndClear();
+    mpRecentColorSet.disposeAndClear();
+    mpPaletteListBox.disposeAndClear();
+    mpButtonAutoColor.disposeAndClear();
+    mpButtonNoneColor.disposeAndClear();
+    mpButtonPicker.disposeAndClear();
+    mpAutomaticSeparator.disposeAndClear();
     SfxPopupWindow::dispose();
 }
 
