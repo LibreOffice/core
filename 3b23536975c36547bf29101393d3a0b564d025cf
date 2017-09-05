@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_d86c009f",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4105,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-09-05T14:18:03Z",
+      "side": 1,
+      "message": "I missed that commit ;)\nI agree that consistent naming is something to aim for.\nFixed for SEARCHB.",
+      "parentUuid": "1a430d35_a4ed548d",
+      "revId": "3b23536975c36547bf29101393d3a0b564d025cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_44c75012",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_f869bc8c",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8828,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-09-05T14:18:03Z",
+      "side": 1,
+      "message": "I based ScSearchB on ScFindB and ScSearch and I didn\u0027t notice that OUStringBuffer is not needed in ScSearchB (where it is in the other ScXxxB functions.\nFixed.",
+      "parentUuid": "1a430d35_44c75012",
+      "range": {
+        "startLine": 8828,
+        "startChar": 12,
+        "endLine": 8828,
+        "endChar": 26
+      },
+      "revId": "3b23536975c36547bf29101393d3a0b564d025cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_64f36c74",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2017-09-05T09:01:18Z",
       "side": 1,
       "message": "Note that OUStringBuffer::toString() creates a copy of the string and leaves the buffer as is, which OUStringBuffer::makeStringAndClear() does not, it assigns the internal rtl_uString to an OUString instance. Unless the OUStringBuffer is to be modified after, toString() should be avoided.",
+      "range": {
+        "startLine": 8835,
+        "startChar": 36,
+        "endLine": 8835,
+        "endChar": 49
+      },
+      "revId": "3b23536975c36547bf29101393d3a0b564d025cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1805a8c1",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8835,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-09-05T14:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_64f36c74",
       "range": {
         "startLine": 8835,
         "startChar": 36,
