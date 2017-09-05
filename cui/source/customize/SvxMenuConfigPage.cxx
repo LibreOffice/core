@@ -206,7 +206,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
 
     bool  bIsSeparator =
-        selection && (static_cast<SvxConfigEntry*>(selection->GetUserData()))->IsSeparator();
+        selection && static_cast<SvxConfigEntry*>(selection->GetUserData())->IsSeparator();
     bool bIsValidSelection =
         !(m_pContentsListBox->GetEntryCount() == 0 || selection == nullptr);
 
