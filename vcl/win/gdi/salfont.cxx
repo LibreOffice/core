@@ -234,9 +234,9 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
 {
     // get required size in bytes
     mnByteCount = ::GetFontData( hDC, nTableTag, 0, NULL, 0 );
-    if( mnByteCount == GDI_ERROR )
-        return;
-    else if( !mnByteCount )
+    if (mnByteCount == GDI_ERROR)
+        mnByteCount = 0;
+    if (!mnByteCount)
         return;
 
     // allocate the array
