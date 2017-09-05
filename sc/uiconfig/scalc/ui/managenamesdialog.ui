@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="0" version="0.0"/>
@@ -132,9 +132,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="managenamesdialog|label2">Name:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -146,10 +146,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="managenamesdialog|label4">Scope:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">scope</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -210,10 +210,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="managenamesdialog|label3">Range or formula expression:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">range</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -378,7 +378,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -390,6 +390,9 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkTreeViewColumn" id="treeviewcolumn1">
     <property name="title" translatable="yes" context="managenamesdialog|treeviewcolumn1">column</property>
