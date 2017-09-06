@@ -68,6 +68,7 @@ private:
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                             const ScRange& rBlock );
     static void GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
+    bool GetDataImpl( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
 public:
             ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc );
