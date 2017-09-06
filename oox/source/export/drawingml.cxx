@@ -1165,7 +1165,7 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
 
-void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation, bool bSuppressFlipping )
+void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, bool bSuppressRotation  )
 {
     SAL_INFO("oox.shape",  "write shape transformation");
 
@@ -1202,14 +1202,6 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
     }
-
-    // OOXML flips shapes before rotating them.
-    if(bFlipH != bFlipV)
-        nRotation = nRotation * -1 + 36000;
-
-    if(bSuppressFlipping)
-        bFlipH = bFlipV = false;
-
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
 
