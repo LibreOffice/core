@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fb69b68c",
+        "filename": "android/source/src/java/org/libreoffice/AboutDialogFragment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-09-06T07:03:53Z",
+      "side": 1,
+      "message": "You can use\nhttps://hub.libreoffice.org/git-core/hash",
+      "revId": "d1117fd16b4b5344e392da85c9b195ddbae6f317",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
