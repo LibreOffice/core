@@ -78,8 +78,9 @@ namespace
     {
         FieldUnit eUnit = FUNIT_CM;
         const SfxPoolItem* pItem = nullptr;
-        SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
-        if ( pItem && eState >= SfxItemState::DEFAULT )
+        SfxViewFrame* pCurrent = SfxViewFrame::Current();
+        SfxItemState eState = pCurrent ? pCurrent->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) : SfxItemState::UNKNOWN;
+        if (pItem && eState >= SfxItemState::DEFAULT)
         {
             eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>( pItem )->GetValue();
         }
@@ -166,10 +167,11 @@ SlideBackground::SlideBackground(
     get(m_pTopMarginEdit, "top");
     get(m_pBottomMarginEdit, "bottom");
 
-    if ( SfxViewFrame::Current() )
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    if (pCurrent)
     {
         const SfxPoolItem* pItem = nullptr;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
+        pCurrent->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
         if (pItem)
         {
             const SvxSizeItem* pSize = static_cast<const SvxSizeItem*>( pItem );
