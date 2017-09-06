@@ -1282,7 +1282,7 @@
 				<!-- Add some margin (a tab is around 0.64cm in LO), but only if there is a number preceding the heading. -->
 				<xsl:if test="$labelFollowedBy='listtab' and $headingNumber != ''">
 					<xsl:attribute name="style">
-						<xsl:text>margin-right:0.64cm;</xsl:text>
+						<xsl:text>margin-right:0.8rem;</xsl:text>
 					</xsl:attribute>
 				</xsl:if>
 				<xsl:copy-of select="$headingNumber"/>
