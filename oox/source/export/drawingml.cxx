@@ -951,11 +951,11 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     return sRelId;
 }
 
-OUString DrawingML::WriteMedia(const css::uno::Reference<css::drawing::XShape>& xShape, bool bRelPathToMedia)
+void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)
 {
     SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(GetSdrObjectFromXShape(xShape));
     if (!pMediaObj)
-        return OUString();
+        return;
 
     // extension
     OUString aExtension;
@@ -963,6 +963,8 @@ OUString DrawingML::WriteMedia(const css::uno::Reference<css::drawing::XShape>& 
     int nLastDot = rURL.lastIndexOf('.');
     if (nLastDot >= 0)
         aExtension = rURL.copy(nLastDot);
+
+    bool bEmbed = rURL.startsWith("vnd.sun.star.Package:");
 
     // mime type
     // TODO add more types explicitly based on the extension (?)
@@ -972,32 +974,59 @@ OUString DrawingML::WriteMedia(const css::uno::Reference<css::drawing::XShape>& 
     else
         aMimeType = pMediaObj->getMediaProperties().getMimeType();
 
-    Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
-                                                                   .appendAscii(GetComponentDir())
-                                                                   .append("/media/media")
-                                                                   .append((sal_Int32) mnImageCounter)
-                                                                   .append(aExtension)
-                                                                   .makeStringAndClear(),
-                                                                   aMimeType);
+    OUString aVideoFileRelId;
+    OUString aMediaRelId;
 
-    uno::Reference<io::XInputStream> xInputStream(pMediaObj->GetInputStream());
-    comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutStream);
+    if (bEmbed)
+    {
+        // copy the video stream
+        Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(OUStringBuffer()
+                                                                       .appendAscii(GetComponentDir())
+                                                                       .appendAscii("/media/media")
+                                                                       .append((sal_Int32) mnImageCounter)
+                                                                       .append(aExtension)
+                                                                       .makeStringAndClear(),
+                                                                       aMimeType);
 
-    xOutStream->closeOutput();
+        uno::Reference<io::XInputStream> xInputStream(pMediaObj->GetInputStream());
+        comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xOutStream);
 
-    // create the relation
-    OString sRelPathToMedia = "media/media";
-    if (bRelPathToMedia)
-        sRelPathToMedia = "../" + sRelPathToMedia;
+        xOutStream->closeOutput();
 
-    return mpFB->addRelation(mpFS->getOutputStream(),
-                             oox::getRelationship(Relationship::VIDEO),
-                             OUStringBuffer()
-                             .appendAscii(GetRelationCompPrefix())
-                             .appendAscii(sRelPathToMedia.getStr())
-                             .append((sal_Int32) mnImageCounter++)
-                             .append(aExtension)
-                             .makeStringAndClear());
+        // create the relation
+        OUString aPath = OUStringBuffer().appendAscii(GetRelationCompPrefix())
+                                         .appendAscii("media/media")
+                                         .append((sal_Int32) mnImageCounter++)
+                                         .append(aExtension)
+                                         .makeStringAndClear();
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::VIDEO), aPath);
+        aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), aPath);
+    }
+    else
+    {
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::VIDEO), rURL);
+        aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), rURL);
+    }
+
+    GetFS()->startElementNS(XML_p, XML_nvPr, FSEND);
+
+    GetFS()->singleElementNS(XML_a, XML_videoFile,
+                    FSNS(XML_r, XML_link), USS(aVideoFileRelId),
+                    FSEND);
+
+    GetFS()->startElementNS(XML_p, XML_extLst, FSEND);
+    GetFS()->startElementNS(XML_p, XML_ext,
+            XML_uri, "{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}", // media extensions; google this ID for details
+            FSEND);
+
+    GetFS()->singleElementNS(XML_p14, XML_media,
+            bEmbed? FSNS(XML_r, XML_embed): FSNS(XML_r, XML_link), USS(aMediaRelId),
+            FSEND);
+
+    GetFS()->endElementNS(XML_p, XML_ext);
+    GetFS()->endElementNS(XML_p, XML_extLst);
+
+    GetFS()->endElementNS(XML_p, XML_nvPr);
 }
 
 OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
