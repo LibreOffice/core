@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 ifneq ($(OS),WNT)
 
 curl_CPPFLAGS :=
-curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),"-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN)
+curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN)
 
 ifneq ($(OS),ANDROID)
 ifneq ($(SYSBASE),)
@@ -39,8 +39,6 @@ endif
 # use --with-nss only on platforms other than Mac OS X and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
-		CPPFLAGS="$(curl_CPPFLAGS)" \
-		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
 			$(if $(filter IOS MACOSX,$(OS)),\
 				--with-darwinssl,\
@@ -60,6 +58,8 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(ENABLE_DEBUG),--enable-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			CPPFLAGS='$(curl_CPPFLAGS)' \
+			LDFLAGS='$(curl_LDFLAGS)' \
 		&& cd lib \
 		&& $(MAKE) \
 	)
