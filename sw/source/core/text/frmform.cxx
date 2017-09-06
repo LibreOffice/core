@@ -1395,10 +1395,19 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         SwTextFrame *pMaster = FindMaster();
         OSL_ENSURE( pMaster, "SwTextFrame::Format: homeless follow" );
         const SwLineLayout* pLine=nullptr;
+
+        if (pMaster && !pMaster->HasPara())
+        {
+            pMaster->GetFormatted();
+            if (!pMaster->HasPara())
+            {
+                SAL_WARN("sw", "failed to get paragraph, abandon its layout");
+                pMaster = nullptr;
+            }
+        }
+
         if (pMaster)
         {
-            if( !pMaster->HasPara() )
-                pMaster->GetFormatted();
             SwTextSizeInfo aInf( pMaster );
             SwTextIter aMasterLine( pMaster, &aInf );
             aMasterLine.Bottom();
