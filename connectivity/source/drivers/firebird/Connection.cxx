@@ -497,16 +497,16 @@ void Connection::setupTransaction()
     switch (m_aTransactionIsolation)
     {
         // TODO: confirm that these are correct.
-        case(TransactionIsolation::READ_UNCOMMITTED):
+        case TransactionIsolation::READ_UNCOMMITTED:
             aTransactionIsolation = isc_tpb_concurrency;
             break;
-        case(TransactionIsolation::READ_COMMITTED):
+        case TransactionIsolation::READ_COMMITTED:
             aTransactionIsolation = isc_tpb_read_committed;
             break;
-        case(TransactionIsolation::REPEATABLE_READ):
+        case TransactionIsolation::REPEATABLE_READ:
             aTransactionIsolation = isc_tpb_consistency;
             break;
-        case(TransactionIsolation::SERIALIZABLE):
+        case TransactionIsolation::SERIALIZABLE:
             aTransactionIsolation = isc_tpb_consistency;
             break;
         default:
