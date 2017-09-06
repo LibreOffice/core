@@ -22,6 +22,7 @@
 {Relationship::HEADER, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"},
 {Relationship::HYPERLINK, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"},
 {Relationship::IMAGE, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"},
+{Relationship::MEDIA, "http://schemas.microsoft.com/office/2007/relationships/media"},
 {Relationship::NOTESMASTER, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster"},
 {Relationship::NOTESSLIDE, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide"},
 {Relationship::NUMBERING, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"},
