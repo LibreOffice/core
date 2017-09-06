@@ -128,8 +128,8 @@ case "$1" in
         then
             echo "Your gerrit setup was successful!"
         else
-            echo "There seems to be trouble."
-            echo "please have the output of: ssh -vvvv logerrit"
+            echo "There seems to be trouble. Please have the output of:"
+            echo "ssh -vvvv "$GERRITHOST
             echo "at hand when looking for help."
         fi
     ;;
