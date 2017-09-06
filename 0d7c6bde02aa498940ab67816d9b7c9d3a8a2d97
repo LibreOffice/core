@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1bd3e239",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-06T08:03:39Z",
+      "side": 1,
+      "message": "the return value of implts_openConfig is no longer used anywhere; it should be changed to \"void\"",
+      "revId": "0d7c6bde02aa498940ab67816d9b7c9d3a8a2d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3bd89e53",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-06T08:03:39Z",
+      "side": 1,
+      "message": "you can just drop the unused lazywrite property, cf. cb2550750386f51ef7a46a8a664a4ab9de614f8d \"Drop lazywrite property, which is silently ignored by configmgr anyway\"",
+      "revId": "0d7c6bde02aa498940ab67816d9b7c9d3a8a2d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5bdd6a41",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-06T08:03:39Z",
+      "side": 1,
+      "message": "adding to this already rather redundant comment IMO doesn\u0027t improve it",
+      "revId": "0d7c6bde02aa498940ab67816d9b7c9d3a8a2d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7be22605",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-06T08:03:39Z",
+      "side": 1,
+      "message": "RecoveryList::get will always return a non-null reference (or throw an exception)",
+      "revId": "0d7c6bde02aa498940ab67816d9b7c9d3a8a2d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
