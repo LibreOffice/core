@@ -2152,7 +2152,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
 
         if( m_nTextTyp == TXT_FTN || m_nTextTyp == TXT_EDN )
+        {
             AttrOutput().FootnoteEndnoteRefTag();
+            AttrOutput().EndRun();
+            AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
+        }
 
         if( nNextAttr > nEnd )
             nNextAttr = nEnd;
