@@ -86,7 +86,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
 
     // determine script changes if not already done for current paragraph
-    OSL_ENSURE( m_pScriptInfo, "No script info available");
+    assert(m_pScriptInfo);
     if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
          m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
 

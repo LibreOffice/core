@@ -37,7 +37,7 @@ void SwTextIter::CtorInitTextIter( SwTextFrame *pNewFrame, SwTextInfo *pNewInf )
 {
     SwTextNode *pNode = pNewFrame->GetTextNode();
 
-    OSL_ENSURE( pNewFrame->GetPara(), "No paragraph" );
+    assert(pNewFrame->GetPara());
 
     CtorInitAttrIter( *pNode, pNewFrame->GetPara()->GetScriptInfo(), pNewFrame );
 
