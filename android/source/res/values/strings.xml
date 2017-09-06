@@ -16,10 +16,10 @@
     <string name="about_moreinfo">More Info</string>
     <string name="back_again_to_quit">Press back again to quit</string>
 
-    <string name="new_write">New Write</string>
-    <string name="new_impress">New Impress</string>
-    <string name="new_spreadsheet">New Sheet</string>
-    <string name="new_draw">New Draw</string>
+    <string name="new_textdocument">New Text Document</string>
+    <string name="new_presentation">New Presentation</string>
+    <string name="new_spreadsheet">New Spreadsheet</string>
+    <string name="new_drawing">New Drawing</string>
     <string name="default_document_name">untitled</string>
 
     <string name="browser_app_name">LibreOffice Browser</string>

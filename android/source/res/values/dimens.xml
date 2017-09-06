@@ -13,4 +13,6 @@
     <dimen name="calc_header_height">24dp</dimen>
     <dimen name="calc_toolbar_height">40dp</dimen>
     <dimen name="calc_address_bar_width">96dp</dimen>
+    <dimen name="new_doc_fab_tweak_top">-11dp</dimen>
+    <dimen name="new_doc_fab_tweak_bottom">-7dp</dimen>
 </resources>
