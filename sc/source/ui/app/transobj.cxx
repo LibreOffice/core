@@ -33,6 +33,7 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include "transobj.hxx"
 #include "patattr.hxx"
@@ -64,6 +65,7 @@
 #include "cellsuno.hxx"
 #include "stringutil.hxx"
 #include "formulaiter.hxx"
+#include "tabvwsh.hxx"
 #include <gridwin.hxx>
 
 using namespace com::sun::star;
@@ -173,6 +175,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
     aBlock = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     nVisibleTab = nTab1;    // valid table as default
+
+    aMaxBitMapSize = ScTabViewShell::GetActiveViewShell()->GetViewFrame()->GetWindow().GetSizePixel();
 
     tools::Rectangle aMMRect = pDoc->GetMMRect( nCol1,nRow1, nCol2,nRow2, nTab1 );
     aObjDesc.maSize = aMMRect.GetSize();
@@ -354,8 +358,13 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             tools::Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),
                                                  aBlock.aStart.Tab() );
+
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
-            pVirtDev->SetOutputSizePixel( pVirtDev->LogicToPixel( aMMRect.GetSize(), MapUnit::Map100thMM ) );
+            Size aSize = pVirtDev->LogicToPixel( aMMRect.GetSize(), MapUnit::Map100thMM );
+            // Limit the width and height to screen area in pixel scale
+            aSize.Width() = std::min( aMaxBitMapSize.Width(), aSize.Width() );
+            aSize.Height() = std::min( aMaxBitMapSize.Height(), aSize.Height() );
+            pVirtDev->SetOutputSizePixel( aSize );
 
             PaintToDev( pVirtDev, pDoc, 1.0, aBlock );
 
