@@ -45,13 +45,13 @@ CustomerInformation	Back	PushButton	164	243	66	17	3		OOO_CONTROL_32	Next
 CustomerInformation	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomerInformation	BannerLine	Line	0	44	376	0	1				
 CustomerInformation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_35	NameLabel	
-CustomerInformation	CompanyEdit	Edit	21	100	237	17	3	COMPANYNAME	OOO_CONTROL_36	SerialLabel	
+CustomerInformation	CompanyEdit	Edit	21	100	249	17	3	COMPANYNAME	OOO_CONTROL_36	SerialLabel	
 CustomerInformation	CompanyLabel	Text	21	89	75	10	3		OOO_CONTROL_37	CompanyEdit	
 CustomerInformation	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_38		
 CustomerInformation	DlgLine	Line	0	234	376	0	1				
 CustomerInformation	DlgRadioGroupText	Text	21	161	300	14	3		OOO_CONTROL_39		
 CustomerInformation	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_40		
-CustomerInformation	NameEdit	Edit	21	63	237	17	3	USERNAME	OOO_CONTROL_41	CompanyLabel	
+CustomerInformation	NameEdit	Edit	21	63	249	17	3	USERNAME	OOO_CONTROL_41	CompanyLabel	
 CustomerInformation	NameLabel	Text	21	52	75	10	3		OOO_CONTROL_42	NameEdit	
 CustomerInformation	Next	PushButton	230	243	66	17	3		OOO_CONTROL_43	Cancel	
 CustomerInformation	RadioGroup	RadioButtonGroup	63	170	300	50	3	ApplicationUsers		Back	
@@ -74,7 +74,7 @@ CustomSetup	ItemDescription	Text	241	80	120	50	3		OOO_CONTROL_58
 CustomSetup	Location	Text	8	203	291	20	3		OOO_CONTROL_59		
 CustomSetup	Next	PushButton	230	243	66	17	3		OOO_CONTROL_60	Cancel	
 CustomSetup	Size	Text	241	133	120	50	3		OOO_CONTROL_61		
-CustomSetup	Tree	SelectionTree	8	70	220	118	7	_BrowseProperty		ChangeFolder	
+CustomSetup	Tree	SelectionTree	8	70	220	118	3	_BrowseProperty		ChangeFolder	
 CustomSetupTips	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomSetupTips	BannerLine	Line	0	44	376	0	1				
 CustomSetupTips	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_64		
@@ -118,9 +118,9 @@ DiskSpaceRequirements	Banner	Bitmap	0	0	374	44	1		BannerBmp
 DiskSpaceRequirements	BannerLine	Line	0	44	376	0	1				
 DiskSpaceRequirements	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_96		
 DiskSpaceRequirements	DlgLine	Line	0	234	376	0	1				
-DiskSpaceRequirements	DlgText	Text	13	185	353	41	3		OOO_CONTROL_97		
+DiskSpaceRequirements	DlgText	Text	21	185	345	41	3		OOO_CONTROL_97		
 DiskSpaceRequirements	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_98		
-DiskSpaceRequirements	List	VolumeCostList	13	55	353	125	393223		{60}{80}{70}{70}{70}		
+DiskSpaceRequirements	List	VolumeCostList	21	55	345	125	65539		{60}{80}{70}{70}{70}		
 DiskSpaceRequirements	OK	PushButton	301	243	66	17	3		OOO_CONTROL_100		
 FilesInUse	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 FilesInUse	BannerLine	Line	0	44	376	0	1				
@@ -153,7 +153,7 @@ InstallChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_113	Combo
 InstallChangeFolder	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_114		
 InstallChangeFolder	DlgLine	Line	0	234	376	0	1				
 InstallChangeFolder	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_115		
-InstallChangeFolder	List	DirectoryList	21	90	332	97	15	_BrowseProperty		TailText	
+InstallChangeFolder	List	DirectoryList	21	90	332	97	11	_BrowseProperty		TailText	
 InstallChangeFolder	NewFolder	PushButton	335	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
 InstallChangeFolder	OK	PushButton	230	243	66	17	3		OOO_CONTROL_118	Cancel	
 InstallChangeFolder	Tail	PathEdit	21	207	332	17	15	_BrowseProperty		OK	
@@ -214,9 +214,9 @@ OutOfSpace	Banner	Bitmap	0	0	374	44	1		BannerBmp
 OutOfSpace	BannerLine	Line	0	44	376	0	1				
 OutOfSpace	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_153		
 OutOfSpace	DlgLine	Line	0	234	376	0	1				
-OutOfSpace	DlgText	Text	21	51	326	43	3		OOO_CONTROL_154		
+OutOfSpace	DlgText	Text	21	185	345	41	3		OOO_CONTROL_154		
 OutOfSpace	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_155		
-OutOfSpace	List	VolumeCostList	21	95	332	120	393223		OOO_CONTROL_156		
+OutOfSpace	List	VolumeCostList	21	55	345	125	65539		OOO_CONTROL_156		
 OutOfSpace	Resume	PushButton	301	243	66	17	3		OOO_CONTROL_157		
 PatchWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_158	Next	
 PatchWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_159	Back	
