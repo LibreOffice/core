@@ -1399,10 +1399,17 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         {
             if( !pMaster->HasPara() )
                 pMaster->GetFormatted();
-            SwTextSizeInfo aInf( pMaster );
-            SwTextIter aMasterLine( pMaster, &aInf );
-            aMasterLine.Bottom();
-            pLine = aMasterLine.GetCurr();
+            if (!pMaster->HasPara())
+            {   // master could be locked because it's being formatted upstack
+                SAL_WARN("sw", "SwTextFrame::Format_: failed to format master!");
+            }
+            else
+            {
+                SwTextSizeInfo aInf( pMaster );
+                SwTextIter aMasterLine( pMaster, &aInf );
+                aMasterLine.Bottom();
+                pLine = aMasterLine.GetCurr();
+            }
         }
         SwLinePortion* pRest = pLine ?
             rLine.MakeRestPortion(pLine, GetOfst()) : nullptr;
