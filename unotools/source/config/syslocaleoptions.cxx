@@ -43,6 +43,17 @@ namespace
     std::weak_ptr<SvtSysLocaleOptions_Impl> g_pSysLocaleOptions;
     struct CurrencyChangeLink
         : public rtl::Static<Link<LinkParamNone*,void>, CurrencyChangeLink> {};
+
+Mutex& GetMutex()
+{
+    // #i77768# Due to a static reference in the toolkit lib
+    // we need a mutex that lives longer than the svl library.
+    // Otherwise the dtor would use a destructed mutex!!
+    static Mutex* persistentMutex(new Mutex);
+
+    return *persistentMutex;
+}
+
 }
 
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
@@ -378,70 +389,94 @@ void SvtSysLocaleOptions_Impl::ImplCommit()
 
 void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
 {
-    if (!m_bROLocale && rStr != m_aLocaleString )
+    ConfigurationHints nHint = ConfigurationHints::Locale;
     {
+        MutexGuard aGuard( GetMutex() );
+        if (m_bROLocale || rStr == m_aLocaleString )
+        {
+            return;
+        }
         m_aLocaleString = rStr;
         MakeRealLocale();
         LanguageTag::setConfiguredSystemLanguage( m_aRealLocale.getLanguageType() );
         SetModified();
-        ConfigurationHints nHint = ConfigurationHints::Locale;
         if ( m_aCurrencyString.isEmpty() )
             nHint |= ConfigurationHints::Currency;
-        NotifyListeners( nHint );
     }
+    NotifyListeners( nHint );
 }
 
 void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
 {
-    if (!m_bROUILocale && rStr != m_aUILocaleString )
     {
+        MutexGuard aGuard( GetMutex() );
+        if (m_bROUILocale || rStr == m_aUILocaleString )
+        {
+            return;
+        }
         m_aUILocaleString = rStr;
 
         // as we can't switch UILocale at runtime, we only store changes in the configuration
         MakeRealUILocale();
         SetModified();
-        NotifyListeners( ConfigurationHints::UiLocale );
     }
+    NotifyListeners( ConfigurationHints::UiLocale );
 }
 
 void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
 {
-    if (!m_bROCurrency && rStr != m_aCurrencyString )
     {
+        MutexGuard aGuard( GetMutex() );
+        if (m_bROCurrency || rStr == m_aCurrencyString )
+        {
+            return;
+        }
         m_aCurrencyString = rStr;
         SetModified();
-        NotifyListeners( ConfigurationHints::Currency );
     }
+    NotifyListeners( ConfigurationHints::Currency );
 }
 
 void SvtSysLocaleOptions_Impl::SetDatePatternsString( const OUString& rStr )
 {
-    if (!m_bRODatePatterns && rStr != m_aDatePatternsString )
     {
+        MutexGuard aGuard( GetMutex() );
+        if (m_bRODatePatterns || rStr == m_aDatePatternsString )
+        {
+            return;
+        }
         m_aDatePatternsString = rStr;
         SetModified();
-        NotifyListeners( ConfigurationHints::DatePatterns );
     }
+    NotifyListeners( ConfigurationHints::DatePatterns );
 }
 
 void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( bool bSet)
 {
-    if(bSet != m_bDecimalSeparator)
     {
+        MutexGuard aGuard( GetMutex() );
+        if(bSet == m_bDecimalSeparator)
+        {
+            return;
+        }
         m_bDecimalSeparator = bSet;
         SetModified();
-        NotifyListeners( ConfigurationHints::DecSep );
     }
+    NotifyListeners( ConfigurationHints::DecSep );
 }
 
 void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( bool bSet)
 {
-    if(bSet != m_bIgnoreLanguageChange)
     {
+        MutexGuard aGuard( GetMutex() );
+        if(bSet == m_bIgnoreLanguageChange)
+        {
+            return;
+        }
         m_bIgnoreLanguageChange = bSet;
         SetModified();
-        NotifyListeners( ConfigurationHints::IgnoreLang );
     }
+    NotifyListeners( ConfigurationHints::IgnoreLang );
 }
 
 void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
@@ -520,17 +555,6 @@ SvtSysLocaleOptions::~SvtSysLocaleOptions()
     pImpl.reset();
 }
 
-// static
-Mutex& SvtSysLocaleOptions::GetMutex()
-{
-    // #i77768# Due to a static reference in the toolkit lib
-    // we need a mutex that lives longer than the svl library.
-    // Otherwise the dtor would use a destructed mutex!!
-    static Mutex* persistentMutex(new Mutex);
-
-    return *persistentMutex;
-}
-
 bool SvtSysLocaleOptions::IsModified()
 {
     MutexGuard aGuard( GetMutex() );
@@ -551,13 +575,11 @@ void SvtSysLocaleOptions::BlockBroadcasts( bool bBlock )
 
 void SvtSysLocaleOptions::SetLocaleConfigString( const OUString& rStr )
 {
-    MutexGuard aGuard( GetMutex() );
     pImpl->SetLocaleString( rStr );
 }
 
 void SvtSysLocaleOptions::SetUILocaleConfigString( const OUString& rStr )
 {
-    MutexGuard aGuard( GetMutex() );
     pImpl->SetUILocaleString( rStr );
 }
 
@@ -569,7 +591,6 @@ const OUString& SvtSysLocaleOptions::GetCurrencyConfigString() const
 
 void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
 {
-    MutexGuard aGuard( GetMutex() );
     pImpl->SetCurrencyString( rStr );
 }
 
@@ -581,7 +602,6 @@ const OUString& SvtSysLocaleOptions::GetDatePatternsConfigString() const
 
 void SvtSysLocaleOptions::SetDatePatternsConfigString( const OUString& rStr )
 {
-    MutexGuard aGuard( GetMutex() );
     pImpl->SetDatePatternsString( rStr );
 }
 
@@ -593,7 +613,6 @@ bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
 
 void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( bool bSet)
 {
-    MutexGuard aGuard( GetMutex() );
     pImpl->SetDecimalSeparatorAsLocale(bSet);
 }
 
@@ -605,7 +624,6 @@ bool SvtSysLocaleOptions::IsIgnoreLanguageChange() const
 
 void SvtSysLocaleOptions::SetIgnoreLanguageChange( bool bSet)
 {
-    MutexGuard aGuard( GetMutex() );
     pImpl->SetIgnoreLanguageChange(bSet);
 }
 

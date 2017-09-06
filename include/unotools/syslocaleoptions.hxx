@@ -31,13 +31,11 @@
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
-namespace osl { class Mutex; }
 
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions : public utl::detail::Options
 {
     std::shared_ptr<SvtSysLocaleOptions_Impl>  pImpl;
 
-    UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, ConfigurationHints nHint ) override;
 
 public:
