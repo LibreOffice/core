@@ -1110,13 +1110,6 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
         return;
     }
 
-    // TODO FIXME currently we support only embedded video
-    if (bHasMediaURL && !sMediaURL.startsWith("vnd.sun.star.Package:"))
-    {
-        SAL_INFO("oox.shape", "external media URL not exported");
-        return;
-    }
-
     FSHelperPtr pFS = GetFS();
     XmlFilterBase* pFB = GetFB();
 
@@ -1157,18 +1150,9 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                           FSEND );
 
     if (bHasMediaURL)
-    {
-        GetFS()->startElementNS(XML_p, XML_nvPr, FSEND);
-
-        OUString sRelId = WriteMedia(xShape, false);
-        GetFS()->singleElementNS(XML_a, XML_videoFile,
-                        FSNS(XML_r, XML_link), USS(sRelId),
-                        FSEND);
-
-        GetFS()->endElementNS(XML_p, XML_nvPr);
-    }
+        WriteMediaNonVisualProperties(xShape);
     else
-        WriteNonVisualProperties( xShape );
+        WriteNonVisualProperties(xShape);
 
     pFS->endElementNS( mnXmlNamespace, XML_nvPicPr );
 
