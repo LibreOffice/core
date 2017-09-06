@@ -139,6 +139,11 @@ private:
                                          by the UI. Managed by SwAutoFormat! */
     css::uno::Sequence <sal_Int8 > maRedlinePasswd;
     bool m_isForbidCompressRedlines = false;
+
+    //stack of redlines being imported in recursive AppendRedline
+    //used by outer AppendRedline callers to detect that an inner AppendRedline
+    //has deleted the outer AppendRedlines SwRangeRedline candidate
+    std::vector<SwRangeRedline*> aAppendRedlineStack;
 };
 
 }
