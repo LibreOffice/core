@@ -9,7 +9,12 @@
         {
             "name": "libreoffice",
             "sources": [
-                @SOURCE@,
+                {
+                    "type": "git",
+                    "url": "git://gerrit.libreoffice.org/core",
+                    "branch": "@BRANCH@",
+                    "disable-fsckobjects": true
+                },
                 {
                     "commands": [
                         "mkdir external/tarballs"
