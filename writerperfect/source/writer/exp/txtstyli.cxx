@@ -95,10 +95,17 @@ void XMLStyleContext::startElement(const OUString &/*rName*/, const css::uno::Re
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
+        const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "style:name")
-            m_aName = xAttribs->getValueByIndex(i);
+            m_aName = rAttributeValue;
         else if (rAttributeName == "style:family")
-            m_aFamily = xAttribs->getValueByIndex(i);
+            m_aFamily = rAttributeValue;
+
+        // Remember properties of the style itself, e.g. parent name.
+        OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+        m_aTextPropertyList.insert(sName.getStr(), sValue.getStr());
+        m_aParagraphPropertyList.insert(sName.getStr(), sValue.getStr());
     }
 }
 

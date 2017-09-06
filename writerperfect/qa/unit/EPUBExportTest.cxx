@@ -47,6 +47,8 @@ public:
     void createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData);
     /// Returns an XML representation of the stream named rName in the exported package.
     xmlDocPtr parseExport(const OUString &rName);
+    /// Loads a CSS representation of the stream named rName in the exported package into rTree.
+    void parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree);
     void testOutlineLevel();
     void testMimetype();
     void testEPUB2();
@@ -56,6 +58,7 @@ public:
     void testMeta();
     void testParaNamedstyle();
     void testCharNamedstyle();
+    void testNamedStyleInheritance();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -67,6 +70,7 @@ public:
     CPPUNIT_TEST(testMeta);
     CPPUNIT_TEST(testParaNamedstyle);
     CPPUNIT_TEST(testCharNamedstyle);
+    CPPUNIT_TEST(testNamedStyleInheritance);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -120,6 +124,25 @@ xmlDocPtr EPUBExportTest::parseExport(const OUString &rName)
     uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
     std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     return parseXmlStream(pStream.get());
+}
+
+void EPUBExportTest::parseCssExport(const OUString &rName, std::map< OString, std::vector<OString> > &rTree)
+{
+    uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
+    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+
+    // Minimal CSS handler till orcus is up to our needs.
+    OString aLine;
+    OString aRuleName;
+    while (!pStream->IsEof())
+    {
+        pStream->ReadLine(aLine);
+        if (aLine.endsWith("{"))
+            // '.name {' -> 'name'
+            aRuleName = aLine.copy(1, aLine.getLength() - 3);
+        else if (aLine.endsWith(";"))
+            rTree[aRuleName].push_back(aLine);
+    }
 }
 
 void EPUBExportTest::testOutlineLevel()
@@ -244,6 +267,24 @@ void EPUBExportTest::testCharNamedstyle()
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[1]", "class", "span0");
     // This failed, character properties from text style were not exported.
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class", "span1");
+}
+
+void EPUBExportTest::testNamedStyleInheritance()
+{
+    createDoc("named-style-inheritance.fodt", {});
+
+    // Find the CSS rule for the blue text.
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    OUString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class");
+
+    std::map< OString, std::vector<OString> > aTree;
+    parseCssExport("OEBPS/styles/stylesheet.css", aTree);
+    CPPUNIT_ASSERT(aTree.find(aBlue.toUtf8()) != aTree.end());
+    const std::vector<OString> &rRule = aTree[aBlue.toUtf8()];
+    CPPUNIT_ASSERT(std::find(rRule.begin(), rRule.end(), "  color: #0000ff;") != rRule.end());
+    // This failed, the span only had the properties from its style, but not
+    // from the style's parent(s).
+    CPPUNIT_ASSERT(std::find(rRule.begin(), rRule.end(), "  font-family: 'Liberation Mono';") != rRule.end());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
