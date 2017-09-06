@@ -59,12 +59,6 @@ $(LO_XCCONFIG) :
 	cp $(INSTDIR)/program/services/services.rdb $(IOSRESOURCE)/services
 	cp $(INSTDIR)/program/services.rdb          $(IOSRESOURCE)
 
-	# copy .res files
-	# program/resource is hardcoded in unotools/source/i18n/resmgr.cxx. Sure,
-	# we could set STAR_RESOURCE_PATH instead. sigh...
-	mkdir -p $(IOSRESOURCE)/program/resource
-	cp $(INSTDIR)/program/resource/*en-US.res $(IOSRESOURCE)/program/resource
-
 	# soffice.cfg
 	mkdir -p $(IOSRESOURCE)/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg $(IOSRESOURCE)/share/config
