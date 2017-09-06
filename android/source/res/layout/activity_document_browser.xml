@@ -115,14 +115,12 @@
         android:id="@+id/editFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:clickable="true"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:backgroundTint="@color/background_normal"
+        app:useCompatPadding="true"
         app:srcCompat="@drawable/ic_add_black_24dp" />
 
     <LinearLayout
@@ -132,22 +130,14 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/editFAB"
-        app:layout_constraintRight_toRightOf="parent">
+        tools:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/editFAB"
+        app:layout_constraintRight_toRightOf="@id/editFAB">
 
         <TextView
             android:id="@+id/newWriterTextView"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:elevation="2dp"
-            android:gravity="center_horizontal"
-            android:text="@string/new_write"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:background="@color/background_normal"
-            android:typeface="normal" />
+            android:text="@string/new_textdocument"
+            style="@style/NewDocumentTextView" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/newWriterFAB"
@@ -156,6 +146,7 @@
             android:clickable="true"
             app:fabSize="normal"
             app:backgroundTint="@color/background_normal"
+            app:useCompatPadding="true"
             app:srcCompat="@drawable/writer" />
 
     </LinearLayout>
@@ -167,23 +158,14 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/writerLayout"
-        app:layout_constraintLeft_toLeftOf="@+id/writerLayout"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="@id/editFAB">
 
         <TextView
             android:id="@+id/newImpressTextView"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:elevation="2dp"
-            android:gravity="center_horizontal"
-            android:text="@string/new_impress"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:background="@color/background_normal"
-            android:typeface="normal" />
+            android:text="@string/new_presentation"
+            style="@style/NewDocumentTextView" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/newImpressFAB"
@@ -192,6 +174,7 @@
             android:clickable="true"
             app:fabSize="normal"
             app:backgroundTint="@color/background_normal"
+            app:useCompatPadding="true"
             app:srcCompat="@drawable/impress" />
 
     </LinearLayout>
@@ -203,23 +186,14 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/impressLayout"
-        app:layout_constraintLeft_toLeftOf="@+id/impressLayout"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="@id/editFAB">
 
         <TextView
             android:id="@+id/newCalcTextView"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:elevation="2dp"
-            android:gravity="center_horizontal"
             android:text="@string/new_spreadsheet"
-            android:background="@color/background_normal"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:typeface="normal" />
+            style="@style/NewDocumentTextView" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/newCalcFAB"
@@ -228,6 +202,7 @@
             android:clickable="true"
             app:fabSize="normal"
             app:backgroundTint="@color/background_normal"
+            app:useCompatPadding="true"
             app:srcCompat="@drawable/calc" />
 
     </LinearLayout>
@@ -239,23 +214,14 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/calcLayout"
-        app:layout_constraintLeft_toLeftOf="@+id/calcLayout"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="@id/editFAB">
 
         <TextView
             android:id="@+id/newDrawTextView"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:elevation="2dp"
-            android:gravity="center_horizontal"
-            android:text="@string/new_draw"
-            android:background="@color/background_normal"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:typeface="normal" />
+            android:text="@string/new_drawing"
+            style="@style/NewDocumentTextView" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/newDrawFAB"
@@ -264,6 +230,7 @@
             android:clickable="true"
             app:fabSize="normal"
             app:backgroundTint="@color/background_normal"
+            app:useCompatPadding="true"
             app:srcCompat="@drawable/draw" />
 
     </LinearLayout>
