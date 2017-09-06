@@ -48,9 +48,8 @@ void ScUnoListenerCalls::ExecuteAndClear()
 
     if (!aEntries.empty())
     {
-        std::list<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
-        std::list<ScUnoListenerEntry>::iterator aEndItr(aEntries.end());
-        while ( aItr != aEndItr )
+        std::vector<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
+        while (aItr != aEntries.end())
         {
             ScUnoListenerEntry aEntry = *aItr;
             try

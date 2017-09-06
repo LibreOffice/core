@@ -35,11 +35,9 @@ void ScUnoRefList::Add( sal_Int64 nId, const ScRangeList& rOldRanges )
 
 void ScUnoRefList::Undo( ScDocument* pDoc )
 {
-    std::list<ScUnoRefEntry>::const_iterator aEnd( aEntries.end() );
-    for ( std::list<ScUnoRefEntry>::const_iterator aIter( aEntries.begin() );
-          aIter != aEnd; ++aIter )
+    for (auto & entry: aEntries)
     {
-        ScUnoRefUndoHint aHint( *aIter );
+        ScUnoRefUndoHint aHint(entry);
         pDoc->BroadcastUno( aHint );
     }
 }

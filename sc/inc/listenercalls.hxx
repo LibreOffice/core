@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_LISTENERCALLS_HXX
 #define INCLUDED_SC_INC_LISTENERCALLS_HXX
 
-#include <list>
+#include <vector>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 
@@ -52,7 +52,7 @@ struct ScUnoListenerEntry
 class ScUnoListenerCalls
 {
 private:
-    ::std::list<ScUnoListenerEntry> aEntries;
+    ::std::vector<ScUnoListenerEntry> aEntries;
 
 public:
                 ScUnoListenerCalls();
