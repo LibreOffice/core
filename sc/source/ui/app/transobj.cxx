@@ -247,7 +247,24 @@ void ScTransferObj::AddSupportedFormats()
     }
 }
 
-bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
+bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
+{
+    bool bOK = false;
+#ifdef _WIN32
+    __try
+#endif
+    {
+        bOK = GetDataImpl( rFlavor, rDestDoc );
+    }
+#ifdef _WIN32
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+    }
+#endif
+    return bOK;
+}
+
+bool ScTransferObj::GetDataImpl( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     bool        bOK = false;
