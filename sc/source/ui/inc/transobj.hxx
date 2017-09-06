@@ -42,6 +42,7 @@ class ScTransferObj : public TransferableHelper
 private:
     ScDocument*                     pDoc;
     ScRange                         aBlock;
+    Size                            aMaxBitMapSize;
     SCROW                           nNonFiltered;       // non-filtered rows
     TransferableObjectDescriptor    aObjDesc;
     SfxObjectShellRef               aDocShellRef;
