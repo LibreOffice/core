@@ -146,7 +146,8 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
             if ((lenArrayCurr & 0x0f) == 0x0f)
                 fputs("\n\t", source_fp);
 #else
-            fwrite(&Ostr[i], sizeof(Ostr[i]), 1, source_fp);
+            sal_Unicode x = Ostr[i];
+            fwrite(&x, sizeof(Ostr[i]), 1, source_fp);
 #endif
         }
     }
