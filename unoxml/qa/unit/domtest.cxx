@@ -235,7 +235,7 @@ struct BasicTest : public test::BootstrapFixture
     {
         try
         {
-            // We DONT expect exeption here, as mxWarningInStream is valid XML Doc
+            // We DONT expect exception here, as mxWarningInStream is valid XML Doc
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument #2",
                 mxDomBuilder->parse(
                     uno::Reference<io::XInputStream>(
@@ -253,7 +253,7 @@ struct BasicTest : public test::BootstrapFixture
     {
         try
         {
-            // We expect exeption here, as mxErrorInStream is invalid XML Doc
+            // We expect exception here, as mxErrorInStream is invalid XML Doc
             CPPUNIT_ASSERT_MESSAGE("Invalid input file result in XDocument #2!",
                 !mxDomBuilder->parse(
                     uno::Reference<io::XInputStream>(
@@ -262,7 +262,7 @@ struct BasicTest : public test::BootstrapFixture
         }
         catch (const css::xml::sax::SAXParseException&)
         {
-            // It's OK to catch an exeption here as we parse incorrect XML file
+            // It's OK to catch an exception here as we parse incorrect XML file
         }
         CPPUNIT_ASSERT_MESSAGE("No parse errors in unclean input file",
             !mxErrHandler->mnWarnCount && mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
