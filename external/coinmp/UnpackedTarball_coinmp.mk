@@ -19,17 +19,16 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,coinmp,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/osi_cuts_iterator.patch.0 \
-	external/coinmp/android.build.patch.1 \
 	external/coinmp/no-binaries.patch.1 \
 	external/coinmp/werror-format-security.patch.0 \
 	external/coinmp/werror-undef.patch.0 \
 	external/coinmp/coinmp-msvc-disable-sse2.patch.1 \
 	$(if $(filter MSC,$(COM)),external/coinmp/windows.build.patch.1) \
-	$(if $(filter MACOSX,$(OS)),external/coinmp/macosx.build.patch.1) \
 	external/coinmp/werror-format-pedantic.patch.0 \
 	external/coinmp/ubsan.patch.0 \
 	external/coinmp/rpath.patch \
 	external/coinmp/libtool.patch \
+	external/coinmp/automake.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
