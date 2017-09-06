@@ -107,7 +107,7 @@ DestinationFolder	ChangeFolder	PushButton	301	125	66	17	3		OOO_CONTROL_88	Back
 DestinationFolder	DestFolder	Icon	21	112	24	24	5242881		OpenFolderIco		
 DestinationFolder	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_304		
 DestinationFolder	DlgLine	Line	0	234	376	0	1				
-DestinationFolder	DlgTitle	Text	13	6	257	25	65539		{&MSSansBold8}[ProductName]		
+DestinationFolder	DlgTitle	Text	13	6	257	25	327683		{&MSSansBold8}[ProductName]		
 DestinationFolder	Location	Text	57	128	240	40	3	_BrowseProperty	[INSTALLLOCATION]		
 DestinationFolder	LocLabel	Text	57	115	290	10	3		OOO_CONTROL_92		
 DestinationFolder	Next	PushButton	230	243	66	17	3		OOO_CONTROL_93	Cancel	
