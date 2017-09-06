@@ -60,6 +60,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			CPPFLAGS='$(curl_CPPFLAGS)' \
 			LDFLAGS='$(curl_LDFLAGS)' \
+			ZLIB_CFLAGS='$(ZLIB_CFLAGS)' ZLIB_LIBS='$(ZLIB_LIBS)' \
 		&& cd lib \
 		&& $(MAKE) \
 	)
