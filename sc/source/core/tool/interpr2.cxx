@@ -2007,8 +2007,6 @@ void ScInterpreter::ScNper()
     // amount to be paid to get from fPV to fFV is fFV_+_fPV.
     if ( fPV + fFV == 0.0 )
         PushDouble( 0.0 );
-    else if ( fPmt == 0.0 )
-        PushIllegalArgument();  // No payment, future value can never be reached
     else if (fInterest == 0.0)
         PushDouble(-(fPV + fFV)/fPmt);
     else if (bPayInAdvance)
