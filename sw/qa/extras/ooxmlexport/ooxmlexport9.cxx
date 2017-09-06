@@ -411,6 +411,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103975_notPageBreakE, "tdf103975_notPageBreakE.d
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf109310_endnoteStyleForMSO, "tdf109310_endnoteStyleForMSO.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/endnotes.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle", "w:val");
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf103389, "tdf103389.docx")
 {
