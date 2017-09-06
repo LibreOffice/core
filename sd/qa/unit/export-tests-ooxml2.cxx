@@ -104,6 +104,7 @@ public:
     void testTdf111518();
     void testTdf100387();
     void testRotateFlip();
+    void testTdf106867();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testTdf111518);
     CPPUNIT_TEST(testTdf100387);
     CPPUNIT_TEST(testRotateFlip);
+    CPPUNIT_TEST(testTdf106867);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -153,6 +155,7 @@ public:
             { "pic", "http://schemas.openxmlformats.org/drawingml/2006/picture" },
             { "wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" },
             { "p", "http://schemas.openxmlformats.org/presentationml/2006/main" },
+            { "p14", "http://schemas.microsoft.com/office/powerpoint/2010/main" },
             { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
             { "a14", "http://schemas.microsoft.com/office/drawing/2010/main" },
             { "wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" },
@@ -989,6 +992,36 @@ void SdOOXMLExportTest2::testRotateFlip()
             assertXPath(pXmlDocContent, sPt, "y", points[nPointIndex][1]);
         }
     }
+}
+
+void SdOOXMLExportTest2::testTdf106867()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf106867.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef.get());
+
+    // first check that we have the media object
+    const SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(pPage->GetObj(2));
+    CPPUNIT_ASSERT_MESSAGE("no media object", pMediaObj != nullptr);
+    CPPUNIT_ASSERT_EQUAL(OUString("vnd.sun.star.Package:ppt/media/media1.wmv"), pMediaObj->getURL());
+
+    xDocShRef->DoClose();
+
+    // additional checks of the output file
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
+    // check that the document contains the video stream
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ppt/media/media1.wmv"));
+
+    // both the ooxml and the extended markup
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/a:videoFile");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/p:extLst/p:ext/p14:media");
+
+    // target the shape with the video in the command
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/p:cBhvr/p:tgtEl/p:spTgt",
+            "spid", "42");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
