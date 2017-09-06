@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5b356a44",
+        "filename": "sd/source/ui/view/sdview4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-09-06T10:25:37Z",
+      "side": 1,
+      "message": "it\u0027s non-obvious that this can free pPickObj, better add a comment here to warn future programmers",
+      "revId": "d190b241906e320a5fec869b4148c23c72f31061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
