@@ -39,6 +39,7 @@ enum class Relationship
     HEADER,
     HYPERLINK,
     IMAGE,
+    MEDIA,
     NOTESMASTER,
     NOTESSLIDE,
     NUMBERING,
