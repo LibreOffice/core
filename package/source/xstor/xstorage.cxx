@@ -1514,9 +1514,9 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     if ( !pElement )
         return;
 
-    if ( (pElement->m_xStorage && ( pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty() ))
-      || (pElement->m_xStream && ( pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsList.empty() )) )
-        throw io::IOException( THROW_WHERE ); // TODO: Access denied
+    //if ( (pElement->m_xStorage && ( pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty() ))
+    //  || (pElement->m_xStream && ( pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsList.empty() )) )
+    //    throw io::IOException( THROW_WHERE ); // TODO: Access denied
 
     if ( pElement->m_bIsInserted )
     {

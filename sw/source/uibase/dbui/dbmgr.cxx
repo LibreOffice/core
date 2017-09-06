@@ -3189,8 +3189,6 @@ void SwDBManager::RevokeLastRegistrations()
 {
     if (m_aUncommitedRegistrations.size())
     {
-        releaseRevokeListener();
-
         SwView* pView = m_pDoc->GetDocShell()->GetView();
         std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
         if (xConfigItem)
