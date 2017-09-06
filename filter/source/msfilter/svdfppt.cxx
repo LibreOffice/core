@@ -507,7 +507,6 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     nDrawingDgId            ( 0xffffffff ),
     pPresentationObjects    ( nullptr ),
     pBObj                   ( nullptr ),
-    bBObjIsTemporary        ( true ),
     ePageKind               ( PPT_MASTERPAGE ),
     bNotesMaster            ( false ),
     bHandoutMaster          ( false ),
@@ -2813,11 +2812,9 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( pE->nBackgroundOffset )
                                             {
                                                 // do not follow master colorscheme?
-                                                bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
                                                 rSlidePersist.pBObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aPageSize, aPageSize );
-                                                rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );
                                             }
                                         }
@@ -2834,7 +2831,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
                                                 rSlidePersist.pBObj = ImportObj( rStCtrl, static_cast<void*>(&aProcessData), aPageSize, aPageSize );
-                                                rSlidePersist.bBObjIsTemporary = false;
                                             }
                                         }
                                     }
@@ -2922,8 +2918,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                         if ( rSlidePersist.pBObj )
                         {
                             // #i99386# transfer the attributes from the temporary BackgroundObject
-                            // to the Page and delete it. Maybe rSlidePersist.bBObjIsTemporary is
-                            // obsolete here, too.
+                            // to the Page and delete it.
                             pRet->getSdrPageProperties().ClearItem();
                             pRet->getSdrPageProperties().PutItemSet(rSlidePersist.pBObj->GetMergedItemSet());
                             if (rSlidePersist.pSolverContainer)
