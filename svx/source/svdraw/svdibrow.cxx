@@ -206,8 +206,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 #define MYBROWSEMODE (BrowserMode::THUMBDRAGGING|BrowserMode::KEEPHIGHLIGHT|BrowserMode::NO_HSCROLL|BrowserMode::HIDECURSOR)
 
 SdrItemBrowserControl::SdrItemBrowserControl(vcl::Window* pParent):
-    BrowseBox(pParent, WB_3DLOOK | WB_BORDER | WB_TABSTOP, MYBROWSEMODE),
-    aList()
+    BrowseBox(pParent, WB_3DLOOK | WB_BORDER | WB_TABSTOP, MYBROWSEMODE)
 {
     ImpCtor();
 }
@@ -274,10 +273,6 @@ void SdrItemBrowserControl::ImpCtor()
 
 void SdrItemBrowserControl::Clear()
 {
-    const std::size_t nCount=aList.size();
-    for (std::size_t nNum=0; nNum<nCount; ++nNum) {
-        delete ImpGetEntry(nNum);
-    }
     aList.clear();
     BrowseBox::Clear();
 }
@@ -298,9 +293,7 @@ OUString SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) cons
     OUString sRet;
     if ( _nRow >= 0 && _nRow < (sal_Int32)aList.size() )
     {
-        ImpItemListRow* pEntry = ImpGetEntry(_nRow);
-        if ( pEntry )
-        {
+        auto& pEntry = aList[_nRow];
             if ( pEntry->bComment )
             {
                 if (_nColId == ITEMBROWSER_NAMECOL_ID)
@@ -330,7 +323,6 @@ OUString SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) cons
                     case ITEMBROWSER_VALUECOL_ID: sRet = pEntry->aValue; break;
                 } // switch
             }
-        }
     }
     return sRet;
 }
@@ -342,7 +334,7 @@ void SdrItemBrowserControl::PaintField(OutputDevice& rDev, const tools::Rectangl
     }
     tools::Rectangle aR(rRect);
     aR.Bottom()++;
-    ImpItemListRow* pEntry=ImpGetEntry(nAktPaintRow);
+    auto& pEntry=aList[nAktPaintRow];
     if (pEntry->bComment)
     {
         if (nColumnId==ITEMBROWSER_NAMECOL_ID)
@@ -378,7 +370,7 @@ sal_uInt16 SdrItemBrowserControl::GetCurrentWhich() const
     sal_uInt16 nRet=0;
     const std::size_t nPos=GetCurrentPos();
     if (nPos!=ITEM_NOT_FOUND) {
-        nRet=ImpGetEntry(nPos)->nWhichId;
+        nRet=aList[nPos]->nWhichId;
     }
     return nRet;
 }
@@ -459,7 +451,7 @@ void SdrItemBrowserControl::ImpRestoreWhich()
         const std::size_t nCount=aList.size();
         std::size_t nNum;
         for (nNum=0; nNum<nCount && !bFnd; nNum++) {
-            ImpItemListRow* pEntry=ImpGetEntry(nNum);
+            auto& pEntry=aList[nNum];
             if (!pEntry->bComment) {
                 sal_uInt16 nWh=pEntry->nWhichId;
                 if (nWh==nLastWhich) bFnd = true;
@@ -480,8 +472,8 @@ bool SdrItemBrowserControl::BeginChangeEntry(std::size_t nPos)
 {
     BreakChangeEntry();
     bool bRet = false;
-    ImpItemListRow* pEntry=ImpGetEntry(nPos);
-    if (pEntry!=nullptr && !pEntry->bComment) {
+    auto& pEntry=aList[nPos];
+    if (!pEntry->bComment) {
         SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
         pEditControl=VclPtr<ImpItemEdit>::Create(&GetDataWindow(),this,0);
         tools::Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
@@ -541,10 +533,10 @@ void SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, std::size_
     SAL_WARN_IF(nEntryNum > aList.size(), "svx", "trying to set item " << nEntryNum << "in a vector of size " << aList.size());
     if (nEntryNum >= aList.size()) {
         nEntryNum = aList.size();
-        aList.push_back(new ImpItemListRow(rEntry));
+        aList.emplace_back(new ImpItemListRow(rEntry));
         RowInserted(nEntryNum);
     } else {
-        ImpItemListRow* pAktEntry=ImpGetEntry(nEntryNum);
+        auto& pAktEntry=aList[nEntryNum];
         if (*pAktEntry!=rEntry) {
             bool bStateDiff=rEntry.eState!=pAktEntry->eState;
             bool bValueDiff=rEntry.aValue != pAktEntry->aValue;
@@ -1010,9 +1002,6 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
 
         if (aList.size()>nEntryNum) { // maybe still too many entries
             size_t const nTooMuch = aList.size() - nEntryNum;
-            for (size_t n = nEntryNum; n < aList.size(); ++n) {
-                delete aList[n];
-            }
             aList.erase(aList.begin() + nEntryNum, aList.end());
             RowRemoved(nEntryNum,nTooMuch);
         }
