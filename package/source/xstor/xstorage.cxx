@@ -3046,6 +3046,8 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
         if ( !pElement )
             throw container::NoSuchElementException( THROW_WHERE ); //???
 
+        if ( pElement->m_xStorage )
+            pElement->m_xStorage->m_pAntiImpl = nullptr;
         m_pImpl->RemoveElement( pElement );
 
         m_pImpl->m_bIsModified = true;
