@@ -732,6 +732,8 @@ Behaviour of Delete-Redline:
 */
 bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCallDelete )
 {
+    aAppendRedlineStack.push_back(pNewRedl);
+
     bool bMerged = false;
     CHECK_REDLINE( *this )
 
@@ -791,6 +793,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
         if( ( *pStt == *pEnd ) &&
             ( pNewRedl->GetContentIdx() == nullptr ) )
         {   // Do not insert empty redlines
+            aAppendRedlineStack.pop_back();
             delete pNewRedl;
             return false;
         }
@@ -1228,9 +1231,12 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 if( bCallDelete )
                                 {
                                     ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
+                                    assert(pNewRedl == aAppendRedlineStack.back());
                                     //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
                                     mpRedlineTable->Insert( pNewRedl );
+                                    aAppendRedlineStack.back() = pNewRedl;
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
+                                    pNewRedl = aAppendRedlineStack.back();
                                     if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
                                     {
                                         assert(false); // can't happen
@@ -1261,9 +1267,12 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
+                                    assert(pNewRedl == aAppendRedlineStack.back());
                                     //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
                                     mpRedlineTable->Insert( pNewRedl );
+                                    aAppendRedlineStack.back() = pNewRedl;
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
+                                    pNewRedl = aAppendRedlineStack.back();
                                     if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
                                     {
                                         assert(false); // can't happen
@@ -1293,9 +1302,12 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
+                                    assert(pNewRedl == aAppendRedlineStack.back());
                                     //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
                                     mpRedlineTable->Insert( pNewRedl );
+                                    aAppendRedlineStack.back() = pNewRedl;
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
+                                    pNewRedl = aAppendRedlineStack.back();
                                     if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
                                     {
                                         assert(false); // can't happen
@@ -1701,6 +1713,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
     }
     CHECK_REDLINE( *this )
 
+    aAppendRedlineStack.pop_back();
+
     return ( nullptr != pNewRedl ) || bMerged;
 }
 
@@ -1939,6 +1953,11 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         SwPosition* pRStt = pRedl->Start(),
                   * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                        : pRedl->GetPoint();
+
+        //detect if this pRedl candidate has been appended by an ongoing AppendRedline
+        //call up-callstack
+        auto it = std::find(aAppendRedlineStack.begin(), aAppendRedlineStack.end(), pRedl);
+
         switch( ComparePosition( *pStt, *pEnd, *pRStt, *pREnd ) )
         {
         case SwComparePosition::Equal:
@@ -2011,6 +2030,13 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             break;
         default:
             break;
+        }
+
+        if (it != aAppendRedlineStack.end())
+        {
+            //let up-callstack know if this candidate was deleted by
+            //SwRedlineTable::Insert which sets its pRedl argument to nullptr
+            *it = pRedl;
         }
     }
 
