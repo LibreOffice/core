@@ -28,7 +28,7 @@ private:
 
     void testOperations() {
         int const some_data[] { 1, 2, 3 };
-        o3tl::array_view<int> v(some_data);
+        o3tl::array_view<int const> v(some_data);
 
         CPPUNIT_ASSERT_EQUAL(1, *v.begin());
         CPPUNIT_ASSERT_EQUAL(
@@ -63,11 +63,17 @@ private:
         {
             int const d1[] { 1, 2 };
             int const d2[] { 3, 4, 5, 6 };
-            o3tl::array_view<int> v1( d1 );
-            o3tl::array_view<int> v2( d2 );
+            o3tl::array_view<int const> v1( d1 );
+            o3tl::array_view<int const> v2( d2 );
             v1.swap(v2);
             CPPUNIT_ASSERT_EQUAL(o3tl::array_view<int>::size_type(4), v1.size());
             CPPUNIT_ASSERT_EQUAL(o3tl::array_view<int>::size_type(2), v2.size());
+        }
+        {
+            int d1[] { 1, 2, 3 };
+            o3tl::array_view<int> v1(d1);
+            o3tl::array_view<int const> v2;
+            v2 = v1; // the special operator=
         }
     }
 };
