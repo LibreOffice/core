@@ -174,7 +174,7 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) override;
 
-    virtual void FootnoteEndnoteRefTag() override;
+    virtual bool FootnoteEndnoteRefTag() override;
 
     virtual void SectFootnoteEndnotePr() override;
 

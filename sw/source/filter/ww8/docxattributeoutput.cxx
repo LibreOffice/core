@@ -2096,12 +2096,26 @@ void DocxAttributeOutput::WritePostponedDiagram()
     m_pPostponedDiagrams.reset(nullptr);
 }
 
-void DocxAttributeOutput::FootnoteEndnoteRefTag()
+bool DocxAttributeOutput::FootnoteEndnoteRefTag()
 {
     if( m_footnoteEndnoteRefTag == 0 )
-        return;
+        return false;
+
+    // output the character style for MS Word's benefit
+    const SwEndNoteInfo& rInfo = m_footnoteEndnoteRefTag == XML_footnoteRef ?
+        m_rExport.m_pDoc->GetFootnoteInfo() : m_rExport.m_pDoc->GetEndNoteInfo();
+    const SwCharFormat* pCharFormat = rInfo.GetCharFormat( *m_rExport.m_pDoc );
+    if ( pCharFormat )
+    {
+        const OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pCharFormat)));
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+    }
+
     m_pSerializer->singleElementNS( XML_w, m_footnoteEndnoteRefTag, FSEND );
     m_footnoteEndnoteRefTag = 0;
+    return true;
 }
 
 /** Output sal_Unicode* as a run text (<t>the text</t>).
