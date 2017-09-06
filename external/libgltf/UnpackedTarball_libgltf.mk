@@ -18,6 +18,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libgltf,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/libgltf-msvc-disable-sse2.patch.1 \
 	external/libgltf/libgltf-msvc-x64.patch.1 \
+	external/libgltf/libgltf-quads-to-triangles.1 \
+	external/libgltf/libgltf-add-a-vao.1 \
+	external/libgltf/libgltf-disable-non-core.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

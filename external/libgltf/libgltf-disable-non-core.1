@@ -1,0 +1,28 @@
+From f944ca8d14feee3787937bff0ba5b47e47f1d04f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Wed, 6 Sep 2017 14:47:22 +0100
+Subject: [PATCH] remove non-core opengl glenables
+
+Change-Id: I28306eaf9fb8ac6705242ecb74de7c19bca65ff4
+---
+ src/RenderScene.cpp | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/RenderScene.cpp b/src/RenderScene.cpp
+index 6d5e8ae..c0e8a62 100644
+--- a/src/RenderScene.cpp
++++ b/src/RenderScene.cpp
+@@ -975,10 +975,7 @@ void RenderScene::initOpengl()
+ {
+     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+     glClear(GL_COLOR_BUFFER_BIT);
+-    glEnable(GL_TEXTURE_2D);
+     glEnable(GL_DEPTH_TEST);
+-    glEnable(GL_LIGHTING);
+-    glEnable(GL_LIGHT0);
+     glDepthFunc(GL_LESS);
+     glGenVertexArrays(1, &mVAO);
+     glBindVertexArray(mVAO);
+-- 
+2.9.4
+
