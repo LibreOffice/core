@@ -60,6 +60,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(ENABLE_DEBUG),--enable-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			ZLIB_CFLAGS='$(ZLIB_CFLAGS)' ZLIB_LIBS='$(ZLIB_LIBS)' \
 		&& cd lib \
 		&& $(MAKE) \
 	)
