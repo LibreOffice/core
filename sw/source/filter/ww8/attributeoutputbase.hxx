@@ -181,7 +181,7 @@ public:
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
     /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
-    virtual void FootnoteEndnoteRefTag() {};
+    virtual bool FootnoteEndnoteRefTag() { return false; };
 
     /// for docx footnotePr/endnotePr inside sectPr
     virtual void SectFootnoteEndnotePr() {};
