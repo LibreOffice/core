@@ -107,8 +107,8 @@ class SdXMLExport : public SvXMLExport
     rtl::Reference<XMLShapeExportPropertyMapper> mpPropertySetMapper;
     rtl::Reference<XMLPageExportPropertyMapper>  mpPresPagePropsMapper;
 
-    SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formatings for date fields
-    SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
+    SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formattings for date fields
+    SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formattings for time fields
 
     bool                    mbIsDraw;
 
