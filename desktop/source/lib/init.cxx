@@ -2926,7 +2926,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                     aDevice->SetFont(aFont);
                 }
 
-                aRect = tools::Rectangle(0, 0, *pFontWidth, *pFontHeight);
+                aRect = Rectangle(0, 0, *pFontWidth, *pFontHeight);
 
                 nFontWidth = *pFontWidth;
                 nFontHeight = *pFontHeight;
