@@ -22,6 +22,30 @@
       "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9b0c3244",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8836,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-09-06T13:50:32Z",
+      "side": 1,
+      "message": "As ODFF 6.7.8 (SEARCHB) says under semantics \u0027As SEARCH, but using byte positions\u0027 and ODFF 6.20.20 (SEARCH) says under semantics \u0027The values returned may vary depending upon the HOST-USE-REGULAR-EXPRESSIONS or HOST-USE-WILDCARDS properties. (3.4)\u0027 I simply used ScSearch as a starting point and made sure that all unit test calls for SEARCH give the same result with SEARCHB.\n\nSo I tested with regular expressions, but not with wildcards, as SEARCH does not work well in Calc with them:\nSEARCH( \"f?ce\"; \"LibreOffice\"; 1 ) returns 10 (8 expected),\nSEARCH( \"f.ce\"; \"Libreoffice\"; 1 ) returns 8 as expected.\nWith Excel it is the other way round:\nSEARCH( \"f?ce\"; \"LibreOffice\"; 1 ) returns 8 as expected),\nSEARCH( \"f.ce\"; \"Libreoffice\"; 1 ) returns 10 (8 expected.\nSEARCHB is the same as SEARCH in both Calc and Excel.\n\nI have no idea how to (dis)able regexpr/wildcards in Calc or Excel.\n\nNow you know what I did and why, and that Excel supports wildcards.",
+      "parentUuid": "1a430d35_78bb0c73",
+      "range": {
+        "startLine": 8836,
+        "startChar": 55,
+        "endLine": 8836,
+        "endChar": 71
+      },
+      "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
