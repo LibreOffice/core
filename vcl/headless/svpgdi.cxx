@@ -1152,7 +1152,13 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
         aPal[0] = Color(COL_BLACK);
         aPal[1] = Color(COL_WHITE);
     }
-    pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), aPal);
+
+    if (!pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), aPal))
+    {
+        SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create bitmap");
+        delete pBitmap;
+        return nullptr;
+    }
 
     cairo_surface_t* target = SvpSalGraphics::createCairoSurface(pBitmap->GetBuffer());
     cairo_t* cr = cairo_create(target);
