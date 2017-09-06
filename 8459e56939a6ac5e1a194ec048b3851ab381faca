@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fb73764b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-06T09:42:54Z",
+      "side": 1,
+      "message": "comphelper::ThreadPool::waitUntilDone appears to only terminate threads when there are no tasks from other tags remaining.  Is the resulting performance issue a theoretical one, or has it actually been observed?",
+      "revId": "8459e56939a6ac5e1a194ec048b3851ab381faca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
