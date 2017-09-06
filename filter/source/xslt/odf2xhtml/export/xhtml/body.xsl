@@ -1337,7 +1337,7 @@
 								<xsl:with-param name="currentoutlineLevel" select="$iOutlineLevel"/>
 							</xsl:call-template>
 						</xsl:with-param>
-						<xsl:with-param name="numberFormat" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = ($outlineLevel)]/@style:num-format"/>
+						<xsl:with-param name="numberFormat" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = ($iOutlineLevel)]/@style:num-format"/>
 					</xsl:call-template>
 				</xsl:if>
 				<xsl:choose>
@@ -1367,7 +1367,7 @@
 							<xsl:with-param name="currentoutlineLevel" select="$iOutlineLevel"/>
 						</xsl:call-template>
 					</xsl:with-param>
-					<xsl:with-param name="numberFormat" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = $outlineLevel]/@style:num-format"/>
+					<xsl:with-param name="numberFormat" select="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = $iOutlineLevel]/@style:num-format"/>
 					<xsl:with-param name="last" select="true()"/>
 				</xsl:call-template>
 			</xsl:otherwise>
