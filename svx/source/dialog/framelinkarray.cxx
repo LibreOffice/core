@@ -77,10 +77,21 @@ public:
     void                MirrorSelfX();
 
     basegfx::B2DHomMatrix CreateCoordinateSystem(const Array& rArray) const;
+    size_t GetCellIndex(const Array& rArray) const;
 };
 
 typedef std::vector< long >     LongVec;
 typedef std::vector< Cell >     CellVec;
+
+size_t Cell::GetCellIndex(const Array& rArray) const
+{
+    if(-1 == maCellIndex)
+    {
+        rArray.AddCellIndices();
+    }
+
+    return maCellIndex;
+}
 
 basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray) const
 {
@@ -89,14 +100,11 @@ basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray) const
         return maCoordinateSystem;
     }
 
-    if(-1 == maCellIndex)
-    {
-        rArray.AddCellIndices();
-    }
+    const size_t nCellIndex(GetCellIndex(rArray));
 
-    if(-1 != maCellIndex)
+    if(-1 != nCellIndex)
     {
-        const basegfx::B2DRange aRange(rArray.GetCellRange(maCellIndex));
+        const basegfx::B2DRange aRange(rArray.GetCellRange(nCellIndex));
 
         if(!aRange.isEmpty())
         {
@@ -932,401 +940,294 @@ void Array::MirrorSelfX()
 }
 
 // drawing
-void HelperCreateHorizontalBorderPrimitives(
-    const basegfx::B2DHomMatrix& rCoordinateSystem, drawinglayer::primitive2d::Primitive2DContainer& rSequence, bool bUpper, const Style& rBorder,
-    const Style& rStartFromTR, const Style& rStartLFromT, const Style& rStartLFromL, const Style& rStartLFromB, const Style& rStartFromBR,
-    const Style& rEndFromTL, const Style& rEndRFromT, const Style& rEndRFromR, const Style& rEndRFromB, const Style& rEndFromBL,
-    const Color* pForceColor)
+void HelperCreateHorizontalEntry(
+    const Array& rArray, const Style& rStyle, size_t col, size_t row,
+    const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX, const basegfx::B2DVector& rY,
+    drawinglayer::primitive2d::Primitive2DContainer& rSequence,
+    bool bUpper, const Color* pForceColor)
 {
-    const basegfx::B2DVector aX(basegfx::tools::getColumn(rCoordinateSystem, 0));
-    const basegfx::B2DVector aY(basegfx::tools::getColumn(rCoordinateSystem, 1));
+    // get involved styles at start
+    const Style& rStartFromTR(rArray.GetCellStyleBL( col, row - 1 ));
+    const Style& rStartLFromT(rArray.GetCellStyleLeft( col, row - 1 ));
+    const Style& rStartLFromL(rArray.GetCellStyleTop( col - 1, row ));
+    const Style& rStartLFromB(rArray.GetCellStyleLeft( col, row ));
+    const Style& rStartFromBR(rArray.GetCellStyleTL( col, row ));
+    StyleVectorTable aStart;
 
-    if(!aX.equalZero() && !aY.equalZero())
+    if(rStartFromTR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromTR, rX - rY));
+    if(rStartLFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromT, -rY));
+    if(rStartLFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromL, -rX));
+    if(rStartLFromB.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromB, rY));
+    if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY));
+
+    // get involved styles at end
+    const Style& rEndFromTL(rArray.GetCellStyleBR( col, row - 1 ));
+    const Style& rEndRFromT(rArray.GetCellStyleRight( col, row - 1 ));
+    const Style& rEndRFromR(rArray.GetCellStyleTop( col + 1, row ));
+    const Style& rEndRFromB(rArray.GetCellStyleRight( col, row ));
+    const Style& rEndFromBL(rArray.GetCellStyleTR( col, row ));
+    StyleVectorTable aEnd;
+
+    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -rX -rY));
+    if(rEndRFromT.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -rY));
+    if(rEndRFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromR, rX));
+    if(rEndRFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromB, rY));
+    if(rEndFromBL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromBL, rY - rX));
+
+    CreateBorderPrimitives(
+        rSequence,
+        bUpper ? rOrigin : rOrigin + rY,
+        rX,
+        rStyle,
+        aStart,
+        aEnd,
+        pForceColor
+    );
+}
+
+void HelperCreateVerticalEntry(
+    const Array& rArray, const Style& rStyle, size_t col, size_t row,
+    const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX, const basegfx::B2DVector& rY,
+    drawinglayer::primitive2d::Primitive2DContainer& rSequence,
+    bool bLeft, const Color* pForceColor)
+{
+    // get involved styles at start
+    const Style& rStartFromBL(rArray.GetCellStyleTR( col - 1, row ));
+    const Style& rStartTFromL(rArray.GetCellStyleTop( col - 1, row ));
+    const Style& rStartTFromT(rArray.GetCellStyleLeft( col, row - 1 ));
+    const Style& rStartTFromR(rArray.GetCellStyleTop( col, row ));
+    const Style& rStartFromBR(rArray.GetCellStyleTL( col, row ));
+    StyleVectorTable aStart;
+
+    if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY));
+    if(rStartTFromR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromR, rX));
+    if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, rY));
+    if(rStartTFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromL, -rX));
+    if(rStartFromBL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBL, rY - rX));
+
+    // get involved styles at end
+    const Style& rEndFromTL(rArray.GetCellStyleBR( col - 1, row ));
+    const Style& rEndBFromL(rArray.GetCellStyleBottom( col - 1, row ));
+    const Style& rEndBFromB(rArray.GetCellStyleLeft( col, row + 1 ));
+    const Style& rEndBFromR(rArray.GetCellStyleBottom( col, row ));
+    const Style& rEndFromTR(rArray.GetCellStyleBL( col, row ));
+    StyleVectorTable aEnd;
+
+    if(rEndFromTR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTR, rX - rY));
+    if(rEndBFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromR, rX));
+    if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -rY));
+    if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, rX));
+    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, rX + rY));
+
+    CreateBorderPrimitives(
+        rSequence,
+        bLeft ? rOrigin : rOrigin + rX,
+        rY,
+        rStyle,
+        aStart,
+        aEnd,
+        pForceColor
+    );
+}
+
+void HelperCreateEntry(const Array& rArray, const Style& rStyle, drawinglayer::primitive2d::Primitive2DContainer& rSequence, const Color* pForceColor)
+{
+    const Cell* pCell = rStyle.GetUsingCell();
+
+    if(nullptr != pCell)
     {
-        const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(rCoordinateSystem, 2));
-        StyleVectorTable aStart;
-        StyleVectorTable aEnd;
+        const size_t nCellIndex(pCell->GetCellIndex(rArray));
 
-        if(rStartFromTR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromTR, aX - aY));
-        if(rStartLFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromT, -aY));
-        if(rStartLFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromL, -aX));
-        if(rStartLFromB.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromB, aY));
-        if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
+        if(-1 != nCellIndex)
+        {
+            size_t col(nCellIndex % rArray.GetColCount());
+            size_t row(nCellIndex / rArray.GetColCount());
+            const bool bL(&rStyle == &pCell->GetStyleLeft());
+            const bool bR(&rStyle == &pCell->GetStyleRight());
+            const bool bT(&rStyle == &pCell->GetStyleTop());
+            const bool bB(&rStyle == &pCell->GetStyleBottom());
 
-        if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -aX -aY));
-        if(rEndRFromT.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -aY));
-        if(rEndRFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromR, aX));
-        if(rEndRFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromB, aY));
-        if(rEndFromBL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromBL, aY - aX));
+            if(bL || bR || bT || bB)
+            {
+                const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(rArray));
+                const basegfx::B2DVector aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
+                const basegfx::B2DVector aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
+                const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(aCoordinateSystem, 2));
 
-        CreateBorderPrimitives(
-            rSequence,
-            bUpper ? aOrigin : aOrigin + aY,
-            aX,
-            rBorder,
-            aStart,
-            aEnd,
-            pForceColor
-        );
+                if(bL || bR)
+                {
+                    // left/right
+                    HelperCreateVerticalEntry(rArray, rStyle, bL ? col : col + 1, row, aOrigin, aX, aY, rSequence, bL, pForceColor);
+                }
+                else if(bT || bB)
+                {
+                    // top/bottom
+                    HelperCreateHorizontalEntry(rArray, rStyle, col, bT ? row : row + 1, aOrigin, aX, aY, rSequence, bT, pForceColor);
+                }
+            }
+        }
     }
 }
 
-void HelperCreateVerticalBorderPrimitives(
-    const basegfx::B2DHomMatrix& rCoordinateSystem, drawinglayer::primitive2d::Primitive2DContainer& rSequence, bool bLeft, const Style& rBorder,
-    const Style& rStartFromBR, const Style& rStartTFromR, const Style& rStartTFromT, const Style& rStartTFromL, const Style& rStartFromBL,
-    const Style& rEndFromTR, const Style& rEndBFromR, const Style& rEndBFromB, const Style& rEndBFromL, const Style& rEndFromTL,
-    const Color* pForceColor)
+drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
+    size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
+    const Color* pForceColor ) const
 {
-    const basegfx::B2DVector aX(basegfx::tools::getColumn(rCoordinateSystem, 0));
-    const basegfx::B2DVector aY(basegfx::tools::getColumn(rCoordinateSystem, 1));
+    DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "CreateB2DPrimitiveRange" );
+    DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "CreateB2DPrimitiveRange" );
 
-    if(!aX.equalZero() && !aY.equalZero())
+    // various primitive sequences to collect the different border types
+    drawinglayer::primitive2d::Primitive2DContainer aHorizontalSequence;
+    drawinglayer::primitive2d::Primitive2DContainer aVerticalSequence;
+    drawinglayer::primitive2d::Primitive2DContainer aCrossSequence;
+
+    for (size_t nRow = nFirstRow; nRow <= nLastRow; ++nRow)
     {
-        const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(rCoordinateSystem, 2));
-        StyleVectorTable aStart;
-        StyleVectorTable aEnd;
-
-        if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, aX + aY));
-        if(rStartTFromR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromR, aX));
-        if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, aY));
-        if(rStartTFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromL, -aX));
-        if(rStartFromBL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBL, aY - aX));
-
-        if(rEndFromTR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTR, aX - aY));
-        if(rEndBFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromR, aX));
-        if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -aY));
-        if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, aX));
-        if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, aX + aY));
-
-        CreateBorderPrimitives(
-            rSequence,
-            bLeft ? aOrigin : aOrigin + aX,
-            aY,
-            rBorder,
-            aStart,
-            aEnd,
-            pForceColor
-        );
-    }
-}
-
-void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
-        size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
-        const Color* pForceColor ) const
-{
-    DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "DrawRange" );
-    DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "DrawRange" );
-
-    size_t nCol, nRow;
-
-    // *** diagonal frame borders ***
-    for (nRow = nFirstRow; nRow <= nLastRow; ++nRow)
-    {
-        for (nCol = nFirstCol; nCol <= nLastCol; ++nCol)
+        for (size_t nCol = nFirstCol; nCol <= nLastCol; ++nCol)
         {
             const Cell& rCell = CELL(nCol, nRow);
-            bool bOverlapX = rCell.mbOverlapX;
-            bool bOverlapY = rCell.mbOverlapY;
-            bool bFirstCol = nCol == nFirstCol;
-            bool bFirstRow = nRow == nFirstRow;
+            const basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this));
+            const basegfx::B2DVector aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
+            const basegfx::B2DVector aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
 
-            if ((!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) || (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow))
+            if(!aX.equalZero() && !aY.equalZero())
             {
                 size_t _nFirstCol = mxImpl->GetMergedFirstCol(nCol, nRow);
                 size_t _nFirstRow = mxImpl->GetMergedFirstRow(nCol, nRow);
-                const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
-                const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
+                size_t _nLastCol = mxImpl->GetMergedLastCol(nCol, nRow);
+                size_t _nLastRow = mxImpl->GetMergedLastRow(nCol, nRow);
+                const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(aCoordinateSystem, 2));
 
-                if (rTLBR.GetWidth() || rBLTR.GetWidth())
+                const bool bOverlapX(rCell.mbOverlapX);
+                const bool bOverlapY(rCell.mbOverlapY);
+                const bool bFirstCol(nCol == nFirstCol);
+                const bool bLastCol(nCol == nLastCol);
+                const bool bFirstRow(nRow == nFirstRow);
+                const bool bLastRow(nRow == nLastRow);
+
+                if (!bOverlapX || bFirstRow)
                 {
-                    basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this));
-                    const basegfx::B2DVector aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
-                    const basegfx::B2DVector aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
+                    const Style& rTop = GetCellStyleTop(_nFirstCol, _nFirstRow);
 
-                    if(!aX.equalZero() && !aY.equalZero())
+                    if(rTop.IsUsed())
                     {
-                        size_t _nLastCol = mxImpl->GetMergedLastCol(nCol, nRow);
-                        size_t _nLastRow = mxImpl->GetMergedLastRow(nCol, nRow);
-                        const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(aCoordinateSystem, 2));
-                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
+                        HelperCreateEntry(*this, rTop, aHorizontalSequence, pForceColor);
+                    }
+                }
 
-                        if(rTLBR.GetWidth())
-                        {
-                            /// top-left and bottom-right Style Tables
-                            StyleVectorTable aStart;
-                            StyleVectorTable aEnd;
+                if (bLastRow)
+                {
+                    const Style& rBottom = GetCellStyleBottom(_nFirstCol, _nFirstRow);
 
-                            /// Fill top-left Style Table
-                            const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
-                            if(rTLFromRight.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX));
-                            const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
-                            if(rTLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY));
+                    if(rBottom.IsUsed())
+                    {
+                        HelperCreateEntry(*this, rBottom, aHorizontalSequence, pForceColor);
+                    }
+                }
 
-                            /// Fill bottom-right Style Table
-                            const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
-                            if(rBRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY));
-                            const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
-                            if(rBRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX));
+                if (!bOverlapY || bFirstCol)
+                {
+                    const Style& rLeft(GetCellStyleLeft(_nFirstCol, _nFirstRow));
 
-                            CreateBorderPrimitives(
-                                aSequence,
-                                aOrigin,
-                                aX + aY,
-                                rTLBR,
-                                aStart,
-                                aEnd,
-                                pForceColor
-                            );
-                        }
+                    if(rLeft.IsUsed())
+                    {
+                        HelperCreateEntry(*this, rLeft, aVerticalSequence, pForceColor);
+                    }
+                }
 
-                        if(rBLTR.GetWidth())
-                        {
-                            /// bottom-left and top-right Style Tables
-                            StyleVectorTable aStart;
-                            StyleVectorTable aEnd;
+                if (bLastCol)
+                {
+                    const Style& rRight(GetCellStyleRight(_nFirstCol, _nFirstRow));
 
-                            /// Fill bottom-left Style Table
-                            const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
-                            if(rBLFromTop.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY));
-                            const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
-                            if(rBLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX));
+                    if(rRight.IsUsed())
+                    {
+                        HelperCreateEntry(*this, rRight, aVerticalSequence, pForceColor);
+                    }
+                }
 
-                            /// Fill top-right Style Table
-                            const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
-                            if(rTRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY));
-                            const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
-                            if(rTRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX));
+                if ((!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) || (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow))
+                {
+                    const Style& rTLBR = GetCellStyleTLBR(_nFirstCol, _nFirstRow);
+                    if(rTLBR.IsUsed())
+                    {
+                        /// top-left and bottom-right Style Tables
+                        StyleVectorTable aStart;
+                        StyleVectorTable aEnd;
 
-                            CreateBorderPrimitives(
-                                aSequence,
-                                aOrigin + aY,
-                                aX - aY,
-                                rBLTR,
-                                aStart,
-                                aEnd,
-                                pForceColor
-                            );
-                        }
+                        /// Fill top-left Style Table
+                        const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
+                        if(rTLFromRight.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX));
+                        const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
+                        if(rTLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY));
 
-                        rProcessor.process(aSequence);
+                        /// Fill bottom-right Style Table
+                        const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
+                        if(rBRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY));
+                        const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
+                        if(rBRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX));
+
+                        CreateBorderPrimitives(
+                            aCrossSequence,
+                            aOrigin,
+                            aX + aY,
+                            rTLBR,
+                            aStart,
+                            aEnd,
+                            pForceColor
+                        );
+                    }
+
+                    const Style& rBLTR = GetCellStyleBLTR(_nFirstCol, _nFirstRow);
+                    if(rBLTR.IsUsed())
+                    {
+                        /// bottom-left and top-right Style Tables
+                        StyleVectorTable aStart;
+                        StyleVectorTable aEnd;
+
+                        /// Fill bottom-left Style Table
+                        const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
+                        if(rBLFromTop.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY));
+                        const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
+                        if(rBLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX));
+
+                        /// Fill top-right Style Table
+                        const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
+                        if(rTRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY));
+                        const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
+                        if(rTRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX));
+
+                        CreateBorderPrimitives(
+                            aCrossSequence,
+                            aOrigin + aY,
+                            aX - aY,
+                            rBLTR,
+                            aStart,
+                            aEnd,
+                            pForceColor
+                        );
                     }
                 }
             }
         }
     }
 
-    // *** horizontal frame borders ***
-    for( nRow = nFirstRow; nRow <= nLastRow + 1; ++nRow )
-    {
-        // *Start*** variables store the data of the left end of the cached frame border
-        basegfx::B2DPoint aStartPos( mxImpl->GetColPosition( nFirstCol ), mxImpl->GetRowPosition( nRow ) );
-        const Style* pStart = &GetCellStyleTop( nFirstCol, nRow );
-        Style aStartLFromTR( GetCellStyleBL( nFirstCol, nRow - 1 ));
-        const Style* pStartLFromT = &GetCellStyleLeft( nFirstCol, nRow - 1 );
-        const Style* pStartLFromL = &GetCellStyleTop( nFirstCol - 1, nRow );
-        const Style* pStartLFromB = &GetCellStyleLeft( nFirstCol, nRow );
-        Style aStartLFromBR( GetCellStyleTL( nFirstCol, nRow ));
+    // to stay compatible, create order as it was formally
+    aCrossSequence.append(aHorizontalSequence);
+    aCrossSequence.append(aVerticalSequence);
 
-        // *End*** variables store the data of the right end of the cached frame border
-        Style aEndRFromTL( GetCellStyleBR( nFirstCol, nRow - 1 ));
-        const Style* pEndRFromT = &GetCellStyleRight( nFirstCol, nRow - 1 );
-        const Style* pEndRFromR = &GetCellStyleTop( nFirstCol + 1, nRow );
-        const Style* pEndRFromB = &GetCellStyleRight( nFirstCol, nRow );
-        Style aEndRFromBL( GetCellStyleTR( nFirstCol, nRow ));
-
-        for( nCol = nFirstCol + 1; nCol <= nLastCol; ++nCol )
-        {
-            const Style& rCurr = *pEndRFromR;
-
-            Style aLFromTR( GetCellStyleBL( nCol, nRow - 1 ));
-            const Style& rLFromT = *pEndRFromT;
-            const Style& rLFromL = *pStart;
-            const Style& rLFromB = *pEndRFromB;
-            Style aLFromBR( GetCellStyleTL( nCol, nRow ));
-
-            Style aRFromTL( GetCellStyleBR( nCol, nRow - 1 ));
-            const Style& rRFromT = GetCellStyleRight( nCol, nRow - 1 );
-            const Style& rRFromR = GetCellStyleTop( nCol + 1, nRow );
-            const Style& rRFromB = GetCellStyleRight( nCol, nRow );
-            Style aRFromBL( GetCellStyleTR( nCol, nRow ));
-
-            // check if current frame border can be connected to cached frame border
-            if( !CheckFrameBorderConnectable( *pStart, rCurr, aEndRFromTL, rLFromT, aLFromTR, aEndRFromBL, rLFromB, aLFromBR ) )
-            {
-                // draw previous frame border
-                basegfx::B2DPoint aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.getY() );
-
-                if (pStart->IsUsed() && (aStartPos.getX() <= aEndPos.getX()))
-                {
-                    // prepare defaults for borderline coordinate system
-                    const Cell* pCell = pStart->GetUsingCell();
-
-                    if(pCell)
-                    {
-                        const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
-                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                        const bool bUpper(&pCell->GetStyleTop() == pStart);
-
-                        HelperCreateHorizontalBorderPrimitives(
-                            aCoordinateSystem, aSequence, bUpper, *pStart,
-                            aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                            aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor);
-
-                        rProcessor.process(aSequence);
-                    }
-                }
-
-                // re-init "*Start***" variables
-                aStartPos = aEndPos;
-                pStart = &rCurr;
-                aStartLFromTR = aLFromTR;
-                pStartLFromT = &rLFromT;
-                pStartLFromL = &rLFromL;
-                pStartLFromB = &rLFromB;
-                aStartLFromBR = aLFromBR;
-            }
-
-            // store current styles in "*End***" variables
-            aEndRFromTL = aRFromTL;
-            pEndRFromT = &rRFromT;
-            pEndRFromR = &rRFromR;
-            pEndRFromB = &rRFromB;
-            aEndRFromBL = aRFromBL;
-        }
-
-        // draw last frame border
-        basegfx::B2DPoint aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.getY() );
-        if (pStart->IsUsed() && (aStartPos.getX() <= aEndPos.getX()))
-        {
-            // for description of involved coordinate systems have a look at
-            // the first CreateBorderPrimitives call above
-            const Cell* pCell = pStart->GetUsingCell();
-
-            if(pCell)
-            {
-                const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
-                drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                const bool bUpper(&pCell->GetStyleTop() == pStart);
-
-                HelperCreateHorizontalBorderPrimitives(
-                    aCoordinateSystem, aSequence, bUpper, *pStart,
-                    aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                    aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor);
-
-                rProcessor.process(aSequence);
-            }
-        }
-    }
-
-    // *** vertical frame borders ***
-    for( nCol = nFirstCol; nCol <= nLastCol + 1; ++nCol )
-    {
-        // *Start*** variables store the data of the top end of the cached frame border
-        basegfx::B2DPoint aStartPos( mxImpl->GetColPosition( nCol ), mxImpl->GetRowPosition( nFirstRow ) );
-        const Style* pStart = &GetCellStyleLeft( nCol, nFirstRow );
-        Style aStartTFromBL( GetCellStyleTR( nCol - 1, nFirstRow ));
-        const Style* pStartTFromL = &GetCellStyleTop( nCol - 1, nFirstRow );
-        const Style* pStartTFromT = &GetCellStyleLeft( nCol, nFirstRow - 1 );
-        const Style* pStartTFromR = &GetCellStyleTop( nCol, nFirstRow );
-        Style aStartTFromBR( GetCellStyleTL( nCol, nFirstRow ));
-
-        // *End*** variables store the data of the bottom end of the cached frame border
-        Style aEndBFromTL( GetCellStyleBR( nCol - 1, nFirstRow ));
-        const Style* pEndBFromL = &GetCellStyleBottom( nCol - 1, nFirstRow );
-        const Style* pEndBFromB = &GetCellStyleLeft( nCol, nFirstRow + 1 );
-        const Style* pEndBFromR = &GetCellStyleBottom( nCol, nFirstRow );
-        Style aEndBFromTR( GetCellStyleBL( nCol, nFirstRow ));
-
-        for( nRow = nFirstRow + 1; nRow <= nLastRow; ++nRow )
-        {
-            const Style& rCurr = *pEndBFromB;
-
-            Style aTFromBL( GetCellStyleTR( nCol - 1, nRow ));
-            const Style& rTFromL = *pEndBFromL;
-            const Style& rTFromT = *pStart;
-            const Style& rTFromR = *pEndBFromR;
-            Style aTFromBR( GetCellStyleTL( nCol, nRow ));
-
-            Style aBFromTL( GetCellStyleBR( nCol - 1, nRow ));
-            const Style& rBFromL = GetCellStyleBottom( nCol - 1, nRow );
-            const Style& rBFromB = GetCellStyleLeft( nCol, nRow + 1 );
-            const Style& rBFromR = GetCellStyleBottom( nCol, nRow );
-            Style aBFromTR( GetCellStyleBL( nCol, nRow ));
-
-            // check if current frame border can be connected to cached frame border
-            if( !CheckFrameBorderConnectable( *pStart, rCurr,
-                    aEndBFromTL, rTFromL, aTFromBL, aEndBFromTR, rTFromR, aTFromBR ) )
-            {
-                // draw previous frame border
-                basegfx::B2DPoint aEndPos( aStartPos.getX(), mxImpl->GetRowPosition( nRow ) );
-                if (pStart->IsUsed() && (aStartPos.getY() <= aEndPos.getY()))
-                {
-                    // for description of involved coordinate systems have a look at
-                    // the first CreateBorderPrimitives call above. Additionally adapt to vertical
-                    const Cell* pCell = pStart->GetUsingCell();
-
-                    if(pCell)
-                    {
-                        const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
-                        drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                        const bool bLeft(&pCell->GetStyleLeft() == pStart);
-
-                        HelperCreateVerticalBorderPrimitives(
-                            aCoordinateSystem, aSequence, bLeft, *pStart,
-                            aStartTFromBR, *pStartTFromR, *pStartTFromT, *pStartTFromL, aStartTFromBL,
-                            aEndBFromTR, *pEndBFromR, *pEndBFromB, *pEndBFromL, aEndBFromTL, pForceColor);
-
-                        rProcessor.process(aSequence);
-                    }
-                }
-
-                // re-init "*Start***" variables
-                aStartPos = aEndPos;
-                pStart = &rCurr;
-                aStartTFromBL = aTFromBL;
-                pStartTFromL = &rTFromL;
-                pStartTFromT = &rTFromT;
-                pStartTFromR = &rTFromR;
-                aStartTFromBR = aTFromBR;
-            }
-
-            // store current styles in "*End***" variables
-            aEndBFromTL = aBFromTL;
-            pEndBFromL = &rBFromL;
-            pEndBFromB = &rBFromB;
-            pEndBFromR = &rBFromR;
-            aEndBFromTR = aBFromTR;
-        }
-
-        // draw last frame border
-        basegfx::B2DPoint aEndPos( aStartPos.getX(), mxImpl->GetRowPosition( nRow ) );
-        if (pStart->IsUsed() && (aStartPos.getY() <= aEndPos.getY()))
-        {
-            // for description of involved coordinate systems have a look at
-            // the first CreateBorderPrimitives call above, adapt to vertical
-            const Cell* pCell = pStart->GetUsingCell();
-
-            if(pCell)
-            {
-                const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(*this));
-                drawinglayer::primitive2d::Primitive2DContainer aSequence;
-                const bool bLeft(&pCell->GetStyleLeft() == pStart);
-
-                HelperCreateVerticalBorderPrimitives(
-                    aCoordinateSystem, aSequence, bLeft, *pStart,
-                    aStartTFromBR, *pStartTFromR, *pStartTFromT, *pStartTFromL, aStartTFromBL,
-                    aEndBFromTR, *pEndBFromR, *pEndBFromB, *pEndBFromL, aEndBFromTL, pForceColor);
-
-                rProcessor.process(aSequence);
-            }
-        }
-    }
+    return aCrossSequence;
 }
 
-void Array::DrawArray(drawinglayer::processor2d::BaseProcessor2D& rProcessor) const
+drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveArray() const
 {
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+
     if (mxImpl->mnWidth && mxImpl->mnHeight)
-        DrawRange(rProcessor, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1, nullptr);
+    {
+        aPrimitives = CreateB2DPrimitiveRange(0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1, nullptr);
+    }
+
+    return aPrimitives;
 }
 
 void Array::AddCellIndices() const

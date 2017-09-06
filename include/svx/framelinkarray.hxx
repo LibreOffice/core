@@ -239,7 +239,7 @@ public:
     /** Sets a clipping range.
         @descr
             No cell borders outside of this clipping range will be drawn. In
-            difference to simply using the DrawRange() function with the same
+            difference to simply using the CreateB2DPrimitiveRange() function with the same
             range, a clipping range causes the drawing functions to completely
             ignore the frame styles connected from outside. This is used i.e.
             in Calc to print single pages and to draw the print preview.
@@ -304,13 +304,13 @@ public:
     /** Draws the part of the specified range, that is inside the clipping range.
         @param pForceColor
             If not NULL, only this color will be used to draw all frame borders. */
-    void                DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
-                            size_t nFirstCol, size_t nFirstRow,
-                            size_t nLastCol, size_t nLastRow,
-                            const Color* pForceColor ) const;
+    drawinglayer::primitive2d::Primitive2DContainer CreateB2DPrimitiveRange(
+        size_t nFirstCol, size_t nFirstRow,
+        size_t nLastCol, size_t nLastRow,
+        const Color* pForceColor ) const;
 
     /** Draws the part of the array, that is inside the clipping range. */
-    void                DrawArray(drawinglayer::processor2d::BaseProcessor2D& rProcessor) const;
+    drawinglayer::primitive2d::Primitive2DContainer CreateB2DPrimitiveArray() const;
 
     // fill the Cell::maCellIndex entries to allow referencing back from Cell to Array Col/Row coordinates
     void AddCellIndices() const;

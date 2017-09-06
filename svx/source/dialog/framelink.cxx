@@ -50,26 +50,38 @@ void Style::implEnsureImplStyle()
     }
 }
 
-Style::Style() : maImplStyle()
+Style::Style() :
+    maImplStyle(),
+    mpUsingCell(nullptr)
 {
 }
 
-Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType ) : maImplStyle(new implStyle())
+Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType ) :
+    maImplStyle(new implStyle()),
+    mpUsingCell(nullptr)
 {
     maImplStyle->mnType = nType;
     Set( nP, nD, nS );
 }
 
-Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType ) : maImplStyle(new implStyle())
+Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType ) :
+    maImplStyle(new implStyle()),
+    mpUsingCell(nullptr)
 {
     maImplStyle->mnType = nType;
     Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
 }
 
-Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) : maImplStyle(new implStyle())
+Style::Style( const editeng::SvxBorderLine* pBorder, double fScale ) :
+    maImplStyle(),
+    mpUsingCell(nullptr)
 {
-    maImplStyle->mfPatternScale = fScale;
-    Set( pBorder, fScale );
+    if(nullptr != pBorder)
+    {
+        maImplStyle.reset(new implStyle());
+        maImplStyle->mfPatternScale = fScale;
+        Set( pBorder, fScale );
+    }
 }
 
 void Style::SetPatternScale( double fScale )
@@ -91,8 +103,7 @@ void Style::Clear()
 {
     if(maImplStyle)
     {
-        Set( Color(), Color(), Color(), false, 0, 0, 0 );
-        maImplStyle->mnType = SvxBorderLineStyle::SOLID;
+        maImplStyle.reset();
     }
 }
 
@@ -123,20 +134,27 @@ void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& 
     Set( nP, nD, nS );
 }
 
-void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth )
+void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth )
 {
+    if(nullptr == pBorder)
+    {
+        Clear();
+        return;
+    }
+
     implEnsureImplStyle();
     implStyle* pTarget = maImplStyle.get();
-    pTarget->maColorPrim = rBorder.GetColorOut();
-    pTarget->maColorSecn = rBorder.GetColorIn();
-    pTarget->maColorGap = rBorder.GetColorGap();
-    pTarget->mbUseGapColor = rBorder.HasGapColor();
+    pTarget->maColorPrim = pBorder->GetColorOut();
+    pTarget->maColorSecn = pBorder->GetColorIn();
+    pTarget->maColorGap = pBorder->GetColorGap();
+    pTarget->mbUseGapColor = pBorder->HasGapColor();
 
-    sal_uInt16 nPrim = rBorder.GetOutWidth();
-    sal_uInt16 nDist = rBorder.GetDistance();
-    sal_uInt16 nSecn = rBorder.GetInWidth();
+    const sal_uInt16 nPrim(pBorder->GetOutWidth());
+    const sal_uInt16 nDist(pBorder->GetDistance());
+    const sal_uInt16 nSecn(pBorder->GetInWidth());
 
-    pTarget->mnType = rBorder.GetBorderLineStyle();
+    pTarget->mnType = pBorder->GetBorderLineStyle();
+
     if( !nSecn )    // no or single frame border
     {
         Set( std::min<double>(nPrim * fScale, nMaxWidth), 0, 0 );
@@ -182,18 +200,6 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
                 --(pTarget->mfSecn);
             }
         }
-    }
-}
-
-void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth )
-{
-    if( pBorder )
-    {
-        Set( *pBorder, fScale, nMaxWidth );
-    }
-    else
-    {
-        Clear();
     }
 }
 
@@ -279,54 +285,50 @@ Style& Style::MirrorSelf()
     return *this;
 }
 
-const Cell* Style::GetUsingCell() const
+bool Style::operator==( const Style& rOther) const
 {
-    if(!maImplStyle)
+    if(!maImplStyle && !rOther.maImplStyle)
     {
-        return nullptr;
+        return true;
     }
 
-    return maImplStyle->mpUsingCell;
-}
-
-void Style::SetUsingCell(const Cell* pCell)
-{
-    if(!maImplStyle)
+    if(maImplStyle && rOther.maImplStyle && maImplStyle.get() == rOther.maImplStyle.get())
     {
-        if(nullptr == pCell)
-        {
-            return;
-        }
-
-        implEnsureImplStyle();
+        return true;
     }
 
-    maImplStyle->mpUsingCell = pCell;
+    return (Prim() == rOther.Prim()
+        && Dist() == rOther.Dist()
+        && Secn() == rOther.Secn()
+        && GetColorPrim() == rOther.GetColorPrim()
+        && GetColorSecn() == rOther.GetColorSecn()
+        && GetColorGap() == rOther.GetColorGap()
+        && GetRefMode() == rOther.GetRefMode()
+        && UseGapColor() == rOther.UseGapColor()
+        && Type() == rOther.Type());
 }
 
-bool operator==( const Style& rL, const Style& rR )
+bool Style::operator<( const Style& rOther) const
 {
-    return (rL.Prim() == rR.Prim()) && (rL.Dist() == rR.Dist()) && (rL.Secn() == rR.Secn()) &&
-        (rL.GetColorPrim() == rR.GetColorPrim()) && (rL.GetColorSecn() == rR.GetColorSecn()) &&
-        (rL.GetColorGap() == rR.GetColorGap()) && (rL.GetRefMode() == rR.GetRefMode()) &&
-        (rL.UseGapColor() == rR.UseGapColor() ) && (rL.Type() == rR.Type());
-}
+    if(!maImplStyle && !rOther.maImplStyle)
+    {
+        // are equal
+        return false;
+    }
 
-bool operator<( const Style& rL, const Style& rR )
-{
-    // different total widths -> rL<rR, if rL is thinner
-    double nLW = rL.GetWidth();
-    double nRW = rR.GetWidth();
+    // different total widths -> this<rOther, if this is thinner
+    double nLW = GetWidth();
+    double nRW = rOther.GetWidth();
     if( !rtl::math::approxEqual(nLW, nRW) ) return nLW < nRW;
 
-    // one line double, the other single -> rL<rR, if rL is single
-    if( (rL.Secn() == 0) != (rR.Secn() == 0) ) return rL.Secn() == 0;
+    // one line double, the other single -> this<rOther, if this is single
+    if( (Secn() == 0) != (rOther.Secn() == 0) ) return Secn() == 0;
 
-    // both lines double with different distances -> rL<rR, if distance of rL greater
-    if( (rL.Secn() && rR.Secn()) && !rtl::math::approxEqual(rL.Dist(), rR.Dist()) ) return rL.Dist() > rR.Dist();
+    // both lines double with different distances -> this<rOther, if distance of this greater
+    if( (Secn() && rOther.Secn()) && !rtl::math::approxEqual(Dist(), rOther.Dist()) ) return Dist() > rOther.Dist();
 
-    // both lines single and 1 unit thick, only one is dotted -> rL<rR, if rL is dotted
-    if( (nLW == 1) && (rL.Type() != rR.Type()) ) return rL.Type() != SvxBorderLineStyle::SOLID;
+    // both lines single and 1 unit thick, only one is dotted -> this<rOther, if this is dotted
+    if( (nLW == 1) && (Type() != rOther.Type()) ) return Type() != SvxBorderLineStyle::SOLID;
 
     // seem to be equal
     return false;
@@ -355,374 +357,531 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
         );
 }
 
-
 // Drawing functions
-struct OffsetPair
-{
-    double          mfLeft;
-    double          mfRight;
+// struct OffsetPair
+// {
+//     double          mfLeft;
+//     double          mfRight;
 
-    OffsetPair(double a, double b) : mfLeft(a), mfRight(b) {}
+//     OffsetPair(double a, double b) : mfLeft(a), mfRight(b) {}
+// };
+
+// struct OffsetCutSet
+// {
+//     double          mfLeftLeft;
+//     double          mfRightLeft;
+//     double          mfLeftRight;
+//     double          mfRightRight;
+// };
+
+// const OffsetCutSet* getMinMaxCutSet(bool bMin, const std::vector< OffsetCutSet >& myCutSets)
+// {
+//     if (myCutSets.empty())
+//     {
+//         return nullptr;
+//     }
+
+//     if (1 == myCutSets.size())
+//     {
+//         return &myCutSets[0];
+//     }
+
+//     const OffsetCutSet* pRetval = &myCutSets[0];
+//     double fRetval(pRetval->mfLeftLeft + pRetval->mfLeftRight + pRetval->mfRightLeft + pRetval->mfRightRight);
+
+//     for (size_t a(1); a < myCutSets.size(); a++)
+//     {
+//         const OffsetCutSet* pCandidate = &myCutSets[a];
+//         const double fCandidate(pCandidate->mfLeftLeft + pCandidate->mfLeftRight + pCandidate->mfRightLeft + pCandidate->mfRightRight);
+
+//         if ((bMin && fCandidate < fRetval) || (!bMin && fCandidate > fRetval))
+//         {
+//             pRetval = pCandidate;
+//             fRetval = fCandidate;
+//         }
+//     }
+
+//     return pRetval;
+// }
+
+// void getOffsetPairsFromStyle(const Style& rStyle, std::vector< OffsetPair >& offsets)
+// {
+//     if (rStyle.IsUsed())
+//     {
+//         if (rStyle.Dist() && rStyle.Secn())
+//         {
+//             // both lines used (or all three), push four values, from outer to inner
+//             switch (rStyle.GetRefMode())
+//             {
+//             case RefMode::Centered:
+//             {
+//                 const double fHalfFullWidth(rStyle.GetWidth() * 0.5);
+//                 offsets.push_back(OffsetPair(-fHalfFullWidth, rStyle.Prim() - fHalfFullWidth));
+//                 offsets.push_back(OffsetPair((rStyle.Prim() + rStyle.Dist()) - fHalfFullWidth, fHalfFullWidth));
+//                 break;
+//             }
+//             case RefMode::Begin:
+//             {
+//                 offsets.push_back(OffsetPair(0.0, rStyle.Prim()));
+//                 offsets.push_back(OffsetPair(rStyle.Prim() + rStyle.Dist(), rStyle.GetWidth()));
+//                 break;
+//             }
+//             default: // case RefMode::End:
+//             {
+//                 const double fFullWidth(rStyle.GetWidth());
+//                 offsets.push_back(OffsetPair(-fFullWidth, rStyle.Prim() - fFullWidth));
+//                 offsets.push_back(OffsetPair((rStyle.Prim() + rStyle.Dist()) - fFullWidth, 0.0));
+//                 break;
+//             }
+//             }
+//         }
+//         else
+//         {
+//             // one line used, push two values, from outer to inner
+//             switch (rStyle.GetRefMode())
+//             {
+//             case RefMode::Centered:
+//                 offsets.push_back(OffsetPair(rStyle.Prim() * -0.5, rStyle.Prim() * 0.5));
+//                 break;
+//             case RefMode::Begin:
+//                 offsets.push_back(OffsetPair(0.0, rStyle.Prim()));
+//                 break;
+//             default: // case RefMode::End:
+//                 offsets.push_back(OffsetPair(-rStyle.Prim(), 0.0));
+//                 break;
+//             }
+//         }
+//     }
+// }
+
+// void createCutsWithStyle(
+//     const basegfx::B2DPoint& rOrigin,
+//     const basegfx::B2DVector& rOtherVector,
+//     const basegfx::B2DVector& rOtherUnifiedPerpendicular,
+//     const OffsetPair& rOtherOffsets,
+//     const Style& rStyle,
+//     const basegfx::B2DVector& rMyVector,
+//     std::vector< OffsetCutSet>& rOtherCuts)
+// {
+//     if (rStyle.IsUsed())
+//     {
+//         // get values dependent on source vector
+//         const basegfx::B2DVector aMyUnifiedPerpendicular(basegfx::getNormalizedPerpendicular(rMyVector));
+//         const basegfx::B2DPoint aOtherPosLeft(rOrigin + (rOtherUnifiedPerpendicular * rOtherOffsets.mfLeft));
+//         const basegfx::B2DPoint aOtherPosRight(rOrigin + (rOtherUnifiedPerpendicular * rOtherOffsets.mfRight));
+//         std::vector< OffsetPair > myOffsets;
+
+//         // get offsets from outer to inner from target style (one or two)
+//         getOffsetPairsFromStyle(rStyle, myOffsets);
+
+//         for (const auto& myOffset : myOffsets)
+//         {
+//             // get values for new vectors and create all four cuts
+//             const basegfx::B2DPoint aMyPosLeft(rOrigin + (aMyUnifiedPerpendicular * myOffset.mfLeft));
+//             const basegfx::B2DPoint aMyPosRight(rOrigin + (aMyUnifiedPerpendicular * myOffset.mfRight));
+//             OffsetCutSet aNewCuts;
+
+//             basegfx::tools::findCut(
+//                 aOtherPosLeft,
+//                 rOtherVector,
+//                 aMyPosLeft,
+//                 rMyVector,
+//                 CutFlagValue::LINE,
+//                 &aNewCuts.mfLeftLeft);
+
+//             basegfx::tools::findCut(
+//                 aOtherPosLeft,
+//                 rOtherVector,
+//                 aMyPosRight,
+//                 rMyVector,
+//                 CutFlagValue::LINE,
+//                 &aNewCuts.mfLeftRight);
+
+//             basegfx::tools::findCut(
+//                 aOtherPosRight,
+//                 rOtherVector,
+//                 aMyPosLeft,
+//                 rMyVector,
+//                 CutFlagValue::LINE,
+//                 &aNewCuts.mfRightLeft);
+
+//             basegfx::tools::findCut(
+//                 aOtherPosRight,
+//                 rOtherVector,
+//                 aMyPosRight,
+//                 rMyVector,
+//                 CutFlagValue::LINE,
+//                 &aNewCuts.mfRightRight);
+
+//             rOtherCuts.push_back(aNewCuts);
+//         }
+//     }
+// }
+
+// double getSimpleExtendedLineValues(
+//     const basegfx::B2DPoint& rOrigin,
+//     const basegfx::B2DVector& rX,
+//     const basegfx::B2DVector& rY,
+//     const basegfx::B2DVector& rPerpendX,
+//     const OffsetPair& myOffset,
+//     const Style& rFirst,
+//     const Style& rSecond,
+//     bool bEdgeStart,
+//     double fLength)
+// {
+//     std::vector< OffsetCutSet > myCutSets;
+//     createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rFirst, rY, myCutSets);
+//     createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rSecond, rY, myCutSets);
+//     const OffsetCutSet* pResult = getMinMaxCutSet(bEdgeStart, myCutSets);
+
+//     if (pResult)
+//     {
+//         if (bEdgeStart)
+//         {
+//             return (pResult->mfLeftRight + pResult->mfRightRight) * -0.5 * fLength;
+//         }
+//         else
+//         {
+//             return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
+//         }
+//     }
+
+//     return 0.0;
+// }
+
+// double getComplexExtendedLineValues(
+//     const basegfx::B2DPoint& rOrigin,
+//     const basegfx::B2DVector& rX,
+//     const basegfx::B2DVector& rY,
+//     const basegfx::B2DVector& rPerpendX,
+//     const OffsetPair& myOffset,
+//     const Style& rFirst,
+//     const Style& rSecond,
+//     bool bEdgeStart,
+//     double fLength)
+// {
+//     std::vector< OffsetCutSet > myCutSets;
+//     createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rFirst, rY, myCutSets);
+//     const OffsetCutSet* pResult = getMinMaxCutSet(!bEdgeStart, myCutSets);
+
+//     if (!pResult)
+//     {
+//         createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rSecond, rY, myCutSets);
+//         pResult = getMinMaxCutSet(bEdgeStart, myCutSets);
+//     }
+
+//     if (pResult)
+//     {
+//         if (bEdgeStart)
+//         {
+//             return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * -fLength;
+//         }
+//         else
+//         {
+//             return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
+//         }
+//     }
+
+//     return 0.0;
+// }
+
+// void CreateBorderPrimitives(
+//     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+//     const basegfx::B2DPoint& rOrigin,
+//     const basegfx::B2DVector& rX,
+//     const basegfx::B2DVector& rY,
+//     const Style& rBorder,
+//     const Style& /*rLFromTR*/,
+//     const Style& rLFromT,
+//     const Style& /*rLFromL*/,
+//     const Style& rLFromB,
+//     const Style& /*rLFromBR*/,
+//     const Style& /*rRFromTL*/,
+//     const Style& rRFromT,
+//     const Style& /*rRFromR*/,
+//     const Style& rRFromB,
+//     const Style& /*rRFromBL*/,
+//     const Color* pForceColor)
+// {
+//     if (rBorder.IsUsed())
+//     {
+//         const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
+//         const double fLength(rX.getLength());
+
+//         // do not forget RefMode offset, primitive will assume RefMode::Centered
+//         basegfx::B2DVector aRefModeOffset;
+
+//         if (RefMode::Centered != rBorder.GetRefMode())
+//         {
+//             const double fHalfWidth(rBorder.GetWidth() * 0.5);
+
+//             if (RefMode::Begin == rBorder.GetRefMode())
+//             {
+//                 // move aligned below vector
+//                 aRefModeOffset = aPerpendX * fHalfWidth;
+//             }
+//             else if (RefMode::End == rBorder.GetRefMode())
+//             {
+//                 // move aligned above vector
+//                 aRefModeOffset = aPerpendX * -fHalfWidth;
+//             }
+//         }
+
+//         // create start/end (use RefMode)
+//         const basegfx::B2DPoint aStart(rOrigin + aRefModeOffset);
+//         const basegfx::B2DPoint aEnd(aStart + rX);
+
+//         // get offsets for my style (one or two)
+//         std::vector< OffsetPair > myOffsets;
+//         getOffsetPairsFromStyle(rBorder, myOffsets);
+
+//         if (1 == myOffsets.size())
+//         {
+//             // we are a single edge, calculate cuts with edges coming from above/below
+//             // to detect the line start/end extensions
+//             const OffsetPair& myOffset(myOffsets[0]);
+//             double mfExtendStart(0.0);
+//             double mfExtendEnd(0.0);
+
+//             // for start: get cuts with all left target styles and use the minimum
+//             mfExtendStart = getSimpleExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffset, rLFromT, rLFromB, true, fLength);
+
+//             // for end: get cuts with all right target styles and use the maximum
+//             mfExtendEnd = getSimpleExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffset, rRFromT, rRFromB, false, fLength);
+
+//             rTarget.append(
+//                 drawinglayer::primitive2d::Primitive2DReference(
+//                     new drawinglayer::primitive2d::BorderLinePrimitive2D(
+//                         aStart,
+//                         aEnd,
+//                         drawinglayer::primitive2d::BorderLine(
+//                             rBorder.Prim(),
+//                             (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
+//                             drawinglayer::primitive2d::BorderLineExtend(
+//                                 mfExtendStart,
+//                                 mfExtendEnd)),
+//                         rBorder.Type(),
+//                         rBorder.PatternScale())));
+//         }
+//         else if (2 == myOffsets.size())
+//         {
+//             // we are a double edge, calculate cuts with edges coming from above/below
+//             // for both edges to detect the line start/end extensions. In the future this
+//             // needs to be extended to use two values per extension, getComplexExtendedLineValues
+//             // internally prepares these already. drawinglayer::primitive2d::BorderLine will
+//             // then need to take these double entries (maybe a pair) and use them internally.
+//             double mfExtendLeftStart(0.0);
+//             double mfExtendLeftEnd(0.0);
+//             double mfExtendRightStart(0.0);
+//             double mfExtendRightEnd(0.0);
+
+//             // for start of first edge, get cuts with left targets. Start with upper and take maximum when
+//             // cut exists. Else use lower and take minimum when cut exists
+//             mfExtendLeftStart = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[0], rLFromT, rLFromB, true, fLength);
+
+//             // for end of first edge, get cuts with right targets. Start with upper and take minimum when
+//             // cut exists. Else use lower and take maximum when cut exists
+//             mfExtendLeftEnd = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[0], rRFromT, rRFromB, false, fLength);
+
+//             // for start of second edge, get cuts with left targets. Start with lower and take maximum when
+//             // cut exists. Else use upper and take minimum when cut exists
+//             mfExtendRightStart = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[1], rLFromB, rLFromT, true, fLength);
+
+//             // for end of second edge, get cuts with right targets. Start with lower and take minimum when
+//             // cut exists. Else use upper and take maximum when cut exists
+//             mfExtendRightEnd = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[1], rRFromB, rRFromT, false, fLength);
+
+//             // needs to be determined in detail later, for now use the max prolongation
+//             // from left/right, but do not less than half (0.0). This works decently,
+//             // but not perfect (see Writer, use three-color-style, look at upper/lower#
+//             // connections)
+//             const double fGapLeft(std::max(0.0, std::max(mfExtendLeftStart, mfExtendRightStart)));
+//             const double fGapRight(std::max(0.0, std::max(mfExtendLeftEnd, mfExtendRightEnd)));
+
+//             rTarget.append(
+//                 drawinglayer::primitive2d::Primitive2DReference(
+//                     new drawinglayer::primitive2d::BorderLinePrimitive2D(
+//                         aStart,
+//                         aEnd,
+//                         drawinglayer::primitive2d::BorderLine(
+//                             rBorder.Prim(),
+//                             (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
+//                             drawinglayer::primitive2d::BorderLineExtend(
+//                                 mfExtendLeftStart,
+//                                 mfExtendLeftEnd)),
+//                         drawinglayer::primitive2d::BorderLine(
+//                             rBorder.Dist(),
+//                             (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
+//                             drawinglayer::primitive2d::BorderLineExtend(
+//                                 fGapLeft,
+//                                 fGapRight)),
+//                         drawinglayer::primitive2d::BorderLine(
+//                             rBorder.Secn(),
+//                             (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
+//                             drawinglayer::primitive2d::BorderLineExtend(
+//                                 mfExtendRightStart,
+//                                 mfExtendRightEnd)),
+//                         rBorder.UseGapColor(),
+//                         rBorder.Type(),
+//                         rBorder.PatternScale())));
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct OffsetWidthColor
+{
+    double          mfOffset;
+    double          mfWidth;
+    Color           maColor;
+
+    OffsetWidthColor(double offset, double width, Color color) :
+        mfOffset(offset),
+        mfWidth(width),
+        maColor(color)
+    {}
 };
 
-struct OffsetCutSet
+struct CutSet
 {
-    double          mfLeftLeft;
-    double          mfRightLeft;
-    double          mfLeftRight;
-    double          mfRightRight;
+    double          mfOLML;
+    double          mfORML;
+    double          mfOLMR;
+    double          mfORMR;
 };
 
-const OffsetCutSet* getMinMaxCutSet(bool bMin, const std::vector< OffsetCutSet >& myCutSets)
-{
-    if (myCutSets.empty())
-    {
-        return nullptr;
-    }
-
-    if (1 == myCutSets.size())
-    {
-        return &myCutSets[0];
-    }
-
-    const OffsetCutSet* pRetval = &myCutSets[0];
-    double fRetval(pRetval->mfLeftLeft + pRetval->mfLeftRight + pRetval->mfRightLeft + pRetval->mfRightRight);
-
-    for (size_t a(1); a < myCutSets.size(); a++)
-    {
-        const OffsetCutSet* pCandidate = &myCutSets[a];
-        const double fCandidate(pCandidate->mfLeftLeft + pCandidate->mfLeftRight + pCandidate->mfRightLeft + pCandidate->mfRightRight);
-
-        if ((bMin && fCandidate < fRetval) || (!bMin && fCandidate > fRetval))
-        {
-            pRetval = pCandidate;
-            fRetval = fCandidate;
-        }
-    }
-
-    return pRetval;
-}
-
-void getOffsetPairsFromStyle(const Style& rStyle, std::vector< OffsetPair >& offsets)
+void getOffsetWidthColorFromStyle(const Style& rStyle, std::vector< OffsetWidthColor >& offsets)
 {
     if (rStyle.IsUsed())
     {
+        // do not forget RefMode offset, primitive is free of it
+        double fRefModeOffset(0.0);
+
+        if (RefMode::Centered != rStyle.GetRefMode())
+        {
+            const double fHalfWidth(rStyle.GetWidth() * 0.5);
+
+            if (RefMode::Begin == rStyle.GetRefMode())
+            {
+                // move aligned below vector
+                fRefModeOffset = fHalfWidth;
+            }
+            else if (RefMode::End == rStyle.GetRefMode())
+            {
+                // move aligned above vector
+                fRefModeOffset = -fHalfWidth;
+            }
+        }
+
         if (rStyle.Dist() && rStyle.Secn())
         {
-            // both lines used (or all three), push four values, from outer to inner
-            switch (rStyle.GetRefMode())
+            // both or all three lines used
+            const double a(fRefModeOffset - (rStyle.GetWidth() * 0.5));
+            const double b(a + rStyle.Prim());
+            const double c(b + rStyle.Dist());
+            const double d(c + rStyle.Secn());
+
+            if(0xff != rStyle.GetColorPrim().GetTransparency())
             {
-            case RefMode::Centered:
-            {
-                const double fHalfFullWidth(rStyle.GetWidth() * 0.5);
-                offsets.push_back(OffsetPair(-fHalfFullWidth, rStyle.Prim() - fHalfFullWidth));
-                offsets.push_back(OffsetPair((rStyle.Prim() + rStyle.Dist()) - fHalfFullWidth, fHalfFullWidth));
-                break;
+                offsets.push_back(OffsetWidthColor((a + b) * 0.5, rStyle.Prim(), rStyle.GetColorPrim()));
             }
-            case RefMode::Begin:
+
+            if(0xff != rStyle.GetColorGap().GetTransparency() && rStyle.UseGapColor())
             {
-                offsets.push_back(OffsetPair(0.0, rStyle.Prim()));
-                offsets.push_back(OffsetPair(rStyle.Prim() + rStyle.Dist(), rStyle.GetWidth()));
-                break;
+                offsets.push_back(OffsetWidthColor((b + c) * 0.5, rStyle.Dist(), rStyle.GetColorGap()));
             }
-            default: // case RefMode::End:
+
+            if(0xff != rStyle.GetColorSecn().GetTransparency())
             {
-                const double fFullWidth(rStyle.GetWidth());
-                offsets.push_back(OffsetPair(-fFullWidth, rStyle.Prim() - fFullWidth));
-                offsets.push_back(OffsetPair((rStyle.Prim() + rStyle.Dist()) - fFullWidth, 0.0));
-                break;
-            }
+                offsets.push_back(OffsetWidthColor((c + d) * 0.5, rStyle.Secn(), rStyle.GetColorSecn()));
             }
         }
         else
         {
             // one line used, push two values, from outer to inner
-            switch (rStyle.GetRefMode())
+            if(0xff != rStyle.GetColorPrim().GetTransparency())
             {
-            case RefMode::Centered:
-                offsets.push_back(OffsetPair(rStyle.Prim() * -0.5, rStyle.Prim() * 0.5));
-                break;
-            case RefMode::Begin:
-                offsets.push_back(OffsetPair(0.0, rStyle.Prim()));
-                break;
-            default: // case RefMode::End:
-                offsets.push_back(OffsetPair(-rStyle.Prim(), 0.0));
-                break;
+                offsets.push_back(OffsetWidthColor(fRefModeOffset, rStyle.Prim(), rStyle.GetColorPrim()));
             }
         }
     }
 }
 
-void createCutsWithStyle(
-    const basegfx::B2DPoint& rOrigin,
-    const basegfx::B2DVector& rOtherVector,
-    const basegfx::B2DVector& rOtherUnifiedPerpendicular,
-    const OffsetPair& rOtherOffsets,
-    const Style& rStyle,
-    const basegfx::B2DVector& rMyVector,
-    std::vector< OffsetCutSet>& rOtherCuts)
-{
-    if (rStyle.IsUsed())
-    {
-        // get values dependent on source vector
-        const basegfx::B2DVector aMyUnifiedPerpendicular(basegfx::getNormalizedPerpendicular(rMyVector));
-        const basegfx::B2DPoint aOtherPosLeft(rOrigin + (rOtherUnifiedPerpendicular * rOtherOffsets.mfLeft));
-        const basegfx::B2DPoint aOtherPosRight(rOrigin + (rOtherUnifiedPerpendicular * rOtherOffsets.mfRight));
-        std::vector< OffsetPair > myOffsets;
-
-        // get offsets from outer to inner from target style (one or two)
-        getOffsetPairsFromStyle(rStyle, myOffsets);
-
-        for (const auto& myOffset : myOffsets)
-        {
-            // get values for new vectors and create all four cuts
-            const basegfx::B2DPoint aMyPosLeft(rOrigin + (aMyUnifiedPerpendicular * myOffset.mfLeft));
-            const basegfx::B2DPoint aMyPosRight(rOrigin + (aMyUnifiedPerpendicular * myOffset.mfRight));
-            OffsetCutSet aNewCuts;
-
-            basegfx::tools::findCut(
-                aOtherPosLeft,
-                rOtherVector,
-                aMyPosLeft,
-                rMyVector,
-                CutFlagValue::LINE,
-                &aNewCuts.mfLeftLeft);
-
-            basegfx::tools::findCut(
-                aOtherPosLeft,
-                rOtherVector,
-                aMyPosRight,
-                rMyVector,
-                CutFlagValue::LINE,
-                &aNewCuts.mfLeftRight);
-
-            basegfx::tools::findCut(
-                aOtherPosRight,
-                rOtherVector,
-                aMyPosLeft,
-                rMyVector,
-                CutFlagValue::LINE,
-                &aNewCuts.mfRightLeft);
-
-            basegfx::tools::findCut(
-                aOtherPosRight,
-                rOtherVector,
-                aMyPosRight,
-                rMyVector,
-                CutFlagValue::LINE,
-                &aNewCuts.mfRightRight);
-
-            rOtherCuts.push_back(aNewCuts);
-        }
-    }
-}
-
-double getSimpleExtendedLineValues(
+void findCutsWithStyleVectorTable(
+    std::vector< CutSet >& rCutSet,
     const basegfx::B2DPoint& rOrigin,
     const basegfx::B2DVector& rX,
-    const basegfx::B2DVector& rY,
-    const basegfx::B2DVector& rPerpendX,
-    const OffsetPair& myOffset,
-    const Style& rFirst,
-    const Style& rSecond,
-    bool bEdgeStart,
-    double fLength)
+    double fOffset,
+    double fHalfWidth,
+    const StyleVectorTable& rStyleVectorTable)
 {
-    std::vector< OffsetCutSet > myCutSets;
-    createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rFirst, rY, myCutSets);
-    createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rSecond, rY, myCutSets);
-    const OffsetCutSet* pResult = getMinMaxCutSet(bEdgeStart, myCutSets);
+    const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(rX));
+    basegfx::B2DPoint aMyLeft(rOrigin + (aY * (fOffset - fHalfWidth)));
+    basegfx::B2DPoint aMyRight(rOrigin + (aY * (fOffset + fHalfWidth)));
 
-    if (pResult)
+    for(const auto& style : rStyleVectorTable)
     {
-        if (bEdgeStart)
+        std::vector< OffsetWidthColor > myOffsets;
+        getOffsetWidthColorFromStyle(style.getStyle(), myOffsets);
+        const basegfx::B2DVector aOtherY(basegfx::getNormalizedPerpendicular(style.getB2DVector()));
+
+        for(const auto& offset : myOffsets)
         {
-            return (pResult->mfLeftRight + pResult->mfRightRight) * -0.5 * fLength;
-        }
-        else
-        {
-            return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
-        }
-    }
+            basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherY * (offset.mfOffset - (offset.mfWidth * 0.5))));
+            basegfx::B2DPoint aOtherRight(rOrigin + (aOtherY * (offset.mfOffset + (offset.mfWidth * 0.5))));
+            CutSet aNewCuts;
 
-    return 0.0;
-}
+            basegfx::tools::findCut(
+                aOtherLeft,
+                style.getB2DVector(),
+                aMyLeft,
+                rX,
+                CutFlagValue::LINE,
+                &aNewCuts.mfOLML);
 
-double getComplexExtendedLineValues(
-    const basegfx::B2DPoint& rOrigin,
-    const basegfx::B2DVector& rX,
-    const basegfx::B2DVector& rY,
-    const basegfx::B2DVector& rPerpendX,
-    const OffsetPair& myOffset,
-    const Style& rFirst,
-    const Style& rSecond,
-    bool bEdgeStart,
-    double fLength)
-{
-    std::vector< OffsetCutSet > myCutSets;
-    createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rFirst, rY, myCutSets);
-    const OffsetCutSet* pResult = getMinMaxCutSet(!bEdgeStart, myCutSets);
+            basegfx::tools::findCut(
+                aOtherLeft,
+                style.getB2DVector(),
+                aMyRight,
+                rX,
+                CutFlagValue::LINE,
+                &aNewCuts.mfOLMR);
 
-    if (!pResult)
-    {
-        createCutsWithStyle(rOrigin, rX, rPerpendX, myOffset, rSecond, rY, myCutSets);
-        pResult = getMinMaxCutSet(bEdgeStart, myCutSets);
-    }
+            basegfx::tools::findCut(
+                aOtherRight,
+                style.getB2DVector(),
+                aMyLeft,
+                rX,
+                CutFlagValue::LINE,
+                &aNewCuts.mfORML);
 
-    if (pResult)
-    {
-        if (bEdgeStart)
-        {
-            return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * -fLength;
-        }
-        else
-        {
-            return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
-        }
-    }
+            basegfx::tools::findCut(
+                aOtherRight,
+                style.getB2DVector(),
+                aMyRight,
+                rX,
+                CutFlagValue::LINE,
+                &aNewCuts.mfORMR);
 
-    return 0.0;
-}
-
-void CreateBorderPrimitives(
-    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-    const basegfx::B2DPoint& rOrigin,
-    const basegfx::B2DVector& rX,
-    const basegfx::B2DVector& rY,
-    const Style& rBorder,
-    const Style& /*rLFromTR*/,
-    const Style& rLFromT,
-    const Style& /*rLFromL*/,
-    const Style& rLFromB,
-    const Style& /*rLFromBR*/,
-    const Style& /*rRFromTL*/,
-    const Style& rRFromT,
-    const Style& /*rRFromR*/,
-    const Style& rRFromB,
-    const Style& /*rRFromBL*/,
-    const Color* pForceColor)
-{
-    if (rBorder.IsUsed())
-    {
-        const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
-        const double fLength(rX.getLength());
-
-        // do not forget RefMode offset, primitive will assume RefMode::Centered
-        basegfx::B2DVector aRefModeOffset;
-
-        if (RefMode::Centered != rBorder.GetRefMode())
-        {
-            const double fHalfWidth(rBorder.GetWidth() * 0.5);
-
-            if (RefMode::Begin == rBorder.GetRefMode())
-            {
-                // move aligned below vector
-                aRefModeOffset = aPerpendX * fHalfWidth;
-            }
-            else if (RefMode::End == rBorder.GetRefMode())
-            {
-                // move aligned above vector
-                aRefModeOffset = aPerpendX * -fHalfWidth;
-            }
-        }
-
-        // create start/end (use RefMode)
-        const basegfx::B2DPoint aStart(rOrigin + aRefModeOffset);
-        const basegfx::B2DPoint aEnd(aStart + rX);
-
-        // get offsets for my style (one or two)
-        std::vector< OffsetPair > myOffsets;
-        getOffsetPairsFromStyle(rBorder, myOffsets);
-
-        if (1 == myOffsets.size())
-        {
-            // we are a single edge, calculate cuts with edges coming from above/below
-            // to detect the line start/end extensions
-            const OffsetPair& myOffset(myOffsets[0]);
-            double mfExtendStart(0.0);
-            double mfExtendEnd(0.0);
-
-            // for start: get cuts with all left target styles and use the minimum
-            mfExtendStart = getSimpleExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffset, rLFromT, rLFromB, true, fLength);
-
-            // for end: get cuts with all right target styles and use the maximum
-            mfExtendEnd = getSimpleExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffset, rRFromT, rRFromB, false, fLength);
-
-            rTarget.append(
-                drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                        aStart,
-                        aEnd,
-                        drawinglayer::primitive2d::BorderLine(
-                            rBorder.Prim(),
-                            (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
-                            drawinglayer::primitive2d::BorderLineExtend(
-                                mfExtendStart,
-                                mfExtendEnd)),
-                        rBorder.Type(),
-                        rBorder.PatternScale())));
-        }
-        else if (2 == myOffsets.size())
-        {
-            // we are a double edge, calculate cuts with edges coming from above/below
-            // for both edges to detect the line start/end extensions. In the future this
-            // needs to be extended to use two values per extension, getComplexExtendedLineValues
-            // internally prepares these already. drawinglayer::primitive2d::BorderLine will
-            // then need to take these double entries (maybe a pair) and use them internally.
-            double mfExtendLeftStart(0.0);
-            double mfExtendLeftEnd(0.0);
-            double mfExtendRightStart(0.0);
-            double mfExtendRightEnd(0.0);
-
-            // for start of first edge, get cuts with left targets. Start with upper and take maximum when
-            // cut exists. Else use lower and take minimum when cut exists
-            mfExtendLeftStart = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[0], rLFromT, rLFromB, true, fLength);
-
-            // for end of first edge, get cuts with right targets. Start with upper and take minimum when
-            // cut exists. Else use lower and take maximum when cut exists
-            mfExtendLeftEnd = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[0], rRFromT, rRFromB, false, fLength);
-
-            // for start of second edge, get cuts with left targets. Start with lower and take maximum when
-            // cut exists. Else use upper and take minimum when cut exists
-            mfExtendRightStart = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[1], rLFromB, rLFromT, true, fLength);
-
-            // for end of second edge, get cuts with right targets. Start with lower and take minimum when
-            // cut exists. Else use upper and take maximum when cut exists
-            mfExtendRightEnd = getComplexExtendedLineValues(rOrigin, rX, rY, aPerpendX, myOffsets[1], rRFromB, rRFromT, false, fLength);
-
-            // needs to be determined in detail later, for now use the max prolongation
-            // from left/right, but do not less than half (0.0). This works decently,
-            // but not perfect (see Writer, use three-color-style, look at upper/lower#
-            // connections)
-            const double fGapLeft(std::max(0.0, std::max(mfExtendLeftStart, mfExtendRightStart)));
-            const double fGapRight(std::max(0.0, std::max(mfExtendLeftEnd, mfExtendRightEnd)));
-
-            rTarget.append(
-                drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                        aStart,
-                        aEnd,
-                        drawinglayer::primitive2d::BorderLine(
-                            rBorder.Prim(),
-                            (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
-                            drawinglayer::primitive2d::BorderLineExtend(
-                                mfExtendLeftStart,
-                                mfExtendLeftEnd)),
-                        drawinglayer::primitive2d::BorderLine(
-                            rBorder.Dist(),
-                            (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
-                            drawinglayer::primitive2d::BorderLineExtend(
-                                fGapLeft,
-                                fGapRight)),
-                        drawinglayer::primitive2d::BorderLine(
-                            rBorder.Secn(),
-                            (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
-                            drawinglayer::primitive2d::BorderLineExtend(
-                                mfExtendRightStart,
-                                mfExtendRightEnd)),
-                        rBorder.UseGapColor(),
-                        rBorder.Type(),
-                        rBorder.PatternScale())));
+            rCutSet.push_back(aNewCuts);
         }
     }
 }
@@ -736,32 +895,80 @@ void CreateBorderPrimitives(
     const StyleVectorTable& rEndStyleVectorTable,
     const Color* pForceColor)
 {
-    /// rough mapping for testing
-    if (rBorder.IsUsed())
+    // get offset color pairs for  style, one per visible line
+    std::vector< OffsetWidthColor > myOffsets;
+    getOffsetWidthColorFromStyle(rBorder, myOffsets);
+
+    if(!myOffsets.empty())
     {
-        const size_t nStart(rStartStyleVectorTable.size());
-        const size_t nEnd(rEndStyleVectorTable.size());
+        const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
+        const bool bHasStartStyles(!rStartStyleVectorTable.empty());
+        const bool bHasEndStyles(!rEndStyleVectorTable.empty());
 
-        CreateBorderPrimitives(
-            rTarget,
-            rOrigin,
-            rX,
-            basegfx::getNormalizedPerpendicular(rX),
-            rBorder,
+        if(bHasStartStyles || bHasEndStyles)
+        {
+            // we have start/end styles, get offset values
+            double fExtStartLeft(0.0);
+            double fExtStartRight(0.0);
+            double fExtEndLeft(0.0);
+            double fExtEndRight(0.0);
 
-            2 == nStart ? rStartStyleVectorTable[0].getStyle() : 5 == nStart ? rStartStyleVectorTable[0].getStyle() : Style(),
-            5 == nStart ? rStartStyleVectorTable[1].getStyle() : Style(),
-            5 == nStart ? rStartStyleVectorTable[2].getStyle() : Style(),
-            5 == nStart ? rStartStyleVectorTable[3].getStyle() : Style(),
-            2 == nStart ? rStartStyleVectorTable[1].getStyle() : 5 == nStart ? rStartStyleVectorTable[4].getStyle() : Style(),
+            for(const auto& offset : myOffsets)
+            {
+                const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * offset.mfOffset));
+                const basegfx::B2DPoint aEnd(aStart + rX);
 
-            2 == nEnd ? rEndStyleVectorTable[0].getStyle() : 5 == nEnd ? rEndStyleVectorTable[0].getStyle() : Style(),
-            5 == nEnd ? rEndStyleVectorTable[1].getStyle() : Style(),
-            5 == nEnd ? rEndStyleVectorTable[2].getStyle() : Style(),
-            5 == nEnd ? rEndStyleVectorTable[3].getStyle() : Style(),
-            2 == nEnd ? rEndStyleVectorTable[1].getStyle() : 5 == nEnd ? rEndStyleVectorTable[4].getStyle() : Style(),
+                if(bHasStartStyles)
+                {
+                    // create extends for line starts
+                    std::vector< CutSet > aStartCutSet;
+                    findCutsWithStyleVectorTable(aStartCutSet, rOrigin, rX, offset.mfOffset, offset.mfWidth * 0.5, rStartStyleVectorTable);
+                }
 
-            pForceColor);
+                if(bHasEndStyles)
+                {
+                    // create extends for line ends
+                    std::vector< CutSet > aEndCutSet;
+                    findCutsWithStyleVectorTable(aEndCutSet, rOrigin + rX, -rX, -offset.mfOffset, offset.mfWidth * 0.5, rStartStyleVectorTable);
+                }
+
+                rTarget.append(
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                            aStart,
+                            aEnd,
+                            drawinglayer::primitive2d::BorderLine(
+                                offset.mfWidth,
+                                (pForceColor ? *pForceColor : offset.maColor).getBColor(),
+                                drawinglayer::primitive2d::BorderLineExtend(
+                                    fExtStartLeft,
+                                    fExtStartRight,
+                                    fExtEndLeft,
+                                    fExtEndRight)),
+                            rBorder.Type(),
+                            rBorder.PatternScale())));
+            }
+        }
+        else
+        {
+            // no start/end styles, just create simple BorderLinePrimitive2D
+            // for each local partial line
+            for(const auto& offset : myOffsets)
+            {
+                const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * offset.mfOffset));
+                const basegfx::B2DPoint aEnd(aStart + rX);
+                rTarget.append(
+                    drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                            aStart,
+                            aEnd,
+                            drawinglayer::primitive2d::BorderLine(
+                                offset.mfWidth,
+                                (pForceColor ? *pForceColor : offset.maColor).getBColor()),
+                            rBorder.Type(),
+                            rBorder.PatternScale())));
+            }
+        }
     }
 }
 

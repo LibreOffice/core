@@ -123,7 +123,6 @@ private:
         double              mfSecn;     /// Width of secondary (right or bottom) line.
         double              mfPatternScale; /// Scale used for line pattern spacing.
         SvxBorderLineStyle  mnType;
-        const Cell*         mpUsingCell;
 
     public:
         /** Constructs an invisible frame style. */
@@ -137,13 +136,16 @@ private:
             mfDist(0.0),
             mfSecn(0.0),
             mfPatternScale(1.0),
-            mnType(SvxBorderLineStyle::SOLID),
-            mpUsingCell(nullptr)
+            mnType(SvxBorderLineStyle::SOLID)
         {}
     };
 
     /// the impl class holding the data
     std::shared_ptr< implStyle >        maImplStyle;
+
+    /// pointer to Cell using this style. Not member of the
+    /// impl class since multiple Cells may use the same style
+    const Cell*                         mpUsingCell;
 
     /// call to set maImplStyle on demand
     void implEnsureImplStyle();
@@ -151,7 +153,7 @@ private:
     /// need information which cell this style info comes from due to needed
     /// rotation info (which is in the cell). Rotation depends on the cell.
     friend class Cell;
-    void SetUsingCell(const Cell* pCell);
+    void SetUsingCell(const Cell* pCell) { mpUsingCell = pCell; }
 
 public:
     /** Constructs an invisible frame style. */
@@ -160,7 +162,7 @@ public:
     explicit Style( double nP, double nD, double nS, SvxBorderLineStyle nType );
     /** Constructs a frame style with passed color and line widths. */
     explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType );
-    /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
+    /** Constructs a frame style from the passed SvxBorderLine struct. */
     explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0 );
 
     RefMode GetRefMode() const { if(!maImplStyle) return RefMode::Centered; return maImplStyle->meRefMode; }
@@ -171,7 +173,7 @@ public:
     double Prim() const { if(!maImplStyle) return 0.0; return maImplStyle->mfPrim; }
     double Dist() const { if(!maImplStyle) return 0.0; return maImplStyle->mfDist; }
     double Secn() const { if(!maImplStyle) return 0.0; return maImplStyle->mfSecn; }
-    double PatternScale() const { if(!maImplStyle) return 0.0; return maImplStyle->mfPatternScale;}
+    double PatternScale() const { if(!maImplStyle) return 1.0; return maImplStyle->mfPatternScale;}
     void SetPatternScale( double fScale );
     SvxBorderLineStyle Type() const { if(!maImplStyle) return SvxBorderLineStyle::SOLID; return maImplStyle->mnType; }
 
@@ -188,9 +190,7 @@ public:
     void Set( double nP, double nD, double nS );
     /** Sets the frame style to the passed line widths. */
     void Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS );
-    /** Sets the frame style to the passed SvxBorderLine struct. */
-    void Set( const editeng::SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
-    /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
+    /** Sets the frame style to the passed SvxBorderLine struct. If nullptr, resets the style */
     void Set( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
@@ -205,12 +205,13 @@ public:
     Style& MirrorSelf();
 
     /** return the Cell using this style (if set) */
-    const Cell* GetUsingCell() const;
+    const Cell* GetUsingCell() const { return mpUsingCell; }
+
+    bool operator==( const Style& rOther) const;
+    bool operator<( const Style& rOther) const;
 };
 
-bool operator==( const Style& rL, const Style& rR );
-SVX_DLLPUBLIC bool operator<( const Style& rL, const Style& rR );
-inline bool operator>( const Style& rL, const Style& rR ) { return rR < rL; }
+inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(rL); }
 
 // Various helper functions
 
@@ -257,66 +258,6 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
 
 
 // Drawing functions
-
-
-/** Draws a horizontal frame border, regards all connected frame styles.
-
-    The frame style to draw is passed as parameter rBorder. The function
-    calculates the adjustment in X direction for left and right end of primary
-    and secondary line of the frame border (the style may present a double
-    line). The line ends may differ according to the connected frame styles
-    coming from top, bottom, left, right, and/or diagonal.
-
-    Thick frame styles are always drawn centered (in width) to the passed
-    reference points. The Y coordinates of both reference points must be equal
-    (the line cannot be drawn slanted).
-
-    The function preserves all settings of the passed output device.
-
-    All parameters starting with "rL" refer to the left end of the processed
-    frame border, all parameters starting with "rR" refer to the right end.
-    The following part of the parameter name starting with "From" specifies
-    where the frame border comes from. Example: "rLFromTR" means the frame
-    border coming from top-right, connected to the left end of rBorder (and
-    therefore a diagonal frame border).
-
-    The following picture shows the meaning of all passed parameters:
-
-                 rLFromT      /                   \      rRFromT
-                    |       /                       \       |
-                    |   rLFromTR               rRFromTL     |
-                    |   /                               \   |
-                    | /                                   \ |
-    --- rLFromL ---   ============== rBorder ==============   --- rRFromR ---
-                    | \                                   / |
-                    |   \                               /   |
-                    |   rLFromBR               rRFromBL     |
-                    |       \                       /       |
-                 rLFromB      \                   /      rRFromB
- */
-SVX_DLLPUBLIC void CreateBorderPrimitives(
-    drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
-
-    const basegfx::B2DPoint&    rOrigin,    /// start point of borderline
-    const basegfx::B2DVector&   rX,         /// X-Axis with length
-    const basegfx::B2DVector&   rY,         /// Y-Axis for perpendicular, normalized. Does *not* need to be perpendicular, but may express a rotation
-
-    const Style&        rBorder,        /// Style of the processed frame border.
-
-    const Style&        rLFromTR,       /// Diagonal frame border from top-right to left end of rBorder.
-    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
-    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
-    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
-    const Style&        rLFromBR,       /// Diagonal frame border from bottom-right to left end of rBorder.
-
-    const Style&        rRFromTL,       /// Diagonal frame border from top-left to right end of rBorder.
-    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
-    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
-    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
-    const Style&        rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
-
-    const Color*        pForceColor     /// If specified, overrides frame border color.
-);
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorCombination
 {

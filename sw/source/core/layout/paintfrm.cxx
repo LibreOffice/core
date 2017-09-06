@@ -2745,7 +2745,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     aPaintEnd.Y() = aUpperAligned.Bottom_();
             }
 
-            if(aStyles[0].Prim())
+            if(aStyles[0].IsUsed())
             {
                 drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
@@ -2760,13 +2760,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         svx::frame::StyleVectorTable aStartTable;
                         svx::frame::StyleVectorTable aEndTable;
 
-                        if(aStyles[ 1 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], -aY)); // aLFromT
-                        if(aStyles[ 2 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aLFromL
-                        if(aStyles[ 3 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], aY)); // aLFromB
+                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], -aY)); // aLFromT
+                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aLFromL
+                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], aY)); // aLFromB
 
-                        if(aStyles[ 4 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], -aY)); // aRFromT
-                        if(aStyles[ 5 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aRFromR
-                        if(aStyles[ 6 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY)); // aRFromB
+                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], -aY)); // aRFromT
+                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aRFromR
+                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY)); // aRFromB
 
                         CreateBorderPrimitives(
                             aSequence,
@@ -2790,13 +2790,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         svx::frame::StyleVectorTable aStartTable;
                         svx::frame::StyleVectorTable aEndTable;
 
-                        if(aStyles[ 3 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], -aY)); // aTFromR
-                        if(aStyles[ 2 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aTFromT
-                        if(aStyles[ 1 ].Prim()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], aY)); // aTFromL
+                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], -aY)); // aTFromR
+                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aTFromT
+                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], aY)); // aTFromL
 
-                        if(aStyles[ 6 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], -aY)); // aBFromR
-                        if(aStyles[ 5 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aBFromB
-                        if(aStyles[ 4 ].Prim()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY)); // aBFromL
+                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], -aY)); // aBFromR
+                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aBFromB
+                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY)); // aBFromL
 
                         CreateBorderPrimitives(
                             aSequence,
@@ -2965,14 +2965,14 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     const Fraction& rFracX = rMapMode.GetScaleX();
     const Fraction& rFracY = rMapMode.GetScaleY();
 
-    svx::frame::Style aL(rBoxItem.GetLeft());
-    aL.SetPatternScale(rFracY);
-    svx::frame::Style aR(rBoxItem.GetRight());
-    aR.SetPatternScale(rFracY);
-    svx::frame::Style aT(rBoxItem.GetTop());
-    aT.SetPatternScale(rFracX);
-    svx::frame::Style aB(rBoxItem.GetBottom());
-    aB.SetPatternScale(rFracX);
+    svx::frame::Style aL(rBoxItem.GetLeft(), rFracY);
+//    aL.SetPatternScale(rFracY);
+    svx::frame::Style aR(rBoxItem.GetRight(), rFracY);
+//    aR.SetPatternScale(rFracY);
+    svx::frame::Style aT(rBoxItem.GetTop(), rFracX);
+//    aT.SetPatternScale(rFracX);
+    svx::frame::Style aB(rBoxItem.GetBottom(), rFracX);
+//    aB.SetPatternScale(rFracX);
 
     aR.MirrorSelf();
     aB.MirrorSelf();
