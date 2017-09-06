@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0e880222",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3192,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-09-06T19:27:52Z",
+      "side": 1,
+      "message": "This is only needed to avoid crash because xstorage can\u0027t fully remove element and throws an exception...\n\nThat condition seems to be broken:\nhttps://opengrok.libreoffice.org/xref/core/package/source/xstor/xstorage.cxx#1516-1519",
+      "revId": "421782d57c195f2ea488d4d0d05cf69f9327e772",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
