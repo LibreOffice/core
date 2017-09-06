@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
 
+#define MAXBITMAPWIDTH 65536
+
 #include <svtools/transfer.hxx>
 #include "global.hxx"
 #include "address.hxx"
@@ -34,6 +36,9 @@ enum class ScDragSrc;
 namespace com { namespace sun { namespace star {
     namespace sheet {
         class XSheetCellRanges;
+    }
+    namespace datatransfer {
+        struct DataFlavor;
     }
 }}}
 
@@ -68,6 +73,7 @@ private:
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                             const ScRange& rBlock );
     static void GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
+    bool SetBitmapExWrapper( const BitmapEx& rBitmapEx, const css::datatransfer::DataFlavor& rFlavor, bool bCatchException );
 
 public:
             ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc );

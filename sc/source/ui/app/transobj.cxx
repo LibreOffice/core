@@ -247,6 +247,33 @@ void ScTransferObj::AddSupportedFormats()
     }
 }
 
+bool ScTransferObj::SetBitmapExWrapper( const BitmapEx& rBitmapEx, const datatransfer::DataFlavor& rFlavor, bool bCatchException )
+{
+    bool bOK = false;
+    if ( bCatchException )
+    {
+#ifdef _WIN32
+        __try
+#else
+        try
+#endif
+        {
+            bOK = SetBitmapEx( rBitmapEx, rFlavor );
+        }
+#ifdef _WIN32
+        __except(EXCEPTION_EXECUTE_HANDLER)
+#else
+        catch ( const css::uno::Exception& )
+#endif
+        {
+        }
+    }
+    else
+        bOK = SetBitmapEx( rBitmapEx, rFlavor );
+
+    return bOK;
+}
+
 bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
@@ -354,6 +381,15 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             tools::Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),
                                                  aBlock.aStart.Tab() );
+            bool bCroppedWidth = false;
+            Size aSize = aMMRect.GetSize();
+            if ( aSize.Width() > MAXBITMAPWIDTH )
+            {
+                aSize.Width() = MAXBITMAPWIDTH;
+                aMMRect.SetSize( aSize );
+                bCroppedWidth = true;
+            }
+
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
             pVirtDev->SetOutputSizePixel( pVirtDev->LogicToPixel( aMMRect.GetSize(), MapUnit::Map100thMM ) );
 
@@ -361,7 +397,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel ) );
             Bitmap aBmp = pVirtDev->GetBitmap( Point(), pVirtDev->GetOutputSize() );
-            bOK = SetBitmapEx( aBmp, rFlavor );
+            bOK = SetBitmapExWrapper( aBmp, rFlavor, bCroppedWidth );
         }
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
