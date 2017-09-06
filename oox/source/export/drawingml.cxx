@@ -967,12 +967,24 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     bool bEmbed = rURL.startsWith("vnd.sun.star.Package:");
 
     // mime type
-    // TODO add more types explicitly based on the extension (?)
-    OUString aMimeType;
-    if (aExtension.equalsIgnoreAsciiCase(".wmv"))
-        aMimeType = "video/x-ms-wmv";
-    else
-        aMimeType = pMediaObj->getMediaProperties().getMimeType();
+    OUString aMimeType(pMediaObj->getMediaProperties().getMimeType());
+    if (aMimeType == "application/vnd.sun.star.media")
+    {
+        // try to set something better
+        // TODO fix the importer to actually set the mimetype on import
+        if (aExtension.equalsIgnoreAsciiCase(".avi"))
+            aMimeType = "video/x-msvideo";
+        else if (aExtension.equalsIgnoreAsciiCase(".flv"))
+            aMimeType = "video/x-flv";
+        else if (aExtension.equalsIgnoreAsciiCase(".mp4"))
+            aMimeType = "video/mp4";
+        else if (aExtension.equalsIgnoreAsciiCase(".mov"))
+            aMimeType = "video/quicktime";
+        else if (aExtension.equalsIgnoreAsciiCase(".ogv"))
+            aMimeType = "video/ogg";
+        else if (aExtension.equalsIgnoreAsciiCase(".wmv"))
+            aMimeType = "video/x-ms-wmv";
+    }
 
     OUString aVideoFileRelId;
     OUString aMediaRelId;
