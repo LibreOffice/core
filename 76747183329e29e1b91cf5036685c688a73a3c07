@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bb6f2e91",
+        "filename": "svx/source/svdraw/svdibrow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-06T06:48:45Z",
+      "side": 1,
+      "message": "the\n   if (pEntry\npart looks like it can never be false, can probably be removed",
+      "revId": "76747183329e29e1b91cf5036685c688a73a3c07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
