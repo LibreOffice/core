@@ -14,6 +14,37 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+
+/// Looks for rName in rAutomaticStyles (and failing that, in rNamedStyles) and fills rPropertyList based on that.
+void FillStyle(const OUString &rName,
+               std::map<OUString, librevenge::RVNGPropertyList> &rNamedStyles,
+               std::map<OUString, librevenge::RVNGPropertyList> &rAutomaticStyles,
+               librevenge::RVNGPropertyList &rPropertyList)
+{
+    auto itStyle = rAutomaticStyles.find(rName);
+    if (itStyle != rAutomaticStyles.end())
+    {
+        // Apply properties from automatic style.
+        librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+        for (itProp.rewind(); itProp.next();)
+            rPropertyList.insert(itProp.key(), itProp()->clone());
+        return;
+    }
+
+    itStyle = rNamedStyles.find(rName);
+    if (itStyle != rNamedStyles.end())
+    {
+        // Apply properties from named style.
+        librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
+        for (itProp.rewind(); itProp.next();)
+            rPropertyList.insert(itProp.key(), itProp()->clone());
+    }
+}
+
+}
+
 namespace writerperfect
 {
 namespace exp
@@ -52,27 +83,7 @@ void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
         const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
-        {
-            // Reference to an automatic text style, try to look it up.
-            auto itStyle = mrImport.GetAutomaticTextStyles().find(rAttributeValue);
-            if (itStyle != mrImport.GetAutomaticTextStyles().end())
-            {
-                // Apply properties directly, librevenge has no notion of automatic styles.
-                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-                for (itProp.rewind(); itProp.next();)
-                    aPropertyList.insert(itProp.key(), itProp()->clone());
-                continue;
-            }
-
-            itStyle = mrImport.GetTextStyles().find(rAttributeValue);
-            if (itStyle != mrImport.GetTextStyles().end())
-            {
-                // Apply properties from text style.
-                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-                for (itProp.rewind(); itProp.next();)
-                    aPropertyList.insert(itProp.key(), itProp()->clone());
-            }
-        }
+            FillStyle(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), aPropertyList);
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
@@ -163,26 +174,7 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         if (rAttributeName == "text:style-name")
         {
             m_aStyleName = rAttributeValue;
-
-            // Reference to an automatic style, try to look it up.
-            auto itStyle = mrImport.GetAutomaticParagraphStyles().find(m_aStyleName);
-            if (itStyle != mrImport.GetAutomaticParagraphStyles().end())
-            {
-                // Found an automatic paragraph style.
-                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-                for (itProp.rewind(); itProp.next();)
-                    aPropertyList.insert(itProp.key(), itProp()->clone());
-                continue;
-            }
-
-            itStyle = mrImport.GetParagraphStyles().find(m_aStyleName);
-            if (itStyle != mrImport.GetParagraphStyles().end())
-            {
-                // Found a paragraph style.
-                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-                for (itProp.rewind(); itProp.next();)
-                    aPropertyList.insert(itProp.key(), itProp()->clone());
-            }
+            FillStyle(m_aStyleName, mrImport.GetAutomaticParagraphStyles(), mrImport.GetParagraphStyles(), aPropertyList);
         }
         else
         {
@@ -204,28 +196,7 @@ void XMLParaContext::characters(const OUString &rChars)
 {
     librevenge::RVNGPropertyList aPropertyList;
     if (!m_aStyleName.isEmpty())
-    {
-        // Reference to an automatic style, try to look it up.
-        auto itStyle = mrImport.GetAutomaticTextStyles().find(m_aStyleName);
-        if (itStyle != mrImport.GetAutomaticTextStyles().end())
-        {
-            // Found an automatic text style.
-            librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-            for (itProp.rewind(); itProp.next();)
-                aPropertyList.insert(itProp.key(), itProp()->clone());
-        }
-        else
-        {
-            itStyle = mrImport.GetTextStyles().find(m_aStyleName);
-            if (itStyle != mrImport.GetTextStyles().end())
-            {
-                // Found a named text style.
-                librevenge::RVNGPropertyList::Iter itProp(itStyle->second);
-                for (itProp.rewind(); itProp.next();)
-                    aPropertyList.insert(itProp.key(), itProp()->clone());
-            }
-        }
-    }
+        FillStyle(m_aStyleName, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), aPropertyList);
     mrImport.GetGenerator().openSpan(aPropertyList);
 
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
