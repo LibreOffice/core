@@ -1528,20 +1528,20 @@
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce48" table:formula="of:=NPER(0.06/52; 0; 8000; 0 ;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:502</text:p>
+     <table:table-cell table:formula="of:=NPER(0.06; 0; -80; 400 ;2)" office:value-type="float" office:value="27.6208695898296" calcext:value-type="float">
+      <text:p>27.6208695898296</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:#ERR502!" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:502</text:p>
+     <table:table-cell office:value-type="float" office:value="27.6208695898296" calcext:value-type="float">
+      <text:p>27.6208695898296</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce53" table:formula="of:=ORG.OPENOFFICE.ERRORTYPE([.A12])=502" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>TRUE</text:p>
+     <table:table-cell table:style-name="ce51" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=NPER(0.06/52, 0, 8000, 0 ,2)" calcext:value-type="string">
-      <text:p>=NPER(0.06/52, 0, 8000, 0 ,2)</text:p>
+     <table:table-cell table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=NPER(0.06; 0; -80; 400 ;2)" calcext:value-type="string">
+      <text:p>=NPER(0,06; 0; -80; 400 ;2)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>No payment, no result</text:p>
+      <text:p>future value achieved with interest from present value</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce20" table:number-columns-repeated="2"/>
@@ -1568,6 +1568,24 @@
      <table:table-cell table:style-name="ce43"/>
      <table:table-cell table:style-name="ce41" table:number-columns-repeated="3"/>
      <table:table-cell table:number-columns-repeated="6"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=NPER(0.06; 0; 80; 400 ;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#NUM!</text:p>
+     </table:table-cell>
++     <table:table-cell office:value-type="string" calcext:value-type="string">
++      <text:p>#NUM!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce26" table:formula="of:=ISERROR([.A14])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>WAAR</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A14])" office:value-type="string" office:string-value="=NPER(0,06; 0; 80; 400 ;2)" calcext:value-type="string">
+      <text:p>=NPER(0,06; 0; 80; 400 ;2)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>future value cannot be achieved with interest from present value</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="15"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
      <table:table-cell table:style-name="ce21"/>
