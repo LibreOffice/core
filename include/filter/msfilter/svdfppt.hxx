@@ -369,7 +369,6 @@ struct PptSlidePersistEntry
                         pPresentationObjects;   // if valid, this is a pointer to an array that includes the offsets to the presentation objects
                                                 // on this masterpage for each instance (0 - 8);
     SdrObject*          pBObj;
-    bool                bBObjIsTemporary;
 
     PptPageKind         ePageKind;
 
