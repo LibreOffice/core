@@ -24,6 +24,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/idle.hxx>
+#include <memory>
 
 class SfxItemSet;
 class ImpItemListRow;
@@ -32,7 +33,7 @@ class BrowserMouseEvent;
 class SdrItemBrowserControl: public BrowseBox
 {
 friend class ImpItemEdit;
-    std::vector<ImpItemListRow*> aList;
+    std::vector<std::unique_ptr<ImpItemListRow>> aList;
     long nAktPaintRow;
     VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
@@ -48,7 +49,6 @@ friend class ImpItemEdit;
 private:
     void ImpCtor();
     void ImpSetEntry(const ImpItemListRow& rEntry, std::size_t nEntryNum);
-    ImpItemListRow* ImpGetEntry(std::size_t nPos) const { return aList[nPos]; }
     void ImpSaveWhich();
     void ImpRestoreWhich();
     std::size_t GetCurrentPos() const;
