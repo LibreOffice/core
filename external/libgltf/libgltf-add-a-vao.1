@@ -1,0 +1,49 @@
+From b260dd9f337af262a48054f3ff537df38083513a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Wed, 6 Sep 2017 14:40:16 +0100
+Subject: [PATCH] add a vao
+
+Change-Id: I48879f7450d1ed5ad216276f2b9b92d8f5f784fb
+---
+ src/RenderScene.cpp | 5 ++++-
+ src/RenderScene.h   | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/RenderScene.cpp b/src/RenderScene.cpp
+index 09670b5..6d5e8ae 100644
+--- a/src/RenderScene.cpp
++++ b/src/RenderScene.cpp
+@@ -700,7 +700,8 @@ unsigned int RenderShader::getRenderPrimSize() const
+ }
+ 
+ RenderScene::RenderScene()
+-    : maCamera()
++    : mVAO(0)
++    , maCamera()
+     , cCamera(0)
+     , vCameraIndex()
+     , mOrbitInitViewMatrix(0.0)
+@@ -979,6 +980,8 @@ void RenderScene::initOpengl()
+     glEnable(GL_LIGHTING);
+     glEnable(GL_LIGHT0);
+     glDepthFunc(GL_LESS);
++    glGenVertexArrays(1, &mVAO);
++    glBindVertexArray(mVAO);
+ }
+ 
+ void RenderScene::createDefaultCamera()
+diff --git a/src/RenderScene.h b/src/RenderScene.h
+index ebc44c3..fa01859 100644
+--- a/src/RenderScene.h
++++ b/src/RenderScene.h
+@@ -286,6 +286,7 @@ private:
+     int initSSAAFrameBuf(glTFViewport* pViewport);
+     void setModelBoundaryValue();
+ 
++    GLuint mVAO;
+     CPhysicalCamera maCamera;
+     ParseCamera* cCamera;
+     std::vector<std::string> vCameraIndex;
+-- 
+2.9.4
+

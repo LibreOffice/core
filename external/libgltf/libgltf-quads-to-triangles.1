@@ -1,0 +1,69 @@
+From b01a2afeac2749ade7fac96b663a684aa988b28f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Wed, 6 Sep 2017 14:31:36 +0100
+Subject: [PATCH] Related: tdf#103884 convert GL_QUADS to GL_TRIANGLES
+
+---
+ src/RenderScene.cpp | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/src/RenderScene.cpp b/src/RenderScene.cpp
+index f4b1c24..09670b5 100644
+--- a/src/RenderScene.cpp
++++ b/src/RenderScene.cpp
+@@ -141,13 +141,15 @@ void RenderWithFBO::inverseBitMap(int width, int height)
+         1.0f, 1.0f,
+         1.0f, 0.0f,
+         0.0f, 0.0f,
++        0.0f, 1.0f,
+     };
+     GLfloat squareVertices[] =
+     {
+         -1.0f, -1.0f, -1.0,
+          1.0f, -1.0f, -1.0,
+          1.0f,  1.0f, -1.0,
+-        -1.0f,  1.0f, -1.0
++        -1.0f,  1.0f, -1.0,
++        -1.0f, -1.0f, -1.0,
+     };
+     setBufferForFbo(texCoordBuf, vertexBuf, coordVertices,
+                     sizeof(coordVertices), squareVertices,
+@@ -266,7 +268,8 @@ void RenderWithFBO::inverseTexture(GLuint proId, GLuint texCoordBuf,
+     glActiveTexture(GL_TEXTURE0);
+     glBindTexture(GL_TEXTURE_2D, mShotTexId);
+     glUniform1i(textureId, 0);
+-    glDrawArrays(GL_QUADS, 0, 4);
++    glDrawArrays(GL_TRIANGLES, 0, 3);
++    glDrawArrays(GL_TRIANGLES, 2, 3);
+     glDisableVertexAttribArray(vertexId);
+     glDisableVertexAttribArray(texCoordId);
+     glActiveTexture(GL_TEXTURE0);
+@@ -416,7 +419,8 @@ int RenderWithFBO::renderFboTexture()
+ 
+     glBindTexture(GL_TEXTURE_2D, mRenderTexId);
+     glUniform1i(textureId, 0);
+-    glDrawArrays(GL_QUADS, 0, 4);
++    glDrawArrays(GL_TRIANGLES, 0, 3);
++    glDrawArrays(GL_TRIANGLES, 2, 3);
+     glDisableVertexAttribArray(texCoordId);
+     glDisableVertexAttribArray(vertexId);
+     return LIBGLTF_SUCCESS;
+@@ -456,6 +460,7 @@ int RenderWithFBO::createAndBindFbo(int width, int height, bool isUseMSAA)
+         1.0f, 0.0f,
+         1.0f, 1.0f,
+         0.0f, 1.0f,
++        0.0f, 0.0f,
+     };
+     GLfloat squareVertices[] =
+     {
+@@ -463,6 +468,7 @@ int RenderWithFBO::createAndBindFbo(int width, int height, bool isUseMSAA)
+          1.0f, -1.0f,
+          1.0f,  1.0f,
+         -1.0f,  1.0f,
++        -1.0f, -1.0f,
+     };
+     setBufferForFbo(mTexCoordBuf, mVertexBuf, coordVertices,
+                     sizeof(coordVertices), squareVertices,
+-- 
+2.9.4
+
