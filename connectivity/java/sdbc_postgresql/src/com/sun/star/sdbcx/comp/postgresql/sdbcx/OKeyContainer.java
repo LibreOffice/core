@@ -29,6 +29,7 @@ import java.util.Map;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.IllegalArgumentException;
@@ -54,7 +55,7 @@ public class OKeyContainer extends OContainer {
     private OTable table;
     private Map<String,OKey> keys;
 
-    protected OKeyContainer(Object lock, boolean isCaseSensitive, List<String> names, Map<String,OKey> keys, OTable table) {
+    protected OKeyContainer(Object lock, boolean isCaseSensitive, List<String> names, Map<String,OKey> keys, OTable table) throws ElementExistException {
         super(lock, isCaseSensitive, names);
         System.out.println("Keys.size()=" + keys.size());
         for (Map.Entry<String,OKey> entry : keys.entrySet()) {
@@ -77,7 +78,7 @@ public class OKeyContainer extends OContainer {
         this.table = table;
     }
 
-    public static OKeyContainer create(boolean isCaseSensitive, Map<String,OKey> keys, OTable table) {
+    public static OKeyContainer create(boolean isCaseSensitive, Map<String,OKey> keys, OTable table) throws ElementExistException {
         final Object lock = new Object();
         String[] names = new String[keys.size()];
         keys.keySet().toArray(names);
@@ -211,6 +212,7 @@ public class OKeyContainer extends OContainer {
         } catch (IllegalArgumentException illegalArgumentException) {
         } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         } catch (PropertyVetoException propertyVetoException) {
+        } catch (ElementExistException elementExistException) {
         }
         return null;
     }

@@ -23,10 +23,8 @@ package com.sun.star.sdbcx.comp.postgresql.sdbcx;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import com.sun.star.beans.UnknownPropertyException;
@@ -63,33 +61,24 @@ import com.sun.star.uno.Type;
 import com.sun.star.util.XRefreshListener;
 import com.sun.star.util.XRefreshable;
 
+/**
+ * Base class for a lazy-loaded collection of database objects.
+ */
 public abstract class OContainer extends WeakBase implements
         XNameAccess, XIndexAccess, XEnumerationAccess,
         XContainer, XColumnLocate, XRefreshable, XDataDescriptorFactory,
         XAppend, XDrop, XServiceInfo {
 
-    private static String[] services = new String[] {
+    private static final String[] services = new String[] {
             "com.sun.star.sdbcx.Container"
     };
 
     protected final Object lock;
     private final boolean isCaseSensitive;
-    private TreeMap<String,HashMap<Long,XPropertySet>> entriesByNameAndId;
-    private ArrayList<PropertyInfo> entriesByIndex;
-    private long nextId;
+    private TreeMap<String,XPropertySet> entriesByName;
+    private ArrayList<String> namesByIndex;
     private InterfaceContainer containerListeners = new InterfaceContainer();
     private InterfaceContainer refreshListeners = new InterfaceContainer();
-
-    /// Names aren't necessarily unique, we have to de-duplicate by id.
-    private static class PropertyInfo {
-        String name;
-        long id;
-
-        PropertyInfo(String name, long id) {
-            this.name = name;
-            this.id = id;
-        }
-    }
 
     private Comparator<String> caseSensitiveComparator = new Comparator<String>() {
         @Override
@@ -102,21 +91,21 @@ public abstract class OContainer extends WeakBase implements
         }
     };
 
-    public OContainer(Object lock, boolean isCaseSensitive, List<String> names) {
+    public OContainer(Object lock, boolean isCaseSensitive) {
         this.lock = lock;
         this.isCaseSensitive = isCaseSensitive;
-        this.entriesByNameAndId = new TreeMap<String,HashMap<Long,XPropertySet>>(caseSensitiveComparator);
-        this.entriesByIndex = new ArrayList<>(names.size());
-        for (String name : names) {
-            HashMap<Long,XPropertySet> entriesById = entriesByNameAndId.get(name);
-            if (entriesById == null) {
-                entriesById = new HashMap<>();
-                entriesByNameAndId.put(name, entriesById);
-            }
-            entriesById.put(nextId, null);
+        this.entriesByName = new TreeMap<>(caseSensitiveComparator);
+        this.namesByIndex = new ArrayList<>();
+    }
 
-            entriesByIndex.add(new PropertyInfo(name, nextId));
-            ++nextId;
+    public OContainer(Object lock, boolean isCaseSensitive, List<String> names) throws ElementExistException {
+        this(lock, isCaseSensitive);
+        for (String name : names) {
+            if (entriesByName.containsKey(name)) {
+                throw new ElementExistException(name, this);
+            }
+            entriesByName.put(name, null);
+            namesByIndex.add(name);
         }
     }
 
@@ -128,13 +117,11 @@ public abstract class OContainer extends WeakBase implements
         refreshListeners.disposeAndClear(event);
 
         synchronized (lock) {
-            for (Map<Long,XPropertySet> entriesById : entriesByNameAndId.values()) {
-                for (XPropertySet propertySet : entriesById.values()) {
-                    CompHelper.disposeComponent(propertySet);
-                }
+            for (XPropertySet value : entriesByName.values()) {
+                CompHelper.disposeComponent(value);
             }
-            entriesByNameAndId.clear();
-            entriesByIndex.clear();
+            entriesByName.clear();
+            namesByIndex.clear();
         }
     }
 
@@ -164,7 +151,7 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public Object getByIndex(int index) throws IndexOutOfBoundsException, WrappedTargetException {
         synchronized (lock) {
-            if (index < 0 || index >= entriesByIndex.size()) {
+            if (index < 0 || index >= namesByIndex.size()) {
                 throw new IndexOutOfBoundsException(Integer.toString(index), this);
             }
             return getObject(index);
@@ -174,7 +161,7 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public int getCount() {
         synchronized (lock) {
-            return entriesByIndex.size();
+            return namesByIndex.size();
         }
     }
 
@@ -183,14 +170,14 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public boolean hasByName(String name) {
         synchronized (lock) {
-            return entriesByNameAndId.containsKey(name);
+            return entriesByName.containsKey(name);
         }
     }
 
     @Override
     public Object getByName(String name) throws NoSuchElementException, WrappedTargetException {
         synchronized (lock) {
-            if (!entriesByNameAndId.containsKey(name)) {
+            if (!entriesByName.containsKey(name)) {
                 String error = SharedResources.getInstance().getResourceStringWithSubstitution(
                         Resources.STR_NO_ELEMENT_NAME, "$name$", name);
                 throw new NoSuchElementException(error, this);
@@ -202,12 +189,8 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public String[] getElementNames() {
         synchronized (lock) {
-            String[] names = new String[entriesByIndex.size()];
-            int next = 0;
-            for (PropertyInfo propertyInfo : entriesByIndex) {
-                names[next++] = propertyInfo.name;
-            }
-            return names;
+            String[] names = new String[namesByIndex.size()];
+            return namesByIndex.toArray(names);
         }
     }
 
@@ -215,15 +198,13 @@ public abstract class OContainer extends WeakBase implements
 
     @Override
     public void refresh() {
-        Iterator iterator;
+        Iterator<?> iterator;
         synchronized (lock) {
-            for (Map<Long,XPropertySet> entriesById : entriesByNameAndId.values()) {
-                for (XPropertySet propertySet : entriesById.values()) {
-                    CompHelper.disposeComponent(propertySet);
-                }
+            for (XPropertySet value : entriesByName.values()) {
+                CompHelper.disposeComponent(value);
             }
-            entriesByNameAndId.clear();
-            entriesByIndex.clear();
+            entriesByName.clear();
+            namesByIndex.clear();
 
             impl_refresh();
 
@@ -249,12 +230,12 @@ public abstract class OContainer extends WeakBase implements
 
     @Override
     public void appendByDescriptor(XPropertySet descriptor) throws SQLException, ElementExistException {
-        Iterator iterator;
+        Iterator<?> iterator;
         ContainerEvent event;
         synchronized (lock) {
             String name = getNameForObject(descriptor);
 
-            if (entriesByNameAndId.containsKey(name)) {
+            if (entriesByName.containsKey(name)) {
                 throw new ElementExistException(name, this);
             }
 
@@ -264,13 +245,10 @@ public abstract class OContainer extends WeakBase implements
             }
 
             name = getNameForObject(newlyCreated);
-            HashMap<Long,XPropertySet> entriesById = entriesByNameAndId.get(name);
-            if (entriesById == null) { // this may happen when the derived class included it itself
-                entriesById = new HashMap<>();
-                entriesById.put(nextId, newlyCreated);
-                entriesByNameAndId.put(name, entriesById);
-                entriesByIndex.add(new PropertyInfo(name, nextId));
-                nextId++;
+            XPropertySet value = entriesByName.get(name);
+            if (value == null) { // this may happen when the derived class included it itself
+                entriesByName.put(name, newlyCreated);
+                namesByIndex.add(name);
             }
 
             // notify our container listeners
@@ -289,7 +267,7 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public void dropByName(String name) throws SQLException, NoSuchElementException {
         synchronized (lock) {
-            if (!entriesByNameAndId.containsKey(name)) {
+            if (!entriesByName.containsKey(name)) {
                 throw new NoSuchElementException(name, this);
             }
             dropImpl(indexOf(name));
@@ -299,7 +277,7 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public void dropByIndex(int index) throws SQLException, IndexOutOfBoundsException {
         synchronized (lock) {
-            if (index < 0 || index >= entriesByIndex.size()) {
+            if (index < 0 || index >= namesByIndex.size()) {
                 throw new IndexOutOfBoundsException(Integer.toString(index), this);
             }
             dropImpl(index);
@@ -312,20 +290,16 @@ public abstract class OContainer extends WeakBase implements
     }
 
     private void dropImpl(int index, boolean reallyDrop) throws SQLException {
-        PropertyInfo propertyInfo = entriesByIndex.get(index);
+        String name = namesByIndex.get(index);
         if (reallyDrop) {
-            dropObject(index, propertyInfo.name);
+            dropObject(index, name);
         }
-        HashMap<Long,XPropertySet> entriesById = entriesByNameAndId.get(propertyInfo.name);
-        XPropertySet propertySet = entriesById.remove(propertyInfo.id);
-        if (entriesById.isEmpty()) {
-            entriesByNameAndId.remove(propertyInfo.name);
-        }
+        namesByIndex.remove(index);
+        XPropertySet propertySet = entriesByName.remove(name);
         CompHelper.disposeComponent(propertySet);
-        entriesByIndex.remove(index);
 
-        ContainerEvent event = new ContainerEvent(this, propertyInfo.name, null, null);
-        for (Iterator iterator = containerListeners.iterator(); iterator.hasNext(); ) {
+        ContainerEvent event = new ContainerEvent(this, name, null, null);
+        for (Iterator<?> iterator = containerListeners.iterator(); iterator.hasNext(); ) {
             XContainerListener listener = (XContainerListener) iterator.next();
             listener.elementRemoved(event);
         }
@@ -335,7 +309,7 @@ public abstract class OContainer extends WeakBase implements
 
     @Override
     public int findColumn(String name) throws SQLException {
-        if (!entriesByNameAndId.containsKey(name)) {
+        if (!entriesByName.containsKey(name)) {
             String error = SharedResources.getInstance().getResourceStringWithSubstitution(
                     Resources.STR_UNKNOWN_COLUMN_NAME, "$columnname$", name);
             throw new SQLException(error, this, StandardSQLState.SQL_COLUMN_NOT_FOUND.text(), 0, null);
@@ -369,7 +343,7 @@ public abstract class OContainer extends WeakBase implements
     @Override
     public boolean hasElements() {
         synchronized (lock) {
-            return !entriesByNameAndId.isEmpty();
+            return !entriesByName.isEmpty();
         }
     }
 
@@ -388,8 +362,8 @@ public abstract class OContainer extends WeakBase implements
     }
 
     protected int indexOf(String name) {
-        for (int i = 0; i < entriesByIndex.size(); i++) {
-            if (entriesByIndex.get(i).name.equals(name)) {
+        for (int i = 0; i < namesByIndex.size(); i++) {
+            if (namesByIndex.get(i).equals(name)) {
                 return i;
             }
         }
@@ -402,12 +376,11 @@ public abstract class OContainer extends WeakBase implements
      * @return ObjectType
      */
     protected Object getObject(int index) throws WrappedTargetException {
-        PropertyInfo propertyInfo = entriesByIndex.get(index);
-        HashMap<Long,XPropertySet> entriesById = entriesByNameAndId.get(propertyInfo.name);
-        XPropertySet propertySet = entriesById.get(propertyInfo.id);
+        String name = namesByIndex.get(index);
+        XPropertySet propertySet = entriesByName.get(name);
         if (propertySet == null) {
             try {
-                propertySet = createObject(propertyInfo.name);
+                propertySet = createObject(name);
             } catch (SQLException e) {
                 try {
                     dropImpl(index, false);
@@ -415,7 +388,7 @@ public abstract class OContainer extends WeakBase implements
                 }
                 throw new WrappedTargetException(e.getMessage(), this, e);
             }
-            entriesById.put(propertyInfo.id, propertySet);
+            entriesByName.put(name, propertySet);
         }
         return propertySet;
     }

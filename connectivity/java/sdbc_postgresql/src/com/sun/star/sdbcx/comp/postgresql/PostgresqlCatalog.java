@@ -24,6 +24,7 @@ package com.sun.star.sdbcx.comp.postgresql;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.star.container.ElementExistException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
@@ -52,6 +53,7 @@ public class PostgresqlCatalog extends OCatalog {
                 names.add(name);
             }
             return new PostgresqlTables(lock, metadata, this, names);
+        } catch (ElementExistException elementExistException) {
         } catch (SQLException sqlException) {
         } finally {
             CompHelper.disposeComponent(results);
@@ -71,6 +73,7 @@ public class PostgresqlCatalog extends OCatalog {
                 names.add(name);
             }
             return new PostgresqlTables(lock, metadata, this, names);
+        } catch (ElementExistException elementExistException) {
         } catch (SQLException sqlException) {
         } finally {
             CompHelper.disposeComponent(results);

@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.sdbc.SQLException;
@@ -54,7 +55,7 @@ public class OKey extends ODescriptor
     }
 
     protected OKey(Object lock, String name, boolean isCaseSensitive, String referencedTable, int type,
-            int updateRule, int deleteRule, List<String> columnNames, OTable table) {
+            int updateRule, int deleteRule, List<String> columnNames, OTable table) throws ElementExistException {
         super(lock, name, isCaseSensitive);
         this.referencedTable = referencedTable;
         this.type = type;
@@ -66,7 +67,7 @@ public class OKey extends ODescriptor
     }
 
     public static OKey create(String name, boolean isCaseSensitive, String referencedTable, int type,
-            int updateRule, int deleteRule, List<String> columnNames, OTable table) {
+            int updateRule, int deleteRule, List<String> columnNames, OTable table) throws ElementExistException {
         final Object lock = new Object();
         return new OKey(lock, name, isCaseSensitive, referencedTable, type, updateRule, deleteRule, columnNames, table);
     }

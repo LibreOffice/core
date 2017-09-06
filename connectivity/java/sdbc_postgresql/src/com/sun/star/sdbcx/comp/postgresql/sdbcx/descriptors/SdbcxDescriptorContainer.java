@@ -21,8 +21,6 @@
 
 package com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors;
 
-import java.util.Collections;
-
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
@@ -32,7 +30,7 @@ import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 
 public abstract class SdbcxDescriptorContainer extends OContainer {
     public SdbcxDescriptorContainer(Object lock, boolean isCaseSensitive) {
-        super(lock, isCaseSensitive, Collections.<String>emptyList());
+        super(lock, isCaseSensitive);
     }
 
     @Override

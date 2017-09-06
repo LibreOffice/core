@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
@@ -40,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 public class OIndexColumnContainer extends OContainer {
     private OIndex index;
 
-    public OIndexColumnContainer(Object lock, OIndex index, List<String> columnNames) {
+    public OIndexColumnContainer(Object lock, OIndex index, List<String> columnNames) throws ElementExistException {
         super(lock, true, columnNames);
         this.index = index;
     }

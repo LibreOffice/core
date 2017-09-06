@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;
@@ -50,7 +51,8 @@ public class OColumnContainer extends OContainer {
         public int dataType;
     }
 
-    public OColumnContainer(Object lock, boolean isCaseSensitive, List<ColumnDescription> columnDescriptions, OTable table, XDatabaseMetaData metadata) {
+    public OColumnContainer(Object lock, boolean isCaseSensitive, List<ColumnDescription> columnDescriptions, OTable table, XDatabaseMetaData metadata)
+            throws ElementExistException {
         super(lock, isCaseSensitive, toColumnNames(columnDescriptions));
         this.table = table;
         this.metadata = metadata;

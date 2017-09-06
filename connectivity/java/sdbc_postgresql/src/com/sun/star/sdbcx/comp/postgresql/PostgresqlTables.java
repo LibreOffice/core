@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
@@ -48,7 +49,7 @@ public class PostgresqlTables extends OContainer {
     private XDatabaseMetaData metadata;
     private PostgresqlCatalog catalog;
 
-    public PostgresqlTables(Object lock, XDatabaseMetaData metadata, PostgresqlCatalog catalog, List<String> names) {
+    public PostgresqlTables(Object lock, XDatabaseMetaData metadata, PostgresqlCatalog catalog, List<String> names) throws ElementExistException {
         super(lock, true, names);
         this.metadata = metadata;
         this.catalog = catalog;

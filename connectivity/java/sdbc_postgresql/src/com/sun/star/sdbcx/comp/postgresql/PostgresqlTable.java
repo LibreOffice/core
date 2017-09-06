@@ -95,6 +95,8 @@ public class PostgresqlTable extends OTable {
         try {
             List<ColumnDescription> columns = new SqlTableHelper().readColumns(getConnection().getMetaData(), catalogName, schemaName, getName());
             return new OColumnContainer(lock, isCaseSensitive(), columns, this, getConnection().getMetaData());
+        } catch (ElementExistException elementExistException) {
+            return null;
         } catch (SQLException sqlException) {
             return null;
         }
@@ -105,6 +107,8 @@ public class PostgresqlTable extends OTable {
         try {
             List<String> indexes = new SqlTableHelper().readIndexes(getConnection().getMetaData(), catalogName, schemaName, getName(), this);
             return new OIndexContainer(lock, indexes, isCaseSensitive(), this);
+        } catch (ElementExistException elementExistException) {
+            return null;
         } catch (SQLException sqlException) {
             return null;
         }
@@ -116,6 +120,8 @@ public class PostgresqlTable extends OTable {
             Map<String, OKey> keys = new SqlTableHelper().readKeys(
                     getConnection().getMetaData(), catalogName, schemaName, getName(), isCaseSensitive(), this);
             return OKeyContainer.create(isCaseSensitive(), keys, this);
+        } catch (ElementExistException elementExistException) {
+            return null;
         } catch (SQLException sqlException) {
             return null;
         }

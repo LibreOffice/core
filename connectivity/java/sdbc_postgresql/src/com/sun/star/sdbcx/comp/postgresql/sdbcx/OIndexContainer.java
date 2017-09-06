@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
@@ -50,7 +51,7 @@ import com.sun.star.uno.UnoRuntime;
 public class OIndexContainer extends OContainer {
     protected OTable table;
 
-    public OIndexContainer(Object lock, List<String> names, boolean isCaseSensitive, OTable table) {
+    public OIndexContainer(Object lock, List<String> names, boolean isCaseSensitive, OTable table) throws ElementExistException {
         super(lock, isCaseSensitive, names);
         this.table = table;
     }
@@ -113,7 +114,7 @@ public class OIndexContainer extends OContainer {
                 CompHelper.disposeComponent(results);
             }
             return ret;
-        } catch (WrappedTargetException | UnknownPropertyException | IllegalArgumentException exception) {
+        } catch (WrappedTargetException | UnknownPropertyException | IllegalArgumentException | ElementExistException exception) {
             throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }

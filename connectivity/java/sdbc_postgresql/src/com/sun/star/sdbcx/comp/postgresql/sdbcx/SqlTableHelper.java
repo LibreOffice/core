@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.sun.star.container.ElementExistException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XResultSet;
@@ -37,6 +38,7 @@ import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
 import com.sun.star.sdbcx.comp.postgresql.util.Osl;
+import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
@@ -165,6 +167,8 @@ public class SqlTableHelper {
                 key = OKey.create(pkName, isCaseSensitive, "", KeyType.PRIMARY, 0, 0, columns, table);
             }
             return key;
+        } catch (ElementExistException elementExistException) {
+            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, elementExistException);
         } finally {
             CompHelper.disposeComponent(results);
         }
@@ -221,6 +225,8 @@ public class SqlTableHelper {
                     keys.put(oldFkName, key);
                 }
             }
+        } catch (ElementExistException elementExistException) {
+            throw new SQLException("Error", this, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, elementExistException);
         } finally {
             CompHelper.disposeComponent(results);
         }

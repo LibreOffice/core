@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.XColumnsSupplier;
@@ -45,7 +46,7 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
     private OContainer columns;
 
     protected OIndex(Object lock, String name, boolean isCaseSensitive, String catalogName,
-            boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) {
+            boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) throws ElementExistException {
         super(lock, name, isCaseSensitive);
         this.catalogName = catalogName;
         this.isUnique = isUnique;
@@ -57,7 +58,7 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
     }
 
     public static OIndex create(String name, boolean isCaseSensitive, String catalogName,
-            boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) {
+            boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) throws ElementExistException {
         final Object lock = new Object();
         return new OIndex(lock, name, isCaseSensitive, catalogName, isUnique, isPrimaryKeyIndex, isClustered, columnNames, table);
     }
