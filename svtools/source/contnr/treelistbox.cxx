@@ -820,7 +820,7 @@ SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry const * pEntry, S
 const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEntry, const SvLBoxItem* pItem) const
 {
     const SvViewDataEntry* pEntryData = SvListView::GetViewData(pEntry);
-    DBG_ASSERT(pEntryData,"Entry not in View");
+    assert(pEntryData && "Entry not in View");
     sal_uInt16 nItemPos = pEntry->GetPos(pItem);
     return &pEntryData->GetItem(nItemPos);
 }
@@ -1099,7 +1099,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView )
 {
-    DBG_ASSERT( pSourceView, "SvTreeListBox::ExecuteDrop(): no source view" );
+    assert(pSourceView);
     pSourceView->EnableSelectionAsDropTarget();
 
     ImplShowTargetEmphasis( pTargetEntry, false );
@@ -1330,7 +1330,7 @@ OUString SvTreeListBox::GetEntryLongDescription( SvTreeListEntry* ) const
 
 OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" );
+    assert(pEntry);
     OUString sRet;
 
     sal_uInt16 nCount = pEntry->ItemCount();
@@ -1633,25 +1633,25 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
 
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 {
-    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" );
+    assert(pEntry);
     SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
-    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" );
+    assert(pItem);
     return pItem->GetText();
 }
 
 const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry)
 {
-    DBG_ASSERT(pEntry,"Entry?");
+    assert(pEntry);
     const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
-    DBG_ASSERT(pItem,"GetContextBmp:Item not found");
+    assert(pItem);
     return pItem->GetBitmap2( );
 }
 
 const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pEntry,"Entry?");
+    assert(pEntry);
     const SvLBoxContextBmp* pItem = static_cast<const SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
-    DBG_ASSERT(pItem,"GetContextBmp:Item not found");
+    assert(pItem);
     return pItem->GetBitmap1( );
 }
 
@@ -1727,7 +1727,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
 void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 {
     SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
-    DBG_ASSERT(pItem,"SetText:Item not found");
+    assert(pItem);
     pItem->SetText(rStr);
     pItem->InitViewData( this, pEntry );
     GetModel()->InvalidateEntry( pEntry );
@@ -1737,7 +1737,7 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
 {
     SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
-    DBG_ASSERT(pItem,"SetExpBmp:Item not found");
+    assert(pItem);
     pItem->SetBitmap2( aBmp );
 
     GetModel()->InvalidateEntry( pEntry );
@@ -1755,7 +1755,7 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aB
 {
     SvLBoxContextBmp* pItem = static_cast<SvLBoxContextBmp*>(pEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
 
-    DBG_ASSERT(pItem,"SetExpBmp:Item not found");
+    assert(pItem);
     pItem->SetBitmap1( aBmp );
 
     GetModel()->InvalidateEntry( pEntry );
@@ -2497,7 +2497,7 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
 
 void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, const Selection& rSelection)
 {
-    DBG_ASSERT(pEntry&&pItem,"EditItemText: Bad params");
+    assert(pEntry && pItem);
     if( IsSelected( pEntry ))
     {
         pImpl->ShowCursor( false );
@@ -3087,7 +3087,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
 
 sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
-    DBG_ASSERT(pTab,"No Tab");
+    assert(pTab);
     sal_IntPtr nPos = pTab->GetPos();
     if( pTab->IsDynamic() )
     {
@@ -3375,7 +3375,7 @@ void SvTreeListBox::Command(const CommandEvent& rCEvt)
 
 void SvTreeListBox::RemoveParentKeepChildren( SvTreeListEntry* pParent )
 {
-    DBG_ASSERT(pParent,"RemoveParentKeepChildren:No Parent");
+    assert(pParent);
     SvTreeListEntry* pNewParent = GetParent( pParent );
     if( pParent->HasChildren())
     {
