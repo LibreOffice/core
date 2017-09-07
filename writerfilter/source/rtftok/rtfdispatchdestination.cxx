@@ -292,7 +292,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_aStates.top().pCurrentBuffer = nullptr;
                 bool bCustomMark = false;
                 OUString aCustomMark;
-                while (m_aSuperBuffer.size())
+                while (!m_aSuperBuffer.empty())
                 {
                     Buf_t aTuple = m_aSuperBuffer.front();
                     m_aSuperBuffer.pop_front();

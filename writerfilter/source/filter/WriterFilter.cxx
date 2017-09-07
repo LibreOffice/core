@@ -149,7 +149,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         xExprtr->setSourceDocument(m_xSrcDoc);
         return xFltr->filter(rDescriptor);
     }
-    else if (m_xDstDoc.is())
+    if (m_xDstDoc.is())
     {
         utl::MediaDescriptor aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
@@ -368,7 +368,7 @@ void WriterFilter::putPropertiesToDocumentGrabBag(const comphelper::SequenceAsHa
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Writer_WriterFilter_get_implementation(uno::XComponentContext* component, uno::Sequence<uno::Any> const&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Writer_WriterFilter_get_implementation(uno::XComponentContext* component, uno::Sequence<uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new WriterFilter(component));
 }

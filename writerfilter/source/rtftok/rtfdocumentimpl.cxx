@@ -137,13 +137,11 @@ bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
 RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = rSprms.find(nId);
-    if (p.get() && p->getSprms().size())
+    if (p.get() && !p->getSprms().empty())
         return p->getSprms().back().second->getAttributes();
-    else
-    {
-        SAL_WARN("writerfilter.rtf", "trying to set property when no type is defined");
-        return rSprms;
-    }
+
+    SAL_WARN("writerfilter.rtf", "trying to set property when no type is defined");
+    return rSprms;
 }
 
 void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pValue)
@@ -650,8 +648,8 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
             return m_aColorTable[nIndex];
         return 0;
     }
-    else
-        return m_pSuperstream->getColorTable(nIndex);
+
+    return m_pSuperstream->getColorTable(nIndex);
 }
 
 rtl_TextEncoding RTFDocumentImpl::getEncoding(int nFontIndex)
@@ -662,31 +660,30 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(int nFontIndex)
         if (it != m_aFontEncodings.end())
             // We have a font encoding associated to this font.
             return it->second;
-        else if (m_aDefaultState.nCurrentEncoding != rtl_getTextEncodingFromWindowsCharset(0))
+        if (m_aDefaultState.nCurrentEncoding != rtl_getTextEncodingFromWindowsCharset(0))
             // We have a default encoding.
             return m_aDefaultState.nCurrentEncoding;
-        else
-            // Guess based on locale.
-            return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        // Guess based on locale.
+        return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLanguageTag().getLocale());
     }
-    else
-        return m_pSuperstream->getEncoding(nFontIndex);
+
+    return m_pSuperstream->getEncoding(nFontIndex);
 }
 
 OUString RTFDocumentImpl::getFontName(int nIndex)
 {
     if (!m_pSuperstream)
         return m_aFontNames[nIndex];
-    else
-        return m_pSuperstream->getFontName(nIndex);
+
+    return m_pSuperstream->getFontName(nIndex);
 }
 
 int RTFDocumentImpl::getFontIndex(int nIndex)
 {
     if (!m_pSuperstream)
         return std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nIndex) - m_aFontIndexes.begin();
-    else
-        return m_pSuperstream->getFontIndex(nIndex);
+
+    return m_pSuperstream->getFontIndex(nIndex);
 }
 
 OUString RTFDocumentImpl::getStyleName(int nIndex)
@@ -698,8 +695,8 @@ OUString RTFDocumentImpl::getStyleName(int nIndex)
             aRet = m_aStyleNames[nIndex];
         return aRet;
     }
-    else
-        return m_pSuperstream->getStyleName(nIndex);
+
+    return m_pSuperstream->getStyleName(nIndex);
 }
 
 Id RTFDocumentImpl::getStyleType(int nIndex)
@@ -711,16 +708,16 @@ Id RTFDocumentImpl::getStyleType(int nIndex)
             nRet = m_aStyleTypes[nIndex];
         return nRet;
     }
-    else
-        return m_pSuperstream->getStyleType(nIndex);
+
+    return m_pSuperstream->getStyleType(nIndex);
 }
 
 RTFParserState& RTFDocumentImpl::getDefaultState()
 {
     if (!m_pSuperstream)
         return m_aDefaultState;
-    else
-        return m_pSuperstream->getDefaultState();
+
+    return m_pSuperstream->getDefaultState();
 }
 
 oox::GraphicHelper& RTFDocumentImpl::getGraphicHelper()
@@ -1011,7 +1008,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         }
         auto pAnchorWrapValue = std::make_shared<RTFValue>(aAnchorWrapAttributes);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_extent, pExtentValue);
-        if (aAnchorWrapAttributes.size() && nWrap == -1)
+        if (!aAnchorWrapAttributes.empty() && nWrap == -1)
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
 
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
@@ -1495,14 +1492,14 @@ void RTFDocumentImpl::replayRowBuffer(
         SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(i),
                     "writerfilter.rtf", "dropping table cell!");
     }
-    assert(0 == rCellsSrpms.size());
-    assert(0 == rCellsAttributes.size());
+    assert(rCellsSrpms.empty());
+    assert(rCellsAttributes.empty());
 }
 
 void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
                                    RTFSprms* const pSprms, RTFSprms const* const pAttributes)
 {
-    while (rBuffer.size())
+    while (!rBuffer.empty())
     {
         Buf_t aTuple(rBuffer.front());
         rBuffer.pop_front();
@@ -2090,7 +2087,7 @@ RTFError RTFDocumentImpl::popState()
         aState.aShape.aProperties.emplace_back(m_aStates.top().pDestinationText->makeStringAndClear(), OUString());
         break;
     case Destination::SHAPEPROPERTYVALUE:
-        if (aState.aShape.aProperties.size())
+        if (!aState.aShape.aProperties.empty())
         {
             aState.aShape.aProperties.back().second = m_aStates.top().pDestinationText->makeStringAndClear();
             if (m_aStates.top().bHadShapeText)

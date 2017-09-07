@@ -39,7 +39,7 @@ void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rH
     TagLogger::getInstance().endElement();
 #endif
 
-    if (mTableDataStack.size() > 0)
+    if (!mTableDataStack.empty())
     {
         TableData::Pointer_t pTableData = mTableDataStack.top();
 
@@ -197,7 +197,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
     TagLogger::getInstance().endElement();
 #endif
 
-    if (mTableDataStack.size() > 0)
+    if (!mTableDataStack.empty())
     {
         TableData::Pointer_t pTableData = mTableDataStack.top();
 
@@ -214,7 +214,7 @@ void TableManager::ensureOpenCell(const TablePropertyMapPtr& pProps)
     TagLogger::getInstance().startElement("tablemanager.ensureOpenCell");
 #endif
 
-    if (mTableDataStack.size() > 0)
+    if (!mTableDataStack.empty())
     {
         TableData::Pointer_t pTableData = mTableDataStack.top();
 
@@ -345,7 +345,7 @@ void TableManager::endLevel()
 #ifdef DEBUG_WRITERFILTER
     TableData::Pointer_t pTableData;
 
-    if (mTableDataStack.size() > 0)
+    if (!mTableDataStack.empty())
         pTableData = mTableDataStack.top();
 
     TagLogger::getInstance().startElement("tablemanager.endLevel");
@@ -363,7 +363,7 @@ void TableManager::startLevel()
 #ifdef DEBUG_WRITERFILTER
     TableData::Pointer_t pTableData;
 
-    if (mTableDataStack.size() > 0)
+    if (!mTableDataStack.empty())
         pTableData = mTableDataStack.top();
 
     TagLogger::getInstance().startElement("tablemanager.startLevel");
