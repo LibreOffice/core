@@ -1279,10 +1279,10 @@
 				<xsl:variable name="currentOutlineLevel" select="@text:outline-level"/>
 				<xsl:variable name="labelFollowedBy" select="$globalData//office:document/office:styles/text:outline-style/text:outline-level-style[@text:level = $currentOutlineLevel]/style:list-level-properties[@text:list-level-position-and-space-mode='label-alignment']/style:list-level-label-alignment/@text:label-followed-by"/>
 
-				<!-- Add some margin (a tab is around 0.64cm in LO), but only if there is a number preceding the heading. -->
+				<!-- Add some margin, but only if there is a number preceding the heading. -->
 				<xsl:if test="$labelFollowedBy='listtab' and $headingNumber != ''">
-					<xsl:attribute name="style">
-						<xsl:text>margin-right:0.8rem;</xsl:text>
+					<xsl:attribute name="class">
+						<xsl:text>heading_numbering</xsl:text>
 					</xsl:attribute>
 				</xsl:if>
 				<xsl:copy-of select="$headingNumber"/>

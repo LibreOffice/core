@@ -106,6 +106,8 @@
 	</xsl:text>
 <xsl:text>span.annotation_style_by_filter { font-size:95%; font-family:Arial; background-color:#fff000;  margin:0; border:0; padding:0;  }
 	</xsl:text>
+<!-- Simulate tabs. They are around 0.64cm in LO, we convert that to 0.8rem. -->
+<xsl:text>span.heading_numbering { margin-right: 0.8rem; }</xsl:text>
 <xsl:text>* { margin:0;}
 	</xsl:text>
 			<xsl:call-template name="write-mapped-CSS-styles">
