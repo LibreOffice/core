@@ -2950,7 +2950,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
                         DrawTextFlags::Center
                         | DrawTextFlags::VCenter
                         | DrawTextFlags::MultiLine
-                        | DrawTextFlags::WordBreakHyphenation;// | DrawTextFlags::WordBreak ;
+                        | DrawTextFlags::WordBreakHyphenation;
 
                 aDevice->DrawText(aRect, aText, nStyle);
             }
