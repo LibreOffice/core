@@ -129,8 +129,8 @@ export PAGEMAKER_TARBALL := libpagemaker-0.0.3.tar.bz2
 export PIXMAN_TARBALL := c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 export PNG_MD5SUM := 897ccec1ebfb0922e83c2bfaa1be8748
 export PNG_TARBALL := libpng-1.6.28.tar.gz
-export POPPLER_MD5SUM := f7a8230626b6d2061acfdc852930b7dd
-export POPPLER_TARBALL := poppler-0.55.0.tar.xz
+export POPPLER_MD5SUM := 6e44408a3b4f4a738f8a6770d0aea8a5
+export POPPLER_TARBALL := poppler-0.59.0.tar.xz
 export POSTGRESQL_TARBALL := c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2
 
 ifeq ($(PYTHON_VERSION_MINOR),3)
