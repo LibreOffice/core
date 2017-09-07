@@ -53,7 +53,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, any, visible ;
+            WriterVariants, any, visible ;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
@@ -413,7 +413,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, any,  visible ;
+            WriterVariants, any,  visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -439,7 +439,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, any,    visible ;
+            WriterVariants, any,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -465,7 +465,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, any,    hidden ;
+            WriterVariants, any,    hidden ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -491,7 +491,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Writer, any,    hidden ;
+            WriterVariants, any,    hidden ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
