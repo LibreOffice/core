@@ -159,11 +159,10 @@ namespace svx
         EndDialog(RET_OK);
     }
 
-
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile, Button*, void)
     {
         ::sfx2::FileDialogHelper aFileDlg(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE, this);
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
         if ( pFilter )
         {
@@ -202,7 +201,6 @@ namespace svx
 
         validate();
     }
-
 
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnTextModified, Edit&, void)
     {

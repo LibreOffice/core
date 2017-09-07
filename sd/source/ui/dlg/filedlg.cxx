@@ -59,7 +59,7 @@ private:
     DECL_LINK( IsMusicStoppedHdl, Timer *, void );
 
 public:
-    explicit SdFileDialog_Imp();
+    explicit SdFileDialog_Imp(const vcl::Window *pParent);
     virtual ~SdFileDialog_Imp() override;
 
     // overwritten from FileDialogHelper, to receive user feedback
@@ -174,8 +174,8 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
     }
 }
 
-SdFileDialog_Imp::SdFileDialog_Imp() :
-    FileDialogHelper( css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY ),
+SdFileDialog_Imp::SdFileDialog_Imp(const vcl::Window* pParent) :
+    FileDialogHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY, FileDialogFlags::NONE, pParent),
     mnPlaySoundEvent( nullptr ),
     mbLabelPlaying(false)
 {
@@ -212,8 +212,8 @@ SdFileDialog_Imp::~SdFileDialog_Imp()
 // -----------      SdOpenSoundFileDialog       -----------------------
 
 // these are simple forwarders
-SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
-    mpImpl( new SdFileDialog_Imp() )
+SdOpenSoundFileDialog::SdOpenSoundFileDialog(const vcl::Window *pParent) :
+    mpImpl( new SdFileDialog_Imp(pParent) )
 {
     OUString aDescr;
     aDescr = SdResId(STR_ALL_FILES);

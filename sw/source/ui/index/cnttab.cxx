@@ -92,13 +92,14 @@ using namespace ::sfx2;
 static const sal_Unicode aDeliStart = '['; // for the form
 static const sal_Unicode aDeliEnd    = ']'; // for the form
 
-static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
-                                const OUString& rFileString, bool bOpen )
+static OUString lcl_CreateAutoMarkFileDlg(const vcl::Window* pParent, const OUString& rURL,
+                                const OUString& rFileString, bool bOpen)
 {
     OUString sRet;
 
     FileDialogHelper aDlgHelper( bOpen ?
-                TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION );
+                TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION,
+                FileDialogFlags::NONE, pParent);
     uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
@@ -1489,7 +1490,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu, bool)
 
     if (sIdent == "open")
     {
-        sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
+        sAutoMarkURL = lcl_CreateAutoMarkFileDlg(this,
                                 sAutoMarkURL, sAutoMarkType, true);
     }
     else if ((sIdent == "new") || (sIdent == "edit"))
@@ -1497,7 +1498,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu, bool)
         bool bNew = (sIdent == "new");
         if (bNew)
         {
-            sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
+            sAutoMarkURL = lcl_CreateAutoMarkFileDlg(this,
                                     sAutoMarkURL, sAutoMarkType, false);
             if( sAutoMarkURL.isEmpty() )
                 return false;

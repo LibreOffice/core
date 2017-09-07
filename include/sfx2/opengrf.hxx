@@ -28,8 +28,8 @@ struct  SvxOpenGrf_Impl;
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
-    SvxOpenGraphicDialog    ( const OUString& rTitle );
-    ~SvxOpenGraphicDialog   ();
+    SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent);
+    ~SvxOpenGraphicDialog();
 
     ErrCode                 Execute();
 

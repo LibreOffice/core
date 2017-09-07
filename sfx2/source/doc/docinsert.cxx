@@ -74,10 +74,9 @@ FileDialogFlags lcl_map_mode_to_flags(const sfx2::DocumentInserter::Mode mode)
 
 namespace sfx2 {
 
-DocumentInserter::DocumentInserter(
-    const OUString& rFactory, const Mode mode) :
-
-      m_sDocFactory             ( rFactory )
+DocumentInserter::DocumentInserter(vcl::Window* pParent, const OUString& rFactory, const Mode mode)
+    : m_xParent                 ( pParent )
+    , m_sDocFactory             ( rFactory )
     , m_nDlgFlags               ( lcl_map_mode_to_flags(mode) )
     , m_nError                  ( ERRCODE_NONE )
     , m_pFileDlg                ( nullptr )
@@ -97,7 +96,7 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
     {
         m_pFileDlg.reset( new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                m_nDlgFlags, m_sDocFactory ) );
+                m_nDlgFlags, m_sDocFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_xParent ) );
     }
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
