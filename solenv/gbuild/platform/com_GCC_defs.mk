@@ -165,8 +165,10 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 # optimization level
 gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
 
+ifeq ($(OS),ANDROID)
+gb_DEBUGINFO_FLAGS=-glldb
 # Clang does not know -ggdb2 or some other options
-ifeq ($(HAVE_GCC_GGDB2),TRUE)
+else ifeq ($(HAVE_GCC_GGDB2),TRUE)
 gb_DEBUGINFO_FLAGS=-ggdb2
 else
 gb_DEBUGINFO_FLAGS=-g2
