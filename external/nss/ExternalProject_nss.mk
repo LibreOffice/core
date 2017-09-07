@@ -9,25 +9,14 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,nss))
 
+# nss build calls configure for nspr itself - if for some reason the configure step should be split out,
+# make sure to create config.status (aka run configure) in dir specified with OBJDIR_NAME (nspr/out)
 $(eval $(call gb_ExternalProject_register_targets,nss,\
-	configure \
 	build \
 ))
 
-$(call gb_ExternalProject_get_state_target,nss,configure):
-	$(call gb_ExternalProject_run,configure,\
-		$(if $(filter MSC,$(COM)),INCLUDE="$(COMPATH)/include" LIB="$(ILIB)") \
-		$(if $(CROSS_COMPILING),\
-			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
-		nspr/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter ANDROID,$(OS)),--build=$(BUILD_PLATFORM) --host="arm-linux-androidebi" --with-android-ndk=$(ANDROID_NDK_HOME) --with-android-toolchain=$(ANDROID_CLANG_TOOLCHAIN) --with-android-platform=$(ANDROID_PLATFORM_DIRECTORY)) \
-			$(if $(filter MSC-X86_64,$(COM)-$(CPUNAME)),--enable-64bit) \
-			$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)),--host=i686-pc-cygwin) \
-	,,nss_configure.log)
-
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
 		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
@@ -39,7 +28,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	,nss)
 
 else # OS!=WNT
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
+# make sure to specify NSPR_CONFIGURE_OPTS as env (before make command), so nss can append it's own defaults
+# OTOH specify e.g. CC and NSINSTALL as arguments (after make command), so they will overrule nss makefile values
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
 		$(if $(filter IOS,$(OS)),\
@@ -52,14 +43,14 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(CROSS_COMPILING),\
 			$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
 			$(if $(filter IOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
-			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
+			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
 		$(MAKE) -j1 AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
-			CCC="$(CXX)" \
-			$(if $(CROSS_COMPILING),NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
-			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android ANDROID_NDK=$(ANDROID_NDK_HOME) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION) NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=arm-linux-androidebi --with-android-ndk=$(ANDROID_NDK_HOME) --with-android-toolchain=$(ANDROID_CLANG_TOOLCHAIN) --with-android-platform=$(ANDROID_PLATFORM_DIRECTORY)") \
+			CC="$(CC)" CCC="$(CXX)" \
+			$(if $(CROSS_COMPILING),NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
+			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=14 ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_HOME) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION)) \
 			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
