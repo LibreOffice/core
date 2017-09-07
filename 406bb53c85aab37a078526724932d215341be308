@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_ac961692",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2017-09-07T20:17:00Z",
+      "side": 1,
+      "message": "WinXP support (along with Vista) is dropped already due to ICU, and the SDK to support XP is/was 7.1A, not 8.1A",
+      "range": {
+        "startLine": 35,
+        "startChar": 53,
+        "endLine": 35,
+        "endChar": 65
+      },
+      "revId": "406bb53c85aab37a078526724932d215341be308",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_1163c31b",
         "filename": "README.md",
         "patchSetId": 2
