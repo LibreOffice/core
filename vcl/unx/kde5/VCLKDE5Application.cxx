@@ -24,14 +24,14 @@
 
 #include "KDE5SalDisplay.hxx"
 
-VCLKDEApplication::VCLKDEApplication() :
-    KApplication()
+VCLKDE5Application::VCLKDE5Application() :
+    QApplication()
 {
 }
 
 // various hacks to be performed before re-entering Qt's event loop
 // because of showing a Qt dialog
-void VCLKDEApplication::preDialogSetup()
+void VCLKDE5Application::preDialogSetup()
 {
     // KFileDialog integration requires using event loop with QClipboard.
     // Opening the KDE file dialog here can lead to QClipboard
@@ -47,7 +47,7 @@ void VCLKDEApplication::preDialogSetup()
 }
 
 // various hacks to be performed after a Qt dialog has been closed
-void VCLKDEApplication::postDialogCleanup()
+void VCLKDE5Application::postDialogCleanup()
 {
     // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
     // (such as the auto-extension flag), but that doesn't update KGlobal::config()

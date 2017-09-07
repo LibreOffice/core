@@ -25,7 +25,7 @@
 #include <unx/salframe.h>
 #include <unx/salgdi.h>
 
-class KDESalFrame : public X11SalFrame
+class KDE5SalFrame : public X11SalFrame
 {
     private:
         static const int nMaxGraphics = 2;
@@ -41,7 +41,7 @@ class KDESalFrame : public X11SalFrame
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
     public:
-        KDESalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
+        KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
 
         virtual SalGraphics* AcquireGraphics() override;
         virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;

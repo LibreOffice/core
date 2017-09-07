@@ -47,16 +47,16 @@
 #include <boost/optional.hpp>
 
 
-KDESalFrame::KDESalFrame( SalFrame* pParent, SalFrameStyleFlags nState ) :
+KDE5SalFrame::KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nState ) :
     X11SalFrame( pParent, nState )
 {
 }
 
-void KDESalFrame::Show( bool bVisible, bool bNoActivate )
+void KDE5SalFrame::Show( bool bVisible, bool bNoActivate )
 {
     if ( !GetParent() && ! (GetStyle() & SalFrameStyleFlags::INTRO) )
     {
-        KDEXLib* pXLib = static_cast<KDEXLib*>(GetDisplay()->GetXLib());
+        KDE5XLib* pXLib = static_cast<KDE5XLib*>(GetDisplay()->GetXLib());
         pXLib->doStartup();
     }
 
@@ -120,12 +120,12 @@ static vcl::Font toFont( const QFont &rQFont, const css::lang::Locale& rLocale )
     else
         aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;
 
-    SAL_INFO( "vcl.kde4", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"" );
+    SAL_INFO( "vcl.kde5", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"" );
 
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rLocale );
 
-    SAL_INFO( "vcl.kde4", "font match " <<
+    SAL_INFO( "vcl.kde5", "font match " <<
               (aInfo.m_nID != 0 ? "succeeded" : "failed") <<
               ", name AFTER: \"" << aInfo.m_aFamilyName << "\"" );
 
@@ -150,7 +150,7 @@ static vcl::Font toFont( const QFont &rQFont, const css::lang::Locale& rLocale )
 
 /** Implementation of KDE integration's main method.
 */
-void KDESalFrame::UpdateSettings( AllSettings& rSettings )
+void KDE5SalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings style( rSettings.GetStyleSettings() );
     bool bSetTitleFont = false;
@@ -334,7 +334,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     rSettings.SetStyleSettings( style );
 }
 
-void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
+void KDE5SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     for( int i = 0; i < nMaxGraphics; i++ )
     {
@@ -346,7 +346,7 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     }
 }
 
-void KDESalFrame::updateGraphics( bool bClear )
+void KDE5SalFrame::updateGraphics( bool bClear )
 {
     Drawable aDrawable = bClear ? None : GetWindow();
     for( int i = 0; i < nMaxGraphics; i++ )
@@ -356,7 +356,7 @@ void KDESalFrame::updateGraphics( bool bClear )
     }
 }
 
-SalGraphics* KDESalFrame::AcquireGraphics()
+SalGraphics* KDE5SalFrame::AcquireGraphics()
 {
     if( GetWindow() )
     {

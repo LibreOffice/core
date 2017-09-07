@@ -51,7 +51,7 @@
 #include "tst_exclude_posted_events.moc"
 #endif
 
-KDEXLib::KDEXLib() :
+KDE5XLib::KDE5XLib() :
     SalXLib(),  m_bStartupDone(false),
     m_nFakeCmdLineArgs( 0 ),
     m_isGlibEventLoopType(false), m_allowKdeDialogs(false),
@@ -84,7 +84,7 @@ KDEXLib::KDEXLib() :
              Qt::BlockingQueuedConnection );
 }
 
-KDEXLib::~KDEXLib()
+KDE5XLib::~KDE5XLib()
 {
 
     // free the faked cmdline arguments no longer needed by KApplication
@@ -94,7 +94,7 @@ KDEXLib::~KDEXLib()
     }
 }
 
-void KDEXLib::Init()
+void KDE5XLib::Init()
 {
     m_pInputMethod = new SalI18N_InputMethod;
     m_pInputMethod->SetLocale();
@@ -218,22 +218,22 @@ static bool qt_event_filter( void* m )
 {
     if( old_qt_event_filter != nullptr && old_qt_event_filter( m ))
         return true;
-    if( SalKDEDisplay::self() && SalKDEDisplay::self()->checkDirectInputEvent( static_cast< XEvent* >( m )))
+    if( SalKDE5Display::self() && SalKDE5Display::self()->checkDirectInputEvent( static_cast< XEvent* >( m )))
         return true;
     return false;
 }*/
 
-bool KDEXLib::nativeEventFilter(const QByteArray &eventType, void *message, long *)
+bool KDE5XLib::nativeEventFilter(const QByteArray &eventType, void *message, long *)
 {
     if (eventType == "xcb_generic_event_t") {
         xcb_generic_event_t* ev = static_cast<xcb_generic_event_t *>(message);
-        if( SalKDEDisplay::self() && SalKDEDisplay::self()->checkDirectInputEvent( ev ))
+        if( SalKDE5Display::self() && SalKDE5Display::self()->checkDirectInputEvent( ev ))
             return true;
     }
     return false;
 }
 
-void KDEXLib::setupEventLoop()
+void KDE5XLib::setupEventLoop()
 {
     QAbstractEventDispatcher::instance()->installNativeEventFilter( this );
 #if KF5_HAVE_GLIB
@@ -248,7 +248,7 @@ void KDEXLib::setupEventLoop()
 #endif
 }
 
-void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle )
+void KDE5XLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle )
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::Insert( fd, data, pending, queued, handle );
@@ -263,7 +263,7 @@ void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, Y
     socketData[ fd ] = sdata;
 }
 
-void KDEXLib::Remove( int fd )
+void KDE5XLib::Remove( int fd )
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::Remove( fd );
@@ -271,13 +271,13 @@ void KDEXLib::Remove( int fd )
     delete sdata.notifier;
 }
 
-void KDEXLib::socketNotifierActivated( int fd )
+void KDE5XLib::socketNotifierActivated( int fd )
 {
     const SocketData& sdata = socketData[ fd ];
     sdata.handle( fd, sdata.data );
 }
 
-bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool KDE5XLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     if( !m_isGlibEventLoopType )
     {
@@ -312,7 +312,7 @@ bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
  * Quoting the Qt docs: [QAbstractEventDispatcher::processEvents] processes
  * pending events that match flags until there are no more events to process.
  */
-bool KDEXLib::processYield( bool bWait, bool )
+bool KDE5XLib::processYield( bool bWait, bool )
 {
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
@@ -323,7 +323,7 @@ bool KDEXLib::processYield( bool bWait, bool )
     return wasEvent;
 }
 
-void KDEXLib::StartTimer( sal_uLong nMS )
+void KDE5XLib::StartTimer( sal_uLong nMS )
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::StartTimer( nMS );
@@ -335,47 +335,47 @@ void KDEXLib::StartTimer( sal_uLong nMS )
         Q_EMIT startTimeoutTimerSignal();
 }
 
-void KDEXLib::startTimeoutTimer()
+void KDE5XLib::startTimeoutTimer()
 {
     timeoutTimer.start();
 }
 
-void KDEXLib::StopTimer()
+void KDE5XLib::StopTimer()
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::StopTimer();
     timeoutTimer.stop();
 }
 
-void KDEXLib::timeoutActivated()
+void KDE5XLib::timeoutActivated()
 {
     // don't potentially wait in timeout, as QTimer is non-recursive
     QApplication::postEvent(this, new QEvent(QEvent::Type( m_timerEventId )));
 }
 
-void KDEXLib::customEvent(QEvent* e)
+void KDE5XLib::customEvent(QEvent* e)
 {
     if( e->type() == m_timerEventId )
         X11SalData::Timeout();
     else if( e->type() == m_postUserEventId )
-        SalKDEDisplay::self()->DispatchInternalEvent();
+        SalKDE5Display::self()->DispatchInternalEvent();
 }
 
-void KDEXLib::Wakeup()
+void KDE5XLib::Wakeup()
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::Wakeup();
     QAbstractEventDispatcher::instance( qApp->thread())->wakeUp(); // main thread event loop
 }
 
-void KDEXLib::PostUserEvent()
+void KDE5XLib::PostUserEvent()
 {
     if( !m_isGlibEventLoopType )
         return SalXLib::PostUserEvent();
     QApplication::postEvent(this, new QEvent(QEvent::Type( m_postUserEventId )));
 }
 
-void KDEXLib::doStartup()
+void KDE5XLib::doStartup()
 {
     if( ! m_bStartupDone )
     {
@@ -387,7 +387,7 @@ void KDEXLib::doStartup()
 
 using namespace com::sun::star;
 
-uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
+uno::Reference< ui::dialogs::XFilePicker2 > KDE5XLib::createFilePicker(
         const uno::Reference< uno::XComponentContext >& xMSF )
 {
 #if KF5_HAVE_GLIB

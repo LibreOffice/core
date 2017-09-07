@@ -35,7 +35,7 @@
 
 class VCLKDEApplication;
 
-class KDEXLib : public QObject, public QAbstractNativeEventFilter, public SalXLib
+class KDE5XLib : public QObject, public QAbstractNativeEventFilter, public SalXLib
 {
     Q_OBJECT
     private:
@@ -75,8 +75,8 @@ class KDEXLib : public QObject, public QAbstractNativeEventFilter, public SalXLi
             createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >& );
 
     public:
-        KDEXLib();
-        virtual ~KDEXLib() override;
+        KDE5XLib();
+        virtual ~KDE5XLib() override;
 
         virtual void Init() override;
         virtual bool Yield( bool bWait, bool bHandleAllCurrentEvents ) override;

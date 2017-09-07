@@ -33,20 +33,20 @@
 
 using namespace com::sun::star;
 
-KDESalInstance::KDESalInstance(SalYieldMutex* pMutex)
+KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
     : X11SalInstance(pMutex)
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
-    pSVData->maAppData.mpToolkitName = new OUString("kde4");
+    pSVData->maAppData.mpToolkitName = new OUString("kde5");
 }
 
-SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
+SalFrame* KDE5SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nState )
 {
-    return new KDESalFrame( pParent, nState );
+    return new KDE5SalFrame( pParent, nState );
 }
 
-uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
+uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
     const uno::Reference< uno::XComponentContext >& xMSF )
 {
     /*KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
@@ -57,12 +57,12 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
         return X11SalInstance::createFilePicker( xMSF );
 }
 
-SalX11Display* KDESalInstance::CreateDisplay() const
+SalX11Display* KDE5SalInstance::CreateDisplay() const
 {
-    return new SalKDEDisplay( QX11Info::display() );
+    return new SalKDE5Display( QX11Info::display() );
 }
 
-bool KDESalInstance::IsMainThread() const
+bool KDE5SalInstance::IsMainThread() const
 {
     return qApp->thread() == QThread::currentThread();
 }
