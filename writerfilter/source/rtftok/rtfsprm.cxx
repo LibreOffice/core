@@ -79,8 +79,8 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
         {
             if (bFirst)
                 return rSprm.second;
-            else
-                pValue = rSprm.second;
+
+            pValue = rSprm.second;
         }
     return pValue;
 }
@@ -99,11 +99,9 @@ void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwr
                     rSprm.second = pValue;
                     return;
                 }
-                else
-                {
-                    bFound = true;
-                    break;
-                }
+
+                bFound = true;
+                break;
             }
     }
     if (eOverwrite == RTFOverwrite::NO_APPEND || !bFound)
@@ -300,8 +298,8 @@ void RTFSprms::clear()
 {
     if (m_pSprms->m_nRefCount == 1)
         return m_pSprms->clear();
-    else
-        m_pSprms.reset(new RTFSprmsImpl);
+
+    m_pSprms.reset(new RTFSprmsImpl);
 }
 
 } // namespace rtftok

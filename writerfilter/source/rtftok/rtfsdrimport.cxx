@@ -69,7 +69,7 @@ RTFSdrImport::~RTFSdrImport()
 {
     if (!m_aGraphicZOrderHelpers.empty())
         m_aGraphicZOrderHelpers.pop();
-    if (m_aParents.size())
+    if (!m_aParents.empty())
         m_aParents.pop();
 }
 
@@ -384,7 +384,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         {
             continue; // ignore: already handled by initShape
         }
-        else if (rProperty.first == "wzName")
+        if (rProperty.first == "wzName")
         {
             if (m_bTextFrame)
             {
@@ -838,7 +838,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xPropertySet->setPropertyValue("TextWritingMode", uno::makeAny(eWritingMode));
     }
 
-    if (m_aParents.size() && m_aParents.top().is() && !m_bTextFrame)
+    if (!m_aParents.empty() && m_aParents.top().is() && !m_bTextFrame)
         m_aParents.top()->add(xShape);
 
     if (bPib)

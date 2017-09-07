@@ -62,7 +62,7 @@ private:
     int initShape(css::uno::Reference<css::drawing::XShape>& o_xShape,
                   css::uno::Reference<css::beans::XPropertySet>& o_xPropSet,
                   bool& o_rIsCustomShape,
-                  RTFShape const& rShape, bool bClose, ShapeOrPict const shapeOrPict);
+                  RTFShape const& rShape, bool bClose, ShapeOrPict shapeOrPict);
 
     RTFDocumentImpl& m_rImport;
     std::stack< css::uno::Reference<css::drawing::XShapes> > m_aParents;

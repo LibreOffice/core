@@ -481,22 +481,22 @@ private:
     void sectBreak(bool bFinal = false);
     void prepareProperties(
         RTFParserState& rState,
-        writerfilter::Reference<Properties>::Pointer_t&,
-        writerfilter::Reference<Properties>::Pointer_t&,
-        writerfilter::Reference<Properties>::Pointer_t&,
-        int const nCells, int const nCurrentCellX);
+        writerfilter::Reference<Properties>::Pointer_t& o_rpParagraphProperties,
+        writerfilter::Reference<Properties>::Pointer_t& o_rpFrameProperties,
+        writerfilter::Reference<Properties>::Pointer_t& o_rpTableRowProperties,
+        int nCells, int nCurrentCellX);
     /// Send the passed properties to dmapper.
     void sendProperties(
-        writerfilter::Reference<Properties>::Pointer_t const&,
-        writerfilter::Reference<Properties>::Pointer_t const&,
-        writerfilter::Reference<Properties>::Pointer_t const&);
+        writerfilter::Reference<Properties>::Pointer_t const& pParagraphProperties,
+        writerfilter::Reference<Properties>::Pointer_t const& pFrameProperties,
+        writerfilter::Reference<Properties>::Pointer_t const& pTableRowProperties);
     void replayRowBuffer(RTFBuffer_t& rBuffer,
                          ::std::deque<RTFSprms>& rCellsSrpms,
                          ::std::deque<RTFSprms>& rCellsAttributes,
-                         int const nCells);
+                         int nCells);
     void replayBuffer(RTFBuffer_t& rBuffer,
-                      RTFSprms*      const pSprms,
-                      RTFSprms const* const pAttributes);
+                      RTFSprms* pSprms,
+                      RTFSprms const* pAttributes);
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.

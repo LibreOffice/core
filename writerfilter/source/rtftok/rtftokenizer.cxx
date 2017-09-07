@@ -160,7 +160,7 @@ RTFError RTFTokenizer::resolveParse()
 
     if (m_nGroup < 0)
         return RTFError::GROUP_UNDER;
-    else if (m_nGroup > 0)
+    if (m_nGroup > 0)
         return RTFError::GROUP_OVER;
     return RTFError::OK;
 }

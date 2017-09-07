@@ -136,8 +136,8 @@ OUString RTFValue::getString() const
 {
     if (!m_sValue.isEmpty() || m_bForceString)
         return m_sValue;
-    else
-        return OUString::number(m_nValue);
+
+    return OUString::number(m_nValue);
 }
 
 void RTFValue::setString(const OUString& sValue)
@@ -186,8 +186,8 @@ std::string RTFValue::toString() const
 {
     if (!m_sValue.isEmpty() || m_bForceString)
         return OUStringToOString(m_sValue, RTL_TEXTENCODING_UTF8).getStr();
-    else
-        return OString::number(m_nValue).getStr();
+
+    return OString::number(m_nValue).getStr();
 }
 #endif
 
@@ -209,11 +209,11 @@ bool RTFValue::equals(RTFValue& rOther)
         return false;
     if (m_pAttributes->size() != rOther.m_pAttributes->size())
         return false;
-    else if (!m_pAttributes->equals(rOther))
+    if (!m_pAttributes->equals(rOther))
         return false;
     if (m_pSprms->size() != rOther.m_pSprms->size())
         return false;
-    else if (!m_pSprms->equals(rOther))
+    if (!m_pSprms->equals(rOther))
         return false;
     return true;
 }
