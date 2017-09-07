@@ -62,6 +62,7 @@ public:
     void testCharNamedstyle();
     void testNamedStyleInheritance();
     void testNestedSpan();
+    void testLineBreak();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testCharNamedstyle);
     CPPUNIT_TEST(testNamedStyleInheritance);
     CPPUNIT_TEST(testNestedSpan);
+    CPPUNIT_TEST(testLineBreak);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -315,6 +317,15 @@ void EPUBExportTest::testNestedSpan()
     // This failed, direct formatting on top of named style was lost.
     assertCss(aCssDoc, aRed, "  color: #ff0000;");
     assertCss(aCssDoc, aRed, "  font-family: 'Liberation Mono';");
+}
+
+void EPUBExportTest::testLineBreak()
+{
+    createDoc("line-break.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This was 0, line break was not handled.
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:br", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
