@@ -33,6 +33,9 @@ private:
     OUString m_aStyleName;
 };
 
+/// Shared child context factory for paragraph and span contexts.
+XMLImportContext *CreateChildContext(XMLImport &rImport, const OUString &rName);
+
 } // namespace exp
 } // namespace writerperfect
 

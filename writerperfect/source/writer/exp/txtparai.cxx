@@ -103,7 +103,7 @@ XMLImportContext *XMLSpanContext::CreateChildContext(const OUString &rName, cons
         return new XMLTextFrameContext(mrImport);
     if (rName == "text:span")
         return new XMLSpanContext(mrImport, &m_aPropertyList);
-    return nullptr;
+    return writerperfect::exp::CreateChildContext(mrImport, rName);
 }
 
 void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
@@ -207,9 +207,7 @@ XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, cons
         return new XMLSpanContext(mrImport, nullptr);
     if (rName == "text:a")
         return new XMLHyperlinkContext(mrImport);
-    if (rName == "text:line-break")
-        return new XMLLineBreakContext(mrImport);
-    return nullptr;
+    return writerperfect::exp::CreateChildContext(mrImport, rName);
 }
 
 void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
@@ -251,6 +249,13 @@ void XMLParaContext::characters(const OUString &rChars)
     mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
 
     mrImport.GetGenerator().closeSpan();
+}
+
+XMLImportContext *CreateChildContext(XMLImport &rImport, const OUString &rName)
+{
+    if (rName == "text:line-break")
+        return new XMLLineBreakContext(rImport);
+    return nullptr;
 }
 
 } // namespace exp
