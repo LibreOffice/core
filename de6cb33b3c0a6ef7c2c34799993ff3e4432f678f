@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_aeffee32",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-07T06:28:22Z",
+      "side": 1,
+      "message": "why add a new try/catch-ignore block here? such exception-ignoring is rarely justified (even if legacy code is often sprinkled with it liberally)",
+      "revId": "de6cb33b3c0a6ef7c2c34799993ff3e4432f678f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
