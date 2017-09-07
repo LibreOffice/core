@@ -563,22 +563,35 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 eCurrentEvent = CommandLineEvent::BatchPrint;
             }
-            else if ( eCurrentEvent == CommandLineEvent::BatchPrint && oArg == "printer-name" )
+            else if ( oArg == "printer-name" )
             {
-                // first argument is the printer name
-                if (supplier.next(&aArg))
-                    m_printername = aArg;
+                if (eCurrentEvent == CommandLineEvent::BatchPrint)
+                {
+                    // first argument is the printer name
+                    if (supplier.next(&aArg))
+                        m_printername = aArg;
+                    else if (m_unknown.isEmpty())
+                        m_unknown = "--printer-name must be followed by printername";
+                }
                 else if (m_unknown.isEmpty())
-                    m_unknown = "--printer-name must be followed by printername";
+                {
+                    m_unknown = "--printer-name must directly follow --print-to-file";
+                }
             }
-            else if ( (eCurrentEvent == CommandLineEvent::Conversion ||
-                       eCurrentEvent == CommandLineEvent::BatchPrint)
-                      && oArg == "outdir" )
+            else if ( oArg == "outdir" )
             {
-                if (supplier.next(&aArg))
-                    m_conversionout = aArg;
+                if ((eCurrentEvent == CommandLineEvent::Conversion ||
+                    eCurrentEvent == CommandLineEvent::BatchPrint))
+                {
+                    if (supplier.next(&aArg))
+                        m_conversionout = aArg;
+                    else if (m_unknown.isEmpty())
+                        m_unknown = "--outdir must be followed by output directory path";
+                }
                 else if (m_unknown.isEmpty())
-                    m_unknown = "--outdir must be followed by output directory path";
+                {
+                    m_unknown = "--outdir must directly follow either output filter specification of --convert-to, or --print-to-file or its printer specification";
+                }
             }
             else if ( aArg.startsWith("-") )
             {
