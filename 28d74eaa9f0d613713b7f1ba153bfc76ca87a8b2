@@ -70,6 +70,30 @@
       "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_31eeff22",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8836,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-09-07T11:14:53Z",
+      "side": 1,
+      "message": "When I use (in bash) grep a?n filename, with \u0027tan\u0027 in the file, it does not show..\n\nI must admit that I do not know how to enable/disable regex or wildcards in a document. I used sc/qa/unit/data/functions/text/fods/search.fods and modified/renamed it.\nThat\u0027s why I didn\u0027t test wildcards and why wildcards aren\u0027t tested for SEARCH either.\n\nThat Excel doesn\u0027t support regex is no surprise.",
+      "parentUuid": "1a430d35_91afb3e2",
+      "range": {
+        "startLine": 8836,
+        "startChar": 55,
+        "endLine": 8836,
+        "endChar": 71
+      },
+      "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
