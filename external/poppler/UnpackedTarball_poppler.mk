@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-mac-fake.patch.1 \
 	external/poppler/ubsan.patch.0 \
 	external/poppler/poppler-libjpeg.patch.1 \
+	external/poppler/0001-Fix-building-with-old-clang.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
