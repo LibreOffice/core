@@ -84,6 +84,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbahyperlink \
 	sc/source/ui/vba/vbahyperlinks \
 	sc/source/ui/vba/vbainterior \
+	sc/source/ui/vba/vbalineshape \
 	sc/source/ui/vba/vbamenubar  \
 	sc/source/ui/vba/vbamenubars \
 	sc/source/ui/vba/vbamenu \
@@ -95,6 +96,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbaoleobject \
 	sc/source/ui/vba/vbaoleobjects \
 	sc/source/ui/vba/vbaoutline \
+	sc/source/ui/vba/vbaovalshape \
 	sc/source/ui/vba/vbapagebreak \
 	sc/source/ui/vba/vbapagebreaks \
 	sc/source/ui/vba/vbapagesetup \

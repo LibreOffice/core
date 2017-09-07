@@ -29,6 +29,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
+#include <ooo/vba/office/MsoAutoShapeType.hpp>
 #include <ooo/vba/word/WdRelativeHorizontalPosition.hpp>
 #include <ooo/vba/word/WdRelativeVerticalPosition.hpp>
 
@@ -152,6 +153,47 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape >& xShape )
         return office::MsoShapeType::msoTextBox;
     else
         throw uno::RuntimeException("the shape type do not be supported: " + sShapeType );
+}
+
+sal_Int32 ScVbaShape::getAutoShapeType(const css::uno::Reference< drawing::XShape >& xShape)
+{
+    assert( ScVbaShape::getType( xShape ) == office::MsoShapeType::msoAutoShape );
+
+    OUString sShapeType;
+    uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor( xShape, uno::UNO_QUERY_THROW );
+    sShapeType = xShapeDescriptor->getShapeType();
+    SAL_INFO("vbahelper", "ScVbaShape::getAutoShapeType: " << sShapeType);
+
+    if( sShapeType == "com.sun.star.drawing.EllipseShape" )
+        return office::MsoAutoShapeType::msoShapeOval;
+    else if ( sShapeType == "com.sun.star.drawing.RectangleShape" )
+        return office::MsoAutoShapeType::msoShapeRectangle;
+    else if ( sShapeType == "com.sun.star.drawing.CustomShape" )
+    {
+        uno::Reference< beans::XPropertySet > aXPropSet( xShape, uno::UNO_QUERY );
+        uno::Any aGeoPropSet = aXPropSet->getPropertyValue( "CustomShapeGeometry" );
+        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+        if ( aGeoPropSet >>= aGeoPropSeq )
+        {
+            for( const auto& rProp : aGeoPropSeq )
+            {
+                if( rProp.Name == "Type" )
+                {
+                    OUString sType;
+                    if( rProp.Value >>= sType )
+                    {
+                        if( sType.endsWith( "ellipse" ) )
+                            return office::MsoAutoShapeType::msoShapeOval;
+                        // TODO other custom shapes here
+                    }
+                }
+            }
+        }
+    }
+
+    SAL_WARN( "vbahelper", "ScVbaShape::getAutoShapeType: unknown auto type" );
+    return -1; // could not decide
+
 }
 
 // Attributes
