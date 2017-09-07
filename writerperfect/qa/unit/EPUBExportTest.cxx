@@ -44,6 +44,8 @@ public:
     void setUp() override;
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx) override;
+    /// Asserts that rCssDoc has a key named rKey and one of its rules is rValue.
+    void assertCss(const std::map< OString, std::vector<OString> > &rCssDoc, const OString &rKey, const OString &rValue);
     void createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData);
     /// Returns an XML representation of the stream named rName in the exported package.
     xmlDocPtr parseExport(const OUString &rName);
@@ -59,6 +61,7 @@ public:
     void testParaNamedstyle();
     void testCharNamedstyle();
     void testNamedStyleInheritance();
+    void testNestedSpan();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -71,6 +74,7 @@ public:
     CPPUNIT_TEST(testParaNamedstyle);
     CPPUNIT_TEST(testCharNamedstyle);
     CPPUNIT_TEST(testNamedStyleInheritance);
+    CPPUNIT_TEST(testNestedSpan);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -101,6 +105,16 @@ void EPUBExportTest::registerNamespaces(xmlXPathContextPtr &pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("opf"), BAD_CAST("http://www.idpf.org/2007/opf"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
+}
+
+void EPUBExportTest::assertCss(const std::map< OString, std::vector<OString> > &rCssDoc, const OString &rKey, const OString &rValue)
+{
+    auto it = rCssDoc.find(rKey);
+    CPPUNIT_ASSERT(it != rCssDoc.end());
+
+    const std::vector<OString> &rRule = it->second;
+    CPPUNIT_ASSERT_MESSAGE(OString("In '" + rKey + "', rule '" + rValue + "' is not found.").getStr(),
+                           std::find(rRule.begin(), rRule.end(), rValue) != rRule.end());
 }
 
 void EPUBExportTest::createDoc(const OUString &rFile, const uno::Sequence<beans::PropertyValue> &rFilterData)
@@ -275,16 +289,32 @@ void EPUBExportTest::testNamedStyleInheritance()
 
     // Find the CSS rule for the blue text.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
-    OUString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class");
+    OString aBlue = getXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span[2]", "class").toUtf8();
 
-    std::map< OString, std::vector<OString> > aTree;
-    parseCssExport("OEBPS/styles/stylesheet.css", aTree);
-    CPPUNIT_ASSERT(aTree.find(aBlue.toUtf8()) != aTree.end());
-    const std::vector<OString> &rRule = aTree[aBlue.toUtf8()];
-    CPPUNIT_ASSERT(std::find(rRule.begin(), rRule.end(), "  color: #0000ff;") != rRule.end());
+    std::map< OString, std::vector<OString> > aCssDoc;
+    parseCssExport("OEBPS/styles/stylesheet.css", aCssDoc);
+    assertCss(aCssDoc, aBlue, "  color: #0000ff;");
     // This failed, the span only had the properties from its style, but not
     // from the style's parent(s).
-    CPPUNIT_ASSERT(std::find(rRule.begin(), rRule.end(), "  font-family: 'Liberation Mono';") != rRule.end());
+    assertCss(aCssDoc, aBlue, "  font-family: 'Liberation Mono';");
+}
+
+void EPUBExportTest::testNestedSpan()
+{
+    createDoc("nested-span.fodt", {});
+
+    // Check textural content of nested span.
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This crashed, span had no content.
+    assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "red");
+
+    // Check formatting of nested span.
+    OString aRed = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class").toUtf8();
+    std::map< OString, std::vector<OString> > aCssDoc;
+    parseCssExport("OEBPS/styles/stylesheet.css", aCssDoc);
+    // This failed, direct formatting on top of named style was lost.
+    assertCss(aCssDoc, aRed, "  color: #ff0000;");
+    assertCss(aCssDoc, aRed, "  font-family: 'Liberation Mono';");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
