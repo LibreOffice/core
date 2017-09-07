@@ -23,6 +23,7 @@
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -227,8 +228,19 @@ namespace logging
 
         if(m_LogTimestamp)
         {
+            if (   record.LogTime.Year < -9999 || 9999 < record.LogTime.Year
+                || record.LogTime.Month < 1 || 12 < record.LogTime.Month
+                || record.LogTime.Day < 1 || 31 < record.LogTime.Day
+                || 24 < record.LogTime.Hours
+                || 60 < record.LogTime.Minutes
+                || 60 < record.LogTime.Seconds
+                || 999999999 < record.LogTime.NanoSeconds)
+            {
+                throw css::lang::IllegalArgumentException("invalid date", static_cast<cppu::OWeakObject*>(this), 1);
+            }
+
             // ISO 8601
-            char buffer[ 30 ];
+            char buffer[ 31 ];
             const size_t buffer_size = sizeof( buffer );
             snprintf( buffer, buffer_size, "%04i-%02i-%02iT%02i:%02i:%02i.%09i",
                 (int)record.LogTime.Year,
