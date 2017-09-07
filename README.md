@@ -27,6 +27,33 @@ to compile and build your code, it avoids any arbitrary limitations of
 our scripting APIs, and in general is far more simple and intuitive -
 if you are a reasonably able C++ programmer.
 
+## The build chain and runtime baselines
+
+These are the current minimal operating system and compiler versions to
+run and compile LibreOffice, also used by the TDF builds:
+
+* Windows:
+ * Runtime: Windows 7
+ * Build: Cygwin + Visual Studio 2015 Update 3
+* macOS:
+ * Runtime: 10.9
+ * Build: 10.11 + Xcode 8
+* Linux:
+ * Runtime: RHEL 6 or CentOS 6
+ * Build: GCC 4.8.1 or Clang
+
+If you want to use Clang with the LibreOffice compiler plugins, the minimal
+version of Clang is 3.4. Since Xcode doesn't provide the compiler plugin
+headers, you have to compile your own Clang to use them on macOS.
+
+You can find the TDF configure switches in the distro-configs/ directory.
+
+To setup your initial build environment on Windows and macOS, we provide
+the LibreOffice Development Environment
+([LODE](https://wiki.documentfoundation.org/Development/lode)) scripts.
+
+For more information see the build instructions for your platform in the
+[TDF wiki](https://wiki.documentfoundation.org/Development).
 
 ## The important bits of code
 
