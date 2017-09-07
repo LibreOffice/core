@@ -1086,7 +1086,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
 
         if( !m_pLbxFound->GetSelectEntryCount() || !bEntriesFound )
         {
-            SvxOpenGraphicDialog aDlg("Gallery");
+            SvxOpenGraphicDialog aDlg("Gallery", this);
             aDlg.EnableLink(false);
             aDlg.AsLink(false);
 

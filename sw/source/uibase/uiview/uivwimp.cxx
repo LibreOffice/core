@@ -261,7 +261,7 @@ void SwView_Impl::StartDocumentInserter(
     }
 
     delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter( rFactory, mode );
+    m_pDocInserter = new ::sfx2::DocumentInserter(pView->GetWindow(), rFactory, mode);
     m_pDocInserter->StartExecuteModal( rEndDialogHdl );
 }
 

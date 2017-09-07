@@ -53,11 +53,11 @@ using namespace ::com::sun::star::sdbcx;
 namespace SwMailMergeHelper
 {
 
-OUString CallSaveAsDialog(OUString& rFilter)
+OUString CallSaveAsDialog(vcl::Window* pParent, OUString& rFilter)
 {
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE,
-                SwDocShell::Factory().GetFactoryName() );
+                SwDocShell::Factory().GetFactoryName(), SfxFilterFlags::NONE, SfxFilterFlags::NONE, pParent);
 
     if (aDialog.Execute()!=ERRCODE_NONE)
     {

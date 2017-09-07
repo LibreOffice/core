@@ -170,8 +170,8 @@ namespace sfx2
                                     FileDialogHelper* _pAntiImpl,
                                     const short nDialogType,
                                     FileDialogFlags nFlags,
-                                    sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
-                                    const vcl::Window* _pPreferredParentWindow = nullptr,
+                                    sal_Int16 nDialog,
+                                    const vcl::Window* _pPreferredParentWindow,
                                     const OUString& sStandardDir = OUString(),
                                     const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
                                 );

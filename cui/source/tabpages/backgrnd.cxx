@@ -1135,7 +1135,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
     OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
-    pImportDlg = new SvxOpenGraphicDialog( aStrBrowse );
+    pImportDlg = new SvxOpenGraphicDialog(aStrBrowse, this);
     if ( bHtml )
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath( aBgdGraphicPath, m_pBtnLink->IsChecked() );

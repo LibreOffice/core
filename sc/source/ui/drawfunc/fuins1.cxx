@@ -219,7 +219,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 }
 
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
-                                  vcl::Window*           pWin,
+                                  vcl::Window*      pWin,
                                   ScDrawView*       pViewP,
                                   SdrModel*         pDoc,
                                   SfxRequest&       rReq )
@@ -249,7 +249,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     }
     else
     {
-        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));
+        SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin);
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {

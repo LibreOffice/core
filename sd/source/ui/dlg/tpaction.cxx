@@ -411,7 +411,7 @@ void SdTPAction::OpenFileDialog()
 
         if (bSound)
         {
-            SdOpenSoundFileDialog   aFileDialog;
+            SdOpenSoundFileDialog aFileDialog(this);
 
             if( aFile.isEmpty() )
                 aFile = SvtPathOptions().GetWorkPath();
@@ -437,7 +437,8 @@ void SdTPAction::OpenFileDialog()
         else
         {
             sfx2::FileDialogHelper aFileDialog(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                FileDialogFlags::NONE, this);
 
             if (bDocument && aFile.isEmpty())
                 aFile = SvtPathOptions().GetWorkPath();

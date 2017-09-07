@@ -1033,8 +1033,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl, Button*, void)
     if(!CheckPasswd())
         return;
     delete m_pDocInserter;
-    m_pDocInserter =
-        new ::sfx2::DocumentInserter( "swriter" );
+    m_pDocInserter = new ::sfx2::DocumentInserter(this, "swriter");
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
 }
 
@@ -1752,7 +1751,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
 IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl, Button*, void)
 {
     delete m_pDocInserter;
-    m_pDocInserter = new ::sfx2::DocumentInserter( "swriter" );
+    m_pDocInserter = new ::sfx2::DocumentInserter(this, "swriter");
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
 }
 

@@ -1397,7 +1397,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( StartFileDialogType nType, const
     short nDialogType = bSave ? ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
                               : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
     delete m_pFileDlg;
-    m_pFileDlg = new sfx2::FileDialogHelper( nDialogType );
+    m_pFileDlg = new sfx2::FileDialogHelper(nDialogType, FileDialogFlags::NONE, this);
 
     m_pFileDlg->SetTitle( rTitle );
     m_pFileDlg->AddFilter( aFilterAllStr, FILEDIALOG_FILTER_ALL );
