@@ -474,18 +474,15 @@ if test -n "$with_android_ndk"; then
         fi
     fi
 
-    ANDROID_API_LEVEL=15
+    ANDROID_API_LEVEL=14
     if test $host_cpu = arm; then
         android_gnu_prefix=arm-linux-androideabi
     elif test $host_cpu = aarch64; then
         android_gnu_prefix=aarch64-linux-android
         ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
-        ANDROID_API_LEVEL=L
+        ANDROID_API_LEVEL=21
     elif test $host_cpu = mips; then
         android_gnu_prefix=mipsel-linux-android
-    elif test $ANDROID_NDK_VERSION = r8; then
-        # The prefix used for the x86 tool-chain changed between NDK r8 and r8b
-        android_gnu_prefix=i686-android-linux
     else
         android_gnu_prefix=i686-linux-android
     fi
@@ -850,7 +847,7 @@ linux-android*)
     ;;
 esac
 
-if echo "$host_os" | grep -q linux-android ; then
+if test "$_os" = "Android" ; then
     if test -z "$with_android_sdk"; then
         AC_MSG_ERROR([the --with-android-sdk option is mandatory, unless it is available at external/android-sdk-linux/.])
     fi
@@ -11883,7 +11880,7 @@ else
 fi
 AC_SUBST(OOO_VENDOR)
 
-if echo "$host_os" | grep -q linux-android ; then
+if test "$_os" = "Android" ; then
     ANDROID_PACKAGE_NAME=
     AC_MSG_CHECKING([for Android package name])
     if test -z "$with_android_package_name" -o "$with_android_package_name" = "no"; then
