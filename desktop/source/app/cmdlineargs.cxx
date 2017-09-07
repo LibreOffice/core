@@ -580,8 +580,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "outdir" )
             {
-                if ((eCurrentEvent == CommandLineEvent::Conversion ||
-                    eCurrentEvent == CommandLineEvent::BatchPrint))
+                if (eCurrentEvent == CommandLineEvent::Conversion ||
+                    eCurrentEvent == CommandLineEvent::BatchPrint)
                 {
                     if (supplier.next(&aArg))
                         m_conversionout = aArg;
