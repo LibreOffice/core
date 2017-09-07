@@ -43,6 +43,7 @@
 
 #if defined LINUX && ! defined __FreeBSD_kernel__
 #include <sys/prctl.h>
+#include <sys/syscall.h>
 #ifndef PR_SET_NAME
 #define PR_SET_NAME 15
 #endif
@@ -80,7 +81,7 @@
 typedef struct osl_thread_impl_st
 {
     pthread_t           m_hThread;
-    sal_uInt16          m_Ident; /* @@@ see TODO @@@ */
+    oslThreadIdentifier m_Ident; /* @@@ see TODO @@@ */
     short               m_Flags;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
@@ -135,9 +136,9 @@ static oslThread osl_thread_create_Impl (
     oslWorkerFunction pWorker, void * pThreadData, short nFlags);
 
 /* @@@ see TODO @@@ */
-static sal_uInt16 insertThreadId (pthread_t hThread);
-static sal_uInt16 lookupThreadId (pthread_t hThread);
-static void       removeThreadId (pthread_t hThread);
+static oslThreadIdentifier insertThreadId (pthread_t hThread);
+static oslThreadIdentifier lookupThreadId (pthread_t hThread);
+static void                removeThreadId (pthread_t hThread);
 
 static void osl_thread_init_Impl()
 {
@@ -532,12 +533,25 @@ void SAL_CALL osl_yieldThread()
     sched_yield();
 }
 
-void SAL_CALL osl_setThreadName(char const * name) {
+void SAL_CALL osl_setThreadName(char const * name)
+{
+    assert( name );
 #if defined LINUX && ! defined __FreeBSD_kernel__
-    if (prctl(PR_SET_NAME, reinterpret_cast<unsigned long>(name), 0, 0, 0) != 0) {
-        int e = errno;
-        SAL_WARN("sal.osl", "prctl(PR_SET_NAME) failed with errno " << e);
-    }
+#define LINUX_THREAD_NAME_MAXLEN 15
+    if ( strlen( name ) > LINUX_THREAD_NAME_MAXLEN )
+        SAL_INFO( "sal.osl", "osl_setThreadName truncated thread name to "
+                  << LINUX_THREAD_NAME_MAXLEN << " chars from name '"
+                  << name << "'" );
+    char shortname[ LINUX_THREAD_NAME_MAXLEN + 1 ];
+    shortname[ LINUX_THREAD_NAME_MAXLEN ] = '\0';
+    strncpy( shortname, name, LINUX_THREAD_NAME_MAXLEN );
+    int err = pthread_setname_np( pthread_self(), shortname );
+    if ( 0 != err )
+        SAL_WARN("sal.osl", "pthread_setname_np failed with errno " << err);
+#elif defined __FreeBSD_kernel__
+    pthread_setname_np( pthread_self(), name );
+#elif defined MACOSX || defined IOS
+    pthread_setname_np( name );
 #else
     (void) name;
 #endif
@@ -547,9 +561,9 @@ void SAL_CALL osl_setThreadName(char const * name) {
 
 struct HashEntry
 {
-    pthread_t         Handle;
-    sal_uInt16        Ident;
-    HashEntry *       Next;
+    pthread_t            Handle;
+    oslThreadIdentifier  Ident;
+    HashEntry *          Next;
 };
 
 static HashEntry* HashTable[31];
@@ -557,7 +571,9 @@ static int HashSize = SAL_N_ELEMENTS(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 
-static sal_uInt16 LastIdent = 0;
+#if ! (defined LINUX || defined MACOSX || defined IOS)
+static oslThreadIdentifier LastIdent = 0;
+#endif
 
 namespace {
 
@@ -566,7 +582,7 @@ std::size_t HASHID(pthread_t x)
 
 }
 
-static sal_uInt16 lookupThreadId (pthread_t hThread)
+static oslThreadIdentifier lookupThreadId (pthread_t hThread)
 {
     HashEntry *pEntry;
 
@@ -588,7 +604,7 @@ static sal_uInt16 lookupThreadId (pthread_t hThread)
     return 0;
 }
 
-static sal_uInt16 insertThreadId (pthread_t hThread)
+static oslThreadIdentifier insertThreadId (pthread_t hThread)
 {
     HashEntry *pEntry, *pInsert = nullptr;
 
@@ -611,12 +627,24 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
 
         pEntry->Handle = hThread;
 
-        ++ LastIdent;
-
+#if defined LINUX
+        long lin_tid = syscall( SYS_gettid );
+        if ( -1 == lin_tid )
+        {
+            SAL_WARN( "sal.osl", "unable to receive TID from kernel: " << errno  );
+            abort();
+        }
+        pEntry->Ident = lin_tid;
+#elif defined MACOSX || defined IOS
+        uint64_t mac_tid;
+        pthread_threadid_np(nullptr, &mac_tid);
+        pEntry->Ident = mac_tid;
+#else
+        ++LastIdent;
         if ( LastIdent == 0 )
             LastIdent = 1;
-
-        pEntry->Ident  = LastIdent;
+        pEntry->Ident = LastIdent;
+#endif
 
         if (pInsert)
             pInsert->Next = pEntry;
@@ -661,7 +689,7 @@ static void removeThreadId (pthread_t hThread)
 oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
 {
     Thread_Impl* pImpl= static_cast<Thread_Impl*>(Thread);
-    sal_uInt16   Ident;
+    oslThreadIdentifier Ident;
 
     if (pImpl)
         Ident = pImpl->m_Ident;
@@ -676,7 +704,7 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
             Ident = insertThreadId (current);
     }
 
-    return (oslThreadIdentifier)Ident;
+    return Ident;
 }
 
 /*****************************************************************************
