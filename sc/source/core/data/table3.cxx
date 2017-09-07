@@ -1964,6 +1964,30 @@ typedef struct lcl_ScTable_DoSubTotals_RowEntry
     SCROW   nFuncEnd;
 } RowEntry;
 
+
+static const char* lcl_GetSubTotalStrId(int id)
+{
+    switch ( id )
+    {
+        case SUBTOTAL_FUNC_AVE:     return STR_FUN_TEXT_AVG;
+        case SUBTOTAL_FUNC_CNT:
+        case SUBTOTAL_FUNC_CNT2:    return STR_FUN_TEXT_COUNT;
+        case SUBTOTAL_FUNC_MAX:     return STR_FUN_TEXT_MAX;
+        case SUBTOTAL_FUNC_MIN:     return STR_FUN_TEXT_MIN;
+        case SUBTOTAL_FUNC_PROD:    return STR_FUN_TEXT_PRODUCT;
+        case SUBTOTAL_FUNC_STD:
+        case SUBTOTAL_FUNC_STDP:    return STR_FUN_TEXT_STDDEV;
+        case SUBTOTAL_FUNC_SUM:     return STR_FUN_TEXT_SUM;
+        case SUBTOTAL_FUNC_VAR:
+        case SUBTOTAL_FUNC_VARP:    return STR_FUN_TEXT_VAR;
+        default:
+        {
+             return STR_EMPTYDATA;
+            // added to avoid warnings
+        }
+    }
+}
+
 //      new intermediate results
 //      rParam.nRow2 is changed!
 
@@ -2019,10 +2043,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     RowEntry aRowEntry;
     ::std::vector< RowEntry > aRowVector;
 
-    for (sal_uInt16 nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      // including grand total
+    for (sal_uInt16 nLevel=0; nLevel<nLevelCount && bSpaceLeft; nLevel++)
     {
-        bool bTotal = ( nLevel == nLevelCount );
-        aRowEntry.nGroupNo = bTotal ? 0 : (nLevelCount-nLevel-1);
+        aRowEntry.nGroupNo = nLevelCount - nLevel - 1;
 
         // how many results per level
         SCCOL nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
@@ -2050,31 +2073,28 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 else
                 {
                     bChanged = false;
-                    if (!bTotal)
+                    OUString aString;
+                    for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
                     {
-                        OUString aString;
-                        for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
+                        GetString( nGroupCol[i], nRow, aString );
+                        if (bIgnoreCase)
+                            aString = ScGlobal::pCharClass->uppercase(aString);
+                        //  when sorting, blanks are separate group
+                        //  otherwise blank cells are allowed below
+                        bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
+                                        aString != aCompString[i] );
+                    }
+                    if ( bChanged && bTestPrevSub )
+                    {
+                        // No group change on rows that will contain subtotal formulas
+                        for ( ::std::vector< RowEntry >::const_iterator
+                                iEntry( aRowVector.begin());
+                                iEntry != aRowVector.end(); ++iEntry)
                         {
-                            GetString( nGroupCol[i], nRow, aString );
-                            if (bIgnoreCase)
-                                aString = ScGlobal::pCharClass->uppercase(aString);
-                            //  when sorting, blanks are separate group
-                            //  otherwise blank cells are allowed below
-                            bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
-                                            aString != aCompString[i] );
-                        }
-                        if ( bChanged && bTestPrevSub )
-                        {
-                            // No group change on rows that will contain subtotal formulas
-                            for ( ::std::vector< RowEntry >::const_iterator
-                                    iEntry( aRowVector.begin());
-                                    iEntry != aRowVector.end(); ++iEntry)
+                            if ( iEntry->nDestRow == nRow )
                             {
-                                if ( iEntry->nDestRow == nRow )
-                                {
-                                    bChanged = false;
-                                    break;
-                                }
+                                bChanged = false;
+                                break;
                             }
                         }
                     }
@@ -2110,36 +2130,14 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         // collect formula positions
                         aRowVector.push_back( aRowEntry );
 
-                        if (bTotal)     // "Grand total"
-                            aOutString = ScGlobal::GetRscString( STR_TABLE_GESAMTERGEBNIS );
-                        else
-                        {               // "Result"
-                            aOutString = aSubString;
-                            if (aOutString.isEmpty())
-                                aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
-                            aOutString += " ";
-                            const char* pStrId = STR_TABLE_ERGEBNIS;
-                            if ( nResCount == 1 )
-                                switch ( eResFunc[0] )
-                                {
-                                    case SUBTOTAL_FUNC_AVE:     pStrId = STR_FUN_TEXT_AVG;      break;
-                                    case SUBTOTAL_FUNC_CNT:
-                                    case SUBTOTAL_FUNC_CNT2:    pStrId = STR_FUN_TEXT_COUNT;    break;
-                                    case SUBTOTAL_FUNC_MAX:     pStrId = STR_FUN_TEXT_MAX;      break;
-                                    case SUBTOTAL_FUNC_MIN:     pStrId = STR_FUN_TEXT_MIN;      break;
-                                    case SUBTOTAL_FUNC_PROD:    pStrId = STR_FUN_TEXT_PRODUCT;  break;
-                                    case SUBTOTAL_FUNC_STD:
-                                    case SUBTOTAL_FUNC_STDP:    pStrId = STR_FUN_TEXT_STDDEV;   break;
-                                    case SUBTOTAL_FUNC_SUM:     pStrId = STR_FUN_TEXT_SUM;      break;
-                                    case SUBTOTAL_FUNC_VAR:
-                                    case SUBTOTAL_FUNC_VARP:    pStrId = STR_FUN_TEXT_VAR;      break;
-                                    default:
-                                    {
-                                        // added to avoid warnings
-                                    }
-                                }
-                            aOutString += ScGlobal::GetRscString(pStrId);
-                        }
+                        aOutString = aSubString;
+                        if (aOutString.isEmpty())
+                            aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
+                        aOutString += " ";
+                        const char* pStrId = STR_TABLE_ERGEBNIS;
+                        if ( nResCount == 1 )
+                            pStrId = lcl_GetSubTotalStrId(eResFunc[0]);
+                        aOutString += ScGlobal::GetRscString(pStrId);
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
 
@@ -2159,6 +2157,40 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 bBlockVis = !RowFiltered(nRow);
             }
         }
+    }
+
+    // generate global total
+    int globalStartRow = aRowVector[0].nSubStartRow;
+    int globalStartFunc = aRowVector[0].nFuncStart;
+    int globalEndRow = 0;
+    int globalEndFunc = 0;
+    for ( ::std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
+            iEntry != aRowVector.end(); ++iEntry)
+    {
+       globalEndRow = (globalEndRow < iEntry->nDestRow) ? iEntry->nDestRow : globalEndRow;
+       globalEndFunc = (globalEndFunc < iEntry->nFuncEnd) ? iEntry->nFuncEnd : globalEndRow;
+    }
+
+    for (int nLevel=0; nLevel<nLevelCount; nLevel++)
+    {
+         // increment row
+         globalEndRow++;
+
+         // add row entry for formula
+         aRowEntry.nGroupNo = nLevelCount-nLevel-1;
+         aRowEntry.nSubStartRow = globalStartRow;
+         aRowEntry.nFuncStart = globalStartFunc;
+         aRowEntry.nDestRow = globalEndRow;
+         aRowEntry.nFuncEnd = globalEndFunc;
+         aRowVector.push_back( aRowEntry );
+
+         // insert label
+        ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
+        OUString label = ScGlobal::GetRscString( STR_TABLE_GRAND );
+        label += " ";
+        label += ScGlobal::GetRscString(lcl_GetSubTotalStrId(eResFunc[0]));
+        SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label );
+        ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
     }
 
     // now insert the formulas
