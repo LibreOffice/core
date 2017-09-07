@@ -105,6 +105,7 @@ public:
     void testTdf100387();
     void testRotateFlip();
     void testTdf106867();
+    void testTdf112280();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -137,6 +138,7 @@ public:
     CPPUNIT_TEST(testTdf100387);
     CPPUNIT_TEST(testRotateFlip);
     CPPUNIT_TEST(testTdf106867);
+    CPPUNIT_TEST(testTdf112280);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1022,6 +1024,19 @@ void SdOOXMLExportTest2::testTdf106867()
     // target the shape with the video in the command
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/p:cBhvr/p:tgtEl/p:spTgt",
             "spid", "42");
+}
+
+void SdOOXMLExportTest2::testTdf112280()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112280.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check the animRot value
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animRot",
+            "by", "21600000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
