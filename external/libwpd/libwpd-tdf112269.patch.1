@@ -1,0 +1,42 @@
+--- libwpd/src/lib/WP5StylesListener.cpp
++++ libwpd/src/lib/WP5StylesListener.cpp
+@@ -85,8 +85,9 @@
+ 		m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
+ 		m_currentPage.setPageSpan(1);
+ 
+-		for (std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
+-		        HFiter != (m_nextPage.getHeaderFooterList()).end(); ++HFiter)
++		std::vector<WPXHeaderFooter> headerFooterList = m_nextPage.getHeaderFooterList();
++		for (std::vector<WPXHeaderFooter>::const_iterator HFiter = headerFooterList.begin();
++		        HFiter != headerFooterList.end(); ++HFiter)
+ 		{
+ 			if ((*HFiter).getOccurrence() != NEVER)
+ 			{
+--- libwpd/src/lib/WP42StylesListener.cpp
++++ libwpd/src/lib/WP42StylesListener.cpp
+@@ -84,8 +84,9 @@
+ 			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
+ 			m_currentPage.setPageSpan(1);
+ 
+-			for (std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
+-			        HFiter != (m_nextPage.getHeaderFooterList()).end(); ++HFiter)
++			std::vector<WPXHeaderFooter> headerFooterList = m_nextPage.getHeaderFooterList();
++			for (std::vector<WPXHeaderFooter>::const_iterator HFiter = headerFooterList.begin();
++			        HFiter != headerFooterList.end(); ++HFiter)
+ 			{
+ 				if ((*HFiter).getOccurrence() != NEVER)
+ 				{
+--- libwpd/src/lib/WP1StylesListener.cpp
++++ libwpd/src/lib/WP1StylesListener.cpp
+@@ -83,8 +83,9 @@
+ 			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
+ 			m_currentPage.setPageSpan(1);
+ 
+-			for (std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
+-			        HFiter != (m_nextPage.getHeaderFooterList()).end(); ++HFiter)
++			std::vector<WPXHeaderFooter> headerFooterList = m_nextPage.getHeaderFooterList();
++			for (std::vector<WPXHeaderFooter>::const_iterator HFiter = headerFooterList.begin();
++			        HFiter != headerFooterList.end(); ++HFiter)
+ 			{
+ 				if ((*HFiter).getOccurrence() != NEVER)
+ 				{
