@@ -3174,7 +3174,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             t = pProp->getRealType();
         }
     }
-    if( t == SbxOBJECT )
+    if( t == SbxOBJECT || bVBAEnabled )
     {
         SbxObject* pObj = dynamic_cast<SbxObject*>(pVal);
         if (!pObj)
