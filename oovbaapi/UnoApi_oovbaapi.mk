@@ -530,10 +530,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/msforms,\
 	XGroupBox \
 	XImage \
 	XLabel \
+	XLine \
 	XLineFormat \
 	XListBox \
 	XMultiPage \
 	XNewFont \
+	XOval \
 	XPages \
 	XPictureFormat \
 	XProgressBar \
