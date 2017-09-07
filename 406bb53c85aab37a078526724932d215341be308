@@ -16,6 +16,23 @@
       "revId": "406bb53c85aab37a078526724932d215341be308",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6c098e2c",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-09-07T18:52:49Z",
+      "side": 1,
+      "message": "better say RHEL 6, RedHat Linux 6.0 was released in 1999...",
+      "revId": "406bb53c85aab37a078526724932d215341be308",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
