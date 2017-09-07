@@ -133,6 +133,25 @@ void XMLSpanContext::characters(const OUString &rChars)
     mrImport.GetGenerator().closeSpan();
 }
 
+/// Handler for <text:line-break>.
+class XMLLineBreakContext : public XMLImportContext
+{
+public:
+    XMLLineBreakContext(XMLImport &rImport);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+};
+
+XMLLineBreakContext::XMLLineBreakContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+void XMLLineBreakContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    mrImport.GetGenerator().insertLineBreak();
+}
+
 /// Handler for <text:a>.
 class XMLHyperlinkContext : public XMLImportContext
 {
@@ -188,6 +207,8 @@ XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, cons
         return new XMLSpanContext(mrImport, nullptr);
     if (rName == "text:a")
         return new XMLHyperlinkContext(mrImport);
+    if (rName == "text:line-break")
+        return new XMLLineBreakContext(mrImport);
     return nullptr;
 }
 
