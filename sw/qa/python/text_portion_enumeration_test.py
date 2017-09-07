@@ -770,8 +770,7 @@ class EnumConverter():
                     continue
                 else:
                     node = self._stack.pop()
-                    assert (isinstance(node, RubyNode)),
-                        "stack error: Ruby expected; is: {}".format(str(node))
+                    assert (isinstance(node, RubyNode)), "stack error: Ruby expected; is: {}".format(str(node))
             elif type_ == "InContentMetadata":
                 xMeta = xPortion.InContentMetadata
                 xmlid = xMeta.MetadataReference
