@@ -94,6 +94,30 @@
       "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_313c3f93",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8836,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-07T11:57:27Z",
+      "side": 1,
+      "message": "The settings are under Tools -\u003e Options -\u003e Calc -\u003e Calculate, the radio buttons. In new installations the default is wildcards enabled because that is Excel compatible. It may be you have a profile carried over that still has regexp enabled. When loading an Excel document it\u0027s set to wildcards, in ODF it depends on the document setting.\n\nFor the grep command to support extended regexp you need to pass the -E option, so\n\n grep -E \u0027a?n\u0027 filename\n\nNote also the single quotes, so the shell doesn\u0027t expand the ? in case there\u0027s a matching file name, eg. \"abn\".\n\nIn non-extended (basic) regexp for grep, some meta-characters lose their special meaning (man grep). You could also precede them with a backslash when not using -E, so this would be the same:\n\n grep \u0027a\\?n\u0027 filename",
+      "parentUuid": "1a430d35_31eeff22",
+      "range": {
+        "startLine": 8836,
+        "startChar": 55,
+        "endLine": 8836,
+        "endChar": 71
+      },
+      "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
