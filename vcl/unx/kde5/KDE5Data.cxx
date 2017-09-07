@@ -27,18 +27,18 @@
 #include "KDE5XLib.hxx"
 #include "KDE5SalDisplay.hxx"
 
-KDEData::~KDEData()
+KDE5Data::~KDE5Data()
 {
 }
 
-void KDEData::Init()
+void KDE5Data::Init()
 {
-    pXLib_ = new KDEXLib();
+    pXLib_ = new KDE5XLib();
     pXLib_->Init();
-    SetDisplay( SalKDEDisplay::self() );
+    SetDisplay( SalKDE5Display::self() );
 }
 
-void KDEData::initNWF()
+void KDE5Data::initNWF()
 {
     ImplSVData *pSVData = ImplGetSVData();
 
@@ -61,7 +61,7 @@ void KDEData::initNWF()
        style->pixelMetric( QStyle::PM_MenuVMargin );
 }
 
-void KDEData::deInitNWF()
+void KDE5Data::deInitNWF()
 {
 }
 

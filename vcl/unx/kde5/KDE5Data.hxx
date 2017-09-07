@@ -22,12 +22,12 @@
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 
-class KDEData : public X11SalData
+class KDE5Data : public X11SalData
 {
     public:
-        explicit KDEData( SalInstance *pInstance )
-                        : X11SalData( SAL_DATA_KDE4, pInstance ) {}
-        virtual ~KDEData() override;
+        explicit KDE5Data( SalInstance *pInstance )
+                        : X11SalData( SAL_DATA_KDE5, pInstance ) {}
+        virtual ~KDE5Data() override;
 
         virtual void Init() override;
         virtual void initNWF() override;

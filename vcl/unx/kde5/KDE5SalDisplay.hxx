@@ -26,20 +26,20 @@
 #undef CursorShape
 #endif
 
-class SalKDEDisplay : public SalX11Display
+class SalKDE5Display : public SalX11Display
 {
     public:
-        explicit SalKDEDisplay( Display* pDisp );
-        virtual ~SalKDEDisplay() override;
-        static SalKDEDisplay* self();
+        explicit SalKDE5Display( Display* pDisp );
+        virtual ~SalKDE5Display() override;
+        static SalKDE5Display* self();
         virtual void Yield() override;
         bool checkDirectInputEvent( xcb_generic_event_t* ev );
     private:
         Atom xim_protocol;
-        static SalKDEDisplay* selfptr;
+        static SalKDE5Display* selfptr;
 };
 
-inline SalKDEDisplay* SalKDEDisplay::self()
+inline SalKDE5Display* SalKDE5Display::self()
 {
     return selfptr;
 }

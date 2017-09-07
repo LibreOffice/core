@@ -28,9 +28,9 @@
 
 #include <assert.h>
 
-SalKDEDisplay* SalKDEDisplay::selfptr = nullptr;
+SalKDE5Display* SalKDE5Display::selfptr = nullptr;
 
-SalKDEDisplay::SalKDEDisplay( Display* pDisp )
+SalKDE5Display::SalKDE5Display( Display* pDisp )
     : SalX11Display( pDisp )
 {
     assert( selfptr == nullptr );
@@ -38,10 +38,10 @@ SalKDEDisplay::SalKDEDisplay( Display* pDisp )
     xim_protocol = XInternAtom( pDisp_, "_XIM_PROTOCOL", False );
 }
 
-SalKDEDisplay::~SalKDEDisplay()
+SalKDE5Display::~SalKDE5Display()
 {
     // in case never a frame opened
-    static_cast<KDEXLib*>(GetXLib())->doStartup();
+    static_cast<KDE5XLib*>(GetXLib())->doStartup();
     // clean up own members
     doDestruct();
     selfptr = nullptr;
@@ -49,7 +49,7 @@ SalKDEDisplay::~SalKDEDisplay()
     pDisp_ = nullptr;
 }
 
-void SalKDEDisplay::Yield()
+void SalKDE5Display::Yield()
 {
     if( DispatchInternalEvent() )
         return;
@@ -60,7 +60,7 @@ void SalKDEDisplay::Yield()
 
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
                 osl::Thread::getCurrentIdentifier(),
-                "will crash soon since solar mutex not locked in SalKDEDisplay::Yield" );
+                "will crash soon since solar mutex not locked in SalKDE5Display::Yield" );
 
     /*XEvent event;
     XNextEvent( pDisp_, &event );
@@ -77,7 +77,7 @@ void SalKDEDisplay::Yield()
 // completely. Skipped events are KeyPress, KeyRelease and also _XIM_PROTOCOL client message
 // (seems to be necessary too, hopefully there are not other internal XIM messages that
 // would need this handling).
-bool SalKDEDisplay::checkDirectInputEvent( xcb_generic_event_t* ev )
+bool SalKDE5Display::checkDirectInputEvent( xcb_generic_event_t* ev )
 {
     switch (ev->response_type & ~0x80)
     {
