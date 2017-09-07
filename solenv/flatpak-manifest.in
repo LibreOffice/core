@@ -226,10 +226,10 @@
                     "dest-filename": "external/tarballs/libgltf-0.1.0.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2017-04-19.tar.bz2",
-                    "sha256": "8333809eec6fce852a1d6de68859962106e13a84705417efb03452164da3ee7a",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2017-08-15.tar.bz2",
+                    "sha256": "d6a97fc8da5ae54d867e7f1b65ffb51e816cadd11714e45fc23ee0abf81a51ab",
                     "type": "file",
-                    "dest-filename": "external/tarballs/language-subtag-registry-2017-04-19.tar.bz2"
+                    "dest-filename": "external/tarballs/language-subtag-registry-2017-08-15.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
