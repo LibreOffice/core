@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_11d02353",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-09-07T11:45:17Z",
+      "side": 1,
+      "message": "These are critical for it to function properly, and seems to make sense, but this is a case of \"try some code and see if it works\" rather than programming from understanding...\n\n1. Without this, the w:r merges with the following node which gets all the wrong formatting.\n\n2. With this, the w:rPr\u0027s are properly merged together.  Otherwise there was a blank one, followed by my style one.\n\nSo, because of 1 and 2, I know I\u0027m doing it right :-)",
+      "range": {
+        "startLine": 2157,
+        "startChar": 12,
+        "endLine": 2158,
+        "endChar": 67
+      },
+      "revId": "16589cbbc75d8c8817fdf89f12a552a963fa247b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
