@@ -165,7 +165,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
         SetPropertyTolerantFailed[] SPTF = oObj.setPropertyValuesTolerant(namesOfProperties,
                                                   getNewValues(valuesOfProperties));
 
-        //read only properties will throw a PropertyVetoExeption if they are set
+        //read only properties will throw a PropertyVetoException if they are set
         int failures = 0;
 
         for (int k = 0; k < SPTF.length; k++) {

@@ -836,7 +836,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
         if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
              (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) )
         {
-            /* Do reformating since the fonts of the document may no longer
+            /* Do reformatting since the fonts of the document may no longer
                exist, or exist now, or are replaced with others. */
             if( mpViewShell )
             {
