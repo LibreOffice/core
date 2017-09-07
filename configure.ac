@@ -5206,19 +5206,21 @@ find_winsdk()
 
 find_msms()
 {
-    my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
+    my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
     if test $VCVER = 150; then
-        my_msm_file=Microsoft_VC141_CRT_x86.msm
+        my_msm_files="Microsoft_VC141_CRT_x86.msm ${my_msm_files}"
     fi
-    AC_MSG_CHECKING([for $my_msm_file])
+    AC_MSG_CHECKING([for ${my_msm_files}])
     msmdir=
     for ver in 14.0 15.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
-            if test -e "$regvalue/$my_msm_file"; then
-                msmdir=$regvalue
-                break
-            fi
+            for f in ${my_msm_files}; do
+                if test -e "$regvalue/${f}"; then
+                    msmdir=$regvalue
+                    break
+                fi
+            done
         fi
     done
     dnl Is the following fallback really necessary, or was it added in response
@@ -5232,9 +5234,11 @@ find_msms()
     dnl obtain its value from cygwin:
     if test -z "$msmdir"; then
         my_msm_dir="${COMMONPROGRAMFILES}/Merge Modules/"
-        if test -e "$my_msm_dir/$my_msm_file"; then
-            msmdir=$my_msm_dir
-        fi
+        for f in ${my_msm_files}; do
+            if test -e "$my_msm_dir/${f}"; then
+                msmdir=$my_msm_dir
+            fi
+        done
     fi
 
     dnl Starting from MSVC 15.0, merge modules are located in different directory
@@ -5242,10 +5246,12 @@ find_msms()
         for l in `ls -1 $VC_PRODUCT_DIR/redist/MSVC/`; do
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules])
             my_msm_dir="$VC_PRODUCT_DIR/redist/MSVC/$l/MergeModules/"
-            if test -e "$my_msm_dir/$my_msm_file"; then
-                msmdir=$my_msm_dir
-                break
-            fi
+            for f in ${my_msm_files}; do
+                if test -e "$my_msm_dir/${f}"; then
+                    msmdir=$my_msm_dir
+                    break
+                fi
+            done
         done
     fi
 
@@ -5257,7 +5263,7 @@ find_msms()
             AC_MSG_ERROR([not found])
         else
             AC_MSG_WARN([not found])
-            add_warning "MSM $my_msm_file not found"
+            add_warning "MSM none of ${my_msm_files} found"
         fi
     fi
 }
@@ -5270,6 +5276,10 @@ find_msvc_x64_dlls()
             AC_MSG_CHECKING([for $VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT])
             if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"; then
                 msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/x64/Microsoft.VC141.CRT"
+                break
+            fi
+            if test -d "$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"; then
+                msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$l/onecore/x64/Microsoft.VC150.CRT"
                 break
             fi
         done
