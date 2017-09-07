@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1163c31b",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2017-09-07T17:45:28Z",
+      "side": 1,
+      "message": "10.6 has not been supported for a while now.. the current baseline is 10.9 to run (and soon 10.12 to build)",
+      "revId": "406bb53c85aab37a078526724932d215341be308",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
