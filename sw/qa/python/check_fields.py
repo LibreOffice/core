@@ -17,7 +17,7 @@ class CheckFields(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openWriterTemplateDoc("fdo39694.ott")
+        cls._xDoc = cls._uno.openTemplateFromTDOC("fdo39694.ott")
         cls._xEmptyDoc = cls._uno.openEmptyWriterDoc()
 
     @classmethod

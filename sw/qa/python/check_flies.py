@@ -26,7 +26,7 @@ class CheckFlies(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls.document = cls._uno.openWriterTemplateDoc("CheckFlies.odt")
+        cls.document = cls._uno.openDocFromTDOC("CheckFlies.odt")
 
     @classmethod
     def tearDownClass(cls):

@@ -3250,7 +3250,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
     def doload(self, file):
         xComp = None
         print("Loading test document...")
-        xComp = self.__class__._uno.openDoc(file)
+        xComp = self.__class__._uno.openDocFromAbsolutePath(file)
         self.assertIsNotNone(xComp, "cannot load: {}".format(file))
         print("...done")
         return xComp
@@ -3266,7 +3266,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xComp = None
         filename = "TESTMETA.odt"
         try:
-            xComp = self.__class__._uno.openBaseDoc(filename)
+            xComp = self.__class__._uno.openDocFromTDOC(filename)
             if xComp:
                 self.checkloadmeta(xComp)
                 with TemporaryDirectory() as tempdir:
@@ -3338,7 +3338,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xComp = None
         filename = "TESTXMLID.odt"
         try:
-            xComp = self.__class__._uno.openBaseDoc(filename)
+            xComp = self.__class__._uno.openDocFromTDOC(filename)
             if xComp:
                 self.checkloadxmlid(xComp)
                 with TemporaryDirectory() as tempdir:

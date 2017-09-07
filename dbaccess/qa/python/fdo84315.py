@@ -20,7 +20,7 @@ class Fdo84315(unittest.TestCase):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
         workdir = os.environ[ "WORKDIR_FOR_BUILD" ]
-        cls._xDoc = cls._uno.openDoc(workdir + "/CppunitTest/fdo84315.odb")
+        cls._xDoc = cls._uno.openDocFromAbsolutePath(workdir + "/CppunitTest/fdo84315.odb")
 
     @classmethod
     def tearDownClass(cls):

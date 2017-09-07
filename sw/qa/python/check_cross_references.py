@@ -38,7 +38,7 @@ class CheckCrossReferences(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls.document = cls._uno.openWriterTemplateDoc("CheckCrossReferences.odt")
+        cls.document = cls._uno.openDocFromTDOC("CheckCrossReferences.odt")
         cls.xParaEnum = None
         cls.xPortionEnum = None
         cls.xFieldsRefresh = None

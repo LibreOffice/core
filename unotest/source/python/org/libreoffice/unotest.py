@@ -195,72 +195,45 @@ class UnoInProcess:
         if not(havePonies):
             pyuno.private_initTestEnvironment()
             havePonies = True
+
     def openEmptyWriterDoc(self):
-        assert(self.xContext)
-        smgr = self.getContext().ServiceManager
-        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
-        props = [("Hidden", True), ("ReadOnly", False)]
-        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
-        self.xDoc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps)
-        assert(self.xDoc)
-        return self.xDoc
+        return self.openEmptyDoc("private:factory/swriter")
 
     def openEmptyCalcDoc(self):
-        self.xDoc = self.openEmptyDoc("private:factory/scalc")
-        return self.xDoc
+        return self.openEmptyDoc("private:factory/scalc")
 
     def openEmptyDoc(self, url, bHidden = True, bReadOnly = False):
-        assert(self.xContext)
-        smgr = self.getContext().ServiceManager
-        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
         props = [("Hidden", bHidden), ("ReadOnly", bReadOnly)]
-        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
-        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
-        assert(self.xDoc)
-        return self.xDoc
+        return self.__openDocFromURL(url, props)
 
-    def openWriterTemplateDoc(self, file):
-        assert(self.xContext)
-        smgr = self.getContext().ServiceManager
-        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
-        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", True)]
-        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+    def openTemplateFromTDOC(self, file):
+        return self.openDocFromTDOC(file, True)
+
+    def openDocFromTDOC(self, file, asTemplate = False):
         path = os.getenv("TDOC")
         if os.name == "nt":
             # do not quote drive letter - it must be "X:"
             url = "file:///" + path + "/" + quote(file)
         else:
             url = "file://" + quote(path) + "/" + quote(file)
-        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
-        assert(self.xDoc)
-        return self.xDoc
+        return self.openDocFromURL(url, asTemplate)
 
-    def openBaseDoc(self, file):
-        assert(self.xContext)
-        smgr = self.getContext().ServiceManager
-        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
-        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", False)]
-        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
-        path = os.getenv("TDOC")
-        if os.name == "nt":
-            #do not quote drive letter - it must be "X:"
-            url = "file:///" + path + "/" + quote(file)
-        else:
-            url = "file://" + quote(path) + "/" + quote(file)
-        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
-        assert(self.xDoc)
-        return self.xDoc
-
-    def openDoc(self, file):
-        assert(self.xContext)
-        smgr = self.getContext().ServiceManager
-        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
-        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", False)]
-        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+    def openDocFromAbsolutePath(self, file):
         if os.name == "nt":
             url = "file:///" + file
         else:
             url = "file://" + file
+        return self.openDocFromURL(url)
+
+    def openDocFromURL(self, url, asTemplate = False):
+        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", asTemplate)]
+        return self.__openDocFromURL(url, props)
+
+    def __openDocFromURL(self, url, props):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
         self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
         assert(self.xDoc)
         return self.xDoc
