@@ -831,7 +831,10 @@ void GtkData::PostUserEvent()
     else // nothing pending anyway
     {
         m_pUserEvent = g_idle_source_new();
-        g_source_set_priority (m_pUserEvent, G_PRIORITY_HIGH);
+        // tdf#110737 set user-events to a lower priority than system redraw
+        // events, which is G_PRIORITY_HIGH_IDLE + 20, so presentations
+        // queue-redraw has a chance to be fulfilled
+        g_source_set_priority (m_pUserEvent,  G_PRIORITY_HIGH_IDLE + 30);
         g_source_set_can_recurse (m_pUserEvent, TRUE);
         g_source_set_callback (m_pUserEvent, call_userEventFn,
                                static_cast<gpointer>(this), nullptr);
