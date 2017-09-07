@@ -770,8 +770,8 @@ class EnumConverter():
                     continue
                 else:
                     node = self._stack.pop()
-                    assert (isinstance(node, RubyNode),
-                        "stack error: Ruby expected; is: {}".format(str(node)))
+                    assert (isinstance(node, RubyNode)),
+                        "stack error: Ruby expected; is: {}".format(str(node))
             elif type_ == "InContentMetadata":
                 xMeta = xPortion.InContentMetadata
                 xmlid = xMeta.MetadataReference
@@ -3267,15 +3267,21 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xComp = None
         filename = "TESTMETA.odt"
         try:
-            xComp = self.__class__._uno.openWriterTemplateDoc(filename)
+            xComp = self.__class__._uno.openBaseDoc(filename)
             if xComp:
                 self.checkloadmeta(xComp)
                 with TemporaryDirectory() as tempdir:
-                    file = os.path.join(tempdir, filename)
+                    if os.altsep: # we need URL so replace "\" with "/"
+                        tempdir = tempdir.replace(os.sep, os.altsep)
+                    file = tempdir + "/" + filename
                     self.dostore(xComp, file)
                     self.close(xComp)
-                    xComp = self.doload(file)
-                    self.checkloadmeta(xComp)
+                    xComp2 = None
+                    try:
+                        xComp2 = self.doload(file)
+                        self.checkloadmeta(xComp2)
+                    finally:
+                        self.close(xComp2)
         finally:
             self.close(xComp)
 
@@ -3333,15 +3339,21 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xComp = None
         filename = "TESTXMLID.odt"
         try:
-            xComp = self.__class__._uno.openWriterTemplateDoc(filename)
+            xComp = self.__class__._uno.openBaseDoc(filename)
             if xComp:
                 self.checkloadxmlid(xComp)
                 with TemporaryDirectory() as tempdir:
-                    file = os.path.join(tempdir, filename)
+                    if os.altsep: # we need URL so replace "\" with "/"
+                        tempdir = tempdir.replace(os.sep, os.altsep)
+                    file = tempdir + "/" + filename
                     self.dostore(xComp, file)
                     self.close(xComp)
-                    xComp = self.doload(file)
-                    self.checkloadxmlid(xComp)
+                    xComp2 = None
+                    try:
+                        xComp2 = self.doload(file)
+                        self.checkloadxmlid(xComp2)
+                    finally:
+                        self.close(xComp2)
         finally:
             self.close(xComp)
 
