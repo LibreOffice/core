@@ -36,6 +36,7 @@
 #include "document.hxx"
 #include "docpool.hxx"
 #include "drawview.hxx"
+#include "gridwin.hxx"
 #include "scresid.hxx"
 
 #define ScChartShell
@@ -96,8 +97,9 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
 
         if( pObject && dynamic_cast<const SdrOle2Obj*>( pObject) !=  nullptr )
         {
+            vcl::Window* pWin = GetViewData()->GetActiveWin();
             Reference< drawing::XShape > xSourceDoc( pObject->getUnoShape(), UNO_QUERY_THROW );
-            GraphicHelper::SaveShapeAsGraphic( xSourceDoc );
+            GraphicHelper::SaveShapeAsGraphic(pWin, xSourceDoc);
         }
     }
 

@@ -710,7 +710,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
     }
 }
 
-
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
@@ -727,7 +726,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
+        ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                      FileDialogFlags::NONE, this);
         OUString aStrFilterType( "*.sod" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         OUString aPalettePath(SvtPathOptions().GetPalettePath());
@@ -790,10 +790,9 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
     }
 }
 
-
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
 {
-    ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
+    ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, this);
     OUString aStrFilterType( "*.sod" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
@@ -842,7 +841,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
         }
     }
 }
-
 
 void SvxLineDefTabPage::FillDash_Impl()
 {

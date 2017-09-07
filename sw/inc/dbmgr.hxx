@@ -409,7 +409,7 @@ public:
      the filename returned by a file picker and additional settings dialog.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource(SwDocShell* pDocShell = nullptr);
+    static OUString            LoadAndRegisterDataSource(const vcl::Window* pParent, SwDocShell* pDocShell = nullptr);
 
     /**
      Loads a data source from file and registers it.

@@ -140,7 +140,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
+        SvxOpenGraphicDialog aDlg(SdResId(STR_INSERTGRAPHIC), mpWindow);
 
         if( aDlg.Execute() != ERRCODE_NONE )
             return; // cancel dialog
@@ -775,7 +775,8 @@ rtl::Reference<FuPoor> FuInsert3DModel::Create( ViewShell* pViewSh, ::sd::Window
 
 void FuInsert3DModel::DoExecute( SfxRequest& )
 {
-    sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                FileDialogFlags::NONE, mpWindow);
 
     aDlg.SetTitle( SdResId( STR_INSERT_3D_MODEL_TITLE ) );
 

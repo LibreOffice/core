@@ -26,6 +26,7 @@
 
 #include <svtools/imageresourceaccess.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
@@ -781,7 +782,9 @@ bool OImageControlControl::implInsertGraphics()
     // build some arguments for the upcoming dialog
     try
     {
-        ::sfx2::FileDialogHelper aDialog( TemplateDescription::FILEOPEN_LINK_PREVIEW, FileDialogFlags::Graphic );
+        Reference< XWindowPeer > xWindowPeer = getPeer();
+        ::sfx2::FileDialogHelper aDialog(TemplateDescription::FILEOPEN_LINK_PREVIEW, FileDialogFlags::Graphic,
+                                         VCLUnoHelper::GetWindow(xWindowPeer));
         aDialog.SetTitle( sTitle );
 
         Reference< XFilePickerControlAccess > xController( aDialog.GetFilePicker(), UNO_QUERY_THROW );

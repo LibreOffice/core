@@ -725,7 +725,7 @@ void SlideTransitionPane::openSoundFileDialog()
     if( ! mpLB_SOUND->IsEnabled())
         return;
 
-    SdOpenSoundFileDialog aFileDialog;
+    SdOpenSoundFileDialog aFileDialog(this);
 
     OUString aFile;
     DBG_ASSERT( mpLB_SOUND->GetSelectEntryPos() == 2,

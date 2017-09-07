@@ -501,7 +501,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW,
-        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection
+        FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, this
     );
     // Read configuration
     OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());

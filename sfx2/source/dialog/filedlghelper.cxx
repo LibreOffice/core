@@ -2247,9 +2247,10 @@ FileDialogHelper::FileDialogHelper(
     FileDialogFlags nFlags,
     const OUString& rFact,
     SfxFilterFlags nMust,
-    SfxFilterFlags nDont )
+    SfxFilterFlags nDont,
+    const vcl::Window* _pPreferredParent)
     :   m_nError(0),
-        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags ) )
+        mpImpl(new FileDialogHelper_Impl(this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent))
 {
 
     // create the list of filters
