@@ -242,11 +242,11 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
             TODO: this can be optimized by using a map. */
         if( !rPropMap.hasNamedLineMarkerInTable( aMarkerName ) )
         {
-// pass X and Y as percentage to OOX_ARROW_POINT
-#define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * ( x ) ), static_cast< sal_Int32 >( fArrowLength * ( y ) ) )
+            // pass X and Y as percentage to OOX_ARROW_POINT
+            auto OOX_ARROW_POINT = [fArrowLength, fArrowWidth]( double x, double y ) { return awt::Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) ); };
             // tdf#100491 Arrow line marker, unlike other markers, depends on line width.
             // So calculate width of half line (more convenient during drawing) taking into account
-            // further conversions/scaling done in OOX_ARROW_POINT macro and scaling to nMarkerWidth.
+            // further conversions/scaling done in OOX_ARROW_POINT and scaling to nMarkerWidth.
             const double fArrowLineHalfWidth = ::std::max< double >( 100.0 * 0.5 * nLineWidth / nMarkerWidth, 1 );
 
             ::std::vector< awt::Point > aPoints;
@@ -301,7 +301,6 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
                 break;
             }
-#undef OOX_ARROW_POINT
 
             OSL_ENSURE( !aPoints.empty(), "lclPushMarkerProperties - missing arrow coordinates" );
             if( !aPoints.empty() )
