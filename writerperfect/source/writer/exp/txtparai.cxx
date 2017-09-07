@@ -74,56 +74,63 @@ namespace exp
 class XMLSpanContext : public XMLImportContext
 {
 public:
-    XMLSpanContext(XMLImport &rImport);
+    XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList *pPropertyList);
 
     XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
-    void SAL_CALL endElement(const OUString &rName) override;
     void SAL_CALL characters(const OUString &rChars) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLSpanContext::XMLSpanContext(XMLImport &rImport)
+XMLSpanContext::XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList *pPropertyList)
     : XMLImportContext(rImport)
 {
+    if (!pPropertyList)
+        return;
+
+    // Inherit properties from parent span.
+    librevenge::RVNGPropertyList::Iter itProp(*pPropertyList);
+    for (itProp.rewind(); itProp.next();)
+        m_aPropertyList.insert(itProp.key(), itProp()->clone());
 }
 
 XMLImportContext *XMLSpanContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "draw:frame")
         return new XMLTextFrameContext(mrImport);
+    if (rName == "text:span")
+        return new XMLSpanContext(mrImport, &m_aPropertyList);
     return nullptr;
 }
 
 void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
 {
-    librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
         const OUString &rAttributeName = xAttribs->getNameByIndex(i);
         const OUString &rAttributeValue = xAttribs->getValueByIndex(i);
         if (rAttributeName == "text:style-name")
-            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), aPropertyList);
+            FillStyles(rAttributeValue, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aPropertyList);
         else
         {
             OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
             OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
-            aPropertyList.insert(sName.getStr(), sValue.getStr());
+            m_aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
-
-    mrImport.GetGenerator().openSpan(aPropertyList);
-}
-
-void XMLSpanContext::endElement(const OUString &/*rName*/)
-{
-    mrImport.GetGenerator().closeSpan();
 }
 
 void XMLSpanContext::characters(const OUString &rChars)
 {
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
+
     OString sCharU8 = OUStringToOString(rChars, RTL_TEXTENCODING_UTF8);
     mrImport.GetGenerator().insertText(librevenge::RVNGString(sCharU8.getStr()));
+
+    mrImport.GetGenerator().closeSpan();
 }
 
 /// Handler for <text:a>.
@@ -178,7 +185,7 @@ XMLParaContext::XMLParaContext(XMLImport &rImport)
 XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "text:span")
-        return new XMLSpanContext(mrImport);
+        return new XMLSpanContext(mrImport, nullptr);
     if (rName == "text:a")
         return new XMLHyperlinkContext(mrImport);
     return nullptr;

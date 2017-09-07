@@ -21,9 +21,10 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_epubexport, \
 	cppuhelper \
 	sal \
 	test \
+	tl \
 	unotest \
 	utl \
-	tl \
+	wpftwriter \
 	$(gb_UWINAPI) \
 ))
 
