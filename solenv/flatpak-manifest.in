@@ -28,10 +28,10 @@
                     "dest-filename": "external/tarballs/4b87018f7fff1d054939d19920b751a0-collada2gltf-master-cb1d97788a.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/pdfium-3151.tar.bz2",
-                    "sha256": "d24f41b65a797e545eeafc37106a85001437664267361a7576572b967d31ed6a",
+                    "url": "https://dev-www.libreoffice.org/src/pdfium-3196.tar.bz2",
+                    "sha256": "76b08c5bc9cd41ccdd58aa41491d3f8e1fad517d7cb3e16d285b68ab175dc0fa",
                     "type": "file",
-                    "dest-filename": "external/tarballs/pdfium-3151.tar.bz2"
+                    "dest-filename": "external/tarballs/pdfium-3196.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/OpenCOLLADA-master-6509aa13af.tar.bz2",
