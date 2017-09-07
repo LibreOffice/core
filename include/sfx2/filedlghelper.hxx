@@ -101,33 +101,34 @@ private:
 
 
 public:
-                            FileDialogHelper( sal_Int16 nDialogType,
-                                              FileDialogFlags nFlags = FileDialogFlags::NONE,
-                                              const vcl::Window* _pPreferredParent = nullptr );
+                            FileDialogHelper(sal_Int16 nDialogType,
+                                             FileDialogFlags nFlags,
+                                             const vcl::Window* _pPreferredParent);
 
-                            FileDialogHelper( sal_Int16 nDialogType,
-                                              FileDialogFlags nFlags,
-                                              const OUString& rFactory,
-                                              SfxFilterFlags nMust = SfxFilterFlags::NONE,
-                                              SfxFilterFlags nDont = SfxFilterFlags::NONE );
+                            FileDialogHelper(sal_Int16 nDialogType,
+                                             FileDialogFlags nFlags,
+                                             const OUString& rFactory,
+                                             SfxFilterFlags nMust,
+                                             SfxFilterFlags nDont,
+                                             const vcl::Window* _pPreferredParent);
 
-                            FileDialogHelper( sal_Int16 nDialogType,
-                                              FileDialogFlags nFlags,
-                                              const OUString& rFactory,
-                                              sal_Int16 nDialog,
-                                              SfxFilterFlags nMust,
-                                              SfxFilterFlags nDont,
-                                              const OUString& rStandardDir,
-                                              const css::uno::Sequence< OUString >& rBlackList,
-                                              const vcl::Window* _pPreferredParent = nullptr);
+                            FileDialogHelper(sal_Int16 nDialogType,
+                                             FileDialogFlags nFlags,
+                                             const OUString& rFactory,
+                                             sal_Int16 nDialog,
+                                             SfxFilterFlags nMust,
+                                             SfxFilterFlags nDont,
+                                             const OUString& rStandardDir,
+                                             const css::uno::Sequence< OUString >& rBlackList,
+                                             const vcl::Window* _pPreferredParent);
 
-                            FileDialogHelper( sal_Int16 nDialogType,
-                                              FileDialogFlags nFlags,
-                                              const OUString& aFilterUIName,
-                                              const OUString& aExtName,
-                                              const OUString& rStandardDir,
-                                              const css::uno::Sequence< OUString >& rBlackList,
-                                              const vcl::Window* _pPreferredParent = nullptr );
+                            FileDialogHelper(sal_Int16 nDialogType,
+                                             FileDialogFlags nFlags,
+                                             const OUString& aFilterUIName,
+                                             const OUString& aExtName,
+                                             const OUString& rStandardDir,
+                                             const css::uno::Sequence< OUString >& rBlackList,
+                                             const vcl::Window* _pPreferredParent);
 
     virtual                 ~FileDialogHelper();
 

@@ -536,7 +536,7 @@ FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) con
 {
     pImpl->m_pFileDlg.reset( new FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::Insert, rFactory) );
+            FileDialogFlags::Insert, rFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, pImpl->m_pParentWin) );
     return *pImpl->m_pFileDlg;
 }
 

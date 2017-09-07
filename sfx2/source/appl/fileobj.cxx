@@ -389,7 +389,7 @@ OUString impl_getFilter( const OUString& _rURL )
     return sFilter;
 }
 
-void SvFileObject::Edit( vcl::Window* /*pParent*/, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl )
+void SvFileObject::Edit(vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl)
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;
@@ -403,7 +403,7 @@ void SvFileObject::Edit( vcl::Window* /*pParent*/, sfx2::SvBaseLink* pLink, cons
             {
                 nType = FILETYPE_GRF;       // If not set already
 
-                SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK));
+                SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK), pParent);
                 aDlg.EnableLink(false);
                 aDlg.SetPath( sFile, true );
                 aDlg.SetCurrentFilter( sTmpFilter );

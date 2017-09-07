@@ -123,9 +123,9 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
     if(pSdrView)
     {
-        SvxOpenGraphicDialog aDlg(SwResId(STR_INSERT_GRAPHIC));
+        SvxOpenGraphicDialog aDlg(SwResId(STR_INSERT_GRAPHIC), &GetView().GetViewFrame()->GetWindow());
 
-        if(ERRCODE_NONE == aDlg.Execute())
+        if (ERRCODE_NONE == aDlg.Execute())
         {
             Graphic aGraphic;
             ErrCode nError = aDlg.GetGraphic(aGraphic);

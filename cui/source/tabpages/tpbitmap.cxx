@@ -758,7 +758,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
 {
-    SvxOpenGraphicDialog aDlg( "Import" );
+    SvxOpenGraphicDialog aDlg("Import", this);
     aDlg.EnableLink(false);
     long nCount = m_pBitmapList->Count();
 

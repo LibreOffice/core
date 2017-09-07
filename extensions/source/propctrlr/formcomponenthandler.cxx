@@ -2716,7 +2716,6 @@ namespace pcr
         return bChanged;
     }
 
-
     bool FormComponentPropertyHandler::impl_browseForImage_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         bool bIsLink = true;// reflect the legacy behavior
@@ -2724,7 +2723,7 @@ namespace pcr
 
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-                FileDialogFlags::Graphic);
+                FileDialogFlags::Graphic, impl_getDefaultDialogParent_nothrow());
 
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
@@ -2787,11 +2786,11 @@ namespace pcr
         return bSuccess;
     }
 
-
     bool FormComponentPropertyHandler::impl_browseForTargetURL_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
         ::sfx2::FileDialogHelper aFileDlg(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                FileDialogFlags::NONE, impl_getDefaultDialogParent_nothrow());
 
         OUString sURL;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_TARGET_URL ) >>= sURL );
@@ -2807,7 +2806,6 @@ namespace pcr
             _out_rNewValue <<= aFileDlg.GetPath();
         return bSuccess;
     }
-
 
     bool FormComponentPropertyHandler::impl_executeFontDialog_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
@@ -2846,7 +2844,7 @@ namespace pcr
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE,
-                "sdatabase");
+                "sdatabase", SfxFilterFlags::NONE, SfxFilterFlags::NONE, impl_getDefaultDialogParent_nothrow());
 
         OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
