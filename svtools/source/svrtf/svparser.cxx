@@ -390,7 +390,8 @@ sal_uInt32 SvParser::GetNextChar()
         while( 0 == nChars  && !bErr );
     }
 
-    if ( ! rtl::isUnicodeCodePoint( c ) )
+    // Note: ImplConvertUtf8ToUnicode() may produce a surrogate!
+    if (!rtl::isUnicodeCodePoint(c) || rtl::isHighSurrogate(c) || rtl::isLowSurrogate(c))
         c = (sal_uInt32) '?' ;
 
     if( bErr )
