@@ -46,6 +46,30 @@
       "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_91afb3e2",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8836,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-07T10:47:00Z",
+      "side": 1,
+      "message": "LibreOffice\n \u003e SEARCH( \"f?ce\"; \"LibreOffice\"; 1 ) returns 10 (8 expected),\n \u003e SEARCH( \"f.ce\"; \"Libreoffice\"; 1 ) returns 8 as expected.\n\nThen you tested with regex enabled instead of wildcards. For \"f?ce\" that means there may be an \u0027f\u0027 or not, followed by \"ce\"; using minimal match 10 is correct.\n\nFor wildcards enabled the results are\n \u003dSEARCH( \"f?ce\", \"Libreoffice\", 1 ) returns 8\n \u003dSEARCH( \"f.ce\", \"Libreoffice\", 1 ) returns #VALUE!\n\nExcel\n \u003e SEARCH( \"f.ce\"; \"Libreoffice\"; 1 ) returns 10 (8 expected. \n\nExcel doesn\u0027t support regex and AFAIK the \u0027.\u0027 dot does not have any special meaning in wildcards. Actually the result should be error (likely #VALUE! as well).",
+      "parentUuid": "1a430d35_9b0c3244",
+      "range": {
+        "startLine": 8836,
+        "startChar": 55,
+        "endLine": 8836,
+        "endChar": 71
+      },
+      "revId": "28d74eaa9f0d613713b7f1ba153bfc76ca87a8b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
