@@ -501,7 +501,7 @@ Reference< XText >  SwXTextDocument::getText() throw( RuntimeException, std::exc
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!xBodyText.is())
     {
         pBodyText = new SwXBodyText(pDocShell->GetDoc());
@@ -514,7 +514,7 @@ void SwXTextDocument::reformat() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
 }
 
 void SwXTextDocument::lockControllers() throw( RuntimeException, std::exception )
@@ -526,7 +526,7 @@ void SwXTextDocument::lockControllers() throw( RuntimeException, std::exception 
         aActionArr.push_front(pContext);
     }
     else
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
 }
 
 void SwXTextDocument::unlockControllers() throw( RuntimeException, std::exception )
@@ -539,7 +539,7 @@ void SwXTextDocument::unlockControllers() throw( RuntimeException, std::exceptio
         delete pContext;
     }
     else
-        throw RuntimeException();
+        throw RuntimeException("Nothing to unlock");
 }
 
 sal_Bool SwXTextDocument::hasControllersLocked() throw( RuntimeException, std::exception )
@@ -640,7 +640,7 @@ Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
         }
     }
     else
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     return mxXLineNumberingProperties;
 }
 
@@ -649,7 +649,7 @@ Reference< XIndexReplace >  SwXTextDocument::getChapterNumberingRules()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXChapterNumbering.is())
     {
         mxXChapterNumbering = new SwXChapterNumbering(*pDocShell);
@@ -661,7 +661,7 @@ Reference< XIndexAccess >  SwXTextDocument::getNumberingRules() throw( RuntimeEx
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXNumberingRules.is() )
     {
         mxXNumberingRules = new SwXNumberingRulesCollection( pDocShell->GetDoc() );
@@ -673,7 +673,7 @@ Reference< XIndexAccess >  SwXTextDocument::getFootnotes() throw( RuntimeExcepti
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXFootnotes.is())
     {
         mxXFootnotes = new SwXFootnotes(false, pDocShell->GetDoc());
@@ -686,7 +686,7 @@ Reference< XPropertySet >  SAL_CALL
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXFootnoteSettings.is())
     {
         mxXFootnoteSettings = new SwXFootnoteProperties(pDocShell->GetDoc());
@@ -698,7 +698,7 @@ Reference< XIndexAccess >  SwXTextDocument::getEndnotes() throw( RuntimeExceptio
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXEndnotes.is())
     {
         mxXEndnotes = new SwXFootnotes(true, pDocShell->GetDoc());
@@ -710,7 +710,7 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings() throw( RuntimeE
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXEndnoteSettings.is())
     {
         mxXEndnoteSettings = new SwXEndnoteProperties(pDocShell->GetDoc());
@@ -745,7 +745,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     SolarMutexGuard aGuard;
     Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY);
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
 
     Reference< XTextCursor >  xCursor;
     auto pUnoCursor(CreateCursorForSearch(xCursor));
@@ -953,7 +953,7 @@ Reference< XIndexAccess >
     Reference< XTextCursor >  xCursor;
     auto pResultCursor(FindAny(xDesc, xCursor, true, nResult, xTmp));
     if(!pResultCursor)
-        throw RuntimeException();
+        throw RuntimeException("No result cursor");
     Reference< XIndexAccess >  xRet;
     xRet = SwXTextRanges::Create( (nResult) ? &(*pResultCursor) : nullptr );
     return xRet;
@@ -968,7 +968,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XTextCursor >  xCursor;
     auto pResultCursor(FindAny(xDesc, xCursor, false, nResult, xTmp));
     if(!pResultCursor)
-        throw RuntimeException();
+        throw RuntimeException("No result cursor");
     Reference< XInterface >  xRet;
     if(nResult)
     {
@@ -989,10 +989,10 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     sal_Int32 nResult = 0;
     Reference< XTextCursor >  xCursor;
     if(!xStartAt.is())
-        throw RuntimeException();
+        throw RuntimeException("xStartAt missing");
     auto pResultCursor(FindAny(xDesc, xCursor, false, nResult, xStartAt));
     if(!pResultCursor)
-        throw RuntimeException();
+        throw RuntimeException("No result cursor");
     Reference< XInterface >  xRet;
     if(nResult)
     {
@@ -1038,7 +1038,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
         pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
     }
     else
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     return aSeq;
 }
 
@@ -1105,13 +1105,13 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             if( sName == "PageRows" )
             {
                 if(!nVal || nVal > 0xff)
-                    throw RuntimeException();
+                    throw RuntimeException("Invalid value");
                 aData.SetRow((sal_uInt8)nVal);
             }
             else if(sName == "PageColumns")
             {
                 if(!nVal  || nVal > 0xff)
-                    throw RuntimeException();
+                    throw RuntimeException("Invalid value");
                 aData.SetCol((sal_uInt8)nVal);
             }
             else if(sName == "LeftMargin")
@@ -1151,7 +1151,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         pDocShell->GetDoc()->SetPreviewPrtData(&aData);
     }
     else
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
 }
 
 void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOptions)
@@ -1232,7 +1232,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
 
     }
     else
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
 }
 
 Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
@@ -1240,7 +1240,7 @@ Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXReferenceMarks.is())
     {
         mxXReferenceMarks = new SwXReferenceMarks(pDocShell->GetDoc());
@@ -1252,7 +1252,7 @@ Reference< XEnumerationAccess >  SwXTextDocument::getTextFields() throw( Runtime
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXTextFieldTypes.is())
     {
         mxXTextFieldTypes = new SwXTextFieldTypes(pDocShell->GetDoc());
@@ -1265,7 +1265,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXTextFieldMasters.is())
     {
         mxXTextFieldMasters = new SwXTextFieldMasters(pDocShell->GetDoc());
@@ -1277,7 +1277,7 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects() throw( RuntimeEx
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXEmbeddedObjects.is())
     {
         mxXEmbeddedObjects = new SwXTextEmbeddedObjects(pDocShell->GetDoc());
@@ -1289,7 +1289,7 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks() throw( RuntimeExceptio
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXBookmarks.is())
     {
         mxXBookmarks = new SwXBookmarks(pDocShell->GetDoc());
@@ -1301,7 +1301,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextSections() throw( RuntimeExcep
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXTextSections.is())
     {
         mxXTextSections = new SwXTextSections(pDocShell->GetDoc());
@@ -1313,7 +1313,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextTables() throw( RuntimeExcepti
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXTextTables.is())
     {
         mxXTextTables = new SwXTextTables(pDocShell->GetDoc());
@@ -1325,7 +1325,7 @@ Reference< XNameAccess >  SwXTextDocument::getGraphicObjects() throw( RuntimeExc
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXGraphicObjects.is())
     {
         mxXGraphicObjects = new SwXTextGraphicObjects(pDocShell->GetDoc());
@@ -1337,7 +1337,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFrames() throw( RuntimeExcepti
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXTextFrames.is())
     {
         mxXTextFrames = new SwXTextFrames(pDocShell->GetDoc());
@@ -1349,7 +1349,7 @@ Reference< XNameAccess >  SwXTextDocument::getStyleFamilies() throw( RuntimeExce
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXStyleFamilies.is())
     {
         mxXStyleFamilies = new SwXStyleFamilies(*pDocShell);
@@ -1362,7 +1362,7 @@ uno::Reference< style::XAutoStyles > SwXTextDocument::getAutoStyles(  )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXAutoStyles.is())
     {
         mxXAutoStyles = new SwXAutoStyles(*pDocShell);
@@ -1375,7 +1375,7 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage() throw( RuntimeEx
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!mxXDrawPage.is())
     {
         static_cast<SwXTextDocument*>(this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
@@ -1613,7 +1613,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     SolarMutexGuard aGuard;
     if (!IsValid())
     {
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     }
     const sal_uInt16 nType = SwXServiceProvider::GetProviderType(rServiceName);
     if (nType != SW_SERVICE_INVALID)
@@ -1785,7 +1785,8 @@ Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes() throw( RuntimeE
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     if(!mxXDocumentIndexes.is())
     {
         mxXDocumentIndexes = new SwXDocumentIndexes(pDocShell->GetDoc());
@@ -1806,10 +1807,8 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException(
-            "invalid SwXTextDocument",
-            static_cast< cppu::OWeakObject * >(
-                static_cast< SwXTextDocumentBaseClass * >(this)));
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
@@ -1986,7 +1985,8 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
@@ -2195,7 +2195,8 @@ void SwXTextDocument::refresh() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     SwViewShell *pViewShell = pDocShell->GetWrtShell();
     NotifyRefreshListeners();
     if(pViewShell)
@@ -2222,7 +2223,8 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     SwDoc* pDoc = pDocShell->GetDoc();
       sfx2::LinkManager& rLnkMan = pDoc->getIDocumentLinksAdministration().GetLinkManager();
     if( !rLnkMan.GetLinks().empty() )
@@ -2239,7 +2241,8 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
     SolarMutexGuard aGuard;
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
@@ -2270,7 +2273,8 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException();
@@ -2285,7 +2289,8 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
     const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException();
@@ -2658,8 +2663,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     SolarMutexGuard aGuard;
     if(!IsValid())
     {
-        throw DisposedException( OUString(),
-                static_cast< XTextDocument* >(this) );
+        throw DisposedException("", static_cast< XTextDocument* >(this));
     }
 
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
@@ -3104,7 +3108,7 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
-        throw RuntimeException();
+        throw DisposedException("", static_cast< XTextDocument* >(this));
 
     // create a new document - hidden - copy the storage and return it
     // SfxObjectShellRef is used here, since the model should control object lifetime after creation
@@ -3728,7 +3732,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
 {
     Any aRet;
     if(!pxDoc)
-        throw RuntimeException();
+        throw RuntimeException("No document available");
     OUString sSuffix("|");
     if(rName == sTables)
     {
@@ -3892,7 +3896,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
             {
                 sParam = sParam.copy(0, sParam.getLength() - sSuffix.getLength());
                 if(!pxDoc->GetDocShell())
-                    throw RuntimeException();
+                    throw RuntimeException("No document shell available");
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
                 const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
@@ -3913,7 +3917,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                 aRet = xRealAccess->getByName(sParam.copy(0, sParam.getLength() - sSuffix.getLength()));
                 Reference< XInterface > xInt;
                 if(!(aRet >>= xInt))
-                    throw RuntimeException();
+                    throw RuntimeException("Could not retrieve property");
                 Reference< XPropertySet >  xProp(xInt, UNO_QUERY);
                 aRet <<= xProp;
                 bFound = true;
@@ -3932,7 +3936,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     if(pxDoc)
     {
         if(!pxDoc->GetDocShell())
-            throw RuntimeException();
+            throw RuntimeException("No document shell available");
 
         SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
         const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
@@ -3977,7 +3981,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
             if(pxDoc)
             {
                 if(!pxDoc->GetDocShell())
-                    throw RuntimeException();
+                    throw RuntimeException("No document shell available");
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
                 const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
