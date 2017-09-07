@@ -409,6 +409,9 @@ public:
     /** Returns pointer to Boolean value, if the item type is 'boolean', otherwise 0. */
     const bool*         GetBool() const;
 
+    /** Returns the type of the item */
+    XclPCItemType GetType() const;
+
 private:
     XclPCItemType       meType;         /// Type of the item.
     OUString       maText;         /// Text representation of the item.

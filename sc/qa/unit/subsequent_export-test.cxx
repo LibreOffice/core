@@ -211,6 +211,7 @@ public:
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
     void testTdf112106();
+    void testTdf112278();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -316,6 +317,8 @@ public:
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
 
     CPPUNIT_TEST(testTdf112106);
+    CPPUNIT_TEST(testTdf112278);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4325,6 +4328,41 @@ void ScExportTest::testTdf112106()
     const OUString* pLayoutName = pDim->GetLayoutName();
     CPPUNIT_ASSERT(pLayoutName);
     CPPUNIT_ASSERT_EQUAL(ScGlobal::GetRscString(STR_PIVOT_DATA), (*pLayoutName));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf112278()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf112278.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check filtering of row dimension
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+    ScDPSaveDimension* pSaveDim = pSaveData->GetDimensionByName("Order ID");
+    CPPUNIT_ASSERT(pSaveDim);
+
+    // Only the first member is visible, others are hidden
+    ScDPSaveMember* pMember = pSaveDim->GetMemberByName("1");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    pMember = pSaveDim->GetMemberByName("2");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    pMember = pSaveDim->GetMemberByName("3");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }

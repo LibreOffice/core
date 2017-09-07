@@ -876,9 +876,16 @@ XclImpPTItem::XclImpPTItem( const XclImpPCField* pCacheField ) :
 const OUString* XclImpPTItem::GetItemName() const
 {
     if( mpCacheField )
+    {
         if( const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx ) )
+        {
             //TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
-            return pCacheItem->IsEmpty() ? nullptr : pCacheItem->GetText();
+            const OUString* pRet = pCacheItem->IsEmpty() ? nullptr : pCacheItem->GetText();
+            if(!pRet && pCacheItem->GetType() == EXC_PCITEM_DOUBLE)
+                pRet = &pCacheItem->ConvertToText();
+            return pRet;
+        }
+    }
     return nullptr;
 }
 

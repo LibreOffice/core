@@ -63,8 +63,7 @@ void XclPCItem::SetText( const OUString& rText )
 void XclPCItem::SetDouble( double fValue )
 {
     meType = EXC_PCITEM_DOUBLE;
-    //TODO convert double to string
-    maText.clear();
+    maText = OUString::number(fValue);
     mfValue = fValue;
 }
 
@@ -159,6 +158,11 @@ const sal_uInt16* XclPCItem::GetError() const
 const bool* XclPCItem::GetBool() const
 {
     return (meType == EXC_PCITEM_BOOL) ? &mbValue : nullptr;
+}
+
+XclPCItemType XclPCItem::GetType() const
+{
+    return meType;
 }
 
 // Field settings =============================================================
