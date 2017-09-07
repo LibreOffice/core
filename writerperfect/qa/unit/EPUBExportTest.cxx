@@ -325,7 +325,9 @@ void EPUBExportTest::testLineBreak()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This was 0, line break was not handled.
-    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:br", 1);
+    assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:br", 1);
+    // This was 0, line break inside span was not handled.
+    assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:br", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
