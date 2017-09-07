@@ -27,6 +27,21 @@ to compile and build your code, it avoids any arbitrary limitations of
 our scripting APIs, and in general is far more simple and intuitive -
 if you are a reasonably able C++ programmer.
 
+## The build chain baselines
+
+These are the current minimal operation system and compiler versions to
+compile LibreOffice:
+
+* Cygwin + Visual Studio 2015 Update 3 + Windows SDK 8.1A (WinXP)
+* MacOS 10.6
+* Redhat 6 / CentOS 6 + gcc 4.8 or clang
+
+It's highly recommended to use the LibreOffice Development Environment
+([LODE](https://wiki.documentfoundation.org/Development/lode)) scripts
+to setup your Windows and MacOS build environments.
+
+For more information see the build instructions in the
+[TDF wiki](https://wiki.documentfoundation.org/Development).
 
 ## The important bits of code
 
