@@ -9,7 +9,7 @@
  {
    doc = docA;
    xref = doc->getXRef();
-   aobj->copy(&obj);
+   obj = aobj->copy();
 -  Dict* dict = obj.getDict();
    ref.num = ref.gen = 0;
    type = ty;
@@ -23,9 +23,9 @@
 +void FormField::init(std::set<int> *usedParents)
 +{
 +  Dict* dict = obj.getDict();
-   Object obj1;
    //childs
-   if (dict->lookup("Kids", &obj1)->isArray()) {
+   Object obj1 = dict->lookup("Kids");
+   if (obj1.isArray()) {
 @@ -803,9 +806,15 @@
  //------------------------------------------------------------------------
  // FormFieldButton
@@ -80,14 +80,16 @@
    numChoices = 0;
    choices = NULL;
    editedChoice = NULL;
-@@ -1379,9 +1400,15 @@
+@@ -1379,11 +1400,17 @@
  //------------------------------------------------------------------------
  // FormFieldSignature
  //------------------------------------------------------------------------
 -FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents)
--  : FormField(docA, dict, ref, parent, usedParents, formSignature)
+-  : FormField(docA, dict, ref, parent, usedParents, formSignature),
 +FormFieldSignature::FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent)
-+  : FormField(docA, dict, ref, parent, formSignature)
++  : FormField(docA, dict, ref, parent, formSignature),
+     signature_type(adbe_pkcs7_detached),
+     signature(nullptr), signature_info(nullptr)
  {
 +}
 +
@@ -99,9 +101,9 @@
  
    signature_info = new SignatureInfo();
 @@ -1691,15 +1718,15 @@
-     FormField *field;
  
-     if (Form::fieldLookup(obj->getDict (), "FT", &obj2)->isName("Btn")) {
+     Object obj2 = Form::fieldLookup(obj->getDict (), "FT");
+     if (obj2.isName("Btn")) {
 -      field = new FormFieldButton(docA, obj, pref, parent, usedParents);
 +      field = FormFieldButton::create(docA, obj, pref, parent, usedParents);
      } else if (obj2.isName("Tx")) {
@@ -117,8 +119,8 @@
 -      field = new FormField(docA, obj, pref, parent, usedParents);
 +      field = FormField::create(docA, obj, pref, parent, usedParents);
      }
-     obj2.free();
  
+     return field;
 --- poppler/Form.h
 +++ poppler/Form.h
 @@ -264,8 +264,16 @@
@@ -198,9 +200,9 @@
    ~FormFieldChoice();
  
 @@ -491,8 +523,16 @@
- //------------------------------------------------------------------------
  
  class FormFieldSignature: public FormField {
+   friend class FormWidgetSignature;
 -public:
 -  FormFieldSignature(PDFDoc *docA, Object *dict, const Ref& ref, FormField *parent, std::set<int> *usedParents);
 +private:
@@ -214,8 +216,8 @@
 +    return f;
 +  }
  
-   SignatureInfo *validateSignature(bool doVerifyCert, bool forceRevalidation);
- 
+   // Use -1 for now as validationTime
+   SignatureInfo *validateSignature(bool doVerifyCert, bool forceRevalidation, time_t validationTime);
 --- poppler/XRef.cc
 +++ poppler/XRef.cc
 @@ -293,6 +293,7 @@
