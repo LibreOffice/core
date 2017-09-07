@@ -54,7 +54,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 
-
 const char* SvxOpenGrfErr2ResId( ErrCode err )
 {
     if (err == ERRCODE_GRFILTER_OPENERROR)
@@ -69,36 +68,33 @@ const char* SvxOpenGrfErr2ResId( ErrCode err )
         return RID_SVXSTR_GRFILTER_FORMATERROR;
 }
 
-
 struct SvxOpenGrf_Impl
 {
-    SvxOpenGrf_Impl         ();
+    SvxOpenGrf_Impl(const vcl::Window* pPreferredParent);
 
     sfx2::FileDialogHelper                  aFileDlg;
     uno::Reference < XFilePickerControlAccess > xCtrlAcc;
 };
 
 
-SvxOpenGrf_Impl::SvxOpenGrf_Impl()
+SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent)
     : aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
-            FileDialogFlags::Graphic)
+            FileDialogFlags::Graphic, pPreferredParent)
 {
     uno::Reference < XFilePicker3 > xFP = aFileDlg.GetFilePicker();
     xCtrlAcc.set(xFP, UNO_QUERY);
 }
 
 
-SvxOpenGraphicDialog::SvxOpenGraphicDialog( const OUString& rTitle ) :
-    mpImpl( new SvxOpenGrf_Impl )
+SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent)
+    : mpImpl(new SvxOpenGrf_Impl(pPreferredParent))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
 }
 
-
 SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 {
 }
-
 
 ErrCode SvxOpenGraphicDialog::Execute()
 {

@@ -301,12 +301,12 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             const XFillBitmapItem& rBitmap =
                 static_cast<const XFillBitmapItem&>(aMergedAttr.Get(XATTR_FILLBITMAP));
             const GraphicObject& rGraphicObj = rBitmap.GetGraphicObject();
-            GraphicHelper::ExportGraphic(rGraphicObj.GetGraphic(), "");
+            GraphicHelper::ExportGraphic(pParent, rGraphicObj.GetGraphic(), "");
         }
     }
     else if (nId == SID_SELECT_BACKGROUND)
     {
-        SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
+        SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE), pParent);
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {

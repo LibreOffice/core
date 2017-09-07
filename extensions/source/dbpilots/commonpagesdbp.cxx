@@ -205,7 +205,8 @@ namespace dbp
     IMPL_LINK_NOARG( OTableSelectionPage, OnSearchClicked, Button*, void )
     {
         ::sfx2::FileDialogHelper aFileDlg(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                FileDialogFlags::NONE, this);
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");

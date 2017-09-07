@@ -621,7 +621,8 @@ IMPL_LINK_NOARG( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
 {
     // create the file dialog
     sfx2::FileDialogHelper aFileDlg(
-            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, OUString() );
+            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, OUString(),
+            SfxFilterFlags::NONE, SfxFilterFlags::NONE, this);
 
     // set the title
     aFileDlg.SetTitle(CuiResId(RID_SVXSTR_SELECT_FILE_IFRAME));
