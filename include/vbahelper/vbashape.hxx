@@ -84,6 +84,8 @@ public:
     /// @throws css::uno::RuntimeException
     static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape >& rShape );
 
+    static sal_Int32 getAutoShapeType( const css::uno::Reference< css::drawing::XShape >& rShape );
+
     // Attributes
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setName( const OUString& _name ) override;
