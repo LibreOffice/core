@@ -488,6 +488,7 @@ namespace svt
         AccessibleFactoryAccess m_aFactoryAccess;
 
         SvHeaderTabListBoxImpl() : m_pHeaderBar( nullptr ) { }
+        ~SvHeaderTabListBoxImpl() { m_pHeaderBar.disposeAndClear(); }
     };
 }
 
