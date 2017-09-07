@@ -2991,7 +2991,7 @@ void OReportController::insertGraphic()
     try
     {
         uno::Reference< report::XSection> xSection = getDesignView()->getCurrentSection();
-        ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW, FileDialogFlags::Graphic );
+        ::sfx2::FileDialogHelper aDialog(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW, FileDialogFlags::Graphic, getView());
         aDialog.SetTitle( sTitle );
 
         uno::Reference< ui::dialogs::XFilePickerControlAccess > xController(aDialog.GetFilePicker(), UNO_QUERY_THROW);

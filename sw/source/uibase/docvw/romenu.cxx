@@ -353,7 +353,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
 
     if( pClipCntnr && pClipCntnr->HasAnyData() )
     {
-            pClipCntnr->CopyToClipboard( pWin );
+        pClipCntnr->CopyToClipboard( pWin );
     }
 }
 
@@ -374,7 +374,7 @@ OUString SwReadOnlyPopup::SaveGraphic(sal_uInt16 nId)
         else
             return OUString();
     }
-    return GraphicHelper::ExportGraphic( aGraphic, sGrfName );
+    return GraphicHelper::ExportGraphic(rView.GetWindow(), aGraphic, sGrfName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

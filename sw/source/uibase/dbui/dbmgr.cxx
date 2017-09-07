@@ -2555,9 +2555,9 @@ uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
     return xDBContext->getElementNames();
 }
 
-OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
+OUString SwDBManager::LoadAndRegisterDataSource(vcl::Window* pParent, SwDocShell* pDocShell)
 {
-    sfx2::FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
+    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pParent);
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
     OUString sHomePath(SvtPathOptions().GetWorkPath());

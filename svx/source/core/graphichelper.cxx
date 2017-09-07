@@ -179,12 +179,12 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
 }
 } // anonymous ns
 
-OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& rGraphicName )
+OUString GraphicHelper::ExportGraphic(const vcl::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
 {
     SvtPathOptions aPathOpt;
     OUString sGraphicsPath( aPathOpt.GetGraphicPath() );
 
-    FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
+    FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
     Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
 
     INetURLObject aPath;
@@ -336,7 +336,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     return OUString();
 }
 
-void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xShape )
+void GraphicHelper::SaveShapeAsGraphic(const vcl::Window* pParent,  const Reference< drawing::XShape >& xShape)
 {
     try
     {
@@ -346,7 +346,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         SvtPathOptions aPathOpt;
         OUString sGraphicPath( aPathOpt.GetGraphicPath() );
 
-        FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
+        FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
         Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
 
         aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
