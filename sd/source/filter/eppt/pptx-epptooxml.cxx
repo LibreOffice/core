@@ -41,12 +41,14 @@
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimationRestart.hpp>
+#include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationValueType.hpp>
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
@@ -908,6 +910,16 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
         pFS->writeEscaped("ppt_y");
         pFS->endElementNS(XML_p, XML_attrName);
     }
+    else if (rAttributeName == "Rotate")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("r");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else
+    {
+        SAL_INFO("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
+    }
 
     pFS->endElementNS( XML_p, XML_attrNameLst );
 }
@@ -969,27 +981,62 @@ void PowerPointExport::WriteAnimationNodeAnimate( const FSHelperPtr& pFS, const 
     }
     }
 
-    OUString aPath;
     if (nXmlNodeType == XML_animMotion)
     {
-        Reference<XAnimateMotion> rMotion(rXNode, UNO_QUERY);
-        if (rMotion.is())
-            rMotion->getPath() >>= aPath;
-    }
+        OUString aPath;
+        Reference<XAnimateMotion> xMotion(rXNode, UNO_QUERY);
+        if (xMotion.is())
+            xMotion->getPath() >>= aPath;
 
-    if (aPath.isEmpty())
+        pFS->startElementNS(XML_p, nXmlNodeType,
+                            XML_path, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8),
+                            FSEND);
+    }
+    else if (nXmlNodeType == XML_animRot)
+    {
+        // when const char* is nullptr, the attribute is completely omitted in the output
+        const char* pBy = nullptr;
+        const char* pFrom = nullptr;
+        const char* pTo = nullptr;
+        OString aBy, aFrom, aTo;
+
+        Reference<XAnimateTransform> xTransform(rXNode, UNO_QUERY);
+        if (xTransform.is())
+        {
+            double value;
+            if (xTransform->getBy() >>= value)
+            {
+                aBy = OString::number(static_cast<int>(value * PER_DEGREE));
+                pBy = aBy.getStr();
+            }
+
+            if (xTransform->getFrom() >>= value)
+            {
+                aFrom = OString::number(static_cast<int>(value * PER_DEGREE));
+                pFrom = aFrom.getStr();
+            }
+
+            if (xTransform->getTo() >>= value)
+            {
+                aTo = OString::number(static_cast<int>(value * PER_DEGREE));
+                pTo = aTo.getStr();
+            }
+        }
+
+        pFS->startElementNS(XML_p, nXmlNodeType,
+                            XML_by, pBy,
+                            XML_from, pFrom,
+                            XML_to, pTo,
+                            FSEND);
+    }
+    else
     {
         pFS->startElementNS(XML_p, nXmlNodeType,
                             XML_calcmode, pCalcMode,
                             XML_valueType, pValueType,
                             FSEND);
     }
-    else
-    {
-        pFS->startElementNS(XML_p, nXmlNodeType,
-                            XML_path, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8),
-                            FSEND);
-    }
+
     WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, bSimple);
     pFS->endElementNS(XML_p, nXmlNodeType);
 }
@@ -1425,6 +1472,23 @@ void PowerPointExport::WriteAnimationNode( const FSHelperPtr& pFS, const Referen
         xmlNodeType = XML_animMotion;
         pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
         break;
+    case AnimationNodeType::ANIMATETRANSFORM:
+        {
+            Reference<XAnimateTransform> xTransform(rXNode, UNO_QUERY);
+            if (xTransform.is())
+            {
+                if (xTransform->getTransformType() == AnimationTransformType::SCALE)
+                {
+                    SAL_WARN("sd.eppt", "SCALE transform type not handled");
+                }
+                else if (xTransform->getTransformType() == AnimationTransformType::ROTATE)
+                {
+                    xmlNodeType = XML_animRot;
+                    pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
+                }
+            }
+        }
+        break;
     case AnimationNodeType::SET:
         xmlNodeType = XML_set;
         pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
@@ -1438,7 +1502,7 @@ void PowerPointExport::WriteAnimationNode( const FSHelperPtr& pFS, const Referen
         pMethod = &PowerPointExport::WriteAnimationNodeCommand;
         break;
     default:
-        SAL_WARN("sd.eppt", "unhandled: " << rXNode->getType());
+        SAL_WARN("sd.eppt", "unhandled animation node: " << rXNode->getType());
         break;
     }
 
