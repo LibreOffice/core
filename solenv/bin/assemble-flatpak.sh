@@ -15,29 +15,25 @@ set -e
 
 cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
 
-## libreoffice-startcenter.desktop -> org.libreoffice.LibreOffice.desktop,
-## combining all libreoffice-*.desktop MimeType= lines:
+## libreoffice-*.desktop -> org.libreoffice.LibreOffice-*.desktop:
 mkdir /app/share
 mkdir /app/share/applications
-my_mimetypes=$(awk -d 'BEGIN { FS="="; ORS=""; semi=0 }; \
- /^MimeType=/ && length($2) \
-  { if (semi) print ";"; print $2; semi = match($2, ";$") == 0 }' \
- "${PREFIXDIR?}"/share/applications/libreoffice-*.desktop)
-sed -e 's,^Exec=libreoffice,Exec=/app/libreoffice/program/soffice,' \
- -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice-/' \
- -e 's|^MimeType=.*$|MimeType='"$my_mimetypes"'|' \
- "${PREFIXDIR?}"/share/applications/libreoffice-startcenter.desktop \
- >/app/share/applications/org.libreoffice.LibreOffice.desktop
+for i in "${PREFIXDIR?}"/share/applications/libreoffice-*.desktop
+do
+ sed -e 's,^Exec=libreoffice,Exec=/app/libreoffice/program/soffice,' \
+  -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice-/' "$i" \
+  >/app/share/applications/org.libreoffice.LibreOffice-"${i#"${PREFIXDIR?}"/share/applications/libreoffice-}"
+done
 
-## icons/hicolor/*/apps/libreoffice-startcenter.* ->
-## icons/hicolor/*/apps/org.libreoffice.LibreOffice-startcenter.*:
+## icons/hicolor/*/apps/libreoffice-* ->
+## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:
 mkdir /app/share/icons
-for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/libreoffice-startcenter.*
+for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/libreoffice-*
 do
  mkdir -p \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"
  cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice-startcenter."${i##*/apps/libreoffice-startcenter.}"
+  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice-"${i##*/apps/libreoffice-}"
 done
 
 ## org.libreoffice.LibreOffice.appdata.xml is manually derived from the various
