@@ -1639,14 +1639,18 @@ void ScCheckListBox::Init()
     SetNodeDefaultImages();
 }
 
-void ScCheckListBox::GetRecursiveChecked(SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& vOut, SvTreeListEntry* pParent)
+void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& vOut,
+        OUString& rLabel )
 {
     if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
     {
-        // we have to hash both parent and child together
-        OUString aName = GetEntryText(pEntry);
-        if (pParent) aName += GetEntryText(pParent);
-        vOut.insert(aName);
+        // We have to hash parents and children together.
+        // Per convention for easy access in getResult()
+        // "child;parent;grandparent" while descending.
+        if (rLabel.isEmpty())
+            rLabel = GetEntryText(pEntry);
+        else
+            rLabel = GetEntryText(pEntry) + ";" + rLabel;
     }
 
     if (pEntry->HasChildren())
@@ -1654,10 +1658,14 @@ void ScCheckListBox::GetRecursiveChecked(SvTreeListEntry* pEntry, std::unordered
         const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
         for (auto& rChild : rChildren)
         {
-            GetRecursiveChecked(rChild.get(), vOut, pEntry);
+            OUString aLabel = rLabel;
+            GetRecursiveChecked( rChild.get(), vOut, aLabel);
+            if (!aLabel.isEmpty())
+                vOut.insert( aLabel);
         }
+        // Let the caller not add the parent alone.
+        rLabel.clear();
     }
-
 }
 
 std::unordered_set<OUString, OUStringHash> ScCheckListBox::GetAllChecked()
@@ -1667,7 +1675,10 @@ std::unordered_set<OUString, OUStringHash> ScCheckListBox::GetAllChecked()
     SvTreeListEntry* pEntry = GetEntry(nRootPos);
     while (pEntry)
     {
-        GetRecursiveChecked(pEntry, vResults, nullptr);
+        OUString aLabel;
+        GetRecursiveChecked( pEntry, vResults, aLabel);
+        if (!aLabel.isEmpty())
+            vResults.insert( aLabel);
         pEntry = GetEntry(++nRootPos);
     }
 
@@ -1952,9 +1963,17 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
 
-            bool bState = vCheckeds.find(maMembers[i].mpParent ?
-                    aLabel.copy(0).concat(maChecks->GetEntryText(maMembers[i].mpParent)) :
-                    aLabel) != vCheckeds.end();
+            /* TODO: performance-wise this looks suspicious, concatenating to
+             * do the lookup for each leaf item seems wasteful. */
+            // Checked labels are in the form "child;parent;grandparent".
+            for (SvTreeListEntry* pParent = maMembers[i].mpParent;
+                    pParent && pParent->GetFirstItem( SvLBoxItemType::String);
+                    pParent = pParent->GetParent())
+            {
+                aLabel += ";" + maChecks->GetEntryText( pParent);
+            }
+            bool bState = vCheckeds.find(aLabel) != vCheckeds.end();
+
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;
             if ( maMembers[i].mbDate )
