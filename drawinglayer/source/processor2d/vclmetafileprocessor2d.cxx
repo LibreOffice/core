@@ -1728,6 +1728,7 @@ namespace drawinglayer
                         impEndSvtGraphicFill(pSvtGraphicFill);
                     }
 
+                    mpOutputDevice->Pop();
                     break;
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
@@ -1747,7 +1748,6 @@ namespace drawinglayer
                         RenderMetafilePrimitive2D(aMetafile);
                     }
 
-                    mpOutputDevice->Pop();
                     break;
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
