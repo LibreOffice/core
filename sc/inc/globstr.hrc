@@ -137,7 +137,7 @@
 #define STR_MSSG_SOLVE_2                        NC_("STR_MSSG_SOLVE_2", "Goal Seek failed.\n\n")
 #define STR_MSSG_SOLVE_3                        NC_("STR_MSSG_SOLVE_3", "Insert the closest value (")
 #define STR_MSSG_SOLVE_4                        NC_("STR_MSSG_SOLVE_4", ") into the variable cell anyway?")
-#define STR_TABLE_GESAMTERGEBNIS                NC_("STR_TABLE_GESAMTERGEBNIS", "Grand Total")
+#define STR_TABLE_GRAND                         NC_("STR_TABLE_GRAND", "Grand")
 #define STR_TABLE_ERGEBNIS                      NC_("STR_TABLE_ERGEBNIS", "Result")
 #define STR_UNDO_SPELLING                       NC_("STR_UNDO_SPELLING", "Spellcheck")
 #define STR_TABLE_UND                           NC_("STR_TABLE_UND", "AND")
