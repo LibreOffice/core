@@ -89,7 +89,7 @@ SwDLL::SwDLL()
         xOpt.reset(new SvtModuleOptions);
     SfxObjectFactory* pDocFact = nullptr;
     SfxObjectFactory* pGlobDocFact = nullptr;
-    if (xOpt && xOpt->IsWriter())
+    if (!xOpt || xOpt->IsWriter())
     {
         pDocFact = &SwDocShell::Factory();
         pGlobDocFact = &SwGlobalDocShell::Factory();
@@ -103,7 +103,7 @@ SwDLL::SwDLL()
 
     pWDocFact->SetDocumentServiceName("com.sun.star.text.WebDocument");
 
-    if (xOpt && xOpt->IsWriter())
+    if (!xOpt || xOpt->IsWriter())
     {
         pGlobDocFact->SetDocumentServiceName("com.sun.star.text.GlobalDocument");
         pDocFact->SetDocumentServiceName("com.sun.star.text.TextDocument");

@@ -75,6 +75,7 @@
 
 #include <view.hxx>
 #include <PostItMgr.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
@@ -2437,7 +2438,9 @@ SwAccessibleMap* SwViewShell::GetAccessibleMap()
 
 void SwViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions const & rAccessibilityOptions)
 {
-    if(mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+    if (mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
     {
         mpAccOptions->SetAlwaysAutoColor(false);
         mpAccOptions->SetStopAnimatedGraphics(false);

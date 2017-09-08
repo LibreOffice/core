@@ -1002,6 +1002,11 @@ void SfxObjectShell::SetAutoLoad(
     }
 }
 
+void SfxObjectShell::SetLoading(SfxLoadedFlags nFlags)
+{
+    pImpl->nLoadedFlags = nFlags;
+}
+
 bool SfxObjectShell::IsLoadingFinished() const
 {
     return ( pImpl->nLoadedFlags == SfxLoadedFlags::ALL );
