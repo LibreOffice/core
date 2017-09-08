@@ -150,7 +150,7 @@ DefItems::DefItems()
     // Features
     rDefItems[51] = new SfxVoidItem( EE_FEATURE_TAB );
     rDefItems[52] = new SfxVoidItem( EE_FEATURE_LINEBR );
-    rDefItems[53] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
+    rDefItems[53] = new SvxCharSetColorItem( Color( COL_RED ), EE_FEATURE_NOTCONV );
     rDefItems[54] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
     assert(EDITITEMCOUNT == 55 && "ITEMCOUNT changed, adjust DefItems!");

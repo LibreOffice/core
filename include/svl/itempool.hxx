@@ -169,7 +169,7 @@ public:
                                     { return IsItemPoolable( rItem.Which() ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
-    sal_uInt16                      GetSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;
+    sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich ) const;
 

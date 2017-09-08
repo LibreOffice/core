@@ -906,14 +906,14 @@ sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const
 }
 
 
-sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, bool bDeep ) const
+sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich ) const
 {
     if ( !IsWhich(nWhich) )
         return nWhich;
 
     if ( !IsInRange( nWhich ) )
     {
-        if ( pImpl->mpSecondary && bDeep )
+        if ( pImpl->mpSecondary )
             return pImpl->mpSecondary->GetSlotId(nWhich);
         assert(false && "unknown WhichId - cannot get slot-id");
         return 0;

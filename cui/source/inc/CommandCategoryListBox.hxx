@@ -37,7 +37,7 @@ class CommandCategoryListBox : public ListBox
     i18nutil::SearchOptions2 m_searchOptions;
 
 public:
-    CommandCategoryListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
+    CommandCategoryListBox( vcl::Window* pParent );
     virtual ~CommandCategoryListBox() override;
     virtual void dispose() override;
     void ClearAll();

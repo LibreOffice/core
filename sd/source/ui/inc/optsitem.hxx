@@ -171,7 +171,7 @@ protected:
 
 public:
 
-            SdOptionsContents(bool bImpress, bool bUseConfig);
+            SdOptionsContents(bool bImpress);
 
     bool    operator==( const SdOptionsContents& rOpt ) const;
 };

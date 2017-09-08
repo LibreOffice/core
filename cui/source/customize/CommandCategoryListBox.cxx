@@ -36,8 +36,8 @@
 #include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>
 
-CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox( pParent, nStyle)
+CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent)
+    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
     SetDropDownLineCount(25);
 
