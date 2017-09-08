@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		$(if $(filter ANDROID IOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS) $(gb_VISIBILITY_FLAGS)") \
 		$(if $(filter-out ANDROID IOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS)" ) \
 		$(if $(filter ANDROID IOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
-		LDFLAGS="$(ZLIB_LIBS)" \
+		LIBS="$(ZLIB_LIBS)" \
 		pixman_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman" \
 		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1" \
 		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
