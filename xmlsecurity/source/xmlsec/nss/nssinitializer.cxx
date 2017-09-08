@@ -413,6 +413,13 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
         nDigestLength = 20;
         b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA1_1K );
     }
+    else if ( nDigestID == css::xml::crypto::DigestID::SHA512
+           || nDigestID == css::xml::crypto::DigestID::SHA512_1K )
+    {
+        nNSSDigestID = SEC_OID_SHA512;
+        nDigestLength = 64;
+        b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA512_1K );
+    }
     else
         throw css::lang::IllegalArgumentException("Unexpected digest requested.", css::uno::Reference< css::uno::XInterface >(), 1 );
 

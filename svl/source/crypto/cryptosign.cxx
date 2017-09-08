@@ -2053,6 +2053,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         break;
     case SEC_OID_SHA512:
         nMaxResultLen = msfilter::SHA512_HASH_LENGTH;
+        rInformation.nDigestID = xml::crypto::DigestID::SHA512;
         break;
     default:
         SAL_WARN("svl.crypto", "ValidateSignature: unrecognized algorithm");
