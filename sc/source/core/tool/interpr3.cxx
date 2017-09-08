@@ -3042,6 +3042,14 @@ void ScInterpreter::ScGeoMean()
                     nVal += log(x);
                     nValCount++;
                 }
+                else if ( x == 0.0 )
+                {
+                    // value of 0 means that function result will be 0
+                    while ( nParamCount-- > 0 )
+                        PopError();
+                    PushDouble( 0.0 );
+                    return;
+                }
                 else
                     SetError( FormulaError::IllegalArgument);
                 break;
@@ -3057,6 +3065,14 @@ void ScInterpreter::ScGeoMean()
                     {
                         nVal += log(x);
                         nValCount++;
+                    }
+                    else if ( x == 0.0 )
+                    {
+                        // value of 0 means that function result will be 0
+                        while ( nParamCount-- > 0 )
+                            PopError();
+                        PushDouble( 0.0 );
+                        return;
                     }
                     else
                         SetError( FormulaError::IllegalArgument);
@@ -3077,6 +3093,14 @@ void ScInterpreter::ScGeoMean()
                         nVal += log(nCellVal);
                         nValCount++;
                     }
+                    else if ( nCellVal == 0.0 )
+                    {
+                        // value of 0 means that function result will be 0
+                        while ( nParamCount-- > 0 )
+                            PopError();
+                        PushDouble( 0.0 );
+                        return;
+                    }
                     else
                         SetError( FormulaError::IllegalArgument);
                     SetError(nErr);
@@ -3086,6 +3110,14 @@ void ScInterpreter::ScGeoMean()
                         {
                             nVal += log(nCellVal);
                             nValCount++;
+                        }
+                        else if ( nCellVal == 0.0 )
+                        {
+                            // value of 0 means that function result will be 0
+                            while ( nParamCount-- > 0 )
+                                PopError();
+                            PushDouble( 0.0 );
+                            return;
                         }
                         else
                             SetError( FormulaError::IllegalArgument);
@@ -3112,6 +3144,14 @@ void ScInterpreter::ScGeoMean()
                                 nVal += log(x);
                                 nValCount++;
                             }
+                            else if ( x == 0.0 )
+                            {
+                                // value of 0 means that function result will be 0
+                                while ( nParamCount-- > 0 )
+                                    PopError();
+                                PushDouble( 0.0 );
+                                return;
+                            }
                             else
                                 SetError( FormulaError::IllegalArgument);
                         }
@@ -3119,6 +3159,7 @@ void ScInterpreter::ScGeoMean()
                     else
                     {
                         for (SCSIZE ui = 0; ui < nCount; ui++)
+                        {
                             if (!pMat->IsString(ui))
                             {
                                 double x = pMat->GetDouble(ui);
@@ -3127,9 +3168,18 @@ void ScInterpreter::ScGeoMean()
                                     nVal += log(x);
                                     nValCount++;
                                 }
+                                else if ( x == 0.0 )
+                                {
+                                    // value of 0 means that function result will be 0
+                                    while ( nParamCount-- > 0 )
+                                        PopError();
+                                    PushDouble( 0.0 );
+                                    return;
+                                }
                                 else
                                     SetError( FormulaError::IllegalArgument);
                             }
+                        }
                     }
                 }
             }
