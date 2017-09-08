@@ -3237,7 +3237,6 @@ void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
 {
     m_nSlotId = nSlotId;
     m_bShowNoneButton = bShowNoneButton;
-    m_xColorWindow.disposeAndClear();
     m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
     ShowPreview(m_aSelectedColor);
     createColorWindow();
@@ -3311,6 +3310,9 @@ void SvxColorListBox::createColorWindow()
     const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
     css::uno::Reference<css::frame::XFrame> xFrame(pFrame ? pFrame->GetFrameInterface() : uno::Reference<css::frame::XFrame>());
 
+    m_xPaletteManager.reset();
+    m_xColorWindow.disposeAndClear();
+
     EnsurePaletteManager();
 
     m_xColorWindow = VclPtr<SvxColorWindow>::Create(
@@ -3347,6 +3349,7 @@ SvxColorListBox::~SvxColorListBox()
 
 void SvxColorListBox::dispose()
 {
+    m_xPaletteManager.reset();
     m_xColorWindow.disposeAndClear();
     m_aColorWrapper.dispose();
     MenuButton::dispose();
