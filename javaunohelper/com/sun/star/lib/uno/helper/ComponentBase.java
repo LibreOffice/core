@@ -87,8 +87,11 @@ public class ComponentBase extends WeakBase implements XComponent
             {
                 // finally makes sure that the  flags are set even if a RuntimeException is thrown.
                 // That ensures that this function is only called once.
-                bDisposed= true;
-                bInDispose= false;
+                synchronized (this)
+                {
+                    bDisposed= true;
+                    bInDispose= false;
+                }
             }
         }
         else
