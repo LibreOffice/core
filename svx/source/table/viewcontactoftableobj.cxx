@@ -352,7 +352,6 @@ namespace sdr
                                         const basegfx::B2DPoint aOrigin(aCellMatrix * basegfx::B2DPoint(0.0, 0.0));
                                         const basegfx::B2DVector aX(aCellMatrix * basegfx::B2DVector(1.0, 0.0));
                                         const basegfx::B2DVector aY(aCellMatrix * basegfx::B2DVector(0.0, 1.0));
-                                        const double fTwipsToMM(127.0 / 72.0);
 
                                         if(aLeftLine.IsUsed())
                                         {
