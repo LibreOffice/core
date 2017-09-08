@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e7903998",
+        "filename": "sd/source/ui/slidesorter/view/SlideSorterView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "this code will never be reached?",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_078e2578",
+        "filename": "sd/source/ui/slidesorter/view/SlsFramePainter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "hmm - so this could potentially happen?\n\nAlso better then to use something like assert(false \u0026\u0026 \"why this is wrong\");",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27e9611b",
+        "filename": "sd/source/ui/slidesorter/view/SlsInsertAnimator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "better assert(rRun) at func start?",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_47ee6d23",
+        "filename": "sd/source/ui/slidesorter/view/SlsInsertAnimator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_67f3690b",
+        "filename": "sd/source/ui/slidesorter/view/SlsLayeredDevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "you\u0027ve just checked that a line above?",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_87f855e7",
+        "filename": "sd/source/ui/slidesorter/view/SlsLayeredDevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "check rpainter straight away?",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a7dd5172",
+        "filename": "sd/source/ui/slidesorter/view/SlsLayeredDevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "this code is not reached",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_07e54536",
+        "filename": "sd/source/ui/slidesorter/view/SlsLayeredDevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "better assert directly",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27d08153",
+        "filename": "sd/source/ui/slidesorter/view/SlsTheme.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:13:43Z",
+      "side": 1,
+      "message": "same here - move the assert up, kill the if statement?",
+      "revId": "2700ddd806a5bdfb936670eb9810d4002f59f340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
