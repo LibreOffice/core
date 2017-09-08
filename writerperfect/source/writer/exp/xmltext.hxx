@@ -26,6 +26,9 @@ public:
     XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
 };
 
+/// Context factory for body text, section, table cell, etc.
+XMLImportContext *CreateTextChildContext(XMLImport &rImport, const OUString &rName);
+
 } // namespace exp
 } // namespace writerperfect
 

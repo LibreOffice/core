@@ -7,11 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "xmltext.hxx"
-
-#include "txtparai.hxx"
-#include "xmltbli.hxx"
 #include "XMLSectionContext.hxx"
+
+#include "xmlimp.hxx"
+#include "xmltext.hxx"
 
 using namespace com::sun::star;
 
@@ -20,25 +19,24 @@ namespace writerperfect
 namespace exp
 {
 
-XMLBodyContentContext::XMLBodyContentContext(XMLImport &rImport)
+XMLSectionContext::XMLSectionContext(XMLImport &rImport)
     : XMLImportContext(rImport)
 {
 }
 
-XMLImportContext *XMLBodyContentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+XMLImportContext *XMLSectionContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }
 
-XMLImportContext *CreateTextChildContext(XMLImport &rImport, const OUString &rName)
+void XMLSectionContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "text:p" || rName == "text:h")
-        return new XMLParaContext(rImport);
-    if (rName == "text:section")
-        return new XMLSectionContext(rImport);
-    if (rName == "table:table")
-        return new XMLTableContext(rImport);
-    return nullptr;
+    mrImport.GetGenerator().openSection(librevenge::RVNGPropertyList());
+}
+
+void XMLSectionContext::endElement(const OUString &/*rName*/)
+{
+    mrImport.GetGenerator().closeSection();
 }
 
 } // namespace exp
