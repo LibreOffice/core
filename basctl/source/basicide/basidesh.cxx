@@ -314,7 +314,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
                 pWin->BasicStopped();
             }
             else
-                aDeleteVec.push_back( pWin );
+                aDeleteVec.emplace_back(pWin );
         }
     }
     // delete windows outside main loop so we don't invalidate the original iterator
@@ -557,7 +557,7 @@ void Shell::CheckWindows()
     {
         BaseWindow* pWin = it->second;
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
-            aDeleteVec.push_back( pWin );
+            aDeleteVec.emplace_back(pWin );
     }
     for ( VclPtr<BaseWindow> const & pWin : aDeleteVec )
     {
@@ -579,7 +579,7 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
     {
         BaseWindow* pWin = it->second;
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
-            aDeleteVec.push_back( pWin );
+            aDeleteVec.emplace_back(pWin );
     }
     for ( VclPtr<BaseWindow> const & pWin : aDeleteVec )
     {
@@ -612,7 +612,7 @@ void Shell::UpdateWindows()
                 // Window is frozen at first, later the windows should be changed
                 // anyway to be marked as hidden instead of being deleted.
                 if ( !(pWin->GetStatus() & ( BASWIN_TOBEKILLED | BASWIN_RUNNINGBASIC | BASWIN_SUSPENDED ) ) )
-                    aDeleteVec.push_back( pWin );
+                    aDeleteVec.emplace_back(pWin );
             }
         }
         for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )

@@ -3977,7 +3977,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // #74254 now per list
     if( pObj )
     {
-        aRefSaved.push_back( pObj );
+        aRefSaved.emplace_back(pObj );
     }
     PushVar( FindElement( pObj, nOp1, nOp2, ERRCODE_BASIC_NO_METHOD, false ) );
 }
@@ -4057,7 +4057,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     else if( t != SbxVARIANT && (SbxDataType)(p->GetType() & 0x0FFF ) != t )
     {
         SbxVariable* q = new SbxVariable( t );
-        aRefSaved.push_back( q );
+        aRefSaved.emplace_back(q );
         *q = *p;
         p = q;
         if ( i )

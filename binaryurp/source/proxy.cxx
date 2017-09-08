@@ -136,14 +136,13 @@ void Proxy::do_dispatch_throw(
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         bSetter = returnValue == nullptr;
         if (bSetter) {
-            inArgs.push_back(
-                BinaryAny(
+            inArgs.emplace_back(
                     css::uno::TypeDescription(
                         reinterpret_cast<
                             typelib_InterfaceAttributeTypeDescription const * >(
                                 member)->
                         pAttributeTypeRef),
-                    arguments[0]));
+                    arguments[0]);
         }
         break;
     case typelib_TypeClass_INTERFACE_METHOD:
@@ -153,10 +152,9 @@ void Proxy::do_dispatch_throw(
                     typelib_InterfaceMethodTypeDescription const * >(member);
             for (sal_Int32 i = 0; i != mtd->nParams; ++i) {
                 if (mtd->pParams[i].bIn) {
-                    inArgs.push_back(
-                        BinaryAny(
+                    inArgs.emplace_back(
                             css::uno::TypeDescription(mtd->pParams[i].pTypeRef),
-                            arguments[i]));
+                            arguments[i]);
                 }
             }
             break;

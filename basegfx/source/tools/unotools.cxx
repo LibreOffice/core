@@ -200,12 +200,12 @@ namespace unotools
                     if(aBezier.isBezier())
                     {
                         // if one is used, add always two control points due to the old schema
-                        aPoints.push_back( awt::Point(fround(aBezier.getControlPointA().getX()),
-                                                      fround(aBezier.getControlPointA().getY())) );
+                        aPoints.emplace_back(fround(aBezier.getControlPointA().getX()),
+                                             fround(aBezier.getControlPointA().getY()) );
                         aFlags.push_back(drawing::PolygonFlags_CONTROL);
 
-                        aPoints.push_back( awt::Point(fround(aBezier.getControlPointB().getX()),
-                                                      fround(aBezier.getControlPointB().getY())) );
+                        aPoints.emplace_back(fround(aBezier.getControlPointB().getX()),
+                                             fround(aBezier.getControlPointB().getY()) );
                         aFlags.push_back(drawing::PolygonFlags_CONTROL);
                     }
 

@@ -168,10 +168,10 @@ namespace basegfx
 
             const sal_uInt32 nYDelta(nYEnd - nYStart);
             const double fInvYDelta(1.0 / nYDelta);
-            maLineEntries.push_back(RasterConversionLineEntry3D(
+            maLineEntries.emplace_back(
                 aStart.getX(), (aEnd.getX() - aStart.getX()) * fInvYDelta,
                 aStart.getZ(), (aEnd.getZ() - aStart.getZ()) * fInvYDelta,
-                nYStart, nYDelta));
+                nYStart, nYDelta);
 
             // if extra interpolation data is used, add it to the last created entry
             RasterConversionLineEntry3D& rEntry = maLineEntries[maLineEntries.size() - 1];
@@ -261,14 +261,14 @@ namespace basegfx
 
                     // horizontal line, create vertical entries. These will be sorted by
                     // X anyways, so no need to distinguish the case here
-                    maLineEntries.push_back(RasterConversionLineEntry3D(
+                    maLineEntries.emplace_back(
                         aStart.getX(), 0.0,
                         aStart.getZ() + fZBufferLineAdd, 0.0,
-                        nYStart, 1));
-                    maLineEntries.push_back(RasterConversionLineEntry3D(
+                        nYStart, 1);
+                    maLineEntries.emplace_back(
                         aEnd.getX(), 0.0,
                         aEnd.getZ() + fZBufferLineAdd, 0.0,
-                        nYStart, 1));
+                        nYStart, 1);
                 }
             }
             else
@@ -287,10 +287,10 @@ namespace basegfx
 
                 // non-horizontal line, create two parallel entries. These will be sorted by
                 // X anyways, so no need to distinguish the case here
-                maLineEntries.push_back(RasterConversionLineEntry3D(
+                maLineEntries.emplace_back(
                     aStart.getX(), (aEnd.getX() - aStart.getX()) * fInvYDelta,
                     aStart.getZ() + fZBufferLineAdd, (aEnd.getZ() - aStart.getZ()) * fInvYDelta,
-                    nYStart, nYDelta));
+                    nYStart, nYDelta);
 
                 RasterConversionLineEntry3D& rEntry = maLineEntries[maLineEntries.size() - 1];
 
@@ -300,10 +300,10 @@ namespace basegfx
                 // guarantee one pixel per line, add a minimum of one for X.
                 const double fDistanceX(fabs(rEntry.getX().getInc()) >= 1.0 ? rEntry.getX().getInc() : 1.0);
 
-                maLineEntries.push_back(RasterConversionLineEntry3D(
+                maLineEntries.emplace_back(
                     rEntry.getX().getVal() + fDistanceX, rEntry.getX().getInc(),
                     rEntry.getZ().getVal() + rEntry.getZ().getInc(), rEntry.getZ().getInc(),
-                    nYStart, nYDelta));
+                    nYStart, nYDelta);
             }
         }
 
