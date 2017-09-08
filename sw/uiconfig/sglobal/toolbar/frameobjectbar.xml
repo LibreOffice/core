@@ -18,11 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOff"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOn"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapIdeal"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapThrough"/>
@@ -35,17 +37,21 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectBackOne"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
- <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
- <toolbar:toolbaritem xlink:href=".uno:AnchorMenu"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

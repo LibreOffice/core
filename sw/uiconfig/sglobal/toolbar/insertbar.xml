@@ -29,7 +29,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertDoc"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDoc" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EditGlossary"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
@@ -44,3 +44,4 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry"/>
 </toolbar:toolbar>
+
