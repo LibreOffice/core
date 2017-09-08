@@ -74,7 +74,7 @@ namespace exp
 class XMLSpanContext : public XMLImportContext
 {
 public:
-    XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList *pPropertyList);
+    XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
 
     XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
@@ -85,14 +85,11 @@ private:
     librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLSpanContext::XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList *pPropertyList)
+XMLSpanContext::XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
     : XMLImportContext(rImport)
 {
-    if (!pPropertyList)
-        return;
-
-    // Inherit properties from parent span.
-    librevenge::RVNGPropertyList::Iter itProp(*pPropertyList);
+    // Inherit properties from parent.
+    librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
     for (itProp.rewind(); itProp.next();)
         m_aPropertyList.insert(itProp.key(), itProp()->clone());
 }
@@ -101,9 +98,7 @@ XMLImportContext *XMLSpanContext::CreateChildContext(const OUString &rName, cons
 {
     if (rName == "draw:frame")
         return new XMLTextFrameContext(mrImport);
-    if (rName == "text:span")
-        return new XMLSpanContext(mrImport, &m_aPropertyList);
-    return writerperfect::exp::CreateChildContext(mrImport, rName);
+    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
 }
 
 void XMLSpanContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
@@ -133,63 +128,93 @@ void XMLSpanContext::characters(const OUString &rChars)
     mrImport.GetGenerator().closeSpan();
 }
 
-/// Handler for <text:line-break>.
-class XMLLineBreakContext : public XMLImportContext
+/// Base class for contexts that represent a single character only.
+class XMLCharContext : public XMLImportContext
 {
 public:
-    XMLLineBreakContext(XMLImport &rImport);
+    XMLCharContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
 
-    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+protected:
+    librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLLineBreakContext::XMLLineBreakContext(XMLImport &rImport)
+XMLCharContext::XMLCharContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
     : XMLImportContext(rImport)
+{
+    // Inherit properties from parent.
+    librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
+    for (itProp.rewind(); itProp.next();)
+        m_aPropertyList.insert(itProp.key(), itProp()->clone());
+}
+
+/// Handler for <text:line-break>.
+class XMLLineBreakContext : public XMLCharContext
+{
+public:
+    XMLLineBreakContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
+};
+
+XMLLineBreakContext::XMLLineBreakContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
+    : XMLCharContext(rImport, rPropertyList)
 {
 }
 
 void XMLLineBreakContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
     mrImport.GetGenerator().insertLineBreak();
+    mrImport.GetGenerator().closeSpan();
 }
 
 /// Handler for <text:s>.
-class XMLSpaceContext : public XMLImportContext
+class XMLSpaceContext : public XMLCharContext
 {
 public:
-    XMLSpaceContext(XMLImport &rImport);
+    XMLSpaceContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLSpaceContext::XMLSpaceContext(XMLImport &rImport)
-    : XMLImportContext(rImport)
+XMLSpaceContext::XMLSpaceContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
+    : XMLCharContext(rImport, rPropertyList)
 {
 }
 
 void XMLSpaceContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    mrImport.GetGenerator().openSpan(librevenge::RVNGPropertyList());
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
     mrImport.GetGenerator().insertSpace();
     mrImport.GetGenerator().closeSpan();
 }
 
 /// Handler for <text:tab>.
-class XMLTabContext : public XMLImportContext
+class XMLTabContext : public XMLCharContext
 {
 public:
-    XMLTabContext(XMLImport &rImport);
+    XMLTabContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLTabContext::XMLTabContext(XMLImport &rImport)
-    : XMLImportContext(rImport)
+XMLTabContext::XMLTabContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
+    : XMLCharContext(rImport, rPropertyList)
 {
 }
 
 void XMLTabContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    mrImport.GetGenerator().openSpan(librevenge::RVNGPropertyList());
+    mrImport.GetGenerator().openSpan(m_aPropertyList);
     mrImport.GetGenerator().insertTab();
     mrImport.GetGenerator().closeSpan();
 }
@@ -245,11 +270,9 @@ XMLParaContext::XMLParaContext(XMLImport &rImport)
 
 XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "text:span")
-        return new XMLSpanContext(mrImport, nullptr);
     if (rName == "text:a")
         return new XMLHyperlinkContext(mrImport);
-    return writerperfect::exp::CreateChildContext(mrImport, rName);
+    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aTextPropertyList);
 }
 
 void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
@@ -263,6 +286,7 @@ void XMLParaContext::startElement(const OUString &/*rName*/, const css::uno::Ref
         {
             m_aStyleName = rAttributeValue;
             FillStyles(m_aStyleName, mrImport.GetAutomaticParagraphStyles(), mrImport.GetParagraphStyles(), aPropertyList);
+            FillStyles(m_aStyleName, mrImport.GetAutomaticTextStyles(), mrImport.GetTextStyles(), m_aTextPropertyList);
         }
         else
         {
@@ -293,14 +317,16 @@ void XMLParaContext::characters(const OUString &rChars)
     mrImport.GetGenerator().closeSpan();
 }
 
-XMLImportContext *CreateChildContext(XMLImport &rImport, const OUString &rName)
+XMLImportContext *CreateParagraphOrSpanChildContext(XMLImport &rImport, const OUString &rName, const librevenge::RVNGPropertyList &rTextPropertyList)
 {
+    if (rName == "text:span")
+        return new XMLSpanContext(rImport, rTextPropertyList);
     if (rName == "text:line-break")
-        return new XMLLineBreakContext(rImport);
+        return new XMLLineBreakContext(rImport, rTextPropertyList);
     if (rName == "text:s")
-        return new XMLSpaceContext(rImport);
+        return new XMLSpaceContext(rImport, rTextPropertyList);
     if (rName == "text:tab")
-        return new XMLTabContext(rImport);
+        return new XMLTabContext(rImport, rTextPropertyList);
     return nullptr;
 }
 

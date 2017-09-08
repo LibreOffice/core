@@ -31,10 +31,12 @@ public:
 
 private:
     OUString m_aStyleName;
+    /// List of properties spans should inherit from this paragraph.
+    librevenge::RVNGPropertyList m_aTextPropertyList;
 };
 
 /// Shared child context factory for paragraph and span contexts.
-XMLImportContext *CreateChildContext(XMLImport &rImport, const OUString &rName);
+XMLImportContext *CreateParagraphOrSpanChildContext(XMLImport &rImport, const OUString &rName, const librevenge::RVNGPropertyList &rTextPropertyList);
 
 } // namespace exp
 } // namespace writerperfect
