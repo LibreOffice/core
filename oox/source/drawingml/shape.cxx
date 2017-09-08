@@ -116,7 +116,6 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mnDiagramRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
-, mbInheritedTextFlipV(false)
 , mbHidden( false )
 , mbHiddenMasterShape( false )
 , mbLockedCanvas( false )
@@ -160,7 +159,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnDiagramRotation( pSourceShape->mnDiagramRotation )
 , mbFlipH( pSourceShape->mbFlipH )
 , mbFlipV( pSourceShape->mbFlipV )
-, mbInheritedTextFlipV(pSourceShape->mbInheritedTextFlipV)
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
@@ -317,7 +315,6 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mnRotation = rReferencedShape.mnRotation;
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
-    mbInheritedTextFlipV = rReferencedShape.mbInheritedTextFlipV;
     mbHidden = rReferencedShape.mbHidden;
 }
 
@@ -391,7 +388,6 @@ void Shape::addChildren(
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() ) {
         (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
-        (*aIter)->applyParentTextFlipV(mbInheritedTextFlipV != mbFlipV);
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap );
     }
 }
@@ -492,7 +488,8 @@ Reference< XShape > const & Shape::createAndInsert(
             maSize.Height ? maSize.Height : 1.0 );
     }
 
-    if( mbFlipH || mbFlipV || mnRotation != 0)
+    bool bInGroup = !aParentTransformation.isIdentity();
+    if( mbFlipH || mbFlipV || mnRotation != 0 || bInGroup )
     {
         // calculate object's center
         basegfx::B2DPoint aCenter(0.5, 0.5);
@@ -507,30 +504,33 @@ Reference< XShape > const & Shape::createAndInsert(
             aTransformation.scale( mbFlipH ? -1.0 : 1.0, mbFlipV ? -1.0 : 1.0 );
         }
 
-        if( bUseRotationTransform && mnRotation != 0 )
+        if( bUseRotationTransform )
         {
             // OOXML flips shapes before rotating them.
-            sal_Int32 nRotation = mnRotation;
-            if(bIsCustomShape)
+            double fRotation = F_PI180 * ( (double)mnRotation / 60000.0 );
+            if( bIsCustomShape )
             {
-                if(mbFlipH)
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                aParentTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+                // A negative scale means that the shape needs to be flipped
+                if(aScale.getX() < 0)
                 {
-                    nRotation = nRotation * -1 + 60000*360;
+                    mbFlipH = !mbFlipH;
                 }
-                if(mbFlipV)
+                if(aScale.getY() < 0)
                 {
-                    nRotation = nRotation * -1 + 60000*360;
+                    mbFlipV = !mbFlipV;
                 }
             }
             // rotate around object's center
-            aTransformation.rotate( F_PI180 * ( (double)nRotation / 60000.0 ) );
+            aTransformation.rotate( fRotation );
         }
 
         // move object back from center
         aTransformation.translate( aCenter.getX(), aCenter.getY() );
     }
 
-    bool bInGroup = !aParentTransformation.isIdentity();
     if( maPosition.X != 0 || maPosition.Y != 0)
     {
         // if global position is used, add it to transformation
@@ -543,6 +543,25 @@ Reference< XShape > const & Shape::createAndInsert(
     aTransformation = aParentTransformation*aTransformation;
     aParentTransformation = aTransformation;
     aTransformation.scale(1/double(EMU_PER_HMM), 1/double(EMU_PER_HMM));
+
+    if( bIsCustomShape )
+    {
+        basegfx::B2DVector aScale, aTranslate;
+        double fRotate, fShearX;
+        aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+        // OOXML rotates shapes before flipping them, so the rotation needs to be inverted.
+        if( mbFlipH != mbFlipV)
+        {
+            // calculate object's center
+            basegfx::B2DPoint aCenter(0.5, 0.5);
+            aCenter *= aTransformation;
+
+            aTransformation.translate( -aCenter.getX(), -aCenter.getY() );
+            aTransformation.rotate( fRotate * -2.0 );
+            aTransformation.translate( aCenter.getX(), aCenter.getY() );
+        }
+    }
 
     // special for lineshape
     if ( aServiceName == "com.sun.star.drawing.LineShape" )
@@ -1093,8 +1112,6 @@ Reference< XShape > const & Shape::createAndInsert(
             if( getTextBody() )
             {
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
-                if(mbInheritedTextFlipV)
-                    nTextRotateAngle -= 180 * 60000;
                 nTextRotateAngle -= mnDiagramRotation;
                 /* OOX measures text rotation clockwise in 1/60000th degrees,
                    relative to the containing shape. setTextRotateAngle wants
