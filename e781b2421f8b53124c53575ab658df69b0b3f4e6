@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_076aa580",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3049,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-08T17:43:17Z",
+      "side": 1,
+      "message": "All these Pop() should be PopError() instead, so that an error from the stack is propagated.",
+      "range": {
+        "startLine": 3049,
+        "startChar": 24,
+        "endLine": 3049,
+        "endChar": 27
+      },
+      "revId": "e781b2421f8b53124c53575ab658df69b0b3f4e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
