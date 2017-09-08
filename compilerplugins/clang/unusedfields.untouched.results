@@ -106,8 +106,8 @@ libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
     GtvMainToolbarClass parentClass GtkBoxClass
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-opencl/source/openclwrapper.cxx:302
-    opencl::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
+opencl/source/openclwrapper.cxx:306
+    openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 pyuno/source/module/pyuno_impl.hxx:226
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:326
@@ -168,8 +168,6 @@ svl/source/crypto/cryptosign.cxx:280
     (anonymous namespace)::(anonymous) statusString SECItem
 svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
-svl/source/misc/inettype.cxx:45
-    (anonymous namespace)::TypeIDMapEntry m_aPresentation class rtl::OUString
 svtools/source/svhtml/htmlkywd.cxx:558
     HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560

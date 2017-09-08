@@ -1435,7 +1435,6 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(m_aLine, WB_TABSTOP, this) ),
     m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(m_aLine) ),
     m_aRemoveButton ( VclPtr<CustomPropertiesRemoveButton>::Create(m_aLine, 0, this) ),
-    m_bIsDate       ( false ),
     m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
 {
@@ -1563,12 +1562,6 @@ IMPL_LINK(CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void)
     pLine->m_aDurationField->Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aEditButton->Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aYesNoButton->Show( CUSTOM_TYPE_BOOLEAN == nType );
-
-    //adjust positions of date and time controls
-    if ( nType == CUSTOM_TYPE_DATE )
-        pLine->m_bIsDate = true;
-    else if ( nType == CUSTOM_TYPE_DATETIME)
-        pLine->m_bIsDate = false;
 
     pLine->m_aLine->SetSizePixel(Size(GetSizePixel().Width(), m_nWidgetHeight));
 }
