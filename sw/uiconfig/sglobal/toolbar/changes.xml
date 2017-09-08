@@ -18,22 +18,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowTrackedChanges"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChanges"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:PreviousTrackedChange"/>
+ <toolbar:toolbaritem xlink:href=".uno:NextTrackedChange"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChange"/>
+ <toolbar:toolbaritem xlink:href=".uno:RejectTrackedChange"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Crop"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
+ <toolbar:toolbaritem xlink:href=".uno:CommentChangeTracking"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FlipVertical"/>
- <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal"/>
- <toolbar:toolbaritem xlink:href=".uno:RotateLeft"/>
- <toolbar:toolbaritem xlink:href=".uno:RotateRight"/>
- <toolbar:toolbaritem xlink:href=".uno:Rotate180" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ProtectTraceChangeMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:CompareDocuments"/>
+ <toolbar:toolbaritem xlink:href=".uno:MergeDocuments"/>
 </toolbar:toolbar>
