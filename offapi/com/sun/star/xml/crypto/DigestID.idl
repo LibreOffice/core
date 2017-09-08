@@ -48,6 +48,15 @@ constants DigestID
         of data.
      */
     const long SHA256_1K = 4;
+
+    /** identifier of SHA-512 algorithm
+     */
+    const long SHA512 = 5;
+
+    /** identifier of SHA-512 algorithm that is applied to the first
+        kilobyte of data.
+     */
+    const long SHA512_1K = 6;
 };
 
 

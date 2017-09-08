@@ -50,6 +50,38 @@ namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 using namespace com::sun::star;
 
+namespace
+{
+OUString getDigestURI(sal_Int32 nID)
+{
+    switch( nID )
+    {
+        case cssxc::DigestID::SHA1:
+            return OUString(ALGO_XMLDSIGSHA1);
+        case cssxc::DigestID::SHA256:
+            return OUString(ALGO_XMLDSIGSHA256);
+        case cssxc::DigestID::SHA512:
+            return OUString(ALGO_XMLDSIGSHA512);
+        default:
+            return OUString(ALGO_XMLDSIGSHA1);
+    }
+}
+OUString getSignatureURI(sal_Int32 nID)
+{
+    switch( nID )
+    {
+        case cssxc::DigestID::SHA1:
+            return OUString(ALGO_RSASHA1);
+        case cssxc::DigestID::SHA256:
+            return OUString(ALGO_RSASHA256);
+        case cssxc::DigestID::SHA512:
+            return OUString(ALGO_RSASHA512);
+        default:
+            return OUString(ALGO_RSASHA1);
+    }
+}
+}
+
 XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& rxCtx )
     : mxCtx(rxCtx)
     , m_nNextSecurityId(1)
@@ -633,7 +665,7 @@ void XSecController::exportSignature(
             // SignatureMethod:Algorithm should be the corresponding one.
             pAttributeList->AddAttribute(
                 "Algorithm",
-                (vReferenceInfors[0].nDigestID == cssxc::DigestID::SHA1 ? OUString(ALGO_RSASHA1) : OUString(ALGO_RSASHA256)));
+                getSignatureURI(vReferenceInfors[0].nDigestID));
             xDocumentHandler->startElement( "SignatureMethod", cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( "SignatureMethod" );
 
@@ -693,7 +725,7 @@ void XSecController::exportSignature(
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
                         "Algorithm",
-                        (refInfor.nDigestID == cssxc::DigestID::SHA1 ? OUString(ALGO_XMLDSIGSHA1) : OUString(ALGO_XMLDSIGSHA256)));
+                        getDigestURI(refInfor.nDigestID));
                     xDocumentHandler->startElement(
                         "DigestMethod",
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
