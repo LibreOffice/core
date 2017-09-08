@@ -144,7 +144,9 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference<cssxc::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, cssu::UNO_QUERY);
     keyCollector->setKeyId(0);
 
-    const sal_Int32 digestID = bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1;
+    // use sha512 for gpg signing unconditionally
+    const sal_Int32 digestID = !internalSignatureInfor.signatureInfor.ouGpgCertificate.isEmpty()?
+        cssxc::DigestID::SHA512 : (bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1);
 
     if (nStorageFormat != embed::StorageFormats::OFOPXML)
     {
@@ -194,7 +196,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, bool isBinary, bool bXAdESCompliantIfODF)
 {
     const SignatureReferenceType type = isBinary ? SignatureReferenceType::BINARYSTREAM : SignatureReferenceType::XMLSTREAM;
-    const sal_Int32 digestID = bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1;
+    sal_Int32 digestID = bXAdESCompliantIfODF ? cssxc::DigestID::SHA256 : cssxc::DigestID::SHA1;
 
     int index = findSignatureInfor( securityId );
 
@@ -206,6 +208,9 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, boo
     }
     else
     {
+        // use sha512 for gpg signing unconditionally
+        if (!m_vInternalSignatureInformations[index].signatureInfor.ouGpgCertificate.isEmpty())
+            digestID = cssxc::DigestID::SHA512;
         m_vInternalSignatureInformations[index].addReference(type, digestID, uri, -1);
     }
 }

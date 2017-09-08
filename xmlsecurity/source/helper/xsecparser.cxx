@@ -151,6 +151,8 @@ void SAL_CALL XSecParser::startElement(
                     m_nReferenceDigestID = cssxc::DigestID::SHA256;
                 else if (ouAlgorithm == ALGO_XMLDSIGSHA512)
                     m_nReferenceDigestID = cssxc::DigestID::SHA512;
+                else
+                    m_nReferenceDigestID = 0;
             }
         }
         else if (aName == "Transform")
