@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_27ba41e2",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-08T21:02:19Z",
+      "side": 1,
+      "message": "Please use the proper types instead of int, ie. SCROW\n\nAlso, I\u0027d prefer if the variables were named according to the conventions generally used in Calc, ie. nGlobal...",
+      "revId": "ee7f2cd8ee88e0278d93a4a8f61429969c35b641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_47bf4dd0",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2174,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-08T21:02:19Z",
+      "side": 1,
+      "message": "sal_uInt16 instead of int",
+      "range": {
+        "startLine": 2174,
+        "startChar": 9,
+        "endLine": 2174,
+        "endChar": 12
+      },
+      "revId": "ee7f2cd8ee88e0278d93a4a8f61429969c35b641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
