@@ -20,6 +20,8 @@
 #include <svx/svdview.hxx>
 #include <svx/svddrag.hxx>
 
+SdrDragStatUserData::~SdrDragStatUserData() = default;
+
 void SdrDragStat::Clear(bool bLeaveOne)
 {
     while (!aPnts.empty()) {
