@@ -24,6 +24,7 @@
 #include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <viewopt.hxx>
@@ -76,7 +77,7 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
-    if ( SvtModuleOptions().IsWriter() )
+    if (utl::ConfigManager::IsAvoidConfig() || SvtModuleOptions().IsWriter())
     {
         SFX_VIEW_REGISTRATION(SwDocShell);
         SFX_VIEW_REGISTRATION(SwGlobalDocShell);
