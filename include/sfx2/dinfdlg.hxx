@@ -448,8 +448,6 @@ public:
     css::uno::Sequence< css::beans::PropertyValue >
                         GetCustomProperties() const;
     void                SetRemovedHdl( const Link<void*,void>& rLink ) { m_aRemovedHdl = rLink; }
-
-    void                updateLineWidth();
 };
 
 // class CustomPropertiesControl -----------------------------------------
