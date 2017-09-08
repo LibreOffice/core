@@ -33,6 +33,24 @@
       "revId": "ceb1eef337dfc50b814bee8e8c1494ed188c8af4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ccad2233",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-08T12:04:51Z",
+      "side": 1,
+      "message": "Thinking on it... Maybe just \"Local help is not installed.\" is enough since it is obvious that the description is not available.",
+      "parentUuid": "1a430d35_6cb6ee8b",
+      "revId": "ceb1eef337dfc50b814bee8e8c1494ed188c8af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
