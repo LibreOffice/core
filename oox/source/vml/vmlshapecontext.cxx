@@ -304,7 +304,7 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, Shape
         // - given width is used only if explicit o:hrpct="0" is given
         OUString hrpct = rAttribs.getString( O_TOKEN( hrpct ), "1000" );
         if( hrpct != "0" )
-            mrTypeModel.maWidth = OUString::number( hrpct.toInt32() / 10 ) + "%";
+            mrTypeModel.maWidthPercent = OUString::number( hrpct.toInt32() );
     }
 
     // stroke settings (may be overridden by v:stroke element later)
