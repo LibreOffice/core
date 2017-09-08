@@ -108,7 +108,7 @@ void Writer::queueRequest(
 {
     css::uno::UnoInterfaceReference cc(current_context::get());
     osl::MutexGuard g(mutex_);
-    queue_.push_back(Item(tid, oid, type, member, inArguments, cc));
+    queue_.emplace_back(tid, oid, type, member, inArguments, cc);
     items_.set();
 }
 
@@ -119,10 +119,9 @@ void Writer::queueReply(
     std::vector< BinaryAny > const & outArguments, bool setCurrentContextMode)
 {
     osl::MutexGuard g(mutex_);
-    queue_.push_back(
-        Item(
+    queue_.emplace_back(
             tid, member, setter, exception, returnValue, outArguments,
-            setCurrentContextMode));
+            setCurrentContextMode);
     items_.set();
 }
 

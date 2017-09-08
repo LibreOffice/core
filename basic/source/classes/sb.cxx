@@ -1064,7 +1064,7 @@ SbModule* StarBASIC::MakeModule( const OUString& rName, const ModuleInfo& mInfo,
     }
     p->SetSource32( rSrc );
     p->SetParent( this );
-    pModules.push_back(p);
+    pModules.emplace_back(p);
     SetModified( true );
     return p;
 }
@@ -1073,7 +1073,7 @@ void StarBASIC::Insert( SbxVariable* pVar )
 {
     if( dynamic_cast<const SbModule*>(pVar) != nullptr)
     {
-        pModules.push_back(static_cast<SbModule*>(pVar));
+        pModules.emplace_back(static_cast<SbModule*>(pVar));
         pVar->SetParent( this );
         StartListening( pVar->GetBroadcaster(), true );
     }
@@ -1862,7 +1862,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         else
         {
             pMod->SetParent( this );
-            pModules.push_back( pMod );
+            pModules.emplace_back(pMod );
         }
     }
     // HACK for SFX-Bullshit!
