@@ -150,7 +150,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="insert:insertmenu">
-                            <property name="label" translatable="yes">Insert</property>
+                            <property name="label" translatable="yes">_Insert</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -158,6 +158,7 @@
                             <property name="margin_right">5</property>
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -167,7 +168,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="modify:modifymenu">
-                            <property name="label" translatable="yes">Modify</property>
+                            <property name="label" translatable="yes">_Modify</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -175,6 +176,7 @@
                             <property name="margin_right">5</property>
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -184,7 +186,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="resetbtn">
-                            <property name="label" translatable="yes">Reset</property>
+                            <property name="label" translatable="yes">Rese_t</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -192,6 +194,7 @@
                             <property name="margin_right">5</property>
                             <property name="margin_top">5</property>
                             <property name="margin_bottom">5</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -224,11 +227,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton">
-                            <property name="label" translatable="yes">Function</property>
+                          <object class="GtkButton" id="functionbtn">
+                            <property name="label" translatable="yes">_Function</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="hexpand">True</property>
+                            <property name="use_underline">True</property>
                             <property name="image_position">right</property>
                           </object>
                           <packing>
@@ -260,13 +264,14 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="plusbtn">
-                            <property name="label" translatable="yes">+</property>
+                            <property name="label" translatable="yes">_+</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="margin_left">5</property>
                             <property name="margin_right">5</property>
                             <property name="hexpand">True</property>
+                            <property name="use_underline">True</property>
                             <property name="always_show_image">True</property>
                           </object>
                           <packing>
@@ -276,11 +281,12 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="minusbtn">
-                            <property name="label" translatable="yes">-</property>
+                            <property name="label" translatable="yes">_-</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="hexpand">True</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -329,8 +335,8 @@
                       <object class="GtkLabel" id="descriptionlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="menuassignpage|label33">_Description</property>
-                        <property name="use_underline">True</property>
+                        <property name="valign">start</property>
+                        <property name="label" translatable="yes" context="menuassignpage|label33">Description</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -343,10 +349,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
-                        <property name="label" translatable="yes" context="menuassignpage|contentslabel">Function:</property>
+                        <property name="label" translatable="yes" context="menuassignpage|contentslabel">_Function</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">entries</property>
+                        <property name="mnemonic_widget">functions:border</property>
                         <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="functions:border"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -383,10 +392,15 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="addlabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Add</property>
+                                <property name="label" translatable="yes">_Add</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">add</property>
+                                <accessibility>
+                                  <relation type="label-for" target="add"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -423,10 +437,15 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="removelabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Remove</property>
+                                <property name="label" translatable="yes">Remo_ve</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">remove</property>
+                                <accessibility>
+                                  <relation type="label-for" target="remove"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -485,12 +504,15 @@
                       <object class="GtkLabel" id="searchlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">start</property>
+                        <property name="valign">center</property>
                         <property name="margin_bottom">5</property>
-                        <property name="label" translatable="yes" context="menuassignpage|contentslabel">Search:</property>
+                        <property name="label" translatable="yes" context="menuassignpage|contentslabel">_Search</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">entries</property>
+                        <property name="mnemonic_widget">searchEntry</property>
                         <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="searchEntry"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -513,12 +535,15 @@
                       <object class="GtkLabel" id="categorylabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">start</property>
+                        <property name="valign">center</property>
                         <property name="margin_bottom">5</property>
-                        <property name="label" translatable="yes" context="menuassignpage|contentslabel">Category:</property>
+                        <property name="label" translatable="yes" context="menuassignpage|contentslabel">Categor_y</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">entries</property>
+                        <property name="mnemonic_widget">commandcategorylist</property>
                         <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="commandcategorylist"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -554,7 +579,7 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="labelx">
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Label</property>
           </object>

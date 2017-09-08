@@ -1165,8 +1165,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pInsertBtn, "insert");
     get(m_pModifyBtn, "modify");
     get(m_pResetBtn, "resetbtn");
+    get(m_pDescriptionFieldLb, "descriptionlabel");
     get(m_pDescriptionField, "desc");
-    m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
+    m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*2.9);
     get(m_pEntries, "entries");
     Size aSize(LogicToPixel(Size(108, 115), MapUnit::MapAppFont));
     m_pEntries->set_height_request(aSize.Height());
@@ -1213,6 +1214,7 @@ void SvxConfigPage::dispose()
     m_pInsertBtn.clear();
     m_pModifyBtn.clear();
     m_pResetBtn.clear();
+    m_pDescriptionFieldLb.clear();
     m_pDescriptionField.clear();
 
     m_pContentsListBox.disposeAndClear();
@@ -1796,6 +1798,24 @@ IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
         m_pRemoveCommandButton->Disable();
 
         m_pDescriptionField->SetText("");
+    }
+
+    // Disable the description field and its label if there is no help text to display
+    if ( m_pDescriptionField->GetText().isEmpty() )
+    {
+        m_pDescriptionField->Disable();
+        m_pDescriptionFieldLb->Disable();
+        m_pDescriptionField->SetQuickHelpText(
+            CuiResId( RID_SVXSTR_DESCRIPTION_DISABLED ) );
+        m_pDescriptionFieldLb->SetQuickHelpText(
+            CuiResId( RID_SVXSTR_DESCRIPTION_DISABLED ) );
+    }
+    else
+    {
+        m_pDescriptionField->Enable();
+        m_pDescriptionFieldLb->Enable();
+        m_pDescriptionField->SetQuickHelpText("");
+        m_pDescriptionFieldLb->SetQuickHelpText("");
     }
 }
 

@@ -74,6 +74,7 @@
 #define RID_SVXSTR_LABEL_NEW_NAME                   NC_("RID_SVXSTR_LABEL_NEW_NAME", "~New name")
 #define RID_SVXSTR_RENAME_MENU                      NC_("RID_SVXSTR_RENAME_MENU", "Rename Menu")
 #define RID_SVXSTR_RENAME_TOOLBAR                   NC_("RID_SVXSTR_RENAME_TOOLBAR", "Rename Toolbar")
+#define RID_SVXSTR_DESCRIPTION_DISABLED             NC_("RID_SVXSTR_DESCRIPTION_DISABLED", "Function description is not available because you don't have local help installed.")
 
 #define RID_SVXSTR_HYPDLG_CLOSEBUT                  NC_("RID_SVXSTR_HYPDLG_CLOSEBUT", "Close")
 #define RID_SVXSTR_HYPDLG_MACROACT1                 NC_("RID_SVXSTR_HYPDLG_MACROACT1", "Mouse over object")
