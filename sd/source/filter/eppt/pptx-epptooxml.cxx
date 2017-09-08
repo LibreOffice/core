@@ -938,7 +938,7 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
     }
     else
     {
-        SAL_INFO("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
+        SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
     }
 
     pFS->endElementNS(XML_p, XML_attrNameLst);
