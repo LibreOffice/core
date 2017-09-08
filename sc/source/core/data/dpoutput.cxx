@@ -870,7 +870,7 @@ void ScDPOutput::CalcSizes()
                 ++nPageSize;        //  filter button above the page fields
         }
 
-        if ( aStartPos.Col() + pRowFields.size() + nColCount - 1 > MAXCOL ||
+        if ( aStartPos.Col() + static_cast<long>(pRowFields.size()) + nColCount - 1 > MAXCOL ||
              aStartPos.Row() + nPageSize + nHeaderSize + pColFields.size() + nRowCount > MAXROW )
         {
             bSizeOverflow = true;
