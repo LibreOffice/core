@@ -25,6 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <editeng/borderline.hxx>
+#include <svtools/borderhelper.hxx>
 
 using namespace com::sun::star;
 
@@ -49,7 +50,7 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
     // 1.47 pixels is 0.03cm at 130% zoom and 96 DPI.
     basegfx::B2DPoint aStart(0, 20);
     basegfx::B2DPoint aEnd(100, 20);
-    double fLeftWidth = 1.47;
+    double const fLeftWidth = 1.47;
     double const fDistance = 1.47;
     double const fRightWidth = 1.47;
     double const fExtendLeftStart = 0;
@@ -58,30 +59,39 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
     double const fExtendRightEnd = 0;
     basegfx::BColor aColorRight;
     basegfx::BColor aColorLeft;
-    basegfx::BColor aColorGap;
-    bool const bHasGapColor = false;
-    SvxBorderLineStyle const nStyle = SvxBorderLineStyle::DOUBLE;
+    const std::vector<double> aDashing(svtools::GetLineDashing(SvxBorderLineStyle::DOUBLE, 10.0));
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
+    std::vector< drawinglayer::primitive2d::BorderLine > aBorderlines;
+
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(
+                aColorLeft,
+                fLeftWidth),
+            fExtendLeftStart,
+            fExtendLeftStart,
+            fExtendLeftEnd,
+            fExtendLeftEnd));
+
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(fDistance));
+
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(
+                aColorRight,
+                fRightWidth),
+            fExtendRightStart,
+            fExtendRightStart,
+            fExtendRightEnd,
+            fExtendRightEnd));
+
     rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> aBorder(
         new drawinglayer::primitive2d::BorderLinePrimitive2D(
             aStart,
             aEnd,
-            drawinglayer::primitive2d::BorderLine(
-                fLeftWidth,
-                aColorLeft,
-                drawinglayer::primitive2d::BorderLineExtend(
-                    fExtendLeftStart,
-                    fExtendLeftEnd)),
-            drawinglayer::primitive2d::BorderLine(
-                fDistance,
-                aColorGap),
-            drawinglayer::primitive2d::BorderLine(
-                fRightWidth,
-                aColorRight,
-                drawinglayer::primitive2d::BorderLineExtend(
-                    fExtendRightStart,
-                    fExtendRightEnd)),
-            bHasGapColor,
-            nStyle));
+            aBorderlines,
+            aStrokeAttribute));
 
     // Decompose it into polygons.
     drawinglayer::geometry::ViewInformation2D aView;
@@ -126,33 +136,42 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
     double const fExtendRightEnd = 0;
     basegfx::BColor aColorRight;
     basegfx::BColor aColorLeft;
-    basegfx::BColor aColorGap;
-    bool const bHasGapColor = false;
-    SvxBorderLineStyle const nStyle = SvxBorderLineStyle::DOUBLE;
-    rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> xBorder(
+    const std::vector<double> aDashing(svtools::GetLineDashing(SvxBorderLineStyle::DOUBLE, 10.0));
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
+    std::vector< drawinglayer::primitive2d::BorderLine > aBorderlines;
+
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(
+                aColorLeft,
+                fLeftWidth),
+            fExtendLeftStart,
+            fExtendLeftStart,
+            fExtendLeftEnd,
+            fExtendLeftEnd));
+
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(fDistance));
+
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(
+                aColorRight,
+                fRightWidth),
+            fExtendRightStart,
+            fExtendRightStart,
+            fExtendRightEnd,
+            fExtendRightEnd));
+
+    rtl::Reference<drawinglayer::primitive2d::BorderLinePrimitive2D> aBorder(
         new drawinglayer::primitive2d::BorderLinePrimitive2D(
             aStart,
             aEnd,
-            drawinglayer::primitive2d::BorderLine(
-                fLeftWidth,
-                aColorLeft,
-                drawinglayer::primitive2d::BorderLineExtend(
-                    fExtendLeftStart,
-                    fExtendLeftEnd)),
-            drawinglayer::primitive2d::BorderLine(
-                fDistance,
-                aColorGap),
-            drawinglayer::primitive2d::BorderLine(
-                fRightWidth,
-                aColorRight,
-                drawinglayer::primitive2d::BorderLineExtend(
-                    fExtendRightStart,
-                    fExtendRightEnd)),
-            bHasGapColor,
-            nStyle));
+            aBorderlines,
+            aStrokeAttribute));
 
     drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
-    aPrimitives.push_back(drawinglayer::primitive2d::Primitive2DReference(xBorder.get()));
+    aPrimitives.push_back(drawinglayer::primitive2d::Primitive2DReference(aBorder.get()));
 
     // Process the primitives.
     pProcessor->process(aPrimitives);

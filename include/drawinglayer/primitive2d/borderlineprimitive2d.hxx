@@ -26,6 +26,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
 
 enum class SvxBorderLineStyle : sal_Int16;
 
@@ -33,70 +35,53 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** BorderLineExtend class
-         */
-        class DRAWINGLAYER_DLLPUBLIC BorderLineExtend
-        {
-        private:
-            std::vector<double> mfExtends;
-
-        public:
-            BorderLineExtend();
-            BorderLineExtend(
-                double fStart,
-                double fEnd);
-            BorderLineExtend(
-                double fStartLeft,
-                double fStartRight,
-                double fEndLeft,
-                double fEndRight);
-            ~BorderLineExtend();
-
-            bool equalStart() const;
-            bool equalEnd() const;
-
-            double getStartLeft() const;
-            double getStartRight() const;
-            double getEndLeft() const;
-            double getEndRight() const;
-
-            double getStartAverage() const;
-            double getEndAverage() const;
-
-            /// compare operator
-            bool operator==(const BorderLineExtend& rBorderLineExtend) const;
-        };
-
         /** BorderLine class
-        Helper class holding the style definition for a single part of a full NorderLine definition.
+        Helper class holding the style definition for a single part of a full BorderLine definition.
         Line extends are for start/end and for Left/Right, seen in vector direction. If
         Left != Right that means the line has a diagonal start/end
         */
         class DRAWINGLAYER_DLLPUBLIC BorderLine
         {
         private:
-            // line width
-            double              mfWidth;
-
-            // line color
-            basegfx::BColor     maRGBColor;
+            // line attribute containing Width, Color and others
+            drawinglayer::attribute::LineAttribute  maLineAttribute;
 
             // line extends
-            BorderLineExtend    maBorderLineExtend;
+            double              mfStartLeft;
+            double              mfStartRight;
+            double              mfEndLeft;
+            double              mfEndRight;
+
+            // if this is a gap, this is set to true
+            bool                mbIsGap;
 
         public:
+            // Constructor for visible BorderLine segments
             BorderLine(
-                double fWidth,
-                const basegfx::BColor& rRGBColor,
-                const BorderLineExtend& rBorderLineExtend);
-            BorderLine(
-                double fWidth,
-                const basegfx::BColor& rRGBColor);
+                const drawinglayer::attribute::LineAttribute& rLineAttribute,
+                double fStartLeft = 0.0,
+                double fStartRight = 0.0,
+                double fEndLeft = 0.0,
+                double fEndRight = 0.0);
+
+            // Constructor for gap BorderLine segments
+            BorderLine(double fWidth);
+
             ~BorderLine();
 
-            double getWidth() const { return mfWidth; }
-            const basegfx::BColor& getRGBColor() const { return maRGBColor; }
-            const BorderLineExtend& getBorderLineExtend() const { return maBorderLineExtend; }
+            const drawinglayer::attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
+            double getStartLeft() const { return mfStartLeft; }
+            double getStartRight() const { return mfStartRight; }
+            double getEndLeft() const { return mfEndLeft; }
+            double getEndRight() const { return mfEndRight; }
+            bool isGap() const { return mbIsGap; }
+
+            /// helper to get adapted width (maximum)
+            double getAdaptedWidth(double fMinWidth) const;
+
+            /// helper to get average values Start/End
+            double getStartAverage() const { return 0.5 * (mfStartLeft + mfStartRight); }
+            double getEndAverage() const { return 0.5 * (mfEndLeft + mfEndRight); }
 
             /// compare operator
             bool operator==(const BorderLine& rBorderLine) const;
@@ -117,50 +102,39 @@ namespace drawinglayer
             basegfx::B2DPoint                               maStart;
             basegfx::B2DPoint                               maEnd;
 
-            /// the single BorderLine style definition(s), one or three allowed (see constructors)
+            /// the single BorderLine style definition(s), one or three mostly used
             std::vector< BorderLine >                       maBorderLines;
 
-            bool                                            mbHasGapColor;
-
             /// common style definitions
-            SvxBorderLineStyle                              mnStyle;
-            double                                          mfPatternScale;
+            const drawinglayer::attribute::StrokeAttribute  maStrokeAttribute;
 
-            // for view dependent decomposition in the case with distance (gap),
-            // remember the last used concrete mfDistance, see get2DDecomposition
+            // for view dependent decomposition in the case with existing gaps,
+            // remember the smallest allowed concrete gap distance, see get2DDecomposition
             // implementation
-            double                                          mfDiscreteGapDistance;
+            double                                          mfSmallestAllowedDiscreteGapDistance;
 
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
+
+            /// helper to find smallest defined gap in maBorderLines
+            bool getSmallestGap(double& rfSmallestGap) const;
+
+            /// helper to get the full width taking mfSmallestAllowedDiscreteGapDistance into account
+            double getFullWidth() const;
 
         public:
             /// simplified constructor for BorderLine with single edge
             BorderLinePrimitive2D(
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
-                const BorderLine& rBorderLine,
-                SvxBorderLineStyle nStyle,
-                double fPatternScale = 1.0);
-
-            /// constructor for full-fledged BorderLine with two edges and gap
-            BorderLinePrimitive2D(
-                const basegfx::B2DPoint& rStart,
-                const basegfx::B2DPoint& rEnd,
-                const BorderLine& rLeft,
-                const BorderLine& rGap,
-                const BorderLine& rRight,
-                bool bHasGapColor,
-                SvxBorderLineStyle nStyle,
-                double fPatternScale = 1.0);
+                const std::vector< BorderLine >& rBorderLines,
+                const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute);
 
             /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
             const std::vector< BorderLine >& getBorderLines() const { return maBorderLines; }
-            bool hasGapColor() const { return mbHasGapColor; }
-            SvxBorderLineStyle getStyle() const { return mnStyle; }
-            double getPatternScale() const { return mfPatternScale; }
+            const drawinglayer::attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 
             /// helper to decide if AntiAliasing should be used
             bool isHorizontalOrVertical(const geometry::ViewInformation2D& rViewInformation) const;
