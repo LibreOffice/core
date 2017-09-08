@@ -205,7 +205,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
     {
         //new z slot
         std::vector< VDataSeriesGroup > aZSlot;
-        aZSlot.push_back( VDataSeriesGroup(pSeries) );
+        aZSlot.emplace_back(pSeries );
         m_aZSlots.push_back( aZSlot );
     }
     else
@@ -216,7 +216,7 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
         if(xSlot<0 || xSlot>=static_cast<sal_Int32>(rXSlots.size()))
         {
             //append the series to already existing x series
-            rXSlots.push_back( VDataSeriesGroup(pSeries) );
+            rXSlots.emplace_back(pSeries );
         }
         else
         {

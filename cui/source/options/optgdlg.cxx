@@ -498,7 +498,7 @@ CanvasSettings::CanvasSettings() :
             {
                 Sequence<OUString> preferredImplementations;
                 if( (xEntryNameAccess->getByName("PreferredImplementations") >>= preferredImplementations) )
-                    maAvailableImplementations.push_back( std::make_pair(*pCurr,preferredImplementations) );
+                    maAvailableImplementations.emplace_back(*pCurr,preferredImplementations );
             }
 
             ++pCurr;

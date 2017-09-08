@@ -266,7 +266,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
         const OUString& aCurrent = rStrings[nN];
         if( bCreateSingleCategories || std::find( rLimitingBorders.begin(), rLimitingBorders.end(), nN ) != rLimitingBorders.end() )
         {
-            aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+            aResult.emplace_back(aPrevious,nCurrentCount );
             nCurrentCount=1;
             aPrevious = aCurrent;
         }
@@ -280,14 +280,14 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
                 ++nCurrentCount;
             else
             {
-                aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+                aResult.emplace_back(aPrevious,nCurrentCount );
                 nCurrentCount=1;
                 aPrevious = aCurrent;
             }
         }
     }
     if( nCurrentCount )
-        aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+        aResult.emplace_back(aPrevious,nCurrentCount );
 
     return aResult;
 }

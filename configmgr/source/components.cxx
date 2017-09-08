@@ -792,7 +792,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
                 if (manager->parse(nullptr)) {
                     processedDeps.insert(name);
                 } else {
-                    unres.push_back(UnresolvedListItem(name, manager));
+                    unres.emplace_back(name, manager);
                 }
             }
         }

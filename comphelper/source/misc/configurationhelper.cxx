@@ -43,14 +43,14 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     // set root path
     aParam.Name    = "nodepath";
     aParam.Value <<= sPackage;
-    lParams.push_back(css::uno::Any(aParam));
+    lParams.emplace_back(aParam);
 
     // enable all locales mode
     if (eMode & EConfigurationModes::AllLocales)
     {
         aParam.Name    = "locale";
         aParam.Value <<= OUString("*");
-        lParams.push_back(css::uno::Any(aParam));
+        lParams.emplace_back(aParam);
     }
 
     // open it

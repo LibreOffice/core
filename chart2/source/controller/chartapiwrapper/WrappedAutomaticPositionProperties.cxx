@@ -107,12 +107,11 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 
 void WrappedAutomaticPositionProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "AutomaticPosition",
+    rOutProperties.emplace_back( "AutomaticPosition",
                   PROP_CHART_AUTOMATIC_POSITION,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList )

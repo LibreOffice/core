@@ -37,34 +37,30 @@ namespace chart
 void DataSeriesProperties::AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "AttributedDataPoints",
+    rOutProperties.emplace_back( "AttributedDataPoints",
                   PROP_DATASERIES_ATTRIBUTED_DATA_POINTS,
                   cppu::UnoType<uno::Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "StackingDirection",
+    rOutProperties.emplace_back( "StackingDirection",
                   PROP_DATASERIES_STACKING_DIRECTION,
                   cppu::UnoType<chart2::StackingDirection>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "VaryColorsByPoint",
+    rOutProperties.emplace_back( "VaryColorsByPoint",
                   PROP_DATASERIES_VARY_COLORS_BY_POINT,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "AttachedAxisIndex",
+    rOutProperties.emplace_back( "AttachedAxisIndex",
                   PROP_DATASERIES_ATTACHED_AXIS_INDEX,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );

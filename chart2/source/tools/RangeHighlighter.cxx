@@ -274,21 +274,19 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
                 Reference< chart2::data::XDataSequence > xValues( aLSeqSeq[i]->getValues());
 
                 if( xLabel.is())
-                    aHilightedRanges.push_back(
-                        chart2::data::HighlightedRange(
+                    aHilightedRanges.emplace_back(
                             xLabel->getSourceRangeRepresentation(),
                             -1,
                             nPreferredColor,
-                            false ));
+                            false );
 
                 sal_Int32 nUnhiddenIndex = DataSeriesHelper::translateIndexFromHiddenToFullSequence( nIndex, xValues, !m_bIncludeHiddenCells );
                 if( xValues.is())
-                    aHilightedRanges.push_back(
-                        chart2::data::HighlightedRange(
+                    aHilightedRanges.emplace_back(
                             xValues->getSourceRangeRepresentation(),
                             nUnhiddenIndex,
                             nPreferredColor,
-                            false ));
+                            false );
             }
             m_aSelectedRanges = comphelper::containerToSequence( aHilightedRanges );
         }

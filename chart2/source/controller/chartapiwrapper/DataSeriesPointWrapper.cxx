@@ -92,115 +92,100 @@ void lcl_AddPropertiesToVector_PointProperties(
     std::vector< Property > & rOutProperties )
 {
     //service chart::Chart3DBarProperties
-    rOutProperties.push_back(
-        Property( "SolidType",
+    rOutProperties.emplace_back( "SolidType",
                   PROP_SERIES_DATAPOINT_SOLIDTYPE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "SegmentOffset",
+    rOutProperties.emplace_back( "SegmentOffset",
                   PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "D3DPercentDiagonal",
+    rOutProperties.emplace_back( "D3DPercentDiagonal",
                   PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "LabelSeparator",
+    rOutProperties.emplace_back( "LabelSeparator",
                   PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_NUMFMT,
+    rOutProperties.emplace_back( CHART_UNONAME_NUMFMT,
                   PROP_SERIES_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "PercentageNumberFormat",
+    rOutProperties.emplace_back( "PercentageNumberFormat",
                   PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "TextWordWrap",
+    rOutProperties.emplace_back( "TextWordWrap",
                   PROP_SERIES_DATAPOINT_TEXT_WORD_WRAP,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "LabelPlacement",
+    rOutProperties.emplace_back( "LabelPlacement",
                   PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "TextRotation",
+    rOutProperties.emplace_back( "TextRotation",
                   PROP_SERIES_DATAPOINT_TEXT_ROTATION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_STYLE,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_STYLE,
                   PROP_SERIES_DATAPOINT_LABEL_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_WIDTH,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_WIDTH,
                   PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_COLOR,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_COLOR,
                   PROP_SERIES_DATAPOINT_LABEL_BORDER_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LABEL_BORDER_TRANS,
+    rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_TRANS,
                   PROP_SERIES_DATAPOINT_LABEL_BORDER_TRANS,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void lcl_AddPropertiesToVector_SeriesOnly(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "Axis",
+    rOutProperties.emplace_back( "Axis",
                   PROP_SERIES_ATTACHED_AXIS,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
+    rOutProperties.emplace_back( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )

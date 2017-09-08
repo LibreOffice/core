@@ -68,53 +68,46 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "PolynomialDegree",
+    rOutProperties.emplace_back( "PolynomialDegree",
                 PROPERTY_DEGREE,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
-                beans::PropertyAttribute::MAYBEDEFAULT ));
+                beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "MovingAveragePeriod",
+    rOutProperties.emplace_back( "MovingAveragePeriod",
                 PROPERTY_PERIOD,
                 cppu::UnoType<sal_Int32>::get(),
                 beans::PropertyAttribute::BOUND |
-                beans::PropertyAttribute::MAYBEDEFAULT ));
+                beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "ExtrapolateForward",
+    rOutProperties.emplace_back( "ExtrapolateForward",
                 PROPERTY_EXTRAPOLATE_FORWARD,
                 cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
-                beans::PropertyAttribute::MAYBEDEFAULT ));
+                beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "ExtrapolateBackward",
+    rOutProperties.emplace_back( "ExtrapolateBackward",
                 PROPERTY_EXTRAPOLATE_BACKWARD,
                 cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
-                beans::PropertyAttribute::MAYBEDEFAULT ));
+                beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "ForceIntercept",
+    rOutProperties.emplace_back( "ForceIntercept",
                   PROPERTY_FORCE_INTERCEPT,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "InterceptValue",
+    rOutProperties.emplace_back( "InterceptValue",
                 PROPERTY_INTERCEPT_VALUE,
                 cppu::UnoType<double>::get(),
                 beans::PropertyAttribute::BOUND |
-                beans::PropertyAttribute::MAYBEDEFAULT ));
+                beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "CurveName",
+    rOutProperties.emplace_back( "CurveName",
                 PROPERTY_CURVE_NAME,
                 cppu::UnoType<OUString>::get(),
-                beans::PropertyAttribute::BOUND ));
+                beans::PropertyAttribute::BOUND );
 }
 
 struct StaticXXXDefaults_Initializer

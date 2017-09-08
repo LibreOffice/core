@@ -1796,7 +1796,7 @@ static void lcl_InsertBreakPosition_Impl(
         else
             ++aStart;
     }
-    rBreakPositions.push_back(LanguagePosition_Impl(nInsert, eLanguage));
+    rBreakPositions.emplace_back(nInsert, eLanguage);
 }
 /*-------------------------------------------------------------------------
     Returns the text in spell portions. Each portion contains text with an

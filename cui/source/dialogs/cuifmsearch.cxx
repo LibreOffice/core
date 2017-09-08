@@ -128,7 +128,7 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
             ++context
         )
     {
-        m_arrContextFields.push_back(OUString());
+        m_arrContextFields.emplace_back();
         m_plbForm->InsertEntry(*context);
     }
     m_plbForm->SelectEntryPos(nInitialContext);

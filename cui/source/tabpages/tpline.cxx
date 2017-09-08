@@ -369,7 +369,7 @@ void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
             if(pObj==nullptr)
                 break;
             pObj=pObj->Clone();
-            m_aGrfNames.push_back("");
+            m_aGrfNames.emplace_back("");
             pPage->NbcInsertObject(pObj);
             if(m_pSymbolAttr)
             {

@@ -246,7 +246,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         s = av[i] + 2;
                     }
 
-                    m_extra_input_files.push_back( s );
+                    m_extra_input_files.emplace_back(s );
                     break;
                 }
 
@@ -286,7 +286,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
             }
             else
             {
-                m_inputFiles.push_back(av[i]);
+                m_inputFiles.emplace_back(av[i]);
             }
         }
     }
