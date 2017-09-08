@@ -1165,8 +1165,9 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pInsertBtn, "insert");
     get(m_pModifyBtn, "modify");
     get(m_pResetBtn, "resetbtn");
+    get(m_pDescriptionFieldLb, "descriptionlabel");
     get(m_pDescriptionField, "desc");
-    m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
+    m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*2.9);
     get(m_pEntries, "entries");
     Size aSize(LogicToPixel(Size(108, 115), MapUnit::MapAppFont));
     m_pEntries->set_height_request(aSize.Height());
@@ -1797,6 +1798,11 @@ IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
 
         m_pDescriptionField->SetText("");
     }
+
+    // Disable the description field and its label if there is no help text
+    bool bIsEmptyDesc = m_pDescriptionField->GetText().isEmpty();
+    m_pDescriptionField->Enable( !bIsEmptyDesc );
+    m_pDescriptionFieldLb->Enable( !bIsEmptyDesc );
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SearchUpdateHdl, Edit&, void)
