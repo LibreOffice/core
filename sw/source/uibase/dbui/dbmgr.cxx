@@ -161,7 +161,7 @@ void lcl_emitEvent(SfxEventHintId nEventId, sal_Int32 nStrId, SfxObjectShell* pD
 
 }
 
-std::vector<OUString> SwDBManager::m_aUncommitedRegistrations;
+std::vector<std::pair<SwDocShell*, OUString>> SwDBManager::m_aUncommitedRegistrations;
 
 enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
@@ -2615,7 +2615,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
         }
         sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
 
-        m_aUncommitedRegistrations.push_back(sFind);
+        m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
     }
     return sFind;
 }
@@ -3197,10 +3197,16 @@ void SwDBManager::RevokeLastRegistrations()
             xConfigItem->DocumentReloaded();
         }
 
-        for (const OUString& rName : m_aUncommitedRegistrations)
-            RevokeDataSource(rName);
-
-        m_aUncommitedRegistrations.clear();
+        for (auto it = m_aUncommitedRegistrations.begin(); it != m_aUncommitedRegistrations.end();)
+        {
+            if (it->first == m_pDoc->GetDocShell())
+            {
+                RevokeDataSource(it->second);
+                it = m_aUncommitedRegistrations.erase(it);
+            }
+            else
+                it++;
+        }
     }
 }
 

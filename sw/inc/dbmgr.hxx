@@ -257,7 +257,7 @@ class SW_DLLPUBLIC SwDBManager
     OUString     m_sEmbeddedName;
 
     /// Store last registrations to revoke or commit
-    static std::vector<OUString> m_aUncommitedRegistrations;
+    static std::vector<std::pair<SwDocShell*, OUString>> m_aUncommitedRegistrations;
 
     /// The document that owns this manager.
     SwDoc* m_pDoc;
