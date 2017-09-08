@@ -2248,7 +2248,7 @@ Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getBas
 
     Reference< script::XStorageBasedLibraryContainer > xBasicLibraries;
     if ( m_pData->m_pObjectShell.is() )
-        xBasicLibraries.set( m_pData->m_pObjectShell->GetBasicContainer(), UNO_QUERY_THROW );
+        xBasicLibraries.set(m_pData->m_pObjectShell->GetBasicContainer(), UNO_QUERY);
     return xBasicLibraries;
 }
 
@@ -2258,7 +2258,7 @@ Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getDia
 
     Reference< script::XStorageBasedLibraryContainer > xDialogLibraries;
     if ( m_pData->m_pObjectShell.is() )
-        xDialogLibraries.set( m_pData->m_pObjectShell->GetDialogContainer(), UNO_QUERY_THROW );
+        xDialogLibraries.set(m_pData->m_pObjectShell->GetDialogContainer(), UNO_QUERY);
     return xDialogLibraries;
 }
 

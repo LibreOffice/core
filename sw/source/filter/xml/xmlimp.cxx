@@ -24,6 +24,8 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
@@ -53,15 +55,20 @@
 #include <strings.hrc>
 #include "xmlimp.hxx"
 #include "xmltexti.hxx"
+#include "swdll.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
+#include <unotools/streamwrap.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
@@ -71,6 +78,7 @@
 #include <xmloff/xformsimport.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <unordered_set>
 
@@ -397,7 +405,6 @@ SwXMLImport::SwXMLImport(
     m_pDoc( nullptr )
 {
     InitItemImport();
-
 }
 
 SwXMLImport::~SwXMLImport() throw ()
@@ -1540,4 +1547,75 @@ com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::X
     return cppu::acquire(new SwXMLImport(context, "com.sun.star.comp.Writer.XMLOasisSettingsImporter",
                 SvXMLImportFlags::SETTINGS));
 }
+
+namespace
+{
+    SfxObjectShell* getSfxObjShell(const uno::Reference<frame::XModel>& rModel)
+    {
+        uno::Reference<lang::XUnoTunnel> xObjShellTunnel(rModel, uno::UNO_QUERY_THROW);
+        SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>(xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+        return pFoundShell;
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream)
+{
+    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(xContext));
+    uno::Reference<frame::XSynchronousFrameLoader> xLoader(xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.comp.office.FrameLoader", xContext), uno::UNO_QUERY_THROW);
+
+    uno::Reference<frame::XFrame> xTargetFrame(SfxFrame::CreateBlankFrame());
+
+    uno::Sequence<beans::PropertyValue> aLoaderArgs(comphelper::InitPropertySequence(
+    {
+        { "URL", uno::Any(OUString("private:factory/swriter")) },
+        { "ViewId", uno::Any(sal_uInt16(1)) },
+    }));
+    bool bRet = xLoader->load(aLoaderArgs, xTargetFrame);
+    assert(bRet);
+    uno::Reference<frame::XController> xDstDoc(xTargetFrame->getController());
+    uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_QUERY_THROW);
+
+    css::uno::Sequence<OUString> aUserData(7);
+    aUserData[0] = "com.sun.star.comp.filter.OdfFlatXml";
+    aUserData[2] = "com.sun.star.comp.Writer.XMLOasisImporter";
+    aUserData[3] = "com.sun.star.comp.Writer.XMLOasisExporter";
+    aUserData[6] = "true";
+    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    {
+        { "UserData", uno::Any(aUserData) },
+    }));
+    css::uno::Sequence<uno::Any> aOuterArgs(1);
+    aOuterArgs[0] <<= aAdaptorArgs;
+
+    uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
+    xInit->initialize(aOuterArgs);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(xStream) },
+        { "URL", uno::Any(OUString("private:stream")) },
+    }));
+    uno::Reference<frame::XModel> xModel = xDstDoc->getModel();
+    SfxObjectShell* pShell = getSfxObjShell(xModel);
+    xImporter->setTargetDocument(xModel);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while its considered uninitialized,
+    //setting a property will inform the document its modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    pShell->SetLoading(SfxLoadedFlags::NONE);
+    bool ret = xFilter->filter(aArgs);
+    pShell->SetLoading(SfxLoadedFlags::ALL);
+
+    xDstDoc->dispose();
+
+    return ret;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
