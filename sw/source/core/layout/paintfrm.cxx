@@ -111,7 +111,6 @@ using namespace ::editeng;
 using namespace ::com::sun::star;
 using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
 using ::drawinglayer::primitive2d::BorderLine;
-using ::drawinglayer::primitive2d::BorderLineExtend;
 using std::pair;
 using std::make_pair;
 
@@ -519,56 +518,37 @@ lcl_MergeBorderLines(
     basegfx::B2DPoint const& rStart,
     basegfx::B2DPoint const& rEnd)
 {
-    const BorderLine& rLineLeft = rLine.getBorderLines()[0];
-    const BorderLine& rOtherLeft(rOther.getBorderLines()[0]);
+    const std::vector< BorderLine >& rLineLeft(rLine.getBorderLines());
+    const std::vector< BorderLine >& rOtherLeft(rOther.getBorderLines());
+    const size_t aSize(std::min(rLineLeft.size(), rOtherLeft.size()));
+    std::vector< BorderLine > aNew;
 
-    if (1 == rLine.getBorderLines().size())
+    for(size_t a(0); a < aSize; a++)
     {
-        return new BorderLinePrimitive2D(
-            rStart,
-            rEnd,
-            BorderLine(
-                rLineLeft.getWidth(),
-                rLineLeft.getRGBColor(),
-                BorderLineExtend(
-                    rLineLeft.getBorderLineExtend().getStartLeft(),
-                    rLineLeft.getBorderLineExtend().getStartRight(),
-                    rOtherLeft.getBorderLineExtend().getEndLeft(),
-                    rOtherLeft.getBorderLineExtend().getEndRight())),
-            rLine.getStyle());
-    }
-    else
-    {
-        const BorderLine& rLineGap(rLine.getBorderLines()[1]);
-        // const BorderLine& rOtherGap(rOther.getBorderLines()[1]);
-        const BorderLine& rLineRight(rLine.getBorderLines()[2]);
-        const BorderLine& rOtherRight(rOther.getBorderLines()[2]);
+        const BorderLine& la(rLineLeft[a]);
+        const BorderLine& lb(rOtherLeft[a]);
 
-        return new BorderLinePrimitive2D(
-            rStart,
-            rEnd,
-            BorderLine(
-                rLineLeft.getWidth(),
-                rLineLeft.getRGBColor(),
-                BorderLineExtend(
-                    rLineLeft.getBorderLineExtend().getStartLeft(),
-                    rLineLeft.getBorderLineExtend().getStartRight(),
-                    rOtherLeft.getBorderLineExtend().getEndLeft(),
-                    rOtherLeft.getBorderLineExtend().getEndRight())),
-            BorderLine(
-                rLineGap.getWidth(),
-                rLineGap.getRGBColor()),
-            BorderLine(
-                rLineRight.getWidth(),
-                rLineRight.getRGBColor(),
-                BorderLineExtend(
-                    rLineRight.getBorderLineExtend().getStartLeft(),
-                    rLineRight.getBorderLineExtend().getStartRight(),
-                    rOtherRight.getBorderLineExtend().getEndLeft(),
-                    rOtherRight.getBorderLineExtend().getEndRight())),
-            rLine.hasGapColor(),
-            rLine.getStyle());
+        if(la.isGap() || lb.isGap())
+        {
+            aNew.push_back(la);
+        }
+        else
+        {
+            aNew.push_back(
+                BorderLine(
+                    la.getLineAttribute(),
+                    la.getStartLeft(),
+                    la.getStartRight(),
+                    lb.getEndLeft(),
+                    lb.getEndRight()));
+        }
     }
+
+    return new BorderLinePrimitive2D(
+        rStart,
+        rEnd,
+        aNew,
+        rLine.getStrokeAttribute());
 }
 
 /**
@@ -601,36 +581,24 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
     double otherWidth  = rOther.getEnd().getX() -  rOther.getStart().getX();
 
     // check for same orientation, same line width, same style and matching colors
-    bool bSameStuff(false);
-    const BorderLine& rThisLeft(rThis.getBorderLines()[0]);
-    const BorderLine& rOtherLeft(rOther.getBorderLines()[0]);
+    bool bSameStuff(
+        ((thisHeight > thisWidth) == (otherHeight > otherWidth))
+        && rThis.getStrokeAttribute() == rOther.getStrokeAttribute());
 
-    if (1 == rThis.getBorderLines().size())
+    if(bSameStuff)
     {
-        bSameStuff = ((thisHeight > thisWidth) == (otherHeight > otherWidth))
-            && (rtl::math::approxEqual(rThisLeft.getWidth(), rOtherLeft.getWidth()))
-            && (rThis.getStyle() == rOther.getStyle())
-            && (rThisLeft.getRGBColor() == rOtherLeft.getRGBColor());
-    }
-    else
-    {
-        const BorderLine& rThisGap(rThis.getBorderLines()[1]);
-        const BorderLine& rOtherGap(rOther.getBorderLines()[1]);
-        const BorderLine& rThisRight(rThis.getBorderLines()[2]);
-        const BorderLine& rOtherRight(rOther.getBorderLines()[2]);
+        const std::vector< BorderLine >& rLineLeft(rThis.getBorderLines());
+        const std::vector< BorderLine >& rOtherLeft(rOther.getBorderLines());
+        const size_t aSize(std::min(rLineLeft.size(), rOtherLeft.size()));
 
-        bSameStuff = ((thisHeight > thisWidth) == (otherHeight > otherWidth))
-            && (rtl::math::approxEqual(rThisLeft.getWidth(), rOtherLeft.getWidth()))
-            && (rtl::math::approxEqual(rThisGap.getWidth(), rOtherGap.getWidth()))
-            && (rtl::math::approxEqual(rThisRight.getWidth(), rOtherRight.getWidth()))
-            && (rThis.getStyle() == rOther.getStyle())
-            && (rThisLeft.getRGBColor() == rOtherLeft.getRGBColor())
-            && (rThisRight.getRGBColor() == rOtherRight.getRGBColor())
-            && (rThis.hasGapColor() == rOther.hasGapColor())
-            && (!rThis.hasGapColor() ||
-            (rThisGap.getRGBColor() == rOtherGap.getRGBColor()));
-    }
+        for(size_t a(0); bSameStuff && a < aSize; a++)
+        {
+            const BorderLine& la(rLineLeft[a]);
+            const BorderLine& lb(rOtherLeft[a]);
 
+            bSameStuff = la == lb;
+        }
+    }
 
     if (bSameStuff)
     {
@@ -4894,45 +4862,44 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     double const nRightWidth = rBorder.GetInWidth();
     Color const aLeftColor = rBorder.GetColorOut(isLeftOrTopBorder);
     Color const aRightColor = rBorder.GetColorIn(isLeftOrTopBorder);
+    const std::vector<double> aDashing(svtools::GetLineDashing(rBorder.GetBorderLineStyle(), 10.0));
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
+    std::vector< drawinglayer::primitive2d::BorderLine > aBorderlines;
 
-    rtl::Reference<BorderLinePrimitive2D> xLine;
+    aBorderlines.push_back(
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(
+                aLeftColor.getBColor(),
+                nLeftWidth),
+            nExtentLeftStart,
+            nExtentLeftStart,
+            nExtentLeftEnd,
+            nExtentLeftEnd));
 
-    if (basegfx::fTools::equalZero(nRightWidth))
+    if (!basegfx::fTools::equalZero(nRightWidth))
     {
-        xLine = new BorderLinePrimitive2D(
+        drawinglayer::primitive2d::BorderLine(
+            drawinglayer::attribute::LineAttribute(
+                rBorder.GetColorGap().getBColor(),
+                rBorder.GetDistance()));
+
+        aBorderlines.push_back(
+            drawinglayer::primitive2d::BorderLine(
+                drawinglayer::attribute::LineAttribute(
+                    aRightColor.getBColor(),
+                    nRightWidth),
+                nExtentRightStart,
+                nExtentRightStart,
+                nExtentRightEnd,
+                nExtentRightEnd));
+    }
+
+    rtl::Reference<BorderLinePrimitive2D> xLine(
+        new BorderLinePrimitive2D(
             aStart,
             aEnd,
-            BorderLine(
-                nLeftWidth,
-                aLeftColor.getBColor(),
-                BorderLineExtend(
-                    nExtentLeftStart,
-                    nExtentLeftEnd)),
-            rBorder.GetBorderLineStyle());
-    }
-    else
-    {
-        xLine = new BorderLinePrimitive2D(
-            aStart,
-            aEnd,
-            BorderLine(
-                nLeftWidth,
-                aLeftColor.getBColor(),
-                BorderLineExtend(
-                    nExtentLeftStart,
-                    nExtentLeftEnd)),
-            BorderLine(
-                rBorder.GetDistance(),
-                rBorder.GetColorGap().getBColor()),
-            BorderLine(
-                nRightWidth,
-                aRightColor.getBColor(),
-                BorderLineExtend(
-                    nExtentRightStart,
-                    nExtentRightEnd)),
-            rBorder.HasGapColor(),
-            rBorder.GetBorderLineStyle());
-    }
+            aBorderlines,
+            aStrokeAttribute));
 
     properties.pBLines->AddBorderLine(xLine.get(), properties);
 }

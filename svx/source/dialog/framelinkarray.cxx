@@ -85,7 +85,7 @@ typedef std::vector< Cell >     CellVec;
 
 size_t Cell::GetCellIndex(const Array& rArray) const
 {
-    if(-1 == maCellIndex)
+    if(static_cast<size_t>(-1) == maCellIndex)
     {
         rArray.AddCellIndices();
     }
@@ -102,7 +102,7 @@ basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray) const
 
     const size_t nCellIndex(GetCellIndex(rArray));
 
-    if(-1 != nCellIndex)
+    if(static_cast<size_t>(-1) != nCellIndex)
     {
         const basegfx::B2DRange aRange(rArray.GetCellRange(nCellIndex));
 
@@ -976,7 +976,7 @@ void HelperCreateHorizontalEntry(
 
     CreateBorderPrimitives(
         rSequence,
-        bUpper ? rOrigin : rOrigin + rY,
+        bUpper ? rOrigin : basegfx::B2DPoint(rOrigin + rY),
         rX,
         rStyle,
         aStart,
@@ -1021,7 +1021,7 @@ void HelperCreateVerticalEntry(
 
     CreateBorderPrimitives(
         rSequence,
-        bLeft ? rOrigin : rOrigin + rX,
+        bLeft ? rOrigin : basegfx::B2DPoint(rOrigin + rX),
         rY,
         rStyle,
         aStart,
@@ -1038,7 +1038,7 @@ void HelperCreateEntry(const Array& rArray, const Style& rStyle, drawinglayer::p
     {
         const size_t nCellIndex(pCell->GetCellIndex(rArray));
 
-        if(-1 != nCellIndex)
+        if(static_cast<size_t>(-1) != nCellIndex)
         {
             size_t col(nCellIndex % rArray.GetColCount());
             size_t row(nCellIndex / rArray.GetColCount());
