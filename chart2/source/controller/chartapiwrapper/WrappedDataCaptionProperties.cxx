@@ -100,12 +100,11 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 void WrappedDataCaptionProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "DataCaption",
+    rOutProperties.emplace_back( "DataCaption",
                   PROP_CHART_DATAPOINT_DATA_CAPTION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void WrappedDataCaptionProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList

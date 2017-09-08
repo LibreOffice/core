@@ -939,94 +939,80 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 void WrappedStatisticProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "ConstantErrorLow",
+    rOutProperties.emplace_back( "ConstantErrorLow",
                   PROP_CHART_STATISTIC_CONST_ERROR_LOW,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ConstantErrorHigh",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ConstantErrorHigh",
                   PROP_CHART_STATISTIC_CONST_ERROR_HIGH,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "MeanValue",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "MeanValue",
                   PROP_CHART_STATISTIC_MEAN_VALUE,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ErrorCategory",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ErrorCategory",
                   PROP_CHART_STATISTIC_ERROR_CATEGORY,
                   cppu::UnoType<css::chart::ChartErrorCategory>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ErrorBarStyle",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ErrorBarStyle",
                   PROP_CHART_STATISTIC_ERROR_BAR_STYLE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "PercentageError",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "PercentageError",
                   PROP_CHART_STATISTIC_PERCENT_ERROR,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ErrorMargin",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ErrorMargin",
                   PROP_CHART_STATISTIC_ERROR_MARGIN,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ErrorIndicator",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ErrorIndicator",
                   PROP_CHART_STATISTIC_ERROR_INDICATOR,
                   cppu::UnoType<css::chart::ChartErrorIndicatorType>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ErrorBarRangePositive",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ErrorBarRangePositive",
                   PROP_CHART_STATISTIC_ERROR_RANGE_POSITIVE,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "ErrorBarRangeNegative",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "ErrorBarRangeNegative",
                   PROP_CHART_STATISTIC_ERROR_RANGE_NEGATIVE,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "RegressionCurves",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "RegressionCurves",
                   PROP_CHART_STATISTIC_REGRESSION_CURVES,
                   cppu::UnoType<css::chart::ChartRegressionCurveType>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "DataRegressionProperties",
+    rOutProperties.emplace_back( "DataRegressionProperties",
                   PROP_CHART_STATISTIC_REGRESSION_PROPERTIES,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::READONLY
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "DataErrorProperties",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "DataErrorProperties",
                   PROP_CHART_STATISTIC_ERROR_PROPERTIES,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::READONLY
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "DataMeanValueProperties",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "DataMeanValueProperties",
                   PROP_CHART_STATISTIC_MEAN_VALUE_PROPERTIES,
                   cppu::UnoType<beans::XPropertySet>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::READONLY
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList

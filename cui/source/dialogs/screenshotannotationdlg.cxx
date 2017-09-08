@@ -292,7 +292,7 @@ void ScreenshotAnnotationDlg_Impl::CollectChildren(
 
         if (!aCurrentRange.isEmpty())
         {
-            rControlDataCollection.push_back(ControlDataEntry(rCurrent, aCurrentRange));
+            rControlDataCollection.emplace_back(rCurrent, aCurrentRange);
         }
 
         for (sal_uInt16 a(0); a < rCurrent.GetChildCount(); a++)

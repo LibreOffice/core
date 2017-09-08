@@ -211,19 +211,17 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "Alignment",
+    rOutProperties.emplace_back( "Alignment",
                   PROP_LEGEND_ALIGNMENT,
                   cppu::UnoType<css::chart::ChartLegendPosition>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
+                  beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "Expansion",
+    rOutProperties.emplace_back( "Expansion",
                   PROP_LEGEND_EXPANSION,
                   cppu::UnoType<css::chart::ChartLegendExpansion>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
+                  beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 struct StaticLegendWrapperPropertyArray_Initializer

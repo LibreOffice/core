@@ -32,31 +32,27 @@ namespace chart
 void UserDefinedProperties::AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "ChartUserDefinedAttributes",
+    rOutProperties.emplace_back( "ChartUserDefinedAttributes",
                   PROP_XML_USERDEF_CHART,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "TextUserDefinedAttributes",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "TextUserDefinedAttributes",
                   PROP_XML_USERDEF_TEXT,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "ParaUserDefinedAttributes",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "ParaUserDefinedAttributes",
                   PROP_XML_USERDEF_PARA,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
     // UserDefinedAttributesSupplier
-    rOutProperties.push_back(
-        Property( "UserDefinedAttributes",
+    rOutProperties.emplace_back( "UserDefinedAttributes",
                   PROP_XML_USERDEF,
                   cppu::UnoType<container::XNameContainer>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 } //  namespace chart

@@ -608,7 +608,7 @@ namespace
 
                     if (xPackage.is())
                     {
-                        maEntries.push_back(ExtensionInfoEntry(xPackage));
+                        maEntries.emplace_back(xPackage);
                     }
                 }
             }
@@ -642,10 +642,9 @@ namespace
                         }
 
                         const bool bEnabled(aAttrRevoked.isEmpty() || !aAttrRevoked.toBoolean());
-                        maEntries.push_back(
-                            ExtensionInfoEntry(
+                        maEntries.emplace_back(
                                 OUStringToOString(aAttrUrl, RTL_TEXTENCODING_ASCII_US),
-                                bEnabled));
+                                bEnabled);
                     }
                 }
                 else
@@ -1607,12 +1606,11 @@ namespace
 
                 // create a file entry for a new file. Offset is set automatically
                 // to 0 to mark the entry as new file entry
-                maPackedFileEntryVector.push_back(
-                    PackedFileEntry(
+                maPackedFileEntryVector.emplace_back(
                         static_cast< sal_uInt32 >(nFileSize),
                         nCrc32,
                         rFileCandidate,
-                        bCompress));
+                        bCompress);
 
                 mbChanged = true;
             }
@@ -2066,12 +2064,12 @@ namespace comphelper
 
         if (aDirNames.empty())
         {
-            aDirNames.push_back("config");     // UI config stuff
-            aDirNames.push_back("registry");   // most of the registry stuff
-            aDirNames.push_back("psprint");    // not really needed, can be abandoned
-            aDirNames.push_back("store");      // not really needed, can be abandoned
-            aDirNames.push_back("temp");       // not really needed, can be abandoned
-            aDirNames.push_back("pack");       // own backup dir
+            aDirNames.emplace_back("config");     // UI config stuff
+            aDirNames.emplace_back("registry");   // most of the registry stuff
+            aDirNames.emplace_back("psprint");    // not really needed, can be abandoned
+            aDirNames.emplace_back("store");      // not really needed, can be abandoned
+            aDirNames.emplace_back("temp");       // not really needed, can be abandoned
+            aDirNames.emplace_back("pack");       // own backup dir
         }
 
         return aDirNames;
@@ -2083,7 +2081,7 @@ namespace comphelper
 
         if (aFileNames.empty())
         {
-            aFileNames.push_back("registrymodifications.xcu"); // personal registry stuff
+            aFileNames.emplace_back("registrymodifications.xcu"); // personal registry stuff
         }
 
         return aFileNames;

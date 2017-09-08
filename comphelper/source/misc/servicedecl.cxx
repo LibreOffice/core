@@ -118,8 +118,8 @@ uno::Sequence<OUString> ServiceDecl::getSupportedServiceNames() const
     sal_Int32 nIndex = 0;
     do {
         OString const token( str.getToken( 0, cDelim, nIndex ) );
-        vec.push_back( OUString( token.getStr(), token.getLength(),
-                                      RTL_TEXTENCODING_ASCII_US ) );
+        vec.emplace_back( token.getStr(), token.getLength(),
+                                      RTL_TEXTENCODING_ASCII_US );
     }
     while (nIndex >= 0);
 

@@ -177,27 +177,24 @@ enum
 
 void WrappedSplineProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_SPLINE_TYPE,
+    rOutProperties.emplace_back( CHART_UNONAME_SPLINE_TYPE,
                   PROP_CHART_SPLINE_TYPE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_SPLINE_ORDER,
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( CHART_UNONAME_SPLINE_ORDER,
                   PROP_CHART_SPLINE_ORDER,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( CHART_UNONAME_SPLINE_RESOLUTION,
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( CHART_UNONAME_SPLINE_RESOLUTION,
                   PROP_CHART_SPLINE_RESOLUTION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList

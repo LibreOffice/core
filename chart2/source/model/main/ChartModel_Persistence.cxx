@@ -624,7 +624,7 @@ void ChartModel::impl_loadGraphics(
                                     *apIStm.get(),
                                     aGraphic ) )
                             {
-                                m_aGraphicObjectVector.push_back( aGraphic );
+                                m_aGraphicObjectVector.emplace_back(aGraphic );
                             }
                         }
                     }

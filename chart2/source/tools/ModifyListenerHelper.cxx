@@ -109,7 +109,7 @@ void ModifyEventForwarder::AddListener( const Reference< util::XModifyListener >
             // remember the helper class for later remove
             uno::WeakReference< util::XModifyListener > xWeakRef( aListener );
             xListenerToAdd.set( new WeakModifyListenerAdapter( xWeakRef ));
-            m_aListenerMap.push_back( tListenerMap::value_type( xWeakRef, xListenerToAdd ));
+            m_aListenerMap.emplace_back( xWeakRef, xListenerToAdd );
         }
 
         m_aModifyListeners.addListener( cppu::UnoType<decltype(xListenerToAdd)>::get(), xListenerToAdd );

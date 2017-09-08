@@ -48,12 +48,11 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "SwapXAndYAxis",
+    rOutProperties.emplace_back( "SwapXAndYAxis",
                   PROP_COORDINATESYSTEM_SWAPXANDYAXIS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 struct StaticCooSysDefaults_Initializer

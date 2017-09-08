@@ -40,19 +40,17 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "OverlapSequence",
+    rOutProperties.emplace_back( "OverlapSequence",
                   PROP_BARCHARTTYPE_OVERLAP_SEQUENCE,
                   cppu::UnoType<Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "GapwidthSequence",
+    rOutProperties.emplace_back( "GapwidthSequence",
                   PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE,
                   cppu::UnoType<Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 struct StaticColumnChartTypeDefaults_Initializer

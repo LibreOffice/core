@@ -47,7 +47,7 @@ std::vector< OUString > lcl_getStringsFromByteSequence(
     {
         if( pBytes[nPos] == '\0' )
         {
-            aResult.push_back( OUString( pBytes + nStartPos, (nPos - nStartPos), RTL_TEXTENCODING_ASCII_US ));
+            aResult.emplace_back( pBytes + nStartPos, (nPos - nStartPos), RTL_TEXTENCODING_ASCII_US );
             nStartPos = nPos + 1;
         }
     }

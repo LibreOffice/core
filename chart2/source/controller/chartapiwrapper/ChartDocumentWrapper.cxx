@@ -154,85 +154,73 @@ enum
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "HasMainTitle",
+    rOutProperties.emplace_back( "HasMainTitle",
                   PROP_DOCUMENT_HAS_MAIN_TITLE,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "HasSubTitle",
+                  beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "HasSubTitle",
                   PROP_DOCUMENT_HAS_SUB_TITLE,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "HasLegend",
+                  beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "HasLegend",
                   PROP_DOCUMENT_HAS_LEGEND,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
+                  beans::PropertyAttribute::MAYBEDEFAULT );
 
     // really needed?
-    rOutProperties.push_back(
-        Property( "DataSourceLabelsInFirstRow",
+    rOutProperties.emplace_back( "DataSourceLabelsInFirstRow",
                   PROP_DOCUMENT_LABELS_IN_FIRST_ROW,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-    rOutProperties.push_back(
-        Property( "DataSourceLabelsInFirstColumn",
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "DataSourceLabelsInFirstColumn",
                   PROP_DOCUMENT_LABELS_IN_FIRST_COLUMN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ));
+                  beans::PropertyAttribute::MAYBEDEFAULT );
 
     //add-in
-    rOutProperties.push_back(
-        Property( "AddIn",
+    rOutProperties.emplace_back( "AddIn",
                   PROP_DOCUMENT_ADDIN,
                   cppu::UnoType<util::XRefreshable>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "BaseDiagram",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "BaseDiagram",
                   PROP_DOCUMENT_BASEDIAGRAM,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
-    rOutProperties.push_back(
-        Property( "AdditionalShapes",
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "AdditionalShapes",
                   PROP_DOCUMENT_ADDITIONAL_SHAPES,
                   cppu::UnoType<drawing::XShapes>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
-                  | beans::PropertyAttribute::READONLY ));
-    rOutProperties.push_back(
-        Property( "RefreshAddInAllowed",
+                  | beans::PropertyAttribute::READONLY );
+    rOutProperties.emplace_back( "RefreshAddInAllowed",
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   cppu::UnoType<bool>::get(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::TRANSIENT ));
+                  beans::PropertyAttribute::TRANSIENT );
 
     // table:null-date // i99104
-    rOutProperties.push_back(
-        Property( "NullDate",
+    rOutProperties.emplace_back( "NullDate",
                   PROP_DOCUMENT_NULL_DATE,
                   ::cppu::UnoType<css::util::DateTime>::get(),
-                  beans::PropertyAttribute::MAYBEVOID ));
+                  beans::PropertyAttribute::MAYBEVOID );
 
-    rOutProperties.push_back(
-        Property( "EnableComplexChartTypes",
+    rOutProperties.emplace_back( "EnableComplexChartTypes",
                   PROP_DOCUMENT_ENABLE_COMPLEX_CHARTTYPES,
                   cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ) );
-    rOutProperties.push_back(
-        Property( "EnableDataTableDialog",
+                  beans::PropertyAttribute::MAYBEDEFAULT );
+    rOutProperties.emplace_back( "EnableDataTableDialog",
                   PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG,
                   cppu::UnoType<bool>::get(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
-                  beans::PropertyAttribute::MAYBEDEFAULT ) );
+                  beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 struct StaticChartDocumentWrapperPropertyArray_Initializer

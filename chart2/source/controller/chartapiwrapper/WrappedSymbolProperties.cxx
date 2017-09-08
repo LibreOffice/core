@@ -164,33 +164,29 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 void WrappedSymbolProperties::addProperties( std::vector< Property > & rOutProperties )
 {
-    rOutProperties.push_back(
-        Property( "SymbolType",
+    rOutProperties.emplace_back( "SymbolType",
                   PROP_CHART_SYMBOL_TYPE,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "SymbolBitmapURL",
+    rOutProperties.emplace_back( "SymbolBitmapURL",
                   PROP_CHART_SYMBOL_BITMAP_URL,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "SymbolSize",
+    rOutProperties.emplace_back( "SymbolSize",
                   PROP_CHART_SYMBOL_SIZE,
                   cppu::UnoType<awt::Size>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 
-    rOutProperties.push_back(
-        Property( "Lines",
+    rOutProperties.emplace_back( "Lines",
                   PROP_CHART_SYMBOL_AND_LINES,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
 void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList

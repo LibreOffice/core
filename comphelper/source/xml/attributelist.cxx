@@ -118,7 +118,7 @@ AttributeList::~AttributeList()
 void AttributeList::AddAttribute(const OUString &sName,
         const OUString &sType, const OUString &sValue)
 {
-    m_pImpl->vecAttribute.push_back( TagAttribute_Impl(sName, sType, sValue) );
+    m_pImpl->vecAttribute.emplace_back(sName, sType, sValue );
 }
 
 void AttributeList::Clear()

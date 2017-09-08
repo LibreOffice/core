@@ -149,7 +149,7 @@ std::vector< Reference<XInterface> > OInterfaceContainerHelper2::getElements() c
         rVec = *aData.pAsVector;
     else if( aData.pAsInterface )
     {
-        rVec.push_back( Reference<XInterface>( aData.pAsInterface ) );
+        rVec.emplace_back( aData.pAsInterface );
     }
     return rVec;
 }

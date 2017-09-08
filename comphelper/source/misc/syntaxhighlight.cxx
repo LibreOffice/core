@@ -680,9 +680,8 @@ void SyntaxHighlighter::Tokenizer::getHighlightPortions(const OUString& rLine,
     // Loop over all the tokens
     while( getNextToken( pos, eType, pStartPos, pEndPos ) )
     {
-        portions.push_back(
-            HighlightPortion(
-                pStartPos - rLine.getStr(), pEndPos - rLine.getStr(), eType));
+        portions.emplace_back(
+                pStartPos - rLine.getStr(), pEndPos - rLine.getStr(), eType);
     }
 }
 
