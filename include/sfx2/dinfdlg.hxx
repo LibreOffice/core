@@ -379,7 +379,6 @@ struct CustomPropertyLine
     ScopedVclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
     ScopedVclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
 
-    bool                            m_bIsDate;
     bool                            m_bIsRemoved;
     bool                            m_bTypeLostFocus;
 

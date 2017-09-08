@@ -238,7 +238,7 @@ filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:143
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:81
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
-framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx:185
+framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx:184
     (anonymous namespace)::ModuleUIConfigurationManager::UIElementType aElementsHashMap (anonymous namespace)::ModuleUIConfigurationManager::UIElementDataHashMap
 framework/source/uiconfiguration/uiconfigurationmanager.cxx:165
     (anonymous namespace)::UIConfigurationManager::UIElementType aElementsHashMap (anonymous namespace)::UIConfigurationManager::UIElementDataHashMap
@@ -264,13 +264,13 @@ include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/brushitem.hxx:52
     SvxBrushItem maSecOptions class SvtSecurityOptions
-include/filter/msfilter/svdfppt.hxx:690
+include/filter/msfilter/svdfppt.hxx:712
     PPTExtParaSheet aExtParaLevel struct PPTExtParaLevel [5]
-include/filter/msfilter/svdfppt.hxx:864
+include/filter/msfilter/svdfppt.hxx:886
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:865
+include/filter/msfilter/svdfppt.hxx:887
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:866
+include/filter/msfilter/svdfppt.hxx:888
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -382,8 +382,8 @@ linguistic/source/dlistimp.hxx:56
     DicList aOpt class LinguOptions
 oox/qa/token/tokenmap-test.cxx:34
     oox::TokenmapTest tokenMap class oox::TokenMap
-opencl/source/openclwrapper.cxx:302
-    opencl::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
+opencl/source/openclwrapper.cxx:306
+    openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 pyuno/source/module/pyuno_impl.hxx:226
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:313
@@ -430,8 +430,6 @@ sc/inc/compiler.hxx:128
     ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo3/sc/inc/compiler.hxx:125:9)
 sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) pMat class ScMatrix *
-sc/inc/datamapper.hxx:65
-    sc::ExternalDataSource mnUpdateFrequency double
 sc/inc/dpresfilter.hxx:64
     ScDPResultTree::DimensionNode maChildMembersValueNames ScDPResultTree::MembersType
 sc/inc/dpresfilter.hxx:65
@@ -460,94 +458,6 @@ sc/source/filter/inc/stylesbuffer.hxx:677
     oox::xls::Dxf mxProtection std::shared_ptr<Protection>
 sc/source/filter/inc/xltracer.hxx:82
     XclTracer mbEnabled _Bool
-sc/source/filter/xml/xmlimprt.hxx:604
-    ScXMLImport pCondFormatsTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:605
-    ScXMLImport pCondFormatTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:606
-    ScXMLImport pCondFormatAttrMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:607
-    ScXMLImport pCondDateAttrMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:608
-    ScXMLImport pConditionAttrMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:609
-    ScXMLImport pColorScaleTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:610
-    ScXMLImport pColorScaleEntryAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:611
-    ScXMLImport pDataBarTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:612
-    ScXMLImport pDataBarAttrMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:613
-    ScXMLImport pFormattingEntryAttrMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:616
-    ScXMLImport pTableAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:622
-    ScXMLImport pDetectiveElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:623
-    ScXMLImport pDetectiveHighlightedAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:624
-    ScXMLImport pDetectiveOperationAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:625
-    ScXMLImport pTableCellRangeSourceAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:626
-    ScXMLImport pDatabaseRangeSourceSQLAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:627
-    ScXMLImport pDatabaseRangeSourceTableAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:628
-    ScXMLImport pDatabaseRangeSourceQueryAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:629
-    ScXMLImport pFilterElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:630
-    ScXMLImport pFilterAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:631
-    ScXMLImport pFilterConditionElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:632
-    ScXMLImport pFilterConditionAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:633
-    ScXMLImport pFilterSetItemAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:634
-    ScXMLImport pSortElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:635
-    ScXMLImport pSortSortByAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:636
-    ScXMLImport pDataPilotTablesElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:637
-    ScXMLImport pDataPilotTableAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:638
-    ScXMLImport pDataPilotTableElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:639
-    ScXMLImport pDataPilotTableSourceServiceAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:640
-    ScXMLImport pDataPilotTableSourceCellRangeElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:641
-    ScXMLImport pDataPilotTableSourceCellRangeAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:642
-    ScXMLImport pDataPilotFieldAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:643
-    ScXMLImport pDataPilotFieldElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:644
-    ScXMLImport pDataPilotLevelAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:645
-    ScXMLImport pDataPilotLevelElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:646
-    ScXMLImport pDataPilotSubTotalsElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:647
-    ScXMLImport pDataPilotSubTotalAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:648
-    ScXMLImport pDataPilotMembersElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:649
-    ScXMLImport pDataPilotMemberAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:650
-    ScXMLImport pCellTextParaElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:651
-    ScXMLImport pCellTextSpanElemTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:652
-    ScXMLImport pCellTextSpanAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:653
-    ScXMLImport pCellTextURLAttrTokenMap class SvXMLTokenMap *
-sc/source/filter/xml/xmlimprt.hxx:654
-    ScXMLImport pCellTextSAttrTokenMap class SvXMLTokenMap *
 sc/source/ui/inc/csvruler.hxx:35
     ScCsvRuler maBackgrDev ScopedVclPtrInstance<class VirtualDevice>
 sc/source/ui/inc/csvruler.hxx:36
@@ -612,8 +522,6 @@ svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
 svl/source/crypto/cryptosign.cxx:300
     (anonymous namespace)::(anonymous) timeStampToken SECItem
-svl/source/misc/inettype.cxx:45
-    (anonymous namespace)::TypeIDMapEntry m_aPresentation class rtl::OUString
 svl/source/misc/strmadpt.cxx:55
     SvDataPipe_Impl::Page m_aBuffer sal_Int8 [1]
 svl/source/uno/pathservice.cxx:36
@@ -724,7 +632,7 @@ vcl/inc/opengl/RenderList.hxx:55
     RenderEntry maLineParameters struct RenderParameters
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
-vcl/inc/printerinfomanager.hxx:71
+vcl/inc/printerinfomanager.hxx:72
     psp::PrinterInfoManager::SystemPrintQueue m_aComment class rtl::OUString
 vcl/inc/salwtype.hxx:153
     SalWheelMouseEvent mbDeltaIsPixel _Bool
@@ -734,17 +642,17 @@ vcl/inc/salwtype.hxx:202
     SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
 vcl/inc/salwtype.hxx:208
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:263
+vcl/inc/svdata.hxx:264
     ImplSVNWFData mnStatusBarLowerRightOffset int
-vcl/inc/svdata.hxx:269
+vcl/inc/svdata.hxx:270
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:279
-    ImplSVNWFData mbCenteredTabs _Bool
 vcl/inc/svdata.hxx:280
+    ImplSVNWFData mbCenteredTabs _Bool
+vcl/inc/svdata.hxx:281
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
-vcl/inc/svdata.hxx:282
+vcl/inc/svdata.hxx:283
     ImplSVNWFData mbProgressNeedsErase _Bool
-vcl/inc/svdata.hxx:291
+vcl/inc/svdata.hxx:292
     ImplSVNWFData mbRolloverMenubar _Bool
 vcl/source/filter/jpeg/Exif.hxx:62
     Exif::TiffHeader byteOrder sal_uInt16
