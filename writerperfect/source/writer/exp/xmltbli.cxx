@@ -11,6 +11,7 @@
 
 #include "txtparai.hxx"
 #include "xmlimp.hxx"
+#include "xmltext.hxx"
 
 using namespace com::sun::star;
 
@@ -38,11 +39,7 @@ XMLTableCellContext::XMLTableCellContext(XMLImport &rImport)
 
 XMLImportContext *XMLTableCellContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
-    if (rName == "text:p" || rName == "text:h")
-        return new XMLParaContext(mrImport);
-    if (rName == "table:table")
-        return new XMLTableContext(mrImport);
-    return nullptr;
+    return CreateTextChildContext(mrImport, rName);
 }
 
 void XMLTableCellContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)

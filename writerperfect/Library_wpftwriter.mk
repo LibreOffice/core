@@ -76,6 +76,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/StarOfficeWriterImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
 	writerperfect/source/writer/exp/XMLBase64ImportContext \
+	writerperfect/source/writer/exp/XMLSectionContext \
 	writerperfect/source/writer/exp/XMLTextFrameContext \
 	writerperfect/source/writer/exp/txtparai \
 	writerperfect/source/writer/exp/txtstyli \

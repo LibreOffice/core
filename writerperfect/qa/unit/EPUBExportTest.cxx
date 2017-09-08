@@ -65,6 +65,7 @@ public:
     void testLineBreak();
     void testEscape();
     void testParaCharProps();
+    void testSection();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testLineBreak);
     CPPUNIT_TEST(testEscape);
     CPPUNIT_TEST(testParaCharProps);
+    CPPUNIT_TEST(testSection);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -360,6 +362,15 @@ void EPUBExportTest::testParaCharProps()
     // Direct para formatting was lost, only direct char formatting was
     // written, so this failed.
     assertCss(aCssDoc, aMiddle, "  font-weight: bold;");
+}
+
+void EPUBExportTest::testSection()
+{
+    createDoc("section.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This was "After.", i.e. in-section content was ignored.
+    assertXPathContent(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "In section.");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
