@@ -479,7 +479,13 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
     if (xMMConfig)
         xMMConfig->Commit();
 
-    SwDBManager::CommitLastRegistrations();
+    SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
+    if (pDoc)
+    {
+        SwDBManager* pDbManager = pDoc->GetDBManager();
+        if (pDbManager)
+            pDbManager->CommitLastRegistrations();
+    }
 
     // release/destroy asynchronously
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
