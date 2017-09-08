@@ -1906,3 +1906,32 @@ index 1661064..3340643 100644
 -- 
 2.12.3
 
+From bce7c05a18a4c5089d5ac77bc61b9f6978e7224b Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 8 Sep 2017 11:21:32 +0200
+Subject: [PATCH] EPUBHTMLGenerator: write un-escaped NBSP
+
+Package implementations are supposed to take care of escaping, like it
+was already a requirement for normal text.
+---
+ src/lib/EPUBHTMLGenerator.cpp      |  3 ++-
+ src/test/EPUBTextGeneratorTest.cpp | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index aa09332..ed968bf 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -681,7 +681,8 @@ void EPUBHTMLGenerator::insertSpace()
+ {
+   if (m_impl->m_ignore)
+     return;
+-  m_impl->output().insertCharacters("&nbsp;");
++  // NBSP.
++  m_impl->output().insertCharacters("\xc2\xa0");
+ }
+ 
+ void EPUBHTMLGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
+-- 
+2.12.3
+
