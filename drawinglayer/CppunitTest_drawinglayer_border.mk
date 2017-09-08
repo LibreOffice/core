@@ -25,6 +25,8 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_border, \
 	test \
 	tl \
 	$(gb_UWINAPI) \
+	unotest \
+	svt \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,drawinglayer_border,\
