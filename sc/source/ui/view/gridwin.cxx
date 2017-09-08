@@ -659,13 +659,12 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     }
 
     // Populate the check box list.
-    bool bHasDates = false;
-    std::vector<ScTypedStrData> aStrings;
-    pDoc->GetFilterEntries(nCol, nRow, nTab, aStrings, bHasDates);
+    ScFilterEntries aFilterEntries;
+    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
-    mpAutoFilterPopup->setHasDates(bHasDates);
-    mpAutoFilterPopup->setMemberSize(aStrings.size());
-    std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
+    mpAutoFilterPopup->setHasDates(aFilterEntries.mbHasDates);
+    mpAutoFilterPopup->setMemberSize(aFilterEntries.size());
+    std::vector<ScTypedStrData>::const_iterator it = aFilterEntries.begin(), itEnd = aFilterEntries.end();
     for (; it != itEnd; ++it)
     {
         const OUString& aVal = it->GetString();

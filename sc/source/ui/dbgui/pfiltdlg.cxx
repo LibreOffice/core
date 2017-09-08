@@ -29,7 +29,7 @@
 #include "dbdata.hxx"
 #include "scresid.hxx"
 #include "queryentry.hxx"
-#include "typedstrdata.hxx"
+#include "filterentries.hxx"
 
 #include "sc.hrc"
 #include "strings.hrc"
@@ -309,14 +309,13 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
                 SCROW   nFirstRow   = theQueryData.nRow1;
                 SCROW   nLastRow    = theQueryData.nRow2;
                 nFirstRow++;
-                bool bHasDates = false;
                 bool bCaseSens = m_pBtnCase->IsChecked();
-                m_pEntryLists[nColumn].reset( new std::vector<ScTypedStrData> );
+                pEntryLists[nColumn].reset( new ScFilterEntries);
                 pDoc->GetFilterEntriesArea(
-                    nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *m_pEntryLists[nColumn], bHasDates);
+                    nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *m_pEntryLists[nColumn]);
             }
 
-            std::vector<ScTypedStrData>* pColl = m_pEntryLists[nColumn].get();
+            const ScFilterEntries* pColl = m_pEntryLists[nColumn].get();
             std::vector<ScTypedStrData>::const_iterator it = pColl->begin(), itEnd = pColl->end();
             for (; it != itEnd; ++it)
             {
