@@ -25,18 +25,16 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 		autoreconf \
 		&& ./configure \
 		   --enable-languages="cl cpp" \
+		   --disable-rpath \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
 		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
-			CFLAGS='$(CFLAGS) \
+		   CFLAGS='$(CFLAGS) \
 				$(if $(ENABLE_OPTIMIZED), \
 					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
 				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
-		   $(if $(filter LINUX,$(OS)), \
-				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
-					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 		   $(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	  && $(MAKE) \
 	)

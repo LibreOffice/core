@@ -21,9 +21,6 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 			--disable-rpath \
 			--disable-languages \
 			--disable-doc \
-			$(if $(filter LINUX,$(OS)), \
-				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
-					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	  && $(MAKE) \
 	)
