@@ -634,7 +634,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheet \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/sheet/_XSubTotalCalculatable \
-    qadevOOo/tests/java/ifc/sheet/_XSubTotalDescriptor \
     qadevOOo/tests/java/ifc/sheet/_XSubTotalField \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \
