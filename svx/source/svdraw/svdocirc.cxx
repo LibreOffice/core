@@ -665,7 +665,7 @@ void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat)
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     if (pU==nullptr) {
         pU=new ImpCircUser;
-        rStat.SetUser(pU);
+        rStat.SetUser(std::unique_ptr<ImpCircUser>(pU));
     }
     pU->SetCreateParams(rStat);
 }

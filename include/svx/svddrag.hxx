@@ -25,6 +25,7 @@
 #include <tools/fract.hxx>
 #include <svx/svxdllapi.h>
 
+#include <memory>
 #include <vector>
 
 // Status information for specialized object dragging. In order for the model
@@ -47,7 +48,7 @@ protected:
     SdrHdl*  pHdl;      // The Handle for the User
     SdrView* pView;
     SdrPageView* pPageView;
-    std::vector<Point*> aPnts; // All previous Points: [0]=Start, [Count()-2]=Prev
+    std::vector<Point> mvPnts; // All previous Points: [0]=Start, [Count()-2]=Prev
     Point     aRef1;     // Referencepoint: Resize fixed point, (axis of rotation,
     Point     aRef2;     // axis of reflection, ...)
     Point     aPos0;     // Position at the last Event
@@ -72,26 +73,25 @@ protected:
     bool  bOrtho8;
 
     SdrDragMethod* pDragMethod;
+    std::unique_ptr<SdrDragStatUserData>  mpUserData;     // Userdata
 
-protected:
     void Clear(bool bLeaveOne);
-    Point& Pnt(sal_uIntPtr nNum)                           { return *aPnts[nNum]; }
-//public:
-    SdrDragStatUserData*    pUser;     // Userdata
+protected:
+    Point&       Pnt(sal_uIntPtr nNum)               { return mvPnts[nNum]; }
 public:
-    SdrDragStat(): aPnts()                           { pUser=nullptr; Reset(); }
-    ~SdrDragStat()                                   { Clear(false); }
+    SdrDragStat()                                    { Reset(); }
+    ~SdrDragStat();
     void         Reset();
     SdrView*     GetView() const                     { return pView; }
     void         SetView(SdrView* pV)                { pView=pV; }
     SdrPageView* GetPageView() const                 { return pPageView; }
     void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(sal_uIntPtr nNum) const    { return *aPnts[nNum]; }
-    sal_uIntPtr        GetPointCount() const           { return aPnts.size(); }
+    const Point& GetPoint(sal_uIntPtr nNum) const    { return mvPnts[nNum]; }
+    sal_uIntPtr  GetPointCount() const               { return mvPnts.size(); }
     const Point& GetStart() const                    { return GetPoint(0); }
     Point&       Start()                             { return Pnt(0); }
     const Point& GetPrev() const                     { return GetPoint(GetPointCount()-(GetPointCount()>=2 ? 2:1)); }
-    Point& Prev()                                    { return Pnt(GetPointCount()-(GetPointCount()>=2 ? 2:1)); }
+    Point&       Prev()                              { return Pnt(GetPointCount()-(GetPointCount()>=2 ? 2:1)); }
     const Point& GetPos0() const                     { return aPos0;  }
     const Point& GetNow() const                      { return GetPoint(GetPointCount()-1); }
     Point&       Now()                               { return Pnt(GetPointCount()-1); }
@@ -103,8 +103,8 @@ public:
     Point&       Ref2()                              { return aRef2;  }
     const        SdrHdl* GetHdl() const              { return pHdl;   }
     void         SetHdl(SdrHdl* pH)                  { pHdl=pH;       }
-    SdrDragStatUserData* GetUser() const             { return pUser;  }
-    void SetUser(SdrDragStatUserData* pU)            { pUser=pU; }
+    SdrDragStatUserData* GetUser() const             { return mpUserData.get();  }
+    void         SetUser(std::unique_ptr<SdrDragStatUserData> pU) { mpUserData = std::move(pU); }
     bool         IsShown() const                     { return bShown; }
     void         SetShown(bool bOn)                  { bShown=bOn; }
 
@@ -143,25 +143,24 @@ public:
     bool         IsMouseDown() const                  { return !bMouseIsUp; }
     void         SetMouseDown(bool bDown)         { bMouseIsUp=!bDown; }
 
-    static Point KorregPos(const Point& rNow, const Point& rPrev);
-    void  Reset(const Point& rPnt);
-    void  NextMove(const Point& rPnt);
-    void  NextPoint();
-    void  PrevPoint();
-    bool CheckMinMoved(const Point& rPnt);
-    long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }
-    long  GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
-    Fraction GetXFact() const;
-    Fraction GetYFact() const;
+    void         Reset(const Point& rPnt);
+    void         NextMove(const Point& rPnt);
+    void         NextPoint();
+    void         PrevPoint();
+    bool         CheckMinMoved(const Point& rPnt);
+    long         GetDX() const                     { return GetNow().X()-GetPrev().X(); }
+    long         GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
+    Fraction     GetXFact() const;
+    Fraction     GetYFact() const;
 
-    SdrDragMethod* GetDragMethod() const               { return pDragMethod; }
-    void           SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }
+    SdrDragMethod* GetDragMethod() const             { return pDragMethod; }
+    void         SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }
 
-    const tools::Rectangle& GetActionRect() const             { return aActionRect; }
-    void             SetActionRect(const tools::Rectangle& rR) { aActionRect=rR; }
+    const tools::Rectangle& GetActionRect() const          { return aActionRect; }
+    void         SetActionRect(const tools::Rectangle& rR) { aActionRect=rR; }
 
     // Also considering 1stPointAsCenter
-    void TakeCreateRect(tools::Rectangle& rRect) const;
+    void         TakeCreateRect(tools::Rectangle& rRect) const;
 };
 
 #endif // INCLUDED_SVX_SVDDRAG_HXX
