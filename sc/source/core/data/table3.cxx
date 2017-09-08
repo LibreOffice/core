@@ -3364,15 +3364,15 @@ bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
     return false;
 }
 
-void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+void ScTable::GetFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries )
 {
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
-    aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rStrings, rHasDates);
+    aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries);
 }
 
 void ScTable::GetFilteredFilterEntries(
-    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries )
 {
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
@@ -3382,18 +3382,13 @@ void ScTable::GetFilteredFilterEntries(
     aParam.RemoveEntryByField(nCol);
 
     lcl_PrepareQuery(pDocument, this, aParam);
-    bool bHasDates = false;
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
         if (ValidQuery(j, aParam))
         {
-            bool bThisHasDates = false;
-            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rStrings, bThisHasDates);
-            bHasDates |= bThisHasDates;
+            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries);
         }
     }
-
-    rHasDates = bHasDates;
 }
 
 bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit)

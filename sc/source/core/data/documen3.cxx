@@ -73,6 +73,7 @@
 #include "formulacell.hxx"
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
+#include "filterentries.hxx"
 
 #include "globalnames.hxx"
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -1501,7 +1502,7 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
  * Entries for AutoFilter listbox
  */
 void ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+    SCCOL nCol, SCROW nRow, SCTAB nTab, ScFilterEntries& rFilterEntries )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
@@ -1537,14 +1538,14 @@ void ScDocument::GetFilterEntries(
 
             if ( bFilter )
             {
-                maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings, rHasDates );
+                maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries );
             }
             else
             {
-                maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
+                maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries );
             }
 
-            sortAndRemoveDuplicates(rStrings, aParam.bCaseSens);
+            sortAndRemoveDuplicates( rFilterEntries.maStrData, aParam.bCaseSens);
         }
     }
 }
@@ -1554,12 +1555,12 @@ void ScDocument::GetFilterEntries(
  */
 void ScDocument::GetFilterEntriesArea(
     SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
-    std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
+    ScFilterEntries& rFilterEntries )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
-        sortAndRemoveDuplicates(rStrings, bCaseSens);
+        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries );
+        sortAndRemoveDuplicates( rFilterEntries.maStrData, bCaseSens);
     }
 }
 

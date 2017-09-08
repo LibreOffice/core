@@ -47,6 +47,7 @@
 #include "editutil.hxx"
 #include "sharedformula.hxx"
 #include <listenercontext.hxx>
+#include "filterentries.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
@@ -2046,8 +2047,7 @@ namespace {
 class FilterEntriesHandler
 {
     ScColumn& mrColumn;
-    std::vector<ScTypedStrData>& mrStrings;
-    bool mbHasDates;
+    ScFilterEntries& mrFilterEntries;
 
     void processCell(SCROW nRow, ScRefCellValue& rCell)
     {
@@ -2058,7 +2058,7 @@ class FilterEntriesHandler
 
         if (rCell.hasString())
         {
-            mrStrings.push_back(ScTypedStrData(aStr));
+            mrFilterEntries.push_back(ScTypedStrData(aStr));
             return;
         }
 
@@ -2080,7 +2080,7 @@ class FilterEntriesHandler
                     OUString aErr = ScGlobal::GetErrorString(nErr);
                     if (!aErr.isEmpty())
                     {
-                        mrStrings.push_back(ScTypedStrData(aErr));
+                        mrFilterEntries.push_back(ScTypedStrData(aErr));
                         return;
                     }
                 }
@@ -2099,7 +2099,7 @@ class FilterEntriesHandler
             // special case for date values.  Disregard the time
             // element if the number format is of date type.
             fVal = rtl::math::approxFloor(fVal);
-            mbHasDates = true;
+            mrFilterEntries.mbHasDates = true;
             bDate = true;
             // Convert string representation to ISO 8601 date to eliminate
             // locale dependent behaviour later when filtering for dates.
@@ -2107,12 +2107,12 @@ class FilterEntriesHandler
             pFormatter->GetInputLineString( fVal, nIndex, aStr);
         }
         // maybe extend ScTypedStrData enum is also an option here
-        mrStrings.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
+        mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
     }
 
 public:
-    FilterEntriesHandler(ScColumn& rColumn, std::vector<ScTypedStrData>& rStrings) :
-        mrColumn(rColumn), mrStrings(rStrings), mbHasDates(false) {}
+    FilterEntriesHandler(ScColumn& rColumn, ScFilterEntries& rFilterEntries) :
+        mrColumn(rColumn), mrFilterEntries(rFilterEntries) {}
 
     void operator() (size_t nRow, double fVal)
     {
@@ -2140,27 +2140,29 @@ public:
 
     void operator() (const int nElemType, size_t nRow, size_t /* nDataSize */)
     {
-        if ( nElemType == sc::element_type_empty ) {
-            mrStrings.push_back(ScTypedStrData(OUString()));
+        if ( nElemType == sc::element_type_empty )
+        {
+            if (!mrFilterEntries.mbHasEmpties)
+            {
+                mrFilterEntries.push_back(ScTypedStrData(OUString()));
+                mrFilterEntries.mbHasEmpties = true;
+            }
             return;
         }
         ScRefCellValue aCell = mrColumn.GetCellValue(nRow);
         processCell(nRow, aCell);
     }
-
-    bool hasDates() const { return mbHasDates; }
 };
 
 }
 
 void ScColumn::GetFilterEntries(
     sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-    std::vector<ScTypedStrData>& rStrings, bool& rHasDates )
+    ScFilterEntries& rFilterEntries )
 {
-    FilterEntriesHandler aFunc(*this, rStrings);
+    FilterEntriesHandler aFunc(*this, rFilterEntries);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);
-    rHasDates = aFunc.hasDates();
 }
 
 namespace {

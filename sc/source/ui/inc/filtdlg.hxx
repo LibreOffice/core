@@ -28,7 +28,7 @@
 #include "address.hxx"
 #include "anyrefdg.hxx"
 #include "queryparam.hxx"
-#include "typedstrdata.hxx"
+#include "filterentries.hxx"
 
 #include <memory>
 #include <deque>
@@ -44,7 +44,7 @@ class ScFilterDlg : public ScAnyRefDlg
 {
     struct EntryList
     {
-        std::vector<ScTypedStrData> maList;
+        ScFilterEntries maFilterEntries;
         size_t mnHeaderPos;
 
         EntryList(const EntryList&) = delete;
