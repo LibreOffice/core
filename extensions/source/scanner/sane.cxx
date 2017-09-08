@@ -623,7 +623,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",
                                   "SANE_FRAME_BLUE", "Unknown !!!" };
             fprintf( stderr, "Parameters for frame %d:\n", nStream );
-            if( aParams.format < 0 || aParams.format > 4 )
+            if( aParams.format > 4 )
                 aParams.format = (SANE_Frame)5;
             fprintf( stderr, "format:           %s\n", ppFormats[ (int)aParams.format ] );
             fprintf( stderr, "last_frame:       %s\n", aParams.last_frame ? "TRUE" : "FALSE" );

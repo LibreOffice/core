@@ -162,7 +162,7 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
 
 ColorData Theme::GetColor (const ColorType eType)
 {
-    if (eType>=0 && sal_uInt32(eType)<maColor.size())
+    if (sal_uInt32(eType)<maColor.size())
         return maColor[eType];
     else
         return 0;
@@ -208,7 +208,7 @@ void Theme::SetGradient (
 
 const BitmapEx& Theme::GetIcon (const IconType eType)
 {
-    if (eType>=0 && size_t(eType)<maIcons.size())
+    if (size_t(eType)<maIcons.size())
         return maIcons[eType];
     else
     {
@@ -219,7 +219,7 @@ const BitmapEx& Theme::GetIcon (const IconType eType)
 
 Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 {
-    if (eType>=0 && size_t(eType)<maGradients.size())
+    if (size_t(eType)<maGradients.size())
         return maGradients[eType];
     else
     {
@@ -230,7 +230,7 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 
 void Theme::InitializeIcon(const IconType eType, const OUString& rResourceId)
 {
-    if (eType>=0 && size_t(eType)<maIcons.size())
+    if (size_t(eType)<maIcons.size())
     {
         const BitmapEx aIcon(rResourceId);
         maIcons[eType] = aIcon;
