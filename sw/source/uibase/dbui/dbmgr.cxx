@@ -165,7 +165,7 @@ void lcl_emitEvent(sal_uInt16 nEventId, sal_Int32 nStrId, SfxObjectShell* pDocSh
 
 }
 
-std::vector<OUString> SwDBManager::m_aUncommitedRegistrations;
+std::vector<std::pair<SwDocShell*, OUString>> SwDBManager::m_aUncommitedRegistrations;
 
 enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
@@ -811,7 +811,9 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
 
 SwDBManager::~SwDBManager()
 {
-    // copy required, m_DataSourceParams can be modifed while disposing components
+    RevokeLastRegistrations();
+
+    // copy required, m_DataSourceParams can be modified while disposing components
     std::vector<uno::Reference<sdbc::XConnection>> aCopiedConnections;
     for (auto & pParam : m_DataSourceParams)
     {
@@ -2627,7 +2629,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
         }
         sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
 
-        m_aUncommitedRegistrations.push_back(sFind);
+        m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
     }
     return sFind;
 }
@@ -2884,6 +2886,10 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
     xDatabaseContext->registerObject( sDataSource, xDataSource );
+
+    // temp file - don't remember connection
+    if (rData.sDataSource.isEmpty())
+        m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(nullptr, sDataSource));
 }
 
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
@@ -3208,24 +3214,38 @@ void SwDBManager::RevokeLastRegistrations()
 {
     if (m_aUncommitedRegistrations.size())
     {
-        SwView* pView = m_pDoc->GetDocShell()->GetView();
-        std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
-        if (xConfigItem)
+        SwView* pView = ( m_pDoc && m_pDoc->GetDocShell() ) ? m_pDoc->GetDocShell()->GetView() : nullptr;
+        if (pView)
         {
-            xConfigItem->DisposeResultSet();
-            xConfigItem->DocumentReloaded();
+            std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
+            if (xConfigItem)
+            {
+                xConfigItem->DisposeResultSet();
+                xConfigItem->DocumentReloaded();
+            }
         }
 
-        for (const OUString& rName : m_aUncommitedRegistrations)
-            RevokeDataSource(rName);
-
-        m_aUncommitedRegistrations.clear();
+        for (auto it = m_aUncommitedRegistrations.begin(); it != m_aUncommitedRegistrations.end();)
+        {
+            if ((m_pDoc && it->first == m_pDoc->GetDocShell()) || it->first == nullptr)
+            {
+                RevokeDataSource(it->second);
+                it = m_aUncommitedRegistrations.erase(it);
+            }
+            else
+                it++;
+        }
     }
 }
 
 void SwDBManager::CommitLastRegistrations()
 {
-    m_aUncommitedRegistrations.clear();
+    auto predicate = [this](const std::pair<SwDocShell*, OUString>& x)
+        { return x.first == this->m_pDoc->GetDocShell(); };
+
+    m_aUncommitedRegistrations.erase(
+        std::remove_if(m_aUncommitedRegistrations.begin(), m_aUncommitedRegistrations.end(), predicate),
+        m_aUncommitedRegistrations.end());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
