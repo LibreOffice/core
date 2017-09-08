@@ -3233,7 +3233,6 @@ void SvxColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
 {
     m_nSlotId = nSlotId;
     m_bShowNoneButton = bShowNoneButton;
-    m_xColorWindow.disposeAndClear();
     m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
     ShowPreview(m_aSelectedColor);
     createColorWindow();
@@ -3344,6 +3343,11 @@ SvxColorListBox::~SvxColorListBox()
 
 void SvxColorListBox::dispose()
 {
+    // TODO: reset should be made automatically but...
+    // tdf#111894: avoid memory leak with PaletteManager with SvxColorListBox
+    // m_xColorWindow is made with m_xPaletteManager
+    // so reset this last one before disposeAndClear first one
+    m_xPaletteManager.reset();
     m_xColorWindow.disposeAndClear();
     m_aColorWrapper.dispose();
     MenuButton::dispose();
