@@ -1012,7 +1012,7 @@ const TextCharAttrib* TextEngine::FindCharAttrib( const TextPaM& rPaM, sal_uInt1
 {
     const TextCharAttrib* pAttr = nullptr;
     TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
-    if ( pNode && ( rPaM.GetIndex() < pNode->GetText().getLength() ) )
+    if (pNode && (rPaM.GetIndex() <= pNode->GetText().getLength()))
         pAttr = pNode->GetCharAttribs().FindAttrib( nWhich, rPaM.GetIndex() );
     return pAttr;
 }
