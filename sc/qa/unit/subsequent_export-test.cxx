@@ -211,9 +211,14 @@ public:
     void testHiddenRepeatedRowsODS();
     void testHyperlinkTargetFrameODS();
     void testTdf112106();
+    void testPivotTableDoubleFieldFilter();
+    void testPivotTableStringFieldFilter();
+    void testPivotTableDateFieldFilter();
+    void testPivotTableBoolFieldFilter();
+    void testPivotTableRowColPageFieldFilter();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
-    CPPUNIT_TEST(test);
+   /* CPPUNIT_TEST(test);
     CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testConditionalFormatExportODS);
@@ -315,7 +320,13 @@ public:
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
     CPPUNIT_TEST(testHyperlinkTargetFrameODS);
 
-    CPPUNIT_TEST(testTdf112106);
+    CPPUNIT_TEST(testTdf112106);*/
+    CPPUNIT_TEST(testPivotTableDoubleFieldFilter);
+    CPPUNIT_TEST(testPivotTableStringFieldFilter);
+    CPPUNIT_TEST(testPivotTableDateFieldFilter);
+    CPPUNIT_TEST(testPivotTableBoolFieldFilter);
+    CPPUNIT_TEST(testPivotTableRowColPageFieldFilter);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4325,6 +4336,348 @@ void ScExportTest::testTdf112106()
     const OUString* pLayoutName = pDim->GetLayoutName();
     CPPUNIT_ASSERT(pLayoutName);
     CPPUNIT_ASSERT_EQUAL(ScGlobal::GetRscString(STR_PIVOT_DATA), (*pLayoutName));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableDoubleFieldFilter()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_double_field_filter.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pDPs->GetCount());
+
+    // Reload and check filtering of row dimensions
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pDPs->GetCount());
+
+    // Field with general formatting
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[2];
+        CPPUNIT_ASSERT(pDPObj);
+        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+        CPPUNIT_ASSERT(pSaveData);
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field1");
+        CPPUNIT_ASSERT(pSaveDim);
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        auto aIter = rMembers.begin();
+        ScDPSaveMember* pMember = *aIter; // "1"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "3"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    }
+
+    // Number formatting
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[1];
+        CPPUNIT_ASSERT(pDPObj);
+        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+        CPPUNIT_ASSERT(pSaveData);
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field2");
+        CPPUNIT_ASSERT(pSaveDim);
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        auto aIter = rMembers.begin();
+        ScDPSaveMember* pMember = *aIter; // "1.00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2.00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "3.00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    }
+
+    // With thousand separator
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[0];
+        CPPUNIT_ASSERT(pDPObj);
+        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+        CPPUNIT_ASSERT(pSaveData);
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double field3");
+        CPPUNIT_ASSERT(pSaveDim);
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        auto aIter = rMembers.begin();
+        ScDPSaveMember* pMember = *aIter; // "10,000.00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "20,000.00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "30,000.00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    }
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableStringFieldFilter()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_string_field_filter.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check filtering of row dimensions
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Country");
+    CPPUNIT_ASSERT(pSaveDim);
+
+    const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
+    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("United Kingdom");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    pMember = pSaveDim->GetExistingMemberByName("United States");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+
+    xDocSh->DoClose();
+}
+
+
+void ScExportTest::testPivotTableDateFieldFilter()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_date_field_filter.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check filtering of row dimensions
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date");
+        CPPUNIT_ASSERT(pSaveDim);
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        auto aIter = rMembers.begin();
+        ScDPSaveMember* pMember = *aIter; // "2016. január 6."
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2016. január 7."
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2016. január 8."
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    }
+
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date2");
+        CPPUNIT_ASSERT(pSaveDim);
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        auto aIter = rMembers.begin();
+        ScDPSaveMember* pMember = *aIter; // "2016-01-06"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2016-01-07"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2016-01-08"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    }
+
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Date3");
+        CPPUNIT_ASSERT(pSaveDim);
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        auto aIter = rMembers.begin();
+        ScDPSaveMember* pMember = *aIter; // "2016. 1. 6. 0:00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2016. 1. 7. 0:00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        ++aIter;
+        pMember = *aIter; // "2016. 1. 8. 0:00"
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    }
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableBoolFieldFilter()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_bool_field_filter.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check filtering of row dimensions
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Bool field");
+    CPPUNIT_ASSERT(pSaveDim);
+
+    const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
+    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("0");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    pMember = pSaveDim->GetExistingMemberByName("1");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableRowColPageFieldFilter()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_rowcolpage_field_filter.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check filtering of row dimensions
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    // Row field
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Order ID");
+        CPPUNIT_ASSERT(pSaveDim);
+        CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_ROW, pSaveDim->GetOrientation());
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("1");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("2");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("3");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    }
+
+    // Column field
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double2 field");
+        CPPUNIT_ASSERT(pSaveDim);
+        CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_COLUMN, pSaveDim->GetOrientation());
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("2");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("3");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("4");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    }
+
+    // Page field
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double3 field");
+        CPPUNIT_ASSERT(pSaveDim);
+        CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_PAGE, pSaveDim->GetOrientation());
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("5");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("6");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("7");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    }
+
+    // Hidden field
+    {
+        ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Double4 field");
+        CPPUNIT_ASSERT(pSaveDim);
+        CPPUNIT_ASSERT_EQUAL(sheet::DataPilotFieldOrientation_HIDDEN, pSaveDim->GetOrientation());
+
+        const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+        ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("8");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("9");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+        pMember = pSaveDim->GetExistingMemberByName("10");
+        CPPUNIT_ASSERT(pMember);
+        CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    }
 
     xDocSh->DoClose();
 }
