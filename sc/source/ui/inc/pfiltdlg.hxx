@@ -36,6 +36,7 @@ class ScViewData;
 class ScDocument;
 class ScQueryItem;
 class ScTypedStrData;
+struct ScFilterEntries;
 
 class ScPivotFilterDlg : public ModalDialog
 {
@@ -81,7 +82,7 @@ private:
     VclPtr<ListBox>            aFieldLbArr[3];
     VclPtr<ListBox>            aCondLbArr[3];
 
-    std::array<std::unique_ptr<std::vector<ScTypedStrData>>, MAXCOLCOUNT> m_pEntryLists;
+    std::array<std::unique_ptr<ScFilterEntries>, MAXCOLCOUNT> m_pEntryLists;
 
 private:
     void    Init            ( const SfxItemSet& rArgSet );

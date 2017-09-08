@@ -105,6 +105,7 @@ struct ScCellValue;
 class ScDocumentImport;
 class ScHint;
 enum class ScMF;
+struct ScFilterEntries;
 
 struct ScNeededSizeOptions
 {
@@ -522,7 +523,7 @@ public:
 
     void GetFilterEntries(
         sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-        std::vector<ScTypedStrData>& rStrings, bool& rHasDates );
+        ScFilterEntries& rFilterEntries );
 
     bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit ) const;
 

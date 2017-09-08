@@ -199,6 +199,7 @@ enum class ScDBDataPortion;
 enum class ScSheetEventId;
 class BitmapEx;
 class ScColumnsRange;
+struct ScFilterEntries;
 
 namespace sc {
 
@@ -1900,12 +1901,11 @@ public:
      * database range that contains the specified cell position.
      */
     void              GetFilterEntries( SCCOL nCol, SCROW nRow,
-                                        SCTAB nTab, std::vector<ScTypedStrData>& rStrings,
-                                        bool& rHasDates);
+                                        SCTAB nTab, ScFilterEntries& rFilterEntries );
 
     SC_DLLPUBLIC void GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
                                             SCTAB nTab, bool bCaseSens,
-                                            std::vector<ScTypedStrData>& rStrings, bool& rHasDates);
+                                            ScFilterEntries& rFilterEntries );
 
     void              GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                       std::vector<ScTypedStrData>& rStrings, bool bLimit = false );

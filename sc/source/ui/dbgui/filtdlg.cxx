@@ -500,34 +500,34 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                 pList = r.first->second.get();
                 pDoc->GetFilterEntriesArea(
                     nColumn, nFirstRow+1, nLastRow,
-                    nTab, bCaseSens, pList->maList, maHasDates[nOffset+nList-1] );
+                    nTab, bCaseSens, pList->maFilterEntries);
+                maHasDates[nOffset+nList-1] = pList->maFilterEntries.mbHasDates;
 
                 // Entry for the first line
                 //! Entry (pHdrEntry) doesn't generate collection?
 
                 pList->mnHeaderPos = INVALID_HEADER_POS;
-                std::vector<ScTypedStrData> aHdrColl;
-                bool bDummy = false;
+                ScFilterEntries aHdrColl;
                 pDoc->GetFilterEntriesArea(
-                    nColumn, nFirstRow, nFirstRow, nTab, true, aHdrColl, bDummy );
+                    nColumn, nFirstRow, nFirstRow, nTab, true, aHdrColl );
                 if (!aHdrColl.empty())
                 {
                     // See if the header value is already in the list.
-                    std::vector<ScTypedStrData>::iterator itBeg = pList->maList.begin(), itEnd = pList->maList.end();
+                    std::vector<ScTypedStrData>::iterator itBeg = pList->maFilterEntries.begin(), itEnd = pList->maFilterEntries.end();
                     std::vector<ScTypedStrData>::iterator it = std::find_if(
                         itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
                     if (it == itEnd)
                     {
                         // Not in the list. Insert it.
-                        pList->maList.push_back(aHdrColl.front());
+                        pList->maFilterEntries.push_back(aHdrColl.front());
                         if (bCaseSens)
-                            std::sort(pList->maList.begin(), pList->maList.end(), ScTypedStrData::LessCaseSensitive());
+                            std::sort(pList->maFilterEntries.begin(), pList->maFilterEntries.end(), ScTypedStrData::LessCaseSensitive());
                         else
-                            std::sort(pList->maList.begin(), pList->maList.end(), ScTypedStrData::LessCaseInsensitive());
+                            std::sort(pList->maFilterEntries.begin(), pList->maFilterEntries.end(), ScTypedStrData::LessCaseInsensitive());
 
                         // Record its position.
-                        itBeg = pList->maList.begin();
-                        itEnd = pList->maList.end();
+                        itBeg = pList->maFilterEntries.begin();
+                        itEnd = pList->maFilterEntries.end();
                         it = std::find_if(itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
                         pList->mnHeaderPos = std::distance(itBeg, it);
                     }
@@ -538,7 +538,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
             OSL_ASSERT(pList);
 
-            std::vector<ScTypedStrData>::const_iterator it = pList->maList.begin(), itEnd = pList->maList.end();
+            std::vector<ScTypedStrData>::const_iterator it = pList->maFilterEntries.begin(), itEnd = pList->maFilterEntries.end();
             for (; it != itEnd; ++it)
             {
                 pValList->InsertEntry(it->GetString(), nListPos++);
@@ -579,7 +579,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     ComboBox* pValList = maValueEdArr[nList-1].get();
     size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
 
-    const ScTypedStrData& rHdrEntry = m_EntryLists[nColumn]->maList[nPos];
+    const ScTypedStrData& rHdrEntry = m_EntryLists[nColumn]->maFilterEntries.maStrData[nPos];
 
     const OUString& aHdrStr = rHdrEntry.GetString();
     bool bWasThere = aHdrStr == pValList->GetEntry(nListPos);
