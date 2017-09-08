@@ -661,6 +661,9 @@ void XSecController::exportSignature(
             /* Write SignatureMethod element */
             pAttributeList = new SvXMLAttributeList();
 
+            // TODO: actually roundtrip this value from parsing documentsignatures.xml - entirely
+            // broken to assume this would in any way relate to the 1st reference's digest algo
+
             // Assume that all Reference elements use the same DigestMethod:Algorithm, and that the
             // SignatureMethod:Algorithm should be the corresponding one.
             pAttributeList->AddAttribute(
