@@ -1658,7 +1658,7 @@ void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordere
         {
             OUString aLabel = rLabel;
             GetRecursiveChecked( rChild.get(), vOut, aLabel);
-            if (!aLabel.isEmpty())
+            if (!aLabel.isEmpty() && aLabel != rLabel)
                 vOut.insert( aLabel);
         }
         // Let the caller not add the parent alone.
