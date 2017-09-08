@@ -64,6 +64,7 @@ public:
     void testNestedSpan();
     void testLineBreak();
     void testEscape();
+    void testParaCharProps();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testNestedSpan);
     CPPUNIT_TEST(testLineBreak);
     CPPUNIT_TEST(testEscape);
+    CPPUNIT_TEST(testParaCharProps);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -327,9 +329,9 @@ void EPUBExportTest::testLineBreak()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This was 0, line break was not handled.
-    assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:br", 1);
+    assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:span/xhtml:br", 1);
     // This was 0, line break inside span was not handled.
-    assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:br", 1);
+    assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:span/xhtml:br", 1);
 }
 
 void EPUBExportTest::testEscape()
@@ -343,6 +345,21 @@ void EPUBExportTest::testEscape()
     assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[2]", "a&b");
     // This was also lost.
     assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[3]", "\t");
+}
+
+void EPUBExportTest::testParaCharProps()
+{
+    createDoc("para-char-props.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // Check formatting of the middle span.
+    OString aMiddle = getXPath(mpXmlDoc, "//xhtml:p/xhtml:span[2]", "class").toUtf8();
+    std::map< OString, std::vector<OString> > aCssDoc;
+    parseCssExport("OEBPS/styles/stylesheet.css", aCssDoc);
+    assertCss(aCssDoc, aMiddle, "  font-style: italic;");
+    // Direct para formatting was lost, only direct char formatting was
+    // written, so this failed.
+    assertCss(aCssDoc, aMiddle, "  font-weight: bold;");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);

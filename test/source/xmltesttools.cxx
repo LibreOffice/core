@@ -64,6 +64,7 @@ void XmlTestTools::registerNamespaces(xmlXPathContextPtr& /*pXmlXpathCtx*/)
 
 OUString XmlTestTools::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
 {
+    CPPUNIT_ASSERT(pXmlDoc);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("In <" + OString(pXmlDoc->name) + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
