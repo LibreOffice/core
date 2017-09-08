@@ -390,6 +390,7 @@ protected:
     VclPtr<CommandCategoryListBox>             m_pCommandCategoryListBox;
     VclPtr<SfxConfigFunctionListBox>           m_pFunctions;
 
+    VclPtr<FixedText>                          m_pDescriptionFieldLb;
     VclPtr<VclMultiLineEdit>                   m_pDescriptionField;
 
     // Right side of the dialog where the contents of the selected
