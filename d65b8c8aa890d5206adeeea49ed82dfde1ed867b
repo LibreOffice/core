@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c7ac1df0",
+        "filename": "sd/source/ui/slidesorter/controller/SlsAnimator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "this is very unlikely to ever fire, no?",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e7b91930",
+        "filename": "sd/source/ui/slidesorter/controller/SlsAnimator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "hmm - so those have some chance of actually firing in production; you did run make check on this?",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_07b7053a",
+        "filename": "sd/source/ui/slidesorter/controller/SlsAnimator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "this now does not need checking anymore, with an assert before",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27824153",
+        "filename": "sd/source/ui/slidesorter/controller/SlsAnimator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_47874d61",
+        "filename": "sd/source/ui/slidesorter/controller/SlsFocusManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "but you just checked that one line up?",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_677c4973",
+        "filename": "sd/source/ui/slidesorter/controller/SlsFocusManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "but you just checked that one line up?",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8781354d",
+        "filename": "sd/source/ui/slidesorter/controller/SlsInsertionIndicatorHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-08T16:05:25Z",
+      "side": 1,
+      "message": "but you just checked that one line up?",
+      "revId": "d65b8c8aa890d5206adeeea49ed82dfde1ed867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
