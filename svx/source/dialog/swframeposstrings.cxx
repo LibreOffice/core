@@ -28,7 +28,7 @@ OUString SvxSwFramePosString::GetString(StringId eId)
 {
     assert(SAL_N_ELEMENTS(RID_SVXSW_FRAMEPOSITIONS) == SvxSwFramePosString::STR_MAX);
     DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
-    if(!(eId >= 0 && eId < STR_MAX))
+    if(!(eId < STR_MAX))
         eId = LEFT;
     return SvxResId(RID_SVXSW_FRAMEPOSITIONS[eId]);
 }
