@@ -61,7 +61,6 @@
 
 // SwLayAction static stuff
 
-#define IS_FLYS (pPage->GetSortedObjs())
 #define IS_INVAFLY (pPage->IsInvalidFly())
 
 // Save some typing work to avoid accessing destroyed pages.
@@ -519,12 +518,12 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             XCHECKPAGE;
 
             while ( !IsInterrupt() && !IsNextCycle() &&
-                    ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
+                    ((pPage->GetSortedObjs() && IS_INVAFLY) || pPage->IsInvalid()) )
             {
                 unlockPositionOfObjects( pPage );
 
                 SwObjectFormatter::FormatObjsAtFrame( *pPage, *pPage, this );
-                if ( !IS_FLYS )
+                if ( !pPage->GetSortedObjs() )
                 {
                     // If there are no (more) Flys, the flags are superfluous.
                     pPage->ValidateFlyLayout();
@@ -533,7 +532,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 // change condition
                 while ( !IsInterrupt() && !IsNextCycle() &&
                         ( pPage->IsInvalid() ||
-                          (IS_FLYS && IS_INVAFLY) ) )
+                          (pPage->GetSortedObjs() && IS_INVAFLY) ) )
                 {
                     PROTOCOL( pPage, PROT::FileInit, DbgAction::NONE, nullptr)
                     XCHECKPAGE;
@@ -558,7 +557,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     // change condition
                     if ( !IsNextCycle() &&
                          ( pPage->IsInvalidContent() ||
-                           (IS_FLYS && IS_INVAFLY) ) )
+                           (pPage->GetSortedObjs() && IS_INVAFLY) ) )
                     {
                         pPage->ValidateFlyInCnt();
                         pPage->ValidateContent();
@@ -584,7 +583,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
             // A previous page may be invalid again.
             XCHECKPAGE;
-            if ( !IS_FLYS )
+            if ( !pPage->GetSortedObjs() )
             {
                 // If there are no (more) Flys, the flags are superfluous.
                 pPage->ValidateFlyLayout();
@@ -624,7 +623,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
                 // Continue to the next invalid page
                 while ( pPage && !pPage->IsInvalid() &&
-                        (!IS_FLYS || !IS_INVAFLY) )
+                        (!pPage->GetSortedObjs() || !IS_INVAFLY) )
                 {
                     pPage = static_cast<SwPageFrame*>(pPage->GetNext());
                 }
@@ -703,7 +702,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             const int nLoopControlMax = 20;
 
             // special case: interrupt content formatting
-            // conditions are incorrect (macros IS_FLYS and IS_INVAFLY only
+            // conditions are incorrect (macro IS_INVAFLY only
             //            works for <pPage>) and are too strict.
             // adjust interrupt formatting to normal page formatting - see above.
             while ( ( mbFormatContentOnInterrupt &&
@@ -816,7 +815,7 @@ bool SwLayAction::TurboAction_( const SwContentFrame *pCnt )
             return false;
         }
 
-        if ( pPage->IsInvalidLayout() || (IS_FLYS && IS_INVAFLY) )
+        if ( pPage->IsInvalidLayout() || (pPage->GetSortedObjs() && IS_INVAFLY) )
             return false;
     }
     if ( !pPage )
@@ -1655,7 +1654,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                 if ( ( IsInterrupt() && !mbFormatContentOnInterrupt ) ||
                      ( !bBrowse && pPage->IsInvalidLayout() ) ||
                      // consider interrupt formatting
-                     ( IS_FLYS && IS_INVAFLY && !mbFormatContentOnInterrupt )
+                     ( pPage->GetSortedObjs() && IS_INVAFLY && !mbFormatContentOnInterrupt )
                    )
                     return false;
             }
@@ -1703,7 +1702,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                                                             nBottom, pContent );
                     if ( !pTmp )
                     {
-                        if ( (!(IS_FLYS && IS_INVAFLY) ||
+                        if ( (!(pPage->GetSortedObjs() && IS_INVAFLY) ||
                               !lcl_FindFirstInvaObj( pPage, nBottom )) &&
                               (!pPage->IsInvalidLayout() ||
                                !lcl_FindFirstInvaLay( pPage, nBottom )))
@@ -1753,7 +1752,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                                                     nBottom, pContent );
                 if ( !pTmp )
                 {
-                    if ( (!(IS_FLYS && IS_INVAFLY) ||
+                    if ( (!(pPage->GetSortedObjs() && IS_INVAFLY) ||
                             !lcl_FindFirstInvaObj( pPage, nBottom )) &&
                             (!pPage->IsInvalidLayout() ||
                             !lcl_FindFirstInvaLay( pPage, nBottom )))
