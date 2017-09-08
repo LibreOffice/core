@@ -1,7 +1,5 @@
 "ScSubTotalDescriptorBase";"com::sun::star::container::XIndexAccess";"getCount()"
 "ScSubTotalDescriptorBase";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScSubTotalDescriptorBase";"com::sun::star::sheet::XSubTotalDescriptor";"addNew()"
-"ScSubTotalDescriptorBase";"com::sun::star::sheet::XSubTotalDescriptor";"clear()"
 "ScSubTotalDescriptorBase";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScSubTotalDescriptorBase";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScSubTotalDescriptorBase";"com::sun::star::sheet::SubTotalDescriptor";"InsertPageBreaks"
