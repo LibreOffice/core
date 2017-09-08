@@ -623,10 +623,12 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                         if(pStartAttr && pStartAttr->GetStart() < mpImpl->maSelection.GetStart().GetIndex())
                         {
                             mpImpl->maSelection.GetStart().GetIndex() = pStartAttr->GetStart();
+                            aOldSel = mpImpl->maSelection; // update to deleted!
                         }
                         if(pEndAttr && pEndAttr->GetEnd() > mpImpl->maSelection.GetEnd().GetIndex())
                         {
                             mpImpl->maSelection.GetEnd().GetIndex() = pEndAttr->GetEnd();
+                            aOldSel = mpImpl->maSelection; // update to deleted!
                         }
                     }
                     aCurSel = ImpDelete( nDel, nMode );
