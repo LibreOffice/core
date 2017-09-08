@@ -74,9 +74,6 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
     get(m_pBtnUnique, "unique");
     get(m_pFtDbArea, "dbarea");
 
-    for (sal_uInt16 i=0; i<=MAXCOL; i++)
-        pEntryLists[i] = nullptr;
-
     Init( rArgSet );
 }
 
@@ -87,8 +84,7 @@ ScPivotFilterDlg::~ScPivotFilterDlg()
 
 void ScPivotFilterDlg::dispose()
 {
-    for (sal_uInt16 i=0; i<=MAXCOL; i++)
-        delete pEntryLists[i];
+    for (auto& a : m_pEntryLists) a.reset();
 
     delete pOutItem;
     m_pLbField1.clear();
@@ -305,7 +301,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
         if ( pDoc && nFieldSelPos )
         {
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
-            if (!pEntryLists[nColumn])
+            if (!m_pEntryLists[nColumn])
             {
                 WaitObject aWaiter( this );
 
@@ -315,12 +311,12 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
                 nFirstRow++;
                 bool bHasDates = false;
                 bool bCaseSens = m_pBtnCase->IsChecked();
-                pEntryLists[nColumn] = new std::vector<ScTypedStrData>;
+                m_pEntryLists[nColumn].reset( new std::vector<ScTypedStrData> );
                 pDoc->GetFilterEntriesArea(
-                    nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *pEntryLists[nColumn], bHasDates);
+                    nColumn, nFirstRow, nLastRow, nTab, bCaseSens, *m_pEntryLists[nColumn], bHasDates);
             }
 
-            std::vector<ScTypedStrData>* pColl = pEntryLists[nColumn];
+            std::vector<ScTypedStrData>* pColl = m_pEntryLists[nColumn].get();
             std::vector<ScTypedStrData>::const_iterator it = pColl->begin(), itEnd = pColl->end();
             for (; it != itEnd; ++it)
             {
@@ -522,8 +518,8 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
 
     if (pBox == m_pBtnCase)                    // value lists
     {
-        for (sal_uInt16 i=0; i<=MAXCOL; i++)
-            DELETEZ( pEntryLists[i] );
+        for (auto& a : m_pEntryLists)
+            a.reset();
 
         OUString aCurVal1 = m_pEdVal1->GetText();
         OUString aCurVal2 = m_pEdVal2->GetText();

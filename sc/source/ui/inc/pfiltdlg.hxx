@@ -28,6 +28,9 @@
 #include <vcl/combobox.hxx>
 #include "address.hxx"
 #include "queryparam.hxx"
+#include <array>
+#include <memory>
+#include <vector>
 
 class ScViewData;
 class ScDocument;
@@ -78,7 +81,7 @@ private:
     VclPtr<ListBox>            aFieldLbArr[3];
     VclPtr<ListBox>            aCondLbArr[3];
 
-    std::vector<ScTypedStrData>* pEntryLists[MAXCOLCOUNT];
+    std::array<std::unique_ptr<std::vector<ScTypedStrData>>, MAXCOLCOUNT> m_pEntryLists;
 
 private:
     void    Init            ( const SfxItemSet& rArgSet );
