@@ -1649,20 +1649,23 @@ void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordere
             rLabel = GetEntryText(pEntry);
         else
             rLabel = GetEntryText(pEntry) + ";" + rLabel;
-    }
 
-    if (pEntry->HasChildren())
-    {
-        const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
-        for (auto& rChild : rChildren)
+        // Prerequisite: the selection mechanism guarantees that if a child is
+        // selected then also the parent is selected, so we only have to
+        // inspect the children in case the parent is selected.
+        if (pEntry->HasChildren())
         {
-            OUString aLabel = rLabel;
-            GetRecursiveChecked( rChild.get(), vOut, aLabel);
-            if (!aLabel.isEmpty() && aLabel != rLabel)
-                vOut.insert( aLabel);
+            const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
+            for (auto& rChild : rChildren)
+            {
+                OUString aLabel = rLabel;
+                GetRecursiveChecked( rChild.get(), vOut, aLabel);
+                if (!aLabel.isEmpty() && aLabel != rLabel)
+                    vOut.insert( aLabel);
+            }
+            // Let the caller not add the parent alone.
+            rLabel.clear();
         }
-        // Let the caller not add the parent alone.
-        rLabel.clear();
     }
 }
 
