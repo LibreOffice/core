@@ -22,18 +22,16 @@
 
 SdrDragStatUserData::~SdrDragStatUserData() = default;
 
+SdrDragStat::~SdrDragStat()
+{
+}
+
 void SdrDragStat::Clear(bool bLeaveOne)
 {
-    while (!aPnts.empty()) {
-        delete aPnts.back();
-        aPnts.pop_back();
-    }
-    delete pUser;
-    pUser=nullptr;
-    aPnts.clear();
-    if (bLeaveOne) {
-        aPnts.push_back(new Point);
-    }
+    mpUserData.reset();
+    mvPnts.clear();
+    if (bLeaveOne)
+        mvPnts.emplace_back();
 }
 
 void SdrDragStat::Reset()
@@ -70,31 +68,22 @@ void SdrDragStat::NextMove(const Point& rPnt)
 {
     aPos0=GetNow();
     RealNow()=rPnt;
-    Point aBla=KorregPos(GetRealNow(),GetPrev());
-    Now()=aBla;
+    Now()=GetRealNow();
 }
 
 void SdrDragStat::NextPoint()
 {
     Point aPnt(GetNow());
-    aPnts.push_back(new Point(KorregPos(GetRealNow(),aPnt)));
+    mvPnts.emplace_back(GetRealNow());
     Prev()=aPnt;
 }
 
 void SdrDragStat::PrevPoint()
 {
-    if (aPnts.size()>=2) { // one has to remain at all times
-        Point* pPnt=aPnts[aPnts.size()-2];
-        aPnts.erase(aPnts.begin()+aPnts.size()-2);
-        delete pPnt;
-        Now()=KorregPos(GetRealNow(),GetPrev());
+    if (mvPnts.size()>=2) { // one has to remain at all times
+        mvPnts.erase(mvPnts.begin()+mvPnts.size()-2);
+        Now() = GetRealNow();
     }
-}
-
-Point SdrDragStat::KorregPos(const Point& rNow, const Point& /*rPrev*/)
-{
-    Point aRet(rNow);
-    return aRet;
 }
 
 bool SdrDragStat::CheckMinMoved(const Point& rPnt)

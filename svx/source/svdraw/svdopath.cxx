@@ -1269,10 +1269,10 @@ bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
     if (bMakeStartPoint) {
         aPathPolygon[0][1]=rStat.GetNow();
     }
-    ImpPathCreateUser* pU=new ImpPathCreateUser;
+    std::unique_ptr<ImpPathCreateUser> pU(new ImpPathCreateUser);
     pU->eStartKind=meObjectKind;
     pU->eAktKind=meObjectKind;
-    rStat.SetUser(pU);
+    rStat.SetUser(std::move(pU));
     return true;
 }
 
