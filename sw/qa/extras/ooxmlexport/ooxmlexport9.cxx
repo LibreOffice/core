@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
@@ -205,6 +206,16 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
 #endif
+
+DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx")
+{
+    int i = mbExported ? 0 : 1;
+    //divide everything by 10 to avoid rounding errors etc
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(15995/10), getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(8001/10),  getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(4001/10),  getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1600/10),  getShape(++i)->getSize().Width/10);
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")
 {
