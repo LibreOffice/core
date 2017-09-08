@@ -18,18 +18,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:IncrementLevel"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementLevel"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementSubLevels"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementLevel"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementSubLevels"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementSubLevels"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveDown"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveUp"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveDownSubItems"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveUpSubItems"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertNeutralParagraph"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:MoveUp"/>
- <toolbar:toolbaritem xlink:href=".uno:MoveDown"/>
- <toolbar:toolbaritem xlink:href=".uno:MoveUpSubItems"/>
- <toolbar:toolbaritem xlink:href=".uno:MoveDownSubItems"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:NumberingStart"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:JumpDownThisLevel" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:JumpUpThisLevel" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ContinueNumbering" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog"/>
 </toolbar:toolbar>
