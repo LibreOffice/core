@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_cc3c4232",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-09-08T10:16:29Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be SAL_WARN, given...",
+      "revId": "a3646e3b2f09a6498a0e6e5d1430faf343d4af58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ec49fed1",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1509,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-09-08T10:16:29Z",
+      "side": 1,
+      "message": "... this is already a WARN not INFO?",
+      "revId": "a3646e3b2f09a6498a0e6e5d1430faf343d4af58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
