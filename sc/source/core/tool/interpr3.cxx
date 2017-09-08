@@ -3042,8 +3042,14 @@ void ScInterpreter::ScGeoMean()
                     nVal += log(x);
                     nValCount++;
                 }
-                else
-                    SetError( FormulaError::IllegalArgument);
+                else if ( x == 0.0 )
+                {
+                    // value of 0 means that function result will be 0
+                    while ( --nParamCount > 0 )
+                        Pop();
+                    PushDouble( 0.0 );
+                    return;
+                }
                 break;
             }
             case svSingleRef :
@@ -3058,8 +3064,14 @@ void ScInterpreter::ScGeoMean()
                         nVal += log(x);
                         nValCount++;
                     }
-                    else
-                        SetError( FormulaError::IllegalArgument);
+                    else if ( x == 0.0 )
+                    {
+                        // value of 0 means that function result will be 0
+                        while ( --nParamCount > 0 )
+                            Pop();
+                        PushDouble( 0.0 );
+                        return;
+                    }
                 }
                 break;
             }
@@ -3077,8 +3089,14 @@ void ScInterpreter::ScGeoMean()
                         nVal += log(nCellVal);
                         nValCount++;
                     }
-                    else
-                        SetError( FormulaError::IllegalArgument);
+                    else if ( nCellVal == 0.0 )
+                    {
+                        // value of 0 means that function result will be 0
+                        while ( --nParamCount > 0 )
+                            Pop();
+                        PushDouble( 0.0 );
+                        return;
+                    }
                     SetError(nErr);
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(nCellVal, nErr))
                     {
@@ -3087,8 +3105,14 @@ void ScInterpreter::ScGeoMean()
                             nVal += log(nCellVal);
                             nValCount++;
                         }
-                        else
-                            SetError( FormulaError::IllegalArgument);
+                        else if ( nCellVal == 0.0 )
+                        {
+                            // value of 0 means that function result will be 0
+                            while ( --nParamCount > 0 )
+                                Pop();
+                            PushDouble( 0.0 );
+                            return;
+                        }
                     }
                     SetError(nErr);
                 }
@@ -3112,8 +3136,14 @@ void ScInterpreter::ScGeoMean()
                                 nVal += log(x);
                                 nValCount++;
                             }
-                            else
-                                SetError( FormulaError::IllegalArgument);
+                            else if ( x == 0.0 )
+                            {
+                                // value of 0 means that function result will be 0
+                                while ( --nParamCount > 0 )
+                                    Pop();
+                                PushDouble( 0.0 );
+                                return;
+                            }
                         }
                     }
                     else
@@ -3127,8 +3157,14 @@ void ScInterpreter::ScGeoMean()
                                     nVal += log(x);
                                     nValCount++;
                                 }
-                                else
-                                    SetError( FormulaError::IllegalArgument);
+                                else if ( x == 0.0 )
+                                {
+                                    // value of 0 means that function result will be 0
+                                    while ( --nParamCount > 0 )
+                                        Pop();
+                                    PushDouble( 0.0 );
+                                    return;
+                                }
                             }
                     }
                 }
