@@ -3547,13 +3547,13 @@
      <table:table-cell table:number-columns-repeated="6"/>
     </table:table-row>
     <table:table-row table:style-name="ro7">
-     <table:table-cell table:style-name="ce10" table:formula="of:=GEOMEAN([.I1:.I4])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Err:502</text:p>
+     <table:table-cell table:style-name="ce10" table:formula="of:=GEOMEAN([.I1:.I4])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Err:502</text:p>
-     </table:table-cell>
-     <table:table-cell table:style-name="ce15" table:formula="of:=ISERROR([.A2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce10" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+      </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=ROUND([.A2];12)=ROUND([.B2];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=GEOMEAN(I1:I4)" calcext:value-type="string">
@@ -3699,7 +3699,10 @@
      <table:table-cell office:value-type="float" office:value="0.5" calcext:value-type="float">
       <text:p>0.5</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce10" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce10" office:value-type="float" office:value="-9" calcext:value-type="float">
+      <text:p>-9</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10"/>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell table:style-name="Gnumeric-default"/>
      <table:table-cell table:style-name="ce29"/>
@@ -4558,7 +4561,69 @@
      <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=GEOMEAN(J2:K5)" calcext:value-type="string">
       <text:p>=GEOMEAN(J2:K5)</text:p>
      </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:style-name="ce10" table:formula="of:=GEOMEAN([.J21:.J25])" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#NUM!</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#NUM!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce59" table:formula="of:=ISERROR([.A38])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=GEOMEAN(J21:J25)" calcext:value-type="string">
+      <text:p>=GEOMEAN(J21:J25)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>at least 1 value must be given</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:formula="of:=GEOMEAN()" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#NUM!</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#NUM!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce60" table:formula="of:=ISERROR([.A39])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=GEOMEAN()" calcext:value-type="string">
+      <text:p>=GEOMEAN()</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>at least 1 value must be given</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="17"/>
+     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce34"/>
+     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce25"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce25" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce35"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro7">
+     <table:table-cell table:formula="of:=GEOMEAN([.J2:.J6])" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce61" table:formula="of:=ISERROR([.A40])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A40])" office:value-type="string" office:string-value="=GEOMEAN(J2:J6)" calcext:value-type="string">
+      <text:p>=GEOMEAN(J2:J6)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>negative values are not allowed</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
      <table:table-cell table:style-name="ce32"/>
      <table:table-cell table:style-name="ce34"/>
      <table:table-cell table:style-name="ce25"/>
@@ -4570,7 +4635,7 @@
      <table:table-cell table:style-name="ce35"/>
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7" table:number-rows-repeated="4">
+    <table:table-row table:style-name="ro7" table:number-rows-repeated="3">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:style-name="ce21"/>
