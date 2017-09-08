@@ -1813,11 +1813,10 @@ SvxCharSetColorItem::SvxCharSetColorItem( const sal_uInt16 nId ) :
 
 
 SvxCharSetColorItem::SvxCharSetColorItem( const Color& rCol,
-                                          const rtl_TextEncoding _eFrom,
                                           const sal_uInt16 nId ) :
     SvxColorItem( rCol, nId ),
 
-    eFrom( _eFrom )
+    eFrom( RTL_TEXTENCODING_DONTKNOW )
 {
 }
 

@@ -287,7 +287,7 @@ public:
 
     bool                Read( SvStream& rInput, const TextSelection* pSel = nullptr );
 
-    bool                Write( SvStream& rOutput, const TextSelection* pSel = nullptr, bool bHTML = false );
+    bool                Write( SvStream& rOutput );
 
     TextPaM             GetPaM( const Point& rDocPos );
     tools::Rectangle    PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );

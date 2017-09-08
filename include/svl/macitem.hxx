@@ -88,7 +88,7 @@ public:
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
     bool operator==( const SvxMacroTableDtor& rOther ) const;
 
-    void        Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
+    void        Read( SvStream & );
     SvStream&   Write( SvStream & ) const;
 
     static sal_uInt16 GetVersion() { return SVX_MACROTBL_AKTVERSION; }

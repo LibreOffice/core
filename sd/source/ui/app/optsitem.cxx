@@ -338,12 +338,10 @@ void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptionsContents::SdOptionsContents(bool bImpress, bool bUseConfig) :
-    SdOptionsGeneric( bImpress, bUseConfig ?
-                      ( bImpress ?
+SdOptionsContents::SdOptionsContents(bool bImpress) :
+    SdOptionsGeneric( bImpress, bImpress ?
                         OUString( "Office.Impress/Content" ) :
-                        OUString( "Office.Draw/Content" ) ) :
-                      OUString() )
+                        OUString( "Office.Draw/Content" ) )
 {
     EnableModify( true );
 }
@@ -1363,7 +1361,7 @@ void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 
 SdOptions::SdOptions(bool bImpress) :
     SdOptionsLayout( bImpress, true ),
-    SdOptionsContents( bImpress, true ),
+    SdOptionsContents( bImpress ),
     SdOptionsMisc( bImpress, true ),
     SdOptionsSnap( bImpress, true ),
     SdOptionsZoom( bImpress ),

@@ -94,10 +94,10 @@ bool SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
     return true;
 }
 
-void SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
+void SvxMacroTableDtor::Read( SvStream& rStrm )
 {
-    if( SVX_MACROTBL_VERSION40 <= nVersion )
-        rStrm.ReadUInt16( nVersion );
+    sal_uInt16 nVersion;
+    rStrm.ReadUInt16( nVersion );
 
     short nMacro(0);
     rStrm.ReadInt16(nMacro);

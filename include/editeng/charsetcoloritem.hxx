@@ -35,8 +35,7 @@ class EDITENG_DLLPUBLIC SvxCharSetColorItem : public SvxColorItem
     rtl_TextEncoding eFrom;
 public:
     explicit SvxCharSetColorItem( const sal_uInt16 nId  );
-    SvxCharSetColorItem( const Color& aColor, const rtl_TextEncoding eFrom,
-                     const sal_uInt16 nId  );
+    SvxCharSetColorItem( const Color& aColor, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool GetPresentation( SfxItemPresentation ePres,

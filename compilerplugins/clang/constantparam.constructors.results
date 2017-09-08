@@ -52,15 +52,15 @@ connectivity/source/inc/calc/CTable.hxx:60
     ""
 connectivity/source/inc/dbase/DTable.hxx:149
     void connectivity::dbase::ODbaseTable::ODbaseTable(class connectivity::sdbcx::OCollection *,class connectivity::dbase::ODbaseConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+    const class rtl::OUString & Description
+    ""
+connectivity/source/inc/dbase/DTable.hxx:149
+    void connectivity::dbase::ODbaseTable::ODbaseTable(class connectivity::sdbcx::OCollection *,class connectivity::dbase::ODbaseConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
     const class rtl::OUString & SchemaName
     ""
 connectivity/source/inc/dbase/DTable.hxx:149
     void connectivity::dbase::ODbaseTable::ODbaseTable(class connectivity::sdbcx::OCollection *,class connectivity::dbase::ODbaseConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
     const class rtl::OUString & CatalogName
-    ""
-connectivity/source/inc/dbase/DTable.hxx:149
-    void connectivity::dbase::ODbaseTable::ODbaseTable(class connectivity::sdbcx::OCollection *,class connectivity::dbase::ODbaseConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & Description
     ""
 connectivity/source/inc/flat/ETable.hxx:80
     void connectivity::flat::OFlatTable::OFlatTable(class connectivity::sdbcx::OCollection *,class connectivity::flat::OFlatConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
@@ -81,18 +81,6 @@ connectivity/source/inc/hsqldb/HView.hxx:40
 connectivity/source/inc/OColumn.hxx:72
     void connectivity::OColumn::OColumn(const class rtl::OUString &,const class rtl::OUString &,int,int,int,int,int)
     const class rtl::OUString & _aTableName
-    ""
-connectivity/source/inc/writer/WTable.hxx:79
-    void connectivity::writer::OWriterTable::OWriterTable(class connectivity::sdbcx::OCollection *,class connectivity::writer::OWriterConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & SchemaName
-    ""
-connectivity/source/inc/writer/WTable.hxx:79
-    void connectivity::writer::OWriterTable::OWriterTable(class connectivity::sdbcx::OCollection *,class connectivity::writer::OWriterConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & CatalogName
-    ""
-connectivity/source/inc/writer/WTable.hxx:79
-    void connectivity::writer::OWriterTable::OWriterTable(class connectivity::sdbcx::OCollection *,class connectivity::writer::OWriterConnection *,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
-    const class rtl::OUString & Description
     ""
 dbaccess/source/core/api/RowSetRow.hxx:41
     void dbaccess::ORowSetOldRowHelper::ORowSetOldRowHelper(const class rtl::Reference<class connectivity::ORowVector<class connectivity::ORowSetValue> > &)
@@ -250,27 +238,11 @@ include/editeng/brushitem.hxx:60
     void SvxBrushItem::SvxBrushItem(class SvStream &,unsigned short,unsigned short)
     unsigned short nWhich
     Which()
-include/editeng/bulletitem.hxx:64
-    void SvxBulletItem::SvxBulletItem(class SvStream &,unsigned short)
-    unsigned short nWhich
-    Which()
 include/editeng/colritem.hxx:42
     void SvxColorItem::SvxColorItem(class SvStream &,const unsigned short)
     const unsigned short nId
     Which()
-include/editeng/colritem.hxx:81
-    void SvxBackgroundColorItem::SvxBackgroundColorItem(class SvStream &,const unsigned short)
-    const unsigned short nId
-    Which()
-include/editeng/flditem.hxx:72
-    void SvxFieldItem::SvxFieldItem(class SvxFieldData *,const unsigned short)
-    const unsigned short nId
-    Which()
-include/editeng/rsiditem.hxx:23
-    void SvxRsidItem::SvxRsidItem(class SvStream &,unsigned short)
-    unsigned short nId
-    Which()
-include/editeng/scripttypeitem.hxx:53
+include/editeng/scripttypeitem.hxx:37
     const class SfxPoolItem * SvxScriptSetItem::GetItemOfScript(unsigned short,const class SfxItemSet &,enum SvtScriptType)
     unsigned short nSlotId
     Which()
@@ -346,10 +318,6 @@ include/sfx2/dinfdlg.hxx:90
     void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool)
     _Bool bUseThumbnailSave
     IsUseThumbnailSave()
-include/sfx2/mailmodelapi.hxx:89
-    enum SfxMailModel::SendMailResult SfxMailModel::AttachDocument(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,const class rtl::OUString &)
-    const class rtl::OUString & sDocumentType
-    ""
 include/sfx2/objsh.hxx:630
     void SfxObjectShell::DoDraw(class OutputDevice *,const class Point &,const class Size &,const class JobSetup &,unsigned short)
     const class JobSetup & rSetup
@@ -362,9 +330,25 @@ include/svl/aeitem.hxx:54
     void SfxAllEnumItem::SfxAllEnumItem(unsigned short,class SvStream &)
     unsigned short nWhich
     Which()
+include/svl/eitem.hxx:103
+    void SfxBoolItem::SfxBoolItem(unsigned short,class SvStream &)
+    unsigned short nWhich
+    Which()
 include/svl/int64item.hxx:22
     void SfxInt64Item::SfxInt64Item(unsigned short,class SvStream &)
     unsigned short nWhich
+    Which()
+include/svl/intitem.hxx:52
+    void SfxInt16Item::SfxInt16Item(unsigned short,class SvStream &)
+    unsigned short nWhich
+    Which()
+include/svl/intitem.hxx:119
+    void SfxInt32Item::SfxInt32Item(unsigned short,class SvStream &)
+    unsigned short which
+    Which()
+include/svl/intitem.hxx:139
+    void SfxUInt32Item::SfxUInt32Item(unsigned short,class SvStream &)
+    unsigned short which
     Which()
 include/svl/lckbitem.hxx:33
     void SfxLockBytesItem::SfxLockBytesItem(unsigned short,class SvStream &)
@@ -378,8 +362,8 @@ include/svl/slstitm.hxx:41
     void SfxStringListItem::SfxStringListItem(unsigned short,class SvStream &)
     unsigned short nWhich
     Which()
-include/svl/szitem.hxx:34
-    void SfxSizeItem::SfxSizeItem(unsigned short,const class Size &)
+include/svl/stritem.hxx:37
+    void SfxStringItem::SfxStringItem(unsigned short,class SvStream &)
     unsigned short nWhich
     Which()
 include/svl/visitem.hxx:39
@@ -394,22 +378,6 @@ include/svtools/ehdl.hxx:37
     void SfxErrorContext::SfxErrorContext(unsigned short,class vcl::Window *,const struct std::pair<const char *, class ErrCode> *,const class std::locale &)
     const class std::locale & rResLocaleP
     SvtResLocale()
-include/svtools/imapobj.hxx:73
-    void IMapObject::AppendCERNURL(class rtl::OStringBuffer &,const class rtl::OUString &) const
-    const class rtl::OUString & rBaseURL
-    ""
-include/svtools/imapobj.hxx:75
-    void IMapObject::AppendNCSAURL(class rtl::OStringBuffer &,const class rtl::OUString &) const
-    const class rtl::OUString & rBaseURL
-    ""
-include/svtools/imapobj.hxx:93
-    void IMapObject::Write(class SvStream &,const class rtl::OUString &) const
-    const class rtl::OUString & rBaseURL
-    ""
-include/svtools/imapobj.hxx:94
-    void IMapObject::Read(class SvStream &,const class rtl::OUString &)
-    const class rtl::OUString & rBaseURL
-    ""
 include/svtools/transfer.hxx:313
     class com::sun::star::uno::Any TransferableDataHelper::GetAny(enum SotClipboardFormatId,const class rtl::OUString &) const
     const class rtl::OUString & rDestDoc
@@ -418,58 +386,26 @@ include/svtools/transfer.hxx:351
     class com::sun::star::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &)
     const class rtl::OUString & rDestDoc
     ""
-include/svtools/treelistbox.hxx:762
+include/svtools/treelistbox.hxx:752
     void SvTreeListBox::ShowFocusRect(const class SvTreeListEntry *)
     const class SvTreeListEntry * pEntry
     FirstSelected()
-include/svx/charmap.hxx:135
-    void SvxShowCharSet::DrawChars_Impl(class OutputDevice &,int,int)
-    int n2
-    LastInView()
-include/svx/charmap.hxx:135
+include/svx/charmap.hxx:151
     void SvxShowCharSet::DrawChars_Impl(class OutputDevice &,int,int)
     int n1
     FirstInView()
-include/svx/chrtitem.hxx:87
-    void SvxChartRegressItem::SvxChartRegressItem(class SvStream &,unsigned short)
-    unsigned short nId
-    Which()
-include/svx/chrtitem.hxx:101
-    void SvxChartTextOrderItem::SvxChartTextOrderItem(class SvStream &,unsigned short)
-    unsigned short nId
-    Which()
-include/svx/chrtitem.hxx:118
-    void SvxChartKindErrorItem::SvxChartKindErrorItem(class SvStream &,unsigned short)
-    unsigned short nId
-    Which()
-include/svx/chrtitem.hxx:134
-    void SvxChartIndicateItem::SvxChartIndicateItem(class SvStream &,unsigned short)
-    unsigned short nId
-    Which()
-include/svx/sdangitm.hxx:31
-    void SdrAngleItem::SdrAngleItem(unsigned short,class SvStream &)
-    unsigned short nId
-    Which()
-include/svx/sdmetitm.hxx:33
-    void SdrMetricItem::SdrMetricItem(unsigned short,class SvStream &)
-    unsigned short nId
-    Which()
+include/svx/charmap.hxx:151
+    void SvxShowCharSet::DrawChars_Impl(class OutputDevice &,int,int)
+    int n2
+    LastInView()
 include/svx/sdr/animation/scheduler.hxx:54
     _Bool sdr::animation::CompareEvent::operator()(class sdr::animation::Event *const &,class sdr::animation::Event *const &) const
     class sdr::animation::Event *const & lhs
     Compare()
-include/svx/sdynitm.hxx:33
-    void SdrYesNoItem::SdrYesNoItem(unsigned short,class SvStream &)
-    unsigned short nId
-    Which()
 include/svx/svdoole2.hxx:163
     void SdrOle2Obj::SetGraphicToObj(const class Graphic &,const class rtl::OUString &)
     const class rtl::OUString & aMediaType
     ""
-include/svx/sxsiitm.hxx:27
-    void SdrScaleItem::SdrScaleItem(unsigned short,class SvStream &)
-    unsigned short nId
-    Which()
 include/test/primitive2dxmldump.hxx:39
     struct _xmlDoc * Primitive2dXmlDump::dumpAndParse(const class drawinglayer::primitive2d::Primitive2DContainer &,const class rtl::OUString &)
     const class rtl::OUString & rTempStreamName
@@ -478,15 +414,15 @@ include/vcl/btndlg.hxx:72
     void ButtonDialog::SetButtonHelpText(unsigned short,const class rtl::OUString &)
     const class rtl::OUString & rText
     ""
-include/vcl/dockwin.hxx:36
+include/vcl/dockwin.hxx:37
     void DockingData::DockingData(const class Point &,const class tools::Rectangle &,_Bool)
     _Bool b
     IsFloatingMode()
-include/vcl/dockwin.hxx:47
+include/vcl/dockwin.hxx:48
     void EndDockingData::EndDockingData(const class tools::Rectangle &,_Bool,_Bool)
     _Bool bCancelled
     IsDockingCanceled()
-include/vcl/dockwin.hxx:47
+include/vcl/dockwin.hxx:48
     void EndDockingData::EndDockingData(const class tools::Rectangle &,_Bool,_Bool)
     _Bool b
     IsFloatingMode()
@@ -510,19 +446,19 @@ include/vcl/virdev.hxx:130
     _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()
-include/xmloff/txtparae.hxx:455
+include/xmloff/txtparae.hxx:454
     void XMLTextParagraphExport::exportTextStyles(_Bool,_Bool)
     _Bool bProg
     IsShowProgress()
-include/xmloff/txtparae.hxx:505
+include/xmloff/txtparae.hxx:504
     void XMLTextParagraphExport::collectTextAutoStyles(const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool)
     _Bool bIsProgress
     IsShowProgress()
-include/xmloff/txtparae.hxx:535
+include/xmloff/txtparae.hxx:534
     void XMLTextParagraphExport::exportText(const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool)
     _Bool bIsProgress
     IsShowProgress()
-include/xmloff/xmlexp.hxx:279
+include/xmloff/xmlexp.hxx:280
     void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const enum FieldUnit,enum SvXMLExportFlags)
     const class rtl::OUString & implementationName
     ""
@@ -578,8 +514,8 @@ lotuswordpro/source/filter/lwpoverride.hxx:419
     void LwpIndentOverride::OverrideUseRelative(_Bool)
     _Bool use
     IsUseRelative()
-opencl/source/opencl_device.cxx:494
-    void opencl::(anonymous namespace)::LogWriter::text(const class rtl::OString &)
+opencl/source/opencl_device.cxx:492
+    void (anonymous namespace)::LogWriter::text(const class rtl::OString &)
     const class rtl::OString & rText
     ""
 reportdesign/source/ui/dlg/Condition.hxx:154
@@ -790,7 +726,7 @@ sw/source/filter/ww8/wrtww8.hxx:265
     void WW8_WrPlcSepx::WriteSepx(class SvStream &) const
     class SvStream & rStrm
     Strm()
-sw/source/filter/ww8/ww8scan.hxx:1532
+sw/source/filter/ww8/ww8scan.hxx:1531
     void WW8Fib::Write(class SvStream &)
     class SvStream & rStrm
     Strm()

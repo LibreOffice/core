@@ -210,7 +210,7 @@ protected:
     static vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent,
                              WinBits nWinBits, MessBoxStyle nMessBoxStyle );
     css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
-                             WinBits nForceWinBits, MessBoxStyle nForceMessBoxStyle );
+                             MessBoxStyle nForceMessBoxStyle );
 
 public:
 
@@ -764,7 +764,7 @@ css::awt::Rectangle VCLXToolkit::getWorkArea(  )
 
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor )
 {
-    return ImplCreateWindow( rDescriptor, WinBits(0), MessBoxStyle::NONE );
+    return ImplCreateWindow( rDescriptor, MessBoxStyle::NONE );
 }
 
 css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height )
@@ -1216,7 +1216,7 @@ extern "C" vcl::Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const css
 
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
-    WinBits nForceWinBits, MessBoxStyle nForceMessBoxStyle )
+    MessBoxStyle nForceMessBoxStyle )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1238,7 +1238,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     std::pair<WinBits, MessBoxStyle> aPair = ImplGetWinBits( rDescriptor.WindowAttributes,
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
     WinBits nWinBits = aPair.first;
-    nWinBits |= nForceWinBits;
     aPair.second |= nForceMessBoxStyle;
 
     VCLXWindow* pNewComp = nullptr;
@@ -1468,7 +1467,7 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
     aDescriptor.Parent            = aParent;
     aDescriptor.WindowAttributes  = nWindowAttributes;
     css::uno::Reference< css::awt::XMessageBox > xMsgBox(
-        ImplCreateWindow( aDescriptor, 0, nAddWinBits ), css::uno::UNO_QUERY );
+        ImplCreateWindow( aDescriptor, nAddWinBits ), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, css::uno::UNO_QUERY );
     if ( xMsgBox.is() && xWindow.is() )
     {

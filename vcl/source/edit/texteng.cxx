@@ -2440,24 +2440,13 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     return rInput.GetError() == ERRCODE_NONE;
 }
 
-bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML )
+bool TextEngine::Write( SvStream& rOutput )
 {
     TextSelection aSel;
-    if ( pSel )
-        aSel = *pSel;
-    else
-    {
-        const sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
-        TextNode* pNode = mpDoc->GetNodes()[ nParas - 1 ];
-        aSel.GetStart() = TextPaM( 0, 0 );
-        aSel.GetEnd() = TextPaM( nParas-1, pNode->GetText().getLength() );
-    }
-
-    if ( bHTML )
-    {
-        rOutput.WriteLine( "<HTML>" );
-        rOutput.WriteLine( "<BODY>" );
-    }
+    const sal_uInt32 nParas = static_cast<sal_uInt32>(mpDoc->GetNodes().size());
+    TextNode* pSelNode = mpDoc->GetNodes()[ nParas - 1 ];
+    aSel.GetStart() = TextPaM( 0, 0 );
+    aSel.GetEnd() = TextPaM( nParas-1, pSelNode->GetText().getLength() );
 
     for ( sal_uInt32 nPara = aSel.GetStart().GetPara(); nPara <= aSel.GetEnd().GetPara(); ++nPara  )
     {
@@ -2469,35 +2458,22 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
             ? aSel.GetEnd().GetIndex() : pNode->GetText().getLength();
 
         OUStringBuffer aText;
-        if ( !bHTML )
+        aText = "<P STYLE=\"margin-bottom: 0cm\">";
+
+        if ( nStartPos == nEndPos )
         {
-            aText = pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
+            // Empty lines will be removed by Writer
+            aText.append( "<BR>" );
         }
         else
         {
-            aText = "<P STYLE=\"margin-bottom: 0cm\">";
-
-            if ( nStartPos == nEndPos )
-            {
-                // Empty lines will be removed by Writer
-                aText.append( "<BR>" );
-            }
-            else
-            {
-                // Text before Attribute
-                aText.append( pNode->GetText().copy( nStartPos, nEndPos-nStartPos ) );
-            }
-
-            aText.append( "</P>" );
+            // Text before Attribute
+            aText.append( pNode->GetText().copy( nStartPos, nEndPos-nStartPos ) );
         }
+
+        aText.append( "</P>" );
         rOutput.WriteLine(OUStringToOString(aText.makeStringAndClear(),
             rOutput.GetStreamCharSet()));
-    }
-
-    if ( bHTML )
-    {
-        rOutput.WriteLine( "</BODY>" );
-        rOutput.WriteLine( "</HTML>" );
     }
 
     return rOutput.GetError() == ERRCODE_NONE;
