@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_ac72967a",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-09-08T04:10:26Z",
+      "side": 1,
+      "message": "s/operation system/operating system",
+      "range": {
+        "startLine": 32,
+        "startChar": 30,
+        "endLine": 32,
+        "endChar": 46
+      },
+      "revId": "406bb53c85aab37a078526724932d215341be308",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_ac961692",
         "filename": "README.md",
         "patchSetId": 2
