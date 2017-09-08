@@ -1935,3 +1935,62 @@ index aa09332..ed968bf 100644
 -- 
 2.12.3
 
+From 7cf3c6541a61f9d74cd51fb2a01344df783cb26d Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 8 Sep 2017 16:25:36 +0200
+Subject: [PATCH] EPUBTextGenerator: ignore invalid media types
+
+This assumes there is no image type that is valid in EPUB2, but not in
+EPUB3.
+---
+ src/lib/EPUBTextGenerator.cpp      | 26 +++++++++++++++++++++++++-
+ src/test/EPUBTextGeneratorTest.cpp | 23 +++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 0f7f1e0..1bd1e16 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -595,6 +595,27 @@ void EPUBTextGenerator::closeFrame()
+   m_impl->getHtml()->closeFrame();
+ }
+ 
++/// Checks if the media type is an EPUB 3 Core Media Type or not.
++static bool isValidMimeType(const RVNGString& mediaType)
++{
++  // Defined at <https://idpf.github.io/epub-cmt/v3/#sec-cmt-supported>.
++  static char const *(types[])=
++  {
++    "image/gif",
++    "image/png",
++    "image/jpeg",
++    "image/svg+xml"
++  };
++
++  for (const auto& i : types)
++  {
++    if (mediaType == i)
++      return true;
++  }
++
++  return false;
++}
++
+ void EPUBTextGenerator::insertBinaryObject(const librevenge::RVNGPropertyList &propList)
+ {
+   if (m_impl->getSplitGuard().splitOnSize())
+@@ -607,7 +628,10 @@ void EPUBTextGenerator::insertBinaryObject(const librevenge::RVNGPropertyList &p
+   for (RVNGPropertyList::Iter iter(propList); !iter.last(); iter.next())
+   {
+     if (RVNGString("librevenge:mime-type") == iter.key())
+-      mimetype.reset(iter()->clone());
++    {
++      if (isValidMimeType(iter()->getStr()))
++        mimetype.reset(iter()->clone());
++    }
+     else if (RVNGString("office:binary-data") == iter.key())
+       data.reset(iter()->clone());
+     else
+-- 
+2.12.3
+
