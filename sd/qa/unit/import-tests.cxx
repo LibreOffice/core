@@ -289,7 +289,7 @@ void SdImportTest::testDocumentLayout()
         { "tdf90403.pptx", "xml/tdf90403_", PPTX, -1 },
         { "tdf90338.odp", "xml/tdf90338_", ODP, PPTX },
         { "tdf92001.odp", "xml/tdf92001_", ODP, PPTX },
-// GCC -mpfmath=387 rounding issues in lclPushMarkerProperties
+// GCC -mfpmath=387 rounding issues in lclPushMarkerProperties
 // (oox/source/drawingml/lineproperties.cxx); see mail sub-thread starting at
 // <https://lists.freedesktop.org/archives/libreoffice/2016-September/
 // 075211.html> "Re: Test File: sc/qa/unit/data/functions/fods/chiinv.fods:
