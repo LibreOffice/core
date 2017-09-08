@@ -57,6 +57,7 @@ bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 
 SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
 {
+    assert(!"this item is not serialisable");
     return Clone();
 }
 
@@ -69,6 +70,7 @@ sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
 
 SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
+    assert(!"this item is not serialisable");
     return rStream;
 }
 

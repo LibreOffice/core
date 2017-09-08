@@ -998,7 +998,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
             SfxPoolItem* pNew = nullptr;
 
             READ(m_aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION);
-            READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
+//unimplemented            READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
             READ(m_aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION);
 
             rStream.ReadUInt16( m_aRepeatHeading ).ReadCharAsBool( m_bLayoutSplit ).ReadCharAsBool( m_bRowSplit ).ReadCharAsBool( m_bCollapsingBorders );
@@ -1043,7 +1043,7 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         WriterSpecificAutoFormatBlock block(rStream);
 
         m_aBreak.Store(rStream, m_aBreak.GetVersion(fileVersion));
-        m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
+//unimplemented        m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
         m_aKeepWithNextPara.Store(rStream, m_aKeepWithNextPara.GetVersion(fileVersion));
         rStream.WriteUInt16( m_aRepeatHeading ).WriteBool( m_bLayoutSplit ).WriteBool( m_bRowSplit ).WriteBool( m_bCollapsingBorders );
         m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
