@@ -152,6 +152,48 @@ void XMLLineBreakContext::startElement(const OUString &/*rName*/, const css::uno
     mrImport.GetGenerator().insertLineBreak();
 }
 
+/// Handler for <text:s>.
+class XMLSpaceContext : public XMLImportContext
+{
+public:
+    XMLSpaceContext(XMLImport &rImport);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+};
+
+XMLSpaceContext::XMLSpaceContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+void XMLSpaceContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    mrImport.GetGenerator().openSpan(librevenge::RVNGPropertyList());
+    mrImport.GetGenerator().insertSpace();
+    mrImport.GetGenerator().closeSpan();
+}
+
+/// Handler for <text:tab>.
+class XMLTabContext : public XMLImportContext
+{
+public:
+    XMLTabContext(XMLImport &rImport);
+
+    void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+};
+
+XMLTabContext::XMLTabContext(XMLImport &rImport)
+    : XMLImportContext(rImport)
+{
+}
+
+void XMLTabContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    mrImport.GetGenerator().openSpan(librevenge::RVNGPropertyList());
+    mrImport.GetGenerator().insertTab();
+    mrImport.GetGenerator().closeSpan();
+}
+
 /// Handler for <text:a>.
 class XMLHyperlinkContext : public XMLImportContext
 {
@@ -255,6 +297,10 @@ XMLImportContext *CreateChildContext(XMLImport &rImport, const OUString &rName)
 {
     if (rName == "text:line-break")
         return new XMLLineBreakContext(rImport);
+    if (rName == "text:s")
+        return new XMLSpaceContext(rImport);
+    if (rName == "text:tab")
+        return new XMLTabContext(rImport);
     return nullptr;
 }
 

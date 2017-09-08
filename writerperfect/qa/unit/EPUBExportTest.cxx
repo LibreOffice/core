@@ -63,6 +63,7 @@ public:
     void testNamedStyleInheritance();
     void testNestedSpan();
     void testLineBreak();
+    void testEscape();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testNamedStyleInheritance);
     CPPUNIT_TEST(testNestedSpan);
     CPPUNIT_TEST(testLineBreak);
+    CPPUNIT_TEST(testEscape);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -328,6 +330,19 @@ void EPUBExportTest::testLineBreak()
     assertXPath(mpXmlDoc, "//xhtml:p[1]/xhtml:br", 1);
     // This was 0, line break inside span was not handled.
     assertXPath(mpXmlDoc, "//xhtml:p[2]/xhtml:br", 1);
+}
+
+void EPUBExportTest::testEscape()
+{
+    createDoc("escape.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This was lost.
+    assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[1]", OUString::fromUtf8("\xc2\xa0"));
+    // Make sure escaping happens only once.
+    assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[2]", "a&b");
+    // This was also lost.
+    assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[3]", "\t");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
