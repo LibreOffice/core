@@ -40,10 +40,10 @@ class XclExpPCItem : public XclExpRecord, public XclPCItem
 {
 public:
     explicit            XclExpPCItem( const OUString& rText );
-    explicit            XclExpPCItem( double fValue );
-    explicit            XclExpPCItem( const DateTime& rDateTime );
+    explicit            XclExpPCItem( double fValue, const OUString& rText = OUString() );
+    explicit            XclExpPCItem( const DateTime& rDateTime, const OUString& rText = OUString() );
     explicit            XclExpPCItem( sal_Int16 nValue );
-    explicit            XclExpPCItem( bool bValue );
+    explicit            XclExpPCItem( bool bValue, const OUString& rText = OUString() );
 
     sal_uInt16   GetTypeFlag() const { return mnTypeFlag; }
 
@@ -120,11 +120,11 @@ private:
     /** Inserts an original text item, if it is not contained already. */
     void                InsertOrigTextItem( const OUString& rText );
     /** Inserts an original value item, if it is not contained already. */
-    void                InsertOrigDoubleItem( double fValue );
+    void                InsertOrigDoubleItem( double fValue, const OUString& rText );
     /** Inserts an original date/time item, if it is not contained already. */
-    void                InsertOrigDateTimeItem( const DateTime& rDateTime );
+    void                InsertOrigDateTimeItem( const DateTime& rDateTime, const OUString& rText );
     /** Inserts an original boolean item, if it is not contained already. */
-    void                InsertOrigBoolItem( bool bValue );
+    void                InsertOrigBoolItem( bool bValue, const OUString& rText );
 
     /** Inserts an item into the grouping item list. Does not change anything else.
         @return  The list index of the new item. */
