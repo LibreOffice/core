@@ -205,6 +205,7 @@ DECLARE_WW8EXPORT_TEST(testTdf112074_RTLtableJustification, "tdf112074_RTLtableJ
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right To Left writing mode", text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Horizontal Orientation", text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTable, "HoriOrient"));
     CPPUNIT_ASSERT_MESSAGE("Table Indent", getProperty<long>(xTable, "LeftMargin") > 3000);
+    CPPUNIT_ASSERT_MESSAGE("Table Indent is 3750", getProperty<long>(xTable, "LeftMargin") < 4000 );
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")

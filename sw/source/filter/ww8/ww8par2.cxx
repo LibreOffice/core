@@ -169,7 +169,6 @@ class WW8TabDesc
     short m_nMaxRight;
     short m_nSwWidth;
     short m_nPreferredWidth;
-    short m_nOrgDxaLeft;
 
     bool m_bOk;
     bool m_bClaimLineFormat;
@@ -1848,7 +1847,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_nMaxRight(0),
     m_nSwWidth(0),
     m_nPreferredWidth(0),
-    m_nOrgDxaLeft(0),
     m_bOk(true),
     m_bClaimLineFormat(false),
     m_eOri(text::HoriOrientation::NONE),
@@ -1976,7 +1974,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         // shift the whole table to that margin (see below)
                         {
                             short nDxaNew = (sal_Int16)SVBT16ToShort( pParams );
-                            m_nOrgDxaLeft = nDxaNew;
                             if( nDxaNew < nTabeDxaNew )
                                 nTabeDxaNew = nDxaNew;
                         }
@@ -2576,7 +2573,6 @@ void WW8TabDesc::CreateSwTable()
             //inside the frame, in word the dialog involved greys out the
             //ability to set the margin.
             SvxLRSpaceItem aL( RES_LR_SPACE );
-            // set right to original DxaLeft (i28656)
 
             long nLeft = 0;
             if (!m_bIsBiDi)
@@ -2585,9 +2581,8 @@ void WW8TabDesc::CreateSwTable()
             {
                 const short nTableWidth = m_nPreferredWidth ? m_nPreferredWidth : m_nSwWidth;
                 nLeft = m_pIo->m_aSectionManager.GetTextAreaWidth();
-                nLeft = nLeft - nTableWidth - m_nOrgDxaLeft;
+                nLeft = nLeft - nTableWidth - GetMinLeft();
             }
-
             aL.SetLeft(nLeft);
 
             m_aItemSet.Put(aL);
