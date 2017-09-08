@@ -348,7 +348,6 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
 
     if( pControl == nil ) {
         SAL_INFO("fpicker.aqua","get value for unknown control " << nControlId);
-        aRetval <<= true;
     } else {
         if( [pControl class] == [NSPopUpButton class] ) {
             aRetval = HandleGetListValue(pControl, nControlAction);
