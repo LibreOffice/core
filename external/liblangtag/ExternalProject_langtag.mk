@@ -28,6 +28,11 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 			--enable-shared --disable-static) \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
+		CFLAGS='$(CFLAGS) \
+				$(if $(ENABLE_OPTIMIZED), \
+					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
+				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
 		LIBXML2_LIBS="$(if $(filter WNT,$(OS)),-L$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc -llibxml2,$(LIBXML_LIBS))" \
