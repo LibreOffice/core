@@ -24,6 +24,7 @@ namespace svx { class OptHeaderTabListBox; }
 class CuiAboutConfigTabPage;
 class CuiAboutConfigValueDialog;
 struct Prop_Impl;
+struct UserData;
 
 class CuiCustomMultilineEdit : public Edit
 {
@@ -46,6 +47,7 @@ private:
     VclPtr<PushButton> m_pEditBtn;
     VclPtr<PushButton> m_pSearchBtn;
     VclPtr<Edit> m_pSearchEdit;
+    std::vector < std::unique_ptr<UserData> > m_vectorUserData;
 
     SvTreeListEntries m_modifiedPrefBoxEntries;
     std::vector< std::shared_ptr< Prop_Impl > > m_vectorOfModified;
