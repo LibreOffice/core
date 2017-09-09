@@ -210,7 +210,8 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rStatus));
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rType));
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rValue));
-    pEntry->SetUserData( new UserData(rPropertyPath) );
+    m_pUserData = o3tl::make_unique<UserData>(rPropertyPath);
+    pEntry->SetUserData(m_pUserData.get());
 
     if(bInsertToPrefBox)
         m_pPrefBox->Insert( pEntry, pParentEntry );
@@ -291,8 +292,8 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
                 pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
 
-                pEntry->SetUserData( new UserData(xNextNameAccess, lineage + 1) );
-                pEntry->EnableChildrenOnDemand();
+                m_pUserData = o3tl::make_unique<UserData>(xNextNameAccess, lineage + 1);
+                pEntry->SetUserData(m_pUserData.get());
                 m_pPrefBox->Insert( pEntry, pParentEntry );
             }
         }
