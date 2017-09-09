@@ -887,15 +887,50 @@ void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
     rStrm >> maItemInfo;
 }
 
-void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
+void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const XclImpRoot& rRoot ) const
 {
-    if (const OUString* pItemName = GetItemName())
+    if(!mpCacheField)
+        return;
+
+    const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx );
+    if(!pCacheItem)
+        return;
+
+    OUString sItemName;
+    if(pCacheItem->GetType() == EXC_PCITEM_TEXT || pCacheItem->GetType() == EXC_PCITEM_ERROR)
     {
-        ScDPSaveMember& rMember = *rSaveDim.GetMemberByName( *pItemName );
-        rMember.SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
-        rMember.SetShowDetails( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL ) );
+        const OUString* pItemName = pCacheItem->GetText();
+        if(!pItemName)
+            return;
+        sItemName = *pItemName;
+    }
+    else if (pCacheItem->GetType() == EXC_PCITEM_DOUBLE)
+    {
+        sItemName = pObj->GetFormattedString(rSaveDim.GetName(), *pCacheItem->GetDouble());
+    }
+    else if (pCacheItem->GetType() == EXC_PCITEM_INTEGER)
+    {
+        sItemName = pObj->GetFormattedString(rSaveDim.GetName(), static_cast<double>(*pCacheItem->GetInteger()));
+    }
+    else if (pCacheItem->GetType() == EXC_PCITEM_BOOL)
+    {
+        sItemName = pObj->GetFormattedString(rSaveDim.GetName(), static_cast<double>(*pCacheItem->GetBool()));
+    }
+    else if (pCacheItem->GetType() == EXC_PCITEM_DATETIME)
+    {
+        sItemName = pObj->GetFormattedString(rSaveDim.GetName(), rRoot.GetDoubleFromDateTime(*pCacheItem->GetDateTime()));
+    }
+    else // EXC_PCITEM_EMPTY || EXC_PCITEM_INVALID
+        return;
+
+    // Find member and set properties
+    ScDPSaveMember* pMember = rSaveDim.GetExistingMemberByName( sItemName );
+    if(pMember)
+    {
+        pMember->SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
+        pMember->SetShowDetails( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL ) );
         if (maItemInfo.HasVisName())
-            rMember.SetLayoutName(*maItemInfo.GetVisName());
+            pMember->SetLayoutName(*maItemInfo.GetVisName());
     }
 }
 
@@ -1079,9 +1114,6 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     // orientation
     rSaveDim.SetOrientation( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) );
 
-    // general field info
-    ConvertFieldInfo( rSaveDim );
-
     // visible name
     if (const OUString* pVisName = maFieldInfo.GetVisName())
         if (!pVisName->isEmpty())
@@ -1127,19 +1159,29 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     return &rSaveDim;
 }
 
-void XclImpPTField::ConvertFieldInfo( ScDPSaveDimension& rSaveDim ) const
+void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot ) const
 {
-    rSaveDim.SetShowEmpty( ::get_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL ) );
+    const OUString& rFieldName = GetFieldName();
+    if( rFieldName.isEmpty() )
+        return;
+
+    const XclImpPCField* pCacheField = GetCacheField();
+    if( !pCacheField || !pCacheField->IsSupportedField() )
+        return;
+
+    ScDPSaveDimension* pTest = rSaveData.GetExistingDimensionByName(rFieldName);
+    if (!pTest)
+        return;
+
+    pTest->SetShowEmpty( ::get_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL ) );
     for( XclImpPTItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ConvertItem( rSaveDim );
+        (*aIt)->ConvertItem( *pTest, pObj, rRoot );
 }
 
 void XclImpPTField::ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const
 {
     // orientation
     rSaveDim.SetOrientation( DataPilotFieldOrientation_DATA );
-    // general field info
-    ConvertFieldInfo( rSaveDim );
     // extended data field info
     ConvertDataFieldInfo( rSaveDim, rDataInfo );
 }
@@ -1422,6 +1464,7 @@ void XclImpPivotTable::Convert()
     GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
     mpDPObj = pDPObj;
 
+    ApplyFieldInfo();
     ApplyMergeFlags(aOutRange, aSaveData);
 }
 
@@ -1509,6 +1552,34 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
             rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
         }
     }
+}
+
+
+void XclImpPivotTable::ApplyFieldInfo()
+{
+    mpDPObj->BuildAllDimensionMembers();
+    ScDPSaveData& rSaveData = *mpDPObj->GetSaveData();
+
+    // row fields
+    for( auto aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
+        if( const XclImpPTField* pField = GetField( *aIt ) )
+            pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
+
+    // column fields
+    for( auto aIt = maColFields.begin(), aEnd = maColFields.end(); aIt != aEnd; ++aIt )
+        if( const XclImpPTField* pField = GetField( *aIt ) )
+            pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
+
+    // page fields
+    for( auto aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
+        if( const XclImpPTField* pField = GetField( *aIt ) )
+            pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
+
+    // hidden fields
+    for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )
+        if( const XclImpPTField* pField = GetField( nField ) )
+            if (!pField->GetAxes())
+                pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
 }
 
 XclImpPivotTableManager::XclImpPivotTableManager( const XclImpRoot& rRoot ) :
