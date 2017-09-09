@@ -9,7 +9,7 @@ AdminChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_5	Combo
 AdminChangeFolder	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_6		
 AdminChangeFolder	DlgLine	Line	0	234	376	0	1				
 AdminChangeFolder	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_7		
-AdminChangeFolder	List	DirectoryList	21	90	332	97	7	TARGETDIR		TailText	
+AdminChangeFolder	List	DirectoryList	21	90	345	97	3	TARGETDIR		TailText	
 AdminChangeFolder	NewFolder	PushButton	335	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_9
 AdminChangeFolder	OK	PushButton	230	243	66	17	3		OOO_CONTROL_10	Cancel	
 AdminChangeFolder	Tail	PathEdit	21	207	332	17	3	TARGETDIR		OK	
@@ -61,20 +61,20 @@ CustomSetup	Back	PushButton	164	243	66	17	3		OOO_CONTROL_46	Next
 CustomSetup	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomSetup	BannerLine	Line	0	44	376	0	1				
 CustomSetup	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_49	Tree	
-CustomSetup	ChangeFolder	PushButton	301	203	66	17	3		OOO_CONTROL_50	Help	
-CustomSetup	Details	PushButton	93	243	66	17	3		OOO_CONTROL_51	Back	
+CustomSetup	ChangeFolder	PushButton	301	208	66	17	3		OOO_CONTROL_50	Help	
+CustomSetup	Details	PushButton	92	243	66	17	3		OOO_CONTROL_51	Back	
 CustomSetup	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_52		
 CustomSetup	DlgLine	Line	0	234	376	0	1				
-CustomSetup	DlgText	Text	9	51	360	10	3		OOO_CONTROL_53		
+CustomSetup	DlgText	Text	21	51	345	10	3		OOO_CONTROL_53		
 CustomSetup	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_54		
-CustomSetup	FeatureGroup	GroupBox	235	67	131	120	1		OOO_CONTROL_55		
-CustomSetup	Help	PushButton	22	243	66	17	3		OOO_CONTROL_56	Details	
-CustomSetup	InstallLabel	Text	8	190	360	10	3		OOO_CONTROL_57		
-CustomSetup	ItemDescription	Text	241	80	120	50	3		OOO_CONTROL_58		
-CustomSetup	Location	Text	8	203	291	20	3		OOO_CONTROL_59		
+CustomSetup	FeatureGroup	GroupBox	233	65	134	133	1		OOO_CONTROL_55		
+CustomSetup	Help	PushButton	21	243	66	17	3		OOO_CONTROL_56	Details	
+CustomSetup	InstallLabel	Text	21	200	278	10	3		OOO_CONTROL_57		
+CustomSetup	ItemDescription	Text	239	78	125	50	3		OOO_CONTROL_58		
+CustomSetup	Location	Text	21	213	278	20	3		OOO_CONTROL_59		
 CustomSetup	Next	PushButton	230	243	66	17	3		OOO_CONTROL_60	Cancel	
-CustomSetup	Size	Text	241	133	120	50	3		OOO_CONTROL_61		
-CustomSetup	Tree	SelectionTree	8	70	220	118	3	_BrowseProperty		ChangeFolder	
+CustomSetup	Size	Text	239	134	125	60	3		OOO_CONTROL_61		
+CustomSetup	Tree	SelectionTree	21	68	205	129	3	_BrowseProperty		ChangeFolder	
 CustomSetupTips	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 CustomSetupTips	BannerLine	Line	0	44	376	0	1				
 CustomSetupTips	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_64		
@@ -120,7 +120,7 @@ DiskSpaceRequirements	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_96
 DiskSpaceRequirements	DlgLine	Line	0	234	376	0	1				
 DiskSpaceRequirements	DlgText	Text	21	185	345	41	3		OOO_CONTROL_97		
 DiskSpaceRequirements	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_98		
-DiskSpaceRequirements	List	VolumeCostList	21	55	345	125	65539		{60}{80}{70}{70}{70}		
+DiskSpaceRequirements	List	VolumeCostList	21	55	345	125	65539		{55}{80}{70}{70}{70}		
 DiskSpaceRequirements	OK	PushButton	301	243	66	17	3		OOO_CONTROL_100		
 FilesInUse	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 FilesInUse	BannerLine	Line	0	44	376	0	1				
@@ -148,17 +148,17 @@ FileTypeDialog	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel
 InstallChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 InstallChangeFolder	BannerLine	Line	0	44	376	0	1				
 InstallChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_111	ComboText	
-InstallChangeFolder	Combo	DirectoryCombo	21	64	277	80	4128779	_BrowseProperty		Up	
+InstallChangeFolder	Combo	DirectoryCombo	21	64	292	80	4128779	_BrowseProperty		Up	
 InstallChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_113	Combo	
 InstallChangeFolder	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_114		
 InstallChangeFolder	DlgLine	Line	0	234	376	0	1				
 InstallChangeFolder	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_115		
-InstallChangeFolder	List	DirectoryList	21	90	332	97	11	_BrowseProperty		TailText	
-InstallChangeFolder	NewFolder	PushButton	335	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
+InstallChangeFolder	List	DirectoryList	21	90	345	97	11	_BrowseProperty		TailText	
+InstallChangeFolder	NewFolder	PushButton	347	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
 InstallChangeFolder	OK	PushButton	230	243	66	17	3		OOO_CONTROL_118	Cancel	
-InstallChangeFolder	Tail	PathEdit	21	207	332	17	15	_BrowseProperty		OK	
+InstallChangeFolder	Tail	PathEdit	21	207	345	17	15	_BrowseProperty		OK	
 InstallChangeFolder	TailText	Text	21	193	99	13	3		OOO_CONTROL_120	Tail	
-InstallChangeFolder	Up	PushButton	310	64	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_121
+InstallChangeFolder	Up	PushButton	322	64	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_121
 InstallWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_122	Copyright	
 InstallWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_123	Back	
 InstallWelcome	Copyright	Text	135	144	228	73	65539		OOO_CONTROL_124	Next	
@@ -195,9 +195,9 @@ MaintenanceType	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_138	RadioGroup
 MaintenanceType	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_139		
 MaintenanceType	DlgLine	Line	0	234	376	0	1				
 MaintenanceType	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_140		
-MaintenanceType	Ico1	Icon	35	75	24	24	5242881		SetupPartialIco		
-MaintenanceType	Ico2	Icon	35	135	24	24	5242881		SetupRepairIco		
-MaintenanceType	Ico3	Icon	35	195	24	24	5242881		TrashcanIco		
+MaintenanceType	Ico1	Icon	34	75	24	24	5242881		SetupPartialIco		
+MaintenanceType	Ico2	Icon	34	135	24	24	5242881		SetupRepairIco		
+MaintenanceType	Ico3	Icon	34	195	24	24	5242881		TrashcanIco		
 MaintenanceType	Next	PushButton	230	243	66	17	3		OOO_CONTROL_141	Cancel	
 MaintenanceType	RadioGroup	RadioButtonGroup	21	55	290	170	3	_IsMaintenance		Back	
 MaintenanceType	Text1	Text	80	72	260	35	3		OOO_CONTROL_143		
