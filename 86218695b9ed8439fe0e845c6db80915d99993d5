@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_47302d57",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-09T10:50:30Z",
+      "side": 1,
+      "message": "this will create a temporary std::unique_ptr which will get destructed somewhere before the end of this block, and will therefore release the UserData object, which means that later on we will be accessing free\u0027ed memory :-(",
+      "revId": "86218695b9ed8439fe0e845c6db80915d99993d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
