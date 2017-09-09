@@ -243,7 +243,7 @@ SwTextNode::~SwTextNode()
     // delete only removes the pointer not the array elements!
     if ( m_pSwpHints )
     {
-        // do not delete attributes twice when those delte their content
+        // do not delete attributes twice when those delete their content
         SwpHints* pTmpHints = m_pSwpHints;
         m_pSwpHints = nullptr;
 
