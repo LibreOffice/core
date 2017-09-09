@@ -263,7 +263,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
         return nullptr;
     // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
     // as patter letter,each represent a element in date/time and its repeat numbers represent
-    // different format: for exampel: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
+    // different format: for example: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
     // letter other than these letters is regard as text in the format, for example ','in 'Jan,2005'
     // we parse pattern string letter by letter and get the time format.
     UChar cSymbol;
@@ -652,7 +652,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
         return nullptr;
     // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
     // as patter letter,each represent a element in date/time and its repeat numbers represent
-    // different format: for exampel: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
+    // different format: for example: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
     // letter other than these letters is regard as text in the format, for example ','in 'Jan,2005'
     // we parse pattern string letter by letter and get the time format.
     // for time format ,for there is not date info,we can only parse the letter representing time.
