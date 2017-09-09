@@ -1445,6 +1445,24 @@ void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimensi
     pOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
+OUString ScDPObject::GetFormattedString(const OUString& rDimName, const double fValue)
+{
+    ScDPTableData* pTableData = GetTableData();
+    if(!pTableData)
+        return OUString();
+
+    long nDim;
+    for (nDim = 0; nDim < pTableData->GetColumnCount(); ++nDim)
+    {
+        if(rDimName == pTableData->getDimensionName(nDim))
+            break;
+    }
+    ScDPItemData aItemData;
+    aItemData.SetValue(fValue);
+    return GetTableData()->GetFormattedString(nDim, aItemData, false);
+}
+
+
 namespace {
 
 bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, OUString& rResult )
