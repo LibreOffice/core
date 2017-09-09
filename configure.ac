@@ -716,7 +716,7 @@ darwin*) # Mac OS X or iOS
     test_freetype=no
     test_fontconfig=no
     test_dbus=no
-    if test "$enable_ios_simulator" = "yes" -o "$host_cpu" = "armv7" -o "$host_cpu" = "arm64"; then
+    if test "$host_cpu" = "arm" -o "$host_cpu" = "arm64"; then
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -2725,7 +2725,6 @@ if test $_os = Darwin -o $_os = iOS; then
     # higher than or equal to the minimum required should be found.
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
-
     for _macosx_sdk in $with_macosx_sdk 10.9 10.10 10.11 10.12; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
@@ -2742,7 +2741,17 @@ if test $_os = Darwin -o $_os = iOS; then
     if test ! -d "$MACOSX_SDK_PATH"; then
         AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
     fi
+
+    if test $_os = iOS; then
+        if test "$enable_ios_simulator" = "yes"; then
+            useos=iphonesimulator
+        else 
+            useos=iphoneos
+        fi
+        MACOSX_SDK_PATH=`xcrun --sdk ${useos} --show-sdk-path 2> /dev/null`
+    fi
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
+
 
     case $with_macosx_sdk in
     10.9)
@@ -2834,6 +2843,8 @@ if test $_os = Darwin -o $_os = iOS; then
 
     AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
     if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
+        AC_MSG_RESULT([$MAC_OS_X_VERSION_MIN_REQUIRED])
+        AC_MSG_RESULT([$MAC_OS_X_VERSION_MAX_REQUIRED])
         AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
     else
         AC_MSG_RESULT([ok])
@@ -2938,27 +2949,26 @@ dnl Check iOS SDK and compiler
 dnl ===================================================================
 
 if test $_os = iOS; then
-    if test "$host_cpu" = "arm64"; then
-        BITNESS_OVERRIDE=64
-    fi
-
     AC_MSG_CHECKING([what iOS SDK to use])
-
-    if test "$build_cpu" = "i386"; then
+    if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
-        XCODE_ARCHS=i386
         versionmin=-mios-simulator-version-min=9.3
-    elif test "$build_cpu" = "x86_64"; then
-        platform=iPhoneSimulator
-        XCODE_ARCHS=x86_64
-        BITNESS_OVERRIDE=64
-        versionmin=-mios-simulator-version-min=9.3
+        if test "$host_cpu" = "arm64"; then
+            XCODE_ARCHS=x86_64
+            BITNESS_OVERRIDE=64
+        else
+            XCODE_ARCHS=i386
+        fi
     else
         platform=iPhoneOS
-        XCODE_ARCHS=$host_cpu
         versionmin=-miphoneos-version-min=9.3
+        if test "$host_cpu" = "arm64"; then
+            XCODE_ARCHS=arm64
+            BITNESS_OVERRIDE=64
+        else
+            XCODE_ARCHS=arm
+        fi
     fi
-
     xcode_developer=`xcode-select -print-path`
 
     current_sdk_ver=10.2
@@ -3160,7 +3170,9 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$_os" = "iOS"; then
-    cross_compiling="yes"
+    if test "$host_cpu" = "arm" -o "$host_cpu" = "arm64" ; then
+        cross_compiling="yes"
+    fi
 fi
 
 if test "$cross_compiling" = "yes"; then
@@ -4017,26 +4029,34 @@ darwin*)
     P_SEP=:
 
     case "$host_cpu" in
-    arm*)
-        CPUNAME=ARM
-        RTL_ARCH=ARM_EABI
-        PLATFORMID=ios_arm
-        OS=IOS
+    arm)
+        OS=iOS
+        if test "$enable_ios_simulator" = "yes"; then
+            CPUNAME=I386
+            RTL_ARCH=x86
+            PLATFORMID=macosx_x86
+        else
+            RTL_ARCH=ARM_EABI
+            CPUNAME=ARM
+            PLATFORMID=ios_arm
+        fi
+        ;;
+    arm64)
+        OS=iOS
+        if test "$enable_ios_simulator" = "yes"; then
+            CPUNAME=X86_64
+            RTL_ARCH=X86_64
+            PLATFORMID=macosx_x86_64
+        else
+            CPUNAME=ARM64
+            RTL_ARCH=ARM_EABI
+            PLATFORMID=ios_arm64
+        fi
         ;;
     i*86)
-        if test "$enable_ios_simulator" = "yes"; then
-            OS=IOS
-            CPUNAME=i386
-            RTL_ARCH=i386
-            PLATFORMID=macosx_i38
-        else
-            AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
-        fi
+        AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
         ;;
     x86_64)
-        if test "$enable_ios_simulator" = "yes"; then
-            OS=IOS
-        fi
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=macosx_x86_64
@@ -5645,7 +5665,7 @@ dnl ===================================================================
 if test "$_os" != "WINNT"; then
 
 if test "$_os" == "iOS"; then
-if test "$host_cpu" == "armv7"; then
+if test "$host_cpu" == "arm"; then
   ac_cv_sizeof_long=4
   ac_cv_sizeof_short=2
   ac_cv_sizeof_int=4
