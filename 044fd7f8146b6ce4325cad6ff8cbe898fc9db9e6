@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a7263114",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-09T11:08:33Z",
+      "side": 1,
+      "message": "If you could please add some comment here, such as\n\"This is why we are doing it (see also tdf#xxyyzz\")",
+      "revId": "044fd7f8146b6ce4325cad6ff8cbe898fc9db9e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
