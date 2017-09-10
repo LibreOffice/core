@@ -179,6 +179,8 @@ public:
                                        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
+    OUString            GetFormattedString( const OUString& rDimName, const double fValue );
+
     double GetPivotData(
         const OUString& rDataFieldName,
         std::vector<css::sheet::DataPilotFieldFilter>& rFilters);
