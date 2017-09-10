@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.18.3 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.12"/>
-  <requires lib="" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkMenu" id="Menu3D">
     <property name="visible">True</property>
@@ -3178,24 +3177,59 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="subtitle">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="heading1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="heading2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="heading3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="heading4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="textBody">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="Quotations">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="preformattedText">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Preformatted Text&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
@@ -3205,28 +3239,70 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="chardefault">
+      <object class="GtkMenuItem" id="defaultstyle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Default%20Style&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="italic">
+      <object class="GtkMenuItem" id="Emphasis">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="bold">
+      <object class="GtkMenuItem" id="EmphasisStrong">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Strong%20Emphasis&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="Quotation2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Quotation&amp;FamilyName:string=CharacterStyles</property>
+        <property name="label" translatable="yes">Quotation</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="SourceCode">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="separator38">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="listStyle">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="numbering1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="numbering4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator157">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -3250,6 +3326,26 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleNewByExample</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="styleload">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:LoadStyles</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator152">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="designDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:DesignerDialog</property>
       </object>
     </child>
   </object>
@@ -4204,7 +4300,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="svtlo-ManagedMenuButton" id="paragraphstyleb:MenuStyle">
-                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstyleb">_Styles</property>
+                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstyleb">St_yles</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -6930,7 +7026,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="svtlo-ManagedMenuButton" id="paragraphstylet:MenuStyle">
-                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstylet">_Styles</property>
+                                        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|paragraphstylet">St_yles</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
