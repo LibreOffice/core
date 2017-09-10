@@ -38,7 +38,7 @@ $(eval $(call gb_Library_use_api,oox,\
 ))
 
 $(eval $(call gb_Library_use_libraries,oox,\
-    avmedia \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \

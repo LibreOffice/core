@@ -41,8 +41,7 @@ $(eval $(call gb_Library_add_defs,svx,\
 $(eval $(call gb_Library_set_precompiled_header,svx,$(SRCDIR)/svx/inc/pch/precompiled_svx))
 
 $(eval $(call gb_Library_use_libraries,svx,\
-    $(if $(filter-out $(OS),IOS), \
-        avmedia) \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     sb \
     comphelper \

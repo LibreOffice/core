@@ -4030,7 +4030,7 @@ darwin*)
 
     case "$host_cpu" in
     arm)
-        OS=iOS
+        OS=IOS
         if test "$enable_ios_simulator" = "yes"; then
             CPUNAME=I386
             RTL_ARCH=x86
@@ -4042,7 +4042,7 @@ darwin*)
         fi
         ;;
     arm64)
-        OS=iOS
+        OS=IOS
         if test "$enable_ios_simulator" = "yes"; then
             CPUNAME=X86_64
             RTL_ARCH=X86_64
