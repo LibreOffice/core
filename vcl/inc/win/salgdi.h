@@ -232,7 +232,7 @@ private:
     bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     sal_uIntPtr             mnFontKernPairCount;// Number of Kerning Pairs of the current Font
-    int                     mnPenWidth;         // Linienbreite
+    int                     mnPenWidth;         // line width
 
     LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
 
@@ -412,7 +412,7 @@ public:
     //             pFont: describes from which font to create a subset
     //             pGlyphIDs: the glyph ids to be extracted
     //             pEncoding: the character code corresponding to each glyph
-    //             pWidths: the advance widths of the correspoding glyphs (in PS font units)
+    //             pWidths: the advance widths of the corresponding glyphs (in PS font units)
     //             nGlyphs: the number of glyphs
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly

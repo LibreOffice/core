@@ -1785,7 +1785,7 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
 
             if ( pSVData->maWinData.mpFocusWin == pFocusWin )
             {
-                // FocusWindow umsetzen
+                // transfer the FocusWindow
                 vcl::Window* pOverlapWindow = pFocusWin->ImplGetFirstOverlapWindow();
                 pOverlapWindow->ImplGetWindowImpl()->mpLastFocusWindow = pFocusWin;
                 pSVData->maWinData.mpFocusWin = nullptr;
@@ -1793,7 +1793,7 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
                 if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
                     pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 
-                // Deaktivate rufen
+                // call the Deactivate
                 vcl::Window* pOldFocusWindow = pFocusWin;
                 if ( pOldFocusWindow )
                 {
@@ -2483,7 +2483,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
                     bInQueryExit = true;
                     if ( GetpApp()->QueryExit() )
                     {
-                        // Message-Schleife beenden
+                        // end the message loop
                         Application::Quit();
                         return false;
                     }
