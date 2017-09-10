@@ -1652,7 +1652,7 @@ static OUString lcl_GetInitials(const OUString& sName)
 
 void PowerPointExport::WriteAuthors()
 {
-    if (maAuthors.size() <= 0)
+    if (maAuthors.empty())
         return;
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer("ppt/commentAuthors.xml",
