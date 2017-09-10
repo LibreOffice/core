@@ -559,8 +559,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
 
 
-        bRet = false;
-        nRet = ERRCODE_NONE;
+        bRet = nRet == ERRCODE_NONE;
 
         if ( bRet )
         {
