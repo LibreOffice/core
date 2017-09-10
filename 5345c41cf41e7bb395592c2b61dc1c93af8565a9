@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e262e7d7",
+        "filename": "cui/source/options/optaboutconfig.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-10T06:35:46Z",
+      "side": 1,
+      "message": "InsertEntry can be called multiple times, which means you need a vector of these",
+      "revId": "5345c41cf41e7bb395592c2b61dc1c93af8565a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
