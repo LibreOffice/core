@@ -1098,7 +1098,7 @@ void SgfFontLst::ReadList()
         LastLn=nullptr;
         SgfFontOne* P,P1;
         Config aCfg(FNam);
-        aCfg.SetGroup("SGV Fonts fuer StarView");
+        aCfg.SetGroup("SGV Fonts for StarView");
         sal_uInt16 Anz=aCfg.GetKeyCount();
         sal_uInt16 i;
         OString FID;

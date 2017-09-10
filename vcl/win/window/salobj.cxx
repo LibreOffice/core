@@ -69,7 +69,7 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
     WinSalObject* pObject = ImplFindSalObject( hWnd );
     if ( pObject )
     {
-        // Dazugehoerenden Frame suchen
+        // find matching frame
         HWND hWnd2 = ::GetParent( pObject->mhWnd );
         pFrame = GetSalData()->mpFirstFrame;
         while ( pFrame )
@@ -584,7 +584,7 @@ WinSalObject::~WinSalObject()
         pTempObject->mpNextObject = mpNextObject;
     }
 
-    // Cache-Daten zerstoeren
+    // destroy cache data
     delete [] reinterpret_cast<BYTE*>(mpStdClipRgnData);
 
     HWND hWndParent = ::GetParent( mhWnd );

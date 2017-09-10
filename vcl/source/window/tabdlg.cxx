@@ -88,7 +88,7 @@ void TabDialog::ImplPosControls()
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
         long    nBtnEx = 0;
 
-        // consider Preview-Fenster and adapt the sizes/offsets
+        // consider preview window and adapt the sizes/offsets
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
             long    nViewOffX = 0;

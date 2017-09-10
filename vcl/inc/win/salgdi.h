@@ -174,7 +174,7 @@ private:
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-    int                     mnPenWidth;         // Linienbreite
+    int                     mnPenWidth;         // line width
 
     LogicalFontInstance* GetWinFontEntry(int nFallbackLevel);
 

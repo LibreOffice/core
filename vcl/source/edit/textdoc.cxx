@@ -193,9 +193,9 @@ void TextNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
             }
         }
 
-        SAL_WARN_IF( rAttrib.GetStart() > rAttrib.GetEnd(), "vcl", "Expand: Attribut verdreht!" );
-        SAL_WARN_IF( ( rAttrib.GetEnd() > maText.getLength() ), "vcl", "Expand: Attrib groesser als Absatz!" );
-        SAL_WARN_IF( rAttrib.IsEmpty(), "vcl", "Leeres Attribut nach ExpandAttribs?" );
+        SAL_WARN_IF( rAttrib.GetStart() > rAttrib.GetEnd(), "vcl", "Expand: attribute twisted!" );
+        SAL_WARN_IF( ( rAttrib.GetEnd() > maText.getLength() ), "vcl", "Expand: attribute greater than paragraph!" );
+        SAL_WARN_IF( rAttrib.IsEmpty(), "vcl", "Empty attribute after ExpandAttribs?" );
     }
 
     if ( bResort )
@@ -248,8 +248,8 @@ void TextNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
             }
         }
 
-        SAL_WARN_IF( rAttrib.GetStart() > rAttrib.GetEnd(), "vcl", "Collaps: Attribut verdreht!" );
-        SAL_WARN_IF( ( rAttrib.GetEnd() > maText.getLength()) && !bDelAttr, "vcl", "Collaps: Attrib groesser als Absatz!" );
+        SAL_WARN_IF( rAttrib.GetStart() > rAttrib.GetEnd(), "vcl", "Collaps: attribute twisted!" );
+        SAL_WARN_IF( ( rAttrib.GetEnd() > maText.getLength()) && !bDelAttr, "vcl", "Collaps: attribute greater than paragraph!" );
         if ( bDelAttr /* || rAttrib.IsEmpty() */ )
         {
             bResort = true;
@@ -465,8 +465,8 @@ sal_Int32 TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSe
 
 TextPaM TextDoc::InsertText( const TextPaM& rPaM, sal_Unicode c )
 {
-    SAL_WARN_IF( c == 0x0A, "vcl", "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    SAL_WARN_IF( c == 0x0D, "vcl", "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
+    SAL_WARN_IF( c == 0x0A, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
+    SAL_WARN_IF( c == 0x0D, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
 
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->InsertText( rPaM.GetIndex(), c );
@@ -477,8 +477,8 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, sal_Unicode c )
 
 TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
 {
-    SAL_WARN_IF( rStr.indexOf( 0x0A ) != -1, "vcl", "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    SAL_WARN_IF( rStr.indexOf( 0x0D ) != -1, "vcl", "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
+    SAL_WARN_IF( rStr.indexOf( 0x0A ) != -1, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
+    SAL_WARN_IF( rStr.indexOf( 0x0D ) != -1, "vcl", "TextDoc::InsertText: Line separator in paragraph not allowed!" );
 
     TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->InsertText( rPaM.GetIndex(), rStr );

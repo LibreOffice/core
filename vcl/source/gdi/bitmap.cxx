@@ -568,7 +568,7 @@ bool Bitmap::Mirror( BmpMirrorFlags nMirrorFlags )
                 }
             }
 
-            // ggf. noch mittlere Zeile horizontal spiegeln
+            // if necessary, also mirror the middle line horizontally
             if( nHeight & 1 )
             {
                 for( long nX = 0, nOtherX = nWidth1, nWidth_2 = nWidth >> 1; nX < nWidth_2; nX++, nOtherX-- )

@@ -217,7 +217,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     for( ::std::vector< OUString >::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it )
     {
         const PrinterInfo& rInfo( rManager.getPrinterInfo( *it ) );
-        // Neuen Eintrag anlegen
+        // create new entry
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
         pInfo->maPrinterName    = *it;
         pInfo->maDriver         = rInfo.m_aDriverName;

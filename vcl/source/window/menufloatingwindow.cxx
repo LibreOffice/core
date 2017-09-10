@@ -703,7 +703,7 @@ void MenuFloatingWindow::ImplScroll( const Point& rMousePos )
 }
 void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTimer )
 {
-    // #57934# ggf. immediately close the active, as TH's backgroundstorage works.
+    // #57934# if necessary, immediately close the active, as TH's backgroundstorage works.
     // #65750# we prefer to refrain from the background storage of small lines.
     //         otherwise the menus are difficult to operate.
     //  MenuItemData* pNextData = pMenu->pItemList->GetDataFromPos( n );

@@ -196,7 +196,7 @@ inline HINSTANCE GetWindowInstance( HWND hWnd )
 #endif
 
 
-// - 5.0-Erweiterungen -
+// - 5.0 extensions -
 
 #ifndef COLOR_GRADIENTACTIVECAPTION
 #define COLOR_GRADIENTACTIVECAPTION     27
