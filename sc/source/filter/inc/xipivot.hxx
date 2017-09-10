@@ -207,7 +207,7 @@ public:
     void                ReadSxvi( XclImpStream& rStrm );
 
     /** Inserts this item into the passed ScDPSaveDimension. */
-    void                ConvertItem( ScDPSaveDimension& rSaveDim ) const;
+    void                ConvertItem( ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const XclImpRoot& rRoot ) const;
 
 private:
     XclPTItemInfo       maItemInfo;         /// General data for this item.
@@ -268,9 +268,10 @@ public:
     void                AddDataFieldInfo( const XclPTDataFieldInfo& rDataInfo );
     void                ConvertDataField( ScDPSaveData& rSaveData ) const;
 
+    void                ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot ) const;
+
 private:
     ScDPSaveDimension*  ConvertRCPField( ScDPSaveData& rSaveData ) const;
-    void                ConvertFieldInfo( ScDPSaveDimension& rSaveDim ) const;
 
     void                ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
     void                ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
@@ -335,6 +336,7 @@ public:
     void                MaybeRefresh();
 
     void                ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData);
+    void                ApplyFieldInfo();
 
 private:
     typedef ::std::vector< XclImpPTFieldRef > XclImpPTFieldVec;

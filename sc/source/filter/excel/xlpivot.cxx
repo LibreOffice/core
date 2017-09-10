@@ -59,19 +59,17 @@ void XclPCItem::SetText( const OUString& rText )
     maText = rText;
 }
 
-void XclPCItem::SetDouble( double fValue )
+void XclPCItem::SetDouble( double fValue, const OUString& rText )
 {
     meType = EXC_PCITEM_DOUBLE;
-    //TODO convert double to string
-    maText.clear();
+    maText = rText;
     mfValue = fValue;
 }
 
-void XclPCItem::SetDateTime( const DateTime& rDateTime )
+void XclPCItem::SetDateTime( const DateTime& rDateTime, const OUString& rText )
 {
     meType = EXC_PCITEM_DATETIME;
-    //TODO convert date to string
-    maText.clear();
+    maText = rText;
     maDateTime = rDateTime;
 }
 
@@ -100,11 +98,10 @@ void XclPCItem::SetError( sal_uInt16 nError )
     }
 }
 
-void XclPCItem::SetBool( bool bValue )
+void XclPCItem::SetBool( bool bValue, const OUString& rText )
 {
     meType = EXC_PCITEM_BOOL;
-    //TODO convert boolean to string
-    maText.clear();
+    maText = rText;
     mbValue = bValue;
 }
 
@@ -158,6 +155,11 @@ const sal_uInt16* XclPCItem::GetError() const
 const bool* XclPCItem::GetBool() const
 {
     return (meType == EXC_PCITEM_BOOL) ? &mbValue : nullptr;
+}
+
+XclPCItemType XclPCItem::GetType() const
+{
+    return meType;
 }
 
 // Field settings =============================================================
