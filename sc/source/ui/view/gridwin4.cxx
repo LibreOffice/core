@@ -1782,8 +1782,6 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
 
-    bool bRepeat = true;
-
     SCCOL nTestX2 = nX2;
     SCROW nTestY2 = nY2;
 
@@ -1912,7 +1910,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelR
                         }
                     }
 
-                    if ( aMultiMark.IsCellMarked( nThisX, nThisY, true ) == bRepeat )
+                    if ( aMultiMark.IsCellMarked( nThisX, nThisY, true ) )
                     {
                         if ( !pMergeFlag->IsOverlapped() )
                         {
