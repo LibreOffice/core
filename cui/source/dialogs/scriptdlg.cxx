@@ -1002,23 +1002,10 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         ScopedVclPtrInstance< CuiInputDialog > xNewDlg( static_cast<vcl::Window*>(this), InputDialogMode::RENAME );
         xNewDlg->SetObjectName( aNewName );
 
-        bool bValid;
-        do
-        {
-            if ( xNewDlg->Execute() && !xNewDlg->GetObjectName().isEmpty() )
-            {
-                OUString aUserSuppliedName = xNewDlg->GetObjectName();
-                bValid = true;
-                if( bValid )
-                    aNewName = aUserSuppliedName;
-            }
-            else
-            {
-                // user hit cancel or hit OK with nothing in the editbox
-                return;
-            }
-        }
-        while ( !bValid );
+        if ( !xNewDlg->Execute() || xNewDlg->GetObjectName().isEmpty() )
+            return; // user hit cancel or hit OK with nothing in the editbox
+
+        aNewName = xNewDlg->GetObjectName();
 
         Sequence< Any > args( 1 );
         args[ 0 ] <<= aNewName;
