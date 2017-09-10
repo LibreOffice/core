@@ -4997,7 +4997,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                             if (!bHidden)
                             {
-                                bool bClip = false;
                                 Size aClipSize( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
 
                                 // go on writing
@@ -5090,33 +5089,27 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     }
                                 }
 
-                                bClip = true;       // always clip at the window/page border
-
-                                //Rectangle aClipRect;
-                                if (bClip)
+                                if ( nAttrRotate /* && eRotMode != SVX_ROTATE_MODE_STANDARD */ )
                                 {
-                                    if ( nAttrRotate /* && eRotMode != SVX_ROTATE_MODE_STANDARD */ )
-                                    {
-                                        // only clip rotated output text at the page border
-                                        nClipStartX = nScrX;
-                                        aClipSize.Width() = nScrW;
-                                    }
-
-                                    if (bPixelToLogic)
-                                        aAreaParam.maClipRect = mpRefDevice->PixelToLogic( tools::Rectangle(
-                                                        Point(nClipStartX,nClipStartY), aClipSize ) );
-                                    else
-                                        aAreaParam.maClipRect = tools::Rectangle(Point(nClipStartX, nClipStartY),
-                                                                aClipSize );    // Scale = 1
-
-                                    if (bMetaFile)
-                                    {
-                                        mpDev->Push();
-                                        mpDev->IntersectClipRegion( aAreaParam.maClipRect );
-                                    }
-                                    else
-                                        mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
+                                    // only clip rotated output text at the page border
+                                    nClipStartX = nScrX;
+                                    aClipSize.Width() = nScrW;
                                 }
+
+                                if (bPixelToLogic)
+                                    aAreaParam.maClipRect = mpRefDevice->PixelToLogic( tools::Rectangle(
+                                                    Point(nClipStartX,nClipStartY), aClipSize ) );
+                                else
+                                    aAreaParam.maClipRect = tools::Rectangle(Point(nClipStartX, nClipStartY),
+                                                            aClipSize );    // Scale = 1
+
+                                if (bMetaFile)
+                                {
+                                    mpDev->Push();
+                                    mpDev->IntersectClipRegion( aAreaParam.maClipRect );
+                                }
+                                else
+                                    mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
 
                                 Point aLogicStart;
                                 if (bPixelToLogic)
@@ -5285,13 +5278,10 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                 pEngine->Draw( mpDev, aLogicStart, (short)nOriVal );
 
-                                if (bClip)
-                                {
-                                    if (bMetaFile)
-                                        mpDev->Pop();
-                                    else
-                                        mpDev->SetClipRegion();
-                                }
+                                if (bMetaFile)
+                                    mpDev->Pop();
+                                else
+                                    mpDev->SetClipRegion();
                             }
                         }
                     }
