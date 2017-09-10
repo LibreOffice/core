@@ -333,14 +333,21 @@ void OpenGLContext::restoreDefaultFramebuffer()
 
 void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
 {
-    if(m_xWindow)
+    if (m_xWindow)
         m_xWindow->SetPosSizePixel(rPos, rSize);
-    if( m_pChildWindow )
+    if (m_pChildWindow)
         m_pChildWindow->SetPosSizePixel(rPos, rSize);
 
     GLWindow& rGLWin = getModifiableOpenGLWindow();
     rGLWin.Width = rSize.Width();
     rGLWin.Height = rSize.Height();
+    adjustToNewSize();
+}
+
+void OpenGLContext::adjustToNewSize()
+{
+    const GLWindow& rGLWin = getOpenGLWindow();
+    glViewport(0, 0, rGLWin.Width, rGLWin.Height);
 }
 
 void OpenGLContext::setWinSize(const Size& rSize)
