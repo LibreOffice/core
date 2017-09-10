@@ -344,7 +344,6 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     mpContext->swapBuffers();
 
-    glViewport(0, 0, aCanvasArea.Width, aCanvasArea.Height);
     CHECK_GL_ERROR();
 
     return true;
