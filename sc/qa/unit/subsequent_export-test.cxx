@@ -708,7 +708,7 @@ void ScExportTest::testPivotCacheExportXLSX()
     assertXPath           (pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name", "blank");
     assertXPath           (pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems", "containsBlank", "1");
     assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems", "containsMixedTypes");
-    // Despite what documentation sais, in case there's only blank values in field (no strings), containsSemiMixedTypes is true (default - not written)
+    // Despite what documentation says, in case there's only blank values in field (no strings), containsSemiMixedTypes is true (default - not written)
     assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems", "containsSemiMixedTypes");
     assertXPathNoAttribute(pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems", "containsDate");
     assertXPath           (pCacheDef, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]/x:sharedItems", "containsString", "0");
