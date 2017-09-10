@@ -731,17 +731,13 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     SetRectsDirty();
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
-    if (bRet) {
-        delete pU;
+    if (bRet)
         rStat.SetUser(nullptr);
-    }
     return bRet;
 }
 
 void SdrCircObj::BrkCreate(SdrDragStat& rStat)
 {
-    ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
-    delete pU;
     rStat.SetUser(nullptr);
 }
 

@@ -1406,7 +1406,6 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         bRet = eCmd==SdrCreateCmd::ForceEnd;
         if (bRet) {
             mbCreating = false;
-            delete pU;
             rStat.SetUser(nullptr);
         }
         return bRet;
@@ -1417,7 +1416,6 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         bRet=eCmd==SdrCreateCmd::ForceEnd;
         if (bRet) {
             mbCreating=false;
-            delete pU;
             rStat.SetUser(nullptr);
         }
         return bRet;
@@ -1501,7 +1499,6 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     bRet=eCmd==SdrCreateCmd::ForceEnd;
     if (bRet) {
         mbCreating=false;
-        delete pU;
         rStat.SetUser(nullptr);
     }
     return bRet;
@@ -1549,10 +1546,8 @@ bool ImpPathForDragAndCreate::BckCreate(SdrDragStat& rStat)
 
 void ImpPathForDragAndCreate::BrkCreate(SdrDragStat& rStat)
 {
-    ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     aPathPolygon.Clear();
     mbCreating=false;
-    delete pU;
     rStat.SetUser(nullptr);
 }
 
