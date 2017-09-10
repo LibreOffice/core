@@ -2223,6 +2223,22 @@ void DomainMapper_Impl::PopShapeContext()
             }
         }
 
+        // define percentage-derived widths
+        SectionPropertyMap* pSectionContext = GetSectionContext();
+        if ( pSectionContext && xShapePropertySet->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_RELATIVE_WIDTH)) )
+        {
+            sal_Int16 nPercent = 0;
+            xShapePropertySet->getPropertyValue( getPropertyName(PROP_RELATIVE_WIDTH) ) >>= nPercent;
+            // this is not the best place to update the percentage-sized width, since we don't know the actual margins yet - just defaults.
+            // Only adjust widths that were undefined - to at least solve the missing lines problem.
+            if ( nPercent && xShape->getSize().Width <= 2 )
+            {
+                const sal_Int32 nPrintWidth = pSectionContext->GetPageWidth() - pSectionContext->GetLeftMargin() - pSectionContext->GetRightMargin();
+                const sal_Int32 nWidth = nPrintWidth * nPercent / 100;
+                xShape->setSize(awt::Size( nWidth, xShape->getSize().Height ) );
+            }
+        }
+
         m_aAnchoredStack.pop();
     }
     m_bFrameBtLr = false;

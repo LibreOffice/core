@@ -210,10 +210,10 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx")
 {
-    int i = 1;
-    //divide everything by 10 to avoid rounding errors etc
-//    CPPUNIT_ASSERT_EQUAL( sal_Int32(15995/10), getShape(++i)->getSize().Width/10);
+    int i = 0;
+    CPPUNIT_ASSERT_MESSAGE( "100 percent line width is at least 15240", getShape(++i)->getSize().Width > 15000 );
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(i*2), "ParaAdjust")) );
+    //divide everything by 10 to avoid rounding errors etc
     CPPUNIT_ASSERT_EQUAL( sal_Int32(8001/10),  getShape(++i)->getSize().Width/10);
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(i*2), "ParaAdjust")) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(4001/10),  getShape(++i)->getSize().Width/10);
