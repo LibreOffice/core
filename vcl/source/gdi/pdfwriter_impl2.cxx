@@ -1693,7 +1693,7 @@ void PDFWriterImpl::putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStre
         writeBuffer( &io_rState.getByte(), 1 );
         io_rState.flush();
     }
-    OSL_ASSERT( i_nLength < 9 );
+    assert(i_nLength < 9);
     static const unsigned int msbmask[9] = { 0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff };
     io_rState.mnBuffer |= static_cast<sal_uInt8>( (i_nCode & msbmask[i_nLength]) << (io_rState.mnNextBitPos - i_nLength) );
     io_rState.mnNextBitPos -= i_nLength;
