@@ -2442,10 +2442,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 if( ' ' == c && rHTMLWrt.m_nLastParaToken == HtmlTokenId::NONE  )
                 {
                     sal_Int32 nLineLen;
-                    if( rHTMLWrt.m_nLastParaToken != HtmlTokenId::NONE )
-                        nLineLen = nStrPos - nPreSplitPos;
-                    else
-                        nLineLen = rHTMLWrt.GetLineLen();
+                    nLineLen = rHTMLWrt.GetLineLen();
 
                     sal_Int32 nWordLen = rStr.indexOf( ' ', nStrPos+1 );
                     if( nWordLen == -1 )
