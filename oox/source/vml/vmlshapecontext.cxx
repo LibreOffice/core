@@ -305,6 +305,8 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, Shape
         OUString hrpct = rAttribs.getString( O_TOKEN( hrpct ), "1000" );
         if( hrpct != "0" )
             mrTypeModel.maWidthPercent = OUString::number( hrpct.toInt32() );
+
+        mrTypeModel.maPositionHorizontal = rAttribs.getString( O_TOKEN( hralign ), "left" );
     }
 
     // stroke settings (may be overridden by v:stroke element later)

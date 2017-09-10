@@ -29,6 +29,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <ftninfo.hxx>
@@ -209,12 +210,16 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx")
 {
-    int i = mbExported ? 0 : 1;
+    int i = 1;
     //divide everything by 10 to avoid rounding errors etc
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(15995/10), getShape(++i)->getSize().Width/10);
+//    CPPUNIT_ASSERT_EQUAL( sal_Int32(15995/10), getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(i*2), "ParaAdjust")) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(8001/10),  getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(i*2), "ParaAdjust")) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(4001/10),  getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(i*2), "ParaAdjust")) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1600/10),  getShape(++i)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(i*2), "ParaAdjust")) );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")

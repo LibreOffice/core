@@ -38,6 +38,7 @@
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
@@ -2187,12 +2188,41 @@ void DomainMapper_Impl::PopShapeContext()
         }
         // Move Watermark upper to be visible if page background is set
         uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
+        const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
         uno::Reference<container::XNamed> xNamed( xShape, uno::UNO_QUERY );
         if ( xNamed.is() && xNamed->getName().match( "PowerPlusWaterMarkObject" ) )
         {
-            uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
             xShapePropertySet->setPropertyValue( UNO_NAME_MISC_OBJ_LAYERID, uno::makeAny( sal_Int16(1) ) );
         }
+
+        // convert AS_CHAR shape's horizontal orientation to paragraph alignment
+        const PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
+        if ( pContext )
+        {
+            text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
+            xShapePropertySet->getPropertyValue(getPropertyName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
+            const bool bAsChar = nAnchorType == text::TextContentAnchorType_AS_CHARACTER;
+            if ( bAsChar && xShapePropertySet->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_HORI_ORIENT)) )
+            {
+                style::ParagraphAdjust nAdjust = style::ParagraphAdjust_BLOCK;
+                sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
+                xShapePropertySet->getPropertyValue(getPropertyName( PROP_HORI_ORIENT )) >>= nHoriOrient;
+                switch ( nHoriOrient )
+                {
+                case text::HoriOrientation::CENTER:
+                    nAdjust = style::ParagraphAdjust_CENTER;
+                    break;
+                case text::HoriOrientation::RIGHT:
+                    nAdjust = style::ParagraphAdjust_RIGHT;
+                    break;
+                default:
+                    break;
+                }
+                if ( nAdjust != style::ParagraphAdjust_BLOCK )
+                    pContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
+            }
+        }
+
         m_aAnchoredStack.pop();
     }
     m_bFrameBtLr = false;
