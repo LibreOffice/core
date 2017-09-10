@@ -2632,7 +2632,7 @@ bool RadioButton::SetModeRadioImage( const Image& rImage )
 
 void RadioButton::SetState( bool bCheck )
 {
-    // TabStop-Flag richtig mitfuehren
+    // carry the TabStop flag along correctly
     if ( bCheck )
         mpWindowImpl->mnStyle |= WB_TABSTOP;
     else
@@ -3712,7 +3712,7 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     {
         // is this still correct ? since the checkbox now
         // shows a focus rect it should be 2 pixels wider and longer
-/* da ansonsten im Writer die Control zu weit oben haengen
+/* since otherwise the controls in the Writer hang too far up
         aSize.Width() += 2;
         aSize.Height() += 2;
 */
