@@ -373,8 +373,6 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
     if(!_rxKeys.is())
         return Reference<XPropertySet>();
 
-    if ( !_rxKeys.is() )
-        return Reference<XPropertySet>();
     // search the one and only primary key
     const sal_Int32 nCount = _rxKeys->getCount();
     for(sal_Int32 i=0;i<nCount ;++i)
