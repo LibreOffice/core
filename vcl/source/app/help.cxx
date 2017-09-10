@@ -630,7 +630,7 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
             pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( rHelpArea.TopLeft() ),
             pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( rHelpArea.BottomRight() ) );
 
-        // Welche Position vom Rechteck?
+        // which position of the rectangle?
         aPos = devHelpArea.Center();
 
         if ( nStyle & QuickHelpFlags::Left )

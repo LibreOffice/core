@@ -123,8 +123,8 @@ public:
     sal_uInt8    Kapit;         // 1..255%
     sal_uInt16   Schnitt;       // 8 flags
     sal_uInt16   LnFeed;        // 1..32767% of max font size of the line
-    sal_uInt16   Slant;         // slant angle 0.00..89.99deg default 15.00deg viewed double width)
-    sal_uInt8    ZAbst;         // character spacing 0..255% (0=on the line; 100=normal; 200=Zeichen wird als
+    sal_uInt16   Slant;         // slant angle 0.00..89.99deg default 15.00deg
+    sal_uInt8    ZAbst;         // character spacing 0..255% (0=on the line; 100=normal; 200=character is viewed as double width)
     signed char  ChrVPos;       // vertical position of char. Default 0=on baseline, 10=5Pt below (-64..63")
     ObjLineType  ShdL;          // shadow outline (new 2.0)
     ObjAreaType  ShdF;          // shadow inside  (new 2.0)
