@@ -377,15 +377,15 @@ public:
     /** Sets the item to 'text' type and adds the passed text. */
     void                SetText( const OUString& rText );
     /** Sets the item to 'double' type and adds the passed value. */
-    void                SetDouble( double fValue );
+    void                SetDouble( double fValue, const OUString& rText = OUString() );
     /** Sets the item to 'date/time' type and adds the passed date. */
-    void                SetDateTime( const DateTime& rDateTime );
+    void                SetDateTime( const DateTime& rDateTime, const OUString& rText = OUString() );
     /** Sets the item to 'integer' type and adds the passed value. */
     void                SetInteger( sal_Int16 nValue );
     /** Sets the item to 'error' type and adds the passed Excel error code. */
     void                SetError( sal_uInt16 nError );
     /** Sets the item to 'boolean' type and adds the passed Boolean value. */
-    void                SetBool( bool bValue );
+    void                SetBool( bool bValue, const OUString& rText = OUString() );
 
     /** Returns the text representation of the item. */
     inline const OUString& ConvertToText() const { return maText; }
@@ -407,6 +407,9 @@ public:
     const sal_uInt16*   GetError() const;
     /** Returns pointer to Boolean value, if the item type is 'boolean', otherwise 0. */
     const bool*         GetBool() const;
+
+    /** Returns the type of the item */
+    XclPCItemType GetType() const;
 
 private:
     XclPCItemType       meType;         /// Type of the item.

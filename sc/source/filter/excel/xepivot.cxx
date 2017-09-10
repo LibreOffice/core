@@ -98,18 +98,18 @@ XclExpPCItem::XclExpPCItem( const OUString& rText ) :
         SetEmpty();
 }
 
-XclExpPCItem::XclExpPCItem( double fValue ) :
+XclExpPCItem::XclExpPCItem( double fValue, const OUString& rText ) :
     XclExpRecord( EXC_ID_SXDOUBLE, 8 )
 {
-    SetDouble( fValue );
+    SetDouble( fValue, rText );
     mnTypeFlag = (fValue - floor( fValue ) == 0.0) ?
         EXC_PCITEM_DATA_INTEGER : EXC_PCITEM_DATA_DOUBLE;
 }
 
-XclExpPCItem::XclExpPCItem( const DateTime& rDateTime ) :
+XclExpPCItem::XclExpPCItem( const DateTime& rDateTime, const OUString& rText ) :
     XclExpRecord( EXC_ID_SXDATETIME, 8 )
 {
-    SetDateTime( rDateTime );
+    SetDateTime( rDateTime, rText );
     mnTypeFlag = EXC_PCITEM_DATA_DATE;
 }
 
@@ -120,11 +120,11 @@ XclExpPCItem::XclExpPCItem( sal_Int16 nValue ) :
     SetInteger( nValue );
 }
 
-XclExpPCItem::XclExpPCItem( bool bValue ) :
+XclExpPCItem::XclExpPCItem( bool bValue, const OUString& rText ) :
     XclExpRecord( EXC_ID_SXBOOLEAN, 2 ),
     mnTypeFlag( EXC_PCITEM_DATA_STRING )
 {
-    SetBool( bValue );
+    SetBool( bValue, rText );
 }
 
 bool XclExpPCItem::EqualsText( const OUString& rText ) const
@@ -336,20 +336,20 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
     // loop over all cells, create pivot cache items
     for( aPos.IncRow(); (aPos.Row() <= rRange.aEnd.Row()) && (maOrigItemList.GetSize() < EXC_PC_MAXITEMCOUNT); aPos.IncRow() )
     {
+        OUString aText = rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab());
         if( rDoc.HasValueData( aPos.Col(), aPos.Row(), aPos.Tab() ) )
         {
             double fValue = rDoc.GetValue( aPos );
             short nFmtType = rFormatter.GetType( rDoc.GetNumberFormat( aPos ) );
             if( nFmtType == css::util::NumberFormat::LOGICAL )
-                InsertOrigBoolItem( fValue != 0 );
+                InsertOrigBoolItem( fValue != 0, aText );
             else if( nFmtType & css::util::NumberFormat::DATETIME )
-                InsertOrigDateTimeItem( GetDateTimeFromDouble( ::std::max( fValue, 0.0 ) ) );
+                InsertOrigDateTimeItem( GetDateTimeFromDouble( ::std::max( fValue, 0.0 ) ), aText );
             else
-                InsertOrigDoubleItem( fValue );
+                InsertOrigDoubleItem( fValue, aText );
         }
         else
         {
-            OUString aText = rDoc.GetString(aPos.Col(), aPos.Row(), aPos.Tab());
             InsertOrigTextItem( aText );
         }
     }
@@ -463,7 +463,7 @@ void XclExpPCField::InsertOrigTextItem( const OUString& rText )
         InsertOrigItem( new XclExpPCItem( aShortText ) );
 }
 
-void XclExpPCField::InsertOrigDoubleItem( double fValue )
+void XclExpPCField::InsertOrigDoubleItem( double fValue, const OUString& rText )
 {
     size_t nPos = 0;
     bool bFound = false;
@@ -471,10 +471,10 @@ void XclExpPCField::InsertOrigDoubleItem( double fValue )
         if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDouble( fValue )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
-        InsertOrigItem( new XclExpPCItem( fValue ) );
+        InsertOrigItem( new XclExpPCItem( fValue, rText ) );
 }
 
-void XclExpPCField::InsertOrigDateTimeItem( const DateTime& rDateTime )
+void XclExpPCField::InsertOrigDateTimeItem( const DateTime& rDateTime, const OUString& rText )
 {
     size_t nPos = 0;
     bool bFound = false;
@@ -482,10 +482,10 @@ void XclExpPCField::InsertOrigDateTimeItem( const DateTime& rDateTime )
         if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsDateTime( rDateTime )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
-        InsertOrigItem( new XclExpPCItem( rDateTime ) );
+        InsertOrigItem( new XclExpPCItem( rDateTime, rText ) );
 }
 
-void XclExpPCField::InsertOrigBoolItem( bool bValue )
+void XclExpPCField::InsertOrigBoolItem( bool bValue, const OUString& rText )
 {
     size_t nPos = 0;
     bool bFound = false;
@@ -493,7 +493,7 @@ void XclExpPCField::InsertOrigBoolItem( bool bValue )
         if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsBool( bValue )) )
             InsertItemArrayIndex( nPos );
     if( !bFound )
-        InsertOrigItem( new XclExpPCItem( bValue ) );
+        InsertOrigItem( new XclExpPCItem( bValue, rText ) );
 }
 
 sal_uInt16 XclExpPCField::InsertGroupItem( XclExpPCItem* pNewItem )
