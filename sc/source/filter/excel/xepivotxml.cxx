@@ -291,21 +291,20 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
         aDPTypesWithoutBlank.erase(ScDPItemData::Empty);
 
-        bool isContainsMoreThanOneType = aDPTypesWithoutBlank.size() > 1;
-        // XML_containsMixedType possible values:
-        // 1 - field contains more than one data type
-        // 0 - (Default) only one data type. The field can still contain blank values (that's why we are using aDPTypesWithoutBlank)
-        if (isContainsMoreThanOneType)
-            pAttList->add(XML_containsMixedTypes, XclXmlUtils::ToPsz10(true));
-
         bool isContainsString = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.end();
+        bool isContainsBlank = aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd;
+        bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
+        bool isContainsNonDate = !(isContainsDate && aDPTypesWithoutBlank.size() <= 1);
+
         // XML_containsSemiMixedTypes possible values:
-        // 1 - (Default) at least one text value, or can also contain a mix of other data types and blank values
+        // 1 - (Default) at least one text value, or can also contain a mix of other data types and blank values,
+        //     or blank values only
         // 0 - the field does not have a mix of text and other values
-        if (!(isContainsString || (aDPTypes.size() > 1)))
+        if (!(isContainsString || (aDPTypes.size() > 1) || (isContainsBlank && aDPTypesWithoutBlank.size() == 0)))
             pAttList->add(XML_containsSemiMixedTypes, XclXmlUtils::ToPsz10(false));
 
-        // OOXTODO: XML_containsNonDate
+        if (!isContainsNonDate)
+            pAttList->add(XML_containsNonDate, XclXmlUtils::ToPsz10(false));
 
         if (isContainsDate)
             pAttList->add(XML_containsDate, XclXmlUtils::ToPsz10(true));
@@ -314,16 +313,20 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         if (!isContainsString)
             pAttList->add(XML_containsString, XclXmlUtils::ToPsz10(false));
 
-        bool isContainsBlank = aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd;
         if (isContainsBlank)
             pAttList->add(XML_containsBlank, XclXmlUtils::ToPsz10(true));
+
+        // XML_containsMixedType possible values:
+        // 1 - field contains more than one data type
+        // 0 - (Default) only one data type. The field can still contain blank values (that's why we are using aDPTypesWithoutBlank)
+        if (aDPTypesWithoutBlank.size() > 1)
+            pAttList->add(XML_containsMixedTypes, XclXmlUtils::ToPsz10(true));
 
         // If field contain mixed types (Date and Numbers), MS Excel is saving only "minDate" and "maxDate" and not "minValue" and "maxValue"
         // Example how Excel is saving mixed Date and Numbers:
         // <sharedItems containsSemiMixedTypes="0" containsDate="1" containsString="0" containsMixedTypes="1" minDate="1900-01-03T22:26:04" maxDate="1900-01-07T14:02:04" />
         // Example how Excel is saving Dates only:
         // <sharedItems containsSemiMixedTypes="0" containsNonDate="0" containsDate="1" containsString="0" minDate="1903-08-24T07:40:48" maxDate="2024-05-23T07:12:00"/>
-        bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
         if (isContainsNumber)
             pAttList->add(XML_containsNumber, XclXmlUtils::ToPsz10(true));
 
