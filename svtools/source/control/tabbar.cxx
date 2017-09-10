@@ -1610,10 +1610,9 @@ void TabBar::AddTabClick()
 void TabBar::InsertPage(sal_uInt16 nPageId, const OUString& rText,
                         TabBarPageBits nBits, sal_uInt16 nPos)
 {
-    DBG_ASSERT(nPageId, "TabBar::InsertPage(): PageId == 0");
-    DBG_ASSERT(GetPagePos( nPageId ) == PAGE_NOT_FOUND,
-                "TabBar::InsertPage(): PageId already exists");
-    assert ((nBits <= TPB_DISPLAY_NAME_ALLFLAGS) && "TabBar::InsertPage(): Invalid flag set in in nBits");
+    assert (nPageId && "TabBar::InsertPage(): PageId must not be 0");
+    assert ((GetPagePos(nPageId) == PAGE_NOT_FOUND) && "TabBar::InsertPage(): Page already exists");
+    assert ((nBits <= TPB_DISPLAY_NAME_ALLFLAGS) && "TabBar::InsertPage(): Invalid flag set in nBits");
 
     // create PageItem and insert in the item list
     ImplTabBarItem* pItem = new ImplTabBarItem( nPageId, rText, nBits );
