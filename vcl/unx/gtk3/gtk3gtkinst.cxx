@@ -978,6 +978,17 @@ private:
     }
 #endif
 
+    virtual void adjustToNewSize() override
+    {
+        if (m_pGLArea)
+        {
+            int scale = gtk_widget_get_scale_factor(m_pGLArea);
+            int width = m_aGLWin.Width * scale;
+            int height = m_aGLWin.Height * scale;
+            glViewport(0, 0, width, height);
+        }
+    }
+
     virtual void makeCurrent() override
     {
         if (isCurrent())
