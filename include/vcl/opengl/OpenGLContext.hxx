@@ -158,6 +158,7 @@ public:
 private:
     virtual bool initWindow();
     virtual void destroyCurrentContext();
+    virtual void adjustToNewSize();
 
 protected:
     bool InitGL();
