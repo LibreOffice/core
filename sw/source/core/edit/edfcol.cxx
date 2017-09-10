@@ -36,6 +36,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -690,22 +692,18 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     if (utf8Text.isEmpty())
         return;
 
-    // 2. Get certificate and SignatureInformation (needed to show signer name).
-    //FIXME: Temporary until the Paragraph Signing Dialog is available.
-    uno::Reference<uno::XComponentContext> xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
-    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
-    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
-    if (!aCertificates.hasElements())
-        return;
+    // 2. Get certificate.
+    uno::Reference<security::XDocumentDigitalSignatures> xSigner(
+        security::DocumentDigitalSignatures::createWithVersion(
+            comphelper::getProcessComponentContext(), "1.2" ) );
 
-    uno::Reference<security::XCertificate> xCert = aCertificates[0];
-    if (!xCert.is())
+    OUString aDescription;
+    uno::Reference<security::XCertificate> xCertificate = xSigner->chooseCertificate(aDescription);
+    if (!xCertificate.is())
         return;
 
     // 3. Sign it.
-    svl::crypto::Signing signing(xCert);
+    svl::crypto::Signing signing(xCertificate);
     signing.AddDataRange(utf8Text.getStr(), utf8Text.getLength());
     OStringBuffer sigBuf;
     if (!signing.Sign(sigBuf))
