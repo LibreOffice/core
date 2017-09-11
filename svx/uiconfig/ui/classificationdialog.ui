@@ -241,17 +241,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="active">0</property>
-                        <items>
-                          <item id="1">1</item>
-                          <item id="2">2</item>
-                          <item id="3">3</item>
-                          <item id="4">4</item>
-                          <item id="5">5</item>
-                          <item id="6">6</item>
-                          <item id="7">7</item>
-                          <item id="8">8</item>
-                          <item id="9">9</item>
-                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>

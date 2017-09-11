@@ -33,6 +33,7 @@
         <xs:element ref="BusinessAuthorizationCategory" maxOccurs="unbounded"/>
         <xs:element ref="loext:Marking" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="loext:IntellectualPropertyPart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPartNumber" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -42,6 +43,7 @@
         <xs:element ref="BusinessAuthorizationCategory" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="loext:Marking" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="loext:IntellectualPropertyPart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPartNumber" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

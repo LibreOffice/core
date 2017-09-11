@@ -11,4 +11,9 @@
       <xs:attribute name="Name" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="IntellectualPropertyPartNumber">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

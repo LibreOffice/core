@@ -79,7 +79,10 @@
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
         <loext:Marking Name="Example Marking" />
-        <loext:IntellectualPropertyPart Name="Example IP Part" />
+        <loext:IntellectualPropertyPart Name="Example First IP Part" />
+        <loext:IntellectualPropertyPart Name="Example Second IP Part" />
+        <loext:IntellectualPropertyPartNumber Name="1" />
+        <loext:IntellectualPropertyPartNumber Name="2" />
     </baf:Included>
 </baf:BusinessAuthorization>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab:

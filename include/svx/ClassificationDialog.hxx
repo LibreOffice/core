@@ -39,8 +39,7 @@ private:
     DECL_LINK(ButtonClicked, Button*, void);
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
-
-    DECL_LINK(SelectIPPartHdl, ListBox&, void);
+    DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(DoubleClickIPPartHdl, ListBox&, void);
 
 public:

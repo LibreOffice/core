@@ -57,7 +57,11 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent)
         m_pMarkingListBox->InsertEntry(rName);
     m_pMarkingListBox->EnableAutoSize(true);
 
-    m_pIntellectualPropertyPartListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectIPPartHdl));
+    m_pIntellectualPropertyPartNumberListBox->SetSelectHdl(LINK(this, ClassificationDialog, SelectIPPartNumbersHdl));
+    for (const OUString& rName : maHelper.GetIntellectualPropertyPartNumbers())
+        m_pIntellectualPropertyPartNumberListBox->InsertEntry(rName);
+    m_pIntellectualPropertyPartNumberListBox->EnableAutoSize(true);
+
     m_pIntellectualPropertyPartListBox->SetDoubleClickHdl(LINK(this, ClassificationDialog, DoubleClickIPPartHdl));
     for (const OUString& rName : maHelper.GetIntellectualPropertyParts())
         m_pIntellectualPropertyPartListBox->InsertEntry(rName);
@@ -154,14 +158,15 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
             }
         }
 
-        OUString aString = maHelper.GetBACNames()[nSelected];
+        OUString aString = maHelper.GetMarkings()[nSelected];
         ClassificationField aField(ClassificationType::MARKINGS, aString);
         m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
     }
 }
 
-IMPL_LINK(ClassificationDialog, SelectIPPartHdl, ListBox&, rBox, void)
+IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
 {
+    printf ("DoubleClickIPPartHdl\n");
 }
 
 IMPL_LINK(ClassificationDialog, DoubleClickIPPartHdl, ListBox&, rBox, void)
