@@ -111,15 +111,18 @@ void ItemHolder2::impl_addItem(EItem eItem)
 
 void ItemHolder2::impl_releaseAllItems()
 {
-    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TItems items;
+    {
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+        items.swap(m_lItems);
+    }
 
     TItems::iterator pIt;
-    for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end()  ;
+    for (  pIt  = items.begin();
+           pIt != items.end()  ;
          ++pIt                    )
     {
-        TItemInfo& rInfo = *pIt;
-        impl_deleteItem(rInfo);
+        delete pIt->pItem;
     }
     m_lItems.clear();
 }
@@ -160,16 +163,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
         default:
             OSL_ASSERT(false);
             break;
-    }
-}
-
-
-void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
-{
-    if (rItem.pItem)
-    {
-        delete rItem.pItem;
-        rItem.pItem = nullptr;
     }
 }
 
