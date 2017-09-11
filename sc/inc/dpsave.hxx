@@ -327,11 +327,11 @@ public:
     bool GetRowGrand() const
         { return bool(nRowGrandMode); }
 
-    void SetIgnoreEmptyRows( bool bSet );
+    SC_DLLPUBLIC void SetIgnoreEmptyRows( bool bSet );
     bool GetIgnoreEmptyRows() const
         { return bool(nIgnoreEmptyMode); }
 
-    void SetRepeatIfEmpty( bool bSet );
+    SC_DLLPUBLIC void SetRepeatIfEmpty( bool bSet );
     bool GetRepeatIfEmpty() const
         { return bool(nRepeatEmptyMode); }
 

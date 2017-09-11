@@ -216,6 +216,7 @@ public:
     void testPivotTableDateFieldFilter();
     void testPivotTableBoolFieldFilter();
     void testPivotTableRowColPageFieldFilter();
+    void testPivotTableEmptyItem();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testPivotTableDateFieldFilter);
     CPPUNIT_TEST(testPivotTableBoolFieldFilter);
     CPPUNIT_TEST(testPivotTableRowColPageFieldFilter);
+    CPPUNIT_TEST(testPivotTableEmptyItem);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4695,6 +4697,43 @@ void ScExportTest::testPivotTableRowColPageFieldFilter()
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
     }
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableEmptyItem()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_empty_item.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check filtering of row dimensions
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("Category");
+    CPPUNIT_ASSERT(pSaveDim);
+
+    const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rMembers.size());
+    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("Fruit");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
+    pMember = pSaveDim->GetExistingMemberByName("Vegetables");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
+    pMember = pSaveDim->GetExistingMemberByName("");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
