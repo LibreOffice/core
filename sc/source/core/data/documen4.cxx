@@ -326,7 +326,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
             *t->GetSingleRef() = aRefData;
         }
 
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        for (SCCOL nCol : GetColumnsRange(nTab1, nCol1, nCol2))
         {
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
