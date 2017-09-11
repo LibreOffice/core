@@ -922,7 +922,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     }
 
     // no routine available
-    if (bNested || !bHasHandler || bCodeNest)
+    if (!bHasHandler || bCodeNest)
     {
         if( m_nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Result not as text
@@ -2723,12 +2723,11 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         //Create a new char style if necessary
         if (!pCharFormat)
         {
-            SwCharFormat *pFormat=nullptr;
             OUString aNm;
             //Take this as the base name
             SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
             aNm+=OUString::number(m_aRubyCharFormats.size()+1);
-            pFormat = m_rDoc.MakeCharFormat(aNm, m_rDoc.GetDfltCharFormat());
+            SwCharFormat *pFormat = m_rDoc.MakeCharFormat(aNm, m_rDoc.GetDfltCharFormat());
             SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
             SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
                 OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);

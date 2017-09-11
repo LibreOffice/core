@@ -1266,15 +1266,10 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn
 void PrinterController::printFilteredPage( int i_nPage )
 {
     if( mpImplData->meJobState != css::view::PrintableState_JOB_STARTED )
-        return;
+        return; // rhbz#657394: check that we are still printing...
 
     GDIMetaFile aPageFile;
     PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
-
-    if (mpImplData->meJobState != css::view::PrintableState_JOB_STARTED)
-    {   // rhbz#657394: check that we are still printing...
-        return;
-    }
 
     if( mpImplData->mpProgress )
     {

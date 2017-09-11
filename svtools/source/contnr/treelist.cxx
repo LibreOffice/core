@@ -433,7 +433,7 @@ sal_uLong SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
     if ( !pParent )
         return GetEntryCount();
 
-    if (!pParent || pParent->m_Children.empty())
+    if (pParent->m_Children.empty())
         return 0;
 
     sal_uLong nCount = 0;
