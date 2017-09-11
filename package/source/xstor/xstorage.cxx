@@ -375,7 +375,7 @@ void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
 {
     // Weak reference is used inside the holder so the refcount must not be zero at this point
     OSL_ENSURE( aStorage.GetRefCount_Impl(), "There must be a reference alive to use this method!" );
-    m_aReadOnlyWrapVector.push_back( StorageHolder_Impl( &aStorage ) );
+    m_aReadOnlyWrapVector.emplace_back( &aStorage );
 }
 
 void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
@@ -2042,7 +2042,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
     xComponent->addEventListener( uno::Reference< lang::XEventListener >(
         static_cast< ::cppu::OWeakObject* >(m_pData->m_pSubElDispListener.get()), uno::UNO_QUERY));
 
-    m_pData->m_aOpenSubComponentsVector.push_back( xComponent );
+    m_pData->m_aOpenSubComponentsVector.emplace_back(xComponent );
 }
 
 //  XInterface

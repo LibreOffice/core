@@ -359,7 +359,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
             try
             {
                 SdrObject* pNewObj = pSdrObject->Clone();
-                aCopies.push_back(uno::Reference<report::XReportComponent>(pNewObj->getUnoShape(),uno::UNO_QUERY));
+                aCopies.emplace_back(pNewObj->getUnoShape(),uno::UNO_QUERY);
                 if ( _bEraseAnddNoClone )
                 {
                     m_pView->AddUndo( rUndo.CreateUndoDeleteObject( *pSdrObject ) );
