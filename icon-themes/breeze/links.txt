@@ -373,6 +373,12 @@ cmd/sc_formfilter.png cmd/sc_datafilterspecialfilter.png
 cmd/sc_autofilter.png cmd/sc_datafilterautofilter.png
 cmd/sc_removefilter.png cmd/sc_removefiltersort.png
 
+# Bullets
+cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
+cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
+cmd/lc_romanliststyle.png cmd/lc_defaultnumbering.png
+cmd/sc_romanliststyle.png cmd/sc_defaultnumbering.png
+
 # Group
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
