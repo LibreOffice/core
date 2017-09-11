@@ -150,7 +150,7 @@
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="insert:insertmenu">
-                            <property name="label" translatable="yes">_Insert</property>
+                            <property name="label" translatable="yes" context="menuassignpage|insert">_Insert</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -168,7 +168,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="modify:modifymenu">
-                            <property name="label" translatable="yes">_Modify</property>
+                            <property name="label" translatable="yes" context="menuassignpage|modify">_Modify</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -186,7 +186,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="resetbtn">
-                            <property name="label" translatable="yes">Rese_t</property>
+                            <property name="label" translatable="yes" context="menuassignpage|resetbtn">Rese_t</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -228,7 +228,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="functionbtn">
-                            <property name="label" translatable="yes">_Function</property>
+                            <property name="label" translatable="yes" context="menuassignpage|functionbtn">_Function</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="hexpand">True</property>
@@ -264,7 +264,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="plusbtn">
-                            <property name="label" translatable="yes">_+</property>
+                            <property name="label" translatable="yes" context="menuassignpage|plusbtn">_+</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -281,7 +281,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="minusbtn">
-                            <property name="label" translatable="yes">_-</property>
+                            <property name="label" translatable="yes" context="menuassignpage|minusbtn">_-</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -395,7 +395,7 @@
                               <object class="GtkLabel" id="addlabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">_Add</property>
+                                <property name="label" translatable="yes" context="menuassignpage|addlabel">_Add</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">add</property>
                                 <accessibility>
@@ -440,7 +440,7 @@
                               <object class="GtkLabel" id="removelabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Remo_ve</property>
+                                <property name="label" translatable="yes" context="menuassignpage|removelabel">Remo_ve</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">remove</property>
                                 <accessibility>
@@ -489,7 +489,7 @@
                           <object class="GtkTextView" id="desc:border">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Local help is not installed.</property>
+                            <property name="tooltip_text" translatable="yes" context="menuassignpage|desc">Local help is not installed.</property>
                             <property name="editable">False</property>
                             <property name="cursor_visible">False</property>
                             <property name="accepts_tab">False</property>
@@ -525,7 +525,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_bottom">5</property>
-                        <property name="placeholder_text" translatable="yes">Type to search</property>
+                        <property name="placeholder_text" translatable="yes" context="menuassignpage|searchEntry">Type to search</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -582,7 +582,7 @@
         <child type="label">
           <object class="GtkLabel" id="labelx">
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Label</property>
+            <property name="label" translatable="yes" context="menuassignpage|labelx">Label</property>
           </object>
         </child>
       </object>
@@ -606,7 +606,7 @@
       <object class="GtkMenuItem" id="insertseparator">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Insert Separator</property>
+        <property name="label" translatable="yes" context="menuassignpage|insertseparator">Insert Separator</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -614,7 +614,7 @@
       <object class="GtkMenuItem" id="insertsubmenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Insert Submenu</property>
+        <property name="label" translatable="yes" context="menuassignpage|insertsubmenu">Insert Submenu</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -626,7 +626,7 @@
       <object class="GtkMenuItem" id="renameItem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Rename...</property>
+        <property name="label" translatable="yes" context="menuassignpage|renameItem">Rename...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -634,7 +634,7 @@
       <object class="GtkMenuItem" id="changeIcon">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Change Icon...</property>
+        <property name="label" translatable="yes" context="menuassignpage|changeIcon">Change Icon...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -642,7 +642,7 @@
       <object class="GtkMenuItem" id="resetIcon">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Reset Icon</property>
+        <property name="label" translatable="yes" context="menuassignpage|resetIcon">Reset Icon</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -650,7 +650,7 @@
       <object class="GtkMenuItem" id="restoreItem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Restore Default Command</property>
+        <property name="label" translatable="yes" context="menuassignpage|restoreItem">Restore Default Command</property>
         <property name="use_underline">True</property>
       </object>
     </child>
