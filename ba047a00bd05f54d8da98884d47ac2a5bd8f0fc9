@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7dcf76b0",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3052,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-11T13:03:24Z",
+      "side": 1,
+      "message": "Umm.. what if x \u003c 0.0 ? As is, it is ignored now, which doesn\u0027t look right.",
+      "revId": "ba047a00bd05f54d8da98884d47ac2a5bd8f0fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
