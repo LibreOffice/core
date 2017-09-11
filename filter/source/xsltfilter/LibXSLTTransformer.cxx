@@ -364,17 +364,13 @@ namespace XSLT
 
     void Reader::forceStateStopped()
     {
-        xsltTransformContextPtr tcontext;
-        {
-            std::unique_lock<std::mutex> g(m_mutex);
-            tcontext = m_tcontext;
-        }
-        if (!tcontext)
+        std::unique_lock<std::mutex> g(m_mutex);
+        if (!m_tcontext)
             return;
         //tdf#100057 If we force a cancel, libxslt will of course just keep on going unless something
         //tells it to stop. Here we force the stopped state so that libxslt will stop processing
         //and so Reader::execute will complete and we can join cleanly
-        tcontext->state = XSLT_STATE_STOPPED;
+        m_tcontext->state = XSLT_STATE_STOPPED;
     }
 
     Reader::~Reader()
