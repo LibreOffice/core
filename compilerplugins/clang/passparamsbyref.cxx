@@ -188,7 +188,7 @@ bool PassParamsByRef::isFat(QualType type) {
     if (type->isIncompleteType()) {
         return false;
     }
-    Type const * t2 = type.getTypePtrOrNull();
+    clang::Type const * t2 = type.getTypePtrOrNull();
     return t2 != nullptr
         && compiler.getASTContext().getTypeSizeInChars(t2).getQuantity() > 64;
 }
