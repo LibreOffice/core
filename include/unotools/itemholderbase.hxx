@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 #define INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 
+#include <memory>
 #include <vector>
 #include <osl/mutex.hxx>
 
@@ -80,16 +81,19 @@ enum class EItem
 struct TItemInfo
 {
     TItemInfo()
-        : pItem(nullptr)
-        , eItem(EItem::UserOptions)
+        : eItem(EItem::UserOptions)
     {
     }
 
-    utl::detail::Options * pItem;
+    TItemInfo(TItemInfo&& other)
+        : pItem(std::move(other.pItem))
+        , eItem(other.eItem)
+    {
+    }
+
+    std::unique_ptr<utl::detail::Options> pItem;
     EItem eItem;
 };
-
-typedef ::std::vector< TItemInfo > TItems;
 
 #endif // INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 

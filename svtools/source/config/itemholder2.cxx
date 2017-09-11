@@ -91,12 +91,8 @@ void ItemHolder2::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    TItems::const_iterator pIt;
-    for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end()  ;
-         ++pIt                    )
+    for ( auto const & rInfo : m_lItems )
     {
-        const TItemInfo& rInfo = *pIt;
         if (rInfo.eItem == eItem)
             return;
     }
@@ -105,26 +101,19 @@ void ItemHolder2::impl_addItem(EItem eItem)
     aNewItem.eItem = eItem;
     impl_newItem(aNewItem);
     if (aNewItem.pItem)
-        m_lItems.push_back(aNewItem);
+        m_lItems.emplace_back(std::move(aNewItem));
 }
 
 
 void ItemHolder2::impl_releaseAllItems()
 {
-    TItems items;
+    std::vector<TItemInfo> items;
     {
         ::osl::ResettableMutexGuard aLock(m_aLock);
         items.swap(m_lItems);
     }
 
-    TItems::iterator pIt;
-    for (  pIt  = items.begin();
-           pIt != items.end()  ;
-         ++pIt                    )
-    {
-        delete pIt->pItem;
-    }
-    m_lItems.clear();
+    // items will be freed when the block exits
 }
 
 
@@ -133,31 +122,31 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
     switch(rItem.eItem)
     {
         case EItem::AccessibilityOptions :
-            rItem.pItem = new SvtAccessibilityOptions();
+            rItem.pItem.reset( new SvtAccessibilityOptions() );
             break;
 
         case EItem::ColorConfig :
-            rItem.pItem = new ::svtools::ColorConfig();
+            rItem.pItem.reset( new ::svtools::ColorConfig() );
             break;
 
         case EItem::HelpOptions :
-            rItem.pItem = new SvtHelpOptions();
+            rItem.pItem.reset( new SvtHelpOptions() );
             break;
 
         case EItem::MenuOptions :
-            rItem.pItem = new SvtMenuOptions();
+            rItem.pItem.reset( new SvtMenuOptions() );
             break;
 
         case EItem::PrintOptions :
-            rItem.pItem = new SvtPrinterOptions();
+            rItem.pItem.reset( new SvtPrinterOptions() );
             break;
 
         case EItem::PrintFileOptions :
-            rItem.pItem = new SvtPrintFileOptions();
+            rItem.pItem.reset( new SvtPrintFileOptions() );
             break;
 
         case EItem::MiscOptions :
-            rItem.pItem = new SvtMiscOptions();
+            rItem.pItem.reset( new SvtMiscOptions() );
             break;
 
         default:

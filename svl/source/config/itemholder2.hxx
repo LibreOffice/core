@@ -30,7 +30,7 @@ class ItemHolder2 : private ItemHolderMutexBase
     // member
     private:
 
-        TItems m_lItems;
+        std::vector<TItemInfo> m_lItems;
 
     // c++ interface
     public:
