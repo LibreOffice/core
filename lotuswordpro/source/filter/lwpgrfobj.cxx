@@ -661,7 +661,7 @@ void LwpGraphicObject::CreateGrafObject()
     }
 
     // insert image object into array
-    m_vXFDrawObjects.push_back(pImage.get());
+    m_vXFDrawObjects.emplace_back(pImage.get());
 
 }
 

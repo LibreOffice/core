@@ -86,7 +86,7 @@ enumXFContent XFTextSpan::GetContentType()
 
 void    XFTextSpan::Add(XFContent *pContent)
 {
-    m_aContents.push_back(pContent);
+    m_aContents.emplace_back(pContent);
 }
 
 void    XFTextSpan::Add(const OUString& text)

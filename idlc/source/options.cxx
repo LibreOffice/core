@@ -101,14 +101,14 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
           }
         default:
           // "-<option>" ([long] option, w/o param)
-          rArgs.push_back(std::string(arg, len));
+          rArgs.emplace_back(arg, len);
           break;
         }
       }
       break;
     default:
       // "<param>"
-      rArgs.push_back(std::string(arg, len));
+      rArgs.emplace_back(arg, len);
       break;
     }
   }

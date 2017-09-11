@@ -1488,17 +1488,17 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
     for (const Bcp47CountryEntry* pEntry = aImplBcp47CountryEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
-        aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
+        aVec.emplace_back( pEntry->getTagString(), pEntry->mnLang);
     }
     for (const IsoLanguageScriptCountryEntry* pEntry = aImplIsoLangScriptEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
-        aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
+        aVec.emplace_back( pEntry->getTagString(), pEntry->mnLang);
     }
     for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
-        aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
+        aVec.emplace_back( pEntry->getTagString(), pEntry->mnLang);
     }
     return aVec;
 }
