@@ -37,6 +37,22 @@ enum class KeyGroup : sal_uInt16 {
     Type   = css::awt::KeyGroup::TYPE,  // mask
 };
 
+enum class KeyFuncType : sal_Int32 { DONTKNOW, NEW, OPEN, SAVE,
+                   SAVEAS, PRINT, CLOSE, QUIT,
+                   CUT, COPY, PASTE, UNDO,
+                   REDO, DELETE, REPEAT, FIND,
+                   FINDBACKWARD, PROPERTIES, FRONT };
+
+#define KEY_CODE_MASK       ((sal_uInt16)0x0FFF)
+
+// Modifier keys
+#define KEY_SHIFT           ((sal_uInt16)0x1000)
+#define KEY_MOD1            ((sal_uInt16)0x2000)
+#define KEY_MOD2            ((sal_uInt16)0x4000)
+#define KEY_MOD3            ((sal_uInt16)0x8000)
+#define KEY_MODIFIERS_MASK  ((sal_uInt16)0xF000)
+
+
 // Key codes
 #define KEY_0           ((sal_uInt16)css::awt::Key::NUM0)
 #define KEY_1           ((sal_uInt16)css::awt::Key::NUM1)
