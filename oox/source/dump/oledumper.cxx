@@ -957,19 +957,19 @@ void AxPropertyObjectBase::dumpUnknownProperty()
 void AxPropertyObjectBase::dumpPosProperty()
 {
     if( startNextProperty() )
-        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_POS, getPropertyName(), 8 ) );
+        maLargeProps.emplace_back( LargeProperty::PROPTYPE_POS, getPropertyName(), 8 );
 }
 
 void AxPropertyObjectBase::dumpSizeProperty()
 {
     if( startNextProperty() )
-        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_SIZE, getPropertyName(), 8 ) );
+        maLargeProps.emplace_back( LargeProperty::PROPTYPE_SIZE, getPropertyName(), 8 );
 }
 
 void AxPropertyObjectBase::dumpGuidProperty( OUString* pValue )
 {
     if( startNextProperty() )
-        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_GUID, getPropertyName(), 16, pValue ) );
+        maLargeProps.emplace_back( LargeProperty::PROPTYPE_GUID, getPropertyName(), 16, pValue );
 }
 
 void AxPropertyObjectBase::dumpStringProperty( OUString* pValue )
@@ -978,7 +978,7 @@ void AxPropertyObjectBase::dumpStringProperty( OUString* pValue )
     {
         alignInput< sal_uInt32 >();
         sal_uInt32 nLen = dumpHex< sal_uInt32 >( getPropertyName(), "AX-STRINGLEN" );
-        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_STRING, getPropertyName(), nLen, pValue ) );
+        maLargeProps.emplace_back( LargeProperty::PROPTYPE_STRING, getPropertyName(), nLen, pValue );
     }
 }
 
@@ -988,7 +988,7 @@ void AxPropertyObjectBase::dumpStringArrayProperty()
     {
         alignInput< sal_uInt32 >();
         sal_uInt32 nLen = dumpHex< sal_uInt32 >( getPropertyName(), "CONV-DEC" );
-        maLargeProps.push_back( LargeProperty( LargeProperty::PROPTYPE_STRINGARRAY, getPropertyName(), nLen ) );
+        maLargeProps.emplace_back( LargeProperty::PROPTYPE_STRINGARRAY, getPropertyName(), nLen );
     }
 }
 
@@ -998,7 +998,7 @@ void AxPropertyObjectBase::dumpStreamProperty()
     {
         alignInput< sal_uInt16 >();
         sal_uInt16 nData = dumpHex< sal_uInt16 >( getPropertyName() );
-        maStreamProps.push_back( StreamProperty( getPropertyName(), nData ) );
+        maStreamProps.emplace_back( getPropertyName(), nData );
     }
 }
 
@@ -1495,7 +1495,7 @@ VbaFormClassInfoObject::VbaFormClassInfoObject( const InputObjectBase& rParent, 
 
 void VbaFormClassInfoObject::implDumpShortProperties()
 {
-    mrFormData.maClassInfoProgIds.push_back( OUString() );
+    mrFormData.maClassInfoProgIds.emplace_back( );
     dumpGuidProperty( &mrFormData.maClassInfoProgIds.back() );
     dumpGuidProperty();
     dumpUnknownProperty();

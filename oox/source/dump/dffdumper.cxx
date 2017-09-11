@@ -185,7 +185,7 @@ void DffStreamObject::dumpDffOpt()
         if( getFlag( nPropId, DFF_OPT_COMPLEX ) )
         {
             writeHexItem( "complex-size", nValue, "CONV-DEC" );
-            aPropInfos.push_back( PropInfo( String( "property-data" ), PROPTYPE_BINARY, nBaseId, nValue ) );
+            aPropInfos.emplace_back( String( "property-data" ), PROPTYPE_BINARY, nBaseId, nValue );
         }
         else
         {

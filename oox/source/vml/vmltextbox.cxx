@@ -57,7 +57,7 @@ TextBox::TextBox(ShapeTypeModel& rTypeModel)
 
 void TextBox::appendPortion( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText )
 {
-    maPortions.push_back( TextPortionModel( rParagraph, rFont, rText ) );
+    maPortions.emplace_back( rParagraph, rFont, rText );
 }
 
 const TextFontModel* TextBox::getFirstFont() const

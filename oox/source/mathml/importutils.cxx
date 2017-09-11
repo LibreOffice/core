@@ -320,17 +320,17 @@ void XmlStream::handleUnexpectedTag()
 
 void XmlStreamBuilder::appendOpeningTag( int token, const uno::Reference< xml::sax::XFastAttributeList >& attrs )
 {
-    tags.push_back( Tag( OPENING( token ), attrs ));
+    tags.emplace_back( OPENING( token ), attrs );
 }
 
 void XmlStreamBuilder::appendOpeningTag( int token, const AttributeList& attrs )
 {
-    tags.push_back( Tag( OPENING( token ), attrs ));
+    tags.emplace_back( OPENING( token ), attrs );
 }
 
 void XmlStreamBuilder::appendClosingTag( int token )
 {
-    tags.push_back( Tag( CLOSING( token )));
+    tags.emplace_back( CLOSING( token ));
 }
 
 void XmlStreamBuilder::appendCharacters( const OUString& chars )

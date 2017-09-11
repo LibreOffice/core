@@ -1540,7 +1540,7 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
             auto it = aMapAxisToIndex.find(nAxisIndex);
             if (it == aMapAxisToIndex.end())
             {
-                aSplitSeries.push_back(Sequence<Reference<chart2::XDataSeries> >());
+                aSplitSeries.emplace_back();
                 nVectorPos = aSplitSeries.size() - 1;
                 aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
             }
@@ -3075,8 +3075,8 @@ void ChartExport::exportAxesId(bool bPrimaryAxes)
     sal_Int32 nAxisIdy = lcl_generateRandomValue();
     AxesType eXAxis = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
     AxesType eYAxis = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
-    maAxes.push_back( AxisIdPair( eXAxis, nAxisIdx, nAxisIdy ) );
-    maAxes.push_back( AxisIdPair( eYAxis, nAxisIdy, nAxisIdx ) );
+    maAxes.emplace_back( eXAxis, nAxisIdx, nAxisIdy );
+    maAxes.emplace_back( eYAxis, nAxisIdy, nAxisIdx );
     FSHelperPtr pFS = GetFS();
     pFS->singleElement( FSNS( XML_c, XML_axId ),
             XML_val, I32S( nAxisIdx ),
@@ -3090,7 +3090,7 @@ void ChartExport::exportAxesId(bool bPrimaryAxes)
         if( isDeep3dChart() )
         {
             nAxisIdz = lcl_generateRandomValue();
-            maAxes.push_back( AxisIdPair( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy ) );
+            maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
         }
         pFS->singleElement( FSNS( XML_c, XML_axId ),
             XML_val, I32S( nAxisIdz ),

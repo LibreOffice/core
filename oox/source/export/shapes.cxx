@@ -702,14 +702,14 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
             // For polar handles, nXPosition is radius and nYPosition is angle
             lcl_GetHandlePosition( nXPosition, aPosition.First , rSeq );
             lcl_GetHandlePosition( nYPosition, aPosition.Second, rSeq );
-            rHandlePositionList.push_back( std::pair<sal_Int32, sal_Int32> ( nXPosition, nYPosition ) );
+            rHandlePositionList.emplace_back( nXPosition, nYPosition );
         }
     }
 }
 
 void lcl_AppendAdjustmentValue( std::vector< std::pair< sal_Int32, sal_Int32> > &rAvList, sal_Int32 nAdjIdx, sal_Int32 nValue )
 {
-    rAvList.push_back( std::pair<sal_Int32, sal_Int32> ( nAdjIdx , nValue ) );
+    rAvList.emplace_back( nAdjIdx , nValue );
 }
 
 sal_Int32 lcl_NormalizeAngle( sal_Int32 nAngle )

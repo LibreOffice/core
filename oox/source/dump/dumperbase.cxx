@@ -1829,13 +1829,13 @@ void StorageObjectBase::implDumpBaseStream( const BinaryInputStreamRef&, const O
 void StorageObjectBase::addPreferredStream( const String& rStrmName )
 {
     if( rStrmName.has() )
-        maPreferred.push_back( PreferredItem( rStrmName, false ) );
+        maPreferred.emplace_back( rStrmName, false );
 }
 
 void StorageObjectBase::addPreferredStorage( const String& rStrgPath )
 {
     if( rStrgPath.has() )
-        maPreferred.push_back( PreferredItem( rStrgPath, true ) );
+        maPreferred.emplace_back( rStrgPath, true );
 }
 
 OUString StorageObjectBase::getSysFileName( const OUString& rStrmName, const OUString& rSysOutPath )

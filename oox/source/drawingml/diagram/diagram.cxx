@@ -277,9 +277,8 @@ void Diagram::build(  )
         if( aCurrCxn->mnType == XML_presOf )
         {
             DiagramData::StringMap::value_type::second_type& rVec=getData()->getPresOfNameMap()[aCurrCxn->msDestId];
-            rVec.push_back(
-                std::make_pair(
-                    aCurrCxn->msSourceId,sal_Int32(0)));
+            rVec.emplace_back(
+                    aCurrCxn->msSourceId,sal_Int32(0));
         }
 
         ++aCurrCxn;
