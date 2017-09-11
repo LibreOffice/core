@@ -501,7 +501,7 @@ void ShapeContext::setPoints( const OUString& rPoints )
     {
         sal_Int32 nX = rPoints.getToken( 0, ',', nIndex ).toInt32();
         sal_Int32 nY = rPoints.getToken( 0, ',', nIndex ).toInt32();
-        mrShapeModel.maPoints.push_back( awt::Point( nX, nY ) );
+        mrShapeModel.maPoints.emplace_back( nX, nY );
     }
 }
 

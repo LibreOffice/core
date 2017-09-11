@@ -69,7 +69,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             int idx = p.toInt32();
             sal_uInt16 nNumFmt;
             xIface = xFactory->createInstance( "com.sun.star.text.TextField.DateTime" );
-            aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+            aFields.emplace_back( xIface, UNO_QUERY );
             Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
 
             // here we should format the field properly. waiting after #i81091.
@@ -136,17 +136,17 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
     else if ( sType == "slidenum" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
-        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+        aFields.emplace_back( xIface, UNO_QUERY );
     }
     else if ( sType == "slidecount" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageCount" );
-        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+        aFields.emplace_back( xIface, UNO_QUERY );
     }
     else if ( sType == "slidename" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageName" );
-        aFields.push_back( Reference< XTextField > ( xIface, uno::UNO_QUERY ) );
+        aFields.emplace_back( xIface, uno::UNO_QUERY );
     }
     else if ( sType.startsWith("file") )
     {
@@ -154,7 +154,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         OString p( s.pData->buffer + 4 );
         int idx = p.toInt32();
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.FileName" );
-        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+        aFields.emplace_back( xIface, UNO_QUERY );
         Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
 
         switch( idx )
@@ -175,7 +175,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
     else if( sType == "author" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.Author" );
-        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+        aFields.emplace_back( xIface, UNO_QUERY );
     }
 }
 

@@ -137,7 +137,7 @@ void ContextStack::pushContext( const RecordInfo& rRecInfo, const ContextHandler
 {
     OSL_ENSURE( (rRecInfo.mnEndRecId >= 0) || maStack.empty() || hasCurrentEndRecId(),
         "ContextStack::pushContext - nested incomplete context record identifiers" );
-    maStack.push_back( ContextInfo( rRecInfo, rxContext ) );
+    maStack.emplace_back( rRecInfo, rxContext );
 }
 
 void ContextStack::popContext()

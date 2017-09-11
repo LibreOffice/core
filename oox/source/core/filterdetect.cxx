@@ -327,7 +327,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     feature with password. Try this first before prompting the
                     user for a password. */
                 std::vector<OUString> aDefaultPasswords;
-                aDefaultPasswords.push_back("VelvetSweatshop");
+                aDefaultPasswords.emplace_back("VelvetSweatshop");
 
                 /*  Use the comphelper password helper to request a password.
                     This helper returns either with the correct password

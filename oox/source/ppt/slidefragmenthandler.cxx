@@ -204,7 +204,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
             mpSlidePersistPtr->getCommentsList().cmLst.back().setText( getCharVector().back() );
         }
         // insert a new comment in vector commentsList
-        mpSlidePersistPtr->getCommentsList().cmLst.push_back(Comment());
+        mpSlidePersistPtr->getCommentsList().cmLst.emplace_back();
         mpSlidePersistPtr->getCommentsList().cmLst.back().setAuthorId(rAttribs.getString(XML_authorId, OUString()));
         mpSlidePersistPtr->getCommentsList().cmLst.back().setdt(rAttribs.getString(XML_dt, OUString()));
         mpSlidePersistPtr->getCommentsList().cmLst.back().setidx(rAttribs.getString(XML_idx, OUString()));

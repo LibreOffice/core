@@ -172,7 +172,7 @@ namespace oox { namespace ppt {
         {
         case PPT_TOKEN( cond ):
             // add a condition to the list
-            maConditions.push_back( AnimationCondition() );
+            maConditions.emplace_back( );
             return new CondContext( *this, rAttribs.getFastAttributeList(), mpNode, maConditions.back() );
         default:
             break;
