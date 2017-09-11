@@ -17,19 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <svx/swframeposstrings.hxx>
 #include <tools/resary.hxx>
-#include <tools/debug.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include "swframeposstrings.hrc"
 
 OUString SvxSwFramePosString::GetString(StringId eId)
 {
-    assert(SAL_N_ELEMENTS(RID_SVXSW_FRAMEPOSITIONS) == SvxSwFramePosString::STR_MAX);
-    DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
-    if(!(eId < STR_MAX))
-        eId = LEFT;
+    static_assert(
+        (SAL_N_ELEMENTS(RID_SVXSW_FRAMEPOSITIONS)
+         == SvxSwFramePosString::STR_MAX),
+        "RID_SVXSW_FRAMEPOSITIONS too small");
+    assert(eId >= 0 && eId < STR_MAX);
     return SvxResId(RID_SVXSW_FRAMEPOSITIONS[eId]);
 }
 
