@@ -145,17 +145,17 @@ FileTypeDialog	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel
 InstallChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 InstallChangeFolder	BannerLine	Line	0	44	376	0	1				
 InstallChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_111	ComboText	
-InstallChangeFolder	Combo	DirectoryCombo	21	64	277	80	4128779	_BrowseProperty		Up	
-InstallChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_113	Combo	
+InstallChangeFolder	Combo	DirectoryCombo	21	64	292	80	4128779	_BrowseProperty		Up	
+InstallChangeFolder	ComboText	Text	21	51	99	14	3		OOO_CONTROL_113	Combo	
 InstallChangeFolder	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_114		
 InstallChangeFolder	DlgLine	Line	0	234	376	0	1				
 InstallChangeFolder	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_115		
-InstallChangeFolder	List	DirectoryList	21	90	332	97	15	_BrowseProperty		TailText	
-InstallChangeFolder	NewFolder	PushButton	335	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
+InstallChangeFolder	List	DirectoryList	21	90	345	97	11	_BrowseProperty		TailText	
+InstallChangeFolder	NewFolder	PushButton	348	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_117
 InstallChangeFolder	OK	PushButton	230	243	66	17	3		OOO_CONTROL_118	Cancel	
-InstallChangeFolder	Tail	PathEdit	21	207	332	17	15	_BrowseProperty		OK	
+InstallChangeFolder	Tail	PathEdit	21	207	345	17	15	_BrowseProperty		OK	
 InstallChangeFolder	TailText	Text	21	193	99	13	3		OOO_CONTROL_120	Tail	
-InstallChangeFolder	Up	PushButton	310	64	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_121
+InstallChangeFolder	Up	PushButton	322	64	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_121
 InstallWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_122	Copyright	
 InstallWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_123	Back	
 InstallWelcome	Copyright	Text	135	144	228	73	65539		OOO_CONTROL_124	Next	
