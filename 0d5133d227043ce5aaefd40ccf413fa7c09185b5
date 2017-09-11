@@ -16,6 +16,24 @@
       "revId": "0d5133d227043ce5aaefd40ccf413fa7c09185b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1dff5202",
+        "filename": "vcl/unx/generic/printer/cpdmgr.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1001621
+      },
+      "writtenOn": "2017-09-11T10:27:09Z",
+      "side": 1,
+      "message": "This was supposed to be a loop over m_aCPDDestMap, freeing the pointers",
+      "parentUuid": "1a430d35_c2224bb9",
+      "revId": "0d5133d227043ce5aaefd40ccf413fa7c09185b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
