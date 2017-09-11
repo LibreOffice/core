@@ -93,12 +93,8 @@ void ItemHolder1::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    TItems::const_iterator pIt;
-    for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end();
-         ++pIt                    )
+    for ( auto const & rInfo : m_lItems )
     {
-        const TItemInfo& rInfo = *pIt;
         if (rInfo.eItem == eItem)
             return;
     }
@@ -107,24 +103,18 @@ void ItemHolder1::impl_addItem(EItem eItem)
     aNewItem.eItem = eItem;
     impl_newItem(aNewItem);
     if (aNewItem.pItem)
-        m_lItems.push_back(aNewItem);
+        m_lItems.emplace_back(std::move(aNewItem));
 }
 
 void ItemHolder1::impl_releaseAllItems()
 {
-    TItems items;
+    std::vector< TItemInfo > items;
     {
         ::osl::MutexGuard aLock(m_aLock);
         items.swap(m_lItems);
     }
 
-    TItems::iterator pIt;
-    for (  pIt  = items.begin();
-           pIt != items.end();
-         ++pIt                    )
-    {
-        delete pIt->pItem;
-    }
+    // items will be freed when the block exits
 }
 
 void ItemHolder1::impl_newItem(TItemInfo& rItem)
@@ -132,91 +122,91 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
     switch(rItem.eItem)
     {
         case EItem::CmdOptions :
-            rItem.pItem = new SvtCommandOptions();
+            rItem.pItem.reset( new SvtCommandOptions() );
             break;
 
         case EItem::Compatibility :
-            rItem.pItem = new SvtCompatibilityOptions();
+            rItem.pItem.reset( new SvtCompatibilityOptions() );
             break;
 
         case EItem::DefaultOptions :
-            rItem.pItem = new SvtDefaultOptions();
+            rItem.pItem.reset( new SvtDefaultOptions() );
             break;
 
         case EItem::DynamicMenuOptions :
-            rItem.pItem = new SvtDynamicMenuOptions();
+            rItem.pItem.reset( new SvtDynamicMenuOptions() );
             break;
 
         case EItem::EventConfig :
-            //rItem.pItem = new GlobalEventConfig();
+            //rItem.pItem.reset( new GlobalEventConfig() );
             break;
 
         case EItem::ExtendedSecurityOptions :
-            rItem.pItem = new SvtExtendedSecurityOptions();
+            rItem.pItem.reset( new SvtExtendedSecurityOptions() );
             break;
 
         case EItem::FontOptions :
-            rItem.pItem = new SvtFontOptions();
+            rItem.pItem.reset( new SvtFontOptions() );
             break;
 
         case EItem::HistoryOptions :
-            rItem.pItem = new SvtHistoryOptions();
+            rItem.pItem.reset( new SvtHistoryOptions() );
             break;
 
         case EItem::LinguConfig :
-            rItem.pItem = new SvtLinguConfig();
+            rItem.pItem.reset( new SvtLinguConfig() );
             break;
 
         case EItem::ModuleOptions :
-            rItem.pItem = new SvtModuleOptions();
+            rItem.pItem.reset( new SvtModuleOptions() );
             break;
 
         case EItem::OptionsDialogOptions :
-            rItem.pItem = new SvtOptionsDialogOptions();
+            rItem.pItem.reset( new SvtOptionsDialogOptions() );
             break;
 
         case EItem::PathOptions :
-            rItem.pItem = new SvtPathOptions();
+            rItem.pItem.reset( new SvtPathOptions() );
             break;
 
         case EItem::PrintWarningOptions :
-            rItem.pItem = new SvtPrintWarningOptions();
+            rItem.pItem.reset( new SvtPrintWarningOptions() );
             break;
 
         case EItem::MiscConfig :
-            rItem.pItem = new ::utl::MiscCfg();
+            rItem.pItem.reset( new ::utl::MiscCfg() );
             break;
 
         case EItem::SaveOptions :
-            rItem.pItem = new SvtSaveOptions();
+            rItem.pItem.reset( new SvtSaveOptions() );
             break;
 
         case EItem::SecurityOptions :
-            rItem.pItem = new SvtSecurityOptions();
+            rItem.pItem.reset( new SvtSecurityOptions() );
             break;
 
         case EItem::ViewOptionsDialog :
-            rItem.pItem = new SvtViewOptions(EViewType::Dialog, OUString());
+            rItem.pItem.reset( new SvtViewOptions(EViewType::Dialog, OUString()) );
             break;
 
         case EItem::ViewOptionsTabDialog :
-            rItem.pItem = new SvtViewOptions(EViewType::TabDialog, OUString());
+            rItem.pItem.reset( new SvtViewOptions(EViewType::TabDialog, OUString()) );
             break;
 
         case EItem::ViewOptionsTabPage :
-            rItem.pItem = new SvtViewOptions(EViewType::TabPage, OUString());
+            rItem.pItem.reset( new SvtViewOptions(EViewType::TabPage, OUString()) );
             break;
 
         case EItem::ViewOptionsWindow :
-            rItem.pItem = new SvtViewOptions(EViewType::Window, OUString());
+            rItem.pItem.reset( new SvtViewOptions(EViewType::Window, OUString()) );
             break;
 
         case EItem::UserOptions :
-            rItem.pItem = new SvtUserOptions();
+            rItem.pItem.reset( new SvtUserOptions() );
             break;
 
         case EItem::SysLocaleOptions :
-            rItem.pItem = new SvtSysLocaleOptions();
+            rItem.pItem.reset( new SvtSysLocaleOptions() );
             break;
 
         default:

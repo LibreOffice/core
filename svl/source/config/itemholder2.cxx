@@ -79,12 +79,8 @@ void ItemHolder2::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    TItems::const_iterator pIt;
-    for (  pIt  = m_lItems.begin();
-           pIt != m_lItems.end()  ;
-         ++pIt                    )
+    for ( auto const & rInfo : m_lItems )
     {
-        const TItemInfo& rInfo = *pIt;
         if (rInfo.eItem == eItem)
             return;
     }
@@ -93,24 +89,18 @@ void ItemHolder2::impl_addItem(EItem eItem)
     aNewItem.eItem = eItem;
     impl_newItem(aNewItem);
     if (aNewItem.pItem)
-        m_lItems.push_back(aNewItem);
+        m_lItems.emplace_back(std::move(aNewItem));
 }
 
 void ItemHolder2::impl_releaseAllItems()
 {
-    TItems items;
+    std::vector< TItemInfo > items;
     {
         ::osl::MutexGuard aLock(m_aLock);
         items.swap(m_lItems);
     }
 
-    TItems::iterator pIt;
-    for (  pIt  = items.begin();
-           pIt != items.end()  ;
-         ++pIt                    )
-    {
-        delete pIt->pItem;
-    }
+    // items will be freed when the block exits
 }
 
 void ItemHolder2::impl_newItem(TItemInfo& rItem)
@@ -118,11 +108,11 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
     switch(rItem.eItem)
     {
         case EItem::CJKOptions :
-            rItem.pItem = new SvtCJKOptions();
+            rItem.pItem.reset( new SvtCJKOptions() );
             break;
 
         case EItem::CTLOptions :
-            rItem.pItem = new SvtCTLOptions();
+            rItem.pItem.reset( new SvtCTLOptions() );
             break;
 
         default:
