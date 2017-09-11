@@ -1158,7 +1158,6 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pTopLevelListBox, "toplevellist");
     get(m_pPlusBtn, "plusbtn");
     get(m_pMinusBtn, "minusbtn");
-    get(m_pContents, "contents");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
@@ -1173,7 +1172,10 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pEntries->set_height_request(aSize.Height());
     m_pEntries->set_width_request(aSize.Width());
     m_pFunctions->set_height_request(aSize.Height());
-    m_pFunctions->set_width_request(aSize.Width());
+    //TODO: Add SvxMenuEntriesListBox into the glade catalog, and use it on the
+    //      .ui file to get rid of the extra VCLContainer, and all these manual
+    //      sizing and widget creation tricks.
+    m_pFunctions->set_width_request(aSize.Width() * 1.4);
 
     // Make the middle buttons bigger
     m_pAddCommandButton->set_height_request( m_pAddCommandButton->GetOptimalSize().Height() * 1.5 );
@@ -1203,7 +1205,6 @@ void SvxConfigPage::dispose()
     m_pMinusBtn.clear();
     m_pSearchEdit.clear();
     m_pCommandCategoryListBox.clear();
-    m_pContents.clear();
     m_pEntries.clear();
     m_pFunctions.clear();
     m_pAddCommandButton.clear();
