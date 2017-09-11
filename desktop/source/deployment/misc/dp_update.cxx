@@ -101,7 +101,7 @@ void getOwnUpdateInfos(
             Sequence<Reference< xml::dom::XElement > >
                 infos(getUpdateInformation(updateInformation, urls, id, anyError));
             if (anyError.hasValue())
-                out_errors.push_back(std::make_pair(i->second.extension, anyError));
+                out_errors.emplace_back(i->second.extension, anyError);
 
             for (sal_Int32 j = 0; j < infos.getLength(); ++j)
             {
@@ -146,7 +146,7 @@ void getDefaultUpdateInfos(
                 updateInformation,
                 Sequence< OUString >(&sDefaultURL, 1), OUString(), anyError));
     if (anyError.hasValue())
-        out_errors.push_back(std::make_pair(Reference<deployment::XPackage>(), anyError));
+        out_errors.emplace_back(Reference<deployment::XPackage>(), anyError);
     for (sal_Int32 i = 0; i < infos.getLength(); ++i)
     {
         Reference< xml::dom::XNode > node(infos[i], UNO_QUERY_THROW);

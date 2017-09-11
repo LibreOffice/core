@@ -364,7 +364,7 @@ namespace drawinglayer
             if(basegfx::fTools::equalZero(fRotation) || 0 == nSteps)
             {
                 // no rotation or no steps, just one plane
-                rSliceVector.push_back(Slice3D(rSource, basegfx::B3DHomMatrix()));
+                rSliceVector.emplace_back(rSource, basegfx::B3DHomMatrix());
             }
             else
             {
@@ -406,7 +406,7 @@ namespace drawinglayer
                         impGetOuterPolyPolygon(aFront, aOuterFront, fOffsetLen, bCharacterMode);
                         basegfx::B3DHomMatrix aTransform;
                         aTransform.translate(0.0, 0.0, fOffsetLen);
-                        rSliceVector.push_back(Slice3D(aOuterFront, aTransform, SLICETYPE3D_FRONTCAP));
+                        rSliceVector.emplace_back(aOuterFront, aTransform, SLICETYPE3D_FRONTCAP);
                     }
 
                     if(bCloseBack)
@@ -421,7 +421,7 @@ namespace drawinglayer
                 // add start polygon (a = 0)
                 if(!bClosedRotation)
                 {
-                    rSliceVector.push_back(Slice3D(aFront, basegfx::B3DHomMatrix()));
+                    rSliceVector.emplace_back(aFront, basegfx::B3DHomMatrix());
                 }
 
                 // create segments (a + 1 .. nSteps)
@@ -433,12 +433,12 @@ namespace drawinglayer
                     basegfx::B2DPolyPolygon aNewPoly(bBackScale ? basegfx::tools::interpolate(aFront, aBack, fStep) : aFront);
                     basegfx::B3DHomMatrix aNewMat;
                     aNewMat.rotate(0.0, fRotation * fStep, 0.0);
-                    rSliceVector.push_back(Slice3D(aNewPoly, aNewMat));
+                    rSliceVector.emplace_back(aNewPoly, aNewMat);
                 }
 
                 if(bCloseBack)
                 {
-                    rSliceVector.push_back(Slice3D(aOuterBack, aTransformBack, SLICETYPE3D_BACKCAP));
+                    rSliceVector.emplace_back(aOuterBack, aTransformBack, SLICETYPE3D_BACKCAP);
                 }
             }
         }
@@ -456,7 +456,7 @@ namespace drawinglayer
             if(basegfx::fTools::equalZero(fDepth))
             {
                 // no depth, just one plane
-                rSliceVector.push_back(Slice3D(rSource, basegfx::B3DHomMatrix()));
+                rSliceVector.emplace_back(rSource, basegfx::B3DHomMatrix());
             }
             else
             {
@@ -488,7 +488,7 @@ namespace drawinglayer
                     impGetOuterPolyPolygon(aFront, aOuterFront, fOffset, bCharacterMode);
                     basegfx::B3DHomMatrix aTransformFront;
                     aTransformFront.translate(0.0, 0.0, fDepth);
-                    rSliceVector.push_back(Slice3D(aOuterFront, aTransformFront, SLICETYPE3D_FRONTCAP));
+                    rSliceVector.emplace_back(aOuterFront, aTransformFront, SLICETYPE3D_FRONTCAP);
                 }
 
                 if(bCloseBack)
@@ -503,15 +503,15 @@ namespace drawinglayer
                     basegfx::B3DHomMatrix aTransformA, aTransformB;
 
                     aTransformA.translate(0.0, 0.0, fZFront);
-                    rSliceVector.push_back(Slice3D(aFront, aTransformA));
+                    rSliceVector.emplace_back(aFront, aTransformA);
 
                     aTransformB.translate(0.0, 0.0, fZBack);
-                    rSliceVector.push_back(Slice3D(aBack, aTransformB));
+                    rSliceVector.emplace_back(aBack, aTransformB);
                 }
 
                 if(bCloseBack)
                 {
-                    rSliceVector.push_back(Slice3D(aOuterBack, basegfx::B3DHomMatrix(), SLICETYPE3D_BACKCAP));
+                    rSliceVector.emplace_back(aOuterBack, basegfx::B3DHomMatrix(), SLICETYPE3D_BACKCAP);
                 }
             }
         }
@@ -891,7 +891,7 @@ namespace drawinglayer
 
                 for(a = 0; a < aEdgeRounding.count(); a++)
                 {
-                    rFill.push_back(basegfx::B3DPolyPolygon(aEdgeRounding.getB3DPolygon(a)));
+                    rFill.emplace_back(aEdgeRounding.getB3DPolygon(a));
                 }
             }
         }

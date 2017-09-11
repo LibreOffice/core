@@ -213,7 +213,7 @@ namespace
         OSL_ENSURE(aUsedFound != maUsedBuffers.end(), "OOps, non-registered buffer freed (!)");
 
         maUsedBuffers.erase(aUsedFound);
-        maFreeBuffers.push_back(&rDevice);
+        maFreeBuffers.emplace_back(&rDevice);
         SAL_WARN_IF(maFreeBuffers.size() > 1000, "drawinglayer", "excessive cached buffers, "
             << maFreeBuffers.size() << " entries!");
         Start();

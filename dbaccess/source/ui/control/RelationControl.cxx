@@ -232,7 +232,7 @@ namespace dbaui
                 rLines.push_back(new OConnectionLineData());
                 nRow = rLines.size() - 1;
                 // add new past-rLines row
-                m_ops.push_back(make_pair(INSERT, make_pair(nRow+1, nRow+2)));
+                m_ops.emplace_back(INSERT, make_pair(nRow+1, nRow+2));
             }
 
             OConnectionLineDataRef pConnLineData = rLines[nRow];
@@ -255,8 +255,8 @@ namespace dbaui
         OConnectionLineDataVec::size_type line = m_pConnData->normalizeLines();
         const OConnectionLineDataVec::size_type newSize = m_pConnData->GetConnLineDataList().size();
         assert(newSize <= oldSize);
-        m_ops.push_back(make_pair(MODIFY, make_pair(line, newSize)));
-        m_ops.push_back(make_pair(DELETE, make_pair(newSize, oldSize)));
+        m_ops.emplace_back(MODIFY, make_pair(line, newSize));
+        m_ops.emplace_back(DELETE, make_pair(newSize, oldSize));
 
         return true;
     }

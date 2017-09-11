@@ -695,11 +695,10 @@ namespace drawinglayer
                 {
                     const SvgGradientEntry& rCandidate = getGradientEntries()[nCount - 1 - a];
 
-                    maMirroredGradientEntries.push_back(
-                        SvgGradientEntry(
+                    maMirroredGradientEntries.emplace_back(
                             1.0 - rCandidate.getOffset(),
                             rCandidate.getColor(),
-                            rCandidate.getOpacity()));
+                            rCandidate.getOpacity());
                 }
             }
         }
