@@ -122,6 +122,7 @@
 #include <officecfg/Office/Security.hxx>
 
 #include <sfx2/fcontnr.hxx>
+#include <svx/ClassificationDialog.hxx>
 
 #include "swabstdlg.hxx"
 #include "watermarkdialog.hxx"
@@ -1165,6 +1166,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_CLASSIFICATION_DIALOG:
         {
+            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
+            if (RET_OK == pDialog->Execute())
+            {
+                SwDocShell* pDocShell = GetDoc()->GetDocShell();
+                if (!pDocShell)
+                    return;
+
+                for (svx::ClassificationResult const & rResult : pDialog->getResult())
+                {
+
+                }
+            }
+            pDialog.disposeAndClear();
         }
         break;
         case SID_WATERMARK:

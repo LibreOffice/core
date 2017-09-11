@@ -4388,7 +4388,7 @@ SfxVoidItem ClassificationDialog SID_CLASSIFICATION_DIALOG
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_DOCUMENT;
+    GroupId = SfxGroupId::Document;
 ]
 
 SfxBoolItem Init3D SID_3D_INIT
