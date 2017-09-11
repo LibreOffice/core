@@ -25,12 +25,6 @@
 
 enum class TimeFieldFormat : sal_Int32 { F_NONE, F_SEC, F_SEC_CS };
 
-enum class KeyFuncType : sal_Int32 { DONTKNOW, NEW, OPEN, SAVE,
-                   SAVEAS, PRINT, CLOSE, QUIT,
-                   CUT, COPY, PASTE, UNDO,
-                   REDO, DELETE, REPEAT, FIND,
-                   FINDBACKWARD, PROPERTIES, FRONT };
-
 enum class MenuItemType { DONTKNOW, STRING, IMAGE, STRINGIMAGE, SEPARATOR };
 
 enum class MenuItemBits : sal_Int16
@@ -123,17 +117,6 @@ namespace o3tl
 {
     template<> struct typed_flags<WindowBorderStyle> : is_typed_flags<WindowBorderStyle, 0x3033> {};
 }
-
-#define KEY_CODE_MASK       ((sal_uInt16)0x0FFF)
-
-// Modifier keys
-#define KEY_SHIFT           ((sal_uInt16)0x1000)
-#define KEY_MOD1            ((sal_uInt16)0x2000)
-#define KEY_MOD2            ((sal_uInt16)0x4000)
-#define KEY_MOD3            ((sal_uInt16)0x8000)
-#define KEY_MODIFIERS_MASK  ((sal_uInt16)0xF000)
-
-
 
 enum class ExtTimeFieldFormat
 {
