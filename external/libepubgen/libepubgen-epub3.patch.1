@@ -1994,3 +1994,64 @@ index 0f7f1e0..1bd1e16 100644
 -- 
 2.12.3
 
+From 7be89d1881e175182039ca93a1546d79933cab85 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Mon, 11 Sep 2017 11:03:03 +0200
+Subject: [PATCH] EPUBSpanStyleManager: ignore line though type/style 'none'
+
+In CSS this is a boolean property, but in ODF it's an enum, so map none
+to false and everything else to true.
+---
+ src/lib/EPUBSpanStyleManager.cpp   | 11 +++++++-
+ src/lib/EPUBTextGenerator.cpp      |  4 +--
+ src/test/EPUBTextGeneratorTest.cpp | 58 ++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 68 insertions(+), 5 deletions(-)
+
+diff --git a/src/lib/EPUBSpanStyleManager.cpp b/src/lib/EPUBSpanStyleManager.cpp
+index 4887858..211946c 100644
+--- a/src/lib/EPUBSpanStyleManager.cpp
++++ b/src/lib/EPUBSpanStyleManager.cpp
+@@ -137,8 +137,17 @@ void EPUBSpanStyleManager::extractDecorations(RVNGPropertyList const &pList, EPU
+   // replaceme by text-decoration-line when its implementation will appear in browser
+   std::stringstream s;
+ 
+-  if (pList["style:text-line-through-style"] || pList["style:text-line-through-type"])
++  // line-though style or type 'none' is not line-though, everything else is.
++  const librevenge::RVNGProperty *textLineThoughStyle = pList["style:text-line-through-style"];
++  bool lineThough = textLineThoughStyle && textLineThoughStyle->getStr() != "none";
++  if (!lineThough)
++  {
++    const librevenge::RVNGProperty *textLineThoughType = pList["style:text-line-through-type"];
++    lineThough = textLineThoughType && textLineThoughType->getStr() != "none";
++  }
++  if (lineThough)
+     s << " line-through";
++
+   if (pList["style:text-overline-style"] || pList["style:text-overline-type"])
+     s << " overline";
+   if (pList["style:text-underline-style"] || pList["style:text-underline-type"])
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 1bd1e16..07aa50d 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -596,7 +596,7 @@ void EPUBTextGenerator::closeFrame()
+ }
+ 
+ /// Checks if the media type is an EPUB 3 Core Media Type or not.
+-static bool isValidMimeType(const RVNGString& mediaType)
++static bool isValidMimeType(const RVNGString &mediaType)
+ {
+   // Defined at <https://idpf.github.io/epub-cmt/v3/#sec-cmt-supported>.
+   static char const *(types[])=
+@@ -607,7 +607,7 @@ static bool isValidMimeType(const RVNGString& mediaType)
+     "image/svg+xml"
+   };
+ 
+-  for (const auto& i : types)
++  for (const auto &i : types)
+   {
+     if (mediaType == i)
+       return true;
+-- 
+2.12.3
+
