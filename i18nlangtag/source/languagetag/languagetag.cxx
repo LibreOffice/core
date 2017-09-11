@@ -2149,15 +2149,15 @@ LanguageTag & LanguageTag::makeFallback()
         if (!aCountry.isEmpty())
         {
             if (bIncludeFullBcp47)
-                aVec.push_back( aLanguage + "-" + aCountry);
+                aVec.emplace_back(aLanguage + "-" + aCountry);
             if (aLanguage == "zh")
             {
                 // For zh-HK or zh-MO also list zh-TW, for all other zh-XX also
                 // list zh-CN.
                 if (aCountry == "HK" || aCountry == "MO")
-                    aVec.push_back( aLanguage + "-TW");
+                    aVec.emplace_back(aLanguage + "-TW");
                 else if (aCountry != "CN")
-                    aVec.push_back( aLanguage + "-CN");
+                    aVec.emplace_back(aLanguage + "-CN");
                 aVec.push_back( aLanguage);
             }
             else if (aLanguage == "sh")
@@ -2165,11 +2165,11 @@ LanguageTag & LanguageTag::makeFallback()
                 // Manual list instead of calling
                 // LanguageTag( "sr-Latn-" + aCountry).getFallbackStrings( true)
                 // that would also include "sh-*" again.
-                aVec.push_back( "sr-Latn-" + aCountry);
-                aVec.push_back( "sr-Latn");
-                aVec.push_back( "sh");  // legacy with script, before default script with country
-                aVec.push_back( "sr-" + aCountry);
-                aVec.push_back( "sr");
+                aVec.emplace_back("sr-Latn-" + aCountry);
+                aVec.emplace_back("sr-Latn");
+                aVec.emplace_back("sh");  // legacy with script, before default script with country
+                aVec.emplace_back("sr-" + aCountry);
+                aVec.emplace_back("sr");
             }
             else if (aLanguage == "ca" && aCountry == "XV")
             {
@@ -2181,29 +2181,29 @@ LanguageTag & LanguageTag::makeFallback()
             {
                 if (aCountry == "TR" || aCountry == "SY")
                 {
-                    aVec.push_back( "kmr-Latn-" + aCountry);
-                    aVec.push_back( "kmr-" + aCountry);
-                    aVec.push_back( "kmr-Latn");
-                    aVec.push_back( "kmr");
+                    aVec.emplace_back("kmr-Latn-" + aCountry);
+                    aVec.emplace_back("kmr-" + aCountry);
+                    aVec.emplace_back("kmr-Latn");
+                    aVec.emplace_back("kmr");
                     aVec.push_back( aLanguage);
                 }
                 else if (aCountry == "IQ" || aCountry == "IR")
                 {
-                    aVec.push_back( "ckb-" + aCountry);
-                    aVec.push_back( "ckb");
+                    aVec.emplace_back("ckb-" + aCountry);
+                    aVec.emplace_back("ckb");
                 }
             }
             else if (aLanguage == "kmr" && (aCountry == "TR" || aCountry == "SY"))
             {
-                aVec.push_back( "ku-Latn-" + aCountry);
-                aVec.push_back( "ku-" + aCountry);
+                aVec.emplace_back("ku-Latn-" + aCountry);
+                aVec.emplace_back("ku-" + aCountry);
                 aVec.push_back( aLanguage);
-                aVec.push_back( "ku");
+                aVec.emplace_back("ku");
             }
             else if (aLanguage == "ckb" && (aCountry == "IQ" || aCountry == "IR"))
             {
-                aVec.push_back( "ku-Arab-" + aCountry);
-                aVec.push_back( "ku-" + aCountry);
+                aVec.emplace_back("ku-Arab-" + aCountry);
+                aVec.emplace_back("ku-" + aCountry);
                 aVec.push_back( aLanguage);
                 // not 'ku' only, that was used for Latin script
             }
@@ -2216,14 +2216,14 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( aLanguage);
             if (aLanguage == "sh")
             {
-                aVec.push_back( "sr-Latn");
-                aVec.push_back( "sr");
+                aVec.emplace_back("sr-Latn");
+                aVec.emplace_back("sr");
             }
             else if (aLanguage == "pli")
             {
                 // a special case for Pali dictionary, see fdo#41599
-                aVec.push_back( "pi-Latn");
-                aVec.push_back( "pi");
+                aVec.emplace_back("pi-Latn");
+                aVec.emplace_back("pi");
             }
         }
         return aVec;
@@ -2237,9 +2237,9 @@ LanguageTag & LanguageTag::makeFallback()
     // in fallbacks in a sensible order.
     /* TODO: could such things be generalized and automated with liblangtag? */
     if (maBcp47 == "en-GB-oed")
-        aVec.push_back( "en-GB-oxendict");
+        aVec.emplace_back("en-GB-oxendict");
     else if (maBcp47 == "en-GB-oxendict")
-        aVec.push_back( "en-GB-oed");
+        aVec.emplace_back("en-GB-oed");
 
     OUString aScript;
     OUString aVariants( getVariants());
@@ -2270,17 +2270,17 @@ LanguageTag & LanguageTag::makeFallback()
                 // sr-Latn-CS => sr-Latn-YU, sh-CS, sh-YU
                 if (aCountry == "CS")
                 {
-                    aVec.push_back( "sr-Latn-YU");
-                    aVec.push_back( "sh-CS");
-                    aVec.push_back( "sh-YU");
+                    aVec.emplace_back("sr-Latn-YU");
+                    aVec.emplace_back("sh-CS");
+                    aVec.emplace_back("sh-YU");
                 }
                 else
-                    aVec.push_back( "sh-" + aCountry);
+                    aVec.emplace_back("sh-" + aCountry);
             }
             else if (aLanguage == "pi" && aScript == "Latn")
-                aVec.push_back( "pli");     // a special case for Pali dictionary, see fdo#41599
+                aVec.emplace_back("pli");     // a special case for Pali dictionary, see fdo#41599
             else if (aLanguage == "krm" && aScript == "Latn" && (aCountry == "TR" || aCountry == "SY"))
-                aVec.push_back( "ku-" + aCountry);
+                aVec.emplace_back("ku-" + aCountry);
         }
         if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {
@@ -2295,12 +2295,12 @@ LanguageTag & LanguageTag::makeFallback()
         // 'sh' actually denoted a script, so have it here instead of appended
         // at the end as language-only.
         if (aLanguage == "sr" && aScript == "Latn")
-            aVec.push_back( "sh");
+            aVec.emplace_back("sh");
         else if (aLanguage == "ku" && aScript == "Arab")
-            aVec.push_back( "ckb");
+            aVec.emplace_back("ckb");
         // 'ku' only denoted Latin script
         else if (aLanguage == "krm" && aScript == "Latn" && aCountry.isEmpty())
-            aVec.push_back( "ku");
+            aVec.emplace_back("ku");
     }
     bool bHaveLanguageVariant = false;
     if (!aCountry.isEmpty())
@@ -2311,7 +2311,7 @@ LanguageTag & LanguageTag::makeFallback()
             if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
             if (maBcp47 == "ca-ES-valencia")
-                aVec.push_back( "ca-XV");
+                aVec.emplace_back("ca-XV");
             // Language with variant but without country before language
             // without variant but with country.
             // But only if variant is not from a grandfathered tag that
@@ -2348,7 +2348,7 @@ LanguageTag & LanguageTag::makeFallback()
     if (!aCountry.isEmpty())
     {
         if (aLanguage == "sr" && aCountry == "CS")
-            aVec.push_back( "sr-YU");
+            aVec.emplace_back("sr-YU");
     }
 
     // Original language-only.
@@ -2584,14 +2584,14 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     if (rReference != "en-US")
     {
-        aFallbacks.push_back( "en-US");
+        aFallbacks.emplace_back("en-US");
         if (rReference != "en")
-            aFallbacks.push_back( "en");
+            aFallbacks.emplace_back("en");
     }
     if (rReference != "x-default")
-        aFallbacks.push_back( "x-default");
+        aFallbacks.emplace_back("x-default");
     if (rReference != "x-no-translate")
-        aFallbacks.push_back( "x-no-translate");
+        aFallbacks.emplace_back("x-no-translate");
     /* TODO: the original comphelper::Locale::getFallback() code had
      * "x-notranslate" instead of "x-no-translate", but all .xcu files use
      * "x-no-translate" and "x-notranslate" apparently was never used anywhere.

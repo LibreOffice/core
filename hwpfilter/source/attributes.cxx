@@ -139,7 +139,7 @@ void AttributeListImpl::addAttribute(   const OUString &sName ,
 const OUString &sType ,
 const OUString &sValue )
 {
-    m_pImpl->vecAttribute.push_back( TagAttribute( sName , sType , sValue ) );
+    m_pImpl->vecAttribute.emplace_back( sName , sType , sValue );
 }
 
 
