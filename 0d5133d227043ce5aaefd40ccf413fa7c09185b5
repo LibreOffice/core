@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c2224bb9",
+        "filename": "vcl/unx/generic/printer/cpdmgr.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-09-11T10:00:12Z",
+      "side": 1,
+      "message": "the dest_it above isn\u0027t used and the loop here will have \"it\" already at m_pBackends.end() so this second loop doesn\u0027t run, What was the original intention here ? Maybe the second loop just needs to be removed or was there supposed to be a loop over m_aCPDDestMap ?",
+      "revId": "0d5133d227043ce5aaefd40ccf413fa7c09185b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
