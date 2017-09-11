@@ -68,7 +68,7 @@ using namespace ::comphelper;
             OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
-            o_aColumnList.push_back( ColumnInfo(*pEntries,sLabel) );
+            o_aColumnList.emplace_back(*pEntries,sLabel );
             if ( !sLabel.isEmpty() )
                 _rListBox.InsertEntry( sLabel );
             else

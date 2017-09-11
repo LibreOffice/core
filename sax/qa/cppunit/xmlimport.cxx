@@ -105,9 +105,9 @@ OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUStrin
     {
         m_aCountStack.top() += 1;
         if ( nIndex < 0 )
-            m_aNamespaceStack.push_back( make_pair( OUString( "default" ), sValue ) );
+            m_aNamespaceStack.emplace_back( OUString( "default" ), sValue );
         else
-            m_aNamespaceStack.push_back( make_pair( sName.copy( nIndex + 1 ), sValue ) );
+            m_aNamespaceStack.emplace_back( sName.copy( nIndex + 1 ), sValue );
     }
     else
     {

@@ -163,7 +163,7 @@ void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xS
         for(;pIter != pEnd;++pIter)
         {
             if ( 0 == (pIter->Attributes & beans::PropertyAttribute::READONLY) )
-                m_aValues.push_back(::std::pair< OUString ,uno::Any>(pIter->Name,_xSection->getPropertyValue(pIter->Name)));
+                m_aValues.emplace_back(pIter->Name,_xSection->getPropertyValue(pIter->Name));
         }
         lcl_collectElements(_xSection,m_aControls);
     }
