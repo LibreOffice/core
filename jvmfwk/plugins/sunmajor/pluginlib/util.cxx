@@ -528,7 +528,7 @@ bool getJavaProps(const OUString & exePath,
         }
 #endif
 
-        props.push_back(std::make_pair(sKey, sVal));
+        props.emplace_back(sKey, sVal);
     }
 
     if (rs != FileHandleReader::RESULT_ERROR && !props.empty())

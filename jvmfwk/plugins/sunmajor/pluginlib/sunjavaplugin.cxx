@@ -722,7 +722,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
-    options.push_back(Option("abort", reinterpret_cast<void*>(abort_handler)));
+    options.emplace_back("abort", reinterpret_cast<void*>(abort_handler));
     bool hasStackSize = false;
     for (int i = 0; i < cOptions; i++)
     {
@@ -743,10 +743,10 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         if (opt.startsWith("-Xss")) {
             hasStackSize = true;
         }
-        options.push_back(Option(opt, arOptions[i].extraInfo));
+        options.emplace_back(opt, arOptions[i].extraInfo);
     }
     if (addForceInterpreted) {
-        options.push_back(Option("-Xint", nullptr));
+        options.emplace_back("-Xint", nullptr);
     }
     if (!hasStackSize) {
 #if defined LINUX && (defined X86 || defined X86_64)
@@ -772,8 +772,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
                     "jfw", "huge RLIMIT_STACK " << l.rlim_cur << " -> 8192K");
                 l.rlim_cur = 8192 * 1024;
             }
-            options.push_back(
-                Option("-Xss" + OString::number(l.rlim_cur), nullptr));
+            options.emplace_back("-Xss" + OString::number(l.rlim_cur), nullptr);
         } else {
             int e = errno;
             SAL_WARN("jfw", "getrlimit(RLIMIT_STACK) failed with errno " << e);

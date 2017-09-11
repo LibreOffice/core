@@ -351,8 +351,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(vendor);
 
-            versionInfos.push_back(
-                std::pair<OUString, jfw::VersionInfo>(vendor, versionInfo));
+            versionInfos.emplace_back(vendor, versionInfo);
         }
 
         std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
