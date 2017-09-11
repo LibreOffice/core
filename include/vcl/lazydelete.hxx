@@ -56,7 +56,7 @@ namespace vcl
     object to be destroyed lazy. The static method creates the LazyDeletor<T>
     (which in turn registers itself in LazyDelete) if this is the first time
     a T* is to be destroyed lazy. It then inserts the object. When the LazyDeletor<T>
-    gets delte it will delete the stored objects in a fashion
+    gets delete it will delete the stored objects in a fashion
     that will ensure the correct order of deletion via the specialized is_less method
     (e.g. if a Window is a child of another Window and therefore should be destroyed
     first it is "less" in this sense)
