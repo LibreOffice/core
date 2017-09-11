@@ -1009,9 +1009,9 @@ namespace pcr
                 Invalidate();
                 ShowDropDown( true );
             }
-            else if (   KEYGROUP_CURSOR == aKeyCode.GetGroup()
+            else if (   ::KeyGroup::Cursor == aKeyCode.GetGroup()
                     ||  nKey == KEY_HELP
-                    ||  KEYGROUP_FKEYS == aKeyCode.GetGroup()
+                    ||  ::KeyGroup::FKeys == aKeyCode.GetGroup()
                     ||  m_nOperationMode == eMultiLineText
                     )
             {

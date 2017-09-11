@@ -603,8 +603,8 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
             DeleteEntries();
             bHandled = true;
         }
-        else if ( ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM ) ||
-                  ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_ALPHA ) )
+        else if ( ( rKEvt.GetKeyCode().GetGroup() == KeyGroup::Num ) ||
+                  ( rKEvt.GetKeyCode().GetGroup() == KeyGroup::Alpha ) )
         {
             DoQuickSearch( rKEvt.GetCharCode() );
             bHandled = true;

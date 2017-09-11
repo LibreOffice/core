@@ -85,18 +85,18 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
     if( bNumericOnly && bNonSpace )
     {
         const vcl::KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
-        sal_uInt16 nGroup = rKeyCode.GetGroup();
+        KeyGroup nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
 
         switch ( nGroup ) {
-            case KEYGROUP_NUM :
-            case KEYGROUP_CURSOR :
+            case KeyGroup::Num :
+            case KeyGroup::Cursor :
             {
                 bValid = true;
                 break;
             }
 
-            case KEYGROUP_MISC :
+            case KeyGroup::Misc :
             {
                 switch ( nKey ) {
                     case KEY_SUBTRACT :

@@ -101,11 +101,11 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
     else
     {
         sal_Unicode cChar = rKEvt.GetCharCode();
-        sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
+        KeyGroup    nGroup = rKEvt.GetKeyCode().GetGroup();
 
-        return !((nGroup == KEYGROUP_FKEYS) ||
-                 (nGroup == KEYGROUP_CURSOR) ||
-                 (nGroup == KEYGROUP_MISC) ||
+        return !((nGroup == KeyGroup::FKeys) ||
+                 (nGroup == KeyGroup::Cursor) ||
+                 (nGroup == KeyGroup::Misc) ||
                  ((cChar >= '0') && (cChar <= '9')) ||
                  (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
                  (string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ) ||

@@ -2419,9 +2419,9 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16 nKeyGroup = rKeyCode.GetGroup();
+        KeyGroup nKeyGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
-        if ( KEYGROUP_ALPHA == nKeyGroup &&  !isHandledKey( rKeyCode ) )
+        if ( KeyGroup::Alpha == nKeyGroup &&  !isHandledKey( rKeyCode ) )
         {
             // do nothing disables the writer accelerators
             bDone = true;

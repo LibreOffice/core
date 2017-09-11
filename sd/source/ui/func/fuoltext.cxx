@@ -206,13 +206,13 @@ bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;
 
-    sal_uInt16 nKeyGroup = rKEvt.GetKeyCode().GetGroup();
-    if( !mpDocSh->IsReadOnly() || nKeyGroup == KEYGROUP_CURSOR )
+    KeyGroup nKeyGroup = rKEvt.GetKeyCode().GetGroup();
+    if( !mpDocSh->IsReadOnly() || nKeyGroup == KeyGroup::Cursor )
     {
         mpWindow->GrabFocus();
 
         std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
-        if( (nKeyGroup != KEYGROUP_CURSOR) && (nKeyGroup != KEYGROUP_FKEYS) )
+        if( (nKeyGroup != KeyGroup::Cursor) && (nKeyGroup != KeyGroup::FKeys) )
             aGuard.reset( new OutlineViewModelChangeGuard( *pOutlineView ) );
 
         bReturn = pOutlineView->GetViewByWindow(mpWindow)->PostKeyEvent(rKEvt);

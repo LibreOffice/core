@@ -1012,7 +1012,7 @@ bool ExtMgrDialog::EventNotify( NotifyEvent& rNEvt )
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
 
-        if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
+        if ( aKeyCode.GetGroup() == KeyGroup::Cursor )
             bHandled = m_pExtensionBox->EventNotify(rNEvt);
     }
 // VclEventId::WindowClose

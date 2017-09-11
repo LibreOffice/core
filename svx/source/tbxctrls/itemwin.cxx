@@ -340,7 +340,7 @@ bool SvxMetricField::EventNotify( NotifyEvent& rNEvt )
         const vcl::KeyCode& rKey = pKEvt->GetKeyCode();
         SfxViewShell* pSh = SfxViewShell::Current();
 
-        if ( rKey.GetModifier() && rKey.GetGroup() != KEYGROUP_CURSOR && pSh )
+        if ( rKey.GetModifier() && rKey.GetGroup() != KeyGroup::Cursor && pSh )
             (void)pSh->KeyInput( *pKEvt );
         else
         {

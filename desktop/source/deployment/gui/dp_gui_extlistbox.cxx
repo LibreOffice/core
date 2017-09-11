@@ -805,7 +805,7 @@ bool ExtensionBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
         if ( nKeyCode == KEY_TAB )
              ;
-        else if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
+        else if ( aKeyCode.GetGroup() == KeyGroup::Cursor )
             bHandled = HandleCursorKey( nKeyCode );
     }
 

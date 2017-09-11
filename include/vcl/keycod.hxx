@@ -33,6 +33,9 @@ namespace vcl
 class VCL_DLLPUBLIC KeyCode
 {
 private:
+    // top 8 bits is modifiers
+    // bottom 24 bits is keycode
+    // --> of which the first 8 bits is the keygroup
     sal_uInt16      nKeyCodeAndModifiers;
     KeyFuncType     eFunc;
 
@@ -58,8 +61,8 @@ public:
                     { return ((nKeyCodeAndModifiers & KEY_MOD2) != 0); }
     bool            IsMod3() const
                     { return ((nKeyCodeAndModifiers & KEY_MOD3) != 0); }
-    sal_uInt16      GetGroup() const
-                    { return (nKeyCodeAndModifiers & KEYGROUP_TYPE); }
+    KeyGroup        GetGroup() const
+                    { return static_cast<KeyGroup>(nKeyCodeAndModifiers & static_cast<sal_uInt16>(KeyGroup::Type)); }
 
     OUString        GetName( vcl::Window* pWindow = nullptr ) const;
 

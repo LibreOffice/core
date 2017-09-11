@@ -108,10 +108,10 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
     if (bValid && bOnlyNumeric)
     {
         const vcl::KeyCode& rKeyCode = rKEvent.GetKeyCode();
-        sal_uInt16 nGroup = rKeyCode.GetGroup();
+        KeyGroup nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
-        bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
-                 ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
+        bValid = ( KeyGroup::Num == nGroup || KeyGroup::Cursor == nGroup ||
+                 ( KeyGroup::Misc == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             // Erase, Copy, Paste, Select All and Undo should work

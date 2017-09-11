@@ -1411,8 +1411,8 @@ bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     Invalidate(SID_STYLE_FAMILY5);
 
     // check and distinguish cursor movements- or input-keys
-    vcl::KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
-    if( (aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS) ||
+    KeyGroup aKeyGroup = rKEvt.GetKeyCode().GetGroup();
+    if( (aKeyGroup != KeyGroup::Cursor && aKeyGroup != KeyGroup::FKeys) ||
         (GetActualPage() != pLastPage) )
     {
         Invalidate( SID_PREVIEW_STATE );

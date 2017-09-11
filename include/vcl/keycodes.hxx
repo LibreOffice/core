@@ -27,12 +27,15 @@
 #include <o3tl/typed_flags_set.hxx>
 
 // Key groups
-#define KEYGROUP_NUM    ((sal_uInt16)css::awt::KeyGroup::NUM)
-#define KEYGROUP_ALPHA  ((sal_uInt16)css::awt::KeyGroup::ALPHA)
-#define KEYGROUP_FKEYS  ((sal_uInt16)css::awt::KeyGroup::FKEYS)
-#define KEYGROUP_CURSOR ((sal_uInt16)css::awt::KeyGroup::CURSOR)
-#define KEYGROUP_MISC   ((sal_uInt16)css::awt::KeyGroup::MISC)
-#define KEYGROUP_TYPE   ((sal_uInt16)css::awt::KeyGroup::TYPE)
+enum class KeyGroup : sal_uInt16 {
+    NONE   = 0,
+    Num    = css::awt::KeyGroup::NUM,
+    Alpha  = css::awt::KeyGroup::ALPHA,
+    FKeys  = css::awt::KeyGroup::FKEYS,
+    Cursor = css::awt::KeyGroup::CURSOR,
+    Misc   = css::awt::KeyGroup::MISC,
+    Type   = css::awt::KeyGroup::TYPE,  // mask
+};
 
 // Key codes
 #define KEY_0           ((sal_uInt16)css::awt::Key::NUM0)

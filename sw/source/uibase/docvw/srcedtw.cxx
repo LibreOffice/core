@@ -469,7 +469,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     else
     {
         rBindings.Invalidate( SID_TABLE_CELL );
-        if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
+        if ( rKEvt.GetKeyCode().GetGroup() == KeyGroup::Cursor )
             rBindings.Update( SID_BASICIDE_STAT_POS );
         if (pSrcEditWin->GetTextEngine()->IsModified() )
         {

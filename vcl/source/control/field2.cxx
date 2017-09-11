@@ -994,10 +994,10 @@ static bool ImplDateProcessKeyInput( const KeyEvent& rKEvt, ExtDateFieldFormat e
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
-    sal_uInt16 nGroup = rKEvt.GetKeyCode().GetGroup();
-    return !((nGroup == KEYGROUP_FKEYS) ||
-             (nGroup == KEYGROUP_CURSOR) ||
-             (nGroup == KEYGROUP_MISC)||
+    KeyGroup nGroup = rKEvt.GetKeyCode().GetGroup();
+    return !((nGroup == KeyGroup::FKeys) ||
+             (nGroup == KeyGroup::Cursor) ||
+             (nGroup == KeyGroup::Misc)||
              ((cChar >= '0') && (cChar <= '9')) ||
              (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat )[0]));
 }
@@ -1907,9 +1907,9 @@ static bool ImplTimeProcessKeyInput( const KeyEvent& rKEvt,
         return false;
     else
     {
-        sal_uInt16 nGroup = rKEvt.GetKeyCode().GetGroup();
-        if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
-             (nGroup == KEYGROUP_MISC)   ||
+        KeyGroup nGroup = rKEvt.GetKeyCode().GetGroup();
+        if ( (nGroup == KeyGroup::FKeys) || (nGroup == KeyGroup::Cursor) ||
+             (nGroup == KeyGroup::Misc)   ||
              ((cChar >= '0') && (cChar <= '9')) ||
              string::equals(rLocaleDataWrapper.getTimeSep(), cChar) ||
              (rLocaleDataWrapper.getTimeAM().indexOf(cChar) != -1) ||
