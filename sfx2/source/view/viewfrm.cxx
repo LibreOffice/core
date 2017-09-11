@@ -794,8 +794,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
             {
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
-                if ( !pSh ||
-                     !pSh->HasName() ||
+                if ( !pSh->HasName() ||
                      !( pSh->Get_Impl()->nLoadedFlags &  SfxLoadedFlags::MAINDOCUMENT ) ||
                      ( pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                        ( !(pVSh = pSh->GetViewShell())  ||
@@ -815,7 +814,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
 
             case SID_RELOAD:
             {
-                if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
+                if ( !pSh->CanReload_Impl() || pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                     rSet.DisableItem(nWhich);
                 else
                 {
