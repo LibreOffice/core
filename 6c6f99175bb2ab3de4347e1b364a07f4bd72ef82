@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fdbb660c",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-11T13:18:55Z",
+      "side": 1,
+      "message": "My earlier nitpick persists, for consistency these should be named nGlobal...",
+      "revId": "6c6f99175bb2ab3de4347e1b364a07f4bd72ef82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1d3752b1",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-11T13:18:55Z",
+      "side": 1,
+      "message": "Please place the opening brace on the next line.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 23,
+        "endLine": 2188,
+        "endChar": 25
+      },
+      "revId": "6c6f99175bb2ab3de4347e1b364a07f4bd72ef82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
