@@ -298,7 +298,12 @@ namespace XSLT
         std::unique_ptr<OleHandler> oh(new OleHandler(m_transformer->getComponentContext()));
         if (styleSheet)
         {
-            m_tcontext = xsltNewTransformContext(styleSheet, doc);
+            xsltTransformContextPtr tcontext = xsltNewTransformContext(
+                styleSheet, doc);
+            {
+                std::unique_lock<std::mutex> g(m_mutex);
+                m_tcontext = tcontext;
+            }
             oh->registercontext(m_tcontext);
             xsltQuoteUserParams(m_tcontext, &params[0]);
             result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
@@ -331,7 +336,10 @@ namespace XSLT
         oh.reset();
         xsltFreeStylesheet(styleSheet);
         xsltFreeTransformContext(m_tcontext);
-        m_tcontext = nullptr;
+        {
+            std::unique_lock<std::mutex> g(m_mutex);
+            m_tcontext = nullptr;
+        }
         xmlFreeDoc(doc);
         xmlFreeDoc(result);
     }
@@ -354,12 +362,17 @@ namespace XSLT
 
     void Reader::forceStateStopped()
     {
-        if (!m_tcontext)
+        xsltTransformContextPtr tcontext;
+        {
+            std::unique_lock<std::mutex> g(m_mutex);
+            tcontext = m_tcontext;
+        }
+        if (!tcontext)
             return;
         //tdf#100057 If we force a cancel, libxslt will of course just keep on going unless something
         //tells it to stop. Here we force the stopped state so that libxslt will stop processing
         //and so Reader::execute will complete and we can join cleanly
-        m_tcontext->state = XSLT_STATE_STOPPED;
+        tcontext->state = XSLT_STATE_STOPPED;
     }
 
     Reader::~Reader()

@@ -12,6 +12,7 @@
 
 #include <list>
 #include <map>
+#include <mutex>
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -71,6 +72,8 @@ namespace XSLT
         LibXSLTTransformer* m_transformer;
         Sequence<sal_Int8> m_readBuf;
         Sequence<sal_Int8> m_writeBuf;
+
+        std::mutex m_mutex;
         xsltTransformContextPtr m_tcontext;
 
         virtual void execute() override;
