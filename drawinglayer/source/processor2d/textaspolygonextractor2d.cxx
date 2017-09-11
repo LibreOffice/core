@@ -104,7 +104,7 @@ namespace drawinglayer
                             const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rPoPoCoCandidate.getBColor()));
 
                             // add to result vector
-                            maTarget.push_back(TextAsPolygonDataNode(aPolyPolygon, aColor, true));
+                            maTarget.emplace_back(aPolyPolygon, aColor, true);
                         }
                     }
 
@@ -126,7 +126,7 @@ namespace drawinglayer
                             const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rPoHaCandidate.getBColor()));
 
                             // add to result vector
-                            maTarget.push_back(TextAsPolygonDataNode(basegfx::B2DPolyPolygon(aPolygon), aColor, false));
+                            maTarget.emplace_back(basegfx::B2DPolyPolygon(aPolygon), aColor, false);
                         }
                     }
 
@@ -148,7 +148,7 @@ namespace drawinglayer
                             const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(rPoPoHaCandidate.getBColor()));
 
                             // add to result vector
-                            maTarget.push_back(TextAsPolygonDataNode(aPolyPolygon, aColor, false));
+                            maTarget.emplace_back(aPolyPolygon, aColor, false);
                         }
                     }
 

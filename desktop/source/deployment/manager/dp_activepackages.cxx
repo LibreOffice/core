@@ -170,19 +170,17 @@ ActivePackages::Entries ActivePackages::getEntries() const {
          i != m.end(); ++i)
     {
         if (!i->first.isEmpty() && i->first[0] == separator) {
-            es.push_back(
-                std::make_pair(
+            es.emplace_back(
                     OUString(
                         i->first.getStr() + 1, i->first.getLength() - 1,
                         RTL_TEXTENCODING_UTF8),
-                    decodeNewData(i->second)));
+                    decodeNewData(i->second));
         } else {
             OUString fn(
                 OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
-            es.push_back(
-                std::make_pair(
+            es.emplace_back(
                     ::dp_misc::generateLegacyIdentifier(fn),
-                    decodeOldData(fn, i->second)));
+                    decodeOldData(fn, i->second));
         }
     }
 #else

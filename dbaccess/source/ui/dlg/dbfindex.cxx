@@ -312,11 +312,11 @@ void ODbaseIndexDialog::Init()
         OUString aExt = aURL.getExtension();
         if (aExt == aIndexExt)
         {
-            m_aFreeIndexList.push_back( OTableIndex(aURL.getName()) );
+            m_aFreeIndexList.emplace_back(aURL.getName() );
         }
         else if (aExt == aTableExt)
         {
-            m_aTableInfoList.push_back( OTableInfo(aURL.getName()) );
+            m_aTableInfoList.emplace_back(aURL.getName() );
             OTableInfo& rTabInfo = m_aTableInfoList.back();
 
             // open the INF file
@@ -341,7 +341,7 @@ void ODbaseIndexDialog::Init()
                 if (aNDX == "NDX")
                 {
                     aEntry = OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
-                    rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
+                    rTabInfo.aIndexList.emplace_back( aEntry );
 
                     // and remove it from the free index list
                     aUsedIndexes.push_back(aEntry);

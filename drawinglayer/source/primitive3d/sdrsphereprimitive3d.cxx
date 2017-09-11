@@ -119,7 +119,7 @@ namespace drawinglayer
 
             for(sal_uInt32 a(0); a < aFill.count(); a++)
             {
-                a3DPolyPolygonVector.push_back(basegfx::B3DPolyPolygon(aFill.getB3DPolygon(a)));
+                a3DPolyPolygonVector.emplace_back(aFill.getB3DPolygon(a));
             }
 
             if(!getSdrLFSAttribute().getFill().isDefault())

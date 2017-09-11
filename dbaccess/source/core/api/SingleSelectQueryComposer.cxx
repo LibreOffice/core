@@ -886,8 +886,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
 
             if ( i > static_cast< sal_Int32>( aSelectColumns->get().size() ) )
             {
-                aSelectColumns->get().push_back(
-                    ::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i ,aColumnNames)
+                aSelectColumns->get().emplace_back(::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i ,aColumnNames)
                 );
                 OSL_ENSURE( aSelectColumns->get().size() == (size_t)i, "OSingleSelectQueryComposer::getColumns: inconsistency!" );
             }
@@ -984,7 +983,7 @@ bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode const * pCondition,
                 bResult = setORCriteria(pCondition->getChild(i), _rIterator, rFilters, xFormatter);
             else
             {
-                rFilters.push_back( std::vector < PropertyValue >());
+                rFilters.emplace_back();
                 bResult = setANDCriteria(pCondition->getChild(i), _rIterator, rFilters[rFilters.size() - 1], xFormatter);
             }
         }
@@ -992,7 +991,7 @@ bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode const * pCondition,
     }
     else
     {
-        rFilters.push_back(std::vector < PropertyValue >());
+        rFilters.emplace_back();
         return setANDCriteria(pCondition, _rIterator, rFilters[rFilters.size() - 1], xFormatter);
     }
 }

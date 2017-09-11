@@ -435,7 +435,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 
                 // Use local vector to store dispatcher because we have to fill our request container before
                 // we can dispatch. Otherwise it would be possible that statusChanged is called before we dispatched all requests!!
-                aDispatches.push_back( DispatchHolder( aURL, xDispatcher ));
+                aDispatches.emplace_back( aURL, xDispatcher );
             }
         }
         else if ( aName.startsWith( "service:" ) )

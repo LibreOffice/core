@@ -908,7 +908,7 @@ void ExtensionBox_Impl::addEventListenerOnce(
                         FindWeakRef(extension)) )
     {
         extension->addEventListener( m_xRemoveListener.get() );
-        m_vListenerAdded.push_back(extension);
+        m_vListenerAdded.emplace_back(extension);
     }
 }
 

@@ -389,7 +389,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 }
                 catch ( cssu::Exception & e )
                 {
-                    vecExceptions.push_back( std::make_pair(seqDownloadURLs[j], e));
+                    vecExceptions.emplace_back(seqDownloadURLs[j], e);
                     //There can be several different errors, for example, the URL is wrong, webserver cannot be reached,
                     //name cannot be resolved. The UCB helper API does not specify different special exceptions for these
                     //cases. Therefore ignore and continue.

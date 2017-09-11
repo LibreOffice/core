@@ -616,7 +616,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
     ODatabaseExport::TColumnVector::const_iterator aEnd = _rSourceColVec.end();
     for (; aIter != aEnd ; ++aIter)
     {
-        m_vSourceVec.push_back(m_vSourceColumns.find((*aIter)->first));
+        m_vSourceVec.emplace_back(m_vSourceColumns.find((*aIter)->first));
     }
 
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
@@ -781,7 +781,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                     m_bAddPKFirstTime = false;
                     insertColumn(0,pField);
                 }
-                m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(1,1));
+                m_vColumnPos.emplace_back(1,1);
                 m_vColumnTypes.push_back(pTypeInfo->nType);
             }
         }
@@ -798,12 +798,12 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
                 {
                     ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
                     sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
-                    m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(nPos,nPos));
+                    m_vColumnPos.emplace_back(nPos,nPos);
                     m_vColumnTypes.push_back((*aFind)->second->GetType());
                 }
                 else
                 {
-                    m_vColumnPos.push_back( ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
+                    m_vColumnPos.emplace_back( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND );
                     m_vColumnTypes.push_back(0);
                 }
             }
@@ -827,7 +827,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
-                m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(m_vDestColumns.size(),m_vDestColumns.size()));
+                m_vColumnPos.emplace_back(m_vDestColumns.size(),m_vDestColumns.size());
                 m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
             }
         }
@@ -1065,7 +1065,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
             pTypeInfo = m_pTypeInfo;
 
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
-        _rColVector.push_back(_rColumns.emplace(pActFieldDescr->GetName(),pActFieldDescr).first);
+        _rColVector.emplace_back(_rColumns.emplace(pActFieldDescr->GetName(),pActFieldDescr).first);
     }
 
     // determine which columns belong to the primary key

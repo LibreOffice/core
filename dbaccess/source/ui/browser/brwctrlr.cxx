@@ -1831,7 +1831,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     if ( pFact )
     {
         std::vector< OUString > aContextNames;
-        aContextNames.push_back( OUString("Standard") );
+        aContextNames.emplace_back("Standard" );
         pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
     }
     OSL_ENSURE( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );

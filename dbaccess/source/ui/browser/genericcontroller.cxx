@@ -421,7 +421,7 @@ namespace
         if ( _rFeatureState.aValue.hasValue() )
             _out_rStates.push_back( _rFeatureState.aValue );
         if ( _out_rStates.empty() )
-            _out_rStates.push_back( Any() );
+            _out_rStates.emplace_back( );
     }
 }
 

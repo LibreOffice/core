@@ -70,7 +70,7 @@ namespace drawinglayer
                             basegfx::tools::openWithGeometryChange(aLocalPolygon);
                         }
 
-                        maExtractedContour.push_back(basegfx::B2DPolyPolygon(aLocalPolygon));
+                        maExtractedContour.emplace_back(aLocalPolygon);
                     }
                     break;
                 }
@@ -90,7 +90,7 @@ namespace drawinglayer
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rBitmapCandidate.getTransform());
                     basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
-                    maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
+                    maExtractedContour.emplace_back(aPolygon);
                     break;
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
@@ -100,7 +100,7 @@ namespace drawinglayer
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rMetaCandidate.getTransform());
                     basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
-                    maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
+                    maExtractedContour.emplace_back(aPolygon);
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
@@ -177,7 +177,7 @@ namespace drawinglayer
                     // primitives who's BoundRect will be added in world coordinates
                     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
                     aRange.transform(getViewInformation2D().getObjectTransformation());
-                    maExtractedContour.push_back(basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aRange)));
+                    maExtractedContour.emplace_back(basegfx::tools::createPolygonFromRect(aRange));
                     break;
                 }
                 default :

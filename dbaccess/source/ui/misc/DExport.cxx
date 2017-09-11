@@ -667,7 +667,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
         m_aDestColumns.erase(aFind);
     }
 
-    m_vDestVector.push_back(m_aDestColumns.emplace(aAlias,pField).first);
+    m_vDestVector.emplace_back(m_aDestColumns.emplace(aAlias,pField).first);
 }
 
 bool ODatabaseExport::createRowSet()
