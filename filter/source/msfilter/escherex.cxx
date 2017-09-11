@@ -4775,8 +4775,8 @@ sal_uInt32 EscherExGlobal::GenerateDrawingId()
     // drawing identifiers are one-based
     sal_uInt32 nDrawingId = static_cast< sal_uInt32 >( maDrawingInfos.size() + 1 );
     // prepare new entries in the tables
-    maClusterTable.push_back( ClusterEntry( nDrawingId ) );
-    maDrawingInfos.push_back( DrawingInfo( nClusterId ) );
+    maClusterTable.emplace_back( nDrawingId );
+    maDrawingInfos.emplace_back( nClusterId );
     // return the new drawing identifier
     return nDrawingId;
 }
@@ -4801,7 +4801,7 @@ sal_uInt32 EscherExGlobal::GenerateShapeId( sal_uInt32 nDrawingId, bool bIsInSpg
     if( pClusterEntry->mnNextShapeId == DFF_DGG_CLUSTER_SIZE )
     {
         // start a new cluster in the cluster table
-        maClusterTable.push_back( ClusterEntry( nDrawingId ) );
+        maClusterTable.emplace_back( nDrawingId );
         pClusterEntry = &maClusterTable.back();
         // new size of maClusterTable is equal to one-based identifier of the new cluster
         rDrawingInfo.mnClusterId = static_cast< sal_uInt32 >( maClusterTable.size() );

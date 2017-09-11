@@ -69,7 +69,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
                     if( aIterSel.IsEqual( aCurrentParaSel ) )
                     {
                         pContent = pIterContent;
-                        maContents.push_back( pContent );
+                        maContents.emplace_back(pContent );
                     }
                 }
             }
@@ -77,7 +77,7 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
             {
                 pContent = new SvxUnoTextContent( mrText, currentPara );
                 pContent->SetSelection( aCurrentParaSel );
-                maContents.push_back( pContent );
+                maContents.emplace_back(pContent );
             }
         }
     }
@@ -416,7 +416,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rT
                 pRange = new SvxUnoTextRange( mrParentText, true );
                 pRange->SetSelection( aSel );
             }
-            maPortions.push_back( pRange );
+            maPortions.emplace_back(pRange );
         }
     }
 }

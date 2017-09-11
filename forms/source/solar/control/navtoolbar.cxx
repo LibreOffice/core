@@ -308,7 +308,7 @@ namespace frm
                         pItemWindow->SetBackground();
                         pItemWindow->SetPaintTransparent(true);
                     }
-                    m_aChildWins.push_back( pItemWindow );
+                    m_aChildWins.emplace_back(pItemWindow );
 
                     switch ( pSupportedFeatures->nId )
                     {

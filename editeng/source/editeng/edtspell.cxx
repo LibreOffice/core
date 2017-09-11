@@ -428,7 +428,7 @@ void WrongList::InsertWrong( size_t nStart, size_t nEnd )
     if (nPos != maRanges.end())
         maRanges.insert(nPos, editeng::MisspellRange(nStart, nEnd));
     else
-        maRanges.push_back(editeng::MisspellRange(nStart, nEnd));
+        maRanges.emplace_back(nStart, nEnd);
 
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }

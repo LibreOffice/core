@@ -558,8 +558,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
     case GradientStyle::Elliptical:
     case GradientStyle::Radial:
         {
-            aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetEndColor() ) );
-            aGradientRecords.push_back( GradRecord( 0xff, maGradient.GetStartColor() ) );
+            aGradientRecords.emplace_back( 0x00, maGradient.GetEndColor() );
+            aGradientRecords.emplace_back( 0xff, maGradient.GetStartColor() );
 
             double tx = ( maGradient.GetOfsX() * 32768.0 ) / 100.0;
             double ty = ( maGradient.GetOfsY() * 32768.0 ) / 100.0;
@@ -591,9 +591,9 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
         break;
     case GradientStyle::Axial:
         {
-            aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetEndColor() ) );
-            aGradientRecords.push_back( GradRecord( 0x80, maGradient.GetStartColor() ) );
-            aGradientRecords.push_back( GradRecord( 0xff, maGradient.GetEndColor() ) );
+            aGradientRecords.emplace_back( 0x00, maGradient.GetEndColor() );
+            aGradientRecords.emplace_back( 0x80, maGradient.GetStartColor() );
+            aGradientRecords.emplace_back( 0xff, maGradient.GetEndColor() );
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
             m.translate( 32768.0 / 2.0, 32768.0 / 2.0 );
@@ -604,8 +604,8 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
     case GradientStyle::Rect:
     case GradientStyle::Linear:
         {
-            aGradientRecords.push_back( GradRecord( 0x00, maGradient.GetStartColor() ) );
-            aGradientRecords.push_back( GradRecord( 0xff, maGradient.GetEndColor() ) );
+            aGradientRecords.emplace_back( 0x00, maGradient.GetStartColor() );
+            aGradientRecords.emplace_back( 0xff, maGradient.GetEndColor() );
             double scalex = (double)maBoundRect.GetWidth() / 32768.0;
             double scaley = (double)maBoundRect.GetHeight() / 32768.0;
 

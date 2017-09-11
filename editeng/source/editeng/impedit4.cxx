@@ -386,7 +386,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     // Write out ColorList  ...
     SvxColorList aColorList;
     // COL_AUTO should be the default color, always put it first
-    aColorList.push_back(COL_AUTO);
+    aColorList.emplace_back(COL_AUTO);
     SvxColorItem const& rDefault(static_cast<SvxColorItem const&>(
                 aEditDoc.GetItemPool().GetDefaultItem(EE_CHAR_COLOR)));
     if (rDefault.GetValue() != COL_AUTO) // is the default always AUTO?
@@ -1376,7 +1376,7 @@ void ImpEditEngine::GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& 
         if (!pWrongList)
             continue;
 
-        aRanges.push_back(editeng::MisspellRanges(i, pWrongList->GetRanges()));
+        aRanges.emplace_back(i, pWrongList->GetRanges());
     }
 
     aRanges.swap(rRanges);
