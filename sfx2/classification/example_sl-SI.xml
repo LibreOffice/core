@@ -65,6 +65,8 @@
                 <baf:ConfidentalityValue>3</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
+        <loext:Marking Name="Example Marking" />
+        <loext:IntellectualPropertyPart Name="Example IP Part" />
     </baf:Included>
 </baf:BusinessAuthorization>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab:
