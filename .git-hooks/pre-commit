@@ -92,6 +92,11 @@ sub check_whitespaces($)
             {
                 bad_line("use tooltip_text instead of tooltip_markup", $_, $src_limited);
             }
+            if ((/translatable="yes"/) and not(/context=/))
+            {
+                bad_line("translatable .ui file line without context", $_, $src_limited);
+            }
+
         }
     }
     if ( $found_bad)
