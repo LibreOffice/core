@@ -88,7 +88,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <editeng/unoprnms.hxx>
+
 
 
 
@@ -2184,14 +2184,6 @@ void DomainMapper_Impl::PopShapeContext()
             catch( const uno::Exception& )
             {
             }
-        }
-        // Move Watermark upper to be visible if page background is set
-        uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
-        uno::Reference<container::XNamed> xNamed( xShape, uno::UNO_QUERY );
-        if ( xNamed.is() && xNamed->getName().match( "PowerPlusWaterMarkObject" ) )
-        {
-            uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
-            xShapePropertySet->setPropertyValue( UNO_NAME_MISC_OBJ_LAYERID, uno::makeAny( sal_Int16(1) ) );
         }
         m_aAnchoredStack.pop();
     }
