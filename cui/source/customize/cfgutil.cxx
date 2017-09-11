@@ -252,6 +252,7 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(vcl::Window* pParent, WinBits
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
+    SetQuickSearch( true );
 }
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SfxConfigFunctionListBox, WB_TABSTOP)
