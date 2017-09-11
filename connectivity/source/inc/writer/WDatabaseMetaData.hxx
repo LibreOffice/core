@@ -20,23 +20,16 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WDATABASEMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WDATABASEMETADATA_HXX
 
-#include "file/FDatabaseMetaData.hxx"
+#include "component/CDatabaseMetaData.hxx"
 
 namespace connectivity
 {
 namespace writer
 {
 
-class OWriterDatabaseMetaData : public file::ODatabaseMetaData
+class OWriterDatabaseMetaData : public component::OComponentDatabaseMetaData
 {
-    virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
     virtual OUString SAL_CALL getURL() override;
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns(const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern) override;
-    virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength() override;
-    virtual sal_Int32 SAL_CALL getMaxCharLiteralLength() override;
-    virtual sal_Int32 SAL_CALL getMaxColumnNameLength() override;
-    virtual sal_Int32 SAL_CALL getMaxColumnsInIndex() override;
-    virtual sal_Int32 SAL_CALL getMaxColumnsInTable() override;
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables(const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types) override;
 protected:
     virtual ~OWriterDatabaseMetaData() override;
