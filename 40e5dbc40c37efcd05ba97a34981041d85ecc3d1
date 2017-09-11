@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1d2cb249",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-11T14:00:43Z",
+      "side": 1,
+      "message": "use a const variable instead of a macro",
+      "revId": "40e5dbc40c37efcd05ba97a34981041d85ecc3d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_bdf63ed5",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-11T14:00:43Z",
+      "side": 1,
+      "message": "At least at \u003chttp://man7.org/linux/man-pages/man2/gettid.2.html\u003e gettid is documented to return a value of type pid_t and to always be successful, so:\n\n* I\u0027d explicitly cast the syscall return value to pid_t, for clarity.\n* The check for -1 should be removed.\n* It appears that on Linux pid_t happens to be a 32-bit integer type (at least my local /usr/include/bits/typesizes.h has \"#define __PID_T_TYPE __S32_TYPE\", so storing it as oslThreadIdentifier (aka sal_uInt32) will work.  But I\u0027d add a static_cast verifying that indeed sizeof(pid_t) \u003c\u003d sizeof(oslThreadIdentifier).",
+      "revId": "40e5dbc40c37efcd05ba97a34981041d85ecc3d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_dd030ab7",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-11T14:00:43Z",
+      "side": 1,
+      "message": "If pthread_threadid_np provides a uint64_t value, how can that be stored as an oslThreadIdentifier (aka sal_uInt32)?",
+      "revId": "40e5dbc40c37efcd05ba97a34981041d85ecc3d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fd00c6ac",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-11T14:00:43Z",
+      "side": 1,
+      "message": "The original implementation of insertThreadId was careful never to insert a thread with Ident \u003d\u003d 0.  The new branches for Linux and macOS/iOS do not appear to guarantee that.",
+      "revId": "40e5dbc40c37efcd05ba97a34981041d85ecc3d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
