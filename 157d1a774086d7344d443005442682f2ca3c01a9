@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bd655ee2",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-11T11:39:23Z",
+      "side": 1,
+      "message": "This is wrong, it disallows to create any bitmap|png that is larger than current view size / screen size. While I can understand that we have to limit *somewhere*, doing it at this ridiculous small size is not right. The current selection effectively is rendered onto a maximum screen size pixel graphic.",
+      "revId": "157d1a774086d7344d443005442682f2ca3c01a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
