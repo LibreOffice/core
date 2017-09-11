@@ -86,17 +86,20 @@ sub check_whitespaces($)
             }
             if (/<property name="use_markup">True<\/property>/)
             {
-                bad_line("use font attributes instead of use-markup", $_, $src_limited);
+                bad_line("use font attributes instead of use-markup", $_, "ui");
             }
             if (/<property name="tooltip_markup"/ )
             {
-                bad_line("use tooltip_text instead of tooltip_markup", $_, $src_limited);
+                bad_line("use tooltip_text instead of tooltip_markup", $_, "ui");
             }
             if ((/translatable="yes"/) and not(/context=/))
             {
-                bad_line("translatable .ui file line without context", $_, $src_limited);
+                bad_line("translatable .ui file line without context", $_, "ui");
             }
-
+            if ((/<interface/) and not(/domain=/))
+            {
+                bad_line(".ui file without translation domain", $_, "ui");
+            }
         }
     }
     if ( $found_bad)
