@@ -28,10 +28,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <ftninfo.hxx>
-#include <drawdoc.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svx/svdpage.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -556,18 +554,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf109184, "tdf109184.docx")
     // Cell with color defined (red).
     uno::Reference<text::XTextRange> xCell3(xTable->getCellByName("A2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), getProperty<sal_Int32>(xCell3, "BackColor"));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testWatermarkLayer, "watermark-layer.docx")
-{
-    // Watermark was not visible if page background was set.
-
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SdrPage* pPage = pTextDoc->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    SdrObject* pObject = pPage->GetObj(0);
-
-    CPPUNIT_ASSERT(pObject);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(1), pObject->GetLayer());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
