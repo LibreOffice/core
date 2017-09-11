@@ -1163,6 +1163,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
         }
         break;
+        case SID_CLASSIFICATION_DIALOG:
+        {
+        }
+        break;
         case SID_WATERMARK:
         {
             SwWrtShell* pSh = GetWrtShell();
