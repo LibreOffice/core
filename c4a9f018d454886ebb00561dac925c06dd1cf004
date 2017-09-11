@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7d9e9657",
+        "filename": "accessibility/source/standard/vclxaccessiblebox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-11T19:43:45Z",
+      "side": 1,
+      "message": "so if it\u0027s not a dropdownbox, any index is valid? that doesn\u0027t seem right",
+      "revId": "c4a9f018d454886ebb00561dac925c06dd1cf004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9da3429e",
+        "filename": "accessibility/source/standard/vclxaccessiblestatusbaritem.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-11T19:43:45Z",
+      "side": 1,
+      "message": "no point in taking a lock if you\u0027re just going to throw",
+      "revId": "c4a9f018d454886ebb00561dac925c06dd1cf004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
