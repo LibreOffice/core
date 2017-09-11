@@ -3405,11 +3405,11 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         SalKeyEvent aKeyEvt;
 
         if ( (wParam >= '0') && (wParam <= '9') )
-            aKeyEvt.mnCode = sal::static_int_cast<sal_uInt16>(KEYGROUP_NUM + wParam - '0');
+            aKeyEvt.mnCode = sal::static_int_cast<sal_uInt16>(KeyGroup::Num + wParam - '0');
         else if ( (wParam >= 'A') && (wParam <= 'Z') )
-            aKeyEvt.mnCode = sal::static_int_cast<sal_uInt16>(KEYGROUP_ALPHA + wParam - 'A');
+            aKeyEvt.mnCode = sal::static_int_cast<sal_uInt16>(KeyGroup::Alpha + wParam - 'A');
         else if ( (wParam >= 'a') && (wParam <= 'z') )
-            aKeyEvt.mnCode = sal::static_int_cast<sal_uInt16>(KEYGROUP_ALPHA + wParam - 'a');
+            aKeyEvt.mnCode = sal::static_int_cast<sal_uInt16>(KeyGroup::Alpha + wParam - 'a');
         else if ( wParam == 0x0D )    // RETURN
             aKeyEvt.mnCode = KEY_RETURN;
         else if ( wParam == 0x1B )    // ESCAPE

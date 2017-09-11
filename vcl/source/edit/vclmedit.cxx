@@ -1468,7 +1468,7 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
     if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( !GetTextView()->IsCursorEnabled() ) )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
-        if ( !rKEvent.GetKeyCode().IsShift() && ( rKEvent.GetKeyCode().GetGroup() == KEYGROUP_CURSOR ) )
+        if ( !rKEvent.GetKeyCode().IsShift() && ( rKEvent.GetKeyCode().GetGroup() == KeyGroup::Cursor ) )
         {
             bDone = true;
             TextSelection aSel = pImpVclMEdit->GetTextWindow()->GetTextView()->GetSelection();

@@ -588,7 +588,7 @@ bool ClientBox::EventNotify( NotifyEvent& rNEvt )
         vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();
         sal_uInt16      nKeyCode = aKeyCode.GetCode();
 
-        if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
+        if ( aKeyCode.GetGroup() == KeyGroup::Cursor )
             bHandled = HandleCursorKey( nKeyCode );
     }
 

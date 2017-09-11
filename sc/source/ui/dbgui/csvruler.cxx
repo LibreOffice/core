@@ -461,7 +461,7 @@ void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
     else if( bShift && (nCode == KEY_DELETE) )
         Execute( CSVCMD_REMOVEALLSPLITS );
 
-    if( rKCode.GetGroup() != KEYGROUP_CURSOR )
+    if( rKCode.GetGroup() != KeyGroup::Cursor )
         ScCsvControl::KeyInput( rKEvt );
 }
 

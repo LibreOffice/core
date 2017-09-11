@@ -113,12 +113,12 @@ bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
 {
     const vcl::KeyCode& rKeyCode = rKEv.GetKeyCode();
 
-    if( rKeyCode.GetGroup() == KEYGROUP_ALPHA && !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
+    if( rKeyCode.GetGroup() == KeyGroup::Alpha && !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
     {
         if( (rKeyCode.GetCode() < KEY_A) || (rKeyCode.GetCode() > KEY_F) )
             return true;
     }
-    else if( rKeyCode.GetGroup() == KEYGROUP_NUM )
+    else if( rKeyCode.GetGroup() == KeyGroup::Num )
     {
         if( rKeyCode.IsShift() )
             return true;

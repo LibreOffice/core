@@ -566,7 +566,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         {
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
             pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
-            if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
+            if ( rKEvt.GetKeyCode().GetGroup() == KeyGroup::Cursor )
             {
                 pBindings->Update( SID_BASICIDE_STAT_POS );
                 pBindings->Update( SID_BASICIDE_STAT_TITLE );

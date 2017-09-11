@@ -951,7 +951,7 @@ void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if( rKCode.GetGroup() != KEYGROUP_CURSOR )
+    if( rKCode.GetGroup() != KeyGroup::Cursor )
         ScCsvControl::KeyInput( rKEvt );
 }
 

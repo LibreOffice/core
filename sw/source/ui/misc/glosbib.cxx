@@ -405,8 +405,8 @@ bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 void FEdit::KeyInput( const KeyEvent& rKEvent )
 {
     vcl::KeyCode aCode = rKEvent.GetKeyCode();
-    if( KEYGROUP_CURSOR == aCode.GetGroup() ||
-        ( KEYGROUP_MISC == aCode.GetGroup() &&
+    if( KeyGroup::Cursor == aCode.GetGroup() ||
+        ( KeyGroup::Misc == aCode.GetGroup() &&
           KEY_DELETE >= aCode.GetCode() ) ||
         SVT_SEARCHPATH_DELIMITER != rKEvent.GetCharCode() )
         Edit::KeyInput( rKEvent );

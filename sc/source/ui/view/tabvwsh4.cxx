@@ -1215,13 +1215,13 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     {
         bool bIsType = false;
         sal_uInt16 nModi = aCode.GetModifier();
-        sal_uInt16 nGroup = aCode.GetGroup();
+        KeyGroup nGroup = aCode.GetGroup();
 
-        if ( nGroup == KEYGROUP_NUM || nGroup == KEYGROUP_ALPHA || nGroup == 0 )
+        if ( nGroup == KeyGroup::Num || nGroup == KeyGroup::Alpha || nGroup == KeyGroup::NONE )
             if ( !bControl && !bAlt )
                 bIsType = true;
 
-        if ( nGroup == KEYGROUP_MISC )
+        if ( nGroup == KeyGroup::Misc )
             switch ( nCode )
             {
                 case KEY_RETURN:

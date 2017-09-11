@@ -4719,12 +4719,12 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         default:
             {
-            sal_uInt16 aKeyGroup = aKeyCode.GetGroup();
+            KeyGroup aKeyGroup = aKeyCode.GetGroup();
             ImplToolItem *pItem = nullptr;
             if( mnHighItemId )
                 pItem = ImplGetItem( mnHighItemId );
             // #i13931# forward alphanum keyinput into embedded control
-            if( (aKeyGroup == KEYGROUP_NUM || aKeyGroup == KEYGROUP_ALPHA ) && pItem && pItem->mpWindow && pItem->mbEnabled )
+            if( (aKeyGroup == KeyGroup::Num || aKeyGroup == KeyGroup::Alpha ) && pItem && pItem->mpWindow && pItem->mbEnabled )
             {
                 vcl::Window *pFocusWindow = Application::GetFocusWindow();
                 ImplHideFocus();
@@ -4739,7 +4739,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 // do nothing to avoid key presses going into the document
                 // while the toolbox has the focus
                 // just forward function and special keys and combinations with Alt-key
-                if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC || aKeyCode.IsMod2() )
+                if( aKeyGroup == KeyGroup::FKeys || aKeyGroup == KeyGroup::Misc || aKeyCode.IsMod2() )
                     bForwardKey = true;
             }
         }
