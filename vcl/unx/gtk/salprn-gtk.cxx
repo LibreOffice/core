@@ -435,7 +435,6 @@ GtkPrintDialog::impl_initCustomTab()
     GtkWidget* pCurParent = nullptr;
     GtkWidget* pCurTabPage = nullptr;
     GtkWidget* pCurSubGroup = nullptr;
-    GtkWidget* pStandardPrintRangeContainer = nullptr;
     bool bIgnoreSubgroup = false;
     for (int i = 0; i != rOptions.getLength(); i++)
     {
@@ -722,9 +721,6 @@ GtkPrintDialog::impl_initCustomTab()
             }
         }
     }
-
-    if (pStandardPrintRangeContainer)
-        gtk_widget_destroy(pStandardPrintRangeContainer);
 
     CustomTabs_t::const_reverse_iterator aEnd = aCustomTabs.rend();
     for (CustomTabs_t::const_reverse_iterator aI = aCustomTabs.rbegin(); aI != aEnd; ++aI)

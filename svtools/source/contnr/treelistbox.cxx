@@ -2724,7 +2724,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     bool bInUse = rEntry.HasInUseEmphasis();
     // if a ClipRegion was set from outside, we don't have to reset it
     const WinBits nWindowStyle = GetStyle();
-    const bool bResetClipRegion = false;
     const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -2981,9 +2980,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             }
         }
     }
-
-    if (bResetClipRegion)
-        rRenderContext.SetClipRegion();
 }
 
 void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeListEntry& /*rEntry*/)

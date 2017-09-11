@@ -262,8 +262,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if ( !nRowSpan )
         return;
 
-    bool bOutWidth = true;
-
     const SwStartNode* pSttNd = pBox->GetSttNd();
     bool bHead = false;
     if( pSttNd )
@@ -317,29 +315,28 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     long nWidth = 0;
+    bool bOutWidth = true;
     sal_uInt32 nPrcWidth = SAL_MAX_UINT32;
-    if( bOutWidth )
+
+    if( m_bLayoutExport )
     {
-        if( m_bLayoutExport )
+        if( pCell->HasPrcWidthOpt() )
         {
-            if( pCell->HasPrcWidthOpt() )
-            {
-                nPrcWidth = pCell->GetWidthOpt();
-            }
-            else
-            {
-                nWidth = pCell->GetWidthOpt();
-                if( !nWidth )
-                    bOutWidth = false;
-            }
+            nPrcWidth = pCell->GetWidthOpt();
         }
         else
         {
-            if( HasRelWidths() )
-                nPrcWidth = GetPrcWidth(nCol, nColSpan);
-            else
-                nWidth = GetAbsWidth( nCol, nColSpan );
+            nWidth = pCell->GetWidthOpt();
+            if( !nWidth )
+                bOutWidth = false;
         }
+    }
+    else
+    {
+        if( HasRelWidths() )
+            nPrcWidth = GetPrcWidth(nCol, nColSpan);
+        else
+            nWidth = GetAbsWidth( nCol, nColSpan );
     }
 
     long nHeight = pCell->GetHeight() > 0
