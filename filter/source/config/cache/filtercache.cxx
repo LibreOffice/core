@@ -1853,28 +1853,28 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
 {
     OUStringList lFlagNames;
 
-    if (nFlags & SfxFilterFlags::STARONEFILTER    ) lFlagNames.push_back(FLAGNAME_3RDPARTYFILTER   );
-    if (nFlags & SfxFilterFlags::ALIEN            ) lFlagNames.push_back(FLAGNAME_ALIEN            );
-    if (nFlags & SfxFilterFlags::CONSULTSERVICE   ) lFlagNames.push_back(FLAGNAME_CONSULTSERVICE   );
-    if (nFlags & SfxFilterFlags::DEFAULT          ) lFlagNames.push_back(FLAGNAME_DEFAULT          );
-    if (nFlags & SfxFilterFlags::ENCRYPTION       ) lFlagNames.push_back(FLAGNAME_ENCRYPTION       );
-    if (nFlags & SfxFilterFlags::EXPORT           ) lFlagNames.push_back(FLAGNAME_EXPORT           );
-    if (nFlags & SfxFilterFlags::IMPORT           ) lFlagNames.push_back(FLAGNAME_IMPORT           );
-    if (nFlags & SfxFilterFlags::INTERNAL         ) lFlagNames.push_back(FLAGNAME_INTERNAL         );
-    if (nFlags & SfxFilterFlags::NOTINFILEDLG     ) lFlagNames.push_back(FLAGNAME_NOTINFILEDIALOG  );
-    if (nFlags & SfxFilterFlags::MUSTINSTALL      ) lFlagNames.push_back(FLAGNAME_NOTINSTALLED     );
-    if (nFlags & SfxFilterFlags::OWN              ) lFlagNames.push_back(FLAGNAME_OWN              );
-    if (nFlags & SfxFilterFlags::PACKED           ) lFlagNames.push_back(FLAGNAME_PACKED           );
-    if (nFlags & SfxFilterFlags::PASSWORDTOMODIFY ) lFlagNames.push_back(FLAGNAME_PASSWORDTOMODIFY );
-    if (nFlags & SfxFilterFlags::PREFERED         ) lFlagNames.push_back(FLAGNAME_PREFERRED        );
-    if (nFlags & SfxFilterFlags::STARTPRESENTATION) lFlagNames.push_back(FLAGNAME_STARTPRESENTATION);
-    if (nFlags & SfxFilterFlags::OPENREADONLY     ) lFlagNames.push_back(FLAGNAME_READONLY         );
-    if (nFlags & SfxFilterFlags::SUPPORTSSELECTION) lFlagNames.push_back(FLAGNAME_SUPPORTSSELECTION);
-    if (nFlags & SfxFilterFlags::TEMPLATE         ) lFlagNames.push_back(FLAGNAME_TEMPLATE         );
-    if (nFlags & SfxFilterFlags::TEMPLATEPATH     ) lFlagNames.push_back(FLAGNAME_TEMPLATEPATH     );
-    if (nFlags & SfxFilterFlags::COMBINED         ) lFlagNames.push_back(FLAGNAME_COMBINED         );
-    if (nFlags & SfxFilterFlags::SUPPORTSSIGNING) lFlagNames.push_back(FLAGNAME_SUPPORTSSIGNING);
-    if (nFlags & SfxFilterFlags::GPGENCRYPTION) lFlagNames.push_back(FLAGNAME_GPGENCRYPTION);
+    if (nFlags & SfxFilterFlags::STARONEFILTER    ) lFlagNames.emplace_back(FLAGNAME_3RDPARTYFILTER   );
+    if (nFlags & SfxFilterFlags::ALIEN            ) lFlagNames.emplace_back(FLAGNAME_ALIEN            );
+    if (nFlags & SfxFilterFlags::CONSULTSERVICE   ) lFlagNames.emplace_back(FLAGNAME_CONSULTSERVICE   );
+    if (nFlags & SfxFilterFlags::DEFAULT          ) lFlagNames.emplace_back(FLAGNAME_DEFAULT          );
+    if (nFlags & SfxFilterFlags::ENCRYPTION       ) lFlagNames.emplace_back(FLAGNAME_ENCRYPTION       );
+    if (nFlags & SfxFilterFlags::EXPORT           ) lFlagNames.emplace_back(FLAGNAME_EXPORT           );
+    if (nFlags & SfxFilterFlags::IMPORT           ) lFlagNames.emplace_back(FLAGNAME_IMPORT           );
+    if (nFlags & SfxFilterFlags::INTERNAL         ) lFlagNames.emplace_back(FLAGNAME_INTERNAL         );
+    if (nFlags & SfxFilterFlags::NOTINFILEDLG     ) lFlagNames.emplace_back(FLAGNAME_NOTINFILEDIALOG  );
+    if (nFlags & SfxFilterFlags::MUSTINSTALL      ) lFlagNames.emplace_back(FLAGNAME_NOTINSTALLED     );
+    if (nFlags & SfxFilterFlags::OWN              ) lFlagNames.emplace_back(FLAGNAME_OWN              );
+    if (nFlags & SfxFilterFlags::PACKED           ) lFlagNames.emplace_back(FLAGNAME_PACKED           );
+    if (nFlags & SfxFilterFlags::PASSWORDTOMODIFY ) lFlagNames.emplace_back(FLAGNAME_PASSWORDTOMODIFY );
+    if (nFlags & SfxFilterFlags::PREFERED         ) lFlagNames.emplace_back(FLAGNAME_PREFERRED        );
+    if (nFlags & SfxFilterFlags::STARTPRESENTATION) lFlagNames.emplace_back(FLAGNAME_STARTPRESENTATION);
+    if (nFlags & SfxFilterFlags::OPENREADONLY     ) lFlagNames.emplace_back(FLAGNAME_READONLY         );
+    if (nFlags & SfxFilterFlags::SUPPORTSSELECTION) lFlagNames.emplace_back(FLAGNAME_SUPPORTSSELECTION);
+    if (nFlags & SfxFilterFlags::TEMPLATE         ) lFlagNames.emplace_back(FLAGNAME_TEMPLATE         );
+    if (nFlags & SfxFilterFlags::TEMPLATEPATH     ) lFlagNames.emplace_back(FLAGNAME_TEMPLATEPATH     );
+    if (nFlags & SfxFilterFlags::COMBINED         ) lFlagNames.emplace_back(FLAGNAME_COMBINED         );
+    if (nFlags & SfxFilterFlags::SUPPORTSSIGNING) lFlagNames.emplace_back(FLAGNAME_SUPPORTSSIGNING);
+    if (nFlags & SfxFilterFlags::GPGENCRYPTION) lFlagNames.emplace_back(FLAGNAME_GPGENCRYPTION);
 
     return comphelper::containerToSequence(lFlagNames);
 }

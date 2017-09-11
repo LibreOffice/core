@@ -2337,7 +2337,7 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
 
         std::vector< ObjectRepresentation > aObjects;
 
-        aObjects.push_back( ObjectRepresentation( Reference< XInterface >(), rMtf ) );
+        aObjects.emplace_back( Reference< XInterface >(), rMtf );
         SVGFontExport aSVGFontExport( *this, aObjects );
 
         Point aPoint100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefMapMode().GetOrigin(), rMtf.GetPrefMapMode(), MapUnit::Map100thMM ) );

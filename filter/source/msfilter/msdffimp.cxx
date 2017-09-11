@@ -1088,14 +1088,14 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
                 sal_Int32 nDist(0);
 
                 rIn.ReadInt32( nColor ).ReadInt32( nDist );
-                rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( nColor, DFF_Prop_fillColor ), 1.0 - ( nDist / 65536.0 ) ) );
+                rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( nColor, DFF_Prop_fillColor ), 1.0 - ( nDist / 65536.0 ) );
             }
         }
     }
     if ( rShadeColors.empty() )
     {
-        rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ), 0 ) );
-        rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ), 1 ) );
+        rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillBackColor, COL_WHITE ), DFF_Prop_fillBackColor ), 0 );
+        rShadeColors.emplace_back( rManager.MSO_CLR_ToColor( rProperties.GetPropertyValue( DFF_Prop_fillColor, COL_WHITE ), DFF_Prop_fillColor ), 1 );
     }
     rIn.Seek( nPos );
 }
@@ -4845,7 +4845,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if (size_t(nCalledByGroup) > maPendingGroupData.size())
     {
         std::shared_ptr<DffRecordHeader> rHdClone(new DffRecordHeader(aObjData.rSpHd));
-        maPendingGroupData.push_back( make_pair(DffObjData(rHdClone, aObjData), rHdClone) );
+        maPendingGroupData.emplace_back(DffObjData(rHdClone, aObjData), rHdClone );
     }
     else
     {

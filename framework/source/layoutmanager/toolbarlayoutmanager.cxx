@@ -1951,11 +1951,11 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
 
             rRowColumnsWindowData[nIndex].aRowColumnWindows.push_back( xWindow );
             rRowColumnsWindowData[nIndex].aUIElementNames.push_back( rElement.m_aName );
-            rRowColumnsWindowData[nIndex].aRowColumnWindowSizes.push_back(
-                awt::Rectangle( rElement.m_aDockedData.m_aPos.X,
+            rRowColumnsWindowData[nIndex].aRowColumnWindowSizes.emplace_back(
+                                rElement.m_aDockedData.m_aPos.X,
                                 rElement.m_aDockedData.m_aPos.Y,
                                 aPosSize.Width,
-                                aPosSize.Height ));
+                                aPosSize.Height );
             if ( rRowColumnsWindowData[nIndex].nStaticSize < aPosSize.Height )
                 rRowColumnsWindowData[nIndex].nStaticSize = aPosSize.Height;
             if ( eDockingArea == ui::DockingArea_DOCKINGAREA_TOP )
@@ -2009,11 +2009,11 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
 
             rRowColumnsWindowData[nIndex].aRowColumnWindows.push_back( xWindow );
             rRowColumnsWindowData[nIndex].aUIElementNames.push_back( rElement.m_aName );
-            rRowColumnsWindowData[nIndex].aRowColumnWindowSizes.push_back(
-                awt::Rectangle( rElement.m_aDockedData.m_aPos.X,
+            rRowColumnsWindowData[nIndex].aRowColumnWindowSizes.emplace_back(
+                                rElement.m_aDockedData.m_aPos.X,
                                 rElement.m_aDockedData.m_aPos.Y,
                                 aPosSize.Width,
-                                aPosSize.Height ));
+                                aPosSize.Height );
             if ( rRowColumnsWindowData[nIndex].nStaticSize < aPosSize.Width )
                 rRowColumnsWindowData[nIndex].nStaticSize = aPosSize.Width;
             if ( eDockingArea == ui::DockingArea_DOCKINGAREA_LEFT )
@@ -2101,9 +2101,9 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
 
             nLastPos = rElement.m_aDockedData.m_aPos.X + aPosSize.Width;
 
-            rRowColumnWindowData.aRowColumnWindowSizes.push_back(
-                awt::Rectangle( rElement.m_aDockedData.m_aPos.X, rElement.m_aDockedData.m_aPos.Y,
-                                aPosSize.Width, aPosSize.Height ));
+            rRowColumnWindowData.aRowColumnWindowSizes.emplace_back(
+                                rElement.m_aDockedData.m_aPos.X, rElement.m_aDockedData.m_aPos.Y,
+                                aPosSize.Width, aPosSize.Height );
             if ( rRowColumnWindowData.nStaticSize < aPosSize.Height )
                 rRowColumnWindowData.nStaticSize = aPosSize.Height;
             rRowColumnWindowData.nVarSize += aPosSize.Width;
@@ -2119,9 +2119,9 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
 
             nLastPos = rElement.m_aDockedData.m_aPos.Y + aPosSize.Height;
 
-            rRowColumnWindowData.aRowColumnWindowSizes.push_back(
-                awt::Rectangle( rElement.m_aDockedData.m_aPos.X, rElement.m_aDockedData.m_aPos.Y,
-                                aPosSize.Width, aPosSize.Height ));
+            rRowColumnWindowData.aRowColumnWindowSizes.emplace_back(
+                                rElement.m_aDockedData.m_aPos.X, rElement.m_aDockedData.m_aPos.Y,
+                                aPosSize.Width, aPosSize.Height );
             if ( rRowColumnWindowData.nStaticSize < aPosSize.Width )
                 rRowColumnWindowData.nStaticSize = aPosSize.Width;
             rRowColumnWindowData.nVarSize += aPosSize.Height;

@@ -1672,7 +1672,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 
         sal_Int32 nPos = 0;
         short nScriptType = _xBI->getScriptType( aText, nPos );
-        rTypes.push_back( ScriptTypePosInfo( nScriptType, nPos, nTextLen ) );
+        rTypes.emplace_back( nScriptType, nPos, nTextLen );
         nPos = _xBI->endOfScript( aText, nPos, nScriptType );
         while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
         {
@@ -1699,7 +1699,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
                         break;
                     }
                 }
-                rTypes.push_back( ScriptTypePosInfo( nScriptType, nPos, nTextLen ) );
+                rTypes.emplace_back( nScriptType, nPos, nTextLen );
             }
 
             nPos = nEndPos;
@@ -1950,7 +1950,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
             for (int32_t nIdx = 0; nIdx < nCount; ++nIdx)
             {
                 ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-                rInfos.push_back( WritingDirectionInfo( nCurrDir, nStart, nEnd ) );
+                rInfos.emplace_back( nCurrDir, nStart, nEnd );
                 nStart = nEnd;
             }
         }
@@ -1960,7 +1960,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
 
     // No infos mean no CTL and default dir is L2R...
     if ( rInfos.empty() )
-        rInfos.push_back( WritingDirectionInfo( 0, 0, pParaPortion->GetNode()->Len() ) );
+        rInfos.emplace_back( 0, 0, pParaPortion->GetNode()->Len() );
 
 }
 
