@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fde4463c",
+        "filename": "vcl/unx/generic/printer/cpdmgr.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1001621
+      },
+      "writtenOn": "2017-09-11T13:00:07Z",
+      "side": 1,
+      "message": "This is still wrong since we are not doing ++dest_it or free(dest_it -\u003e second)... should I update this and send a patch?",
+      "revId": "098dcc6e935d0ce9bac25170360618b15a2b81da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
