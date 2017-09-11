@@ -76,6 +76,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <modeltoviewhelper.hxx>
 #include <strings.hrc>
+#include <undobj.hxx>
 
 #define WATERMARK_NAME "PowerPlusWaterMarkObject"
 
@@ -672,6 +673,75 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     }
 }
 
+class SwUndoParagraphSigning : public SwUndo
+{
+private:
+    sal_uLong m_nNodeIndex;
+    SwDoc* m_pDoc;
+    uno::Reference<text::XTextField> m_xField;
+    uno::Reference<text::XTextContent> m_xParent;
+    OUString m_signature;
+    OUString m_display;
+
+public:
+    SwUndoParagraphSigning(const SwPosition& rPos,
+                           const uno::Reference<text::XTextField>& xField,
+                           const uno::Reference<text::XTextContent>& xParent);
+
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
+    virtual void RepeatImpl(::sw::RepeatContext&) override;
+};
+
+SwUndoParagraphSigning::SwUndoParagraphSigning(const SwPosition& rPos,
+                                               const uno::Reference<text::XTextField>& xField,
+                                               const uno::Reference<text::XTextContent>& xParent)
+  : SwUndo(SwUndoId::PARA_SIGN_ADD, rPos.GetDoc()),
+    m_nNodeIndex(rPos.nNode.GetIndex()),
+    m_pDoc(rPos.GetDoc()),
+    m_xField(xField),
+    m_xParent(xParent)
+{
+    // Save the metadata and field content to undo/redo.
+    static const OUString metaNS("urn:bails");
+    uno::Reference<frame::XModel> xModel = m_pDoc->GetDocShell()->GetBaseModel();
+    const css::uno::Reference<css::rdf::XResource> xSubject(m_xField, uno::UNO_QUERY);
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, metaNS, xSubject);
+    const auto it = aStatements.find("loext:signature:signature");
+    if (it != aStatements.end())
+        m_signature = it->second;
+
+    uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
+    m_display = xText->getString();
+}
+
+void SwUndoParagraphSigning::UndoImpl(::sw::UndoRedoContext&)
+{
+    lcl_RemoveParagraphSignatureField(m_xField);
+}
+
+void SwUndoParagraphSigning::RedoImpl(::sw::UndoRedoContext&)
+{
+    static const OUString metaFile("bails.rdf");
+    static const OUString metaNS("urn:bails");
+    const OUString name = "loext:signature:signature";
+
+    uno::Reference<frame::XModel> xModel = m_pDoc->GetDocShell()->GetBaseModel();
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+    m_xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance("com.sun.star.text.textfield.MetadataField"), uno::UNO_QUERY);
+    m_xField->attach(m_xParent->getAnchor()->getStart());
+
+    const css::uno::Reference<css::rdf::XResource> xSubject(m_xField, uno::UNO_QUERY);
+    SwRDFHelper::addStatement(xModel, metaNS, metaFile, xSubject, name, m_signature);
+
+    uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
+    xText->setString(m_display);
+}
+
+void SwUndoParagraphSigning::RepeatImpl(::sw::RepeatContext&)
+{
+}
+
 void SwEditShell::SignParagraph(SwPaM* pPaM)
 {
     if (!pPaM)
@@ -719,6 +789,8 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
     uno::Reference<css::text::XTextField> xField(xMultiServiceFactory->createInstance("com.sun.star.text.textfield.MetadataField"), uno::UNO_QUERY);
 
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+
     uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
     xContent->attach(xParent->getAnchor()->getStart());
 
@@ -726,9 +798,23 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     const OUString name = "loext:signature:signature";
     SwRDFHelper::addStatement(xModel, metaNS, metaFile, xRes, name, OStringToOUString(signature, RTL_TEXTENCODING_UTF8, 0));
 
-    const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text);
-    uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
-    xText->setString(res.second + " ");
+    {
+        // Disable undo to avoid introducing noise when we edit the metadata field.
+        const bool isUndoEnabled = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+        comphelper::ScopeGuard const g([&] () {
+                GetDoc()->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
+             });
+
+        const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text);
+        uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
+        xText->setString(res.second + " ");
+    }
+
+    SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(SwPosition(*pNode), xField, xParent);
+    GetDoc()->GetIDocumentUndoRedo().AppendUndo(pUndo);
+
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 }
 
 void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
@@ -757,9 +843,16 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+
+    // Prevent recursive validation since this is triggered on node updates, which we do below.
     m_bIsValidatingParagraphSignature = true;
-    comphelper::ScopeGuard const g([this] () {
+    // Disable undo to avoid introducing noise when we edit the metadata field.
+    const bool isUndoEnabled = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+
+    comphelper::ScopeGuard const g([this, isUndoEnabled] () {
             m_bIsValidatingParagraphSignature = false;
+            GetDoc()->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
     while (xTextPortions->hasMoreElements())
@@ -777,14 +870,10 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
 
         uno::Reference<text::XTextField> xContent(xTextField, uno::UNO_QUERY);
 
-        const bool isUndoEnabled = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
         if (updateDontRemove)
             lcl_UpdateParagraphSignatureField(xModel, xContent, utf8Text);
         else if (!lcl_MakeParagraphSignatureFieldText(xModel, xContent, utf8Text).first)
             lcl_RemoveParagraphSignatureField(xContent);
-
-        GetDoc()->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
     }
 }
 
