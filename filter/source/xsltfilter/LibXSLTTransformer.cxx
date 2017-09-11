@@ -13,6 +13,7 @@
 #include <cstring>
 #include <list>
 #include <map>
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <libxml/parser.h>
@@ -335,11 +336,12 @@ namespace XSLT
         closeOutput();
         oh.reset();
         xsltFreeStylesheet(styleSheet);
-        xsltFreeTransformContext(m_tcontext);
+        xsltTransformContextPtr tcontext = nullptr;
         {
             std::unique_lock<std::mutex> g(m_mutex);
-            m_tcontext = nullptr;
+            std::swap(m_tcontext, tcontext);
         }
+        xsltFreeTransformContext(tcontext);
         xmlFreeDoc(doc);
         xmlFreeDoc(result);
     }
