@@ -18,6 +18,7 @@
  */
 
 #include <cstdarg>
+#include <type_traits>
 #include <math.h>
 #include <osl/file.h>
 #include <sal/log.hxx>
@@ -623,8 +624,14 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",
                                   "SANE_FRAME_BLUE", "Unknown !!!" };
             fprintf( stderr, "Parameters for frame %d:\n", nStream );
-            if( aParams.format > 4 )
+            if( static_cast<
+                    typename std::make_unsigned<
+                        typename std::underlying_type<SANE_Frame>::type>::type>(
+                            aParams.format)
+                > 4 )
+            {
                 aParams.format = (SANE_Frame)5;
+            }
             fprintf( stderr, "format:           %s\n", ppFormats[ (int)aParams.format ] );
             fprintf( stderr, "last_frame:       %s\n", aParams.last_frame ? "TRUE" : "FALSE" );
             fprintf( stderr, "depth:            %d\n", (int)aParams.depth );
