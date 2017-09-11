@@ -2952,7 +2952,7 @@ if test $_os = iOS; then
         versionmin=-mios-simulator-version-min=9.3
         if test "$host_cpu" = "arm64"; then
             XCODE_ARCHS=x86_64
-            BITNESS_OVERRIDE=64
+            BITNESS=-fembed-bitcode
         else
             XCODE_ARCHS=i386
         fi
@@ -2961,7 +2961,7 @@ if test $_os = iOS; then
         versionmin=-miphoneos-version-min=9.3
         if test "$host_cpu" = "arm64"; then
             XCODE_ARCHS=arm64
-            BITNESS_OVERRIDE=64
+            BITNESS=-fembed-bitcode
         else
             XCODE_ARCHS=arm
         fi
@@ -2998,8 +2998,8 @@ if test $_os = iOS; then
     XCODE_CLANG_CXX_LIBRARY=libc++
     stdlib="-stdlib=$XCODE_CLANG_CXX_LIBRARY"
 
-    CC="`xcrun -find clang` -arch $XCODE_ARCHS -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $XCODE_ARCHS -fvisibility=hidden $stdlib -isysroot $sysroot $lto $versionmin"
+    CC="`xcrun -find clang` -arch $XCODE_ARCHS -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $XCODE_ARCHS -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
