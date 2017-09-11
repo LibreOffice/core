@@ -68,7 +68,6 @@
 #include <pagefrm.hxx>
 #include <rdfhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
-#include <DocumentDrawModelManager.hxx>
 
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
@@ -460,8 +459,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
 void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
                             const uno::Reference<frame::XModel>& xModel,
                             const uno::Reference<beans::XPropertySet>& xPageStyle,
-                            const uno::Reference<text::XText>& xHeaderText,
-                            sal_Int16 nLayer)
+                            const uno::Reference<text::XText>& xHeaderText)
 {
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
     OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
@@ -583,7 +581,6 @@ void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
         xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
         xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
         xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
-        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_LAYERID, uno::makeAny(nLayer));
 
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
         xTextRange->setString(rWatermark.GetText());
@@ -629,8 +626,6 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
 
-    sal_Int16 nHeavenId = GetDoc()->getIDocumentDrawModelAccess().GetHeavenId().get();
-
     std::set<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
@@ -656,16 +651,16 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
         uno::Reference<text::XText> xHeaderTextRight;
 
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
-        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderText, nHeavenId);
+        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderText);
 
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT_FIRST) >>= xHeaderTextFirst;
-        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderTextFirst, nHeavenId);
+        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderTextFirst);
 
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT_LEFT) >>= xHeaderTextLeft;
-        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderTextLeft, nHeavenId);
+        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderTextLeft);
 
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT_RIGHT) >>= xHeaderTextRight;
-        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderTextRight, nHeavenId);
+        lcl_placeWatermarkInHeader(rWatermark, xModel, xPageStyle, xHeaderTextRight);
 
         // tdf#108494 the header height was switched to height of a watermark
         // and shape was moved to the lower part of a page
