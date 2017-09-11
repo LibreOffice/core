@@ -527,6 +527,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
 {
     if ( !mpNoteEngine )
     {
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         mpNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
         mpNoteEngine->SetUpdateMode( false );
         mpNoteEngine->EnableUndo( false );
