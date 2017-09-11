@@ -6807,7 +6807,17 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         aRectangle.SetSize(m_pReferenceDevice->PixelToLogic(Size(rLayout.GetTextWidth(), 0)));
         // This includes ascent / descent.
         aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
-        drawRectangle(aRectangle);
+
+        LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance;
+        if (pFontInstance->mnOrientation)
+        {
+            // Adapt rectangle for rotated text.
+            tools::Polygon aPolygon(aRectangle);
+            aPolygon.Rotate(m_pReferenceDevice->PixelToLogic(rLayout.GetDrawPosition()), pFontInstance->mnOrientation);
+            drawPolygon(aPolygon);
+        }
+        else
+            drawRectangle(aRectangle);
 
         pop();
     }
