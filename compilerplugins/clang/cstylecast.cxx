@@ -26,8 +26,8 @@ bool areSimilar(QualType type1, QualType type2) {
             if (!t2->isPointerType()) {
                 return false;
             }
-            auto t1a = t1->getAs<PointerType>();
-            auto t2a = t2->getAs<PointerType>();
+            auto t1a = t1->getAs<clang::PointerType>();
+            auto t2a = t2->getAs<clang::PointerType>();
             t1 = t1a->getPointeeType().getTypePtr();
             t2 = t2a->getPointeeType().getTypePtr();
         } else if (t1->isMemberPointerType()) {
@@ -77,7 +77,7 @@ bool areSimilar(QualType type1, QualType type2) {
 
 QualType resolvePointers(QualType type) {
     while (type->isPointerType()) {
-        type = type->getAs<PointerType>()->getPointeeType();
+        type = type->getAs<clang::PointerType>()->getPointeeType();
     }
     return type;
 }

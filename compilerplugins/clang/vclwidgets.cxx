@@ -47,7 +47,7 @@ public:
     bool VisitCXXConstructExpr(const CXXConstructExpr *);
     bool VisitBinaryOperator(const BinaryOperator *);
 private:
-    void checkAssignmentForVclPtrToRawConversion(const SourceLocation& sourceLoc, const Type* lhsType, const Expr* rhs);
+    void checkAssignmentForVclPtrToRawConversion(const SourceLocation& sourceLoc, const clang::Type* lhsType, const Expr* rhs);
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
     bool mbCheckingMemcpy = false;
 };
@@ -85,7 +85,7 @@ bool isDerivedFromVclReferenceBase(const CXXRecordDecl *decl) {
     return false;
 }
 
-bool containsVclReferenceBaseSubclass(const Type* pType0);
+bool containsVclReferenceBaseSubclass(const clang::Type* pType0);
 
 bool containsVclReferenceBaseSubclass(const QualType& qType) {
     auto check = loplugin::TypeCheck(qType);
@@ -99,10 +99,10 @@ bool containsVclReferenceBaseSubclass(const QualType& qType) {
     return containsVclReferenceBaseSubclass(qType.getTypePtr());
 }
 
-bool containsVclReferenceBaseSubclass(const Type* pType0) {
+bool containsVclReferenceBaseSubclass(const clang::Type* pType0) {
     if (!pType0)
         return false;
-    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
     if (!pType)
         return false;
     const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
@@ -132,7 +132,7 @@ bool containsVclReferenceBaseSubclass(const Type* pType0) {
         QualType pointeeType = pType->getPointeeType();
         return containsVclReferenceBaseSubclass(pointeeType);
     } else if (pType->isArrayType()) {
-        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        const clang::ArrayType* pArrayType = dyn_cast<clang::ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
         return containsVclReferenceBaseSubclass(elementType);
     } else {
@@ -276,9 +276,9 @@ bool VCLWidgets::VisitBinaryOperator(const BinaryOperator * binaryOperator)
 
 // Look for places where we are accidentally assigning a returned-by-value VclPtr<T> to a T*, which generally
 // ends up in a use-after-free.
-void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const SourceLocation& spellingLocation, const Type* lhsType, const Expr* rhs)
+void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const SourceLocation& spellingLocation, const clang::Type* lhsType, const Expr* rhs)
 {
-    if (!lhsType || !isa<PointerType>(lhsType)) {
+    if (!lhsType || !isa<clang::PointerType>(lhsType)) {
         return;
     }
     if (!rhs) {
@@ -736,7 +736,7 @@ bool VCLWidgets::isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodD
     return true;
 }
 
-bool containsVclPtr(const Type* pType0);
+bool containsVclPtr(const clang::Type* pType0);
 
 bool containsVclPtr(const QualType& qType) {
     auto check = loplugin::TypeCheck(qType);
@@ -750,16 +750,16 @@ bool containsVclPtr(const QualType& qType) {
     return containsVclPtr(qType.getTypePtr());
 }
 
-bool containsVclPtr(const Type* pType0) {
+bool containsVclPtr(const clang::Type* pType0) {
     if (!pType0)
         return false;
-    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
     if (!pType)
         return false;
     if (pType->isPointerType()) {
         return false;
     } else if (pType->isArrayType()) {
-        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        const clang::ArrayType* pArrayType = dyn_cast<clang::ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
         return containsVclPtr(elementType);
     } else {

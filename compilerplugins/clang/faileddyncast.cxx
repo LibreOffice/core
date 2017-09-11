@@ -22,12 +22,12 @@ bool isAlwaysNull(CXXDynamicCastExpr const * expr) {
   QualType SrcType = expr->getSubExpr()->getType();
   QualType DestType = expr->getType();
 
-  if (const PointerType *SrcPTy = SrcType->getAs<PointerType>()) {
+  if (const clang::PointerType *SrcPTy = SrcType->getAs<clang::PointerType>()) {
     SrcType = SrcPTy->getPointeeType();
 #if 0
     DestType = DestType->castAs<PointerType>()->getPointeeType();
 #else
-    auto DstPTy = DestType->getAs<PointerType>();
+    auto DstPTy = DestType->getAs<clang::PointerType>();
     if (!DstPTy)
       return false;
     DestType = DstPTy->getPointeeType();

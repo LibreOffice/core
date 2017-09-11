@@ -412,7 +412,7 @@ bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
                 = ignoreParenImpCastAndComma(expr->getImplicitObjectArgument())
                 ->getType();
             if (dyn_cast<MemberExpr>(expr->getCallee())->isArrow()) {
-                ty = ty->getAs<PointerType>()->getPointeeType();
+                ty = ty->getAs<clang::PointerType>()->getPointeeType();
             }
             TemplateSpecializationType const * ct
                 = ty->getAs<TemplateSpecializationType>();
@@ -913,7 +913,8 @@ bool ImplicitBoolConversion::isExternCFunctionCall(
     if (d != nullptr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
         if (fd != nullptr) {
-            PointerType const * pt = fd->getType()->getAs<PointerType>();
+            clang::PointerType const * pt = fd->getType()
+                ->getAs<clang::PointerType>();
             QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
             *functionType = t2->getAs<FunctionProtoType>();
             assert(
@@ -927,7 +928,8 @@ bool ImplicitBoolConversion::isExternCFunctionCall(
         }
         VarDecl const * vd = dyn_cast<VarDecl>(d);
         if (vd != nullptr) {
-            PointerType const * pt = vd->getType()->getAs<PointerType>();
+            clang::PointerType const * pt = vd->getType()
+                ->getAs<clang::PointerType>();
             *functionType
                 = ((pt == nullptr ? vd->getType() : pt->getPointeeType())
                    ->getAs<FunctionProtoType>());

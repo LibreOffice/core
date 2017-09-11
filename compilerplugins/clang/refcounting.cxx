@@ -110,16 +110,16 @@ bool isDerivedFrom(const CXXRecordDecl *decl, DeclChecker base) {
 }
 
 
-bool containsXInterfaceSubclass(const Type* pType0);
+bool containsXInterfaceSubclass(const clang::Type* pType0);
 
 bool containsXInterfaceSubclass(const QualType& qType) {
     return containsXInterfaceSubclass(qType.getTypePtr());
 }
 
-bool containsXInterfaceSubclass(const Type* pType0) {
+bool containsXInterfaceSubclass(const clang::Type* pType0) {
     if (!pType0)
         return false;
-    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
     if (!pType)
         return false;
     const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
@@ -229,7 +229,7 @@ bool containsXInterfaceSubclass(const Type* pType0) {
         // ignore
         return false;
     } else if (pType->isArrayType()) {
-        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        const clang::ArrayType* pArrayType = dyn_cast<clang::ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
         return containsXInterfaceSubclass(elementType);
     } else {
@@ -237,10 +237,10 @@ bool containsXInterfaceSubclass(const Type* pType0) {
     }
 }
 
-bool containsSvRefBaseSubclass(const Type* pType0) {
+bool containsSvRefBaseSubclass(const clang::Type* pType0) {
     if (!pType0)
         return false;
-    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
     if (!pType)
         return false;
     const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
@@ -269,7 +269,7 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
         // ignore
         return false;
     } else if (pType->isArrayType()) {
-        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        const clang::ArrayType* pArrayType = dyn_cast<clang::ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
         return containsSvRefBaseSubclass(elementType.getTypePtr());
     } else {
@@ -277,10 +277,10 @@ bool containsSvRefBaseSubclass(const Type* pType0) {
     }
 }
 
-bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
+bool containsSalhelperReferenceObjectSubclass(const clang::Type* pType0) {
     if (!pType0)
         return false;
-    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
     if (!pType)
         return false;
     const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
@@ -311,7 +311,7 @@ bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
         // ignore
         return false;
     } else if (pType->isArrayType()) {
-        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        const clang::ArrayType* pArrayType = dyn_cast<clang::ArrayType>(pType);
         QualType elementType = pArrayType->getElementType();
         return containsSalhelperReferenceObjectSubclass(elementType.getTypePtr());
     } else {

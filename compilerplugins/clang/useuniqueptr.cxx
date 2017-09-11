@@ -337,7 +337,7 @@ void UseUniquePtr::CheckForDeleteOfPOD(const CompoundStmt* compoundStmt)
         if (tagDecl->isUnion())
             continue;
 
-        auto pointerType = dyn_cast<PointerType>(fieldDecl->getType()->getUnqualifiedDesugaredType());
+        auto pointerType = dyn_cast<clang::PointerType>(fieldDecl->getType()->getUnqualifiedDesugaredType());
         QualType elementType = pointerType->getPointeeType();
         auto tc = loplugin::TypeCheck(elementType);
         if (!elementType.isPODType(compiler.getASTContext())

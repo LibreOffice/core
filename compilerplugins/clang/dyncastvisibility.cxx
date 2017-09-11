@@ -91,7 +91,7 @@ public:
         if (auto const t = td->getAs<ReferenceType>()) {
             td = t->getPointeeType();
         }
-        while (auto const t = td->getAs<PointerType>()) {
+        while (auto const t = td->getAs<clang::PointerType>()) {
             td = t->getPointeeType();
         }
         auto const rtd = td->getAs<RecordType>();
@@ -104,7 +104,7 @@ public:
             return true;
         }
         auto ts = expr->getSubExpr()->getType();
-        while (auto const t = ts->getAs<PointerType>()) {
+        while (auto const t = ts->getAs<clang::PointerType>()) {
             ts = t->getPointeeType();
         }
         auto const rts = ts->getAs<RecordType>();

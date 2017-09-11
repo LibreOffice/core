@@ -262,7 +262,8 @@ bool SalBool::VisitCallExpr(CallExpr * expr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
         if (fd != nullptr) {
             if (!hasBoolOverload(fd, false)) {
-                PointerType const * pt = fd->getType()->getAs<PointerType>();
+                clang::PointerType const * pt = fd->getType()
+                    ->getAs<clang::PointerType>();
                 QualType t2(
                     pt == nullptr ? fd->getType() : pt->getPointeeType());
                 ft = t2->getAs<FunctionProtoType>();
@@ -275,7 +276,8 @@ bool SalBool::VisitCallExpr(CallExpr * expr) {
         } else {
             VarDecl const * vd = dyn_cast<VarDecl>(d);
             if (vd != nullptr) {
-                PointerType const * pt = vd->getType()->getAs<PointerType>();
+                clang::PointerType const * pt = vd->getType()
+                    ->getAs<clang::PointerType>();
                 ft = (pt == nullptr ? vd->getType() : pt->getPointeeType())
                     ->getAs<FunctionProtoType>();
             }
@@ -290,7 +292,7 @@ bool SalBool::VisitCallExpr(CallExpr * expr) {
                 b = !t.isConstQualified() && isSalBool(t);
             } else if (t->isPointerType()) {
                 for (;;) {
-                    auto t2 = t->getAs<PointerType>();
+                    auto t2 = t->getAs<clang::PointerType>();
                     if (t2 == nullptr) {
                         break;
                     }
@@ -479,7 +481,7 @@ bool SalBool::VisitReturnStmt(ReturnStmt const * stmt) {
         return true;
     }
     for (;;) {
-        auto t2 = t->getAs<PointerType>();
+        auto t2 = t->getAs<clang::PointerType>();
         if (t2 == nullptr) {
             break;
         }
