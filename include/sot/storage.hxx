@@ -40,7 +40,7 @@ friend class SotStorage;
 protected:
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
     virtual std::size_t PutData(const void* pData, std::size_t nSize) override;
-    virtual sal_uInt64      SeekPos(sal_uInt64 nPos) override;
+    virtual sal_uInt64  SeekPos(sal_uInt64 nPos) override;
     virtual void        FlushData() override;
                         virtual ~SotStorageStream() override;
 public:
@@ -70,7 +70,7 @@ friend class SotStorageStream;
     bool            m_bIsRoot;   // e.g.: File Storage
     bool            m_bDelStm;
     OString         m_aKey;      // aKey.Len != 0  -> encryption
-    long            m_nVersion;
+    sal_Int32       m_nVersion;
 
 protected:
                         virtual ~SotStorage() override;
@@ -96,11 +96,11 @@ public:
 
     const OString&      GetKey() const { return m_aKey;}
 
-    void                SetVersion( long nVers )
+    void                SetVersion( sal_Int32 nVers )
                         {
                             m_nVersion = nVers;
                         }
-    long                GetVersion() const
+    sal_Int32           GetVersion() const
                         {
                             return m_nVersion;
                         }

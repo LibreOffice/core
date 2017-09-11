@@ -58,7 +58,7 @@ class SFX2_DLLPUBLIC SfxFilter
     OUString maProvider;
 
     SfxFilterFlags  nFormatType;
-    sal_uIntPtr     nVersion;
+    sal_Int32       nVersion;
     SotClipboardFormatId lFormat;
 
 public:
@@ -98,8 +98,8 @@ public:
     bool            UsesStorage() const { return GetFormat() != SotClipboardFormatId::NONE; }
     void SetURLPattern( const OUString& rStr );
     void            SetUIName( const OUString& rName ) { aUIName = rName; }
-    void            SetVersion( sal_uIntPtr nVersionP ) { nVersion = nVersionP; }
-    sal_uIntPtr           GetVersion() const { return nVersion; }
+    void            SetVersion( sal_Int32 nVersionP ) { nVersion = nVersionP; }
+    sal_Int32       GetVersion() const { return nVersion; }
     OUString GetSuffixes() const;
     OUString GetDefaultExtension() const;
     const OUString& GetServiceName() const { return aServiceName; }

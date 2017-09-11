@@ -172,7 +172,7 @@ private:
     unsigned char   m_nCryptMask;
 
     // Userdata
-    long            m_nVersion;   // for external use
+    sal_Int32       m_nVersion;   // for external use
 
                     SvStream ( const SvStream& rStream ) = delete;
     SvStream&       operator=( const SvStream& rStream ) = delete;
@@ -384,8 +384,8 @@ public:
     bool            IsWritable() const { return m_isWritable; }
     StreamMode      GetStreamMode() const { return m_eStreamMode; }
 
-    long            GetVersion() { return m_nVersion; }
-    void            SetVersion( long n ) { m_nVersion = n; }
+    sal_Int32       GetVersion() { return m_nVersion; }
+    void            SetVersion( sal_Int32 n ) { m_nVersion = n; }
 
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
