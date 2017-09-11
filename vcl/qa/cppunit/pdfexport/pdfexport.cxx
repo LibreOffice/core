@@ -66,6 +66,7 @@ public:
     void testTdf107089();
     void testTdf99680();
     void testTdf99680_2();
+    void testTdf108963();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testTdf107089);
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
+    CPPUNIT_TEST(testTdf108963);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -674,6 +676,59 @@ void PdfExportTest::testTdf99680_2()
     }
 }
 
+void PdfExportTest::testTdf108963()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf108963.odp";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+
+    // Make sure there is a filled rectangle inside.
+    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nYellowPathCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
+            continue;
+
+        unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
+        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        if (RGB_COLORDATA(nRed, nGreen, nBlue) == COL_YELLOW)
+        {
+            ++nYellowPathCount;
+            float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
+            FPDFPageObj_GetBounds(pPdfPageObject, &fLeft, &fBottom, &fRight, &fTop);
+            int nWidth = fRight - fLeft;
+            int nHeight = fTop - fBottom;
+            // This was 37 and 20, i.e. the bounding rectangle was much smaller
+            // as the highlight polygon wasn't rotated.
+            CPPUNIT_ASSERT_EQUAL(42, nWidth);
+            CPPUNIT_ASSERT_EQUAL(39, nHeight);
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
+}
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
