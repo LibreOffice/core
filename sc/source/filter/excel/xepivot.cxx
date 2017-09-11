@@ -1429,9 +1429,9 @@ void XclExpPivotTable::Finalize()
     maPTInfo.mnDataRows = rnXclRow2 - rnDataXclRow + 1;
 
     // first heading
-    maPTInfo.mnFirstHeadRow = rnXclRow1;
+    maPTInfo.mnFirstHeadRow = rnXclRow1 + 1;
     if (bExtraHeaderRow)
-        maPTInfo.mnFirstHeadRow += 2;
+        maPTInfo.mnFirstHeadRow += 1;
 }
 
 // records ----------------------------------------------------------------
