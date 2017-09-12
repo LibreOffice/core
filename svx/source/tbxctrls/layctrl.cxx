@@ -160,6 +160,8 @@ void TableWindow::dispose()
 void TableWindow::MouseMove( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseMove( rMEvt );
+    if (IsInCleanUp())
+        return;
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos( aPos );
 
