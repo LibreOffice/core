@@ -16,6 +16,24 @@
       "revId": "ba047a00bd05f54d8da98884d47ac2a5bd8f0fc9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a1bffcce",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3052,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-09-12T14:19:24Z",
+      "side": 1,
+      "message": "No, that\u0027s not right at all. I\u0027ll put the removed lines back and will add an extra test in unit test document.",
+      "parentUuid": "1a430d35_7dcf76b0",
+      "revId": "ba047a00bd05f54d8da98884d47ac2a5bd8f0fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
