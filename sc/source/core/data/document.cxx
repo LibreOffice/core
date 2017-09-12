@@ -997,9 +997,9 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
 
         //  mirror existing objects:
 
-        if (pDrawLayer)
+        if (mpDrawLayer)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+            SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             OSL_ENSURE(pPage,"Page ?");
             if (pPage)
             {
@@ -1011,7 +1011,7 @@ void ScDocument::SetLayoutRTL( SCTAB nTab, bool bRTL )
                     //  don't mirror again
                     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
                     if ( !pData )
-                        pDrawLayer->MirrorRTL( pObject );
+                        mpDrawLayer->MirrorRTL( pObject );
 
                     pObject->SetContextWritingMode( bRTL ? WritingMode2::RL_TB : WritingMode2::LR_TB );
 
@@ -2227,12 +2227,12 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
         maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i]);
 
-        if (pDrawLayer && bIncludeObjects)
+        if (mpDrawLayer && bIncludeObjects)
         {
             //  also copy drawing objects
             tools::Rectangle aObjRect = GetMMRect(
                 aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i);
-            pDrawLayer->CopyToClip(pClipDoc, i, aObjRect);
+            mpDrawLayer->CopyToClip(pClipDoc, i, aObjRect);
         }
     }
 
@@ -2363,12 +2363,12 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                                             aClipRange.aEnd.Col(), aClipRange.aEnd.Row(),
                                             pTransClip->maTabs[i], nFlags, bAsLink );
 
-                if ( pDrawLayer && ( nFlags & InsertDeleteFlags::OBJECTS ) )
+                if ( mpDrawLayer && ( nFlags & InsertDeleteFlags::OBJECTS ) )
                 {
                     //  Drawing objects are copied to the new area without transposing.
                     //  CopyFromClip is used to adjust the objects to the transposed block's
                     //  cell range area.
-                    //  (pDrawLayer in the original clipboard document is set only if there
+                    //  (mpDrawLayer in the original clipboard document is set only if there
                     //  are drawing objects to copy)
 
                     pTransClip->InitDrawLayer();
@@ -2377,7 +2377,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                     tools::Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
                             static_cast<SCCOL>(aClipRange.aEnd.Row() - aClipRange.aStart.Row()),
                             static_cast<SCROW>(aClipRange.aEnd.Col() - aClipRange.aStart.Col()), i );
-                    pTransClip->pDrawLayer->CopyFromClip( pDrawLayer, i, aSourceRect, ScAddress(0,0,i), aDestRect );
+                    pTransClip->mpDrawLayer->CopyFromClip( mpDrawLayer, i, aSourceRect, ScAddress(0,0,i), aDestRect );
                 }
             }
 
@@ -2624,14 +2624,14 @@ void ScDocument::CopyBlockFromClip(
             maTabs[i]->CopyFromClip(
                 rCxt, nCol1, nRow1, nCol2, nRow2, nDx, nDy, rClipTabs[nClipTab]);
 
-            if (rCxt.getClipDoc()->pDrawLayer && (rCxt.getInsertFlag() & InsertDeleteFlags::OBJECTS))
+            if (rCxt.getClipDoc()->mpDrawLayer && (rCxt.getInsertFlag() & InsertDeleteFlags::OBJECTS))
             {
                 //  also copy drawing objects
 
                 // drawing layer must be created before calling CopyFromClip
                 // (ScDocShell::MakeDrawLayer also does InitItems etc.)
-                OSL_ENSURE( pDrawLayer, "CopyBlockFromClip: No drawing layer" );
-                if ( pDrawLayer )
+                OSL_ENSURE( mpDrawLayer, "CopyBlockFromClip: No drawing layer" );
+                if ( mpDrawLayer )
                 {
                     //  For GetMMRect, the row heights in the target document must already be valid
                     //  (copied in an extra step before pasting, or updated after pasting cells, but
@@ -2640,7 +2640,7 @@ void ScDocument::CopyBlockFromClip(
                     tools::Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
                                     nCol1-nDx, nRow1-nDy, nCol2-nDx, nRow2-nDy, nClipTab );
                     tools::Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
-                    pDrawLayer->CopyFromClip(rCxt.getClipDoc()->pDrawLayer, nClipTab, aSourceRect,
+                    mpDrawLayer->CopyFromClip(rCxt.getClipDoc()->mpDrawLayer, nClipTab, aSourceRect,
                                                 ScAddress( nCol1, nRow1, i ), aDestRect );
                 }
             }
@@ -6388,7 +6388,7 @@ void ScDocument::EnableUndo( bool bVal )
     if (bVal != GetUndoManager()->IsUndoEnabled())
     {
         GetUndoManager()->EnableUndo(bVal);
-        if( pDrawLayer ) pDrawLayer->EnableUndo(bVal);
+        if( mpDrawLayer ) mpDrawLayer->EnableUndo(bVal);
     }
 
     mbUndoEnabled = bVal;

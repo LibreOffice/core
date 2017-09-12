@@ -141,7 +141,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpShell( pDocShell ),
         mpPrinter( nullptr ),
         mpVirtualDevice_100th_mm( nullptr ),
-        pDrawLayer( nullptr ),
+        mpDrawLayer( nullptr ),
         pValidationList( nullptr ),
         pFormatExchangeList( nullptr ),
         pRangeName(nullptr),
@@ -628,7 +628,7 @@ bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
-        if (pDrawLayer)
+        if (mpDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
             if (DrawGetPrintArea( aDrawRange, true, true ))
@@ -652,7 +652,7 @@ bool ScDocument::GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         bool bAny = maTabs[nTab]->GetPrintAreaHor( nStartRow, nEndRow, rEndCol );
-        if (pDrawLayer)
+        if (mpDrawLayer)
         {
             ScRange aDrawRange(0,nStartRow,nTab, MAXCOL,nEndRow,nTab);
             if (DrawGetPrintArea( aDrawRange, true, false ))
@@ -674,7 +674,7 @@ bool ScDocument::GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         bool bAny = maTabs[nTab]->GetPrintAreaVer( nStartCol, nEndCol, rEndRow, bNotes );
-        if (pDrawLayer)
+        if (mpDrawLayer)
         {
             ScRange aDrawRange(nStartCol,0,nTab, nEndCol,MAXROW,nTab);
             if (DrawGetPrintArea( aDrawRange, false, true ))
@@ -695,7 +695,7 @@ bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
         bool bAny = maTabs[nTab]->GetDataStart( rStartCol, rStartRow );
-        if (pDrawLayer)
+        if (mpDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MAXCOL,MAXROW,nTab);
             if (DrawGetPrintArea( aDrawRange, true, true ))
@@ -810,8 +810,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             sc::SetFormulaDirtyContext aFormulaDirtyCxt;
             SetAllFormulasDirty(aFormulaDirtyCxt);
 
-            if (pDrawLayer)
-                pDrawLayer->ScMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+            if (mpDrawLayer)
+                mpDrawLayer->ScMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
             bValid = true;
         }
@@ -940,9 +940,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         sc::SetFormulaDirtyContext aFormulaDirtyCxt;
         SetAllFormulasDirty(aFormulaDirtyCxt);
 
-        if (pDrawLayer) //  Skip cloning Note caption object
+        if (mpDrawLayer) //  Skip cloning Note caption object
             // page is already created in ScTable ctor
-            pDrawLayer->ScCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+            mpDrawLayer->ScCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
         if (pDPCollection)
             pDPCollection->CopyToTab(nOldPos, nNewPos);

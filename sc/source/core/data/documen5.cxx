@@ -107,7 +107,7 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
 
 void ScDocument::UpdateAllCharts()
 {
-    if ( !pDrawLayer || !mpShell )
+    if ( !mpDrawLayer || !mpShell )
         return;
 
     if (pChartCollection->empty())
@@ -120,7 +120,7 @@ void ScDocument::UpdateAllCharts()
     {
         if (maTabs[nTab])
         {
-            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+            SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             OSL_ENSURE(pPage,"Page ?");
 
             SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -184,9 +184,9 @@ void ScDocument::UpdateAllCharts()
 
 bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName )
 {
-    if (pDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (mpDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -225,13 +225,13 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUStr
 {
     uno::Reference< chart2::XChartDocument > xReturn;
 
-    if (pDrawLayer)
+    if (mpDrawLayer)
     {
-        sal_uInt16 nCount = pDrawLayer->GetPageCount();
+        sal_uInt16 nCount = mpDrawLayer->GetPageCount();
         SCTAB nSize = static_cast<SCTAB>(maTabs.size());
         for (sal_uInt16 nTab=0; nTab<nCount && nTab < nSize; nTab++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = mpDrawLayer->GetPage(nTab);
             OSL_ENSURE(pPage,"Page ?");
 
             SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -290,13 +290,13 @@ void ScDocument::GetOldChartParameters( const OUString& rName,
 {
     // used for undo of changing chart source area
 
-    if (!pDrawLayer)
+    if (!mpDrawLayer)
         return;
 
-    sal_uInt16 nCount = pDrawLayer->GetPageCount();
+    sal_uInt16 nCount = mpDrawLayer->GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nCount && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = mpDrawLayer->GetPage(nTab);
         OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -338,12 +338,12 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
             const ScRangeListRef& rNewList, bool bColHeaders, bool bRowHeaders,
             bool bAdd )
 {
-    if (!pDrawLayer)
+    if (!mpDrawLayer)
         return;
 
     for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -420,7 +420,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
 
 void ScDocument::UpdateChart( const OUString& rChartName )
 {
-    if (!pDrawLayer || bInDtorClear)
+    if (!mpDrawLayer || bInDtorClear)
         return;
     uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
     if( xChartDoc.is() )
@@ -480,7 +480,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
-    if (!pDrawLayer)
+    if (!mpDrawLayer)
         return;
 
     ScChartListenerCollection::ListenersType& rListeners = pChartListenerCollection->getListeners();
@@ -573,12 +573,12 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
 {
     // called from ChartListener
 
-    if (!pDrawLayer)
+    if (!mpDrawLayer)
         return;
 
     for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -624,16 +624,16 @@ bool ScDocument::HasData( SCCOL nCol, SCROW nRow, SCTAB nTab )
 uno::Reference< embed::XEmbeddedObject >
     ScDocument::FindOleObjectByName( const OUString& rName )
 {
-    if (!pDrawLayer)
+    if (!mpDrawLayer)
         return uno::Reference< embed::XEmbeddedObject >();
 
     //  take the pages here from Draw-Layer, as they might not match with the tables
     //  (e.g. delete Redo of table; Draw-Redo happens before DeleteTab)
 
-    sal_uInt16 nCount = pDrawLayer->GetPageCount();
+    sal_uInt16 nCount = mpDrawLayer->GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = mpDrawLayer->GetPage(nTab);
         OSL_ENSURE(pPage,"Page ?");
 
         SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
@@ -661,7 +661,7 @@ void ScDocument::UpdateChartListenerCollection()
     assert(pChartListenerCollection);
 
     bChartListenerCollectionNeedsUpdate = false;
-    if (!pDrawLayer)
+    if (!mpDrawLayer)
         return;
 
     for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++)
@@ -669,7 +669,7 @@ void ScDocument::UpdateChartListenerCollection()
         if (!maTabs[nTab])
             continue;
 
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrPage* pPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         OSL_ENSURE(pPage,"Page ?");
 
         if (!pPage)

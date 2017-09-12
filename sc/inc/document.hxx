@@ -323,7 +323,7 @@ private:
     SfxObjectShell*     mpShell;
     VclPtr<SfxPrinter>  mpPrinter;
     VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
-    ScDrawLayer*        pDrawLayer;                     // SdrModel
+    ScDrawLayer*        mpDrawLayer;                    // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
@@ -933,8 +933,8 @@ public:
 
     SfxBindings*                    GetViewBindings();
     SfxObjectShell*                 GetDocumentShell() const    { return mpShell; }
-    SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return pDrawLayer;  }
-    SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return pDrawLayer;  }
+    SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return mpDrawLayer;  }
+    SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return mpDrawLayer;  }
     SfxBroadcaster*                 GetDrawBroadcaster();       // to avoid header
     void                            BeginDrawUndo();
 
