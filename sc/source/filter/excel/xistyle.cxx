@@ -1376,20 +1376,20 @@ void XclImpXF::ApplyPatternToAttrList(
             // First attribute range doesn't start at row 0.
             bHasGap = true;
 
-        if (!rAttrs.empty() && rAttrs.back().nRow + 1 < nRow1)
+        if (!rAttrs.empty() && rAttrs.back().nEndRow + 1 < nRow1)
             bHasGap = true;
 
         if (bHasGap)
         {
             // Fill this gap with the default pattern.
             ScAttrEntry aEntry;
-            aEntry.nRow = nRow1 - 1;
+            aEntry.nEndRow = nRow1 - 1;
             aEntry.pPattern = rDoc.GetDefPattern();
             rAttrs.push_back(aEntry);
         }
 
         ScAttrEntry aEntry;
-        aEntry.nRow = nRow2;
+        aEntry.nEndRow = nRow2;
         aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
         rAttrs.push_back(aEntry);
     }
@@ -2004,10 +2004,10 @@ void XclImpXFRangeBuffer::Finalize()
                 pXF->ApplyPatternToAttrList(aAttrs, rStyle.mnScRow1, rStyle.mnScRow2, nForceScNumFmt);
             }
 
-            if (aAttrs.empty() || aAttrs.back().nRow != MAXROW)
+            if (aAttrs.empty() || aAttrs.back().nEndRow != MAXROW)
             {
                 ScAttrEntry aEntry;
-                aEntry.nRow = MAXROW;
+                aEntry.nEndRow = MAXROW;
                 aEntry.pPattern = rDoc.getDoc().GetDefPattern();
                 aAttrs.push_back(aEntry);
             }

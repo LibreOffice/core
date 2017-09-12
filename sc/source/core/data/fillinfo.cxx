@@ -491,7 +491,7 @@ void ScDocument::FillInfo(
                         const ScPatternAttr* pPattern = nullptr;
                         if ( pThisAttrArr->nCount )
                         {
-                            nThisRow = pThisAttrArr->pData[nIndex].nRow;              // End of range
+                            nThisRow = pThisAttrArr->pData[nIndex].nEndRow;              // End of range
                             pPattern = pThisAttrArr->pData[nIndex].pPattern;
                         }
                         else

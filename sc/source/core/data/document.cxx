@@ -5437,7 +5437,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                                                          GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped();
                 if ( bHorOverlapped )
                 {
-                    SCROW nEndRowSeg = (pAttrArray->nCount) ? pAttrArray->pData[nIndex].nRow : MAXROW;
+                    SCROW nEndRowSeg = (pAttrArray->nCount) ? pAttrArray->pData[nIndex].nEndRow : MAXROW;
                     SCROW nLoopEndRow = std::min( nEndRow, nEndRowSeg );
                     for (SCROW nAttrRow = nAttrPos; nAttrRow <= nLoopEndRow; nAttrRow++)
                     {
@@ -5452,7 +5452,7 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                 }
                 if ( pAttrArray->nCount )
                 {
-                    nAttrPos = pAttrArray->pData[nIndex].nRow + 1;
+                    nAttrPos = pAttrArray->pData[nIndex].nEndRow + 1;
                     ++nIndex;
                 }
                 else

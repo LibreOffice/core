@@ -472,10 +472,10 @@ void SheetDataBuffer::finalizeImport()
              if ( pXf )
                  pXf->applyPatternToAttrList( aAttrs,  rRows->mnStartRow,  rRows->mnEndRow,  rRows->mnNumFmt.second );
         }
-        if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nRow != MAXROW)
+        if (aAttrs.maAttrs.empty() || aAttrs.maAttrs.back().nEndRow != MAXROW)
         {
             ScAttrEntry aEntry;
-            aEntry.nRow = MAXROW;
+            aEntry.nEndRow = MAXROW;
             aEntry.pPattern = pDefPattern;
             rDoc.getDoc().GetPool()->Put(*aEntry.pPattern);
             aAttrs.maAttrs.push_back(aEntry);
