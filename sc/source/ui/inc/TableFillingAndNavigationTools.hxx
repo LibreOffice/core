@@ -19,7 +19,7 @@
 #include "docfunc.hxx"
 #include "formulacell.hxx"
 
-#include <list>
+#include <vector>
 
 class FormulaTemplate
 {
@@ -55,7 +55,7 @@ public:
 class AddressWalker
 {
 public:
-    std::list<ScAddress> mAddressStack;
+    std::vector<ScAddress> mAddressStack;
 
     ScAddress mCurrentAddress;
     ScAddress mMinimumAddress;
