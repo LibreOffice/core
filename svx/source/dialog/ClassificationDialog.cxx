@@ -43,6 +43,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent)
     get(m_pIntellectualPropertyPartNumberListBox, "intellectualPropertyPartNumberCB");
     get(m_pIntellectualPropertyPartListBox, "intellectualPropertyPartLB");
     get(m_pIntellectualPropertyPartAddButton, "intellectualPropertyPartAddButton");
+    get(m_pIntellectualPropertyPartEdit, "intellectualPropertyPartEntry");
 
     m_pBoldButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
@@ -166,12 +167,22 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
 
 IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
 {
-    printf ("DoubleClickIPPartHdl\n");
+    sal_Int32 nSelected = rBox.GetSelectEntryPos();
+    if (nSelected >= 0)
+    {
+        OUString sString = maHelper.GetIntellectualPropertyPartNumbers()[nSelected];
+        m_pIntellectualPropertyPartEdit->SetText(m_pIntellectualPropertyPartEdit->GetText() + sString);
+    }
 }
 
 IMPL_LINK(ClassificationDialog, DoubleClickIPPartHdl, ListBox&, rBox, void)
 {
-    printf ("DoubleClickIPPartHdl\n");
+    sal_Int32 nSelected = rBox.GetSelectEntryPos();
+    if (nSelected >= 0)
+    {
+        OUString sString = maHelper.GetIntellectualPropertyParts()[nSelected];
+        m_pIntellectualPropertyPartEdit->SetText(m_pIntellectualPropertyPartEdit->GetText() + sString);
+    }
 }
 
 IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
@@ -182,6 +193,8 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
     }
     else if (pButton == m_pIntellectualPropertyPartAddButton)
     {
+        ClassificationField aField(ClassificationType::INTELLECTUAL_PROPERTY_PART, m_pIntellectualPropertyPartEdit->GetText());
+        m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
     }
 }
 

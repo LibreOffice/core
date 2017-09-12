@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/edit.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/ClassificationEditView.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -33,6 +34,7 @@ private:
     VclPtr<ListBox> m_pIntellectualPropertyPartListBox;
     VclPtr<ListBox> m_pIntellectualPropertyPartNumberListBox;
     VclPtr<PushButton> m_pIntellectualPropertyPartAddButton;
+    VclPtr<Edit> m_pIntellectualPropertyPartEdit;
 
     SfxClassificationHelper maHelper;
 

@@ -21,6 +21,7 @@ enum class ClassificationType
     CLASSIFICATION,
     MARKINGS,
     TEXT,
+    INTELLECTUAL_PROPERTY_PART
 };
 
 class SVX_DLLPUBLIC ClassificationField : public SvxFieldData
