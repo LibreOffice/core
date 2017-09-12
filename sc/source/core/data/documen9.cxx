@@ -109,7 +109,10 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 {
     if (pDocShell && !mpShell)
+    {
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         mpShell = pDocShell;
+    }
 
     if (!mpDrawLayer)
     {
