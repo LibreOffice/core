@@ -394,11 +394,6 @@ void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces
     {
         NumericField& rField = *mpImpl->mpLinkField;
         rField.SetModifyHdl( Link<Edit&,void>() );
-        rField.SetUpHdl( Link<SpinField&,void>() );
-        rField.SetDownHdl( Link<SpinField&,void>() );
-        rField.SetFirstHdl( Link<SpinField&,void>() );
-        rField.SetLastHdl( Link<SpinField&,void>() );
-        rField.SetLoseFocusHdl( Link<Control&,void>() );
     }
     // remember the new linked field
     mpImpl->mpLinkField = pField;
@@ -407,22 +402,10 @@ void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces
     {
         NumericField& rField = *mpImpl->mpLinkField;
         rField.SetModifyHdl( LINK( this, DialControl, LinkedFieldModifyHdl ) );
-        rField.SetUpHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetDownHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetFirstHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetLastHdl( LINK(this, DialControl, SpinFieldHdl) );
-        rField.SetLoseFocusHdl( LINK( this, DialControl, LinkedFieldFocusHdl ) );
     }
 }
+
 IMPL_LINK_NOARG( DialControl, LinkedFieldModifyHdl, Edit&, void )
-{
-    LinkedFieldModifyHdl();
-}
-IMPL_LINK_NOARG( DialControl, LinkedFieldFocusHdl, Control&, void )
-{
-    LinkedFieldModifyHdl();
-}
-IMPL_LINK_NOARG(DialControl, SpinFieldHdl, SpinField&, void)
 {
     LinkedFieldModifyHdl();
 }
