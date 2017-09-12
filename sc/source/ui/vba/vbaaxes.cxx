@@ -101,18 +101,18 @@ public:
             bool bBool = false;
             uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
             if ( ( xDiagramPropertySet->getPropertyValue("HasXAxis") >>= bBool )  && bBool )
-                mCoordinates.push_back( AxesCoordinate( xlPrimary, xlCategory ) );
+                mCoordinates.emplace_back( xlPrimary, xlCategory );
             if ( ( xDiagramPropertySet->getPropertyValue("HasYAxis") >>= bBool )  && bBool )
-                mCoordinates.push_back( AxesCoordinate( xlPrimary, xlSeriesAxis ) );
+                mCoordinates.emplace_back( xlPrimary, xlSeriesAxis );
 
             if (  pChart->is3D() )
-                mCoordinates.push_back( AxesCoordinate( xlPrimary, xlValue ) );
+                mCoordinates.emplace_back( xlPrimary, xlValue );
 
             // secondary
             if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryXAxis") >>= bBool )  && bBool )
-                mCoordinates.push_back( AxesCoordinate( xlSecondary, xlCategory ) );
+                mCoordinates.emplace_back( xlSecondary, xlCategory );
             if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryYAxis") >>= bBool )  && bBool )
-                mCoordinates.push_back( AxesCoordinate( xlSecondary, xlSeriesAxis ) );
+                mCoordinates.emplace_back( xlSecondary, xlSeriesAxis );
         }
 
     }

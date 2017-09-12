@@ -149,7 +149,7 @@ std::vector<CellValueSpan> CellValues::getNonEmptySpans() const
             // Record this span.
             size_t nRow1 = it->position;
             size_t nRow2 = nRow1 + it->size - 1;
-            aRet.push_back(CellValueSpan(nRow1, nRow2));
+            aRet.emplace_back(nRow1, nRow2);
         }
     }
     return aRet;

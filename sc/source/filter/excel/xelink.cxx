@@ -1875,7 +1875,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
     FindSBIndexEntry f(nSupbookId, nSheetId);
     if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
     {
-        maSBIndexVec.push_back(XclExpSBIndex());
+        maSBIndexVec.emplace_back();
         XclExpSBIndex& r = maSBIndexVec.back();
         r.mnSupbook = nSupbookId;
         r.mnSBTab   = nSheetId;
@@ -1939,7 +1939,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
         FindSBIndexEntry f(nSupbookId, nSheetId);
         if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
-            maSBIndexVec.push_back(XclExpSBIndex());
+            maSBIndexVec.emplace_back();
             XclExpSBIndex& r = maSBIndexVec.back();
             r.mnSupbook = nSupbookId;
             r.mnSBTab   = nSheetId;
@@ -2042,7 +2042,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabN
         FindSBIndexEntry f(nSupbookId, nSheetId);
         if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
-            maSBIndexVec.push_back(XclExpSBIndex());
+            maSBIndexVec.emplace_back();
             XclExpSBIndex& r = maSBIndexVec.back();
             r.mnSupbook = nSupbookId;
             r.mnSBTab   = nSheetId;

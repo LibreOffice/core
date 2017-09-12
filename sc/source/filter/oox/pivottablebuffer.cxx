@@ -411,7 +411,7 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
                 pCacheField->getCacheItemNames( aItems );
                 PivotCacheGroupItemVector aItemNames;
                 for( ::std::vector< OUString >::iterator aIt = aItems.begin(), aEnd = aItems.end(); aIt != aEnd; ++aIt )
-                    aItemNames.push_back( PivotCacheGroupItem( *aIt ) );
+                    aItemNames.emplace_back( *aIt );
                 // create all nested group fields (if any)
                 mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, aItemNames );
             }
@@ -450,7 +450,7 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
             for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
             {
                 if ( aIt->mnType == XML_data  && aIt->msCaption.getLength() )
-                    captionList.push_back( IdCaptionPair( aIt->mnCacheItem, aIt->msCaption ) );
+                    captionList.emplace_back( aIt->mnCacheItem, aIt->msCaption );
             }
             if ( !captionList.empty() )
                 pCacheField->applyItemCaptions( captionList );

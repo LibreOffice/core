@@ -204,7 +204,7 @@ size_t ScOrcusFactory::addString(const OUString& rStr)
 
 void ScOrcusFactory::pushStringCell(const ScAddress& rPos, size_t nStrIndex)
 {
-    maStringCells.push_back(StringCellCache(rPos, nStrIndex));
+    maStringCells.emplace_back(rPos, nStrIndex);
 }
 
 void ScOrcusFactory::incrementProgress()

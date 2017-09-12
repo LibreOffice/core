@@ -1532,7 +1532,7 @@ ScTabStops::~ScTabStops()
 
 void ScTabStops::AddTabStop( vcl::Window* pWin )
 {
-    maControls.push_back( pWin );
+    maControls.emplace_back(pWin );
     maControlToPos[pWin] = maControls.size() - 1;
 }
 

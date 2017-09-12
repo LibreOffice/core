@@ -116,7 +116,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                     ++nEnd;
                 if (!rMark.IsColumnMarked(nEnd))
                     --nEnd;
-                aRanges.push_back(sc::ColRowSpan(nStart,nEnd));
+                aRanges.emplace_back(nStart,nEnd);
                 nStart = nEnd+1;
             }
             else
@@ -125,7 +125,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     }
     else
     {
-        aRanges.push_back(sc::ColRowSpan(nPos,nPos));
+        aRanges.emplace_back(nPos,nPos);
     }
 
     rViewData.GetView()->SetWidthOrHeight(true, aRanges, eMode, nSizeTwips);
@@ -275,7 +275,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
                     ++nEnd;
                 if (!rMark.IsRowMarked(nEnd))
                     --nEnd;
-                aRanges.push_back(sc::ColRowSpan(nStart,nEnd));
+                aRanges.emplace_back(nStart,nEnd);
                 nStart = nEnd+1;
             }
             else
@@ -284,7 +284,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
     }
     else
     {
-        aRanges.push_back(sc::ColRowSpan(nPos,nPos));
+        aRanges.emplace_back(nPos,nPos);
     }
 
     rViewData.GetView()->SetWidthOrHeight(false, aRanges, eMode, nSizeTwips);

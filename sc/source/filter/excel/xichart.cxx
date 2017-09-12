@@ -884,7 +884,7 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
                 rRoot.ConvertFont( aStringProp, nFontIdx );
 
             // add string to vector of strings
-            aStringVec.push_back( xFmtStr );
+            aStringVec.emplace_back(xFmtStr );
         }
     }
     return ScfApiHelper::VectorToSequence( aStringVec );

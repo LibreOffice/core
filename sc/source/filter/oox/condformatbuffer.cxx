@@ -160,7 +160,7 @@ ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
 void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
 {
     if(mnCfvo >= maColorScaleRuleEntries.size())
-        maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
+        maColorScaleRuleEntries.emplace_back();
 
     SetCfvoData( &maColorScaleRuleEntries[mnCfvo], rAttribs );
 
@@ -227,7 +227,7 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
     ::Color aColor = importOOXColor(rAttribs, rThemeBuffer, rGraphicHelper);
 
     if(mnCol >= maColorScaleRuleEntries.size())
-        maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
+        maColorScaleRuleEntries.emplace_back();
 
     maColorScaleRuleEntries[mnCol].maColor = aColor;
     ++mnCol;
@@ -386,7 +386,7 @@ void IconSetRule::importIcon(const AttributeList& rAttribs)
     }
 
     ScIconSetType eIconSetType = getType(aIconSet);
-    mxFormatData->maCustomVector.push_back(std::pair<ScIconSetType, sal_Int32>(eIconSetType, nIndex));
+    mxFormatData->maCustomVector.emplace_back(eIconSetType, nIndex);
 }
 
 void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )

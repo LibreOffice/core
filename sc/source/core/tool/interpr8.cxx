@@ -162,7 +162,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
 
     // maRange needs to be sorted by X
     for ( SCSIZE i = 0; i < mnCount; i++ )
-        maRange.push_back( DataPoint( rMatX->GetDouble( i ), rMatY->GetDouble( i ) ) );
+        maRange.emplace_back( rMatX->GetDouble( i ), rMatY->GetDouble( i ) );
     sort( maRange.begin(), maRange.end(), lcl_SortByX );
 
     if ( rTMat )
@@ -1564,7 +1564,7 @@ void ScInterpreter::ScTextJoin_MS()
                             }
                         }
                         else
-                            aDelimiters.push_back( "" );
+                            aDelimiters.emplace_back("" );
                     }
                 }
             }
@@ -1597,7 +1597,7 @@ void ScInterpreter::ScTextJoin_MS()
                                     }
                                 }
                                 else
-                                    aDelimiters.push_back( "" );
+                                    aDelimiters.emplace_back("" );
                             }
                         }
                     }

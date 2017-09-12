@@ -412,7 +412,7 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
             aGroupItems.reserve( maItems.size() );
             // initialize with own item names
             for( XclImpPCItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-                aGroupItems.push_back( ScDPSaveGroupItem( (*aIt)->ConvertToText() ) );
+                aGroupItems.emplace_back( (*aIt)->ConvertToText() );
 
             // *** iterate over all base items, set their names at corresponding own items ***
             for( sal_uInt16 nItemIdx = 0, nItemCount = static_cast< sal_uInt16 >( maGroupOrder.size() ); nItemIdx < nItemCount; ++nItemIdx )

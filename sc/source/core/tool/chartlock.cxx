@@ -65,7 +65,7 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
                     {
                         Reference< frame::XModel > xModel( xCompSupp->getComponent(), uno::UNO_QUERY );
                         if( xModel.is() )
-                            aRet.push_back( xModel );
+                            aRet.emplace_back(xModel );
                     }
                 }
                 pObject = aIter.Next();
@@ -132,7 +132,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
         try
         {
             xModel->lockControllers();
-            maChartModels.push_back( xModel );
+            maChartModels.emplace_back(xModel );
         }
         catch ( uno::Exception& )
         {

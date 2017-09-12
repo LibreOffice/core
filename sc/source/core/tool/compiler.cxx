@@ -4574,7 +4574,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             if (pPrev && pPrev->GetOpCode() == ocDBArea)
             {
                 FormulaToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::TABLE);
-                maTableRefs.push_back( TableRefEntry( pTableRefToken));
+                maTableRefs.emplace_back( pTableRefToken);
                 // pPrev may be dead hereafter.
                 static_cast<ScTokenArray*>(pArr)->ReplaceToken( nIdx, pTableRefToken,
                         FormulaTokenArray::ReplaceMode::CODE_ONLY);

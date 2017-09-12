@@ -539,9 +539,9 @@ void ScCsvGrid::FillColumnDataSep( ScAsciiOptions& rOptions ) const
     {
         if( GetColumnType( nColIx ) != CSV_TYPE_DEFAULT )
             // 1-based column index
-            aDataVec.push_back( ScCsvExpData(
+            aDataVec.emplace_back(
                 static_cast< sal_Int32 >( nColIx + 1 ),
-                lcl_GetExtColumnType( GetColumnType( nColIx ) ) ) );
+                lcl_GetExtColumnType( GetColumnType( nColIx ) ) );
     }
     rOptions.SetColumnInfo( aDataVec );
 }
@@ -737,7 +737,7 @@ void ScCsvGrid::ImplSetTextLineSep(
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
     while( maTexts.size() <= nLineIx )
-        maTexts.push_back( std::vector<OUString>() );
+        maTexts.emplace_back( );
     std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
 
@@ -800,7 +800,7 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
     while( maTexts.size() <= nLineIx )
-        maTexts.push_back( std::vector<OUString>() );
+        maTexts.emplace_back( );
 
     std::vector<OUString>& rStrVec = maTexts[ nLineIx ];
     rStrVec.clear();
