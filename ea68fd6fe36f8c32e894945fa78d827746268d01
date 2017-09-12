@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_812cc04b",
+        "filename": "accessibility/source/standard/vclxaccessiblebox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2017-09-12T13:42:50Z",
+      "side": 1,
+      "message": "No, if it\u0027s not a dropdownbox, it\u0027s invalid, only 0 is valid for  dropdownbox.",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 390,
+        "endChar": 43
+      },
+      "revId": "ea68fd6fe36f8c32e894945fa78d827746268d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
