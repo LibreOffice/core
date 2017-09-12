@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1d31120c",
+        "filename": "include/drawinglayer/primitive2d/textprimitive2d.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-12T10:09:44Z",
+      "side": 1,
+      "message": "mbFillWidth maybe?",
+      "revId": "f5a35dae33e6d7e3b4ca2cf0c89bf7669009074e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
