@@ -285,7 +285,7 @@ class SW_DLLPUBLIC SwDBManager
 
 public:
     SwDBManager(SwDoc* pDoc);
-    ~SwDBManager();
+    ~SwDBManager() COVERITY_NOEXCEPT_FALSE;
 
     enum DBConnURITypes {
         DBCONN_UNKNOWN = 0,
