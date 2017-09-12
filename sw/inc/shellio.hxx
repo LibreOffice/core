@@ -370,7 +370,6 @@ class SW_DLLPUBLIC Writer
 
 protected:
 
-    SwPaM* pOrigPam;            // Last Pam that has to be processed.
     const OUString* pOrigFileName;
 
     void ResetWriter();
@@ -390,6 +389,7 @@ protected:
 
 public:
     SwDoc* pDoc;
+    SwPaM* pOrigPam;            // Last Pam that has to be processed.
     SwPaM* pCurPam;
     bool bWriteAll : 1;
     bool bShowProgress : 1;
@@ -544,7 +544,7 @@ namespace SwReaderWriter
 }
 
 void GetRTFWriter( const OUString&, const OUString&, WriterRef& );
-void GetASCWriter( const OUString&, const OUString&, WriterRef& );
+SW_DLLPUBLIC void GetASCWriter(const OUString&, const OUString&, WriterRef&);
 void GetHTMLWriter( const OUString&, const OUString&, WriterRef& );
 void GetXMLWriter( const OUString&, const OUString&, WriterRef& );
 
