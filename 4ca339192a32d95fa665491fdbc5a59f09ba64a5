@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_211eac0c",
+        "filename": "README.cross",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-09-12T13:48:45Z",
+      "side": 1,
+      "message": "Unintentional? :-)",
+      "revId": "4ca339192a32d95fa665491fdbc5a59f09ba64a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
