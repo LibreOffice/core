@@ -345,7 +345,7 @@ OUString SwUndoInsLayFormat::GetComment() const
     // have a SwDrawContact yet, so it will fall back to SwUndo::GetComment(),
     // which sets pComment to a wrong value.
 //    if (! pComment)
-    if (true)
+    if ((true))
     {
         /*
           If frame format is present and has an SdrObject use the undo

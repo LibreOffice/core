@@ -1062,73 +1062,80 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
                 if( Get( aL ) ) switch( eOp )
                 {
-                    double dTest;
                     case SbxMUL:
-                        // first overflow check: see if product will fit - test real value of product (hence 2 curr factors)
-                        dTest = (double)aL.nInt64 * (double)aR.nInt64 / (double)CURRENCY_FACTOR_SQUARE;
-                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                         {
-                            aL.nInt64 = SAL_MAX_INT64;
-                            if( dTest < SbxMINCURR ) aL.nInt64 = SAL_MIN_INT64;
-                            SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                            // first overflow check: see if product will fit - test real value of product (hence 2 curr factors)
+                            double dTest = (double)aL.nInt64 * (double)aR.nInt64 / (double)CURRENCY_FACTOR_SQUARE;
+                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                            {
+                                aL.nInt64 = SAL_MAX_INT64;
+                                if( dTest < SbxMINCURR ) aL.nInt64 = SAL_MIN_INT64;
+                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                                break;
+                            }
+                            // second overflow check: see if unscaled product overflows - if so use doubles
+                            dTest = (double)aL.nInt64 * (double)aR.nInt64;
+                            if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                            {
+                                aL.nInt64 = (sal_Int64)( dTest / (double)CURRENCY_FACTOR );
+                                break;
+                            }
+                            // precise calc: multiply then scale back (move decimal pt)
+                            aL.nInt64 *= aR.nInt64;
+                            aL.nInt64 /= CURRENCY_FACTOR;
                             break;
                         }
-                        // second overflow check: see if unscaled product overflows - if so use doubles
-                        dTest = (double)aL.nInt64 * (double)aR.nInt64;
-                        if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
-                        {
-                            aL.nInt64 = (sal_Int64)( dTest / (double)CURRENCY_FACTOR );
-                            break;
-                        }
-                        // precise calc: multiply then scale back (move decimal pt)
-                        aL.nInt64 *= aR.nInt64;
-                        aL.nInt64 /= CURRENCY_FACTOR;
-                        break;
 
                     case SbxDIV:
-                        if( !aR.nInt64 )
                         {
-                            SetError( ERRCODE_BASIC_ZERODIV );
+                            if( !aR.nInt64 )
+                            {
+                                SetError( ERRCODE_BASIC_ZERODIV );
+                                break;
+                            }
+                            // first overflow check: see if quotient will fit - calc real value of quotient (curr factors cancel)
+                            double dTest = (double)aL.nInt64 / (double)aR.nInt64;
+                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                            {
+                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                                break;
+                            }
+                            // second overflow check: see if scaled dividend overflows - if so use doubles
+                            dTest = (double)aL.nInt64 * (double)CURRENCY_FACTOR;
+                            if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                            {
+                                aL.nInt64 = (sal_Int64)(dTest / (double)aR.nInt64);
+                                break;
+                            }
+                            // precise calc: scale (move decimal pt) then divide
+                            aL.nInt64 *= CURRENCY_FACTOR;
+                            aL.nInt64 /= aR.nInt64;
                             break;
                         }
-                        // first overflow check: see if quotient will fit - calc real value of quotient (curr factors cancel)
-                        dTest = (double)aL.nInt64 / (double)aR.nInt64;
-                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
-                        {
-                            SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                            break;
-                        }
-                        // second overflow check: see if scaled dividend overflows - if so use doubles
-                        dTest = (double)aL.nInt64 * (double)CURRENCY_FACTOR;
-                        if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
-                        {
-                            aL.nInt64 = (sal_Int64)(dTest / (double)aR.nInt64);
-                            break;
-                        }
-                        // precise calc: scale (move decimal pt) then divide
-                        aL.nInt64 *= CURRENCY_FACTOR;
-                        aL.nInt64 /= aR.nInt64;
-                        break;
 
                     case SbxPLUS:
-                        dTest = ( (double)aL.nInt64 + (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
-                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                         {
-                            SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                            double dTest = ( (double)aL.nInt64 + (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
+                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                            {
+                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                                break;
+                            }
+                            aL.nInt64 += aR.nInt64;
                             break;
                         }
-                        aL.nInt64 += aR.nInt64;
-                        break;
 
                     case SbxMINUS:
-                        dTest = ( (double)aL.nInt64 - (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
-                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                         {
-                            SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                            double dTest = ( (double)aL.nInt64 - (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
+                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                            {
+                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
+                                break;
+                            }
+                            aL.nInt64 -= aR.nInt64;
                             break;
                         }
-                        aL.nInt64 -= aR.nInt64;
-                        break;
                     case SbxNEG:
                         aL.nInt64 = -aL.nInt64;
                         break;

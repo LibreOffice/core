@@ -54,6 +54,7 @@ gb_CFLAGS_COMMON := \
 	-Wextra \
 	-Wstrict-prototypes \
 	-Wundef \
+	-Wunreachable-code \
 	-Wunused-macros \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \
@@ -67,6 +68,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wendif-labels \
 	-Wextra \
 	-Wundef \
+	-Wunreachable-code \
 	-Wunused-macros \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \

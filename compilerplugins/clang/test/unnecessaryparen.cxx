@@ -34,6 +34,12 @@ int main()
 
     int v1 = (static_cast<short>(1)) + 1; // expected-error {{unnecessary parentheses around cast [loplugin:unnecessaryparen]}}
     (void)v1;
+
+    // No warnings, used to silence -Wunreachable-code:
+    if ((false)) {
+        return 0;
+    }
+    x = (true) ? 0 : 1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
