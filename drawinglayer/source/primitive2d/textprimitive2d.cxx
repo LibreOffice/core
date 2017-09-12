@@ -225,7 +225,7 @@ namespace drawinglayer
             const basegfx::BColor& rFontColor,
             bool bFilled,
             long nWidthToFill,
-            const Color& rFillColor)
+            const Color& rTextFillColor)
         :   BufferedDecompositionPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
@@ -235,10 +235,10 @@ namespace drawinglayer
             maFontAttribute(rFontAttribute),
             maLocale(rLocale),
             maFontColor(rFontColor),
-            maB2DRange(),
             mbFilled(bFilled),
             mnWidthToFill(nWidthToFill),
-            maTextFillColor(rFillColor)
+            maTextFillColor(rTextFillColor),
+            maB2DRange()
         {
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 aStringLength(getText().getLength());
@@ -269,7 +269,8 @@ namespace drawinglayer
                     && LocalesAreEqual(getLocale(), rCompare.getLocale())
                     && getFontColor() == rCompare.getFontColor()
                     && mbFilled == rCompare.mbFilled
-                    && mnWidthToFill == rCompare.mnWidthToFill);
+                    && mnWidthToFill == rCompare.mnWidthToFill
+                    && maTextFillColor == rCompare.maTextFillColor);
             }
 
             return false;
