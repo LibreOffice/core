@@ -619,6 +619,7 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
     if ( pKey ) {
         PPDKey* pImageableAreas = new PPDKey("ImageableArea");
         PPDKey* pPaperDimensions = new PPDKey("PaperDimension");
+#if defined(CUPS_VERSION_MAJOR)
 #if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 7) || CUPS_VERSION_MAJOR > 1
         for (int i = 0; i < pKey->countValues(); i++) {
             const PPDValue* pValue = pKey -> getValue(i);
@@ -648,6 +649,7 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
             }
         }
 #endif // HAVE_CUPS_API_1_7
+#endif
         insertKey("ImageableArea", pImageableAreas);
         insertKey("PaperDimension", pPaperDimensions);
     }
