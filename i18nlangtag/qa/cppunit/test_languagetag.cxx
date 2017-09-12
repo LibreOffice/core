@@ -436,6 +436,57 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("en"), en_GB_oxendict_Fallbacks[4]);
     }
 
+    // 'es-ES-u-co-trad' is a valid (and known) Extension U tag
+    {
+        OUString s_es_ES_u_co_trad( "es-ES-u-co-trad" );
+        LanguageTag es_ES_u_co_trad( s_es_ES_u_co_trad );
+        lang::Locale aLocale = es_ES_u_co_trad.getLocale();
+        CPPUNIT_ASSERT_EQUAL( s_es_ES_u_co_trad, es_ES_u_co_trad.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("qlt"), aLocale.Language );
+        CPPUNIT_ASSERT_EQUAL( OUString("ES"), aLocale.Country );
+        CPPUNIT_ASSERT_EQUAL( s_es_ES_u_co_trad, aLocale.Variant );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_SPANISH_DATED, es_ES_u_co_trad.getLanguageType() );
+        CPPUNIT_ASSERT( es_ES_u_co_trad.isValidBcp47() );
+        CPPUNIT_ASSERT( !es_ES_u_co_trad.isIsoLocale() );
+        CPPUNIT_ASSERT( !es_ES_u_co_trad.isIsoODF() );
+        CPPUNIT_ASSERT_EQUAL( OUString("es"), es_ES_u_co_trad.getLanguageAndScript() );
+        CPPUNIT_ASSERT_EQUAL( OUString("u-co-trad"), es_ES_u_co_trad.getVariants() );
+        ::std::vector< OUString > es_ES_u_co_trad_Fallbacks( es_ES_u_co_trad.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), es_ES_u_co_trad_Fallbacks.size() );
+        CPPUNIT_ASSERT_EQUAL( OUString("es-ES-u-co-trad"), es_ES_u_co_trad_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es-u-co-trad"), es_ES_u_co_trad_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es-ES"), es_ES_u_co_trad_Fallbacks[2]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es"), es_ES_u_co_trad_Fallbacks[3]);
+        // Map to broken MS.
+        CPPUNIT_ASSERT_EQUAL( OUString("es-ES_tradnl"), es_ES_u_co_trad.getBcp47MS() );
+    }
+
+    // 'es-ES_tradnl' (broken MS) maps to 'es-ES-u-co-trad'
+    {
+        OUString s_es_ES_u_co_trad( "es-ES-u-co-trad" );
+        OUString s_es_ES_tradnl( "es-ES_tradnl" );
+        LanguageTag es_ES_tradnl( s_es_ES_tradnl );
+        lang::Locale aLocale = es_ES_tradnl.getLocale();
+        CPPUNIT_ASSERT_EQUAL( s_es_ES_u_co_trad, es_ES_tradnl.getBcp47() );
+        CPPUNIT_ASSERT_EQUAL( OUString("qlt"), aLocale.Language );
+        CPPUNIT_ASSERT_EQUAL( OUString("ES"), aLocale.Country );
+        CPPUNIT_ASSERT_EQUAL( s_es_ES_u_co_trad, aLocale.Variant );
+        CPPUNIT_ASSERT_EQUAL( LANGUAGE_SPANISH_DATED, es_ES_tradnl.getLanguageType() );
+        CPPUNIT_ASSERT( es_ES_tradnl.isValidBcp47() );
+        CPPUNIT_ASSERT( !es_ES_tradnl.isIsoLocale() );
+        CPPUNIT_ASSERT( !es_ES_tradnl.isIsoODF() );
+        CPPUNIT_ASSERT_EQUAL( OUString("es"), es_ES_tradnl.getLanguageAndScript() );
+        CPPUNIT_ASSERT_EQUAL( OUString("u-co-trad"), es_ES_tradnl.getVariants() );
+        ::std::vector< OUString > es_ES_tradnl_Fallbacks( es_ES_tradnl.getFallbackStrings( true));
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), es_ES_tradnl_Fallbacks.size() );
+        CPPUNIT_ASSERT_EQUAL( OUString("es-ES-u-co-trad"), es_ES_tradnl_Fallbacks[0]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es-u-co-trad"), es_ES_tradnl_Fallbacks[1]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es-ES"), es_ES_tradnl_Fallbacks[2]);
+        CPPUNIT_ASSERT_EQUAL( OUString("es"), es_ES_tradnl_Fallbacks[3]);
+        // Map back to broken MS.
+        CPPUNIT_ASSERT_EQUAL( s_es_ES_tradnl, es_ES_tradnl.getBcp47MS() );
+    }
+
     // 'zh-yue-HK' uses redundant 'zh-yue' and should be preferred 'yue-HK'
 #if 0
     /* XXX Disabled because liblangtag in lt_tag_canonicalize() after replacing
