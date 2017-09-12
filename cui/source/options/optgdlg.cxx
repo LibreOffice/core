@@ -288,12 +288,6 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_aStrDateInfo = m_pToYearFT->GetText();
     m_pYearValueField->SetUseThousandSep(false);
     m_pYearValueField->SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
-    Link<SpinField&,void> aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
-    m_pYearValueField->SetDownHdl( aLink );
-    m_pYearValueField->SetUpHdl( aLink );
-    m_pYearValueField->SetLoseFocusHdl( LINK( this, OfaMiscTabPage, TwoFigureConfigFocusHdl ) );
-    m_pYearValueField->SetFirstHdl( aLink );
-    TwoFigureConfigHdl(*m_pYearValueField);
 
     SetExchangeSupport();
 }
@@ -389,14 +383,9 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 
     const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
-    {
         m_pYearValueField->SetValue( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
-        TwoFigureConfigHdl(*m_pYearValueField);
-    }
     else
-    {
         m_pYearFrame->Enable(false);
-    }
 
     m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
     m_pCollectUsageInfo->Enable(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
@@ -416,19 +405,6 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
         aOutput += OUString::number( nNum );
     }
     m_pToYearFT->SetText( aOutput );
-}
-
-IMPL_LINK( OfaMiscTabPage, TwoFigureConfigFocusHdl, Control&, rControl, void )
-{
-    TwoFigureConfigHdl(static_cast<SpinField&>(rControl));
-}
-IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, SpinField&, rEd, void )
-{
-    sal_Int64 nNum = m_pYearValueField->GetValue();
-    OUString aOutput(OUString::number(nNum));
-    m_pYearValueField->SetText(aOutput);
-    m_pYearValueField->SetSelection( Selection( 0, aOutput.getLength() ) );
-    TwoFigureHdl( static_cast<Edit&>(rEd) );
 }
 
 class CanvasSettings

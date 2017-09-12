@@ -59,8 +59,6 @@ private:
     VclPtr<CheckBox>     m_pCollectUsageInfo;
 
     DECL_LINK( TwoFigureHdl, Edit&, void );
-    DECL_LINK( TwoFigureConfigHdl, SpinField&, void );
-    DECL_LINK( TwoFigureConfigFocusHdl, Control&, void );
 protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
