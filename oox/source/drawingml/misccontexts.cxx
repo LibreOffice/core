@@ -63,7 +63,8 @@ ContextHandlerRef GradientFillContext::onCreateContext(
             if( rAttribs.hasAttribute( XML_pos ) )
             {
                 double fPosition = getLimitedValue< double >( rAttribs.getDouble( XML_pos, 0.0 ) / 100000.0, 0.0, 1.0 );
-                return new ColorContext( *this, mrGradientProps.maGradientStops[ fPosition ] );
+                auto aElement = mrGradientProps.maGradientStops.emplace( fPosition, Color() );
+                return new ColorContext( *this, aElement->second );
             }
         break;
 
