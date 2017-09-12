@@ -454,7 +454,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         comphelper::FlagRestorationGuard aStartedParaSdtGuard(m_bStartedParaSdt, false);
 
         assert(!m_pPostponedCustomShape);
-        m_pPostponedCustomShape.reset(new std::list<PostponedDrawing>);
+        m_pPostponedCustomShape.reset(new std::vector<PostponedDrawing>);
         for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
         {
             m_bParagraphFrameOpen = true;
@@ -1726,16 +1726,16 @@ void DocxAttributeOutput::StartRunProperties()
     InitCollectedRunProperties();
 
     assert( !m_pPostponedGraphic );
-    m_pPostponedGraphic.reset(new std::list<PostponedGraphic>);
+    m_pPostponedGraphic.reset(new std::vector<PostponedGraphic>);
 
     assert( !m_pPostponedDiagrams );
-    m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>);
+    m_pPostponedDiagrams.reset(new std::vector<PostponedDiagram>);
 
     assert(!m_pPostponedDMLDrawings);
-    m_pPostponedDMLDrawings.reset(new std::list<PostponedDrawing>);
+    m_pPostponedDMLDrawings.reset(new std::vector<PostponedDrawing>);
 
     assert( !m_pPostponedOLEs );
-    m_pPostponedOLEs.reset(new std::list<PostponedOLE>);
+    m_pPostponedOLEs.reset(new std::vector<PostponedOLE>);
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -2087,7 +2087,7 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
 
 void DocxAttributeOutput::WritePostponedGraphic()
 {
-    for( std::list< PostponedGraphic >::const_iterator it = m_pPostponedGraphic->begin();
+    for( std::vector< PostponedGraphic >::const_iterator it = m_pPostponedGraphic->begin();
          it != m_pPostponedGraphic->end();
          ++it )
         FlyFrameGraphic( it->grfNode, it->size, it->mOLEFrameFormat, it->mOLENode, it->pSdrObj );
@@ -2096,7 +2096,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
 
 void DocxAttributeOutput::WritePostponedDiagram()
 {
-    for( std::list< PostponedDiagram >::const_iterator it = m_pPostponedDiagrams->begin();
+    for( std::vector< PostponedDiagram >::const_iterator it = m_pPostponedDiagrams->begin();
          it != m_pPostponedDiagrams->end();
          ++it )
         m_rExport.SdrExporter().writeDiagram( it->object, *(it->frame), m_anchorId++ );
@@ -4911,7 +4911,7 @@ void DocxAttributeOutput::WritePostponedOLE()
     if( !m_pPostponedOLEs )
         return;
 
-    for( std::list< PostponedOLE >::iterator it = m_pPostponedOLEs->begin();
+    for( std::vector< PostponedOLE >::iterator it = m_pPostponedOLEs->begin();
          it != m_pPostponedOLEs->end();
          ++it )
     {
@@ -5019,7 +5019,7 @@ void DocxAttributeOutput::WritePostponedCustomShape()
         return;
 
     bool bStartedParaSdt = m_bStartedParaSdt;
-    for( std::list< PostponedDrawing >::iterator it = m_pPostponedCustomShape->begin();
+    for( std::vector< PostponedDrawing >::iterator it = m_pPostponedCustomShape->begin();
          it != m_pPostponedCustomShape->end();
          ++it )
     {
@@ -5038,11 +5038,11 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         return;
 
     // Clear the list early, this method may be called recursively.
-    std::unique_ptr< std::list<PostponedDrawing> > pPostponedDMLDrawings(m_pPostponedDMLDrawings.release());
-    std::unique_ptr< std::list<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
+    std::unique_ptr< std::vector<PostponedDrawing> > pPostponedDMLDrawings(m_pPostponedDMLDrawings.release());
+    std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
 
     bool bStartedParaSdt = m_bStartedParaSdt;
-    for( std::list< PostponedDrawing >::iterator it = pPostponedDMLDrawings->begin();
+    for( std::vector< PostponedDrawing >::iterator it = pPostponedDMLDrawings->begin();
          it != pPostponedDMLDrawings->end();
          ++it )
     {

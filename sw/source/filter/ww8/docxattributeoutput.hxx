@@ -843,14 +843,14 @@ private:
         SwOLENode* mOLENode;
         const SdrObject* pSdrObj;
     };
-    std::unique_ptr< std::list<PostponedGraphic> > m_pPostponedGraphic;
+    std::unique_ptr< std::vector<PostponedGraphic> > m_pPostponedGraphic;
     struct PostponedDiagram
     {
         PostponedDiagram( const SdrObject* o, const SwFrameFormat* frm ) : object( o ), frame( frm ) {};
         const SdrObject* object;
         const SwFrameFormat* frame;
     };
-    std::unique_ptr< std::list<PostponedDiagram> > m_pPostponedDiagrams;
+    std::unique_ptr< std::vector<PostponedDiagram> > m_pPostponedDiagrams;
 
     struct PostponedDrawing
     {
@@ -858,8 +858,8 @@ private:
         const SdrObject* object;
         const SwFrameFormat* frame;
     };
-    std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedDMLDrawings;
-    std::unique_ptr< std::list<PostponedDrawing> > m_pPostponedCustomShape;
+    std::unique_ptr< std::vector<PostponedDrawing> > m_pPostponedDMLDrawings;
+    std::unique_ptr< std::vector<PostponedDrawing> > m_pPostponedCustomShape;
 
     struct PostponedOLE
     {
@@ -868,7 +868,7 @@ private:
         const Size size;
         const SwFlyFrameFormat* frame;
     };
-    std::unique_ptr< std::list<PostponedOLE> > m_pPostponedOLEs;
+    std::unique_ptr< std::vector<PostponedOLE> > m_pPostponedOLEs;
 
     std::vector<const SwOLENode*> m_aPostponedMaths;
     /// count charts consistently for unit tests
