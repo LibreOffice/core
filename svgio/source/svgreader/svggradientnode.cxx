@@ -289,11 +289,10 @@ namespace svgio
                                 fOffset = 1.0;
                             }
 
-                            aVector.push_back(
-                                drawinglayer::primitive2d::SvgGradientEntry(
+                            aVector.emplace_back(
                                     fOffset,
                                     pStyle->getStopColor(),
-                                    pStyle->getStopOpacity().solve(*this)));
+                                    pStyle->getStopOpacity().solve(*this));
                         }
                         else
                         {

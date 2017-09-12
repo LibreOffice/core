@@ -1523,7 +1523,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
             }
 
             // Token is known and can be saved
-            maOptions.push_back(HTMLOption(nToken, sName, aValue));
+            maOptions.emplace_back(nToken, sName, aValue);
 
         }
         else
