@@ -1010,6 +1010,13 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
 
 bool SectionPropertyMap::FloatingTableConversion( DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo )
 {
+    // This is OOXML version of the code deciding if the table needs to be
+    // in a floating frame.
+    // For ww8 code, see SwWW8ImplReader::FloatingTableConversion in
+    // sw/source/filter/ww8/ww8par.cxx
+    // The two should do the same, so if you make changes here, please check
+    // that the other is in sync.
+
     // Note that this is just a list of heuristics till sw core can have a
     // table that is floating and can span over multiple pages at the same
     // time.
@@ -1063,9 +1070,9 @@ bool SectionPropertyMap::FloatingTableConversion( DomainMapper_Impl& rDM_Impl, F
 
     // If the position is relative to the edge of the page, then we need to check the whole
     // page width to see whether text can fit next to the table.
-    if ( rInfo.getPropertyValue( "HoriOrientRelation" ) == text::RelOrientation::PAGE_FRAME )
+    if ( nHoriOrientRelation == text::RelOrientation::PAGE_FRAME )
     {
-        // If the table is wide enough to that no text fits next to it, then don't create a fly
+        // If the table is wide enough so that no text fits next to it, then don't create a fly
         // for the table: no wrapping will be performed anyway, but multi-page
         // tables will be broken.
         if ((nTableWidth + nMagicNumber) < (nPageWidth - std::min(GetLeftMargin(), GetRightMargin())))

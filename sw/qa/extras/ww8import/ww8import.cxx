@@ -131,6 +131,14 @@ DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
         }
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf112346, "tdf112346.doc")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1, multi-page table was imported as a floating one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

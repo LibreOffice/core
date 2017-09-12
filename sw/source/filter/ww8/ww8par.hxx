@@ -1867,6 +1867,7 @@ public:     // really private, but can only be done public
     bool SearchRowEnd(WW8PLCFx_Cp_FKP* pPap,WW8_CP &rStartCp, int nLevel) const;
     /// Seek to the end of the table with pPap, returns true on success.
     bool SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const;
+    bool FloatingTableConversion(WW8PLCFx_Cp_FKP* pPap);
 
     const WW8Fib& GetFib() const    { return *m_xWwFib; }
     SwDoc& GetDoc() const           { return m_rDoc; }
