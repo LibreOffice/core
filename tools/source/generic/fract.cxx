@@ -72,7 +72,7 @@ Fraction::Fraction( Fraction&& rFrac ) : mpImpl(std::move(rFrac.mpImpl))
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
 // in order to return the correct value.
-Fraction::Fraction( long nNum, long nDen ) : mpImpl(new Impl)
+Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mpImpl(new Impl)
 {
     if ( nDen == 0 )
     {
@@ -107,10 +107,10 @@ Fraction::~Fraction()
 bool Fraction::HasOverflowValue()
 {
     //coverity[result_independent_of_operands]
-    return mpImpl->value.numerator() < std::numeric_limits<long>::min() ||
-        mpImpl->value.numerator() > std::numeric_limits<long>::max() ||
-        mpImpl->value.denominator() < std::numeric_limits<long>::min() ||
-        mpImpl->value.denominator() > std::numeric_limits<long>::max();
+    return mpImpl->value.numerator() < std::numeric_limits<sal_Int64>::min() ||
+        mpImpl->value.numerator() > std::numeric_limits<sal_Int64>::max() ||
+        mpImpl->value.denominator() < std::numeric_limits<sal_Int64>::min() ||
+        mpImpl->value.denominator() > std::numeric_limits<sal_Int64>::max();
 }
 
 Fraction::operator double() const
@@ -126,7 +126,7 @@ Fraction::operator double() const
 
 // This methods first validates both values.
 // If one of the arguments is invalid, the whole operation is invalid.
-// After computation detect if result overflows a long value
+// After computation detect if result overflows a sal_Int64 value
 // which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
@@ -268,7 +268,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     rational_ReduceInaccurate(mpImpl->value, nSignificantBits);
 }
 
-long Fraction::GetNumerator() const
+sal_Int64 Fraction::GetNumerator() const
 {
     if ( !mpImpl->valid )
     {
@@ -278,7 +278,7 @@ long Fraction::GetNumerator() const
     return mpImpl->value.numerator();
 }
 
-long Fraction::GetDenominator() const
+sal_Int64 Fraction::GetDenominator() const
 {
     if ( !mpImpl->valid )
     {
@@ -309,14 +309,14 @@ bool Fraction::IsValid() const
     return mpImpl->valid;
 }
 
-Fraction::operator long() const
+Fraction::operator sal_Int64() const
 {
     if ( !mpImpl->valid )
     {
-        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
+        SAL_WARN( "tools.fraction", "'operator sal_Int64()' on invalid fraction" );
         return 0;
     }
-    return boost::rational_cast<long>(mpImpl->value);
+    return boost::rational_cast<sal_Int64>(mpImpl->value);
 }
 
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
@@ -437,21 +437,20 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 // Otherwise, dVal and denominator are multiplied by 10, until one of them
 // is larger than (LONG_MAX / 10).
 //
-// NOTE: here we use 'long' due that only values in long range are valid.
 template<typename T>
 static boost::rational<T> rational_FromDouble(double dVal)
 {
-    if ( dVal > std::numeric_limits<long>::max() ||
-            dVal < std::numeric_limits<long>::min() )
+    if ( dVal > std::numeric_limits<sal_Int64>::max() ||
+            dVal < std::numeric_limits<sal_Int64>::min() )
         throw boost::bad_rational();
 
-    const long nMAX = std::numeric_limits<long>::max() / 10;
-    long nDen = 1;
+    const sal_Int64 nMAX = std::numeric_limits<sal_Int64>::max() / 10;
+    sal_Int64 nDen = 1;
     while ( std::abs( dVal ) < nMAX && nDen < nMAX ) {
         dVal *= 10;
         nDen *= 10;
     }
-    return boost::rational<T>( long(dVal), nDen );
+    return boost::rational<T>( sal_Int64(dVal), nDen );
 }
 
 // Similar to clz_table that can be googled
@@ -463,7 +462,7 @@ const char nbits_table[32] =
     21, 12, 16,  8, 11,  7,  6,  5
 };
 
-static int impl_NumberOfBits( unsigned long nNum )
+static int impl_NumberOfBits( sal_uInt64 nNum )
 {
     // http://en.wikipedia.org/wiki/De_Bruijn_sequence
     // background paper: Using de Bruijn Sequences to Index a 1 in a
@@ -485,10 +484,6 @@ static int impl_NumberOfBits( unsigned long nNum )
     sal_uInt32 nNumber;
     int nBonus;
 
-#if SAL_TYPES_SIZEOFLONG == 4
-    nNumber = nNum;
-    nBonus = 0;
-#elif SAL_TYPES_SIZEOFLONG == 8
     nNum |= ( nNum >> 32 );
 
     if ( nNum & 0x80000000 )
@@ -504,9 +499,6 @@ static int impl_NumberOfBits( unsigned long nNum )
         nNumber = sal_uInt32( nNum & 0xFFFFFFFF );
         nBonus = 0;
     }
-#else
-#error "Unknown size of long!"
-#endif
 
     // De facto shift left of nDeBruijn using multiplication (nNumber
     // is all ones from topmost bit, thus nDeBruijn + (nDeBruijn *
