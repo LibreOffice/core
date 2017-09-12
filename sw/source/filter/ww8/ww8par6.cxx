@@ -5067,20 +5067,8 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
             pTabPos->nUpMgn = SVBT16ToShort(pRes);
         if (nullptr != (pRes = pPap->HasSprm(0x941F)))
             pTabPos->nLoMgn = SVBT16ToShort(pRes);
+        pTabPos->bNoFly = !FloatingTableConversion(pPap);
         bRet = true;
-    }
-    if (nullptr != (pRes = pPap->HasSprm(NS_sprm::LN_TDefTable)))
-    {
-        WW8TabBandDesc aDesc;
-        aDesc.ReadDef(false, pRes);
-        int nTableWidth = aDesc.nCenter[aDesc.nWwCols] - aDesc.nCenter[0];
-        int nTextAreaWidth = m_aSectionManager.GetTextAreaWidth();
-        // If the table is wider than the text area, then don't create a fly
-        // for the table: no wrapping will be performed anyway, but multi-page
-        // tables will be broken.
-        // If there are columns, do create a fly, as the flow of the columns
-        // would otherwise restrict the table.
-        pTabPos->bNoFly = nTableWidth >= nTextAreaWidth  && m_aSectionManager.CurrentSectionColCount() < 2;
     }
     return bRet;
 }
