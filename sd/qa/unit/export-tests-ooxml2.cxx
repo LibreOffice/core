@@ -109,6 +109,7 @@ public:
     void testTdf112280();
     void testTdf112552();
     void testTdf112557();
+    void testTdf112088();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testTdf112280);
     CPPUNIT_TEST(testTdf112552);
     CPPUNIT_TEST(testTdf112557);
+    CPPUNIT_TEST(testTdf112088);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -884,6 +886,18 @@ void SdOOXMLExportTest2::testTdf112557()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
     assertXPath(pXmlDocContent, "/p:sldMaster/p:cSld/p:spTree/p:sp", 2); // title and object
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf112088()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112088.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check gradient stops
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:gradFill/a:gsLst", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
