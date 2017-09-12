@@ -1267,7 +1267,7 @@ void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util:
 {
     SolarMutexGuard aGuard;
 
-    aModifyListeners.push_back( uno::Reference<util::XModifyListener>( aListener ) );
+    aModifyListeners.emplace_back( aListener );
 
     if ( aModifyListeners.size() == 1 )
     {

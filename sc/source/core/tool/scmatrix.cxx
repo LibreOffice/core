@@ -3445,7 +3445,7 @@ void flushStrSegment(
     std::vector<svl::SharedString> aStrs;
     aStrs.reserve(pCur - pHead);
     for (; pHead != pCur; ++pHead)
-        aStrs.push_back(svl::SharedString(*pHead, *pHead));
+        aStrs.emplace_back(*pHead, *pHead);
 
     rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
 }

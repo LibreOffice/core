@@ -186,9 +186,9 @@ void Test::testFormulaCreateStringFromTokens()
 
     // Artificially add external reference data after the context object is
     // initialized.
-    aCxt.maExternalFileNames.push_back("file:///path/to/fake.file");
+    aCxt.maExternalFileNames.emplace_back("file:///path/to/fake.file");
     std::vector<OUString> aExtTabNames;
-    aExtTabNames.push_back("Sheet");
+    aExtTabNames.emplace_back("Sheet");
     aCxt.maExternalCachedTabNames.emplace(0, aExtTabNames);
 
     ScAddress aPos(0,0,0);

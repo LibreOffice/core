@@ -432,7 +432,7 @@ namespace
                 continue;
             if (rVisibleWidgets.find(pChild) == rVisibleWidgets.end())
             {
-                rWasVisibleWidgets.push_back(pChild);
+                rWasVisibleWidgets.emplace_back(pChild);
                 pChild->Hide();
             }
             else if (isContainerWindow(pChild))
@@ -501,7 +501,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                     continue; // do nothing
                 else if (pWin->IsVisible())
                 {
-                    m_aHiddenWidgets.push_back(pChild);
+                    m_aHiddenWidgets.emplace_back(pChild);
                     pChild->Hide();
                 }
             }

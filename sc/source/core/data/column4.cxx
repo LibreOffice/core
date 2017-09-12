@@ -138,7 +138,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
                 bContinue = false;
             }
 
-            aDestSpans.push_back(sc::RowSpan(nDestRow1, nDestRow2));
+            aDestSpans.emplace_back(nDestRow1, nDestRow2);
         }
 
         nDestOffset += nClipRowLen;
@@ -271,7 +271,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             {
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
-                aRanges.push_back(sc::RowSpan(nRow1, nRow2));
+                aRanges.emplace_back(nRow1, nRow2);
                 CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges);
             }
             break;
@@ -741,7 +741,7 @@ public:
                 ++it, ++nOffset)
         {
             ScAddress aPos(mnCol, nTopRow + nOffset, mnTab);
-            mrNotes.push_back(sc::NoteEntry(aPos, *it));
+            mrNotes.emplace_back(aPos, *it);
         }
     }
 };

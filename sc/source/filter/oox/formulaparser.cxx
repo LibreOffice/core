@@ -641,7 +641,7 @@ void FormulaParserImpl::appendSpaces( WhiteSpaceVec& orSpaces, sal_Int32 nCount,
 {
     OSL_ENSURE( nCount >= 0, "FormulaParserImpl::appendSpaces - negative count" );
     if( nCount > 0 )
-        orSpaces.push_back( WhiteSpace( nCount, bLineFeed ) );
+        orSpaces.emplace_back( nCount, bLineFeed );
 }
 
 void FormulaParserImpl::appendLeadingSpaces( sal_Int32 nCount, bool bLineFeed )

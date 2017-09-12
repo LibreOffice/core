@@ -642,7 +642,7 @@ void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 
 void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
 {
-    maEntries.push_back(ENTRY());
+    maEntries.emplace_back();
     mpAkt = &maEntries.back();
     mpAkt->nStart = mpAkt->nEnd = nPos;
     mpAkt->nNumFormat = nNumFormat;

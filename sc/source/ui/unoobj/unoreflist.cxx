@@ -30,7 +30,7 @@ ScUnoRefList::~ScUnoRefList()
 
 void ScUnoRefList::Add( sal_Int64 nId, const ScRangeList& rOldRanges )
 {
-    aEntries.push_back( ScUnoRefEntry( nId, rOldRanges ) );
+    aEntries.emplace_back( nId, rOldRanges );
 }
 
 void ScUnoRefList::Undo( ScDocument* pDoc )

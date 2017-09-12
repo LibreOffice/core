@@ -99,7 +99,7 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(nColumnFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
-        aAddrs.push_back(ScAddress(nCol, nRow, nTab));
+        aAddrs.emplace_back(nCol, nRow, nTab);
     rAddrs.swap(aAddrs);
 }
 
@@ -121,7 +121,7 @@ void ScDPOutputGeometry::getRowFieldPositions(vector<ScAddress>& rAddrs) const
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(nRowFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
-        aAddrs.push_back(ScAddress(nCol, nRow, nTab));
+        aAddrs.emplace_back(nCol, nRow, nTab);
     rAddrs.swap(aAddrs);
 }
 
@@ -141,7 +141,7 @@ void ScDPOutputGeometry::getPageFieldPositions(vector<ScAddress>& rAddrs) const
     SCROW nRowEnd   = nRowStart + static_cast<SCCOL>(mnPageFields-1);
 
     for (SCROW nRow = nRowStart; nRow <= nRowEnd; ++nRow)
-        aAddrs.push_back(ScAddress(nCol, nRow, nTab));
+        aAddrs.emplace_back(nCol, nRow, nTab);
     rAddrs.swap(aAddrs);
 }
 

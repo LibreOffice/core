@@ -605,7 +605,7 @@ const TokenId TokenPool::StoreName( sal_uInt16 nIndex, sal_Int16 nSheet )
     pElement[nElementAkt] = static_cast<sal_uInt16>(maRangeNames.size());
     pType[nElementAkt] = T_RN;
 
-    maRangeNames.push_back(RangeName());
+    maRangeNames.emplace_back();
     RangeName& r = maRangeNames.back();
     r.mnIndex = nIndex;
     r.mnSheet = nSheet;
@@ -624,7 +624,7 @@ const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const OUString& rName
     pElement[nElementAkt] = static_cast<sal_uInt16>(maExtNames.size());
     pType[nElementAkt] = T_ExtName;
 
-    maExtNames.push_back(ExtName());
+    maExtNames.emplace_back();
     ExtName& r = maExtNames.back();
     r.mnFileId = nFileId;
     r.maName = rName;
@@ -643,7 +643,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
     pElement[nElementAkt] = static_cast<sal_uInt16>(maExtCellRefs.size());
     pType[nElementAkt] = T_ExtRefC;
 
-    maExtCellRefs.push_back(ExtCellRef());
+    maExtCellRefs.emplace_back();
     ExtCellRef& r = maExtCellRefs.back();
     r.mnFileId = nFileId;
     r.maTabName = rTabName;
@@ -663,7 +663,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
     pElement[nElementAkt] = static_cast<sal_uInt16>(maExtAreaRefs.size());
     pType[nElementAkt] = T_ExtRefA;
 
-    maExtAreaRefs.push_back(ExtAreaRef());
+    maExtAreaRefs.emplace_back();
     ExtAreaRef& r = maExtAreaRefs.back();
     r.mnFileId = nFileId;
     r.maTabName = rTabName;

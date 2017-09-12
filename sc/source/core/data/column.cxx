@@ -2348,12 +2348,12 @@ public:
 
     virtual void processNonShared( ScFormulaCell* pCell, size_t nRow ) override
     {
-        mrGroups.push_back(sc::FormulaGroupEntry(pCell, nRow));
+        mrGroups.emplace_back(pCell, nRow);
     }
 
     virtual void processSharedTop( ScFormulaCell** ppCells, size_t nRow, size_t nLength ) override
     {
-        mrGroups.push_back(sc::FormulaGroupEntry(ppCells, nRow, nLength));
+        mrGroups.emplace_back(ppCells, nRow, nLength);
     }
 };
 

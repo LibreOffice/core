@@ -519,7 +519,7 @@ void XclImpStream::EnableDecryption( bool bEnable )
 
 void XclImpStream::PushPosition()
 {
-    maPosStack.push_back( XclImpStreamPos() );
+    maPosStack.emplace_back( );
     StorePosition( maPosStack.back() );
 }
 

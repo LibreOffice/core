@@ -180,7 +180,7 @@ void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& 
 
 void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection )
 {
-    mrAnnotationData.maContentStyles.push_back( ScXMLAnnotationStyleEntry( nFamily, rName, rSelection ) );
+    mrAnnotationData.maContentStyles.emplace_back( nFamily, rName, rSelection );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
