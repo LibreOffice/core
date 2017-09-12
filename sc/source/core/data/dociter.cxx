@@ -2306,7 +2306,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             else if ( nIndex < pArray->nCount )
             {
                 const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
-                SCROW nThisEnd = pArray->pData[nIndex].nRow;
+                SCROW nThisEnd = pArray->pData[nIndex].nEndRow;
 
                 if ( IsDefaultItem( pPattern ) )
                     pPattern = nullptr;

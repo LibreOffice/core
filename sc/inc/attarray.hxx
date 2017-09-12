@@ -75,9 +75,10 @@ struct ScMergePatternState
                         mbValidPatternId(true), mnPatternId(0) {}
 };
 
+// we store an array of these where the pattern applies to all rows up till nEndRow
 struct ScAttrEntry
 {
-    SCROW                   nRow;
+    SCROW                   nEndRow;
     const ScPatternAttr*    pPattern;
 };
 
@@ -267,7 +268,7 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
     if ( nPos < pArray->nCount && nRow <= nEndRow )
     {
         rTop = nRow;
-        rBottom = std::min( pArray->pData[nPos].nRow, nEndRow );
+        rBottom = std::min( pArray->pData[nPos].nEndRow, nEndRow );
         pRet = pArray->pData[nPos].pPattern;
         nRow = rBottom + 1;
         ++nPos;
@@ -289,13 +290,13 @@ inline const ScPatternAttr* ScAttrIterator::Resync( SCROW nRowP, SCROW& rTop, SC
     // starting right there. Assume that Next() was called so nPos already
     // advanced. Another high chance is that the change extended a previous or
     // next pattern. In all these cases we don't need to search.
-    if (3 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-3].nRow < nRowP &&
-            nRowP <= pArray->pData[nPos-2].nRow)
+    if (3 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-3].nEndRow < nRowP &&
+            nRowP <= pArray->pData[nPos-2].nEndRow)
         nPos -= 2;
-    else if (2 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-2].nRow < nRowP &&
-            nRowP <= pArray->pData[nPos-1].nRow)
+    else if (2 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-2].nEndRow < nRowP &&
+            nRowP <= pArray->pData[nPos-1].nEndRow)
         --nPos;
-    else if (pArray->nCount > 0 && nRowP <= pArray->pData[0].nRow)
+    else if (pArray->nCount > 0 && nRowP <= pArray->pData[0].nEndRow)
         nPos = 0;
     else
         pArray->Search( nRowP, nPos );

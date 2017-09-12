@@ -2051,14 +2051,14 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
             // First attribute range doesn't start at row 0.
             bHasGap = true;
 
-        if (!rAttrs.maAttrs.empty() && rAttrs.maAttrs.back().nRow + 1 < nRow1)
+        if (!rAttrs.maAttrs.empty() && rAttrs.maAttrs.back().nEndRow + 1 < nRow1)
             bHasGap = true;
 
         if (bHasGap)
         {
             // Fill this gap with the default pattern.
             ScAttrEntry aEntry;
-            aEntry.nRow = nRow1 - 1;
+            aEntry.nEndRow = nRow1 - 1;
             aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(*rAttrs.mpDefPattern));
             rAttrs.maAttrs.push_back(aEntry);
 
@@ -2068,7 +2068,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         }
 
         ScAttrEntry aEntry;
-        aEntry.nRow = nRow2;
+        aEntry.nEndRow = nRow2;
         aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
         rAttrs.maAttrs.push_back(aEntry);
 
