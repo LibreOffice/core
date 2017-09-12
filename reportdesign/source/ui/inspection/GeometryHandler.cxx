@@ -1892,11 +1892,11 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
             utl::TextSearch aTextSearch( aSearchOptions);
             sal_Int32 start = 0;
             sal_Int32 end = sFormula.getLength();
-            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.getLength()) // default function found
+            if (aTextSearch.SearchForward(sFormula, &start, &end) && start == 0 && end == sFormula.getLength()) // default function found
             {
                 aSearchOptions.searchString = "\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
                 utl::TextSearch aDataSearch( aSearchOptions);
-                aDataSearch.SearchForward(sFormula,&start,&end );
+                (void)aDataSearch.SearchForward(sFormula, &start, &end);
                 ++start;
                 _rDataField = sFormula.copy(start,end-start-1);
                 _rsDefaultFunctionName = aIter->m_sName;
