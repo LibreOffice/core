@@ -50,6 +50,9 @@
 #include <cups/cups.h>
 #endif
 
+#include <config_dbus.h>
+#include <config_gio.h>
+
 namespace psp
 {
     class PPDTranslator
@@ -575,7 +578,9 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 #endif
         } else if ( rMgr.getType() == PrinterInfoManager::Type::CPD )
         {
+#if ENABLE_DBUS && ENABLE_GIO
             pNewParser = const_cast<PPDParser*>(static_cast<CPDManager&>(rMgr).createCPDParser( aFile ));
+#endif
         }
     }
     if( pNewParser )
