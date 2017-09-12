@@ -263,7 +263,7 @@ public class FormatValueUtility
         final SectionLayoutController slc = findGroupOrDetail(ref);
         if (slc == null)
         {
-            // {Page, Report} × {Header, Footer} have no usable iteration count
+            // {Page, Report} x {Header, Footer} have no usable iteration count
             // err on the side of showing them rather than not showing them
             return true;
         }
