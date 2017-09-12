@@ -156,9 +156,7 @@ private:
     void                InvalidateControl();
 
     DECL_LINK( LinkedFieldModifyHdl, Edit&, void );
-    DECL_LINK( LinkedFieldFocusHdl, Control&, void );
     void LinkedFieldModifyHdl();
-    DECL_LINK(SpinFieldHdl, SpinField&, void);
 };
 
 /** Wrapper for usage of a DialControl in item connections. */
