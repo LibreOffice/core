@@ -954,11 +954,11 @@ void HelperCreateHorizontalEntry(
     const Style& rStartFromBR(rArray.GetCellStyleTL( col, row ));
     StyleVectorTable aStart;
 
-    if(rStartFromTR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromTR, rX - rY));
-    if(rStartLFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromT, -rY));
-    if(rStartLFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromL, -rX));
-    if(rStartLFromB.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromB, rY));
-    if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY));
+    if(rStartFromTR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromTR, rX - rY, false));
+    if(rStartLFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromT, -rY, true));
+    if(rStartLFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromL, -rX, true));
+    if(rStartLFromB.IsUsed()) aStart.push_back(StyleVectorCombination(rStartLFromB, rY, false));
+    if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY, false));
 
     // get involved styles at end
     const Style& rEndFromTL(rArray.GetCellStyleBR( col, row - 1 ));
@@ -968,11 +968,11 @@ void HelperCreateHorizontalEntry(
     const Style& rEndFromBL(rArray.GetCellStyleTR( col, row ));
     StyleVectorTable aEnd;
 
-    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -rX -rY));
-    if(rEndRFromT.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -rY));
-    if(rEndRFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromR, rX));
-    if(rEndRFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromB, rY));
-    if(rEndFromBL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromBL, rY - rX));
+    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -rX -rY, true));
+    if(rEndRFromT.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromT, -rY, true));
+    if(rEndRFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromR, rX, false));
+    if(rEndRFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndRFromB, rY, false));
+    if(rEndFromBL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromBL, rY - rX, true));
 
     CreateBorderPrimitives(
         rSequence,
@@ -999,11 +999,11 @@ void HelperCreateVerticalEntry(
     const Style& rStartFromBR(rArray.GetCellStyleTL( col, row ));
     StyleVectorTable aStart;
 
-    if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY));
-    if(rStartTFromR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromR, rX));
-    if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, rY));
-    if(rStartTFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromL, -rX));
-    if(rStartFromBL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBL, rY - rX));
+    if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY, false));
+    if(rStartTFromR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromR, rX, false));
+    if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, rY, true));
+    if(rStartTFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromL, -rX, true));
+    if(rStartFromBL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBL, rY - rX, true));
 
     // get involved styles at end
     const Style& rEndFromTL(rArray.GetCellStyleBR( col - 1, row ));
@@ -1013,11 +1013,11 @@ void HelperCreateVerticalEntry(
     const Style& rEndFromTR(rArray.GetCellStyleBL( col, row ));
     StyleVectorTable aEnd;
 
-    if(rEndFromTR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTR, rX - rY));
-    if(rEndBFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromR, rX));
-    if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -rY));
-    if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, rX));
-    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, rX + rY));
+    if(rEndFromTR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTR, rX - rY, false));
+    if(rEndBFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromR, rX, false));
+    if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -rY, false));
+    if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, rX, true));
+    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, rX + rY, true));
 
     CreateBorderPrimitives(
         rSequence,
@@ -1069,6 +1069,48 @@ void HelperCreateEntry(const Array& rArray, const Style& rStyle, drawinglayer::p
     }
 }
 
+void HelperMergeInB2DPrimitiveArray(
+    const drawinglayer::primitive2d::Primitive2DContainer& rSource,
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget)
+{
+    if(rSource.size() > 1)
+    {
+        drawinglayer::primitive2d::Primitive2DReference aCandidate;
+
+        for(const auto& a : rSource)
+        {
+            if(aCandidate.is())
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aMerge(
+                    drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(aCandidate, a));
+
+                if(aMerge.is())
+                {
+                    aCandidate = aMerge;
+                }
+                else
+                {
+                    rTarget.append(aCandidate);
+                    aCandidate = a;
+                }
+            }
+            else
+            {
+                aCandidate = a;
+            }
+        }
+
+        if(aCandidate.is())
+        {
+            rTarget.append(aCandidate);
+        }
+    }
+    else
+    {
+        rTarget.append(rSource);
+    }
+}
+
 drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
     size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
     const Color* pForceColor ) const
@@ -1078,7 +1120,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
     // various primitive sequences to collect the different border types
     drawinglayer::primitive2d::Primitive2DContainer aHorizontalSequence;
-    drawinglayer::primitive2d::Primitive2DContainer aVerticalSequence;
+    std::vector< drawinglayer::primitive2d::Primitive2DContainer > aVerticalSequences(nLastCol - nFirstCol + 1);
     drawinglayer::primitive2d::Primitive2DContainer aCrossSequence;
 
     for (size_t nRow = nFirstRow; nRow <= nLastRow; ++nRow)
@@ -1131,7 +1173,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rLeft.IsUsed())
                     {
-                        HelperCreateEntry(*this, rLeft, aVerticalSequence, pForceColor);
+                        HelperCreateEntry(*this, rLeft, aVerticalSequences[nCol - nFirstCol], pForceColor);
                     }
                 }
 
@@ -1141,7 +1183,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                     if(rRight.IsUsed())
                     {
-                        HelperCreateEntry(*this, rRight, aVerticalSequence, pForceColor);
+                        HelperCreateEntry(*this, rRight, aVerticalSequences[nCol - nFirstCol], pForceColor);
                     }
                 }
 
@@ -1156,15 +1198,15 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                         /// Fill top-left Style Table
                         const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
-                        if(rTLFromRight.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX));
+                        if(rTLFromRight.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromRight, aX, false));
                         const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
-                        if(rTLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY));
+                        if(rTLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rTLFromBottom, aY, false));
 
                         /// Fill bottom-right Style Table
                         const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
-                        if(rBRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY));
+                        if(rBRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromBottom, -aY, true));
                         const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
-                        if(rBRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX));
+                        if(rBRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rBRFromLeft, -aX, true));
 
                         CreateBorderPrimitives(
                             aCrossSequence,
@@ -1186,15 +1228,15 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 
                         /// Fill bottom-left Style Table
                         const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
-                        if(rBLFromTop.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY));
+                        if(rBLFromTop.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromTop, -aY, true));
                         const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
-                        if(rBLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX));
+                        if(rBLFromBottom.IsUsed()) aStart.push_back(StyleVectorCombination(rBLFromBottom, aX, false));
 
                         /// Fill top-right Style Table
                         const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
-                        if(rTRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY));
+                        if(rTRFromBottom.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromBottom, -aY, true));
                         const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
-                        if(rTRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX));
+                        if(rTRFromLeft.IsUsed()) aEnd.push_back(StyleVectorCombination(rTRFromLeft, -aX, false));
 
                         CreateBorderPrimitives(
                             aCrossSequence,
@@ -1211,9 +1253,13 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
         }
     }
 
-    // to stay compatible, create order as it was formally
-    aCrossSequence.append(aHorizontalSequence);
-    aCrossSequence.append(aVerticalSequence);
+    // to stay compatible, create order as it was formally. Also try to
+    // merge primitives as far as possible
+    HelperMergeInB2DPrimitiveArray(aHorizontalSequence, aCrossSequence);
+    for(const auto& aVert : aVerticalSequences)
+    {
+        HelperMergeInB2DPrimitiveArray(aVert, aCrossSequence);
+    }
 
     return aCrossSequence;
 }

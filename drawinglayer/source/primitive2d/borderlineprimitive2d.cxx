@@ -144,7 +144,7 @@ namespace drawinglayer
 
                 for(const auto& candidate : maBorderLines)
                 {
-                    const double fWidth(candidate.getAdaptedWidth(mfSmallestAllowedDiscreteGapDistance) * 0.5);
+                    const double fWidth(candidate.getAdaptedWidth(mfSmallestAllowedDiscreteGapDistance));
 
                     if(!candidate.isGap())
                     {
@@ -369,6 +369,116 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(BorderLinePrimitive2D, PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D)
 
+        Primitive2DReference tryMergeBorderLinePrimitive2D(
+            const Primitive2DReference& rCandidateA,
+            const Primitive2DReference& rCandidateB)
+        {
+            // try to cast to BorderLinePrimitive2D
+            const primitive2d::BorderLinePrimitive2D* pCandidateA = dynamic_cast< const primitive2d::BorderLinePrimitive2D* >(rCandidateA.get());
+            const primitive2d::BorderLinePrimitive2D* pCandidateB = dynamic_cast< const primitive2d::BorderLinePrimitive2D* >(rCandidateB.get());
+
+            // we need a comparable BorderLinePrimitive2D
+            if(nullptr == pCandidateA || nullptr == pCandidateB)
+            {
+                return Primitive2DReference();
+            }
+
+            // start of candidate has to match end of this
+            if(!pCandidateA->getEnd().equal(pCandidateB->getStart()))
+            {
+                return Primitive2DReference();
+            }
+
+            // candidate A needs a length
+            if(pCandidateA->getStart().equal(pCandidateA->getEnd()))
+            {
+                return Primitive2DReference();
+            }
+
+            // candidate B needs a length
+            if(pCandidateB->getStart().equal(pCandidateB->getEnd()))
+            {
+                return Primitive2DReference();
+            }
+
+            // StrokeAttribute has to be equal
+            if(!(pCandidateA->getStrokeAttribute() == pCandidateB->getStrokeAttribute()))
+            {
+                return Primitive2DReference();
+            }
+
+            // direction has to be equal -> cross product == 0.0
+            const basegfx::B2DVector aVT(pCandidateA->getEnd() - pCandidateA->getStart());
+            const basegfx::B2DVector aVC(pCandidateB->getEnd() - pCandidateB->getStart());
+            if(!rtl::math::approxEqual(0.0, aVC.cross(aVT)))
+            {
+                return Primitive2DReference();
+            }
+
+            // number BorderLines has to be equal
+            const size_t count(pCandidateA->getBorderLines().size());
+            if(count != pCandidateB->getBorderLines().size())
+            {
+                return Primitive2DReference();
+            }
+
+            for(size_t a(0); a < count; a++)
+            {
+                const BorderLine& rBT(pCandidateA->getBorderLines()[a]);
+                const BorderLine& rBC(pCandidateB->getBorderLines()[a]);
+
+                // LineAttribute has to be the same
+                if(!(rBC.getLineAttribute() == rBT.getLineAttribute()))
+                {
+                    return Primitive2DReference();
+                }
+
+                // isGap has to be the same
+                if(rBC.isGap() != rBT.isGap())
+                {
+                    return Primitive2DReference();
+                }
+
+                if(!rBT.isGap())
+                {
+                    // when not gap, the line extends have at least reach to the center ( > 0.0),
+                    // else there is a extend usage. When > 0.0 they just overlap, no problem
+                    if(rBT.getEndLeft() >= 0.0
+                        && rBT.getEndRight() >= 0.0
+                        && rBC.getStartLeft() >= 0.0
+                        && rBC.getStartRight() >= 0.0)
+                    {
+                        // okay
+                    }
+                    else
+                    {
+                        return Primitive2DReference();
+                    }
+                }
+            }
+
+            // all conditions met, create merged primitive
+            std::vector< BorderLine > aMergedBorderLines;
+
+            for(size_t a(0); a < count; a++)
+            {
+                const BorderLine& rBT(pCandidateA->getBorderLines()[a]);
+                const BorderLine& rBC(pCandidateB->getBorderLines()[a]);
+
+                aMergedBorderLines.push_back(
+                    BorderLine(
+                        rBT.getLineAttribute(),
+                        rBT.getStartLeft(), rBT.getStartRight(),
+                        rBC.getEndLeft(), rBC.getEndRight()));
+            }
+
+            return Primitive2DReference(
+                new BorderLinePrimitive2D(
+                    pCandidateA->getStart(),
+                    pCandidateB->getEnd(),
+                    aMergedBorderLines,
+                    pCandidateA->getStrokeAttribute()));
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
