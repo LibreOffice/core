@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6149945f",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-09-12T11:33:54Z",
+      "side": 1,
+      "message": "I guess this should be outside of switch...case and somehow if\u0027ed to not do something in the EmfPlusLineStyleSolid case...? I have never seen code inside switch...case that is not directly assigned to one or more cases - wondering that this compiles",
+      "range": {
+        "startLine": 453,
+        "startChar": 20,
+        "endLine": 457,
+        "endChar": 47
+      },
+      "revId": "6168a38ce84dd414ac0c197a4165b0774b8e56a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
