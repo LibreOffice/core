@@ -12,6 +12,7 @@
 #include "txtparai.hxx"
 #include "xmltbli.hxx"
 #include "XMLSectionContext.hxx"
+#include "XMLTextListContext.hxx"
 
 using namespace com::sun::star;
 
@@ -38,6 +39,8 @@ XMLImportContext *CreateTextChildContext(XMLImport &rImport, const OUString &rNa
         return new XMLSectionContext(rImport);
     if (rName == "table:table")
         return new XMLTableContext(rImport);
+    if (rName == "text:list")
+        return new XMLTextListContext(rImport);
     return nullptr;
 }
 

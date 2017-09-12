@@ -66,6 +66,7 @@ public:
     void testEscape();
     void testParaCharProps();
     void testSection();
+    void testList();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testEscape);
     CPPUNIT_TEST(testParaCharProps);
     CPPUNIT_TEST(testSection);
+    CPPUNIT_TEST(testList);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -371,6 +373,15 @@ void EPUBExportTest::testSection()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This was "After.", i.e. in-section content was ignored.
     assertXPathContent(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "In section.");
+}
+
+void EPUBExportTest::testList()
+{
+    createDoc("list.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // This was "C", i.e. in-list content was ignored.
+    assertXPathContent(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "B");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
