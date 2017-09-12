@@ -676,7 +676,6 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 class SwUndoParagraphSigning : public SwUndo
 {
 private:
-    sal_uLong m_nNodeIndex;
     SwDoc* m_pDoc;
     uno::Reference<text::XTextField> m_xField;
     uno::Reference<text::XTextContent> m_xParent;
@@ -697,7 +696,6 @@ SwUndoParagraphSigning::SwUndoParagraphSigning(const SwPosition& rPos,
                                                const uno::Reference<text::XTextField>& xField,
                                                const uno::Reference<text::XTextContent>& xParent)
   : SwUndo(SwUndoId::PARA_SIGN_ADD, rPos.GetDoc()),
-    m_nNodeIndex(rPos.nNode.GetIndex()),
     m_pDoc(rPos.GetDoc()),
     m_xField(xField),
     m_xParent(xParent)
