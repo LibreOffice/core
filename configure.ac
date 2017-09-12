@@ -3352,7 +3352,6 @@ find_msvc()
 }
 
 SOLARINC=
-SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
 DEVENV=
 if test "$_os" = "WINNT"; then
@@ -3576,31 +3575,6 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
-    dnl We need to guess the prefix of the -showIncludes output, it can be
-    dnl localized
-    AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
-    echo "#include <stdlib.h>" > conftest.c
-    dnl Filter out -FIIntrin.h when CC points at clang-cl.exe and needs to
-    dnl explicitly state that argument:
-    my_CC=
-    for i in $CC; do
-        case $i in
-        -FIIntrin.h)
-            ;;
-        *)
-            my_CC="$my_CC $i"
-            ;;
-        esac
-    done
-    SHOWINCLUDES_PREFIX=`$my_CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
-        grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
-    rm -f conftest.c conftest.obj
-    if test -z "$SHOWINCLUDES_PREFIX"; then
-        AC_MSG_ERROR([cannot determine the -showIncludes prefix])
-    else
-        AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
-    fi
-
     # Check for 64-bit (cross-)compiler to use to build the 64-bit
     # version of the Explorer extension (and maybe other small
     # bits, too) needed when installing a 32-bit LibreOffice on a
@@ -3652,7 +3626,6 @@ AC_SUBST(DEVENV)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(MSVC_CXX)
-AC_SUBST(SHOWINCLUDES_PREFIX)
 
 #
 # unowinreg.dll
@@ -3672,16 +3645,52 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
      COM_IS_CLANG=TRUE],
     [AC_MSG_RESULT([no])])
 
+CC_PLAIN=$CC
 if test "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([the Clang version])
-    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | ${CC%-cl.exe*} -E -P -`
-    CLANG_FULL_VERSION=`echo __clang_version__ | ${CC%-cl.exe*} -E -P -`
+    if test "$_os" = WINNT; then
+        dnl In which case, assume clang-cl:
+        my_args="/EP /TC"
+        dnl Filter out -FIIntrin.h, which needs to be explicitly stated for
+        dnl clang-cl:
+        CC_PLAIN=
+        for i in $CC; do
+            case $i in
+            -FIIntrin.h)
+                ;;
+            *)
+                CC_PLAIN="$CC_PLAIN $i"
+                ;;
+            esac
+        done
+    else
+        my_args="-E -P"
+    fi
+    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args -`
+    CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
     CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
     AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
     AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
     AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
 fi
 AC_SUBST(COM_IS_CLANG)
+
+SHOWINCLUDES_PREFIX=
+if test "$_os" = WINNT; then
+    dnl We need to guess the prefix of the -showIncludes output, it can be
+    dnl localized
+    AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
+    echo "#include <stdlib.h>" > conftest.c
+    SHOWINCLUDES_PREFIX=`$CC_PLAIN $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
+        grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
+    rm -f conftest.c conftest.obj
+    if test -z "$SHOWINCLUDES_PREFIX"; then
+        AC_MSG_ERROR([cannot determine the -showIncludes prefix])
+    else
+        AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
+    fi
+fi
+AC_SUBST(SHOWINCLUDES_PREFIX)
 
 #
 # prefix C with ccache if needed
