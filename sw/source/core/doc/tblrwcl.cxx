@@ -3985,7 +3985,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
             // Calculate the new relative size by means of the old one
             // If the selected Box get bigger, adjust via the max space else
             // via the max height.
-            if( true /*!rParam.bBigger*/ )
+            if( (true) /*!rParam.bBigger*/ )
             {
                 nDist *= pLineFrame->Frame().Height();
                 nDist /= rParam.nMaxHeight;

@@ -22,7 +22,7 @@ struct Widget : public VclReferenceBase
         Widget* p = mpParent;
         (void)p;
         // test against false+
-        p = true ? mpParent.get() : nullptr;
+        p = (true) ? mpParent.get() : nullptr;
     }
 
     ~Widget() override

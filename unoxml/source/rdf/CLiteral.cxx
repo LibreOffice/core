@@ -102,7 +102,7 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
             "CLiteral::initialize: argument must be string", *this, 0);
     }
     //FIXME: what is legal?
-    if (true) {
+    if ((true)) {
         m_Value = arg0;
     } else {
         throw css::lang::IllegalArgumentException(

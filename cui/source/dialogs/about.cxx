@@ -316,7 +316,9 @@ OUString AboutDialog::GetVersionString()
 
     sVersion += "\n" + Application::GetHWOSConfInfo();
 
-    if (EXTRA_BUILDID[0] != '\0')
+    bool const extra = EXTRA_BUILDID[0] != '\0';
+        // extracted from the 'if' to avoid Clang -Wunreachable-code
+    if (extra)
     {
         sVersion += "\n" EXTRA_BUILDID;
     }

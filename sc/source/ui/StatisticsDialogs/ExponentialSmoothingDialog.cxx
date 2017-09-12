@@ -99,7 +99,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
         output.nextRow();
 
         // Initial value
-        if (false)
+        if ((false))
         {
             aTemplate.setTemplate("=AVERAGE(%RANGE%)");
             aTemplate.applyRange("%RANGE%", aCurrentRange);

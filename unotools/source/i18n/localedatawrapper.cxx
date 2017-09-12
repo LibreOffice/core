@@ -1376,7 +1376,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     sal_Int16   nYear   = rDate.GetYear();
     sal_uInt16  nYearLen;
 
-    if ( true /* IsDateCentury() */ )
+    if ( (true) /* IsDateCentury() */ )
         nYearLen = 4;
     else
     {
@@ -1490,7 +1490,7 @@ OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bo
     if ( rTime < tools::Time( 0 ) )
         pBuf = ImplAddString( pBuf, ' ' );
 
-    if ( true /* IsTimeLeadingZero() */ )
+    if ( (true) /* IsTimeLeadingZero() */ )
         pBuf = ImplAddUNum( pBuf, rTime.GetHour(), 2 );
     else
         pBuf = ImplAddUNum( pBuf, rTime.GetHour() );

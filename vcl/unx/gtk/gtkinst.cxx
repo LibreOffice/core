@@ -99,7 +99,9 @@ extern "C"
         GtkYieldMutex *pYieldMutex;
 
         // init gdk thread protection
-        if ( !g_thread_supported() )
+        bool const sup = g_thread_supported();
+            // extracted from the 'if' to avoid Clang -Wunreachable-code
+        if ( !sup )
             g_thread_init( nullptr );
 
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);

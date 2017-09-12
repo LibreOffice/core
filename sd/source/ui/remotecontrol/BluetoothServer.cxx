@@ -1207,6 +1207,9 @@ void SAL_CALL BluetoothServer::run()
                 while (DBUS_DISPATCH_DATA_REMAINS == dbus_connection_get_dispatch_status( pConnection ))
                     dbus_connection_dispatch( pConnection );
             }
+            if ((false)) break;
+                // silence Clang -Wunreachable-code after loop (TODO: proper
+                // fix?)
         }
         unregisterBluez5Profile( pConnection );
         g_main_context_unref( mpImpl->mpContext );
@@ -1295,6 +1298,8 @@ void SAL_CALL BluetoothServer::run()
                 pCommunicator->launch();
             }
         }
+        if ((false)) break;
+            // silence Clang -Wunreachable-code after loop (TODO: proper fix?)
     }
 
     unregisterBluez5Profile( pConnection );

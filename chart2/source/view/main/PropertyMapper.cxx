@@ -82,7 +82,7 @@ void PropertyMapper::getValueMap(
     tPropertyNameMap::const_iterator aEnd( rNameMap.end() );
 
     uno::Reference< beans::XMultiPropertySet > xMultiPropSet(xSourceProp, uno::UNO_QUERY);
-    if(false && xMultiPropSet.is())
+    if((false) && xMultiPropSet.is())
     {
         uno::Sequence< rtl::OUString > aPropSourceNames(rNameMap.size());
         uno::Sequence< rtl::OUString > aPropTargetNames(rNameMap.size());

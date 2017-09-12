@@ -94,7 +94,7 @@ public:
 
 void Test::testUnoType() {
     // Avoid warnings about unused ~DerivedInterface1/2 (see above):
-    if (false) {
+    if ((false)) {
         DerivedInterface1::dummy(nullptr);
         DerivedInterface2::dummy(nullptr);
     }

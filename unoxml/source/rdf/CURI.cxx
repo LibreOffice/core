@@ -765,7 +765,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
             "CURI::initialize: argument is not valid namespace", *this, 0);
     }
     //FIXME: what is legal?
-    if (true) {
+    if ((true)) {
         m_LocalName = arg1;
     } else {
         throw css::lang::IllegalArgumentException(
