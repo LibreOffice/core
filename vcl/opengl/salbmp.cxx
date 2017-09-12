@@ -124,6 +124,20 @@ bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long 
     VCL_GL_INFO( "OpenGLSalBitmap::Create from FBO: ["
                   << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
 
+    GLint nMaxTextureSize;
+    glGetIntegerv( GL_MAX_TEXTURE_SIZE, &nMaxTextureSize );
+    if ( nWidth > nMaxTextureSize )
+    {
+        nWidth = nMaxTextureSize;
+        VCL_GL_INFO( "Width limited to " << nMaxTextureSize );
+    }
+
+    if ( nHeight > nMaxTextureSize )
+    {
+        nHeight = nMaxTextureSize;
+        VCL_GL_INFO( "Height limited to " << nMaxTextureSize );
+    }
+
     mnWidth = nWidth;
     mnHeight = nHeight;
 
