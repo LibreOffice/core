@@ -379,18 +379,20 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                         // Add a fake gradient stop at 0% and 100% if necessary, so that the gradient always starts
                         // at 0% and ends at 100%, to make following logic clearer (?).
-                        if( aGradientStops.find(0.0) == aGradientStops.end() )
+                        auto a0 = aGradientStops.find( 0.0 );
+                        if( a0 == aGradientStops.end() )
                         {
                             // temp variable required
                             Color aFirstColor(aGradientStops.begin()->second);
-                            aGradientStops[0.0] = aFirstColor;
+                            aGradientStops.emplace( 0.0, aFirstColor );
                         }
 
-                        if( aGradientStops.find(1.0) == aGradientStops.end() )
+                        auto a1 = aGradientStops.find( 1.0 );
+                        if( a1 == aGradientStops.end() )
                         {
                             // ditto
                             Color aLastColor(aGradientStops.rbegin()->second);
-                            aGradientStops[1.0] = aLastColor;
+                            aGradientStops.emplace( 1.0, aLastColor );
                         }
 
                         // Check if the gradient is symmetric, which we will emulate with an "axial" gradient.
@@ -421,7 +423,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 if( aItA->first != aItZ->first )
                                 {
                                     Color aMiddleColor = aItZ->second;
-                                    aGradientStops[0.5] = aMiddleColor;
+                                    auto a05 = aGradientStops.find( 0.5 );
+
+                                    if( a05 != aGradientStops.end() )
+                                        a05->second = aMiddleColor;
+                                    else
+                                        aGradientStops.emplace( 0.5, aMiddleColor );
                                 }
                                 // Drop the rest of the stops
                                 while( aGradientStops.rbegin()->first > 0.5 )

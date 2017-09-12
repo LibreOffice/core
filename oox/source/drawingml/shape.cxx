@@ -999,7 +999,7 @@ Reference< XShape > const & Shape::createAndInsert(
             if( aShapeProps.hasProperty( PROP_FillGradient ) )
             {
                 std::vector<beans::PropertyValue> aGradientStops;
-                ::std::map< double, Color >::iterator aIt = aFillProperties.maGradientProps.maGradientStops.begin();
+                auto aIt = aFillProperties.maGradientProps.maGradientStops.begin();
                 for( size_t i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
                 { // for each stop in the gradient definition:
 

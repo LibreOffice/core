@@ -106,6 +106,7 @@ public:
     void testRotateFlip();
     void testTdf106867();
     void testTdf112280();
+    void testTdf112088();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testRotateFlip);
     CPPUNIT_TEST(testTdf106867);
     CPPUNIT_TEST(testTdf112280);
+    CPPUNIT_TEST(testTdf112088);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1037,6 +1039,18 @@ void SdOOXMLExportTest2::testTdf112280()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animRot",
             "by", "21600000");
+}
+
+void SdOOXMLExportTest2::testTdf112088()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112088.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check gradient stops
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPathChildren(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:gradFill/a:gsLst", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

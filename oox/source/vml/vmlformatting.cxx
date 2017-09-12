@@ -708,6 +708,15 @@ void FillModel::assignUsed( const FillModel& rSource )
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
+void lcl_setGradientStop( std::multimap< double, Color >& rMap, const double fKey, const Color& rValue ) {
+    auto aElement = rMap.find( fKey );
+
+    if (aElement != rMap.end())
+        aElement->second = rValue;
+    else
+        rMap.emplace( fKey, rValue );
+}
+
 void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
 {
     /*  Convert VML fill formatting to DrawingML fill formatting and let the
@@ -749,8 +758,10 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                         // simulate axial gradient by 3-step DrawingML gradient
                         const Color& rOuterColor = bOuterToInner ? aColor1 : aColor2;
                         const Color& rInnerColor = bOuterToInner ? aColor2 : aColor1;
-                        aFillProps.maGradientProps.maGradientStops[ 0.0 ] = aFillProps.maGradientProps.maGradientStops[ 1.0 ] = rOuterColor;
-                        aFillProps.maGradientProps.maGradientStops[ 0.5 ] = rInnerColor;
+
+                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, rOuterColor);
+                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, rOuterColor);
+                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.5, rInnerColor );
                     }
                     else    // focus of -100%, 0%, and 100% is linear gradient
                     {
@@ -762,8 +773,8 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                         if( fFocus < -0.5 || fFocus > 0.5 )
                             (nVmlAngle += 180) %= 360;
                         // set the start and stop colors
-                        aFillProps.maGradientProps.maGradientStops[ 0.0 ] = aColor1;
-                        aFillProps.maGradientProps.maGradientStops[ 1.0 ] = aColor2;
+                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, aColor1 );
+                        lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, aColor2 );
                     }
 
                     // VML counts counterclockwise from bottom, DrawingML clockwise from left
@@ -788,8 +799,8 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
 
                     // set the start and stop colors (focus of 0% means outer-to-inner)
                     bool bOuterToInner = (-0.5 <= fFocus) && (fFocus <= 0.5);
-                    aFillProps.maGradientProps.maGradientStops[ 0.0 ] = bOuterToInner ? aColor2 : aColor1;
-                    aFillProps.maGradientProps.maGradientStops[ 1.0 ] = bOuterToInner ? aColor1 : aColor2;
+                    lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 0.0, bOuterToInner ? aColor2 : aColor1 );
+                    lcl_setGradientStop( aFillProps.maGradientProps.maGradientStops, 1.0, bOuterToInner ? aColor1 : aColor2 );
                 }
             }
             break;
