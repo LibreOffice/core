@@ -344,7 +344,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
         ScMarkArrayIter aIter( &aArray );
         SCROW nStart, nEnd;
         while ( aIter.Next( nStart, nEnd ) )
-            aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( nStart, nEnd ) );
+            aMarkedRowSegs.emplace_back( nStart, nEnd );
 
         CPPUNIT_ASSERT_EQUAL( rMarkArrayTestData.aMarkedRowSegs.size(), aMarkedRowSegs.size() );
         size_t nIdx = 0;
@@ -400,17 +400,17 @@ void Test::testMultiMark_FourRanges()
     aSingle1.aRange = ScRange( 10, 5, 0, 20, 10, 0 );
     aSingle1.bMark = true;
 
-    aSingle1.aInsideAddresses.push_back( ScAddress( 15, 6, 0 ) );
-    aSingle1.aInsideAddresses.push_back( ScAddress( 10, 5, 0 ) );
-    aSingle1.aInsideAddresses.push_back( ScAddress( 20, 5, 0 ) );
-    aSingle1.aInsideAddresses.push_back( ScAddress( 10, 10, 0 ) );
-    aSingle1.aInsideAddresses.push_back( ScAddress( 20, 10, 0 ) );
+    aSingle1.aInsideAddresses.emplace_back( 15, 6, 0 );
+    aSingle1.aInsideAddresses.emplace_back( 10, 5, 0 );
+    aSingle1.aInsideAddresses.emplace_back( 20, 5, 0 );
+    aSingle1.aInsideAddresses.emplace_back( 10, 10, 0 );
+    aSingle1.aInsideAddresses.emplace_back( 20, 10, 0 );
 
-    aSingle1.aOutsideAddresses.push_back( ScAddress( 15, 4, 0 ) );
-    aSingle1.aOutsideAddresses.push_back( ScAddress( 15, 11, 0 ) );
-    aSingle1.aOutsideAddresses.push_back( ScAddress( 9, 6, 0 ) );
-    aSingle1.aOutsideAddresses.push_back( ScAddress( 21, 6, 0 ) );
-    aSingle1.aOutsideAddresses.push_back( ScAddress( 26, 10, 0 ) );
+    aSingle1.aOutsideAddresses.emplace_back( 15, 4, 0 );
+    aSingle1.aOutsideAddresses.emplace_back( 15, 11, 0 );
+    aSingle1.aOutsideAddresses.emplace_back( 9, 6, 0 );
+    aSingle1.aOutsideAddresses.emplace_back( 21, 6, 0 );
+    aSingle1.aOutsideAddresses.emplace_back( 26, 10, 0 );
 
     aSingle1.aColumnsWithoutFullMarks.push_back( 16 );
     aSingle1.aColumnsWithoutFullMarks.push_back( 21 );
@@ -418,17 +418,17 @@ void Test::testMultiMark_FourRanges()
     aSingle1.aRowsWithoutFullMarks.push_back( 7 );
     aSingle1.aRowsWithoutFullMarks.push_back( 11 );
 
-    aSingle1.aRangesWithFullMarks.push_back( ScRange( 10, 5, 0, 20, 10, 0 ) );
-    aSingle1.aRangesWithFullMarks.push_back( ScRange( 11, 6, 0, 19, 8, 0 ) );
+    aSingle1.aRangesWithFullMarks.emplace_back( 10, 5, 0, 20, 10, 0 );
+    aSingle1.aRangesWithFullMarks.emplace_back( 11, 6, 0, 19, 8, 0 );
 
-    aSingle1.aRangesWithoutFullMarks.push_back( ScRange( 9, 4, 0, 21, 11, 0 ) );
-    aSingle1.aRangesWithoutFullMarks.push_back( ScRange( 25, 7, 0, 30, 15, 0 ) );
+    aSingle1.aRangesWithoutFullMarks.emplace_back( 9, 4, 0, 21, 11, 0 );
+    aSingle1.aRangesWithoutFullMarks.emplace_back( 25, 7, 0, 30, 15, 0 );
 
-    aSingle1.aNextMarked.push_back( ScRange( 15, 1, 0, 1, 5, 0 ) ); // Search down
-    aSingle1.aNextMarked.push_back( ScRange( 15, 15, 0, 0, 10, 0 ) ); // Search up
+    aSingle1.aNextMarked.emplace_back( 15, 1, 0, 1, 5, 0 ); // Search down
+    aSingle1.aNextMarked.emplace_back( 15, 15, 0, 0, 10, 0 ); // Search up
 
-    aSingle1.aNextMarked.push_back( ScRange( 15, 15, 0, 1, MAXROWCOUNT, 0 ) ); // Search down fail
-    aSingle1.aNextMarked.push_back( ScRange( 15, 4, 0, 0, -1, 0 ) ); // Search up fail
+    aSingle1.aNextMarked.emplace_back( 15, 15, 0, 1, MAXROWCOUNT, 0 ); // Search down fail
+    aSingle1.aNextMarked.emplace_back( 15, 4, 0, 0, -1, 0 ); // Search up fail
 
     aSingle1.aColumnsWithAtLeastOneMark.push_back( 10 );
     aSingle1.aColumnsWithAtLeastOneMark.push_back( 15 );
@@ -443,37 +443,37 @@ void Test::testMultiMark_FourRanges()
     aSingle2.bMark = true;
 
     aSingle2.aInsideAddresses = aSingle1.aInsideAddresses;
-    aSingle2.aInsideAddresses.push_back( ScAddress( 27, 10, 0 ) );
-    aSingle2.aInsideAddresses.push_back( ScAddress( 25, 7, 0 ) );
-    aSingle2.aInsideAddresses.push_back( ScAddress( 30, 7, 0 ) );
-    aSingle2.aInsideAddresses.push_back( ScAddress( 25, 15, 0 ) );
-    aSingle2.aInsideAddresses.push_back( ScAddress( 30, 15, 0 ) );
+    aSingle2.aInsideAddresses.emplace_back( 27, 10, 0 );
+    aSingle2.aInsideAddresses.emplace_back( 25, 7, 0 );
+    aSingle2.aInsideAddresses.emplace_back( 30, 7, 0 );
+    aSingle2.aInsideAddresses.emplace_back( 25, 15, 0 );
+    aSingle2.aInsideAddresses.emplace_back( 30, 15, 0 );
 
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 15, 4, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 15, 11, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 9, 6, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 21, 6, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 26, 6, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 26, 16, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 24, 8, 0 ) );
-    aSingle2.aOutsideAddresses.push_back( ScAddress( 31, 11, 0 ) );
+    aSingle2.aOutsideAddresses.emplace_back( 15, 4, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 15, 11, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 9, 6, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 21, 6, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 26, 6, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 26, 16, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 24, 8, 0 );
+    aSingle2.aOutsideAddresses.emplace_back( 31, 11, 0 );
 
     aSingle2.aColumnsWithoutFullMarks = aSingle1.aColumnsWithoutAnyMarks;
 
     aSingle2.aRowsWithoutFullMarks = aSingle1.aRowsWithoutFullMarks;
 
     aSingle2.aRangesWithFullMarks = aSingle1.aRangesWithFullMarks;
-    aSingle2.aRangesWithFullMarks.push_back( ScRange( 25, 7, 0, 30, 15, 0 ) );
-    aSingle2.aRangesWithFullMarks.push_back( ScRange( 26, 8, 0, 29, 14, 0 ) );
+    aSingle2.aRangesWithFullMarks.emplace_back( 25, 7, 0, 30, 15, 0 );
+    aSingle2.aRangesWithFullMarks.emplace_back( 26, 8, 0, 29, 14, 0 );
 
-    aSingle2.aRangesWithoutFullMarks.push_back( ScRange( 9, 4, 0, 21, 11, 0 ) );
-    aSingle2.aRangesWithoutFullMarks.push_back( ScRange( 24, 6, 0, 31, 16, 0 ) );
-    aSingle2.aRangesWithoutFullMarks.push_back( ScRange( 10, 5, 0, 30, 15, 0 ) );
+    aSingle2.aRangesWithoutFullMarks.emplace_back( 9, 4, 0, 21, 11, 0 );
+    aSingle2.aRangesWithoutFullMarks.emplace_back( 24, 6, 0, 31, 16, 0 );
+    aSingle2.aRangesWithoutFullMarks.emplace_back( 10, 5, 0, 30, 15, 0 );
 
-    aSingle2.aNextMarked.push_back( ScRange( 27, 16, 0, 0, 15, 0 ) );  // up ok
-    aSingle2.aNextMarked.push_back( ScRange( 27, 4, 0, 1, 7, 0 ) );  // down ok
-    aSingle2.aNextMarked.push_back( ScRange( 27, 4, 0, 0, -1, 0 ) );  // up fail
-    aSingle2.aNextMarked.push_back( ScRange( 27, 16, 0, 1, MAXROWCOUNT, 0 ) );  // down fail
+    aSingle2.aNextMarked.emplace_back( 27, 16, 0, 0, 15, 0 );  // up ok
+    aSingle2.aNextMarked.emplace_back( 27, 4, 0, 1, 7, 0 );  // down ok
+    aSingle2.aNextMarked.emplace_back( 27, 4, 0, 0, -1, 0 );  // up fail
+    aSingle2.aNextMarked.emplace_back( 27, 16, 0, 1, MAXROWCOUNT, 0 );  // down fail
 
     aSingle2.aColumnsWithAtLeastOneMark = aSingle1.aColumnsWithAtLeastOneMark;
     aSingle2.aColumnsWithAtLeastOneMark.push_back( 25 );
@@ -492,24 +492,24 @@ void Test::testMultiMark_FourRanges()
     aSingle3.bMark = true;
 
     aSingle3.aInsideAddresses = aSingle2.aInsideAddresses;
-    aSingle3.aInsideAddresses.push_back( ScAddress( 5, 20, 0 ) );
-    aSingle3.aInsideAddresses.push_back( ScAddress( 100, 20, 0 ) );
+    aSingle3.aInsideAddresses.emplace_back( 5, 20, 0 );
+    aSingle3.aInsideAddresses.emplace_back( 100, 20, 0 );
 
-    aSingle3.aOutsideAddresses.push_back( ScAddress( 0, 21, 0 ) );
-    aSingle3.aOutsideAddresses.push_back( ScAddress( 27, 19, 0 ) );
+    aSingle3.aOutsideAddresses.emplace_back( 0, 21, 0 );
+    aSingle3.aOutsideAddresses.emplace_back( 27, 19, 0 );
 
     aSingle3.aColumnsWithoutFullMarks = aSingle2.aColumnsWithoutAnyMarks;
 
     aSingle3.aRowsWithFullMarks.push_back( 20 );
 
     aSingle3.aRangesWithFullMarks = aSingle2.aRangesWithFullMarks;
-    aSingle3.aRangesWithFullMarks.push_back( ScRange( 0, 20, 0, MAXCOL, 20, 0 ) );
-    aSingle3.aRangesWithFullMarks.push_back( ScRange( 15, 20, 0, 55, 20, 0 ) );
+    aSingle3.aRangesWithFullMarks.emplace_back( 0, 20, 0, MAXCOL, 20, 0 );
+    aSingle3.aRangesWithFullMarks.emplace_back( 15, 20, 0, 55, 20, 0 );
 
-    aSingle3.aNextMarked.push_back( ScRange( 15, 16, 0, 0, 10, 0 ) );  // up ok
-    aSingle3.aNextMarked.push_back( ScRange( 15, 16, 0, 1, 20, 0 ) );  // down ok
-    aSingle3.aNextMarked.push_back( ScRange( 22, 15, 0, 0, -1, 0 ) );  // up fail
-    aSingle3.aNextMarked.push_back( ScRange( 22, 25, 0, 1, MAXROWCOUNT, 0 ) );  // down fail
+    aSingle3.aNextMarked.emplace_back( 15, 16, 0, 0, 10, 0 );  // up ok
+    aSingle3.aNextMarked.emplace_back( 15, 16, 0, 1, 20, 0 );  // down ok
+    aSingle3.aNextMarked.emplace_back( 22, 15, 0, 0, -1, 0 );  // up fail
+    aSingle3.aNextMarked.emplace_back( 22, 25, 0, 1, MAXROWCOUNT, 0 );  // down fail
 
     aSingle3.aColumnsWithAtLeastOneMark = aSingle2.aColumnsWithAtLeastOneMark;
     aSingle3.aColumnsWithAtLeastOneMark.push_back( 39 );
@@ -521,21 +521,21 @@ void Test::testMultiMark_FourRanges()
     aSingle4.bMark = true;
 
     aSingle4.aInsideAddresses = aSingle3.aInsideAddresses;
-    aSingle4.aInsideAddresses.push_back( ScAddress( 35, 10, 0 ) );
-    aSingle4.aInsideAddresses.push_back( ScAddress( 35, 25, 0 ) );
+    aSingle4.aInsideAddresses.emplace_back( 35, 10, 0 );
+    aSingle4.aInsideAddresses.emplace_back( 35, 25, 0 );
 
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 33, 10, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 39, 10, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 33, 25, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 39, 25, 0 ) );
+    aSingle4.aOutsideAddresses.emplace_back( 33, 10, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 39, 10, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 33, 25, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 39, 25, 0 );
 
     aSingle4.aColumnsWithFullMarks.push_back( 35 );
 
     aSingle4.aRowsWithFullMarks.push_back( 20 );
 
     aSingle4.aRangesWithFullMarks = aSingle3.aRangesWithFullMarks;
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 35, 0, 0, 35, MAXROW, 0 ) );
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 35, 10, 0, 35, 25, 0 ) );
+    aSingle4.aRangesWithFullMarks.emplace_back( 35, 0, 0, 35, MAXROW, 0 );
+    aSingle4.aRangesWithFullMarks.emplace_back( 35, 10, 0, 35, 25, 0 );
 
     // Add the rectangle data to aData
     aData.aMarks.push_back( aSingle1 );
@@ -566,33 +566,33 @@ void Test::testMultiMark_FourRanges()
 
     MarkArrayTestData aMarkArrayTestData1;
     aMarkArrayTestData1.nCol = 5;
-    aMarkArrayTestData1.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 20, 20 ) );
+    aMarkArrayTestData1.aMarkedRowSegs.emplace_back( 20, 20 );
 
     MarkArrayTestData aMarkArrayTestData2;
     aMarkArrayTestData2.nCol = 15;
-    aMarkArrayTestData2.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 5, 10 ) );
-    aMarkArrayTestData2.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 20, 20 ) );
+    aMarkArrayTestData2.aMarkedRowSegs.emplace_back( 5, 10 );
+    aMarkArrayTestData2.aMarkedRowSegs.emplace_back( 20, 20 );
 
     MarkArrayTestData aMarkArrayTestData3;
     aMarkArrayTestData3.nCol = 22;
-    aMarkArrayTestData3.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 20, 20 ) );
+    aMarkArrayTestData3.aMarkedRowSegs.emplace_back( 20, 20 );
 
     MarkArrayTestData aMarkArrayTestData4;
     aMarkArrayTestData4.nCol = 27;
-    aMarkArrayTestData4.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 7, 15 ) );
-    aMarkArrayTestData4.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 20, 20 ) );
+    aMarkArrayTestData4.aMarkedRowSegs.emplace_back( 7, 15 );
+    aMarkArrayTestData4.aMarkedRowSegs.emplace_back( 20, 20 );
 
     MarkArrayTestData aMarkArrayTestData5;
     aMarkArrayTestData5.nCol = 33;
-    aMarkArrayTestData5.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 20, 20 ) );
+    aMarkArrayTestData5.aMarkedRowSegs.emplace_back( 20, 20 );
 
     MarkArrayTestData aMarkArrayTestData6;
     aMarkArrayTestData6.nCol = 35;
-    aMarkArrayTestData6.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 0, MAXROW ) );
+    aMarkArrayTestData6.aMarkedRowSegs.emplace_back( 0, MAXROW );
 
     MarkArrayTestData aMarkArrayTestData7;
     aMarkArrayTestData7.nCol = 40;
-    aMarkArrayTestData7.aMarkedRowSegs.push_back( std::pair<SCROW, SCROW>( 20, 20 ) );
+    aMarkArrayTestData7.aMarkedRowSegs.emplace_back( 20, 20 );
 
     aData.aMarkArrays.push_back( aMarkArrayTestData1 );
     aData.aMarkArrays.push_back( aMarkArrayTestData2 );
@@ -602,11 +602,11 @@ void Test::testMultiMark_FourRanges()
     aData.aMarkArrays.push_back( aMarkArrayTestData6 );
     aData.aMarkArrays.push_back( aMarkArrayTestData7 );
 
-    aData.aColsWithOneMark.push_back( ScRange( 5, 20, 0, 0, 20, 0 ) );
-    aData.aColsWithOneMark.push_back( ScRange( 22, 20, 0, 0, 20, 0 ) );
-    aData.aColsWithOneMark.push_back( ScRange( 32, 20, 0, 0, 20, 0 ) );
-    aData.aColsWithOneMark.push_back( ScRange( 35, 0, 0, 0, MAXROW, 0 ) );
-    aData.aColsWithOneMark.push_back( ScRange( 50, 20, 0, 0, 20, 0 ) );
+    aData.aColsWithOneMark.emplace_back( 5, 20, 0, 0, 20, 0 );
+    aData.aColsWithOneMark.emplace_back( 22, 20, 0, 0, 20, 0 );
+    aData.aColsWithOneMark.emplace_back( 32, 20, 0, 0, 20, 0 );
+    aData.aColsWithOneMark.emplace_back( 35, 0, 0, 0, MAXROW, 0 );
+    aData.aColsWithOneMark.emplace_back( 50, 20, 0, 0, 20, 0 );
 
     aData.aColsWithoutOneMark.push_back( 10 );
     aData.aColsWithoutOneMark.push_back( 15 );
@@ -614,40 +614,40 @@ void Test::testMultiMark_FourRanges()
     aData.aColsWithoutOneMark.push_back( 25 );
     aData.aColsWithoutOneMark.push_back( 30 );
 
-    aData.aColsAllMarked.push_back( ScRange( 10, 5, 0, 0, 10, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 15, 5, 0, 0, 10, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 5, 20, 0, 0, 20, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 10, 20, 0, 0, 20, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 25, 7, 0, 0, 15, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 30, 7, 0, 0, 15, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 35, 0, 0, 0, MAXROW, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 100, 20, 0, 0, 20, 0 ) );
+    aData.aColsAllMarked.emplace_back( 10, 5, 0, 0, 10, 0 );
+    aData.aColsAllMarked.emplace_back( 15, 5, 0, 0, 10, 0 );
+    aData.aColsAllMarked.emplace_back( 5, 20, 0, 0, 20, 0 );
+    aData.aColsAllMarked.emplace_back( 10, 20, 0, 0, 20, 0 );
+    aData.aColsAllMarked.emplace_back( 25, 7, 0, 0, 15, 0 );
+    aData.aColsAllMarked.emplace_back( 30, 7, 0, 0, 15, 0 );
+    aData.aColsAllMarked.emplace_back( 35, 0, 0, 0, MAXROW, 0 );
+    aData.aColsAllMarked.emplace_back( 100, 20, 0, 0, 20, 0 );
 
-    aData.aColsNotAllMarked.push_back( ScRange( 5, 5, 0, 0, 25, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 15, 5, 0, 0, 25, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 22, 15, 0, 0, 25, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 27, 7, 0, 0, 20, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 100, 19, 0, 0, 21, 0 ) );
+    aData.aColsNotAllMarked.emplace_back( 5, 5, 0, 0, 25, 0 );
+    aData.aColsNotAllMarked.emplace_back( 15, 5, 0, 0, 25, 0 );
+    aData.aColsNotAllMarked.emplace_back( 22, 15, 0, 0, 25, 0 );
+    aData.aColsNotAllMarked.emplace_back( 27, 7, 0, 0, 20, 0 );
+    aData.aColsNotAllMarked.emplace_back( 100, 19, 0, 0, 21, 0 );
 
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 9 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 10, 20 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 21, 24 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 25, 30 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 31, 34 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 36, 100 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 22 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 34 ) );
+    aData.aColsWithEqualMarksList.emplace_back( 0, 9 );
+    aData.aColsWithEqualMarksList.emplace_back( 10, 20 );
+    aData.aColsWithEqualMarksList.emplace_back( 21, 24 );
+    aData.aColsWithEqualMarksList.emplace_back( 25, 30 );
+    aData.aColsWithEqualMarksList.emplace_back( 31, 34 );
+    aData.aColsWithEqualMarksList.emplace_back( 36, 100 );
+    aData.aColsWithEqualMarksList.emplace_back( 0, 22 );
+    aData.aColsWithEqualMarksList.emplace_back( 0, 34 );
 
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 10 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 20 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 10, 21 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 20, 25 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 20, 30 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 24, 30 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 30, 31 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 30, 34 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 30, 35 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 35, 100 ) );
+    aData.aColsWithUnequalMarksList.emplace_back( 0, 10 );
+    aData.aColsWithUnequalMarksList.emplace_back( 0, 20 );
+    aData.aColsWithUnequalMarksList.emplace_back( 10, 21 );
+    aData.aColsWithUnequalMarksList.emplace_back( 20, 25 );
+    aData.aColsWithUnequalMarksList.emplace_back( 20, 30 );
+    aData.aColsWithUnequalMarksList.emplace_back( 24, 30 );
+    aData.aColsWithUnequalMarksList.emplace_back( 30, 31 );
+    aData.aColsWithUnequalMarksList.emplace_back( 30, 34 );
+    aData.aColsWithUnequalMarksList.emplace_back( 30, 35 );
+    aData.aColsWithUnequalMarksList.emplace_back( 35, 100 );
 
     testMultiMark( aData );
 }
@@ -676,65 +676,65 @@ void Test::testMultiMark_NegativeMarking()
     aSingle4.aRange = ScRange( 17, 5, 0, 20, 5, 0 );
     aSingle4.bMark = false;
 
-    aSingle4.aInsideAddresses.push_back( ScAddress( 6, 5, 0 ) );
-    aSingle4.aInsideAddresses.push_back( ScAddress( 30, 5, 0 ) );
-    aSingle4.aInsideAddresses.push_back( ScAddress( 6, 12, 0 ) );
-    aSingle4.aInsideAddresses.push_back( ScAddress( 30, 12, 0 ) );
-    aSingle4.aInsideAddresses.push_back( ScAddress( 13, 14, 0 ) );
-    aSingle4.aInsideAddresses.push_back( ScAddress( 16, 12, 0 ) );
+    aSingle4.aInsideAddresses.emplace_back( 6, 5, 0 );
+    aSingle4.aInsideAddresses.emplace_back( 30, 5, 0 );
+    aSingle4.aInsideAddresses.emplace_back( 6, 12, 0 );
+    aSingle4.aInsideAddresses.emplace_back( 30, 12, 0 );
+    aSingle4.aInsideAddresses.emplace_back( 13, 14, 0 );
+    aSingle4.aInsideAddresses.emplace_back( 16, 12, 0 );
 
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 5, 2, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 18, 5, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 17, 5, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 20, 5, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 18, 7, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 5, 10, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 30, 10, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 5, 14, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 30, 14, 0 ) );
-    aSingle4.aOutsideAddresses.push_back( ScAddress( 18, 25, 0 ) );
+    aSingle4.aOutsideAddresses.emplace_back( 5, 2, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 18, 5, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 17, 5, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 20, 5, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 18, 7, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 5, 10, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 30, 10, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 5, 14, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 30, 14, 0 );
+    aSingle4.aOutsideAddresses.emplace_back( 18, 25, 0 );
 
     aSingle4.aRowsWithFullMarks.push_back( 12 );
 
     aSingle4.aRowsWithoutFullMarks.push_back( 5 );
 
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 5, 5, 0, 16, 5, 0 ) );
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 21, 5, 0, 30, 5, 0 ) );
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 5, 12, 0, 9, 12, 0 ) );
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 26, 12, 0, 30, 12, 0 ) );
-    aSingle4.aRangesWithFullMarks.push_back( ScRange( 10, 8, 0, 25, 20, 0 ) );
+    aSingle4.aRangesWithFullMarks.emplace_back( 5, 5, 0, 16, 5, 0 );
+    aSingle4.aRangesWithFullMarks.emplace_back( 21, 5, 0, 30, 5, 0 );
+    aSingle4.aRangesWithFullMarks.emplace_back( 5, 12, 0, 9, 12, 0 );
+    aSingle4.aRangesWithFullMarks.emplace_back( 26, 12, 0, 30, 12, 0 );
+    aSingle4.aRangesWithFullMarks.emplace_back( 10, 8, 0, 25, 20, 0 );
 
-    aSingle4.aRangesWithoutFullMarks.push_back( ScRange( 10, 5, 0, 25, 5, 0 ) );
+    aSingle4.aRangesWithoutFullMarks.emplace_back( 10, 5, 0, 25, 5, 0 );
 
-    aSingle4.aNextMarked.push_back( ScRange( 18, 7, 0, 0, -1, 0 ) ); // up fail
-    aSingle4.aNextMarked.push_back( ScRange( 18, 4, 0, 1, 8, 0 ) ); // down ok
+    aSingle4.aNextMarked.emplace_back( 18, 7, 0, 0, -1, 0 ); // up fail
+    aSingle4.aNextMarked.emplace_back( 18, 4, 0, 1, 8, 0 ); // down ok
 
     // Create deselection rectangle ( 15, 10, 18, 14 )
     MarkTestData aSingle5;
     aSingle5.aRange = ScRange( 15, 10, 0, 18, 14, 0 );
     aSingle5.bMark = false;
 
-    aSingle5.aInsideAddresses.push_back( ScAddress( 6, 5, 0 ) );
-    aSingle5.aInsideAddresses.push_back( ScAddress( 30, 5, 0 ) );
-    aSingle5.aInsideAddresses.push_back( ScAddress( 6, 12, 0 ) );
-    aSingle5.aInsideAddresses.push_back( ScAddress( 30, 12, 0 ) );
-    aSingle5.aInsideAddresses.push_back( ScAddress( 13, 14, 0 ) );
+    aSingle5.aInsideAddresses.emplace_back( 6, 5, 0 );
+    aSingle5.aInsideAddresses.emplace_back( 30, 5, 0 );
+    aSingle5.aInsideAddresses.emplace_back( 6, 12, 0 );
+    aSingle5.aInsideAddresses.emplace_back( 30, 12, 0 );
+    aSingle5.aInsideAddresses.emplace_back( 13, 14, 0 );
 
     aSingle5.aOutsideAddresses = aSingle4.aOutsideAddresses;
-    aSingle5.aOutsideAddresses.push_back( ScAddress( 17, 12, 0 ) );
-    aSingle5.aOutsideAddresses.push_back( ScAddress( 15, 10, 0 ) );
-    aSingle5.aOutsideAddresses.push_back( ScAddress( 18, 10, 0 ) );
-    aSingle5.aOutsideAddresses.push_back( ScAddress( 15, 14, 0 ) );
-    aSingle5.aOutsideAddresses.push_back( ScAddress( 18, 14, 0 ) );
+    aSingle5.aOutsideAddresses.emplace_back( 17, 12, 0 );
+    aSingle5.aOutsideAddresses.emplace_back( 15, 10, 0 );
+    aSingle5.aOutsideAddresses.emplace_back( 18, 10, 0 );
+    aSingle5.aOutsideAddresses.emplace_back( 15, 14, 0 );
+    aSingle5.aOutsideAddresses.emplace_back( 18, 14, 0 );
 
     aSingle5.aRowsWithoutFullMarks.push_back( 12 );
     aSingle5.aRowsWithoutFullMarks.push_back( 5 );
 
-    aSingle5.aRangesWithoutFullMarks.push_back( ScRange( 10, 8, 0, 25, 20, 0 ) );
+    aSingle5.aRangesWithoutFullMarks.emplace_back( 10, 8, 0, 25, 20, 0 );
 
     aSingle5.aNextMarked = aSingle4.aNextMarked;
-    aSingle5.aNextMarked.push_back( ScRange( 17, 12, 0, 0, 9, 0 ) ); // up ok
-    aSingle5.aNextMarked.push_back( ScRange( 17, 12, 0, 1, 15, 0 ) ); // down ok
+    aSingle5.aNextMarked.emplace_back( 17, 12, 0, 0, 9, 0 ); // up ok
+    aSingle5.aNextMarked.emplace_back( 17, 12, 0, 1, 15, 0 ); // down ok
 
     // Add the rectangle data to aData
     aData.aMarks.push_back( aSingle1 );
@@ -768,8 +768,8 @@ void Test::testMultiMark_NegativeMarking()
     aData.aBottomEnvelope.Append( ScRange( 26, 13, 0, MAXCOL, 13, 0 ) );
     aData.aBottomEnvelope.Append( ScRange( 10, 21, 0, 25, 21, 0 ) );
 
-    aData.aColsWithOneMark.push_back( ScRange( 19, 8, 0, 0, 20, 0 ) );
-    aData.aColsWithOneMark.push_back( ScRange( 20, 8, 0, 0, 20, 0 ) );
+    aData.aColsWithOneMark.emplace_back( 19, 8, 0, 0, 20, 0 );
+    aData.aColsWithOneMark.emplace_back( 20, 8, 0, 0, 20, 0 );
 
     aData.aColsWithoutOneMark.push_back( 5 );
     aData.aColsWithoutOneMark.push_back( 10 );
@@ -779,33 +779,33 @@ void Test::testMultiMark_NegativeMarking()
     aData.aColsWithoutOneMark.push_back( 24 );
     aData.aColsWithoutOneMark.push_back( 100 );
 
-    aData.aColsAllMarked.push_back( ScRange( 10, 8, 0, 0, 20, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 17, 8, 0, 0, 9, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 20, 8, 0, 0, 20, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 100, 5, 0, 0, 5, 0 ) );
-    aData.aColsAllMarked.push_back( ScRange( 100, 12, 0, 0, 12, 0 ) );
+    aData.aColsAllMarked.emplace_back( 10, 8, 0, 0, 20, 0 );
+    aData.aColsAllMarked.emplace_back( 17, 8, 0, 0, 9, 0 );
+    aData.aColsAllMarked.emplace_back( 20, 8, 0, 0, 20, 0 );
+    aData.aColsAllMarked.emplace_back( 100, 5, 0, 0, 5, 0 );
+    aData.aColsAllMarked.emplace_back( 100, 12, 0, 0, 12, 0 );
 
-    aData.aColsNotAllMarked.push_back( ScRange( 5, 5, 0, 0, 12, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 10, 5, 0, 0, 20, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 15, 8, 0, 0, 20, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 18, 8, 0, 0, 20, 0 ) );
-    aData.aColsNotAllMarked.push_back( ScRange( 25, 5, 0, 0, 20, 0 ) );
+    aData.aColsNotAllMarked.emplace_back( 5, 5, 0, 0, 12, 0 );
+    aData.aColsNotAllMarked.emplace_back( 10, 5, 0, 0, 20, 0 );
+    aData.aColsNotAllMarked.emplace_back( 15, 8, 0, 0, 20, 0 );
+    aData.aColsNotAllMarked.emplace_back( 18, 8, 0, 0, 20, 0 );
+    aData.aColsNotAllMarked.emplace_back( 25, 5, 0, 0, 20, 0 );
 
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 9 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 10, 14 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 15, 16 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 17, 18 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 19, 20 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 21, 25 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 26, 100 ) );
-    aData.aColsWithEqualMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 100 ) );
+    aData.aColsWithEqualMarksList.emplace_back( 0, 9 );
+    aData.aColsWithEqualMarksList.emplace_back( 10, 14 );
+    aData.aColsWithEqualMarksList.emplace_back( 15, 16 );
+    aData.aColsWithEqualMarksList.emplace_back( 17, 18 );
+    aData.aColsWithEqualMarksList.emplace_back( 19, 20 );
+    aData.aColsWithEqualMarksList.emplace_back( 21, 25 );
+    aData.aColsWithEqualMarksList.emplace_back( 26, 100 );
+    aData.aColsWithEqualMarksList.emplace_back( 0, 100 );
 
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 0, 10 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 10, 15 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 15, 17 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 17, 19 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 19, 21 ) );
-    aData.aColsWithUnequalMarksList.push_back( std::pair<SCCOL,SCCOL>( 21, 26 ) );
+    aData.aColsWithUnequalMarksList.emplace_back( 0, 10 );
+    aData.aColsWithUnequalMarksList.emplace_back( 10, 15 );
+    aData.aColsWithUnequalMarksList.emplace_back( 15, 17 );
+    aData.aColsWithUnequalMarksList.emplace_back( 17, 19 );
+    aData.aColsWithUnequalMarksList.emplace_back( 19, 21 );
+    aData.aColsWithUnequalMarksList.emplace_back( 21, 26 );
 
     testMultiMark( aData );
 }

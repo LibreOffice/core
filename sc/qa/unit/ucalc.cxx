@@ -4478,8 +4478,8 @@ void Test::testUpdateReference()
     ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5);
 
     std::vector<OUString> aSheets;
-    aSheets.push_back("Sheet1");
-    aSheets.push_back("Sheet2");
+    aSheets.emplace_back("Sheet1");
+    aSheets.emplace_back("Sheet2");
     m_pDoc->InsertTabs(0, aSheets, true);
     m_pDoc->GetValue(2, 0, 2, aValue);
     OUString aFormula;

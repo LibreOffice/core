@@ -2521,7 +2521,7 @@ long ScPrintFunc::CountNotePages()
                     for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
                         {
                             if ( pDoc->HasNote(nCol, nRow, nPrintTab) )
-                                aNotePosList.push_back( ScAddress( nCol, nRow, nPrintTab ) );
+                                aNotePosList.emplace_back( nCol, nRow, nPrintTab );
                         }
                 }
             }

@@ -149,7 +149,7 @@ void SAL_CALL ScXMLFilterContext::endFastElement( sal_Int32 /*nElement*/ )
 
 void ScXMLFilterContext::OpenConnection(bool b)
 {
-    maConnStack.push_back(ConnStackItem(b));
+    maConnStack.emplace_back(b);
 }
 
 void ScXMLFilterContext::CloseConnection()

@@ -94,7 +94,7 @@ static SCSIZE initSlotDistribution( ScSlotDistribution & rSD, SCSIZE & rBSR )
     // Must be sorted by row1,row2!
     while (nRow2 <= MAXROWCOUNT)
     {
-        rSD.push_back( ScSlotData( nRow1, nRow2, nSlice, nSlots));
+        rSD.emplace_back( nRow1, nRow2, nSlice, nSlots);
         nSlots += (nRow2 - nRow1) / nSlice;
         nRow1 = nRow2;
         nRow2 *= 2;
@@ -1173,7 +1173,7 @@ void ScBroadcastAreaSlotMachine::RemoveBulkGroupArea( ScBroadcastArea* pArea )
 void ScBroadcastAreaSlotMachine::PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
         ScBroadcastAreas::iterator& rIter )
 {
-    maAreasToBeErased.push_back( ::std::make_pair( pSlot, rIter));
+    maAreasToBeErased.emplace_back( pSlot, rIter);
 }
 
 void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )

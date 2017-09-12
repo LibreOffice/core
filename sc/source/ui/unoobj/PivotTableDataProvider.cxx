@@ -315,7 +315,7 @@ void PivotTableDataProvider::collectPivotTableData()
                 continue;
             if (rDataResult.Flags == 0 || rDataResult.Flags & css::sheet::DataResultFlags::HASDATA)
             {
-                aRow.push_back(ValueAndFormat(rDataResult.Flags ? rDataResult.Value : fNan, 0));
+                aRow.emplace_back(rDataResult.Flags ? rDataResult.Value : fNan, 0);
                 if (rDataResult.Flags != 0) // set as valid only if we have data
                 {
                     bRowEmpty = false;
@@ -396,7 +396,7 @@ void PivotTableDataProvider::collectPivotTableData()
                 {
                     case sheet::DataPilotFieldOrientation_COLUMN:
                     {
-                        m_aColumnFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
+                        m_aColumnFields.emplace_back(xLevelName->getName(), nDim, nDimPos, bHasHiddenMember);
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         size_t i = 0;
@@ -440,7 +440,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
                     case sheet::DataPilotFieldOrientation_ROW:
                     {
-                        m_aRowFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
+                        m_aRowFields.emplace_back(xLevelName->getName(), nDim, nDimPos, bHasHiddenMember);
 
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
 
@@ -498,7 +498,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
                     case sheet::DataPilotFieldOrientation_PAGE:
                     {
-                        m_aPageFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
+                        m_aPageFields.emplace_back(xLevelName->getName(), nDim, nDimPos, bHasHiddenMember);
 
                         // Resolve filtering
                         OUString aFieldOutputDescription;
@@ -522,7 +522,7 @@ void PivotTableDataProvider::collectPivotTableData()
                     case sheet::DataPilotFieldOrientation_DATA:
                     {
                         aDataFieldNumberFormatMap[xLevelName->getName()] = nNumberFormat;
-                        m_aDataFields.push_back(chart2::data::PivotTableFieldEntry{xLevelName->getName(), nDim, nDimPos, bHasHiddenMember});
+                        m_aDataFields.emplace_back(xLevelName->getName(), nDim, nDimPos, bHasHiddenMember);
                     }
                     break;
 
@@ -833,7 +833,7 @@ void SAL_CALL PivotTableDataProvider::addModifyListener(const uno::Reference< ut
 {
     SolarMutexGuard aGuard;
 
-    m_aValueListeners.push_back(uno::Reference<util::XModifyListener>(aListener));
+    m_aValueListeners.emplace_back(aListener);
 }
 
 void SAL_CALL PivotTableDataProvider::removeModifyListener(const uno::Reference<util::XModifyListener>& aListener )

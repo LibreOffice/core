@@ -279,7 +279,7 @@ void SheetDataBuffer::createArrayFormula( const ScRange& rRange, const ApiTokenS
     /*  Array formulas will be inserted later in finalizeImport(). This is
         needed to not disturb collecting all the cells, which will be put into
         the sheet in large blocks to increase performance. */
-    maArrayFormulas.push_back( ArrayFormula( rRange, rTokens ) );
+    maArrayFormulas.emplace_back( rRange, rTokens );
 }
 
 void SheetDataBuffer::createTableOperation( const ScRange& rRange, const DataTableModel& rModel )
@@ -287,7 +287,7 @@ void SheetDataBuffer::createTableOperation( const ScRange& rRange, const DataTab
     /*  Table operations will be inserted later in finalizeImport(). This is
         needed to not disturb collecting all the cells, which will be put into
         the sheet in large blocks to increase performance. */
-    maTableOperations.push_back( TableOperation( rRange, rModel ) );
+    maTableOperations.emplace_back( rRange, rModel );
 }
 
 void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat )
@@ -313,7 +313,7 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCusto
 
 void SheetDataBuffer::setMergedRange( const ScRange& rRange )
 {
-    maMergedRanges.push_back( MergedRange( rRange ) );
+    maMergedRanges.emplace_back( rRange );
 }
 
 typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;
@@ -709,7 +709,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
                 /*  start new merged range, if cell is not empty (#108781#),
                     or try to expand last range with empty cell */
                 if( rModel.mnCellType != XML_TOKEN_INVALID )
-                    maCenterFillRanges.push_back( MergedRange( rModel.maCellAddr, nHorAlign ) );
+                    maCenterFillRanges.emplace_back( rModel.maCellAddr, nHorAlign );
                 else if( !maCenterFillRanges.empty() )
                     maCenterFillRanges.rbegin()->tryExpand( rModel.maCellAddr, nHorAlign );
             }

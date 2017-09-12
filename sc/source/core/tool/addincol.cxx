@@ -115,9 +115,9 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
                     const sheet::LocalizedName* pArray = aCompNames.getArray();
                     for (sal_Int32 i=0; i<nSeqLen; i++)
                     {
-                        maCompNames.push_back( LocalizedName(
+                        maCompNames.emplace_back(
                                     LanguageTag::convertToBcp47( pArray[i].Locale, false),
-                                    pArray[i].Name));
+                                    pArray[i].Name);
                     }
                 }
             }
@@ -161,10 +161,10 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
         ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
         if (aSearch != "en-US")
         {
-            aFallbackSearch.push_back( "en-US");
+            aFallbackSearch.emplace_back("en-US");
             if (aSearch != "en")
             {
-                aFallbackSearch.push_back( "en");
+                aFallbackSearch.emplace_back("en");
             }
         }
         ::std::vector< OUString >::const_iterator itSearch( aFallbackSearch.begin());
@@ -471,7 +471,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                             // PropertyValue value is the localized value (string in this case)
                             OUString aName;
                             pConfigArray[nLocale].Value >>= aName;
-                            aCompNames.push_back( ScUnoAddInFuncData::LocalizedName( aLocale, aName));
+                            aCompNames.emplace_back( aLocale, aName);
                         }
                     }
                 }

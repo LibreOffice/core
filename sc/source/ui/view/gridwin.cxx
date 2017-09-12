@@ -6157,24 +6157,24 @@ void ScGridWindow::UpdateDragRectOverlay()
 
         if ( meDragInsertMode == INS_CELLSDOWN )
         {
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+1, aRect.Top()+3, aRect.Left()+1, aRect.Bottom()-2 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Right()-1, aRect.Top()+3, aRect.Right()-1, aRect.Bottom()-2 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+1, aRect.Top(), aRect.Right()-1, aRect.Top()+2 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+1, aRect.Bottom()-1, aRect.Right()-1, aRect.Bottom()-1 ) );
+            aPixelRects.emplace_back( aRect.Left()+1, aRect.Top()+3, aRect.Left()+1, aRect.Bottom()-2 );
+            aPixelRects.emplace_back( aRect.Right()-1, aRect.Top()+3, aRect.Right()-1, aRect.Bottom()-2 );
+            aPixelRects.emplace_back( aRect.Left()+1, aRect.Top(), aRect.Right()-1, aRect.Top()+2 );
+            aPixelRects.emplace_back( aRect.Left()+1, aRect.Bottom()-1, aRect.Right()-1, aRect.Bottom()-1 );
         }
         else if ( meDragInsertMode == INS_CELLSRIGHT )
         {
-            aPixelRects.push_back( tools::Rectangle( aRect.Left(), aRect.Top()+1, aRect.Left()+2, aRect.Bottom()-1 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Right()-1, aRect.Top()+1, aRect.Right()-1, aRect.Bottom()-1 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Top()+1, aRect.Right()-2, aRect.Top()+1 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Bottom()-1, aRect.Right()-2, aRect.Bottom()-1 ) );
+            aPixelRects.emplace_back( aRect.Left(), aRect.Top()+1, aRect.Left()+2, aRect.Bottom()-1 );
+            aPixelRects.emplace_back( aRect.Right()-1, aRect.Top()+1, aRect.Right()-1, aRect.Bottom()-1 );
+            aPixelRects.emplace_back( aRect.Left()+3, aRect.Top()+1, aRect.Right()-2, aRect.Top()+1 );
+            aPixelRects.emplace_back( aRect.Left()+3, aRect.Bottom()-1, aRect.Right()-2, aRect.Bottom()-1 );
         }
         else
         {
-            aPixelRects.push_back( tools::Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ) );
-            aPixelRects.push_back( tools::Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ) );
+            aPixelRects.emplace_back( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() );
+            aPixelRects.emplace_back( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() );
+            aPixelRects.emplace_back( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 );
+            aPixelRects.emplace_back( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() );
         }
 
         // #i70788# get the OverlayManager safely

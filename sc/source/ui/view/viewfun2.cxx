@@ -111,7 +111,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     if (aMarkedRows.empty())
     {
         SCROW nCurRow = GetViewData().GetCurY();
-        aMarkedRows.push_back(sc::ColRowSpan(nCurRow, nCurRow));
+        aMarkedRows.emplace_back(nCurRow, nCurRow);
     }
 
     double nPPTX = GetViewData().GetPPTX();

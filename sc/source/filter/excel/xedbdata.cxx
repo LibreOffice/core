@@ -171,7 +171,7 @@ XclExpTables::~XclExpTables()
 
 void XclExpTables::AppendTable( const ScDBData* pData, sal_Int32 nTableId )
 {
-    maTables.push_back( Entry( pData, nTableId));
+    maTables.emplace_back( pData, nTableId);
 }
 
 void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )

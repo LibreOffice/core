@@ -143,7 +143,7 @@ void ScDPFilteredCache::fillTable(
     // Build unique field entries.
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
-        maFieldEntries.push_back( vector<SCROW>() );
+        maFieldEntries.emplace_back( );
         SCROW nMemCount = getCache().GetDimMemberCount( nCol );
         if (!nMemCount)
             continue;
@@ -206,7 +206,7 @@ void ScDPFilteredCache::fillTable()
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
-        maFieldEntries.push_back( vector<SCROW>() );
+        maFieldEntries.emplace_back( );
         SCROW nMemCount = getCache().GetDimMemberCount( nCol );
         if (!nMemCount)
             continue;

@@ -565,9 +565,8 @@ void ScXMLSourceDlg::OkPressed()
             OUString aPath = getXPath(*mpLbTree, rEntry, aParam.maNamespaces);
             const ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(rEntry);
 
-            aParam.maCellLinks.push_back(
-                ScOrcusImportXMLParam::CellLink(
-                    pUserData->maLinkedPos, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8)));
+            aParam.maCellLinks.emplace_back(
+                    pUserData->maLinkedPos, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
         }
     }
 

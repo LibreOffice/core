@@ -1611,7 +1611,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     if (aSpans.empty())
     {
         SCCOLROW nCurPos = bRows ? GetViewData().GetCurY() : GetViewData().GetCurX();
-        aSpans.push_back(sc::ColRowSpan(nCurPos, nCurPos));
+        aSpans.emplace_back(nCurPos, nCurPos);
     }
 
     //  test if allowed

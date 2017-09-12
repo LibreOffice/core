@@ -118,7 +118,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
             ScRange aCellRange;
             tools::Rectangle aPixRect;
             if ( aLocData.GetMainCellRange( aCellRange, aPixRect ) )
-                aLocations.push_back( ScPrintPageLocation( nRenderer, aCellRange, aPixRect ) );
+                aLocations.emplace_back( nRenderer, aCellRange, aPixRect );
 
             ++nRenderer;
         }

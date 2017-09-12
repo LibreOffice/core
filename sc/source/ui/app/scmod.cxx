@@ -2175,7 +2175,7 @@ void ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )
 
     if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
     {
-        rlRefWindow.push_back( pWnd );
+        rlRefWindow.emplace_back(pWnd );
     }
 
 }

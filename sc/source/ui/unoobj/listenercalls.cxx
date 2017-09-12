@@ -37,7 +37,7 @@ void ScUnoListenerCalls::Add( const uno::Reference<util::XModifyListener>& rList
                                 const lang::EventObject& rEvent )
 {
     if ( rListener.is() )
-        aEntries.push_back( ScUnoListenerEntry( rListener, rEvent ) );
+        aEntries.emplace_back( rListener, rEvent );
 }
 
 void ScUnoListenerCalls::ExecuteAndClear()

@@ -822,9 +822,8 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
             double fValue;
             OUString aStr(pString);
             bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue);
-            rStrColl.push_back(
-                ScTypedStrData(
-                    aStr, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard));
+            rStrColl.emplace_back(
+                    aStr, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard);
         }
         bOk = aIt.Ok();
 

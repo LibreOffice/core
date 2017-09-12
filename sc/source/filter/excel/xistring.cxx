@@ -96,7 +96,7 @@ void XclImpString::AppendFormat( XclFormatRunVec& rFormats, sal_uInt16 nChar, sa
     // #i33341# real life -- same character index may occur several times
     OSL_ENSURE( rFormats.empty() || (rFormats.back().mnChar <= nChar), "XclImpString::AppendFormat - wrong char order" );
     if( rFormats.empty() || (rFormats.back().mnChar < nChar) )
-        rFormats.push_back( XclFormatRun( nChar, nFontIdx ) );
+        rFormats.emplace_back( nChar, nFontIdx );
     else
         rFormats.back().mnFontIdx = nFontIdx;
 }

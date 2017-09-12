@@ -1305,7 +1305,7 @@ void XclImpPolygonObj::ReadCoordList( XclImpStream& rStrm )
             sal_uInt16 nX, nY;
             nX = rStrm.ReaduInt16();
             nY = rStrm.ReaduInt16();
-            maCoords.push_back( Point( nX, nY ) );
+            maCoords.emplace_back( nX, nY );
         }
     }
 }

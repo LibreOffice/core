@@ -655,7 +655,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
                 short nFormatType = css::util::NumberFormat::UNDEFINED;
                 aData.SetEmpty();
                 rDB.getValue(nCol, aData, nFormatType);
-                aBuckets.push_back(Bucket(aData, nRow));
+                aBuckets.emplace_back(aData, nRow);
                 if (!aData.IsEmpty())
                 {
                     maEmptyRows.insert_back(nRow, nRow+1, false);

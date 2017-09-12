@@ -227,7 +227,7 @@ ScUndoApplyPageStyle::~ScUndoApplyPageStyle()
 
 void ScUndoApplyPageStyle::AddSheetAction( SCTAB nTab, const OUString& rOldStyle )
 {
-    maEntries.push_back( ApplyStyleEntry( nTab, rOldStyle ) );
+    maEntries.emplace_back( nTab, rOldStyle );
 }
 
 OUString ScUndoApplyPageStyle::GetComment() const

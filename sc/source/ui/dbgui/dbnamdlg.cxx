@@ -531,9 +531,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, Button*, void)
             SCCOL nColStart, nColEnd;
             SCROW nRowStart, nRowEnd;
             (*itr)->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
-            aRemoveList.push_back(
-                ScRange( ScAddress( nColStart, nRowStart, nTab ),
-                         ScAddress( nColEnd,   nRowEnd,   nTab ) ) );
+            aRemoveList.emplace_back( ScAddress( nColStart, nRowStart, nTab ),
+                         ScAddress( nColEnd,   nRowEnd,   nTab ) );
 
             rDBs.erase(itr);
 

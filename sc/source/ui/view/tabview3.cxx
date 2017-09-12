@@ -2443,7 +2443,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
 
 void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 {
-    maHighlightRanges.push_back( ScHighlightEntry( rRange, rColor ) );
+    maHighlightRanges.emplace_back( rRange, rColor );
 
     SCTAB nTab = aViewData.GetTabNo();
     if ( nTab >= rRange.aStart.Tab() && nTab <= rRange.aEnd.Tab() )

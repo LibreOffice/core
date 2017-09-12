@@ -106,7 +106,7 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
                     ScRange *p = *vi;
                     if ( row >= p->aStart.Row() && row <= p->aEnd.Row())
                     {
-                        m_vecTempCol.push_back(std::make_pair(p->aStart.Col(),p->aEnd.Col()));
+                        m_vecTempCol.emplace_back(p->aStart.Col(),p->aEnd.Col());
                     }
                 }
             }
@@ -151,7 +151,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeDifferenceMax(const ScRange *pSrc, cons
             {
                 for (sal_uInt16 col = pDest->aStart.Col(); col <=  pDest->aEnd.Col();++col)
                 {
-                    vecRet.push_back(ScMyAddress(col,row,pDest->aStart.Tab()));
+                    vecRet.emplace_back(col,row,pDest->aStart.Tab());
                 }
             }
         }
@@ -218,7 +218,7 @@ bool ScAccessibleSpreadsheet::CalcScRangeListDifferenceMax(ScRangeList *pSrc,ScR
             {
                 for (sal_uInt16 col = pRange->aStart.Col(); col <=  pRange->aEnd.Col();++col)
                 {
-                    vecRet.push_back(ScMyAddress(col,row,pRange->aStart.Tab()));
+                    vecRet.emplace_back(col,row,pRange->aStart.Tab());
                 }
             }
         }
@@ -1543,7 +1543,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
             CommitChange(aEvent);
             m_mapFormulaSelectionSend.emplace(aFormulaAddr,xNew);
             m_vecFormulaLastMyAddr.clear();
-            m_vecFormulaLastMyAddr.push_back(aFormulaAddr);
+            m_vecFormulaLastMyAddr.emplace_back(aFormulaAddr);
         }
         else
         {

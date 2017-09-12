@@ -268,8 +268,8 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
 std::vector<OUString> DataProviderFactory::getDataProviders()
 {
     std::vector<OUString> aDataProviders;
-    aDataProviders.push_back("org.libreoffice.calc.csv");
-    aDataProviders.push_back("org.libreoffice.calc.html");
+    aDataProviders.emplace_back("org.libreoffice.calc.csv");
+    aDataProviders.emplace_back("org.libreoffice.calc.html");
 
     return aDataProviders;
 }
