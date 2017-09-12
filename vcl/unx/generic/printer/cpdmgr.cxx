@@ -34,6 +34,7 @@
 using namespace psp;
 using namespace osl;
 
+#if ENABLE_DBUS && ENABLE_GIO
 // Function to execute when name is acquired on the bus
 void CPDManager::onNameAcquired (GDBusConnection *connection,
                                  const gchar *,
@@ -233,6 +234,7 @@ void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUn
     aPrinter.m_bModified = false;
     m_aPrinters[ aUniqueName ] = aPrinter;
 }
+#endif
 
 /*
  *  CPDManager class
@@ -271,14 +273,17 @@ CPDManager* CPDManager::tryLoadCPD()
 CPDManager::CPDManager() :
     PrinterInfoManager( PrinterInfoManager::Type::CPD )
 {
+#if ENABLE_DBUS && ENABLE_GIO
     // Get Destinations number and pointers
     GError *error = nullptr;
     m_pConnection = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, &error);
     g_assert_no_error (error);
+#endif
 }
 
 CPDManager::~CPDManager()
 {
+#if ENABLE_DBUS && ENABLE_GIO
     g_dbus_connection_emit_signal (m_pConnection,
                                    nullptr,
                                    "/org/libreoffice/PrintDialog",
@@ -303,12 +308,14 @@ CPDManager::~CPDManager()
     {
         free(dest_it->second);
     }
+#endif
 }
 
 
 const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
 {
     const PPDParser* pNewParser = nullptr;
+#if ENABLE_DBUS && ENABLE_GIO
     OUString aPrinter;
 
     if( rPrinter.startsWith("CPD:") )
@@ -464,7 +471,9 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
         rInfo.m_pParser = pNewParser;
         rInfo.m_aContext.setParser( pNewParser );
     }
-
+#else
+    (void)rPrinter;
+#endif
     return pNewParser;
 }
 
@@ -473,6 +482,7 @@ void CPDManager::initialize()
 {
     // get normal printers, clear printer list
     PrinterInfoManager::initialize();
+#if ENABLE_DBUS && ENABLE_GIO
     g_bus_own_name_on_connection (m_pConnection,
                                   "org.libreoffice.print-dialog",
                                   G_BUS_NAME_OWNER_FLAGS_NONE,
@@ -520,10 +530,12 @@ void CPDManager::initialize()
         m_aPrinters.erase( aRemovePrinters.front() );
         aRemovePrinters.pop_front();
     }
+#endif
 }
 
 void CPDManager::setupJobContextData( JobData& rData )
 {
+#if ENABLE_DBUS && ENABLE_GIO
     std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator dest_it =
         m_aCPDDestMap.find( rData.m_aPrinterName );
 
@@ -558,10 +570,14 @@ void CPDManager::setupJobContextData( JobData& rData )
 
     rData.m_pParser     = p_it->second.m_aInfo.m_pParser;
     rData.m_aContext    = p_it->second.m_aInfo.m_aContext;
+#else
+    (void)rData;
+#endif
 }
 
 FILE* CPDManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
+#if ENABLE_DBUS && ENABLE_GIO
     SAL_INFO( "vcl.unx.print", "startSpool: " << rPrintername << " " << (bQuickCommand ? "true" : "false") );
     if( m_aCPDDestMap.find( rPrintername ) == m_aCPDDestMap.end() )
     {
@@ -577,8 +593,14 @@ FILE* CPDManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
         m_aSpoolFiles[fp] = aSysFile;
 
     return fp;
+#else
+    (void)rPrintername;
+    (void)bQuickCommand;
+    return nullptr;
+#endif
 }
 
+#if ENABLE_DBUS && ENABLE_GIO
 void CPDManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, const OString& rJobName, int& rNumOptions, GVariant **arr )
 {
     GVariantBuilder *builder;
@@ -649,10 +671,12 @@ void CPDManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner,
     (*arr) = g_variant_new("a(ss)", builder);
     g_variant_builder_unref(builder);
 }
+#endif
 
 bool CPDManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber )
 {
     bool success = false;
+#if ENABLE_DBUS && ENABLE_GIO
     SAL_INFO( "vcl.unx.print", "endSpool: " << rPrintername << "," << rJobTitle << " copy count = " << rDocumentJobData.m_nCopies );
     std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator dest_it =
         m_aCPDDestMap.find( rPrintername );
@@ -697,12 +721,20 @@ bool CPDManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         unlink( it->second.getStr() );
         m_aSpoolFiles.erase( pFile );
     }
-
+#else
+    (void)rPrintername;
+    (void)rJobTitle;
+    (void)pFile;
+    (void)rDocumentJobData;
+    (void)bBanner;
+    (void)rFaxNumber;
+#endif
     return success;
 }
 
 bool CPDManager::checkPrintersChanged( bool )
 {
+#if ENABLE_DBUS && ENABLE_GIO
     bool bChanged = m_aPrintersChanged;
     m_aPrintersChanged = false;
     g_dbus_connection_emit_signal (m_pConnection,
@@ -713,29 +745,35 @@ bool CPDManager::checkPrintersChanged( bool )
                                    nullptr,
                                    nullptr);
     return bChanged;
+#else
+    return false;
+#endif
 }
 
 bool CPDManager::addPrinter( const OUString& rName, const OUString& rDriver )
 {
+#if ENABLE_DBUS && ENABLE_GIO
     // don't touch the CPD printers
-    if( m_aCPDDestMap.find( rName ) != m_aCPDDestMap.end() ||
-        rDriver.startsWith("CPD:")
-        )
+    if (m_aCPDDestMap.find( rName ) != m_aCPDDestMap.end() || rDriver.startsWith("CPD:"))
         return false;
+#endif
     return PrinterInfoManager::addPrinter( rName, rDriver );
 }
 
 bool CPDManager::removePrinter( const OUString& rName, bool bCheck )
 {
+#if ENABLE_DBUS && ENABLE_GIO
     // don't touch the CPD printers
     if( m_aCPDDestMap.find( rName ) != m_aCPDDestMap.end() )
         return false;
+#endif
     return PrinterInfoManager::removePrinter( rName, bCheck );
 }
 
 bool CPDManager::setDefaultPrinter( const OUString& rName )
 {
     bool bSuccess = false;
+#if ENABLE_DBUS && ENABLE_GIO
     std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator nit =
         m_aCPDDestMap.find( rName );
     if( nit != m_aCPDDestMap.end())
@@ -745,7 +783,9 @@ bool CPDManager::setDefaultPrinter( const OUString& rName )
     }
     else
         bSuccess = PrinterInfoManager::setDefaultPrinter( rName );
-
+#else
+    (void)rName;
+#endif
     return bSuccess;
 }
 

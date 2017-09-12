@@ -34,6 +34,9 @@
 #define FRONTEND_INTERFACE "/usr/share/dbus-1/interfaces/org.openprinting.Frontend.xml"
 #define BACKEND_INTERFACE "/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml"
 
+typedef struct _GDBusProxy GDBusProxy;
+typedef struct _GDBusConnection GDBusConnection;
+
 namespace psp
 {
 
@@ -75,6 +78,9 @@ class CPDManager : public PrinterInfoManager
     // Function called when CPDManager is destroyed
     virtual ~CPDManager() override;
 
+    virtual void initialize() override;
+
+#if ENABLE_DBUS && ENABLE_GIO
     static void onNameAcquired(GDBusConnection *connection, const char* name, void* user_data);
     static void onNameLost (GDBusConnection *, const char *name, void*);
     static void printerAdded (GDBusConnection *connection,
@@ -92,18 +98,18 @@ class CPDManager : public PrinterInfoManager
                                 GVariant        *parameters,
                                 gpointer        user_data);
 
-    virtual void initialize() override;
-
     static void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, const OString& rJobName, int& rNumOptions, GVariant **arr );
-
+#endif
 
 public:
+#if ENABLE_DBUS && ENABLE_GIO
     // Functions involved in initialization
     GDBusProxy * getProxy( std::string target );
     void addBackend( std::pair< std::string, GDBusProxy * > pair );
     void addTempBackend( std::pair< std::string, gchar* > pair );
     std::vector<std::pair<std::string, gchar*>> getTempBackends();
     void addNewPrinter( const OUString&, const OUString&, CPDPrinter * );
+#endif
 
     // Create CPDManager
     static CPDManager* tryLoadCPD();
