@@ -286,6 +286,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     }
 
     m_aStrDateInfo = m_pToYearFT->GetText();
+    m_pYearValueField->SetUseThousandSep(false);
     m_pYearValueField->SetModifyHdl( LINK( this, OfaMiscTabPage, TwoFigureHdl ) );
     Link<SpinField&,void> aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
     m_pYearValueField->SetDownHdl( aLink );
@@ -406,10 +407,6 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
 {
     OUString aOutput( m_aStrDateInfo );
     OUString aStr( m_pYearValueField->GetText() );
-    OUString sSep( SvtSysLocale().GetLocaleData().getNumThousandSep() );
-    sal_Int32 nIndex = 0;
-    while ((nIndex = aStr.indexOf( sSep, nIndex)) != -1)
-        aStr = aStr.replaceAt( nIndex, sSep.getLength(), "");
     sal_Int32 nNum = aStr.toInt32();
     if ( aStr.getLength() != 4 || nNum < m_pYearValueField->GetMin() || nNum > m_pYearValueField->GetMax() )
         aOutput += "????";
