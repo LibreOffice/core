@@ -187,19 +187,19 @@ void ScDocument::SetPrintOptions()
 
 VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 {
-    if (!pVirtualDevice_100th_mm)
+    if (!mpVirtualDevice_100th_mm)
     {
 #ifdef IOS
-        pVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::GRAYSCALE);
+        mpVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::GRAYSCALE);
 #else
-        pVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::BITMASK);
+        mpVirtualDevice_100th_mm = VclPtr<VirtualDevice>::Create(DeviceFormat::BITMASK);
 #endif
-        pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
-        MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
+        mpVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
+        MapMode aMapMode( mpVirtualDevice_100th_mm->GetMapMode() );
         aMapMode.SetMapUnit( MapUnit::Map100thMM );
-        pVirtualDevice_100th_mm->SetMapMode( aMapMode );
+        mpVirtualDevice_100th_mm->SetMapMode( aMapMode );
     }
-    return pVirtualDevice_100th_mm;
+    return mpVirtualDevice_100th_mm;
 }
 
 OutputDevice* ScDocument::GetRefDevice()

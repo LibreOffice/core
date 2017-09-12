@@ -322,7 +322,7 @@ private:
     ScNoteEditEngine*   mpNoteEngine;                   // uses pEditPool from xPoolHelper
     SfxObjectShell*     mpShell;
     VclPtr<SfxPrinter>  mpPrinter;
-    VclPtr<VirtualDevice> pVirtualDevice_100th_mm;
+    VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScValidationDataList* pValidationList;              // validity

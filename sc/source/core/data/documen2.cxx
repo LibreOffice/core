@@ -140,7 +140,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpNoteEngine( nullptr ),
         mpShell( pDocShell ),
         mpPrinter( nullptr ),
-        pVirtualDevice_100th_mm( nullptr ),
+        mpVirtualDevice_100th_mm( nullptr ),
         pDrawLayer( nullptr ),
         pValidationList( nullptr ),
         pFormatExchangeList( nullptr ),
@@ -436,7 +436,7 @@ ScDocument::~ScDocument()
     delete mpEditEngine;
     delete mpNoteEngine;
     delete pChangeViewSettings;         // and delete
-    pVirtualDevice_100th_mm.disposeAndClear();
+    mpVirtualDevice_100th_mm.disposeAndClear();
 
     delete pDPCollection;
     delete mpAnonymousDBData;
