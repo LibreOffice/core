@@ -1,0 +1,16 @@
+diff -ur gpgme.org/configure.ac gpgme/configure.ac
+--- gpgme.org/configure.ac	2017-09-10 03:21:22.943048578 +0200
++++ gpgme/configure.ac	2017-09-10 03:22:10.670808121 +0200
+@@ -892,6 +892,12 @@
+ ***]])
+ fi
+ 
++AC_MSG_RESULT(patching libtool to fix HIDEOUS BREAKAGE)
++test -f libtool.old |||| (mv libtool libtool.old && cp libtool.old libtool)
++sed -e s/^hardcode_direct.*$/hardcode_direct=yes/g libtool || \
++sed -e s/^hardcode_minus_L.*$/hardcode_minus_L=yes/g || \
++sed -e s/^hardcode_shlibpath_var.*$/hardcode_shlibpath_var=no/g   >libtool.new
++mv libtool.new libtool
+ 
+ #
+ # Create config files
