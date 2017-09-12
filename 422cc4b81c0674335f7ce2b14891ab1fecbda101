@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_61c6f468",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-12T14:33:50Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need to use the \n   std::pair\u003c double, Color \u003e\nwhen you call emplace. This should suffice:\n   aGradientStops.emplace( 0.5, aMiddleColor );\nsince it uses perfect forwarding",
+      "revId": "422cc4b81c0674335f7ce2b14891ab1fecbda101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_81a120ac",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-12T14:33:50Z",
+      "side": 1,
+      "message": "lcl_setGredientStop -\u003e lcl_setGradientStop",
+      "revId": "422cc4b81c0674335f7ce2b14891ab1fecbda101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
