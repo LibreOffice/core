@@ -540,7 +540,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     // Add just the id of the sub shell. The actual shell is created
     // later in CreateShells().
     UpdateLock aLock (*this);
-    rList.push_back(ShellDescriptor(nId));
+    rList.emplace_back(nId);
 }
 
 void ViewShellManager::Implementation::DeactivateSubShell (

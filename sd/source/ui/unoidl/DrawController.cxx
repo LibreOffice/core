@@ -583,69 +583,57 @@ sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
 void DrawController::FillPropertyTable (
     ::std::vector<beans::Property>& rProperties)
 {
-    rProperties.push_back(
-        beans::Property("VisibleArea",
+    rProperties.emplace_back("VisibleArea",
             PROPERTY_WORKAREA,
             ::cppu::UnoType< css::awt::Rectangle>::get(),
-            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY));
-    rProperties.push_back(
-        beans::Property(
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY);
+    rProperties.emplace_back(
             "SubController",
             PROPERTY_SUB_CONTROLLER,
             cppu::UnoType<drawing::XDrawSubController>::get(),
-            beans::PropertyAttribute::BOUND));
-    rProperties.push_back(
-        beans::Property(
+            beans::PropertyAttribute::BOUND);
+    rProperties.emplace_back(
             "CurrentPage",
             PROPERTY_CURRENTPAGE,
             cppu::UnoType<drawing::XDrawPage>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("IsLayerMode",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("IsLayerMode",
             PROPERTY_LAYERMODE,
             cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("IsMasterPageMode",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("IsMasterPageMode",
             PROPERTY_MASTERPAGEMODE,
             cppu::UnoType<bool>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("ActiveLayer",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("ActiveLayer",
             PROPERTY_ACTIVE_LAYER,
             cppu::UnoType<drawing::XLayer>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("ZoomValue",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("ZoomValue",
             PROPERTY_ZOOMVALUE,
             ::cppu::UnoType<sal_Int16>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("ZoomType",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("ZoomType",
             PROPERTY_ZOOMTYPE,
             ::cppu::UnoType<sal_Int16>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("ViewOffset",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("ViewOffset",
             PROPERTY_VIEWOFFSET,
             ::cppu::UnoType< css::awt::Point>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property("DrawViewMode",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back("DrawViewMode",
             PROPERTY_DRAWVIEWMODE,
             ::cppu::UnoType< css::awt::Point>::get(),
-            beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
+            beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID );
     // add new property to update current page's acc information
-    rProperties.push_back(
-        beans::Property( "UpdateAcc",
+    rProperties.emplace_back( "UpdateAcc",
             PROPERTY_UPDATEACC,
             ::cppu::UnoType<sal_Int16>::get(),
-            beans::PropertyAttribute::BOUND ));
-    rProperties.push_back(
-        beans::Property( "PageChange",
+            beans::PropertyAttribute::BOUND );
+    rProperties.emplace_back( "PageChange",
             PROPERTY_PAGE_CHANGE,
             ::cppu::UnoType<sal_Int16>::get(),
-            beans::PropertyAttribute::BOUND ));
+            beans::PropertyAttribute::BOUND );
 }
 
 IPropertyArrayHelper & DrawController::getInfoHelper()

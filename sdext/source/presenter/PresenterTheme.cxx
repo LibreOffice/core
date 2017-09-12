@@ -822,12 +822,12 @@ void PaneStyleContainer::Read (
     {
         ::std::vector<OUString> aProperties;
         aProperties.reserve(6);
-        aProperties.push_back("StyleName");
-        aProperties.push_back("ParentStyle");
-        aProperties.push_back("TitleFont");
-        aProperties.push_back("InnerBorderSize");
-        aProperties.push_back("OuterBorderSize");
-        aProperties.push_back("BorderBitmapList");
+        aProperties.emplace_back("StyleName");
+        aProperties.emplace_back("ParentStyle");
+        aProperties.emplace_back("TitleFont");
+        aProperties.emplace_back("InnerBorderSize");
+        aProperties.emplace_back("OuterBorderSize");
+        aProperties.emplace_back("BorderBitmapList");
         PresenterConfigurationAccess::ForAll(
             xPaneStyleList,
             aProperties,

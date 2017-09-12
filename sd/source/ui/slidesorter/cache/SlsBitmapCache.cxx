@@ -387,8 +387,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
         if ( ! iEntry->second.HasPreview())
             continue;
 
-        aSortedContainer.push_back(SortableBitmapContainer::value_type(
-            iEntry->first,iEntry->second));
+        aSortedContainer.emplace_back(iEntry->first,iEntry->second);
     }
 
     // Sort the remaining entries.

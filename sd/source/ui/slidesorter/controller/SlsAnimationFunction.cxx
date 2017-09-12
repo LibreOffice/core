@@ -82,7 +82,7 @@ AnimationParametricFunction::AnimationParametricFunction (const ParametricFuncti
     for (sal_Int32 nIndex=0; nIndex<nSampleCount; ++nIndex)
     {
         const double nT (nIndex/double(nSampleCount-1));
-        aPoints.push_back(basegfx::B2DPoint(rFunction(nT)));
+        aPoints.emplace_back(rFunction(nT));
     }
 
     // Interpolate at evenly spaced points.

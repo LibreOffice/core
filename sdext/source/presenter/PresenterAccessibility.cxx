@@ -1719,8 +1719,7 @@ void AccessibleNotes::SetTextView (
                 Reference<awt::XWindow>(mxContentWindow, UNO_QUERY),
                 Reference<awt::XWindow>(mxBorderWindow, UNO_QUERY));
             pParagraph->SetAccessibleParent(this);
-            aChildren.push_back(
-                rtl::Reference<PresenterAccessible::AccessibleObject>(pParagraph.get()));
+            aChildren.emplace_back(pParagraph.get());
         }
         maChildren.swap(aChildren);
         FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
