@@ -350,7 +350,7 @@ namespace svgio
                         {
                             // if it is a Css style, allow reading text between the start and end tag (see
                             // SvgDocHdl::characters for details)
-                            maCssContents.push_back(OUString());
+                            maCssContents.emplace_back();
                         }
                         break;
                     }

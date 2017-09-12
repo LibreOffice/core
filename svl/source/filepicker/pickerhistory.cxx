@@ -56,7 +56,7 @@ namespace svt
                             _rHistory.end());
 
             // then push_back the picker
-            _rHistory.push_back( css::uno::WeakReference< XInterface >( _rxPicker ) );
+            _rHistory.emplace_back( _rxPicker );
         }
     }
 

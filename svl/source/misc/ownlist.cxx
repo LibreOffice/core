@@ -34,7 +34,7 @@ void SvCommandList::Append
  const OUString & rArg         /* The command's argument */
 )
 {
-    aCommandList.push_back( SvCommand( rCommand, rArg ) );
+    aCommandList.emplace_back( rCommand, rArg );
 }
 
 void SvCommandList::FillFromSequence( const css::uno::Sequence < css::beans::PropertyValue >& aCommandSequence )
