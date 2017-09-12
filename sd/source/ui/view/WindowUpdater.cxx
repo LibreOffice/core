@@ -53,7 +53,7 @@ void WindowUpdater::RegisterWindow (vcl::Window* pWindow)
         {
             // Update the device once right now and add it to the list.
             Update (pWindow);
-            maWindowList.push_back (pWindow);
+            maWindowList.emplace_back(pWindow);
         }
     }
 }

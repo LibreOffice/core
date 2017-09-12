@@ -369,7 +369,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
         if ( !aRelUrl.isEmpty() )
             sBookmarkURL = aRelUrl;
     }
-    maHyperlink.push_back( EPPTHyperlink( sBookmarkURL, nType ) );
+    maHyperlink.emplace_back( sBookmarkURL, nType );
 
     mpExEmbed->WriteUInt16( 0xf )
                .WriteUInt16( EPP_ExHyperlink )
@@ -3090,7 +3090,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                 awt::Size aS( 0, 0 );
                 xPropSet->getPropertyValue( "Width" ) >>= aS.Width;
                 awt::Size aM( MapSize( aS ) );
-                aColumns.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Width ) );
+                aColumns.emplace_back( nPosition, aM.Width );
                 nPosition += aM.Width;
                 if ( x == nColumnCount - 1  && nPosition != maRect.Right() )
                     maRect.Right() = nPosition;
@@ -3103,7 +3103,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                 awt::Size aS( 0, 0 );
                 xPropSet->getPropertyValue( "Height" ) >>= aS.Height;
                 awt::Size aM( MapSize( aS ) );
-                aRows.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Height ) );
+                aRows.emplace_back( nPosition, aM.Height );
                 nPosition += aM.Height;
                 if ( y == nRowCount - 1 && nPosition != maRect.Bottom())
                     maRect.Bottom() = nPosition;

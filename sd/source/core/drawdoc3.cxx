@@ -1595,7 +1595,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         pMySheet->GetItemSet().ClearItem();  // Delete all
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
 
-                        aCreatedStyles.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pMySheet ) ) );
+                        aCreatedStyles.emplace_back( static_cast< SdStyleSheet* >( pMySheet ) );
                     }
 
                     StyleReplaceData aReplData;

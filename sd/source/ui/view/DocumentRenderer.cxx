@@ -2034,16 +2034,16 @@ private:
             sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;
 
             if( aPageVector.size() & 1 )
-                aPairVector.push_back( std::make_pair( (sal_uInt16) 65535, aPageVector[ nFirstIndex++ ] ) );
+                aPairVector.emplace_back( (sal_uInt16) 65535, aPageVector[ nFirstIndex++ ] );
             else
-                aPairVector.push_back( std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
+                aPairVector.emplace_back( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] );
 
             while( nFirstIndex < nLastIndex )
             {
                 if( nFirstIndex & 1 )
-                    aPairVector.push_back( std::make_pair( aPageVector[ nFirstIndex++ ], aPageVector[ nLastIndex-- ] ) );
+                    aPairVector.emplace_back( aPageVector[ nFirstIndex++ ], aPageVector[ nLastIndex-- ] );
                 else
-                    aPairVector.push_back( std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
+                    aPairVector.emplace_back( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] );
             }
         }
 

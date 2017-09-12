@@ -680,7 +680,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             // Also set parent relation for copied style sheets
             OUString aParent( xSheet->GetParent() );
             if( !aParent.isEmpty() )
-                aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, OUString >( xNewSheet, aParent ) );
+                aNewStyles.emplace_back( xNewSheet, aParent );
 
             if( !bAddToList )
             {
@@ -689,14 +689,14 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             }
             xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
 
-            rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
-            aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
+            rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( xNewSheet.get() ) );
+            aRenamedList.emplace_back( xSheet->GetName(), aName );
         }
         else if (bAddToList)
         {
             // Add to list - used for renaming
-            rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pExistingSheet ) ) );
-            aRenamedList.push_back( std::pair< OUString, OUString >( xSheet->GetName(), aName ) );
+            rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( pExistingSheet ) );
+            aRenamedList.emplace_back( xSheet->GetName(), aName );
         }
     }
 
@@ -752,7 +752,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
                 OUString file;
                 rNewSheet.SetHelpId( file, pSourceSheet->GetHelpId( file ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
-                rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
+                rCreatedSheets.emplace_back( static_cast< SdStyleSheet* >( &rNewSheet ) );
             }
         }
     }
@@ -796,13 +796,13 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::
     OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
 
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
-        aNameList.push_back( aPrefix + STR_LAYOUT_OUTLINE " " + OUString::number( nLevel ) );
+        aNameList.emplace_back(aPrefix + STR_LAYOUT_OUTLINE " " + OUString::number( nLevel ) );
 
-    aNameList.push_back(aPrefix + STR_LAYOUT_TITLE);
-    aNameList.push_back(aPrefix + STR_LAYOUT_SUBTITLE);
-    aNameList.push_back(aPrefix + STR_LAYOUT_NOTES);
-    aNameList.push_back(aPrefix + STR_LAYOUT_BACKGROUNDOBJECTS);
-    aNameList.push_back(aPrefix + STR_LAYOUT_BACKGROUND);
+    aNameList.emplace_back(aPrefix + STR_LAYOUT_TITLE);
+    aNameList.emplace_back(aPrefix + STR_LAYOUT_SUBTITLE);
+    aNameList.emplace_back(aPrefix + STR_LAYOUT_NOTES);
+    aNameList.emplace_back(aPrefix + STR_LAYOUT_BACKGROUNDOBJECTS);
+    aNameList.emplace_back(aPrefix + STR_LAYOUT_BACKGROUND);
 }
 
 /*************************************************************************
@@ -822,7 +822,7 @@ void SdStyleSheetPool::CreateLayoutSheetList(const OUString& rLayoutName, SdStyl
     while (pSheet)
     {
         if (pSheet->GetName().startsWith(aLayoutNameWithSep))
-            rLayoutSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pSheet ) ) );
+            rLayoutSheets.emplace_back( static_cast< SdStyleSheet* >( pSheet ) );
         pSheet = aIter.Next();
     }
 }
@@ -1406,7 +1406,7 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet const * pShee
         SdStyleSheet* pChild = dynamic_cast< SdStyleSheet* >( pSheet->GetListener(n) );
         if(pChild && pChild->GetParent() == pSheet->GetName())
         {
-            aResult.push_back( SdStyleSheetRef( pChild ) );
+            aResult.emplace_back( pChild );
         }
     }
 

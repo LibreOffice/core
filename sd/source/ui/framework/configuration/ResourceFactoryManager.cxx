@@ -79,7 +79,7 @@ void ResourceFactoryManager::AddFactory (
     if (rsURL.indexOf('*') >= 0 || rsURL.indexOf('?') >= 0)
     {
         // The URL is a URL pattern not an single URL.
-        maFactoryPatternList.push_back(FactoryPatternList::value_type(rsURL, rxFactory));
+        maFactoryPatternList.emplace_back(rsURL, rxFactory);
 
 #if defined VERBOSE && VERBOSE>=1
         SAL_INFO("sd","ResourceFactoryManager::AddFactory pattern " << rsURL << std::hex << rxFactory.get());

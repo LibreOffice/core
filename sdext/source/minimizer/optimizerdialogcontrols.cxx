@@ -777,7 +777,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         }
     }
     while( aSummaryStrings.size() < 3 )
-        aSummaryStrings.push_back( OUString() );
+        aSummaryStrings.emplace_back( );
     setControlProperty( "FixedText4Pg4", "Label", Any( aSummaryStrings[ 0 ] ) );
     setControlProperty( "FixedText5Pg4", "Label", Any( aSummaryStrings[ 1 ] ) );
     setControlProperty( "FixedText6Pg4", "Label", Any( aSummaryStrings[ 2 ] ) );
@@ -864,7 +864,7 @@ void OptimizerDialog::InitPage4()
     aControlList.push_back( InsertRadioButton( *this, "RadioButton0Pg4", mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, 8, false, mnTabIndex++ ) );
     aControlList.push_back( InsertRadioButton( *this, "RadioButton1Pg4", mxItemListener, getString( STR_SAVE_AS ), PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 8, false, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, "FixedText1Pg4", OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 87, PAGE_WIDTH - 12, 8, true, false, mnTabIndex++ ) );
-    aControlList.push_back( "Progress" );
+    aControlList.emplace_back("Progress" );
     aControlList.push_back( InsertSeparator( *this, "Separator1Pg4", 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );
     aControlList.push_back( InsertCheckBox(  *this, "CheckBox1Pg4", mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 47, 100, 8, mnTabIndex++ ) );
     aControlList.push_back( InsertComboBox(  *this, "ComboBox0Pg4", xTextListener, true, aItemList, PAGE_POS_X + 106, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
