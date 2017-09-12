@@ -23,9 +23,14 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/keycodes.hxx>
-#include <vcl/vclenum.hxx>
 
 namespace vcl { class Window; }
+
+enum class KeyFuncType : sal_Int32 { DONTKNOW, NEW, OPEN, SAVE,
+                   SAVEAS, PRINT, CLOSE, QUIT,
+                   CUT, COPY, PASTE, UNDO,
+                   REDO, DELETE, REPEAT, FIND,
+                   FINDBACKWARD, PROPERTIES, FRONT };
 
 namespace vcl
 {

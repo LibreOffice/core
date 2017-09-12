@@ -20,11 +20,18 @@
 #ifndef INCLUDED_VCL_KEYCODES_HXX
 #define INCLUDED_VCL_KEYCODES_HXX
 
-#include <vcl/vclenum.hxx>
-#undef DELETE
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <o3tl/typed_flags_set.hxx>
+
+#define KEY_CODE_MASK       ((sal_uInt16)0x0FFF)
+
+// Modifier keys
+#define KEY_SHIFT           ((sal_uInt16)0x1000)
+#define KEY_MOD1            ((sal_uInt16)0x2000)
+#define KEY_MOD2            ((sal_uInt16)0x4000)
+#define KEY_MOD3            ((sal_uInt16)0x8000)
+#define KEY_MODIFIERS_MASK  ((sal_uInt16)0xF000)
 
 // Key groups
 #define KEYGROUP_NUM    ((sal_uInt16)css::awt::KeyGroup::NUM)
