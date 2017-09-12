@@ -197,7 +197,7 @@ namespace sdr
             return svx::frame::Style();
         }
 
-        void createForVector(drawinglayer::primitive2d::Primitive2DContainer& rContainer, const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX,
+        void createForVector(bool bHor, drawinglayer::primitive2d::Primitive2DContainer& rContainer, const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX,
             const svx::frame::Style& rLine,
             const svx::frame::Style& rLeftA, const svx::frame::Style& rLeftB, const svx::frame::Style& rLeftC,
             const svx::frame::Style& rRightA, const svx::frame::Style& rRightB, const svx::frame::Style& rRightC)
@@ -206,17 +206,16 @@ namespace sdr
             svx::frame::StyleVectorTable aStart;
             svx::frame::StyleVectorTable aEnd;
             const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(rX));
-            const double fTwipsToMM(127.0 / 72.0);
 
             /// Fill top-left Style Table
-            if(rLeftA.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftA, -aY));
-            if(rLeftB.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftB, -rX));
-            if(rLeftC.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftC, aY));
+            if(rLeftA.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftA, -aY, bHor ? true : false));
+            if(rLeftB.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftB, -rX, bHor ? true : true));
+            if(rLeftC.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftC, aY, bHor ? false : true));
 
             /// Fill bottom-right Style Table
-            if(rRightA.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightA, -aY));
-            if(rRightB.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightB, rX));
-            if(rRightC.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightC, aY));
+            if(rRightA.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightA, -aY, bHor ? true : false));
+            if(rRightB.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightB, rX, bHor ? false : false));
+            if(rRightC.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightC, aY, bHor ? false : true));
 
             CreateBorderPrimitives(
                 rContainer,
@@ -350,32 +349,31 @@ namespace sdr
                                         const basegfx::B2DPoint aOrigin(aCellMatrix * basegfx::B2DPoint(0.0, 0.0));
                                         const basegfx::B2DVector aX(aCellMatrix * basegfx::B2DVector(1.0, 0.0));
                                         const basegfx::B2DVector aY(aCellMatrix * basegfx::B2DVector(0.0, 1.0));
-                                        const double fTwipsToMM(127.0 / 72.0);
 
                                         if(aLeftLine.IsUsed())
                                         {
-                                            createForVector(aBorderSequence, aOrigin, aY, aLeftLine,
+                                            createForVector(false, aBorderSequence, aOrigin, aY, aLeftLine,
                                                 aTopLine, aLeftFromTLine, aTopFromLLine,
                                                 aBottomLine, aLeftFromBLine, aBottomFromLLine);
                                         }
 
                                         if(aBottomLine.IsUsed())
                                         {
-                                            createForVector(aBorderSequence, aOrigin + aY, aX, aBottomLine,
+                                            createForVector(true, aBorderSequence, aOrigin + aY, aX, aBottomLine,
                                                 aLeftLine, aBottomFromLLine, aLeftFromBLine,
                                                 aRightLine, aBottomFromRLine, aRightFromBLine);
                                         }
 
                                         if(aRightLine.IsUsed())
                                         {
-                                            createForVector(aBorderSequence, aOrigin + aX, aY, aRightLine,
+                                            createForVector(false, aBorderSequence, aOrigin + aX, aY, aRightLine,
                                                 aTopFromRLine, aRightFromTLine, aTopLine,
                                                 aBottomFromRLine, aRightFromBLine, aBottomLine);
                                         }
 
                                         if(aTopLine.IsUsed())
                                         {
-                                            createForVector(aBorderSequence, aOrigin, aX, aTopLine,
+                                            createForVector(true, aBorderSequence, aOrigin, aX, aTopLine,
                                                 aLeftFromTLine, aTopFromLLine, aLeftLine,
                                                 aRightFromTLine, aTopFromRLine, aRightLine);
                                         }

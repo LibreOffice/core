@@ -213,66 +213,27 @@ public:
 
 inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(rL); }
 
-// Various helper functions
-
-/** Checks whether two horizontal frame borders are "connectable".
-
-    Two borders are "connectable" in terms of this function, if both can be
-    drawn with only one call of a border drawing function. This means, the two
-    frame borders must have equal style and color, and none of the other
-    vertical and diagonal frame borders break the lines of the two borders in
-    any way (i.e. two vertical double frame borders would break the horizonal
-    frame borders). Of course this function can be used for vertical frame
-    borders as well.
-
-    The following picture shows the meaning of all passed parameters:
-
-                      \      rTFromT      /
-                        \       |       /
-                   rTFromTL     |   rTFromTR
-                            \   |   /
-                              \ | /
-    ======== rLBorder =========   ========== rRBorder =======
-                              / | \
-                            /   |   \
-                   rBFromBL     |   rBFromBR
-                        /       |       \
-                      /      rBFromB      \
-
-    @return
-        True, if rLBorder and rRBorder can be drawn in one step without
-        interruption at their connection point.
- */
-SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
-    const Style&        rLBorder,       /// Style of the left frame border to connect.
-    const Style&        rRBorder,       /// Style of the right frame border to connect.
-
-    const Style&        rTFromTL,       /// Diagonal frame border from top-left to connection point.
-    const Style&        rTFromT,        /// Vertical frame border from top to connection point.
-    const Style&        rTFromTR,       /// Horizontal frame border from top-right to connection point.
-
-    const Style&        rBFromBL,       /// Diagonal frame border from bottom-left to connection point.
-    const Style&        rBFromB,        /// Vertical frame border from bottom to connection point.
-    const Style&        rBFromBR        /// Horizontal frame border from bottom-right to connection point.
-);
-
-
 // Drawing functions
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorCombination
 {
 private:
     const Style&                mrStyle;
-    const basegfx::B2DVector&   mrB2DVector;
+    const basegfx::B2DVector    maB2DVector;
+    const bool                  mbMirrored;
+
 
 public:
-    StyleVectorCombination(const Style& rStyle, const basegfx::B2DVector& rB2DVector) :
+    StyleVectorCombination(const Style& rStyle, const basegfx::B2DVector& rB2DVector, bool bMirrored) :
         mrStyle(rStyle),
-        mrB2DVector(rB2DVector)
-    {}
+        maB2DVector(rB2DVector),
+        mbMirrored(bMirrored)
+    {
+    }
 
     const Style& getStyle() const { return mrStyle; }
-    const basegfx::B2DVector& getB2DVector() const { return mrB2DVector; }
+    const basegfx::B2DVector& getB2DVector() const { return maB2DVector; }
+    bool isMirrored() const { return mbMirrored; }
 };
 
 typedef std::vector< StyleVectorCombination > StyleVectorTable;

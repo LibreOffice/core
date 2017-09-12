@@ -88,7 +88,7 @@ void Style::SetPatternScale( double fScale )
 {
     if(!maImplStyle)
     {
-        if(1.0 == fScale)
+        if(rtl::math::approxEqual(1.0, fScale))
         {
             return;
         }
@@ -334,29 +334,6 @@ bool Style::operator<( const Style& rOther) const
     return false;
 }
 
-bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
-        const Style& rTFromTL, const Style& rTFromT, const Style& rTFromTR,
-        const Style& rBFromBL, const Style& rBFromB, const Style& rBFromBR )
-{
-    return      // returns 1 AND (2a OR 2b)
-        // 1) only, if both frame borders are equal
-        (rLBorder == rRBorder)
-        &&
-        (
-            (
-                // 2a) if the borders are not double, at least one of the vertical must not be double
-                !rLBorder.Secn() && (!rTFromT.Secn() || !rBFromB.Secn())
-            )
-            ||
-            (
-                // 2b) if the borders are double, all other borders must not be double
-                rLBorder.Secn() &&
-                !rTFromTL.Secn() && !rTFromT.Secn() && !rTFromTR.Secn() &&
-                !rBFromBL.Secn() && !rBFromB.Secn() && !rBFromBR.Secn()
-            )
-        );
-}
-
 // Drawing functions
 struct OffsetAndHalfWidthAndColor
 {
@@ -387,48 +364,70 @@ struct ExtendSet
     ExtendSet() : mfExtLeft(0.0), mfExtRight(0.0) {}
 };
 
-void getOffsetAndHalfWidthAndColorFromStyle(const Style& rStyle, const Color* pForceColor, std::vector< OffsetAndHalfWidthAndColor >& offsets)
+double getOffsetAndHalfWidthAndColorFromStyle(
+    const Style& rStyle,
+    const Color* pForceColor,
+    bool bMirrored,
+    std::vector< OffsetAndHalfWidthAndColor >& offsets)
 {
+    // do not forget RefMode offset, primitive is free of it
+    double fRefModeOffset(0.0);
+
     if (rStyle.IsUsed())
     {
-        // do not forget RefMode offset, primitive is free of it
-        double fRefModeOffset(0.0);
+        RefMode aRefMode(rStyle.GetRefMode());
+        Color aPrim(rStyle.GetColorPrim());
+        Color aSecn(rStyle.GetColorSecn());
+        double fPrim(rStyle.Prim());
+        double fSecn(rStyle.Secn());
 
-        if (RefMode::Centered != rStyle.GetRefMode())
+        if(bMirrored)
+        {
+            switch(aRefMode)
+            {
+                case RefMode::Begin: aRefMode = RefMode::End; break;
+                case RefMode::End: aRefMode = RefMode::Begin; break;
+                default: break;
+            }
+            std::swap(aPrim, aSecn);
+            std::swap(fPrim, fSecn);
+        }
+
+        if (RefMode::Centered != aRefMode)
         {
             const double fHalfWidth(rStyle.GetWidth() * 0.5);
 
-            if (RefMode::Begin == rStyle.GetRefMode())
+            if (RefMode::Begin == aRefMode)
             {
                 // move aligned below vector
                 fRefModeOffset = fHalfWidth;
             }
-            else if (RefMode::End == rStyle.GetRefMode())
+            else if (RefMode::End == aRefMode)
             {
                 // move aligned above vector
                 fRefModeOffset = -fHalfWidth;
             }
         }
 
-        if (rStyle.Dist() && rStyle.Secn())
+        if (rStyle.Dist() && fSecn)
         {
             // both or all three lines used
             const bool bPrimTransparent(0xff == rStyle.GetColorPrim().GetTransparency());
             const bool bDistTransparent(!rStyle.UseGapColor() || 0xff == rStyle.GetColorGap().GetTransparency());
-            const bool bSecnTransparent(0xff == rStyle.GetColorSecn().GetTransparency());
+            const bool bSecnTransparent(0xff == aSecn.GetTransparency());
 
             if(!bPrimTransparent || !bDistTransparent || !bSecnTransparent)
             {
                 const double a(fRefModeOffset - (rStyle.GetWidth() * 0.5));
-                const double b(a + rStyle.Prim());
+                const double b(a + fPrim);
                 const double c(b + rStyle.Dist());
-                const double d(c + rStyle.Secn());
+                const double d(c + fSecn);
 
                 offsets.push_back(
                     OffsetAndHalfWidthAndColor(
                         (a + b) * 0.5,
-                        rStyle.Prim() * 0.5,
-                        nullptr != pForceColor ? *pForceColor : rStyle.GetColorPrim()));
+                        fPrim * 0.5,
+                        nullptr != pForceColor ? *pForceColor : aPrim));
 
                 offsets.push_back(
                     OffsetAndHalfWidthAndColor(
@@ -441,8 +440,8 @@ void getOffsetAndHalfWidthAndColorFromStyle(const Style& rStyle, const Color* pF
                 offsets.push_back(
                     OffsetAndHalfWidthAndColor(
                         (c + d) * 0.5,
-                        rStyle.Secn() * 0.5,
-                        nullptr != pForceColor ? *pForceColor : rStyle.GetColorSecn()));
+                        fSecn * 0.5,
+                        nullptr != pForceColor ? *pForceColor : aSecn));
             }
         }
         else
@@ -453,11 +452,13 @@ void getOffsetAndHalfWidthAndColorFromStyle(const Style& rStyle, const Color* pF
                 offsets.push_back(
                     OffsetAndHalfWidthAndColor(
                         fRefModeOffset,
-                        rStyle.Prim() * 0.5,
-                        nullptr != pForceColor ? *pForceColor : rStyle.GetColorPrim()));
+                        fPrim * 0.5,
+                        nullptr != pForceColor ? *pForceColor : aPrim));
             }
         }
     }
+
+    return fRefModeOffset;
 }
 
 void getCutSet(
@@ -525,7 +526,7 @@ void getExtends(
             for(const auto& rStyleVectorCombination : rStyleVectorTable)
             {
                 std::vector< OffsetAndHalfWidthAndColor > otherOffsets;
-                getOffsetAndHalfWidthAndColorFromStyle(rStyleVectorCombination.getStyle(), nullptr, otherOffsets);
+                getOffsetAndHalfWidthAndColorFromStyle(rStyleVectorCombination.getStyle(), nullptr, rStyleVectorCombination.isMirrored(), otherOffsets);
 
                 if(!otherOffsets.empty())
                 {
@@ -568,7 +569,7 @@ void CreateBorderPrimitives(
 {
     // get offset color pairs for  style, one per visible line
     std::vector< OffsetAndHalfWidthAndColor > myOffsets;
-    getOffsetAndHalfWidthAndColorFromStyle(rBorder, pForceColor, myOffsets);
+    const double fRefModeOffset(getOffsetAndHalfWidthAndColorFromStyle(rBorder, pForceColor, false, myOffsets));
     const size_t nOffsets(myOffsets.size());
 
     if(nOffsets)
@@ -624,12 +625,13 @@ void CreateBorderPrimitives(
         static double fPatScFact(10.0); // 10.0 multiply, see old code
         const std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
         const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
+        const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * fRefModeOffset));
 
         rTarget.append(
             drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    rOrigin,
-                    rOrigin + rX,
+                    aStart,
+                    aStart + rX,
                     aBorderlines,
                     aStrokeAttribute)));
     }
