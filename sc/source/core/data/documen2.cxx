@@ -333,8 +333,6 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl, Timer *, void)
         TrackFormulas();
         mpShell->Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
 
-            //  modified...
-
         if (!mpShell->IsModified())
         {
             mpShell->SetModified();
