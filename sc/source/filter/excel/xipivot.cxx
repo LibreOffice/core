@@ -882,26 +882,21 @@ const OUString* XclImpPTItem::GetItemName() const
     return nullptr;
 }
 
-void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
-{
-    rStrm >> maItemInfo;
-}
-
-void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const XclImpRoot& rRoot ) const
+std::pair<bool, OUString> XclImpPTItem::GetItemName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const XclImpRoot& rRoot) const
 {
     if(!mpCacheField)
-        return;
+        return std::pair<bool, OUString>(false, OUString());
 
     const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx );
     if(!pCacheItem)
-        return;
+        return std::pair<bool, OUString>(false, OUString());
 
     OUString sItemName;
     if(pCacheItem->GetType() == EXC_PCITEM_TEXT || pCacheItem->GetType() == EXC_PCITEM_ERROR)
     {
         const OUString* pItemName = pCacheItem->GetText();
         if(!pItemName)
-            return;
+            return std::pair<bool, OUString>(false, OUString());
         sItemName = *pItemName;
     }
     else if (pCacheItem->GetType() == EXC_PCITEM_DOUBLE)
@@ -925,16 +920,30 @@ void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim, ScDPObject* pObj, c
         // sItemName is an empty string
     }
     else // EXC_PCITEM_INVALID
-        return;
+        return std::pair<bool, OUString>(false, OUString());
 
+    return std::pair<bool, OUString>(true, sItemName);
+}
+
+void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
+{
+    rStrm >> maItemInfo;
+}
+
+void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const XclImpRoot& rRoot ) const
+{
     // Find member and set properties
-    ScDPSaveMember* pMember = rSaveDim.GetExistingMemberByName( sItemName );
-    if(pMember)
+    std::pair<bool, OUString> aReturnedName = GetItemName(rSaveDim, pObj, rRoot);
+    if(aReturnedName.first)
     {
-        pMember->SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
-        pMember->SetShowDetails( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL ) );
-        if (maItemInfo.HasVisName())
-            pMember->SetLayoutName(*maItemInfo.GetVisName());
+        ScDPSaveMember* pMember = rSaveDim.GetExistingMemberByName(aReturnedName.second);
+        if(pMember)
+        {
+            pMember->SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
+            pMember->SetShowDetails( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL ) );
+            if (maItemInfo.HasVisName())
+                pMember->SetLayoutName(*maItemInfo.GetVisName());
+        }
     }
 }
 
@@ -1016,12 +1025,7 @@ void XclImpPTField::SetPageFieldInfo( const XclPTPageFieldInfo& rPageInfo )
 void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
 {
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
-    if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
-    {
-        const OUString* pName = GetItemName( maPageInfo.mnSelItem );
-        if (pName)
-            pSaveDim->SetCurrentPage(pName);
-    }
+    ConvertRCPField( rSaveData );
 }
 
 // hidden fields --------------------------------------------------------------
@@ -1163,7 +1167,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     return &rSaveDim;
 }
 
-void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot ) const
+void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot, bool bPageField ) const
 {
     const OUString& rFieldName = GetFieldName();
     if( rFieldName.isEmpty() )
@@ -1173,13 +1177,24 @@ void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject*
     if( !pCacheField || !pCacheField->IsSupportedField() )
         return;
 
-    ScDPSaveDimension* pTest = rSaveData.GetExistingDimensionByName(rFieldName);
-    if (!pTest)
+    ScDPSaveDimension* pSaveDim = rSaveData.GetExistingDimensionByName(rFieldName);
+    if (!pSaveDim)
         return;
 
-    pTest->SetShowEmpty( ::get_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL ) );
+    pSaveDim->SetShowEmpty( ::get_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL ) );
     for( XclImpPTItemVec::const_iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ConvertItem( *pTest, pObj, rRoot );
+        (*aIt)->ConvertItem( *pSaveDim, pObj, rRoot );
+
+    if(bPageField && maPageInfo.mnSelItem != EXC_SXPI_ALLITEMS)
+    {
+        const XclImpPTItem* pItem = GetItem( maPageInfo.mnSelItem );
+        if(pItem)
+        {
+            std::pair<bool, OUString> aReturnedName = pItem->GetItemName(*pSaveDim, pObj, rRoot);
+            if(aReturnedName.first)
+                pSaveDim->SetCurrentPage(&aReturnedName.second);
+        }
+    }
 }
 
 void XclImpPTField::ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const
@@ -1579,7 +1594,7 @@ void XclImpPivotTable::ApplyFieldInfo()
     // page fields
     for( auto aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
         if( const XclImpPTField* pField = GetField( *aIt ) )
-            pField->ConvertFieldInfo( rSaveData, mpDPObj, *this );
+            pField->ConvertFieldInfo( rSaveData, mpDPObj, *this, true );
 
     // hidden fields
     for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )

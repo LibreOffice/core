@@ -202,6 +202,8 @@ public:
 
     /** Returns the internal name of the item or 0, if no name could be found. */
     const OUString* GetItemName() const;
+    /** Returns the internal name of the item. */
+    std::pair<bool, OUString> GetItemName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const XclImpRoot& rRoot) const;
 
     /** Reads an SXVI record containing data of this item. */
     void                ReadSxvi( XclImpStream& rStrm );
@@ -268,7 +270,7 @@ public:
     void                AddDataFieldInfo( const XclPTDataFieldInfo& rDataInfo );
     void                ConvertDataField( ScDPSaveData& rSaveData ) const;
 
-    void                ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot ) const;
+    void                ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot, bool bPageField = false ) const;
 
 private:
     ScDPSaveDimension*  ConvertRCPField( ScDPSaveData& rSaveData ) const;
