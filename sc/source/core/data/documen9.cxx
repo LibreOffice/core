@@ -116,6 +116,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
     if (!mpDrawLayer)
     {
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         OUString aName;
         if ( mpShell && !mpShell->IsLoading() )       // don't call GetTitle while loading
             aName = mpShell->GetTitle();
@@ -238,6 +239,8 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
 
 void ScDocument::DeleteDrawLayer()
 {
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+
     // remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
     // it is registered as secondary pool
     if (mxPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
