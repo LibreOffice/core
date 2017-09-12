@@ -88,10 +88,7 @@ private:
     SCTAB           nTab;
     ScDocument*     pDocument;
 
-    SCSIZE          nCount;
-    SCSIZE          nLimit;
-    std::unique_ptr<ScAttrEntry[]>
-                    pData;
+    std::vector<ScAttrEntry> mvData;
 
 friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;
@@ -144,7 +141,7 @@ public:
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
-    void    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
+    void    SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
@@ -209,7 +206,7 @@ public:
 
     /* i123909: Pre-calculate needed memory, and pre-reserve enough memory */
     bool    Reserve( SCSIZE nReserve );
-    SCSIZE  Count() const { return nCount; }
+    SCSIZE  Count() const { return mvData.size(); }
     SCSIZE  Count( SCROW nRow1, SCROW nRow2 ) const;
 };
 
@@ -235,7 +232,7 @@ inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStar
     nRow( nStart ),
     nEndRow( nEnd )
 {
-    if ( pArray->nCount )
+    if ( pArray->Count() )
     {
         if ( nStart > 0 )
             pArray->Search( nStart, nPos );
@@ -249,7 +246,7 @@ inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStar
 inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
 {
     const ScPatternAttr* pRet;
-    if ( !pArray->nCount )
+    if ( !pArray->Count() )
     {
         if ( !nPos )
         {
@@ -264,11 +261,11 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
         return nullptr;
     }
 
-    if ( nPos < pArray->nCount && nRow <= nEndRow )
+    if ( nPos < pArray->Count() && nRow <= nEndRow )
     {
         rTop = nRow;
-        rBottom = std::min( pArray->pData[nPos].nRow, nEndRow );
-        pRet = pArray->pData[nPos].pPattern;
+        rBottom = std::min( pArray->mvData[nPos].nRow, nEndRow );
+        pRet = pArray->mvData[nPos].pPattern;
         nRow = rBottom + 1;
         ++nPos;
     }
@@ -280,7 +277,7 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
 inline const ScPatternAttr* ScAttrIterator::Resync( SCROW nRowP, SCROW& rTop, SCROW& rBottom )
 {
     nRow = nRowP;
-    if ( !pArray->nCount )
+    if ( !pArray->Count() )
     {
         nPos = 0;
         return Next( rTop, rBottom );
@@ -289,13 +286,13 @@ inline const ScPatternAttr* ScAttrIterator::Resync( SCROW nRowP, SCROW& rTop, SC
     // starting right there. Assume that Next() was called so nPos already
     // advanced. Another high chance is that the change extended a previous or
     // next pattern. In all these cases we don't need to search.
-    if (3 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-3].nRow < nRowP &&
-            nRowP <= pArray->pData[nPos-2].nRow)
+    if (3 <= nPos && nPos <= pArray->Count() && pArray->mvData[nPos-3].nRow < nRowP &&
+            nRowP <= pArray->mvData[nPos-2].nRow)
         nPos -= 2;
-    else if (2 <= nPos && nPos <= pArray->nCount && pArray->pData[nPos-2].nRow < nRowP &&
-            nRowP <= pArray->pData[nPos-1].nRow)
+    else if (2 <= nPos && nPos <= pArray->Count() && pArray->mvData[nPos-2].nRow < nRowP &&
+            nRowP <= pArray->mvData[nPos-1].nRow)
         --nPos;
-    else if (pArray->nCount > 0 && nRowP <= pArray->pData[0].nRow)
+    else if (pArray->Count() > 0 && nRowP <= pArray->mvData[0].nRow)
         nPos = 0;
     else
         pArray->Search( nRowP, nPos );

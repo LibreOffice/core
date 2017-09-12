@@ -485,14 +485,10 @@ void SheetDataBuffer::finalizeImport()
         }
 
         ScDocumentImport::Attrs aAttrParam;
-        aAttrParam.mnSize = aAttrs.maAttrs.size();
-        aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
+        aAttrParam.mvData.swap(aAttrs.maAttrs);
         aAttrParam.mbLatinNumFmtOnly = aAttrs.mbLatinNumFmtOnly;
-        std::list<ScAttrEntry>::const_iterator itr = aAttrs.maAttrs.begin(), itrEnd = aAttrs.maAttrs.end();
-        for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-            aAttrParam.mpData[i] = *itr;
 
-        rDoc.setAttrEntries(getSheetIndex(), nScCol, aAttrParam);
+        rDoc.setAttrEntries(getSheetIndex(), nScCol, std::move(aAttrParam));
     }
 
     // merge all cached merged ranges and update right/bottom cell borders
