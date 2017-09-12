@@ -642,7 +642,7 @@ PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
                 aBuf.append( PWG_TO_POINTS(pPWGMedia -> length) );
                 if ( pPaperDimensionValue )
                     pPaperDimensionValue->m_aValue = aBuf.makeStringAndClear();
-                if ((aValueName).equals(pKey -> getDefaultValue() -> m_aOption)) {
+                if (aValueName.equals(pKey -> getDefaultValue() -> m_aOption)) {
                     pImageableAreas -> m_pDefaultValue = pImageableAreaValue;
                     pPaperDimensions -> m_pDefaultValue = pPaperDimensionValue;
                 }
