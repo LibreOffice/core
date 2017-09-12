@@ -335,7 +335,8 @@ private:
         EXTRACTED_LV,
         EXTRACTED_C_LOCALE,
         EXTRACTED_X,
-        EXTRACTED_X_JOKER
+        EXTRACTED_X_JOKER,
+        EXTRACTED_KNOWN_BAD
     };
 
     /** Of a language tag of the form lll[-Ssss][-CC][-vvvvvvvv] extract the
@@ -349,6 +350,7 @@ private:
                 EXTRACTED_C_LOCALE if a 'C' locale was detected,
                 EXTRACTED_X if x-... privateuse tag was detected,
                 EXTRACTED_X_JOKER if "*" joker was detected,
+                EXTRACTED_KNOWN_BAD if a bad but known (to be remapped) tag was detected
                 EXTRACTED_NONE else.
      */
     static Extraction   simpleExtract( const OUString& rBcp47,
@@ -2511,6 +2513,26 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LV;
         }
     }
+    else if (  (nHyph1 == 2 && nHyph2 == 5 && nHyph3 == 7)      // ll-CC-u-...
+            || (nHyph1 == 3 && nHyph2 == 6 && nHyph3 == 8))     // lll-CC-u-...
+    {
+        if (rBcp47[nHyph3-1] == 'u')
+        {
+            // Need to recognize as known, otherwise getLanguage() and
+            // getCountry() return empty string because mpImplLangtag is not
+            // used with a known mapping.
+            /* TODO: if there were more this would get ugly and needed some
+             * table driven approach via isolang.cxx instead. */
+            if (rBcp47.equalsIgnoreAsciiCase( "es-ES-u-co-trad"))
+            {
+                rLanguage = "es";
+                rScript.clear();
+                rCountry  = "ES";
+                rVariants = "u-co-trad";    // not strictly a variant, but used to reconstruct the tag.
+                eRet = EXTRACTED_LV;
+            }
+        }
+    }
     else if (  (nHyph1 == 2 && nHyph2 == 5 && nLen >= 10)   // ll-CC-vvvv[vvvv][-...]
             || (nHyph1 == 3 && nHyph2 == 6 && nLen >= 11))  // lll-CC-vvvv[vvvv][-...]
     {
@@ -2550,6 +2572,16 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
                 rCountry  = "GB";
                 rVariants = "oed";
                 eRet = EXTRACTED_LV;
+            }
+            // Other known and handled odd cases.
+            else if (rBcp47.equalsIgnoreAsciiCase( "es-ES_tradnl"))
+            {
+                // Will get overridden, but needs to be recognized as known.
+                rLanguage = "es";
+                rScript.clear();
+                rCountry  = "ES";
+                rVariants = "tradnl";   // this is nonsense, but.. ignored.
+                eRet = EXTRACTED_KNOWN_BAD;
             }
         }
     }
