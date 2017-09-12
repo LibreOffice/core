@@ -178,10 +178,12 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     if( bLastNd )
         nEnd = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
+    bool bIsOneParagraph = rWrt.pOrigPam->Start()->nNode == rWrt.pOrigPam->End()->nNode;
+
     SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
 
     const SwNumRule* pNumRule = rNd.GetNumRule();
-    if (pNumRule && !nStrPos && rWrt.bExportPargraphNumbering)
+    if (pNumRule && !nStrPos && rWrt.bExportPargraphNumbering && !bIsOneParagraph)
     {
         bool bIsOutlineNumRule = pNumRule == rNd.GetDoc()->GetOutlineNumRule();
 
