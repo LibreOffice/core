@@ -139,7 +139,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpEditEngine( nullptr ),
         mpNoteEngine( nullptr ),
         mpShell( pDocShell ),
-        pPrinter( nullptr ),
+        mpPrinter( nullptr ),
         pVirtualDevice_100th_mm( nullptr ),
         pDrawLayer( nullptr ),
         pValidationList( nullptr ),
@@ -427,7 +427,7 @@ ScDocument::~ScDocument()
     delete pChartCollection;
     DeleteDrawLayer();
     delete pFormatExchangeList;
-    pPrinter.disposeAndClear();
+    mpPrinter.disposeAndClear();
     ImplDeleteOptions();
     delete pConsolidateDlgData;
     delete pClipData;

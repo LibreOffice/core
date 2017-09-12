@@ -321,7 +321,7 @@ private:
     ScFieldEditEngine*  mpEditEngine;                   // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   mpNoteEngine;                   // uses pEditPool from xPoolHelper
     SfxObjectShell*     mpShell;
-    VclPtr<SfxPrinter>    pPrinter;
+    VclPtr<SfxPrinter>  mpPrinter;
     VclPtr<VirtualDevice> pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;

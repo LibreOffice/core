@@ -117,7 +117,7 @@ void ScDocument::ImplDeleteOptions()
 
 SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 {
-    if ( !pPrinter && bCreateIfNotExist )
+    if ( !mpPrinter && bCreateIfNotExist )
     {
         auto pSet =
             o3tl::make_unique<SfxItemSet>( *mxPoolHelper->GetDocPool(),
@@ -135,18 +135,18 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
-        pPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
-        pPrinter->SetMapMode( MapUnit::Map100thMM );
+        mpPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
+        mpPrinter->SetMapMode( MapUnit::Map100thMM );
         UpdateDrawPrinter();
-        pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+        mpPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
 
-    return pPrinter;
+    return mpPrinter;
 }
 
 void ScDocument::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter )
 {
-    if ( pNewPrinter == pPrinter.get() )
+    if ( pNewPrinter == mpPrinter.get() )
     {
         //  #i6706# SetPrinter is called with the same printer again if
         //  the JobSetup has changed. In that case just call UpdateDrawPrinter
@@ -155,23 +155,23 @@ void ScDocument::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter )
     }
     else
     {
-        ScopedVclPtr<SfxPrinter> pOld( pPrinter );
-        pPrinter = pNewPrinter;
+        ScopedVclPtr<SfxPrinter> pOld( mpPrinter );
+        mpPrinter = pNewPrinter;
         UpdateDrawPrinter();
-        pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+        mpPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
     InvalidateTextWidth(nullptr, nullptr, false);     // in both cases
 }
 
 void ScDocument::SetPrintOptions()
 {
-    if ( !pPrinter ) GetPrinter(); // this sets pPrinter
-    OSL_ENSURE( pPrinter, "Error in printer creation :-/" );
+    if ( !mpPrinter ) GetPrinter(); // this sets mpPrinter
+    OSL_ENSURE( mpPrinter, "Error in printer creation :-/" );
 
-    if ( pPrinter )
+    if ( mpPrinter )
     {
         ::utl::MiscCfg aMisc;
-        SfxItemSet aOptSet( pPrinter->GetOptions() );
+        SfxItemSet aOptSet( mpPrinter->GetOptions() );
 
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
         if ( aMisc.IsPaperOrientationWarning() )
@@ -181,7 +181,7 @@ void ScDocument::SetPrintOptions()
         aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
-        pPrinter->SetOptions( aOptSet );
+        mpPrinter->SetOptions( aOptSet );
     }
 }
 
