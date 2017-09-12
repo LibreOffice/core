@@ -224,6 +224,12 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt *parent, const Expr* cond, Strin
     if (parenExpr) {
         if (parenExpr->getLocStart().isMacroID())
             return;
+        // Used to silence -Wunreachable-code:
+        if (isa<CXXBoolLiteralExpr>(parenExpr->getSubExpr())
+            && stmtName == "if")
+        {
+            return;
+        }
         // assignments need extra parentheses or they generate a compiler warning
         auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
         if (binaryOp && binaryOp->getOpcode() == BO_Assign)
