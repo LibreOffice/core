@@ -221,7 +221,7 @@ class BorderLines
 {
     drawinglayer::primitive2d::Primitive2DContainer m_Lines;
 public:
-    void AddBorderLine(css::uno::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties const & properties);
+    void AddBorderLine(const drawinglayer::primitive2d::Primitive2DReference& rLine);
     drawinglayer::primitive2d::Primitive2DContainer GetBorderLines_Clear()
     {
         drawinglayer::primitive2d::Primitive2DContainer lines;
@@ -472,197 +472,20 @@ SwSavePaintStatics::~SwSavePaintStatics()
     gProp.aSScaleY            = aSScaleY;
 }
 
-/**
- * Check whether the two primitive can be merged
- *
- * @param[in]   mergeA  A primitive start and end position
- * @param[in]   mergeB  B primitive start and end position
- * @return      1       if A and B can be merged to a primite staring with A, ending with B
- *              2       if A and B can be merged to a primite staring with B, ending with A
- *              0       if A and B can't be merged
-**/
-static sal_uInt8 lcl_TryMergeLines(
-    pair<double, double> const& mergeA,
-    pair<double, double> const& mergeB,
-    SwPaintProperties const & properties)
+void BorderLines::AddBorderLine(const drawinglayer::primitive2d::Primitive2DReference& rLine)
 {
-    double const fMergeGap(properties.nSPixelSzW + properties.nSHalfPixelSzW); // NOT static!
-    // A is above/before B
-    if( mergeA.second <= mergeB.first &&
-        mergeA.second + fMergeGap >= mergeB.first )
+    for (drawinglayer::primitive2d::Primitive2DContainer::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend(); ++it)
     {
-        return 1;
-    }
-    // B is above/before A
-    else if( mergeB.second <= mergeA.first &&
-             mergeB.second + fMergeGap >= mergeA.first )
-    {
-        return 2;
-    }
-    return 0;
-}
+        const drawinglayer::primitive2d::Primitive2DReference aMerged(drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(*it, rLine));
 
-/**
- * Make a new primitive from the two input borderline primitive
- *
- * @param[in]   rLine       starting primitive
- * @param[in]   rOther      ending primitive
- * @param[in]   rStart      starting point of merged primitive
- * @param[in]   rEnd        ending point of merged primitive
- * @return      merged primitive
-**/
-static rtl::Reference<BorderLinePrimitive2D>
-lcl_MergeBorderLines(
-    BorderLinePrimitive2D const& rLine,
-    BorderLinePrimitive2D const& rOther,
-    basegfx::B2DPoint const& rStart,
-    basegfx::B2DPoint const& rEnd)
-{
-    const std::vector< BorderLine >& rLineLeft(rLine.getBorderLines());
-    const std::vector< BorderLine >& rOtherLeft(rOther.getBorderLines());
-    const size_t aSize(std::min(rLineLeft.size(), rOtherLeft.size()));
-    std::vector< BorderLine > aNew;
-
-    for(size_t a(0); a < aSize; a++)
-    {
-        const BorderLine& la(rLineLeft[a]);
-        const BorderLine& lb(rOtherLeft[a]);
-
-        if(la.isGap() || lb.isGap())
+        if (aMerged.is())
         {
-            aNew.push_back(la);
-        }
-        else
-        {
-            aNew.push_back(
-                BorderLine(
-                    la.getLineAttribute(),
-                    la.getStartLeft(),
-                    la.getStartRight(),
-                    lb.getEndLeft(),
-                    lb.getEndRight()));
-        }
-    }
-
-    return new BorderLinePrimitive2D(
-        rStart,
-        rEnd,
-        aNew,
-        rLine.getStrokeAttribute());
-}
-
-/**
- * Merge the two borderline if possible.
- *
- * @param[in]   rThis   one borderline primitive
- * @param[in]   rOther  other borderline primitive
- * @return      merged borderline including the two input primitive, if they can be merged
- *              0, otherwise
-**/
-static rtl::Reference<BorderLinePrimitive2D>
-lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
-                       BorderLinePrimitive2D const& rOther,
-                       SwPaintProperties const & properties)
-{
-    assert(rThis.getEnd().getX() >= rThis.getStart().getX());
-    assert(rThis.getEnd().getY() >= rThis.getStart().getY());
-    assert(rOther.getEnd().getX() >= rOther.getStart().getX());
-    assert(rOther.getEnd().getY() >= rOther.getStart().getY());
-    const bool bSameEdgeNumber(rThis.getBorderLines().size() == rOther.getBorderLines().size());
-
-    if (!bSameEdgeNumber)
-    {
-        return nullptr;
-    }
-
-    double thisHeight = rThis.getEnd().getY() - rThis.getStart().getY();
-    double thisWidth  = rThis.getEnd().getX() - rThis.getStart().getX();
-    double otherHeight = rOther.getEnd().getY() -  rOther.getStart().getY();
-    double otherWidth  = rOther.getEnd().getX() -  rOther.getStart().getX();
-
-    // check for same orientation, same line width, same style and matching colors
-    bool bSameStuff(
-        ((thisHeight > thisWidth) == (otherHeight > otherWidth))
-        && rThis.getStrokeAttribute() == rOther.getStrokeAttribute());
-
-    if(bSameStuff)
-    {
-        const std::vector< BorderLine >& rLineLeft(rThis.getBorderLines());
-        const std::vector< BorderLine >& rOtherLeft(rOther.getBorderLines());
-        const size_t aSize(std::min(rLineLeft.size(), rOtherLeft.size()));
-
-        for(size_t a(0); bSameStuff && a < aSize; a++)
-        {
-            const BorderLine& la(rLineLeft[a]);
-            const BorderLine& lb(rOtherLeft[a]);
-
-            bSameStuff = la == lb;
-        }
-    }
-
-    if (bSameStuff)
-    {
-        int nRet = 0;
-        if (thisHeight > thisWidth) // vertical line
-        {
-            if (rtl::math::approxEqual(rThis.getStart().getX(), rOther.getStart().getX()))
-            {
-                assert(rtl::math::approxEqual(rThis.getEnd().getX(), rOther.getEnd().getX()));
-                nRet = lcl_TryMergeLines(
-                    make_pair(rThis.getStart().getY(), rThis.getEnd().getY()),
-                    make_pair(rOther.getStart().getY(),rOther.getEnd().getY()),
-                    properties);
-            }
-        }
-        else // horizontal line
-        {
-            if (rtl::math::approxEqual(rThis.getStart().getY(), rOther.getStart().getY()))
-            {
-                assert(rtl::math::approxEqual(rThis.getEnd().getY(), rOther.getEnd().getY()));
-                nRet = lcl_TryMergeLines(
-                    make_pair(rThis.getStart().getX(), rThis.getEnd().getX()),
-                    make_pair(rOther.getStart().getX(),rOther.getEnd().getX()),
-                    properties);
-            }
-        }
-
-        // The merged primitive starts with rThis and ends with rOther
-        if (nRet == 1)
-        {
-            basegfx::B2DPoint const start(
-                rThis.getStart().getX(), rThis.getStart().getY());
-            basegfx::B2DPoint const end(
-                rOther.getEnd().getX(), rOther.getEnd().getY());
-            return lcl_MergeBorderLines(rThis, rOther, start, end).get();
-        }
-        // The merged primitive starts with rOther and ends with rThis
-        else if(nRet == 2)
-        {
-            basegfx::B2DPoint const start(
-                rOther.getStart().getX(), rOther.getStart().getY());
-            basegfx::B2DPoint const end(
-                rThis.getEnd().getX(), rThis.getEnd().getY());
-            return lcl_MergeBorderLines(rOther, rThis, start, end).get();
-        }
-    }
-    return nullptr;
-}
-
-void BorderLines::AddBorderLine(
-        css::uno::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties const & properties)
-{
-    for (drawinglayer::primitive2d::Primitive2DContainer::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend();
-         ++it)
-    {
-        rtl::Reference<BorderLinePrimitive2D> const xMerged(
-            lcl_TryMergeBorderLine(*static_cast<BorderLinePrimitive2D*>((*it).get()), *xLine.get(), properties).get());
-        if (xMerged.is())
-        {
-            *it = xMerged.get(); // replace existing line with merged
+            *it = aMerged; // replace existing line with merged // lcl_TryMergeBorderLine
             return;
         }
     }
-    m_Lines.push_back(xLine);
+
+    m_Lines.append(rLine);
 }
 
 SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderLineStyle nStyl,
@@ -2608,6 +2431,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     aUpper.Pos() += pUpper->Frame().Pos();
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
+    drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
     while ( true )
     {
@@ -2715,8 +2539,6 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
             if(aStyles[0].IsUsed())
             {
-                drawinglayer::primitive2d::Primitive2DContainer aSequence;
-
                 if (bHori)
                 {
                     const basegfx::B2DPoint aOrigin(aPaintStart.X(), aPaintStart.Y());
@@ -2728,13 +2550,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         svx::frame::StyleVectorTable aStartTable;
                         svx::frame::StyleVectorTable aEndTable;
 
-                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], -aY)); // aLFromT
-                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aLFromL
-                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], aY)); // aLFromB
+                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], -aY, true)); // aLFromT
+                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX, true)); // aLFromL
+                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], aY, false)); // aLFromB
 
-                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], -aY)); // aRFromT
-                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aRFromR
-                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY)); // aRFromB
+                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], -aY, true)); // aRFromT
+                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX, false)); // aRFromR
+                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY, false)); // aRFromB
 
                         CreateBorderPrimitives(
                             aSequence,
@@ -2743,7 +2565,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                             aStyles[ 0 ],
                             aStartTable,
                             aEndTable,
-                            nullptr
+                            pTmpColor
                         );
                     }
                 }
@@ -2758,13 +2580,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         svx::frame::StyleVectorTable aStartTable;
                         svx::frame::StyleVectorTable aEndTable;
 
-                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], -aY)); // aTFromR
-                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX)); // aTFromT
-                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], aY)); // aTFromL
+                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], -aY, false)); // aTFromR
+                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX, true)); // aTFromT
+                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], aY, true)); // aTFromL
 
-                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], -aY)); // aBFromR
-                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX)); // aBFromB
-                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY)); // aBFromL
+                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], -aY, false)); // aBFromR
+                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX, false)); // aBFromB
+                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY, true)); // aBFromL
 
                         CreateBorderPrimitives(
                             aSequence,
@@ -2773,17 +2595,16 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                             aStyles[ 0 ],
                             aStartTable,
                             aEndTable,
-                            nullptr
+                            pTmpColor
                         );
                     }
                 }
-
-                mrTabFrame.ProcessPrimitives(aSequence);
             }
         }
-
         ++aIter;
     }
+
+    mrTabFrame.ProcessPrimitives(aSequence);
 
     // restore output device:
     rDev.SetDrawMode( nOldDrawMode );
@@ -4839,7 +4660,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     // When rendering to very small (virtual) devices, like when producing
     // page thumbnails in a mobile device app, the line geometry can end up
     // bogus (negative width or height), so just ignore such border lines.
-    // Otherwise we will run into assertions later in lcl_TryMergeBorderLine()
+    // Otherwise we will run into assertions later in BorderLinePrimitive2D::tryMerge()
     // at least.
     if (aEnd.getX() < aStart.getX() ||
         aEnd.getY() < aStart.getY())
@@ -4894,14 +4715,14 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
                 nExtentRightEnd));
     }
 
-    rtl::Reference<BorderLinePrimitive2D> xLine(
+    drawinglayer::primitive2d::Primitive2DReference aLine(
         new BorderLinePrimitive2D(
             aStart,
             aEnd,
             aBorderlines,
             aStrokeAttribute));
 
-    properties.pBLines->AddBorderLine(xLine.get(), properties);
+    properties.pBLines->AddBorderLine(aLine);
 }
 
 /**
