@@ -92,8 +92,8 @@ public:
 
     void testMinLongDouble() {
         Fraction f(double(SAL_MIN_INT32));
-        CPPUNIT_ASSERT_EQUAL(long(SAL_MIN_INT32), f.GetNumerator());
-        CPPUNIT_ASSERT_EQUAL(1L, f.GetDenominator());
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(SAL_MIN_INT32), f.GetNumerator());
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(1), f.GetDenominator());
     }
 
     void testCreateFromDoubleIn32BitsPlatform() {
