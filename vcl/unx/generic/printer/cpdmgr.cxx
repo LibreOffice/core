@@ -168,23 +168,23 @@ void CPDManager::printerRemoved (GDBusConnection *,
 }
 
 GDBusProxy * CPDManager::getProxy(std::string target) {
-    std::unordered_map<std::string, GDBusProxy *>::const_iterator it = this -> m_pBackends.find(target);
-    if (it == this -> m_pBackends.end()) {
+    std::unordered_map<std::string, GDBusProxy *>::const_iterator it = m_pBackends.find(target);
+    if (it == m_pBackends.end()) {
         return nullptr;
     }
     return it -> second;
 }
 
 void CPDManager::addBackend(std::pair<std::string, GDBusProxy *> pair) {
-    this -> m_pBackends.insert(pair);
+    m_pBackends.insert(pair);
 }
 
 void CPDManager::addTempBackend(std::pair<std::string, gchar*> pair) {
-    this -> m_tBackends.push_back(pair);
+    m_tBackends.push_back(pair);
 }
 
 std::vector<std::pair<std::string, gchar*>> CPDManager::getTempBackends() {
-    return this -> m_tBackends;
+    return m_tBackends;
 }
 
 void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUniqueName, CPDPrinter *pDest) {
@@ -292,7 +292,7 @@ CPDManager::~CPDManager()
     g_dbus_connection_close_sync (m_pConnection,
                                   nullptr,
                                   nullptr);
-    std::unordered_map<std::string, GDBusProxy *>::iterator it = this -> m_pBackends.begin();
+    std::unordered_map<std::string, GDBusProxy *>::iterator it = m_pBackends.begin();
     for(; it != m_pBackends.end(); ++it)
     {
         g_object_unref(it->second);
