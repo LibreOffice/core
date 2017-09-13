@@ -124,20 +124,20 @@ enum class SwFormatFieldHintWhich
 
 class SW_DLLPUBLIC SwFormatFieldHint : public SfxHint
 {
-    const SwFormatField*   pField;
-    SwFormatFieldHintWhich nWhich;
-    const SwView*     pView;
+    const SwFormatField*   m_pField;
+    SwFormatFieldHintWhich m_nWhich;
+    const SwView*     m_pView;
 
 public:
-    SwFormatFieldHint( const SwFormatField* p, SwFormatFieldHintWhich n, const SwView* pV = nullptr)
-        : pField(p)
-        , nWhich(n)
-        , pView(pV)
+    SwFormatFieldHint( const SwFormatField* pField, SwFormatFieldHintWhich nWhich, const SwView* pView = nullptr)
+        : m_pField(pField)
+        , m_nWhich(nWhich)
+        , m_pView(pView)
     {}
 
-    const SwFormatField* GetField() const { return pField; }
-    SwFormatFieldHintWhich Which() const { return nWhich; }
-    const SwView* GetView() const { return pView; }
+    const SwFormatField* GetField() const { return m_pField; }
+    SwFormatFieldHintWhich Which() const { return m_nWhich; }
+    const SwView* GetView() const { return m_pView; }
 };
 
 #endif
