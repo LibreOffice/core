@@ -99,7 +99,7 @@ class ShapeTypeContext : public ShapeContextBase
 public:
     explicit            ShapeTypeContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
-                            ShapeType& rShapeType,
+                            std::shared_ptr<ShapeType> const& pShapeType,
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
@@ -113,6 +113,7 @@ private:
     OptValue< OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
 
 private:
+    std::shared_ptr<ShapeType> m_pShapeType;
     ShapeTypeModel&     mrTypeModel;
 };
 
@@ -122,7 +123,7 @@ class ShapeContext : public ShapeTypeContext
 public:
     explicit            ShapeContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
-                            ShapeBase& rShape,
+                            std::shared_ptr<ShapeBase> pShape,
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
@@ -155,7 +156,7 @@ class GroupShapeContext : public ShapeContext
 public:
     explicit            GroupShapeContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
-                            GroupShape& rShape,
+                            std::shared_ptr<GroupShape> pShape,
                             const AttributeList& rAttribs );
 
     virtual ::oox::core::ContextHandlerRef
@@ -172,7 +173,7 @@ public:
     explicit            RectangleShapeContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
                             const AttributeList& rAttribs,
-                            RectangleShape& rShape );
+                            std::shared_ptr<RectangleShape> pShape);
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
