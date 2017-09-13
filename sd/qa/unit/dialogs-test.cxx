@@ -607,13 +607,13 @@ void SdDialogsTest::openAnyDialog()
     }
 
     /// example how to dump all known dialogs
-    if (false)
+    if ((false))
     {
         processAllKnownDialogs();
     }
 
     /// example how to dump exactly one known dialog
-    if (false)
+    if ((false))
     {
         // example for SfxTabDialog: 5 -> "modules/sdraw/ui/drawpagedialog.ui"
         // example for TabDialog: 22 -> "modules/simpress/ui/headerfooterdialog.ui"
@@ -634,7 +634,7 @@ void SdDialogsTest::openAnyDialog()
     }
 
     /// example how to dump a dialog using fallback functionality
-    if (false)
+    if ((false))
     {
         // unknown dialog, try fallback to generic created
         // VclBuilder-generated instance. Keep in mind that Dialogs
