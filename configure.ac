@@ -7427,20 +7427,20 @@ dnl ===================================================================
 AC_MSG_CHECKING([which libjpeg to use])
 if test "$with_system_jpeg" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_JPEG=TRUE
+    SYSTEM_LIBJPEG=TRUE
     AC_CHECK_HEADER(jpeglib.h, [ LIBJPEG_CFLAGS= ],
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ LIBJPEG_LIBS="-ljpeg" ],
         [AC_MSG_ERROR(jpeg library not found or fuctional)], [])
 else
-    SYSTEM_JPEG=
-    AC_MSG_RESULT([internal, jpeg-turbo])
-    BUILD_TYPE="$BUILD_TYPE JPEG_TURBO"
-    LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/jpeg-turbo"
+    SYSTEM_LIBJPEG=
+    AC_MSG_RESULT([internal, libjpeg-turbo])
+    BUILD_TYPE="$BUILD_TYPE LIBJPEG_TURBO"
+    LIBJPEG_CFLAGS="-I${WORKDIR}/UnpackedTarball/libjpeg-turbo"
     if test "$COM" = "MSC"; then
-        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs/libjpeg.lib"
+        LIBJPEG_LIBS="${WORKDIR}/UnpackedTarball/libjpeg-turbo/.libs/libjpeg.lib"
     else
-        LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/jpeg-turbo/.libs -ljpeg"
+        LIBJPEG_LIBS="-L${WORKDIR}/UnpackedTarball/libjpeg-turbo/.libs -ljpeg"
     fi
 
     case "$host_cpu" in
@@ -7605,7 +7605,7 @@ consult https://github.com/libjpeg-turbo/libjpeg-turbo/blob/master/BUILDING.md
 _EOS
             fi
             AC_MSG_WARN([no suitable nasm (Netwide Assembler) found])
-            add_warning "no suitable nasm (Netwide Assembler) found for internal jpeg-turbo"
+            add_warning "no suitable nasm (Netwide Assembler) found for internal libjpeg-turbo"
         fi
       ;;
     esac
@@ -7614,7 +7614,7 @@ fi
 AC_SUBST(NASM)
 AC_SUBST(LIBJPEG_CFLAGS)
 AC_SUBST(LIBJPEG_LIBS)
-AC_SUBST(SYSTEM_JPEG)
+AC_SUBST(SYSTEM_LIBJPEG)
 
 dnl ===================================================================
 dnl Check for system clucene

@@ -56,7 +56,7 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_wmf,\
 $(eval $(call gb_CppunitTest_use_externals,emfio_wmf,\
     $(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
             curl) \
-    jpeg \
+    libjpeg \
     $(if $(filter-out IOS WNT,$(OS)), \
             nss3 \
             plc4) \
