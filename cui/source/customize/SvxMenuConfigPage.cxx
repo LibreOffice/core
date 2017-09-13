@@ -150,6 +150,15 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     if ( !bIsMenuBar )
     {
         // Context menus cannot be added/removed
+        // These height requests are needed to keep the height of
+        // the top level list boxes consistent for all tabs
+        m_pTopLevelListBox->set_height_request(
+            m_pPlusBtn->GetOptimalSize().Height() );
+        m_pCommandCategoryListBox->set_height_request(
+            m_pPlusBtn->GetOptimalSize().Height() );
+
+        m_pPlusBtn->Disable();
+        m_pMinusBtn->Disable();
         m_pPlusBtn->Hide();
         m_pMinusBtn->Hide();
     }
