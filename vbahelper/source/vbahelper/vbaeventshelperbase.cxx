@@ -61,7 +61,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
         processing the original event. All unprocessed events are collected in
         a queue. First element in the queue is the next event to be processed. */
     EventQueue aEventQueue;
-    aEventQueue.push_back( EventQueueEntry( nEventId, rArgs ) );
+    aEventQueue.emplace_back( nEventId, rArgs );
 
     /*  bCancel will contain the current Cancel value. It is possible that
         multiple events will try to modify the Cancel value. Every event

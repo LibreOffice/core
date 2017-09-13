@@ -33,33 +33,33 @@ OUString collectPushFlags(PushFlags nFlags)
     std::vector<OUString> aStrings;
 
     if (nFlags & PushFlags::LINECOLOR)
-        aStrings.push_back("PushLineColor");
+        aStrings.emplace_back("PushLineColor");
     if (nFlags & PushFlags::FILLCOLOR)
-        aStrings.push_back("PushFillColor");
+        aStrings.emplace_back("PushFillColor");
     if (nFlags & PushFlags::FONT)
-        aStrings.push_back("PushFont");
+        aStrings.emplace_back("PushFont");
     if (nFlags & PushFlags::TEXTCOLOR)
-        aStrings.push_back("PushTextColor");
+        aStrings.emplace_back("PushTextColor");
     if (nFlags & PushFlags::MAPMODE)
-        aStrings.push_back("PushMapMode");
+        aStrings.emplace_back("PushMapMode");
     if (nFlags & PushFlags::CLIPREGION)
-        aStrings.push_back("PushClipRegion");
+        aStrings.emplace_back("PushClipRegion");
     if (nFlags & PushFlags::RASTEROP)
-        aStrings.push_back("PushRasterOp");
+        aStrings.emplace_back("PushRasterOp");
     if (nFlags & PushFlags::TEXTFILLCOLOR)
-        aStrings.push_back("PushTextFillColor");
+        aStrings.emplace_back("PushTextFillColor");
     if (nFlags & PushFlags::TEXTALIGN)
-        aStrings.push_back("PushTextAlign");
+        aStrings.emplace_back("PushTextAlign");
     if (nFlags & PushFlags::REFPOINT)
-        aStrings.push_back("PushRefPoint");
+        aStrings.emplace_back("PushRefPoint");
     if (nFlags & PushFlags::TEXTLINECOLOR)
-        aStrings.push_back("PushTextLineColor");
+        aStrings.emplace_back("PushTextLineColor");
     if (nFlags & PushFlags::TEXTLAYOUTMODE)
-        aStrings.push_back("PushTextLayoutMode");
+        aStrings.emplace_back("PushTextLayoutMode");
     if (nFlags & PushFlags::TEXTLANGUAGE)
-        aStrings.push_back("PushTextLanguage");
+        aStrings.emplace_back("PushTextLanguage");
     if (nFlags & PushFlags::OVERLINECOLOR)
-        aStrings.push_back("PushOverlineColor");
+        aStrings.emplace_back("PushOverlineColor");
 
     OUString aString;
 
@@ -78,41 +78,41 @@ OUString convertDrawTextFlagsToString(DrawTextFlags eDrawTextFlags)
 {
     std::vector<OUString> aStrings;
     if (eDrawTextFlags & DrawTextFlags::Disable)
-        aStrings.push_back("Disable");
+        aStrings.emplace_back("Disable");
     if (eDrawTextFlags & DrawTextFlags::Mnemonic)
-        aStrings.push_back("Mnemonic");
+        aStrings.emplace_back("Mnemonic");
     if (eDrawTextFlags & DrawTextFlags::Mono)
-        aStrings.push_back("Mono");
+        aStrings.emplace_back("Mono");
     if (eDrawTextFlags & DrawTextFlags::Clip)
-        aStrings.push_back("Clip");
+        aStrings.emplace_back("Clip");
     if (eDrawTextFlags & DrawTextFlags::Left)
-        aStrings.push_back("Left");
+        aStrings.emplace_back("Left");
     if (eDrawTextFlags & DrawTextFlags::Center)
-        aStrings.push_back("Center");
+        aStrings.emplace_back("Center");
     if (eDrawTextFlags & DrawTextFlags::Right)
-        aStrings.push_back("Right");
+        aStrings.emplace_back("Right");
     if (eDrawTextFlags & DrawTextFlags::Top)
-        aStrings.push_back("Top");
+        aStrings.emplace_back("Top");
     if (eDrawTextFlags & DrawTextFlags::VCenter)
-        aStrings.push_back("VCenter");
+        aStrings.emplace_back("VCenter");
     if (eDrawTextFlags & DrawTextFlags::Bottom)
-        aStrings.push_back("Bottom");
+        aStrings.emplace_back("Bottom");
     if (eDrawTextFlags & DrawTextFlags::EndEllipsis)
-        aStrings.push_back("EndEllipsis");
+        aStrings.emplace_back("EndEllipsis");
     if (eDrawTextFlags & DrawTextFlags::PathEllipsis)
-        aStrings.push_back("PathEllipsis");
+        aStrings.emplace_back("PathEllipsis");
     if (eDrawTextFlags & DrawTextFlags::MultiLine)
-        aStrings.push_back("MultiLine");
+        aStrings.emplace_back("MultiLine");
     if (eDrawTextFlags & DrawTextFlags::WordBreak)
-        aStrings.push_back("WordBreak");
+        aStrings.emplace_back("WordBreak");
     if (eDrawTextFlags & DrawTextFlags::NewsEllipsis)
-        aStrings.push_back("NewsEllipsis");
+        aStrings.emplace_back("NewsEllipsis");
     if (eDrawTextFlags & DrawTextFlags::WordBreakHyphenation)
-        aStrings.push_back("WordBreakHyphenation");
+        aStrings.emplace_back("WordBreakHyphenation");
     if (eDrawTextFlags & DrawTextFlags::CenterEllipsis)
-        aStrings.push_back("CenterEllipsis");
+        aStrings.emplace_back("CenterEllipsis");
     if (eDrawTextFlags & DrawTextFlags::HideMnemonic)
-        aStrings.push_back("HideMnemonic");
+        aStrings.emplace_back("HideMnemonic");
 
     OUString aString;
 
