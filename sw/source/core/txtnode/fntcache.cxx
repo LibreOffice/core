@@ -476,8 +476,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
             pOut->GetMapMode().GetScaleY().IsValid() &&
             pOut->GetMapMode().GetScaleX() == pOut->GetMapMode().GetScaleY() )
         {
-            nTmp = ( 100 * pOut->GetMapMode().GetScaleX().GetNumerator() ) /
-                     pOut->GetMapMode().GetScaleX().GetDenominator();
+            nTmp = long(100 * pOut->GetMapMode().GetScaleX());
         }
         else
             nTmp = 0;

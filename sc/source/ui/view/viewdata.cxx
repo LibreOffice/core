@@ -161,8 +161,8 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_POSITION_BOTTOM].Name = SC_POSITIONBOTTOM;
         pSettings[SC_POSITION_BOTTOM].Value <<= sal_Int32(nPosY[SC_SPLIT_BOTTOM]);
 
-        sal_Int32 nZoomValue ((aZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
-        sal_Int32 nPageZoomValue ((aPageZoomY.GetNumerator() * 100) / aPageZoomY.GetDenominator());
+        sal_Int32 nZoomValue = long(aZoomY * 100);
+        sal_Int32 nPageZoomValue = long(aPageZoomY * 100);
         pSettings[SC_TABLE_ZOOM_TYPE].Name = SC_ZOOMTYPE;
         pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
         pSettings[SC_TABLE_ZOOM_VALUE].Name = SC_ZOOMVALUE;
@@ -2318,9 +2318,9 @@ void ScViewData::WriteUserData(OUString& rData)
     // PosX[left]/PosX[right]/PosY[top]/PosY[bottom]
     // when rows bigger than 8192, "+" instead of "/"
 
-    sal_uInt16 nZoom = (sal_uInt16)((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
+    sal_uInt16 nZoom = (sal_uInt16)long(pThisTab->aZoomY * 100);
     rData = OUString::number( nZoom ) + "/";
-    nZoom = (sal_uInt16)((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
+    nZoom = (sal_uInt16)long(pThisTab->aPageZoomY * 100);
     rData += OUString::number( nZoom ) + "/";
     if (bPagebreak)
         rData += "1";
@@ -2790,8 +2790,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         pSettings[SC_ACTIVE_TABLE].Value <<= sName;
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
-        sal_Int32 nZoomValue ((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
-        sal_Int32 nPageZoomValue ((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
+        sal_Int32 nZoomValue = long(pThisTab->aZoomY * 100);
+        sal_Int32 nPageZoomValue = long(pThisTab->aPageZoomY * 100);
         pSettings[SC_ZOOM_TYPE].Name = SC_ZOOMTYPE;
         pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
         pSettings[SC_ZOOM_VALUE].Name = SC_ZOOMVALUE;

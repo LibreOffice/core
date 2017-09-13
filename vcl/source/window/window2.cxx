@@ -448,14 +448,8 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     {
         vcl::Font aFont(rFont);
         Size aSize = aFont.GetFontSize();
-        double n = double(aSize.Width());
-        n *= double(rZoom.GetNumerator());
-        n /= double(rZoom.GetDenominator());
-        aSize.Width() = WinFloatRound(n);
-        n = double(aSize.Height());
-        n *= double(rZoom.GetNumerator());
-        n /= double(rZoom.GetDenominator());
-        aSize.Height() = WinFloatRound(n);
+        aSize.Width() = WinFloatRound(double(aSize.Width() * rZoom));
+        aSize.Height() = WinFloatRound(double(aSize.Height() * rZoom));
         aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
     }
@@ -471,9 +465,7 @@ long Window::CalcZoom( long nCalc ) const
     const Fraction& rZoom = GetZoom();
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
-        double n = (double)nCalc;
-        n *= (double)rZoom.GetNumerator();
-        n /= (double)rZoom.GetDenominator();
+        double n = double(nCalc * rZoom);
         nCalc = WinFloatRound( n );
     }
     return nCalc;
