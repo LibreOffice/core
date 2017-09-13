@@ -206,7 +206,6 @@ namespace sdr
             svx::frame::StyleVectorTable aStart;
             svx::frame::StyleVectorTable aEnd;
             const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(rX));
-            const double fTwipsToMM(127.0 / 72.0);
 
             /// Fill top-left Style Table
             if(rLeftA.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftA, -aY, bHor ? true : false));
@@ -350,7 +349,6 @@ namespace sdr
                                         const basegfx::B2DPoint aOrigin(aCellMatrix * basegfx::B2DPoint(0.0, 0.0));
                                         const basegfx::B2DVector aX(aCellMatrix * basegfx::B2DVector(1.0, 0.0));
                                         const basegfx::B2DVector aY(aCellMatrix * basegfx::B2DVector(0.0, 1.0));
-                                        const double fTwipsToMM(127.0 / 72.0);
 
                                         if(aLeftLine.IsUsed())
                                         {

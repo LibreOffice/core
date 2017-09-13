@@ -88,7 +88,7 @@ void Style::SetPatternScale( double fScale )
 {
     if(!maImplStyle)
     {
-        if(1.0 == fScale)
+        if(rtl::math::approxEqual(1.0, fScale))
         {
             return;
         }
