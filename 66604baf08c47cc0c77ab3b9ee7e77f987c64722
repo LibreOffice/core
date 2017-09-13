@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_649d2265",
+        "filename": "embedserv/source/embed/ed_ipersiststr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-09-13T14:17:49Z",
+      "side": 0,
+      "message": "why remove the \"const\" qualifier? const variables are neat...",
+      "revId": "66604baf08c47cc0c77ab3b9ee7e77f987c64722",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
