@@ -4234,7 +4234,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
             case FTS_DEFAULT:
                 LOG(("add_dir_entries: found a non-standard file: " LOG_S,
                      ftsdirEntry->fts_path));
-            // Fall through and try to remove as a file
+            /* Fall through */ // and try to remove as a file
 
             // Files
             case FTS_F:

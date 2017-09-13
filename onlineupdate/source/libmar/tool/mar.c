@@ -327,6 +327,7 @@ int main(int argc, char **argv) {
     printf("\n");
     /* The fall through from 'T' to 't' is intentional */
   }
+  /* Fall through */
   case 't':
     return mar_test(argv[2]);
 
