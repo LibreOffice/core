@@ -400,11 +400,11 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
 void SheetDataBuffer::finalizeImport()
 {
     // create all array formulas
-    for( ArrayFormulaList::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
+    for( ArrayFormulaVector::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
         finalizeArrayFormula( aIt->first, aIt->second );
 
     // create all table operations
-    for( TableOperationList::iterator aIt = maTableOperations.begin(), aEnd = maTableOperations.end(); aIt != aEnd; ++aIt )
+    for( TableOperationVector::iterator aIt = maTableOperations.begin(), aEnd = maTableOperations.end(); aIt != aEnd; ++aIt )
         finalizeTableOperation( aIt->first, aIt->second );
 
     // write default formatting of remaining row range
@@ -492,9 +492,9 @@ void SheetDataBuffer::finalizeImport()
     }
 
     // merge all cached merged ranges and update right/bottom cell borders
-    for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
+    for( MergedRangeVector::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
         applyCellMerging( aIt->maRange );
-    for( MergedRangeList::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
+    for( MergedRangeVector::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
         applyCellMerging( aIt->maRange );
 }
 

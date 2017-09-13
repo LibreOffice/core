@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_HTMLPARS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_HTMLPARS_HXX
 
-#include <list>
 #include <memory>
 #include <map>
 #include <stack>
@@ -443,8 +442,8 @@ private:
     typedef ::std::unique_ptr< ScHTMLTableMap >         ScHTMLTableMapPtr;
     typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
     typedef ::std::vector< SCCOLROW >                   ScSizeVec;
-    typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
-    typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
+    typedef ::std::vector< ScHTMLEntry* >               ScHTMLEntryVector;
+    typedef ::std::map< ScHTMLPos, ScHTMLEntryVector >    ScHTMLEntryMap;
     typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
 
     /** Returns true, if the current cell does not contain an entry yet. */
@@ -465,7 +464,7 @@ private:
     void                InsertLeadingEmptyLine();
 
     /** Pushes the passed entry into the list of the current cell. */
-    void                ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rxEntry );
+    void                ImplPushEntryToVector( ScHTMLEntryVector& rEntryVector, ScHTMLEntryPtr& rxEntry );
     /** Tries to insert the entry into the current cell.
         @descr  If insertion is not possible (i.e., currently no cell open), the
         entry will be inserted into the parent table.
@@ -529,7 +528,7 @@ private:
     EditEngine&         mrEditEngine;       /// Edit engine (from ScEEParser).
     ::std::vector< ScEEParseEntry* >& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
     ScHTMLEntryMap      maEntryMap;         /// List of entries for each cell.
-    ScHTMLEntryList*    mpCurrEntryList;    /// Current entry list from map for faster access.
+    ScHTMLEntryVector*  mpCurrEntryVector;  /// Current entry vector from map for faster access.
     ScHTMLEntryPtr      mxCurrEntry;        /// Working entry, not yet inserted in a list.
     ScSizeVec           maCumSizes[ 2 ];    /// Cumulated cell counts for each HTML table column/row.
     ScHTMLSize          maSize;             /// Size of the table.

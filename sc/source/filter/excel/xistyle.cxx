@@ -62,13 +62,13 @@
 #include <svl/poolcach.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include <list>
+#include <vector>
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-using ::std::list;
+using ::std::vector;
 using namespace ::com::sun::star;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
@@ -1323,7 +1323,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     return *mpPattern;
 }
 
-void XclImpXF::ApplyPatternToAttrList(
+void XclImpXF::ApplyPatternToAttrVector(
     std::vector<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
@@ -2002,7 +2002,7 @@ void XclImpXFRangeBuffer::Finalize()
                 sal_uInt32 nForceScNumFmt = rXFIndex.IsBoolCell() ?
                     GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-                pXF->ApplyPatternToAttrList(aAttrs, rStyle.mnScRow1, rStyle.mnScRow2, nForceScNumFmt);
+                pXF->ApplyPatternToAttrVector(aAttrs, rStyle.mnScRow1, rStyle.mnScRow2, nForceScNumFmt);
             }
 
             if (aAttrs.empty() || aAttrs.back().nEndRow != MAXROW)
@@ -2018,13 +2018,12 @@ void XclImpXFRangeBuffer::Finalize()
             ScDocumentImport::Attrs aAttrParam;
             aAttrParam.mvData.swap(aAttrs);
             aAttrParam.mbLatinNumFmtOnly = false; // when unsure, set it to false.
-
             rDoc.setAttrEntries(nScTab, nScCol, std::move(aAttrParam));
         }
     }
 
     // insert hyperlink cells
-    for( XclImpHyperlinkList::const_iterator aLIt = maHyperlinks.begin(), aLEnd = maHyperlinks.end(); aLIt != aLEnd; ++aLIt )
+    for( XclImpHyperlinkVector::const_iterator aLIt = maHyperlinks.begin(), aLEnd = maHyperlinks.end(); aLIt != aLEnd; ++aLIt )
         XclImpHyperlink::InsertUrl( GetRoot(), aLIt->first, aLIt->second );
 
     // apply cell merging
