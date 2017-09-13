@@ -1324,7 +1324,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 }
 
 void XclImpXF::ApplyPatternToAttrList(
-    list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
+    std::vector<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
     CreatePattern();
@@ -1987,7 +1987,8 @@ void XclImpXFRangeBuffer::Finalize()
         {
             XclImpXFRangeColumn& rColumn = **aVIt;
             SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
-            list<ScAttrEntry> aAttrs;
+            std::vector<ScAttrEntry> aAttrs;
+            aAttrs.reserve(rColumn.end() - rColumn.begin());
 
             for (XclImpXFRangeColumn::IndexList::iterator itr = rColumn.begin(), itrEnd = rColumn.end();
                  itr != itrEnd; ++itr)
@@ -2012,16 +2013,13 @@ void XclImpXFRangeBuffer::Finalize()
                 aAttrs.push_back(aEntry);
             }
 
+            aAttrs.shrink_to_fit();
+            assert(aAttrs.size() > 0);
             ScDocumentImport::Attrs aAttrParam;
-            aAttrParam.mnSize = aAttrs.size();
-            assert(aAttrParam.mnSize > 0);
-            aAttrParam.mpData = new ScAttrEntry[aAttrParam.mnSize];
+            aAttrParam.mvData.swap(aAttrs);
             aAttrParam.mbLatinNumFmtOnly = false; // when unsure, set it to false.
-            list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
-            for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-                aAttrParam.mpData[i] = *itr;
 
-            rDoc.setAttrEntries(nScTab, nScCol, aAttrParam);
+            rDoc.setAttrEntries(nScTab, nScCol, std::move(aAttrParam));
         }
     }
 
