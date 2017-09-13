@@ -995,7 +995,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
             const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
             long nZoom = 100;
             if (rFrac.IsValid())
-                nZoom = rFrac.GetNumerator() * 100L / rFrac.GetDenominator();
+                nZoom = long(rFrac * 100);
 
             const Fraction aFrac( nZoom, 100 );
             m_pVRuler->SetZoom( aFrac );

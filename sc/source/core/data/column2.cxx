@@ -426,7 +426,7 @@ long ScColumn::GetNeededSize(
 
             // space for AutoFilter button:  20 * nZoom/100
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
-                nDocWidth -= (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
+                nDocWidth -= long(rZoomX*20);
 
             aPaper.Width() = nDocWidth;
 
@@ -564,7 +564,7 @@ long ScColumn::GetNeededSize(
 
         ScMF nFlags = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
         if (nFlags & ScMF::Auto)
-            nValue += (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
+            nValue += long(rZoomX*20);
     }
     return nValue;
 }

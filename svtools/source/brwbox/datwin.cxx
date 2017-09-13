@@ -167,10 +167,7 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
 
 void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
-    double n = (double)_nOriginalWidth;
-    n *= (double)rNewZoom.GetNumerator();
-    n /= (double)rNewZoom.GetDenominator();
-
+    double n(_nOriginalWidth * rNewZoom);
     _nWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 

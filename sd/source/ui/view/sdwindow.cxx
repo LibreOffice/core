@@ -190,8 +190,7 @@ long Window::GetZoom() const
 {
     if( GetMapMode().GetScaleX().GetDenominator() )
     {
-        return GetMapMode().GetScaleX().GetNumerator() * 100L
-            / GetMapMode().GetScaleX().GetDenominator();
+        return long(GetMapMode().GetScaleX() * 100);
     }
     else
     {

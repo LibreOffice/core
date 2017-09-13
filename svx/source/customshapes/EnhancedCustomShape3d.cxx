@@ -263,10 +263,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     {
         fMap = 1.0;
         Fraction aFraction( pModel->GetScaleFraction() );
-        if ( ( aFraction.GetNumerator() ) != 1 || ( aFraction.GetDenominator() != 1 ) )
-        {
-            fMap *= aFraction.GetNumerator();
-            fMap /= aFraction.GetDenominator();
+        if ( aFraction.GetNumerator() != 1 || aFraction.GetDenominator() != 1 )
+         {
+            fMap *= double(aFraction);
             pMap = &fMap;
         }
         if ( pModel->GetScaleUnit() != MapUnit::Map100thMM )

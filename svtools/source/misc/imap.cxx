@@ -36,8 +36,8 @@
 #include <memory>
 
 
-#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
-                                      (aPT).Y()=((aPT).Y()*(aFracY).GetNumerator())/(aFracY).GetDenominator();
+#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=long((aPT).X()*aFracX);  \
+                                      (aPT).Y()=long((aPT).Y()*aFracY);
 
 
 /******************************************************************************/
@@ -368,7 +368,7 @@ void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
     if (!aAverage.GetDenominator())
         throw o3tl::divide_by_zero();
 
-    nRadius = ( nRadius * aAverage.GetNumerator() ) / aAverage.GetDenominator();
+    nRadius = double(nRadius * aAverage);
 }
 
 bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )

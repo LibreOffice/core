@@ -756,7 +756,7 @@ void ScTabView::UpdateVarZoom()
         bInZoomUpdate = true;
         const Fraction& rOldX = GetViewData().GetZoomX();
         const Fraction& rOldY = GetViewData().GetZoomY();
-        long nOldPercent = ( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator();
+        long nOldPercent = long(rOldY * 100);
         sal_uInt16 nNewZoom = CalcZoom( eZoomType, (sal_uInt16)nOldPercent );
         Fraction aNew( nNewZoom, 100 );
 
@@ -977,7 +977,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             //  and can't be changed directly
 
             const Fraction& rOldY = aViewData.GetZoomY();
-            long nOld = (long)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
+            long nOld = (long)( rOldY * 100 );
             long nNew;
             if ( pData->GetDelta() < 0 )
                 nNew = std::max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
