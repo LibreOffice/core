@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/AbiWordImportFilter \
 	writerperfect/source/writer/EBookImportFilter \
+	writerperfect/source/writer/EPUBExportDialog \
 	writerperfect/source/writer/EPUBExportFilter \
 	writerperfect/source/writer/EPUBExportUIComponent \
 	writerperfect/source/writer/EPUBPackage \

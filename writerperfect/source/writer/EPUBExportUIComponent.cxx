@@ -13,6 +13,10 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/vclptr.hxx>
+
+#include "EPUBExportDialog.hxx"
 
 using namespace com::sun::star;
 
@@ -70,7 +74,10 @@ void EPUBExportUIComponent::setTitle(const OUString &/*rTitle*/)
 
 sal_Int16 EPUBExportUIComponent::execute()
 {
-    return ui::dialogs::ExecutableDialogResults::OK;
+    ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData);
+    if (pDialog->Execute() == RET_OK)
+        return ui::dialogs::ExecutableDialogResults::OK;
+    return ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *SAL_CALL com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(uno::XComponentContext *pCtx, uno::Sequence<uno::Any> const &)
