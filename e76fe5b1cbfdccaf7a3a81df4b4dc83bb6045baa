@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a4e2aad3",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-09-13T16:10:49Z",
+      "side": 1,
+      "message": "still a problem - in this case, two PolyPolygonStrokePrimitive2D get created, one here and one below after the switch...case",
+      "range": {
+        "startLine": 434,
+        "startChar": 25,
+        "endLine": 434,
+        "endChar": 46
+      },
+      "revId": "e76fe5b1cbfdccaf7a3a81df4b4dc83bb6045baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
