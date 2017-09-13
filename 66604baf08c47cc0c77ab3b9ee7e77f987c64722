@@ -16,6 +16,24 @@
       "revId": "66604baf08c47cc0c77ab3b9ee7e77f987c64722",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_84120eb3",
+        "filename": "embedserv/source/embed/ed_ipersiststr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-09-13T17:34:17Z",
+      "side": 0,
+      "message": "oh, i see what happened: you didn\u0027t really \"remove\" the const, rather somebody else added it on master between your patch set #1 and #2 - namely commit fd924b397b17e69dbf5721665d493d08c35fad59 \"loplugin:oncevar (clang-cl)\"",
+      "parentUuid": "1a430d35_649d2265",
+      "revId": "66604baf08c47cc0c77ab3b9ee7e77f987c64722",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
