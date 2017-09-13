@@ -33,10 +33,20 @@ EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> 
 {
 }
 
+sal_Int32 EPUBExportFilter::GetDefaultVersion()
+{
+    return 30;
+}
+
+sal_Int32 EPUBExportFilter::GetDefaultSplitMethod()
+{
+    return libepubgen::EPUB_SPLIT_METHOD_HEADING;
+}
+
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
-    sal_Int32 nVersion = 30;
-    sal_Int32 nSplitMethod = libepubgen::EPUB_SPLIT_METHOD_HEADING;
+    sal_Int32 nVersion = EPUBExportFilter::GetDefaultVersion();
+    sal_Int32 nSplitMethod = EPUBExportFilter::GetDefaultSplitMethod();
     uno::Sequence<beans::PropertyValue> aFilterData;
     for (sal_Int32 i = 0; i < rDescriptor.getLength(); ++i)
     {

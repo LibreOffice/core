@@ -45,6 +45,11 @@ public:
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    /// Gives the default EPUB version.
+    static sal_Int32 GetDefaultVersion();
+    /// Gives the default split method.
+    static sal_Int32 GetDefaultSplitMethod();
 };
 
 } // namespace writerperfect

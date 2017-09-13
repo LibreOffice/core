@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_UIConfig,writerperfect))
 
 $(eval $(call gb_UIConfig_add_uifiles,writerperfect,\
 	writerperfect/uiconfig/ui/wpftencodingdialog \
+	writerperfect/uiconfig/ui/exportepub \
 ))
 
 # vim: set noet sw=4 ts=4:
