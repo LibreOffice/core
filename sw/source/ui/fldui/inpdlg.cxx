@@ -30,17 +30,19 @@
 
 // edit field-insert
 SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
-                              SwField* pField, bool bNextButton )
+                              SwField* pField, bool bPrevButton, bool bNextButton )
     : SvxStandardDialog( pParent, "InputFieldDialog",
         "modules/swriter/ui/inputfielddialog.ui")
     , rSh( rS )
     , pInpField(nullptr)
     , pSetField(nullptr)
     , pUsrType(nullptr)
+    , nNavigationDirection(0)
 {
     get(m_pLabelED, "name");
     get(m_pEditED, "text");
     m_pEditED->set_height_request(m_pEditED->GetTextHeight() * 9);
+    get(m_pPrevBT, "prev");
     get(m_pNextBT, "next");
     get(m_pOKBT, "ok");
     // switch font for Edit
@@ -48,10 +50,15 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     aFont.SetWeight(WEIGHT_LIGHT);
     m_pEditED->SetFont(aFont);
 
-    if( bNextButton )
+    if( bPrevButton || bNextButton )
     {
+        m_pPrevBT->Show();
+        m_pPrevBT->SetClickHdl(LINK(this, SwFieldInputDlg, PrevHdl));
+        m_pPrevBT->Enable(bPrevButton);
+
         m_pNextBT->Show();
         m_pNextBT->SetClickHdl(LINK(this, SwFieldInputDlg, NextHdl));
+        m_pNextBT->Enable(bNextButton);
     }
 
     // evaluation here
@@ -162,8 +169,15 @@ void SwFieldInputDlg::Apply()
     rSh.EndAllAction();
 }
 
+IMPL_LINK_NOARG(SwFieldInputDlg, PrevHdl, Button*, void)
+{
+    nNavigationDirection = -1;
+    EndDialog(RET_OK);
+}
+
 IMPL_LINK_NOARG(SwFieldInputDlg, NextHdl, Button*, void)
 {
+    nNavigationDirection = 1;
     EndDialog(RET_OK);
 }
 

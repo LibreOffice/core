@@ -239,6 +239,11 @@ void AbstractDropDownFieldDialog_Impl::SetWindowState( const OString& rStr )
     pDlg->SetWindowState(rStr);
 }
 
+short AbstractDropDownFieldDialog_Impl::getNavigationDirection()
+{
+    return pDlg->getNavigationDirection();
+}
+
 void AbstractSwLabDlg_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
@@ -409,6 +414,11 @@ OString AbstractFieldInputDlg_Impl::GetWindowState() const
 void AbstractFieldInputDlg_Impl::EndDialog(sal_Int32 n)
 {
     pDlg->EndDialog(n);
+}
+
+short AbstractFieldInputDlg_Impl::getNavigationDirection()
+{
+    return pDlg->getNavigationDirection();
 }
 
 OUString AbstractInsFootNoteDlg_Impl::GetFontName()
@@ -723,9 +733,9 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptio
 }
 
 VclPtr<AbstractDropDownFieldDialog> SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(
-    SwWrtShell &rSh, SwField* pField, bool bNextButton)
+    SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
-    VclPtr<sw::DropDownFieldDialog> pDlg = VclPtr<sw::DropDownFieldDialog>::Create(nullptr, rSh, pField, bNextButton);
+    VclPtr<sw::DropDownFieldDialog> pDlg = VclPtr<sw::DropDownFieldDialog>::Create(nullptr, rSh, pField, bPrevButton, bNextButton);
     return VclPtr<AbstractDropDownFieldDialog_Impl>::Create( pDlg );
 }
 
@@ -888,9 +898,9 @@ VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxV
 }
 
 VclPtr<AbstractFieldInputDlg> SwAbstractDialogFactory_Impl::CreateFieldInputDlg(vcl::Window *pParent,
-    SwWrtShell &rSh, SwField* pField, bool bNextButton)
+    SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton)
 {
-    VclPtr<SwFieldInputDlg> pDlg = VclPtr<SwFieldInputDlg>::Create( pParent, rSh, pField, bNextButton );
+    VclPtr<SwFieldInputDlg> pDlg = VclPtr<SwFieldInputDlg>::Create( pParent, rSh, pField, bPrevButton, bNextButton );
     return VclPtr<AbstractFieldInputDlg_Impl>::Create( pDlg );
 }
 

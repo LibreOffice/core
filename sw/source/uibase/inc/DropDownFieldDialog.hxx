@@ -36,6 +36,7 @@ class DropDownFieldDialog : public SvxStandardDialog
     VclPtr<ListBox>            m_pListItemsLB;
 
     VclPtr<OKButton>           m_pOKPB;
+    VclPtr<PushButton>         m_pPrevPB;
     VclPtr<PushButton>         m_pNextPB;
 
     VclPtr<PushButton>         m_pEditPB;
@@ -43,14 +44,19 @@ class DropDownFieldDialog : public SvxStandardDialog
     SwWrtShell          &rSh;
     SwDropDownField*    pDropField;
 
-    DECL_LINK(ButtonHdl, Button*, void);
+    short               nNavigationDirection;
+
+    DECL_LINK(EditHdl, Button*, void);
+    DECL_LINK(PrevHdl, Button*, void);
+    DECL_LINK(NextHdl, Button*, void);
     virtual void    Apply() override;
     DECL_LINK(DoubleClickHdl, ListBox&, void);
 public:
     DropDownFieldDialog(   vcl::Window *pParent, SwWrtShell &rSh,
-                                SwField* pField, bool bNextButton );
+                                SwField* pField, bool bPrevButton, bool bNextButton );
     virtual ~DropDownFieldDialog() override;
     virtual void dispose() override;
+    short getNavigationDirection() { return nNavigationDirection; }
 };
 } //namespace sw
 
