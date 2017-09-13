@@ -96,6 +96,20 @@ gb_CXXFLAGS_COMMON += \
     -Wunused-const-variable=1
 endif
 
+# for release branch, exclude all new GCC7 warnings from Werror
+ifeq ($(shell expr '$(GCC_VERSION)' '>=' 700),1)
+gb_CFLAGS_COMMON += \
+	-Wno-deprecated \
+	-Wno-error=implicit-fallthrough \
+
+gb_CXXFLAGS_COMMON += \
+	-Wno-deprecated \
+	-Wno-error=implicit-fallthrough \
+	-Wno-error=format-truncation \
+	-Wno-error=int-in-bool-context \
+
+endif
+
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
 endif
