@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e1ed848c",
+        "filename": "filter/source/graphicfilter/ipsd/ipsd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-09-13T05:56:20Z",
+      "side": 1,
+      "message": "Why not drop the \u0027L\u0027 from the 255 values, too?",
+      "range": {
+        "startLine": 680,
+        "startChar": 92,
+        "endLine": 680,
+        "endChar": 96
+      },
+      "revId": "d549074f1ea62d229e29172258eaf9365d600a78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
