@@ -113,8 +113,8 @@ bool isValidName(OUString const & name, bool setMember) {
     for (sal_Int32 i = 0; i != name.getLength();) {
         sal_uInt32 c = name.iterateCodePoints(&i);
         if ((c < 0x20 && !(c == 0x09 || c == 0x0A || c == 0x0D))
-            || rtl::isHighSurrogate(c) || rtl::isLowSurrogate(c) || c == 0xFFFE
-            || c == 0xFFFF || (!setMember && c == '/'))
+            || rtl::isSurrogate(c) || c == 0xFFFE || c == 0xFFFF
+            || (!setMember && c == '/'))
         {
             return false;
         }

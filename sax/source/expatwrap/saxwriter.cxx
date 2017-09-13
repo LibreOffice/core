@@ -406,7 +406,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
             OSL_ENSURE( nSurrogate != 0, "lone 2nd Unicode surrogate" );
 
             nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
-            if( rtl::isUnicodeCodePoint(nSurrogate) && nSurrogate >= 0x00010000 )
+            if( rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000 )
             {
                 sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
                                       sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
@@ -851,7 +851,7 @@ inline sal_Int32 calcXMLByteLength( const OUString& rStr,
         {
             // 2. surrogate: write as UTF-8 (if range is OK
             nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
-            if( rtl::isUnicodeCodePoint(nSurrogate) && nSurrogate >= 0x00010000 )
+            if( rtl::isUnicodeScalarValue(nSurrogate) && nSurrogate >= 0x00010000 )
                 nOutputLength += 4;
             nSurrogate = 0;
         }

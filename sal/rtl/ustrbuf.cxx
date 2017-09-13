@@ -168,7 +168,7 @@ void rtl_uStringbuffer_insertUtf32(
 {
     sal_Unicode buf[2];
     sal_Int32 len;
-    OSL_ASSERT(rtl::isUnicodeCodePoint(c) && !(c >= 0xD800 && c <= 0xDFFF));
+    OSL_ASSERT(rtl::isUnicodeScalarValue(c));
     if (c <= 0xFFFF) {
         buf[0] = (sal_Unicode) c;
         len = 1;

@@ -170,10 +170,7 @@ sal_Size ImplConvertUtf8ToUnicode(
                 }
                 break;
             case 3:
-                if (nUtf32 < 0x800
-                    || (!bJavaUtf8
-                        && (rtl::isHighSurrogate(nUtf32)
-                            || rtl::isLowSurrogate(nUtf32))))
+                if (nUtf32 < 0x800 || (!bJavaUtf8 && rtl::isSurrogate(nUtf32)))
                 {
                     goto bad_input;
                 }

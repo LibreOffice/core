@@ -423,7 +423,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
         while( 0 == nChars  && !bErr );
     }
 
-    if ( ! rtl::isUnicodeCodePoint( c ) )
+    if ( ! rtl::isUnicodeScalarValue( c ) )
         c = '?' ;
 
     if( bErr )

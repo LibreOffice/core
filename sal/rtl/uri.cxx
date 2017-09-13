@@ -133,9 +133,8 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     p += 3;
                     nEncoded |= ((nWeight1 & 3) << 4 | nWeight2) << nShift;
                 }
-                if (bUTF8 && rtl::isUnicodeCodePoint(nEncoded)
-                    && nEncoded >= nMin && !rtl::isHighSurrogate(nEncoded)
-                    && !rtl::isLowSurrogate(nEncoded))
+                if (bUTF8 && rtl::isUnicodeScalarValue(nEncoded)
+                    && nEncoded >= nMin)
                 {
                     *pBegin = p;
                     *pType = EscapeChar;

@@ -335,6 +335,20 @@ sal_uInt32 const surrogatesLowLast = 0xDFFF;
 }
 /// @endcond
 
+/** Check for surrogate.
+
+    @param code  A Unicode code point.
+
+    @return  True if code is a surrogate code point (0xD800--0xDFFF).
+
+    @since LibreOffice 6.0
+*/
+inline bool isSurrogate(sal_uInt32 code) {
+    assert(isUnicodeCodePoint(code));
+    return code >= detail::surrogatesHighFirst
+        && code <= detail::surrogatesLowLast;
+}
+
 /** Check for high surrogate.
 
     @param code  A Unicode code point.
@@ -431,6 +445,19 @@ inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode * output) {
         output[1] = getLowSurrogate(code);
         return 2;
     }
+}
+
+/** Check for Unicode scalar value.
+
+    @param code  An integer.
+
+    @return  True if code is a Unicode scalar value.
+
+    @since LibreOffice 6.0
+*/
+inline bool isUnicodeScalarValue(sal_uInt32 code)
+{
+    return isUnicodeCodePoint(code) && !isSurrogate(code);
 }
 
 }

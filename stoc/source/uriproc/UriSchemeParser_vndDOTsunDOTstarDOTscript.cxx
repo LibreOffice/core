@@ -110,8 +110,8 @@ OUString parsePart(
                     }
                     encoded |= (n & 0x3F) << shift;
                 }
-                if (!utf8 || !rtl::isUnicodeCodePoint(encoded) || encoded < min
-                    || (encoded >= 0xD800 && encoded <= 0xDFFF))
+                if (!utf8 || !rtl::isUnicodeScalarValue(encoded)
+                    || encoded < min)
                 {
                     break;
                 }
