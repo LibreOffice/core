@@ -30,6 +30,7 @@
 struct ImplUtf8ToUnicodeContext
 {
     sal_uInt32 nUtf32;
+    int nBytes;
     int nShift;
     bool bCheckBom;
 };
@@ -65,18 +66,9 @@ sal_Size ImplConvertUtf8ToUnicode(
     sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
     sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
 {
-    /*
-       This function is very liberal with the UTF-8 input.  Accepted are:
-       - non-shortest forms (e.g., C0 41 instead of 41 to represent U+0041)
-       - surrogates (e.g., ED A0 80 to represent U+D800)
-       - encodings with up to six bytes (everything outside the range
-         U+0000..10FFFF is considered "undefined")
-       The first two of these points allow this routine to translate from both
-       RTL_TEXTENCODING_UTF8 and RTL_TEXTENCODING_JAVA_UTF8.
-      */
-
     bool bJavaUtf8 = pData != nullptr;
     sal_uInt32 nUtf32 = 0;
+    int nBytes;
     int nShift = -1;
     bool bCheckBom = true;
     sal_uInt32 nInfo = 0;
@@ -88,19 +80,22 @@ sal_Size ImplConvertUtf8ToUnicode(
     if (pContext != nullptr)
     {
         nUtf32 = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nUtf32;
+        nBytes = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nBytes;
         nShift = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift;
         bCheckBom = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom;
     }
 
     while (pSrcBufPtr < pSrcBufEnd)
     {
-        bool bUndefined = false;
         bool bConsume = true;
         sal_uInt32 nChar = *pSrcBufPtr++;
         if (nShift < 0)
+            // Allow (illegal) 5 and 6 byte sequences, so they are read as a
+            // single individual bad character:
             if (nChar <= 0x7F)
             {
                 nUtf32 = nChar;
+                nBytes = 1;
                 goto transform;
             }
             else if (nChar <= 0xBF)
@@ -108,26 +103,31 @@ sal_Size ImplConvertUtf8ToUnicode(
             else if (nChar <= 0xDF)
             {
                 nUtf32 = (nChar & 0x1F) << 6;
+                nBytes = 2;
                 nShift = 0;
             }
             else if (nChar <= 0xEF)
             {
                 nUtf32 = (nChar & 0x0F) << 12;
+                nBytes = 3;
                 nShift = 6;
             }
             else if (nChar <= 0xF7)
             {
                 nUtf32 = (nChar & 0x07) << 18;
+                nBytes = 4;
                 nShift = 12;
             }
             else if (nChar <= 0xFB)
             {
                 nUtf32 = (nChar & 0x03) << 24;
+                nBytes = 5;
                 nShift = 18;
             }
             else if (nChar <= 0xFD)
             {
                 nUtf32 = (nChar & 0x01) << 30;
+                nBytes = 6;
                 nShift = 24;
             }
             else
@@ -154,28 +154,52 @@ sal_Size ImplConvertUtf8ToUnicode(
         continue;
 
     transform:
-        if (!bCheckBom || nUtf32 != 0xFEFF
+        if (!bCheckBom || nUtf32 != 0xFEFF || nBytes != 3
             || (nFlags & RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE) == 0
             || bJavaUtf8)
         {
+            switch (nBytes) {
+            case 1:
+                if (bJavaUtf8 && nUtf32 == 0) {
+                    goto bad_input;
+                }
+                break;
+            case 2:
+                if (nUtf32 < 0x80 && !(bJavaUtf8 && nUtf32 == 0)) {
+                    goto bad_input;
+                }
+                break;
+            case 3:
+                if (nUtf32 < 0x800
+                    || (!bJavaUtf8
+                        && (rtl::isHighSurrogate(nUtf32)
+                            || rtl::isLowSurrogate(nUtf32))))
+                {
+                    goto bad_input;
+                }
+                break;
+            case 4:
+                if (nUtf32 < 0x10000 || !rtl::isUnicodeCodePoint(nUtf32)
+                    || bJavaUtf8)
+                {
+                    goto bad_input;
+                }
+                break;
+            default:
+                goto bad_input;
+            }
             if (nUtf32 <= 0xFFFF)
                 if (pDestBufPtr != pDestBufEnd)
                     *pDestBufPtr++ = (sal_Unicode) nUtf32;
                 else
                     goto no_output;
-            else if (rtl::isUnicodeCodePoint(nUtf32))
-                if (pDestBufEnd - pDestBufPtr >= 2)
-                {
-                    *pDestBufPtr++ = (sal_Unicode) ImplGetHighSurrogate(nUtf32);
-                    *pDestBufPtr++ = (sal_Unicode) ImplGetLowSurrogate(nUtf32);
-                }
-                else
-                    goto no_output;
-            else
+            else if (pDestBufEnd - pDestBufPtr >= 2)
             {
-                bUndefined = true;
-                goto bad_input;
+                *pDestBufPtr++ = (sal_Unicode) ImplGetHighSurrogate(nUtf32);
+                *pDestBufPtr++ = (sal_Unicode) ImplGetLowSurrogate(nUtf32);
             }
+            else
+                goto no_output;
         }
         nShift = -1;
         bCheckBom = false;
@@ -183,7 +207,7 @@ sal_Size ImplConvertUtf8ToUnicode(
 
     bad_input:
         switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
-                    bUndefined, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                    false, nBytes != 1, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                     &nInfo))
         {
         case sal::detail::textenc::BAD_INPUT_STOP:
@@ -238,6 +262,7 @@ sal_Size ImplConvertUtf8ToUnicode(
     if (pContext != nullptr)
     {
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nUtf32 = nUtf32;
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nBytes = nBytes;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = nShift;
         static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = bCheckBom;
     }
