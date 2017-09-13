@@ -114,6 +114,7 @@ public:
     virtual void         SetWindowState( const OString & rStr ) = 0;
     virtual OString      GetWindowState() const = 0;
     virtual void         EndDialog(sal_Int32 nResult) override = 0;
+    virtual short getNavigationDirection() = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog
@@ -284,6 +285,7 @@ protected:
 public:
     virtual OString GetWindowState() const = 0; //this method inherit from SystemWindow
     virtual void    SetWindowState( const OString & rStr ) = 0; //this method inherit from SystemWindow
+    virtual short getNavigationDirection() = 0;
 };
 
 class AbstractSwLabDlg  : public SfxAbstractTabDialog
@@ -404,7 +406,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(SwWrtShell &rSh,
-        SwField* pField, bool bNextButton) = 0;
+        SwField* pField, bool bPrevButton, bool bNextButton) = 0;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) = 0;
 
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
@@ -463,7 +465,7 @@ public:
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0;
     virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(vcl::Window *pParent,
-        SwWrtShell &rSh, SwField* pField, bool bNextButton) = 0;
+        SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton) = 0;
     virtual VclPtr<AbstractInsFootNoteDlg>     CreateInsFootNoteDlg(vcl::Window * pParent,
         SwWrtShell &rSh, bool bEd = false) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateTitlePageDlg ( vcl::Window * pParent ) = 0;

@@ -30,6 +30,7 @@ class SwSetExpField;
 class SwUserFieldType;
 class SwField;
 class SwWrtShell;
+class SwFieldMgr;
 
 // insert fields
 class SwFieldInputDlg: public SvxStandardDialog
@@ -42,19 +43,25 @@ class SwFieldInputDlg: public SvxStandardDialog
     SwSetExpField*    pSetField;
     SwUserFieldType*  pUsrType;
 
+    short               nNavigationDirection;
+
     VclPtr<Edit>             m_pLabelED;
 
     VclPtr<VclMultiLineEdit> m_pEditED;
 
     VclPtr<OKButton>         m_pOKBT;
     VclPtr<PushButton>       m_pNextBT;
+    VclPtr<PushButton>       m_pPrevBT;
 
     DECL_LINK(NextHdl, Button*, void);
+    DECL_LINK(PrevHdl, Button*, void);
+
 public:
     SwFieldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
-                    SwField* pField, bool bNextButton );
+                    SwField* pField, bool bPrevButton, bool bNextButton );
     virtual ~SwFieldInputDlg() override;
     virtual void dispose() override;
+    short getNavigationDirection() { return nNavigationDirection; }
 };
 
 #endif

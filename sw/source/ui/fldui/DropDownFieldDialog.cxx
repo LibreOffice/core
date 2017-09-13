@@ -30,27 +30,36 @@ using namespace ::com::sun::star;
 
 // edit insert-field
 sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &rS,
-                              SwField* pField, bool bNextButton)
+                              SwField* pField, bool bPrevButton, bool bNextButton)
     : SvxStandardDialog(pParent, "DropdownFieldDialog",
         "modules/swriter/ui/dropdownfielddialog.ui")
     , rSh( rS )
     , pDropField(nullptr)
+    , nNavigationDirection(0)
 {
     get(m_pListItemsLB, "list");
     m_pListItemsLB->SetDropDownLineCount(12);
     m_pListItemsLB->set_width_request(m_pListItemsLB->approximate_char_width()*32);
     get(m_pOKPB, "ok");
+    get(m_pPrevPB, "prev");
     get(m_pNextPB, "next");
     get(m_pEditPB, "edit");
     Link<ListBox&, void> aDoubleLk = LINK(this, DropDownFieldDialog, DoubleClickHdl);
     m_pListItemsLB->SetDoubleClickHdl( aDoubleLk );
 
-    Link<Button*,void> aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
-    m_pEditPB->SetClickHdl(aButtonLk);
-    if( bNextButton )
+    Link<Button*, void> aEditButtonLk = LINK(this, DropDownFieldDialog, EditHdl);
+    Link<Button*,void> aPrevButtonLk = LINK(this, DropDownFieldDialog, PrevHdl);
+    Link<Button*, void> aNextButtonLk = LINK(this, DropDownFieldDialog, NextHdl);
+    m_pEditPB->SetClickHdl(aEditButtonLk);
+    if( bPrevButton || bNextButton )
     {
+        m_pPrevPB->Show();
+        m_pPrevPB->SetClickHdl(aPrevButtonLk);
+        m_pPrevPB->Enable(bPrevButton);
+
         m_pNextPB->Show();
-        m_pNextPB->SetClickHdl(aButtonLk);
+        m_pNextPB->SetClickHdl(aNextButtonLk);
+        m_pNextPB->Enable(bNextButton);
     }
     if( SwFieldIds::Dropdown == pField->GetTyp()->Which() )
     {
@@ -81,6 +90,7 @@ void sw::DropDownFieldDialog::dispose()
 {
     m_pListItemsLB.clear();
     m_pOKPB.clear();
+    m_pPrevPB.clear();
     m_pNextPB.clear();
     m_pEditPB.clear();
     SvxStandardDialog::dispose();
@@ -107,9 +117,21 @@ void sw::DropDownFieldDialog::Apply()
     }
 }
 
-IMPL_LINK(sw::DropDownFieldDialog, ButtonHdl, Button*, pButton, void)
+IMPL_LINK(sw::DropDownFieldDialog, EditHdl, Button*, pButton, void)
 {
-    EndDialog(m_pNextPB == pButton ? RET_OK : RET_YES );
+    EndDialog(m_pEditPB == pButton ? RET_OK : RET_YES);
+}
+
+IMPL_LINK(sw::DropDownFieldDialog, PrevHdl, Button*, pButton, void)
+{
+    nNavigationDirection = -1;
+    EndDialog(m_pPrevPB == pButton ? RET_OK : RET_YES );
+}
+
+IMPL_LINK(sw::DropDownFieldDialog, NextHdl, Button*, pButton, void)
+{
+    nNavigationDirection = 1;
+    EndDialog(m_pNextPB == pButton ? RET_OK : RET_YES);
 }
 
 IMPL_LINK_NOARG(sw::DropDownFieldDialog, DoubleClickHdl, ListBox&, void)

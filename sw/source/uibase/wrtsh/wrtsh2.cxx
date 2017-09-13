@@ -144,21 +144,50 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
 
         bool bCancel = false;
         OString aDlgPos;
-        for( size_t i = 0; i < nCnt && !bCancel; ++i )
+
+        size_t nIndex = 0;
+        short nNavigationDirection = 0;
+
+        SwField* pField = GetCurField();
+        if (pField)
         {
-            pTmp->GotoFieldPos( i );
-            SwField* pField = pTmp->GetField( i );
-            if(pField->GetTyp()->Which() == SwFieldIds::Dropdown)
-                bCancel = StartDropDownFieldDlg( pField, true, &aDlgPos );
+            for (size_t i = 0; i < nCnt; i++)
+            {
+                if (pField == pTmp->GetField(i))
+                {
+                    nIndex = i;
+                    break;
+                }
+            }
+        }
+
+        while (!bCancel)
+        {
+            bool bPrev = nIndex > 0;
+            bool bNext = nIndex < nCnt - 1;
+            pTmp->GotoFieldPos(nIndex);
+            pField = pTmp->GetField(nIndex);
+            if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
+            {
+                bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, &aDlgPos, &nNavigationDirection);
+            }
             else
-                bCancel = StartInputFieldDlg( pField, true, nullptr, &aDlgPos);
+                bCancel = StartInputFieldDlg(pField, bPrev, bNext, nullptr, &aDlgPos, &nNavigationDirection);
 
             if (!bCancel)
             {
                 // Otherwise update error at multi-selection:
-                pTmp->GetField( i )->GetTyp()->UpdateFields();
+                pTmp->GetField(nIndex)->GetTyp()->UpdateFields();
+
+                if (nNavigationDirection < 0 && nIndex > 0)
+                    nIndex--;
+                else if (nNavigationDirection > 0 && nIndex < nCnt - 1)
+                    nIndex++;
+                else
+                    bCancel = true;
             }
         }
+
         pTmp->PopCursor();
     }
 
@@ -225,13 +254,13 @@ class FieldDeletionModify : public SwModify
 };
 
 // Start input dialog for a specific field
-bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bNextButton,
-                                   vcl::Window* pParentWin, OString* pWindowState )
+bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bPrevButton, bool bNextButton,
+                                   vcl::Window* pParentWin, OString* pWindowState, short* pNavigationDirection )
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    ScopedVclPtr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bNextButton));
+    ScopedVclPtr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bPrevButton, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
@@ -246,23 +275,30 @@ bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bNextButton,
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
 
+    if (pNavigationDirection)
+        *pNavigationDirection = pDlg->getNavigationDirection();
+
     pDlg.disposeAndClear();
     GetWin()->Update();
     return bRet;
 }
 
-bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bNextButton, OString* pWindowState)
+bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool bNextButton, OString* pWindowState, short* pNavigationDirection)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bNextButton));
+    ScopedVclPtr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(*this, pField, bPrevButton, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
     const short nRet = pDlg->Execute();
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
+
+    if (pNavigationDirection)
+        *pNavigationDirection = pDlg->getNavigationDirection();
+
     pDlg.disposeAndClear();
     bool bRet = RET_CANCEL == nRet;
     GetWin()->Update();
@@ -387,17 +423,17 @@ void SwWrtShell::ClickToField( const SwField& rField )
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
             if ( pInputField == nullptr )
             {
-                StartInputFieldDlg( const_cast<SwField*>(&rField), false );
+                StartInputFieldDlg( const_cast<SwField*>(&rField), false, false );
             }
         }
         break;
 
     case SwFieldIds::SetExp:
         if( static_cast<const SwSetExpField&>(rField).GetInputFlag() )
-            StartInputFieldDlg( const_cast<SwField*>(&rField), false );
+            StartInputFieldDlg( const_cast<SwField*>(&rField), false, false );
         break;
     case SwFieldIds::Dropdown :
-        StartDropDownFieldDlg( const_cast<SwField*>(&rField), false );
+        StartDropDownFieldDlg( const_cast<SwField*>(&rField), false, false );
     break;
     default:
         SAL_WARN_IF(rField.IsClickable(), "sw", "unhandled clickable field!");
