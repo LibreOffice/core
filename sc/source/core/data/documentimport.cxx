@@ -104,7 +104,9 @@ struct ScDocumentImportImpl
     }
 };
 
-ScDocumentImport::Attrs::Attrs() : mpData(nullptr), mnSize(0), mbLatinNumFmtOnly(false) {}
+ScDocumentImport::Attrs::Attrs() : mbLatinNumFmtOnly(false) {}
+
+ScDocumentImport::Attrs::~Attrs() {}
 
 ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
 
@@ -474,7 +476,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
     }
 }
 
-void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs )
+void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs&& rAttrs )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
     if (!pTab)
@@ -488,7 +490,7 @@ void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs )
     if (pColAttr)
         pColAttr->mbLatinNumFmtOnly = rAttrs.mbLatinNumFmtOnly;
 
-    pCol->pAttrArray->SetAttrEntries(rAttrs.mpData, rAttrs.mnSize);
+    pCol->pAttrArray->SetAttrEntries(std::move(rAttrs.mvData));
 }
 
 void ScDocumentImport::setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, bool bVisible)

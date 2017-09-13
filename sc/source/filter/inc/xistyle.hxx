@@ -402,7 +402,7 @@ public:
     const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
 
     void                ApplyPatternToAttrList(
-                            ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
+                            ::std::vector<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
                             sal_uInt32 nForceScNumFmt);
 
     /** Inserts all formatting attributes to the specified area in the Calc document.

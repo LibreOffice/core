@@ -5419,25 +5419,25 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
             ScAttrArray* pAttrArray = maTabs[nTab]->aCol[nOldCol].pAttrArray;
             SCSIZE nIndex;
-            if ( pAttrArray->nCount )
+            if ( pAttrArray->Count() )
                 pAttrArray->Search( nOldRow, nIndex );
             else
                 nIndex = 0;
             SCROW nAttrPos = nOldRow;
             while (nAttrPos<=nEndRow)
             {
-                OSL_ENSURE( nIndex < pAttrArray->nCount, "Wrong index in AttrArray" );
+                OSL_ENSURE( nIndex < pAttrArray->Count(), "Wrong index in AttrArray" );
 
                 bool bHorOverlapped;
-                if ( pAttrArray->nCount )
-                    bHorOverlapped = static_cast<const ScMergeFlagAttr&>(pAttrArray->pData[nIndex].pPattern->
+                if ( pAttrArray->Count() )
+                    bHorOverlapped = static_cast<const ScMergeFlagAttr&>(pAttrArray->mvData[nIndex].pPattern->
                                                                          GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped();
                 else
                     bHorOverlapped = static_cast<const ScMergeFlagAttr&>(GetDefPattern()->
                                                                          GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped();
                 if ( bHorOverlapped )
                 {
-                    SCROW nEndRowSeg = (pAttrArray->nCount) ? pAttrArray->pData[nIndex].nEndRow : MAXROW;
+                    SCROW nEndRowSeg = (pAttrArray->Count()) ? pAttrArray->mvData[nIndex].nEndRow : MAXROW;
                     SCROW nLoopEndRow = std::min( nEndRow, nEndRowSeg );
                     for (SCROW nAttrRow = nAttrPos; nAttrRow <= nLoopEndRow; nAttrRow++)
                     {
@@ -5450,9 +5450,9 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                             rStartCol = nTempCol;
                     }
                 }
-                if ( pAttrArray->nCount )
+                if ( pAttrArray->Count() )
                 {
-                    nAttrPos = pAttrArray->pData[nIndex].nEndRow + 1;
+                    nAttrPos = pAttrArray->mvData[nIndex].nEndRow + 1;
                     ++nIndex;
                 }
                 else
