@@ -22,6 +22,30 @@
       "revId": "e76fe5b1cbfdccaf7a3a81df4b4dc83bb6045baa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e4ecb2c9",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2017-09-13T16:16:08Z",
+      "side": 1,
+      "message": "damn! you are right :) ... I\u0027ll fix that in a minute, sorry",
+      "parentUuid": "1a430d35_a4e2aad3",
+      "range": {
+        "startLine": 434,
+        "startChar": 25,
+        "endLine": 434,
+        "endChar": 46
+      },
+      "revId": "e76fe5b1cbfdccaf7a3a81df4b4dc83bb6045baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
