@@ -1835,7 +1835,7 @@ basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
 {
     basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
         -DragStat().Ref1().X(), -DragStat().Ref1().Y()));
-    aRetval.scale(aXFact, aYFact);
+    aRetval.scale(double(aXFact), double(aYFact));
     aRetval.translate(DragStat().Ref1().X(), DragStat().Ref1().Y());
 
     return aRetval;
@@ -2268,12 +2268,12 @@ basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
     {
         if (bVertical)
         {
-            aRetval.scale(aFact, 1.0);
+            aRetval.scale(double(aFact), 1.0);
             aRetval.shearY(-nTan);
         }
         else
         {
-            aRetval.scale(1.0, aFact);
+            aRetval.scale(1.0, double(aFact));
             aRetval.shearX(-nTan);
         }
     }
@@ -2371,8 +2371,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
             if (bUpSideDown) nNewAngle-=18000;
             if (bNeg) nTmpAngle=-nTmpAngle;
             bResize=true;
-            double nCos=cos(nTmpAngle*nPi180);
-            aNeuFact=nCos;
+            aNeuFact = cos(nTmpAngle*nPi180);
             aFact.ReduceInaccurate(10); // three decimals should be enough
         }
 

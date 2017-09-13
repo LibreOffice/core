@@ -2007,13 +2007,13 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec* pRecord,
 
             Fraction aHackX(ww::nWrap100Percent, ww::nWrap100Percent + nMove);
             Fraction aHackY(ww::nWrap100Percent, ww::nWrap100Percent - nMove);
-            aPoly.Scale(aHackX, aHackY);
+            aPoly.Scale(double(aHackX), double(aHackY));
 
             // Turn polygon back into units that match the graphic's
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
             Fraction aMapPolyX(rOrigSize.Width(), ww::nWrap100Percent);
             Fraction aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
-            aPoly.Scale(aMapPolyX, aMapPolyY);
+            aPoly.Scale(double(aMapPolyX), double(aMapPolyY));
 
             // #i47277# - contour is already in unit of the
             // graphic preferred unit. Thus, call method <SetContour(..)>

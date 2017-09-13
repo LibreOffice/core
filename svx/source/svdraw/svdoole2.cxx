@@ -176,8 +176,8 @@ tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 {
     tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
     // apply scaling to object area and convert to pixels
-    aLogicRect.SetSize( Size( Fraction( aLogicRect.GetWidth() ) * m_aScaleWidth,
-                                Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
+    aLogicRect.SetSize( Size( long( aLogicRect.GetWidth() * m_aScaleWidth),
+                              long( aLogicRect.GetHeight() * m_aScaleHeight) ) );
     return aLogicRect;
 }
 
@@ -497,8 +497,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
         //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
         // new size of the object area without scaling
-        Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
-                          Fraction( aNewLogicRect.GetHeight() ) / m_aScaleHeight );
+        Size aNewObjSize( long( aNewLogicRect.GetWidth() / m_aScaleWidth ),
+                          long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
 
         // now remove scaling from new placement and keep this a the new object area
         aNewLogicRect.SetSize( aNewObjSize );

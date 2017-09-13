@@ -127,7 +127,7 @@ void CopyDlg::Reset()
     // Set Min/Max values
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
     Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
-    SetMetricValue( *m_pMtrFldMoveX, Fraction(1000000) / maUIScale, MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldMoveX, long(1000000 / maUIScale), MapUnit::Map100thMM);
     double fScaleFactor = m_pMtrFldMoveX->GetValue()/1000000.0;
 
     long nPageWidth  = aPageSize.Width()  * fScaleFactor;
@@ -156,12 +156,12 @@ void CopyDlg::Reset()
         long nMoveX = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             nMoveX = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldMoveX, Fraction(nMoveX) / maUIScale, MapUnit::Map100thMM);
+        SetMetricValue( *m_pMtrFldMoveX, long(nMoveX / maUIScale), MapUnit::Map100thMM);
 
         long nMoveY = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             nMoveY = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldMoveY, Fraction(nMoveY) / maUIScale, MapUnit::Map100thMM);
+        SetMetricValue( *m_pMtrFldMoveY, long(nMoveY / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             m_pMtrFldAngle->SetValue( static_cast<const SfxInt32Item*>( pPoolItem )->GetValue() );
@@ -171,12 +171,12 @@ void CopyDlg::Reset()
         long nWidth = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             nWidth = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldWidth, Fraction(nWidth) / maUIScale, MapUnit::Map100thMM);
+        SetMetricValue( *m_pMtrFldWidth, long(nWidth / maUIScale), MapUnit::Map100thMM);
 
         long nHeight = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             nHeight = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldHeight, Fraction(nHeight) / maUIScale, MapUnit::Map100thMM);
+        SetMetricValue( *m_pMtrFldHeight, long(nHeight / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
@@ -227,10 +227,10 @@ void CopyDlg::Reset()
  */
 void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
-    long nMoveX = Fraction( GetCoreValue( *m_pMtrFldMoveX, MapUnit::Map100thMM) ) * maUIScale;
-    long nMoveY = Fraction( GetCoreValue( *m_pMtrFldMoveY, MapUnit::Map100thMM) ) * maUIScale;
-    long nHeight = Fraction( GetCoreValue( *m_pMtrFldHeight, MapUnit::Map100thMM) ) * maUIScale;
-    long nWidth  = Fraction( GetCoreValue( *m_pMtrFldWidth, MapUnit::Map100thMM) ) * maUIScale;
+    long nMoveX = long( GetCoreValue( *m_pMtrFldMoveX, MapUnit::Map100thMM) * maUIScale);
+    long nMoveY = long( GetCoreValue( *m_pMtrFldMoveY, MapUnit::Map100thMM) * maUIScale);
+    long nHeight = long( GetCoreValue( *m_pMtrFldHeight, MapUnit::Map100thMM) * maUIScale);
+    long nWidth  = long( GetCoreValue( *m_pMtrFldWidth, MapUnit::Map100thMM) * maUIScale);
 
     rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (sal_uInt16) m_pNumFldCopies->GetValue() ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
@@ -267,10 +267,10 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData, Button*, void)
 {
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
 
-    SetMetricValue( *m_pMtrFldMoveX, Fraction( aRect.GetWidth() ) /
-                                    maUIScale, MapUnit::Map100thMM);
-    SetMetricValue( *m_pMtrFldMoveY, Fraction( aRect.GetHeight() ) /
-                                    maUIScale, MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldMoveX, long( aRect.GetWidth() /
+                                    maUIScale ), MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldMoveY, long( aRect.GetHeight() /
+                                    maUIScale ), MapUnit::Map100thMM);
 
     // sets color attribute
     const SfxPoolItem*  pPoolItem = nullptr;
@@ -289,13 +289,13 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault, Button*, void)
     m_pNumFldCopies->SetValue( 1 );
 
     long nValue = 500;
-    SetMetricValue( *m_pMtrFldMoveX, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
-    SetMetricValue( *m_pMtrFldMoveY, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldMoveX, long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldMoveY, long(nValue / maUIScale), MapUnit::Map100thMM);
 
     nValue = 0;
     m_pMtrFldAngle->SetValue( nValue );
-    SetMetricValue( *m_pMtrFldWidth, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
-    SetMetricValue( *m_pMtrFldHeight, Fraction(nValue) / maUIScale, MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldWidth, long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldHeight, long(nValue / maUIScale), MapUnit::Map100thMM);
 
     // set color attribute
     const SfxPoolItem*  pPoolItem = nullptr;

@@ -1889,7 +1889,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     sal_uInt16 nOldZoomValue = 0;
     if (GetWin() && GetWin()->GetMapMode().GetScaleX() != scaleX)
     {
-        double fScale = scaleX;
+        double fScale = double(scaleX);
         SwViewOption aOption(*GetViewOptions());
         nOldZoomValue = aOption.GetZoom();
         aOption.SetZoom(fScale * 100);

@@ -233,14 +233,13 @@ void OStartMarker::Resize()
     aImageSize.Width() = long(aImageSize.Width() * (double)rMapMode.GetScaleX());
     aImageSize.Height() = long(aImageSize.Height() * (double)rMapMode.GetScaleY());
 
-    Fraction aExtraWidth(long(REPORT_EXTRA_SPACE));
-    aExtraWidth *= rMapMode.GetScaleX();
+    long nExtraWidth = long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
 
-    Point aPos(aImageSize.Width() + (long)(aExtraWidth + aExtraWidth), aExtraWidth);
+    Point aPos(aImageSize.Width() + (nExtraWidth * 2), nExtraWidth);
     const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
     m_aText->SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
-    aPos.X() = aExtraWidth;
+    aPos.X() = nExtraWidth;
     aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
     m_aImage->SetPosSizePixel(aPos,aImageSize);
 }

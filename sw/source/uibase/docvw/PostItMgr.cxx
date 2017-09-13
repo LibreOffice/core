@@ -2015,7 +2015,7 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
     if (comphelper::LibreOfficeKit::isActive() && !bEnableMapMode)
     {
         // The output device is the tile and contains the real wanted scale factor.
-        double fScaleX = mpWrtShell->GetOut()->GetMapMode().GetScaleX();
+        double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());
         nZoom = fScaleX * 100;
     }
     unsigned long aWidth = (unsigned long)(nZoom * 1.8);

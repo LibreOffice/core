@@ -236,8 +236,8 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
     // It's main use is to make scaling fonts look easier.
 {   const Size &rFaceSize = rFace.GetFontSize();
 
-    rFace.SetSize(Size(Fraction(rFaceSize.Width())  *= rFrac,
-                       Fraction(rFaceSize.Height()) *= rFrac));
+    rFace.SetSize(Size(long(rFaceSize.Width() * rFrac),
+                       long(rFaceSize.Height() * rFrac)));
     return rFace;
 }
 

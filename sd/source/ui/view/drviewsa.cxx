@@ -597,8 +597,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
         pPageView->LogicToPagePos(aPos);
         Fraction aUIScale(GetDoc()->GetUIScale());
-        aPos.X() = Fraction(aPos.X()) / aUIScale;
-        aPos.Y() = Fraction(aPos.Y()) / aUIScale;
+        aPos.X() = long(aPos.X() / aUIScale);
+        aPos.Y() = long(aPos.Y() / aUIScale);
 
         // position- and size items
         if ( mpDrawView->IsAction() )
@@ -612,12 +612,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             {
                 pPageView->LogicToPagePos(aRect);
                 aPos = aRect.TopLeft();
-                aPos.X() = Fraction(aPos.X()) / aUIScale;
-                aPos.Y() = Fraction(aPos.Y()) / aUIScale;
+                aPos.X() = long(aPos.X() / aUIScale);
+                aPos.Y() = long(aPos.Y() / aUIScale);
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.Height() = Fraction(aSize.Height()) / aUIScale;
-                aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
+                aSize.Height() = long(aSize.Height() / aUIScale);
+                aSize.Width()  = long(aSize.Width()  / aUIScale);
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
         }
@@ -630,13 +630,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
                 // Show the position of the selected shape(s)
                 Point aShapePosition (aRect.TopLeft());
-                aShapePosition.X() = Fraction(aShapePosition.X()) / aUIScale;
-                aShapePosition.Y() = Fraction(aShapePosition.Y()) / aUIScale;
+                aShapePosition.X() = long(aShapePosition.X() / aUIScale);
+                aShapePosition.Y() = long(aShapePosition.Y() / aUIScale);
                 rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
 
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.Height() = Fraction(aSize.Height()) / aUIScale;
-                aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
+                aSize.Height() = long(aSize.Height() / aUIScale);
+                aSize.Width()  = long(aSize.Width()  / aUIScale);
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
             else

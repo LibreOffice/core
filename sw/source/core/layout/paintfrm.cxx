@@ -393,8 +393,8 @@ void SwCalcPixStatics( vcl::RenderContext const *pOut )
     gProp.nSMinDistPixelH = gProp.nSPixelSzH * 2 + 1;
 
     const MapMode &rMap = pOut->GetMapMode();
-    gProp.aSScaleX = rMap.GetScaleX();
-    gProp.aSScaleY = rMap.GetScaleY();
+    gProp.aSScaleX = double(rMap.GetScaleX());
+    gProp.aSScaleY = double(rMap.GetScaleY());
 }
 
 /**
@@ -2926,13 +2926,13 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     const Fraction& rFracY = rMapMode.GetScaleY();
 
     svx::frame::Style aL(rBoxItem.GetLeft());
-    aL.SetPatternScale(rFracY);
+    aL.SetPatternScale(double(rFracY));
     svx::frame::Style aR(rBoxItem.GetRight());
-    aR.SetPatternScale(rFracY);
+    aR.SetPatternScale(double(rFracY));
     svx::frame::Style aT(rBoxItem.GetTop());
-    aT.SetPatternScale(rFracX);
+    aT.SetPatternScale(double(rFracX));
     svx::frame::Style aB(rBoxItem.GetBottom());
-    aB.SetPatternScale(rFracX);
+    aB.SetPatternScale(double(rFracX));
 
     aR.MirrorSelf();
     aB.MirrorSelf();

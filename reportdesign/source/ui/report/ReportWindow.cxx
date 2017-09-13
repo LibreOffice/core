@@ -156,10 +156,9 @@ sal_Int32 OReportWindow::GetTotalWidth() const
         Fraction aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
         const Fraction aZoom(m_pView->getController().getZoomValue(),100);
         aStartWidth *= aZoom;
-        const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
-        Fraction aPaperWidth(nPaperWidth,1);
-        aPaperWidth *= aZoom;
-        const Size aPageSize = LogicToPixel(Size(aPaperWidth,0));
+        sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
+        nPaperWidth = long(nPaperWidth * aZoom);
+        const Size aPageSize = LogicToPixel(Size(nPaperWidth,0));
         nWidth = aPageSize.Width() + long(aStartWidth);
     }
     return nWidth;

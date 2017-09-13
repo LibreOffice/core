@@ -137,8 +137,8 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                     // In all cases, the following code fragment
                     // returns the chart bounding box in twips.
                     MapMode aCWMapMode = pWindow->GetMapMode();
-                    double fXScale = aCWMapMode.GetScaleX();
-                    double fYScale = aCWMapMode.GetScaleY();
+                    double fXScale( aCWMapMode.GetScaleX() );
+                    double fYScale( aCWMapMode.GetScaleY() );
                     Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
                     aOffset.X() *= (TWIPS_PER_PIXEL / fXScale);
                     aOffset.Y() *= (TWIPS_PER_PIXEL / fYScale);
