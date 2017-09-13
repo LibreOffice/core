@@ -62,10 +62,10 @@ public:
     /// Gives access to the underlying C pointer.
     LibreOfficeKitDocument *get() { return mpDoc; }
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Get document type.
      *
+     * @since LibreOffice 6.0
      * @return an element of the LibreOfficeKitDocumentType enum.
      */
     int getDocumentType()
@@ -73,6 +73,7 @@ public:
         return mpDoc->pClass->getDocumentType(mpDoc);
     }
 
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Get number of part that the document contains.
      *
@@ -513,11 +514,11 @@ public:
         mpThis->pClass->freeError(pFree);
     }
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Registers a callback. LOK will invoke this function when it wants to
      * inform the client about events.
      *
+     * @since LibreOffice 6.0
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
@@ -539,6 +540,8 @@ public:
      *         "MediaType": "application/vnd.oasis.opendocument.spreadsheet"
      *     }
      * }
+     *
+     * @since LibreOffice 6.0
      */
     char* getFilterTypes()
     {
@@ -548,6 +551,7 @@ public:
     /**
      * Set bitmask of optional features supported by the client.
      *
+     * @since LibreOffice 6.0
      * @see LibreOfficeKitOptionalFeatures
      */
     void setOptionalFeatures(uint64_t features)
@@ -573,6 +577,8 @@ public:
      * result in another LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
      * and a NULL password will continue loading the document in read-only
      * mode.
+     *
+     * @since LibreOffice 6.0
      */
     void setDocumentPassword(char const* pURL, char const* pPassword)
     {
@@ -582,6 +588,7 @@ public:
     /**
      * Get version information of the LOKit process
      *
+     * @since LibreOffice 6.0
      * @returns JSON string containing version information in format:
      * {ProductName: <>, ProductVersion: <>, ProductExtension: <>, BuildId: <>}
      *
@@ -600,6 +607,7 @@ public:
      *
      * Same syntax as on command line is permissible (ie. the macro:// URI forms)
      *
+     * @since LibreOffice 6.0
      * @param pURL macro url to run
      */
 
@@ -607,7 +615,6 @@ public:
     {
         return mpThis->pClass->runMacro( mpThis, pURL );
     }
-#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 /// Factory method to create a lok::Office instance.

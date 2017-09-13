@@ -12,13 +12,11 @@
 
 #include <stddef.h>
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
-# ifndef _WIN32
+#ifndef _WIN32
 // the unstable API needs C99's bool
-#  include <stdbool.h>
-# endif
-# include <stdint.h>
+# include <stdbool.h>
 #endif
+#include <stdint.h>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -62,28 +60,37 @@ struct _LibreOfficeKitClass
     /// @since LibreOffice 5.2
     void (*freeError) (char* pFree);
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+    /// @since LibreOffice 6.0
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
 
-    /// @see lok::Office::getFilterTypes().
+    /** @see lok::Office::getFilterTypes().
+        @since LibreOffice 6.0
+     */
     char* (*getFilterTypes) (LibreOfficeKit* pThis);
 
-    /// @see lok::Office::setOptionalFeatures().
+    /** @see lok::Office::setOptionalFeatures().
+        @since LibreOffice 6.0
+     */
     void (*setOptionalFeatures)(LibreOfficeKit* pThis, uint64_t features);
 
-    /// @see lok::Office::setDocumentPassword().
+    /** @see lok::Office::setDocumentPassword().
+        @since LibreOffice 6.0
+     */
     void (*setDocumentPassword) (LibreOfficeKit* pThis,
             char const* pURL,
             char const* pPassword);
 
-    /// @see lok::Office::getVersionInfo().
+    /** @see lok::Office::getVersionInfo().
+        @since LibreOffice 6.0
+     */
     char* (*getVersionInfo) (LibreOfficeKit* pThis);
 
+    /** @see lok::Office::runMacro().
+        @since LibreOffice 6.0
+     */
     bool (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
-#endif
-
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
@@ -104,10 +111,12 @@ struct _LibreOfficeKitDocumentClass
                    const char* pFormat,
                    const char* pFilterOptions);
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
-    /// @see lok::Document::getDocumentType().
+    /** @see lok::Document::getDocumentType().
+        @since LibreOffice 6.0
+     */
     int (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see lok::Document::getParts().
     int (*getParts) (LibreOfficeKitDocument* pThis);
 
