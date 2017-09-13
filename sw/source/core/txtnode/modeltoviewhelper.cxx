@@ -110,17 +110,17 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
         const sal_Int32 nShownLen = nShownEnd - nShownStart;
 
         if (nShownLen)
-            aBlocks.push_back(block(nShownStart, nShownLen, true));
+            aBlocks.emplace_back(nShownStart, nShownLen, true);
 
         if (nHiddenLen)
-            aBlocks.push_back(block(nHiddenStart, nHiddenLen, false));
+            aBlocks.emplace_back(nHiddenStart, nHiddenLen, false);
 
         nShownStart = nHiddenEnd;
     }
 
     sal_Int32 nTrailingShownLen = rNodeText.getLength() - nShownStart;
     if (nTrailingShownLen)
-        aBlocks.push_back(block(nShownStart, nTrailingShownLen, true));
+        aBlocks.emplace_back(nShownStart, nTrailingShownLen, true);
 
     if (eMode & ExpandMode::ExpandFields || eMode & ExpandMode::ExpandFootnote)
     {
@@ -217,7 +217,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
         {
             sal_Int32 const modelBlockPos(nBlockEnd);
             sal_Int32 const viewBlockPos(nBlockStart + nOffset);
-            m_aMap.push_back(ConversionMapEntry(modelBlockPos, viewBlockPos, false));
+            m_aMap.emplace_back(modelBlockPos, viewBlockPos, false);
 
             m_aRetText = m_aRetText.replaceAt(nOffset + nBlockStart, nBlockLen, OUString());
             nOffset -= nBlockLen;
@@ -228,7 +228,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
             {
                 sal_Int32 const modelFieldPos(j->m_nFieldPos);
                 sal_Int32 const viewFieldPos(j->m_nFieldPos + nOffset);
-                m_aMap.push_back( ConversionMapEntry(modelFieldPos, viewFieldPos, true) );
+                m_aMap.emplace_back(modelFieldPos, viewFieldPos, true );
 
                 m_aRetText = m_aRetText.replaceAt(viewFieldPos, 1, j->m_sExpand);
                 nOffset += j->m_sExpand.getLength() - 1;
@@ -248,7 +248,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
 
             sal_Int32 const modelEndBlock(nBlockEnd);
             sal_Int32 const viewFieldPos(nBlockEnd + nOffset);
-            m_aMap.push_back(ConversionMapEntry(modelEndBlock, viewFieldPos, true));
+            m_aMap.emplace_back(modelEndBlock, viewFieldPos, true);
         }
     }
 }

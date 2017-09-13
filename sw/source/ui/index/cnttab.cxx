@@ -2939,7 +2939,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         VclPtr<SwTOXEdit> pEdit = VclPtr<SwTOXEdit>::Create(m_pCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
 
-        m_aControlList.push_back(pEdit);
+        m_aControlList.emplace_back(pEdit);
 
         pEdit->SetText(rText);
         sal_uInt32 nIndex = GetControlIndex( TOKEN_TEXT );
@@ -2968,7 +2968,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
         VclPtr<SwTOXButton> pButton = VclPtr<SwTOXButton>::Create(m_pCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
 
-        m_aControlList.push_back(pButton);
+        m_aControlList.emplace_back(pButton);
 
         Size aEditSize(aControlSize);
         aEditSize.Width() = pButton->GetTextWidth(rText) + 5;

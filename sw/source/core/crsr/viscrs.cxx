@@ -340,9 +340,9 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
             const SwRect aNextRect((*this)[a]);
             const tools::Rectangle aPntRect(aNextRect.SVRect());
 
-            aNewRanges.push_back(basegfx::B2DRange(
+            aNewRanges.emplace_back(
                 aPntRect.Left(), aPntRect.Top(),
-                aPntRect.Right() + 1, aPntRect.Bottom() + 1));
+                aPntRect.Right() + 1, aPntRect.Bottom() + 1);
         }
 
         if (m_pCursorOverlay)
@@ -453,9 +453,9 @@ void SwSelPaintRects::HighlightInputField()
             {
                 const tools::Rectangle aPntRect(rNextRect.SVRect());
 
-                aInputFieldRanges.push_back(basegfx::B2DRange(
+                aInputFieldRanges.emplace_back(
                     aPntRect.Left(), aPntRect.Top(),
-                    aPntRect.Right() + 1, aPntRect.Bottom() + 1));
+                    aPntRect.Right() + 1, aPntRect.Bottom() + 1);
             }
         }
     }

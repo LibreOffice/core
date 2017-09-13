@@ -335,11 +335,11 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
 
     if (TOX_CONTENT == m_eType)
     {
-        aTokens.push_back(SwFormToken(TOKEN_ENTRY_NO));
-        aTokens.push_back(SwFormToken(TOKEN_ENTRY_TEXT));
+        aTokens.emplace_back(TOKEN_ENTRY_NO);
+        aTokens.emplace_back(TOKEN_ENTRY_TEXT);
     }
     else
-        aTokens.push_back(SwFormToken(TOKEN_ENTRY));
+        aTokens.emplace_back(TOKEN_ENTRY);
 
     if (TOX_AUTHORITIES != m_eType)
     {
@@ -351,11 +351,11 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         aToken.eTabAlign = SvxTabAdjust::End;
 
         aTokens.push_back(aToken);
-        aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
+        aTokens.emplace_back(TOKEN_PAGE_NUMS);
     }
 
     if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType)
-        aTokens.push_back(SwFormToken(TOKEN_LINK_END));
+        aTokens.emplace_back(TOKEN_LINK_END);
 
     SetTemplate(0, SwResId(*pPoolId++));
 

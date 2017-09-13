@@ -162,7 +162,7 @@ void SwAccessiblePortionData::Special(
                 sDisplay = rText;
                 sal_Int32 nStart=m_aBuffer.getLength();
                 sal_Int32 nEnd=nStart + rText.getLength();
-                m_vecPairPos.push_back(std::make_pair(nStart,nEnd));
+                m_vecPairPos.emplace_back(nStart,nEnd);
                 break;
             }
             break;

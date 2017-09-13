@@ -169,7 +169,7 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
             }
         }
 
-        pCT->m_rMapArr.push_back(MapTableFrameFormat(pBox->GetFrameFormat(), pBoxFormat));
+        pCT->m_rMapArr.emplace_back(pBox->GetFrameFormat(), pBoxFormat);
     }
 
     sal_uInt16 nLines = pBox->GetTabLines().size();
@@ -212,7 +212,7 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
     {
         pLineFormat = pCT->m_pDoc->MakeTableLineFormat();
         pLineFormat->CopyAttrs( *pLine->GetFrameFormat() );
-        pCT->m_rMapArr.push_back(MapTableFrameFormat(pLine->GetFrameFormat(), pLineFormat));
+        pCT->m_rMapArr.emplace_back(pLine->GetFrameFormat(), pLineFormat);
     }
 
     SwTableLine* pNewLine = new SwTableLine(pLineFormat, pLine->GetTabBoxes().size(), pCT->m_pInsBox);

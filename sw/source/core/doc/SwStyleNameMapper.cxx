@@ -432,49 +432,49 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         case SwGetPoolIdFromName::TxtColl:
         {
             pHashPointer = bProgName ? &s_pParaProgMap : &s_pParaUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END, bProgName ? &GetTextProgNameArray : &GetTextUINameArray) );
-            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END, bProgName ? &GetListsProgNameArray : &GetListsUINameArray) );
-            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END, bProgName ? &GetExtraProgNameArray : &GetExtraUINameArray) );
-            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END, bProgName ? &GetRegisterProgNameArray : &GetRegisterUINameArray) );
-            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END, bProgName ? &GetDocProgNameArray : &GetDocUINameArray) );
-            vIndexes.push_back( std::make_tuple(RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END, bProgName ? &GetHTMLProgNameArray : &GetHTMLUINameArray) );
+            vIndexes.emplace_back(RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END, bProgName ? &GetTextProgNameArray : &GetTextUINameArray );
+            vIndexes.emplace_back(RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END, bProgName ? &GetListsProgNameArray : &GetListsUINameArray );
+            vIndexes.emplace_back(RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END, bProgName ? &GetExtraProgNameArray : &GetExtraUINameArray );
+            vIndexes.emplace_back(RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END, bProgName ? &GetRegisterProgNameArray : &GetRegisterUINameArray );
+            vIndexes.emplace_back(RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END, bProgName ? &GetDocProgNameArray : &GetDocUINameArray );
+            vIndexes.emplace_back(RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END, bProgName ? &GetHTMLProgNameArray : &GetHTMLUINameArray );
         }
         break;
         case SwGetPoolIdFromName::ChrFmt:
         {
             pHashPointer = bProgName ? &s_pCharProgMap : &s_pCharUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END, bProgName ? &GetChrFormatProgNameArray : &GetChrFormatUINameArray) );
-            vIndexes.push_back( std::make_tuple(RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END, bProgName ? &GetHTMLChrFormatProgNameArray : &GetHTMLChrFormatUINameArray) );
+            vIndexes.emplace_back(RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END, bProgName ? &GetChrFormatProgNameArray : &GetChrFormatUINameArray );
+            vIndexes.emplace_back(RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END, bProgName ? &GetHTMLChrFormatProgNameArray : &GetHTMLChrFormatUINameArray );
         }
         break;
         case SwGetPoolIdFromName::FrmFmt:
         {
             pHashPointer = bProgName ? &s_pFrameProgMap : &s_pFrameUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLFRM_BEGIN, RES_POOLFRM_END, bProgName ? &GetFrameFormatProgNameArray : &GetFrameFormatUINameArray) );
+            vIndexes.emplace_back(RES_POOLFRM_BEGIN, RES_POOLFRM_END, bProgName ? &GetFrameFormatProgNameArray : &GetFrameFormatUINameArray );
         }
         break;
         case SwGetPoolIdFromName::PageDesc:
         {
             pHashPointer = bProgName ? &s_pPageProgMap : &s_pPageUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLPAGE_BEGIN, RES_POOLPAGE_END, bProgName ? &GetPageDescProgNameArray : &GetPageDescUINameArray) );
+            vIndexes.emplace_back(RES_POOLPAGE_BEGIN, RES_POOLPAGE_END, bProgName ? &GetPageDescProgNameArray : &GetPageDescUINameArray );
         }
         break;
         case SwGetPoolIdFromName::NumRule:
         {
             pHashPointer = bProgName ? &s_pNumRuleProgMap : &s_pNumRuleUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray) );
+            vIndexes.emplace_back(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray );
         }
         break;
         case SwGetPoolIdFromName::TabStyle:
         {
             pHashPointer = bProgName ? &s_pTableStyleProgMap : &s_pTableStyleUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLTABSTYLE_BEGIN, RES_POOLTABSTYLE_END, bProgName ? &GetTableStyleProgNameArray : &GetTableStyleUINameArray) );
+            vIndexes.emplace_back(RES_POOLTABSTYLE_BEGIN, RES_POOLTABSTYLE_END, bProgName ? &GetTableStyleProgNameArray : &GetTableStyleUINameArray );
         }
         break;
         case SwGetPoolIdFromName::CellStyle:
         {
             pHashPointer = bProgName ? &s_pCellStyleProgMap : &s_pCellStyleUIMap;
-            vIndexes.push_back( std::make_tuple(RES_POOLCELLSTYLE_BEGIN, RES_POOLCELLSTYLE_END, bProgName ? &GetCellStyleProgNameArray : &GetCellStyleUINameArray) );
+            vIndexes.emplace_back(RES_POOLCELLSTYLE_BEGIN, RES_POOLCELLSTYLE_END, bProgName ? &GetCellStyleProgNameArray : &GetCellStyleUINameArray );
         }
         break;
         default:

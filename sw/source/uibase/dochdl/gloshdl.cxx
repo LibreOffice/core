@@ -416,7 +416,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                     const OUString sShortName(pGlossaryList->GetBlockShortName(i, j));
                     if( rSCmp.isEqual( rShortName, sShortName ))
                     {
-                        aFoundArr.push_back(TextBlockInfo_Impl(sTitle, sLongName, sGroupName));
+                        aFoundArr.emplace_back(sTitle, sLongName, sGroupName);
                     }
                 }
             }

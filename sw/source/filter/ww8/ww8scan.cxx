@@ -2599,7 +2599,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
     }
 
     //one more FC than grrpl entries
-    maEntries.push_back(Entry(Get_Long(pStart)));
+    maEntries.emplace_back(Get_Long(pStart));
 
     //we expect them sorted, but it appears possible for them to arrive unsorted
     std::sort(maEntries.begin(), maEntries.end());
@@ -2755,7 +2755,7 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
         {
             sal_uInt16 nFixedLen = maSprmParser.DistanceToData(nId);
             sal_uInt16 nL = maSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
-            rResult.push_back(SprmResult(aIter.GetAktParams(), nL - nFixedLen));
+            rResult.emplace_back(aIter.GetAktParams(), nL - nFixedLen);
         }
         aIter.advance();
     };
@@ -3088,7 +3088,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
             {
                 sal_uInt16 nFixedLen = rSprmParser.DistanceToData(nId);
                 sal_uInt16 nL = rSprmParser.GetSprmSize(nId, aIter.GetSprms(), aIter.GetRemLen());
-                rResult.push_back(SprmResult(aIter.GetAktParams(), nL - nFixedLen));
+                rResult.emplace_back(aIter.GetAktParams(), nL - nFixedLen);
             }
             aIter.advance();
         };
@@ -3921,7 +3921,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     rArray.push_back(OStringToOUString(aTmp, eCS));
                 }
                 else
-                    rArray.push_back(OUString());
+                    rArray.emplace_back();
 
                 // Skip the extra data (for bVer67 versions this must come from
                 // external knowledge)

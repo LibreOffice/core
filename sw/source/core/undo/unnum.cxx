@@ -208,7 +208,7 @@ void SwUndoDelNum::AddNode( const SwTextNode& rNd )
 {
     if( rNd.GetNumRule() )
     {
-        aNodes.push_back( NodeLevel( rNd.GetIndex(), rNd.GetActualListLevel() ) );
+        aNodes.emplace_back( rNd.GetIndex(), rNd.GetActualListLevel() );
     }
 }
 

@@ -147,36 +147,36 @@ public:
 
         mMMargs.reserve( 15 );
 
-        mMMargs.push_back( beans::NamedValue( UNO_NAME_OUTPUT_TYPE, uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) ) );
-        mMMargs.push_back( beans::NamedValue( UNO_NAME_DOCUMENT_URL, uno::Any(
-                                         ( OUString( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) ) );
-        mMMargs.push_back( beans::NamedValue( UNO_NAME_DATA_SOURCE_NAME, uno::Any( aDBName ) ) );
-        mMMargs.push_back( beans::NamedValue( UNO_NAME_OUTPUT_URL, uno::Any( aWorkDir ) ) );
+        mMMargs.emplace_back( UNO_NAME_OUTPUT_TYPE, uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
+        mMMargs.emplace_back( UNO_NAME_DOCUMENT_URL, uno::Any(
+                                         ( OUString( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
+        mMMargs.emplace_back( UNO_NAME_DATA_SOURCE_NAME, uno::Any( aDBName ) );
+        mMMargs.emplace_back( UNO_NAME_OUTPUT_URL, uno::Any( aWorkDir ) );
         if (file)
-            mMMargs.push_back( beans::NamedValue( UNO_NAME_FILE_NAME_PREFIX, uno::Any( aPrefix )) );
+            mMMargs.emplace_back( UNO_NAME_FILE_NAME_PREFIX, uno::Any( aPrefix ) );
 
         if (bPrefixIsColumn)
-            mMMargs.push_back( beans::NamedValue( UNO_NAME_FILE_NAME_FROM_COLUMN, uno::Any( true ) ) );
+            mMMargs.emplace_back( UNO_NAME_FILE_NAME_FROM_COLUMN, uno::Any( true ) );
 
         if (tablename)
         {
-            mMMargs.push_back( beans::NamedValue( UNO_NAME_DAD_COMMAND_TYPE, uno::Any( sdb::CommandType::TABLE ) ) );
-            mMMargs.push_back( beans::NamedValue( UNO_NAME_DAD_COMMAND, uno::Any( OUString::createFromAscii(tablename) ) ) );
+            mMMargs.emplace_back( UNO_NAME_DAD_COMMAND_TYPE, uno::Any( sdb::CommandType::TABLE ) );
+            mMMargs.emplace_back( UNO_NAME_DAD_COMMAND, uno::Any( OUString::createFromAscii(tablename) ) );
         }
 
         if (nDataSets > 0)
         {
             mxCurResultSet = getXResultFromDataset( tablename, aDBName );
             uno::Reference< sdbcx::XRowLocate > xCurRowLocate( mxCurResultSet, uno::UNO_QUERY );
-            mMMargs.push_back( beans::NamedValue( UNO_NAME_RESULT_SET, uno::Any( mxCurResultSet ) ) );
+            mMMargs.emplace_back( UNO_NAME_RESULT_SET, uno::Any( mxCurResultSet ) );
             std::vector< uno::Any > vResult;
             vResult.reserve( nDataSets );
             sal_Int32 i;
             for (i = 0, mxCurResultSet->first(); i < nDataSets; i++, mxCurResultSet->next())
             {
-                vResult.push_back( uno::Any( xCurRowLocate->getBookmark() ) );
+                vResult.emplace_back( xCurRowLocate->getBookmark() );
             }
-            mMMargs.push_back( beans::NamedValue( UNO_NAME_SELECTION, uno::Any( comphelper::containerToSequence(vResult) ) ) );
+            mMMargs.emplace_back( UNO_NAME_SELECTION, uno::Any( comphelper::containerToSequence(vResult) ) );
         }
 
     }
@@ -652,7 +652,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.od
             ++aNamedValueIter;
         }
     }
-    mMMargs.push_back( beans::NamedValue( UNO_NAME_SAVE_AS_SINGLE_FILE, uno::Any( true ) ) );
+    mMMargs.emplace_back( UNO_NAME_SAVE_AS_SINGLE_FILE, uno::Any( true ) );
 
     // Generate correct mail merge result filename
     executeMailMerge();

@@ -258,7 +258,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             {
                 // must create new one, otherwise document is without pam
                 SwPaM* pPaM = rWrtSh.GetCursor();
-                vItems.push_back( std::make_pair( pSize, o3tl::make_unique<SwPaM>( *(pPaM->GetMark()), *(pPaM->GetPoint())) ) );
+                vItems.emplace_back( pSize, o3tl::make_unique<SwPaM>( *(pPaM->GetMark()), *(pPaM->GetPoint())) );
             }
             else
                 vItems = rWrtSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );

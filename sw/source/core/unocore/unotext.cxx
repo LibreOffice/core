@@ -2020,7 +2020,7 @@ lcl_ApplyCellProperties(
                     }
                 }
                 // add the new group of merged cells
-                rMergedCells.push_back(VerticallyMergedCell(xCellPS, nLeftPos));
+                rMergedCells.emplace_back(xCellPS, nLeftPos);
             }
             else
             {

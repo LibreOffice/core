@@ -280,7 +280,7 @@ void SwInsertBookmarkDlg::PopulateTable()
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
             m_pBookmarksBox->InsertBookmark(ppBookmark->get());
-            aTableBookmarks.push_back(std::make_pair(ppBookmark->get(), ppBookmark->get()->GetName()));
+            aTableBookmarks.emplace_back(ppBookmark->get(), ppBookmark->get()->GetName());
         }
     }
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
