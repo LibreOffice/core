@@ -79,7 +79,7 @@ void ContextList::AddContextDescription (
     const bool bIsInitiallyVisible,
     const OUString& rsMenuCommand)
 {
-    maEntries.push_back(Entry());
+    maEntries.emplace_back();
     maEntries.back().maContext = rContext;
     maEntries.back().mbIsInitiallyVisible = bIsInitiallyVisible;
     maEntries.back().msMenuCommand = rsMenuCommand;

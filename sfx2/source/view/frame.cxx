@@ -374,11 +374,11 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 void SfxFrame::GetDefaultTargetList(TargetList& rList)
 {
     // An empty string for 'No Target'
-    rList.push_back( OUString() );
-    rList.push_back( OUString( "_top" ) );
-    rList.push_back( OUString( "_parent" ) );
-    rList.push_back( OUString( "_blank" ) );
-    rList.push_back( OUString( "_self" ) );
+    rList.emplace_back( );
+    rList.emplace_back( "_top" );
+    rList.emplace_back( "_parent" );
+    rList.emplace_back( "_blank" );
+    rList.emplace_back( "_self" );
 }
 
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )
