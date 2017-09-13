@@ -216,7 +216,7 @@ static oslFileError osl_psz_getVolumeInformation (
     {
         OSL_detail_STATFS_STRUCT sfs;
         OSL_detail_STATFS_INIT(sfs);
-        if ((OSL_detail_STATFS(pszDirectory, &sfs)) < 0)
+        if ((OSL_detail_STATFS(pszDirectory, &sfs)) < (0))
         {
             oslFileError result = oslTranslateFileError(OSL_FET_ERROR, errno);
             return result;
@@ -225,7 +225,9 @@ static oslFileError osl_psz_getVolumeInformation (
         /* FIXME: how to detect the kind of storage (fixed, cdrom, ...) */
         if (uFieldMask & osl_VolumeInfo_Mask_Attributes)
         {
-            if (OSL_detail_STATFS_ISREMOTE(sfs))
+            bool const remote = OSL_detail_STATFS_ISREMOTE(sfs);
+                // extracted from the 'if' to avoid Clang -Wunreachable-code
+            if (remote)
                 pInfo->uAttributes  |= osl_Volume_Attribute_Remote;
 
             pInfo->uValidFields |= osl_VolumeInfo_Mask_Attributes;
