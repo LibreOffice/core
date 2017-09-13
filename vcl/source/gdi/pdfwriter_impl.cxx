@@ -718,7 +718,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
             {
                  // create new hierarchy field
                 sal_Int32 nNewWidget = m_aWidgets.size();
-                m_aWidgets.push_back( PDFWidget() );
+                m_aWidgets.emplace_back( );
                 m_aWidgets[nNewWidget].m_nObject = createObject();
                 m_aWidgets[nNewWidget].m_eType = PDFWriter::Hierarchy;
                 m_aWidgets[nNewWidget].m_aName = aPartialName;
@@ -1721,7 +1721,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         doTestCode();
     }
 #endif
-    m_aStructure.push_back( PDFStructureElement() );
+    m_aStructure.emplace_back( );
     m_aStructure[0].m_nOwnElement       = 0;
     m_aStructure[0].m_nParentElement    = 0;
 
@@ -1808,7 +1808,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     }
 
     // insert outline root
-    m_aOutline.push_back( PDFOutlineEntry() );
+    m_aOutline.emplace_back( );
 
     m_bIsPDF_A1 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_1);
     if( m_bIsPDF_A1 )
@@ -2241,7 +2241,7 @@ void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::O
 {
     endPage();
     m_nCurrentPage = m_aPages.size();
-    m_aPages.push_back( PDFPage(this, nPageWidth, nPageHeight, eOrientation ) );
+    m_aPages.emplace_back(this, nPageWidth, nPageHeight, eOrientation );
     m_aPages.back().beginStream();
 
     // setup global graphics state
@@ -2268,7 +2268,7 @@ void PDFWriterImpl::endPage()
         }
 
         m_aGraphicsStack.clear();
-        m_aGraphicsStack.push_back( GraphicsState() );
+        m_aGraphicsStack.emplace_back( );
 
         // this should pop the PDF graphics stack if necessary
         updateGraphicsState();
@@ -2507,7 +2507,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                     writeBuffer( aRef.getStr(), aRef.getLength() );
                 }
 
-                i_rEle.m_aKids.push_back( PDFStructureElementKid( nRefObject ) );
+                i_rEle.m_aKids.emplace_back( nRefObject );
             }
             else
             {
@@ -6051,7 +6051,7 @@ void PDFWriterImpl::sortWidgets()
             if( rWidget.m_eType != PDFWriter::RadioButton )
             {
                 rCont.aObjects.insert( rWidget.m_nObject );
-                rCont.aSortedAnnots.push_back( AnnotationSortEntry( rWidget.m_nTabOrder, rWidget.m_nObject, nW ) );
+                rCont.aSortedAnnots.emplace_back( rWidget.m_nTabOrder, rWidget.m_nObject, nW );
             }
         }
     }
@@ -6062,7 +6062,7 @@ void PDFWriterImpl::sortWidgets()
         unsigned int nAnnots = rPage.m_aAnnotations.size();
         for( unsigned int nA = 0; nA < nAnnots; nA++ )
             if( it->second.aObjects.find( rPage.m_aAnnotations[nA] ) == it->second.aObjects.end())
-                it->second.aSortedAnnots.push_back( AnnotationSortEntry( 10000, rPage.m_aAnnotations[nA], -1 ) );
+                it->second.aSortedAnnots.emplace_back( 10000, rPage.m_aAnnotations[nA], -1 );
 
         AnnotSorterLess aLess( m_aWidgets );
         std::stable_sort( it->second.aSortedAnnots.begin(), it->second.aSortedAnnots.end(), aLess );
@@ -6300,7 +6300,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             if( rSubset.m_aSubsets.empty()
             || (rSubset.m_aSubsets.back().m_aMapping.size() > 254) )
             {
-                rSubset.m_aSubsets.push_back( FontEmit( m_nNextFID++ ) );
+                rSubset.m_aSubsets.emplace_back( m_nNextFID++ );
             }
 
             // copy font id
@@ -6773,12 +6773,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         for( int i = 0; i < nGlyphs; i++ )
         {
-            aGlyphs.push_back( PDFGlyph( aGNGlyphPos,
+            aGlyphs.emplace_back( aGNGlyphPos,
                                          pGlyphWidths[i],
                                          pGlyphs[i]->maGlyphId,
                                          pMappedFontObjects[i],
                                          pMappedGlyphs[i],
-                                         pGlyphs[i]->IsVertical() ) );
+                                         pGlyphs[i]->IsVertical() );
             if( bVertical )
                 aGNGlyphPos.Y() += pGlyphs[i]->mnNewWidth/rLayout.GetUnitsPerPixel();
             else
@@ -7781,7 +7781,7 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
     }
 
     // create XObject
-    m_aTransparentObjects.push_back( TransparencyEmit() );
+    m_aTransparentObjects.emplace_back( );
     // FIXME: polygons with beziers may yield incorrect bound rect
     m_aTransparentObjects.back().m_aBoundRect     = rPolyPoly.GetBoundRect();
     // convert rectangle to default user space
@@ -7925,7 +7925,7 @@ void PDFWriterImpl::endTransparencyGroup( const tools::Rectangle& rBoundingBox, 
     if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
     {
         // create XObject
-        m_aTransparentObjects.push_back( TransparencyEmit() );
+        m_aTransparentObjects.emplace_back( );
         m_aTransparentObjects.back().m_aBoundRect   = rBoundingBox;
         // convert rectangle to default user space
         m_aPages.back().convertRect( m_aTransparentObjects.back().m_aBoundRect );
@@ -9713,7 +9713,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     if (m_aContext.UseReferenceXObject)
     {
         // Store the original PDF data as an embedded file.
-        m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
+        m_aEmbeddedFiles.emplace_back();
         m_aEmbeddedFiles.back().m_nObject = createObject();
         m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
 
@@ -10120,7 +10120,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
                 aTilingStream.append( aImageName );
                 aTilingStream.append( " Do\n" );
 
-                m_aTilings.push_back( TilingEmit() );
+                m_aTilings.emplace_back( );
                 m_aTilings.back().m_nObject         = createObject();
                 m_aTilings.back().m_aRectangle      = tools::Rectangle( Point( 0, 0 ), aConvertRect.GetSize() );
                 m_aTilings.back().m_pTilingStream   = new SvMemoryStream();
@@ -10438,7 +10438,7 @@ void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rN
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
         return;
 
-    m_aNotes.push_back( PDFNoteEntry() );
+    m_aNotes.emplace_back( );
     m_aNotes.back().m_nObject       = createObject();
     m_aNotes.back().m_aContents     = rNote;
     m_aNotes.back().m_aRect         = rRect;
@@ -10459,7 +10459,7 @@ sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nP
 
     sal_Int32 nRet = m_aLinks.size();
 
-    m_aLinks.push_back( PDFLink() );
+    m_aLinks.emplace_back( );
     m_aLinks.back().m_nObject   = createObject();
     m_aLinks.back().m_nPage     = nPageNr;
     m_aLinks.back().m_aRect     = rRect;
@@ -10482,7 +10482,7 @@ sal_Int32 PDFWriterImpl::createScreen(const tools::Rectangle& rRect, sal_Int32 n
 
     sal_Int32 nRet = m_aScreens.size();
 
-    m_aScreens.push_back(PDFScreen());
+    m_aScreens.emplace_back();
     m_aScreens.back().m_nObject = createObject();
     m_aScreens.back().m_nPage = nPageNr;
     m_aScreens.back().m_aRect = rRect;
@@ -10505,7 +10505,7 @@ sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const tools
 
     sal_Int32 nRet = m_aNamedDests.size();
 
-    m_aNamedDests.push_back( PDFNamedDest() );
+    m_aNamedDests.emplace_back( );
     m_aNamedDests.back().m_aDestName = sDestName;
     m_aNamedDests.back().m_nPage = nPageNr;
     m_aNamedDests.back().m_eType = eType;
@@ -10526,7 +10526,7 @@ sal_Int32 PDFWriterImpl::createDest( const tools::Rectangle& rRect, sal_Int32 nP
 
     sal_Int32 nRet = m_aDests.size();
 
-    m_aDests.push_back( PDFDest() );
+    m_aDests.emplace_back( );
     m_aDests.back().m_nPage = nPageNr;
     m_aDests.back().m_eType = eType;
     m_aDests.back().m_aRect = rRect;
@@ -10600,7 +10600,7 @@ sal_Int32 PDFWriterImpl::createOutlineItem( sal_Int32 nParent, const OUString& r
 {
     // create new item
     sal_Int32 nNewItem = m_aOutline.size();
-    m_aOutline.push_back( PDFOutlineEntry() );
+    m_aOutline.emplace_back( );
 
     // set item attributes
     setOutlineItemParent( nNewItem, nParent );
@@ -10713,7 +10713,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         SAL_INFO("vcl.pdfwriter", "beginning marked content id " << nMCID << " on page object "
                  << m_aPages[ m_nCurrentPage ].m_nPageObject << ", structure first page = "
                  << rEle.m_nFirstPageObject);
-        rEle.m_aKids.push_back( PDFStructureElementKid( nMCID, m_aPages[m_nCurrentPage].m_nPageObject ) );
+        rEle.m_aKids.emplace_back( nMCID, m_aPages[m_nCurrentPage].m_nPageObject );
         // update the page's mcid parent list
         m_aPages[ m_nCurrentPage ].m_aMCIDParents.push_back( rEle.m_nObject );
         // mark element MC sequence as open
@@ -10809,7 +10809,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     }
 
     sal_Int32 nNewId = sal_Int32(m_aStructure.size());
-    m_aStructure.push_back( PDFStructureElement() );
+    m_aStructure.emplace_back( );
     PDFStructureElement& rEle = m_aStructure.back();
     rEle.m_eType            = eType;
     rEle.m_nOwnElement      = nNewId;
@@ -10850,7 +10850,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
     {
         rEle.m_nObject      = createObject();
         // update parent's kids list
-        m_aStructure[ rEle.m_nParentElement ].m_aKids.push_back(PDFStructureElementKid(rEle.m_nObject));
+        m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(rEle.m_nObject);
     }
     return nNewId;
 }
@@ -10954,7 +10954,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 {
                     sal_Int32 nCurrentStructElement = rEle.m_nOwnElement;
                     sal_Int32 nNewId = sal_Int32(m_aStructure.size());
-                    m_aStructure.push_back( PDFStructureElement() );
+                    m_aStructure.emplace_back( );
                     PDFStructureElement& rEleNew = m_aStructure.back();
                     rEleNew.m_aAlias            = aAliasName;
                     rEleNew.m_eType             = PDFWriter::Division; // a new Div type container
@@ -10964,7 +10964,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                     rEleNew.m_nFirstPageObject  = m_aStructure[ rEle.m_aChildren.front() ].m_nFirstPageObject;
                     rEleNew.m_nObject           = createObject();//assign a PDF object number
                     //add the object to the kid list of the parent
-                    aNewKids.push_back( PDFStructureElementKid( rEleNew.m_nObject ) );
+                    aNewKids.emplace_back( rEleNew.m_nObject );
                     aNewChildren.push_back( nNewId );
 
                     std::list< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );
@@ -11493,7 +11493,7 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidge
             sal_Int32(m_aWidgets.size());
 
         // new group, insert the radiobutton
-        m_aWidgets.push_back( PDFWidget() );
+        m_aWidgets.emplace_back( );
         m_aWidgets.back().m_nObject     = createObject();
         m_aWidgets.back().m_nPage       = m_nCurrentPage;
         m_aWidgets.back().m_eType       = PDFWriter::RadioButton;
@@ -11518,7 +11518,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
     bool sigHidden(true);
     sal_Int32 nNewWidget = m_aWidgets.size();
-    m_aWidgets.push_back( PDFWidget() );
+    m_aWidgets.emplace_back( );
 
     m_aWidgets.back().m_nObject         = createObject();
     m_aWidgets.back().m_aRect           = rControl.Location;
@@ -11710,7 +11710,7 @@ void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStre
 {
     if( pStream )
     {
-        m_aAdditionalStreams.push_back( PDFAddStream() );
+        m_aAdditionalStreams.emplace_back( );
         PDFAddStream& rStream = m_aAdditionalStreams.back();
         rStream.m_aMimeType = !rMimeType.isEmpty()
                               ? rMimeType

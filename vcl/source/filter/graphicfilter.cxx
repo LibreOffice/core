@@ -1378,7 +1378,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 
     for (const auto& pStream : rStreams)
     {
-        aContexts.push_back(GraphicImportContext());
+        aContexts.emplace_back();
         GraphicImportContext& rContext = aContexts.back();
 
         if (pStream)

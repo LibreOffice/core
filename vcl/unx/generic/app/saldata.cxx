@@ -305,7 +305,7 @@ bool X11SalData::ErrorTrapPop( bool bIgnoreError )
 
 void X11SalData::PushXErrorLevel( bool bIgnore )
 {
-    m_aXErrorHandlerStack.push_back( XErrorStackEntry() );
+    m_aXErrorHandlerStack.emplace_back( );
     XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
     rEnt.m_bWas = false;
     rEnt.m_bIgnore = bIgnore;

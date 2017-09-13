@@ -2096,7 +2096,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
     // initialization
     if ( pTEParaPortion->GetLines().empty() )
     {
-        pTEParaPortion->GetLines().push_back( TextLine() );
+        pTEParaPortion->GetLines().emplace_back( );
     }
 
     const sal_Int32 nInvalidDiff = pTEParaPortion->GetInvalidDiff();
@@ -2789,7 +2789,7 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
         for ( long nIdx = 0; nIdx < nCount; ++nIdx )
         {
             ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.push_back( TEWritingDirectionInfo( nCurrDir, nStart, nEnd ) );
+            rInfos.emplace_back( nCurrDir, nStart, nEnd );
             nStart = nEnd;
         }
 
@@ -2798,7 +2798,7 @@ void TextEngine::ImpInitWritingDirections( sal_uInt32 nPara )
 
     // No infos mean no CTL and default dir is L2R...
     if ( rInfos.empty() )
-        rInfos.push_back( TEWritingDirectionInfo( 0, 0, pParaPortion->GetNode()->GetText().getLength() ) );
+        rInfos.emplace_back( 0, 0, pParaPortion->GetNode()->GetText().getLength() );
 
 }
 

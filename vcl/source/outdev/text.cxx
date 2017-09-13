@@ -2530,7 +2530,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     rResultVector.reserve( aB2DPolyPolyVector.size() );
     basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
     for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
-        rResultVector.push_back(tools::PolyPolygon(*aIt)); // #i76339#
+        rResultVector.emplace_back(*aIt); // #i76339#
 
     return true;
 }

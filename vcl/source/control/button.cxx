@@ -2211,7 +2211,7 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
         if( pFirst->GetType() == WindowType::RADIOBUTTON )
         {
             if( pFirst != this || bIncludeThis )
-                aGroup.push_back( static_cast<RadioButton*>(pFirst) );
+                aGroup.emplace_back(static_cast<RadioButton*>(pFirst) );
         }
         pFirst = pFirst->GetWindow( GetWindowType::Next );
     } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );
@@ -2731,7 +2731,7 @@ static void LoadThemedImageList(const StyleSettings &rStyleSettings,
     {
         BitmapEx aBmpEx(a);
         aBmpEx.Replace(aColorAry1, aColorAry2, SAL_N_ELEMENTS(aColorAry1));
-        rList.push_back(Image(aBmpEx));
+        rList.emplace_back(aBmpEx);
     }
 }
 
@@ -2759,21 +2759,21 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
         std::vector<OUString> aResources;
         if (nStyle)
         {
-            aResources.push_back(SV_RESID_BITMAP_RADIOMONO1);
-            aResources.push_back(SV_RESID_BITMAP_RADIOMONO2);
-            aResources.push_back(SV_RESID_BITMAP_RADIOMONO3);
-            aResources.push_back(SV_RESID_BITMAP_RADIOMONO4);
-            aResources.push_back(SV_RESID_BITMAP_RADIOMONO5);
-            aResources.push_back(SV_RESID_BITMAP_RADIOMONO6);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIOMONO1);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIOMONO2);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIOMONO3);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIOMONO4);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIOMONO5);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIOMONO6);
         }
         else
         {
-            aResources.push_back(SV_RESID_BITMAP_RADIO1);
-            aResources.push_back(SV_RESID_BITMAP_RADIO2);
-            aResources.push_back(SV_RESID_BITMAP_RADIO3);
-            aResources.push_back(SV_RESID_BITMAP_RADIO4);
-            aResources.push_back(SV_RESID_BITMAP_RADIO5);
-            aResources.push_back(SV_RESID_BITMAP_RADIO6);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIO1);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIO2);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIO3);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIO4);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIO5);
+            aResources.emplace_back(SV_RESID_BITMAP_RADIO6);
         }
         LoadThemedImageList( rStyleSettings, pSVData->maCtrlData.maRadioImgList, aResources);
         pSVData->maCtrlData.mnRadioStyle = nStyle;
@@ -3583,27 +3583,27 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
         std::vector<OUString> aResources;
         if (nStyle)
         {
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO1);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO2);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO3);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO4);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO5);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO6);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO7);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO8);
-            aResources.push_back(SV_RESID_BITMAP_CHECKMONO9);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO1);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO2);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO3);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO4);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO5);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO6);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO7);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO8);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECKMONO9);
         }
         else
         {
-            aResources.push_back(SV_RESID_BITMAP_CHECK1);
-            aResources.push_back(SV_RESID_BITMAP_CHECK2);
-            aResources.push_back(SV_RESID_BITMAP_CHECK3);
-            aResources.push_back(SV_RESID_BITMAP_CHECK4);
-            aResources.push_back(SV_RESID_BITMAP_CHECK5);
-            aResources.push_back(SV_RESID_BITMAP_CHECK6);
-            aResources.push_back(SV_RESID_BITMAP_CHECK7);
-            aResources.push_back(SV_RESID_BITMAP_CHECK8);
-            aResources.push_back(SV_RESID_BITMAP_CHECK9);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK1);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK2);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK3);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK4);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK5);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK6);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK7);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK8);
+            aResources.emplace_back(SV_RESID_BITMAP_CHECK9);
         }
         LoadThemedImageList(rStyleSettings, pSVData->maCtrlData.maCheckImgList, aResources);
         pSVData->maCtrlData.mnCheckStyle = nStyle;

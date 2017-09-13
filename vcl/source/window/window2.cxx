@@ -1957,7 +1957,7 @@ void Window::add_mnemonic_label(FixedText *pLabel)
     std::vector<VclPtr<FixedText> >& v = mpWindowImpl->m_aMnemonicLabels;
     if (std::find(v.begin(), v.end(), VclPtr<FixedText>(pLabel)) != v.end())
         return;
-    v.push_back(pLabel);
+    v.emplace_back(pLabel);
     pLabel->set_mnemonic_widget(this);
 }
 

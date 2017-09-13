@@ -289,8 +289,8 @@ namespace vcl {
                 nEnd);
             while (aScriptRun.next())
             {
-                runs.push_back(Run(aScriptRun.getScriptStart(),
-                    aScriptRun.getScriptEnd(), aScriptRun.getScriptCode()));
+                runs.emplace_back(aScriptRun.getScriptStart(),
+                    aScriptRun.getScriptEnd(), aScriptRun.getScriptCode());
             }
         }
     };

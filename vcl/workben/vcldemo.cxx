@@ -1199,7 +1199,7 @@ public:
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
             {
                 maIconNames.push_back(OUString::createFromAscii(pNames[i]));
-                maIcons.push_back(BitmapEx(maIconNames[i]));
+                maIcons.emplace_back(maIconNames[i]);
             }
         }
 
@@ -1217,7 +1217,7 @@ public:
                 if (aAllIcons[i].endsWithIgnoreAsciiCase("svg"))
                     continue; // too slow to load.
                 maIconNames.push_back(aAllIcons[i]);
-                maIcons.push_back(BitmapEx(aAllIcons[i]));
+                maIcons.emplace_back(aAllIcons[i]);
             }
         }
 
@@ -1491,7 +1491,7 @@ public:
             drawThumbs(rDev, aWholeWin, bVDev);
     }
     std::vector<VclPtr<vcl::Window> > maInvalidates;
-    void addInvalidate(vcl::Window *pWindow) { maInvalidates.push_back(pWindow); };
+    void addInvalidate(vcl::Window *pWindow) { maInvalidates.emplace_back(pWindow); };
     void removeInvalidate(vcl::Window *pWindow)
     {
         for (auto aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)

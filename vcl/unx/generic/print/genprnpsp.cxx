@@ -1119,7 +1119,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 }
                 // save current file and paper format
                 aLastParm = aNewParm;
-                aPDFFiles.push_back( PDFPrintFile( aPDFUrl, aNewParm ) );
+                aPDFFiles.emplace_back( aPDFUrl, aNewParm );
                 // update context
                 aContext.URL = aPDFUrl;
 

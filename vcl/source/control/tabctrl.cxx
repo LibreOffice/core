@@ -1634,7 +1634,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     ImplTabItem* pItem = nullptr;
     if( nPos == TAB_APPEND || size_t(nPos) >= mpTabCtrlData->maItemList.size() )
     {
-        mpTabCtrlData->maItemList.push_back( ImplTabItem() );
+        mpTabCtrlData->maItemList.emplace_back( );
         pItem = &mpTabCtrlData->maItemList.back();
         if( mpTabCtrlData->mpListBox )
             mpTabCtrlData->mpListBox->InsertEntry( rText );

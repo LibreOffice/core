@@ -39,10 +39,10 @@ static void ImplInitMsgBoxImageList()
     ImplSVData* pSVData = ImplGetSVData();
     if (pSVData->maWinData.maMsgBoxImgList.empty())
     {
-        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_ERRORBOX)));
-        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_QUERYBOX)));
-        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_WARNINGBOX)));
-        pSVData->maWinData.maMsgBoxImgList.push_back(Image(BitmapEx(SV_RESID_BITMAP_INFOBOX)));
+        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_ERRORBOX));
+        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_QUERYBOX));
+        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_WARNINGBOX));
+        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_INFOBOX));
     }
 }
 

@@ -537,7 +537,7 @@ GtkPrintDialog::impl_initCustomTab()
             lcl_setHelpText(pCurTabPage, aHelpTexts, 0);
 
             pCurParent = pCurTabPage;
-            aCustomTabs.push_back(std::make_pair(pCurTabPage, aText));
+            aCustomTabs.emplace_back(pCurTabPage, aText);
         }
         else if (aCtrlType == "Subgroup")
         {

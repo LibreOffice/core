@@ -65,7 +65,7 @@ static void CollectMenuItemIds( Menu *pMenu, std::vector< SalMenuEvent > &rIds )
     for (sal_uInt16 i = 0; i < nItems; i++)
     {
         if (pMenu->GetItemType( i ) != MenuItemType::SEPARATOR || getRandom() < 0.01)
-            rIds.push_back( SalMenuEvent( pMenu->GetItemId( i ), pMenu ) );
+            rIds.emplace_back( pMenu->GetItemId( i ), pMenu );
         PopupMenu *pPopup = pMenu->GetPopupMenu( i );
         if (pPopup)
             CollectMenuItemIds( pPopup, rIds );
