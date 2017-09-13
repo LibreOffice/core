@@ -1103,19 +1103,19 @@ static OUString lcl_convertExcelSubtotalName(const OUString& rName)
     return aBuf.makeStringAndClear();
 }
 
-ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
+void XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
 {
     const OUString& rFieldName = GetFieldName();
     if( rFieldName.isEmpty() )
-        return nullptr;
+        return;
 
     const XclImpPCField* pCacheField = GetCacheField();
     if( !pCacheField || !pCacheField->IsSupportedField() )
-        return nullptr;
+        return;
 
     ScDPSaveDimension* pTest = rSaveData.GetNewDimensionByName(rFieldName);
     if (!pTest)
-        return nullptr;
+        return;
 
     ScDPSaveDimension& rSaveDim = *pTest;
 
@@ -1163,8 +1163,6 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
         OUString aSubName = lcl_convertExcelSubtotalName(*maFieldExtInfo.mpFieldTotalName);
         rSaveDim.SetSubtotalName(aSubName);
     }
-
-    return &rSaveDim;
 }
 
 void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot, bool bPageField ) const

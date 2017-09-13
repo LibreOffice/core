@@ -273,7 +273,7 @@ public:
     void                ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot, bool bPageField = false ) const;
 
 private:
-    ScDPSaveDimension*  ConvertRCPField( ScDPSaveData& rSaveData ) const;
+    void                ConvertRCPField( ScDPSaveData& rSaveData ) const;
 
     void                ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
     void                ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const;
