@@ -163,21 +163,17 @@ public:
     , mnLastPageCount( [i_pAccessoryController printerController]->getFilteredPageCount() )
     , mpAccessoryController( i_pAccessoryController )
     {
-        assert( SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 5 && "resources not found" );
+        static_assert( SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) == 5, "resources not found" );
     }
 
     static rtl::OUString getMoreString()
     {
-        return SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 4
-               ? VclResId(SV_PRINT_NATIVE_STRINGS[3])
-               : OUString("More");
+        return VclResId(SV_PRINT_NATIVE_STRINGS[3]);
     }
 
     static rtl::OUString getPrintSelectionString()
     {
-        return SAL_N_ELEMENTS(SV_PRINT_NATIVE_STRINGS) >= 5
-               ? VclResId(SV_PRINT_NATIVE_STRINGS[4])
-               : OUString("Print selection only");
+        return VclResId(SV_PRINT_NATIVE_STRINGS[4]);
     }
 
     int addNameTag( const rtl::OUString& i_rPropertyName )
