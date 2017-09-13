@@ -90,31 +90,11 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    Link<SpinField&,void> aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
-    Link<Control&,void> aLk3 = LINK(this, SwWrapTabPage, RangeLoseFocusHdl);
-    m_pLeftMarginED->SetUpHdl(aLk);
-    m_pLeftMarginED->SetDownHdl(aLk);
-    m_pLeftMarginED->SetFirstHdl(aLk);
-    m_pLeftMarginED->SetLastHdl(aLk);
-    m_pLeftMarginED->SetLoseFocusHdl(aLk3);
-
-    m_pRightMarginED->SetUpHdl(aLk);
-    m_pRightMarginED->SetDownHdl(aLk);
-    m_pRightMarginED->SetFirstHdl(aLk);
-    m_pRightMarginED->SetLastHdl(aLk);
-    m_pRightMarginED->SetLoseFocusHdl(aLk3);
-
-    m_pTopMarginED->SetUpHdl(aLk);
-    m_pTopMarginED->SetDownHdl(aLk);
-    m_pTopMarginED->SetFirstHdl(aLk);
-    m_pTopMarginED->SetLastHdl(aLk);
-    m_pTopMarginED->SetLoseFocusHdl(aLk3);
-
-    m_pBottomMarginED->SetUpHdl(aLk);
-    m_pBottomMarginED->SetDownHdl(aLk);
-    m_pBottomMarginED->SetFirstHdl(aLk);
-    m_pBottomMarginED->SetLastHdl(aLk);
-    m_pBottomMarginED->SetLoseFocusHdl(aLk3);
+    Link<Edit&,void> aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
+    m_pLeftMarginED->SetModifyHdl(aLk);
+    m_pRightMarginED->SetModifyHdl(aLk);
+    m_pTopMarginED->SetModifyHdl(aLk);
+    m_pBottomMarginED->SetModifyHdl(aLk);
 
     Link<Button*,void> aLk2 = LINK(this, SwWrapTabPage, WrapTypeHdl);
     m_pNoWrapRB->SetClickHdl(aLk2);
@@ -572,12 +552,7 @@ DeactivateRC SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
     return DeactivateRC::LeavePage;
 }
 
-// range check
-IMPL_LINK( SwWrapTabPage, RangeLoseFocusHdl, Control&, rControl, void )
-{
-    RangeModifyHdl( static_cast<SpinField&>(rControl) );
-}
-IMPL_LINK( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
+IMPL_LINK( SwWrapTabPage, RangeModifyHdl, Edit&, rSpin, void )
 {
     MetricField& rEdit = static_cast<MetricField&>(rSpin);
     sal_Int64 nValue = rEdit.GetValue();
