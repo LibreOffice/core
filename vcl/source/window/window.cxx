@@ -1074,7 +1074,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         if ( pRealParent && IsTopWindow() )
         {
             ImplWinData* pParentWinData = pRealParent->ImplGetWinData();
-            pParentWinData->maTopWindowChildren.push_back( this );
+            pParentWinData->maTopWindowChildren.emplace_back(this );
         }
     }
 
@@ -1104,7 +1104,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         // add ownerdraw decorated frame windows to list in the top-most frame window
         // so they can be hidden on lose focus
         if( nStyle & WB_OWNERDRAWDECORATION )
-            ImplGetOwnerDrawList().push_back( this );
+            ImplGetOwnerDrawList().emplace_back(this );
 
         // delay settings initialization until first "real" frame
         // this relies on the IntroWindow not needing any system settings

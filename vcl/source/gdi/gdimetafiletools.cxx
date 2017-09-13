@@ -274,10 +274,10 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     std::vector< MapMode > aMapModes;
 
     // start with empty region
-    aClips.push_back(basegfx::B2DPolyPolygon());
+    aClips.emplace_back();
 
     // start with default MapMode (MapUnit::MapPixel)
-    aMapModes.push_back(MapMode());
+    aMapModes.emplace_back();
 
     for(sal_uLong i(0); i < nObjCount; ++i)
     {

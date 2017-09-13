@@ -3432,7 +3432,7 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
         // event has a matching key press event in this list, we swallow
         // the key release because some GTK Input Methods don't swallow it
         // for us.
-        m_aPrevKeyPresses.push_back( PreviousKeyPress(pEvent) );
+        m_aPrevKeyPresses.emplace_back(pEvent );
         m_nPrevKeyPresses++;
 
         // Also pop off the earliest key press event if there are more than 10

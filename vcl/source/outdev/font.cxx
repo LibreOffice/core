@@ -697,7 +697,7 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
 void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
     const OUString& rSubstFontName, AddFontSubstituteFlags nFlags )
 {
-    maFontSubstList.push_back( ImplFontSubstEntry( rFontName, rSubstFontName, nFlags ) );
+    maFontSubstList.emplace_back( rFontName, rSubstFontName, nFlags );
 }
 
 ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,

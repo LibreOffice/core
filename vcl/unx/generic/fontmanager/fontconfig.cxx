@@ -342,7 +342,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern const * pPattern,
         if (FcPatternGetString( pPattern, elementlangtype, 0, &elementlang ) == FcResultMatch)
         {
             std::vector< lang_and_element > lang_and_elements;
-            lang_and_elements.push_back(lang_and_element(elementlang, *element));
+            lang_and_elements.emplace_back(elementlang, *element);
             int k = 1;
             while (true)
             {
@@ -350,7 +350,7 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern const * pPattern,
                     break;
                 if (FcPatternGetString( pPattern, elementtype, k, element ) != FcResultMatch)
                     break;
-                lang_and_elements.push_back(lang_and_element(elementlang, *element));
+                lang_and_elements.emplace_back(elementlang, *element);
                 ++k;
             }
 
