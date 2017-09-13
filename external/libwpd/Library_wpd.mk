@@ -12,6 +12,7 @@ $(eval $(call gb_Library_Library,wpd))
 $(eval $(call gb_Library_use_unpacked,wpd,libwpd))
 
 $(eval $(call gb_Library_use_externals,wpd,\
+	boost_headers \
 	revenge \
 ))
 
