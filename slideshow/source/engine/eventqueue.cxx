@@ -119,9 +119,8 @@ namespace slideshow
 
             ENSURE_OR_RETURN_FALSE( rEvent.get() != nullptr,
                                "EventQueue::addEvent: event ptr NULL" );
-            maNextEvents.push_back(
-                EventEntry( rEvent, rEvent->getActivationTime(
-                                mpTimer->getElapsedTime()) ) );
+            maNextEvents.emplace_back( rEvent, rEvent->getActivationTime(
+                                mpTimer->getElapsedTime()) );
             return true;
         }
 

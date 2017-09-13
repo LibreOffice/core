@@ -343,7 +343,7 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
     if( maViews.empty() )
         maSpriteRectangle = spriteRectangle;
 
-    maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
+    maViews.emplace_back( rView, sprite );
 
     if (isActive())
         sprite->show();

@@ -392,7 +392,7 @@ void SlideChangeBase::viewAdded( const UnoViewSharedPtr& rView )
     if( mbFinished )
         return;
 
-    maViewData.push_back( ViewEntry(rView) );
+    maViewData.emplace_back(rView );
 
     ViewEntry& rEntry( maViewData.back() );
     getEnteringBitmap( rEntry );

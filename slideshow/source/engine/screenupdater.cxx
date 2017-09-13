@@ -99,8 +99,7 @@ namespace internal
     void ScreenUpdater::notifyUpdate( const UnoViewSharedPtr& rView,
                                       bool                    bViewClobbered )
     {
-        mpImpl->maViewUpdateRequests.push_back(
-            std::make_pair(rView, bViewClobbered) );
+        mpImpl->maViewUpdateRequests.emplace_back(rView, bViewClobbered );
 
         if( bViewClobbered )
             mpImpl->mbViewClobbered = true;

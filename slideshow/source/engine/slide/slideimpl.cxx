@@ -581,9 +581,8 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 
 void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )
 {
-    maSlideBitmaps.push_back(
-        std::make_pair( rView,
-                        VectorOfSlideBitmaps(SlideAnimationState_NUM_ENTRIES) ));
+    maSlideBitmaps.emplace_back( rView,
+                        VectorOfSlideBitmaps(SlideAnimationState_NUM_ENTRIES) );
 
     if( mpLayerManager )
         mpLayerManager->viewAdded( rView );

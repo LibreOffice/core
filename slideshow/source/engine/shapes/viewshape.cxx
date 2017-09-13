@@ -755,7 +755,7 @@ namespace slideshow
 
                 // not yet in cache - add default-constructed cache
                 // entry, to have something to return
-                maRenderers.push_back( RendererCacheEntry() );
+                maRenderers.emplace_back( );
                 aIter = maRenderers.end()-1;
             }
 
