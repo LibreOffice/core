@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,cmis))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libcmis))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,cmis,$(CMIS_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,libcmis,$(LIBCMIS_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,cmis,1))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 
-$(eval $(call gb_UnpackedTarball_add_patches,cmis, \
+$(eval $(call gb_UnpackedTarball_add_patches,libcmis, \
 						external/libcmis/libcmis-libxml2_compatibility.patch \
 						external/libcmis/libcmis-fix-google-drive.patch \
 						external/libcmis/libcmis-google-2FA-implementation.patch \
@@ -23,7 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_UnpackedTarball_add_patches,cmis,external/libcmis/boost-win.patch))
+$(eval $(call gb_UnpackedTarball_add_patches,libcmis,external/libcmis/boost-win.patch))
 endif
 
 # vim: set noet sw=4 ts=4:

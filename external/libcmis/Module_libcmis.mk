@@ -10,8 +10,8 @@
 $(eval $(call gb_Module_Module,libcmis))
 
 $(eval $(call gb_Module_add_targets,libcmis,\
-	StaticLibrary_cmis \
-	UnpackedTarball_cmis \
+	StaticLibrary_libcmis \
+	UnpackedTarball_libcmis \
 ))
 
 # vim: set noet sw=4 ts=4:
