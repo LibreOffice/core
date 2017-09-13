@@ -54,6 +54,9 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker.hpp>
+
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -3150,6 +3153,25 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
+static void preloadData()
+{
+    // First: sit down and read all dictionaries: yum.
+    css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
+        css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
+    css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
+
+    css::uno::Reference<linguistic2::XSupportedLocales> xLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
+    uno::Sequence< css::lang::Locale > aLocales = xLocales->getLocales();
+    SAL_INFO("lok", "Preloading #" << aLocales.getLength() << " dictionaries");
+    for (auto &it : aLocales)
+    {
+        SAL_INFO("lok", "    load " << it.Language << "_" << it.Country);
+        css::beans::PropertyValues aNone;
+        xSpellChecker->isValid("forcefed", it, aNone);
+    }
+    SAL_INFO("lok", "Preloading done");
+}
+
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {
     enum {
@@ -3260,6 +3282,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // 2) comphelper::setProcessServiceFactory(xSFactory);
                 // 3) InitVCL()
                 aService->initialize({css::uno::makeAny<OUString>("preload")});
+
+                preloadData();
 
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
