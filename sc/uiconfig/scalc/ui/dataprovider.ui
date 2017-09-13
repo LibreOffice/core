@@ -6,7 +6,7 @@
   <object class="GtkDialog" id="DataProviderDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="datastreams|DataStreamDialog">Live Data Streams</property>
+    <property name="title" translatable="yes" context="dataprovider|DataStreamDialog">Live Data Streams</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -104,7 +104,7 @@
                               <object class="GtkLabel" id="label6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="datastreams|label6">URL:</property>
+                                <property name="label" translatable="yes" context="dataprovider|label6">URL:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -117,7 +117,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes" context="datastreams|url|tooltip_text">Enter the URL of the source document in the local file system or Internet here.</property>
+                                <property name="tooltip_text" translatable="yes" context="dataprovider|url|tooltip_text">Enter the URL of the source document in the local file system or Internet here.</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
                                 <property name="max_width_chars">48</property>
@@ -135,7 +135,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="browse">
-                                <property name="label" translatable="yes" context="datastreams|browse">_Browse...</property>
+                                <property name="label" translatable="yes" context="dataprovider|browse">_Browse...</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -162,7 +162,7 @@
                               <object class="GtkLabel" id="label_db">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="datastreams|label_db">Database Range:</property>
+                                <property name="label" translatable="yes" context="dataprovider|label_db">Database Range:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -196,7 +196,7 @@
                               <object class="GtkLabel" id="label_provider">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="datastreams|label_provider">Data Provider:</property>
+                                <property name="label" translatable="yes" context="dataprovider|label_provider">Data Provider:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -231,7 +231,7 @@
                               <object class="GtkLabel" id="label_search">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes" context="datastreams|label_search">Search String:</property>
+                                <property name="label" translatable="yes" context="dataprovider|label_search">Search String:</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -265,7 +265,7 @@
                   <object class="GtkLabel" id="label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="datastreams|label">Source Stream</property>
+                    <property name="label" translatable="yes" context="dataprovider|label">Source Stream</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
