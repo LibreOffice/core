@@ -988,7 +988,7 @@ void HelperCreateVerticalEntry(
 
     if(rStartFromBR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBR, rX + rY, false));
     if(rStartTFromR.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromR, rX, false));
-    if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, rY, true));
+    if(rStartTFromT.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromT, -rY, true));
     if(rStartTFromL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartTFromL, -rX, true));
     if(rStartFromBL.IsUsed()) aStart.push_back(StyleVectorCombination(rStartFromBL, rY - rX, true));
 
@@ -1002,9 +1002,9 @@ void HelperCreateVerticalEntry(
 
     if(rEndFromTR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTR, rX - rY, false));
     if(rEndBFromR.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromR, rX, false));
-    if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, -rY, false));
-    if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, rX, true));
-    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, rX + rY, true));
+    if(rEndBFromB.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromB, rY, false));
+    if(rEndBFromL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndBFromL, -rX, true));
+    if(rEndFromTL.IsUsed()) aEnd.push_back(StyleVectorCombination(rEndFromTL, -rX - rY, true));
 
     CreateBorderPrimitives(
         rSequence,
