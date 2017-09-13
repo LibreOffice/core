@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4463c6dc",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3048,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-13T14:11:37Z",
+      "side": 1,
+      "message": "Oh, seeing this just now.. that should be a post decrement nParamCount-- otherwise it leaves one argument on the stack (which doesn\u0027t harm but wouldn\u0027t pop an error if there was one).\n\nI\u0027ll correct in an amended patch.",
+      "range": {
+        "startLine": 3048,
+        "startChar": 28,
+        "endLine": 3048,
+        "endChar": 41
+      },
+      "revId": "243f7dd04dd1c5ffbf656be937b7bf3e76d813b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
