@@ -208,14 +208,14 @@ namespace sdr
             const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(rX));
 
             /// Fill top-left Style Table
-            if(rLeftA.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftA, -aY, bHor ? true : false));
-            if(rLeftB.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftB, -rX, bHor ? true : true));
-            if(rLeftC.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftC, aY, bHor ? false : true));
+            if(rLeftA.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftA, -aY, bHor)); // bHor ? true : false));
+            if(rLeftB.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftB, -rX, true)); // bHor ? true : true));
+            if(rLeftC.IsUsed()) aStart.push_back(svx::frame::StyleVectorCombination(rLeftC, aY, !bHor)); // bHor ? false : true));
 
             /// Fill bottom-right Style Table
-            if(rRightA.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightA, -aY, bHor ? true : false));
-            if(rRightB.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightB, rX, bHor ? false : false));
-            if(rRightC.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightC, aY, bHor ? false : true));
+            if(rRightA.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightA, -aY, bHor)); // bHor ? true : false));
+            if(rRightB.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightB, rX, false)); // bHor ? false : false));
+            if(rRightC.IsUsed()) aEnd.push_back(svx::frame::StyleVectorCombination(rRightC, aY, !bHor)); // bHor ? false : true));
 
             CreateBorderPrimitives(
                 rContainer,
