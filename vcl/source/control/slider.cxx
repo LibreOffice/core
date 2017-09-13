@@ -815,36 +815,12 @@ void Slider::Resize()
 void Slider::SetLinkedField(VclPtr<NumericField> const & pField)
 {
     if (mpLinkedField)
-    {
         mpLinkedField->SetModifyHdl(Link<Edit&,void>());
-        mpLinkedField->SetUpHdl(Link<SpinField&,void>());
-        mpLinkedField->SetDownHdl(Link<SpinField&,void>());
-        mpLinkedField->SetFirstHdl(Link<SpinField&,void>());
-        mpLinkedField->SetLastHdl(Link<SpinField&,void>());
-        mpLinkedField->SetLoseFocusHdl(Link<Control&,void>());
-    }
     mpLinkedField = pField;
     if (mpLinkedField)
-    {
         mpLinkedField->SetModifyHdl(LINK(this, Slider, LinkedFieldModifyHdl));
-        mpLinkedField->SetUpHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
-        mpLinkedField->SetDownHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
-        mpLinkedField->SetFirstHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
-        mpLinkedField->SetLastHdl(LINK(this, Slider, LinkedFieldSpinnerHdl));
-        mpLinkedField->SetLoseFocusHdl(LINK(this, Slider, LinkedFieldLoseFocusHdl));
-    }
 }
 
-IMPL_LINK_NOARG(Slider, LinkedFieldSpinnerHdl, SpinField&, void)
-{
-    if (mpLinkedField)
-        SetThumbPos(mpLinkedField->GetValue());
-}
-IMPL_LINK_NOARG(Slider, LinkedFieldLoseFocusHdl, Control&, void)
-{
-    if (mpLinkedField)
-        SetThumbPos(mpLinkedField->GetValue());
-}
 IMPL_LINK_NOARG(Slider, LinkedFieldModifyHdl, Edit&, void)
 {
     if (mpLinkedField)

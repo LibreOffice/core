@@ -57,8 +57,6 @@ private:
     Link<Slider*,void>   maEndSlideHdl;
 
     DECL_LINK(LinkedFieldModifyHdl, Edit&, void);
-    DECL_LINK(LinkedFieldLoseFocusHdl, Control&, void);
-    DECL_LINK(LinkedFieldSpinnerHdl, SpinField&, void);
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
