@@ -481,7 +481,7 @@ void ScDocument::FillInfo(
 
                     SCROW nThisRow;
                     SCSIZE nIndex;
-                    if ( pThisAttrArr->nCount )
+                    if ( pThisAttrArr->Count() )
                         (void) pThisAttrArr->Search( nCurRow, nIndex );
                     else
                         nIndex = 0;
@@ -489,10 +489,10 @@ void ScDocument::FillInfo(
                     do
                     {
                         const ScPatternAttr* pPattern = nullptr;
-                        if ( pThisAttrArr->nCount )
+                        if ( pThisAttrArr->Count() )
                         {
-                            nThisRow = pThisAttrArr->pData[nIndex].nEndRow;              // End of range
-                            pPattern = pThisAttrArr->pData[nIndex].pPattern;
+                            nThisRow = pThisAttrArr->mvData[nIndex].nEndRow;              // End of range
+                            pPattern = pThisAttrArr->mvData[nIndex].pPattern;
                         }
                         else
                         {
@@ -606,7 +606,7 @@ void ScDocument::FillInfo(
                         while (nCurRow <= nThisRow && nCurRow <= nYExtra);
                         ++nIndex;
                     }
-                    while ( nIndex < pThisAttrArr->nCount && nThisRow < nYExtra );
+                    while ( nIndex < pThisAttrArr->Count() && nThisRow < nYExtra );
 
                     if (pMarkData && pMarkData->IsMultiMarked())
                     {
