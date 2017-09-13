@@ -11,15 +11,15 @@ $(eval $(call gb_Module_Module,libexttextcat))
 
 $(eval $(call gb_Module_add_targets,libexttextcat,\
 	ExternalPackage_fingerprint \
-	UnpackedTarball_exttextcat \
+	UnpackedTarball_libexttextcat \
 ))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,libexttextcat,\
-	StaticLibrary_exttextcat \
+	StaticLibrary_libexttextcat \
 ))
 else
 $(eval $(call gb_Module_add_targets,libexttextcat,\
-	ExternalProject_exttextcat \
+	ExternalProject_libexttextcat \
 ))
 endif
 

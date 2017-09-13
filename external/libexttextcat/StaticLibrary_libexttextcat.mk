@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,exttextcat))
+$(eval $(call gb_StaticLibrary_StaticLibrary,libexttextcat))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,exttextcat,exttextcat))
+$(eval $(call gb_StaticLibrary_use_unpacked,libexttextcat,libexttextcat))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,exttextcat))
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libexttextcat))
 
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,exttextcat,\
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,libexttextcat,\
 	UnpackedTarball/exttextcat/src/common \
 	UnpackedTarball/exttextcat/src/fingerprint \
 	UnpackedTarball/exttextcat/src/textcat \
