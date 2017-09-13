@@ -577,12 +577,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write framePr
     if(!aFramePrTextbox.empty())
     {
-        for (std::vector< std::shared_ptr<ww8::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
+        for ( const auto & pFrame : aFramePrTextbox )
         {
             DocxTableExportContext aTableExportContext;
             pushToTableExportContext(aTableExportContext);
-            m_pCurrentFrame = it->get();
-            m_rExport.SdrExporter().writeOnlyTextOfFrame(it->get());
+            m_pCurrentFrame = pFrame.get();
+            m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
             m_pCurrentFrame = nullptr;
             popFromTableExportContext(aTableExportContext);
         }
@@ -1409,11 +1409,8 @@ void DocxAttributeOutput::DoWriteBookmarks()
 void DocxAttributeOutput::DoWriteAnnotationMarks()
 {
     // Write the start annotation marks
-    for ( std::vector< OString >::const_iterator it = m_rAnnotationMarksStart.begin(), end = m_rAnnotationMarksStart.end();
-          it != end; ++it )
+    for ( const auto & rName : m_rAnnotationMarksStart )
     {
-        const OString& rName = *it;
-
         // Output the annotation mark
         /* Ensure that the existing Annotation Marks are not overwritten
            as it causes discrepancy when DocxAttributeOutput::PostitField
@@ -1433,11 +1430,8 @@ void DocxAttributeOutput::DoWriteAnnotationMarks()
     m_rAnnotationMarksStart.clear();
 
     // export the end annotation marks
-    for ( std::vector< OString >::const_iterator it = m_rAnnotationMarksEnd.begin(), end = m_rAnnotationMarksEnd.end();
-          it != end; ++it )
+    for ( const auto & rName : m_rAnnotationMarksEnd )
     {
-        const OString& rName = *it;
-
         // Get the id of the annotation mark
         std::map< OString, sal_Int32 >::iterator pPos = m_rOpenedAnnotationMarksIds.find( rName );
         if ( pPos != m_rOpenedAnnotationMarksIds.end(  ) )
@@ -2087,19 +2081,18 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
 
 void DocxAttributeOutput::WritePostponedGraphic()
 {
-    for( std::vector< PostponedGraphic >::const_iterator it = m_pPostponedGraphic->begin();
-         it != m_pPostponedGraphic->end();
-         ++it )
-        FlyFrameGraphic( it->grfNode, it->size, it->mOLEFrameFormat, it->mOLENode, it->pSdrObj );
+    for (const auto & rPostponedDiagram : *m_pPostponedGraphic)
+        FlyFrameGraphic(rPostponedDiagram.grfNode, rPostponedDiagram.size,
+            rPostponedDiagram.mOLEFrameFormat, rPostponedDiagram.mOLENode,
+            rPostponedDiagram.pSdrObj);
     m_pPostponedGraphic.reset(nullptr);
 }
 
 void DocxAttributeOutput::WritePostponedDiagram()
 {
-    for( std::vector< PostponedDiagram >::const_iterator it = m_pPostponedDiagrams->begin();
-         it != m_pPostponedDiagrams->end();
-         ++it )
-        m_rExport.SdrExporter().writeDiagram( it->object, *(it->frame), m_anchorId++ );
+    for( const auto & rPostponedDiagram : *m_pPostponedDiagrams )
+        m_rExport.SdrExporter().writeDiagram(rPostponedDiagram.object,
+            *rPostponedDiagram.frame, m_anchorId++);
     m_pPostponedDiagrams.reset(nullptr);
 }
 
@@ -3315,28 +3308,27 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         m_aTableStyleConf.clear();
 
     // Extract properties from grab bag
-    std::map<OUString, css::uno::Any>::iterator aGrabBagElement;
-    for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
+    for( const auto & rGrabBagElement : aGrabBag )
     {
-        if( aGrabBagElement->first == "TableStyleName")
+        if( rGrabBagElement.first == "TableStyleName")
         {
-            OString sStyleName = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
+            OString sStyleName = OUStringToOString( rGrabBagElement.second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
             m_pSerializer->singleElementNS( XML_w, XML_tblStyle,
                     FSNS( XML_w, XML_val ), sStyleName.getStr(),
                     FSEND );
         }
-        else if( aGrabBagElement->first == "TableStyleTopBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::TOP ] = aGrabBagElement->second.get<table::BorderLine2>();
-        else if( aGrabBagElement->first == "TableStyleBottomBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::BOTTOM ] = aGrabBagElement->second.get<table::BorderLine2>();
-        else if( aGrabBagElement->first == "TableStyleLeftBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::LEFT ] = aGrabBagElement->second.get<table::BorderLine2>();
-        else if( aGrabBagElement->first == "TableStyleRightBorder" )
-            m_aTableStyleConf[ SvxBoxItemLine::RIGHT ] = aGrabBagElement->second.get<table::BorderLine2>();
-        else if (aGrabBagElement->first == "TableStyleLook")
+        else if( rGrabBagElement.first == "TableStyleTopBorder" )
+            m_aTableStyleConf[ SvxBoxItemLine::TOP ] = rGrabBagElement.second.get<table::BorderLine2>();
+        else if( rGrabBagElement.first == "TableStyleBottomBorder" )
+            m_aTableStyleConf[ SvxBoxItemLine::BOTTOM ] = rGrabBagElement.second.get<table::BorderLine2>();
+        else if( rGrabBagElement.first == "TableStyleLeftBorder" )
+            m_aTableStyleConf[ SvxBoxItemLine::LEFT ] = rGrabBagElement.second.get<table::BorderLine2>();
+        else if( rGrabBagElement.first == "TableStyleRightBorder" )
+            m_aTableStyleConf[ SvxBoxItemLine::RIGHT ] = rGrabBagElement.second.get<table::BorderLine2>();
+        else if (rGrabBagElement.first == "TableStyleLook")
         {
             FastAttributeList* pAttributeList = FastSerializerHelper::createAttrList();
-            uno::Sequence<beans::PropertyValue> aAttributeList = aGrabBagElement->second.get< uno::Sequence<beans::PropertyValue> >();
+            uno::Sequence<beans::PropertyValue> aAttributeList = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
 
             for (sal_Int32 i = 0; i < aAttributeList.getLength(); ++i)
             {
@@ -3363,10 +3355,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             XFastAttributeListRef xAttributeList(pAttributeList);
             m_pSerializer->singleElementNS(XML_w, XML_tblLook, xAttributeList);
         }
-        else if (aGrabBagElement->first == "TablePosition" )
+        else if (rGrabBagElement.first == "TablePosition" )
         {
             FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
-            uno::Sequence<beans::PropertyValue> aTablePosition = aGrabBagElement->second.get<uno::Sequence<beans::PropertyValue> >();
+            uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
             for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
             {
                 if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
@@ -3421,7 +3413,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             attrListTablePos = nullptr;
         }
         else
-            SAL_WARN("sw.ww8", "DocxAttributeOutput::TableDefinition: unhandled property: " << aGrabBagElement->first);
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::TableDefinition: unhandled property: " << rGrabBagElement.first);
     }
 
     // Output the table alignment
@@ -3494,13 +3486,13 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     m_pSerializer->startElementNS( XML_w, XML_tblGrid, FSEND );
     sal_Int32 nPrv = 0;
     ww8::WidthsPtr pColumnWidths = GetColumnWidths( pTableTextNodeInfoInner );
-    for ( ww8::Widths::const_iterator it = pColumnWidths->begin(); it != pColumnWidths->end(); ++it )
+    for ( auto aColumnWidth : *pColumnWidths )
     {
-        sal_Int32 nWidth  =  sal_Int32( *it ) - nPrv;
+        sal_Int32 nWidth  =  sal_Int32( aColumnWidth ) - nPrv;
         m_pSerializer->singleElementNS( XML_w, XML_gridCol,
                FSNS( XML_w, XML_w ), OString::number( nWidth ).getStr( ),
                FSEND );
-        nPrv = sal_Int32( *it );
+        nPrv = sal_Int32( aColumnWidth );
     }
 
     m_pSerializer->endElementNS( XML_w, XML_tblGrid );
@@ -3560,29 +3552,29 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     {
         rtl::Reference<sax_fastparser::FastAttributeList> pAttrList;
 
-        for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
+        for( const auto & rGrabBagElement : aGrabBag )
         {
-            if (!aGrabBagElement->second.has<OUString>())
+            if (!rGrabBagElement.second.has<OUString>())
                 continue;
 
-            OString sValue = OUStringToOString( aGrabBagElement->second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
-            if( aGrabBagElement->first == "themeFill")
+            OString sValue = OUStringToOString( rGrabBagElement.second.get<OUString>(), RTL_TEXTENCODING_UTF8 );
+            if( rGrabBagElement.first == "themeFill")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_themeFill ), sValue.getStr() );
-            else if( aGrabBagElement->first == "themeFillTint")
+            else if( rGrabBagElement.first == "themeFillTint")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_themeFillTint ), sValue.getStr() );
-            else if( aGrabBagElement->first == "themeFillShade")
+            else if( rGrabBagElement.first == "themeFillShade")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_themeFillShade ), sValue.getStr() );
-            else if( aGrabBagElement->first == "fill" )
+            else if( rGrabBagElement.first == "fill" )
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_fill ), sValue.getStr() );
-            else if( aGrabBagElement->first == "themeColor")
+            else if( rGrabBagElement.first == "themeColor")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_themeColor ), sValue.getStr() );
-            else if( aGrabBagElement->first == "themeTint")
+            else if( rGrabBagElement.first == "themeTint")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_themeTint ), sValue.getStr() );
-            else if( aGrabBagElement->first == "themeShade")
+            else if( rGrabBagElement.first == "themeShade")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_themeShade ), sValue.getStr() );
-            else if( aGrabBagElement->first == "color")
+            else if( rGrabBagElement.first == "color")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_color ), sValue.getStr() );
-            else if( aGrabBagElement->first == "val")
+            else if( rGrabBagElement.first == "val")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
         }
         m_pSerializer->singleElementNS( XML_w, XML_shd, pAttrList.get() );
@@ -4785,10 +4777,9 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
 void DocxAttributeOutput::WritePostponedActiveXControl(bool bInsideRun)
 {
-    for( std::vector<PostponedDrawing>::const_iterator it = m_aPostponedActiveXControls.begin();
-         it != m_aPostponedActiveXControls.end(); ++it )
+    for( const auto & rPostponedDrawing : m_aPostponedActiveXControls )
     {
-        WriteActiveXControl(it->object, *(it->frame), bInsideRun);
+        WriteActiveXControl(rPostponedDrawing.object, *rPostponedDrawing.frame, bInsideRun);
     }
     m_aPostponedActiveXControls.clear();
 }
@@ -4911,11 +4902,9 @@ void DocxAttributeOutput::WritePostponedOLE()
     if( !m_pPostponedOLEs )
         return;
 
-    for( std::vector< PostponedOLE >::iterator it = m_pPostponedOLEs->begin();
-         it != m_pPostponedOLEs->end();
-         ++it )
+    for( const auto & rPostponedOLE : *m_pPostponedOLEs )
     {
-        WriteOLE( *it->object, it->size, it->frame );
+        WriteOLE( *rPostponedOLE.object, rPostponedOLE.size, rPostponedOLE.frame );
     }
 
     // clear list of postponed objects
@@ -5019,14 +5008,12 @@ void DocxAttributeOutput::WritePostponedCustomShape()
         return;
 
     bool bStartedParaSdt = m_bStartedParaSdt;
-    for( std::vector< PostponedDrawing >::iterator it = m_pPostponedCustomShape->begin();
-         it != m_pPostponedCustomShape->end();
-         ++it )
+    for( const auto & rPostponedDrawing : *m_pPostponedCustomShape)
     {
         if ( IsAlternateContentChoiceOpen() )
-            m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
+            m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), m_anchorId++);
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
     m_bStartedParaSdt = bStartedParaSdt;
     m_pPostponedCustomShape.reset(nullptr);
@@ -5042,15 +5029,13 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
 
     bool bStartedParaSdt = m_bStartedParaSdt;
-    for( std::vector< PostponedDrawing >::iterator it = pPostponedDMLDrawings->begin();
-         it != pPostponedDMLDrawings->end();
-         ++it )
+    for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
         // Avoid w:drawing within another w:drawing.
         if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
-           m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
+           m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
         else
-            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), m_anchorId++);
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
     m_bStartedParaSdt = bStartedParaSdt;
 
@@ -7000,16 +6985,16 @@ void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
 void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts,
         std::vector< OUString >& rEnds )
 {
-    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
+    for ( const auto & rAnnotationName : rStarts )
     {
-        OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
+        OString rName = OUStringToOString(rAnnotationName, RTL_TEXTENCODING_UTF8 ).getStr( );
         m_rAnnotationMarksStart.push_back( rName );
     }
     rStarts.clear();
 
-    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
+    for ( const auto & rAnnotationName : rEnds )
     {
-        OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
+        OString rName = OUStringToOString( rAnnotationName, RTL_TEXTENCODING_UTF8 ).getStr( );
         m_rAnnotationMarksEnd.push_back( rName );
     }
     rEnds.clear();
@@ -8292,30 +8277,30 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
 void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 {
     const std::map<OUString, css::uno::Any>& rMap = rItem.GetGrabBag();
-    for (std::map<OUString, css::uno::Any>::const_iterator i = rMap.begin(); i != rMap.end(); ++i)
+    for ( const auto & rGrabBagElement : rMap )
     {
-        if (i->first == "MirrorIndents")
+        if (rGrabBagElement.first == "MirrorIndents")
             m_pSerializer->singleElementNS(XML_w, XML_mirrorIndents, FSEND);
-        else if (i->first == "ParaTopMarginBeforeAutoSpacing")
+        else if (rGrabBagElement.first == "ParaTopMarginBeforeAutoSpacing")
         {
             m_bParaBeforeAutoSpacing = true;
             // get fixed value which was set during import
-            i->second >>= m_nParaBeforeSpacing;
+            rGrabBagElement.second >>= m_nParaBeforeSpacing;
             m_nParaBeforeSpacing = convertMm100ToTwip(m_nParaBeforeSpacing);
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaBeforeSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << rGrabBagElement.first << " : m_nParaBeforeSpacing= " << m_nParaBeforeSpacing);
         }
-        else if (i->first == "ParaBottomMarginAfterAutoSpacing")
+        else if (rGrabBagElement.first == "ParaBottomMarginAfterAutoSpacing")
         {
             m_bParaAfterAutoSpacing = true;
             // get fixed value which was set during import
-            i->second >>= m_nParaAfterSpacing;
+            rGrabBagElement.second >>= m_nParaAfterSpacing;
             m_nParaAfterSpacing = convertMm100ToTwip(m_nParaAfterSpacing);
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << i->first << " : m_nParaBeforeSpacing= " << m_nParaAfterSpacing);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << rGrabBagElement.first << " : m_nParaBeforeSpacing= " << m_nParaAfterSpacing);
         }
-        else if (i->first == "CharThemeFill")
+        else if (rGrabBagElement.first == "CharThemeFill")
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
-            i->second >>= aGrabBagSeq;
+            rGrabBagElement.second >>= aGrabBagSeq;
 
             for (sal_Int32 j=0; j < aGrabBagSeq.getLength(); ++j)
             {
@@ -8346,10 +8331,10 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     aGrabBagSeq[j].Value >>= m_sOriginalBackgroundColor;
             }
         }
-        else if (i->first == "SdtPr")
+        else if (rGrabBagElement.first == "SdtPr")
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSdt =
-                    i->second.get< uno::Sequence<beans::PropertyValue> >();
+                    rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
             for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
             {
                 beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
@@ -8470,17 +8455,17 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled SdtPr grab bag property " << aPropertyValue.Name);
             }
         }
-        else if (i->first == "ParaCnfStyle")
+        else if (rGrabBagElement.first == "ParaCnfStyle")
         {
-            uno::Sequence<beans::PropertyValue> aAttributes = i->second.get< uno::Sequence<beans::PropertyValue> >();
+            uno::Sequence<beans::PropertyValue> aAttributes = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
         }
-        else if (i->first == "ParaSdtEndBefore")
+        else if (rGrabBagElement.first == "ParaSdtEndBefore")
         {
             // Handled already in StartParagraph().
         }
         else
-            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << rGrabBagElement.first );
     }
 }
 
@@ -8494,29 +8479,29 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     bool bWriteEastAsiaTheme = true;
     bool bWriteThemeFontColor = true;
     OUString sOriginalValue;
-    for ( std::map< OUString, css::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
+    for ( const auto & rGrabBagElement : rMap )
     {
-        if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameCs" )
+        if ( m_pFontsAttrList.is() && rGrabBagElement.first == "CharThemeFontNameCs" )
         {
-            if ( i->second >>= sOriginalValue )
+            if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteCSTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_cs ) ) == sOriginalValue );
         }
-        else if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameAscii" )
+        else if ( m_pFontsAttrList.is() && rGrabBagElement.first == "CharThemeFontNameAscii" )
         {
-            if ( i->second >>= sOriginalValue )
+            if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteAsciiTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sOriginalValue );
         }
-        else if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameEastAsia" )
+        else if ( m_pFontsAttrList.is() && rGrabBagElement.first == "CharThemeFontNameEastAsia" )
         {
-            if ( i->second >>= sOriginalValue )
+            if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteEastAsiaTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sOriginalValue );
         }
-        else if ( m_pColorAttrList.is() && i->first == "CharThemeOriginalColor" )
+        else if ( m_pColorAttrList.is() && rGrabBagElement.first == "CharThemeOriginalColor" )
         {
-            if ( i->second >>= sOriginalValue )
+            if ( rGrabBagElement.second >>= sOriginalValue )
                 bWriteThemeFontColor =
                         ( m_pColorAttrList->getOptionalValue( FSNS( XML_w, XML_val ) ) == sOriginalValue );
         }
@@ -8524,85 +8509,85 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 
     // save theme attributes back to the run properties
     OUString str;
-    for ( std::map< OUString, css::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
+    for ( const auto & rGrabBagElement : rMap )
     {
-        if ( i->first == "CharThemeNameAscii" && bWriteAsciiTheme )
+        if ( rGrabBagElement.first == "CharThemeNameAscii" && bWriteAsciiTheme )
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_asciiTheme ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if ( i->first == "CharThemeNameCs" && bWriteCSTheme )
+        else if ( rGrabBagElement.first == "CharThemeNameCs" && bWriteCSTheme )
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_cstheme ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if ( i->first == "CharThemeNameEastAsia" && bWriteEastAsiaTheme )
+        else if ( rGrabBagElement.first == "CharThemeNameEastAsia" && bWriteEastAsiaTheme )
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_eastAsiaTheme ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if ( i->first == "CharThemeNameHAnsi" && bWriteAsciiTheme )
+        else if ( rGrabBagElement.first == "CharThemeNameHAnsi" && bWriteAsciiTheme )
         // this is not a mistake: in LibO we don't directly support the hAnsi family
         // of attributes so we save the same value from ascii attributes instead
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pFontsAttrList, FSNS( XML_w, XML_hAnsiTheme ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if ( i->first == "CharThemeColor" && bWriteThemeFontColor )
+        else if ( rGrabBagElement.first == "CharThemeColor" && bWriteThemeFontColor )
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_themeColor ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if ( i->first == "CharThemeColorShade" )
+        else if ( rGrabBagElement.first == "CharThemeColorShade" )
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_themeShade ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if ( i->first == "CharThemeColorTint" )
+        else if ( rGrabBagElement.first == "CharThemeColorTint" )
         {
-            i->second >>= str;
+            rGrabBagElement.second >>= str;
             AddToAttrList( m_pColorAttrList, FSNS( XML_w, XML_themeTint ),
                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        else if( i->first == "CharThemeFontNameCs"   ||
-                i->first == "CharThemeFontNameAscii" ||
-                i->first == "CharThemeFontNameEastAsia" ||
-                i->first == "CharThemeOriginalColor" )
+        else if( rGrabBagElement.first == "CharThemeFontNameCs"   ||
+                rGrabBagElement.first == "CharThemeFontNameAscii" ||
+                rGrabBagElement.first == "CharThemeFontNameEastAsia" ||
+                rGrabBagElement.first == "CharThemeOriginalColor" )
         {
             // just skip these, they were processed before
         }
-        else if(i->first == "CharGlowTextEffect" ||
-                i->first == "CharShadowTextEffect" ||
-                i->first == "CharReflectionTextEffect" ||
-                i->first == "CharTextOutlineTextEffect" ||
-                i->first == "CharTextFillTextEffect" ||
-                i->first == "CharScene3DTextEffect" ||
-                i->first == "CharProps3DTextEffect" ||
-                i->first == "CharLigaturesTextEffect" ||
-                i->first == "CharNumFormTextEffect" ||
-                i->first == "CharNumSpacingTextEffect" ||
-                i->first == "CharStylisticSetsTextEffect" ||
-                i->first == "CharCntxtAltsTextEffect")
+        else if(rGrabBagElement.first == "CharGlowTextEffect" ||
+                rGrabBagElement.first == "CharShadowTextEffect" ||
+                rGrabBagElement.first == "CharReflectionTextEffect" ||
+                rGrabBagElement.first == "CharTextOutlineTextEffect" ||
+                rGrabBagElement.first == "CharTextFillTextEffect" ||
+                rGrabBagElement.first == "CharScene3DTextEffect" ||
+                rGrabBagElement.first == "CharProps3DTextEffect" ||
+                rGrabBagElement.first == "CharLigaturesTextEffect" ||
+                rGrabBagElement.first == "CharNumFormTextEffect" ||
+                rGrabBagElement.first == "CharNumSpacingTextEffect" ||
+                rGrabBagElement.first == "CharStylisticSetsTextEffect" ||
+                rGrabBagElement.first == "CharCntxtAltsTextEffect")
         {
             beans::PropertyValue aPropertyValue;
-            i->second >>= aPropertyValue;
+            rGrabBagElement.second >>= aPropertyValue;
             m_aTextEffectsGrabBag.push_back(aPropertyValue);
         }
-        else if (i->first == "SdtEndBefore")
+        else if (rGrabBagElement.first == "SdtEndBefore")
         {
             if (m_bStartedCharSdt)
                 m_bEndCharSdt = true;
         }
-        else if (i->first == "SdtPr" && FLY_NOT_PROCESSED != m_nStateOfFlyFrame )
+        else if (rGrabBagElement.first == "SdtPr" && FLY_NOT_PROCESSED != m_nStateOfFlyFrame )
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSdt =
-                    i->second.get< uno::Sequence<beans::PropertyValue> >();
+                    rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
             for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
             {
                 beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
@@ -8665,7 +8650,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             }
         }
         else
-            SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << i->first);
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << rGrabBagElement.first);
     }
 }
 
