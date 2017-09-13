@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 
-#include <list>
+#include <vector>
 #include <memory>
 #include <vector>
 #include <tools/mempool.hxx>
@@ -401,7 +401,7 @@ public:
         @return  A read-only reference to the item set stored internally. */
     const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
 
-    void                ApplyPatternToAttrList(
+    void                ApplyPatternToAttrVector(
                             ::std::vector<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
                             sal_uInt32 nForceScNumFmt);
 
@@ -669,10 +669,10 @@ private:
     typedef std::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
     typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
     typedef ::std::pair< XclRange, OUString >        XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
+    typedef ::std::vector< XclImpHyperlinkRange >      XclImpHyperlinkVector;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
-    XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.
+    XclImpHyperlinkVector maHyperlinks;     /// Maps URLs to hyperlink cells.
     ScRangeList         maMergeList;        /// List of merged cell ranges.
 };
 
