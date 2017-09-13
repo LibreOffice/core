@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libwpd,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libwpd,\
+	boost_headers \
 	revenge \
 ))
 
@@ -30,11 +31,12 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			--without-docs \
 			--disable-tools \
 			--disable-debug \
+			--disable-werror \
 			$(if $(filter MACOSX,$(OS)), \
-				--disable-werror \
 				--prefix=/@.__________________________________________________OOO) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))") \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
