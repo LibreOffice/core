@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,CDR,libcdr) \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(call gb_Helper_optional,CLUCENE,clucene) \
-	$(call gb_Helper_optional,CMIS,libcmis) \
+	$(call gb_Helper_optional,LIBCMIS,libcmis) \
 	$(call gb_Helper_optional,COINMP,coinmp) \
 	$(call gb_Helper_optional,COLLADA2GLTF,collada2gltf) \
 	$(call gb_Helper_optional,CPPUNIT,cppunit) \
