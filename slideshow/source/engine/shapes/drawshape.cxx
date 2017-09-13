@@ -869,17 +869,15 @@ namespace slideshow
                             maHyperlinkIndices.pop_back();
                             maHyperlinkRegions.pop_back();
                         }
-                        maHyperlinkIndices.push_back(
-                            HyperlinkIndexPair( nIndex + 1,
-                                                -1 /* to be filled below */ ) );
-                        maHyperlinkRegions.push_back(
-                            HyperlinkRegion(
+                        maHyperlinkIndices.emplace_back( nIndex + 1,
+                                                -1 /* to be filled below */ );
+                        maHyperlinkRegions.emplace_back(
                                 basegfx::B2DRectangle(),
                                 OUString(
                                     reinterpret_cast<sal_Unicode const*>(
                                         pAct->GetData()),
                                     pAct->GetDataSize() / sizeof(sal_Unicode) )
-                                ) );
+                                );
                     }
                     else if (pAct->GetComment().equalsIgnoreAsciiCase("FIELD_SEQ_END") &&
                              // pending end is expected:
@@ -977,12 +975,11 @@ namespace slideshow
             for( const auto& cp : maHyperlinkRegions )
             {
                 basegfx::B2DRange const& relRegion( cp.first );
-                aTranslatedRegions.push_back(
-                    std::make_pair(
+                aTranslatedRegions.emplace_back(
                         basegfx::B2DRange(
                             relRegion.getMinimum() + rOffset,
                             relRegion.getMaximum() + rOffset),
-                        cp.second) );
+                        cp.second );
             }
 
             return aTranslatedRegions;

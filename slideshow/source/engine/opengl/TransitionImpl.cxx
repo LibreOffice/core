@@ -961,7 +961,7 @@ std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , s
     float TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
     {
-        unScaledTexCoords.push_back( glm::vec2( cos(TempAngle - 3.1415926/2.0) , sin(TempAngle- 3.1415926/2.0) ) );
+        unScaledTexCoords.emplace_back( cos(TempAngle - 3.1415926/2.0) , sin(TempAngle- 3.1415926/2.0) );
 
         TempAngle += dAngle;
     }
@@ -1157,9 +1157,9 @@ void Primitive::pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& Sl
     Verts.reserve(3);
     Texs.reserve(3);
 
-    Verts.push_back(glm::vec3( 2*SlideLocation0.x - 1, -2*SlideLocation0.y + 1 , 0.0 ));
-    Verts.push_back(glm::vec3( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 ));
-    Verts.push_back(glm::vec3( 2*SlideLocation2.x - 1, -2*SlideLocation2.y + 1 , 0.0 ));
+    Verts.emplace_back( 2*SlideLocation0.x - 1, -2*SlideLocation0.y + 1 , 0.0 );
+    Verts.emplace_back( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 );
+    Verts.emplace_back( 2*SlideLocation2.x - 1, -2*SlideLocation2.y + 1 , 0.0 );
 
     //figure out if they're facing the correct way, and make them face the correct way.
     glm::vec3 Normal( glm::cross( Verts[0] - Verts[1] , Verts[1] - Verts[2] ) );
@@ -1175,9 +1175,9 @@ void Primitive::pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& Sl
         Texs.push_back(SlideLocation2);
         Texs.push_back(SlideLocation1);
         Verts.clear();
-        Verts.push_back(glm::vec3( 2*SlideLocation0.x - 1, -2*SlideLocation0.y + 1 , 0.0 ));
-        Verts.push_back(glm::vec3( 2*SlideLocation2.x - 1, -2*SlideLocation2.y + 1 , 0.0 ));
-        Verts.push_back(glm::vec3( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 ));
+        Verts.emplace_back( 2*SlideLocation0.x - 1, -2*SlideLocation0.y + 1 , 0.0 );
+        Verts.emplace_back( 2*SlideLocation2.x - 1, -2*SlideLocation2.y + 1 , 0.0 );
+        Verts.emplace_back( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 );
     }
 
     Vertices.push_back({Verts[0], glm::vec3(0, 0, 1), Texs[0]}); //all normals always face the screen when untransformed.

@@ -387,8 +387,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         if( nWaitTime100thSeconds == 0 )
             nWaitTime100thSeconds = 10;
 
-        o_rFrames.push_back( MtfAnimationFrame( pMtf,
-                                                nWaitTime100thSeconds / 100.0 ) );
+        o_rFrames.emplace_back( pMtf, nWaitTime100thSeconds / 100.0 );
     }
 
     return !o_rFrames.empty();
