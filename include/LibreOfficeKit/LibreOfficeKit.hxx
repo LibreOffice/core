@@ -62,7 +62,6 @@ public:
     /// Gives access to the underlying C pointer.
     LibreOfficeKitDocument *get() { return mpDoc; }
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Get document type.
      *
@@ -73,6 +72,7 @@ public:
         return mpDoc->pClass->getDocumentType(mpDoc);
     }
 
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Get number of part that the document contains.
      *
@@ -513,7 +513,6 @@ public:
         mpThis->pClass->freeError(pFree);
     }
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /**
      * Registers a callback. LOK will invoke this function when it wants to
      * inform the client about events.
@@ -607,7 +606,6 @@ public:
     {
         return mpThis->pClass->runMacro( mpThis, pURL );
     }
-#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 /// Factory method to create a lok::Office instance.

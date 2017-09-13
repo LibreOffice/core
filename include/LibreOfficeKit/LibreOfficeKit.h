@@ -62,7 +62,6 @@ struct _LibreOfficeKitClass
     /// @since LibreOffice 5.2
     void (*freeError) (char* pFree);
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
@@ -82,8 +81,6 @@ struct _LibreOfficeKitClass
     char* (*getVersionInfo) (LibreOfficeKit* pThis);
 
     bool (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
-#endif
-
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
@@ -104,10 +101,10 @@ struct _LibreOfficeKitDocumentClass
                    const char* pFormat,
                    const char* pFilterOptions);
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see lok::Document::getDocumentType().
     int (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see lok::Document::getParts().
     int (*getParts) (LibreOfficeKitDocument* pThis);
 
