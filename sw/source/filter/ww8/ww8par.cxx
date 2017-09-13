@@ -6111,7 +6111,7 @@ void SwWW8ImplReader::GetSmartTagInfo(SwFltRDFMark& rMark)
         if (rProperty.m_nValue < m_pSmartTagData->m_aPropBagStore.m_aStringTable.size())
             aValue = m_pSmartTagData->m_aPropBagStore.m_aStringTable[rProperty.m_nValue];
         if (!aKey.isEmpty() && !aValue.isEmpty())
-            aAttributes.push_back(std::make_pair(aKey, aValue));
+            aAttributes.emplace_back(aKey, aValue);
     }
     rMark.SetAttributes(aAttributes);
 }

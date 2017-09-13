@@ -865,7 +865,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 
         if ( nScript != nNextScript )
         {
-            aScriptChanges.push_back( ScriptChangeInfo(nEnd, nScript) );
+            aScriptChanges.emplace_back(nEnd, nScript );
             nCnt++;
             nScript = nNextScript;
         }
@@ -911,16 +911,16 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
-                aScriptChanges.push_back( ScriptChangeInfo(nChg-1, nScript) );
+                aScriptChanges.emplace_back(nChg-1, nScript );
             }
             else
             {
-                aScriptChanges.push_back( ScriptChangeInfo(nChg, nScript) );
+                aScriptChanges.emplace_back(nChg, nScript );
             }
         }
         else
         {
-            aScriptChanges.push_back( ScriptChangeInfo(nChg, nScript) );
+            aScriptChanges.emplace_back(nChg, nScript );
         }
         ++nCnt;
 
@@ -969,7 +969,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                         if ( CharCompressType::PunctuationAndKana == aCompEnum ||
                              ePrevState != KANA )
                         {
-                            aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
+                            aCompressionChanges.emplace_back(nPrevChg, nLastCompression - nPrevChg, ePrevState );
                         }
                     }
 
@@ -987,7 +987,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                 if ( CharCompressType::PunctuationAndKana == aCompEnum ||
                      ePrevState != KANA )
                 {
-                    aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
+                    aCompressionChanges.emplace_back(nPrevChg, nLastCompression - nPrevChg, ePrevState );
                 }
             }
         }
@@ -1278,7 +1278,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
     for ( int nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        aDirectionChanges.push_back( DirectionChangeInfo(nEnd, nCurrDir) );
+        aDirectionChanges.emplace_back(nEnd, nCurrDir );
         nStart = nEnd;
     }
 

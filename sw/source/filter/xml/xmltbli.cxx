@@ -1452,7 +1452,7 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
         nWidth2 = MINLAY;
     else if( nWidth2 > USHRT_MAX )
         nWidth2 = USHRT_MAX;
-    m_aColumnWidths.push_back( ColumnWidthInfo(nWidth2, bRelWidth2) );
+    m_aColumnWidths.emplace_back(nWidth2, bRelWidth2 );
     if( (pDfltCellStyleName && !pDfltCellStyleName->isEmpty()) ||
         m_pColumnDefaultCellStyleNames )
     {
@@ -1558,7 +1558,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     {
         for( sal_uInt32 i=GetColumnCount(); i<nColsReq; ++i )
         {
-            m_aColumnWidths.push_back( ColumnWidthInfo(MINLAY, true) );
+            m_aColumnWidths.emplace_back(MINLAY, true );
         }
         // adjust columns in *all* rows, if columns must be inserted
         for (size_t i = 0; i < m_pRows->size(); ++i)

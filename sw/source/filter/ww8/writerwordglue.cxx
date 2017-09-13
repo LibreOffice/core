@@ -543,8 +543,8 @@ namespace sw
 
             if (rText.isEmpty())
             {
-                aRunChanges.push_back(CharRunEntry(0, nScript, eChrSet,
-                    bParaIsRTL));
+                aRunChanges.emplace_back(0, nScript, eChrSet,
+                    bParaIsRTL);
                 return aRunChanges;
             }
 
@@ -585,7 +585,7 @@ namespace sw
                 The value for UBIDI_DEFAULT_LTR is even and the one for
                 UBIDI_DEFAULT_RTL is odd
                 */
-                aDirChanges.push_back(DirEntry(nEnd, nCurrDir & 0x1));
+                aDirChanges.emplace_back(nEnd, nCurrDir & 0x1);
                 nStart = nEnd;
             }
             ubidi_close(pBidi);
@@ -601,7 +601,7 @@ namespace sw
                 if (nEnd2 < 0)
                     break;
                 nPos = nEnd2;
-                aScripts.push_back(ScriptEntry(nPos, nScript));
+                aScripts.emplace_back(nPos, nScript);
                 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, nPos);
             }
 
@@ -634,8 +634,7 @@ namespace sw
                     nScript = aScriptIter->second;
                 }
 
-                aRunChanges.push_back(
-                    CharRunEntry(nMinPos, nScript, eChrSet, bCharIsRTL));
+                aRunChanges.emplace_back(nMinPos, nScript, eChrSet, bCharIsRTL);
 
                 if (aBiDiIter != aBiDiEnd)
                 {

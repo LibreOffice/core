@@ -1773,8 +1773,8 @@ namespace
     {
         Comparators aComparisons;
         //compare main text
-        aComparisons.push_back(CompareDataPtrPair(CompareDataPtr(new CompareMainText(rSrcDoc)),
-                                                  CompareDataPtr(new CompareMainText(rDestDoc))));
+        aComparisons.emplace_back(CompareDataPtr(new CompareMainText(rSrcDoc)),
+                                  CompareDataPtr(new CompareMainText(rDestDoc)));
 
         //if we have the same number of frames then try to compare within them
         const SwFrameFormats *pSrcFrameFormats = rSrcDoc.GetSpzFrameFormats();
@@ -1797,8 +1797,8 @@ namespace
                     continue;
                 if (!pSrcNode || !pDestNode)
                     break;
-                aComparisons.push_back(CompareDataPtrPair(CompareDataPtr(new CompareFrameFormatText(rSrcDoc, *pSrcIdx)),
-                                                          CompareDataPtr(new CompareFrameFormatText(rDestDoc, *pDestIdx))));
+                aComparisons.emplace_back(CompareDataPtr(new CompareFrameFormatText(rSrcDoc, *pSrcIdx)),
+                                          CompareDataPtr(new CompareFrameFormatText(rDestDoc, *pDestIdx)));
             }
         }
         return aComparisons;
@@ -2093,7 +2093,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
                 // Found the position.
                 // Then we also have to insert the redline to the line in the DestDoc.
-                vRedlines.push_back(SaveMergeRedline(*pDstNd, *pRedl));
+                vRedlines.emplace_back(*pDstNd, *pRedl);
             }
         }
 

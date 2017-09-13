@@ -327,7 +327,7 @@ std::vector<OUString> & SwGlossaries::GetNameList()
         if (m_GlosArr.empty())
         {
             // the standard block is inside of the path's first part
-            m_GlosArr.push_back( SwGlossaries::GetDefName() + OUStringLiteral1(GLOS_DELIM) + "0" );
+            m_GlosArr.emplace_back(SwGlossaries::GetDefName() + OUStringLiteral1(GLOS_DELIM) + "0" );
         }
     }
     return m_GlosArr;
@@ -598,7 +598,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString
     {
         xGroup = new SwXAutoTextGroup( sCompleteGroupName, this );
         // cache it
-        m_aGlossaryGroups.push_back( css::uno::WeakReference< css::text::XAutoTextGroup >( xGroup ) );
+        m_aGlossaryGroups.emplace_back( xGroup );
     }
 
     return xGroup;
@@ -655,7 +655,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     {
         xReturn = new SwXAutoTextEntry( this, rGroupName, rEntryName );
         // cache it
-        m_aGlossaryEntries.push_back( css::uno::WeakReference< css::text::XAutoTextEntry >( xReturn ) );
+        m_aGlossaryEntries.emplace_back( xReturn );
     }
 
     return xReturn;

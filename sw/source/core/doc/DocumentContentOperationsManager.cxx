@@ -715,7 +715,7 @@ namespace
                 }
 
                 // save the current redline
-                rArr.push_back(SaveRedline( pCurrent, *pStart ));
+                rArr.emplace_back( pCurrent, *pStart );
             }
         }
 
@@ -771,7 +771,7 @@ namespace
                     pTmpPos->nContent.Assign(
                                 pTmpPos->nNode.GetNode().GetContentNode(), 0 );
 
-                    rArr.push_back(SaveRedline(pNewRedl, rRg.aStart));
+                    rArr.emplace_back(pNewRedl, rRg.aStart);
 
                     pTmpPos = pTmp->End();
                     pTmpPos->nNode = rRg.aEnd;
@@ -793,7 +793,7 @@ namespace
                     ( pREnd->nNode == rRg.aEnd && !pREnd->nContent.GetIndex()) )
                 {
                     // move everything
-                    rArr.push_back(SaveRedline( pTmp, rRg.aStart ));
+                    rArr.emplace_back( pTmp, rRg.aStart );
                 }
                 else
                 {
@@ -804,7 +804,7 @@ namespace
                     pTmpPos->nContent.Assign(
                                 pTmpPos->nNode.GetNode().GetContentNode(), 0 );
 
-                    rArr.push_back(SaveRedline( pNewRedl, rRg.aStart ));
+                    rArr.emplace_back( pNewRedl, rRg.aStart );
 
                     pTmpPos = pTmp->Start();
                     pTmpPos->nNode = rRg.aEnd;

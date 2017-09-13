@@ -132,7 +132,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             sal_uInt16 nPgNum(0);
             aIo.GetStream().ReadUInt16( nPgNum ).ReadUInt32( nIndex )
                    .ReadInt32( nX ).ReadInt32( nY ).ReadInt32( nW ).ReadInt32( nH );
-            m_FlyCache.push_back(SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH ));
+            m_FlyCache.emplace_back( nPgNum, nIndex, nX, nY, nW, nH );
             aIo.CloseRec();
             break;
         }
@@ -1045,7 +1045,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
     sal_uInt32 nPos = pStream->Tell();
     if( bWriteMode )
     {
-        aRecords.push_back( RecTypeSize(cType, nPos) );
+        aRecords.emplace_back(cType, nPos );
         pStream->WriteUInt32( 0 );
     }
     else
@@ -1058,14 +1058,14 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
             OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
-            aRecords.push_back( RecTypeSize(0, pStream->Tell()) );
+            aRecords.emplace_back(0, pStream->Tell() );
             bRes = false;
             bError = true;
         }
         else
         {
             sal_uInt32 nSize = nVal >> 8;
-            aRecords.push_back( RecTypeSize(cRecTyp, nPos+nSize) );
+            aRecords.emplace_back(cRecTyp, nPos+nSize );
         }
     }
     return bRes;

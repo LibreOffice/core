@@ -356,7 +356,7 @@ public:
                 SvxXMLListStyleContext *const pContext(
                     new SvxXMLListStyleContext(GetImport(),
                                 nPrefix, rLocalName, xAttrList, true));
-                m_Contexts.push_back(pContext);
+                m_Contexts.emplace_back(pContext);
                 return pContext;
             }
         }

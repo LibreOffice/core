@@ -478,8 +478,7 @@ SwUndoDrawUnGroupConnectToLayout::RedoImpl(::sw::UndoRedoContext &)
 void SwUndoDrawUnGroupConnectToLayout::AddFormatAndObj( SwDrawFrameFormat* pDrawFrameFormat,
                                                      SdrObject* pDrawObject )
 {
-    aDrawFormatsAndObjs.push_back(
-            std::pair< SwDrawFrameFormat*, SdrObject* >( pDrawFrameFormat, pDrawObject ) );
+    aDrawFormatsAndObjs.emplace_back( pDrawFrameFormat, pDrawObject );
 }
 
 SwUndoDrawDelete::SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc )

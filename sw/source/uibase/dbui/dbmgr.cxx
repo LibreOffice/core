@@ -524,7 +524,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     {
         // with database fields without DB-Name, use DB-Name from Doc
         std::vector<OUString> aDBNames;
-        aDBNames.push_back(OUString());
+        aDBNames.emplace_back();
         SwDBData aInsertData = pWorkShell->GetDBData();
         OUString sDBName = aInsertData.sDataSource
             + OUStringLiteral1(DB_DELIM) + aInsertData.sCommand

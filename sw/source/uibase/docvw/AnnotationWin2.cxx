@@ -801,9 +801,9 @@ void SwAnnotationWin::SetPosAndSize()
             for(SwRect & rNextRect : *pRects)
             {
                 const tools::Rectangle aPntRect(rNextRect.SVRect());
-                maAnnotationTextRanges.push_back(basegfx::B2DRange(
+                maAnnotationTextRanges.emplace_back(
                     aPntRect.Left(), aPntRect.Top(),
-                    aPntRect.Right() + 1, aPntRect.Bottom() + 1));
+                    aPntRect.Right() + 1, aPntRect.Bottom() + 1);
             }
         }
     }

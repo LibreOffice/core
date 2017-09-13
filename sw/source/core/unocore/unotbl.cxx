@@ -1813,7 +1813,7 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet, std::function<Tpooli
         const uno::Any* pAny = nullptr;
         GetProperty(nWhich, nMember, pAny);
         if(pAny)
-            vMemberAndAny.push_back(std::make_pair(nMember, pAny));
+            vMemberAndAny.emplace_back(nMember, pAny);
     }
     if(!vMemberAndAny.empty())
     {
@@ -3272,7 +3272,7 @@ std::vector< uno::Reference< table::XCell > > SwXCellRange::GetCells()
     vResult.reserve(static_cast<size_t>(nRowCount)*static_cast<size_t>(nColCount));
     for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
         for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
-            vResult.push_back(uno::Reference< table::XCell >(lcl_CreateXCell(pFormat, m_pImpl->m_RangeDescriptor.nLeft + nCol, m_pImpl->m_RangeDescriptor.nTop + nRow)));
+            vResult.emplace_back(lcl_CreateXCell(pFormat, m_pImpl->m_RangeDescriptor.nLeft + nCol, m_pImpl->m_RangeDescriptor.nTop + nRow));
     return vResult;
 }
 

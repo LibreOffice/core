@@ -413,7 +413,7 @@ sal_Int32 SwXMLExport::GetDocumentSpecificSettings( std::list< SettingsGroup >& 
     if ( xXForms.is() )
     {
         getXFormsSettings( xXForms, aXFormsSettings );
-        _out_rSettings.push_back( SettingsGroup( XML_XFORM_MODEL_SETTINGS, aXFormsSettings ) );
+        _out_rSettings.emplace_back( XML_XFORM_MODEL_SETTINGS, aXFormsSettings );
     }
 
     return aXFormsSettings.getLength() + SvXMLExport::GetDocumentSpecificSettings( _out_rSettings );

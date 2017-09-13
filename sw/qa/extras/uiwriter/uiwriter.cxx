@@ -3908,29 +3908,29 @@ class PortionHandler : public SwPortionHandler
     virtual void Text(sal_Int32 nLength, sal_uInt16 nType,
                       sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/) override
     {
-        mPortionItems.push_back(PortionItem("text", nLength, nType));
+        mPortionItems.emplace_back("text", nLength, nType);
     }
 
     virtual void Special(sal_Int32 nLength, const OUString & /*rText*/,
                          sal_uInt16 nType, sal_Int32 /*nHeight*/,
                          sal_Int32 /*nWidth*/, const SwFont* /*pFont*/) override
     {
-        mPortionItems.push_back(PortionItem("special", nLength, nType));
+        mPortionItems.emplace_back("special", nLength, nType);
     }
 
     virtual void LineBreak(sal_Int32 /*nWidth*/) override
     {
-        mPortionItems.push_back(PortionItem("line_break"));
+        mPortionItems.emplace_back("line_break");
     }
 
     virtual void Skip(sal_Int32 nLength) override
     {
-        mPortionItems.push_back(PortionItem("skip", nLength));
+        mPortionItems.emplace_back("skip", nLength);
     }
 
     virtual void Finish() override
     {
-        mPortionItems.push_back(PortionItem("finish"));
+        mPortionItems.emplace_back("finish");
     }
 };
 

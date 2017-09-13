@@ -491,7 +491,7 @@ void SwWW8WrGrf::Insert(const ww8::Frame &rFly)
     const Size aSize( rFly.GetLayoutSize() );
     const sal_uInt16 nWidth = static_cast< sal_uInt16 >(aSize.Width());
     const sal_uInt16 nHeight = static_cast< sal_uInt16 >(aSize.Height());
-    maDetails.push_back(GraphicDetails(rFly, nWidth, nHeight));
+    maDetails.emplace_back(rFly, nWidth, nHeight);
 }
 
 void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,

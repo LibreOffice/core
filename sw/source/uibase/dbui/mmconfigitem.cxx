@@ -207,7 +207,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(SA_ADDRESS_HEADER); ++i)
     {
-        m_AddressHeaderSA.push_back(std::make_pair(SwResId(SA_ADDRESS_HEADER[i].first), SA_ADDRESS_HEADER[i].second));
+        m_AddressHeaderSA.emplace_back(SwResId(SA_ADDRESS_HEADER[i].first), SA_ADDRESS_HEADER[i].second);
     }
 
     const Sequence<OUString>& rNames = GetPropertyNames();

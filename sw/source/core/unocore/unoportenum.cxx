@@ -534,7 +534,7 @@ lcl_InsertRubyPortion(
 {
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCursor,
             static_txtattr_cast<const SwTextRuby&>(rAttr), xParent, bEnd);
-    rPortions.push_back(pPortion);
+    rPortions.emplace_back(pPortion);
     pPortion->SetCollapsed(rAttr.End() == nullptr);
 }
 
@@ -616,7 +616,7 @@ static void lcl_ExportBookmark(
         {
             pPortion =
                 new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_START);
-            rPortions.push_back(pPortion);
+            rPortions.emplace_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
             pPortion->SetCollapsed( BkmType::StartEnd == pPtr->nBkmType );
 
@@ -625,7 +625,7 @@ static void lcl_ExportBookmark(
         {
             pPortion =
                 new SwXTextPortion(pUnoCursor, xParent, PORTION_BOOKMARK_END);
-            rPortions.push_back(pPortion);
+            rPortions.emplace_back(pPortion);
             pPortion->SetBookmark(pPtr->xBookmark);
         }
         aIter = rBkmArr.erase(aIter);
@@ -1155,7 +1155,7 @@ static void lcl_ExportAnnotationStarts(
             SwXTextPortion* pPortion =
                 new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
             pPortion->SetTextField( pPtr->mxAnnotationField );
-            rPortions.push_back(pPortion);
+            rPortions.emplace_back(pPortion);
 
             aIter = rAnnotationStartArr.erase(aIter);
         }
@@ -1184,7 +1184,7 @@ static sal_Int32 lcl_ExportFrames(
         {
             SwXTextPortion* pPortion = new SwXTextPortion(i_pUnoCursor, i_xParent,
                 *static_cast<SwFrameFormat*>( const_cast<SwModify*>( pFrame ) ) );
-            rPortions.push_back(pPortion);
+            rPortions.emplace_back(pPortion);
         }
         i_rFrames.pop_front();
     }

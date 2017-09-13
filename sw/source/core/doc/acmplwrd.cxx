@@ -161,7 +161,7 @@ void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
         if(&aIt->GetDoc() == &rDoc)
             return;
     }
-    aClientVector.push_back(SwAutoCompleteClient(rAutoCompleteWord, rDoc));
+    aClientVector.emplace_back(rAutoCompleteWord, rDoc);
 }
 
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)

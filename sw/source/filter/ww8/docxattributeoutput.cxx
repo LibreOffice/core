@@ -5158,7 +5158,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 if( !bDuplicate )
                 {
                     m_bPostponedProcessingFly = true ;
-                    m_aFramesOfParagraph.push_back(ww8::Frame(rFrame));
+                    m_aFramesOfParagraph.emplace_back(rFrame);
                 }
             }
             break;
@@ -5179,7 +5179,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
             {
                 const SdrObject* pObject = rFrame.GetFrameFormat().FindRealSdrObject();
                 if(ExportAsActiveXControl(pObject))
-                    m_aPostponedActiveXControls.push_back(PostponedDrawing(pObject, &(rFrame.GetFrameFormat())));
+                    m_aPostponedActiveXControls.emplace_back(pObject, &(rFrame.GetFrameFormat()));
                 else
                     m_aPostponedFormControls.push_back(pObject);
                 m_bPostponedProcessingFly = true ;
@@ -6844,7 +6844,7 @@ void DocxAttributeOutput::PostitField( const SwField* pField )
     else
         // Otherwise get a new one.
         nId = m_nNextAnnotationMarkId++;
-    m_postitFields.push_back(std::make_pair(pPostItField, nId));
+    m_postitFields.emplace_back(pPostItField, nId);
 }
 
 void DocxAttributeOutput::WritePostitFieldReference()

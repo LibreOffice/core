@@ -1212,7 +1212,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
                 if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
                 {
                     // Store for later use
-                    aImplicitChanges.push_back(ImplicitChangesRange(nBegin, nBegin+nLen));
+                    aImplicitChanges.emplace_back(nBegin, nBegin+nLen);
                 }
                 nBegin = nChPos;    // start of next language portion
             }
