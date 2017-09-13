@@ -2243,7 +2243,7 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
         if( pFirst->GetType() == WINDOW_RADIOBUTTON )
         {
             if( pFirst != this || bIncludeThis )
-                aGroup.push_back( static_cast<RadioButton*>(pFirst) );
+                aGroup.emplace_back(static_cast<RadioButton*>(pFirst) );
         }
         pFirst = pFirst->GetWindow( GetWindowType::Next );
     } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );

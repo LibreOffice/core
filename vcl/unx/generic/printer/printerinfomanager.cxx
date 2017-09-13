@@ -1091,7 +1091,7 @@ static void standardSysQueueTokenHandler(
                 // do not insert duplicates (e.g. lpstat tends to produce such lines)
                 if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() )
                 {
-                    o_rQueues.push_back( PrinterInfoManager::SystemPrintQueue() );
+                    o_rQueues.emplace_back( );
                     o_rQueues.back().m_aQueue = aSysQueue;
                     o_rQueues.back().m_aLocation = aSysQueue;
                     aUniqueSet.insert( aSysQueue );
@@ -1136,7 +1136,7 @@ void SystemQueueInfo::run()
         if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
         {
             while( fgets( pBuffer, 1024, pPipe ) )
-                aLines.push_back( OString( pBuffer ) );
+                aLines.emplace_back( pBuffer );
             if( ! pclose( pPipe ) )
             {
                 std::list< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;

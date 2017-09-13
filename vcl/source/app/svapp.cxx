@@ -920,7 +920,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, Ke
         if( nEventId )
         {
             pPostEventData->mnEventId = nEventId;
-            ImplGetSVData()->maAppData.maPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+            ImplGetSVData()->maAppData.maPostedEventList.emplace_back( pWin, pPostEventData );
         }
         else
             delete pPostEventData;
@@ -953,7 +953,7 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
         if( nEventId )
         {
             pPostEventData->mnEventId = nEventId;
-            ImplGetSVData()->maAppData.maPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+            ImplGetSVData()->maAppData.maPostedEventList.emplace_back( pWin, pPostEventData );
         }
         else
             delete pPostEventData;

@@ -44,7 +44,7 @@ PDFFontCache::FontData& PDFFontCache::getFont( const PhysicalFontFace* pFont, bo
     if( it != m_aFontToIndex.end() )
         return m_aFonts[ it->second ];
     m_aFontToIndex[ aId ] = sal_uInt32(m_aFonts.size());
-    m_aFonts.push_back( FontData() );
+    m_aFonts.emplace_back( );
     return m_aFonts.back();
 }
 

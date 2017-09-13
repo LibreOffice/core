@@ -1084,7 +1084,7 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
         sal_Int32 nDelim = sID.indexOf(':');
         if (nDelim != -1)
             sID = sID.copy(0, nDelim);
-        m_pParserState->m_aGroupMaps.push_back(RadioButtonGroupMap(id, sID));
+        m_pParserState->m_aGroupMaps.emplace_back(id, sID);
         rMap.erase(aFind);
         return true;
     }
@@ -1094,19 +1094,19 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
 void VclBuilder::connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment)
 {
     if (!rAdjustment.isEmpty())
-        m_pParserState->m_aNumericFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
+        m_pParserState->m_aNumericFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
 }
 
 void VclBuilder::connectTimeFormatterAdjustment(const OString &id, const OString &rAdjustment)
 {
     if (!rAdjustment.isEmpty())
-        m_pParserState->m_aTimeFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
+        m_pParserState->m_aTimeFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
 }
 
 void VclBuilder::connectDateFormatterAdjustment(const OString &id, const OString &rAdjustment)
 {
     if (!rAdjustment.isEmpty())
-        m_pParserState->m_aDateFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
+        m_pParserState->m_aDateFormatterAdjustmentMaps.emplace_back(id, rAdjustment);
 }
 
 bool VclBuilder::extractAdjustmentToMap(const OString& id, VclBuilder::stringmap& rMap, std::vector<WidgetAdjustmentMap>& rAdjustmentMap)
@@ -1114,7 +1114,7 @@ bool VclBuilder::extractAdjustmentToMap(const OString& id, VclBuilder::stringmap
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
     if (aFind != rMap.end())
     {
-        rAdjustmentMap.push_back(WidgetAdjustmentMap(id, aFind->second));
+        rAdjustmentMap.emplace_back(id, aFind->second);
         rMap.erase(aFind);
         return true;
     }
@@ -1166,8 +1166,8 @@ bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("model"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second,
-            extractActive(rMap)));
+        m_pParserState->m_aModelMaps.emplace_back(id, aFind->second,
+            extractActive(rMap));
         rMap.erase(aFind);
         return true;
     }
@@ -1191,7 +1191,7 @@ bool VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("buffer"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aTextBufferMaps.push_back(TextBufferMap(id, aFind->second));
+        m_pParserState->m_aTextBufferMaps.emplace_back(id, aFind->second);
         rMap.erase(aFind);
         return true;
     }
@@ -1223,7 +1223,7 @@ bool VclBuilder::extractButtonImage(const OString &id, stringmap &rMap, bool bRa
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("image"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aButtonImageWidgetMaps.push_back(ButtonImageWidgetMap(id, aFind->second, bRadio));
+        m_pParserState->m_aButtonImageWidgetMaps.emplace_back(id, aFind->second, bRadio);
         rMap.erase(aFind);
         return true;
     }
@@ -1239,7 +1239,7 @@ void VclBuilder::extractMnemonicWidget(const OString &rLabelID, stringmap &rMap)
         sal_Int32 nDelim = sID.indexOf(':');
         if (nDelim != -1)
             sID = sID.copy(0, nDelim);
-        m_pParserState->m_aMnemonicWidgetMaps.push_back(MnemonicWidgetMap(rLabelID, sID));
+        m_pParserState->m_aMnemonicWidgetMaps.emplace_back(rLabelID, sID);
         rMap.erase(aFind);
     }
 }
@@ -1301,14 +1301,14 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             OString sTabPageId = get_by_window(pParent) +
                 OString("-page") +
                 OString::number(nNewPageCount);
-            m_aChildren.push_back(WinAndId(sTabPageId, pPage, false));
+            m_aChildren.emplace_back(sTabPageId, pPage, false);
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
             //And give the page one container as a child to make it a layout enabled
             //tab page
             VclPtrInstance<VclBin> pContainer(pPage);
             pContainer->Show();
-            m_aChildren.push_back(WinAndId(OString(), pContainer, false));
+            m_aChildren.emplace_back(OString(), pContainer, false);
             pContainer->SetHelpId(m_sHelpRoot + sTabPageId + OString("-bin"));
             pParent = pContainer;
 
@@ -1387,7 +1387,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         else
         {
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
-            m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
+            m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         }
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         setupFromActionName(xButton, rMap, m_xFrame);
@@ -1399,7 +1399,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         OString sMenu = extractCustomProperty(rMap);
         assert(sMenu.getLength() && "not implemented yet");
         xButton = extractStockAndBuildMenuToggleButton(pParent, rMap);
-        m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
+        m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
@@ -1804,7 +1804,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xWindow->mpWindowImpl->mpRealParent.get() << "/" <<
             xWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
             xWindow->GetHelpId().getStr());
-        m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
+        m_aChildren.emplace_back(id, xWindow, bVertical);
     }
     return xWindow;
 }
@@ -2514,7 +2514,7 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
             break;
     }
 
-    m_aMenus.push_back(MenuAndId(rID, pCurrentMenu));
+    m_aMenus.emplace_back(rID, pCurrentMenu);
 }
 
 void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader)
@@ -2616,7 +2616,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
 
 void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID)
 {
-    m_pParserState->m_aSizeGroups.push_back(SizeGroup());
+    m_pParserState->m_aSizeGroups.emplace_back();
     SizeGroup &rSizeGroup = m_pParserState->m_aSizeGroups.back();
 
     int nLevel = 1;

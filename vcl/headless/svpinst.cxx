@@ -169,7 +169,7 @@ void SvpSalInstance::PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, SalEv
 {
     {
         osl::MutexGuard g(m_aEventGuard);
-        m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
+        m_aUserEvents.emplace_back( pFrame, pData, nEvent );
     }
     Wakeup();
 }

@@ -234,7 +234,7 @@ void SAL_CALL VCLSession::addSessionManagerListener( const css::uno::Reference<X
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    m_aListeners.push_back( Listener( xListener ) );
+    m_aListeners.emplace_back( xListener );
 }
 
 void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception )

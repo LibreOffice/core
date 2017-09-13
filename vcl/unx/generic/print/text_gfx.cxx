@@ -82,7 +82,7 @@ void PrinterGfx::drawGlyphs(
     // not found ? create a new one
     if (aIter == maPS3Font.end())
     {
-        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
+        maPS3Font.emplace_back(mnFontID, mbTextVertical);
         maPS3Font.back().DrawGlyphs (*this, rPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
     }
 }
