@@ -75,10 +75,6 @@ tools::Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
 
 void SdrHelpLineList::Clear()
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 i=0; i<nCount; i++) {
-        delete GetObject(i);
-    }
     aList.clear();
 }
 
@@ -99,7 +95,7 @@ bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
     if (nCount==rSrcList.GetCount()) {
         bEqual = true;
         for (sal_uInt16 i=0; i<nCount && bEqual; i++) {
-            if (*GetObject(i)!=*rSrcList.GetObject(i)) {
+            if (*aList[i]!=*rSrcList.aList[i]) {
                 bEqual = false;
             }
         }
@@ -112,7 +108,7 @@ sal_uInt16 SdrHelpLineList::HitTest(const Point& rPnt, sal_uInt16 nTolLog, const
     sal_uInt16 nCount=GetCount();
     for (sal_uInt16 i=nCount; i>0;) {
         i--;
-        if (GetObject(i)->IsHit(rPnt,nTolLog,rOut)) return i;
+        if (aList[i]->IsHit(rPnt,nTolLog,rOut)) return i;
     }
     return SDRHELPLINE_NOTFOUND;
 }
