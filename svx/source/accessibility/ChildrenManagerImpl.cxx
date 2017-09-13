@@ -298,7 +298,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
                 // bounding box has non-zero extensions.
                 awt::Rectangle aPixelBBox (xComponent->getBounds());
                 if ((aPixelBBox.Width > 0) && (aPixelBBox.Height > 0))
-                    raDescriptorList.push_back (ChildDescriptor (*I));
+                    raDescriptorList.emplace_back(*I);
             }
         }
     }
@@ -327,7 +327,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
             // Insert shape if it is visible, i.e. its bounding box overlaps
             // the visible area.
             if ( aBoundingBox.IsOver (aVisibleArea) )
-                raDescriptorList.push_back (ChildDescriptor (xShape));
+                raDescriptorList.emplace_back(xShape);
         }
     }
 }
@@ -456,7 +456,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
                 if (aBoundingBox.IsOver (aVisibleArea))
                 {
                     // Add shape to list of visible shapes.
-                    maVisibleChildren.push_back (ChildDescriptor (rxShape));
+                    maVisibleChildren.emplace_back(rxShape);
 
                     // Create accessibility object.
                     ChildDescriptor& rDescriptor = maVisibleChildren.back();
@@ -883,7 +883,7 @@ void ChildrenManagerImpl::UpdateSelection()
                 {
                     if (bDrawShape)
                     {
-                        vecSelect.push_back(std::make_pair(pAccessibleShape,true));
+                        vecSelect.emplace_back(pAccessibleShape,true);
                         ++nAddSelect;
                     }
                 }
@@ -899,7 +899,7 @@ void ChildrenManagerImpl::UpdateSelection()
                 {
                     if(bDrawShape)
                     {
-                        vecSelect.push_back(std::make_pair(pAccessibleShape,false));
+                        vecSelect.emplace_back(pAccessibleShape,false);
                     }
                 }
             }

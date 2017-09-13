@@ -3276,7 +3276,7 @@ void FormController::startFiltering()
                                 if (xText.is() && xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
                                     ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                                 {
-                                    aFieldInfos.push_back(FmFieldInfo(xField, xText));
+                                    aFieldInfos.emplace_back(xField, xText);
                                     xText->addTextListener(this);
                                 }
                             }
@@ -3311,7 +3311,7 @@ void FormController::startFiltering()
                     if ( replaceControl( xControl, xFilterControl ) )
                     {
                         Reference< XTextComponent > xFilterText( xFilterControl, UNO_QUERY );
-                        aFieldInfos.push_back( FmFieldInfo( xField, xFilterText ) );
+                        aFieldInfos.emplace_back( xField, xFilterText );
                         xFilterText->addTextListener(this);
                     }
                 }

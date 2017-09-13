@@ -338,7 +338,7 @@ void FrameSelectorImpl::InitArrowImageList()
     {
         BitmapEx aBmpEx(aImageIds[i]);
         aBmpEx.Replace(pColorAry1, pColorAry2, 3);
-        maArrows.push_back(Image(aBmpEx));
+        maArrows.emplace_back(aBmpEx);
     }
     assert(maArrows.size() == 16);
 
@@ -414,21 +414,21 @@ void FrameSelectorImpl::InitBorderGeometry()
             long nDiagFocusOffsY = frame::GetTLDiagOffset( -mnFocusOffs, mnFocusOffs, maArray.GetVerDiagAngle( nCol, nRow ) );
 
             std::vector< Point > aFocusVec;
-            aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY ) );
-            aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Top()    - mnFocusOffs     ) );
-            aFocusVec.push_back( Point( aRect.Left()  + nDiagFocusOffsX, aRect.Top()    - mnFocusOffs     ) );
-            aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
-            aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
-            aFocusVec.push_back( Point( aRect.Right() - nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
+            aFocusVec.emplace_back( aRect.Left()  - mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY );
+            aFocusVec.emplace_back( aRect.Left()  - mnFocusOffs,     aRect.Top()    - mnFocusOffs     );
+            aFocusVec.emplace_back( aRect.Left()  + nDiagFocusOffsX, aRect.Top()    - mnFocusOffs     );
+            aFocusVec.emplace_back( aRect.Right() + mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY );
+            aFocusVec.emplace_back( aRect.Right() + mnFocusOffs,     aRect.Bottom() + mnFocusOffs     );
+            aFocusVec.emplace_back( aRect.Right() - nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     );
             maTLBR.AddFocusPolygon( tools::Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
 
             aFocusVec.clear();
-            aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY ) );
-            aFocusVec.push_back( Point( aRect.Right() + mnFocusOffs,     aRect.Top()    - mnFocusOffs     ) );
-            aFocusVec.push_back( Point( aRect.Right() - nDiagFocusOffsX, aRect.Top()    - mnFocusOffs     ) );
-            aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY ) );
-            aFocusVec.push_back( Point( aRect.Left()  - mnFocusOffs,     aRect.Bottom() + mnFocusOffs     ) );
-            aFocusVec.push_back( Point( aRect.Left()  + nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     ) );
+            aFocusVec.emplace_back( aRect.Right() + mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY );
+            aFocusVec.emplace_back( aRect.Right() + mnFocusOffs,     aRect.Top()    - mnFocusOffs     );
+            aFocusVec.emplace_back( aRect.Right() - nDiagFocusOffsX, aRect.Top()    - mnFocusOffs     );
+            aFocusVec.emplace_back( aRect.Left()  - mnFocusOffs,     aRect.Bottom() - nDiagFocusOffsY );
+            aFocusVec.emplace_back( aRect.Left()  - mnFocusOffs,     aRect.Bottom() + mnFocusOffs     );
+            aFocusVec.emplace_back( aRect.Left()  + nDiagFocusOffsX, aRect.Bottom() + mnFocusOffs     );
             maBLTR.AddFocusPolygon( tools::Polygon( static_cast< sal_uInt16 >( aFocusVec.size() ), &aFocusVec[ 0 ] ) );
         }
     }

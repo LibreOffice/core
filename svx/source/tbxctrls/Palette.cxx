@@ -164,7 +164,7 @@ void PaletteASE::LoadPalette()
 
         // Ignore color type
         aFile.SeekRel(2);
-        maColors.push_back(std::make_pair(Color(r * 255, g * 255, b * 255), aPaletteName));
+        maColors.emplace_back(Color(r * 255, g * 255, b * 255), aPaletteName);
     }
 
     mbValidPalette = true;
@@ -278,9 +278,9 @@ void PaletteGPL::LoadPalette()
             if(nIndex != -1)
                 name = aLine.copy(nIndex);
 
-            maColors.push_back(std::make_pair(
+            maColors.emplace_back(
                 Color(r, g, b),
-                OStringToOUString(name, RTL_TEXTENCODING_ASCII_US)));
+                OStringToOUString(name, RTL_TEXTENCODING_ASCII_US));
         }
     } while (aFile.ReadLine(aLine));
 }

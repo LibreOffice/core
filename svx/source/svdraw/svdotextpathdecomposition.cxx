@@ -195,7 +195,7 @@ namespace
 
     IMPL_LINK(impTextBreakupHandler, decompositionPathTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
-        maPathTextPortions.push_back(impPathTextPortion(*pInfo));
+        maPathTextPortions.emplace_back(*pInfo);
     }
 } // end of anonymous namespace
 
