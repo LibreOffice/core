@@ -439,7 +439,15 @@ namespace drawinglayer
                     return Primitive2DReference();
                 }
 
-                if(!rBT.isGap())
+                if(rBT.isGap())
+                {
+                    // when gap, width has to be equal
+                    if(!rtl::math::approxEqual(rBT.getLineAttribute().getWidth(), rBC.getLineAttribute().getWidth()))
+                    {
+                        return Primitive2DReference();
+                    }
+                }
+                else
                 {
                     // when not gap, the line extends have at least reach to the center ( > 0.0),
                     // else there is a extend usage. When > 0.0 they just overlap, no problem
@@ -465,11 +473,18 @@ namespace drawinglayer
                 const BorderLine& rBT(pCandidateA->getBorderLines()[a]);
                 const BorderLine& rBC(pCandidateB->getBorderLines()[a]);
 
-                aMergedBorderLines.push_back(
-                    BorderLine(
-                        rBT.getLineAttribute(),
-                        rBT.getStartLeft(), rBT.getStartRight(),
-                        rBC.getEndLeft(), rBC.getEndRight()));
+                if(rBT.isGap())
+                {
+                    aMergedBorderLines.push_back(rBT);
+                }
+                else
+                {
+                    aMergedBorderLines.push_back(
+                        BorderLine(
+                            rBT.getLineAttribute(),
+                            rBT.getStartLeft(), rBT.getStartRight(),
+                            rBC.getEndLeft(), rBC.getEndRight()));
+                }
             }
 
             return Primitive2DReference(

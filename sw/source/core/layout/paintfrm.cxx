@@ -88,6 +88,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/framelinkarray.hxx>
 #include <comphelper/sequence.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
@@ -2431,7 +2432,8 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     aUpper.Pos() += pUpper->Frame().Pos();
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
-    drawinglayer::primitive2d::Primitive2DContainer aSequence;
+    drawinglayer::primitive2d::Primitive2DContainer aHorizontalSequence;
+    drawinglayer::primitive2d::Primitive2DContainer aVerticalSequence;
 
     while ( true )
     {
@@ -2559,7 +2561,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY, false)); // aRFromB
 
                         CreateBorderPrimitives(
-                            aSequence,
+                            aHorizontalSequence,
                             aOrigin,
                             aX,
                             aStyles[ 0 ],
@@ -2589,7 +2591,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY, true)); // aBFromL
 
                         CreateBorderPrimitives(
-                            aSequence,
+                            aVerticalSequence,
                             aOrigin,
                             aX,
                             aStyles[ 0 ],
@@ -2604,6 +2606,14 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
         ++aIter;
     }
 
+    // to stay compatible, create order as it was formally. Also try to
+    // merge primitives as far as possible
+    drawinglayer::primitive2d::Primitive2DContainer aSequence;
+
+    svx::frame::HelperMergeInB2DPrimitiveArray(aHorizontalSequence, aSequence);
+    svx::frame::HelperMergeInB2DPrimitiveArray(aVerticalSequence, aSequence);
+
+    // paint
     mrTabFrame.ProcessPrimitives(aSequence);
 
     // restore output device:
