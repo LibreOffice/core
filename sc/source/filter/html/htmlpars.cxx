@@ -1866,7 +1866,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo
     maTableItemSet( rParentTable.GetCurrItemSet() ),
     mrEditEngine( rParentTable.mrEditEngine ),
     mrEEParseList( rParentTable.mrEEParseList ),
-    mpCurrEntryList( nullptr ),
+    mpCurrEntryVector( nullptr ),
     maSize( 1, 1 ),
     mpParser(rParentTable.mpParser),
     mbBorderOn( false ),
@@ -1914,7 +1914,7 @@ ScHTMLTable::ScHTMLTable(
     maTableItemSet( rPool ),
     mrEditEngine( rEditEngine ),
     mrEEParseList( rEEParseList ),
-    mpCurrEntryList( nullptr ),
+    mpCurrEntryVector( nullptr ),
     maSize( 1, 1 ),
     mpParser(pParser),
     mbBorderOn( false ),
@@ -2322,7 +2322,7 @@ SvNumberFormatter* ScHTMLTable::GetFormatTable()
 
 bool ScHTMLTable::IsEmptyCell() const
 {
-    return mpCurrEntryList && mpCurrEntryList->empty();
+    return mpCurrEntryVector && mpCurrEntryVector->empty();
 }
 
 bool ScHTMLTable::IsSpaceCharInfo( const HtmlImportInfo& rInfo )
@@ -2342,10 +2342,10 @@ void ScHTMLTable::CreateNewEntry( const HtmlImportInfo& rInfo )
     mxCurrEntry->aSel = rInfo.aSelection;
 }
 
-void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rxEntry )
+void ScHTMLTable::ImplPushEntryToVector( ScHTMLEntryVector& rEntryVector, ScHTMLEntryPtr& rxEntry )
 {
     // HTML entry list does not own the entries
-    rEntryList.push_back( rxEntry.get() );
+    rEntryVector.push_back( rxEntry.get() );
     // mrEEParseList (reference to member of ScEEParser) owns the entries
     mrEEParseList.push_back( rxEntry.release() );
 }
@@ -2355,15 +2355,15 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
     bool bPushed = false;
     if( rxEntry.get() && rxEntry->HasContents() )
     {
-        if( mpCurrEntryList )
+        if( mpCurrEntryVector )
         {
             if( mbPushEmptyLine )
             {
                 ScHTMLEntryPtr xEmptyEntry = CreateEntry();
-                ImplPushEntryToList( *mpCurrEntryList, xEmptyEntry );
+                ImplPushEntryToVector( *mpCurrEntryVector, xEmptyEntry );
                 mbPushEmptyLine = false;
             }
-            ImplPushEntryToList( *mpCurrEntryList, rxEntry );
+            ImplPushEntryToVector( *mpCurrEntryVector, rxEntry );
             bPushed = true;
         }
         else if( mpParentTable )
@@ -2437,7 +2437,7 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
         current cell position stored in maCurrCell. */
     while( ((pRange = maVMergedCells.Find( maCurrCell.MakeAddr() )) != nullptr) || ((pRange = maHMergedCells.Find( maCurrCell.MakeAddr() )) != nullptr) )
         maCurrCell.mnCol = pRange->aEnd.Col() + 1;
-    mpCurrEntryList = &maEntryMap[ maCurrCell ];
+    mpCurrEntryVector = &maEntryMap[ maCurrCell ];
 
     /*  If the new cell is merged horizontally, try to find collisions with
         other vertically merged ranges. In this case, shrink existing
@@ -2515,7 +2515,7 @@ void ScHTMLTable::ImplDataOff()
     {
         mxDataItemSet.reset();
         ++maCurrCell.mnCol;
-        mpCurrEntryList = nullptr;
+        mpCurrEntryVector = nullptr;
         mbDataOn = false;
     }
 }
@@ -2639,7 +2639,7 @@ void ScHTMLTable::FillEmptyCells()
 
                 // insert a dummy entry
                 ScHTMLEntryPtr xEntry = CreateEntry();
-                ImplPushEntryToList( maEntryMap[ ScHTMLPos( aAddr ) ], xEntry );
+                ImplPushEntryToVector( maEntryMap[ ScHTMLPos( aAddr ) ], xEntry );
             }
         }
     }
@@ -2665,9 +2665,9 @@ void ScHTMLTable::RecalcDocSize()
             const ScHTMLPos& rCellPos = aMapIter->first;
             ScHTMLSize aCellSpan = GetSpan( rCellPos );
 
-            const ScHTMLEntryList& rEntryList = aMapIter->second;
-            ScHTMLEntryList::const_iterator aListIter;
-            ScHTMLEntryList::const_iterator aListIterEnd = rEntryList.end();
+            const ScHTMLEntryVector& rEntryVector = aMapIter->second;
+            ScHTMLEntryVector::const_iterator aVectorIter;
+            ScHTMLEntryVector::const_iterator aVectorIterEnd = rEntryVector.end();
 
             // process the dimension of the current cell in this pass?
             // (pass is single and span is 1) or (pass is not single and span is not 1)
@@ -2678,9 +2678,9 @@ void ScHTMLTable::RecalcDocSize()
                 ScHTMLSize aDocSize( 1, 0 );    // resulting size of the cell in document
 
                 // expand the cell size for each cell parse entry
-                for( aListIter = rEntryList.begin(); aListIter != aListIterEnd; ++aListIter )
+                for( aVectorIter = rEntryVector.begin(); aVectorIter != aVectorIterEnd; ++aVectorIter )
                 {
-                    ScHTMLTable* pTable = GetExistingTable( (*aListIter)->GetTableId() );
+                    ScHTMLTable* pTable = GetExistingTable( (*aVectorIter)->GetTableId() );
                     // find entry with maximum width
                     if( bProcessColWidth && pTable )
                         aDocSize.mnCols = std::max( aDocSize.mnCols, static_cast< SCCOL >( pTable->GetDocSize( tdCol ) ) );
@@ -2717,12 +2717,12 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
         // running doc position for single entries
         ScHTMLPos aEntryDocPos( aCellDocPos );
 
-        ScHTMLEntryList& rEntryList = aMapIter->second;
+        ScHTMLEntryVector& rEntryVector = aMapIter->second;
         ScHTMLEntry* pEntry = nullptr;
-        ScHTMLEntryList::iterator aListIterEnd = rEntryList.end();
-        for( ScHTMLEntryList::iterator aListIter = rEntryList.begin(); aListIter != aListIterEnd; ++aListIter )
+        ScHTMLEntryVector::iterator aVectorIterEnd = rEntryVector.end();
+        for( ScHTMLEntryVector::iterator aVectorIter = rEntryVector.begin(); aVectorIter != aVectorIterEnd; ++aVectorIter )
         {
-            pEntry = *aListIter;
+            pEntry = *aVectorIter;
             if( ScHTMLTable* pTable = GetExistingTable( pEntry->GetTableId() ) )
             {
                 pTable->RecalcDocPos( aEntryDocPos );   // recalc nested table
@@ -2758,7 +2758,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
         // pEntry points now to last entry.
         if( pEntry )
         {
-            if( (pEntry == rEntryList.front()) && (pEntry->GetTableId() == SC_HTML_NO_TABLE) )
+            if( (pEntry == rEntryVector.front()) && (pEntry->GetTableId() == SC_HTML_NO_TABLE) )
             {
                 // pEntry is the only entry in this cell - merge rows of cell with single non-table entry.
                 pEntry->nRowOverlap = aCellDocSize.mnRows;
@@ -2773,7 +2773,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
                     xDummyEntry->nCol = aEntryDocPos.mnCol;
                     xDummyEntry->nRow = aEntryDocPos.mnRow;
                     xDummyEntry->nColOverlap = aCellDocSize.mnCols;
-                    ImplPushEntryToList( rEntryList, xDummyEntry );
+                    ImplPushEntryToVector( rEntryVector, xDummyEntry );
                     ++aEntryDocPos.mnRow;
                 }
             }
@@ -2784,11 +2784,11 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
 ScHTMLGlobalTable::ScHTMLGlobalTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
-    std::vector< ScEEParseEntry* >& rEEParseList,
+    std::vector< ScEEParseEntry* >& rEEParseVector,
     ScHTMLTableId& rnUnusedId,
     ScHTMLParser* pParser
 ) :
-    ScHTMLTable( rPool, rEditEngine, rEEParseList, rnUnusedId, pParser )
+    ScHTMLTable( rPool, rEditEngine, rEEParseVector, rnUnusedId, pParser )
 {
 }
 
