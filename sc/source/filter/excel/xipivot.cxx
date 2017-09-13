@@ -921,7 +921,11 @@ void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim, ScDPObject* pObj, c
     {
         sItemName = pObj->GetFormattedString(rSaveDim.GetName(), rRoot.GetDoubleFromDateTime(*pCacheItem->GetDateTime()));
     }
-    else // EXC_PCITEM_EMPTY || EXC_PCITEM_INVALID
+    else if (pCacheItem->GetType() == EXC_PCITEM_EMPTY)
+    {
+        // sItemName is an empty string
+    }
+    else // EXC_PCITEM_INVALID
         return;
 
     // Find member and set properties
@@ -1393,6 +1397,8 @@ void XclImpPivotTable::Convert()
     aSaveData.SetColumnGrand( ::get_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND ) );
     aSaveData.SetFilterButton( false );
     aSaveData.SetDrillDown( ::get_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN ) );
+    aSaveData.SetIgnoreEmptyRows( false );
+    aSaveData.SetRepeatIfEmpty( false );
 
     // *** fields ***
 
