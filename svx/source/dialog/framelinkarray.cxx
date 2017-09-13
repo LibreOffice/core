@@ -249,9 +249,6 @@ struct ArrayImpl
     long                GetColPosition( size_t nCol ) const;
     long                GetRowPosition( size_t nRow ) const;
 
-    long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
-    long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
-
     bool                HasCellRotation() const;
 };
 
@@ -373,16 +370,6 @@ long ArrayImpl::GetRowPosition( size_t nRow ) const
         mbYCoordsDirty = false;
     }
     return maYCoords[ nRow ];
-}
-
-long ArrayImpl::GetColWidth( size_t nFirstCol, size_t nLastCol ) const
-{
-    return GetColPosition( nLastCol + 1 ) - GetColPosition( nFirstCol );
-}
-
-long ArrayImpl::GetRowHeight( size_t nFirstRow, size_t nLastRow ) const
-{
-    return GetRowPosition( nLastRow + 1 ) - GetRowPosition( nFirstRow );
 }
 
 bool ArrayImpl::HasCellRotation() const

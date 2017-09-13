@@ -327,6 +327,11 @@ private:
     ArrayImplPtr        mxImpl;
 };
 
+// helper to merge B2DPrimitive(s) in rSource and add to rTarget
+void SVX_DLLPUBLIC HelperMergeInB2DPrimitiveArray(
+    const drawinglayer::primitive2d::Primitive2DContainer& rSource,
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget);
+
 }
 }
 
