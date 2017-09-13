@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libexttextcat_fingerprint,exttextcat))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libexttextcat_fingerprint,libexttextcat))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libexttextcat_fingerprint,$(LIBO_SHARE_FOLDER)/fingerprint,\
 	langclass/fpdb.conf \

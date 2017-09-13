@@ -783,19 +783,19 @@ else # !SYSTEM_LIBEXTTEXTCAT
 
 define gb_LinkTarget__use_libexttextcat
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,exttextcat/src) \
+	-I$(call gb_UnpackedTarball_get_dir,libexttextcat/src) \
 	$$(INCLUDE) \
 )
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	exttextcat \
+	libexttextcat \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,exttextcat)/src/.libs/libexttextcat-2.0.a\
+	$(call gb_UnpackedTarball_get_dir,libexttextcat)/src/.libs/libexttextcat-2.0.a\
 )
-$(call gb_LinkTarget_use_external_project,$(1),exttextcat)
+$(call gb_LinkTarget_use_external_project,$(1),libexttextcat)
 endif
 
 
