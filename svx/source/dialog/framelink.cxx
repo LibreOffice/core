@@ -380,6 +380,7 @@ double getOffsetAndHalfWidthAndColorFromStyle(
         Color aSecn(rStyle.GetColorSecn());
         double fPrim(rStyle.Prim());
         double fSecn(rStyle.Secn());
+        const bool bSecnUsed(0.0 != fSecn);
 
         if(bMirrored)
         {
@@ -389,8 +390,12 @@ double getOffsetAndHalfWidthAndColorFromStyle(
                 case RefMode::End: aRefMode = RefMode::Begin; break;
                 default: break;
             }
-            std::swap(aPrim, aSecn);
-            std::swap(fPrim, fSecn);
+
+            if(bSecnUsed)
+            {
+                std::swap(aPrim, aSecn);
+                std::swap(fPrim, fSecn);
+            }
         }
 
         if (RefMode::Centered != aRefMode)
@@ -409,7 +414,7 @@ double getOffsetAndHalfWidthAndColorFromStyle(
             }
         }
 
-        if (rStyle.Dist() && fSecn)
+        if (bSecnUsed)
         {
             // both or all three lines used
             const bool bPrimTransparent(0xff == rStyle.GetColorPrim().GetTransparency());
@@ -503,6 +508,103 @@ void getCutSet(
         &rCutSet.mfORMR);
 }
 
+void getAllCutSets(
+    std::vector< CutSet >& rCutSets,
+    const basegfx::B2DPoint& rOrigin,
+    const basegfx::B2DPoint& rLeft,
+    const basegfx::B2DPoint& rRight,
+    const basegfx::B2DVector& rX,
+    const StyleVectorTable& rStyleVectorTable,
+    bool bUpper,
+    bool bLower)
+{
+    for(const auto& rStyleVectorCombination : rStyleVectorTable)
+    {
+        if(bUpper || bLower)
+        {
+            // use only upper or lower vectors compared to rX
+            const double fCross(rX.cross(rStyleVectorCombination.getB2DVector()));
+
+            if(bUpper && fCross > 0.0)
+            {
+                // upper vectors wanted, but is lower
+                continue;
+            }
+
+            if(bLower && fCross < 0.0)
+            {
+                // lower vectors wanted, but is upper
+                continue;
+            }
+        }
+
+        std::vector< OffsetAndHalfWidthAndColor > otherOffsets;
+        getOffsetAndHalfWidthAndColorFromStyle(rStyleVectorCombination.getStyle(), nullptr, rStyleVectorCombination.isMirrored(), otherOffsets);
+
+        if(!otherOffsets.empty())
+        {
+            const basegfx::B2DVector aOtherPerpend(basegfx::getNormalizedPerpendicular(rStyleVectorCombination.getB2DVector()));
+
+            for(const auto& rOtherOffset : otherOffsets)
+            {
+                const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset - rOtherOffset.mfHalfWidth)));
+                const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset + rOtherOffset.mfHalfWidth)));
+                CutSet aCutSet;
+
+                getCutSet(aCutSet, rLeft, rRight, rX, aOtherLeft, aOtherRight, rStyleVectorCombination.getB2DVector());
+                rCutSets.push_back(aCutSet);
+            }
+        }
+    }
+}
+
+CutSet getMinMaxCutSet(
+    bool bMin,
+    const std::vector< CutSet >& rCutSets)
+{
+    if(rCutSets.empty())
+    {
+        CutSet aRetval;
+        aRetval.mfOLML = aRetval.mfORML = aRetval.mfOLMR = aRetval.mfORMR = 0.0;
+        return aRetval;
+    }
+
+    const size_t aSize(rCutSets.size());
+
+    if(1 == aSize)
+    {
+        return rCutSets[0];
+    }
+
+    CutSet aRetval(rCutSets[0]);
+    double fRetval(aRetval.mfOLML + aRetval.mfORML + aRetval.mfOLMR + aRetval.mfORMR);
+
+    for(size_t a(1); a < aSize; a++)
+    {
+        const CutSet& rCandidate(rCutSets[a]);
+        const double fCandidate(rCandidate.mfOLML + rCandidate.mfORML + rCandidate.mfOLMR + rCandidate.mfORMR);
+
+        if(bMin)
+        {
+            if(fCandidate < fRetval)
+            {
+                fRetval = fCandidate;
+                aRetval = rCandidate;
+            }
+        }
+        else
+        {
+            if(fCandidate > fRetval)
+            {
+                fRetval = fCandidate;
+                aRetval = rCandidate;
+            }
+        }
+    }
+
+    return aRetval;
+}
+
 void getExtends(
     std::vector<ExtendSet>& rExtendSet,                     // target Left/Right values to fill
     const basegfx::B2DPoint& rOrigin,                       // own vector start
@@ -518,40 +620,98 @@ void getExtends(
         for(size_t a(0); a < nOffsets; a++)
         {
             const OffsetAndHalfWidthAndColor& rOffset(rOffsets[a]);
-            ExtendSet& rExt(rExtendSet[a]);
-            bool bExtSet(false);
-            const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (rOffset.mfOffset - rOffset.mfHalfWidth)));
-            const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (rOffset.mfOffset + rOffset.mfHalfWidth)));
 
-            for(const auto& rStyleVectorCombination : rStyleVectorTable)
+            if(0xff != rOffset.maColor.GetTransparency())
             {
-                std::vector< OffsetAndHalfWidthAndColor > otherOffsets;
-                getOffsetAndHalfWidthAndColorFromStyle(rStyleVectorCombination.getStyle(), nullptr, rStyleVectorCombination.isMirrored(), otherOffsets);
+                const basegfx::B2DPoint aLeft(rOrigin + (rPerpendX * (rOffset.mfOffset - rOffset.mfHalfWidth)));
+                const basegfx::B2DPoint aRight(rOrigin + (rPerpendX * (rOffset.mfOffset + rOffset.mfHalfWidth)));
+                std::vector< CutSet > aCutSets;
+                CutSet aResult;
+                bool bResultSet(false);
 
-                if(!otherOffsets.empty())
+                if(1 == nOffsets)
                 {
-                    const basegfx::B2DVector aOtherPerpend(basegfx::getNormalizedPerpendicular(rStyleVectorCombination.getB2DVector()));
+                    // single line:
+                    // - get all CutSets
+                    // - get minimum values as extension (biggest possible overlap)
+                    getAllCutSets(aCutSets, rOrigin, aLeft, aRight, rX, rStyleVectorTable, false, false);
 
-                    for(const auto& rOtherOffset : otherOffsets)
+                    if(!aCutSets.empty())
                     {
-                        const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset - rOtherOffset.mfHalfWidth)));
-                        const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset + rOtherOffset.mfHalfWidth)));
-                        CutSet aCutSet;
+                        aResult = getMinMaxCutSet(true, aCutSets);
+                        bResultSet = true;
+                    }
+                }
+                else
+                {
+                    // multiple lines
+                    const bool bUpper(a < (nOffsets >> 1));
+                    const bool bLower(a > (nOffsets >> 1));
 
-                        getCutSet(aCutSet, aLeft, aRight, rX, aOtherLeft, aOtherRight, rStyleVectorCombination.getB2DVector());
+                    if(bUpper)
+                    {
+                        getAllCutSets(aCutSets, rOrigin, aLeft, aRight, rX, rStyleVectorTable, true, false);
 
-                        if(!bExtSet)
+                        if(!aCutSets.empty())
                         {
-                            rExt.mfExtLeft = std::min(aCutSet.mfOLML, aCutSet.mfORML);
-                            rExt.mfExtRight = std::min(aCutSet.mfOLMR, aCutSet.mfORMR);
-                            bExtSet = true;
+                            aResult = getMinMaxCutSet(false, aCutSets);
+                            bResultSet = true;
                         }
                         else
                         {
-                            rExt.mfExtLeft = std::min(rExt.mfExtLeft , std::min(aCutSet.mfOLML, aCutSet.mfORML));
-                            rExt.mfExtRight = std::min(rExt.mfExtRight , std::min(aCutSet.mfOLMR, aCutSet.mfORMR));
+                            getAllCutSets(aCutSets, rOrigin, aLeft, aRight, rX, rStyleVectorTable, false, true);
+
+                            if(!aCutSets.empty())
+                            {
+                                aResult = getMinMaxCutSet(true, aCutSets);
+                                bResultSet = true;
+                            }
                         }
                     }
+                    else if(bLower)
+                    {
+                        getAllCutSets(aCutSets, rOrigin, aLeft, aRight, rX, rStyleVectorTable, false, true);
+
+                        if(!aCutSets.empty())
+                        {
+                            aResult = getMinMaxCutSet(false, aCutSets);
+                            bResultSet = true;
+                        }
+                        else
+                        {
+                            getAllCutSets(aCutSets, rOrigin, aLeft, aRight, rX, rStyleVectorTable, true, false);
+
+                            if(!aCutSets.empty())
+                            {
+                                aResult = getMinMaxCutSet(true, aCutSets);
+                                bResultSet = true;
+                            }
+                        }
+                    }
+                    else // middle line
+                    {
+                        getAllCutSets(aCutSets, rOrigin, aLeft, aRight, rX, rStyleVectorTable, false, false);
+
+                        if(!aCutSets.empty())
+                        {
+                            const CutSet aResultMin(getMinMaxCutSet(true, aCutSets));
+                            const CutSet aResultMax(getMinMaxCutSet(false, aCutSets));
+
+                            aResult.mfOLML = (aResultMin.mfOLML + aResultMax.mfOLML) * 0.5;
+                            aResult.mfORML = (aResultMin.mfORML + aResultMax.mfORML) * 0.5;
+                            aResult.mfOLMR = (aResultMin.mfOLMR + aResultMax.mfOLMR) * 0.5;
+                            aResult.mfORMR = (aResultMin.mfORMR + aResultMax.mfORMR) * 0.5;
+                            bResultSet = true;
+                        }
+                    }
+                }
+
+                if(bResultSet)
+                {
+                    ExtendSet& rExt(rExtendSet[a]);
+
+                    rExt.mfExtLeft = std::min(aResult.mfOLML, aResult.mfORML);
+                    rExt.mfExtRight = std::min(aResult.mfOLMR, aResult.mfORMR);
                 }
             }
         }
@@ -588,9 +748,22 @@ void CreateBorderPrimitives(
 
         if(bHasEndStyles)
         {
-            // create extends for line ends, use inverse point/vector and inverse offsets
-            std::reverse(myOffsets.begin(), myOffsets.end());
-            getExtends(aExtendSetEnd, rOrigin + rX, -rX, -aPerpendX, myOffsets, rEndStyleVectorTable);
+            // Create extends for line ends, use inverse point/vector and inverse offsets.
+            // Offsets need to be inverted for different width of lines. To invert, change
+            // order, but also sign of offset. Do this on a copy since myOffsets will be
+            // used below to create the primitives
+            std::vector< OffsetAndHalfWidthAndColor > myInverseOffsets(myOffsets);
+            std::reverse(myInverseOffsets.begin(), myInverseOffsets.end());
+
+            for(auto& offset : myInverseOffsets)
+            {
+                offset.mfOffset *= -1;
+            }
+
+            getExtends(aExtendSetEnd, rOrigin + rX, -rX, -aPerpendX, myInverseOffsets, rEndStyleVectorTable);
+
+            // also need to reverse the result to apply to the correct lines
+            std::reverse(aExtendSetEnd.begin(), aExtendSetEnd.end());
         }
 
         std::vector< drawinglayer::primitive2d::BorderLine > aBorderlines;
