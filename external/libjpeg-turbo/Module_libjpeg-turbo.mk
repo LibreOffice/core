@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,jpeg-turbo))
+$(eval $(call gb_Module_Module,libjpeg-turbo))
 
-$(eval $(call gb_Module_add_targets,jpeg-turbo,\
-	ExternalProject_jpeg-turbo \
-	UnpackedTarball_jpeg-turbo \
+$(eval $(call gb_Module_add_targets,libjpeg-turbo,\
+	ExternalProject_libjpeg-turbo \
+	UnpackedTarball_libjpeg-turbo \
 ))
 
 # vim: set noet sw=4 ts=4:

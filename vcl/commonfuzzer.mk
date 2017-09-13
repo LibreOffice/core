@@ -30,7 +30,7 @@ fuzzer_externals = \
     liblangtag \
     libxslt \
     libxml2 \
-    jpeg \
+    libjpeg \
     png \
     clew \
     openssl \

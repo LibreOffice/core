@@ -531,7 +531,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 ))
 
 $(eval $(call gb_Library_use_externals,pdfium,\
-    jpeg \
+    libjpeg \
     lcms2 \
     zlib \
 ))

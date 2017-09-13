@@ -30,7 +30,7 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 
 # PTHREAD_CFLAGS (Linux)
 # SYSTEM_ICU (Linux)
-# SYSTEM_JPEG (Linux)
+# SYSTEM_LIBJPEG (Linux)
 # SYSTEM_LIBXML (Linux)
 
 .DELETE_ON_ERROR:

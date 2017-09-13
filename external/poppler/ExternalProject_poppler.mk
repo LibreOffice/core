@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalProject_ExternalProject,poppler))
 $(eval $(call gb_ExternalProject_use_autoconf,poppler,build))
 
 $(eval $(call gb_ExternalProject_use_externals,poppler,\
-	jpeg \
+	libjpeg \
 ))
 
 $(eval $(call gb_ExternalProject_register_targets,poppler,\

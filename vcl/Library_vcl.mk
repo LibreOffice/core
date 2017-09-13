@@ -56,7 +56,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-	jpeg \
+	libjpeg \
 	libeot \
 	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
