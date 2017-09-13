@@ -673,7 +673,7 @@ namespace sw
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
             Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
             Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
-            aPoly.Scale(aMapPolyX, aMapPolyY);
+            aPoly.Scale(double(aMapPolyX), double(aMapPolyY));
 
             /*
              a) stretch right bound by 15twips
@@ -691,7 +691,7 @@ namespace sw
                     ww::nWrap100Percent);
             Fraction aHackY(ww::nWrap100Percent - nMove,
                     ww::nWrap100Percent);
-            aPoly.Scale(aHackX, aHackY);
+            aPoly.Scale(double(aHackX), double(aHackY));
 
             aPoly.Move(-nMove, 0);
             return aPoly;

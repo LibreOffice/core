@@ -212,10 +212,8 @@ void ScClient::ViewChanged()
     if (pDrawObj)
     {
         tools::Rectangle aLogicRect = pDrawObj->GetLogicRect();
-        Fraction aFractX = GetScaleWidth();
-        Fraction aFractY = GetScaleHeight();
-        aFractX *= aVisSize.Width();
-        aFractY *= aVisSize.Height();
+        Fraction aFractX = GetScaleWidth() * aVisSize.Width();
+        Fraction aFractY = GetScaleHeight() * aVisSize.Height();
         aVisSize = Size( (long) aFractX, (long) aFractY ); // Scaled for Draw model
 
         //  pClientData->SetObjArea before pDrawObj->SetLogicRect, so that we don't

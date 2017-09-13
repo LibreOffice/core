@@ -229,8 +229,7 @@ void OSectionWindow::Resize()
     Window::Resize();
 
     Size aOutputSize = GetOutputSizePixel();
-    Fraction aEndWidth(long(REPORT_ENDMARKER_WIDTH));
-    aEndWidth *= GetMapMode().GetScaleX();
+    long nEndWidth = long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
     aOutputSize.Width() -= aThumbPos.X();
@@ -245,19 +244,18 @@ void OSectionWindow::Resize()
     {
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
 
-        Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
-        aStartWidth *= GetMapMode().GetScaleX();
+        long nStartWidth = long(REPORT_STARTMARKER_WIDTH * GetMapMode().GetScaleX());
 
         // set start marker
-        m_aStartMarker->SetPosSizePixel(Point(0,0),Size(aStartWidth,aOutputSize.Height()));
+        m_aStartMarker->SetPosSizePixel(Point(0,0),Size(nStartWidth,aOutputSize.Height()));
 
         // set report section
         const uno::Reference< report::XSection> xSection = m_aReportSection->getSection();
         Size aSectionSize = LogicToPixel( Size( 0,xSection->getHeight() ) );
-        Point aReportPos(aStartWidth,0);
-        aSectionSize.Width() = aOutputSize.Width() - (long)aStartWidth;
+        Point aReportPos(nStartWidth,0);
+        aSectionSize.Width() = aOutputSize.Width() - nStartWidth;
         if ( bShowEndMarker )
-            aSectionSize.Width() -= (long)aEndWidth;
+            aSectionSize.Width() -= nEndWidth;
 
         m_aReportSection->SetPosSizePixel(aReportPos,aSectionSize);
 
@@ -265,13 +263,13 @@ void OSectionWindow::Resize()
         aReportPos.Y() += aSectionSize.Height();
         m_aSplitter->SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter->GetSizePixel().Height()));
         aSectionSize.Height() = (long)(1000 * (double)GetMapMode().GetScaleY());
-        m_aSplitter->SetDragRectPixel( tools::Rectangle(Point(aStartWidth,0),aSectionSize));
+        m_aSplitter->SetDragRectPixel( tools::Rectangle(Point(nStartWidth,0),aSectionSize));
 
         // set end marker
         aReportPos.X() += aSectionSize.Width();
         aReportPos.Y() = 0;
         m_aEndMarker->Show(bShowEndMarker);
-        m_aEndMarker->SetPosSizePixel(aReportPos,Size(aEndWidth,aOutputSize.Height()));
+        m_aEndMarker->SetPosSizePixel(aReportPos,Size(nEndWidth,aOutputSize.Height()));
     }
 }
 

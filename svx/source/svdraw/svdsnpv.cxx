@@ -369,7 +369,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if(bGridSnap)
     {
-        double fSnapWidth = aSnapWdtX;
+        double fSnapWidth(aSnapWdtX);
         if(dx == NOT_SNAPPED && fSnapWidth != 0.0)
         {
             double fx = (double)x;
@@ -384,7 +384,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             x = (long)((double)x * fSnapWidth + (double)pPV->GetPageOrigin().X());
             dx = 0;
         }
-        fSnapWidth = aSnapWdtY;
+        fSnapWidth = double(aSnapWdtY);
         if(dy == NOT_SNAPPED && fSnapWidth)
         {
             double fy = (double)y;

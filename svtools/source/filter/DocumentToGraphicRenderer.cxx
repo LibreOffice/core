@@ -150,8 +150,8 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     OutputDevice* pOutputDev = VCLUnoHelper::GetOutputDevice( xDevice );
     pOutputDev->SetAntialiasing(pOutputDev->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
     MapMode mm = pOutputDev->GetMapMode();
-    mm.SetScaleX( fScaleX );
-    mm.SetScaleY( fScaleY );
+    mm.SetScaleX( Fraction(fScaleX) );
+    mm.SetScaleY( Fraction(fScaleY) );
     pOutputDev->SetMapMode( mm );
 
     aMtf.Record( pOutputDev );

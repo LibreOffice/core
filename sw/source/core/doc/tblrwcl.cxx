@@ -3913,7 +3913,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
         Fraction aTmp( nMyOldH );
         aTmp *= Fraction( nNewHeight, nOldHeight );
         aTmp += Fraction( 1, 2 );       // round up if needed
-        nMyNewH = aTmp;
+        nMyNewH = long(aTmp);
     }
 
     SwFrameSize eSize = ATT_MIN_SIZE;

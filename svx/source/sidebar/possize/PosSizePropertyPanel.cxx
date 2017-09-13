@@ -370,7 +370,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
-        lX = Fraction( lX ) * aUIScale;
+        lX = long( lX * aUIScale );
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
 
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lY += maAnchorPos.Y();
-        lY = Fraction( lY ) * aUIScale;
+        lY = long( lY * aUIScale );
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
@@ -530,12 +530,10 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pWidthItem)
                 {
-                    long mlOldWidth1 = pWidthItem->GetValue();
-
-                    mlOldWidth1 = Fraction( mlOldWidth1 ) / maUIScale;
+                    long lOldWidth1 = long( pWidthItem->GetValue() / maUIScale );
                     SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
-                    SetMetricValue( *mpMtrWidth, mlOldWidth1, mePoolUnit );
-                    mlOldWidth = mlOldWidth1;
+                    SetMetricValue( *mpMtrWidth, lOldWidth1, mePoolUnit );
+                    mlOldWidth = lOldWidth1;
                     break;
                 }
             }
@@ -550,12 +548,10 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pHeightItem)
                 {
-                    long mlOldHeight1 = pHeightItem->GetValue();
-
-                    mlOldHeight1 = Fraction( mlOldHeight1 ) / maUIScale;
+                    long nTmp = long( pHeightItem->GetValue() / maUIScale);
                     SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
-                    SetMetricValue( *mpMtrHeight, mlOldHeight1, mePoolUnit );
-                    mlOldHeight = mlOldHeight1;
+                    SetMetricValue( *mpMtrHeight, nTmp, mePoolUnit );
+                    mlOldHeight = nTmp;
                     break;
                 }
             }
@@ -570,8 +566,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    long nTmp = pItem->GetValue();
-                    nTmp = Fraction( nTmp ) / maUIScale;
+                    long nTmp = long(pItem->GetValue() / maUIScale);
                     SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
                     SetMetricValue( *mpMtrPosX, nTmp, mePoolUnit );
                     break;
@@ -588,8 +583,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    long nTmp = pItem->GetValue();
-                    nTmp = Fraction( nTmp ) / maUIScale;
+                    long nTmp = long(pItem->GetValue() / maUIScale);
                     SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
                     SetMetricValue( *mpMtrPosY, nTmp, mePoolUnit );
                     break;
@@ -607,7 +601,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotX = pItem->GetValue();
-                    mlRotX = Fraction( mlRotX ) / maUIScale;
+                    mlRotX = long( mlRotX / maUIScale );
                 }
             }
             break;
@@ -620,7 +614,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotY = pItem->GetValue();
-                    mlRotY = Fraction( mlRotY ) / maUIScale;
+                    mlRotY = long( mlRotY / maUIScale );
                 }
             }
             break;

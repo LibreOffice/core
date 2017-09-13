@@ -100,8 +100,8 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
     awt::Point aMovePoint(aMove.operator long(), 0);
     pResult = move(aMovePoint);
 
-    Fraction aScaleX(nWrap100Percent, Fraction(nWrap100Percent) + aMove);
-    Fraction aScaleY(nWrap100Percent, Fraction(nWrap100Percent) - aMove);
+    Fraction aScaleX = nWrap100Percent / (nWrap100Percent + aMove);
+    Fraction aScaleY = nWrap100Percent / (nWrap100Percent - aMove);
     pResult = pResult->scale(aScaleX, aScaleY);
 
     Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);

@@ -343,8 +343,8 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         if (pEditWin)
         {
             MapMode aCWMapMode = GetMapMode();
-            double fXScale = aCWMapMode.GetScaleX();
-            double fYScale = aCWMapMode.GetScaleY();
+            double fXScale( aCWMapMode.GetScaleX() );
+            double fYScale( aCWMapMode.GetScaleY() );
 
             if (!IsMapModeEnabled())
             {
@@ -410,8 +410,8 @@ tools::Rectangle ChartWindow::GetBoundingBox()
         // In all cases, the following code fragment
         // returns the chart bounding box in twips.
         MapMode aCWMapMode = GetMapMode();
-        double fXScale = aCWMapMode.GetScaleX();
-        double fYScale = aCWMapMode.GetScaleY();
+        double fXScale( aCWMapMode.GetScaleX() );
+        double fYScale( aCWMapMode.GetScaleY() );
         Point aOffset = GetOffsetPixelFrom(*pRootWin);
         aOffset.X() *= (TWIPS_PER_PIXEL / fXScale);
         aOffset.Y() *= (TWIPS_PER_PIXEL / fYScale);

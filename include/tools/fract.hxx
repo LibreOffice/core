@@ -27,7 +27,7 @@ class SvStream;
 
 // This class uses the platform defined type 'long' as valid values but do all
 // calculations using sal_Int64 with checks for 'long' overflows.
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
 {
     struct Impl;
 
@@ -40,7 +40,7 @@ public:
                     Fraction( const Fraction & rFrac );
                     Fraction( Fraction && rFrac );
                     Fraction( long nNum, long nDen );
-                    Fraction( double dVal );
+    explicit        Fraction( double dVal );
                     ~Fraction();
 
     bool            IsValid() const;
@@ -48,16 +48,21 @@ public:
     long            GetNumerator() const;
     long            GetDenominator() const;
 
-    operator        long() const;
-    operator        double() const;
+    explicit operator long() const;
+    explicit operator double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac );
     Fraction&       operator=( Fraction&& rfrFrac );
+    Fraction&       operator=( double v ) { return operator=(Fraction(v)); }
 
     Fraction&       operator+=( const Fraction& rfrFrac );
     Fraction&       operator-=( const Fraction& rfrFrac );
     Fraction&       operator*=( const Fraction& rfrFrac );
     Fraction&       operator/=( const Fraction& rfrFrac );
+    Fraction&       operator+=( double v ) { return operator+=(Fraction(v)); }
+    Fraction&       operator-=( double v ) { return operator-=(Fraction(v)); }
+    Fraction&       operator*=( double v ) { return operator*=(Fraction(v)); }
+    Fraction&       operator/=( double v ) { return operator/=(Fraction(v)); }
 
     void            ReduceInaccurate( unsigned nSignificantBits );
 
@@ -84,6 +89,16 @@ TOOLS_DLLPUBLIC Fraction operator/( const Fraction& rVal1, const Fraction& rVal2
 TOOLS_DLLPUBLIC bool operator !=( const Fraction& rVal1, const Fraction& rVal2 );
 TOOLS_DLLPUBLIC bool operator <=( const Fraction& rVal1, const Fraction& rVal2 );
 TOOLS_DLLPUBLIC bool operator >=( const Fraction& rVal1, const Fraction& rVal2 );
+
+inline Fraction operator+( double v1, const Fraction& rVal2 ) { return Fraction(v1) + rVal2; }
+inline Fraction operator-( double v1, const Fraction& rVal2 ) { return Fraction(v1) - rVal2; }
+inline Fraction operator*( double v1, const Fraction& rVal2 ) { return Fraction(v1) * rVal2; }
+inline Fraction operator/( double v1, const Fraction& rVal2 ) { return Fraction(v1) / rVal2; }
+
+inline Fraction operator+( const Fraction& rVal1, double v2 ) { return rVal1 + Fraction(v2); }
+inline Fraction operator-( const Fraction& rVal1, double v2 ) { return rVal1 - Fraction(v2); }
+inline Fraction operator*( const Fraction& rVal1, double v2 ) { return rVal1 * Fraction(v2); }
+inline Fraction operator/( const Fraction& rVal1, double v2 ) { return rVal1 / Fraction(v2); }
 
 #endif
 
