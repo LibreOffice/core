@@ -366,12 +366,12 @@ void SpinField::Down()
 
 void SpinField::First()
 {
-    ImplCallEventListenersAndHandler( VclEventId::SpinfieldFirst, [this] () { maFirstHdlLink.Call(*this); } );
+    ImplCallEventListenersAndHandler(VclEventId::SpinfieldFirst, nullptr);
 }
 
 void SpinField::Last()
 {
-    ImplCallEventListenersAndHandler( VclEventId::SpinfieldLast, [this] () { maLastHdlLink.Call(*this); } );
+    ImplCallEventListenersAndHandler(VclEventId::SpinfieldLast, nullptr);
 }
 
 void SpinField::MouseButtonDown( const MouseEvent& rMEvt )

@@ -53,8 +53,6 @@ public:
     void            SetUpHdl( const Link<SpinField&,void>& rLink ) { maUpHdlLink = rLink; }
     void            SetDownHdl( const Link<SpinField&,void>& rLink ) { maDownHdlLink = rLink; }
     const Link<SpinField&,void>&   GetDownHdl() const { return maDownHdlLink; }
-    void            SetFirstHdl( const Link<SpinField&,void>& rLink ) { maFirstHdlLink = rLink; }
-    void            SetLastHdl( const Link<SpinField&,void>& rLink ) { maLastHdlLink = rLink; }
 
     virtual Size    CalcMinimumSize() const override;
     virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;
@@ -87,8 +85,6 @@ private:
     AutoTimer       maRepeatTimer;
     Link<SpinField&,void>  maUpHdlLink;
     Link<SpinField&,void>  maDownHdlLink;
-    Link<SpinField&,void>  maFirstHdlLink;
-    Link<SpinField&,void>  maLastHdlLink;
     bool            mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,
