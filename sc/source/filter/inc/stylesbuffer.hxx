@@ -36,7 +36,7 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
 #include "attarray.hxx"
-#include <list>
+#include <vector>
 
 namespace oox { class PropertySet;
                 class PropertyMap; }
@@ -591,7 +591,7 @@ class Xf : public WorkbookHelper
 public:
     struct AttrList
     {
-        std::list<ScAttrEntry> maAttrs;
+        std::vector<ScAttrEntry> maAttrs;
         bool mbLatinNumFmtOnly;
         const ScPatternAttr* mpDefPattern;
 

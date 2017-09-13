@@ -16,6 +16,7 @@
 #include <rtl/ustring.hxx>
 
 #include <memory>
+#include <vector>
 
 class EditTextObject;
 class ScDocument;
@@ -45,8 +46,7 @@ public:
 
     struct SC_DLLPUBLIC Attrs
     {
-        ScAttrEntry* mpData;
-        size_t mnSize;
+        std::vector<ScAttrEntry> mvData;
 
         bool mbLatinNumFmtOnly;
 
@@ -106,7 +106,7 @@ public:
      * transfers the ownership of the ScAttrEntry array from the caller to the
      * column.
      */
-    void setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs& rAttrs );
+    void setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs&& rAttrs );
 
     void setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, bool bVisible);
 

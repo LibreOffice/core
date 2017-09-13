@@ -2287,7 +2287,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             SCSIZE nIndex;
             if (bInitialization)
             {
-                if ( pArray->nCount )
+                if ( pArray->Count() )
                     pArray->Search( nStartRow, nIndex );
                 else
                     nIndex = 0;
@@ -2297,16 +2297,16 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             else
                 nIndex = ++pIndices[nPos];
 
-            if ( !nIndex && !pArray->nCount )
+            if ( !nIndex && !pArray->Count() )
             {
                 pNextEnd[nPos] = MAXROW;
                 OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
                 ppPatterns[nPos] = nullptr;
             }
-            else if ( nIndex < pArray->nCount )
+            else if ( nIndex < pArray->Count() )
             {
-                const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
-                SCROW nThisEnd = pArray->pData[nIndex].nEndRow;
+                const ScPatternAttr* pPattern = pArray->mvData[nIndex].pPattern;
+                SCROW nThisEnd = pArray->mvData[nIndex].nEndRow;
 
                 if ( IsDefaultItem( pPattern ) )
                     pPattern = nullptr;
