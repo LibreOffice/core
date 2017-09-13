@@ -331,21 +331,21 @@ void getOffsetPairsFromStyle(const Style& rStyle, std::vector< OffsetPair >& off
             case RefMode::Centered:
             {
                 const double fHalfFullWidth(rStyle.GetWidth() * 0.5);
-                offsets.push_back(OffsetPair(-fHalfFullWidth, rStyle.Prim() - fHalfFullWidth));
-                offsets.push_back(OffsetPair((rStyle.Prim() + rStyle.Dist()) - fHalfFullWidth, fHalfFullWidth));
+                offsets.emplace_back(-fHalfFullWidth, rStyle.Prim() - fHalfFullWidth);
+                offsets.emplace_back((rStyle.Prim() + rStyle.Dist()) - fHalfFullWidth, fHalfFullWidth);
                 break;
             }
             case RefMode::Begin:
             {
-                offsets.push_back(OffsetPair(0.0, rStyle.Prim()));
-                offsets.push_back(OffsetPair(rStyle.Prim() + rStyle.Dist(), rStyle.GetWidth()));
+                offsets.emplace_back(0.0, rStyle.Prim());
+                offsets.emplace_back(rStyle.Prim() + rStyle.Dist(), rStyle.GetWidth());
                 break;
             }
             default: // case RefMode::End:
             {
                 const double fFullWidth(rStyle.GetWidth());
-                offsets.push_back(OffsetPair(-fFullWidth, rStyle.Prim() - fFullWidth));
-                offsets.push_back(OffsetPair((rStyle.Prim() + rStyle.Dist()) - fFullWidth, 0.0));
+                offsets.emplace_back(-fFullWidth, rStyle.Prim() - fFullWidth);
+                offsets.emplace_back((rStyle.Prim() + rStyle.Dist()) - fFullWidth, 0.0);
                 break;
             }
             }
@@ -356,13 +356,13 @@ void getOffsetPairsFromStyle(const Style& rStyle, std::vector< OffsetPair >& off
             switch (rStyle.GetRefMode())
             {
             case RefMode::Centered:
-                offsets.push_back(OffsetPair(rStyle.Prim() * -0.5, rStyle.Prim() * 0.5));
+                offsets.emplace_back(rStyle.Prim() * -0.5, rStyle.Prim() * 0.5);
                 break;
             case RefMode::Begin:
-                offsets.push_back(OffsetPair(0.0, rStyle.Prim()));
+                offsets.emplace_back(0.0, rStyle.Prim());
                 break;
             default: // case RefMode::End:
-                offsets.push_back(OffsetPair(-rStyle.Prim(), 0.0));
+                offsets.emplace_back(-rStyle.Prim(), 0.0);
                 break;
             }
         }

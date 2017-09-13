@@ -169,7 +169,7 @@ IMPL_STATIC_LINK(
 
             case OBJ_FM_TIMEFIELD:
                 sServiceSpecifier = FM_COMPONENT_TIMEFIELD;
-                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_TIMEMAX, makeAny( tools::Time( 23, 59, 59, 999999999 ).GetUNOTime() ) ) );
+                aInitialProperties.emplace_back( FM_PROP_TIMEMAX, makeAny( tools::Time( 23, 59, 59, 999999999 ).GetUNOTime() ) );
                 break;
 
             case OBJ_FM_NUMERICFIELD:
@@ -202,12 +202,12 @@ IMPL_STATIC_LINK(
 
             case OBJ_FM_SCROLLBAR:
                 sServiceSpecifier = FM_SUN_COMPONENT_SCROLLBAR;
-                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) ) );
+                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
                 break;
 
             case OBJ_FM_SPINBUTTON:
                 sServiceSpecifier = FM_SUN_COMPONENT_SPINBUTTON;
-                aInitialProperties.push_back( PropertyValueArray::value_type( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) ) );
+                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( (sal_Int16)0 ) );
                 break;
         }
 

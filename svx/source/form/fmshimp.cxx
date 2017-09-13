@@ -968,7 +968,7 @@ void FmXFormShell::InvalidateSlot_Lock(sal_Int16 nId, bool bWithId)
     if (m_nLockSlotInvalidation)
     {
         sal_uInt8 nFlags = ( bWithId ? 0x01 : 0 );
-        m_arrInvalidSlots.push_back( InvalidSlotInfo(nId, nFlags) );
+        m_arrInvalidSlots.emplace_back(nId, nFlags );
     }
     else
         if (nId)
@@ -2463,7 +2463,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
                         m_arrRelativeGridColumn.push_back(-1);
 
                         // and for the formatted search...
-                        rfmscContextInfo.arrFields.push_back(Reference<XInterface>( xControl, UNO_QUERY ));
+                        rfmscContextInfo.arrFields.emplace_back( xControl, UNO_QUERY );
                     }
                 }
             }
@@ -3057,7 +3057,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
 
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
                             // the first getPropertyValue failed -> use two dummies
-                            aOriginalFilters.push_back( OUString() );
+                            aOriginalFilters.emplace_back( );
                         aOriginalApplyFlags.push_back( false );
                     }
                 }

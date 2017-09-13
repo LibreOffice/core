@@ -841,7 +841,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
         while ( nIndex2 >= 0 );
     }
 
-    maGrfURLs.push_back( ::std::make_pair( aURL, OUString() ) );
+    maGrfURLs.emplace_back( aURL, OUString() );
     ImplInsertGraphicURL( aURL, nIndex, aRequestedFileName );
 
     return maGrfURLs[ nIndex ].second;

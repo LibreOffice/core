@@ -58,14 +58,14 @@ OrientationHelper_Impl::OrientationHelper_Impl( DialControl& rCtrlDial, CheckBox
     mbEnabled( rCtrlDial.IsEnabled() ),
     mbVisible( rCtrlDial.IsVisible() )
 {
-    maWinVec.push_back( WindowPair( &mrCtrlDial, TRISTATE_TRUE ) );
-    maWinVec.push_back( WindowPair( &mrCbStacked, TRISTATE_INDET ) );
+    maWinVec.emplace_back( &mrCtrlDial, TRISTATE_TRUE );
+    maWinVec.emplace_back( &mrCbStacked, TRISTATE_INDET );
     mrCbStacked.SetClickHdl( LINK( this, OrientationHelper_Impl, ClickHdl ) );
 }
 
 void OrientationHelper_Impl::AddDependentWindow( vcl::Window& rWindow, TriState eDisableIfStacked )
 {
-    maWinVec.push_back( std::make_pair( &rWindow, eDisableIfStacked ) );
+    maWinVec.emplace_back( &rWindow, eDisableIfStacked );
     EnableWindow( rWindow, eDisableIfStacked );
 }
 
