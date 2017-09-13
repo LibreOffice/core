@@ -544,7 +544,7 @@ namespace SwReaderWriter
 }
 
 void GetRTFWriter( const OUString&, const OUString&, WriterRef& );
-SW_DLLPUBLIC void GetASCWriter(const OUString&, const OUString&, WriterRef&);
+void GetASCWriter(const OUString&, const OUString&, WriterRef&);
 void GetHTMLWriter( const OUString&, const OUString&, WriterRef& );
 void GetXMLWriter( const OUString&, const OUString&, WriterRef& );
 

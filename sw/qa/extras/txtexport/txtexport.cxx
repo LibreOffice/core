@@ -27,7 +27,7 @@ public:
     void assertExportedRange(const OString& aExpected, SwPaM& rPaM)
     {
         WriterRef rAsciiWriter;
-        GetASCWriter(aEmptyOUStr, OUString(), rAsciiWriter);
+        SwReaderWriter::GetWriter(FILTER_TEXT, OUString(), rAsciiWriter);
         CPPUNIT_ASSERT(rAsciiWriter.is());
 
         // no start char
