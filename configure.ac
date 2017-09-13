@@ -3668,7 +3668,8 @@ if test "$COM_IS_CLANG" = TRUE; then
     fi
     clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args -`
     CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
-    CLANGVER=`echo $clang_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    CLANGVER=`echo $clang_version \
+        | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
     AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
     AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
     AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
