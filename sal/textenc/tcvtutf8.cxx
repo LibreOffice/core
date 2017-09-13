@@ -68,7 +68,7 @@ sal_Size ImplConvertUtf8ToUnicode(
 {
     bool bJavaUtf8 = pData != nullptr;
     sal_uInt32 nUtf32 = 0;
-    int nBytes;
+    int nBytes = int();
     int nShift = -1;
     bool bCheckBom = true;
     sal_uInt32 nInfo = 0;
