@@ -421,6 +421,7 @@ certain functionality.
 @section sax
 
 @li @c sax.cppunit
+@li @c sax.fastparser
 
 @section stoc
 

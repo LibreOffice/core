@@ -759,7 +759,8 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
             rEntity.mxDocumentHandler->startDocument();
         }
 
-        rEntity.mbEnableThreads = (rEntity.maStructSource.aInputStream->available() > 10000);
+        rEntity.mbEnableThreads = rEntity.maStructSource.aInputStream->available() > 10000
+            && !getenv("SAX_DISABLE_THREADS");
 
         if (rEntity.mbEnableThreads)
         {
@@ -1199,7 +1200,10 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         if (rEntity.mbEnableThreads)
             produce();
         else
+        {
+            SAL_INFO("sax.fastparser", " startElement line " << mxDocumentLocator->getLineNumber() << " column " << mxDocumentLocator->getColumnNumber() << " " << prefix << ":" << localName);
             rEntity.startElement( &rEvent );
+        }
     }
     catch (const Exception&)
     {

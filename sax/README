@@ -8,3 +8,6 @@ UNO services for SAX parsing and C++ functions for XMLSchema-2 data types.
     + C++ wrapper for fast SAX parser
     + C++ XMLSchema-2 data type conversion helpers
 
+Multi-threading in FastParser can be disabled for debugging purposes with:
+SAX_DISABLE_THREADS=1 SAL_LOG="+INFO.sax.fastparser+WARN"
+
