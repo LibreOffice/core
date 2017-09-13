@@ -164,6 +164,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">center</property>
+            <property name="margin_left">6</property>
+            <property name="margin_right">6</property>
             <property name="row_spacing">6</property>
             <child>
               <object class="GtkGrid">
@@ -175,6 +177,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="menuassignpage|add">Add item</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <property name="margin_bottom">5</property>
@@ -186,22 +189,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="addlabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="menuassignpage|addlabel">_Add</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">add</property>
-                    <accessibility>
-                      <relation type="label-for" target="add"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -220,6 +207,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes" context="menuassignpage|remove">Remove item</property>
                     <property name="halign">center</property>
                     <property name="valign">end</property>
                     <property name="margin_bottom">5</property>
@@ -231,22 +219,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="removelabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="menuassignpage|removelabel">Remo_ve</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">remove</property>
-                    <accessibility>
-                      <relation type="label-for" target="remove"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
                   </packing>
                 </child>
               </object>
@@ -525,6 +497,20 @@
       <widget name="desc:border"/>
       <widget name="commandcategorylist"/>
       <widget name="searchEntry"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegrp2">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="searchEntry"/>
+      <widget name="searchlabel"/>
+      <widget name="savein"/>
+      <widget name="functionbtn"/>
+      <widget name="categorylabel"/>
+      <widget name="commandcategorylist"/>
+      <widget name="toplevellist"/>
+      <widget name="plusbtn"/>
+      <widget name="minusbtn"/>
     </widgets>
   </object>
   <object class="GtkMenu" id="insertmenu">

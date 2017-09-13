@@ -1175,7 +1175,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     //TODO: Add SvxMenuEntriesListBox into the glade catalog, and use it on the
     //      .ui file to get rid of the extra VCLContainer, and all these manual
     //      sizing and widget creation tricks.
-    m_pFunctions->set_width_request(aSize.Width() * 1.4);
+    m_pFunctions->set_width_request(aSize.Width() * 1.45);
 
     // Make the middle buttons bigger
     m_pAddCommandButton->set_height_request( m_pAddCommandButton->GetOptimalSize().Height() * 1.5 );
