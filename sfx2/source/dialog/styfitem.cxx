@@ -26,7 +26,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem(SfxStyleFamily nFamily_, const OUString &
     , aImage(rImage)
 {
     for (const std::pair<const char*, int>* pItem = pStringArray; pItem->first; ++pItem)
-        aFilterList.push_back(SfxFilterTupel(Translate::get(pItem->first, rResLocale), pItem->second));
+        aFilterList.emplace_back(Translate::get(pItem->first, rResLocale), pItem->second);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

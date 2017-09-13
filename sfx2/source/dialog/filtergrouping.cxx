@@ -176,7 +176,7 @@ namespace sfx2
         void operator() ( const FilterName& _rLogicalFilterName )
         {
             // insert a new (empty) class
-            m_rClassList.push_back( FilterClass() );
+            m_rClassList.emplace_back( );
             // get the position of this new entry
             FilterClassList::iterator aInsertPos = m_rClassList.end();
             --aInsertPos;
@@ -476,7 +476,7 @@ namespace sfx2
         {
             if ( ( s_cWildcardSeparator == *pTokenLoop ) && ( pTokenLoop > pTokenStart ) )
             {   // found a new token separator (and a non-empty token)
-                aWildCards.push_back( OUString( pTokenStart, pTokenLoop - pTokenStart ) );
+                aWildCards.emplace_back( pTokenStart, pTokenLoop - pTokenStart );
 
                 // search the start of the next token
                 while ( ( pTokenStart != pTokenLoopEnd ) && ( *pTokenStart != s_cWildcardSeparator ) )
@@ -492,7 +492,7 @@ namespace sfx2
         }
         if ( pTokenLoop > pTokenStart )
             // the last one ....
-            aWildCards.push_back( OUString( pTokenStart, pTokenLoop - pTokenStart ) );
+            aWildCards.emplace_back( pTokenStart, pTokenLoop - pTokenStart );
     }
 
 
@@ -575,7 +575,7 @@ namespace sfx2
         // (this assumes that both numbers are the same, which, speaking strictly, must not hold - but it does, as we know ...)
         sal_Int32 nGlobalClasses = aGlobalClasses.size();
         while ( nGlobalClasses-- )
-            _rAllFilters.push_back( FilterGroup() );
+            _rAllFilters.emplace_back( );
 
 
         // for the local classes:
@@ -685,7 +685,7 @@ namespace sfx2
                     FilterGroup::iterator aInsertPos = aCurrentGroup->end();
                     --aInsertPos;
                     // remember this pos
-                    aLocalFinalPositions.push_back( MapGroupEntry2GroupEntry::value_type( aBelongsToLocal->second, aInsertPos ) );
+                    aLocalFinalPositions.emplace_back( aBelongsToLocal->second, aInsertPos );
                 }
             }
             else

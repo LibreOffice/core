@@ -210,7 +210,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
 void SfxInfoBarWindow::addButton(PushButton* pButton) {
     pButton->SetParent(this);
     pButton->Show();
-    m_aActionBtns.push_back(pButton);
+    m_aActionBtns.emplace_back(pButton);
     Resize();
 }
 

@@ -548,7 +548,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     Reference< XFrame > xFrame( pView->GetFrame().GetFrameInterface() );
                     SAL_WARN_IF( !xFrame.is(), "sfx.view", "SfxViewFrame::ExecReload_Impl: no XFrame?!");
-                    aViewFrames.push_back( ViewDescriptor( xFrame, pView->GetCurViewId() ) );
+                    aViewFrames.emplace_back( xFrame, pView->GetCurViewId() );
 
                     pView = GetNext( *pView, xOldObj );
                 }

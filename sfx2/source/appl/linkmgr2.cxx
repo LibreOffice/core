@@ -161,7 +161,7 @@ bool LinkManager::Insert( SvBaseLink* pLink )
     }
 
     pLink->SetLinkManager( this );
-    aLinkTbl.push_back( tools::SvRef<SvBaseLink>(pLink) );
+    aLinkTbl.emplace_back(pLink );
     return true;
 }
 

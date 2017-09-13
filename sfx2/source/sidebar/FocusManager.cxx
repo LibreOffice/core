@@ -121,7 +121,7 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
         // Register also as child event listener at the panel.
         (*iPanel)->AddChildEventListener(LINK(this, FocusManager, ChildEventListener));
 
-        maPanels.push_back(iPanel->get());
+        maPanels.emplace_back(iPanel->get());
     }
 }
 
@@ -131,7 +131,7 @@ void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
     for (auto iButton = rButtons.begin(); iButton != rButtons.end(); ++iButton)
     {
         RegisterWindow(**iButton);
-        maButtons.push_back(*iButton);
+        maButtons.emplace_back(*iButton);
     }
 }
 
