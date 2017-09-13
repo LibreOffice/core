@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2475daca",
+        "filename": "sw/inc/swabstdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "hmm, short is not ideal here - might be easier to read with something like an enum \u0026 speaking names for prev/next?",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4482e695",
+        "filename": "sw/source/ui/fldui/DropDownFieldDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "like here - magic numbers are not ideal when having to understand the code...",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_647fe2aa",
+        "filename": "sw/source/ui/fldui/inpdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_844a0e82",
+        "filename": "sw/source/ui/fldui/inpdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c4441676",
+        "filename": "sw/source/uibase/inc/inpdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "I admit this class is a mess already, but:\n\n- since this is new code, please use the m_n... prefix for member variables",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e449128d",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "local convention is if( not if (\n\n(yeah, it\u0027s already inconsistent. but no reason to make it more so ;))",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_045ffe41",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "local convention is for( not for (",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_245cfa4a",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4459065a",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6456022b",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "if( not if (",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_84312e0e",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a4362a01",
+        "filename": "vcl/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "Clashing accelerator - P is already used for Paste",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c43b36ea",
+        "filename": "vcl/source/window/builder.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-13T23:04:37Z",
+      "side": 1,
+      "message": "nice addition!\n\nbut please submit as separate patch (the other one can then depend on it), this should go in regardless of the other changes.",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
