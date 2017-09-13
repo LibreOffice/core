@@ -734,11 +734,8 @@ void InternetProxyDecider_Impl::setNoProxyList(
                     }
                 }
 
-                m_aNoProxyList.push_back(
-                    NoProxyListEntry( WildCard( aToken ),
-                                      WildCard(
-                                        aFullyQualifiedHost
-                                            .makeStringAndClear() ) ) );
+                m_aNoProxyList.emplace_back( WildCard( aToken ),
+                                      WildCard( aFullyQualifiedHost.makeStringAndClear() ) );
             }
 
             if ( nEnd != nLen )

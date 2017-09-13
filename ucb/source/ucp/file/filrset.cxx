@@ -239,8 +239,7 @@ XResultSet_impl::OneMore()
             {
                 osl::MutexGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
-                m_aIdents.push_back(
-                    uno::Reference< ucb::XContentIdentifier >() );
+                m_aIdents.emplace_back( );
                 m_aUnqPath.push_back( aUnqPath );
                 rowCountChanged();
                 return true;
@@ -254,8 +253,7 @@ XResultSet_impl::OneMore()
             {
                 osl::MutexGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
-                m_aIdents.push_back(
-                    uno::Reference< ucb::XContentIdentifier >() );
+                m_aIdents.emplace_back( );
                 m_aUnqPath.push_back( aUnqPath );
                 rowCountChanged();
                 return true;
@@ -268,8 +266,7 @@ XResultSet_impl::OneMore()
             {
                 osl::MutexGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
-                m_aIdents.push_back(
-                    uno::Reference< ucb::XContentIdentifier >() );
+                m_aIdents.emplace_back( );
                 m_aUnqPath.push_back( aUnqPath );
                 rowCountChanged();
                 return true;

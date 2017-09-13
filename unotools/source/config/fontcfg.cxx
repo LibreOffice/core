@@ -1084,7 +1084,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
 
     ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     if (aLanguageTag.getLanguage() != "en")
-        aFallbacks.push_back("en");
+        aFallbacks.emplace_back("en");
 
     for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {

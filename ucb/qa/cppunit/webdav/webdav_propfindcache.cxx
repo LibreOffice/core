@@ -83,7 +83,7 @@ namespace
         aRetProp = aPropsNames.getPropertiesNames();
         CPPUNIT_ASSERT_EQUAL( true, ( aProps == aRetProp ) );
 
-        aProps[0].properties.push_back( "DAV:getlastmodified" );
+        aProps[0].properties.emplace_back("DAV:getlastmodified" );
         aRetProp = aPropsNames.getPropertiesNames();
         CPPUNIT_ASSERT_EQUAL( false, ( aProps == aRetProp ) );
     }

@@ -147,7 +147,7 @@ public:
         Reference< XCloneable > xCloneSource( _rSource.first, UNO_QUERY );
         Reference< XControlModel > xClone( xCloneSource->createClone(), UNO_QUERY );
         // add to target list
-        m_rTargetList.push_back( ControlModelContainerBase::UnoControlModelHolder( xClone, _rSource.second ) );
+        m_rTargetList.emplace_back( xClone, _rSource.second );
     }
 };
 
@@ -594,7 +594,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
 
     if ( xAllChildren.is() )
         updateUserFormChildren( xAllChildren, aName, Insert, xM );
-    maModels.push_back( UnoControlModelHolder( xM, aName ) );
+    maModels.emplace_back( xM, aName );
     mbGroupsUpToDate = false;
     startControlListening( xM );
 

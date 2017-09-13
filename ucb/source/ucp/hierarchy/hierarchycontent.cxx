@@ -760,9 +760,8 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
                  ( nPos == ( aChildURL.getLength() - 1 ) ) )
             {
                 // No further slashes/ only a final slash. It's a child!
-                rChildren.push_back(
-                    HierarchyContentRef(
-                        static_cast< HierarchyContent * >( xChild.get() ) ) );
+                rChildren.emplace_back(
+                        static_cast< HierarchyContent * >( xChild.get() ) );
             }
         }
         ++it;
