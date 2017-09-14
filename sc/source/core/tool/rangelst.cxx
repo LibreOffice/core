@@ -286,12 +286,14 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         {   // 2D
             if ( p->aStart.Col() == nCol1 && p->aEnd.Col() == nCol2 )
             {
-                if ( p->aStart.Row() == nRow2+1 )
+                if ( p->aStart.Row() <= nRow2+1 &&
+                     p->aStart.Row() >= nRow1 )
                 {   // top
                     p->aStart.SetRow( nRow1 );
                     bJoined = true;
                 }
-                else if ( p->aEnd.Row() == nRow1-1 )
+                else if ( p->aEnd.Row() >= nRow1-1 &&
+                          p->aEnd.Row() <= nRow2 )
                 {   // bottom
                     p->aEnd.SetRow( nRow2 );
                     bJoined = true;
@@ -299,12 +301,14 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
             }
             else if ( p->aStart.Row() == nRow1 && p->aEnd.Row() == nRow2 )
             {
-                if ( p->aStart.Col() == nCol2+1 )
+                if ( p->aStart.Col() <= nCol2+1 &&
+                     p->aStart.Col() >= nCol1 )
                 {   // left
                     p->aStart.SetCol( nCol1 );
                     bJoined = true;
                 }
-                else if ( p->aEnd.Col() == nCol1-1 )
+                else if ( p->aEnd.Col() >= nCol1-1 &&
+                          p->aEnd.Col() <= nCol2 )
                 {   // right
                     p->aEnd.SetCol( nCol2 );
                     bJoined = true;
