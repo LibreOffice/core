@@ -55,7 +55,7 @@ OUString VCLXAccessibleTextField::implGetText()
     OUString aText;
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
     if (pListBox && !pListBox->IsInDropDown())
-        aText = pListBox->GetSelectEntry();
+        aText = pListBox->GetSelectedEntry();
 
     return aText;
 }

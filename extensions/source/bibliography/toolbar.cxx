@@ -476,7 +476,7 @@ IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Timer*, void )
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
     pPropertyVal[0].Name = "DataSourceName";
-    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource->GetSelectEntry() ) );
+    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource->GetSelectedEntry() ) );
     pPropertyVal[0].Value <<= aEntry;
     SendDispatch(nTBC_LB_SOURCE, aPropVal);
 }

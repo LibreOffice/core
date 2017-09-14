@@ -2628,16 +2628,16 @@ void CodeCompleteListBox::InsertSelectedEntry()
         GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
         GetParentEditView()->DeleteSelected();
 
-        if( !GetSelectEntry().isEmpty() )
+        if( !GetSelectedEntry().isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( GetSelectEntry() );
+            GetParentEditView()->InsertText( GetSelectedEntry() );
         }
     }
     else
     {
-        if( !GetSelectEntry().isEmpty() )
+        if( !GetSelectedEntry().isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( GetSelectEntry() );
+            GetParentEditView()->InsertText( GetSelectedEntry() );
         }
     }
     HideAndRestoreFocus();
@@ -2718,7 +2718,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 
                         GetParentEditView()->SetSelection( aTextSelection );
                         GetParentEditView()->DeleteSelected();
-                        GetParentEditView()->InsertText( GetSelectEntry() );
+                        GetParentEditView()->InsertText( GetSelectedEntry() );
                     }
                 }
                 break;

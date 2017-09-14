@@ -255,7 +255,7 @@ double CompressGraphicsDialog::GetViewHeightInch()
 
 BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType()
 {
-    OUString aSelectionText = m_pInterpolationCombo->GetSelectEntry();
+    OUString aSelectionText = m_pInterpolationCombo->GetSelectedEntry();
 
     if( aSelectionText == "Lanczos" ) {
         return BmpScaleFlag::Lanczos;

@@ -99,7 +99,7 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
     const sal_Int32 nSelect = m_pLbType->GetSelectEntryPos();
 
-    rDesc.aDBName = m_pLbDatabase->GetSelectEntry();
+    rDesc.aDBName = m_pLbDatabase->GetSelectedEntry();
     rDesc.aObject = m_pCbObject->GetText();
 
     if (rDesc.aDBName.isEmpty() || rDesc.aObject.isEmpty())
@@ -123,7 +123,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 {
     m_pCbObject->Clear();
 
-    OUString aDatabaseName = m_pLbDatabase->GetSelectEntry();
+    OUString aDatabaseName = m_pLbDatabase->GetSelectedEntry();
     if (aDatabaseName.isEmpty())
         return;
 

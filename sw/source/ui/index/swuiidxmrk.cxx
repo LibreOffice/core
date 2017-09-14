@@ -177,7 +177,7 @@ void SwIndexMarkPane::InitControls()
     OSL_ENSURE(pType, "No directory type !!");
     OUString sTmpTypeSelection;
     if(m_pTypeDCB->GetSelectEntryCount())
-        sTmpTypeSelection = m_pTypeDCB->GetSelectEntry();
+        sTmpTypeSelection = m_pTypeDCB->GetSelectedEntry();
     m_pTypeDCB->Clear();
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
@@ -423,7 +423,7 @@ void SwIndexMarkPane::InsertUpdate()
     pSh->EndAllAction();
     pSh->EndUndo(bDel ? SwUndoId::INDEX_ENTRY_DELETE : SwUndoId::INDEX_ENTRY_INSERT);
 
-    if((nTypePos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry())) == LISTBOX_ENTRY_NOTFOUND)
+    if((nTypePos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectedEntry())) == LISTBOX_ENTRY_NOTFOUND)
         nTypePos = 0;
 
     nKey1Pos = m_pKey1DCB->GetEntryPos(m_pKey1DCB->GetText());
@@ -457,7 +457,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
 
 void SwIndexMarkPane::InsertMark()
 {
-    sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
+    sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectedEntry());
     TOXTypes eType = nPos == POS_CONTENT ? TOX_CONTENT :
                         nPos == POS_INDEX ? TOX_INDEX : TOX_USER;
 
@@ -480,7 +480,7 @@ void SwIndexMarkPane::InsertMark()
         break;
         default:            // Userdefined index mark
         {
-            aDesc.SetTOUName(m_pTypeDCB->GetSelectEntry());
+            aDesc.SetTOUName(m_pTypeDCB->GetSelectedEntry());
         }
     }
     if (aOrgStr != m_pEntryED->GetText())
@@ -516,7 +516,7 @@ void SwIndexMarkPane::UpdateMark()
 
     UpdateKeyBoxes();
 
-    sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
+    sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectedEntry());
     TOXTypes eType = TOX_USER;
     if(POS_CONTENT == nPos)
         eType = TOX_CONTENT;
@@ -656,7 +656,7 @@ void SwIndexMarkPane::ModifyHdl(Control const * pBox)
     if (m_pTypeDCB == pBox)
     {
         // set index type
-        sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
+        sal_Int32 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectedEntry());
         bool bLevelEnable = false,
              bKeyEnable   = false,
              bSetKey2     = false,
@@ -1157,7 +1157,7 @@ static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int
 
 IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
 {
-    const OUString sEntry(rBox.GetSelectEntry());
+    const OUString sEntry(rBox.GetSelectedEntry());
     if(bIsFromComponent)
     {
         if(xBibAccess.is() && !sEntry.isEmpty())
@@ -1190,7 +1190,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
                             pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
         }
     }
-    if (rBox.GetSelectEntry().isEmpty())
+    if (rBox.GetSelectedEntry().isEmpty())
     {
         for(OUString & s : m_sFields)
             s.clear();

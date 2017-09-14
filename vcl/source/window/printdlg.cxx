@@ -776,7 +776,7 @@ void PrintDialog::storeToSettings()
     pItem->setValue( "PrintDialog",
                      "LastPrinter",
                       isPrintToFile() ? Printer::GetDefaultPrinterName()
-                                      : maJobPage.mpPrinters->GetSelectEntry() );
+                                      : maJobPage.mpPrinters->GetSelectedEntry() );
 
     pItem->setValue( "PrintDialog",
                      "LastPage",
@@ -1276,7 +1276,7 @@ static OUString searchAndReplace( const OUString& i_rOrig, const char* i_pRepl, 
 void PrintDialog::updatePrinterText()
 {
     const OUString aDefPrt( Printer::GetDefaultPrinterName() );
-    const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.mpPrinters->GetSelectEntry(), true );
+    const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.mpPrinters->GetSelectedEntry(), true );
     if( pInfo )
     {
         maJobPage.mpLocationTxt->SetText( pInfo->GetLocation() );
@@ -1521,7 +1521,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
 
         if ( rBox.GetSelectEntryPos() != 0)
         {
-            OUString aNewPrinter( rBox.GetSelectEntry() );
+            OUString aNewPrinter( rBox.GetSelectedEntry() );
             // set new printer
             maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
             maPController->resetPrinterOptions( false  );

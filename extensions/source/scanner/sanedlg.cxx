@@ -692,12 +692,12 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox&, rListBox, void )
     {
         if( &rListBox == mpQuantumRangeBox )
         {
-            double fValue = mpQuantumRangeBox->GetSelectEntry().toDouble();
+            double fValue = mpQuantumRangeBox->GetSelectedEntry().toDouble();
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
         else if( &rListBox == mpStringRangeBox )
         {
-            mrSane.SetOptionValue( mnCurrentOption, mpStringRangeBox->GetSelectEntry() );
+            mrSane.SetOptionValue( mnCurrentOption, mpStringRangeBox->GetSelectedEntry() );
         }
     }
 }
@@ -1396,7 +1396,7 @@ void SaneDlg::SaveState()
     aConfig.DeleteGroup( "SANE" );
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice",
-        OUStringToOString(mpDeviceBox->GetSelectEntry(), RTL_TEXTENCODING_UTF8) );
+        OUStringToOString(mpDeviceBox->GetSelectedEntry(), RTL_TEXTENCODING_UTF8) );
 
     static char const* pSaveOptions[] = {
         "resolution",

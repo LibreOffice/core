@@ -230,7 +230,7 @@ class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
 class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
 {
     DECL_ABSTDLG_BASE( AbstractScSelEntryDlg_Impl, ScSelEntryDlg )
-    virtual OUString GetSelectEntry() const override;
+    virtual OUString GetSelectedEntry() const override;
 };
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
@@ -336,7 +336,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
     virtual void    Insert( const OUString& rString, bool bSelected ) override;
     virtual sal_Int32 GetSelectEntryCount() const override;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId ) override;
-    virtual OUString  GetSelectEntry(sal_Int32 nPos) const override;
+    virtual OUString  GetSelectedEntry(sal_Int32 nPos) const override;
     virtual sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const override;
 };
 

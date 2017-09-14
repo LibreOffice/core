@@ -310,7 +310,7 @@ IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, ListBox&, rListBox, void)
 {
     ScNavigatorDlg::ReleaseFocus();
 
-    OUString aDocName = rListBox.GetSelectEntry();
+    OUString aDocName = rListBox.GetSelectedEntry();
     aLbEntries->SelectDoc(aDocName);
 }
 

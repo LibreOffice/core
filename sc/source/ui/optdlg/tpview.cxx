@@ -154,7 +154,7 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         pBreakCB       ->IsValueChangedFromSaved() ||
         pGuideLineCB   ->IsValueChangedFromSaved())
     {
-        NamedColor aNamedColor = pColorLB->GetSelectEntry();
+        NamedColor aNamedColor = pColorLB->GetSelectedEntry();
         pLocalOptions->SetGridColor(aNamedColor.first, aNamedColor.second);
         rCoreSet->Put(ScTpViewItem(*pLocalOptions));
         bRet = true;

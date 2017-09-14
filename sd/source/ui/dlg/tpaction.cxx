@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl, SvTreeListBox*, void)
 {
-    m_pEdtBookmark->SetText( m_pLbTree->GetSelectEntry() );
+    m_pEdtBookmark->SetText( m_pLbTree->GetSelectedEntry() );
 }
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, Control&, void)
@@ -835,7 +835,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         m_pLbTreeDocument->Control::IsVisible() &&
         m_pLbTreeDocument->GetSelectionCount() > 0 )
     {
-        OUString aTmpStr( m_pLbTreeDocument->GetSelectEntry() );
+        OUString aTmpStr( m_pLbTreeDocument->GetSelectedEntry() );
         if( !aTmpStr.isEmpty() )
         {
             aStr += OUStringLiteral1(DOCUMENT_TOKEN) + aTmpStr;

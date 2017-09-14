@@ -49,7 +49,7 @@ void SwBreakDlg::Apply()
         const sal_Int32 nPos = m_pPageCollBox->GetSelectEntryPos();
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
-            aTemplate = m_pPageCollBox->GetSelectEntry();
+            aTemplate = m_pPageCollBox->GetSelectedEntry();
             oPgNum = boost::none;
             if (m_pPageNumBox->IsChecked())
             {
@@ -97,7 +97,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, Button*, void)
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
-            pPageDesc = rSh.FindPageDescByName( m_pPageCollBox->GetSelectEntry(),
+            pPageDesc = rSh.FindPageDescByName( m_pPageCollBox->GetSelectedEntry(),
                                                 true );
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());

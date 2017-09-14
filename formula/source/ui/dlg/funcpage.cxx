@@ -284,7 +284,7 @@ sal_Int32 FuncPage::GetFunctionEntryCount()
 
 OUString FuncPage::GetSelFunctionName() const
 {
-    return m_pLbFunction->GetSelectEntry();
+    return m_pLbFunction->GetSelectedEntry();
 }
 
 const IFunctionDescription* FuncPage::GetFuncDesc( sal_Int32 nPos ) const

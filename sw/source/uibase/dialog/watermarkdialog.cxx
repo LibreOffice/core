@@ -95,7 +95,7 @@ IMPL_LINK_NOARG( SwWatermarkDialog, OKButtonHdl, Button*, void )
     css::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
     {
         { "Text", css::uno::makeAny( sText ) },
-        { "Font", css::uno::makeAny( m_pFont->GetSelectEntry() ) },
+        { "Font", css::uno::makeAny( m_pFont->GetSelectedEntry() ) },
         { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_pAngle->GetValue() ) ) },
         { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_pTransparency->GetValue() ) ) },
         { "Color", css::uno::makeAny( static_cast<sal_uInt32>( m_pColor->GetSelectEntryColor().GetRGBColor() ) ) }

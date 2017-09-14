@@ -258,7 +258,7 @@ void SwCondCollPage::AssignRemove(void const * pBtn)
     m_pAssignPB->Enable( !bAssEnabled );
     m_pRemovePB->Enable(  bAssEnabled );
     if ( bAssEnabled )
-        sSel += m_pStyleLB->GetSelectEntry();
+        sSel += m_pStyleLB->GetSelectedEntry();
 
     m_pTbLinks->SetUpdateMode(false);
     m_pTbLinks->GetModel()->Remove(pE);
@@ -303,7 +303,7 @@ void SwCondCollPage::SelectHdl(void const * pBox)
         const OUString sTbEntry = pE
             ? m_pTbLinks->GetEntryText(pE).getToken(1, '\t')
             : OUString();
-        const OUString sStyle = m_pStyleLB->GetSelectEntry();
+        const OUString sStyle = m_pStyleLB->GetSelectedEntry();
 
         m_pAssignPB->Enable( sStyle != sTbEntry && m_pConditionCB->IsChecked() );
 

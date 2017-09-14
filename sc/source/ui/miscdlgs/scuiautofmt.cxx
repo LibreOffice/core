@@ -282,7 +282,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, Button*, void)
     if ( (nIndex > 0) && (m_pLbFormat->GetEntryCount() > 0) )
     {
         OUString aMsg = aStrDelMsg.getToken( 0, '#' )
-                      + m_pLbFormat->GetSelectEntry()
+                      + m_pLbFormat->GetSelectedEntry()
                       + aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
@@ -318,7 +318,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
     while( !bOk )
     {
 
-        OUString aFormatName = m_pLbFormat->GetSelectEntry();
+        OUString aFormatName = m_pLbFormat->GetSelectedEntry();
         OUString aEntry;
 
         VclPtrInstance<ScStringInputDlg> pDlg( this,

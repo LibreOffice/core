@@ -292,7 +292,7 @@ namespace dbaui
         {
             case COLUMN_ID_FIELDNAME:
             {
-                OUString sFieldSelected = m_pFieldNameCell->GetSelectEntry();
+                OUString sFieldSelected = m_pFieldNameCell->GetSelectedEntry();
                 bool bEmptySelected = sFieldSelected.isEmpty();
                 if (isNewField())
                 {
@@ -384,7 +384,7 @@ namespace dbaui
         {   // a field has been selected
             if (GetCurRow() >= GetRowCount() - 2)
             {   // and we're in one of the last two rows
-                OUString sSelectedEntry = m_pFieldNameCell->GetSelectEntry();
+                OUString sSelectedEntry = m_pFieldNameCell->GetSelectedEntry();
                 sal_Int32 nCurrentRow = GetCurRow();
                 sal_Int32 rowCount = GetRowCount();
 

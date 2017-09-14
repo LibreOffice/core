@@ -75,7 +75,7 @@ namespace dbaui
         bool bChangedSomething = false;
         if ( IsValueChangedFromSaved() )
         {
-            OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName( GetSelectEntry() );
+            OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName( GetSelectedEntry() );
             OSL_ENSURE( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
             if ( aFind != m_aCharSets.end() )
             {

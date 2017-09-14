@@ -335,7 +335,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
             {
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    OUString sName(m_pSelectionLB->GetSelectEntry());
+                    OUString sName(m_pSelectionLB->GetSelectedEntry());
                     m_pNameED->SetText(sName);
 
                     if (!IsFieldDlgHtmlMode())
@@ -385,7 +385,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    OUString sName(m_pSelectionLB->GetSelectEntry());
+                    OUString sName(m_pSelectionLB->GetSelectedEntry());
                     if (!IsFieldEdit())
                         m_pNameED->SetText(sName);
 
@@ -423,7 +423,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 
                 OUString sName;
 
-                sName = m_pSelectionLB->GetSelectEntry();
+                sName = m_pSelectionLB->GetSelectedEntry();
                 m_pNameED->SetText( sName );
 
                 // User- or SetField ?
@@ -506,7 +506,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
                                         GetFormula() );
 
                 if( IsFieldEdit() || pBox )   // only when interacting via mouse
-                    m_pNameED->SetText( m_pSelectionLB->GetSelectEntry() );
+                    m_pNameED->SetText( m_pSelectionLB->GetSelectedEntry() );
 
                 if( pFieldTyp )
                 {
@@ -581,7 +581,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
                         nSelData = static_cast<size_t>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos)));
                         if (nSelData != SIZE_MAX && pBox && !bInit)
                         {
-                            m_pValueED->ReplaceSelected(m_pSelectionLB->GetSelectEntry());
+                            m_pValueED->ReplaceSelected(m_pSelectionLB->GetSelectedEntry());
                             ModifyHdl(*m_pNameED);
                         }
                     }
@@ -961,7 +961,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
     if (nCurId == m_nDeleteId)
     {
         if( nTypeId == TYP_USERFLD )
-            GetFieldMgr().RemoveFieldType(SwFieldIds::User, m_pSelectionLB->GetSelectEntry());
+            GetFieldMgr().RemoveFieldType(SwFieldIds::User, m_pSelectionLB->GetSelectedEntry());
         else
         {
             SwFieldIds nWhich;
@@ -977,7 +977,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
                     break;
             }
 
-            GetFieldMgr().RemoveFieldType(nWhich, m_pSelectionLB->GetSelectEntry());
+            GetFieldMgr().RemoveFieldType(nWhich, m_pSelectionLB->GetSelectedEntry());
         }
 
         UpdateSubType();
@@ -1159,7 +1159,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         {
             nSubType = (nFormat == ULONG_MAX) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
 
-            if (nFormat == ULONG_MAX && m_pNumFormatLB->GetSelectEntry() == SwResId(FMT_USERVAR_CMD))
+            if (nFormat == ULONG_MAX && m_pNumFormatLB->GetSelectedEntry() == SwResId(FMT_USERVAR_CMD))
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
 
             if (m_pInvisibleCB->IsChecked())

@@ -154,7 +154,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         const sal_Int32 nCount = pDlg->GetSelectEntryCount();
                         for (sal_Int32 nPos=0; nPos<nCount; ++nPos)
                         {
-                            aName = pDlg->GetSelectEntry(nPos);
+                            aName = pDlg->GetSelectedEntry(nPos);
                             rReq.AppendItem( SfxStringItem( FID_TABLE_SHOW, aName ) );
                             rNames.push_back(aName);
                         }

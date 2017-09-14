@@ -457,7 +457,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
         case FIELD_PROPERTY_BOOL_DEFAULT:
             if (pBoolDefault)
             {
-                OUString sOld = pBoolDefault->GetSelectEntry();
+                OUString sOld = pBoolDefault->GetSelectedEntry();
                 pBoolDefault->SelectEntry(rText);
                 if (sOld != rText)
                     LINK(this, OFieldDescControl, ChangeHdl).Call(*pBoolDefault);
@@ -489,7 +489,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
         case FIELD_PROPERTY_AUTOINC:
             if (pAutoIncrement)
             {
-                OUString sOld = pAutoIncrement->GetSelectEntry();
+                OUString sOld = pAutoIncrement->GetSelectedEntry();
                 pAutoIncrement->SelectEntry(rText);
                 if (sOld != rText)
                     LINK(this, OFieldDescControl, ChangeHdl).Call(*pAutoIncrement);
@@ -1302,7 +1302,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             else
                 pBoolDefault->SelectEntry(sDef);
 
-            pFieldDescr->SetControlDefault(makeAny(BoolStringPersistent(pBoolDefault->GetSelectEntry())));
+            pFieldDescr->SetControlDefault(makeAny(BoolStringPersistent(pBoolDefault->GetSelectedEntry())));
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
@@ -1467,7 +1467,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     }
     else if (pBoolDefault)
     {
-        sDefault = BoolStringPersistent(pBoolDefault->GetSelectEntry());
+        sDefault = BoolStringPersistent(pBoolDefault->GetSelectedEntry());
     }
 
     if ( !sDefault.isEmpty() )

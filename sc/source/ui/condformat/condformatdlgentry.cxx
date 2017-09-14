@@ -296,7 +296,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
         }
     }
 
-    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle->GetSelectedEntry());
     return pEntry;
 }
 
@@ -453,7 +453,7 @@ namespace {
 
 void UpdateStyleList(ListBox& rLbStyle, const ScDocument* pDoc)
 {
-    OUString aSelectedStyle = rLbStyle.GetSelectEntry();
+    OUString aSelectedStyle = rLbStyle.GetSelectedEntry();
     for(sal_Int32 i = rLbStyle.GetEntryCount(); i >= 1; --i)
     {
         rLbStyle.RemoveEntry(i);
@@ -528,7 +528,7 @@ void StyleSelect( ListBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& 
         }
     }
 
-    OUString aStyleName = rLbStyle.GetSelectEntry();
+    OUString aStyleName = rLbStyle.GetSelectedEntry();
     SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SfxStyleFamily::Para );
     if(pStyleSheet)
     {
@@ -607,7 +607,7 @@ ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
     if(aFormula.isEmpty())
         return nullptr;
 
-    ScFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT, aFormula, OUString(), mpDoc, maPos, maLbStyle->GetSelectEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT, aFormula, OUString(), mpDoc, maPos, maLbStyle->GetSelectedEntry());
     return pEntry;
 }
 
@@ -1302,7 +1302,7 @@ ScFormatEntry* ScDateFrmtEntry::GetEntry() const
     ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(mpDoc);
     condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(maLbDateEntry->GetSelectEntryPos());
     pNewEntry->SetDateType(eType);
-    pNewEntry->SetStyleName(maLbStyle->GetSelectEntry());
+    pNewEntry->SetStyleName(maLbStyle->GetSelectedEntry());
     return pNewEntry;
 }
 

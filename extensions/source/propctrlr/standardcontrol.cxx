@@ -696,7 +696,7 @@ namespace pcr
 
     Any SAL_CALL OListboxControl::getValue()
     {
-        OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
+        OUString sControlValue( getTypedControlWindow()->GetSelectedEntry() );
 
         Any aPropValue;
         if ( !sControlValue.isEmpty() )
@@ -720,7 +720,7 @@ namespace pcr
             OUString sSelection;
             _rValue >>= sSelection;
 
-            if ( sSelection != getTypedControlWindow()->GetSelectEntry() )
+            if ( sSelection != getTypedControlWindow()->GetSelectedEntry() )
                 getTypedControlWindow()->SelectEntry( sSelection );
 
             if ( !getTypedControlWindow()->IsEntrySelected( sSelection ) )

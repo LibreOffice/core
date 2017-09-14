@@ -2867,7 +2867,7 @@ vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:45
     int nStyle
     0
 vcl/inc/listbox.hxx:133
-    class rtl::OUString ImplEntryList::GetSelectEntry(int) const
+    class rtl::OUString ImplEntryList::GetSelectedEntry(int) const
     int nIndex
     0
 vcl/inc/listbox.hxx:309

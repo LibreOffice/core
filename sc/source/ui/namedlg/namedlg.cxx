@@ -268,7 +268,7 @@ void ScNameDlg::UpdateChecks(const ScRangeData* pData)
 
 bool ScNameDlg::IsNameValid()
 {
-    OUString aScope = m_pLbScope->GetSelectEntry();
+    OUString aScope = m_pLbScope->GetSelectedEntry();
     OUString aName = m_pEdName->GetText();
     aName = aName.trim();
 
@@ -394,7 +394,7 @@ void ScNameDlg::NameModified()
     if (aOldScope.isEmpty())
         return;
     OUString aExpr = m_pEdAssign->GetText();
-    OUString aNewScope = m_pLbScope->GetSelectEntry();
+    OUString aNewScope = m_pLbScope->GetSelectedEntry();
 
     ScRangeName* pOldRangeName = GetRangeName( aOldScope );
     ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );

@@ -1701,13 +1701,13 @@ IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
 {
     if (&rBox == m_pAbbrevLB)
     {
-        m_pAbbrevED->SetText(rBox.GetSelectEntry());
+        m_pAbbrevED->SetText(rBox.GetSelectedEntry());
         m_pNewAbbrevPB->Enable(false);
         m_pDelAbbrevPB->Enable();
     }
     else
     {
-        m_pDoubleCapsED->SetText(rBox.GetSelectEntry());
+        m_pDoubleCapsED->SetText(rBox.GetSelectedEntry());
         m_pNewDoublePB->Enable(false);
         m_pDelDoublePB->Enable();
     }
@@ -1715,22 +1715,22 @@ IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
 
 IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit&, rEdt, void)
 {
-//  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
+//  sal_Bool bSame = pEdt->GetText() == ->GetSelectedEntry();
     const OUString& sEntry = rEdt.GetText();
     bool bEntryLen = !sEntry.isEmpty();
     if(&rEdt == m_pAbbrevED)
     {
         bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
-        if(bSame && sEntry != m_pAbbrevLB->GetSelectEntry())
-            rEdt.SetText(m_pAbbrevLB->GetSelectEntry());
+        if(bSame && sEntry != m_pAbbrevLB->GetSelectedEntry())
+            rEdt.SetText(m_pAbbrevLB->GetSelectedEntry());
         m_pNewAbbrevPB->Enable(!bSame && bEntryLen);
         m_pDelAbbrevPB->Enable(bSame && bEntryLen);
     }
     else
     {
         bool bSame = lcl_FindEntry(*m_pDoubleCapsLB, sEntry, *pCompareClass);
-        if(bSame && sEntry != m_pDoubleCapsLB->GetSelectEntry())
-            rEdt.SetText(m_pDoubleCapsLB->GetSelectEntry());
+        if(bSame && sEntry != m_pDoubleCapsLB->GetSelectedEntry())
+            rEdt.SetText(m_pDoubleCapsLB->GetSelectedEntry());
         m_pNewDoublePB->Enable(!bSame && bEntryLen);
         m_pDelDoublePB->Enable(bSame && bEntryLen);
     }
@@ -2395,7 +2395,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         for( sal_Int32 n = 0; n < nSelCnt; ++n )
         {
-            sData.append(OUStringToOString(m_pLBEntries->GetSelectEntry(n),
+            sData.append(OUStringToOString(m_pLBEntries->GetSelectedEntry(n),
                 nEncode));
 #if defined(_WIN32)
             sData.append("\015\012");

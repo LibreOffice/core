@@ -400,7 +400,7 @@ bool ContentListBox_Impl::EventNotify( NotifyEvent& rNEvt )
 }
 
 
-OUString ContentListBox_Impl::GetSelectEntry() const
+OUString ContentListBox_Impl::GetSelectedEntry() const
 {
     OUString aRet;
     SvTreeListEntry* pEntry = FirstSelected();
@@ -776,7 +776,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 }
 
 
-OUString IndexTabPage_Impl::GetSelectEntry() const
+OUString IndexTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
     IndexEntry_Impl* pEntry = static_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData( m_pIndexCB->GetEntryPos( m_pIndexCB->GetText() ) ));
@@ -1080,7 +1080,7 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
 }
 
 
-OUString SearchTabPage_Impl::GetSelectEntry() const
+OUString SearchTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
     OUString* pData = static_cast<OUString*>(m_pResultsLB->GetSelectEntryData());
@@ -1326,7 +1326,7 @@ void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink 
     m_pBookmarksBox->SetDoubleClickHdl(rLink);
 }
 
-OUString BookmarksTabPage_Impl::GetSelectEntry() const
+OUString BookmarksTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
     OUString* pData = static_cast<OUString*>(m_pBookmarksBox->GetSelectEntryData());
@@ -1714,7 +1714,7 @@ void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive
     }
 }
 
-OUString SfxHelpIndexWindow_Impl::GetSelectEntry() const
+OUString SfxHelpIndexWindow_Impl::GetSelectedEntry() const
 {
     OUString sRet;
 
@@ -1722,19 +1722,19 @@ OUString SfxHelpIndexWindow_Impl::GetSelectEntry() const
 
     if (sName == "contents")
     {
-        sRet = pCPage->GetSelectEntry();
+        sRet = pCPage->GetSelectedEntry();
     }
     else if (sName == "index")
     {
-        sRet = pIPage->GetSelectEntry();
+        sRet = pIPage->GetSelectedEntry();
     }
     else if (sName == "find")
     {
-        sRet = pSPage->GetSelectEntry();
+        sRet = pSPage->GetSelectedEntry();
     }
     else if (sName == "bookmarks")
     {
-        sRet = pBPage->GetSelectEntry();
+        sRet = pBPage->GetSelectedEntry();
     }
 
     return sRet;
@@ -2804,7 +2804,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
 IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
 {
     pIndexWin->SelectExecutableEntry();
-    OUString aEntry = pIndexWin->GetSelectEntry();
+    OUString aEntry = pIndexWin->GetSelectedEntry();
 
     if ( aEntry.isEmpty() )
         return false;

@@ -709,7 +709,7 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
 bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 {
     bool bRet = false;
-    OUString sOldTableName(pListBox->GetSelectEntry());
+    OUString sOldTableName(pListBox->GetSelectedEntry());
     pListBox->Clear();
     SwDSParam* pParam = FindDSConnection(rDBName, false);
     uno::Reference< sdbc::XConnection> xConnection;

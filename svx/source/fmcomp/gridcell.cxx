@@ -2677,7 +2677,7 @@ void DbFilterField::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
             DbCellControl::PaintCell( rDev, rRect );
             break;
         case FormComponentType::LISTBOX:
-            rDev.DrawText(rRect, static_cast<ListBox*>(m_pWindow.get())->GetSelectEntry(), nStyle);
+            rDev.DrawText(rRect, static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntry(), nStyle);
             break;
         default:
             rDev.DrawText(rRect, m_aText, nStyle);
@@ -4171,7 +4171,7 @@ OUString SAL_CALL FmXListBoxCell::getSelectedItem()
     if (m_pBox)
     {
         UpdateFromColumn();
-        aItem = m_pBox->GetSelectEntry();
+        aItem = m_pBox->GetSelectedEntry();
     }
 
     return aItem;
@@ -4190,7 +4190,7 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
         const sal_Int32 nSelEntries = m_pBox->GetSelectEntryCount();
         aSeq = css::uno::Sequence<OUString>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
-            aSeq.getArray()[n] = m_pBox->GetSelectEntry( n );
+            aSeq.getArray()[n] = m_pBox->GetSelectedEntry( n );
     }
     return aSeq;
 }
@@ -4308,7 +4308,7 @@ IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick, ListBox&, void)
 
         css::awt::ActionEvent aEvent;
         aEvent.Source = *this;
-        aEvent.ActionCommand = m_pBox->GetSelectEntry();
+        aEvent.ActionCommand = m_pBox->GetSelectedEntry();
 
         while( aIt.hasMoreElements() )
             static_cast< css::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );

@@ -828,7 +828,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
         if(!m_pCharStyleLB->GetSelectEntryPos())
             pOpt->SetCharacterStyle("");
         else
-            pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectEntry());
+            pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectedEntry());
         pOpt->CopyAttributes() = m_pApplyBorderCB->IsChecked();
     }
 }

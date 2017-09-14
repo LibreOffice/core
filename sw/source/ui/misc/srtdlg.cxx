@@ -311,7 +311,7 @@ void SwSortDlg::Apply()
     SwSortOptions aOptions;
     if( bCheck1 )
     {
-        OUString sEntry( m_pTypDLB1->GetSelectEntry() );
+        OUString sEntry( m_pTypDLB1->GetSelectedEntry() );
         if( sEntry == aNumericText )
             sEntry.clear();
         else if( nullptr != (pUserData = m_pTypDLB1->GetSelectEntryData()) )
@@ -324,7 +324,7 @@ void SwSortDlg::Apply()
 
     if( bCheck2 )
     {
-        OUString sEntry( m_pTypDLB2->GetSelectEntry() );
+        OUString sEntry( m_pTypDLB2->GetSelectedEntry() );
         if( sEntry == aNumericText )
             sEntry.clear();
         else if( nullptr != (pUserData = m_pTypDLB2->GetSelectEntryData()) )
@@ -337,7 +337,7 @@ void SwSortDlg::Apply()
 
     if( bCheck3 )
     {
-        OUString sEntry( m_pTypDLB3->GetSelectEntry() );
+        OUString sEntry( m_pTypDLB3->GetSelectedEntry() );
         if( sEntry == aNumericText )
             sEntry.clear();
         else if( nullptr != (pUserData = m_pTypDLB3->GetSelectEntryData()) )
