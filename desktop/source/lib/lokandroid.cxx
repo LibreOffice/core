@@ -163,7 +163,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setOption
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
 
-    uint64_t pOptions = (uint64_t)options;
+    unsigned long long pOptions = (unsigned long long)options;
 
     pLibreOfficeKit->pClass->setOptionalFeatures(pLibreOfficeKit, pOptions);
 }
