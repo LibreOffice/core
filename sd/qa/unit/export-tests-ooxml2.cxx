@@ -101,6 +101,7 @@ public:
     void testPptmContentType();
     void testTdf111798();
     void testPptmVBAStream();
+    void testTdf111863();
     void testTdf111518();
     void testTdf100387();
     void testRotateFlip();
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testPptmContentType);
     CPPUNIT_TEST(testTdf111798);
     CPPUNIT_TEST(testPptmVBAStream);
+    CPPUNIT_TEST(testTdf111863);
     CPPUNIT_TEST(testTdf111518);
     CPPUNIT_TEST(testTdf100387);
     CPPUNIT_TEST(testRotateFlip);
@@ -907,6 +909,19 @@ void SdOOXMLExportTest2::testPptmVBAStream()
     CPPUNIT_ASSERT(xNameAccess->hasByName("ppt/vbaProject.bin"));
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf111863()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf111863.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check that transition attribute didn't change from 'out' to 'in'
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animEffect",
+        "transition", "out");
 }
 
 void SdOOXMLExportTest2::testTdf111518()

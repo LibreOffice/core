@@ -1482,10 +1482,10 @@ void PowerPointExport::WriteAnimationNodeEffect(const FSHelperPtr& pFS, const Re
     if (xFilter.is())
     {
         const char* pFilter = ::ppt::AnimationExporter::FindTransitionName(xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection());
-        const char* pDirection = xFilter->getDirection() ? "in" : "out";
+        const char* pMode = xFilter->getMode() ? "in" : "out";
         pFS->startElementNS(XML_p, XML_animEffect,
                             XML_filter, pFilter,
-                            XML_transition, pDirection,
+                            XML_transition, pMode,
                             FSEND);
 
         WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, false);
