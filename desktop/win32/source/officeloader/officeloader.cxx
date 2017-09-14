@@ -17,50 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#define _UNICODE
-
 #include <cstddef>
-#include <cwchar>
 
-#define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-
-#include <tchar.h>
-
-#include <string.h>
-#include <stdlib.h>
 #include <systools/win32/uwinapi.h>
-
 #include <desktop/exithelper.h>
-#include <rtl/string.h>
-#include <sal/macros.h>
 
 #include "../loader.hxx"
 
-#include <config_version.h>
-
-static LPTSTR   *GetCommandArgs( int *pArgc )
+static LPWSTR *GetCommandArgs( int *pArgc )
 {
-#ifdef UNICODE
     return CommandLineToArgvW( GetCommandLineW(), pArgc );
-#else
-    *pArgc = __argc;
-    return __argv;
-#endif
 }
 
-int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
+int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
-    TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
-    TCHAR               szIniDirectory[MAX_PATH];
-    STARTUPINFO         aStartupInfo;
+    WCHAR        szTargetFileName[MAX_PATH] = {};
+    WCHAR        szIniDirectory[MAX_PATH];
+    STARTUPINFOW aStartupInfo;
 
     desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
 
@@ -69,7 +42,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
-    GetStartupInfo(&aStartupInfo);
+    GetStartupInfoW(&aStartupInfo);
 
     // If this process hasn't its stdio handles set, then check if its parent
     // has a console (i.e. this process is launched from command line), and if so,
@@ -81,9 +54,9 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     DWORD   dwExitCode = (DWORD)-1;
 
     BOOL    fSuccess = FALSE;
-    LPTSTR  lpCommandLine = nullptr;
+    LPWSTR  lpCommandLine = nullptr;
     int argc = 0;
-    LPTSTR * argv = nullptr;
+    LPWSTR * argv = nullptr;
     bool bFirst = true;
     WCHAR cwd[MAX_PATH];
     DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
@@ -126,8 +99,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
         bFirst = false;
 
-        TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
-        BOOL    bHeadlessMode( FALSE );
+        WCHAR szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
+        BOOL  bHeadlessMode( FALSE );
 
         {
             // Check command line arguments for "--headless" parameter. We only
@@ -135,8 +108,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             // mode as self-destruction of the soffice.bin process can lead to
             // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
             // See 138244 for more information.
-            int     argc2;
-            LPTSTR  *argv2 = GetCommandArgs( &argc2 );
+            int    argc2;
+            LPWSTR *argv2 = GetCommandArgs( &argc2 );
 
             if ( argc2 > 1 )
             {
@@ -144,8 +117,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 for ( n = 1; n < argc2; n++ )
                 {
-                    if ( 0 == _tcsnicmp( argv2[n], _T("-headless"), 9 ) ||
-                         0 == _tcsnicmp( argv2[n], _T("--headless"), 10 ) )
+                    if ( 0 == wcsnicmp( argv2[n], L"-headless", 9 ) ||
+                         0 == wcsnicmp( argv2[n], L"--headless", 10 ) )
                     {
                         bHeadlessMode = TRUE;
                     }
@@ -153,12 +126,12 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             }
         }
 
-        if ( _ltot( (long)GetCurrentProcessId(),szParentProcessId, 10 ) && bHeadlessMode )
-            SetEnvironmentVariable( TEXT("ATTACHED_PARENT_PROCESSID"), szParentProcessId );
+        if ( _ltow( (long)GetCurrentProcessId(),szParentProcessId, 10 ) && bHeadlessMode )
+            SetEnvironmentVariableW( L"ATTACHED_PARENT_PROCESSID", szParentProcessId );
 
         PROCESS_INFORMATION aProcessInfo;
 
-        fSuccess = CreateProcess(
+        fSuccess = CreateProcessW(
             szTargetFileName,
             lpCommandLine,
             nullptr,
@@ -185,7 +158,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 {
                     MSG msg;
 
-                    PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE );
+                    PeekMessageW( &msg, nullptr, 0, 0, PM_REMOVE );
                 }
             } while ( WAIT_OBJECT_0 + 1 == dwWaitResult );
 

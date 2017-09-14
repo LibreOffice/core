@@ -20,11 +20,9 @@
 #ifndef INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
 #define INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
 
-#include <sal/config.h>
-
-#include <cstddef>
-
-#include <tchar.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <string.h>
 
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 #define MY_STRING(s) (s), MY_LENGTH(s)
