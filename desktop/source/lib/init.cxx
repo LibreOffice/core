@@ -1098,12 +1098,12 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
-static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t features);
+static void                    lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long features);
 static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
 static char*                   lo_getVersionInfo(LibreOfficeKit* pThis);
-static bool                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
+static int                     lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -1262,7 +1262,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     return nullptr;
 }
 
-static bool lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
+static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 {
     SolarMutexGuard aGuard;
 
@@ -3014,7 +3014,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     return strdup(aStream.str().c_str());
 }
 
-static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const features)
+static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
 {
     SolarMutexGuard aGuard;
 

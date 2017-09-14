@@ -12,11 +12,14 @@
 
 #include <stddef.h>
 
-#ifndef _WIN32
 // the unstable API needs C99's bool
-# include <stdbool.h>
+// TODO remove the C99 types from the API before making stable
+#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+# ifndef _WIN32
+#  include <stdbool.h>
+# endif
+# include <stdint.h>
 #endif
-#include <stdint.h>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -73,7 +76,7 @@ struct _LibreOfficeKitClass
     /** @see lok::Office::setOptionalFeatures().
         @since LibreOffice 6.0
      */
-    void (*setOptionalFeatures)(LibreOfficeKit* pThis, uint64_t features);
+    void (*setOptionalFeatures)(LibreOfficeKit* pThis, unsigned long long features);
 
     /** @see lok::Office::setDocumentPassword().
         @since LibreOffice 6.0
@@ -90,7 +93,7 @@ struct _LibreOfficeKitClass
     /** @see lok::Office::runMacro().
         @since LibreOffice 6.0
      */
-    bool (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
+    int (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
