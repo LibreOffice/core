@@ -17,22 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
-#define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#include <shlwapi.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-
 #include <tools/pathutils.hxx>
-
 #include "loader.hxx"
-
 #include <cassert>
 
 namespace {
