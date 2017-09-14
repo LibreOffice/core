@@ -76,10 +76,9 @@ void WinOpenGLContext::resetCurrent()
     g_bAnyCurrent = false;
 }
 
-thread_local bool bEpoxyDispatchMakeCurrentCalled = false;
-
 void ensureDispatchTable()
 {
+    thread_local bool bEpoxyDispatchMakeCurrentCalled = false;
     if (!bEpoxyDispatchMakeCurrentCalled)
     {
         epoxy_handle_external_wglMakeCurrent();
