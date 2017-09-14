@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_47910899",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-14T08:21:17Z",
+      "side": 1,
+      "message": "I\u0027m not sure about the purpose of this change (was only marginally involved in the discussion) but since I wrote this code ... \n\n... shouldn\u0027t you people have changed return values here as well? It likely compiles, but looks odd",
+      "revId": "5bcc79e825d542c40c9ee0f48d1d72ea9aa53c54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
