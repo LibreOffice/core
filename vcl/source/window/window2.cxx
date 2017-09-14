@@ -475,8 +475,7 @@ void Window::SetControlFont()
 {
     if (mpWindowImpl && mpWindowImpl->mpControlFont)
     {
-        delete mpWindowImpl->mpControlFont;
-        mpWindowImpl->mpControlFont = nullptr;
+        mpWindowImpl->mpControlFont.reset();
         CompatStateChanged(StateChangedType::ControlFont);
     }
 }
@@ -496,7 +495,7 @@ void Window::SetControlFont(const vcl::Font& rFont)
         *mpWindowImpl->mpControlFont = rFont;
     }
     else
-        mpWindowImpl->mpControlFont = new vcl::Font(rFont);
+        mpWindowImpl->mpControlFont.reset( new vcl::Font(rFont) );
 
     CompatStateChanged(StateChangedType::ControlFont);
 }
@@ -1110,7 +1109,7 @@ const InputContext& Window::GetInputContext() const
 
 bool Window::IsControlFont() const
 {
-    return (mpWindowImpl->mpControlFont != nullptr);
+    return bool(mpWindowImpl->mpControlFont);
 }
 
 const Color& Window::GetControlForeground() const
