@@ -108,13 +108,13 @@ SvxCellHorJustify lclConvertSlotToHAlign( sal_uInt16 nSlot )
 
 SvxCellVerJustify lclConvertSlotToVAlign( sal_uInt16 nSlot )
 {
-    SvxCellVerJustify eVJustify = SVX_VER_JUSTIFY_STANDARD;
+    SvxCellVerJustify eVJustify = SvxCellVerJustify::Standard;
     switch( nSlot )
     {
-        case SID_ALIGN_ANY_VDEFAULT:    eVJustify = SVX_VER_JUSTIFY_STANDARD;   break;
-        case SID_ALIGN_ANY_TOP:         eVJustify = SVX_VER_JUSTIFY_TOP;        break;
-        case SID_ALIGN_ANY_VCENTER:     eVJustify = SVX_VER_JUSTIFY_CENTER;     break;
-        case SID_ALIGN_ANY_BOTTOM:      eVJustify = SVX_VER_JUSTIFY_BOTTOM;     break;
+        case SID_ALIGN_ANY_VDEFAULT:    eVJustify = SvxCellVerJustify::Standard;   break;
+        case SID_ALIGN_ANY_TOP:         eVJustify = SvxCellVerJustify::Top;        break;
+        case SID_ALIGN_ANY_VCENTER:     eVJustify = SvxCellVerJustify::Center;     break;
+        case SID_ALIGN_ANY_BOTTOM:      eVJustify = SvxCellVerJustify::Bottom;     break;
         default:    OSL_FAIL( "lclConvertSlotToVAlign - invalid slot" );
     }
     return eVJustify;
@@ -1551,7 +1551,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         const SvxHorJustifyItem* pHorJustify = nullptr;
         const SvxVerJustifyItem* pVerJustify = nullptr;
         SvxCellHorJustify        eHorJustify = SvxCellHorJustify::Standard;
-        SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
+        SvxCellVerJustify        eVerJustify = SvxCellVerJustify::Standard;
 
         if (rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, true,&pItem ) == SfxItemState::SET)
         {
@@ -1601,24 +1601,24 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
             case SID_ALIGNTOP:
                 rReq.SetSlot( SID_V_ALIGNCELL );
                 rReq.AppendItem( SvxVerJustifyItem(
-                    !pVerJustify || (eVerJustify != SVX_VER_JUSTIFY_TOP) ?
-                    SVX_VER_JUSTIFY_TOP : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
+                    !pVerJustify || (eVerJustify != SvxCellVerJustify::Top) ?
+                    SvxCellVerJustify::Top : SvxCellVerJustify::Standard, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 
             case SID_ALIGNBOTTOM:
                 rReq.SetSlot( SID_V_ALIGNCELL );
                 rReq.AppendItem( SvxVerJustifyItem(
-                    !pVerJustify || (eVerJustify != SVX_VER_JUSTIFY_BOTTOM) ?
-                    SVX_VER_JUSTIFY_BOTTOM : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
+                    !pVerJustify || (eVerJustify != SvxCellVerJustify::Bottom) ?
+                    SvxCellVerJustify::Bottom : SvxCellVerJustify::Standard, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 
             case SID_ALIGNCENTERVER:
                 rReq.SetSlot( SID_V_ALIGNCELL );
                 rReq.AppendItem( SvxVerJustifyItem(
-                    !pVerJustify || (eVerJustify != SVX_VER_JUSTIFY_CENTER) ?
-                    SVX_VER_JUSTIFY_CENTER : SVX_VER_JUSTIFY_STANDARD, SID_V_ALIGNCELL ) );
+                    !pVerJustify || (eVerJustify != SvxCellVerJustify::Center) ?
+                    SvxCellVerJustify::Center : SvxCellVerJustify::Standard, SID_V_ALIGNCELL ) );
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 
@@ -2291,7 +2291,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
     const SvxHorJustifyItem* pHorJustify = nullptr;
     const SvxVerJustifyItem* pVerJustify = nullptr;
-    SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
+    SvxCellVerJustify        eVerJustify = SvxCellVerJustify::Standard;
     sal_uInt16                   nWhich      = 0;
     bool                     bJustifyStd = false;
     SfxBoolItem              aBoolItem   ( 0, true );
@@ -2374,19 +2374,19 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
                 switch ( eVerJustify )
                 {
-                    case SVX_VER_JUSTIFY_TOP:
+                    case SvxCellVerJustify::Top:
                         nWhich = SID_ALIGNTOP;
                         break;
 
-                    case SVX_VER_JUSTIFY_BOTTOM:
+                    case SvxCellVerJustify::Bottom:
                         nWhich = SID_ALIGNBOTTOM;
                         break;
 
-                    case SVX_VER_JUSTIFY_CENTER:
+                    case SvxCellVerJustify::Center:
                         nWhich = SID_ALIGNCENTERVER;
                         break;
 
-                    case SVX_VER_JUSTIFY_STANDARD:
+                    case SvxCellVerJustify::Standard:
                     default:
                         bJustifyStd = true;
                         break;
@@ -2445,7 +2445,7 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
     if( bHasHAlign )
         eHAlign = static_cast<const SvxHorJustifyItem&>(rAttrSet.Get( ATTR_HOR_JUSTIFY )).GetValue();
 
-    SvxCellVerJustify eVAlign = SVX_VER_JUSTIFY_STANDARD;
+    SvxCellVerJustify eVAlign = SvxCellVerJustify::Standard;
     bool bHasVAlign = rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SfxItemState::DONTCARE;
     if( bHasVAlign )
         eVAlign = static_cast<const SvxVerJustifyItem&>(rAttrSet.Get( ATTR_VER_JUSTIFY )).GetValue();

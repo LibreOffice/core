@@ -1250,7 +1250,7 @@ void SwDocTest::testTableAutoFormats()
     SvxHorJustifyItem aHJustify( SvxCellHorJustify::Center, 0 );
     aBoxAF.m_aHorJustify = aHJustify;
     //Set m_aVerJustify
-    SvxVerJustifyItem aVJustify( SVX_VER_JUSTIFY_CENTER , 0 );
+    SvxVerJustifyItem aVJustify( SvxCellVerJustify::Center , 0 );
     aBoxAF.m_aVerJustify = aVJustify;
     //Set m_aStacked
     aBoxAF.m_aStacked.SetValue( true );

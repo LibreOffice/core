@@ -1576,14 +1576,14 @@ SvxCellJustifyMethod XclCellAlign::GetScHorJustifyMethod() const
 
 SvxCellVerJustify XclCellAlign::GetScVerAlign() const
 {
-    SvxCellVerJustify eVerJust = SVX_VER_JUSTIFY_STANDARD;
+    SvxCellVerJustify eVerJust = SvxCellVerJustify::Standard;
     switch( mnVerAlign )
     {
-        case EXC_XF_VER_TOP:        eVerJust = SVX_VER_JUSTIFY_TOP;         break;
-        case EXC_XF_VER_CENTER:     eVerJust = SVX_VER_JUSTIFY_CENTER;      break;
-        case EXC_XF_VER_BOTTOM:     eVerJust = SVX_VER_JUSTIFY_STANDARD;    break;
+        case EXC_XF_VER_TOP:        eVerJust = SvxCellVerJustify::Top;         break;
+        case EXC_XF_VER_CENTER:     eVerJust = SvxCellVerJustify::Center;      break;
+        case EXC_XF_VER_BOTTOM:     eVerJust = SvxCellVerJustify::Standard;    break;
         case EXC_XF_VER_JUSTIFY:
-        case EXC_XF_VER_DISTRIB:    eVerJust = SVX_VER_JUSTIFY_BLOCK;       break;
+        case EXC_XF_VER_DISTRIB:    eVerJust = SvxCellVerJustify::Block;       break;
         default:    OSL_FAIL( "XclCellAlign::GetScVerAlign - unknown vertical alignment" );
     }
     return eVerJust;
@@ -1626,10 +1626,10 @@ void XclCellAlign::SetScVerAlign( SvxCellVerJustify eVerJust )
 {
     switch( eVerJust )
     {
-        case SVX_VER_JUSTIFY_STANDARD:  mnVerAlign = EXC_XF_VER_BOTTOM; break;
-        case SVX_VER_JUSTIFY_TOP:       mnVerAlign = EXC_XF_VER_TOP;    break;
-        case SVX_VER_JUSTIFY_CENTER:    mnVerAlign = EXC_XF_VER_CENTER; break;
-        case SVX_VER_JUSTIFY_BOTTOM:    mnVerAlign = EXC_XF_VER_BOTTOM; break;
+        case SvxCellVerJustify::Standard:  mnVerAlign = EXC_XF_VER_BOTTOM; break;
+        case SvxCellVerJustify::Top:       mnVerAlign = EXC_XF_VER_TOP;    break;
+        case SvxCellVerJustify::Center:    mnVerAlign = EXC_XF_VER_CENTER; break;
+        case SvxCellVerJustify::Bottom:    mnVerAlign = EXC_XF_VER_BOTTOM; break;
         default:                        mnVerAlign = EXC_XF_VER_BOTTOM;
             OSL_FAIL( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
     }

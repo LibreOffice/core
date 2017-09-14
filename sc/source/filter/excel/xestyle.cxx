@@ -1554,7 +1554,7 @@ bool XclExpCellAlign::FillFromItemSet(
                 mnHorAlign = EXC_XF_HOR_DISTRIB;
         }
 
-        if (eVerAlign == SVX_VER_JUSTIFY_BLOCK)
+        if (eVerAlign == SvxCellVerJustify::Block)
         {
             SvxCellJustifyMethod eVerJustMethod =
                 rItemSet.GetItem<SvxJustifyMethodItem>(ATTR_VER_JUSTIFY_METHOD)->GetValue();

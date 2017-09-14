@@ -987,13 +987,13 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                 SvxCellVerJustify eVal;
                 const OUString& rOptVal = rOption.GetString();
                 if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_top ) )
-                    eVal = SVX_VER_JUSTIFY_TOP;
+                    eVal = SvxCellVerJustify::Top;
                 else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
-                    eVal = SVX_VER_JUSTIFY_CENTER;
+                    eVal = SvxCellVerJustify::Center;
                 else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_bottom ) )
-                    eVal = SVX_VER_JUSTIFY_BOTTOM;
+                    eVal = SvxCellVerJustify::Bottom;
                 else
-                    eVal = SVX_VER_JUSTIFY_STANDARD;
+                    eVal = SvxCellVerJustify::Standard;
                 pActEntry->aItemSet.Put( SvxVerJustifyItem( eVal, ATTR_VER_JUSTIFY) );
             }
             break;
@@ -2552,15 +2552,15 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const HtmlImportIn
 
             case HtmlOptionId::VALIGN:
             {
-                SvxCellVerJustify eVal = SVX_VER_JUSTIFY_STANDARD;
+                SvxCellVerJustify eVal = SvxCellVerJustify::Standard;
                 const OUString& rOptVal = itr->GetString();
                 if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_top ) )
-                    eVal = SVX_VER_JUSTIFY_TOP;
+                    eVal = SvxCellVerJustify::Top;
                 else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
-                    eVal = SVX_VER_JUSTIFY_CENTER;
+                    eVal = SvxCellVerJustify::Center;
                 else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_bottom ) )
-                    eVal = SVX_VER_JUSTIFY_BOTTOM;
-                if( eVal != SVX_VER_JUSTIFY_STANDARD )
+                    eVal = SvxCellVerJustify::Bottom;
+                if( eVal != SvxCellVerJustify::Standard )
                     rItemSet.Put( SvxVerJustifyItem( eVal, ATTR_VER_JUSTIFY ) );
             }
             break;

@@ -324,7 +324,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     bool bAsianVertical = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_STACKED )).GetValue() &&
         static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
-    if ( eJust == SVX_VER_JUSTIFY_TOP ||
+    if ( eJust == SvxCellVerJustify::Top ||
             ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
         nPixDifY = nTopMargin;
     else
@@ -350,7 +350,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             nPixDifY = 0;                           // too large -> begin at the top
         else
         {
-            if ( eJust == SVX_VER_JUSTIFY_CENTER )
+            if ( eJust == SvxCellVerJustify::Center )
                 nPixDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
             else
                 nPixDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM

@@ -1185,13 +1185,13 @@ void Sc10Import::LoadPatternCollection()
                     switch( VerJustify )
                     {
                         case vjTop:
-                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_TOP, ATTR_VER_JUSTIFY ) );
+                            rItemSet.Put( SvxVerJustifyItem( SvxCellVerJustify::Top, ATTR_VER_JUSTIFY ) );
                             break;
                         case vjCenter:
-                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
+                            rItemSet.Put( SvxVerJustifyItem( SvxCellVerJustify::Center, ATTR_VER_JUSTIFY ) );
                             break;
                         case vjBottom:
-                            rItemSet.Put( SvxVerJustifyItem( SVX_VER_JUSTIFY_BOTTOM, ATTR_VER_JUSTIFY ) );
+                            rItemSet.Put( SvxVerJustifyItem( SvxCellVerJustify::Bottom, ATTR_VER_JUSTIFY ) );
                             break;
                     }
 
@@ -1824,13 +1824,13 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             switch (VerJustify)
             {
                 case vjTop:
-                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP, ATTR_VER_JUSTIFY));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SvxCellVerJustify::Top, ATTR_VER_JUSTIFY));
                     break;
                 case vjCenter:
-                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SvxCellVerJustify::Center, ATTR_VER_JUSTIFY));
                     break;
                 case vjBottom:
-                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM, ATTR_VER_JUSTIFY));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SvxCellVerJustify::Bottom, ATTR_VER_JUSTIFY));
                     break;
             }
 

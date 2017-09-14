@@ -185,7 +185,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     nAscentPixel(0),
     eAttrOrient ( SvxCellOrientation::Standard ),
     eAttrHorJust( SvxCellHorJustify::Standard ),
-    eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
+    eAttrVerJust( SvxCellVerJustify::Bottom ),
     eAttrHorJustMethod( SvxCellJustifyMethod::Auto ),
     pMargin     ( nullptr ),
     nIndent     ( 0 ),
@@ -326,8 +326,8 @@ void ScDrawStringsVars::SetPattern(
     eAttrHorJust = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
 
     eAttrVerJust = static_cast<const SvxVerJustifyItem&>(pPattern->GetItem( ATTR_VER_JUSTIFY, pCondSet )).GetValue();
-    if ( eAttrVerJust == SVX_VER_JUSTIFY_STANDARD )
-        eAttrVerJust = SVX_VER_JUSTIFY_BOTTOM;
+    if ( eAttrVerJust == SvxCellVerJustify::Standard )
+        eAttrVerJust = SvxCellVerJustify::Bottom;
 
     // justification method
 
@@ -1901,22 +1901,22 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         long nTestClipHeight = aVars.GetTextSize().Height();
                         switch (aVars.GetVerJust())
                         {
-                            case SVX_VER_JUSTIFY_TOP:
-                            case SVX_VER_JUSTIFY_BLOCK:
+                            case SvxCellVerJustify::Top:
+                            case SvxCellVerJustify::Block:
                                 {
                                     long nTop = (long)( aVars.GetMargin()->GetTopMargin() * mnPPTY );
                                     nJustPosY += nTop;
                                     nTestClipHeight += nTop;
                                 }
                                 break;
-                            case SVX_VER_JUSTIFY_BOTTOM:
+                            case SvxCellVerJustify::Bottom:
                                 {
                                     long nBot = (long)( aVars.GetMargin()->GetBottomMargin() * mnPPTY );
                                     nJustPosY += nOutHeight - aVars.GetTextSize().Height() - nBot;
                                     nTestClipHeight += nBot;
                                 }
                                 break;
-                            case SVX_VER_JUSTIFY_CENTER:
+                            case SvxCellVerJustify::Center:
                                 {
                                     long nTop = (long)( aVars.GetMargin()->GetTopMargin() * mnPPTY );
                                     long nBot = (long)( aVars.GetMargin()->GetBottomMargin() * mnPPTY );
@@ -2580,19 +2580,19 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         SvxAdjust eSvxAdjust = SvxAdjust::Left;
         switch (meVerJust)
         {
-            case SVX_VER_JUSTIFY_TOP:
+            case SvxCellVerJustify::Top:
                 eSvxAdjust = (meOrient == SvxCellOrientation::TopBottom || mbAsianVertical) ?
                             SvxAdjust::Left : SvxAdjust::Right;
                 break;
-            case SVX_VER_JUSTIFY_CENTER:
+            case SvxCellVerJustify::Center:
                 eSvxAdjust = SvxAdjust::Center;
                 break;
-            case SVX_VER_JUSTIFY_BOTTOM:
-            case SVX_VER_JUSTIFY_STANDARD:
+            case SvxCellVerJustify::Bottom:
+            case SvxCellVerJustify::Standard:
                 eSvxAdjust = (meOrient == SvxCellOrientation::TopBottom || mbAsianVertical) ?
                             SvxAdjust::Right : SvxAdjust::Left;
                 break;
-            case SVX_VER_JUSTIFY_BLOCK:
+            case SvxCellVerJustify::Block:
                 eSvxAdjust = SvxAdjust::Block;
                 break;
         }
@@ -2601,7 +2601,7 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
 
         if (meHorJustResult == SvxCellHorJustify::Block)
-            mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
+            mpEngine->SetDefaultItem( SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST) );
     }
     else
     {
@@ -2637,17 +2637,17 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
             else
                 switch (meVerJust)
                 {
-                    case SVX_VER_JUSTIFY_TOP:
+                    case SvxCellVerJustify::Top:
                         eSvxAdjust = SvxAdjust::Right;
                         break;
-                    case SVX_VER_JUSTIFY_CENTER:
+                    case SvxCellVerJustify::Center:
                         eSvxAdjust = SvxAdjust::Center;
                         break;
-                    case SVX_VER_JUSTIFY_BOTTOM:
-                    case SVX_VER_JUSTIFY_STANDARD:
+                    case SvxCellVerJustify::Bottom:
+                    case SvxCellVerJustify::Standard:
                         eSvxAdjust = SvxAdjust::Left;
                         break;
-                    case SVX_VER_JUSTIFY_BLOCK:
+                    case SvxCellVerJustify::Block:
                         eSvxAdjust = SvxAdjust::Block;
                         break;
                 }
@@ -2659,13 +2659,13 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         {
             mpEngine->SetDefaultItem( SvxJustifyMethodItem(meVerJustMethod, EE_PARA_JUST_METHOD) );
             if (meHorJustResult == SvxCellHorJustify::Block)
-                mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
+                mpEngine->SetDefaultItem( SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST) );
         }
         else
         {
             mpEngine->SetDefaultItem( SvxJustifyMethodItem(meHorJustMethod, EE_PARA_JUST_METHOD) );
-            if (meVerJust == SVX_VER_JUSTIFY_BLOCK)
-                mpEngine->SetDefaultItem( SvxVerJustifyItem(SVX_VER_JUSTIFY_BLOCK, EE_PARA_VER_JUST) );
+            if (meVerJust == SvxCellVerJustify::Block)
+                mpEngine->SetDefaultItem( SvxVerJustifyItem(SvxCellVerJustify::Block, EE_PARA_VER_JUST) );
         }
     }
 
@@ -2834,8 +2834,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     //  Fill the EditEngine (cell attributes and text)
 
     // default alignment for asian vertical mode is top-right
-    if ( rParam.mbAsianVertical && rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
-        rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
+    if ( rParam.mbAsianVertical && rParam.meVerJust == SvxCellVerJustify::Standard )
+        rParam.meVerJust = SvxCellVerJustify::Top;
 
     rParam.setPatternToEngine(mbUseStyleColor);
     rParam.setAlignmentToEngine();
@@ -3089,8 +3089,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             rParam.mpOldPattern = nullptr;
     }
 
-    if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
-        rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
+    if (rParam.meVerJust==SvxCellVerJustify::Bottom ||
+        rParam.meVerJust==SvxCellVerJustify::Standard)
     {
         //! if pRefDevice != pFmtDevice, keep heights in logic units,
         //! only converting margin?
@@ -3103,7 +3103,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         else
             aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
     }
-    else if (rParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
+    else if (rParam.meVerJust==SvxCellVerJustify::Center)
     {
         if (rParam.mbPixelToLogic)
             aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM + (
@@ -3493,16 +3493,16 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
         switch (rParam.meVerJust)
         {
-            case SVX_VER_JUSTIFY_STANDARD:
-            case SVX_VER_JUSTIFY_BOTTOM:
+            case SvxCellVerJustify::Standard:
+            case SvxCellVerJustify::Bottom:
                 // align to bottom (do nothing).
             break;
-            case SVX_VER_JUSTIFY_CENTER:
+            case SvxCellVerJustify::Center:
                 // center it.
                 aLogicStart.Y() -= nGap / 2;
             break;
-            case SVX_VER_JUSTIFY_BLOCK:
-            case SVX_VER_JUSTIFY_TOP:
+            case SvxCellVerJustify::Block:
+            case SvxCellVerJustify::Top:
                 // align to top
                 aLogicStart.Y() -= nGap;
             break;
@@ -3744,17 +3744,17 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
             switch (rParam.meVerJust)
             {
-                case SVX_VER_JUSTIFY_STANDARD:
-                case SVX_VER_JUSTIFY_BOTTOM:
+                case SvxCellVerJustify::Standard:
+                case SvxCellVerJustify::Bottom:
                     // align to bottom
                     aLogicStart.Y() -= nGap;
                 break;
-                case SVX_VER_JUSTIFY_CENTER:
+                case SvxCellVerJustify::Center:
                     // center it.
                     aLogicStart.Y() -= nGap / 2;
                 break;
-                case SVX_VER_JUSTIFY_BLOCK:
-                case SVX_VER_JUSTIFY_TOP:
+                case SvxCellVerJustify::Block:
+                case SvxCellVerJustify::Top:
                     // align to top (do nothing)
                 default:
                     ;
@@ -4056,8 +4056,8 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     else
         aLogicStart = Point(nStartX, nStartY);
 
-    if (rParam.meVerJust==SVX_VER_JUSTIFY_BOTTOM ||
-        rParam.meVerJust==SVX_VER_JUSTIFY_STANDARD)
+    if (rParam.meVerJust==SvxCellVerJustify::Bottom ||
+        rParam.meVerJust==SvxCellVerJustify::Standard)
     {
         //! if pRefDevice != pFmtDevice, keep heights in logic units,
         //! only converting margin?
@@ -4070,7 +4070,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         else
             aLogicStart.Y() += nTopM + aCellSize.Height() - nEngineHeight;
     }
-    else if (rParam.meVerJust==SVX_VER_JUSTIFY_CENTER)
+    else if (rParam.meVerJust==SvxCellVerJustify::Center)
     {
         if (rParam.mbPixelToLogic)
             aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0, nTopM + (
@@ -4209,8 +4209,8 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     //  Fill the EditEngine (cell attributes and text)
 
     // default alignment for asian vertical mode is top-right
-    if ( rParam.meVerJust == SVX_VER_JUSTIFY_STANDARD )
-        rParam.meVerJust = SVX_VER_JUSTIFY_TOP;
+    if ( rParam.meVerJust == SvxCellVerJustify::Standard )
+        rParam.meVerJust = SvxCellVerJustify::Top;
 
     rParam.setPatternToEngine(mbUseStyleColor);
     rParam.setAlignmentToEngine();
@@ -5179,8 +5179,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( eOrient==SvxCellOrientation::Standard ||
                                      eOrient==SvxCellOrientation::Stacked || !bBreak )
                                 {
-                                    if (eVerJust==SVX_VER_JUSTIFY_BOTTOM ||
-                                        eVerJust==SVX_VER_JUSTIFY_STANDARD)
+                                    if (eVerJust==SvxCellVerJustify::Bottom ||
+                                        eVerJust==SvxCellVerJustify::Standard)
                                     {
                                         if (bPixelToLogic)
                                             aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0,
@@ -5191,7 +5191,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             aLogicStart.Y() += aCellSize.Height() - nEngineHeight;
                                     }
 
-                                    else if (eVerJust==SVX_VER_JUSTIFY_CENTER)
+                                    else if (eVerJust==SvxCellVerJustify::Center)
                                     {
                                         if (bPixelToLogic)
                                             aLogicStart.Y() += mpRefDevice->PixelToLogic( Size(0,(
@@ -5241,9 +5241,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             nAddX -= nSkew;
 
                                         long nUp = 0;
-                                        if ( eVerJust == SVX_VER_JUSTIFY_CENTER )
+                                        if ( eVerJust == SvxCellVerJustify::Center )
                                             nUp = ( aCellSize.Height() - nEngineHeight ) / 2;
-                                        else if ( eVerJust == SVX_VER_JUSTIFY_TOP )
+                                        else if ( eVerJust == SvxCellVerJustify::Top )
                                         {
                                             if ( nSin > 0.0 )
                                                 nUp = aCellSize.Height() - nEngineHeight;
