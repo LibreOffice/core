@@ -1629,7 +1629,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
 
 IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox&, rBox, void )
 {
-    if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL) == rBox.GetSelectEntry())
+    if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL) == rBox.GetSelectedEntry())
     {
         EnableHierarchical(true);
     }

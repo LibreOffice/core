@@ -212,7 +212,7 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
     }
     else if ( nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
     {
-        aStrCurSelTable = m_pLbTables->GetSelectEntry();
+        aStrCurSelTable = m_pLbTables->GetSelectedEntry();
         pStr = &aStrCurSelTable;
         if ( pN )
             *pN = m_pLbTables->GetSelectEntryPos();
@@ -228,7 +228,7 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 
     if ( !m_pBtnNew->IsChecked() && nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
     {
-        aStrCurSelTable = m_pLbTables->GetSelectEntry( nSelTabIndex );
+        aStrCurSelTable = m_pLbTables->GetSelectedEntry( nSelTabIndex );
         pStr = &aStrCurSelTable;
         if ( pN )
             *pN = m_pLbTables->GetSelectEntryPos( nSelTabIndex );

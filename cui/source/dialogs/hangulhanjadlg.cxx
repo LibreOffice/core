@@ -532,9 +532,9 @@ namespace svx
     {
         return m_aListBox->GetEntry( nPos );
     }
-    OUString SuggestionDisplay::GetSelectEntry() const
+    OUString SuggestionDisplay::GetSelectedEntry() const
     {
-        return m_aListBox->GetSelectEntry();
+        return m_aListBox->GetSelectedEntry();
     }
     void SuggestionDisplay::SetHelpIds()
     {
@@ -711,7 +711,7 @@ namespace svx
 
     IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnSuggestionSelected, SuggestionDisplay&, void )
     {
-        m_pWordInput->SetText( m_pSuggestions->GetSelectEntry() );
+        m_pWordInput->SetText( m_pSuggestions->GetSelectedEntry() );
         OnSuggestionModified( *m_pWordInput );
     }
 

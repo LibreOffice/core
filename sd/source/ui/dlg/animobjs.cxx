@@ -984,7 +984,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             sal_Int32 nPos = m_pLbLoopCount->GetSelectEntryPos();
 
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
-                nLoopCount = m_pLbLoopCount->GetSelectEntry().toUInt32();
+                nLoopCount = m_pLbLoopCount->GetSelectedEntry().toUInt32();
 
             aAnimBmp.aBmpEx = *pBitmapEx;
             aAnimBmp.aPosPix = aPt;

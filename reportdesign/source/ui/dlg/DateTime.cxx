@@ -152,12 +152,12 @@ short ODateTimeDialog::Execute()
             sal_Int32 nWidth = 0;
             if ( m_pDate->IsChecked() )
             {
-                OUString sDateFormat = m_pDateListBox->GetSelectEntry();
+                OUString sDateFormat = m_pDateListBox->GetSelectedEntry();
                 nWidth = LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MapUnit::Map100thMM);
             }
             if ( m_pTime->IsChecked() )
             {
-                OUString sDateFormat = m_pTimeListBox->GetSelectEntry();
+                OUString sDateFormat = m_pTimeListBox->GetSelectedEntry();
                 nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MapUnit::Map100thMM),nWidth);
             }
 

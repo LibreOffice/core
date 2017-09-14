@@ -282,7 +282,7 @@ void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
 void SwFieldPage::SavePos( const ListBox* pLst1 )
 {
     if( pLst1 && pLst1->GetEntryCount() )
-        m_aLstStrArr[ 0 ] = pLst1->GetSelectEntry();
+        m_aLstStrArr[ 0 ] = pLst1->GetSelectedEntry();
     else
         m_aLstStrArr[ 0 ].clear();
     m_aLstStrArr[ 1 ].clear();

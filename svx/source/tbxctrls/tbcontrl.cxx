@@ -403,7 +403,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
 
 IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
-    OUString sEntry = GetSelectEntry();
+    OUString sEntry = GetSelectedEntry();
     OString sMenuIdent = pMenu->GetCurItemIdent();
     ReleaseFocus(); // It must be after getting entry pos!
     if (IsInDropDown())

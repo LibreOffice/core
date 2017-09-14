@@ -779,7 +779,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void
     for (const char* pCurrentCategory : aCategories)
     {
         OUString aCurrentCategoryString = SmResId(pCurrentCategory);
-        if (aCurrentCategoryString == rList.GetSelectEntry())
+        if (aCurrentCategoryString == rList.GetSelectedEntry())
         {
             mpElementsControl->setElementSetId(pCurrentCategory);
             return;

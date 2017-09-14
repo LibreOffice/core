@@ -289,7 +289,7 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
     if ( pBox->IsEnabled() )
     {
         // it is the current entry, which name was modified
-        const bool bSelect = pBox->GetSelectEntry() == aBuf;
+        const bool bSelect = pBox->GetSelectedEntry() == aBuf;
         pBox->RemoveEntry( aBuf );
         pBox->InsertEntry( rNew );
 
@@ -337,7 +337,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, void )
 {
-    OUString aTemplName(m_pFollowLb->GetSelectEntry());
+    OUString aTemplName(m_pFollowLb->GetSelectedEntry());
     OUString aEditTemplName(m_pNameRo->GetText());
     if (!( aTemplName == aEditTemplName))
         m_pEditStyleBtn->Enable();
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, voi
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 {
-    OUString aTemplName(m_pFollowLb->GetSelectEntry());
+    OUString aTemplName(m_pFollowLb->GetSelectedEntry());
     if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily() ))
     {
     }
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&,
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, void )
 {
-    OUString aTemplName(m_pBaseLb->GetSelectEntry());
+    OUString aTemplName(m_pBaseLb->GetSelectedEntry());
     if (aTemplName != SfxResId(STR_NONE))
         Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily() );
 }
@@ -619,7 +619,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if ( pStyle->HasFollowSupport() && m_pFollowLb->IsEnabled() )
     {
-        const OUString aFollowEntry( m_pFollowLb->GetSelectEntry() );
+        const OUString aFollowEntry( m_pFollowLb->GetSelectedEntry() );
 
         if ( pStyle->GetFollow() != aFollowEntry )
         {
@@ -636,7 +636,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if ( m_pBaseLb->IsEnabled() )
     {
-        OUString aParentEntry( m_pBaseLb->GetSelectEntry() );
+        OUString aParentEntry( m_pBaseLb->GetSelectedEntry() );
 
         if ( SfxResId(STR_NONE) == aParentEntry || aParentEntry == pStyle->GetName() )
             aParentEntry.clear();

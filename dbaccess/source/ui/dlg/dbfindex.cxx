@@ -193,7 +193,7 @@ IMPL_LINK_NOARG( ODbaseIndexDialog, OKClickHdl, Button*, void )
 
 IMPL_LINK_NOARG( ODbaseIndexDialog, AddClickHdl, Button*, void )
 {
-    OUString aSelection = m_pLB_FreeIndexes->GetSelectEntry();
+    OUString aSelection = m_pLB_FreeIndexes->GetSelectedEntry();
     OUString aTableName = m_pCB_Tables->GetText();
     OTableIndex aIndex = RemoveFreeIndex( aSelection, true );
     InsertTableIndex( aTableName, aIndex );
@@ -203,7 +203,7 @@ IMPL_LINK_NOARG( ODbaseIndexDialog, AddClickHdl, Button*, void )
 
 IMPL_LINK_NOARG( ODbaseIndexDialog, RemoveClickHdl, Button*, void )
 {
-    OUString aSelection = m_pLB_TableIndexes->GetSelectEntry();
+    OUString aSelection = m_pLB_TableIndexes->GetSelectedEntry();
     OUString aTableName = m_pCB_Tables->GetText();
     OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection );
     InsertFreeIndex( aIndex );

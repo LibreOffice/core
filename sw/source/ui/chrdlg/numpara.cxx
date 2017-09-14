@@ -149,7 +149,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     {
         OUString aStyle;
         if(m_pNumberStyleLB->GetSelectEntryPos())
-            aStyle = m_pNumberStyleLB->GetSelectEntry();
+            aStyle = m_pNumberStyleLB->GetSelectedEntry();
         const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
         SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : nullptr;
         if (pRule)
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, ListBox&, vo
 
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl, Button*, void)
 {
-    OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
+    OUString aTemplName(m_pNumberStyleLB->GetSelectedEntry());
     ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(), SfxStyleFamily::Pseudo );
 }
 

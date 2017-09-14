@@ -827,7 +827,7 @@ StringMap ListBoxUIObject::get_state()
     aMap["EntryCount"] = OUString::number(mxListBox->GetEntryCount());
     aMap["SelectEntryCount"] = OUString::number(mxListBox->GetSelectEntryCount());
     aMap["SelectEntryPos"] = OUString::number(mxListBox->GetSelectEntryPos());
-    aMap["SelectEntryText"] = mxListBox->GetSelectEntry();
+    aMap["SelectEntryText"] = mxListBox->GetSelectedEntry();
 
     return aMap;
 }

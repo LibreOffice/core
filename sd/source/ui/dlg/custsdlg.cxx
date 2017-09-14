@@ -413,7 +413,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
 
             for( sal_Int32 i = 0; i < nCount; i++ )
             {
-                OUString aStr = m_pLbPages->GetSelectEntry( i );
+                OUString aStr = m_pLbPages->GetSelectedEntry( i );
                 pEntry = m_pLbCustomPages->InsertEntry( aStr,
                                             nullptr, false, nPosCP );
 

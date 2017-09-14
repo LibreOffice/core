@@ -47,7 +47,7 @@ public:
     void    Insert( const OUString& rString, bool bSelected );
 
     sal_Int32 GetSelectEntryCount() const;
-    OUString    GetSelectEntry(sal_Int32 nPos) const;
+    OUString    GetSelectedEntry(sal_Int32 nPos) const;
     sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const;
 };
 

@@ -224,7 +224,7 @@ namespace dbaui
         long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
-            OUString sFieldName(m_pListCell->GetSelectEntry());
+            OUString sFieldName(m_pListCell->GetSelectedEntry());
             OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
             if ( rLines.size() <= static_cast<OConnectionLineDataVec::size_type>(nRow) )
             {
@@ -313,7 +313,7 @@ namespace dbaui
             fillListBox(xDef);
             OUString sName = GetCellText( nRow, nColumnId );
             m_pListCell->SelectEntry( sName );
-            if ( m_pListCell->GetSelectEntry() != sName )
+            if ( m_pListCell->GetSelectedEntry() != sName )
             {
                 m_pListCell->InsertEntry( sName );
                 m_pListCell->SelectEntry( sName );
@@ -515,7 +515,7 @@ namespace dbaui
 
     IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox&, rListBox, void )
     {
-        OUString strSelected(rListBox.GetSelectEntry());
+        OUString strSelected(rListBox.GetSelectedEntry());
         OTableWindow* pLeft     = nullptr;
         OTableWindow* pRight    = nullptr;
 
@@ -534,7 +534,7 @@ namespace dbaui
             ++aIter;
             OTableWindow* pSecond = aIter->second;
 
-            if ( m_pLeftTable->GetSelectEntry() == pFirst->GetName() )
+            if ( m_pLeftTable->GetSelectedEntry() == pFirst->GetName() )
             {
                 pLeft   = pFirst;
                 pRight  = pSecond;
@@ -564,7 +564,7 @@ namespace dbaui
 
                 pLeft = pLoop;
 
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_pRightTable->GetSelectEntry());
+                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_pRightTable->GetSelectedEntry());
                 OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
                 if ( aIter != m_pTableMap->end() )
                     pRight = aIter->second;
@@ -580,7 +580,7 @@ namespace dbaui
                 m_strCurrentRight = strSelected;
 
                 pRight = pLoop;
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_pLeftTable->GetSelectEntry());
+                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_pLeftTable->GetSelectedEntry());
                 OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
                 if ( aIter != m_pTableMap->end() )
                     pLeft = aIter->second;

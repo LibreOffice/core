@@ -298,7 +298,7 @@ void SwDropCapsPict::UpdatePaintSettings()
         {
             // query Font at character template
             SwCharFormat *pFormat = mpPage->rSh.GetCharStyle(
-                                    mpPage->m_pTemplateBox->GetSelectEntry(),
+                                    mpPage->m_pTemplateBox->GetSelectedEntry(),
                                     SwWrtShell::GETSTYLE_CREATEANY );
             OSL_ENSURE(pFormat, "character style doesn't exist!");
             const SvxFontItem &rFormatFont = pFormat->GetFont();
@@ -788,7 +788,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
             // template
             if (m_pTemplateBox->GetSelectEntryPos())
-                aFormat.SetCharFormat(rSh.GetCharStyle(m_pTemplateBox->GetSelectEntry()));
+                aFormat.SetCharFormat(rSh.GetCharStyle(m_pTemplateBox->GetSelectedEntry()));
         }
         else
         {

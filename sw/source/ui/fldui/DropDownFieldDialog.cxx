@@ -101,7 +101,7 @@ void sw::DropDownFieldDialog::Apply()
 {
     if(pDropField)
     {
-        OUString sSelect = m_pListItemsLB->GetSelectEntry();
+        OUString sSelect = m_pListItemsLB->GetSelectedEntry();
         if(pDropField->GetPar1() != sSelect)
         {
             rSh.StartAllAction();

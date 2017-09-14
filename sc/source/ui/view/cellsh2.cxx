@@ -741,7 +741,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            OUString aName = pDlg->GetSelectEntry();
+                            OUString aName = pDlg->GetSelectedEntry();
                             pTabViewShell->GotoDBArea( aName );
                             rReq.AppendItem( SfxStringItem( SID_SELECT_DB, aName ) );
                             rReq.Done();

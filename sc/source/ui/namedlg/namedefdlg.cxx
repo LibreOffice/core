@@ -137,7 +137,7 @@ bool ScNameDefDlg::IsFormulaValid()
 
 bool ScNameDefDlg::IsNameValid()
 {
-    OUString aScope = m_pLbScope->GetSelectEntry();
+    OUString aScope = m_pLbScope->GetSelectedEntry();
     OUString aName = m_pEdName->GetText();
 
     ScRangeName* pRangeName = nullptr;
@@ -194,7 +194,7 @@ bool ScNameDefDlg::IsNameValid()
 
 void ScNameDefDlg::AddPushed()
 {
-    OUString aScope = m_pLbScope->GetSelectEntry();
+    OUString aScope = m_pLbScope->GetSelectedEntry();
     OUString aName = m_pEdName->GetText();
     OUString aExpression = m_pEdRange->GetText();
 

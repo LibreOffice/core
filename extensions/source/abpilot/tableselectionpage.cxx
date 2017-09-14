@@ -99,7 +99,7 @@ namespace abp
             return false;
 
         AddressSettings& rSettings = getSettings();
-        rSettings.sSelectedTable = m_pTableList->GetSelectEntry();
+        rSettings.sSelectedTable = m_pTableList->GetSelectedEntry();
 
         return true;
     }

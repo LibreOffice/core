@@ -980,7 +980,7 @@ bool OSelectionBrowseBox::SaveModified()
 
             case BROW_TABLE_ROW:
             {
-                OUString aAliasName = m_pTableCell->GetSelectEntry();
+                OUString aAliasName = m_pTableCell->GetSelectedEntry();
                 strOldCellContents = pEntry->GetAlias();
                 if ( m_pTableCell->GetSelectEntryPos() != 0 )
                 {

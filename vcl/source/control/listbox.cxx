@@ -186,7 +186,7 @@ IMPL_LINK_NOARG(ListBox, ImplSelectHdl, LinkParamNone*, void)
         }
 
         mpImplWin->SetItemPos( GetSelectEntryPos() );
-        mpImplWin->SetString( GetSelectEntry() );
+        mpImplWin->SetString( GetSelectedEntry() );
         if( mpImplLB->GetEntryList()->HasImages() )
         {
             Image aImage = mpImplLB->GetEntryList()->GetEntryImage( GetSelectEntryPos() );
@@ -392,7 +392,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, Dr
 
     if ( IsDropDownBox() )
     {
-        OUString   aText = GetSelectEntry();
+        OUString   aText = GetSelectedEntry();
         long       nTextHeight = pDev->GetTextHeight();
         long       nTextWidth = pDev->GetTextWidth( aText );
         long       nOffY = (aSize.Height()-nTextHeight) / 2;
@@ -1016,7 +1016,7 @@ sal_Int32 ListBox::GetEntryCount() const
     return mpImplLB->GetEntryList()->GetEntryCount() - mpImplLB->GetEntryList()->GetMRUCount();
 }
 
-OUString ListBox::GetSelectEntry(sal_Int32 nIndex) const
+OUString ListBox::GetSelectedEntry(sal_Int32 nIndex) const
 {
     return GetEntry( GetSelectEntryPos( nIndex ) );
 }

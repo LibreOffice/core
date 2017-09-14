@@ -1097,8 +1097,8 @@ void SvxColorOptionsTabPage::UpdateColorConfig()
 
 IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox&, rBox, void)
 {
-    pColorConfig->LoadScheme(rBox.GetSelectEntry());
-    pExtColorConfig->LoadScheme(rBox.GetSelectEntry());
+    pColorConfig->LoadScheme(rBox.GetSelectedEntry());
+    pExtColorConfig->LoadScheme(rBox.GetSelectedEntry());
     UpdateColorConfig();
 }
 
@@ -1134,7 +1134,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
         aQuery->SetText(CuiResId(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
         if(RET_YES == aQuery->Execute())
         {
-            OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
+            OUString sDeleteScheme(m_pColorSchemeLB->GetSelectedEntry());
             m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());
             m_pColorSchemeLB->SelectEntryPos(0);
             m_pColorSchemeLB->GetSelectHdl().Call(*m_pColorSchemeLB);

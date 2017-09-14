@@ -55,7 +55,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox const * pBox, PushButton* pPropBtn,
     VclPtr<Printer> pTempPrinter( pTempPrinterIn );
     if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), true );
+        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectedEntry(), true );
         if( pInfo)
         {
             if ( !pTempPrinter )
@@ -111,7 +111,7 @@ void ImplPrnDlgUpdateQueueInfo( ListBox const * pBox, QueueInfo& rInfo )
 {
     if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
-        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), true );
+        const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectedEntry(), true );
         if( pInfo )
             rInfo = *pInfo;
     }
@@ -262,7 +262,7 @@ void PrinterSetupDialog::SetOptionsHdl( const Link<Button*,void>& rLink )
 
 void PrinterSetupDialog::ImplSetInfo()
 {
-    const QueueInfo* pInfo = Printer::GetQueueInfo(m_pLbName->GetSelectEntry(), true);
+    const QueueInfo* pInfo = Printer::GetQueueInfo(m_pLbName->GetSelectedEntry(), true);
     if ( pInfo )
     {
         m_pFiType->SetText( pInfo->GetDriver() );

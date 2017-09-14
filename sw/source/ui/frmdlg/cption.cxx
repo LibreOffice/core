@@ -513,7 +513,7 @@ void SwSequenceOptionDialog::Apply()
 OUString  SwSequenceOptionDialog::GetCharacterStyle() const
 {
     if(m_pLbCharStyle->GetSelectEntryPos())
-        return m_pLbCharStyle->GetSelectEntry();
+        return m_pLbCharStyle->GetSelectedEntry();
     return OUString();
 }
 

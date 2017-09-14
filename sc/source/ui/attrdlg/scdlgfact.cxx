@@ -389,9 +389,9 @@ const OUString* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
     return pDlg->GetNextTable( pN );
 }
 
-OUString AbstractScSelEntryDlg_Impl::GetSelectEntry() const
+OUString AbstractScSelEntryDlg_Impl::GetSelectedEntry() const
 {
-    return pDlg->GetSelectEntry();
+    return pDlg->GetSelectedEntry();
 }
 
 void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
@@ -575,9 +575,9 @@ sal_Int32 AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_Int32 nPos) const
     return pDlg->GetSelectEntryPos( nPos);
 }
 
-OUString AbstractScShowTabDlg_Impl::GetSelectEntry(sal_Int32 nPos) const
+OUString AbstractScShowTabDlg_Impl::GetSelectedEntry(sal_Int32 nPos) const
 {
-    return pDlg->GetSelectEntry(nPos);
+    return pDlg->GetSelectedEntry(nPos);
 }
 
 OUString AbstractScStringInputDlg_Impl::GetInputString() const

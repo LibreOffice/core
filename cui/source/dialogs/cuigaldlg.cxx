@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, Button*, void)
 
 void TPGalleryThemeProperties::DoPreview()
 {
-    OUString aString( m_pLbxFound->GetSelectEntry() );
+    OUString aString( m_pLbxFound->GetSelectedEntry() );
 
     if( aString != aPreviewString )
     {

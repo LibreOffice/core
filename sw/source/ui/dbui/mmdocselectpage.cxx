@@ -181,7 +181,7 @@ bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason 
                 m_pNewDocRB->IsChecked() ||
                 (!(sReloadDocument = m_sLoadFileName).isEmpty() && m_pLoadDocRB->IsChecked() )||
                 (!(sReloadDocument = m_sLoadTemplateName).isEmpty() && m_pLoadTemplateRB->IsChecked())||
-                (m_pRecentDocRB->IsChecked() && !(sReloadDocument = m_pRecentDocLB->GetSelectEntry()).isEmpty());
+                (m_pRecentDocRB->IsChecked() && !(sReloadDocument = m_pRecentDocLB->GetSelectedEntry()).isEmpty());
         if( _eReason == ::svt::WizardTypes::eValidate )
             m_pWizard->SetDocumentLoad(!m_pCurrentDocRB->IsChecked());
 

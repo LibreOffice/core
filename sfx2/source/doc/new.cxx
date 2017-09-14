@@ -242,7 +242,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
     const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
     m_pTemplateLb->SetUpdateMode(false);
     m_pTemplateLb->Clear();
-    OUString aSel = m_pRegionLb->GetSelectEntry();
+    OUString aSel = m_pRegionLb->GetSelectedEntry();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, LoadFile, Button*, void)
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
     sal_uInt16 nEntry = m_pTemplateLb->GetSelectEntryPos();
-    OUString aSel = m_pRegionLb->GetSelectEntry();
+    OUString aSel = m_pRegionLb->GetSelectedEntry();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");

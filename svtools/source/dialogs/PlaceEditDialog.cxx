@@ -215,7 +215,7 @@ void PlaceEditDialog::InitDetails( )
     // Set default to first value
     m_pLBServerType->SelectEntryPos( 0 );
 
-    if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
+    if ( m_pLBServerType->GetSelectedEntry() == "--------------------" )
         m_pLBServerType->SelectEntryPos( 1 );
 
     SelectTypeHdl( *m_pLBServerType );
@@ -273,14 +273,14 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditHdl, DetailsContainer*, void )
                 nLength = sUser.getLength();
 
             sLabel = sLabel.replaceFirst( "$user$", sUser.copy( 0, nLength ) );
-            sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectEntry() );
+            sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectedEntry() );
 
             m_pEDServerName->SetText( sLabel );
             bLabelChanged = false;
         }
         else
         {
-            m_pEDServerName->SetText( m_pLBServerType->GetSelectEntry( ) );
+            m_pEDServerName->SetText( m_pLBServerType->GetSelectedEntry( ) );
         }
     }
 
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl, Edit&, void )
 
 IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
 {
-    if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
+    if ( m_pLBServerType->GetSelectedEntry() == "--------------------" )
     {
         if( !m_pLBServerType->IsTravelSelect() )
             m_pLBServerType->SelectEntryPos( m_nCurrentType );

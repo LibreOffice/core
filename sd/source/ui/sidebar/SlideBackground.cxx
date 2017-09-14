@@ -1032,7 +1032,7 @@ IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, ListBox&, void)
             break;
         }
     }
-    OUString aLayoutName(mpMasterSlide->GetSelectEntry());
+    OUString aLayoutName(mpMasterSlide->GetSelectedEntry());
     pDoc->SetMasterPage(nSelectedPage, aLayoutName, pDoc, false, false);
 }
 

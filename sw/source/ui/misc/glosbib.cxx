@@ -220,10 +220,10 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, Button*, void)
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
-    const OUString sTemp(m_pNameED->GetText() + "\t" + m_pPathLB->GetSelectEntry());
+    const OUString sTemp(m_pNameED->GetText() + "\t" + m_pPathLB->GetSelectedEntry());
     SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTemp);
     GlosBibUserData* pData = new GlosBibUserData;
-    pData->sPath = m_pPathLB->GetSelectEntry();
+    pData->sPath = m_pPathLB->GetSelectedEntry();
     pData->sGroupName = sGroup;
     pData->sGroupTitle = m_pNameED->GetText();
     pEntry->SetUserData(pData);
@@ -315,9 +315,9 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, Button*, void)
     delete static_cast<GlosBibUserData*>(pEntry->GetUserData());
     m_pGroupTLB->GetModel()->Remove(pEntry);
     pEntry = m_pGroupTLB->InsertEntry(m_pNameED->GetText() + "\t"
-                                      + m_pPathLB->GetSelectEntry());
+                                      + m_pPathLB->GetSelectedEntry());
     GlosBibUserData* pData = new GlosBibUserData;
-    pData->sPath = m_pPathLB->GetSelectEntry();
+    pData->sPath = m_pPathLB->GetSelectedEntry();
     pData->sGroupName = sNewName;
     pData->sGroupTitle = sNewTitle;
     pEntry->SetUserData(pData);
