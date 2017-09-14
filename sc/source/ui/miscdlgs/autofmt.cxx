@@ -261,7 +261,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
         // Justification:
 
         eJustification  = mbRTL ? SvxCellHorJustify::Right : bJustify ?
-            (SvxCellHorJustify) (static_cast<const SvxHorJustifyItem*>(pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY))->GetValue()) :
+            static_cast<const SvxHorJustifyItem*>(pCurData->GetItem(nFmtIndex, ATTR_HOR_JUSTIFY))->GetValue() :
             SvxCellHorJustify::Standard;
 
         if (pCurData->GetIncludeFont())

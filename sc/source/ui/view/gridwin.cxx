@@ -5078,9 +5078,9 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         return false;
 
     bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
-                    ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
+                    (static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block);
-    SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
+    SvxCellHorJustify eHorJust = static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem(ATTR_HOR_JUSTIFY)).GetValue();
 
         //  EditEngine

@@ -197,19 +197,19 @@ void HTMLOption::GetColor( Color& rColor ) const
 HTMLInputType HTMLOption::GetInputType() const
 {
     DBG_ASSERT( nToken==HtmlOptionId::TYPE, "GetInputType: Option not TYPE" );
-    return (HTMLInputType)GetEnum( aInputTypeOptEnums, HTMLInputType::Text );
+    return GetEnum( aInputTypeOptEnums, HTMLInputType::Text );
 }
 
 HTMLTableFrame HTMLOption::GetTableFrame() const
 {
     DBG_ASSERT( nToken==HtmlOptionId::FRAME, "GetTableFrame: Option not FRAME" );
-    return (HTMLTableFrame)GetEnum( aTableFrameOptEnums );
+    return GetEnum( aTableFrameOptEnums );
 }
 
 HTMLTableRules HTMLOption::GetTableRules() const
 {
     DBG_ASSERT( nToken==HtmlOptionId::RULES, "GetTableRules: Option not RULES" );
-    return (HTMLTableRules)GetEnum( aTableRulesOptEnums );
+    return GetEnum( aTableRulesOptEnums );
 }
 
 HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :

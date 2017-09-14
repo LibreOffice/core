@@ -317,7 +317,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
 
     long nPixDifY;
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
-    SvxCellVerJustify eJust = (SvxCellVerJustify) static_cast<const SvxVerJustifyItem&>(pPattern->
+    SvxCellVerJustify eJust = static_cast<const SvxVerJustifyItem&>(pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
     //  asian vertical is always edited top-aligned

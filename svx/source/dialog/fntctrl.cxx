@@ -1013,7 +1013,7 @@ void SvxFontPrevWindow::SetFromItemSet(const SfxItemSet &rSet, bool bPreviewBack
     if( GetWhich( rSet, SID_ATTR_CHAR_CASEMAP, nWhich ) )
     {
         const SvxCaseMapItem& rItem = static_cast<const SvxCaseMapItem&>( rSet.Get( nWhich ) );
-        SvxCaseMap eCaseMap = ( SvxCaseMap ) rItem.GetValue();
+        SvxCaseMap eCaseMap = rItem.GetValue();
         rFont.SetCaseMap( eCaseMap );
         rCJKFont.SetCaseMap( eCaseMap );
         // #i78474# small caps do not exist in CTL fonts
@@ -1255,7 +1255,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     if( ISITEMSET )
     {
         const SvxCaseMapItem& rItem = static_cast<const SvxCaseMapItem&>( rSet.Get( nWhich ) );
-        SvxCaseMap eCaseMap = ( SvxCaseMap ) rItem.GetValue();
+        SvxCaseMap eCaseMap = rItem.GetValue();
         rFont.SetCaseMap( eCaseMap );
         rCJKFont.SetCaseMap( eCaseMap );
         // #i78474# small caps do not exist in CTL fonts

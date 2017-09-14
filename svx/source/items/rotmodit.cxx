@@ -104,7 +104,7 @@ sal_uInt16 SvxRotateModeItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int32 nUno = table::CellVertJustify2::STANDARD;
-    switch ( (SvxRotateMode)GetValue() )
+    switch ( GetValue() )
     {
         case SVX_ROTATE_MODE_STANDARD: nUno = table::CellVertJustify2::STANDARD; break;
         case SVX_ROTATE_MODE_TOP:      nUno = table::CellVertJustify2::TOP;      break;

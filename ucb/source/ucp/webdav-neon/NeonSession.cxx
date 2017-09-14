@@ -796,15 +796,15 @@ void NeonSession::Init()
         // set the timeout (in seconds) used when making a connection
         sal_Int32 nConnectTimeout = officecfg::Inet::Settings::ConnectTimeout::get( rContext );
         ne_set_connect_timeout( m_pHttpSession,
-                                (int) ( std::max( nConnectTimeoutMin,
-                                                  std::min( nConnectTimeout, nConnectTimeoutMax ) ) ) );
+                                std::max( nConnectTimeoutMin,
+                                          std::min( nConnectTimeout, nConnectTimeoutMax ) ) );
 
         // provides a read time out facility as well
         // set the timeout (in seconds) used when reading from a socket.
         sal_Int32 nReadTimeout =  officecfg::Inet::Settings::ReadTimeout::get( rContext );
         ne_set_read_timeout( m_pHttpSession,
-                             (int) ( std::max( nReadTimeoutMin,
-                                               std::min( nReadTimeout, nReadTimeoutMax ) ) ) );
+                             std::max( nReadTimeoutMin,
+                                       std::min( nReadTimeout, nReadTimeoutMax ) ) );
     }
 }
 

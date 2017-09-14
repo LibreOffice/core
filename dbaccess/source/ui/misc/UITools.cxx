@@ -859,7 +859,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
             // horizontal justify
             const SvxHorJustifyItem* pHorJustify = pSet->GetItem<SvxHorJustifyItem>(SBA_ATTR_ALIGN_HOR_JUSTIFY);
 
-            _eJustify = (SvxCellHorJustify)pHorJustify->GetValue();
+            _eJustify = pHorJustify->GetValue();
 
             // format key
             if (_bHasFormat)

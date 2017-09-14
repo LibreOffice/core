@@ -285,7 +285,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     SetMetricValue( *m_pMF_ABSTAND, nGap, eUnit );
     nGap = static_cast<long>(m_pMF_ABSTAND->GetValue());
 
-    nCaptionType = (SdrCaptionType)static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
+    nCaptionType = static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
     bFitLineLen = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
     nEscDir = static_cast<const SdrCaptionEscDirItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
     bEscRel = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();

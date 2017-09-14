@@ -1050,7 +1050,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bEditActive[eWhich] = true;
 
     const ScPatternAttr* pPattern = pDoc->GetPattern( nNewX, nNewY, nTabNo );
-    SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
+    SvxCellHorJustify eJust = static_cast<const SvxHorJustifyItem&>(
                                     pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
 
     bool bBreak = ( eJust == SvxCellHorJustify::Block ) ||
@@ -1256,7 +1256,7 @@ void ScViewData::EditGrowX()
 
     //  get bGrow... variables the same way as in SetEditEngine
     const ScPatternAttr* pPattern = pLocalDoc->GetPattern( nEditCol, nEditRow, nTabNo );
-    SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
+    SvxCellHorJustify eJust = static_cast<const SvxHorJustifyItem&>(
                                     pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
     bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
     bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left

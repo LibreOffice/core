@@ -294,6 +294,9 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
     }
     auto t1 = compat::getSubExprAsWritten(expr)->getType();
     auto t2 = expr->getTypeAsWritten();
+    if (auto templateType = dyn_cast<SubstTemplateTypeParmType>(t1)) {
+        t1 = templateType->desugar();
+    }
     if (t1 != t2) {
         return true;
     }

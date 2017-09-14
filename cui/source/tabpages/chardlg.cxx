@@ -1968,7 +1968,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxCaseMapItem& rItem = static_cast<const SvxCaseMapItem&>(rSet->Get( nWhich ));
-            eCaseMap = (SvxCaseMap)rItem.GetValue();
+            eCaseMap = rItem.GetValue();
             break;
         }
     }
@@ -2333,7 +2333,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
                          SfxItemState::DEFAULT > rOldSet.GetItemState( nWhich );
 
         const SvxCaseMapItem& rItem = *static_cast<const SvxCaseMapItem*>(pOld);
-        if ( (SvxCaseMap)rItem.GetValue() == eCaseMap  &&  !bAllowChg )
+        if ( rItem.GetValue() == eCaseMap  &&  !bAllowChg )
             bChanged = false;
     }
 

@@ -235,8 +235,8 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
     {
         // VertAdjust and HorAdjust are unequivocal, thus
-        SdrTextVertAdjust eTVA = (SdrTextVertAdjust)static_cast<const SdrTextVertAdjustItem&>(rAttrs->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
-        SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)static_cast<const SdrTextHorzAdjustItem&>(rAttrs->Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
+        SdrTextVertAdjust eTVA = static_cast<const SdrTextVertAdjustItem&>(rAttrs->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+        SdrTextHorzAdjust eTHA = static_cast<const SdrTextHorzAdjustItem&>(rAttrs->Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
         RectPoint eRP = RectPoint::LB;
 
         m_pTsbFullWidth->EnableTriState( false );
@@ -309,7 +309,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // adjust to border
     if ( rAttrs->GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SfxItemState::DONTCARE )
     {
-        SdrFitToSizeType eFTS = (SdrFitToSizeType)
+        SdrFitToSizeType eFTS =
                     static_cast<const SdrTextFitToSizeTypeItem&>( rAttrs->Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
         if( eFTS == SdrFitToSizeType::Autofit || eFTS == SdrFitToSizeType::NONE )
             m_pTsbFitToSize->SetState( TRISTATE_FALSE );
@@ -462,8 +462,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE )
         {
-            eOldTVA = (SdrTextVertAdjust)
-                        static_cast<const SdrTextVertAdjustItem&>( rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue();
+            eOldTVA = static_cast<const SdrTextVertAdjustItem&>( rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue();
             if( eOldTVA != eTVA )
                 rAttrs->Put( SdrTextVertAdjustItem( eTVA ) );
         }
@@ -472,8 +471,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
         if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SfxItemState::DONTCARE )
         {
-            eOldTHA = (SdrTextHorzAdjust)
-                        static_cast<const SdrTextHorzAdjustItem&>( rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
+            eOldTHA = static_cast<const SdrTextHorzAdjustItem&>( rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
             if( eOldTHA != eTHA )
                 rAttrs->Put( SdrTextHorzAdjustItem( eTHA ) );
         }

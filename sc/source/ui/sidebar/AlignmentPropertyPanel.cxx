@@ -270,7 +270,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT && pState && dynamic_cast<const SvxHorJustifyItem*>( pState) !=  nullptr )
             {
                 const SvxHorJustifyItem* pItem = static_cast<const SvxHorJustifyItem*>(pState);
-                meHorAlignState = (SvxCellHorJustify)pItem->GetValue();
+                meHorAlignState = pItem->GetValue();
             }
 
             if( meHorAlignState == SvxCellHorJustify::Repeat )
@@ -359,7 +359,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         if( eState >= SfxItemState::DEFAULT)
         {
             const SvxRotateModeItem* pItem = static_cast<const SvxRotateModeItem*>(pState);
-            SvxRotateMode eMode = (SvxRotateMode)pItem->GetValue();
+            SvxRotateMode eMode = pItem->GetValue();
             if(eMode == SVX_ROTATE_MODE_BOTTOM)
             {
                 mpRefEdgeBottom->SetState(true);

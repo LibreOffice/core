@@ -69,7 +69,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_HORJUST_HORJUST:
             {
                 table::CellHoriJustify eUno = table::CellHoriJustify_STANDARD;
-                switch ( (SvxCellHorJustify)GetValue() )
+                switch ( GetValue() )
                 {
                     case SvxCellHorJustify::Standard: eUno = table::CellHoriJustify_STANDARD; break;
                     case SvxCellHorJustify::Left:     eUno = table::CellHoriJustify_LEFT;     break;
@@ -87,7 +87,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 //  (same value for ParaAdjust and ParaLastLineAdjust)
 
                 style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
-                switch ( (SvxCellHorJustify)GetValue() )
+                switch ( GetValue() )
                 {
                     // ParagraphAdjust_LEFT is used for STANDARD and REPEAT
                     case SvxCellHorJustify::Standard:
@@ -218,7 +218,7 @@ bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_HORJUST_ADJUST:
             {
                 style::VerticalAlignment eUno = style::VerticalAlignment_TOP;
-                switch ( (SvxCellVerJustify)GetValue() )
+                switch ( GetValue() )
                 {
                     case SVX_VER_JUSTIFY_TOP:      eUno = style::VerticalAlignment_TOP;     break;
                     case SVX_VER_JUSTIFY_CENTER:   eUno = style::VerticalAlignment_MIDDLE;  break;
@@ -231,7 +231,7 @@ bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         default:
             {
                 sal_Int32 nUno = table::CellVertJustify2::STANDARD;
-                switch ( (SvxCellVerJustify)GetValue() )
+                switch ( GetValue() )
                 {
                     case SVX_VER_JUSTIFY_STANDARD: nUno = table::CellVertJustify2::STANDARD; break;
                     case SVX_VER_JUSTIFY_TOP:      nUno = table::CellVertJustify2::TOP;     break;

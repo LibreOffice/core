@@ -473,7 +473,7 @@ EditCharAttribRelief::EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_
 
 void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetRelief( (FontRelief)static_cast<const SvxCharReliefItem*>(GetItem())->GetValue() );
+    rFont.SetRelief( static_cast<const SvxCharReliefItem*>(GetItem())->GetValue() );
 }
 
 // class EditCharAttribGrabBag
