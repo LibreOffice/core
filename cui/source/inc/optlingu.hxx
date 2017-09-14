@@ -127,7 +127,7 @@ private:
         css::uno::Reference<
             css::linguistic2::XDictionary > >    aDics;
 
-    SvLBoxButtonData*   pCheckButtonData;
+    std::unique_ptr<SvLBoxButtonData>   pCheckButtonData;
 
     SvxLinguData_Impl*  pLinguData;
 
