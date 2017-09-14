@@ -11,10 +11,10 @@ $(eval $(call gb_Library_Library,mysqlc))
 
 $(eval $(call gb_Library_use_externals,mysqlc,\
 	boost_headers \
-	mysqlcppconn \
+	mysql-connector-cpp \
 ))
 
-ifeq ($(SYSTEM_MYSQL_CPPCONN),)
+ifeq ($(SYSTEM_MYSQL_CONNECTOR_CPP),)
 $(eval $(call gb_Library_add_libs,mysqlc,\
 	$(if $(filter-out WNT,$(OS)),$(if $(filter MACOSX SOLARIS,$(OS)),-lz -lm,\
 	-rdynamic -lz -lcrypt -lnsl -lm)) \
@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DMARIADBC_VERSION_MAJOR=$(MARIADBC_MAJOR) \
 	-DMARIADBC_VERSION_MINOR=$(MARIADBC_MINOR) \
 	-DMARIADBC_VERSION_MICRO=$(MARIADBC_MICRO) \
-	$(if $(SYSTEM_MYSQL_CPPCONN),,\
+	$(if $(SYSTEM_MYSQL_CONNECTOR_CPP),,\
 	-DCPPCONN_LIB=\"$(call gb_Library_get_runtime_filename,mysqlcppconn)\") \
 	$(if $(BUNDLE_MARIADB_CONNECTOR_C),-DBUNDLE_MARIADB=\"$(LIBMARIADB)\") \
 ))

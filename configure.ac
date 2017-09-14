@@ -8243,7 +8243,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     AC_MSG_CHECKING([MySQL Connector/C++])
     if test "$with_system_mysql_cppconn" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_MYSQL_CPPCONN=TRUE
+        SYSTEM_MYSQL_CONNECTOR_CPP=TRUE
         AC_LANG_PUSH([C++])
         AC_CHECK_HEADER(mysql_driver.h, [],
                     [AC_MSG_ERROR(mysql_driver.h not found. install MySQL C++ Connectivity)], [])
@@ -8271,12 +8271,12 @@ int main(int argc, char **argv) {
         LIBS=$save_LIBS
     else
         AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
-        SYSTEM_MYSQL_CPPCONN=
+        BUILD_TYPE="$BUILD_TYPE MYSQL_CONNECTOR_CPP"
+        SYSTEM_MYSQL_CONNECTOR_CPP=
     fi
     AC_LANG_POP([C++])
 fi
-AC_SUBST(SYSTEM_MYSQL_CPPCONN)
+AC_SUBST(SYSTEM_MYSQL_CONNECTOR_CPP)
 
 dnl ===================================================================
 dnl Check for system hsqldb
