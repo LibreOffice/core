@@ -13,6 +13,7 @@
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
+#include <test/sheet/xsubtotalcalculatable.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -23,9 +24,12 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 10
+#define NUMBER_OF_TESTS 12
 
-class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable, public apitest::XReplaceable, public apitest::XPrintAreas, public apitest::XCellSeries, public apitest::XUniqueCellFormatRangesSupplier
+class ScTableSheetObj : public CalcUnoApiTest,
+                          public apitest::XSearchable, public apitest::XReplaceable,
+                          public apitest::XPrintAreas, public apitest::XCellSeries,
+                          public apitest::XUniqueCellFormatRangesSupplier, public apitest::XSubTotalCalculatable
 {
 public:
     ScTableSheetObj();
@@ -34,6 +38,7 @@ public:
     virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
 
@@ -56,6 +61,10 @@ public:
 
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
+
+    // XSubTotalCalculatable
+    CPPUNIT_TEST(testCreateSubTotalDescriptor);
+    CPPUNIT_TEST(testApplyRemoveSubTotals);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -86,6 +95,21 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    return xSheet;
+}
+
+uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
+{
+    OUString aFileURL;
+    createFileURL("ScTableSheetObj.ods", aFileURL);
+    if(!mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
 
     return xSheet;
 }
