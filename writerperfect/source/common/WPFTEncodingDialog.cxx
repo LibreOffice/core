@@ -104,7 +104,7 @@ void selectEncoding(ListBox *box, const OUString &encoding)
 
 OUString getEncoding(ListBox const *box)
 {
-    sal_uIntPtr pos = reinterpret_cast<sal_uIntPtr>(box->GetSelectEntryData());
+    sal_uIntPtr pos = reinterpret_cast<sal_uIntPtr>(box->GetSelectedEntryData());
     if (pos>=numEncodings)
         return OUString();
     return s_encodings[pos].first;

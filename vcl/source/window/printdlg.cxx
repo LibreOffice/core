@@ -1364,7 +1364,7 @@ Size const & PrintDialog::getJobPageSize()
 
 void PrintDialog::updateNupFromPages()
 {
-    sal_IntPtr nPages = sal_IntPtr(maNUpPage.mpNupPagesBox->GetSelectEntryData());
+    sal_IntPtr nPages = sal_IntPtr(maNUpPage.mpNupPagesBox->GetSelectedEntryData());
     int nRows   = int(maNUpPage.mpNupRowsEdt->GetValue());
     int nCols   = int(maNUpPage.mpNupColEdt->GetValue());
     long nPageMargin  = maNUpPage.mpPageMarginEdt->Denormalize(maNUpPage.mpPageMarginEdt->GetValue( FUNIT_100TH_MM ));

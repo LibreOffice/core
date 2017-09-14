@@ -1554,7 +1554,7 @@ void CustomPropertiesWindow::dispose()
 IMPL_LINK(CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void)
 {
     CustomPropertiesTypeBox* pBox = static_cast<CustomPropertiesTypeBox*>(&rListBox);
-    long nType = reinterpret_cast<long>( pBox->GetSelectEntryData() );
+    long nType = reinterpret_cast<long>( pBox->GetSelectedEntryData() );
     CustomPropertyLine* pLine = pBox->GetLine();
     pLine->m_aValueEdit->Show( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
     pLine->m_aDateField->Show( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
@@ -1626,7 +1626,7 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
     bool bIsValid = true;
     pLine->m_bTypeLostFocus = false;
     long nType = reinterpret_cast<long>(
-                     pLine->m_aTypeBox->GetSelectEntryData() );
+                     pLine->m_aTypeBox->GetSelectedEntryData() );
     OUString sValue = pLine->m_aValueEdit->GetText();
     if ( sValue.isEmpty() )
         return true;
@@ -1889,7 +1889,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
         {
             aPropertiesSeq[i].Name = sPropertyName;
             long nType = reinterpret_cast<long>(
-                            pLine->m_aTypeBox->GetSelectEntryData() );
+                            pLine->m_aTypeBox->GetSelectedEntryData() );
             if ( CUSTOM_TYPE_NUMBER == nType )
             {
                 double nValue = 0;

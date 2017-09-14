@@ -174,7 +174,7 @@ public:
 
     void                SetEntryData( sal_Int32  nPos, void* pNewData );
     void*               GetEntryData( sal_Int32  nPos ) const;
-    void*               GetSelectEntryData() const { return GetEntryData(GetSelectedEntryPos()); }
+    void*               GetSelectedEntryData() const { return GetEntryData(GetSelectedEntryPos()); }
 
     /** this methods stores a combination of flags from the
         ListBoxEntryFlags::* defines at the given entry.
