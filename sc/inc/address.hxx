@@ -652,6 +652,25 @@ public:
     inline size_t hashStartColumn() const;
 };
 
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScRange& rRange)
+{
+    stream << rRange.aStart;
+    if (rRange.aEnd != rRange.aStart)
+    {
+        stream << ":";
+        if (rRange.aEnd.Tab() != rRange.aStart.Tab())
+            stream << rRange.aEnd;
+        else
+            stream <<
+                "R" << rRange.aEnd.Row()+1 <<
+                "C" << rRange.aEnd.Col()+1;
+    }
+
+    return stream;
+}
+
 inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                               SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const
 {
