@@ -334,7 +334,7 @@ void SvxRubyDialog::Activate()
         if (xRubySel.is())
         {
             Reference< XModel > xModel = m_pImpl->GetModel();
-            const OUString sCharStyleSelect = m_pCharStyleLB->GetSelectEntry();
+            const OUString sCharStyleSelect = m_pCharStyleLB->GetSelectedEntry();
             ClearCharStyleList();
             Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
             if (xSupplier.is())

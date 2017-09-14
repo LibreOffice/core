@@ -586,7 +586,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
         if( nPos == 0 )
             pItem.reset(new XLineStartItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
-            pItem.reset(new XLineStartItem( mpLBStart->GetSelectEntry(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+            pItem.reset(new XLineStartItem( mpLBStart->GetSelectedEntry(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
         setLineStartStyle(pItem.get());
     }
 }
@@ -600,7 +600,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
         if( nPos == 0 )
             pItem.reset(new XLineEndItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
-            pItem.reset(new XLineEndItem( mpLBEnd->GetSelectEntry(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+            pItem.reset(new XLineEndItem( mpLBEnd->GetSelectedEntry(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
         setLineEndStyle(pItem.get());
     }
 }

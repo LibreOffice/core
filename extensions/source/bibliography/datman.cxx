@@ -437,7 +437,7 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)
         BibConfig* pConfig = BibModul::GetConfig();
         for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            OUString sSel = aListBoxes[nEntry]->GetSelectEntry();
+            OUString sSel = aListBoxes[nEntry]->GetSelectedEntry();
             if(sSel != sNone)
             {
                 aNew.aColumnPairs[nWriteIndex].sRealColumnName = sSel;
@@ -519,7 +519,7 @@ void DBChangeDialog_Impl::dispose()
 
 OUString  DBChangeDialog_Impl::GetCurrentURL()const
 {
-    return m_pSelectionLB->GetSelectEntry();
+    return m_pSelectionLB->GetSelectedEntry();
 }
 
 // XDispatchProvider

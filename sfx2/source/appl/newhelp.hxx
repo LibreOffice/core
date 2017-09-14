@@ -69,7 +69,7 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { SetDoubleClickHdl( rLink ); }
-    OUString        GetSelectEntry() const;
+    OUString        GetSelectedEntry() const;
 };
 
 // class HelpTabPage_Impl ------------------------------------------------
@@ -106,7 +106,7 @@ public:
     virtual Control*    GetLastFocusControl() override;
 
     void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
-    OUString GetSelectEntry() const { return m_pContentBox->GetSelectEntry(); }
+    OUString GetSelectedEntry() const { return m_pContentBox->GetSelectedEntry(); }
     void     SetFocusOnBox() { m_pContentBox->GrabFocus(); }
 };
 
@@ -156,7 +156,7 @@ public:
     void                SetDoubleClickHdl( const Link<ComboBox&,void>& rLink );
     void                SetFactory( const OUString& rFactory );
     const OUString&     GetFactory() const { return sFactory; }
-    OUString            GetSelectEntry() const;
+    OUString            GetSelectedEntry() const;
     void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
     bool         HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
 
@@ -233,7 +233,7 @@ public:
 
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
     void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
-    OUString            GetSelectEntry() const;
+    OUString            GetSelectedEntry() const;
     void                ClearPage();
     void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
     bool         HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
@@ -274,7 +274,7 @@ public:
     virtual Control*    GetLastFocusControl() override;
 
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
-    OUString            GetSelectEntry() const;
+    OUString            GetSelectedEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     void                SetFocusOnBox() { m_pBookmarksBox->GrabFocus(); }
 };
@@ -338,10 +338,10 @@ public:
     void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
     OUString     GetFactory() const { return pIPage->GetFactory(); }
-    OUString            GetSelectEntry() const;
+    OUString            GetSelectedEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     bool                IsValidFactory( const OUString& _rFactory );
-    OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectEntry(); }
+    OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectedEntry(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
     bool                HasFocusOnEdit() const;

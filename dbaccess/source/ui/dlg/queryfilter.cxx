@@ -213,7 +213,7 @@ void DlgFilterCrit::dispose()
     ModalDialog::dispose();
 }
 
-#define LbText(x)       ((x).GetSelectEntry())
+#define LbText(x)       ((x).GetSelectedEntry())
 #define LbPos(x)        ((x).GetSelectEntryPos())
 
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const
@@ -316,7 +316,7 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
     try
     {
         OUString sTableName;
-        _rFilter.Name = _rField.GetSelectEntry();
+        _rFilter.Name = _rField.GetSelectedEntry();
         Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
         if ( xColumn.is() )
         {
@@ -361,7 +361,7 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
     {
     }
 
-    _rFilter.Handle = GetOSQLPredicateType( _rComp.GetSelectEntry() );
+    _rFilter.Handle = GetOSQLPredicateType( _rComp.GetSelectedEntry() );
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
         OUString sPredicateValue;
@@ -436,15 +436,15 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
     OUString sField;
     if ( &_rValueInput == m_pET_WHEREVALUE1 )
     {
-        sField = m_pLB_WHEREFIELD1->GetSelectEntry();
+        sField = m_pLB_WHEREFIELD1->GetSelectedEntry();
     }
     else if ( &_rValueInput == m_pET_WHEREVALUE2 )
     {
-        sField = m_pLB_WHEREFIELD2->GetSelectEntry();
+        sField = m_pLB_WHEREFIELD2->GetSelectedEntry();
     }
     else if ( &_rValueInput == m_pET_WHEREVALUE3 )
     {
-        sField = m_pLB_WHEREFIELD3->GetSelectEntry();
+        sField = m_pLB_WHEREFIELD3->GetSelectedEntry();
     }
     else {
         OSL_FAIL( "DlgFilterCrit::getMatchingColumn: invalid event source!" );

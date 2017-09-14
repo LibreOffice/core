@@ -60,7 +60,7 @@ public:
     void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
 
     Color GetSelectEntryColor() const { return m_aSelectedColor.first; }
-    NamedColor GetSelectEntry() const { return m_aSelectedColor; }
+    NamedColor GetSelectedEntry() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);

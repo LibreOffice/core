@@ -1455,7 +1455,7 @@ sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox const &rAlignLB)
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
-            OUString sSelEntry(rAlignLB.GetSelectEntry());
+            OUString sSelEntry(rAlignLB.GetSelectedEntry());
 
             for (std::size_t i = 0; i < nMapCount; i++)
             {
@@ -1672,7 +1672,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
     {
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
-            OUString sOldEntry(rLB.GetSelectEntry());
+            OUString sOldEntry(rLB.GetSelectedEntry());
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
             for (std::size_t _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
@@ -1806,7 +1806,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                                       ListBox &_rLB)
 {
     OUString sSelEntry, sOldEntry;
-    sOldEntry = _rLB.GetSelectEntry();
+    sOldEntry = _rLB.GetSelectedEntry();
 
     _rLB.Clear();
 

@@ -289,7 +289,7 @@ void SwTitlePageDlg::dispose()
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, Button*, void)
 {
     SwView& rView = mpSh->GetView();
-    rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), "page", *mpSh);
+    rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectedEntry(), "page", *mpSh);
     rView.InvalidateRulerPos();
 }
 

@@ -199,7 +199,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
     {
         OUString aString = m_pEdtName->GetText();
 
-        if( aString != m_pLbLineEnds->GetSelectEntry() )
+        if( aString != m_pLbLineEnds->GetSelectedEntry() )
         {
             ScopedVclPtrInstance<MessageDialog> aQueryBox( GetParentDialog()
                                                            ,"AskChangeLineEndDialog"
@@ -245,7 +245,7 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 
         const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
 
-        m_pEdtName->SetText( m_pLbLineEnds->GetSelectEntry() );
+        m_pEdtName->SetText( m_pLbLineEnds->GetSelectedEntry() );
 
         rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, void)
 
         const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
 
-        m_pEdtName->SetText( m_pLbLineEnds->GetSelectEntry() );
+        m_pEdtName->SetText( m_pLbLineEnds->GetSelectedEntry() );
 
         rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );

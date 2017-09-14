@@ -335,22 +335,22 @@ IMPL_LINK_NOARG(SwLabPage, AddrHdl, Button*, void)
 
 IMPL_LINK( SwLabPage, DatabaseHdl, ListBox&, rListBox, void )
 {
-    sActDBName = m_pDatabaseLB->GetSelectEntry();
+    sActDBName = m_pDatabaseLB->GetSelectedEntry();
 
     WaitObject aObj( GetParentSwLabDlg() );
 
     if (&rListBox == m_pDatabaseLB)
         GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
 
-    GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectEntry());
+    GetDBManager()->GetColumnNames(m_pDBFieldLB, sActDBName, m_pTableLB->GetSelectedEntry());
 }
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl, Button*, void)
 {
-    OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
-                  m_pTableLB->GetSelectEntry() + "." +
+    OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
+                  m_pTableLB->GetSelectedEntry() + "." +
                   (m_pTableLB->GetSelectEntryData() == nullptr ? OUString("0") : OUString("1")) + "." +
-                  m_pDBFieldLB->GetSelectEntry() + ">");
+                  m_pDBFieldLB->GetSelectedEntry() + ">");
     m_pWritingEdit->ReplaceSelected(aStr);
     Selection aSel = m_pWritingEdit->GetSelection();
     m_pWritingEdit->GrabFocus();
@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
     m_pHiddenSortTypeBox->Clear();
     GetParentSwLabDlg()->TypeIds().clear();
 
-    const OUString aMake = m_pMakeBox->GetSelectEntry();
+    const OUString aMake = m_pMakeBox->GetSelectedEntry();
     GetParentSwLabDlg()->ReplaceGroup( aMake );
     aItem.m_aLstMake = aMake;
 
@@ -418,7 +418,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
 IMPL_LINK_NOARG(SwLabPage, TypeHdl, ListBox&, void)
 {
     DisplayFormat();
-    aItem.m_aType = m_pTypeBox->GetSelectEntry();
+    aItem.m_aType = m_pTypeBox->GetSelectedEntry();
 }
 
 void SwLabPage::DisplayFormat()
@@ -448,7 +448,7 @@ void SwLabPage::DisplayFormat()
 
 SwLabRec* SwLabPage::GetSelectedEntryPos()
 {
-    OUString sSelEntry(m_pTypeBox->GetSelectEntry());
+    OUString sSelEntry(m_pTypeBox->GetSelectedEntry());
 
     return GetParentSwLabDlg()->GetRecord(sSelEntry, m_pContButton->IsChecked());
 }
@@ -498,15 +498,15 @@ void SwLabPage::FillItem(SwLabItem& rItem)
     rItem.m_bAddr    = m_pAddrBox->IsChecked();
     rItem.m_aWriting = m_pWritingEdit->GetText();
     rItem.m_bCont    = m_pContButton->IsChecked();
-    rItem.m_aMake    = m_pMakeBox->GetSelectEntry();
-    rItem.m_aType    = m_pTypeBox->GetSelectEntry();
+    rItem.m_aMake    = m_pMakeBox->GetSelectedEntry();
+    rItem.m_aType    = m_pTypeBox->GetSelectedEntry();
     rItem.m_sDBName  = sActDBName;
 
     SwLabRec* pRec = GetSelectedEntryPos();
     pRec->FillItem( rItem );
 
-    rItem.m_aLstMake = m_pMakeBox->GetSelectEntry();
-    rItem.m_aLstType = m_pTypeBox->GetSelectEntry();
+    rItem.m_aLstMake = m_pMakeBox->GetSelectedEntry();
+    rItem.m_aLstType = m_pTypeBox->GetSelectedEntry();
 }
 
 bool SwLabPage::FillItemSet(SfxItemSet* rSet)

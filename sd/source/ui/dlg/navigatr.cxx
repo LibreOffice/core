@@ -315,7 +315,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
         // if it is the active window, we jump to the page
         if( pInfo && pInfo->IsActive() )
         {
-            OUString aStr( maTlbObjects->GetSelectEntry() );
+            OUString aStr( maTlbObjects->GetSelectedEntry() );
 
             if( !aStr.isEmpty() )
             {
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
 {
-    OUString aStrLb = maLbDocs->GetSelectEntry();
+    OUString aStrLb = maLbDocs->GetSelectedEntry();
     long   nPos = maLbDocs->GetSelectEntryPos();
     bool   bFound = false;
     ::sd::DrawDocShell* pDocShell = nullptr;

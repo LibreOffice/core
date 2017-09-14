@@ -359,7 +359,7 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
     else if (rIdent == "delete")
     {
         if( ScopedVclPtrInstance<MessageDialog>(nullptr, "QueryDeleteThemeDialog","svx/ui/querydeletethemedialog.ui")->Execute() == RET_YES )
-            mpGallery->RemoveTheme( mpThemes->GetSelectEntry() );
+            mpGallery->RemoveTheme( mpThemes->GetSelectedEntry() );
     }
     else if (rIdent == "rename")
     {

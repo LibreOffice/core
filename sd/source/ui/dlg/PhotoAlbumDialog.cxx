@@ -574,7 +574,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, Button*, void)
     const sal_Int32 nActPos = pImagesLst->GetSelectEntryPos();
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
     {
-        OUString sActEntry( pImagesLst->GetSelectEntry() );
+        OUString sActEntry( pImagesLst->GetSelectedEntry() );
         OUString* pActData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
         OUString sAct(*pActData);
 

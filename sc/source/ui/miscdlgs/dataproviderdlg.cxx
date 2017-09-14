@@ -88,8 +88,8 @@ IMPL_LINK_NOARG(DataProviderDlg, SelectHdl, ListBox&, void)
 void DataProviderDlg::UpdateEnable()
 {
     bool bEmptyEntry = m_pCbUrl->GetURL().isEmpty() ||
-            m_pCBData->GetSelectEntry().isEmpty() ||
-            m_pCBProvider->GetSelectEntry().isEmpty();
+            m_pCBData->GetSelectedEntry().isEmpty() ||
+            m_pCBProvider->GetSelectedEntry().isEmpty();
     m_pBtnOk->Enable(!bEmptyEntry);
     setOptimalLayoutSize();
 }
@@ -117,11 +117,11 @@ void DataProviderDlg::StartImport()
     if (aURL.isEmpty())
         return;
 
-    OUString maDBDataName = m_pCBData->GetSelectEntry();
+    OUString maDBDataName = m_pCBData->GetSelectedEntry();
     if (maDBDataName.isEmpty())
         return;
 
-    OUString aProvider = m_pCBProvider->GetSelectEntry();
+    OUString aProvider = m_pCBProvider->GetSelectedEntry();
     if (aProvider.isEmpty())
         return;
 

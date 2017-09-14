@@ -197,7 +197,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
     // char styles
-    OUString sCharFormatName(m_pCharStyleLB->GetSelectEntry());
+    OUString sCharFormatName(m_pCharStyleLB->GetSelectedEntry());
     SwCharFormat *pCharFormat = pSh->FindCharFormatByName(sCharFormatName);
 
     if (!pCharFormat)

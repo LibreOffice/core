@@ -206,7 +206,7 @@ public:
     bool                    IsEqualToDoc( const SdDrawDocument* pInDoc );
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );
-    OUString                GetSelectEntry();
+    OUString                GetSelectedEntry();
 
     //Mark Current Entry
     void                    SetSdNavigatorWinFlag(bool isInSdNavigatorWin){bisInSdNavigatorWin =isInSdNavigatorWin;};

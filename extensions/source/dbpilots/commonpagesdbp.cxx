@@ -178,10 +178,10 @@ namespace dbp
             {
                 xOldConn = getFormConnection();
 
-                OUString sDataSource = m_pDatasource->GetSelectEntry();
+                OUString sDataSource = m_pDatasource->GetSelectedEntry();
                 rContext.xForm->setPropertyValue("DataSourceName", makeAny( sDataSource ) );
             }
-            OUString sCommand = m_pTable->GetSelectEntry();
+            OUString sCommand = m_pTable->GetSelectedEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_pTable->GetSelectEntryData() );
 
             rContext.xForm->setPropertyValue("Command", makeAny( sCommand ) );
@@ -278,7 +278,7 @@ namespace dbp
             // connect to the data source
             try
             {
-                OUString sCurrentDatasource = m_pDatasource->GetSelectEntry();
+                OUString sCurrentDatasource = m_pDatasource->GetSelectedEntry();
                 if (!sCurrentDatasource.isEmpty())
                 {
                     // obtain the DS object
@@ -421,7 +421,7 @@ namespace dbp
 
     void OMaybeListSelectionPage::implCommit(OUString& _rSelection)
     {
-        _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectEntry() : OUString();
+        _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectedEntry() : OUString();
     }
 
 

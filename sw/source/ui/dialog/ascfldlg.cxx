@@ -269,7 +269,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     LanguageType nLng = LANGUAGE_SYSTEM;
     if( m_pFontLB->IsVisible() )
     {
-        sFont = m_pFontLB->GetSelectEntry();
+        sFont = m_pFontLB->GetSelectedEntry();
         nLng = m_pLanguageLB->GetSelectLanguage();
     }
 

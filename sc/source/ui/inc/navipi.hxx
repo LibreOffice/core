@@ -74,7 +74,7 @@ private:
     typedef ::std::vector< ScenarioEntry > ScenarioList;
 
 private:
-    const ScenarioEntry* GetSelectedEntry() const;
+    const ScenarioEntry* GetSelectedScenarioEntry() const;
 
     void                ExecuteScenarioSlot( sal_uInt16 nSlotId );
     void                SelectScenario();

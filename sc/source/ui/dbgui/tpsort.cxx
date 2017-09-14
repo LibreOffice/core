@@ -441,7 +441,7 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
 IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
 {
-    OUString aSelEntry = rLb.GetSelectEntry();
+    OUString aSelEntry = rLb.GetSelectedEntry();
     ScSortKeyItems::iterator pIter;
 
     // If last listbox is enabled add one item

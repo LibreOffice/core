@@ -98,7 +98,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
 
 void ScScenarioListBox::Select()
 {
-    if( const ScenarioEntry* pEntry = GetSelectedEntry() )
+    if( const ScenarioEntry* pEntry = GetSelectedScenarioEntry() )
         mrParent.SetComment( pEntry->maComment );
 }
 
@@ -131,7 +131,7 @@ bool ScScenarioListBox::EventNotify( NotifyEvent& rNEvt )
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt && pCEvt->GetCommand() == CommandEventId::ContextMenu )
         {
-            if( const ScenarioEntry* pEntry = GetSelectedEntry() )
+            if( const ScenarioEntry* pEntry = GetSelectedScenarioEntry() )
             {
                 if( !pEntry->mbProtected )
                 {
@@ -152,7 +152,7 @@ bool ScScenarioListBox::EventNotify( NotifyEvent& rNEvt )
     return bHandled || ListBox::EventNotify(rNEvt);
 }
 
-const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedEntry() const
+const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedScenarioEntry() const
 {
     size_t nPos = GetSelectEntryPos();
     return (nPos < maEntries.size()) ? &maEntries[ nPos ] : nullptr;
@@ -162,7 +162,7 @@ void ScScenarioListBox::ExecuteScenarioSlot( sal_uInt16 nSlotId )
 {
     if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
     {
-        SfxStringItem aStringItem( nSlotId, GetSelectEntry() );
+        SfxStringItem aStringItem( nSlotId, GetSelectedEntry() );
         pViewFrm->GetDispatcher()->ExecuteList(nSlotId,
                 SfxCallMode::SLOT | SfxCallMode::RECORD, { &aStringItem } );
     }

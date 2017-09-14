@@ -39,7 +39,7 @@ public:
     virtual ~ScSelEntryDlg() override;
     virtual void dispose() override;
 
-    OUString GetSelectEntry() const;
+    OUString GetSelectedEntry() const;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_LBSELDLG_HXX

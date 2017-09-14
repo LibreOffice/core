@@ -239,9 +239,9 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
-    NamedColor aColor = m_pLbStartColor->GetSelectEntry();
+    NamedColor aColor = m_pLbStartColor->GetSelectedEntry();
     rOutAttrs.Put(XColorItem(ATTR_COPY_START_COLOR, aColor.second, aColor.first));
-    aColor = m_pLbEndColor->GetSelectEntry();
+    aColor = m_pLbEndColor->GetSelectedEntry();
     rOutAttrs.Put(XColorItem(ATTR_COPY_END_COLOR, aColor.second, aColor.first));
 }
 

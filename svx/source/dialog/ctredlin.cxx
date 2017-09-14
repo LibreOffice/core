@@ -728,7 +728,7 @@ void SvxTPFilter::InsertAuthor( const OUString& rString)
 
 OUString SvxTPFilter::GetSelectedAuthor() const
 {
-    return m_pLbAuthor->GetSelectEntry();
+    return m_pLbAuthor->GetSelectedEntry();
 }
 
 void SvxTPFilter::SelectedAuthorPos(sal_Int32 nPos)

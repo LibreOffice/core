@@ -280,7 +280,7 @@ OUString OWizTypeSelect::GetTitle() const
 
 IMPL_LINK_NOARG( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )
 {
-    OUString aColumnName( m_pColumnNames->GetSelectEntry() );
+    OUString aColumnName( m_pColumnNames->GetSelectedEntry() );
 
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_pColumnNames->GetEntryData(m_pColumnNames->GetEntryPos(aColumnName)));
     if(pField)
@@ -325,7 +325,7 @@ void OWizTypeSelect::ActivatePage( )
 
 bool OWizTypeSelect::LeavePage()
 {
-    OUString aColumnName( m_pColumnNames->GetSelectEntry() );
+    OUString aColumnName( m_pColumnNames->GetSelectedEntry() );
 
     bool bDuplicateName = false;
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_pColumnNames->GetEntryData(m_pColumnNames->GetEntryPos(aColumnName)));

@@ -173,7 +173,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
         DBG_ASSERT( pBox, "Window not found!" );
 
-        OUString aString( pBox->GetSelectEntry() );
+        OUString aString( pBox->GetSelectedEntry() );
         pBox->Clear();
         pBox->InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
         pBox->InsertEntry( SvxResId(RID_SVXSTR_SOLID) );

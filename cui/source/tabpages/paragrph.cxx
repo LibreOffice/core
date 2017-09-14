@@ -1427,7 +1427,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     {
         if ( eState == TRISTATE_TRUE )
         {
-            sPage = m_pApplyCollBox->GetSelectEntry();
+            sPage = m_pApplyCollBox->GetSelectedEntry();
             bIsPageModel = !sPage.isEmpty();
         }
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_MODEL );

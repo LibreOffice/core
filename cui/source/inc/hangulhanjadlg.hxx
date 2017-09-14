@@ -67,7 +67,7 @@ namespace svx
         sal_uInt16 GetEntryCount() const;
 
         OUString GetEntry( sal_uInt16 nPos ) const;
-        OUString GetSelectEntry() const;
+        OUString GetSelectedEntry() const;
 
         virtual void StateChanged( StateChangedType nStateChange ) override;
 
