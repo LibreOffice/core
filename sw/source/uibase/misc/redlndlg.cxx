@@ -911,7 +911,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
     SvxTPFilter *pFilterTP = m_aTabPagesCTRL->GetFilterPage();
 
     if (pFilterTP->IsAction())
-        m_sFilterAction = pFilterTP->GetLbAction()->GetSelectEntry();
+        m_sFilterAction = pFilterTP->GetLbAction()->GetSelectedEntry();
     else
         m_sFilterAction = aEmptyOUStr;
 

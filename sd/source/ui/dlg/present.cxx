@@ -294,7 +294,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 {
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALL, aRbtAll->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CUSTOMSHOW, aRbtCustomshow->IsChecked() ) );
-    rAttr.Put( SfxStringItem ( ATTR_PRESENT_DIANAME, aLbDias->GetSelectEntry() ) );
+    rAttr.Put( SfxStringItem ( ATTR_PRESENT_DIANAME, aLbDias->GetSelectedEntry() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MANUEL, aCbxManuel->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MOUSE, aCbxMousepointer->IsChecked() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_PEN, aCbxPen->IsChecked() ) );

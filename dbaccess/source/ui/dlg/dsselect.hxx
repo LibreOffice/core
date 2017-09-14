@@ -55,7 +55,7 @@ public:
     virtual ~ODatasourceSelectDialog() override;
     virtual void dispose() override;
     OUString GetSelected() const {
-        return m_pDatasource->GetSelectEntry();
+        return m_pDatasource->GetSelectedEntry();
     }
     void     Select( const OUString& _rEntry ) {
         m_pDatasource->SelectEntry(_rEntry);

@@ -228,7 +228,7 @@ OUString DlgOrderCrit::GetOrderList( ) const
             if(!sOrder.isEmpty())
                 sOrder += ",";
 
-            OUString sName = m_aColumnList[i]->GetSelectEntry();
+            OUString sName = m_aColumnList[i]->GetSelectedEntry();
             sOrder += ::dbtools::quoteName(sQuote,sName);
             if(m_aValueList[i]->GetSelectEntryPos())
                 sOrder += " DESC ";

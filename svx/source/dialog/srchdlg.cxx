@@ -1277,8 +1277,8 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
     {
         if ( m_pLayoutBtn->IsChecked() && !bInclusive )
         {
-            pSearchItem->SetSearchString ( m_pSearchTmplLB->GetSelectEntry() );
-            pSearchItem->SetReplaceString( m_pReplaceTmplLB->GetSelectEntry() );
+            pSearchItem->SetSearchString ( m_pSearchTmplLB->GetSelectedEntry() );
+            pSearchItem->SetReplaceString( m_pReplaceTmplLB->GetSelectedEntry() );
         }
         else
         {
@@ -1615,8 +1615,8 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
 {
-    OUString aOldSrch( m_pSearchTmplLB->GetSelectEntry() );
-    OUString aOldRepl( m_pReplaceTmplLB->GetSelectEntry() );
+    OUString aOldSrch( m_pSearchTmplLB->GetSelectedEntry() );
+    OUString aOldRepl( m_pReplaceTmplLB->GetSelectedEntry() );
     m_pSearchTmplLB->Clear();
     m_pReplaceTmplLB->Clear();
     rPool.SetSearchMask( pSearchItem->GetFamily() );
@@ -2259,8 +2259,8 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     if ( m_pLayoutBtn->IsChecked() )
     {
-        pSearchItem->SetSearchString ( m_pSearchTmplLB->GetSelectEntry() );
-        pSearchItem->SetReplaceString( m_pReplaceTmplLB->GetSelectEntry() );
+        pSearchItem->SetSearchString ( m_pSearchTmplLB->GetSelectedEntry() );
+        pSearchItem->SetReplaceString( m_pReplaceTmplLB->GetSelectedEntry() );
     }
     else
     {

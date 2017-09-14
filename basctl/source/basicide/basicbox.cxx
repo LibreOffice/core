@@ -167,7 +167,7 @@ void LibBox::Update( const SfxStringItem* pItem )
             aCurText = IDEResId(RID_STR_ALL);
     }
 
-    if ( GetSelectEntry() != aCurText )
+    if ( GetSelectedEntry() != aCurText )
         SelectEntry( aCurText );
 }
 
@@ -191,7 +191,7 @@ void LibBox::FillBox()
     SetUpdateMode(false);
     bIgnoreSelect = true;
 
-    aCurText = GetSelectEntry();
+    aCurText = GetSelectedEntry();
 
     SelectEntryPos( 0 );
     ClearBox();
@@ -217,7 +217,7 @@ void LibBox::FillBox()
     if ( !GetSelectEntryCount() )
     {
         SelectEntryPos( GetEntryCount() );
-        aCurText = GetSelectEntry();
+        aCurText = GetSelectedEntry();
     }
     bIgnoreSelect = false;
 }
@@ -387,7 +387,7 @@ void LanguageBox::FillBox()
 {
     SetUpdateMode(false);
     m_bIgnoreSelect = true;
-    m_sCurrentText = GetSelectEntry();
+    m_sCurrentText = GetSelectedEntry();
     ClearBox();
 
     std::shared_ptr<LocalizationMgr> pCurMgr(GetShell()->GetCurLocalizationMgr());
@@ -421,7 +421,7 @@ void LanguageBox::FillBox()
         if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
         {
             SelectEntryPos( nSelPos );
-            m_sCurrentText = GetSelectEntry();
+            m_sCurrentText = GetSelectedEntry();
         }
     }
     else
@@ -501,7 +501,7 @@ void LanguageBox::Update( const SfxStringItem* pItem )
     if ( pItem && !pItem->GetValue().isEmpty() )
     {
         m_sCurrentText = pItem->GetValue();
-        if ( GetSelectEntry() != m_sCurrentText )
+        if ( GetSelectedEntry() != m_sCurrentText )
             SelectEntry( m_sCurrentText );
     }
 }

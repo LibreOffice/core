@@ -494,7 +494,7 @@ void ThemePanel::DoubleClickHdl()
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     if (pDocSh)
     {
-        OUString sEntryFonts = mpListBoxFonts->GetSelectEntry();
+        OUString sEntryFonts = mpListBoxFonts->GetSelectedEntry();
         sal_uInt32 nItemId = mpValueSetColors->GetSelectItemId();
         OUString sEntryColors = maColorSets.getColorSet(nItemId).getName();
 

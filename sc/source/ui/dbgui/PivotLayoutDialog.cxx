@@ -425,7 +425,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
 
     if (mpSourceRadioNamedRange->IsChecked())
     {
-        OUString aEntryString = mpSourceListBox->GetSelectEntry();
+        OUString aEntryString = mpSourceListBox->GetSelectedEntry();
         ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, mpDocument);
         if (!aSourceRange.IsValid() || aSourceSheet.GetSourceRange() == aSourceRange)
             return;
@@ -610,7 +610,7 @@ bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNe
 
     if (mpDestinationRadioNamedRange->IsChecked())
     {
-        OUString aName = mpDestinationListBox->GetSelectEntry();
+        OUString aName = mpDestinationListBox->GetSelectedEntry();
         aDestinationRange = lclGetRangeForNamedRange(aName, mpDocument);
         if (!aDestinationRange.IsValid())
             return false;

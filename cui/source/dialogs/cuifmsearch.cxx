@@ -421,7 +421,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 
     sal_Int32 nCurrentContext = m_plbForm->GetSelectEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
-        m_arrContextFields[nCurrentContext] = m_plbField->GetSelectEntry();
+        m_arrContextFields[nCurrentContext] = m_plbField->GetSelectedEntry();
 }
 
 IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
@@ -850,7 +850,7 @@ void FmSearchDialog::SaveParams() const
     for (sal_Int32 i=0; i<m_pcmbSearchText->GetEntryCount(); ++i, ++pHistory)
         *pHistory = m_pcmbSearchText->GetEntry(i);
 
-    aCurrentSettings.sSingleSearchField         = m_plbField->GetSelectEntry();
+    aCurrentSettings.sSingleSearchField         = m_plbField->GetSelectedEntry();
     aCurrentSettings.bAllFields                 = m_prbAllFields->IsChecked();
     aCurrentSettings.nPosition                  = m_pSearchEngine->GetPosition();
     aCurrentSettings.bUseFormatter              = m_pSearchEngine->GetFormatterUsing();

@@ -179,7 +179,7 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
 
 IMPL_STATIC_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
 {
-    OUString aEntry = rCategory.GetSelectEntry();
+    OUString aEntry = rCategory.GetSelectedEntry();
 
     OUString aType = getCategoryType();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({

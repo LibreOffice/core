@@ -466,9 +466,9 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn, void )
             //if it's not the 'no suggestions' entry
             if(sWrong == sCurrentErrorText &&
                     m_pSuggestionLB->IsEnabled() && m_pSuggestionLB->GetSelectEntryCount() > 0 &&
-                    m_sNoSuggestionsST != m_pSuggestionLB->GetSelectEntry())
+                    m_sNoSuggestionsST != m_pSuggestionLB->GetSelectedEntry())
             {
-                sCurrentErrorText = m_pSuggestionLB->GetSelectEntry();
+                sCurrentErrorText = m_pSuggestionLB->GetSelectedEntry();
             }
             if(sWrong != sCurrentErrorText)
             {
@@ -530,8 +530,8 @@ OUString SpellDialog::getReplacementString() const
 
     if(m_pSuggestionLB->IsEnabled() &&
             m_pSuggestionLB->GetSelectEntryCount()>0 &&
-            m_sNoSuggestionsST != m_pSuggestionLB->GetSelectEntry())
-        sReplacement = m_pSuggestionLB->GetSelectEntry();
+            m_sNoSuggestionsST != m_pSuggestionLB->GetSelectedEntry())
+        sReplacement = m_pSuggestionLB->GetSelectedEntry();
 
     return getDotReplacementString(sOrigString, sReplacement);
 }

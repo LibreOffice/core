@@ -451,7 +451,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
     {
         ScopedVclPtrInstance< MessageDialog > aBox(this, CuiResId( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VclMessageType::Question, VclButtonsType::YesNo);
         OUString sTxt(aBox->get_primary_text());
-        sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
+        sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectedEntry() );
         aBox->set_primary_text(sTxt);
 
         if ( aBox->Execute() == RET_YES )

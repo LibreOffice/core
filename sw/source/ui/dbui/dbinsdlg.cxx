@@ -490,7 +490,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
                             : *m_pLbTableCol )
                         : *m_pLbTextDbColumn;
 
-    SwInsDBColumn aSrch( rBox.GetSelectEntry() );
+    SwInsDBColumn aSrch( rBox.GetSelectedEntry() );
     SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
     bool bFromDB = m_pRbDbFormatFromDb == pButton;
@@ -591,7 +591,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
     {
         bChgEnable = false;
         // move data to Edit:
-        OUString aField( m_pLbTextDbColumn->GetSelectEntry() );
+        OUString aField( m_pLbTextDbColumn->GetSelectedEntry() );
         if( !aField.isEmpty() )
         {
             OUString aStr( m_pEdDbText->GetText() );
@@ -798,7 +798,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
                                     : m_pLbTextDbColumn.get() )
                             : &rBox;
 
-    SwInsDBColumn aSrch( pGetBox->GetSelectEntry() );
+    SwInsDBColumn aSrch( pGetBox->GetSelectedEntry() );
     SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
     if( &rBox == m_pLbDbFormatFromUsr )
@@ -1220,7 +1220,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             SwTextFormatColl* pColl = nullptr;
             {
-                const OUString sTmplNm( m_pLbDbParaColl->GetSelectEntry() );
+                const OUString sTmplNm( m_pLbDbParaColl->GetSelectedEntry() );
                 if( sNoTmpl != sTmplNm )
                 {
                     pColl = rSh.FindTextFormatCollByName( sTmplNm );
@@ -1592,7 +1592,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
     if (!sTmp.isEmpty())
         pValues[4].Value <<= sTmp;
 
-    if( sNoTmpl != (sTmp = m_pLbDbParaColl->GetSelectEntry()) )
+    if( sNoTmpl != (sTmp = m_pLbDbParaColl->GetSelectedEntry()) )
         pValues[5].Value <<= sTmp;
 
     if( pTAutoFormat )

@@ -1898,7 +1898,7 @@ namespace svxform
 
     void DataNavigatorWindow::SetPageModel()
     {
-        OUString sModel( m_pModelsBox->GetSelectEntry() );
+        OUString sModel( m_pModelsBox->GetSelectedEntry() );
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -1931,7 +1931,7 @@ namespace svxform
 
     void DataNavigatorWindow::InitPages()
     {
-        OUString sModel( m_pModelsBox->GetSelectEntry() );
+        OUString sModel( m_pModelsBox->GetSelectedEntry() );
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -2447,7 +2447,7 @@ namespace svxform
             return;
         }
 
-        OUString sDataType( m_pDataTypeLB->GetSelectEntry() );
+        OUString sDataType( m_pDataTypeLB->GetSelectedEntry() );
         m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, makeAny( sDataType ) );
 
         if ( bIsHandleBinding )
@@ -3183,17 +3183,17 @@ namespace svxform
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
                 sTemp = m_pActionED->GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, makeAny( sTemp ) );
-                sTemp = m_aMethodString.toAPI( m_pMethodLB->GetSelectEntry() );
+                sTemp = m_aMethodString.toAPI( m_pMethodLB->GetSelectedEntry() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
                 sTemp = m_pRefED->GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
-                OUString sEntry = m_pBindLB->GetSelectEntry();
+                OUString sEntry = m_pBindLB->GetSelectedEntry();
                 sal_Int32 nColonIdx = sEntry.indexOf(':');
                 if (nColonIdx != -1)
                     sEntry = sEntry.copy(0, nColonIdx);
                 sTemp = sEntry;
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
-                sTemp = m_aReplaceString.toAPI( m_pReplaceLB->GetSelectEntry() );
+                sTemp = m_aReplaceString.toAPI( m_pReplaceLB->GetSelectedEntry() );
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
             }
             catch ( Exception& )

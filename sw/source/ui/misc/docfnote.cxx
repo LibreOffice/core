@@ -365,15 +365,15 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     pInf->SetSuffix(m_pSuffixED->GetText().replaceAll("\\t", "\t"));
 
     pInf->SetCharFormat( lcl_GetCharFormat( pSh,
-                        m_pFootnoteCharTextTemplBox->GetSelectEntry() ) );
+                        m_pFootnoteCharTextTemplBox->GetSelectedEntry() ) );
     pInf->SetAnchorCharFormat( lcl_GetCharFormat( pSh,
-                        m_pFootnoteCharAnchorTemplBox->GetSelectEntry() ) );
+                        m_pFootnoteCharAnchorTemplBox->GetSelectedEntry() ) );
 
     // paragraph template
     sal_Int32 nPos = m_pParaTemplBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        const OUString aFormatName( m_pParaTemplBox->GetSelectEntry() );
+        const OUString aFormatName( m_pParaTemplBox->GetSelectedEntry() );
         SwTextFormatColl *pColl = pSh->GetParaStyle(aFormatName, SwWrtShell::GETSTYLE_CREATEANY);
         OSL_ENSURE(pColl, "paragraph style not found");
         pInf->SetFootnoteTextColl(*pColl);
@@ -381,7 +381,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 
     // page template
     pInf->ChgPageDesc( pSh->FindPageDescByName(
-                                m_pPageTemplBox->GetSelectEntry(), true ) );
+                                m_pPageTemplBox->GetSelectedEntry(), true ) );
 
     if ( bEndNote )
     {

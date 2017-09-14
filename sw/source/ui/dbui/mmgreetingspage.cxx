@@ -131,7 +131,7 @@ void    SwGreetingsHandler::UpdatePreview()
 
 IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void)
 {
-    const OUString sPreview(m_pFemaleLB->GetSelectEntry() + "\n" + m_pMaleLB->GetSelectEntry());
+    const OUString sPreview(m_pFemaleLB->GetSelectedEntry() + "\n" + m_pMaleLB->GetSelectedEntry());
     ScopedVclPtr<SwAssignFieldsDialog> pDlg(
             VclPtr<SwAssignFieldsDialog>::Create(pButton, m_rConfigItem, sPreview, false));
     if(RET_OK == pDlg->Execute())
@@ -163,7 +163,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     if( !bNoValue )
     {
         const OUString sFemaleValue = m_pFemaleFieldCB->GetText();
-        const OUString sFemaleColumn = m_pFemaleColumnLB->GetSelectEntry();
+        const OUString sFemaleColumn = m_pFemaleColumnLB->GetSelectedEntry();
         Reference< sdbcx::XColumnsSupplier > xColsSupp( m_rConfigItem.GetResultSet(), UNO_QUERY);
         Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
         if(!sFemaleValue.isEmpty() && !sFemaleColumn.isEmpty() &&
@@ -200,8 +200,8 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         }
     }
 
-    OUString sPreview = bFemale ? m_pFemaleLB->GetSelectEntry() :
-        bNoValue ? m_pNeutralCB->GetText() : m_pMaleLB->GetSelectEntry();
+    OUString sPreview = bFemale ? m_pFemaleLB->GetSelectedEntry() :
+        bNoValue ? m_pNeutralCB->GetText() : m_pMaleLB->GetSelectedEntry();
 
     sPreview = SwAddressPreview::FillData(sPreview, m_rConfigItem);
     m_pPreviewWIN->SetAddress(sPreview);
@@ -342,7 +342,7 @@ bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason 
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
         if(aAssignment.getLength() <= MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER + 1);
-        aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectEntry();
+        aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectedEntry();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if (m_pFemaleFieldCB->IsValueChangedFromSaved())
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, Button*, void)
         if(aAssignment.getLength() < MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER);
         if( nPos > 0 )
-            aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectEntry();
+            aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectedEntry();
         else
             aAssignment[MM_PART_GENDER].clear();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );

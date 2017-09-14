@@ -254,24 +254,24 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
 
     if (&rListBox == m_pDatabaseLB)
     {
-        sActDBName = rListBox.GetSelectEntry();
+        sActDBName = rListBox.GetSelectedEntry();
         pSh->GetDBManager()->GetTableNames(m_pTableLB, sActDBName);
         sActDBName += OUStringLiteral1(DB_DELIM);
     }
     else
     {
-        sActDBName = comphelper::string::setToken(sActDBName, 1, DB_DELIM, m_pTableLB->GetSelectEntry());
+        sActDBName = comphelper::string::setToken(sActDBName, 1, DB_DELIM, m_pTableLB->GetSelectedEntry());
     }
-    pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectEntry(),
-                                       m_pTableLB->GetSelectEntry());
+    pSh->GetDBManager()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectedEntry(),
+                                       m_pTableLB->GetSelectedEntry());
 }
 
 IMPL_LINK_NOARG(SwEnvPage, FieldHdl, Button*, void)
 {
-    OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
-                  m_pTableLB->GetSelectEntry() + "." +
+    OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
+                  m_pTableLB->GetSelectedEntry() + "." +
                   OUString(m_pTableLB->GetSelectEntryData() == nullptr ? '0' : '1') + "." +
-                  m_pDBFieldLB->GetSelectEntry() + ">");
+                  m_pDBFieldLB->GetSelectedEntry() + ">");
     m_pAddrEdit->ReplaceSelected(aStr);
     Selection aSel = m_pAddrEdit->GetSelection();
     m_pAddrEdit->GrabFocus();

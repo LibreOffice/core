@@ -165,7 +165,7 @@ public:
     void                SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
 
     sal_Int32           GetSelectEntryCount() const;
-    OUString            GetSelectEntry( sal_Int32  nSelIndex = 0 ) const;
+    OUString            GetSelectedEntry( sal_Int32  nSelIndex = 0 ) const;
     sal_Int32           GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
 
     bool                IsEntrySelected(const OUString& rStr) const;

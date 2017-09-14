@@ -2213,7 +2213,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox&, void)
 {
     bAutomaticCharStyles = false;
     sal_Int32 nEntryPos = m_pCharFmtLB->GetSelectEntryPos();
-    OUString sEntry = m_pCharFmtLB->GetSelectEntry();
+    OUString sEntry = m_pCharFmtLB->GetSelectedEntry();
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {

@@ -319,7 +319,7 @@ OUString ScLinkedAreaDlg::GetSource()
     {
         if (i > 0)
             aBuf.append(';');
-        aBuf.append(m_pLbRanges->GetSelectEntry(i));
+        aBuf.append(m_pLbRanges->GetSelectedEntry(i));
     }
     return aBuf.makeStringAndClear();
 }

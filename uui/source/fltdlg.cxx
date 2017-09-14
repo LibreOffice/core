@@ -138,7 +138,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     {
         if( ModalDialog::Execute() == RET_OK )
         {
-            OUString sEntry = m_pLbFilters->GetSelectEntry();
+            OUString sEntry = m_pLbFilters->GetSelectedEntry();
             if( !sEntry.isEmpty() )
             {
                 int nPos = m_pLbFilters->GetSelectEntryPos();

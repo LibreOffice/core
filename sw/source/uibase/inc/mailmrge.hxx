@@ -131,7 +131,7 @@ public:
 
     bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
-    OUString GetColumnName() const { return m_pColumnLB->GetSelectEntry(); }
+    OUString GetColumnName() const { return m_pColumnLB->GetSelectedEntry(); }
     OUString GetTargetURL() const;
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}

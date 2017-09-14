@@ -324,7 +324,7 @@ void SdPageObjsTLB::Clear()
         maSelectionEntryText.clear();
         maTreeItem.clear();
         if (GetCurEntry())
-            maSelectionEntryText = GetSelectEntry();
+            maSelectionEntryText = GetSelectedEntry();
         SvTreeListEntry* pEntry = FirstChild(nullptr);
         SaveExpandedTreeItemState(pEntry, maTreeItem);
     }
@@ -420,7 +420,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
     OUString aSelection;
     if( GetSelectionCount() > 0 )
     {
-        aSelection = GetSelectEntry();
+        aSelection = GetSelectedEntry();
         Clear();
     }
 
@@ -697,7 +697,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 /**
  * @return selected string
  */
-OUString SdPageObjsTLB::GetSelectEntry()
+OUString SdPageObjsTLB::GetSelectedEntry()
 {
     return GetEntryText( GetCurEntry() );
 }
@@ -1006,9 +1006,9 @@ void SdPageObjsTLB::DoDrag()
         OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
         NavigatorDragType   eDragType = mpDropNavWin->GetNavigatorDragType();
 
-        aURL += "#" + GetSelectEntry();
+        aURL += "#" + GetSelectedEntry();
 
-        INetBookmark    aBookmark( aURL, GetSelectEntry() );
+        INetBookmark    aBookmark( aURL, GetSelectedEntry() );
         sal_Int8        nDNDActions = DND_ACTION_COPYMOVE;
 
         if( eDragType == NAVIGATOR_DRAGTYPE_LINK )

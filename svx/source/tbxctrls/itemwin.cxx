@@ -112,7 +112,7 @@ void SvxLineBox::Select()
                     // Notify cares!
                     SvxDashListItem aItem( *static_cast<const SvxDashListItem*>(
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
-                    XLineDashItem aLineDashItem( GetSelectEntry(),
+                    XLineDashItem aLineDashItem( GetSelectedEntry(),
                         aItem.GetDashList()->GetDash( nPos - 2 )->GetDash() );
 
                     Any a;

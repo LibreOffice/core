@@ -147,7 +147,7 @@ void SAL_CALL DropdownToolbarController::dispose()
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    OUString aSelectedText = m_pListBoxControl->GetSelectEntry();
+    OUString aSelectedText = m_pListBoxControl->GetSelectedEntry();
 
     // Add key modifier to argument list
     aArgs[0].Name = "KeyModifier";

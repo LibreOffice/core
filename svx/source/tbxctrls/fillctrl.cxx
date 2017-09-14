@@ -362,7 +362,7 @@ void SvxFillToolBoxControl::Update()
                         mpLbFillAttr->SelectEntry(aString);
 
                         // Check if the entry is not in the list
-                        if (mpLbFillAttr->GetSelectEntry() != aString)
+                        if (mpLbFillAttr->GetSelectedEntry() != aString)
                         {
                             sal_Int32 nCount = mpLbFillAttr->GetEntryCount();
                             OUString aTmpStr;
@@ -421,7 +421,7 @@ void SvxFillToolBoxControl::Update()
                         mpLbFillAttr->SelectEntry( aString );
 
                         // Check if the entry is not in the list
-                        if( mpLbFillAttr->GetSelectEntry() != aString )
+                        if( mpLbFillAttr->GetSelectedEntry() != aString )
                         {
                             const sal_Int32 nCount = mpLbFillAttr->GetEntryCount();
                             OUString aTmpStr;
@@ -480,7 +480,7 @@ void SvxFillToolBoxControl::Update()
                         mpLbFillAttr->SelectEntry(aString);
 
                         // Check if the entry is not in the list
-                        if (mpLbFillAttr->GetSelectEntry() != aString)
+                        if (mpLbFillAttr->GetSelectedEntry() != aString)
                         {
                             sal_Int32 nCount = mpLbFillAttr->GetEntryCount();
                             OUString aTmpStr;
@@ -676,7 +676,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                         if(mnLastPosHatch < aItem.GetHatchList()->Count())
                         {
                             const XHatch aHatch = aItem.GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
-                            const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(), aHatch);
+                            const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                             // #i122676# change FillStyle and Hatch in one call
                             SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
@@ -716,7 +716,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                         if(mnLastPosBitmap < aItem.GetBitmapList()->Count())
                         {
                             const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(mnLastPosBitmap);
-                            const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+                            const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXBitmapEntry->GetGraphicObject());
 
                             // #i122676# change FillStyle and Bitmap in one call
                             SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
@@ -782,7 +782,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                 if(nPos < aItem.GetGradientList()->Count())
                 {
                     const XGradient aGradient = aItem.GetGradientList()->GetGradient(nPos)->GetGradient();
-                    const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
+                    const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectedEntry(), aGradient);
 
                     // #i122676# Change FillStyle and Gradinet in one call
                     SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
@@ -815,7 +815,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                 if(nPos < aItem.GetHatchList()->Count())
                 {
                     const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
-                    const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
+                    const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
                     SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
@@ -848,7 +848,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
                 if(nPos < aItem.GetBitmapList()->Count())
                 {
                     const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
-                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
                     SfxViewFrame::Current()->GetDispatcher()->ExecuteList(

@@ -372,7 +372,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, Button*, void)
 {
     OUString aMessage = aStrDelMsg;
     aMessage += "\n\n";
-    aMessage += m_pLbFormat->GetSelectEntry();
+    aMessage += m_pLbFormat->GetSelectedEntry();
     aMessage += "\n";
 
     VclPtrInstance<MessBox> pBox( this, MessBoxStyle::OkCancel, 0,
@@ -409,7 +409,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, Button*, void)
     while( !bOk )
     {
         VclPtrInstance<SwStringInputDlg> pDlg( this, aStrRenameTitle,
-                                               m_pLbFormat->GetSelectEntry(),
+                                               m_pLbFormat->GetSelectedEntry(),
                                                OUString() );
         if( pDlg->Execute() == RET_OK )
         {

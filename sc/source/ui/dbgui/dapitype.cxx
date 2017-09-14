@@ -138,7 +138,7 @@ void ScDataPilotServiceDlg::dispose()
 
 OUString ScDataPilotServiceDlg::GetServiceName() const
 {
-    return m_pLbService->GetSelectEntry();
+    return m_pLbService->GetSelectedEntry();
 }
 
 OUString ScDataPilotServiceDlg::GetParSource() const

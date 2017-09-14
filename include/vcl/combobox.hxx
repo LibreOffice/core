@@ -143,7 +143,7 @@ public:
 
     sal_Int32       GetSelectEntryCount() const;
     sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
-    OUString        GetSelectEntry() const { return GetEntry( GetSelectEntryPos() ); }
+    OUString        GetSelectedEntry() const { return GetEntry( GetSelectEntryPos() ); }
     bool            IsEntryPosSelected( sal_Int32  nPos ) const;
     void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true );
     void            SetNoSelection();

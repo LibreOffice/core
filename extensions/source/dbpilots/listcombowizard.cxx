@@ -340,7 +340,7 @@ namespace dbp
             return false;
 
         OListComboSettings& rSettings = getSettings();
-        rSettings.sListContentTable = m_pSelectTable->GetSelectEntry();
+        rSettings.sListContentTable = m_pSelectTable->GetSelectedEntry();
         if (rSettings.sListContentTable.isEmpty() && (::svt::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
             return false;
@@ -404,7 +404,7 @@ namespace dbp
     IMPL_LINK_NOARG( OContentFieldSelection, OnFieldSelected, ListBox&, void )
     {
         updateDialogTravelUI();
-        m_pDisplayedField->SetText(m_pSelectTableField->GetSelectEntry());
+        m_pDisplayedField->SetText(m_pSelectTableField->GetSelectedEntry());
     }
 
 
@@ -413,7 +413,7 @@ namespace dbp
         if (!OLCPage::commitPage(_eReason))
             return false;
 
-        getSettings().sListContentField = m_pSelectTableField->GetSelectEntry();
+        getSettings().sListContentField = m_pSelectTableField->GetSelectedEntry();
 
         return true;
     }

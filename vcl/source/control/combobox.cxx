@@ -399,7 +399,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
         }
         else
         {
-            aText = m_pImplLB->GetEntryList()->GetSelectEntry( 0 );
+            aText = m_pImplLB->GetEntryList()->GetSelectedEntry( 0 );
         }
 
         m_pSubEdit->SetText( aText );

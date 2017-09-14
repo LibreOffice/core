@@ -186,7 +186,7 @@ void ScFunctionWin::SetDescription()
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        OUStringBuffer aBuf(aFuncList->GetSelectEntry());
+        OUStringBuffer aBuf(aFuncList->GetSelectedEntry());
         aBuf.append(":\n\n");
         aBuf.append(pDesc->GetParamList());
         aBuf.append("\n\n");
@@ -279,7 +279,7 @@ void ScFunctionWin::DoEnter()
 {
     OUString aFirstArgStr;
     OUString aArgStr;
-    OUString aString=aFuncList->GetSelectEntry();
+    OUString aString=aFuncList->GetSelectedEntry();
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
 
@@ -296,7 +296,7 @@ void ScFunctionWin::DoEnter()
             if (OutputDevice::isDisposed())
                 return;
             aString = "=";
-            aString += aFuncList->GetSelectEntry();
+            aString += aFuncList->GetSelectedEntry();
             if (pHdl)
                 pHdl->ClearText();
         }
@@ -342,7 +342,7 @@ void ScFunctionWin::DoEnter()
             if (pHdl->GetEditString().isEmpty())
             {
                 aString = "=";
-                aString += aFuncList->GetSelectEntry();
+                aString += aFuncList->GetSelectedEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
             if(pEdView!=nullptr) // @ needed because of crash during setting a name

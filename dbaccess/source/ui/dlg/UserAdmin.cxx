@@ -285,7 +285,7 @@ IMPL_LINK_NOARG( OUserAdmin, ListDblClickHdl, ListBox&, void )
 
 OUString OUserAdmin::GetUser()
 {
-    return m_pUSER->GetSelectEntry();
+    return m_pUSER->GetSelectedEntry();
 }
 
 void OUserAdmin::fillControls(std::vector< ISaveValueWrapper* >& /*_rControlList*/)

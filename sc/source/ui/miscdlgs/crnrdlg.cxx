@@ -574,7 +574,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
 {
-    OUString aRangeStr = pLbRange->GetSelectEntry();
+    OUString aRangeStr = pLbRange->GetSelectedEntry();
     sal_Int32 nSelectPos = pLbRange->GetSelectEntryPos();
     bool bColName =
         (reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataCol);
@@ -642,7 +642,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, ListBox&, void)
         ++nMoves;
         pLbRange->SelectEntryPos( ++nSelectPos );
     }
-    OUString aRangeStr = pLbRange->GetSelectEntry();
+    OUString aRangeStr = pLbRange->GetSelectedEntry();
     if ( nMoves )
     {
         if ( nSelectPos > 1 && nSelectPos >= nCnt )
@@ -650,14 +650,14 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, ListBox&, void)
             // do not stop at the delimiter
             nSelectPos = nCnt - 2;
             pLbRange->SelectEntryPos( nSelectPos );
-            aRangeStr = pLbRange->GetSelectEntry();
+            aRangeStr = pLbRange->GetSelectedEntry();
         }
         else if ( nSelectPos > 2 && nSelectPos < nCnt && !aRangeStr.isEmpty()
                   && aRangeStr == pEdAssign->GetText() )
         {   // move upwards instead of below to the previous position
             nSelectPos -= 2;
             pLbRange->SelectEntryPos( nSelectPos );
-            aRangeStr = pLbRange->GetSelectEntry();
+            aRangeStr = pLbRange->GetSelectedEntry();
         }
     }
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
