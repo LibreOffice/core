@@ -132,7 +132,7 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
         maCoreStyle = SvxBorderLine();
 
     // from twips to points
-    maUIStyle.Set( &maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH );
+    maUIStyle.Set( &maCoreStyle, FrameBorder::GetDefaultPatternScale(), FRAMESEL_GEOM_WIDTH );
     meState = maUIStyle.IsUsed() ? FrameBorderState::Show : FrameBorderState::Hide;
 }
 
@@ -150,7 +150,7 @@ void FrameBorder::SetState( FrameBorderState eState )
         break;
         case FrameBorderState::DontCare:
             maCoreStyle = SvxBorderLine();
-            maUIStyle = frame::Style(3, 0, 0, SvxBorderLineStyle::SOLID); //OBJ_FRAMESTYLE_DONTCARE
+            maUIStyle = frame::Style(3, 0, 0, SvxBorderLineStyle::SOLID, FrameBorder::GetDefaultPatternScale()); //OBJ_FRAMESTYLE_DONTCARE
         break;
     }
 }
@@ -643,7 +643,7 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             rRightStyle.GetColorSecn(), rRightStyle.GetColorGap(),
             rRightStyle.UseGapColor(),
             rRightStyle.Secn(), rRightStyle.Dist(), rRightStyle.Prim( ),
-            rRightStyle.Type( ) );
+            rRightStyle.Type( ), rRightStyle.PatternScale() );
     maArray.SetColumnStyleRight( mbVer ? 1 : 0, rInvertedRight );
 
     maArray.SetRowStyleTop( 0, maTop.GetUIStyle() );
@@ -655,7 +655,7 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             rHorStyle.GetColorSecn(), rHorStyle.GetColorGap(),
             rHorStyle.UseGapColor(),
             rHorStyle.Secn(), rHorStyle.Dist(), rHorStyle.Prim( ),
-            rHorStyle.Type() );
+            rHorStyle.Type(), rHorStyle.PatternScale() );
         maArray.SetRowStyleTop( 1, rInvertedHor );
     }
 
@@ -665,7 +665,7 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             rBottomStyle.GetColorSecn(), rBottomStyle.GetColorGap(),
             rBottomStyle.UseGapColor(),
             rBottomStyle.Secn(), rBottomStyle.Dist(), rBottomStyle.Prim( ),
-            rBottomStyle.Type() );
+            rBottomStyle.Type(), rBottomStyle.PatternScale() );
     maArray.SetRowStyleBottom( mbHor ? 1 : 0, rInvertedBottom );
 
     for( size_t nCol = 0; nCol < maArray.GetColCount(); ++nCol )
