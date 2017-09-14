@@ -977,7 +977,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LIBLANGTAG_LIBS))
-$(call gb_LinkTarget_use_external_project,$(1),langtag)
+$(call gb_LinkTarget_use_external_project,$(1),liblangtag)
 
 endef
 
@@ -1000,7 +1000,7 @@ endef
 endif # MSC
 
 define gb_ExternalProject__use_liblangtag
-$(call gb_ExternalProject_use_external_project,$(1),langtag)
+$(call gb_ExternalProject_use_external_project,$(1),liblangtag)
 
 endef
 

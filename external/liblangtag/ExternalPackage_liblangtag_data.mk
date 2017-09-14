@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,liblangtag_data,langtag))
+$(eval $(call gb_ExternalPackage_ExternalPackage,liblangtag_data,liblangtag))
 
-$(eval $(call gb_ExternalPackage_use_external_project,liblangtag_data,langtag))
+$(eval $(call gb_ExternalPackage_use_external_project,liblangtag_data,liblangtag))
 
 $(eval $(call gb_ExternalPackage_add_files,liblangtag_data,$(LIBO_SHARE_FOLDER)/liblangtag,\
 	data/language-subtag-registry.xml \
