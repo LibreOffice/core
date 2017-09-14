@@ -140,6 +140,24 @@
       "revId": "99af3d39546766199c918238f995b6746de712ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27523c68",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T13:29:33Z",
+      "side": 1,
+      "message": "what can happen is that after thread A has written bTicksPerSecondInitialized, thread B indeed sees bTicksPerSecondInitialized set to true, but doesn\u0027t see the value that thread A has written into nTicksPerSecond",
+      "parentUuid": "1a430d35_677524f8",
+      "revId": "99af3d39546766199c918238f995b6746de712ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
