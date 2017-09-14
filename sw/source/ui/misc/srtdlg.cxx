@@ -295,9 +295,9 @@ void SwSortDlg::Apply()
     nCol2 = (sal_uInt16)m_pColEdt2->GetValue();
     nCol3 = (sal_uInt16)m_pColEdt3->GetValue();
 
-    nType1 = m_pTypDLB1->GetSelectEntryPos();
-    nType2 = m_pTypDLB2->GetSelectEntryPos();
-    nType3 = m_pTypDLB3->GetSelectEntryPos();
+    nType1 = m_pTypDLB1->GetSelectedEntryPos();
+    nType2 = m_pTypDLB2->GetSelectedEntryPos();
+    nType3 = m_pTypDLB3->GetSelectedEntryPos();
 
     bAsc1 = m_pSortUp1RB->IsChecked();
     bAsc2 = m_pSortUp2RB->IsChecked();
@@ -474,7 +474,7 @@ void SwSortDlg::LanguageHdl(ListBox const * pLBox)
         ListBox* pL = aLstArr[ n ];
         if( !pLBox )
             pL->SelectEntryPos( *aTypeArr[n] );
-        else if( LISTBOX_ENTRY_NOTFOUND == pL->GetSelectEntryPos() )
+        else if( LISTBOX_ENTRY_NOTFOUND == pL->GetSelectedEntryPos() )
             pL->SelectEntryPos( 0 );
     }
 }

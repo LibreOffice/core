@@ -596,7 +596,7 @@ void ScImportAsciiDlg::SaveParameters()
                      pCkbQuotedAsText->IsChecked(), pCkbDetectNumber->IsChecked(),
                      pRbFixed->IsChecked(),
                      static_cast<sal_Int32>(pNfRow->GetValue()),
-                     pLbCharSet->GetSelectEntryPos(),
+                     pLbCharSet->GetSelectedEntryPos(),
                      static_cast<sal_uInt16>(pLbCustomLang->GetSelectLanguage()), meCall );
 }
 
@@ -745,7 +745,7 @@ IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, Edit&, rEdit, void )
 IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox&, rListBox, void )
 {
     if( &rListBox == pLbType )
-        mpTableBox->Execute( CSVCMD_SETCOLUMNTYPE, rListBox.GetSelectEntryPos() );
+        mpTableBox->Execute( CSVCMD_SETCOLUMNTYPE, rListBox.GetSelectedEntryPos() );
 }
 
 IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)

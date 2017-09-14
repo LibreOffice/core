@@ -300,7 +300,7 @@ void LibBox::Select()
 
 void LibBox::NotifyIDE()
 {
-    sal_Int32 nSelPos = GetSelectEntryPos();
+    sal_Int32 nSelPos = GetSelectedEntryPos();
     if (LibEntry* pEntry = static_cast<LibEntry*>(GetEntryData(nSelPos)))
     {
         ScriptDocument aDocument( pEntry->GetDocument() );

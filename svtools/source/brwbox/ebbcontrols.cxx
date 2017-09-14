@@ -146,7 +146,7 @@ namespace svt
                 (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
             {
                 // select next resp. previous entry
-                sal_Int32 nPos = GetSelectEntryPos();
+                sal_Int32 nPos = GetSelectedEntryPos();
                 int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
                 if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
                 {

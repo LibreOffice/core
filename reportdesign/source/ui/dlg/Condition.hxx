@@ -190,13 +190,13 @@ namespace rptui
 
     inline ConditionType Condition::impl_getCurrentConditionType() const
     {
-        return sal::static_int_cast< ConditionType >( m_pConditionType->GetSelectEntryPos() );
+        return sal::static_int_cast< ConditionType >( m_pConditionType->GetSelectedEntryPos() );
     }
 
 
     inline ComparisonOperation Condition::impl_getCurrentComparisonOperation() const
     {
-        return sal::static_int_cast< ComparisonOperation >( m_pOperationList->GetSelectEntryPos() );
+        return sal::static_int_cast< ComparisonOperation >( m_pOperationList->GetSelectedEntryPos() );
     }
 
 

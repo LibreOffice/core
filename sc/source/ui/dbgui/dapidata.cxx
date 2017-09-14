@@ -97,7 +97,7 @@ void ScDataPilotDatabaseDlg::dispose()
 
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
-    const sal_Int32 nSelect = m_pLbType->GetSelectEntryPos();
+    const sal_Int32 nSelect = m_pLbType->GetSelectedEntryPos();
 
     rDesc.aDBName = m_pLbDatabase->GetSelectedEntry();
     rDesc.aObject = m_pCbObject->GetText();
@@ -127,7 +127,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     if (aDatabaseName.isEmpty())
         return;
 
-    const sal_Int32 nSelect = m_pLbType->GetSelectEntryPos();
+    const sal_Int32 nSelect = m_pLbType->GetSelectedEntryPos();
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 

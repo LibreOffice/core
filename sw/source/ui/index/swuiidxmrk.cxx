@@ -1593,7 +1593,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         OSL_ENSURE(pTypeListBox, "No ListBox");
-        return OUString::number(pTypeListBox->GetSelectEntryPos());
+        return OUString::number(pTypeListBox->GetSelectedEntryPos());
     }
 
     if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)

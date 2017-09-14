@@ -982,7 +982,7 @@ bool OSelectionBrowseBox::SaveModified()
             {
                 OUString aAliasName = m_pTableCell->GetSelectedEntry();
                 strOldCellContents = pEntry->GetAlias();
-                if ( m_pTableCell->GetSelectEntryPos() != 0 )
+                if ( m_pTableCell->GetSelectedEntryPos() != 0 )
                 {
                     pEntry->SetAlias(aAliasName);
                     // we have to set the table name as well as the table window
@@ -1011,7 +1011,7 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_ORDER_ROW:
             {
                 strOldCellContents = OUString::number((sal_uInt16)pEntry->GetOrderDir());
-                sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
+                sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
                 if (nIdx == LISTBOX_ENTRY_NOTFOUND)
                     nIdx = 0;
                 pEntry->SetOrderDir(EOrderDir(nIdx));
@@ -1032,7 +1032,7 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_FUNCTION_ROW:
                 {
                     strOldCellContents = pEntry->GetFunction();
-                    sal_Int32 nPos = m_pFunctionCell->GetSelectEntryPos();
+                    sal_Int32 nPos = m_pFunctionCell->GetSelectedEntryPos();
                     // these functions are only available in CORE
                     OUString sFunctionName        = m_pFunctionCell->GetEntry(nPos);
                     OUString sGroupFunctionName   = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
@@ -1866,7 +1866,7 @@ void OSelectionBrowseBox::CellModified()
             {
                 OTableFieldDescRef  pEntry = getEntry(GetColumnPos(GetCurColumnId()) - 1);
 
-                sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
+                sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
                 if(!m_bOrderByUnRelated && nIdx > 0 &&
                     nIdx != LISTBOX_ENTRY_NOTFOUND  &&
                     !pEntry->IsEmpty()              &&
@@ -2233,7 +2233,7 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
             return pEntry->IsVisible() ? OUStringLiteral("1") : OUStringLiteral("0");
         case BROW_ORDER_ROW:
         {
-            sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
+            sal_Int32 nIdx = m_pOrderCell->GetSelectedEntryPos();
             if (nIdx == LISTBOX_ENTRY_NOTFOUND)
                 nIdx = 0;
             return OUString::number(nIdx);

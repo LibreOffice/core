@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl, RadioButton&, void)
 IMPL_LINK_NOARG(ChartErrorBarPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
-    sal_Int32 nPos = mpLBType->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBType->GetSelectedEntryPos();
 
     setTypePos(mxModel, aCID, nPos);
 }

@@ -928,7 +928,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
         else //otherwise the current column name may match one of the db columns
             pNewLB->SelectEntry(rHeader);
         //then the preview can be filled accordingly
-        if(xColAccess.is() && pNewLB->GetSelectEntryPos() > 0 &&
+        if(xColAccess.is() && pNewLB->GetSelectedEntryPos() > 0 &&
                 xColAccess->hasByName(pNewLB->GetSelectedEntry()))
         {
             uno::Any aCol = xColAccess->getByName(pNewLB->GetSelectedEntry());

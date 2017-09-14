@@ -255,7 +255,7 @@ void ScFilterListBox::dispose()
 
 void ScFilterListBox::EndInit()
 {
-    sal_Int32 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectedEntryPos();
     if ( LISTBOX_ENTRY_NOTFOUND == nPos )
         nSel = 0;
     else
@@ -300,7 +300,7 @@ void ScFilterListBox::SelectHdl()
 {
     if ( !IsTravelSelect() && !bInit && !bCancelled )
     {
-        sal_Int32 nPos = GetSelectEntryPos();
+        sal_Int32 nPos = GetSelectedEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != nPos )
         {
             nSel = nPos;

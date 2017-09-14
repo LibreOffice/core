@@ -213,7 +213,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, TypeHdl, ListBox&, void)
     const sal_Int32 nOld = GetTypeSel();
 
     // current ListBoxPos
-    SetTypeSel(m_pTypeLB->GetSelectEntryPos());
+    SetTypeSel(m_pTypeLB->GetSelectedEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
@@ -245,7 +245,7 @@ IMPL_LINK( SwFieldVarPage, SubTypeListBoxHdl, ListBox&, rBox, void )
 void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 {
     sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
-    sal_Int32 nSelPos = m_pSelectionLB->GetSelectEntryPos();
+    sal_Int32 nSelPos = m_pSelectionLB->GetSelectedEntryPos();
     size_t nSelData = SIZE_MAX;
 
     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
@@ -574,7 +574,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
         {
             case TYP_FORMELFLD:
                 {
-                    nSelPos = m_pSelectionLB->GetSelectEntryPos();
+                    nSelPos = m_pSelectionLB->GetSelectedEntryPos();
 
                     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                     {
@@ -595,7 +595,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
 // renew types in SelectionBox
 void SwFieldVarPage::UpdateSubType()
 {
-    SetSelectionSel(m_pSelectionLB->GetSelectEntryPos());
+    SetSelectionSel(m_pSelectionLB->GetSelectedEntryPos());
 
     OUString sOldSel;
     if (GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
@@ -703,13 +703,13 @@ void SwFieldVarPage::UpdateSubType()
 void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     OUString sOldSel;
-    const sal_Int32 nFormatSel = m_pFormatLB->GetSelectEntryPos();
+    const sal_Int32 nFormatSel = m_pFormatLB->GetSelectedEntryPos();
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pFormatLB->GetEntry(nFormatSel);
 
     OUString sOldNumSel;
     sal_uLong nOldNumFormat = 0;
-    sal_Int32 nNumFormatSel = m_pNumFormatLB->GetSelectEntryPos();
+    sal_Int32 nNumFormatSel = m_pNumFormatLB->GetSelectedEntryPos();
     if (nNumFormatSel != LISTBOX_ENTRY_NOTFOUND)
     {
         sOldNumSel = m_pNumFormatLB->GetEntry(nNumFormatSel);
@@ -994,7 +994,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
         OUString sName(m_pNameED->GetText()), sValue(m_pValueED->GetText());
         SwFieldType* pType = nullptr;
         SwFieldIds nId = SwFieldIds::Database;
-        sal_Int32 nNumFormatPos = m_pNumFormatLB->GetSelectEntryPos();
+        sal_Int32 nNumFormatPos = m_pNumFormatLB->GetSelectedEntryPos();
 
         switch (nTypeId)
         {
@@ -1004,7 +1004,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
         }
         pType = GetFieldMgr().GetFieldType(nId, sName);
 
-        sal_uLong nFormat = m_pFormatLB->GetSelectEntryPos();
+        sal_uLong nFormat = m_pFormatLB->GetSelectedEntryPos();
         if (nFormat != LISTBOX_ENTRY_NOTFOUND)
             nFormat = reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData((sal_Int32)nFormat));
 
@@ -1098,7 +1098,7 @@ IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
 
 IMPL_LINK_NOARG(SwFieldVarPage, ChapterHdl, ListBox&, void)
 {
-    bool bEnable = m_pChapterLevelLB->GetSelectEntryPos() != 0;
+    bool bEnable = m_pChapterLevelLB->GetSelectedEntryPos() != 0;
 
     m_pSeparatorED->Enable(bEnable);
     m_pSeparatorFT->Enable(bEnable);
@@ -1108,7 +1108,7 @@ IMPL_LINK_NOARG(SwFieldVarPage, ChapterHdl, ListBox&, void)
 IMPL_LINK_NOARG(SwFieldVarPage, SeparatorHdl, Edit&, void)
 {
     bool bEnable = !m_pSeparatorED->GetText().isEmpty() ||
-                    m_pChapterLevelLB->GetSelectEntryPos() == 0;
+                    m_pChapterLevelLB->GetSelectedEntryPos() == 0;
     EnableInsert(bEnable);
 }
 
@@ -1119,7 +1119,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
 
-    const sal_Int32 nSubPos = m_pSelectionLB->GetSelectEntryPos();
+    const sal_Int32 nSubPos = m_pSelectionLB->GetSelectedEntryPos();
     sal_uInt16 nSubType = (nSubPos == LISTBOX_ENTRY_NOTFOUND) ? 0 :
         (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSubPos));
 
@@ -1127,7 +1127,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
 
     if (!m_pNumFormatLB->IsVisible())
     {
-        sal_Int32 nFormatPos = m_pFormatLB->GetSelectEntryPos();
+        sal_Int32 nFormatPos = m_pFormatLB->GetSelectedEntryPos();
 
         if(nFormatPos == LISTBOX_ENTRY_NOTFOUND)
             nFormat = 0;
@@ -1203,7 +1203,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         }
         case TYP_SEQFLD:
         {
-            nSubType = static_cast< sal_uInt16 >(m_pChapterLevelLB->GetSelectEntryPos());
+            nSubType = static_cast< sal_uInt16 >(m_pChapterLevelLB->GetSelectedEntryPos());
             if (nSubType == 0)
                 nSubType = 0x7f;
             else
@@ -1300,7 +1300,7 @@ void SwFieldVarPage::FillUserData()
 {
     OUString sData(USER_DATA_VERSION);
     sData += ";";
-    sal_Int32 nTypeSel = m_pTypeLB->GetSelectEntryPos();
+    sal_Int32 nTypeSel = m_pTypeLB->GetSelectedEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else

@@ -72,7 +72,7 @@ void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
 
 SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
 {
-    sal_Int32 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectedEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         return static_cast< SvxFrameDirection >( 0xFFFF );
     return lclVoidToEnum( GetEntryData( nPos ) );

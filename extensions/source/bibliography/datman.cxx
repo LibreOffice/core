@@ -413,12 +413,12 @@ void MappingDialog_Impl::dispose()
 
 IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
 {
-    const sal_Int32 nEntryPos = rListBox.GetSelectEntryPos();
+    const sal_Int32 nEntryPos = rListBox.GetSelectedEntryPos();
     if(0 < nEntryPos)
     {
         for(VclPtr<ListBox> & aListBoxe : aListBoxes)
         {
-            if(&rListBox != aListBoxe && aListBoxe->GetSelectEntryPos() == nEntryPos)
+            if(&rListBox != aListBoxe && aListBoxe->GetSelectedEntryPos() == nEntryPos)
                 aListBoxe->SelectEntryPos(0);
         }
     }

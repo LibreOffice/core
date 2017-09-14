@@ -541,7 +541,7 @@ void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeLineStyleHdl, ListBox&, void)
 {
-    const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBStyle->GetSelectedEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBStyle->IsValueChangedFromSaved())
     {
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeLineStyleHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
 {
-    sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
+    sal_Int32  nPos = mpLBStart->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBStart->IsValueChangedFromSaved() )
     {
         std::unique_ptr<XLineStartItem> pItem;
@@ -593,7 +593,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
 {
-    sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
+    sal_Int32  nPos = mpLBEnd->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBEnd->IsValueChangedFromSaved() )
     {
         std::unique_ptr<XLineEndItem> pItem;
@@ -607,7 +607,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, ListBox&, void)
 {
-    const sal_Int32 nPos(mpLBEdgeStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBEdgeStyle->GetSelectedEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBEdgeStyle->IsValueChangedFromSaved())
     {
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeCapStyleHdl, ListBox&, void)
 {
-    const sal_Int32 nPos(mpLBCapStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBCapStyle->GetSelectedEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBCapStyle->IsValueChangedFromSaved())
     {
@@ -896,7 +896,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
 
 void LinePropertyPanelBase::ActivateControls()
 {
-    const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
+    const sal_Int32 nPos(mpLBStyle->GetSelectedEntryPos());
     bool bLineStyle( nPos != 0 );
 
     mpGridLineProps->Enable( bLineStyle );

@@ -48,7 +48,7 @@ public:
 
     sal_Int32 GetSelectEntryCount() const;
     OUString    GetSelectedEntry(sal_Int32 nPos) const;
-    sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const;
+    sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const;
 };
 
 #endif

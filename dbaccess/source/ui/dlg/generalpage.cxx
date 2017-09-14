@@ -397,10 +397,10 @@ namespace dbaui
     IMPL_LINK( OGeneralPageWizard, OnEmbeddedDBTypeSelected, ListBox&, _rBox, void )
     {
         // get the type from the entry data
-        const sal_Int32 nSelected = _rBox.GetSelectEntryPos();
+        const sal_Int32 nSelected = _rBox.GetSelectedEntryPos();
         if (static_cast<size_t>(nSelected) >= m_aEmbeddedURLPrefixes.size() )
         {
-            SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
+            SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
             return;
         }
         const OUString sURLPrefix = m_aEmbeddedURLPrefixes[ nSelected ];
@@ -415,10 +415,10 @@ namespace dbaui
     IMPL_LINK( OGeneralPage, OnDatasourceTypeSelected, ListBox&, _rBox, void )
     {
         // get the type from the entry data
-        const sal_Int32 nSelected = _rBox.GetSelectEntryPos();
+        const sal_Int32 nSelected = _rBox.GetSelectedEntryPos();
         if (static_cast<size_t>(nSelected) >= m_aURLPrefixes.size() )
         {
-            SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
+            SAL_WARN("dbaccess.ui.generalpage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectedEntryPos(): no corresponding URL prefix");
             return;
         }
         const OUString sURLPrefix = m_aURLPrefixes[ nSelected ];
@@ -461,7 +461,7 @@ namespace dbaui
     {
         bool bChangedSomething = false;
 
-        const sal_Int32 nEntry = m_pDatasourceType->GetSelectEntryPos();
+        const sal_Int32 nEntry = m_pDatasourceType->GetSelectedEntryPos();
         OUString sURLPrefix = m_aURLPrefixes[ nEntry ];
 
         if ( m_pDatasourceType->IsValueChangedFromSaved() )
@@ -654,7 +654,7 @@ namespace dbaui
 
         if ( bCommitTypeSelection )
         {
-            const sal_Int32 nEntry = m_pDatasourceType->GetSelectEntryPos();
+            const sal_Int32 nEntry = m_pDatasourceType->GetSelectedEntryPos();
             OUString sURLPrefix = m_aURLPrefixes[nEntry];
 
             if  (  m_pDatasourceType->IsValueChangedFromSaved()

@@ -560,7 +560,7 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, con
 
 IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
 {
-    const sal_Int32 nCurPos = aDocTypeLB->GetSelectEntryPos();
+    const sal_Int32 nCurPos = aDocTypeLB->GetSelectedEntryPos();
 
     sal_IntPtr nData = -1;
     if(nCurPos < APP_COUNT)

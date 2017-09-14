@@ -99,7 +99,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
     Init(); // Allgemeine initialisierung
 
     m_pTypeLB->SetUpdateMode(false);
-    const sal_Int32 nOldPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_Int32 nOldPos = m_pTypeLB->GetSelectedEntryPos();
     m_sOldDBName = m_pDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
 
     m_pTypeLB->Clear();
@@ -240,7 +240,7 @@ bool SwFieldDBPage::FillItemSet(SfxItemSet* )
 
         case TYP_DBSETNUMBERFLD:
             nFormat = reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(
-                                m_pFormatLB->GetSelectEntryPos() ));
+                                m_pFormatLB->GetSelectedEntryPos() ));
             break;
         }
 
@@ -285,7 +285,7 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
     const sal_Int32 nOld = GetTypeSel();
 
     // current ListBoxPos
-    SetTypeSel(m_pTypeLB->GetSelectEntryPos());
+    SetTypeSel(m_pTypeLB->GetSelectedEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
@@ -491,7 +491,7 @@ IMPL_LINK_NOARG(SwFieldDBPage, ModifyHdl, Edit&, void)
 
 void    SwFieldDBPage::FillUserData()
 {
-    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectedEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
         ? USHRT_MAX : (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData( nEntryPos ));
     SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));

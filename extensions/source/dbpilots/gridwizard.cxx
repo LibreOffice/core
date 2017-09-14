@@ -410,7 +410,7 @@ namespace dbp
         ListBox& rMoveTo = bMoveRight ? *m_pSelFields : *m_pExistFields;
 
         // the index of the selected entry
-        const sal_Int32 nSelected = bMoveRight ? m_pExistFields->GetSelectEntryPos() : m_pSelFields->GetSelectEntryPos();
+        const sal_Int32 nSelected = bMoveRight ? m_pExistFields->GetSelectedEntryPos() : m_pSelFields->GetSelectedEntryPos();
         // the (original) relative position of the entry
         sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_pExistFields->GetEntryData(nSelected) : m_pSelFields->GetEntryData(nSelected));
 
@@ -437,7 +437,7 @@ namespace dbp
         // remove the entry from its old list
         if (bMoveRight)
         {
-            sal_Int32 nSelectPos = m_pExistFields->GetSelectEntryPos();
+            sal_Int32 nSelectPos = m_pExistFields->GetSelectedEntryPos();
             m_pExistFields->RemoveEntry(nSelected);
             if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_pExistFields->GetEntryCount()))
                 m_pExistFields->SelectEntryPos(nSelectPos);
@@ -446,7 +446,7 @@ namespace dbp
         }
         else
         {
-            sal_Int32 nSelectPos = m_pSelFields->GetSelectEntryPos();
+            sal_Int32 nSelectPos = m_pSelFields->GetSelectedEntryPos();
             m_pSelFields->RemoveEntry(nSelected);
             if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_pSelFields->GetEntryCount()))
                 m_pSelFields->SelectEntryPos(nSelectPos);

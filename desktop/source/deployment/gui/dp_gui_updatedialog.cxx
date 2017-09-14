@@ -636,7 +636,7 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 
     if ( pData )
     {
-        sal_uLong nEntryPos = GetSelectEntryPos();
+        sal_uLong nEntryPos = GetSelectedEntryPos();
         UpdateDialog::Index * p = static_cast< UpdateDialog::Index * >( GetEntryData( nEntryPos ) );
 
         if ( ( p->m_eKind == ENABLED_UPDATE ) || ( p->m_eKind == DISABLED_UPDATE ) )

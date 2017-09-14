@@ -113,7 +113,7 @@ void SvxFontListBox::SetNoSelection()
     SelectAll( false );
 }
 
-sal_uLong SvxFontListBox::GetSelectEntryPos() const
+sal_uLong SvxFontListBox::GetSelectedEntryPos() const
 {
     SvTreeListEntry* pSvLBoxEntry = FirstSelected();
     return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : TREELIST_ENTRY_NOTFOUND;

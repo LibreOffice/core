@@ -720,7 +720,7 @@ namespace svt
                 DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectEntryPos();
+                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
                 OUString sSelected;
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     sSelected = static_cast< ListBox const * >( _pControl )->GetSelectedEntry();
@@ -733,9 +733,9 @@ namespace svt
                 DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectEntryPos();
+                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
-                    aReturn <<= static_cast< ListBox const * >( _pControl )->GetSelectEntryPos();
+                    aReturn <<= static_cast< ListBox const * >( _pControl )->GetSelectedEntryPos();
                 else
                     aReturn <<= (sal_Int32)-1;
             }

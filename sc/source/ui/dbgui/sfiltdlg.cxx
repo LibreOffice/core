@@ -420,7 +420,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
     if ( &rLb == pLbFilterArea )
     {
         OUString  aString;
-        const sal_Int32 nSelPos = pLbFilterArea->GetSelectEntryPos();
+        const sal_Int32 nSelPos = pLbFilterArea->GetSelectedEntryPos();
 
         if ( nSelPos > 0 )
             aString = *static_cast<OUString*>(pLbFilterArea->GetEntryData( nSelPos ));

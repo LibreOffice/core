@@ -30,8 +30,8 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
 {
     double nVal = 0;
     sal_uInt32 nIndex = 0;
-    pEntry->SetType(static_cast<ScColorScaleEntryType>(rLstBox.GetSelectEntryPos()));
-    switch(rLstBox.GetSelectEntryPos())
+    pEntry->SetType(static_cast<ScColorScaleEntryType>(rLstBox.GetSelectedEntryPos()));
+    switch(rLstBox.GetSelectedEntryPos())
     {
         case COLORSCALE_AUTO:
         case COLORSCALE_MIN:
@@ -165,7 +165,7 @@ namespace {
 
 void GetAxesPosition(ScDataBarFormatData* pData, const ListBox* rLbox)
 {
-    switch(rLbox->GetSelectEntryPos())
+    switch(rLbox->GetSelectedEntryPos())
     {
         case 0:
             pData->meAxisPosition = databar::AUTOMATIC;
@@ -198,7 +198,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     ScDataBarFormatData* pData = new ScDataBarFormatData();
     pData->maPositiveColor = mpLbPos->GetSelectEntryColor();
     pData->mpNegativeColor.reset(new Color(mpLbNeg->GetSelectEntryColor()));
-    pData->mbGradient = ( mpLbFillType->GetSelectEntryPos() == 1 );
+    pData->mbGradient = ( mpLbFillType->GetSelectedEntryPos() == 1 );
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
     pData->maAxisColor = mpLbAxisCol->GetSelectEntryColor();
@@ -216,10 +216,10 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
 {
     //check that min < max
     bool bWarn = false;
-    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
+    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectedEntryPos();
     if( nSelectMin == COLORSCALE_MAX )
         bWarn = true;
-    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectEntryPos();
+    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectedEntryPos();
     if( nSelectMax == COLORSCALE_MIN )
         bWarn = true;
     if(!bWarn) // databar length checks
@@ -235,7 +235,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
         if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue || nMaxValue > 100 || nMinValue < 0)
             bWarn = true;
     }
-    if(!bWarn && mpLbTypeMin->GetSelectEntryPos() == mpLbTypeMax->GetSelectEntryPos())
+    if(!bWarn && mpLbTypeMin->GetSelectedEntryPos() == mpLbTypeMax->GetSelectedEntryPos())
     {
 
         if(nSelectMax != COLORSCALE_FORMULA && nSelectMax != COLORSCALE_AUTO)
@@ -267,7 +267,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
 
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
 {
-    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
+    sal_Int32 nSelectMin = mpLbTypeMin->GetSelectedEntryPos();
     if( nSelectMin <= COLORSCALE_MAX)
         mpEdMin->Disable();
     else
@@ -282,7 +282,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
         }
     }
 
-    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectEntryPos();
+    sal_Int32 nSelectMax = mpLbTypeMax->GetSelectedEntryPos();
     if(nSelectMax <= COLORSCALE_MAX)
         mpEdMax->Disable();
     else
@@ -300,7 +300,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
 
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl, ListBox&, void )
 {
-    sal_Int32 axisPos = mpLbAxisPos->GetSelectEntryPos();
+    sal_Int32 axisPos = mpLbAxisPos->GetSelectedEntryPos();
     if(axisPos != 2 && axisPos != 1) // disable if axis vertical position is automatic
     {
         mpLenMin->Disable();

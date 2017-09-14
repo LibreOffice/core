@@ -259,7 +259,7 @@ namespace dbp
         if (bMoveLeft)
         {
             while (m_pExistingRadios->GetSelectEntryCount())
-                m_pExistingRadios->RemoveEntry(m_pExistingRadios->GetSelectEntryPos());
+                m_pExistingRadios->RemoveEntry(m_pExistingRadios->GetSelectedEntryPos());
         }
         else
         {
@@ -417,7 +417,7 @@ namespace dbp
             m_aUncommittedValues[m_nLastSelection] = m_pValue->GetText();
         }
 
-        m_nLastSelection = m_pOptions->GetSelectEntryPos();
+        m_nLastSelection = m_pOptions->GetSelectedEntryPos();
         DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
         m_pValue->SetText(m_aUncommittedValues[m_nLastSelection]);
     }

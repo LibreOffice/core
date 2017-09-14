@@ -326,7 +326,7 @@ void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel>
 
 FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter()
 {
-    const sal_Int16 nCurAppId = mpCBApp->GetSelectEntryPos();
+    const sal_Int16 nCurAppId = mpCBApp->GetSelectedEntryPos();
 
     if (nCurAppId == MNI_WRITER)
         return FILTER_APPLICATION::WRITER;
@@ -457,7 +457,7 @@ void SfxTemplateManagerDlg::writeSettings ()
     Sequence< NamedValue > aSettings
     {
         { TM_SETTING_LASTFOLDER, css::uno::makeAny(aLastFolder) },
-        { TM_SETTING_LASTAPPLICATION,     css::uno::makeAny(sal_uInt16(mpCBApp->GetSelectEntryPos())) }
+        { TM_SETTING_LASTAPPLICATION,     css::uno::makeAny(sal_uInt16(mpCBApp->GetSelectedEntryPos())) }
     };
 
     // write
@@ -483,7 +483,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
 {
     const OUString sSelectedRegion = mpCBFolder->GetSelectedEntry();
 
-    if(mpCBFolder->GetSelectEntryPos() == 0)
+    if(mpCBFolder->GetSelectedEntryPos() == 0)
     {
         mpLocalView->showAllTemplates();
         mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
@@ -1355,7 +1355,7 @@ IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, Edit&, void)
 
 IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, void)
 {
-    if(mpLBCategory->GetSelectEntryPos() == 0)
+    if(mpLBCategory->GetSelectedEntryPos() == 0)
     {
         msSelectedCategory = OUString();
         mpOKButton->Disable();

@@ -239,12 +239,12 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
     bool bRet = false;
     ScFormulaOptions aOpt;
     bool bEnglishFuncName = mpCbEnglishFuncName->IsChecked();
-    sal_Int16 aSyntaxPos      = mpLbFormulaSyntax->GetSelectEntryPos();
+    sal_Int16 aSyntaxPos      = mpLbFormulaSyntax->GetSelectedEntryPos();
     OUString aSep             = mpEdSepFuncArg->GetText();
     OUString aSepArrayCol     = mpEdSepArrayCol->GetText();
     OUString aSepArrayRow     = mpEdSepArrayRow->GetText();
-    sal_Int16 nOOXMLRecalcMode = mpLbOOXMLRecalcOptions->GetSelectEntryPos();
-    sal_Int16 nODFRecalcMode = mpLbODFRecalcOptions->GetSelectEntryPos();
+    sal_Int16 nOOXMLRecalcMode = mpLbOOXMLRecalcOptions->GetSelectedEntryPos();
+    sal_Int16 nODFRecalcMode = mpLbODFRecalcOptions->GetSelectedEntryPos();
 
     if (mpBtnCustomCalcDefault->IsChecked())
     {

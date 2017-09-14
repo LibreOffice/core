@@ -711,7 +711,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
     // paper tray
     nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
-    sal_Int32 nPos = m_pPaperTrayBox->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPaperTrayBox->GetSelectedEntryPos();
     sal_uInt16 nBin = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pPaperTrayBox->GetEntryData( nPos ));
     pOld = GetOldItem( *rSet, SID_ATTR_PAGE_PAPERBIN );
 
@@ -721,7 +721,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    nPos = m_pPaperSizeBox->GetSelectEntryPos();
+    nPos = m_pPaperSizeBox->GetSelectedEntryPos();
     Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData( nPos ));
     const sal_Int32 nOld = m_pPaperSizeBox->GetSavedValue();
     bool bChecked = m_pLandscapeBtn->IsChecked();
@@ -769,7 +769,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
     if ( bMod )
         aPage.SetPageUsage(
-            ::PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() ) );
+            ::PosToPageUsage_Impl( m_pLayoutBox->GetSelectedEntryPos() ) );
 
     if ( m_pLandscapeBtn->IsValueChangedFromSaved() )
     {
@@ -778,7 +778,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     }
 
     //Get the NumType value
-    nPos = m_pNumberFormatBox->GetSelectEntryPos();
+    nPos = m_pNumberFormatBox->GetSelectedEntryPos();
     SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(m_pNumberFormatBox->GetEntryData(nPos)));
     if ( m_pNumberFormatBox->IsValueChangedFromSaved() )
     {
@@ -868,7 +868,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
 {
     // switch inside outside
-    const SvxPageUsage nUsage = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
+    const SvxPageUsage nUsage = PosToPageUsage_Impl( m_pLayoutBox->GetSelectedEntryPos() );
 
     if ( nUsage == SvxPageUsage::Mirror )
     {
@@ -1119,7 +1119,7 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
     m_pBspWin->SetRight( GetCoreValue( *m_pRightMarginEdit, MapUnit::MapTwip ) );
 
     // Layout
-    m_pBspWin->SetUsage( PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() ) );
+    m_pBspWin->SetUsage( PosToPageUsage_Impl( m_pLayoutBox->GetSelectedEntryPos() ) );
     if ( bResetbackground )
         m_pBspWin->ResetBackground();
     m_pBspWin->Invalidate();
@@ -1544,7 +1544,7 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, Button*, pBox, void )
     if(static_cast<CheckBox*>(pBox)->IsChecked())
     {
         bEnable = true;
-        if(USHRT_MAX == m_pRegisterLB->GetSelectEntryPos())
+        if(USHRT_MAX == m_pRegisterLB->GetSelectedEntryPos())
             m_pRegisterLB->SelectEntry(sStandardRegister);
     }
     m_pRegisterFT->Enable( bEnable );

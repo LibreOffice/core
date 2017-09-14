@@ -247,7 +247,7 @@ DeactivateRC ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 
 IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
 {
-    const sal_Int32 nSelPos = rLb.GetSelectEntryPos();
+    const sal_Int32 nSelPos = rLb.GetSelectedEntryPos();
     ScVObjMode  eMode   = ScVObjMode(nSelPos);
     ScVObjType  eType   = VOBJ_TYPE_OLE;
 
@@ -317,7 +317,7 @@ void ScTpContentOptions::InitGridOpt()
 
 IMPL_LINK( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
 {
-    sal_Int32   nSelPos = rLb.GetSelectEntryPos();
+    sal_Int32   nSelPos = rLb.GetSelectedEntryPos();
     bool    bGrid = ( nSelPos <= 1 );
     bool    bGridOnTop = ( nSelPos == 1 );
 
@@ -423,7 +423,7 @@ VclPtr<SfxTabPage> ScTpLayoutOptions::Create( vcl::Window*          pParent,
 bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bRet = true;
-    const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pUnitLB->GetSelectedEntryPos();
     if ( m_pUnitLB->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos ));
@@ -467,7 +467,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
 
     if(m_pAlignLB->IsValueChangedFromSaved())
     {
-        rCoreSet->Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectEntryPos()));
+        rCoreSet->Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectedEntryPos()));
         bRet = true;
     }
 
@@ -636,7 +636,7 @@ DeactivateRC ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 
 IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, ListBox&, void)
 {
-    const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pUnitLB->GetSelectedEntryPos();
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
         FieldUnit eFieldUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pUnitLB->GetEntryData( nMPos ));

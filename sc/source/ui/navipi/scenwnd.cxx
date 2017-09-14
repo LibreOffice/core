@@ -154,7 +154,7 @@ bool ScScenarioListBox::EventNotify( NotifyEvent& rNEvt )
 
 const ScScenarioListBox::ScenarioEntry* ScScenarioListBox::GetSelectedEntry() const
 {
-    size_t nPos = GetSelectEntryPos();
+    size_t nPos = GetSelectedEntryPos();
     return (nPos < maEntries.size()) ? &maEntries[ nPos ] : nullptr;
 }
 

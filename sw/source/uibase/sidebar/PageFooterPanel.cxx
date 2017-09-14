@@ -247,7 +247,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterSpacingHdl, ListBox&, void )
 }
 IMPL_LINK_NOARG( PageFooterPanel, FooterLayoutHdl, ListBox&, void )
 {
-    sal_uInt16 nVal = mpFooterLayoutLB->GetSelectEntryPos();
+    sal_uInt16 nVal = mpFooterLayoutLB->GetSelectedEntryPos();
     mpFooterLayoutItem->SetValue(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER_LAYOUT,
                                                  SfxCallMode::RECORD, { mpFooterLayoutItem.get() } );

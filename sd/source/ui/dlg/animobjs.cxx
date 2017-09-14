@@ -894,7 +894,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     const Point         aWindowCenter( pOutWin->PixelToLogic( Point( aTemp.Width() >> 1, aTemp.Height() >> 1 ) ) );
     const OutputDevice* pDefDev = Application::GetDefaultDevice();
     const size_t nCount = m_FrameList.size();
-    BitmapAdjustment    eBA = (BitmapAdjustment) m_pLbAdjustment->GetSelectEntryPos();
+    BitmapAdjustment    eBA = (BitmapAdjustment) m_pLbAdjustment->GetSelectedEntryPos();
 
     // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)
@@ -981,7 +981,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             // find LoopCount (number of passes)
             AnimationBitmap aAnimBmp;
             sal_uInt32 nLoopCount = 0;
-            sal_Int32 nPos = m_pLbLoopCount->GetSelectEntryPos();
+            sal_Int32 nPos = m_pLbLoopCount->GetSelectedEntryPos();
 
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
                 nLoopCount = m_pLbLoopCount->GetSelectedEntry().toUInt32();

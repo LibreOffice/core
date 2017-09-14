@@ -88,7 +88,7 @@ void SvxLineBox::Select()
     if ( !IsTravelSelect() )
     {
         drawing::LineStyle eXLS;
-        sal_Int32 nPos = GetSelectEntryPos();
+        sal_Int32 nPos = GetSelectedEntryPos();
 
         switch ( nPos )
         {
@@ -138,7 +138,7 @@ void SvxLineBox::Select()
                                      ".uno:XLineStyle",
                                      aArgs );
 
-        nCurPos = GetSelectEntryPos();
+        nCurPos = GetSelectedEntryPos();
         ReleaseFocus_Impl();
     }
 }
@@ -152,7 +152,7 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
     {
         case MouseNotifyEvent::MOUSEBUTTONDOWN:
         case MouseNotifyEvent::GETFOCUS:
-            nCurPos = GetSelectEntryPos();
+            nCurPos = GetSelectedEntryPos();
         break;
         case MouseNotifyEvent::LOSEFOCUS:
             SelectEntryPos(nCurPos);
@@ -401,7 +401,7 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
     if (!isDisposed())
     {
         if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-            nCurPos = GetSelectEntryPos();
+            nCurPos = GetSelectedEntryPos();
         else if ( MouseNotifyEvent::LOSEFOCUS == nType
                   && Application::GetFocusWindow()
                   && !IsWindowOrChild( Application::GetFocusWindow(), true ) )
@@ -476,7 +476,7 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
     MouseNotifyEvent nType = rNEvt.GetType();
 
     if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-        nCurPos = GetSelectEntryPos();
+        nCurPos = GetSelectedEntryPos();
 
     return FillAttrLB::PreNotify( rNEvt );
 }

@@ -85,7 +85,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
         }
         if ( bIsValidURL )
         {
-            sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
+            sal_Int32 nPos = m_pLbDocTypes->GetSelectedEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
                 aURLObject.SetExtension( static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
@@ -337,7 +337,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if ( !aStrNewName.isEmpty() )
                 {
                     // get private-url
-                    sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
+                    sal_Int32 nPos = m_pLbDocTypes->GetSelectedEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     OUString aStrDocName ( static_cast<DocumentTypeData*>(
@@ -448,10 +448,10 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, Button*, void)
         INetURLObject   aNewURL( aStrTmp );
 
         if( !aStrName.isEmpty() && !aNewURL.getExtension().isEmpty() &&
-            m_pLbDocTypes->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+            m_pLbDocTypes->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
-            const sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
+            const sal_Int32 nPos = m_pLbDocTypes->GetSelectedEntryPos();
             aNewURL.setExtension( static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
 

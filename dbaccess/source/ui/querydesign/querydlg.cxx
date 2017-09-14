@@ -155,7 +155,7 @@ void DlgQryJoin::dispose()
 
 IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
 {
-    if (m_pLB_JoinType->GetSelectEntryPos() == m_pLB_JoinType->GetSavedValue() )
+    if (m_pLB_JoinType->GetSelectedEntryPos() == m_pLB_JoinType->GetSavedValue() )
         return;
 
     m_pLB_JoinType->SaveValue();
@@ -167,7 +167,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
     OUString sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
     const char* pResId = nullptr;
-    const sal_Int32 nPos = m_pLB_JoinType->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLB_JoinType->GetSelectedEntryPos();
     const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(nPos));
     bool bAddHint = true;
     switch ( nJoinType )

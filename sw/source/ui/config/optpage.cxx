@@ -264,7 +264,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if(bRet)
         bRet = nullptr != rSet->Put(aElem);
 
-    sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
+    sal_Int32 nMPos = m_pMetricLB->GetSelectedEntryPos();
     sal_Int32 nGlobalMetricPos = nMPos;
     if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
@@ -274,7 +274,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
         bRet = true;
     }
 
-    nMPos = m_pHMetric->GetSelectEntryPos();
+    nMPos = m_pHMetric->GetSelectedEntryPos();
     if ( m_pHMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
@@ -282,7 +282,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
         rSet->Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
-    nMPos = m_pVMetric->GetSelectEntryPos();
+    nMPos = m_pVMetric->GetSelectedEntryPos();
     if ( m_pVMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
@@ -1829,7 +1829,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     ColorData nOldMarkColor = pOpt->GetMarkAlignColor().GetColor();
     sal_uInt16 nOldMarkMode = pOpt->GetMarkAlignMode();
 
-    sal_Int32 nPos = m_pInsertLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pInsertLB->GetSelectedEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = static_cast<CharAttr *>(m_pInsertLB->GetEntryData(nPos));
@@ -1839,7 +1839,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         pOpt->SetInsertAuthorAttr(aInsertedAttr);
     }
 
-    nPos = m_pDeletedLB->GetSelectEntryPos();
+    nPos = m_pDeletedLB->GetSelectedEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = static_cast<CharAttr *>(m_pDeletedLB->GetEntryData(nPos));
@@ -1849,7 +1849,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         pOpt->SetDeletedAuthorAttr(aDeletedAttr);
     }
 
-    nPos = m_pChangedLB->GetSelectEntryPos();
+    nPos = m_pChangedLB->GetSelectedEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         pAttr = static_cast<CharAttr *>(m_pChangedLB->GetEntryData(nPos));
@@ -1860,7 +1860,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     }
 
     nPos = 0;
-    switch (m_pMarkPosLB->GetSelectEntryPos())
+    switch (m_pMarkPosLB->GetSelectedEntryPos())
     {
         case 0: nPos = text::HoriOrientation::NONE;       break;
         case 1: nPos = text::HoriOrientation::LEFT;       break;
@@ -1998,7 +1998,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
         rCJKFont.SetColor(aColor);
     }
 
-    sal_Int32 nPos = rLB.GetSelectEntryPos();
+    sal_Int32 nPos = rLB.GetSelectedEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
@@ -2072,7 +2072,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
 
     SvxFont&    rFont = pPrev->GetFont();
     SvxFont&    rCJKFont = pPrev->GetCJKFont();
-    sal_Int32      nPos = pLB->GetSelectEntryPos();
+    sal_Int32      nPos = pLB->GetSelectedEntryPos();
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
@@ -2115,7 +2115,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, SvxColorListBox&, rListBox, void )
 
 void SwRedlineOptionsTabPage::ChangedMaskPrev()
 {
-    m_pMarkPreviewWN->SetMarkPos(m_pMarkPosLB->GetSelectEntryPos());
+    m_pMarkPreviewWN->SetMarkPos(m_pMarkPosLB->GetSelectedEntryPos());
     m_pMarkPreviewWN->SetColor(m_pMarkColorLB->GetSelectEntryColor().GetColor());
 
     m_pMarkPreviewWN->Invalidate();

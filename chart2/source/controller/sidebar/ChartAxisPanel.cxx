@@ -374,7 +374,7 @@ IMPL_LINK(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
 IMPL_LINK_NOARG(ChartAxisPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
-    sal_Int32 nPos = mpLBLabelPos->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBLabelPos->GetSelectedEntryPos();
 
     setLabelPosition(mxModel, aCID, nPos);
 }

@@ -1622,7 +1622,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
         m_bWantHierarchical = false; // before FilterSelect
-        FilterSelect(aFilterLb->GetSelectEntryPos() - 1, bHierarchical );
+        FilterSelect(aFilterLb->GetSelectedEntryPos() - 1, bHierarchical );
         bHierarchical=false;
     }
 }

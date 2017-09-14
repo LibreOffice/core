@@ -255,7 +255,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl, ListBox&, void)
 {
-    const sal_Int32 nPos = m_pFormattingLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pFormattingLB->GetSelectedEntryPos();
     sal_uLong nOptions = reinterpret_cast<sal_uLong>(m_pFormattingLB->GetEntryData( nPos ));
     SetCurrentOptions( nOptions );
 }

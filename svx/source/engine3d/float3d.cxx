@@ -827,7 +827,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         sal_uInt16 nValue = static_cast<const Svx3DShadeModeItem&>(rAttrs.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue();
-        if( nValue != m_pLbShademode->GetSelectEntryPos() )
+        if( nValue != m_pLbShademode->GetSelectedEntryPos() )
         {
             m_pLbShademode->SelectEntryPos( nValue );
             bUpdate = true;
@@ -1798,7 +1798,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Shade mode
     if( m_pLbShademode->GetSelectEntryCount() )
     {
-        nValue = m_pLbShademode->GetSelectEntryPos();
+        nValue = m_pLbShademode->GetSelectedEntryPos();
         rAttrs.Put(Svx3DShadeModeItem(nValue));
     }
     else
@@ -2547,7 +2547,7 @@ IMPL_LINK( Svx3DWin, SelectHdl, ListBox&, rListBox, void )
         Color aColSpec( COL_WHITE );
         sal_uInt16 nSpecIntens = 20;
 
-        switch( m_pLbMatFavorites->GetSelectEntryPos() )
+        switch( m_pLbMatFavorites->GetSelectedEntryPos() )
         {
             case 1: // Metall
             {

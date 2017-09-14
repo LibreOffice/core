@@ -79,7 +79,7 @@ void SvxCheckListBox::SelectEntryPos( sal_uLong nPos )
 }
 
 
-sal_uLong SvxCheckListBox::GetSelectEntryPos() const
+sal_uLong SvxCheckListBox::GetSelectedEntryPos() const
 {
     SvTreeListEntry* pEntry = GetCurEntry();
 
@@ -158,7 +158,7 @@ void SvxCheckListBox::ToggleCheckButton( SvTreeListEntry* pEntry )
         if ( !IsSelected( pEntry ) )
             Select( pEntry );
         else
-            CheckEntryPos( GetSelectEntryPos(), !IsChecked( GetSelectEntryPos() ) );
+            CheckEntryPos( GetSelectedEntryPos(), !IsChecked( GetSelectedEntryPos() ) );
     }
 }
 

@@ -782,7 +782,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
+    sal_Int32 nPos = m_pAssignedList->GetSelectedEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pAssignedList->RemoveEntry( nPos );
@@ -803,7 +803,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
 
 void SvxJavaParameterDlg::EditParameter()
 {
-    sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
+    sal_Int32 nPos = m_pAssignedList->GetSelectedEntryPos();
     m_pParameterEdit->SetText( OUString() );
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -978,7 +978,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pPathList->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPathList->GetSelectedEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pPathList->RemoveEntry( nPos );

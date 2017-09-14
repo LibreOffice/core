@@ -184,7 +184,7 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
 void DlgOrderCrit::EnableLines()
 {
 
-    if ( m_pLB_ORDERFIELD1->GetSelectEntryPos() == 0 )
+    if ( m_pLB_ORDERFIELD1->GetSelectedEntryPos() == 0 )
     {
         m_pLB_ORDERFIELD2->Disable();
         m_pLB_ORDERVALUE2->Disable();
@@ -198,7 +198,7 @@ void DlgOrderCrit::EnableLines()
         m_pLB_ORDERVALUE2->Enable();
     }
 
-    if ( m_pLB_ORDERFIELD2->GetSelectEntryPos() == 0 )
+    if ( m_pLB_ORDERFIELD2->GetSelectedEntryPos() == 0 )
     {
         m_pLB_ORDERFIELD3->Disable();
         m_pLB_ORDERVALUE3->Disable();
@@ -223,14 +223,14 @@ OUString DlgOrderCrit::GetOrderList( ) const
     OUString sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
     {
-        if(m_aColumnList[i]->GetSelectEntryPos() != 0)
+        if(m_aColumnList[i]->GetSelectedEntryPos() != 0)
         {
             if(!sOrder.isEmpty())
                 sOrder += ",";
 
             OUString sName = m_aColumnList[i]->GetSelectedEntry();
             sOrder += ::dbtools::quoteName(sQuote,sName);
-            if(m_aValueList[i]->GetSelectEntryPos())
+            if(m_aValueList[i]->GetSelectedEntryPos())
                 sOrder += " DESC ";
             else
                 sOrder += " ASC ";

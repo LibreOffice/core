@@ -167,12 +167,12 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
     if ( aQBox->Execute() == RET_OK )
     {
         sal_Int32 nCount = m_pLanguageLB->GetSelectEntryCount();
-        sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            const sal_Int32 nSelPos = m_pLanguageLB->GetSelectEntryPos(i);
+            const sal_Int32 nSelPos = m_pLanguageLB->GetSelectedEntryPos(i);
             LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nSelPos ));
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl, Button*, void)
 {
-    const sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
     LanguageEntry* pSelectEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nPos ));
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, ListBox&, void)
     const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
     bool bEmpty = ( !nCount ||
                     m_pLanguageLB->GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
-    bool bSelect = ( m_pLanguageLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
+    bool bSelect = ( m_pLanguageLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND );
     bool bEnable = !bEmpty && bSelect;
 
     m_pDeletePB->Enable(bEnable);

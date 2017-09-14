@@ -154,7 +154,7 @@ void PageFormatPanel::NotifyItemUpdate(
                 mpPaperWidth->SetValue( mpPaperWidth->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
                 mpPaperHeight->SetValue( mpPaperHeight->Normalize( aPaperSize.Height() ), FUNIT_TWIP );
 
-                if(mpPaperOrientation->GetSelectEntryPos() == 1)
+                if(mpPaperOrientation->GetSelectedEntryPos() == 1)
                    Swap(aPaperSize);
 
                 Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit,true);
@@ -217,10 +217,10 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
     Paper ePaper = mpPaperSizeBox->GetSelection();
     Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
 
-    if(mpPaperOrientation->GetSelectEntryPos() == 1)
+    if(mpPaperOrientation->GetSelectedEntryPos() == 1)
         Swap(aSize);
 
-    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectEntryPos() == 1);
+    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectedEntryPos() == 1);
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
 }
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
 {
     bool bMirrored = false;
     bool bApplyNewPageMargins = true;
-    switch ( mpMarginSelectBox->GetSelectEntryPos() )
+    switch ( mpMarginSelectBox->GetSelectedEntryPos() )
     {
         case 0:
             SetNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);

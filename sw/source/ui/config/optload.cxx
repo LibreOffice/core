@@ -217,7 +217,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
         bRet = true;
     }
 
-    const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pMetricLB->GetSelectedEntryPos();
     if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
@@ -378,7 +378,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
 
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, ListBox&, void)
 {
-    const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pMetricLB->GetSelectedEntryPos();
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
         // Double-Cast for VA3.0
@@ -609,7 +609,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
     sal_uLong nCheckCount = m_pCheckLB->GetCheckedEntryCount();
     pModOpt->SetInsWithCaption( bHTMLMode, nCheckCount > 0 );
 
-    sal_Int32 nPos = m_pLbCaptionOrder->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbCaptionOrder->GetSelectedEntryPos();
     pModOpt->SetCaptionOrderNumberingFirst(nPos == 1);
 
     return bRet;
@@ -699,7 +699,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
         bool bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
 
         m_pSettingsGroup->Enable(bChecked);
-        bool bNumSep = bChecked && m_pLbCaptionOrder->GetSelectEntryPos() == 1;
+        bool bNumSep = bChecked && m_pLbCaptionOrder->GetSelectedEntryPos() == 1;
         m_pNumberingSeparatorED->Enable( bNumSep );
         m_pNumberingSeparatorFT->Enable( bNumSep );
 
@@ -819,13 +819,13 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
         pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectEntryData()));
         pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
-        pOpt->SetPos(m_pPosBox->GetSelectEntryPos());
-        sal_Int32 nPos = m_pLbLevel->GetSelectEntryPos();
+        pOpt->SetPos(m_pPosBox->GetSelectedEntryPos());
+        sal_Int32 nPos = m_pLbLevel->GetSelectedEntryPos();
         sal_Int32 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
         pOpt->SetLevel(nLevel);
         pOpt->SetSeparator(m_pEdDelim->GetText());
         pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
-        if(!m_pCharStyleLB->GetSelectEntryPos())
+        if(!m_pCharStyleLB->GetSelectedEntryPos())
             pOpt->SetCharacterStyle("");
         else
             pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectedEntry());
@@ -872,7 +872,7 @@ IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox&, rBox, void )
         bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
     }
 
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     m_pNumberingSeparatorFT->Enable( bChecked && nPos == 1 );
     m_pNumberingSeparatorED->Enable( bChecked && nPos == 1 );
 }
@@ -884,10 +884,10 @@ void SwCaptionOptPage::InvalidatePreview()
     if( m_pCategoryBox->GetText() != m_sNone)
     {
         //#i61007# order of captions
-        bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectEntryPos() == 1;
+        bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectedEntryPos() == 1;
         // number
         const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
-                                        m_pFormatBox->GetSelectEntryPos() ));
+                                        m_pFormatBox->GetSelectedEntryPos() ));
         if( SVX_NUM_NUMBER_NONE != nNumFormat )
         {
             //#i61007# order of captions

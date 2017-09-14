@@ -749,7 +749,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
-    const sal_Int32 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectEntryPos();
+    const sal_Int32 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectedEntryPos();
     if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -766,7 +766,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         aMiscOptions.SetSymbolsSize( eSet );
     }
 
-    const sal_Int32 nSidebarSizeLB_NewSelection = m_pSidebarIconSizeLB->GetSelectEntryPos();
+    const sal_Int32 nSidebarSizeLB_NewSelection = m_pSidebarIconSizeLB->GetSelectedEntryPos();
     if( nSidebarSizeLB_InitialSelection != nSidebarSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -782,7 +782,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         aMiscOptions.SetSidebarIconSize( eSet );
     }
 
-    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_pNotebookbarIconSizeLB->GetSelectEntryPos();
+    const sal_Int32 nNotebookbarSizeLB_NewSelection = m_pNotebookbarIconSizeLB->GetSelectedEntryPos();
     if( nNotebookbarSizeLB_InitialSelection != nNotebookbarSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -798,7 +798,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         aMiscOptions.SetNotebookbarIconSize( eSet );
     }
 
-    const sal_Int32 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
+    const sal_Int32 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectedEntryPos();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
         // 0 means choose style automatically
@@ -806,7 +806,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             aMiscOptions.SetIconTheme("auto");
         else
         {
-            const sal_Int32 pos = m_pIconStyleLB->GetSelectEntryPos();
+            const sal_Int32 pos = m_pIconStyleLB->GetSelectedEntryPos();
             const vcl::IconThemeInfo& iconThemeId = mInstalledIconThemes.at(pos-1);
             aMiscOptions.SetIconTheme(iconThemeId.GetThemeId());
         }
@@ -817,7 +817,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     // Mouse Snap Mode
     SnapType eOldSnap = pAppearanceCfg->GetSnapMode();
-    SnapType eNewSnap = (SnapType)m_pMousePosLB->GetSelectEntryPos();
+    SnapType eNewSnap = (SnapType)m_pMousePosLB->GetSelectedEntryPos();
     if(eNewSnap > SnapType::NONE)
         eNewSnap = SnapType::NONE;
 
@@ -829,7 +829,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     // Middle Mouse Button
     MouseMiddleButtonAction eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
-    short eNewMiddleMouse = m_pMouseMiddleLB->GetSelectEntryPos();
+    short eNewMiddleMouse = m_pMouseMiddleLB->GetSelectedEntryPos();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
@@ -861,9 +861,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if(m_pMenuIconsLB->IsValueChangedFromSaved())
     {
-        aMenuOpt.SetMenuIconsState(m_pMenuIconsLB->GetSelectEntryPos() == 0 ?
+        aMenuOpt.SetMenuIconsState(m_pMenuIconsLB->GetSelectedEntryPos() == 0 ?
             TRISTATE_INDET :
-            static_cast<TriState>(m_pMenuIconsLB->GetSelectEntryPos() - 1));
+            static_cast<TriState>(m_pMenuIconsLB->GetSelectedEntryPos() - 1));
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
@@ -871,9 +871,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if(m_pContextMenuShortcutsLB->IsValueChangedFromSaved())
     {
-        aMenuOpt.SetContextMenuShortcuts(m_pContextMenuShortcutsLB->GetSelectEntryPos() == 0 ?
+        aMenuOpt.SetContextMenuShortcuts(m_pContextMenuShortcutsLB->GetSelectedEntryPos() == 0 ?
             TRISTATE_INDET :
-            static_cast<TriState>(m_pContextMenuShortcutsLB->GetSelectEntryPos() - 1));
+            static_cast<TriState>(m_pContextMenuShortcutsLB->GetSelectedEntryPos() - 1));
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
@@ -1361,7 +1361,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             aLangString = seqInstalledLanguages[d-1];
 
         /*
-        if( m_pUserInterfaceLB->GetSelectEntryPos() > 0)
+        if( m_pUserInterfaceLB->GetSelectedEntryPos() > 0)
             aLangString = ConvertLanguageToIsoString(m_pUserInterfaceLB->GetSelectLanguage());
         */
         Reference< XMultiServiceFactory > theConfigProvider(

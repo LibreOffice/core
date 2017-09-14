@@ -76,9 +76,9 @@ OUString ScShowTabDlg::GetSelectedEntry(sal_Int32 nPos) const
     return m_pLb->GetSelectedEntry(nPos);
 }
 
-sal_Int32 ScShowTabDlg::GetSelectEntryPos(sal_Int32 nPos) const
+sal_Int32 ScShowTabDlg::GetSelectedEntryPos(sal_Int32 nPos) const
 {
-    return m_pLb->GetSelectEntryPos(nPos);
+    return m_pLb->GetSelectedEntryPos(nPos);
 }
 
 IMPL_LINK_NOARG(ScShowTabDlg, DblClkHdl, ListBox&, void)

@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, Button*, void)
 {
     OUString sGroup = m_pNameED->GetText()
         + OUStringLiteral1(GLOS_DELIM)
-        + OUString::number(m_pPathLB->GetSelectEntryPos());
+        + OUString::number(m_pPathLB->GetSelectedEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
     const OUString sTemp(m_pNameED->GetText() + "\t" + m_pPathLB->GetSelectedEntry());
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, Button*, void)
     const OUString sNewTitle(m_pNameED->GetText());
     OUString sNewName = sNewTitle
         + OUStringLiteral1(GLOS_DELIM)
-        + OUString::number(m_pPathLB->GetSelectEntryPos());
+        + OUString::number(m_pPathLB->GetSelectedEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
     // if the name to be renamed is among the new ones - replace

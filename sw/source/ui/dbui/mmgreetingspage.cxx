@@ -65,7 +65,7 @@ static void lcl_StoreGreetingsBox(ListBox const & rBox,
     for(sal_Int32 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
-    rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
+    rConfig.SetCurrentGreeting(eType, rBox.GetSelectedEntryPos());
 }
 
 static void lcl_StoreGreetingsBox(ComboBox const & rBox,
@@ -77,7 +77,7 @@ static void lcl_StoreGreetingsBox(ComboBox const & rBox,
     for(sal_Int32 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
-    rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
+    rConfig.SetCurrentGreeting(eType, rBox.GetSelectedEntryPos());
 }
 
 IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, Button*, void)
     {
         const SwDBData& rDBData = m_rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
-        sal_Int32 nPos = m_pFemaleColumnLB->GetSelectEntryPos();
+        sal_Int32 nPos = m_pFemaleColumnLB->GetSelectedEntryPos();
         if(aAssignment.getLength() < MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER);
         if( nPos > 0 )

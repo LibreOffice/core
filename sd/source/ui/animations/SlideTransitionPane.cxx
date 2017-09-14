@@ -303,7 +303,7 @@ OUString lcl_getSoundFileURL(
 {
     if( rListBox->GetSelectEntryCount() > 0 )
     {
-        sal_Int32 nPos = rListBox->GetSelectEntryPos();
+        sal_Int32 nPos = rListBox->GetSelectedEntryPos();
         // the first three entries are no actual sounds
         if( nPos >= 3 )
         {
@@ -700,7 +700,7 @@ void SlideTransitionPane::updateControlState()
     mpLB_VARIANT->Enable( mbHasSelection && mpLB_VARIANT->GetEntryCount() > 0 );
     mpCBX_duration->Enable( mbHasSelection );
     mpLB_SOUND->Enable( mbHasSelection );
-    mpCB_LOOP_SOUND->Enable( mbHasSelection && (mpLB_SOUND->GetSelectEntryPos() > 2));
+    mpCB_LOOP_SOUND->Enable( mbHasSelection && (mpLB_SOUND->GetSelectedEntryPos() > 2));
     mpRB_ADVANCE_ON_MOUSE->Enable( mbHasSelection );
     mpRB_ADVANCE_AUTO->Enable( mbHasSelection );
     mpMF_ADVANCE_AUTO_AFTER->Enable( mbHasSelection && mpRB_ADVANCE_AUTO->IsChecked());
@@ -728,7 +728,7 @@ void SlideTransitionPane::openSoundFileDialog()
     SdOpenSoundFileDialog aFileDialog(this);
 
     OUString aFile;
-    DBG_ASSERT( mpLB_SOUND->GetSelectEntryPos() == 2,
+    DBG_ASSERT( mpLB_SOUND->GetSelectedEntryPos() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
     aFile = SvtPathOptions().GetWorkPath();
 
@@ -805,7 +805,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         auto aSelected = rPresetList.begin();
         std::advance( aSelected, mpVS_TRANSITION_ICONS->GetSelectItemId() - 1);
 
-        if( mpLB_VARIANT->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+        if( mpLB_VARIANT->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         {
             // Transition with just one effect.
             aResult = impl::TransitionEffect( **aSelected );
@@ -819,7 +819,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             {
                 if( aIter->getSetId() == (*aSelected)->getSetId() )
                 {
-                    if( mpLB_VARIANT->GetSelectEntryPos() == nVariant)
+                    if( mpLB_VARIANT->GetSelectedEntryPos() == nVariant)
                     {
                         aResult = impl::TransitionEffect( *aIter );
                         aResult.setAllAmbiguous();
@@ -877,7 +877,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         maCurrentSoundFile.clear();
         if( mpLB_SOUND->GetSelectEntryCount() > 0 )
         {
-            sal_Int32 nPos = mpLB_SOUND->GetSelectEntryPos();
+            sal_Int32 nPos = mpLB_SOUND->GetSelectedEntryPos();
             aResult.mbStopSound = nPos == 1;
             aResult.mbSoundOn = nPos > 1;
             if( aResult.mbStopSound )
@@ -1119,7 +1119,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected, ListBox&, void)
 {
     if( mpLB_SOUND->GetSelectEntryCount() )
     {
-        sal_Int32 nPos = mpLB_SOUND->GetSelectEntryPos();
+        sal_Int32 nPos = mpLB_SOUND->GetSelectedEntryPos();
         if( nPos == 2 )
         {
             // other sound...

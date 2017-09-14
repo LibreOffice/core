@@ -782,7 +782,7 @@ IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl, Button*, void)
 {
     sal_Int32 nColumn = -1;
     if(m_pFindOnlyCB->IsChecked())
-        nColumn = m_pFindOnlyLB->GetSelectEntryPos();
+        nColumn = m_pFindOnlyLB->GetSelectedEntryPos();
     if(nColumn != LISTBOX_ENTRY_NOTFOUND)
         m_pParent->Find(m_pFindED->GetText(), nColumn);
 }

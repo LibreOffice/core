@@ -211,7 +211,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox&, rLb, void )
     if ( &rLb == pLbCopyArea )
     {
         OUString aString;
-        const sal_Int32 nSelPos = pLbCopyArea->GetSelectEntryPos();
+        const sal_Int32 nSelPos = pLbCopyArea->GetSelectedEntryPos();
 
         if ( nSelPos > 0 )
             aString = *static_cast<OUString*>(pLbCopyArea->GetEntryData( nSelPos ));
