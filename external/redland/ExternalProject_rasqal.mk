@@ -42,7 +42,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			, \
 				--enable-shared --disable-static \
 			) \
-			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
+			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,libxml2)/xml2-config) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
